@@ -1,0 +1,9 @@
+dist/
+bin/
+develop-eggs/
+build/
+eggs/
+.installed.cfg
+wsgit.egg-info
+*.pyc
+*.pyo
