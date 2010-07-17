@@ -3,6 +3,7 @@ import urllib
 
 from webob import Request, exc
 import routes
+import pymongo
 
 from mediagoblin import routing, util
 
@@ -23,8 +24,9 @@ class MediagoblinApp(object):
     """
     Really basic wsgi app using routes and WebOb.
     """
-    def __init__(self, user_template_path=None):
+    def __init__(self, database, user_template_path=None):
         self.template_env = util.get_jinja_env(user_template_path)
+        self.db = database
 
     def __call__(self, environ, start_response):
         request = Request(environ)
@@ -60,5 +62,9 @@ class MediagoblinApp(object):
 
 
 def paste_app_factory(global_config, **kw):
+    connection = pymongo.Connection()
+    db = kw.get('db_name', 'mediagoblin')
+
     return MediagoblinApp(
+        db,
         user_template_path=kw.get('local_templates'))
