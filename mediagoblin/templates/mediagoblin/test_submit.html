@@ -1,0 +1,18 @@
+<html>
+  <body>
+    <form action="{{ request.urlgen('test_submit') }}" method="POST">
+      <table>
+        {% for field in image_form %}
+          <tr>
+            <td>{{ field.label }}</td>
+            <td>{{ field }}</td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <td></td>
+          <td><input type="submit" value="submit" /></td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>
