@@ -1,6 +1,7 @@
 <html>
   <body>
-    <form action="{{ request.urlgen('test_submit') }}" method="POST">
+    <form action="{{ request.urlgen('test_submit') }}" method="POST"
+          enctype="multipart/form-data">
       <table>
         {% for field in image_form %}
           <tr>

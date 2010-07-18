@@ -1,3 +1,5 @@
+import datetime
+
 from webob import Response, exc
 import wtforms
 
@@ -17,7 +19,11 @@ def submit_test(request):
     image_form = ImageSubmitForm(request.POST)
     if request.method == 'POST' and image_form.validate():
         # create entry and save in database
-        
+        work_id = request.app.db.works.insert(
+            {'title': image_form.title.data,
+             'created': datetime.datetime.now(),
+             'description': image_form.description.data})
+
         # save file to disk
         ## TODO
 

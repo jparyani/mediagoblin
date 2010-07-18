@@ -64,7 +64,7 @@ class MediagoblinApp(object):
 
 def paste_app_factory(global_config, **kw):
     connection = pymongo.Connection()
-    db = kw.get('db_name', 'mediagoblin')
+    db = connection[kw.get('db_name', 'mediagoblin')]
 
     return MediagoblinApp(
         db,
