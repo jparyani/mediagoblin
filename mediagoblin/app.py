@@ -70,9 +70,5 @@ def paste_app_factory(global_config, **kw):
 
     mgoblin_app = MediagoblinApp(
         db, user_template_path=kw.get('local_templates'))
-    beakered_app = SessionMiddleware(
-        mgoblin_app,
-        {'session.type': 'file',
-         'session.cookie_expires': True})
 
-    return beakered_app
+    return mgoblin_app
