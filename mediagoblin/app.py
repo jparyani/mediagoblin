@@ -27,11 +27,12 @@ class MediagoblinApp(object):
     def __init__(self, database, user_template_path=None):
         self.template_env = util.get_jinja_env(user_template_path)
         self.db = database
+        self.routing = routing.get_mapper()
 
     def __call__(self, environ, start_response):
         request = Request(environ)
         path_info = request.path_info
-        route_match = routing.mapping.match(path_info)
+        route_match = self.routing.match(path_info)
 
         # No matching page?
         if route_match is None:
@@ -39,7 +40,7 @@ class MediagoblinApp(object):
             # added and if so, redirect
             if not path_info.endswith('/') \
                     and request.method == 'GET' \
-                    and routing.mapping.match(path_info + '/'):
+                    and self.routing.match(path_info + '/'):
                 new_path_info = path_info + '/'
                 if request.GET:
                     new_path_info = '%s?%s' % (
@@ -56,7 +57,7 @@ class MediagoblinApp(object):
         request.matchdict = route_match
         request.app = self
         request.template_env = self.template_env
-        request.urlgen = routes.URLGenerator(routing.mapping, environ)
+        request.urlgen = routes.URLGenerator(self.routing, environ)
 
         return controller(request)(environ, start_response)
 
