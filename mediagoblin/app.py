@@ -1,9 +1,10 @@
 import sys
 import urllib
 
-from webob import Request, exc
+from beaker.middleware import SessionMiddleware
 import routes
 import pymongo
+from webob import Request, exc
 
 from mediagoblin import routing, util
 
@@ -58,6 +59,7 @@ class MediagoblinApp(object):
         request.app = self
         request.template_env = self.template_env
         request.urlgen = routes.URLGenerator(self.routing, environ)
+        request.session = request.environ['beaker.session']
 
         return controller(request)(environ, start_response)
 
@@ -66,6 +68,11 @@ def paste_app_factory(global_config, **kw):
     connection = pymongo.Connection()
     db = connection[kw.get('db_name', 'mediagoblin')]
 
-    return MediagoblinApp(
-        db,
-        user_template_path=kw.get('local_templates'))
+    mgoblin_app = MediagoblinApp(
+        db, user_template_path=kw.get('local_templates'))
+    beakered_app = SessionMiddleware(
+        mgoblin_app,
+        {'session.type': 'file',
+         'session.cookie_expires': True})
+
+    return beakered_app
