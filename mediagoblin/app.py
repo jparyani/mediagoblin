@@ -59,7 +59,10 @@ class MediagoblinApp(object):
         request.app = self
         request.template_env = self.template_env
         request.urlgen = routes.URLGenerator(self.routing, environ)
-        request.session = request.environ['beaker.session']
+
+        # Do we really want to load this via middleware?  Maybe?
+        # let's comment it out till we start using it :)
+        #request.session = request.environ['beaker.session']
 
         return controller(request)(environ, start_response)
 
