@@ -14,6 +14,7 @@ setup(
         'beaker',
         'routes',
         'pymongo',
+        'mongokit',
         'webob',
         'wtforms',
         ],
