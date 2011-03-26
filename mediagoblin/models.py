@@ -29,4 +29,5 @@ def register_models(connection):
     """
     Register all models in REGISTER_MODELS with this connection.
     """
-    pass
+    connection.register(REGISTER_MODELS)
+
