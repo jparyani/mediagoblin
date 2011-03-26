@@ -1,4 +1,5 @@
 from mongokit import Document, Set
+
 import datetime
 
 
@@ -18,7 +19,7 @@ class MediaEntry(Document):
         'media_type', 'file_store']
 
     default_values = {
-        'date_creation':datetime.datetime.utcnow}
+        'created': datetime.datetime.utcnow}
     
 
 class User(Document):
@@ -32,11 +33,11 @@ class User(Document):
     required_fields = ['username', 'created', 'pw_hash']
 
     default_values = {
-        'date_creation':datetime.datetime.utcnow}
-
+        'created': datetime.datetime.utcnow}
 
 
 REGISTER_MODELS = [MediaEntry, User]
+
 
 def register_models(connection):
     """
