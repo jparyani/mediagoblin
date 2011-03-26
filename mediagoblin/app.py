@@ -3,10 +3,10 @@ import urllib
 
 from beaker.middleware import SessionMiddleware
 import routes
-import pymongo
+import mongokit
 from webob import Request, exc
 
-from mediagoblin import routing, util
+from mediagoblin import routing, util, models
 
 
 class Error(Exception): pass
@@ -25,10 +25,13 @@ class MediagoblinApp(object):
     """
     Really basic wsgi app using routes and WebOb.
     """
-    def __init__(self, database, user_template_path=None):
+    def __init__(self, connection, database_path, user_template_path=None):
         self.template_env = util.get_jinja_env(user_template_path)
-        self.db = database
+        self.connection = connection
+        self.db = connection['database_path']
         self.routing = routing.get_mapper()
+
+        models.register_models(connection)
 
     def __call__(self, environ, start_response):
         request = Request(environ)
@@ -59,6 +62,7 @@ class MediagoblinApp(object):
         request.app = self
         request.template_env = self.template_env
         request.urlgen = routes.URLGenerator(self.routing, environ)
+        request.db = self.db
 
         # Do we really want to load this via middleware?  Maybe?
         # let's comment it out till we start using it :)
@@ -68,10 +72,11 @@ class MediagoblinApp(object):
 
 
 def paste_app_factory(global_config, **kw):
-    connection = pymongo.Connection()
-    db = connection[kw.get('db_name', 'mediagoblin')]
+    connection = mongokit.Connection(
+        kw.get('db_host'), kw.get('db_port'))
 
     mgoblin_app = MediagoblinApp(
-        db, user_template_path=kw.get('local_templates'))
+        connection, kw.get('db_name', 'mediagoblin'),
+        user_template_path=kw.get('local_templates'))
 
     return mgoblin_app
