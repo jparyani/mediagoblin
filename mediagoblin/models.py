@@ -13,6 +13,13 @@ class MediaEntry(Document):
         'file_store': unicode,
         'tags': Set(unicode)}
 
+    required_fields = [
+        'title', 'created',
+        'media_type', 'file_store']
+
+    default_values = {
+        'date_creation':datetime.datetime.utcnow}
+    
 
 class User(Document):
     structure = {
@@ -21,6 +28,12 @@ class User(Document):
         'plugin_data': dict, # plugins can dump stuff here.
         'pw_hash': unicode,
         }
+
+    required_fields = ['username', 'created', 'pw_hash']
+
+    default_values = {
+        'date_creation':datetime.datetime.utcnow}
+
 
 
 REGISTER_MODELS = [MediaEntry, User]
