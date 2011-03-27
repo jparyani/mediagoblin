@@ -4,6 +4,8 @@ import datetime
 
 
 class MediaEntry(Document):
+    __collection__ = 'media_entries'
+
     structure = {
         'title': unicode,
         'created': datetime.datetime,
@@ -12,7 +14,8 @@ class MediaEntry(Document):
         'media_data': dict, # extra data relevant to this media_type
         'plugin_data': dict, # plugins can dump stuff here.
         'file_store': unicode,
-        'tags': Set(unicode)}
+        'attachments': [dict],
+        'tags': [unicode]}
 
     required_fields = [
         'title', 'created',
@@ -20,7 +23,9 @@ class MediaEntry(Document):
 
     default_values = {
         'created': datetime.datetime.utcnow}
-    
+
+    def main_mediafile(self):
+        pass
 
 class User(Document):
     structure = {
