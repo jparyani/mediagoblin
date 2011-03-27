@@ -1,0 +1,18 @@
+{% macro render_table(form) -%}
+  {% for field in form %}
+    <tr>
+      <th>{{field.label}}</th>
+      <td>
+        {{field}}
+        {% if field.errors %}
+          <br />
+          <ul class="errors">
+            {% for error in field.errors %}
+              <li>{{error}}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+{%- endmacro %}
