@@ -28,7 +28,7 @@ class MediagoblinApp(object):
     def __init__(self, connection, database_path, user_template_path=None):
         self.template_env = util.get_jinja_env(user_template_path)
         self.connection = connection
-        self.db = connection['database_path']
+        self.db = connection[database_path]
         self.routing = routing.get_mapper()
 
         models.register_models(connection)
