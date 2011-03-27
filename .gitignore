@@ -4,6 +4,6 @@ develop-eggs/
 build/
 eggs/
 .installed.cfg
-wsgit.egg-info
+mediagoblin.egg-info
 *.pyc
 *.pyo
