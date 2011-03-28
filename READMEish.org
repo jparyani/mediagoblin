@@ -1,3 +1,7 @@
+#+latex_header: \documentclass[12pt]{article}
+#+latex_header: \usepackage[margin=1in]{geometry}
+#+OPTIONS: ^:nil
+
 GNU MediaGoblin
 
 * About
