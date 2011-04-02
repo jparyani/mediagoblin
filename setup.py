@@ -33,6 +33,7 @@ setup(
         'mongokit',
         'webob',
         'wtforms',
+        'py-bcrypt',
         ],
 
     license = 'AGPLv3',
