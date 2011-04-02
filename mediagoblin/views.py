@@ -40,7 +40,7 @@ def submit_test(request):
 
         entry = request.db.MediaEntry()
         entry['title'] = request.POST['title']
-        entry['description'] = request.POST.get(['description'])o
+        entry['description'] = request.POST.get(['description'])
         entry['media_type'] = u'image'
 
         # TODO this does NOT look save, we should clean the filename somenow?
