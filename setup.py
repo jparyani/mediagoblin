@@ -34,7 +34,9 @@ setup(
         'webob',
         'wtforms',
         'py-bcrypt',
+        'nose',
         ],
+    test_suite='nose.collector',
 
     license = 'AGPLv3',
     author = 'Christopher Webber',
