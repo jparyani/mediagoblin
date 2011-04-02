@@ -28,9 +28,14 @@ def test_bcrypt_check_password():
         'lollerskates',
         '$2a$12$PXU03zfrVCujBhVeICTwtOaHTUs5FFwsscvSSTJkqx/2RQ0Lhy/nO')
 
+    assert not auth_lib.bcrypt_check_password(
+        'notthepassword',
+        '$2a$12$PXU03zfrVCujBhVeICTwtOaHTUs5FFwsscvSSTJkqx/2RQ0Lhy/nO')
+
+
     # Same thing, but with extra fake salt.
-    assert auth_lib.bcrypt_check_password(
-        'lollerskates',
+    assert not auth_lib.bcrypt_check_password(
+        'notthepassword',
         '$2a$12$ELVlnw3z1FMu6CEGs/L8XO8vl0BuWSlUHgh0rUrry9DUXGMUNWwl6',
         '3><7R45417')
 
@@ -42,8 +47,13 @@ def test_bcrypt_gen_password_hash():
     hashed_pw = auth_lib.bcrypt_gen_password_hash(pw)
     assert auth_lib.bcrypt_check_password(
         pw, hashed_pw)
+    assert not auth_lib.bcrypt_check_password(
+        'notthepassword', hashed_pw)
+
 
     # Same thing, extra salt.
     hashed_pw = auth_lib.bcrypt_gen_password_hash(pw, '3><7R45417')
     assert auth_lib.bcrypt_check_password(
         pw, hashed_pw, '3><7R45417')
+    assert not auth_lib.bcrypt_check_password(
+        'notthepassword', hashed_pw, '3><7R45417')
