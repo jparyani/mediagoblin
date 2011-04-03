@@ -44,6 +44,8 @@ class MediaEntry(Document):
         pass
 
 class User(Document):
+    __collection__ = 'users'
+
     structure = {
         'username': unicode,
         'created': datetime.datetime,
