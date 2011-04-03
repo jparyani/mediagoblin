@@ -23,12 +23,12 @@ class RegistrationForm(wtforms.Form):
         [wtforms.validators.Required(),
          wtforms.validators.Length(min=3, max=30),
          wtforms.validators.Regexp(r'^\w+$')])
-    password = wtforms.TextField(
+    password = wtforms.PasswordField(
         'Password',
         [wtforms.validators.Required(),
-         wtforms.validators.Length(min=8, max=30),
+         wtforms.validators.Length(min=6, max=30),
          wtforms.validators.EqualTo('confirm_password')])
-    confirm_password = wtforms.TextField(
+    confirm_password = wtforms.PasswordField(
         'Confirm password',
         [wtforms.validators.Required()])
     email = wtforms.TextField(
