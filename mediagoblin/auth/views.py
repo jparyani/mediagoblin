@@ -79,11 +79,10 @@ def login(request):
     login_failed = False
 
     if request.method == 'POST' and login_form.validate():
-        #try:
         user = request.db.User.find_one(
             {'username': request.POST['username']})
 
-        if user.check_login(request.POST['password']):
+        if user and user.check_login(request.POST['password']):
             # set up login in session
             request.session['user_id'] = unicode(user['_id'])
             request.session.save()
