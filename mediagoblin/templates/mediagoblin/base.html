@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <title>{% block title %}Mediagoblin{% endblock title %}</title>
+    {# <link rel="stylesheet" type="text/css"
+          href="{{ request.staticdirect('/css/base.css') }}"/> #}
+  </head>
+
+  <body>
+  <body>
+    {% block mediagoblin_body %}
+      {% block mediagoblin_header %}
+        <table id="mediagoblin_header">
+          <tr>
+            <td id="mediagoblin_logo">
+              {% block mediagoblin_logo %}
+                <a href="{{ request.urlgen('index') }}">Mediagoblin</a>
+              {% endblock %}
+            </td>
+            <td>{% block mediagoblin_header_title %}Mediagoblin Home{% endblock %}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              {% block mediagoblin_header_subtitle %}
+                perhaps some subtitle here
+              {% endblock %}</td>
+          </tr>
+        </table>
+      {% endblock %}
+      <div id="mediagoblin_content">
+        {% block mediagoblin_content %}
+        {% endblock mediagoblin_content %}
+      </div>
+    {% endblock mediagoblin_body %}
+  </body>
+</html>
