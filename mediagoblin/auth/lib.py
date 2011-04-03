@@ -15,8 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-
 import random
+
+import bcrypt
 
 
 def bcrypt_check_password(raw_pass, stored_hash, extra_salt=None):
@@ -71,7 +72,9 @@ def fake_login_attempt():
     Pretend we're trying to login.
 
     Nothing actually happens here, we're just trying to take up some
-    time.
+    time, approximately the same amount of time as
+    bcrypt_check_password, so as to avoid figuring out what users are
+    on the system by intentionally faking logins a bunch of times.
     """
     rand_salt = bcrypt.gensalt(5)
 
