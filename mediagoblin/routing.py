@@ -33,5 +33,3 @@ def get_mapper():
     mapping.extend(auth_routes, '/auth')
 
     return mapping
-
-
