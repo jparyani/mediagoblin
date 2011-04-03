@@ -14,24 +14,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from routes import Mapper
-
-from mediagoblin.auth.routing import auth_routes
+import wtforms
 
 
-def get_mapper():
-    mapping = Mapper()
-    mapping.minimization = False
-
-    mapping.connect(
-        "index", "/",
-        controller="mediagoblin.views:root_view")
-    mapping.connect(
-        "test_submit", "/test_submit/",
-        controller="mediagoblin.views:submit_test")
-
-    mapping.extend(auth_routes, '/auth')
-
-    return mapping
-
-
+class RegistrationForm(wtforms.Form):
+    username = wtforms.TextField(
+        'Username',
+        [wtforms.validators.Required(),
+         wtforms.validators.Length(min=3, max=30),
+         wtforms.validators.Regexp(r'^\w+$')])
+    password = wtforms.TextField(
+        'Password',
+        [wtforms.validators.Required(),
+         wtforms.validators.Length(min=8, max=30),
+         wtforms.validators.EqualTo('confirm_password')])
+    confirm_password = wtforms.TextField(
+        'Confirm password',
+        [wtforms.validators.Required()])
+    email = wtforms.TextField(
+        'Email address',
+        [wtforms.validators.Required(),
+         wtforms.validators.Email()])

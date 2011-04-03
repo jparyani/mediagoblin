@@ -48,15 +48,18 @@ class User(Document):
 
     structure = {
         'username': unicode,
+        'email': unicode,
         'created': datetime.datetime,
         'plugin_data': dict, # plugins can dump stuff here.
         'pw_hash': unicode,
+        'email_verified': bool,
         }
 
-    required_fields = ['username', 'created', 'pw_hash']
+    required_fields = ['username', 'created', 'pw_hash', 'email']
 
     default_values = {
-        'created': datetime.datetime.utcnow}
+        'created': datetime.datetime.utcnow,
+        'email_verified': False}
 
 
 REGISTER_MODELS = [MediaEntry, User]
