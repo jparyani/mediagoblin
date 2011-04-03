@@ -38,19 +38,12 @@ def setup_user_in_request(request):
         return
 
     user = None
+    user = request.db.User.one(
+        {'_id': mongokit.ObjectId(request.session['user_id'])})
 
-    try:
-        user = request.db.User.one(
-            {'_id': mongokit.ObjectId(request.session['user_id'])})
-        
-        if not user:
-            # Something's wrong... this user doesn't exist?  Invalidate
-            # this session.
-            request.session.invalidate()
-
-    except mongokit.MultipleResultsFound:
-        # Something's wrong... we shouldn't have multiple users with
-        # the same user id.  Invalidate this session.
+    if not user:
+        # Something's wrong... this user doesn't exist?  Invalidate
+        # this session.
         request.session.invalidate()
 
     request.user = user
