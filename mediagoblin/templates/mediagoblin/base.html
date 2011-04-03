@@ -22,9 +22,27 @@
             <td></td>
             <td>
               {% block mediagoblin_header_subtitle %}
-                perhaps some subtitle here
+                Clever subtitle here!
               {% endblock %}</td>
           </tr>
+          {% if request.user %}
+            <tr>
+              <td></td>
+              <td>
+                Welcome {{ user['username'] }}! --
+                <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">
+                  Logout</a>
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td></td>
+              <td>
+                <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
+                  Login</a>
+              </td>
+            </tr>
+          {% endif %}
         </table>
       {% endblock %}
       <div id="mediagoblin_content">
