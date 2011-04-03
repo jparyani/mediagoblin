@@ -35,3 +35,13 @@ class RegistrationForm(wtforms.Form):
         'Email address',
         [wtforms.validators.Required(),
          wtforms.validators.Email()])
+
+
+class LoginForm(wtforms.Form):
+    username = wtforms.TextField(
+        'Username',
+        [wtforms.validators.Required(),
+         wtforms.validators.Regexp(r'^\w+$')])
+    password = wtforms.PasswordField(
+        'Password',
+        [wtforms.validators.Required()])

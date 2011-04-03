@@ -69,7 +69,14 @@ def register_success(request):
 
 
 def login(request):
+    """
+    Mediagoblin login view.
+
+    If you provide the POST with 'next', it'll redirect to that view.
+    """
     login_form = auth_forms.LoginForm(request.POST)
+
+    login_failed = False
 
     if request.method == 'POST' and login_form.validate():
         #try:
@@ -79,15 +86,19 @@ def login(request):
         if user.check_login(request.POST['password']):
             # set up login in session
             request.session['user_id'] = unicode(user['_id'])
+            request.session.save()
 
-            import pdb
-            pdb.set_trace()
-
+            if request.POST.has_key('next'):
+                return exc.HTTPFound(location=request.POST['next'])
+            else:
+                return exc.HTTPFound(
+                    location=request.urlgen("index"))
 
         else:
             # Prevent detecting who's on this system by testing login
             # attempt timings
             auth_lib.fake_login_attempt()
+            login_failed = True
 
     # render
     template = request.template_env.get_template(
@@ -95,7 +106,9 @@ def login(request):
     return Response(
         template.render(
             {'request': request,
-             'login_form': login_form}))
+             'login_form': login_form,
+             'next': request.GET.get('next') or request.POST.get('next'),
+             'login_failed': login_failed}))
 
 
 def logout(request):
