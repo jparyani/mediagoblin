@@ -68,5 +68,39 @@ def register_success(request):
             {'request': request}))
 
 
-def login():
-    pass
+def login(request):
+    login_form = auth_forms.LoginForm(request.POST)
+
+    if request.method == 'POST' and login_form.validate():
+        #try:
+        user = request.db.User.find_one(
+            {'username': request.POST['username']})
+
+        if user.check_login(request.POST['password']):
+            # set up login in session
+            request.session['user_id'] = unicode(user['_id'])
+
+            import pdb
+            pdb.set_trace()
+
+
+        else:
+            # Prevent detecting who's on this system by testing login
+            # attempt timings
+            auth_lib.fake_login_attempt()
+
+    # render
+    template = request.template_env.get_template(
+        'mediagoblin/auth/login.html')
+    return Response(
+        template.render(
+            {'request': request,
+             'login_form': login_form}))
+
+
+def logout(request):
+    template = request.template_env.get_template(
+        'mediagoblin/auth/logout.html')
+    return Response(
+        template.render(
+            {'request': request}))
