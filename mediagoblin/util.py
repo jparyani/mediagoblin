@@ -34,12 +34,14 @@ def setup_user_in_request(request):
     appropriate.
     """
     if not request.session.has_key('user_id'):
+        request.user = None
         return
 
     user = None
 
     try:
-        user = request.db.User.one({'_id': request.session['user_id']})
+        user = request.db.User.one(
+            {'_id': mongokit.ObjectId(request.session['user_id'])})
         
         if not user:
             # Something's wrong... this user doesn't exist?  Invalidate

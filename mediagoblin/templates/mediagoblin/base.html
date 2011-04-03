@@ -29,7 +29,7 @@
             <tr>
               <td></td>
               <td>
-                Welcome {{ user['username'] }}! --
+                Welcome {{ request.user['username'] }}! --
                 <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">
                   Logout</a>
               </td>
