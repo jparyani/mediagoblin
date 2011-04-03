@@ -14,9 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
+
 from mongokit import Document, Set
 
-import datetime
+from mediagoblin.auth import lib as auth_lib
 
 
 class MediaEntry(Document):
@@ -60,6 +62,13 @@ class User(Document):
     default_values = {
         'created': datetime.datetime.utcnow,
         'email_verified': False}
+
+    def check_login(self, password):
+        """
+        See if a user can login with this password
+        """
+        return auth_lib.bcrypt_check_password(
+            password, self['pw_hash'])
 
 
 REGISTER_MODELS = [MediaEntry, User]
