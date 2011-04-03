@@ -48,7 +48,7 @@ def register(request):
             # TODO: Send email authentication request
 
             # Redirect to register_success
-            return exc.HTTPTemporaryRedirect(
+            return exc.HTTPFound(
                 location=request.urlgen("mediagoblin.auth.register_success"))
 
     # render
