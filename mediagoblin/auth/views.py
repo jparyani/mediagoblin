@@ -79,7 +79,7 @@ def login(request):
     login_failed = False
 
     if request.method == 'POST' and login_form.validate():
-        user = request.db.User.find_one(
+        user = request.db.User.one(
             {'username': request.POST['username']})
 
         if user and user.check_login(request.POST['password']):
