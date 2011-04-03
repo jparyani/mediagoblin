@@ -16,7 +16,7 @@
 
 import os
 
-import bcrypt
+import random
 
 
 def bcrypt_check_password(raw_pass, stored_hash, extra_salt=None):
@@ -64,3 +64,20 @@ def bcrypt_gen_password_hash(raw_pass, extra_salt=None):
         raw_pass = u"%s:%s" % (extra_salt, raw_pass)
 
     return unicode(bcrypt.hashpw(raw_pass, bcrypt.gensalt()))
+
+
+def fake_login_attempt():
+    """
+    Pretend we're trying to login.
+
+    Nothing actually happens here, we're just trying to take up some
+    time.
+    """
+    rand_salt = bcrypt.gensalt(5)
+
+    hashed_pass = bcrypt.hashpw(str(random.random()), rand_salt)
+
+    randplus_stored_hash = bcrypt.hashpw(str(random.random()), rand_salt)
+    randplus_hashed_pass = bcrypt.hashpw(hashed_pass, rand_salt)
+
+    randplus_stored_hash == randplus_hashed_pass
