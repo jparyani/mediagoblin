@@ -81,8 +81,7 @@ class MediagoblinApp(object):
         request.db = self.db
 
         # Do we really want to load this via middleware?  Maybe?
-        # let's comment it out till we start using it :)
-        #request.session = request.environ['beaker.session']
+        request.session = request.environ['beaker.session']
 
         return controller(request)(environ, start_response)
 
