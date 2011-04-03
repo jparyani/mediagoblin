@@ -36,12 +36,12 @@ def setup_user_in_request(request):
     if not request.session.has_key('user_id'):
         return
 
+    user = None
+
     try:
         user = request.db.User.one({'_id': request.session['user_id']})
         
-        if user:
-            request.user = user
-        else:
+        if not user:
             # Something's wrong... this user doesn't exist?  Invalidate
             # this session.
             request.session.invalidate()
@@ -50,3 +50,5 @@ def setup_user_in_request(request):
         # Something's wrong... we shouldn't have multiple users with
         # the same user id.  Invalidate this session.
         request.session.invalidate()
+
+    request.user = user
