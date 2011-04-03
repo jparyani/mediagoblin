@@ -63,4 +63,4 @@ def bcrypt_gen_password_hash(raw_pass, extra_salt=None):
     if extra_salt:
         raw_pass = u"%s:%s" % (extra_salt, raw_pass)
 
-    return bcrypt.hashpw(raw_pass, bcrypt.gensalt())
+    return unicode(bcrypt.hashpw(raw_pass, bcrypt.gensalt()))
