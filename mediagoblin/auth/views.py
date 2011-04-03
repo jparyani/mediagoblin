@@ -112,8 +112,8 @@ def login(request):
 
 
 def logout(request):
-    template = request.template_env.get_template(
-        'mediagoblin/auth/logout.html')
-    return Response(
-        template.render(
-            {'request': request}))
+    # Maybe deleting the user_id parameter would be enough?
+    request.session.delete()
+    
+    return exc.HTTPFound(
+        location=request.urlgen("index"))
