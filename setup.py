@@ -35,6 +35,7 @@ setup(
         'wtforms',
         'py-bcrypt',
         'nose',
+        'werkzeug',
         ],
     test_suite='nose.collector',
 
