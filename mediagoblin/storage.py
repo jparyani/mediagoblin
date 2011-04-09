@@ -84,6 +84,14 @@ class StorageInterface(object):
         # Subclasses should override this method.
         self.__raise_not_implemented()
 
+    def get_file(self, filepath):
+        # Subclasses should override this method.
+        self.__raise_not_implemented()
+
+    def delete_file(self, filepath):
+        # Subclasses should override this method.
+        self.__raise_not_implemented()
+
     def get_unique_filename(self, filepath):
         """
         If a filename at filepath already exists, generate a new name.
@@ -96,13 +104,7 @@ class StorageInterface(object):
         >>> storage_handler.get_unique_filename(['dir1', 'dir2', 'fname.jpg'])
         ['dir1', 'dir2', 'd02c3571-dd62-4479-9d62-9e3012dada29-fname.jpg']
         """
-        # Subclasses should override this method.
-        self.__raise_not_implemented()
-
-    def get_file(self, filepath):
-        # Subclasses should override this method.
-        self.__raise_not_implemented()
-
-    def delete_file(self, filepath):
-        # Subclasses should override this method.
-        self.__raise_not_implemented()
+        if self.file_exists(filepath):
+            return filepath[:-1] + ["%s-%s" % (uuid.uuid4(), filepath[-1])]
+        else:
+            return filepath
