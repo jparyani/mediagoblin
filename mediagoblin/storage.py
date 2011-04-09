@@ -102,7 +102,7 @@ class StorageInterface(object):
         
         But if a file does exist, let's get one back with at uuid tacked on:
         >>> storage_handler.get_unique_filename(['dir1', 'dir2', 'fname.jpg'])
-        ['dir1', 'dir2', 'd02c3571-dd62-4479-9d62-9e3012dada29-fname.jpg']
+        [u'dir1', u'dir2', u'd02c3571-dd62-4479-9d62-9e3012dada29-fname.jpg']
         """
         if self.file_exists(filepath):
             return filepath[:-1] + ["%s-%s" % (uuid.uuid4(), filepath[-1])]
