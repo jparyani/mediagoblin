@@ -84,11 +84,22 @@ class StorageInterface(object):
         # Subclasses should override this method.
         self.__raise_not_implemented()
 
-    def get_file(self, filepath):
+    def get_file(self, filepath, mode):
+        """
+        Return a file-like object for reading/writing from this filepath.
+
+        Should create directories, buckets, whatever, as necessary.
+        """
         # Subclasses should override this method.
         self.__raise_not_implemented()
 
     def delete_file(self, filepath):
+        """
+        Delete or dereference the file at filepath.
+
+        This might need to delete directories, buckets, whatever, for
+        cleanliness.  (Be sure to avoid race conditions on that though)
+        """
         # Subclasses should override this method.
         self.__raise_not_implemented()
 
