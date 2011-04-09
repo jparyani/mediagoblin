@@ -18,6 +18,10 @@
 from werkzeug.utils import secure_filename
 
 
+class Error(Exception): pass
+class InvalidFilepath(Error): pass
+
+
 def clean_listy_filepath(listy_filepath):
     """
     Take a listy filepath (like ['dir1', 'dir2', 'filename.jpg']) and
@@ -34,8 +38,14 @@ def clean_listy_filepath(listy_filepath):
     Returns:
       A cleaned list of unicode objects.
     """
-    return [
+    cleaned_filepath = [
         unicode(secure_filename(filepath))
         for filepath in listy_filepath]
+
+    if u'' in cleaned_filepath:
+        raise InvalidFilepath(
+            "A filename component could not be resolved into a usable name.")
+
+    return cleaned_filepath
 
 

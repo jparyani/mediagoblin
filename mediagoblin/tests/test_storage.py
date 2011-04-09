@@ -30,3 +30,12 @@ def test_clean_listy_filepath():
     expected = [u'etc', u'passwd']
     assert storage.clean_listy_filepath(
         ['../../../etc/', 'passwd']) == expected
+
+    try:
+        storage.clean_listy_filepath(
+            ['../../', 'linooks.jpg'])
+    except storage.InvalidFilepath:
+        # Yes, this error should be raise
+        pass
+    else:
+        assert "success" == "failboat"
