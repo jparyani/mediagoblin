@@ -144,12 +144,6 @@ class BasicFileStorage(StorageInterface):
         return os.path.join(
             self.base_dir, *clean_listy_filepath(filepath))
         
-    def _create_dirs_for_filepath(self, filepath):
-        """
-        Create any necessary directories for filepath
-        """
-        pass
-
     def file_exists(self, filepath):
         return os.path.exists(self._resolve_filepath(filepath))
 
