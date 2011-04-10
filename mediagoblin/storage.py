@@ -112,7 +112,7 @@ class StorageInterface(object):
         # Subclasses should override this method.
         self.__raise_not_implemented()
 
-    def get_unique_filename(self, filepath):
+    def get_unique_filepath(self, filepath):
         """
         If a filename at filepath already exists, generate a new name.
 
