@@ -19,6 +19,7 @@ import os
 import tempfile
 
 from nose.tools import assert_raises
+from werkzeug.utils import secure_filename
 
 from mediagoblin import storage
 
@@ -82,8 +83,24 @@ def test_basic_storage_file_exists():
     assert not this_storage.file_exists(['dnedir1', 'dnedir2', 'somefile.lol'])
 
 
-def test_basic_storage_get_unique_filename():
-    pass
+def test_basic_storage_get_unique_filepath():
+    tmpdir, this_storage = get_tmp_filestorage()
+    
+    # write something that exists
+    os.makedirs(os.path.join(tmpdir, 'dir1', 'dir2'))
+    filename = os.path.join(tmpdir, 'dir1', 'dir2', 'filename.txt')
+    with open(filename, 'w') as ourfile:
+        ourfile.write("I'm having a lovely day!")
+
+    # now we want something new, with the same name!
+    new_filepath = this_storage.get_unique_filepath(
+        ['dir1', 'dir2', 'filename.txt'])
+    assert new_filepath[:-1] == [u'dir1', u'dir2']
+
+    new_filename = new_filepath[-1]
+    assert new_filename.endswith('filename.txt')
+    assert len(new_filename) > len('filename.txt')
+    assert new_filename == secure_filename(new_filename)
 
 
 def test_basic_storage_get_file():
