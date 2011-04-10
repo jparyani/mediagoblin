@@ -86,7 +86,7 @@ class StorageInterface(object):
         # Subclasses should override this method.
         self.__raise_not_implemented()
 
-    def get_file(self, filepath, mode):
+    def get_file(self, filepath, mode='r'):
         """
         Return a file-like object for reading/writing from this filepath.
 
@@ -156,8 +156,16 @@ class BasicFileStorage(StorageInterface):
     def file_exists(self, filepath):
         return os.path.exists(self._resolve_filepath(filepath))
 
-    def get_file(self, filepath, mode):
-        pass
+    def get_file(self, filepath, mode='r'):
+        # Make directories if necessary
+        if len(filepath) > 1:
+            directory = self._resolve_filepath(filepath[:-1])
+            if not os.path.exists('directory'):
+                os.makedirs(directory)
+
+        # Grab and return the file in the mode specified
+        return open(self._resolve_filepath(filepath), mode)
+
 
     def delete_file(self, filepath):
         pass
