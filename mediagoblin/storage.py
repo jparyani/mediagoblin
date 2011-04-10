@@ -104,6 +104,14 @@ class StorageInterface(object):
         # Subclasses should override this method.
         self.__raise_not_implemented()
 
+    def url_for_file(self, filepath):
+        """
+        Get the URL for this file.  This assumes our storage has been
+        mounted with some kind of URL which makes this possible.
+        """
+        # Subclasses should override this method.
+        self.__raise_not_implemented()
+
     def get_unique_filename(self, filepath):
         """
         If a filename at filepath already exists, generate a new name.
@@ -151,4 +159,7 @@ class BasicFileStorage(StorageInterface):
         pass
 
     def delete_file(self, filepath):
+        pass
+
+    def url_for_file(self, filepath):
         pass
