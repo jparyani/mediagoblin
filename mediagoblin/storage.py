@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
 
 from werkzeug.utils import secure_filename
 
@@ -119,3 +120,41 @@ class StorageInterface(object):
             return filepath[:-1] + ["%s-%s" % (uuid.uuid4(), filepath[-1])]
         else:
             return filepath
+
+
+class BasicFileStorage(StorageInterface):
+    """
+    Basic local filesystem implementation of storage API
+    """
+
+    def __init__(self, base_dir, serve_url=None):
+        """
+        Keyword arguments:
+        - base_dir: Base directory things will be served out of.  MUST
+          be an absolute path.
+        - serve_url: URL files will be served from
+        """
+        self.base_dir = base_dir
+        self.serve_url = serve_url
+
+    def _resolve_filepath(self, filepath):
+        """
+        Transform the given filepath into a local filesystem filepath.
+        """
+        return os.path.join(
+            self.base_dir, *clean_listy_filepath(filepath))
+        
+    def _create_dirs_for_filepath(self, filepath):
+        """
+        Create any necessary directories for filepath
+        """
+        pass
+
+    def file_exists(self, filepath):
+        return os.path.exists(self._resolve_filepath(filepath))
+
+    def get_file(self, filepath, mode):
+        pass
+
+    def delete_file(self, filepath):
+        pass
