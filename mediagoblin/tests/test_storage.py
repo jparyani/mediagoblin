@@ -70,6 +70,19 @@ def test_basic_storage__resolve_filepath():
 
 
 def test_basic_storage_file_exists():
+    tmpdir, this_storage = get_tmp_filestorage()
+
+    os.makedirs(os.path.join(tmpdir, 'dir1', 'dir2'))
+    filename = os.path.join(tmpdir, 'dir1', 'dir2', 'filename.txt')
+    with open(filename, 'w') as ourfile:
+        ourfile.write("I'm having a lovely day!")
+
+    assert this_storage.file_exists(['dir1', 'dir2', 'filename.txt'])
+    assert not this_storage.file_exists(['dir1', 'dir2', 'thisfile.lol'])
+    assert not this_storage.file_exists(['dnedir1', 'dnedir2', 'somefile.lol'])
+
+
+def test_basic_storage_get_unique_filename():
     pass
 
 
