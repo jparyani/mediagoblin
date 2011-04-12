@@ -47,7 +47,7 @@ Why WSGI Minimalism
 
 Chris Webber on "Why WSGI Minimalism":
 
-    If you notice in the technology list above, I list a lot of
+    If you notice in the technology listI list a lot of
     components that are very `Django Project`_, but not actually
     Django components.  What can I say, I really like a lot of the
     ideas in Django!  Which leads to the question: why not just use
@@ -144,12 +144,12 @@ Chris Webber on "Why MongoDB":
     dawg, I heard you liked plugins, so I put a database in your
     database so you can query while you query.)  Gross.
 
-    I also don't want things to be too lose so that we forget or lose
+    I also don't want things to be too loose so that we forget or lose
     the structure of things, and that's one reason why I want to use
     MongoKit, because we can cleanly define a much structure as we
     want and verify that documents match that structure generally
-    without adding too much bloat or overhead (mongokit is a pretty
-    lightweight wrapper and doesn't inject extra mongokit-specific
+    without adding too much bloat or overhead (MongoKit is a pretty
+    lightweight wrapper and doesn't inject extra MongoKit-specific
     stuff into the database, which is nice and nicer than many other
     ORMs in that way).
 
@@ -167,4 +167,3 @@ Will Kahn-Greene on "Why Sphinx":
     There are other doc systems out there, but given that GNU
     MediaGoblin is being written in Python, it makes sense to use
     Sphinx for now.
-

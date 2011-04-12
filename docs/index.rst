@@ -20,7 +20,8 @@ Contents:
 
    foreward
    softwarestack
-   installation
+   deploymenthowto
+   hackinghowto
    designdecisions
 
 
