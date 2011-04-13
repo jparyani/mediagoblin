@@ -75,17 +75,21 @@ Run::
 Creating a new file
 ===================
 
-All new files need to have the standard GNU MediaGoblin
-license/copyright header.
+All new files need to have license/copyright information.
 
-For Python files, include the license/copyright header at the top such
-that each line of the header starts with ``#``.
+The following kinds of files get the GNU AGPL header:
 
-For Jinja2 template files, FIXME.
+* Python files
+* JavaScript files
+* templates
+* other files with code in them
 
-For JavaScript files, FIXME.
+The following files get a CC BY header:
 
-For CSS files, FIXME.
+* CSS files
 
-If you're doing the copy-paste thing, make sure to update the
-copyright year.
+The following files don't get a header because that's hard, but are
+under the CC BY license:
+
+* image files
+* video files
