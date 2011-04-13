@@ -1,4 +1,4 @@
-# GNU Mediagoblin -- federated, autonomous media hosting
+# GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
 # This program is free software: you can redistribute it and/or modify
@@ -37,7 +37,7 @@ def load_controller(string):
     return func
 
 
-class MediagoblinApp(object):
+class MediaGoblinApp(object):
     """
     Really basic wsgi app using routes and WebOb.
     """
@@ -90,7 +90,7 @@ def paste_app_factory(global_config, **kw):
     connection = mongokit.Connection(
         kw.get('db_host'), kw.get('db_port'))
 
-    mgoblin_app = MediagoblinApp(
+    mgoblin_app = MediaGoblinApp(
         connection, kw.get('db_name', 'mediagoblin'),
         user_template_path=kw.get('local_templates'))
 

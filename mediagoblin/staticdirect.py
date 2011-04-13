@@ -1,4 +1,4 @@
-# GNU Mediagoblin -- federated, autonomous media hosting
+# GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
 # This program is free software: you can redistribute it and/or modify
