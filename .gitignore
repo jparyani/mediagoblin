@@ -7,3 +7,4 @@ eggs/
 mediagoblin.egg-info
 *.pyc
 *.pyo
+docs/_build/
