@@ -2,17 +2,30 @@
  Foreward
 ==========
 
-What is GNU MediaGoblin
-=======================
+About this manual
+=================
 
-See the web-site at http://mediagoblin.org/ .
+This is the GNU MediaGoblin manual.  This documentation targets the
+following groups of individuals:
+
+* people who want to use the software
+* people who want to deploy the software
+* contributors
+
+This manual is a living document and is in the ``mediagoblin``
+repository in the ``docs/`` directory.
 
 
 Who wrote this documentation
 ============================
 
-* Chris Webber
-* Will Kahn-Greene
+In no particular order:
+
+* Chris
+* Will
+* Deb
+* Greg
+* Karen
 
 
 How should I bring up errors in the documentation

@@ -6,23 +6,21 @@
 Welcome to GNU MediaGoblin's documentation!
 ===========================================
 
-This documentation covers the GNU MediaGoblin software.  It is versioned
-alongside the code and the source for this documentation is located in
-the mediagoblin repository in the ``docs/`` directory.
-
-It is also viewable on the Web site in HTML form.
-
-
-Contents:
+Table of Contents:
 
 .. toctree::
    :maxdepth: 2
 
    foreward
-   softwarestack
+   mediagoblin
    deploymenthowto
+   contributinghowto
    hackinghowto
+   theminghowto
+   softwarestack
    designdecisions
+   workflow
+   codedocs
 
 
 Indices and tables

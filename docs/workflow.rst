@@ -1,6 +1,12 @@
-========================================================
- Workflow, and other structurally significant braindumps
-========================================================
+==========================================================================
+ Design Document: Workflow, and other structurally significant braindumps
+==========================================================================
+
+.. Note::
+
+   When we get a wiki, this will get moved there.  It's here for now
+   mostly because we didn't have a better place for it.
+
 
 This document attempts to describe the envisioned workflow of
 mediagoblin, from a structural standpoint.  For now, *nothing* in this

@@ -1,9 +1,12 @@
+.. _hacking-howto:
+
 ===============
  Hacking HOWTO
 ===============
 
-So you want to hack on GNU MediaGoblin
-======================================
+
+So you want to hack on GNU MediaGoblin?
+=======================================
 
 First thing to do is check out the Web site where we list all the
 project infrastructure including:
@@ -75,6 +78,8 @@ Run::
 Creating a new file
 ===================
 
+FIXME - this needs to be updated when it's set in stone.
+
 All new files need to have license/copyright information.
 
 The following kinds of files get the GNU AGPL header:
@@ -93,3 +98,15 @@ under the CC BY license:
 
 * image files
 * video files
+
+
+Quickstart for Django programmers
+=================================
+
+FIXME - write this
+
+
+Bite-sized bugs to start with
+=============================
+
+FIXME - write this
