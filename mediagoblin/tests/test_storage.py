@@ -140,7 +140,22 @@ def test_basic_storage_get_file():
 
 
 def test_basic_storage_delete_file():
-    pass
+    tmpdir, this_storage = get_tmp_filestorage()
+
+    assert not os.path.exists(
+        os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'))
+
+    filepath = ['dir1', 'dir2', 'ourfile.txt']
+    with this_storage.get_file(filepath, 'w') as our_file:
+        our_file.write('Testing this file')
+
+    assert os.path.exists(
+        os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'))
+
+    this_storage.delete_file(filepath)
+    
+    assert not os.path.exists(
+        os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'))
 
 
 def test_basic_storage_url_for_file():
