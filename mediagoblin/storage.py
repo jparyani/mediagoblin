@@ -22,6 +22,7 @@ from werkzeug.utils import secure_filename
 
 class Error(Exception): pass
 class InvalidFilepath(Error): pass
+class NoWebServing(Error): pass
 
 class NotImplementedError(Error): pass
 
@@ -136,15 +137,15 @@ class BasicFileStorage(StorageInterface):
     Basic local filesystem implementation of storage API
     """
 
-    def __init__(self, base_dir, serve_url=None):
+    def __init__(self, base_dir, base_url=None):
         """
         Keyword arguments:
         - base_dir: Base directory things will be served out of.  MUST
           be an absolute path.
-        - serve_url: URL files will be served from
+        - base_url: URL files will be served from
         """
         self.base_dir = base_dir
-        self.serve_url = serve_url
+        self.base_url = base_url
 
     def _resolve_filepath(self, filepath):
         """
@@ -166,9 +167,16 @@ class BasicFileStorage(StorageInterface):
         # Grab and return the file in the mode specified
         return open(self._resolve_filepath(filepath), mode)
 
-
     def delete_file(self, filepath):
-        pass
+        # TODO: Also delete unused directories if empty (safely, with
+        # checks to avoid race conditions).
+        os.remove(self._resolve_filepath(filepath))
 
     def url_for_file(self, filepath):
-        pass
+        if not self.base_url:
+            raise NoWebServing(
+                "base_url not set, cannot provide file urls")
+
+        return urlparse.urljoin(
+            self.base_url,
+            '/'.join(clean_listy_filepath(filepath)))
