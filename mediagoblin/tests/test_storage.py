@@ -104,7 +104,39 @@ def test_basic_storage_get_unique_filepath():
 
 
 def test_basic_storage_get_file():
-    pass
+    tmpdir, this_storage = get_tmp_filestorage()
+
+    # Write a brand new file
+    filepath = ['dir1', 'dir2', 'ourfile.txt']
+
+    with this_storage.get_file(filepath, 'w') as our_file:
+        our_file.write('First file')
+    with this_storage.get_file(filepath, 'r') as our_file:
+        assert our_file.read() == 'First file'
+    assert os.path.exists(os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'))
+    with file(os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'), 'r') as our_file:
+        assert our_file.read() == 'First file'
+
+    # Write to the same path but try to get a unique file.
+    new_filepath = this_storage.get_unique_filepath(filepath)
+    assert not os.path.exists(os.path.join(tmpdir, *new_filepath))
+
+    with this_storage.get_file(new_filepath, 'w') as our_file:
+        our_file.write('Second file')
+    with this_storage.get_file(new_filepath, 'r') as our_file:
+        assert our_file.read() == 'Second file'
+    assert os.path.exists(os.path.join(tmpdir, *new_filepath))
+    with file(os.path.join(tmpdir, *new_filepath), 'r') as our_file:
+        assert our_file.read() == 'Second file'
+
+    # Read from an existing file
+    manually_written_file = os.makedirs(
+        os.path.join(tmpdir, 'testydir'))
+    with file(os.path.join(tmpdir, 'testydir/testyfile.txt'), 'w') as testyfile:
+        testyfile.write('testy file!  so testy.')
+
+    with this_storage.get_file(['testydir', 'testyfile.txt']) as testyfile:
+        assert testyfile.read() == 'testy file!  so testy.'
 
 
 def test_basic_storage_delete_file():
