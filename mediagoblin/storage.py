@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import urlparse
 import uuid
 
 from werkzeug.utils import secure_filename
@@ -106,7 +107,7 @@ class StorageInterface(object):
         # Subclasses should override this method.
         self.__raise_not_implemented()
 
-    def url_for_file(self, filepath):
+    def file_url(self, filepath):
         """
         Get the URL for this file.  This assumes our storage has been
         mounted with some kind of URL which makes this possible.
@@ -176,7 +177,7 @@ class BasicFileStorage(StorageInterface):
         # checks to avoid race conditions).
         os.remove(self._resolve_filepath(filepath))
 
-    def url_for_file(self, filepath):
+    def file_url(self, filepath):
         if not self.base_url:
             raise NoWebServing(
                 "base_url not set, cannot provide file urls")
