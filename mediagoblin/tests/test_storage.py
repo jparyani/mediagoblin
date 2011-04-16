@@ -159,4 +159,24 @@ def test_basic_storage_delete_file():
 
 
 def test_basic_storage_url_for_file():
-    pass
+    # Not supplying a base_url should actually just bork.
+    tmpdir, this_storage = get_tmp_filestorage()
+    assert_raises(
+        storage.NoWebServing,
+        this_storage.file_url,
+        ['dir1', 'dir2', 'filename.txt'])
+
+    # base_url without domain
+    tmpdir, this_storage = get_tmp_filestorage('/media/')
+    result = this_storage.file_url(
+        ['dir1', 'dir2', 'filename.txt'])
+    expected = '/media/dir1/dir2/filename.txt'
+    assert result == expected
+
+    # base_url with domain
+    tmpdir, this_storage = get_tmp_filestorage(
+        'http://media.example.org/ourmedia/')
+    result = this_storage.file_url(
+        ['dir1', 'dir2', 'filename.txt'])
+    expected = 'http://media.example.org/ourmedia/dir1/dir2/filename.txt'
+    assert result == expected
