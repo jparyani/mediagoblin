@@ -165,7 +165,7 @@ class BasicFileStorage(StorageInterface):
         # Make directories if necessary
         if len(filepath) > 1:
             directory = self._resolve_filepath(filepath[:-1])
-            if not os.path.exists('directory'):
+            if not os.path.exists(directory):
                 os.makedirs(directory)
 
         # Grab and return the file in the mode specified
