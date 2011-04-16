@@ -126,6 +126,10 @@ class StorageInterface(object):
         >>> storage_handler.get_unique_filename(['dir1', 'dir2', 'fname.jpg'])
         [u'dir1', u'dir2', u'd02c3571-dd62-4479-9d62-9e3012dada29-fname.jpg']
         """
+        # Make sure we have a clean filepath to start with, since
+        # we'll be possibly tacking on stuff to the filename.
+        filepath = clean_listy_filepath(filepath)
+
         if self.file_exists(filepath):
             return filepath[:-1] + ["%s-%s" % (uuid.uuid4(), filepath[-1])]
         else:
