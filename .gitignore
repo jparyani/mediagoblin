@@ -3,8 +3,10 @@ bin/
 develop-eggs/
 build/
 eggs/
+parts/
 .installed.cfg
 mediagoblin.egg-info
 *.pyc
 *.pyo
 docs/_build/
+user_dev/
