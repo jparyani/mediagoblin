@@ -45,5 +45,8 @@ setup(
     entry_points = """\
       [paste.app_factory]
       app = mediagoblin.app:paste_app_factory
+
+      [zc.buildout]
+      make_user_dev_dirs = mediagoblin.buildout_recipes:MakeUserDevDirs
       """,
     )
