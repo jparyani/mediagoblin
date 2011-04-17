@@ -20,7 +20,7 @@ import routes
 import mongokit
 from webob import Request, exc
 
-from mediagoblin import routing, util, models
+from mediagoblin import routing, util, models, storage
 
 
 class Error(Exception): pass
@@ -31,13 +31,24 @@ class MediaGoblinApp(object):
     """
     Really basic wsgi app using routes and WebOb.
     """
-    def __init__(self, connection, database_path, user_template_path=None):
+    def __init__(self, connection, database_path,
+                 public_store, queue_store,
+                 user_template_path=None):
+        # Get the template environment
         self.template_env = util.get_jinja_env(user_template_path)
+        
+        # Set up storage systems
+        self.public_store = public_store
+        self.queue_store = queue_store
+
+        # Set up database
         self.connection = connection
         self.db = connection[database_path]
+        models.register_models(connection)
+
+        # set up routing
         self.routing = routing.get_mapper()
 
-        models.register_models(connection)
 
     def __call__(self, environ, start_response):
         request = Request(environ)
@@ -82,10 +93,14 @@ def paste_app_factory(global_config, **kw):
         kw.get('db_host'), kw.get('db_port'))
 
     # Set up the storage systems.
-    ## TODO: allow for extra storage systems that aren't just
-    ## BasicFileStorage.
+    public_store = storage.storage_system_from_paste_config(
+        kw, 'publicstore')
+    queue_store = storage.storage_system_from_paste_config(
+        kw, 'queuestore')
+
     mgoblin_app = MediaGoblinApp(
         connection, kw.get('db_name', 'mediagoblin'),
+        public_store=public_store, queue_store=queue_store,
         user_template_path=kw.get('local_templates'))
 
     return mgoblin_app
