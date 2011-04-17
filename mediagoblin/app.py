@@ -20,7 +20,7 @@ import routes
 import mongokit
 from webob import Request, exc
 
-from mediagoblin import routing, util, models, storage
+from mediagoblin import routing, util, models, storage, staticdirect
 
 
 class Error(Exception): pass
@@ -33,6 +33,7 @@ class MediaGoblinApp(object):
     """
     def __init__(self, connection, database_path,
                  public_store, queue_store,
+                 staticdirector,
                  user_template_path=None):
         # Get the template environment
         self.template_env = util.get_jinja_env(user_template_path)
@@ -49,10 +50,14 @@ class MediaGoblinApp(object):
         # set up routing
         self.routing = routing.get_mapper()
 
+        # set up staticdirector tool
+        self.staticdirector = staticdirector
 
     def __call__(self, environ, start_response):
         request = Request(environ)
         path_info = request.path_info
+
+        ## Routing / controller loading stuff
         route_match = self.routing.match(path_info)
 
         # No matching page?
@@ -75,11 +80,13 @@ class MediaGoblinApp(object):
         controller = util.import_component(route_match['controller'])
         request.start_response = start_response
 
+        ## Attach utilities to the request object
         request.matchdict = route_match
         request.app = self
         request.template_env = self.template_env
         request.urlgen = routes.URLGenerator(self.routing, environ)
         request.db = self.db
+        request.staticdirect = self.staticdirector
         # Do we really want to load this via middleware?  Maybe?
         request.session = request.environ['beaker.session']
         util.setup_user_in_request(request)
@@ -98,9 +105,22 @@ def paste_app_factory(global_config, **kw):
     queue_store = storage.storage_system_from_paste_config(
         kw, 'queuestore')
 
+    # Set up the staticdirect system
+    if kw.has_key('direct_remote_path'):
+        staticdirector = staticdirect.RemoteStaticDirect(
+            kw['direct_remote_path'].strip())
+    elif kw.has_key('direct_remote_paths'):
+        staticdirector = staticdirect.MultiRemoteStaticDirect(
+            dict([line.strip().split(' ', 1)
+                  for line in kw['direct_remote_paths'].strip().splitlines()]))
+    else:
+        raise ImproperlyConfigured(
+            "One of direct_remote_path or direct_remote_paths must be provided")
+
     mgoblin_app = MediaGoblinApp(
         connection, kw.get('db_name', 'mediagoblin'),
         public_store=public_store, queue_store=queue_store,
+        staticdirector=staticdirector,
         user_template_path=kw.get('local_templates'))
 
     return mgoblin_app
