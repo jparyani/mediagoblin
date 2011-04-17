@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
+
 import jinja2
 import mongokit
 
@@ -54,3 +56,19 @@ def setup_user_in_request(request):
         request.session.invalidate()
 
     request.user = user
+
+
+def import_component(import_string):
+    """
+    Import a module component defined by STRING.  Probably a method,
+    class, or global variable.
+
+    Args:
+     - import_string: a string that defines what to import.  Written
+       in the format of "module1.module2:component"
+    """
+    module_name, func_name = import_string.split(':', 1)
+    __import__(module_name)
+    module = sys.modules[module_name]
+    func = getattr(module, func_name)
+    return func

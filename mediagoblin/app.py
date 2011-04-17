@@ -14,10 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import urllib
 
-from beaker.middleware import SessionMiddleware
 import routes
 import mongokit
 from webob import Request, exc
@@ -27,14 +25,6 @@ from mediagoblin import routing, util, models
 
 class Error(Exception): pass
 class ImproperlyConfigured(Error): pass
-
-
-def load_controller(string):
-    module_name, func_name = string.split(':', 1)
-    __import__(module_name)
-    module = sys.modules[module_name]
-    func = getattr(module, func_name)
-    return func
 
 
 class MediaGoblinApp(object):
@@ -71,7 +61,7 @@ class MediaGoblinApp(object):
             # Okay, no matches.  404 time!
             return exc.HTTPNotFound()(environ, start_response)
 
-        controller = load_controller(route_match['controller'])
+        controller = util.import_component(route_match['controller'])
         request.start_response = start_response
 
         request.matchdict = route_match
@@ -87,9 +77,13 @@ class MediaGoblinApp(object):
 
 
 def paste_app_factory(global_config, **kw):
+    # Get the database connection
     connection = mongokit.Connection(
         kw.get('db_host'), kw.get('db_port'))
 
+    # Set up the storage systems.
+    ## TODO: allow for extra storage systems that aren't just
+    ## BasicFileStorage.
     mgoblin_app = MediaGoblinApp(
         connection, kw.get('db_name', 'mediagoblin'),
         user_template_path=kw.get('local_templates'))
