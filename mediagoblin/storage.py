@@ -23,6 +23,9 @@ from werkzeug.utils import secure_filename
 
 from mediagoblin import util
 
+########
+# Errors
+########
 
 class Error(Exception): pass
 class InvalidFilepath(Error): pass
@@ -31,32 +34,9 @@ class NoWebServing(Error): pass
 class NotImplementedError(Error): pass
 
 
-def clean_listy_filepath(listy_filepath):
-    """
-    Take a listy filepath (like ['dir1', 'dir2', 'filename.jpg']) and
-    clean out any nastiness from it.
-
-    For example:
-    >>> clean_listy_filepath([u'/dir1/', u'foo/../nasty', u'linooks.jpg'])
-    [u'dir1', u'foo_.._nasty', u'linooks.jpg']
-
-    Args:
-    - listy_filepath: a list of filepath components, mediagoblin
-      storage API style.
-
-    Returns:
-      A cleaned list of unicode objects.
-    """
-    cleaned_filepath = [
-        unicode(secure_filename(filepath))
-        for filepath in listy_filepath]
-
-    if u'' in cleaned_filepath:
-        raise InvalidFilepath(
-            "A filename component could not be resolved into a usable name.")
-
-    return cleaned_filepath
-
+###############################################
+# Storage interface & basic file implementation
+###############################################
 
 class StorageInterface(object):
     """
@@ -196,6 +176,37 @@ class BasicFileStorage(StorageInterface):
         return urlparse.urljoin(
             self.base_url,
             '/'.join(clean_listy_filepath(filepath)))
+
+
+###########
+# Utilities
+###########
+
+def clean_listy_filepath(listy_filepath):
+    """
+    Take a listy filepath (like ['dir1', 'dir2', 'filename.jpg']) and
+    clean out any nastiness from it.
+
+    For example:
+    >>> clean_listy_filepath([u'/dir1/', u'foo/../nasty', u'linooks.jpg'])
+    [u'dir1', u'foo_.._nasty', u'linooks.jpg']
+
+    Args:
+    - listy_filepath: a list of filepath components, mediagoblin
+      storage API style.
+
+    Returns:
+      A cleaned list of unicode objects.
+    """
+    cleaned_filepath = [
+        unicode(secure_filename(filepath))
+        for filepath in listy_filepath]
+
+    if u'' in cleaned_filepath:
+        raise InvalidFilepath(
+            "A filename component could not be resolved into a usable name.")
+
+    return cleaned_filepath
 
 
 def storage_system_from_paste_config(paste_config, storage_prefix):
