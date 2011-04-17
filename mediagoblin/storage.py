@@ -65,9 +65,17 @@ class StorageInterface(object):
     It is important to note that the storage API idea of a "filepath"
     is actually like ['dir1', 'dir2', 'file.jpg'], so keep that in
     mind while reading method documentation.
+
+    You should set up your __init__ method with whatever keyword
+    arguments are appropriate to your storage system, but you should
+    also passively accept all extraneous keyword arguments like:
+
+      def __init__(self, **kwargs):
+          pass
+
+    See BasicFileStorage as a simple implementation of the
+    StorageInterface.
     """
-    # def __init__(self, *args, **kwargs):
-    #     pass
 
     def __raise_not_implemented(self):
         """
@@ -142,7 +150,7 @@ class BasicFileStorage(StorageInterface):
     Basic local filesystem implementation of storage API
     """
 
-    def __init__(self, base_dir, base_url=None):
+    def __init__(self, base_dir, base_url=None, **kwargs):
         """
         Keyword arguments:
         - base_dir: Base directory things will be served out of.  MUST
