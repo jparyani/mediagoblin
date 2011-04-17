@@ -82,14 +82,16 @@ class MediaGoblinApp(object):
 
         ## Attach utilities to the request object
         request.matchdict = route_match
-        request.app = self
-        request.template_env = self.template_env
         request.urlgen = routes.URLGenerator(self.routing, environ)
-        request.db = self.db
-        request.staticdirect = self.staticdirector
         # Do we really want to load this via middleware?  Maybe?
         request.session = request.environ['beaker.session']
         util.setup_user_in_request(request)
+        # Attach self as request.app
+        # Also attach a few utilities from request.app for convenience?
+        request.app = self
+        request.template_env = self.template_env
+        request.db = self.db
+        request.staticdirect = self.staticdirector
 
         return controller(request)(environ, start_response)
 
