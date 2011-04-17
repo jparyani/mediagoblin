@@ -56,6 +56,14 @@ etc).  You can change this, but for development purposes this default
 should be fine.
 
 
+Running the server
+==================
+
+Run::
+
+      ./bin/paster serve mediagoblin.ini --reload
+
+
 Running the test suite
 ======================
 
