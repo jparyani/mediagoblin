@@ -18,6 +18,13 @@ import jinja2
 import mongokit
 
 def get_jinja_env(user_template_path=None):
+    """
+    Set up the Jinja environment, possibly allowing for user
+    overridden templates.
+
+    (In the future we may have another system for providing theming;
+    for now this is good enough.)
+    """
     if user_template_path:
         loader = jinja2.ChoiceLoader(
             [jinja2.FileSystemLoader(user_template_path),
