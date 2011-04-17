@@ -15,10 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import re
 import urlparse
 import uuid
 
 from werkzeug.utils import secure_filename
+
+from mediagoblin import util
 
 
 class Error(Exception): pass
@@ -193,3 +196,49 @@ class BasicFileStorage(StorageInterface):
         return urlparse.urljoin(
             self.base_url,
             '/'.join(clean_listy_filepath(filepath)))
+
+
+def storage_system_from_paste_config(paste_config, storage_prefix):
+    """
+    Utility for setting up a storage system from the paste app config.
+
+    Note that a special argument may be passed in to the paste_config
+    which is "${storage_prefix}_storage_class" which will provide an
+    import path to a storage system.  This defaults to
+    "mediagoblin.storage:BasicFileStorage" if otherwise undefined.
+
+    Arguments:
+     - paste_config: dictionary of config parameters
+     - storage_prefix: the storage system we're setting up / will be
+       getting keys/arguments from.  For example 'publicstore' will
+       grab all arguments that are like 'publicstore_FOO'.
+
+    Returns:
+      An instantiated storage system.
+
+    Example:
+      storage_system_from_paste_config(
+        {'publicstore_base_url': '/media/',
+         'publicstore_base_dir': '/var/whatever/media/'},
+        'publicstore')
+
+       Will return:
+         BasicFileStorage(
+           base_url='/media/',
+           base_dir='/var/whatever/media')
+    """
+    prefix_re = re.compile('^%s_(.+)$' % re.escape(storage_prefix))
+
+    config_params = dict(
+        [(prefix_re.match(key).groups()[0], value)
+         for key, value in paste_config.iteritems()
+         if prefix_re.match(key)])
+
+    if config_params.has_key('storage_class'):
+        storage_class = config_params['storage_class']
+        config_params.pop('storage_class')
+    else:
+        storage_class = "mediagoblin.storage:BasicFileStorage"
+
+    storage_class = util.import_component(storage_class)
+    return storage_class(**config_params)

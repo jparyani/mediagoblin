@@ -24,6 +24,10 @@ from werkzeug.utils import secure_filename
 from mediagoblin import storage
 
 
+################
+# Test utilities
+################
+
 def test_clean_listy_filepath():
     expected = [u'dir1', u'dir2', u'linooks.jpg']
     assert storage.clean_listy_filepath(
@@ -41,6 +45,36 @@ def test_clean_listy_filepath():
         storage.InvalidFilepath,
         storage.clean_listy_filepath,
         ['../../', 'linooks.jpg'])
+
+
+class FakeStorageSystem():
+    def __init__(self, foobie, blech, **kwargs):
+        self.foobie = foobie
+        self.blech = blech
+
+
+def test_storage_system_from_paste_config():
+    this_storage = storage.storage_system_from_paste_config(
+        {'somestorage_base_url': 'http://example.org/moodia/',
+         'somestorage_base_dir': '/tmp/',
+         'somestorage_garbage_arg': 'garbage_arg',
+         'garbage_arg': 'trash'},
+        'somestorage')
+    assert this_storage.base_url == 'http://example.org/moodia/'
+    assert this_storage.base_dir == '/tmp/'
+    assert this_storage.__class__ is storage.BasicFileStorage
+
+    this_storage = storage.storage_system_from_paste_config(
+        {'somestorage_foobie': 'eiboof',
+         'somestorage_blech': 'hcelb',
+         'somestorage_garbage_arg': 'garbage_arg',
+         'garbage_arg': 'trash',
+         'somestorage_storage_class':
+             'mediagoblin.tests.test_storage:FakeStorageSystem'},
+         'somestorage')
+    assert this_storage.foobie == 'eiboof'
+    assert this_storage.blech == 'hcelb'
+    assert this_storage.__class__ is FakeStorageSystem
 
 
 ##########################
