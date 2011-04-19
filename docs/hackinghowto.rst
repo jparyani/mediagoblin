@@ -19,41 +19,68 @@ Additionally, we have information on how to get involved, who to talk
 to, what needs to be worked on, and other things besides!
 
 
-How to set up an environment for hacking
-========================================
+How to set up and maintain an environment for hacking
+=====================================================
 
-If running Debian GNU/Linux or a Debian-derived distro such as Mint or
-Ubuntu, running the following should install necessary dependencies:
 
-   sudo apt-get install mongodb git-core python python-dev python-lxml
+Getting requirements
+--------------------
 
-Note: The following instructions describe a development environment
-that uses `zc.buildout <http://www.buildout.org/>`_ because it
-involves less steps to get things running and less knowledge of python
-packaging.  However, if you prefer to use
-`virtualenv <http://pypi.python.org/pypi/virtualenv>`_,
-that should work just fine.
+First, you need to have the following installed before you can build
+an environment for hacking on GNU MediaGoblin:
 
-Follow these steps:
+* Python 2.6 or 2.7  - http://www.python.org/
 
-1. clone the repository::
+  You'll need Python as well as the dev files for building modules.
 
-      git clone http://git.gitorious.org/mediagoblin/mediagoblin.git
+* python-lxml        - http://lxml.de/
+* git                - http://git-scm.com/
+* MongoDB            - http://www.mongodb.org/
+
+If you're running Debian GNU/Linux or a Debian-derived distribution
+such as Mint or Ubuntu, running the following should install these
+requirements::
+
+    sudo apt-get install mongodb git-core python python-dev python-lxml
+
+
+Running bootstrap and buildout
+------------------------------
+
+After installing the requirements, follow these steps:
+
+1. Clone the repository::
+
+       git clone http://git.gitorious.org/mediagoblin/mediagoblin.git
 
 2. Bootstrap and run buildout::
 
-      cd mediagoblin
-      python bootstrap.py && ./bin/buildout
-
-Now whenever you want to update mediagoblin's dependencies, just run::
-
-      ./bin/buildout
+       cd mediagoblin
+       python bootstrap.py && ./bin/buildout
 
 
-Using this method, buildout should create a user_dev directory, in
-which certain things will be stored (media, beaker session stuff,
-etc).  You can change this, but for development purposes this default
-should be fine.
+That's it!  Using this method, buildout should create a ``user_dev``
+directory, in which certain things will be stored (media, beaker
+session stuff, etc).  You can change this, but for development
+purposes this default should be fine.
+
+
+.. Note::
+
+   We used `zc.buildout <http://www.buildout.org/>`_ because it
+   involves fewer steps to get things running and less knowledge of
+   Python packaging.  However, if you prefer to use `virtualenv
+   <http://pypi.python.org/pypi/virtualenv>`_, that should work just
+   fine.
+
+
+Updating dependencies
+---------------------
+
+While hacking on GNU MediaGoblin over time, you'll eventually have to
+update the dependencies.  To do that, run::
+
+    ./bin/buildout
 
 
 Running the server
@@ -61,7 +88,7 @@ Running the server
 
 Run::
 
-      ./bin/paster serve mediagoblin.ini --reload
+    ./bin/paster serve mediagoblin.ini --reload
 
 
 Running the test suite
@@ -69,7 +96,7 @@ Running the test suite
 
 Run::
 
-      ./bin/nosetests
+    ./bin/nosetests
 
 
 Creating a new file
