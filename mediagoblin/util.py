@@ -47,7 +47,7 @@ def setup_user_in_request(request):
         return
 
     user = None
-    user = request.db.User.one(
+    user = request.app.db.User.one(
         {'_id': mongokit.ObjectId(request.session['user_id'])})
 
     if not user:
