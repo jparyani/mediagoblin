@@ -167,3 +167,73 @@ Will Kahn-Greene on "Why Sphinx":
     There are other doc systems out there, but given that GNU
     MediaGoblin is being written in Python, it makes sense to use
     Sphinx for now.
+
+
+Why AGPLv3 and CC0?
+===================
+
+Chris, Brett, Will, Rob, Matt, et al curated into a story where
+everyone is the hero by Will on "Why AGPLv3 and CC0":
+
+    The `AGPL v3`_ preserves the freedoms guaranteed by the GPL v3 in
+    the context of software as a service.  Using this license ensures
+    that users of the service have the ability to examine the source,
+    deploy their own instance, and implement their own version.  This
+    is really important to us and a core mission component of this
+    project.  Thus we decided that the software parts should be under
+    this license.
+
+    However, the project is made up of more than just software:
+    there's CSS, images, and other output-related things.  We wanted
+    the templates/images/css side of the project all permissive and
+    permissive in the same absolutely permissive way.  We're licensing
+    these under a CC0 license.
+
+    That brings us to the templates where there's some code and some
+    output.  We decided the templates are part of the output of the
+    software and not the software itself.  We wanted the output of the
+    software to be licensed in a hassle-free way so that when someone
+    deploys their own GNU MediaGoblin instance with their own
+    templates, they don't have to deal with the copyleft aspects of
+    the AGPLv3 and we'd be fine with that because the changes they're
+    making are identity-related.  So at first we decided to license
+    HTML templates (written in Jinja2) under a CC0 license and then
+    we'd add an exception to the AGPLv3 for the software such that the
+    templates can make calls into the software and yet be a separately
+    licensed work.  However, Brett brought up the question of whether
+    this allows some unscrupulous person to make changes to the
+    software through the templates in such a way that they're not
+    bound by the AGPLv3: i.e. a loophole.  We thought about this
+    loophole and between this and the extra legalese involved in
+    releasing the templates under a CC0 license with the exception to
+    the AGPLv3 for Python and JavaScript, we decided that it's just
+    way simpler if the templates were also licensed under the AGPLv3.
+
+    Then we have the licensing for the documentation.  Given that the
+    documentation is tied to the software content-wise, we don't feel
+    like we have to worry about ensuring freedom of the documentation
+    or worry about attribution concerns.  Thus we're licensing the
+    documentation under a CC0 license as well.
+
+    Lastly, we have branding.  This covers logos and other things that
+    are distinctive to GNU MediaGoblin that we feel represents this
+    project.  Since we don't currently have any branding, this is an
+    open issue, but we're thinking we'll go with a CC BY-SA license.
+
+    By licensing in this way, we make sure that users of the software
+    receive the freedoms that the AGPLv3 ensures regardless of what
+    fate befalls this project.
+
+    So to summarize:
+
+    * software (Python, JavaScript, HTML templates) is licensed
+      under AGPLv3
+    * non-software things (CSS, images, video) are licensed under CC0
+      because this is output of the software
+    * documentation is licensed under a CC0 license
+    * we'll figure out licensing for branding assets later
+
+    This is all codified in the ``COPYING`` file.
+
+.. _AGPL v3: http://www.gnu.org/licenses/agpl.html
+.. _CC0 v1: http://creativecommons.org/publicdomain/zero/1.0/

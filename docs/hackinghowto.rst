@@ -99,31 +99,6 @@ Run::
     ./bin/nosetests
 
 
-Creating a new file
-===================
-
-FIXME - this needs to be updated when it's set in stone.
-
-All new files need to have license/copyright information.
-
-The following kinds of files get the GNU AGPL header:
-
-* Python files
-* JavaScript files
-* templates
-* other files with code in them
-
-The following files get a CC BY header:
-
-* CSS files
-
-The following files don't get a header because that's hard, but are
-under the CC BY license:
-
-* image files
-* video files
-
-
 Quickstart for Django programmers
 =================================
 
