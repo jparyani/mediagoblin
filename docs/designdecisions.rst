@@ -237,3 +237,19 @@ everyone is the hero by Will on "Why AGPLv3 and CC0":
 
 .. _AGPL v3: http://www.gnu.org/licenses/agpl.html
 .. _CC0 v1: http://creativecommons.org/publicdomain/zero/1.0/
+
+
+Why copyright assignment?
+=========================
+
+Will Kahn-Greene on "Why copyright assignment?":
+
+    GNU MediaGoblin is a GNU project with the copyrights held by the
+    FSF.  Like other GNU projects, we require copyright assignment to
+    the FSF which gives the FSF the legal ability to defend the
+    AGPL-covered status of the software and distribute it.
+
+    This is important to us because it guarantees that this software
+    we're working so hard on will be available to everyone and will
+    survive us.  As long as someone is interested in using it and/or
+    working on it, it will live on.

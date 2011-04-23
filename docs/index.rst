@@ -13,8 +13,8 @@ Table of Contents:
 
    foreward
    mediagoblin
-   deploymenthowto
    contributinghowto
+   deploymenthowto
    hackinghowto
    theminghowto
    softwarestack

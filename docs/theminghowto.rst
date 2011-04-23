@@ -1,3 +1,5 @@
+.. _theming-howto:
+
 ===============
  Theming HOWTO
 ===============

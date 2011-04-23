@@ -1,3 +1,5 @@
+.. _deployment-howto:
+
 ==================
  Deployment HOWTO
 ==================
