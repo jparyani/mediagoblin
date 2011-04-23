@@ -37,7 +37,9 @@ def require_active_login(controller):
             # TODO: Indicate to the user that they were redirected
             # here because an *active* user is required.
             return exc.HTTPFound(
-                location=request.urlgen("mediagoblin.auth.login"))
+                location="%s?next=%s" % (
+                    request.urlgen("mediagoblin.auth.login"),
+                    request.path_info))
 
         return controller(request, *args, **kwargs)
 
