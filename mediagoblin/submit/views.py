@@ -52,7 +52,8 @@ def submit_start(request):
         queue_file = request.app.queue_store.get_file(
             queue_filepath, 'wb')
 
-        queue_file.write(request.POST['file'].file.read())
+        with queue_file:
+            queue_file.write(request.POST['file'].file.read())
 
         # Add queued filename to the entry
         entry.setdefault('queue_files', []).add(queue_filepath)
