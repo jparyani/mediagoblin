@@ -27,7 +27,7 @@ def submit_start(request):
     """
     First view for submitting a file.
     """
-    submit_form = submit_forms.SubmitStartForm()
+    submit_form = submit_forms.SubmitStartForm(request.POST)
 
     if request.method == 'POST' and submit_form.validate():
         # create entry and save in database
@@ -56,12 +56,12 @@ def submit_start(request):
             queue_file.write(request.POST['file'].file.read())
 
         # Add queued filename to the entry
-        entry.setdefault('queue_files', []).add(queue_filepath)
+        entry.setdefault('queue_files', []).append(queue_filepath)
         entry.save(validate=True)
 
         # redirect
         return exc.HTTPFound(
-            location=request.urlgen("mediagoblin.submit.submit_success"))
+            location=request.urlgen("mediagoblin.submit.success"))
 
     # render
     template = request.template_env.get_template(
@@ -72,7 +72,6 @@ def submit_start(request):
              'submit_form': submit_form}))
 
 
-@require_active_login
 def submit_success(request):
     # render
     template = request.template_env.get_template(
