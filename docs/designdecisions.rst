@@ -186,34 +186,35 @@ everyone is the hero by Will on "Why AGPLv3 and CC0":
     However, the project is made up of more than just software:
     there's CSS, images, and other output-related things.  We wanted
     the templates/images/css side of the project all permissive and
-    permissive in the same absolutely permissive way.  We're licensing
-    these under a CC0 license.
+    permissive in the same absolutely permissive way.  We're waiving
+    our copyrights to non-software things under the CC0 waiver.
 
     That brings us to the templates where there's some code and some
-    output.  We decided the templates are part of the output of the
+    output.  The template engine we're using is called Jinja2.  It
+    mixes HTML markup with Python code to render the output of the
+    software.  We decided the templates are part of the output of the
     software and not the software itself.  We wanted the output of the
     software to be licensed in a hassle-free way so that when someone
     deploys their own GNU MediaGoblin instance with their own
     templates, they don't have to deal with the copyleft aspects of
     the AGPLv3 and we'd be fine with that because the changes they're
-    making are identity-related.  So at first we decided to license
-    HTML templates (written in Jinja2) under a CC0 license and then
-    we'd add an exception to the AGPLv3 for the software such that the
-    templates can make calls into the software and yet be a separately
-    licensed work.  However, Brett brought up the question of whether
-    this allows some unscrupulous person to make changes to the
-    software through the templates in such a way that they're not
-    bound by the AGPLv3: i.e. a loophole.  We thought about this
-    loophole and between this and the extra legalese involved in
-    releasing the templates under a CC0 license with the exception to
-    the AGPLv3 for Python and JavaScript, we decided that it's just
-    way simpler if the templates were also licensed under the AGPLv3.
+    making are identity-related.  So at first we decided to waive our
+    copyrights to the templates with a CC0 waiver and then add an
+    exception to the AGPLv3 for the software such that the templates
+    can make calls into the software and yet be a separately licensed
+    work.  However, Brett brought up the question of whether this
+    allows some unscrupulous person to make changes to the software
+    through the templates in such a way that they're not bound by the
+    AGPLv3: i.e. a loophole.  We thought about this loophole and
+    between this and the extra legalese involved in the exception to
+    the AGPLv3, we decided that it's just way simpler if the templates
+    were also licensed under the AGPLv3.
 
     Then we have the licensing for the documentation.  Given that the
     documentation is tied to the software content-wise, we don't feel
     like we have to worry about ensuring freedom of the documentation
-    or worry about attribution concerns.  Thus we're licensing the
-    documentation under a CC0 license as well.
+    or worry about attribution concerns.  Thus we're waiving our
+    copyrights to the documentation under CC0 as well.
 
     Lastly, we have branding.  This covers logos and other things that
     are distinctive to GNU MediaGoblin that we feel represents this
@@ -226,12 +227,14 @@ everyone is the hero by Will on "Why AGPLv3 and CC0":
 
     So to summarize:
 
-    * software (Python, JavaScript, HTML templates) is licensed
+    * software (Python, JavaScript, HTML templates): licensed
       under AGPLv3
-    * non-software things (CSS, images, video) are licensed under CC0
-      because this is output of the software
-    * documentation is licensed under a CC0 license
-    * we'll figure out licensing for branding assets later
+    * non-software things (CSS, images, video): copyrights waived
+      under CC0 because this is output of the software
+    * documentation: copyrights waived under CC0 because it's not part
+      of the software
+    * branding assets: we're kicking this can down the road, but
+      probably CC BY-SA
 
     This is all codified in the ``COPYING`` file.
 
