@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from cgi import FieldStorage
+
 from webob import Response, exc
 from werkzeug.utils import secure_filename
 
@@ -30,38 +32,44 @@ def submit_start(request):
     submit_form = submit_forms.SubmitStartForm(request.POST)
 
     if request.method == 'POST' and submit_form.validate():
-        # create entry and save in database
-        entry = request.db.MediaEntry()
-        entry['title'] = request.POST['title']
-        entry['description'] = request.POST.get(['description'])
-        entry['media_type'] = u'image' # heh
-        entry['uploader'] = request.user
+        if not (request.POST.has_key('file')
+                and isinstance(request.POST['file'], FieldStorage)
+                and request.POST['file'].file):
+            submit_form.file.errors.append(
+                u'You must provide a file.')
+        else:
+            # create entry and save in database
+            entry = request.db.MediaEntry()
+            entry['title'] = request.POST['title']
+            entry['description'] = request.POST.get(['description'])
+            entry['media_type'] = u'image' # heh
+            entry['uploader'] = request.user
 
-        # Save, just so we can get the entry id for the sake of using
-        # it to generate the file path
-        entry.save(validate=False)
+            # Save, just so we can get the entry id for the sake of using
+            # it to generate the file path
+            entry.save(validate=False)
 
-        # Now store generate the queueing related filename
-        queue_filepath = request.app.queue_store.get_unique_filepath(
-            ['media_entries',
-             unicode(request.user['_id']),
-             unicode(entry['_id']),
-             secure_filename(request.POST['file'].filename)])
+            # Now store generate the queueing related filename
+            queue_filepath = request.app.queue_store.get_unique_filepath(
+                ['media_entries',
+                 unicode(request.user['_id']),
+                 unicode(entry['_id']),
+                 secure_filename(request.POST['file'].filename)])
 
-        # queue appropriately
-        queue_file = request.app.queue_store.get_file(
-            queue_filepath, 'wb')
+            # queue appropriately
+            queue_file = request.app.queue_store.get_file(
+                queue_filepath, 'wb')
 
-        with queue_file:
-            queue_file.write(request.POST['file'].file.read())
+            with queue_file:
+                queue_file.write(request.POST['file'].file.read())
 
-        # Add queued filename to the entry
-        entry.setdefault('queue_files', []).append(queue_filepath)
-        entry.save(validate=True)
+            # Add queued filename to the entry
+            entry.setdefault('queue_files', []).append(queue_filepath)
+            entry.save(validate=True)
 
-        # redirect
-        return exc.HTTPFound(
-            location=request.urlgen("mediagoblin.submit.success"))
+            # redirect
+            return exc.HTTPFound(
+                location=request.urlgen("mediagoblin.submit.success"))
 
     # render
     template = request.template_env.get_template(
