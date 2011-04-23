@@ -21,6 +21,15 @@ from mongokit import Document, Set
 from mediagoblin.auth import lib as auth_lib
 
 
+###################
+# Custom validators
+###################
+
+########
+# Models
+########
+
+
 class User(Document):
     __collection__ = 'users'
 
