@@ -21,10 +21,40 @@ from mongokit import Document, Set
 from mediagoblin.auth import lib as auth_lib
 
 
+class User(Document):
+    __collection__ = 'users'
+
+    structure = {
+        'username': unicode,
+        'email': unicode,
+        'created': datetime.datetime,
+        'plugin_data': dict, # plugins can dump stuff here.
+        'pw_hash': unicode,
+        'email_verified': bool,
+        'status': unicode,
+        }
+
+    required_fields = ['username', 'created', 'pw_hash', 'email']
+
+    default_values = {
+        'created': datetime.datetime.utcnow,
+        'email_verified': False,
+        # TODO: shouldn't be active by default, must have email registration
+        'status': 'active'}
+
+    def check_login(self, password):
+        """
+        See if a user can login with this password
+        """
+        return auth_lib.bcrypt_check_password(
+            password, self['pw_hash'])
+
+
 class MediaEntry(Document):
     __collection__ = 'media_entries'
 
     structure = {
+        'uploader': User,
         'title': unicode,
         'created': datetime.datetime,
         'description': unicode,
@@ -44,31 +74,6 @@ class MediaEntry(Document):
 
     def main_mediafile(self):
         pass
-
-class User(Document):
-    __collection__ = 'users'
-
-    structure = {
-        'username': unicode,
-        'email': unicode,
-        'created': datetime.datetime,
-        'plugin_data': dict, # plugins can dump stuff here.
-        'pw_hash': unicode,
-        'email_verified': bool,
-        }
-
-    required_fields = ['username', 'created', 'pw_hash', 'email']
-
-    default_values = {
-        'created': datetime.datetime.utcnow,
-        'email_verified': False}
-
-    def check_login(self, password):
-        """
-        See if a user can login with this password
-        """
-        return auth_lib.bcrypt_check_password(
-            password, self['pw_hash'])
 
 
 REGISTER_MODELS = [MediaEntry, User]
