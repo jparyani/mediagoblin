@@ -87,7 +87,7 @@ def login(request):
             request.session['user_id'] = unicode(user['_id'])
             request.session.save()
 
-            if request.POST.has_key('next'):
+            if request.POST.get('next'):
                 return exc.HTTPFound(location=request.POST['next'])
             else:
                 return exc.HTTPFound(
