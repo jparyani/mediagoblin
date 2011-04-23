@@ -70,16 +70,24 @@ class MediaEntry(Document):
         'media_type': unicode,
         'media_data': dict, # extra data relevant to this media_type
         'plugin_data': dict, # plugins can dump stuff here.
-        'file_store': unicode,
-        'attachments': [dict],
-        'tags': [unicode]}
+        'tags': [unicode],
+        'state': unicode,
+
+        # The following should be lists of lists, in appropriate file
+        # record form
+        'media_files': list,
+        'attachment_files': list,
+        'queue_files': list,
+
+        # This one should just be a single file record
+        'thumbnail_file': [unicode]}
 
     required_fields = [
-        'title', 'created',
-        'media_type', 'file_store']
+        'uploader', 'title', 'created', 'media_type']
 
     default_values = {
-        'created': datetime.datetime.utcnow}
+        'created': datetime.datetime.utcnow,
+        'state': u'unprocessed'}
 
     def main_mediafile(self):
         pass
