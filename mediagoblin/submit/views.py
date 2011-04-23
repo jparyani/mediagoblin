@@ -16,6 +16,7 @@
 
 
 from webob import Response, exc
+from werkzeug.utils import secure_filename
 
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms
@@ -28,6 +29,39 @@ def submit_start(request):
     """
     submit_form = submit_forms.SubmitStartForm()
 
+    if request.method == 'POST' and submit_form.validate():
+        # create entry and save in database
+        entry = request.db.MediaEntry()
+        entry['title'] = request.POST['title']
+        entry['description'] = request.POST.get(['description'])
+        entry['media_type'] = u'image' # heh
+        entry['uploader'] = request.user
+
+        # Save, just so we can get the entry id for the sake of using
+        # it to generate the file path
+        entry.save(validate=False)
+
+        # Now store generate the queueing related filename
+        queue_filepath = request.app.queue_store.get_unique_filepath(
+            ['media_entries',
+             unicode(request.user['_id']),
+             unicode(entry['_id']),
+             secure_filename(request.POST['file'].filename)])
+
+        # queue appropriately
+        queue_file = request.app.queue_store.get_file(
+            queue_filepath, 'wb')
+
+        queue_file.write(request.POST['file'].file.read())
+
+        # Add queued filename to the entry
+        entry.setdefault('queue_files', []).add(queue_filepath)
+        entry.save(validate=True)
+
+        # redirect
+        return exc.HTTPFound(
+            location=request.urlgen("mediagoblin.submit.submit_success"))
+
     # render
     template = request.template_env.get_template(
         'mediagoblin/submit/start.html')
@@ -35,3 +69,13 @@ def submit_start(request):
         template.render(
             {'request': request,
              'submit_form': submit_form}))
+
+
+@require_active_login
+def submit_success(request):
+    # render
+    template = request.template_env.get_template(
+        'mediagoblin/submit/success.html')
+    return Response(
+        template.render(
+            {'request': request}))
