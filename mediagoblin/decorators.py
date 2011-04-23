@@ -33,7 +33,7 @@ def require_active_login(controller):
     Require an active login from the user.
     """
     def new_controller_func(request, *args, **kwargs):
-        if not request.user or not request.user.get('session') == 'active':
+        if not request.user or not request.user.get('status') == u'active':
             # TODO: Indicate to the user that they were redirected
             # here because an *active* user is required.
             return exc.HTTPFound(
