@@ -21,6 +21,7 @@ import mongokit
 from webob import Request, exc
 
 from mediagoblin import routing, util, models, storage, staticdirect
+from mediagoblin.globals import setup_globals
 
 
 class Error(Exception): pass
@@ -52,6 +53,15 @@ class MediaGoblinApp(object):
 
         # set up staticdirector tool
         self.staticdirector = staticdirector
+
+        # certain properties need to be accessed globally eg from
+        # validators, etc, which might not access to the request
+        # object.
+        setup_globals(
+            db_connection=connection,
+            database=self.db,
+            public_store=self.public_store,
+            queue_store=self.queue_store)
 
     def __call__(self, environ, start_response):
         request = Request(environ)
