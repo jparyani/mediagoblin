@@ -36,6 +36,7 @@ setup(
         'py-bcrypt',
         'nose',
         'werkzeug',
+        'celery',
         ],
     test_suite='nose.collector',
 
