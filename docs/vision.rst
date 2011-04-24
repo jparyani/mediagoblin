@@ -1,21 +1,26 @@
-==========================================================================
- Design Document: Workflow, and other structurally significant braindumps
-==========================================================================
+=========================================
+ Design Document: GNU MediaGoblin vision
+=========================================
 
 .. Note::
 
    When we get a wiki, this will get moved there.  It's here for now
    mostly because we didn't have a better place for it.
 
+.. Note::
 
-This document attempts to describe the envisioned workflow of
-mediagoblin, from a structural standpoint.  For now, *nothing* in this
+   By the time you read this, it's very likely it'll be out of date.
+
+
+This document attempts to describe the envisioned workflow of GNU
+MediaGoblin, from a structural standpoint.  For now, *nothing* in this
 document is probably the eventual, final way that things will work.
 Eventually as things come to exist, this document will hopefully be
 refactored to describe how things *do* work.
 
 This documented on hopes, dreams, rainbows, and unicorns.  And it will
-come to fulfillment through a lot of hard work.
+come to fulfillment through a lot of hard work.  Your hard work and my
+hard work.
 
 
 Look and feel
@@ -30,6 +35,7 @@ go, but it's probably a good idea to steal a good number of ideas from
 here.
 
 http://mairin.wordpress.com/2010/03/09/another-design-hub-mockup/
+
 
 User profile mockup
 -------------------
