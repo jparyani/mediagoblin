@@ -26,6 +26,7 @@ In no particular order:
 * Deb
 * Greg
 * Karen
+* Matt
 
 
 How should I bring up errors in the documentation
