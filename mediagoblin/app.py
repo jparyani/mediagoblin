@@ -22,6 +22,7 @@ from webob import Request, exc
 
 from mediagoblin import routing, util, models, storage, staticdirect
 from mediagoblin.globals import setup_globals
+from mediagoblin.celery_setup import setup_celery_from_config
 
 
 class Error(Exception): pass
@@ -107,33 +108,37 @@ class MediaGoblinApp(object):
         return controller(request)(environ, start_response)
 
 
-def paste_app_factory(global_config, **kw):
+def paste_app_factory(global_config, **app_config):
     # Get the database connection
     connection = mongokit.Connection(
-        kw.get('db_host'), kw.get('db_port'))
+        app_config.get('db_host'), app_config.get('db_port'))
 
     # Set up the storage systems.
     public_store = storage.storage_system_from_paste_config(
-        kw, 'publicstore')
+        app_config, 'publicstore')
     queue_store = storage.storage_system_from_paste_config(
-        kw, 'queuestore')
+        app_config, 'queuestore')
 
     # Set up the staticdirect system
-    if kw.has_key('direct_remote_path'):
+    if app_config.has_key('direct_remote_path'):
         staticdirector = staticdirect.RemoteStaticDirect(
-            kw['direct_remote_path'].strip())
-    elif kw.has_key('direct_remote_paths'):
+            app_config['direct_remote_path'].strip())
+    elif app_config.has_key('direct_remote_paths'):
+        direct_remote_path_lines = app_config[
+            'direct_remote_paths'].strip().splitlines()
         staticdirector = staticdirect.MultiRemoteStaticDirect(
             dict([line.strip().split(' ', 1)
-                  for line in kw['direct_remote_paths'].strip().splitlines()]))
+                  for line in direct_remote_path_lines]))
     else:
         raise ImproperlyConfigured(
             "One of direct_remote_path or direct_remote_paths must be provided")
 
+    setup_celery_from_config(app_config, global_config)
+
     mgoblin_app = MediaGoblinApp(
-        connection, kw.get('db_name', 'mediagoblin'),
+        connection, app_config.get('db_name', 'mediagoblin'),
         public_store=public_store, queue_store=queue_store,
         staticdirector=staticdirector,
-        user_template_path=kw.get('local_templates'))
+        user_template_path=app_config.get('local_templates'))
 
     return mgoblin_app
