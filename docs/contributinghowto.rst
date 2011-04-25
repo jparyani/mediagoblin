@@ -64,7 +64,7 @@ help with.
 
     Are there things about our instance you want to change?  Are there
     things about other instances you wish were different?  That's
-    great--you can run your own instance!
+    great---you can run your own instance!
     
     For more information on deploying your own instance, see
     :ref:`deployment-howto`.

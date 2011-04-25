@@ -16,8 +16,8 @@ This manual is a living document and is in the ``mediagoblin``
 repository in the ``docs/`` directory.
 
 
-Who wrote this documentation
-============================
+Who wrote this documentation?
+=============================
 
 In no particular order:
 
@@ -29,10 +29,10 @@ In no particular order:
 * Matt
 
 
-How should I bring up errors in the documentation
-=================================================
+I found an error in the docs---who do I tell?
+=============================================
 
-There are a few ways--please pick the one most convenient to you!
+There are a few ways---please pick the one most convenient to you!
 
 1. Send an email to Will ``willg at bluesock dot org``.
 2. Write up a bug report in the bug tracker at http://bugs.foocorp.net/ .
