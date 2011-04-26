@@ -82,7 +82,7 @@ class MediaGoblinApp(object):
                 if request.GET:
                     new_path_info = '%s?%s' % (
                         new_path_info, urllib.urlencode(request.GET))
-                redirect = exc.HTTPTemporaryRedirect(location=new_path_info)
+                redirect = exc.HTTPFound(location=new_path_info)
                 return request.get_response(redirect)(environ, start_response)
 
             # Okay, no matches.  404 time!
