@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'GNU MediaGoblin'
-copyright = u'2011, Chris Webber, et al'
+copyright = u'2011, Free Software Foundation, Inc and contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
