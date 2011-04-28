@@ -39,6 +39,16 @@ Here are some things you can do today:
         and we're willing to help you!
 
 
+    **Send encouragement**
+
+        A nice word from you could send someone into a tizzy of
+        productive work.  Ten nice words could complete a feature.
+        One hundred nice words could get us to the next milestone.
+
+        Send it to the `mailing list <http://mediagoblin.org/join/>`_
+        or hop into ``#mediagoblin`` on Freenode.net and let us know.
+
+
     **Spread the word**
 
         The seductive call of Free Software services is a powerful
