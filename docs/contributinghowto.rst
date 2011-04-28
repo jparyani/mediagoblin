@@ -39,18 +39,6 @@ Here are some things you can do today:
         and we're willing to help you!
 
 
-    **Run your own instance**
-
-        Are there things about our instance you want to change?  Are
-        there things about other instances you wish were different?
-        Want to test upcoming changes?  Want to create patches to
-        implement things you need?  That's great---you can run your
-        own instance!
-    
-        For more information on deploying your own instance, see
-        :ref:`deployment-howto`.
-
-
     **Spread the word**
 
         The seductive call of Free Software services is a powerful
@@ -86,6 +74,18 @@ bits in place for these additional things to do in the coming months:
         experience and wisdom are invaluable and you're the best
         person we can think of to help other users with their
         questions.
+
+
+    **Run your own instance**
+
+        Are there things about our instance you want to change?  Are
+        there things about other instances you wish were different?
+        Want to test upcoming changes?  Want to create patches to
+        implement things you need?  That's great---you can run your
+        own instance!
+    
+        For more information on deploying your own instance, see
+        :ref:`deployment-howto`.
 
 
     **Translate GNU MediaGoblin**
