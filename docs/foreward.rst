@@ -27,6 +27,7 @@ In no particular order:
 * Greg
 * Karen
 * Matt
+* Asheesh
 
 
 I found an error in the docs---who do I tell?
@@ -34,9 +35,9 @@ I found an error in the docs---who do I tell?
 
 There are a few ways---please pick the one most convenient to you!
 
-1. Send an email to Will ``willg at bluesock dot org``.
-2. Write up a bug report in the bug tracker at http://bugs.foocorp.net/ .
-3. Tell someone on IRC ``#mediagoblin`` on Freenode.
+1. Write up a bug report in the bug tracker at http://bugs.foocorp.net/ .
+2. Tell someone on IRC ``#mediagoblin`` on Freenode.
+3. Send an email to Will ``willg at bluesock dot org``.
 
 When you tell us about your issue, please let us know:
 

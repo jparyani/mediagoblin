@@ -8,8 +8,9 @@
 So you want to hack on GNU MediaGoblin?
 =======================================
 
-First thing to do is check out the Web site where we list all the
-project infrastructure including:
+First thing to do is check out the `Web site
+<http://mediagoblin.org>`_ where we list all the project
+infrastructure including:
 
 * the mailing list
 * the IRC channel
@@ -87,6 +88,13 @@ update your development environment.  To do that, run::
 Wiping your environment for a clean-slate
 -----------------------------------------
 
+.. Note::
+
+   Unless you're doing development and working on and testing creating
+   a new instance, you will probably never have to do this.  Will
+   plans to do this work and thus he documented it.
+
+
 Delete the following directories:
 
 * bin/
@@ -96,7 +104,8 @@ Delete the following directories:
 * parts/
 * user_dev/
 
-FIXME - how to drop data from mongodb?
+FIXME - how to drop data from mongodb?  we should probably write a
+script.
 
 
 Running the server
@@ -151,3 +160,49 @@ Bite-sized bugs to start with
 =============================
 
 FIXME - write this
+
+
+Tips for people new to coding
+=============================
+
+Python
+------
+
+GNU MediaGoblin is written using a programming language called `Python
+<http://python.org/>`_.
+
+There are two different incompatible iterations of Python which I'll
+refer to as Python 2 and Python 3.  GNU MediaGoblin is written in
+Python 2 and requires Python 2.6 or 2.7.  At some point, we might
+switch to Python 3, but that's a future thing.
+
+You can learn how to code in Python 2 from several excellent books
+that are freely available on the Internet:
+
+* `Learn Python the Hard Way <http://learnpythonthehardway.org/>`_
+* `Dive Into Pyton <http://diveintopython.org/>`_
+* `Python for Software Design <http://www.greenteapress.com/thinkpython/>`_
+* `A Byte of Python <http://www.swaroopch.com/notes/Python>`_
+
+These are all excellent texts.
+
+FIXME - are there good quality Python tutorial videos?
+
+
+Libraries
+---------
+
+GNU MediaGoblin uses a variety of libraries in order to do what it
+does.  These libraries are listed in the :ref:`beardomatic-chapter`
+along with links to the project Web sites and documentation for the
+libraries.
+
+There are a variety of Python-related conferences every year that have
+sessions covering many aspects of these libraries.  You can find them
+at `Python Miro Community <http://python.mirocommunity.org>`_ [0]_.
+
+.. [0] This is a shameless plug.  Will Kahn-Greene runs Python Miro
+   Community.
+
+If you have questions or need help, find us on the mailing list and on
+IRC.
