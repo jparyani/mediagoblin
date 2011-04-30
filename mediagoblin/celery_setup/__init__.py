@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 
 from paste.deploy.converters import asbool, asint, aslist
 
@@ -69,10 +70,21 @@ def asfloat(obj):
             "Bad float value: %r" % obj)
 
 
-def setup_celery_from_config(app_config, global_config):
+DEFAULT_SETTINGS_MODULE = 'mediagoblin.celery_setup.dummy_settings_module'
+
+def setup_celery_from_config(app_config, global_config,
+                             settings_module=DEFAULT_SETTINGS_MODULE,
+                             set_environ=True):
     """
     Take a mediagoblin app config and the global config from a paste
     factory and try to set up a celery settings module from this.
+
+    Args:
+    - app_config: the application config section
+    - global_config: the entire paste config, all sections
+    - settings_module: the module to populate, as a string
+    - set_environ: if set, this will CELERY_CONFIG_MODULE to the
+      settings_module
     """
     if asbool(app_config.get('use_celery_environment_var')) == True:
         # Don't setup celery based on our config file.
@@ -112,10 +124,11 @@ def setup_celery_from_config(app_config, global_config):
             value = aslist(value)
         celery_settings[key] = value
 
-    from mediagoblin.celery_setup import dummy_settings_module
+    __import__(settings_module)
+    this_module = sys.modules[settings_module]
 
     for key, value in celery_settings.iteritems():
-        setattr(dummy_settings_module, key, value)
-
-    os.environ['CELERY_CONFIG_MODULE'] = \
-        'mediagoblin.celery_setup.dummy_settings_module'
+        setattr(this_module, key, value)
+    
+    if set_environ:
+        os.environ['CELERY_CONFIG_MODULE'] = settings_module
