@@ -17,6 +17,7 @@ Table of Contents:
    deploymenthowto
    hackinghowto
    theminghowto
+   git
    designdecisions
    vision
    beardomatic
