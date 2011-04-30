@@ -244,17 +244,24 @@ everyone is the hero by Will on "Why AGPLv3 and CC0":
 .. _CC0 v1: http://creativecommons.org/publicdomain/zero/1.0/
 
 
-Why copyright assignment?
-=========================
+Why (non-mandatory) copyright assignment?
+=========================================
 
-Will Kahn-Greene on "Why copyright assignment?":
+Chris Webber on "Why copyright assignment?":
 
-    GNU MediaGoblin is a GNU project with the copyrights held by the
-    FSF.  Like other GNU projects, we require copyright assignment to
-    the FSF which gives the FSF the legal ability to defend the
-    AGPL-covered status of the software and distribute it.
+    GNU MediaGoblin is a GNU project with non-mandatory but heavily
+    encouraged copyright assignment to the FSF.  Most, if not all, of
+    the core contributors to GNU MediaGoblin will have done a
+    copyright assignment, but unlike some other GNU projects, it isn't
+    required here.  We think this is the best choice for GNU
+    MediaGoblin: it ensures that the Free Software Foundation may
+    protect the software by enforcing the AGPL if the FSF sees fit,
+    but it also means that we can immediately merge in changes from a
+    new contributor.  It also means that some significant non-FSF
+    contributors might also be able to enforce the AGPL if seen fit.
 
-    This is important to us because it guarantees that this software
-    we're working so hard on will be available to everyone and will
-    survive us.  As long as someone is interested in using it and/or
-    working on it, it will live on.
+    Again, assignment is not mandatory, but it is heavily encouraged,
+    even incentivized: significant contributors who do a copyright
+    assignment to the FSF are eligible to have a unique goblin drawing
+    produced for them by the project's main founder, Christopher Allan
+    Webber.  See :ref:`contributinghowto` for details.
