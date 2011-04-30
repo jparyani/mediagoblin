@@ -1,36 +1,15 @@
-.. _beardomatic-chapter:
+.. _codebase-chapter:
 
-===========================================
- Beardomatic: Infrastructure Documentation
-===========================================
+========================
+ Codebase Documentation
+========================
 
-What the hell is Beardomatic?
-=============================
-
-You might be wondering, "Gah!  What the hell is Beardomatic!?"
-
-Well, I'll tell you.  GNU MediaGoblin is a piece of software that sits
-on a stack of libraries that do a bunch of stuff.  It makes it easier
-to differentiate the bits of code that encompass GNU MediaGoblin from
-the bits of code that GNU MediaGoblin sit on top of.  Thus, we came up
-with the TOTALLY AWESOME name Beardomatic.
-
-Now you might be saying, "Holy crap!?  Another web framework?  Are you
-going to write a mocking framework and an enumeration library, too!?"
-
-No, we're not.  We're just calling this Beardomatic so that it's
-easier to talk about things.  However, at some point, we can take
-these infrastructure bits from GNU MediaGoblin and turn them into a
-full-blown "web framework".  We wouldn't do this to compete for
-mindshare with other web frameworks.  We would do this to make it
-easier for us to bootstrap other similar projects.
+This chapter covers the libraries that GNU MediaGoblin uses as well as
+various recipes for getting things done.
 
 
-Beardomatic software stack
-==========================
-
-Beardomatic is a software stack "web framework" composed of the
-following bits:
+Software Stack
+==============
 
 * Project infrastructure
 
@@ -80,7 +59,7 @@ following bits:
   * `JQuery <http://jquery.com/>`_: for groovy JavaScript things
 
 
-How to ... in Beardomatic?
-==========================
+Recipes
+=======
 
 FIXME - write this
