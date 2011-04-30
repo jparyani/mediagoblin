@@ -47,11 +47,10 @@ Why WSGI Minimalism
 
 Chris Webber on "Why WSGI Minimalism":
 
-    If you notice in the technology listI list a lot of
-    components that are very `Django Project`_, but not actually
-    Django components.  What can I say, I really like a lot of the
-    ideas in Django!  Which leads to the question: why not just use
-    Django?
+    If you notice in the technology list I list a lot of components
+    that are very "django-like", but not actually `Django`_
+    components.  What can I say, I really like a lot of the ideas in
+    Django!  Which leads to the question: why not just use Django?
 
     While I really like Django's ideas and a lot of its components, I
     also feel that most of the best ideas in Django I want have been
@@ -85,7 +84,7 @@ Chris Webber on "Why WSGI Minimalism":
     deployment-howto, especially in the former making some notes on
     how to make it easier for Django hackers to get started.
 
-.. _Django Project: http://www.djangoproject.com/
+.. _Django: http://www.djangoproject.com/
 .. _Pylons: http://pylonshq.com/
 .. _Pyramid: http://docs.pylonsproject.org/projects/pyramid/dev/
 .. _Flask: http://flask.pocoo.org/
