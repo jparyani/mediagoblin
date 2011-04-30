@@ -17,11 +17,11 @@ Chris Webber on "Why Python":
     software web applications before in Python, including `Miro
     Community`_, the `Miro Guide`_, a large portion of `Creative
     Commons`_, and a whole bunch of things while working at `Imaginary
-    Landscape`_).  I know Python, I can make this happen in Python, me
-    starting a project like this makes sense if it's done in Python.
+    Landscape`_).  Me starting a project like this makes sense if it's
+    done in Python.
 
     You might say that PHP is way more deployable, that Rails has way
-    more cool developers riding around on fixie bikes, and all of
+    more cool developers riding around on fixie bikes---and all of
     those things are true.  But I know Python, like Python, and think
     that Python is pretty great.  I do think that deployment in Python
     is not as good as with PHP, but I think the days of shared hosting
@@ -159,14 +159,16 @@ Why Sphinx for documentation
 
 Will Kahn-Greene on "Why Sphinx":
 
-    Sphinx is a fantastic tool for organizing documentation for a
+    `Sphinx`_ is a fantastic tool for organizing documentation for a
     Python-based project that makes it pretty easy to write docs that
     are readable in source form and can be "compiled" into HTML, LaTeX
     and other formats.
 
     There are other doc systems out there, but given that GNU
-    MediaGoblin is being written in Python, it makes sense to use
-    Sphinx for now.
+    MediaGoblin is being written in Python and I've done a ton of
+    documentation using Sphinx, it makes sense to use Sphinx for now.
+
+.. _Sphinx: http://sphinx.pocoo.org/
 
 
 Why AGPLv3 and CC0?

@@ -1,5 +1,0 @@
-====================
- Code Documentation
-====================
-
-FIXME - stub!

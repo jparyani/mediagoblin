@@ -17,10 +17,9 @@ Table of Contents:
    deploymenthowto
    hackinghowto
    theminghowto
-   softwarestack
    designdecisions
-   workflow
-   codedocs
+   vision
+   beardomatic
 
 
 Indices and tables

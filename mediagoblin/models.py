@@ -49,7 +49,7 @@ class User(Document):
         'created': datetime.datetime.utcnow,
         'email_verified': False,
         # TODO: shouldn't be active by default, must have email registration
-        'status': 'active'}
+        'status': u'active'}
 
     def check_login(self, password):
         """

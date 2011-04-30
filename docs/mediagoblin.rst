@@ -5,12 +5,13 @@
 What is GNU MediaGoblin
 =======================
 
-Three years ago, a number of free software luminaries got together at
-the FSF office to answer the question, "What should software freedom
-look like on the participatory web?"  Those thinkers included Richard
-Stallman - founder of the free software movement and instigator of the
-GNU project, Evan Prodromou - the driving force behind Status.net, a
-highly sucessful federated micro-blogging service, and FIXME.
+Three years ago (2008), a number of free software luminaries got
+together at the FSF office to answer the question, "What should
+software freedom look like on the participatory web?"  Those thinkers
+included Richard Stallman---founder of the free software movement and
+instigator of the GNU project, Evan Prodromou---the driving force
+behind Status.net, a highly sucessful federated micro-blogging
+service, and FIXME.
 
 Since that time Identi.ca and Libre.fm have answered the
 freedom-loving web-user's need for micro-blogging and music sharing.
@@ -46,10 +47,12 @@ How can I participate?
 See `Get Involved <http://mediagoblin.org/join/>`.
 
 
-How is this licensed?
-=====================
+How is GNU MediaGoblin licensed?
+================================
 
-FIXME - write this once we work out the details
+GNU MediaGoblin software is released under an AGPLv3 license.
+
+See the ``COPYING`` file in the source for details.
 
 
 Is this an official GNU Project?  What does that mean?
