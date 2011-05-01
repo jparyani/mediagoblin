@@ -133,7 +133,7 @@ def setup_celery_from_config(app_config, global_config,
     __import__(settings_module)
     this_module = sys.modules[settings_module]
 
-    for key, value in celery_settings.items():
+    for key, value in celery_settings.iteritems():
         setattr(this_module, key, value)
     
     if set_environ:
