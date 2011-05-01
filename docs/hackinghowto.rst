@@ -165,8 +165,8 @@ FIXME - write this
 Tips for people new to coding
 =============================
 
-Python
-------
+Learning Python
+---------------
 
 GNU MediaGoblin is written using a programming language called `Python
 <http://python.org/>`_.
@@ -189,8 +189,8 @@ These are all excellent texts.
 FIXME - are there good quality Python tutorial videos?
 
 
-Libraries
----------
+Learning Libraries GNU MediaGoblin uses
+---------------------------------------
 
 GNU MediaGoblin uses a variety of libraries in order to do what it
 does.  These libraries are listed in the :ref:`beardomatic-chapter`
@@ -206,3 +206,35 @@ at `Python Miro Community <http://python.mirocommunity.org>`_ [0]_.
 
 If you have questions or need help, find us on the mailing list and on
 IRC.
+
+
+.. _hacking-howto-git:
+
+Learning git
+------------
+
+git is an interesting and very powerful tool.  Like all powerful
+tools, it has a learning curve.
+
+If you're new to git, we highly recommend the following resources for
+getting the hang of it:
+
+* `Learn Git <http://learn.github.com/p/intro.html>`_ --- the GitHub
+  intro to git
+* `Pro Git <http://progit.org/book/>`_ --- fantastic book
+* `Git casts <http://gitcasts.com/>`_ --- screencast covering git
+  usage
+* `Git Reference <http://gitref.org/>`_ --- Git reference that makes
+  it easier to get the hang of git if you're coming from other version
+  control systems
+
+
+Learning other utilities
+------------------------
+
+The `OpenHatch <http://openhatch.org/>`_ site has a series of
+`training missions <http://openhatch.org/missions/>`_ which are
+designed to help you learn how to use these tools.
+
+If you're new to tar, diff and patch, we highly recommend you sign up
+with OpenHatch and do the missions.

@@ -17,9 +17,10 @@ Table of Contents:
    deploymenthowto
    hackinghowto
    theminghowto
+   git
+   codebase
    designdecisions
    vision
-   beardomatic
 
 
 Indices and tables
