@@ -37,6 +37,8 @@ setup(
         'nose',
         'werkzeug',
         'celery',
+        'jinja2',
+        'sphinx',
         ],
     test_suite='nose.collector',
 
