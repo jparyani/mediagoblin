@@ -99,35 +99,41 @@ def setup_celery_from_config(app_config, global_config,
     celery_settings = {}
 
     # set up mongodb stuff
+    celery_settings['CELERY_RESULT_BACKEND'] = 'mongodb'
+    if not celery_settings.has_key('BROKER_BACKEND'):
+        celery_settings['BROKER_BACKEND'] = 'mongodb'
+
     celery_mongo_settings = {}
+
     if app_config.has_key('db_host'):
         celery_mongo_settings['host'] = app_config['db_host']
-        celery_settings['BROKER_HOST'] = app_config['db_host']
+        if celery_settings['BROKER_BACKEND'] == 'mongodb':
+            celery_settings['BROKER_HOST'] = app_config['db_host']
     if app_config.has_key('db_port'):
         celery_mongo_settings['port'] = asint(app_config['db_port'])
-        celery_settings['BROKER_PORT'] = asint(app_config['db_port'])
+        if celery_settings['BROKER_BACKEND'] == 'mongodb':
+            celery_settings['BROKER_PORT'] = asint(app_config['db_port'])
     celery_mongo_settings['database'] = app_config.get('db_name', 'mediagoblin')
 
     celery_settings['CELERY_MONGODB_BACKEND_SETTINGS'] = celery_mongo_settings
-    celery_settings['CELERY_RESULT_BACKEND'] = 'mongodb'
 
     # Add anything else
     for key, value in celery_conf.iteritems():
         key = key.upper()
         if key in KNOWN_CONFIG_BOOLS:
             value = asbool(value)
-        elif value in KNOWN_CONFIG_INTS:
+        elif key in KNOWN_CONFIG_INTS:
             value = asint(value)
-        elif value in KNOWN_CONFIG_FLOATS:
+        elif key in KNOWN_CONFIG_FLOATS:
             value = asfloat(value)
-        elif value in KNOWN_CONFIG_LISTS:
+        elif key in KNOWN_CONFIG_LISTS:
             value = aslist(value)
         celery_settings[key] = value
 
     __import__(settings_module)
     this_module = sys.modules[settings_module]
 
-    for key, value in celery_settings.iteritems():
+    for key, value in celery_settings.items():
         setattr(this_module, key, value)
     
     if set_environ:
