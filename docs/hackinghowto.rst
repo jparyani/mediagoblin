@@ -193,7 +193,7 @@ Learning Libraries GNU MediaGoblin uses
 ---------------------------------------
 
 GNU MediaGoblin uses a variety of libraries in order to do what it
-does.  These libraries are listed in the :ref:`beardomatic-chapter`
+does.  These libraries are listed in the :ref:`codebase-chapter`
 along with links to the project Web sites and documentation for the
 libraries.
 
