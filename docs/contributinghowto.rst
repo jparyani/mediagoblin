@@ -4,10 +4,15 @@
  Contributing HOWTO
 ====================
 
+.. _join-the-community-section:
+
 Join the community!
 ===================
 
 We're super glad you want to join our community!
+
+See `the join page on the website <http://mediagoblin.org/join/>`_ for
+where we hang out.
 
 There are a variety of ways you can help us and become part of the
 team.  We're not just looking for coders!  We're also looking for
