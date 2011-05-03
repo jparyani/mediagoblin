@@ -44,7 +44,7 @@ dedicated to computer user freedom.
 How can I participate?
 ======================
 
-See `Get Involved <http://mediagoblin.org/join/>`.
+See `Get Involved <http://mediagoblin.org/join/>`_ on the website..
 
 
 How is GNU MediaGoblin licensed?
