@@ -70,6 +70,8 @@ def asfloat(obj):
             "Bad float value: %r" % obj)
 
 
+MANDATORY_CELERY_IMPORTS = ['mediagoblin.process_media']
+
 DEFAULT_SETTINGS_MODULE = 'mediagoblin.celery_setup.dummy_settings_module'
 
 def setup_celery_from_config(app_config, global_config,
@@ -129,6 +131,10 @@ def setup_celery_from_config(app_config, global_config,
         elif key in KNOWN_CONFIG_LISTS:
             value = aslist(value)
         celery_settings[key] = value
+
+    # add mandatory celery imports
+    celery_imports = celery_settings.setdefault('CELERY_IMPORTS', [])
+    celery_imports.extend(MANDATORY_CELERY_IMPORTS)
 
     __import__(settings_module)
     this_module = sys.modules[settings_module]
