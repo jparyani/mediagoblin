@@ -14,7 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import email
+
 from mediagoblin import util
+
+
+util._activate_testing()
 
 
 def _import_component_testing_method(silly_string):
@@ -28,3 +33,39 @@ def test_import_component():
     result = imported_func('hooobaladoobala')
     expected = u"'hooobaladoobala' is the silliest string I've ever seen"
     assert result == expected
+
+
+def test_send_email():
+    util._clear_test_inboxes()
+
+    # send the email
+    util.send_email(
+        "sender@mediagoblin.example.org",
+        ["amanda@example.org", "akila@example.org"],
+        "Testing is so much fun!",
+        """HAYYY GUYS!
+
+I hope you like unit tests JUST AS MUCH AS I DO!""")
+
+    # check the main inbox
+    assert len(util.EMAIL_TEST_INBOX) == 1
+    message = util.EMAIL_TEST_INBOX.pop()
+    assert message['From'] == "sender@mediagoblin.example.org"
+    assert message['To'] == "amanda@example.org, akila@example.org"
+    assert message['Subject'] == "Testing is so much fun!"
+    assert message.get_payload(decode=True) == """HAYYY GUYS!
+
+I hope you like unit tests JUST AS MUCH AS I DO!"""
+
+    # Check everything that the FakeMhost.sendmail() method got is correct
+    assert len(util.EMAIL_TEST_MBOX_INBOX) == 1
+    mbox_dict = util.EMAIL_TEST_MBOX_INBOX.pop()
+    assert mbox_dict['from'] == "sender@mediagoblin.example.org"
+    assert mbox_dict['to'] == ["amanda@example.org", "akila@example.org"]
+    mbox_message = email.message_from_string(mbox_dict['message'])
+    assert mbox_message['From'] == "sender@mediagoblin.example.org"
+    assert mbox_message['To'] == "amanda@example.org, akila@example.org"
+    assert mbox_message['Subject'] == "Testing is so much fun!"
+    assert mbox_message.get_payload(decode=True) == """HAYYY GUYS!
+
+I hope you like unit tests JUST AS MUCH AS I DO!"""

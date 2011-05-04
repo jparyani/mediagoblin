@@ -14,10 +14,22 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from email.MIMEText import MIMEText
+import smtplib
 import sys
 
 import jinja2
 import mongokit
+
+
+TESTS_ENABLED = False
+def _activate_testing():
+    """
+    Call this to activate testing in util.py
+    """
+    global TESTS_ENABLED
+    TESTS_ENABLED = True
+
 
 def get_jinja_env(user_template_path=None):
     """
@@ -72,3 +84,88 @@ def import_component(import_string):
     module = sys.modules[module_name]
     func = getattr(module, func_name)
     return func
+
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### Special email test stuff begins HERE
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# We have two "test inboxes" here:
+# 
+# EMAIL_TEST_INBOX:
+# ----------------
+#   If you're writing test views, you'll probably want to check this.
+#   It contains a list of MIMEText messages.
+#
+# EMAIL_TEST_MBOX_INBOX:
+# ----------------------
+#   This collects the messages from the FakeMhost inbox.  It's reslly
+#   just here for testing the send_email method itself.
+#
+#   Anyway this contains:
+#    - from
+#    - to: a list of email recipient addresses
+#    - message: not just the body, but the whole message, including
+#      headers, etc.
+#
+# ***IMPORTANT!***
+# ----------------
+# Before running tests that call functions which send email, you should
+# always call _clear_test_inboxes() to "wipe" the inboxes clean. 
+
+EMAIL_TEST_INBOX = []
+EMAIL_TEST_MBOX_INBOX = []
+
+
+class FakeMhost(object):
+    """
+    Just a fake mail host so we can capture and test messages
+    from send_email
+    """
+    def connect(self):
+        pass
+
+    def sendmail(self, from_addr, to_addrs, message):
+        EMAIL_TEST_MBOX_INBOX.append(
+            {'from': from_addr,
+             'to': to_addrs,
+             'message': message})
+
+def _clear_test_inboxes():
+    global EMAIL_TEST_INBOX
+    global EMAIL_TEST_MBOX_INBOX
+    EMAIL_TEST_INBOX = []
+    EMAIL_TEST_MBOX_INBOX = []
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### </Special email test stuff>
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+def send_email(from_addr, to_addrs, subject, message_body):
+    """
+    Simple email sending wrapper, use this so we can capture messages
+    for unit testing purposes.
+
+    Args:
+     - from_addr: address you're sending the email from
+     - to_addrs: list of recipient email addresses
+     - subject: subject of the email
+     - message_body: email body text
+    """
+    # TODO: make a mock mhost if testing is enabled
+    if TESTS_ENABLED:
+        mhost = FakeMhost()
+    else:
+        mhost = smtplib.SMTP()
+
+    mhost.connect()
+
+    message = MIMEText(message_body.encode('utf-8'), 'plain', 'utf-8')
+    message['Subject'] = subject
+    message['From'] = from_addr
+    message['To'] = ', '.join(to_addrs)
+
+    if TESTS_ENABLED:
+        EMAIL_TEST_INBOX.append(message)
+
+    return mhost.sendmail(from_addr, to_addrs, message.as_string())
