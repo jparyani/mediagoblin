@@ -39,6 +39,7 @@ setup(
         'celery',
         'jinja2',
         'sphinx',
+        'PIL',
         ],
     test_suite='nose.collector',
 
