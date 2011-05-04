@@ -142,6 +142,16 @@ def _clear_test_inboxes():
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 def send_email(from_addr, to_addrs, subject, message_body):
+    """
+    Simple email sending wrapper, use this so we can capture messages
+    for unit testing purposes.
+
+    Args:
+     - from_addr: address you're sending the email from
+     - to_addrs: list of recipient email addresses
+     - subject: subject of the email
+     - message_body: email body text
+    """
     # TODO: make a mock mhost if testing is enabled
     if TESTS_ENABLED:
         mhost = FakeMhost()
