@@ -7,6 +7,63 @@
 This chapter talks a bit about design decisions.
 
 
+Why GNU MediaGoblin?
+====================
+
+Chris and Will on "Why GNU MediaGoblin":
+
+    Chris came up with the name MediaGoblin.  The name is pretty fun.
+    It merges the idea that this is a Media hosting project with
+    Goblin which sort of sounds like gobbling.  Here's a piece of
+    software that gobbles up your media for all to see.
+
+    `According to Wikipedia <http://en.wikipedia.org/wiki/Goblin>`_, a
+    goblin is:
+
+        a legendary evil or mischievous illiterate creature, described
+        as grotesquely evil or evil-like phantom
+
+    So are we evil?  No.  Are we mischievous or illiterate?  Not
+    really.  So what kind of goblin are we thinking about?  We're
+    thinking about these goblins:
+
+    .. figure:: goblin.png
+       :alt: Cute goblin with a beret.
+
+       *Figure 1: Cute goblin with a beret.  llustrated by Chris
+       Webber*
+
+    .. figure:: snugglygoblin.png
+       :scale: 50%
+       :alt: Snuggly goblin with a beret.
+
+       *Figure 2: Snuggly goblin.  Illustrated by Karen Rustad*
+
+    Those are pretty cute goblins.  Those are the kinds of goblins
+    we're thinking about.
+
+    Chris started doing work on the project after thinking about it
+    for a year.  Then, after talking with Matt and Rob, it became an
+    official GNU project.  Thus we now call it GNU MediaGoblin.
+
+    That's a lot of letters, though, so in the interest of brevity and
+    facilitating easier casual conversation and balancing that with
+    what's important to us, we have the following rules:
+
+    1. "GNU MediaGoblin" is the name we're going to use in all official
+       capacities: web site, documentation, press releases, ...
+
+    2. In casual conversation, it's ok to use more casual names.
+
+    3. If you're writing about the project, we ask that you call it GNU 
+       MediaGoblin.
+
+    4. If you don't like the name, we kindly ask you to take a deep
+       breath, think a happy thought about cute little goblins playing
+       on a playground and taking cute pictures of themselves, and let
+       it go.  (Will added this one.)
+
+
 Why Python
 ==========
 
@@ -264,3 +321,5 @@ Chris Webber on "Why copyright assignment?":
     assignment to the FSF are eligible to have a unique goblin drawing
     produced for them by the project's main founder, Christopher Allan
     Webber.  See :ref:`contributing-howto-chapter` for details.
+
+
