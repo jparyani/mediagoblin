@@ -22,11 +22,15 @@ import wtforms
 from mediagoblin import models
 
 def root_view(request):
+    media_entries = request.db.MediaEntry.find(
+        {u'state': u'processed'})
+
     template = request.template_env.get_template(
         'mediagoblin/root.html')
     return Response(
         template.render(
-            {'request': request}))
+            {'request': request,
+             'media_entries': media_entries}))
 
 
 class ImageSubmitForm(wtforms.Form):
