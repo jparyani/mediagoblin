@@ -103,6 +103,18 @@ Run::
     ./bin/paster serve mediagoblin.ini --reload
 
 
+Running celeryd
+===============
+
+You need to do this if you want your media to process and actually
+show up.  It's probably a good idea in development to have the web
+server (above) running in one terminal and celeryd in another window.
+
+Run::
+
+    CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_celery ./bin/celeryd
+
+
 Running the test suite
 ======================
 
