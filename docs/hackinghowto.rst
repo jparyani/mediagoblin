@@ -95,6 +95,22 @@ changed.  To do that, run::
     need to do this when you've made code changes.
 
 
+Running the server
+==================
+
+Run::
+
+    ./bin/paster serve mediagoblin.ini --reload
+
+
+Running the test suite
+======================
+
+Run::
+
+    ./bin/nosetests
+
+
 Wiping your environment for a clean-slate
 -----------------------------------------
 
@@ -120,22 +136,6 @@ Delete the following directories:
    If you're familiar with MongoDB and bash, we'd love to get a bash
    script that removes all the GNU MediaGoblin data from an existing
    MongoDB instance.  Let us know!
-
-
-Running the server
-==================
-
-Run::
-
-    ./bin/paster serve mediagoblin.ini --reload
-
-
-Running the test suite
-======================
-
-Run::
-
-    ./bin/nosetests
 
 
 Quickstart for Django programmers
