@@ -22,6 +22,7 @@ from werkzeug.utils import secure_filename
 
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms
+from mediagoblin.process_media import process_media_initial
 
 
 @require_active_login
@@ -52,7 +53,6 @@ def submit_start(request):
             # Now store generate the queueing related filename
             queue_filepath = request.app.queue_store.get_unique_filepath(
                 ['media_entries',
-                 unicode(request.user['_id']),
                  unicode(entry['_id']),
                  secure_filename(request.POST['file'].filename)])
 
@@ -64,8 +64,11 @@ def submit_start(request):
                 queue_file.write(request.POST['file'].file.read())
 
             # Add queued filename to the entry
-            entry.setdefault('queue_files', []).append(queue_filepath)
+            entry['queued_media_file'] = queue_filepath
             entry.save(validate=True)
+
+            # queue it for processing
+            process_media_initial.delay(unicode(entry['_id']))
 
             # redirect
             return exc.HTTPFound(
