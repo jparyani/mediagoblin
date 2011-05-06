@@ -163,7 +163,8 @@ def send_email(from_addr, to_addrs, subject, message_body):
     message = MIMEText(message_body.encode('utf-8'), 'plain', 'utf-8')
     message['Subject'] = subject
     message['From'] = from_addr
-    message['To'] = ', '.join(to_addrs)
+    # The shorthand condition takes height for the possibility that the to_addrs argument can be either list() or string()
+    message['To'] = ', '.join(to_addrs) if type( to_addrs ) == list else to_addrs
 
     if TESTS_ENABLED:
         EMAIL_TEST_INBOX.append(message)
