@@ -133,9 +133,9 @@ Delete the following directories:
 
 .. YouCanHelp::
 
-   If you're familiar with MongoDB and bash, we'd love to get a
-   `script that removes all the GNU MediaGoblin data from an existing
-   instance <http://bugs.foocorp.net/issues/296>`_.  Let us know!
+   If you're familiar with MongoDB, we'd love to get a `script that
+   removes all the GNU MediaGoblin data from an existing instance
+   <http://bugs.foocorp.net/issues/296>`_.  Let us know!
 
 
 Quickstart for Django programmers
