@@ -61,5 +61,5 @@ def process_media_initial(media_id):
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict['thumb'] = thumb_filepath
     media_files_dict['main'] = main_filepath
-    entry.state = 'processed'
-    entry.save(validate=False)
+    entry['state'] = u'processed'
+    entry.save()
