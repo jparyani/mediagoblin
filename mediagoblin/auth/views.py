@@ -19,6 +19,7 @@ from webob import Response, exc
 
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
+from mediagoblin.util import send_email
 
 
 def register(request):
@@ -44,9 +45,28 @@ def register(request):
             entry['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
             entry.save(validate=True)
+            
+            # TODO: Move this setting to a better place
+            EMAIL_SENDER_ADDRESS = 'mediagoblin@fakehost'
 
-            # TODO: Send email authentication request
-
+            ''' TODO Index - Regarding sending of verification email
+            1.  There is no error handling in place
+            2.  Due to the distributed nature of GNU MediaGoblin, we should find a way to send some additional information about the specific GNU MediaGoblin instance in the subject line. For example "GNU MediaGoblin @ Wandborg - [...]".   
+            3.  The verification link generation does not detect and adapt to access via the HTTPS protocol.
+            '''
+            
+            # TODO (1)
+            send_email( 
+                EMAIL_SENDER_ADDRESS,
+                entry['email'],
+                'GNU MediaGoblin - Verify email', # TODO (2)
+                'http://{host}{uri}?userid={userid}&token={verification_key}'.format( # TODO (3)
+                    host = request.host,
+                    uri = request.urlgen('mediagoblin.auth.verify_email'),
+                    userid = unicode( entry['_id'] ),
+                    verification_key = entry['verification_key']
+                    ))
+            
             # Redirect to register_success
             return exc.HTTPFound(
                 location=request.urlgen("mediagoblin.auth.register_success"))
