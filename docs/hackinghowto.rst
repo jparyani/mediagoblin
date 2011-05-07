@@ -258,6 +258,12 @@ If you see this::
 
 then make sure mongodb is installed and running.
 
+If it's installed, check the mongodb log.  On my machine, that's ``/var/log/mongodb/mongodb.log``.  If you see something like::
+
+    old lock file: /var/lib/mongodb/mongod.lock.  probably means...
+
+Then delete the lock file and relaunch mongodb.
+
 
 Wiping your user data
 =====================
