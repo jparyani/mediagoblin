@@ -36,4 +36,18 @@
   </p>
 
   {% endif %}
+
+  {# temporarily, an "image gallery" that isn't one really ;) #}
+
+  <div>
+    <ul>
+      {% for entry in media_entries %}
+        <li>
+          <img src="{{ request.app.public_store.file_url(
+                           entry['media_files']['thumb']) }}" />
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
 {% endblock %}    

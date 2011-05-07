@@ -29,11 +29,11 @@ def process_media_initial(media_id):
     entry = database.MediaEntry.one(
         {'_id': mongokit.ObjectId(media_id)})
 
-    queued_filepath = entry['queue_files'].pop()
+    queued_filepath = entry['queued_media_file']
     queued_file = queue_store.get_file(queued_filepath, 'r')
 
     with queued_file:
-        thumb = Image(queued_file)
+        thumb = Image.open(queued_file)
         thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
 
         thumb_filepath = public_store.get_unique_filepath(
@@ -44,7 +44,22 @@ def process_media_initial(media_id):
         with public_store.get_file(thumb_filepath, 'w') as thumb_file:
             thumb.save(thumb_file, "JPEG")
 
-    queue_store.delete(queued_filepath)
-    entry.setdefault('media_files', []).append(thumb_filepath)
-    entry.state = 'processed'
+    # we have to re-read because unlike PIL, not everything reads
+    # things in string representation :)
+    queued_file = queue_store.get_file(queued_filepath, 'rb')
+
+    with queued_file:
+        main_filepath = public_store.get_unique_filepath(
+            ['media_entries',
+             unicode(entry['_id']),
+             queued_filepath[-1]])
+        
+        with public_store.get_file(main_filepath, 'wb') as main_file:
+            main_file.write(queued_file.read())
+
+    queue_store.delete_file(queued_filepath)
+    media_files_dict = entry.setdefault('media_files', {})
+    media_files_dict['thumb'] = thumb_filepath
+    media_files_dict['main'] = main_filepath
+    entry['state'] = u'processed'
     entry.save()

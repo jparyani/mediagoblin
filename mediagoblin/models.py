@@ -74,11 +74,16 @@ class MediaEntry(Document):
         'tags': [unicode],
         'state': unicode,
 
+        # For now let's assume there can only be one main file queued
+        # at a time
+        'queued_media_file': [unicode],
+
+        # A dictionary of logical names to filepaths
+        'media_files': dict,
+
         # The following should be lists of lists, in appropriate file
         # record form
-        'media_files': list,
         'attachment_files': list,
-        'queue_files': list,
 
         # This one should just be a single file record
         'thumbnail_file': [unicode]}

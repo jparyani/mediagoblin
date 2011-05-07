@@ -95,6 +95,34 @@ changed.  To do that, run::
     need to do this when you've made code changes.
 
 
+Running the server
+==================
+
+Run::
+
+    ./bin/paster serve mediagoblin.ini --reload
+
+
+Running celeryd
+===============
+
+You need to do this if you want your media to process and actually
+show up.  It's probably a good idea in development to have the web
+server (above) running in one terminal and celeryd in another window.
+
+Run::
+
+    CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_celery ./bin/celeryd
+
+
+Running the test suite
+======================
+
+Run::
+
+    ./bin/nosetests
+
+
 Wiping your environment for a clean-slate
 -----------------------------------------
 
@@ -117,25 +145,9 @@ Delete the following directories:
 
 .. YouCanHelp::
 
-   If you're familiar with MongoDB and bash, we'd love to get a bash
-   script that removes all the GNU MediaGoblin data from an existing
-   MongoDB instance.  Let us know!
-
-
-Running the server
-==================
-
-Run::
-
-    ./bin/paster serve mediagoblin.ini --reload
-
-
-Running the test suite
-======================
-
-Run::
-
-    ./bin/nosetests
+   If you're familiar with MongoDB, we'd love to get a `script that
+   removes all the GNU MediaGoblin data from an existing instance
+   <http://bugs.foocorp.net/issues/296>`_.  Let us know!
 
 
 Quickstart for Django programmers
