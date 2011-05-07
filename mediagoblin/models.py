@@ -50,7 +50,7 @@ class User(Document):
         'created': datetime.datetime.utcnow,
         'email_verified': False,
         'status': u'needs_email_verification',
-        'verification_key': uuid.uuid4 }
+        'verification_key': lambda: unicode( uuid.uuid4() ) }
 
     def check_login(self, password):
         """
