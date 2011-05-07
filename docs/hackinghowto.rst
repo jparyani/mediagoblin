@@ -77,7 +77,7 @@ How to set up and maintain an environment for hacking with virtualenv
 **Requirements**
 
 * virtualenv: http://pypi.python.org/pypi/virtualenv
-* virtualenv wrapper: http://www.doughellmann.com/projects/virtualenvwrapper/
+* virtualenv wrapper: http://www.doughellmann.com/projects/virtualenvwrapper/ (be sure to read the `install instructions <http://www.doughellmann.com/docs/virtualenvwrapper/install.html>`_)
 * git: http://git-scm.com/
 
 
