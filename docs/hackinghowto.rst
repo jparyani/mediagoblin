@@ -81,7 +81,6 @@ How to set up and maintain an environment for hacking with virtualenv
   http://www.doughellmann.com/projects/virtualenvwrapper/ (be sure to
   read the `install instructions
   <http://www.doughellmann.com/docs/virtualenvwrapper/install.html>`_)
-* git: http://git-scm.com/
 
 
 **Create a development environment**
