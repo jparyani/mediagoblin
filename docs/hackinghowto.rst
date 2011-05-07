@@ -28,8 +28,8 @@ Third you'll need to :ref:`get the requirements
 
 Fourth, you'll need to build a development environment.  For this step, there are two options: 
 
-1. :ref:`virtualenv <hacking-with-virtualenv>` OR
-2. :ref:`buildout and bootstrap <hacking-with-buildout>`
+1. :ref:`buildout and bootstrap <hacking-with-buildout>` (easier) OR
+2. :ref:`virtualenv <hacking-with-virtualenv>` (more flexible, but harder)
 
 Pick one---don't do both!
 
@@ -61,6 +61,72 @@ requirements::
 
    If you have instructions for other GNU/Linux distributions to set
    up requirements, let us know!
+
+
+.. _hacking-with-buildout:
+
+How to set up and maintain an environment for hacking with buildout
+===================================================================
+
+.. Note::
+
+   Either follow the instructions in this section OR follow the ones
+   in :ref:`hacking-with-virtualenv`.  But don't do both!
+
+
+**Requirements**
+
+No additional requirements.
+
+
+**Create a development environment**
+
+After installing the requirements, follow these steps:
+
+1. Clone the repository::
+
+       git clone http://git.gitorious.org/mediagoblin/mediagoblin.git
+
+2. Bootstrap and run buildout::
+
+       cd mediagoblin
+       python bootstrap.py && ./bin/buildout
+
+
+That's it!  Using this method, buildout should create a ``user_dev``
+directory, in which certain things will be stored (media, beaker
+session stuff, etc).  You can change this, but for development
+purposes this default should be fine.
+
+
+**Updating for dependency changes**
+
+While hacking on GNU MediaGoblin over time, you'll eventually have to
+update your development environment because the dependencies have
+changed.  To do that, run::
+
+    ./bin/buildout
+
+
+**Updating for code changes**
+
+You don't need to do anything---code changes are automatically
+available.
+
+
+**Deleting your buildout**
+
+At some point, you may want to delete your buildout.  Perhaps it's to
+start over.  Perhaps it's to test building development environments
+with buildout.
+
+To do this, do::
+
+    rm -rf bin develop-eggs eggs mediagoblin.egg-info parts user_dev
+
+Usually buildout works pretty great and is super easy, but if you get
+problems with python-dateutil conflicts on your system, you may need
+to use virtualenv instead.
 
 
 .. _hacking-with-virtualenv:
@@ -144,68 +210,6 @@ development environments with virtualenv.
 To do this, do::
 
     rmvirtualenv mediagoblin
-
-
-.. _hacking-with-buildout:
-
-How to set up and maintain an environment for hacking with buildout
-===================================================================
-
-.. Note::
-
-   Either follow the instructions in this section OR follow the ones
-   in :ref:`hacking-with-virtualenv`.  But don't do both!
-
-
-**Requirements**
-
-No additional requirements.
-
-
-**Create a development environment**
-
-After installing the requirements, follow these steps:
-
-1. Clone the repository::
-
-       git clone http://git.gitorious.org/mediagoblin/mediagoblin.git
-
-2. Bootstrap and run buildout::
-
-       cd mediagoblin
-       python bootstrap.py && ./bin/buildout
-
-
-That's it!  Using this method, buildout should create a ``user_dev``
-directory, in which certain things will be stored (media, beaker
-session stuff, etc).  You can change this, but for development
-purposes this default should be fine.
-
-
-**Updating for dependency changes**
-
-While hacking on GNU MediaGoblin over time, you'll eventually have to
-update your development environment because the dependencies have
-changed.  To do that, run::
-
-    ./bin/buildout
-
-
-**Updating for code changes**
-
-You don't need to do anything---code changes are automatically
-available.
-
-
-**Deleting your buildout**
-
-At some point, you may want to delete your buildout.  Perhaps it's to
-start over.  Perhaps it's to test building development environments
-with buildout.
-
-To do this, do::
-
-    rm -rf bin develop-eggs eggs mediagoblin.egg-info parts user_dev
 
 
 Running the server
