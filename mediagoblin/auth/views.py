@@ -47,9 +47,6 @@ def register(request):
                 request.POST['password'])
             entry.save(validate=True)
             
-            # TODO: Move this setting to a better place
-            EMAIL_SENDER_ADDRESS = 'mediagoblin@fakehost'
-
             email_template = request.template_env.get_template(
                 'mediagoblin/auth/verification_email.txt')
 
