@@ -60,7 +60,7 @@ Is this an official GNU Project?  What does that mean?
 
 We are!  It means that we meet the GNU Project's rigourous standards
 for free software.  To find out more about what that means, check out
-`the GNU site <http://gnu.org/>`.
+`the GNU site <http://gnu.org/>`_.
 
 Please feel free to contact us with further questions!
 
