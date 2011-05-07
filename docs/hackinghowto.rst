@@ -23,13 +23,21 @@ Second thing to do is take a look at :ref:`codebase-chapter` where
 we've started documenting how GNU MediaGoblin is built and how to add
 new things.
 
+Third you'll need to :ref:`get the requirements
+<get-requirements-section>`.
 
-How to set up and maintain an environment for hacking
-=====================================================
+Fourth, you'll need to build a development environment.  For this step, there are two options: 
 
+1. :ref:`virtualenv <hacking-with-virtualenv>` OR
+2. :ref:`buildout and bootstrap <hacking-with-buildout>`
+
+Pick one---don't do both!
+
+
+.. _get-requirements-section:
 
 Getting requirements
---------------------
+====================
 
 First, you need to have the following installed before you can build
 an environment for hacking on GNU MediaGoblin:
@@ -49,22 +57,112 @@ requirements::
     sudo apt-get install mongodb git-core python python-dev \
          python-lxml
 
-After getting the requirements, there are two ways to build a development environment:
+.. YouCanHelp::
 
-1. Running bootstrap and buildout, OR
-2. Creating a virtual environment
-
-Pick one---don't do both!
+   If you have instructions for other GNU/Linux distributions to set
+   up requirements, let us know!
 
 
-Creating a dev environment with bootstrap and buildout
-------------------------------------------------------
+.. _hacking-with-virtualenv:
+
+How to set up and maintain an environment for hacking with virtualenv
+=====================================================================
 
 .. Note::
 
    Either follow the instructions in this section OR follow the ones
-   in the next one---don't do both!
+   in :ref:`hacking-with-buildout`.  But don't do both!
 
+
+**Requirements**
+
+* virtualenv: http://pypi.python.org/pypi/virtualenv
+* virtualenv wrapper:
+  http://www.doughellmann.com/projects/virtualenvwrapper/ (be sure to
+  read the `install instructions
+  <http://www.doughellmann.com/docs/virtualenvwrapper/install.html>`_)
+
+
+**Create a development environment**
+
+1. Clone the repository::
+
+       git clone http://git.gitorious.org/mediagoblin/mediagoblin.git
+
+2. Create a virtual environment::
+
+       mkvirtualenv --no-site-packages mediagoblin
+
+3. If that doesn't put you in the virutal environment you just
+   created, then do::
+
+       workon mediagoblin
+
+4. Run::
+
+       python setup.py develop
+
+That's it!
+
+
+**Activating a virtual environment**
+
+When you want to work on GNU MediaGoblin, you need to activate the
+virtual environment like this::
+
+    workon mediagoblin
+
+
+**Deactivating a virtual environment**
+
+If you want to deactivate it, you can do this::
+
+    deactivate
+
+
+**Updating a virtual environment with dependency changes**
+
+1. Enter the virtual environment.
+
+2. Run::
+
+      python setup.py develop
+
+
+**Updating a virtual environment with code changes**
+
+You don't need to do anything---code changes are automatically
+available.
+
+
+**Deleting a virtual environment**
+
+At some point you may want to delete your virtual environment.
+Perhaps it's to start over.  Perhaps it's so you can test building
+development environments with virtualenv.
+
+To do this, do::
+
+    rmvirtualenv mediagoblin
+
+
+.. _hacking-with-buildout:
+
+How to set up and maintain an environment for hacking with buildout
+===================================================================
+
+.. Note::
+
+   Either follow the instructions in this section OR follow the ones
+   in :ref:`hacking-with-virtualenv`.  But don't do both!
+
+
+**Requirements**
+
+No additional requirements.
+
+
+**Create a development environment**
 
 After installing the requirements, follow these steps:
 
@@ -84,13 +182,7 @@ session stuff, etc).  You can change this, but for development
 purposes this default should be fine.
 
 
-.. Note::
-
-   We used `zc.buildout <http://www.buildout.org/>`_ because it
-   involves fewer steps to get things running and less knowledge of
-   Python packaging.  However, if you prefer to use `virtualenv
-   <http://pypi.python.org/pypi/virtualenv>`_, that should work just
-   fine.
+**Updating for dependency changes**
 
 While hacking on GNU MediaGoblin over time, you'll eventually have to
 update your development environment because the dependencies have
@@ -98,76 +190,32 @@ changed.  To do that, run::
 
     ./bin/buildout
 
-.. Note::
 
-    You only need to do this when dependencies are updated.  You don't
-    need to do this when you've made code changes.
+**Updating for code changes**
 
-
-Creating a dev environment with virtualenv
-------------------------------------------
-
-.. Note::
-
-   Either follow the instructions in this section OR follow the ones
-   in the previous one---don't do both!
-
-The following assumes you have these things installed:
-
-1. virtualenv:
-
-   http://pypi.python.org/pypi/virtualenv
-
-2. virtualenv wrapper:
-
-   http://www.doughellmann.com/projects/virtualenvwrapper/
-
-3. git:
-
-   http://git-scm.com/
+You don't need to do anything---code changes are automatically
+available.
 
 
-Follow these steps:
+**Deleting your buildout**
 
-1. Clone the repository::
+At some point, you may want to delete your buildout.  Perhaps it's to
+start over.  Perhaps it's to test building development environments
+with buildout.
 
-       git clone http://git.gitorious.org/mediagoblin/mediagoblin.git
+To do this, do::
 
-2. Create a virtual environment::
-
-       mkvirtualenv --no-site-packages mediagoblin
-
-3. If that doesn't put you in the virutal environment you just created, then do::
-
-       workon mediagoblin
-
-4. Run::
-
-       python setup.py develop
-
-
-That's it!
-
-When you want to work on GNU MediaGoblin, you need to activate the
-virtual environment like this::
-
-    workon mediagoblin
-
-If you want to deactivate it, you can do this::
-
-    deactivate
-
-.. Note::
-
-   You don't have to do anything additional to move changes you're
-   making to your virtual environment because the virtual environment
-   is pointing at the actual code files.
+    rm -rf bin develop-eggs eggs mediagoblin.egg-info parts user_dev
 
 
 Running the server
 ==================
 
-Run::
+If you did virtualenv, run::
+
+    paster serve mediagoblin.ini --reload
+
+If you did buildout, run::
 
     ./bin/paster serve mediagoblin.ini --reload
 
@@ -179,7 +227,11 @@ You need to do this if you want your media to process and actually
 show up.  It's probably a good idea in development to have the web
 server (above) running in one terminal and celeryd in another window.
 
-Run::
+If you did virtualenv, run::
+
+    CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_celery celeryd
+
+If you did buildout, run::
 
     CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_celery ./bin/celeryd
 
@@ -187,30 +239,42 @@ Run::
 Running the test suite
 ======================
 
-Run::
+If you did virtualenv, run::
+
+    nosetests
+
+If you did buildout, run::
 
     ./bin/nosetests
 
 
-Wiping your environment for a clean-slate
------------------------------------------
+Troubleshooting
+===============
+
+pymongo.errors.AutoReconnect: could not find master/primary
+-----------------------------------------------------------
+
+If you see this::
+
+    pymongo.errors.AutoReconnect: could not find master/primary
+
+then make sure mongodb is installed and running.
+
+If it's installed, check the mongodb log.  On my machine, that's ``/var/log/mongodb/mongodb.log``.  If you see something like::
+
+    old lock file: /var/lib/mongodb/mongod.lock.  probably means...
+
+Then delete the lock file and relaunch mongodb.
+
+
+Wiping your user data
+=====================
 
 .. Note::
 
    Unless you're doing development and working on and testing creating
    a new instance, you will probably never have to do this.  Will
    plans to do this work and thus he documented it.
-
-
-Delete the following directories:
-
-* bin/
-* develop-eggs/
-* eggs/
-* mediagoblin.egg-info/
-* parts/
-* user_dev/
-
 
 .. YouCanHelp::
 
