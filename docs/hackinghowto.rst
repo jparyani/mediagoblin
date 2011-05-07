@@ -49,9 +49,22 @@ requirements::
     sudo apt-get install mongodb git-core python python-dev \
          python-lxml
 
+After getting the requirements, there are two ways to build a development environment:
 
-Running bootstrap and buildout
-------------------------------
+1. Running bootstrap and buildout, OR
+2. Creating a virtual environment
+
+Pick one---don't do both!
+
+
+Creating a dev environment with bootstrap and buildout
+------------------------------------------------------
+
+.. Note::
+
+   Either follow the instructions in this section OR follow the ones
+   in the next one---don't do both!
+
 
 After installing the requirements, follow these steps:
 
@@ -79,10 +92,6 @@ purposes this default should be fine.
    <http://pypi.python.org/pypi/virtualenv>`_, that should work just
    fine.
 
-
-Updating dependencies
----------------------
-
 While hacking on GNU MediaGoblin over time, you'll eventually have to
 update your development environment because the dependencies have
 changed.  To do that, run::
@@ -93,6 +102,66 @@ changed.  To do that, run::
 
     You only need to do this when dependencies are updated.  You don't
     need to do this when you've made code changes.
+
+
+Creating a dev environment with virtualenv
+------------------------------------------
+
+.. Note::
+
+   Either follow the instructions in this section OR follow the ones
+   in the previous one---don't do both!
+
+The following assumes you have these things installed:
+
+1. virtualenv:
+
+   http://pypi.python.org/pypi/virtualenv
+
+2. virtualenv wrapper:
+
+   http://www.doughellmann.com/projects/virtualenvwrapper/
+
+3. git:
+
+   http://git-scm.com/
+
+
+Follow these steps:
+
+1. Clone the repository::
+
+       git clone http://git.gitorious.org/mediagoblin/mediagoblin.git
+
+2. Create a virtual environment::
+
+       mkvirtualenv --no-site-packages mediagoblin
+
+3. If that doesn't put you in the virutal environment you just created, then do::
+
+       workon mediagoblin
+
+4. Run::
+
+       python setup.py develop
+
+
+That's it!
+
+When you want to work on GNU MediaGoblin, you need to activate the
+virtual environment like this::
+
+    workon mediagoblin
+
+If you want to deactivate it, you can do this::
+
+    deactivate
+
+.. Note::
+
+   You don't have to do anything additional to move changes you're
+   making to your virtual environment because the virtual environment
+   is pointing at the actual code files.
 
 
 Running the server
