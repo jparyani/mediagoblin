@@ -22,6 +22,7 @@ from paste.deploy.loadwsgi import NicerConfigParser
 from mediagoblin import storage, models
 from mediagoblin.celery_setup import setup_celery_from_config
 from mediagoblin.globals import setup_globals
+from mediagoblin import globals as mgoblin_globals
 
 
 OUR_MODULENAME = 'mediagoblin.celery_setup.from_celery'
@@ -81,6 +82,9 @@ def setup_self(setup_globals_func=setup_globals):
         db_connection=connection,
         database=db,
         public_store=public_store,
+        email_sender_address=mgoblin_section.get(
+            'email_sender_address', 
+            'notice@mediagoblin.org'),
         queue_store=queue_store)
 
 

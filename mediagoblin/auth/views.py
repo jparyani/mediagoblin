@@ -20,6 +20,7 @@ from webob import Response, exc
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.util import send_email
+from mediagoblin import globals as mgoblin_globals
 
 
 def register(request):
@@ -49,23 +50,26 @@ def register(request):
             # TODO: Move this setting to a better place
             EMAIL_SENDER_ADDRESS = 'mediagoblin@fakehost'
 
-            ''' TODO Index - Regarding sending of verification email
-            1.  There is no error handling in place
-            2.  Due to the distributed nature of GNU MediaGoblin, we should find a way to send some additional information about the specific GNU MediaGoblin instance in the subject line. For example "GNU MediaGoblin @ Wandborg - [...]".   
-            3.  The verification link generation does not detect and adapt to access via the HTTPS protocol.
-            '''
-            
-            # TODO (1)
-            send_email( 
-                EMAIL_SENDER_ADDRESS,
-                entry['email'],
-                'GNU MediaGoblin - Verify email', # TODO (2)
-                'http://{host}{uri}?userid={userid}&token={verification_key}'.format( # TODO (3)
-                    host = request.host,
-                    uri = request.urlgen('mediagoblin.auth.verify_email'),
-                    userid = unicode( entry['_id'] ),
-                    verification_key = entry['verification_key']
-                    ))
+            email_template = request.template_env.get_template(
+                'mediagoblin/auth/verification_email.txt')
+
+            # TODO: There is no error handling in place
+            send_email(
+                mgoblin_globals.email_sender_address,
+                list(entry['email']),
+                # TODO
+                # Due to the distributed nature of GNU MediaGoblin, we should
+                # find a way to send some additional information about the 
+                # specific GNU MediaGoblin instance in the subject line. For 
+                # example "GNU MediaGoblin @ Wandborg - [...]".   
+                'GNU MediaGoblin - Verify email',
+                email_template.render(
+                    username=entry['username'],
+                    verification_url='http://{host}{uri}?userid={userid}&token={verification_key}'.format(
+                        host=request.host,
+                        uri=request.urlgen('mediagoblin.auth.verify_email'),
+                        userid=unicode(entry['_id']),
+                        verification_key=entry['verification_key'])))
             
             # Redirect to register_success
             return exc.HTTPFound(
@@ -138,13 +142,19 @@ def logout(request):
         location=request.urlgen("index"))
 
 def verify_email(request):
+    """
+    Email verification view
+
+    validates GET parameters against database and unlocks the user account, if
+    you are lucky :)
+    """
     import bson.objectid
     user = request.db.User.find_one(
-        {'_id': bson.objectid.ObjectId( unicode( request.GET.get('userid') ) )})
+        {'_id': bson.objectid.ObjectId(unicode(request.GET.get('userid')))})
 
     verification_successful = bool
 
-    if user and user['verification_key'] == unicode( request.GET.get('token') ):
+    if user and user['verification_key'] == unicode(request.GET.get('token')):
         user['status'] = u'active'
         user['email_verified'] = True
         verification_successful = True
