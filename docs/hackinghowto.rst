@@ -146,8 +146,8 @@ To do this, do::
 
 .. _hacking-with-buildout:
 
-Creating a dev environment with bootstrap and buildout
-------------------------------------------------------
+How to set up and maintain an environment for hacking with buildout
+===================================================================
 
 .. Note::
 
@@ -204,12 +204,6 @@ with buildout.
 To do this, do::
 
     rm -rf bin develop-eggs eggs mediagoblin.egg-info parts user_dev
-
-
-.. _env_with_virtualenv:
-
-Creating a dev environment with virtualenv
-------------------------------------------
 
 
 Running the server
