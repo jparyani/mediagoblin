@@ -16,40 +16,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 {% extends "mediagoblin/base.html" %}
-
 {% block mediagoblin_content %}
-  <h2>Welcome to GNU MediaGoblin!</h2>
-
-  {% if request.user %}
-  <p>
-    <a href="{{ request.urlgen('mediagoblin.submit.start') }}">Submit an item</a>.
-  </p>
-
-  {% else %}
-  <p>
-    If you have an account, you can
-    <a href="{{ request.urlgen('mediagoblin.auth.login') }}">Login</a>.
-  </p>
-  <p>
-    If you don't have an account, please 
-    <a href="{{ request.urlgen('mediagoblin.auth.register') }}">Register</a>.
-  </p>
-
-  {% endif %}
 
   {# temporarily, an "image gallery" that isn't one really ;) #}
-
+  {% if media %}
+  <h2>Media details for {{media.title}}</h2>
   <div>
-    <ul>
-      {% for entry in media_entries %}
-        <li>
-          <a href="{{ request.urlgen('mediagoblin.user_pages.media_home',
-                   user= entry.uploader.username, m_id= entry._id) }}">
-            <img src="{{ request.app.public_store.file_url(
-                      entry['media_files']['thumb']) }}" /></a>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+    <img src="{{ request.app.public_store.file_url(
+                  media.media_files.main) }}" />
 
+          <br/>Uploaded: {{ media.created}}
+          <br/>Description: {{media.description}}
+  </div>
+  {% else %}
+  <p>Sorry, no such media found.<p/>
+  {% endif %}
 {% endblock %}    

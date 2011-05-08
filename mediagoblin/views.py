@@ -18,13 +18,13 @@ import datetime
 
 from webob import Response, exc
 import wtforms
-
+from mongokit import ObjectId
 from mediagoblin import models
 
 def root_view(request):
     media_entries = request.db.MediaEntry.find(
         {u'state': u'processed'})
-
+    
     template = request.template_env.get_template(
         'mediagoblin/root.html')
     return Response(

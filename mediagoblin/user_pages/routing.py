@@ -1,4 +1,4 @@
-# GNU MediaGoblin -- federated, autonomous media hosting
+1# GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,22 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from routes import Mapper
+from routes.route import Route
 
-from mediagoblin.auth.routing import auth_routes
-from mediagoblin.submit.routing import submit_routes
-from mediagoblin.user_pages.routing import user_routes
-
-def get_mapper():
-    mapping = Mapper()
-    mapping.minimization = False
-
-    mapping.connect(
-        "index", "/",
-        controller="mediagoblin.views:root_view")
-
-    mapping.extend(auth_routes, '/auth')
-    mapping.extend(submit_routes, '/submit')
-    mapping.extend(user_routes, '/u')
-
-    return mapping
+user_routes = [
+    Route('mediagoblin.user_pages.user_home', "/{user}",
+        controller="mediagoblin.user_pages.views:user_home"),
+    Route('mediagoblin.user_pages.media_home', r'/{user}/m/{m_id}',
+        requirements=dict(m_id="[0-9a-fA-F]{24}"),
+        controller="mediagoblin.user_pages.views:media_home")]
