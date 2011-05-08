@@ -1,3 +1,4 @@
+{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
@@ -13,17 +14,15 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
 
-from routes.route import Route
-
-auth_routes = [
-    Route('mediagoblin.auth.register', '/register/',
-          controller='mediagoblin.auth.views:register'),
-    Route('mediagoblin.auth.register_success', '/register/success/',
-          controller='mediagoblin.auth.views:register_success'),
-    Route('mediagoblin.auth.login', '/login/',
-          controller='mediagoblin.auth.views:login'),
-    Route('mediagoblin.auth.logout', '/logout/',
-          controller='mediagoblin.auth.views:logout'),
-    Route('mediagoblin.auth.verify_email', '/verify_email/',
-          controller='mediagoblin.auth.views:verify_email')]
+{% block mediagoblin_content %}
+<p>
+  {% if verification_successful %}
+    Your email address has been verified!
+  {% else %}
+    The verification key or user id is incorrect
+  {% endif %}
+</p>
+{% endblock %}

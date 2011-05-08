@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime
+import datetime, uuid
 
 from mongokit import Document, Set
 
@@ -41,6 +41,7 @@ class User(Document):
         'pw_hash': unicode,
         'email_verified': bool,
         'status': unicode,
+        'verification_key': unicode
         }
 
     required_fields = ['username', 'created', 'pw_hash', 'email']
@@ -48,8 +49,8 @@ class User(Document):
     default_values = {
         'created': datetime.datetime.utcnow,
         'email_verified': False,
-        # TODO: shouldn't be active by default, must have email registration
-        'status': u'active'}
+        'status': u'needs_email_verification',
+        'verification_key': lambda: unicode( uuid.uuid4() ) }
 
     def check_login(self, password):
         """

@@ -19,6 +19,8 @@ from webob import Response, exc
 
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
+from mediagoblin.util import send_email
+from mediagoblin import globals as mgoblin_globals
 
 
 def register(request):
@@ -44,9 +46,28 @@ def register(request):
             entry['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
             entry.save(validate=True)
+            
+            email_template = request.template_env.get_template(
+                'mediagoblin/auth/verification_email.txt')
 
-            # TODO: Send email authentication request
-
+            # TODO: There is no error handling in place
+            send_email(
+                mgoblin_globals.email_sender_address,
+                list(entry['email']),
+                # TODO
+                # Due to the distributed nature of GNU MediaGoblin, we should
+                # find a way to send some additional information about the 
+                # specific GNU MediaGoblin instance in the subject line. For 
+                # example "GNU MediaGoblin @ Wandborg - [...]".   
+                'GNU MediaGoblin - Verify email',
+                email_template.render(
+                    username=entry['username'],
+                    verification_url='http://{host}{uri}?userid={userid}&token={verification_key}'.format(
+                        host=request.host,
+                        uri=request.urlgen('mediagoblin.auth.verify_email'),
+                        userid=unicode(entry['_id']),
+                        verification_key=entry['verification_key'])))
+            
             # Redirect to register_success
             return exc.HTTPFound(
                 location=request.urlgen("mediagoblin.auth.register_success"))
@@ -116,3 +137,32 @@ def logout(request):
     
     return exc.HTTPFound(
         location=request.urlgen("index"))
+
+def verify_email(request):
+    """
+    Email verification view
+
+    validates GET parameters against database and unlocks the user account, if
+    you are lucky :)
+    """
+    import bson.objectid
+    user = request.db.User.find_one(
+        {'_id': bson.objectid.ObjectId(unicode(request.GET.get('userid')))})
+
+    verification_successful = bool
+
+    if user and user['verification_key'] == unicode(request.GET.get('token')):
+        user['status'] = u'active'
+        user['email_verified'] = True
+        verification_successful = True
+        user.save()
+    else:
+        verification_successful = False
+        
+    template = request.template_env.get_template(
+        'mediagoblin/auth/verify_email.html')
+    return Response(
+        template.render(
+            {'request': request,
+             'user': user,
+             'verification_successful': verification_successful}))
