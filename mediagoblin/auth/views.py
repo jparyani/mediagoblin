@@ -53,7 +53,7 @@ def register(request):
             # TODO: There is no error handling in place
             send_email(
                 mgoblin_globals.email_sender_address,
-                list(entry['email']),
+                [entry['email']],
                 # TODO
                 # Due to the distributed nature of GNU MediaGoblin, we should
                 # find a way to send some additional information about the 
