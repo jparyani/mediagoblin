@@ -16,8 +16,6 @@
 
 from setuptools import setup, find_packages
 
-import sys
-
 setup(
     name = "mediagoblin",
     version = "0.0.1",
