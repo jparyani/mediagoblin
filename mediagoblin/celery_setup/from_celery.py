@@ -84,7 +84,7 @@ def setup_self(setup_globals_func=setup_globals):
         public_store=public_store,
         email_sender_address=mgoblin_section.get(
             'email_sender_address', 
-            'notice@mediagoblin.org'),
+            'notice@mediagoblin.example.org'),
         queue_store=queue_store)
 
 

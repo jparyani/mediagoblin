@@ -142,7 +142,7 @@ def paste_app_factory(global_config, **app_config):
         public_store=public_store, queue_store=queue_store,
         staticdirector=staticdirector,
         email_sender_address=app_config.get('email_sender_address', 
-                                            'notice@medigoblin.org'),
+                                            'notice@mediagoblin.example.org'),
         user_template_path=app_config.get('local_templates'))
 
     return mgoblin_app
