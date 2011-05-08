@@ -19,4 +19,4 @@ Hi {{ username }},
 
 to activate your GNU MediaGoblin account, open the following URL in your web browser
 
-{{ verification_url }}
+{{ verification_url|safe }}
