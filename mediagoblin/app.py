@@ -18,6 +18,7 @@ import urllib
 
 import routes
 import mongokit
+from paste.deploy.converters import asbool
 from webob import Request, exc
 
 from mediagoblin import routing, util, models, storage, staticdirect
@@ -36,7 +37,7 @@ class MediaGoblinApp(object):
     def __init__(self, connection, database_path,
                  public_store, queue_store,
                  staticdirector,
-                 email_sender_address,
+                 email_sender_address, email_debug_mode,
                  user_template_path=None):
         # Get the template environment
         self.template_env = util.get_jinja_env(user_template_path)
@@ -61,6 +62,7 @@ class MediaGoblinApp(object):
         # object.
         setup_globals(
             email_sender_address=email_sender_address,
+            email_debug_mode=email_debug_mode,
             db_connection=connection,
             database=self.db,
             public_store=self.public_store,
@@ -141,8 +143,9 @@ def paste_app_factory(global_config, **app_config):
         connection, app_config.get('db_name', 'mediagoblin'),
         public_store=public_store, queue_store=queue_store,
         staticdirector=staticdirector,
-        email_sender_address=app_config.get('email_sender_address', 
-                                            'notice@mediagoblin.example.org'),
+        email_sender_address=app_config.get(
+            'email_sender_address', 'notice@mediagoblin.example.org'),
+        email_debug_mode=app_config.get('email_debug_mode'),
         user_template_path=app_config.get('local_templates'))
 
     return mgoblin_app

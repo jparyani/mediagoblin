@@ -82,6 +82,7 @@ def setup_self(setup_globals_func=setup_globals):
         db_connection=connection,
         database=db,
         public_store=public_store,
+        email_debug_mode=app_config.get('email_debug_mode'),
         email_sender_address=mgoblin_section.get(
             'email_sender_address', 
             'notice@mediagoblin.example.org'),

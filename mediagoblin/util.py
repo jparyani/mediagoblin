@@ -21,6 +21,8 @@ import sys
 import jinja2
 import mongokit
 
+from mediagoblin import globals as mgoblin_globals
+
 
 TESTS_ENABLED = False
 def _activate_testing():
@@ -153,9 +155,9 @@ def send_email(from_addr, to_addrs, subject, message_body):
      - message_body: email body text
     """
     # TODO: make a mock mhost if testing is enabled
-    if TESTS_ENABLED:
+    if TESTS_ENABLED or mgoblin_globals.email_debug_mode:
         mhost = FakeMhost()
-    else:
+    elif not mgoblin_globals.email_debug_mode:
         mhost = smtplib.SMTP()
 
     mhost.connect()
@@ -168,4 +170,13 @@ def send_email(from_addr, to_addrs, subject, message_body):
     if TESTS_ENABLED:
         EMAIL_TEST_INBOX.append(message)
 
-    return mhost.sendmail(from_addr, to_addrs, message.as_string())
+    elif mgoblin_globals.email_debug_mode:
+        print u"===== Email ====="
+        print u"From address: %s" % message['From']
+        print u"To addresses: %s" % message['To']
+        print u"Subject: %s" % message['Subject']
+        print u"-- Body: --"
+        print message.get_payload(decode=True)
+
+    else:
+        return mhost.sendmail(from_addr, to_addrs, message.as_string())
