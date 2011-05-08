@@ -18,7 +18,7 @@ import urllib
 
 import routes
 import mongokit
-from paste.deploy.converters import asint
+from paste.deploy.converters import asbool, asint
 from webob import Request, exc
 
 from mediagoblin import routing, util, models, storage, staticdirect
@@ -148,7 +148,7 @@ def paste_app_factory(global_config, **app_config):
         staticdirector=staticdirector,
         email_sender_address=app_config.get(
             'email_sender_address', 'notice@mediagoblin.example.org'),
-        email_debug_mode=app_config.get('email_debug_mode'),
+        email_debug_mode=asbool(app_config.get('email_debug_mode')),
         user_template_path=app_config.get('local_templates'))
 
     return mgoblin_app

@@ -18,7 +18,7 @@ import os
 
 import mongokit
 from paste.deploy.loadwsgi import NicerConfigParser
-from paste.deploy.converters import asint
+from paste.deploy.converters import asint, asbool
 
 from mediagoblin import storage, models
 from mediagoblin.celery_setup import setup_celery_from_config
@@ -86,7 +86,7 @@ def setup_self(setup_globals_func=setup_globals):
         db_connection=connection,
         database=db,
         public_store=public_store,
-        email_debug_mode=mgoblin_section.get('email_debug_mode'),
+        email_debug_mode=asbool(mgoblin_section.get('email_debug_mode')),
         email_sender_address=mgoblin_section.get(
             'email_sender_address', 
             'notice@mediagoblin.example.org'),
