@@ -18,7 +18,7 @@ import urllib
 
 import routes
 import mongokit
-from paste.deploy.converters import asbool
+from paste.deploy.converters import asint
 from webob import Request, exc
 
 from mediagoblin import routing, util, models, storage, staticdirect
@@ -114,7 +114,9 @@ class MediaGoblinApp(object):
 
 def paste_app_factory(global_config, **app_config):
     # Get the database connection
-    port = int(app_config.get('db_port'))
+    port = app_config.get('db_port')
+    if port:
+        port = asint(port)
     connection = mongokit.Connection(
         app_config.get('db_host'), port)
 

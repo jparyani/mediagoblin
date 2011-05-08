@@ -18,6 +18,7 @@ import os
 
 import mongokit
 from paste.deploy.loadwsgi import NicerConfigParser
+from paste.deploy.converters import asint
 
 from mediagoblin import storage, models
 from mediagoblin.celery_setup import setup_celery_from_config
@@ -67,8 +68,11 @@ def setup_self(setup_globals_func=setup_globals):
         settings_module=OUR_MODULENAME,
         set_environ=False)
 
+    port = mgoblin_section.get('db_port')
+    if port:
+        port = asint(port)
     connection = mongokit.Connection(
-        mgoblin_section.get('db_host'), mgoblin_section.get('db_port'))
+        mgoblin_section.get('db_host'), port)
     db = connection[mgoblin_section.get('db_name', 'mediagoblin')]
     models.register_models(connection)
 
