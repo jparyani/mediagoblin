@@ -42,7 +42,7 @@ def submit_start(request):
             # create entry and save in database
             entry = request.db.MediaEntry()
             entry['title'] = request.POST['title']
-            entry['description'] = request.POST.get(['description'])
+            entry['description'] = request.POST.get('description')
             entry['media_type'] = u'image' # heh
             entry['uploader'] = request.user
 
