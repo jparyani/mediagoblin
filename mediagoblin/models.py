@@ -89,7 +89,7 @@ class MediaEntry(Document):
         'thumbnail_file': [unicode]}
 
     required_fields = [
-        'uploader', 'title', 'created', 'media_type']
+        'uploader', 'created', 'media_type']
 
     default_values = {
         'created': datetime.datetime.utcnow,

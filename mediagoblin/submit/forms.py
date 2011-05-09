@@ -21,6 +21,6 @@ import wtforms
 class SubmitStartForm(wtforms.Form):
     title = wtforms.TextField(
         'Title',
-        [wtforms.validators.Length(min=1, max=500)])
+        [wtforms.validators.Length(min=-1, max=500)])
     description = wtforms.TextAreaField('Description of this work')
     file = wtforms.FileField('File')

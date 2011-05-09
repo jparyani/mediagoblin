@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+from os.path import splitext
 from cgi import FieldStorage
 
 from webob import Response, exc
@@ -39,9 +39,11 @@ def submit_start(request):
             submit_form.file.errors.append(
                 u'You must provide a file.')
         else:
+            filename = request.POST['file'].filename
+
             # create entry and save in database
             entry = request.db.MediaEntry()
-            entry['title'] = request.POST['title']
+            entry['title'] = request.POST['title'] or unicode(splitext(filename)[0])
             entry['description'] = request.POST.get('description')
             entry['media_type'] = u'image' # heh
             entry['uploader'] = request.user
@@ -54,7 +56,7 @@ def submit_start(request):
             queue_filepath = request.app.queue_store.get_unique_filepath(
                 ['media_entries',
                  unicode(entry['_id']),
-                 secure_filename(request.POST['file'].filename)])
+                 secure_filename(filename)])
 
             # queue appropriately
             queue_file = request.app.queue_store.get_file(
