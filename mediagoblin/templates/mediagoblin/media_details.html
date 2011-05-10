@@ -20,15 +20,15 @@
 
   {# temporarily, an "image gallery" that isn't one really ;) #}
   {% if media %}
-  <h2>Media details for {{media.title}}</h2>
-  <div>
-    <img src="{{ request.app.public_store.file_url(
-                  media.media_files.main) }}" />
-
-          <br/>Uploaded: {{ media.created}}
-          <br/>Description: {{media.description}}
-  </div>
+    <h2>Media details for {{media.title}}</h2>
+    <div>
+      <img src="{{ request.app.public_store.file_url(
+                    media.media_files.main) }}" />
+  
+      <br/>Uploaded: {{ media.created}}
+      <br/>Description: {{media.description}}
+    </div>
   {% else %}
-  <p>Sorry, no such media found.<p/>
+    <p>Sorry, no such media found.<p/>
   {% endif %}
 {% endblock %}    

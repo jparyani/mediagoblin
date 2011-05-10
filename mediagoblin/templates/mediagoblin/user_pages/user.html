@@ -18,9 +18,9 @@
 {% extends "mediagoblin/base.html" %}
 {% block mediagoblin_content -%}
   {% if user %}
-  <h2>User page for '{{user.username}}'</h2>
-  {{user}}
+    <h2>User page for '{{ user.username }}'</h2>
+    {{ user }}
   {% else %}
-  <p>Sorry, no such user found.<p/>
+    <p>Sorry, no such user found.<p/>
   {% endif %}
 {% endblock %}    
