@@ -17,7 +17,7 @@
 from webob import Response
 from mongokit import ObjectId
 import wtforms
-#from mongokit import ObjectId
+
 
 def user_home(request):
     """'Homepage' of a User()"""
@@ -34,15 +34,15 @@ def user_home(request):
              'user': user,
              'medias': medias}))
 
+
 def media_home(request):
     """'Homepage' of a MediaEntry()"""
     media = request.db.MediaEntry.find_one(
         ObjectId(request.matchdict['m_id']))
 
-    #check that media uploader and user correspondent
+    #check that media uploader and user correspond
     if media['uploader'].get('username') != request.matchdict['user']:
-        #TODO: How do I throw an error 404?
-        pass
+        return exc.HTTPNotFound()
 
     template = request.template_env.get_template(
         'mediagoblin/user_pages/media.html')
