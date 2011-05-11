@@ -1,4 +1,4 @@
-1# GNU MediaGoblin -- federated, autonomous media hosting
+# GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
 # This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
 from routes.route import Route
 
 user_routes = [
-    Route('mediagoblin.user_pages.user_home', "/{user}",
+    Route('mediagoblin.user_pages.user_home', "/{user}/",
         controller="mediagoblin.user_pages.views:user_home"),
-    Route('mediagoblin.user_pages.media_home', r'/{user}/m/{m_id}',
+    Route('mediagoblin.user_pages.media_home', r'/{user}/m/{m_id}/',
         requirements=dict(m_id="[0-9a-fA-F]{24}"),
         controller="mediagoblin.user_pages.views:media_home")]
