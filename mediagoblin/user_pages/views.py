@@ -14,17 +14,22 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from webob import Response
+from webob import Response, exc
 from mongokit import ObjectId
 import wtforms
 
 
 def user_home(request):
     """'Homepage' of a User()"""
-    user = request.db.User.find_one(
-        {'username': request.matchdict['user']})
+    user = request.db.User.find_one({
+            'username': request.matchdict['user'],
+            'status': 'active'})
+    if not user:
+        return exc.HTTPNotFound()
 
-    medias = request.db.MediaEntry.find()
+    medias = request.db.MediaEntry.find({
+            'uploader': user,
+            'state': 'processed'})
 
     template = request.template_env.get_template(
         'mediagoblin/user_pages/user.html')
@@ -32,16 +37,18 @@ def user_home(request):
         template.render(
             {'request': request,
              'user': user,
-             'medias': medias}))
+             'media_entries': medias}))
 
 
 def media_home(request):
     """'Homepage' of a MediaEntry()"""
-    media = request.db.MediaEntry.find_one(
-        ObjectId(request.matchdict['m_id']))
+    media = request.db.MediaEntry.find_one({
+            '_id': ObjectId(request.matchdict['m_id']),
+            'state': 'processed'})
 
-    #check that media uploader and user correspond
-    if media['uploader'].get('username') != request.matchdict['user']:
+    # Check that media uploader and user correspond.
+    if not media or \
+            media['uploader'].get('username') != request.matchdict['user']:
         return exc.HTTPNotFound()
 
     template = request.template_env.get_template(
