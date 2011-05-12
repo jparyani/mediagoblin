@@ -215,14 +215,13 @@ To do this, do::
 Running the server
 ==================
 
-If you did virtualenv, run::
-
-    paster serve mediagoblin.ini --reload
-
 If you did buildout, run::
 
     ./bin/paster serve mediagoblin.ini --reload
 
+If you did virtualenv, run::
+
+    paster serve mediagoblin.ini --reload
 
 Running celeryd
 ===============
@@ -231,26 +230,24 @@ You need to do this if you want your media to process and actually
 show up.  It's probably a good idea in development to have the web
 server (above) running in one terminal and celeryd in another window.
 
-If you did virtualenv, run::
-
-    CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_celery celeryd
-
 If you did buildout, run::
 
     CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_celery ./bin/celeryd
 
+If you did virtualenv, run::
+
+    CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_celery celeryd
 
 Running the test suite
 ======================
-
-If you did virtualenv, run::
-
-    nosetests
 
 If you did buildout, run::
 
     ./bin/nosetests
 
+If you did virtualenv, run::
+
+    nosetests
 
 Troubleshooting
 ===============
