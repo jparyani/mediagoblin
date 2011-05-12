@@ -48,7 +48,9 @@ def get_jinja_env(user_template_path=None):
     else:
         loader = jinja2.PackageLoader('mediagoblin', 'templates')
 
-    return jinja2.Environment(loader=loader, autoescape=True)
+    return jinja2.Environment(
+        loader=loader, autoescape=True,
+        extensions=['jinja2.ext.i18n'])
 
 
 def setup_user_in_request(request):
@@ -180,3 +182,4 @@ def send_email(from_addr, to_addrs, subject, message_body):
 
     else:
         return mhost.sendmail(from_addr, to_addrs, message.as_string())
+
