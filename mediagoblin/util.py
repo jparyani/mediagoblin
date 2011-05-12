@@ -172,7 +172,7 @@ def send_email(from_addr, to_addrs, subject, message_body):
     if TESTS_ENABLED:
         EMAIL_TEST_INBOX.append(message)
 
-    elif mgoblin_globals.email_debug_mode:
+    if getattr(mgoblin_globals, 'email_debug_mode', False):
         print u"===== Email ====="
         print u"From address: %s" % message['From']
         print u"To addresses: %s" % message['To']
@@ -180,8 +180,7 @@ def send_email(from_addr, to_addrs, subject, message_body):
         print u"-- Body: --"
         print message.get_payload(decode=True)
 
-    else:
-        return mhost.sendmail(from_addr, to_addrs, message.as_string())
+    return mhost.sendmail(from_addr, to_addrs, message.as_string())
 
 
 ###################
