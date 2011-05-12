@@ -38,6 +38,7 @@ setup(
         'jinja2',
         'sphinx',
         'PIL',
+        'Babel',
         ],
     test_suite='nose.collector',
 
@@ -50,5 +51,8 @@ setup(
 
       [zc.buildout]
       make_user_dev_dirs = mediagoblin.buildout_recipes:MakeUserDevDirs
+
+      [babel.extractors]
+      jinja2 = jinja2.ext:babel_extract
       """,
     )
