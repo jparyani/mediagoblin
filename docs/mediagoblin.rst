@@ -27,7 +27,7 @@ Centralization and proprietization of media on the internet is a
 serious problem and makes the web go from a system of extreme
 resilience to a system of frightening fragility.  We believe people
 should be able to own their data and that means someone has to build
-the tools to make it possible.  We decide that in this case, that
+the tools to make it possible.  We decided that in this case, that
 someone would be us!
  
 
