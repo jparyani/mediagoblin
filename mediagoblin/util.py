@@ -183,3 +183,59 @@ def send_email(from_addr, to_addrs, subject, message_body):
     else:
         return mhost.sendmail(from_addr, to_addrs, message.as_string())
 
+
+###################
+# Translation tools
+###################
+
+
+def locale_to_lower_upper(locale):
+    """
+    Take a locale, regardless of style, and format it like "en-us"
+    """
+    if '-' in locale:
+        lang, country = locale.split('-', 1)
+        return '%s_%s' % (lang.lower(), country.upper())
+    elif '_' in locale:
+        lang, country = locale.split('_', 1)
+        return '%s_%s' % (lang.lower(), country.upper())
+    else:
+        return locale.lower()
+
+
+def locale_to_lower_lower(locale):
+    """
+    Take a locale, regardless of style, and format it like "en_US"
+    """
+    if '_' in locale:
+        lang, country = locale.split('_', 1)
+        return '%s-%s' % (lang.lower(), country.lower())
+    else:
+        return locale.lower()
+
+
+def get_locale_from_request(request):
+    """
+    Figure out what target language is most appropriate based on the
+    request
+    """
+    request_form = request.GET or request.POST
+
+    if request_form.has_key('lang'):
+        return locale_to_lower_upper(request_form['lang'])
+
+    accept_lang_matches = request.accept_language.best_matches()
+
+    # Your routing can explicitly specify a target language
+    if request.matchdict.has_key('target_lang'):
+        target_lang = request.matchdict['target_lang']
+    elif request.session.has_key('target_lang'):
+        target_lang = request.session['target_lang']
+    # Pull the first acceptable language
+    elif accept_lang_matches:
+        target_lang = accept_lang_matches[0]
+    # Fall back to English
+    else:
+        target_lang = 'en'
+
+    return make_locale_lower_upper_style(target_lang)

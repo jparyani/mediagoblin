@@ -69,3 +69,29 @@ I hope you like unit tests JUST AS MUCH AS I DO!"""
     assert mbox_message.get_payload(decode=True) == """HAYYY GUYS!
 
 I hope you like unit tests JUST AS MUCH AS I DO!"""
+
+
+def test_locale_to_lower_upper():
+    """
+    Test cc.i18n.util.locale_to_lower_upper()
+    """
+    assert util.locale_to_lower_upper('en') == 'en'
+    assert util.locale_to_lower_upper('en_US') == 'en_US'
+    assert util.locale_to_lower_upper('en-us') == 'en_US'
+
+    # crazy renditions.  Useful?
+    assert util.locale_to_lower_upper('en-US') == 'en_US'
+    assert util.locale_to_lower_upper('en_us') == 'en_US'
+
+
+def test_locale_to_lower_lower():
+    """
+    Test cc.i18n.util.locale_to_lower_lower()
+    """
+    assert util.locale_to_lower_lower('en') == 'en'
+    assert util.locale_to_lower_lower('en_US') == 'en-us'
+    assert util.locale_to_lower_lower('en-us') == 'en-us'
+
+    # crazy renditions.  Useful?
+    assert util.locale_to_lower_lower('en-US') == 'en-us'
+    assert util.locale_to_lower_lower('en_us') == 'en-us'
