@@ -40,7 +40,7 @@ class MediaGoblinApp(object):
                  email_sender_address, email_debug_mode,
                  user_template_path=None):
         # Get the template environment
-        self.template_env = util.get_jinja_env(user_template_path)
+        self.template_loader = util.get_jinja_loader(user_template_path)
         
         # Set up storage systems
         self.public_store = public_store
@@ -103,7 +103,10 @@ class MediaGoblinApp(object):
         # Attach self as request.app
         # Also attach a few utilities from request.app for convenience?
         request.app = self
-        request.template_env = self.template_env
+        request.locale = util.get_locale_from_request(request)
+            
+        request.template_env = util.get_jinja_env(
+            self.template_loader, request.locale)
         request.db = self.db
         request.staticdirect = self.staticdirector
 

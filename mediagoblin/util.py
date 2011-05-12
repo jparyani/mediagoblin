@@ -33,23 +33,31 @@ def _activate_testing():
     TESTS_ENABLED = True
 
 
-def get_jinja_env(user_template_path=None):
+def get_jinja_loader(user_template_path=None):
     """
-    Set up the Jinja environment, possibly allowing for user
+    Set up the Jinja template loaders, possibly allowing for user
     overridden templates.
 
     (In the future we may have another system for providing theming;
     for now this is good enough.)
     """
     if user_template_path:
-        loader = jinja2.ChoiceLoader(
+        return jinja2.ChoiceLoader(
             [jinja2.FileSystemLoader(user_template_path),
              jinja2.PackageLoader('mediagoblin', 'templates')])
     else:
-        loader = jinja2.PackageLoader('mediagoblin', 'templates')
+        return jinja2.PackageLoader('mediagoblin', 'templates')
 
+
+def get_jinja_env(template_loader, locale):
+    """
+    Set up the Jinja environment, 
+
+    (In the future we may have another system for providing theming;
+    for now this is good enough.)
+    """
     return jinja2.Environment(
-        loader=loader, autoescape=True,
+        loader=template_loader, autoescape=True,
         extensions=['jinja2.ext.i18n'])
 
 
@@ -237,4 +245,4 @@ def get_locale_from_request(request):
     else:
         target_lang = 'en'
 
-    return make_locale_lower_upper_style(target_lang)
+    return locale_to_lower_upper(target_lang)
