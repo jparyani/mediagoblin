@@ -7,6 +7,17 @@ body {
     margin:0px;
 }
 
+/* Carter One font */
+
+@font-face {
+  font-family: 'Carter One';
+  font-style: normal;
+  font-weight: normal;
+  src: local('CarterOne'), url('http://themes.googleusercontent.com/font?kit=VjW2qt1pkqVtO22ObxgEBRsxEYwM7FgeyaSgU71cLG0') format('woff');
+}
+
+/* text styles */
+
 h1 {
     font-family: 'Carter One', arial, serif;
     margin-bottom: 20px;
