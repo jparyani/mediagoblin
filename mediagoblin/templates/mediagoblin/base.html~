@@ -23,8 +23,6 @@
   </head>
 
   <body>
-    <h1>GNU MediaGoblin at your duty!</h1>
-    <!-- OLD CODE HERE
     {% block mediagoblin_body %}
       {% block mediagoblin_header %}
         <table id="mediagoblin_header">
@@ -67,6 +65,6 @@
         {% block mediagoblin_content %}
         {% endblock mediagoblin_content %}
       </div>
-    {% endblock mediagoblin_body %}-->
+    {% endblock mediagoblin_body %}
   </body>
 </html>

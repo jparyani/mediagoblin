@@ -18,7 +18,7 @@
 {% extends "mediagoblin/base.html" %}
 {% block mediagoblin_content -%}
   {% if user %}
-    <h2>User page for '{{ user.username }}'</h2>
+    <h1>User page for '{{ user.username }}'</h1>
 
     {#- Should we outsource such a media 'gallery' view to it's own file?
         It could be useful for the home page and other views too -#}

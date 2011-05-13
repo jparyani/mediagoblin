@@ -16,20 +16,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 {% extends "mediagoblin/base.html" %}
+{% block mediagoblin_content -%}
+  {% if user %}
+    <h1>User page for '{{ user.username }}'</h1s>
 
-{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
-
-{% block mediagoblin_content %}
-  <h2>Submit yer media</h2>
-
-  <form action="{{ request.urlgen('mediagoblin.submit.start') }}"
-        method="POST" enctype="multipart/form-data">
-    <table>
-      {{ wtforms_util.render_table(submit_form) }}
-      <tr>
-        <td></td>
-        <td><input type="submit" value="submit" class="button_green" /></td>
-      </tr>
-    </table>
-  </form>
+    {#- Should we outsource such a media 'gallery' view to it's own file?
+        It could be useful for the home page and other views too -#}
+    <ul>
+      {%- for entry in media_entries %}
+      <li>
+        <a href="{{ request.urlgen('mediagoblin.user_pages.media_home',
+                 user= entry.uploader.username, m_id= entry._id) }}">
+          <img src="{{ request.app.public_store.file_url(
+                    entry['media_files']['thumb']) }}" /></a>
+      </li>
+      {%- endfor %}
+    </ul>
+  {% else %}
+    {# This *should* not occur as the view makes sure we pass in a user. #}
+    <p>Sorry, no such user found.<p/>
+  {% endif %}
 {% endblock %}    

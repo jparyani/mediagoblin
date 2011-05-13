@@ -16,20 +16,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 {% extends "mediagoblin/base.html" %}
-
-{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
-
 {% block mediagoblin_content %}
-  <h2>Submit yer media</h2>
 
-  <form action="{{ request.urlgen('mediagoblin.submit.start') }}"
-        method="POST" enctype="multipart/form-data">
-    <table>
-      {{ wtforms_util.render_table(submit_form) }}
-      <tr>
-        <td></td>
-        <td><input type="submit" value="submit" class="button_green" /></td>
-      </tr>
-    </table>
-  </form>
+  {# temporarily, an "image gallery" that isn't one really ;) #}
+  {% if media %}
+  <h2>Media details for <a 
+             href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+             user= media.uploader.username) }}">{{media.uploader.username}}</a>
+             / {{media.title}}
+  </h2>
+  <div>
+    <img src="{{ request.app.public_store.file_url(
+                  media.media_files.main) }}" />
+
+          <br/>Uploaded on {{ "%4d-%02d-%02d"|format(media.created.year,
+             media.created.month,media.created.day)}} by <a 
+             href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                   user= media.uploader.username) }}">{{media.uploader.username}}</a>
+          <br/>Description: {{media.description}}
+  </div>
+  {% else %}
+  <p>Sorry, no such media found.<p/>
+  {% endif %}
 {% endblock %}    
