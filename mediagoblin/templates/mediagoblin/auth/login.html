@@ -33,12 +33,12 @@
       {{ wtforms_util.render_table(login_form) }}
       <tr>
         <td></td>
-        <td><input type="submit" value="submit" /></td>
+        <td><input type="submit" value="submit" class="button_green"/></td>
       </tr>
     </table>
 
     {% if next %}
-      <input type="hidden" name="next" value="{{ next }}" class="buttonGreen" />
+      <input type="hidden" name="next" value="{{ next }}" class="button_green" />
     {% endif %}
   </form>
 {% endblock %}
