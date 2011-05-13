@@ -19,6 +19,6 @@ from routes.route import Route
 user_routes = [
     Route('mediagoblin.user_pages.user_home', "/{user}/",
         controller="mediagoblin.user_pages.views:user_home"),
-    Route('mediagoblin.user_pages.media_home', r'/{user}/m/{m_id}/',
+    Route('mediagoblin.user_pages.media_home', '/{user}/m/{m_id}/',
         requirements=dict(m_id="[0-9a-fA-F]{24}"),
         controller="mediagoblin.user_pages.views:media_home")]
