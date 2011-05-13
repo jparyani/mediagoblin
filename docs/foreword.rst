@@ -1,5 +1,5 @@
 ==========
- Foreward
+ Foreword
 ==========
 
 About this manual

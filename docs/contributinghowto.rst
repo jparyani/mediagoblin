@@ -59,7 +59,7 @@ Here are some things you can do today:
     **Spread the word**
 
         The seductive call of Free Software services is a powerful
-        one, but many cannot hear it because it'd drowned out by the
+        one, but many cannot hear it because it's drowned out by the
         rush hour traffic honking of proprietary walled gardens and
         faux free services.  Yuck!  Be the sweet chirrup of the bird
         amidst the din!  Tell others that there is a better way to
