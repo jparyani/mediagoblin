@@ -248,8 +248,8 @@ def get_locale_from_request(request):
     accept_lang_matches = request.accept_language.best_matches()
 
     # Your routing can explicitly specify a target language
-    if request.matchdict.has_key('target_lang'):
-        target_lang = request.matchdict['target_lang']
+    if request.matchdict.has_key('locale'):
+        target_lang = request.matchdict['locale']
     elif request.session.has_key('target_lang'):
         target_lang = request.session['target_lang']
     # Pull the first acceptable language
