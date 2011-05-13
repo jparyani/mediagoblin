@@ -38,7 +38,7 @@
     </table>
 
     {% if next %}
-      <input type="hidden" name="next" value="{{ next }}" class="buttonGreen" />
+      <input type="hidden" name="next" value="{{ next }}" />
     {% endif %}
   </form>
 {% endblock %}
