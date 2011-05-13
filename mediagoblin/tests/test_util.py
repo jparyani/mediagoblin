@@ -70,6 +70,14 @@ I hope you like unit tests JUST AS MUCH AS I DO!"""
 
 I hope you like unit tests JUST AS MUCH AS I DO!"""
 
+def test_slugify():
+    assert util.slugify('a walk in the park') == 'a-walk-in-the-park'
+    assert util.slugify('A Walk in the Park') == 'a-walk-in-the-park'
+    assert util.slugify('a  walk in the park') == 'a-walk-in-the-park'
+    assert util.slugify('a walk in-the-park') == 'a-walk-in-the-park'
+    assert util.slugify('a w@lk in the park?') == 'a-w-lk-in-the-park'
+    assert util.slugify(u'a walk in the par\u0107') == 'a-walk-in-the-parc'
+    assert util.slugify(u'\u00E0\u0042\u00E7\u010F\u00EB\u0066') == 'abcdef'
 
 def test_locale_to_lower_upper():
     """

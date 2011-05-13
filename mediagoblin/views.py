@@ -20,6 +20,7 @@ from webob import Response, exc
 import wtforms
 from mongokit import ObjectId
 from mediagoblin import models
+import gettext
 
 def root_view(request):
     media_entries = request.db.MediaEntry.find(

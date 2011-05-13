@@ -52,6 +52,9 @@ def submit_start(request):
             # it to generate the file path
             entry.save(validate=False)
 
+            # Generate a slug from the title
+            entry.generate_slug()
+
             # Now store generate the queueing related filename
             queue_filepath = request.app.queue_store.get_unique_filepath(
                 ['media_entries',

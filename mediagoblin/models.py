@@ -18,8 +18,9 @@ import datetime, uuid
 
 from mongokit import Document, Set
 
+from mediagoblin import util
 from mediagoblin.auth import lib as auth_lib
-
+from mediagoblin import globals as mediagoblin_globals
 
 ###################
 # Custom validators
@@ -66,6 +67,7 @@ class MediaEntry(Document):
     structure = {
         'uploader': User,
         'title': unicode,
+        'slug':unicode,
         'created': datetime.datetime,
         'description': unicode,
         'media_type': unicode,
@@ -98,6 +100,13 @@ class MediaEntry(Document):
     def main_mediafile(self):
         pass
 
+    def generate_slug(self):
+        self['slug'] = util.slugify(self['title'])
+
+        duplicate = mediagoblin_globals.database.media_entries.find_one({'slug': self['slug']})
+        
+        if duplicate:
+            self['slug'] = "%s-%s" % (self['_id'], self['slug'])
 
 REGISTER_MODELS = [MediaEntry, User]
 

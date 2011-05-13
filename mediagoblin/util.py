@@ -19,9 +19,10 @@ import gettext
 import pkg_resources
 import smtplib
 import sys
-
+import re
 import jinja2
 import mongokit
+import translitcodec
 
 from mediagoblin import globals as mgoblin_globals
 
@@ -107,6 +108,18 @@ def import_component(import_string):
     func = getattr(module, func_name)
     return func
 
+_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+
+def slugify(text, delim=u'-'):
+    """
+    Generates an ASCII-only slug. Taken from http://flask.pocoo.org/snippets/5/
+    """
+    result = []
+    for word in _punct_re.split(text.lower()):
+        word = word.encode('translit/long')
+        if word:
+            result.append(word)
+    return unicode(delim.join(result))
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ### Special email test stuff begins HERE

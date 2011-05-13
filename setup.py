@@ -39,6 +39,7 @@ setup(
         'sphinx',
         'PIL',
         'Babel',
+        'translitcodec',
         ],
     test_suite='nose.collector',
 
