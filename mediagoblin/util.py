@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from email.MIMEText import MIMEText
+import gettext
+import pkg_resources
 import smtplib
 import sys
 
@@ -56,9 +58,17 @@ def get_jinja_env(template_loader, locale):
     (In the future we may have another system for providing theming;
     for now this is good enough.)
     """
-    return jinja2.Environment(
+    setup_gettext(locale)
+
+    template_env = jinja2.Environment(
         loader=template_loader, autoescape=True,
         extensions=['jinja2.ext.i18n'])
+
+    template_env.install_gettext_callables(
+        mgoblin_globals.translations.gettext,
+        mgoblin_globals.translations.ngettext)
+
+    return template_env
 
 
 def setup_user_in_request(request):
@@ -196,6 +206,10 @@ def send_email(from_addr, to_addrs, subject, message_body):
 ###################
 
 
+TRANSLATIONS_PATH = pkg_resources.resource_filename(
+    'mediagoblin', 'translations')
+
+
 def locale_to_lower_upper(locale):
     """
     Take a locale, regardless of style, and format it like "en-us"
@@ -246,3 +260,20 @@ def get_locale_from_request(request):
         target_lang = 'en'
 
     return locale_to_lower_upper(target_lang)
+
+
+def setup_gettext(locale):
+    """
+    Setup the gettext instance based on this locale
+    """
+    # Later on when we have plugins we may want to enable the
+    # multi-translations system they have so we can handle plugin
+    # translations too
+
+    # TODO: fallback nicely on translations from pt_PT to pt if not
+    # available, etc.
+    this_gettext = gettext.translation(
+        'mediagoblin', TRANSLATIONS_PATH, [locale], fallback=True)
+
+    mgoblin_globals.setup_globals(
+        translations=this_gettext)
