@@ -67,7 +67,7 @@ class MediaEntry(Document):
     structure = {
         'uploader': User,
         'title': unicode,
-        'slug':unicode,
+        'slug': unicode,
         'created': datetime.datetime,
         'description': unicode,
         'media_type': unicode,
