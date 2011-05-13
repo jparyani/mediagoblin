@@ -11,3 +11,4 @@ mediagoblin.egg-info
 docs/_build/
 user_dev/
 server-log.txt
+*~
