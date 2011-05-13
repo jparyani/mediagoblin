@@ -28,15 +28,15 @@ a {
     text-decoration: none;
 }
 
-.header {
+.mediagoblin_header {
     width:100%;
     height:60px;
-    background-image:url('header_back.png');
+    background-image:url('../images/header_back.png');
     padding-top:40px;
     margin-bottom:80px;
 }
 
-.container {
+.mediagoblin_content {
     width: 800px;
     margin-left: auto;
     margin-right: auto;
@@ -61,10 +61,10 @@ a {
 }
 
 .button_red {
-    background-image: url('button_red.png');
+    background-image: url('../images/button_red.png');
 }
 
 .button_green {
-    background-image: url('button_green.png');
+    background-image: url('../images/button_green.png');
 }
 

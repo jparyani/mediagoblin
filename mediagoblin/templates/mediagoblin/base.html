@@ -25,43 +25,26 @@
   <body>
     {% block mediagoblin_body %}
       {% block mediagoblin_header %}
-        <table id="mediagoblin_header">
-          <tr>
-            <td id="mediagoblin_logo">
+      <div class="mediagoblin_header">
+      <div class="mediagoblin_content">
               {% block mediagoblin_logo %}
                 <a href="{{ request.urlgen('index') }}">MediaGoblin</a>
-              {% endblock %}
-            </td>
-            <td>{% block mediagoblin_header_title %}MediaGoblin Home{% endblock %}</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
+              {% endblock %}{% block mediagoblin_header_title %}MediaGoblin Home{% endblock %}
               {% block mediagoblin_header_subtitle %}
                 Clever subtitle here!
-              {% endblock %}</td>
-          </tr>
+              {% endblock %}
           {% if request.user %}
-            <tr>
-              <td></td>
-              <td>
                 Welcome {{ request.user['username'] }}! --
                 <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">
                   Logout</a>
-              </td>
-            </tr>
           {% else %}
-            <tr>
-              <td></td>
-              <td>
                 <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
                   Login</a>
-              </td>
-            </tr>
           {% endif %}
-        </table>
+      </div>
+      </div>
       {% endblock %}
-      <div id="mediagoblin_content">
+      <div class="mediagoblin_content">
         {% block mediagoblin_content %}
         {% endblock mediagoblin_content %}
       </div>
