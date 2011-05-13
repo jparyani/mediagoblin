@@ -20,7 +20,7 @@
 
   {# temporarily, an "image gallery" that isn't one really ;) #}
   {% if media %}
-    <h1>Media details for {{media.title}}</h1>
+    <h2>Media details for {{media.title}}</h2>
     <div>
       <img src="{{ request.app.public_store.file_url(
                     media.media_files.main) }}" />

@@ -19,7 +19,7 @@
 
 {% block mediagoblin_content %}
   
-  <h1>{% trans %}Welcome to GNU MediaGoblin!{% endtrans %}</h1>
+  <h2>{% trans %}Welcome to GNU MediaGoblin!{% endtrans %}</h2>
 
   {% if request.user %}
   <p>
