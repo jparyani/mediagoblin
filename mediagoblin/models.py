@@ -99,9 +99,11 @@ class MediaEntry(Document):
         'created': datetime.datetime.utcnow,
         'state': u'unprocessed'}
 
-    indexes = [
-        {'fields': 'slug',
-         'unique': True}]
+    # Actually we should referene uniqueness by uploader, but we
+    # should fix http://bugs.foocorp.net/issues/340 first.
+    # indexes = [
+    #     {'fields': ['uploader', 'slug'],
+    #      'unique': True}]
 
     def main_mediafile(self):
         pass
