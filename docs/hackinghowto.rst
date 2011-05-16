@@ -249,6 +249,21 @@ If you did virtualenv, run::
 
     nosetests
 
+Running a shell
+===============
+
+If you want a shell with your database pre-setup and an instantiated
+application ready and at your fingertips...
+
+If you did buildout, run::
+
+    ./bin/gmg shell
+
+If you did virtualenv, run::
+
+    gmg shell
+
+
 Troubleshooting
 ===============
 
