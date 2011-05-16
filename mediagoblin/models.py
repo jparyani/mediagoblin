@@ -99,6 +99,10 @@ class MediaEntry(Document):
         'created': datetime.datetime.utcnow,
         'state': u'unprocessed'}
 
+    indexes = [
+        {'fields': 'slug',
+         'unique': True}]
+
     def main_mediafile(self):
         pass
 
