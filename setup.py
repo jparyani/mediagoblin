@@ -40,6 +40,7 @@ setup(
         'PIL',
         'Babel',
         'translitcodec',
+        'argparse',
         ],
     test_suite='nose.collector',
 
@@ -47,6 +48,9 @@ setup(
     author = 'Christopher Webber',
     author_email = 'cwebber@gnu.org',
     entry_points = """\
+      [console_scripts]
+      gmg = mediagoblin.gmg_commands:main_cli
+
       [paste.app_factory]
       app = mediagoblin.app:paste_app_factory
 
