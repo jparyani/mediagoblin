@@ -109,7 +109,8 @@ class MediaEntry(Document):
     def generate_slug(self):
         self['slug'] = util.slugify(self['title'])
 
-        duplicate = mediagoblin_globals.database.media_entries.find_one({'slug': self['slug']})
+        duplicate = mediagoblin_globals.database.media_entries.find_one(
+            {'slug': self['slug']})
         
         if duplicate:
             self['slug'] = "%s-%s" % (self['_id'], self['slug'])
