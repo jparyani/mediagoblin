@@ -1,6 +1,6 @@
 body {
     background-color: #272727;
-    background-image: url('back.png');
+    background-image: url('../images/back.png');
     color: #f7f7f7;
     font-family: sans;
     padding:none;
