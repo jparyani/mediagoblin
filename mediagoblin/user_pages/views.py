@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from webob import Response, exc
+from pymongo import DESCENDING
 from mongokit import ObjectId
 import wtforms
 
@@ -29,7 +30,7 @@ def user_home(request):
 
     medias = request.db.MediaEntry.find({
             'uploader': user,
-            'state': 'processed'})
+            'state': 'processed'}).sort('created', DESCENDING)
 
     template = request.template_env.get_template(
         'mediagoblin/user_pages/user.html')

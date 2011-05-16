@@ -18,13 +18,14 @@ import datetime
 
 from webob import Response, exc
 import wtforms
+from pymongo import DESCENDING
 from mongokit import ObjectId
 from mediagoblin import models
 import gettext
 
 def root_view(request):
     media_entries = request.db.MediaEntry.find(
-        {u'state': u'processed'})
+        {u'state': u'processed'}).sort('created', DESCENDING)
     
     template = request.template_env.get_template(
         'mediagoblin/root.html')
