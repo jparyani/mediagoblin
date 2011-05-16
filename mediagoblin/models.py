@@ -42,7 +42,8 @@ class User(Document):
         'pw_hash': unicode,
         'email_verified': bool,
         'status': unicode,
-        'verification_key': unicode
+        'verification_key': unicode,
+        'is_admin': bool,
         }
 
     required_fields = ['username', 'created', 'pw_hash', 'email']
@@ -51,7 +52,8 @@ class User(Document):
         'created': datetime.datetime.utcnow,
         'email_verified': False,
         'status': u'needs_email_verification',
-        'verification_key': lambda: unicode( uuid.uuid4() ) }
+        'verification_key': lambda: unicode(uuid.uuid4()),
+        'is_admin': False}
 
     def check_login(self, password):
         """
