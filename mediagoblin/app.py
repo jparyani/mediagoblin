@@ -17,12 +17,12 @@
 import urllib
 
 import routes
-import mongokit
 from paste.deploy.converters import asbool, asint
 from webob import Request, exc
 
 from mediagoblin import routing, util, storage, staticdirect
 from mediagoblin.db import models
+from mediagoblin.db.util import connect_database
 from mediagoblin.globals import setup_globals
 from mediagoblin.celery_setup import setup_celery_from_config
 
@@ -118,11 +118,7 @@ class MediaGoblinApp(object):
 
 def paste_app_factory(global_config, **app_config):
     # Get the database connection
-    port = app_config.get('db_port')
-    if port:
-        port = asint(port)
-    connection = mongokit.Connection(
-        app_config.get('db_host'), port)
+    connection = connect_database(app_config)
 
     # Set up the storage systems.
     public_store = storage.storage_system_from_paste_config(
