@@ -20,7 +20,7 @@ from webob import Response, exc
 import wtforms
 from pymongo import DESCENDING
 from mongokit import ObjectId
-from mediagoblin import models
+from mediagoblin.db import models
 import gettext
 
 def root_view(request):

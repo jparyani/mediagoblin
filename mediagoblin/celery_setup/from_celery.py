@@ -20,7 +20,8 @@ import mongokit
 from paste.deploy.loadwsgi import NicerConfigParser
 from paste.deploy.converters import asint, asbool
 
-from mediagoblin import storage, models
+from mediagoblin import storage
+from mediagoblin.db import models
 from mediagoblin.celery_setup import setup_celery_from_config
 from mediagoblin.globals import setup_globals
 from mediagoblin import globals as mgoblin_globals

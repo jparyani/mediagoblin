@@ -21,7 +21,8 @@ import mongokit
 from paste.deploy.converters import asbool, asint
 from webob import Request, exc
 
-from mediagoblin import routing, util, models, storage, staticdirect
+from mediagoblin import routing, util, storage, staticdirect
+from mediagoblin.db import models
 from mediagoblin.globals import setup_globals
 from mediagoblin.celery_setup import setup_celery_from_config
 
