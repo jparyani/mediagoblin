@@ -14,7 +14,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import mongokit
+from paste.deploy.converters import asint
+from mediagoblin.db import models
 
-# Imports that other modules might use
-from pymongo import DESCENDING
-from mongokit import ObjectId
+
+def connect_database_from_config(app_config):
+    """Connect to the main database, take config from app_config"""
+    port = app_config.get('db_port')
+    if port:
+        port = asint(port)
+    connection = mongokit.Connection(
+        app_config.get('db_host'), port)
+    return connection
+
+def setup_connection_and_db_from_config(app_config):
+    connection = connect_database_from_config(app_config)
+    database_path = app_config.get('db_name', 'mediagoblin')
+    db = connection[database_path]
+    models.register_models(connection)
+    # Could configure indexes here on db
+    return (connection, db)

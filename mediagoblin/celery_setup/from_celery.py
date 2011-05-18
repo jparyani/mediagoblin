@@ -20,8 +20,7 @@ from paste.deploy.loadwsgi import NicerConfigParser
 from paste.deploy.converters import asbool
 
 from mediagoblin import storage
-from mediagoblin.db import models
-from mediagoblin.db.util import connect_database_from_config
+from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.celery_setup import setup_celery_from_config
 from mediagoblin.globals import setup_globals
 from mediagoblin import globals as mgoblin_globals
@@ -69,10 +68,7 @@ def setup_self(setup_globals_func=setup_globals):
         settings_module=OUR_MODULENAME,
         set_environ=False)
 
-    connection = connect_database_from_config(mgoblin_section)
-
-    db = connection[mgoblin_section.get('db_name', 'mediagoblin')]
-    models.register_models(connection)
+    connection, db = setup_connection_and_db_from_config(mgoblin_section)
 
     # Set up the storage systems.
     public_store = storage.storage_system_from_paste_config(

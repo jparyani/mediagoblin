@@ -21,8 +21,7 @@ from paste.deploy.converters import asbool
 from webob import Request, exc
 
 from mediagoblin import routing, util, storage, staticdirect
-from mediagoblin.db import models
-from mediagoblin.db.util import connect_database_from_config
+from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.globals import setup_globals
 from mediagoblin.celery_setup import setup_celery_from_config
 
@@ -35,7 +34,7 @@ class MediaGoblinApp(object):
     """
     Really basic wsgi app using routes and WebOb.
     """
-    def __init__(self, connection, database_path,
+    def __init__(self, connection, db,
                  public_store, queue_store,
                  staticdirector,
                  email_sender_address, email_debug_mode,
@@ -49,8 +48,7 @@ class MediaGoblinApp(object):
 
         # Set up database
         self.connection = connection
-        self.db = connection[database_path]
-        models.register_models(connection)
+        self.db = db
 
         # set up routing
         self.routing = routing.get_mapper()
@@ -118,7 +116,7 @@ class MediaGoblinApp(object):
 
 def paste_app_factory(global_config, **app_config):
     # Get the database connection
-    connection = connect_database_from_config(app_config)
+    connection, db = setup_connection_and_db_from_config(app_config)
 
     # Set up the storage systems.
     public_store = storage.storage_system_from_paste_config(
@@ -143,7 +141,7 @@ def paste_app_factory(global_config, **app_config):
     setup_celery_from_config(app_config, global_config)
 
     mgoblin_app = MediaGoblinApp(
-        connection, app_config.get('db_name', 'mediagoblin'),
+        connection, db,
         public_store=public_store, queue_store=queue_store,
         staticdirector=staticdirector,
         email_sender_address=app_config.get(
