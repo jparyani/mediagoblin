@@ -23,7 +23,7 @@ from pymongo import DESCENDING
 from mongokit import ObjectId
 
 
-def connect_database(app_config):
+def connect_database_from_config(app_config):
     """Connect to the main database, take config from app_config"""
     port = app_config.get('db_port')
     if port:

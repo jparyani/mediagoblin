@@ -22,7 +22,7 @@ from webob import Request, exc
 
 from mediagoblin import routing, util, storage, staticdirect
 from mediagoblin.db import models
-from mediagoblin.db.util import connect_database
+from mediagoblin.db.util import connect_database_from_config
 from mediagoblin.globals import setup_globals
 from mediagoblin.celery_setup import setup_celery_from_config
 
@@ -118,7 +118,7 @@ class MediaGoblinApp(object):
 
 def paste_app_factory(global_config, **app_config):
     # Get the database connection
-    connection = connect_database(app_config)
+    connection = connect_database_from_config(app_config)
 
     # Set up the storage systems.
     public_store = storage.storage_system_from_paste_config(
