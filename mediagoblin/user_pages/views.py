@@ -18,7 +18,7 @@ from webob import Response, exc
 from pymongo import DESCENDING
 from mongokit import ObjectId
 import wtforms
-
+from ..util import Pagination
 
 def user_home(request):
     """'Homepage' of a User()"""
@@ -28,18 +28,26 @@ def user_home(request):
     if not user:
         return exc.HTTPNotFound()
 
-    medias = request.db.MediaEntry.find({
-            'uploader': user,
-            'state': 'processed'}).sort('created', DESCENDING)
-
+    pagination = Pagination()
+    media_entries = pagination(
+        { 'per_page': 2,
+          'request': request,
+          'collection':'MediaEntry',
+          'query': { 'uploader':user, 'state':'processed'} } )
+    
+    #if no data is available, return NotFound
+    if media_entries == None:
+        return exc.HTTPNotFound()
+    
     template = request.template_env.get_template(
         'mediagoblin/user_pages/user.html')
+
     return Response(
         template.render(
             {'request': request,
              'user': user,
-             'media_entries': medias}))
-
+             'media_entries': media_entries,
+             'pagination': pagination}))
 
 def media_home(request):
     """'Homepage' of a MediaEntry()"""
@@ -58,3 +66,4 @@ def media_home(request):
         template.render(
             {'request': request,
              'media': media}))
+

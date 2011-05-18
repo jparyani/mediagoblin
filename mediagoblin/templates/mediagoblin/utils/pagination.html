@@ -1,5 +1,4 @@
-{#
-# GNU MediaGoblin -- federated, autonomous media hosting
+{# GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,20 +14,28 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "mediagoblin/base.html" %}
-{% block mediagoblin_content -%}
-  {% if user %}
-    <h1>User page for '{{ user.username }}'</h1>
 
-    {#- Should we outsource such a media 'gallery' view to it's own file?
-        It could be useful for the home page and other views too -#}
-    <ul>
-      
-      {% include "mediagoblin/utils/object_gallery.html" %}
 
-    </ul>
-  {% else %}
-    {# This *should* not occur as the view makes sure we pass in a user. #}
-    <p>Sorry, no such user found.<p/>
+{% macro render_pagination(pagination) %}
+
+{# only display if {{pagination}} is defined #}
+
+{% if pagination %}
+  <div class=pagination>
+  {%- for page in pagination.iter_pages() %}
+    {% if page %}
+      {% if page != pagination.page %}
+        <a href={{pagination.url_generator(page)}}>{{ page }}</a>
+      {% else %}
+        <strong>{{ page }}</strong>
+      {% endif %}
+    {% else %}
+      <span class=ellipsis>…</span>
+    {% endif %}
+  {%- endfor %}
+  {% if pagination.has_next %}
+    <a href={{pagination.url_generator(pagination.page+1)}}>Next &raquo;</a>
   {% endif %}
-{% endblock %}    
+  </div>
+{% endif %}
+{% endmacro %}

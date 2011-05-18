@@ -26,6 +26,10 @@ import translitcodec
 
 from mediagoblin import globals as mgoblin_globals
 
+import urllib
+from pymongo import ASCENDING, DESCENDING
+from math import ceil
+
 
 TESTS_ENABLED = False
 def _activate_testing():
@@ -290,3 +294,85 @@ def setup_gettext(locale):
 
     mgoblin_globals.setup_globals(
         translations=this_gettext)
+
+
+class Pagination(object):
+    """
+    Pagination class
+    """
+    def __init__(self):
+        pass
+
+    def __call__(self, args):
+        """
+        input values:
+        {'page': ...,       ---    requested page
+         'per_page': ...,   ---    objects per page
+          'request': ...,   ---    webob request object for url generation
+          'collection' ...  ---    db collection, thats to be queried
+          'query': {'user': xxx},  query restrictions, db.collection.find(query)
+          }
+
+        add:
+           option for sorting attribute
+           ascending, descending option
+           range based pagination
+        """
+        self.per_page = args['per_page']
+        self.request = args['request']
+
+        try:
+            self.page = abs(int(args['request'].str_GET['page']))
+        # set default page, if page value is not set    
+        except KeyError:
+            self.page = 1
+        # return None(404 Error) if page is set, but has no value or has an invalid value    
+        except ValueError:
+            return None
+
+        ######################################################
+        #
+        # db queries should be changed into range based pagination
+        # save count and current page in some user session data
+        #
+        ######################################################
+
+        collection =  getattr(self.request.db, args['collection'])
+
+        self.total_count = collection.find(args['query']).count()
+
+        #check if requested page is valid, not larger than available number of pages
+        if self.page > self.pages:
+             return None
+        
+        return collection.find(args['query']).sort('created',DESCENDING) \
+            .skip((self.page-1)*self.per_page).limit(self.per_page)
+
+    @property
+    def pages(self):
+        return int(ceil(self.total_count / float(self.per_page)))
+
+    @property
+    def has_prev(self):
+        return self.page > 1
+
+    @property
+    def has_next(self):
+        return self.page < self.pages
+
+    def iter_pages(self, left_edge=2, left_current=2,
+                   right_current=5, right_edge=2):
+        last = 0
+        for num in xrange(1, self.pages + 1):
+            if num <= left_edge or \
+               (num > self.page - left_current - 1 and \
+                num < self.page + right_current) or \
+               num > self.pages - right_edge:
+                if last + 1 != num:
+                    yield None
+                yield num
+                last = num
+     
+    def url_generator(self, page):
+        return '%s?%s' % (self.request.path_info, \
+                          urllib.urlencode({'page':str(page)}))

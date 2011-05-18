@@ -15,20 +15,22 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "mediagoblin/base.html" %}
-{% block mediagoblin_content -%}
-  {% if user %}
-    <h1>User page for '{{ user.username }}'</h1>
 
-    {#- Should we outsource such a media 'gallery' view to it's own file?
-        It could be useful for the home page and other views too -#}
-    <ul>
-      
-      {% include "mediagoblin/utils/object_gallery.html" %}
 
-    </ul>
-  {% else %}
-    {# This *should* not occur as the view makes sure we pass in a user. #}
-    <p>Sorry, no such user found.<p/>
-  {% endif %}
-{% endblock %}    
+  <div>
+    {% if media_entries %}
+        <ul>
+	  {% for entry in media_entries %}
+          <li>
+            <a href="{{ request.urlgen('mediagoblin.user_pages.media_home',
+                     user= entry.uploader.username, m_id= entry._id) }}">
+              <img src="{{ request.app.public_store.file_url(
+			entry['media_files']['thumb']) }}" /></a>
+          </li>
+	  {% endfor %}
+	</ul>
+	
+	{% import 'mediagoblin/utils/pagination.html' as paginationmacro %}
+	{{ paginationmacro.render_pagination(pagination) }}
+    {%  endif %}
+  </div>
