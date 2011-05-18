@@ -1,4 +1,6 @@
 import mongokit
+from pymongo import DESCENDING
+from mongokit import ObjectId
 
 
 def connect_database(app_config):

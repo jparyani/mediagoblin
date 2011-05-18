@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import Image
-import mongokit
+from mediagoblin.db.util import ObjectId
 from celery.task import task
 
 from mediagoblin.globals import database, queue_store, public_store
@@ -27,7 +27,7 @@ THUMB_SIZE = 200, 200
 @task
 def process_media_initial(media_id):
     entry = database.MediaEntry.one(
-        {'_id': mongokit.ObjectId(media_id)})
+        {'_id': ObjectId(media_id)})
 
     queued_filepath = entry['queued_media_file']
     queued_file = queue_store.get_file(queued_filepath, 'r')

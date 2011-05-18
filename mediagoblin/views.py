@@ -18,9 +18,8 @@ import datetime
 
 from webob import Response, exc
 import wtforms
-from pymongo import DESCENDING
-from mongokit import ObjectId
 from mediagoblin.db import models
+from mediagoblin.db.util import ObjectId, DESCENDING
 import gettext
 
 def root_view(request):

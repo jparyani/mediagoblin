@@ -21,7 +21,7 @@ import smtplib
 import sys
 import re
 import jinja2
-import mongokit
+from mediagoblin.db.util import ObjectId
 import translitcodec
 
 from mediagoblin import globals as mgoblin_globals
@@ -83,7 +83,7 @@ def setup_user_in_request(request):
 
     user = None
     user = request.app.db.User.one(
-        {'_id': mongokit.ObjectId(request.session['user_id'])})
+        {'_id': ObjectId(request.session['user_id'])})
 
     if not user:
         # Something's wrong... this user doesn't exist?  Invalidate

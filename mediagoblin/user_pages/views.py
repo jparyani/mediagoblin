@@ -15,8 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from webob import Response, exc
-from pymongo import DESCENDING
-from mongokit import ObjectId
+from mediagoblin.db.util import ObjectId, DESCENDING
 import wtforms
 
 
