@@ -17,7 +17,7 @@
 import urllib
 
 import routes
-from paste.deploy.converters import asbool, asint
+from paste.deploy.converters import asbool
 from webob import Request, exc
 
 from mediagoblin import routing, util, storage, staticdirect

@@ -16,9 +16,8 @@
 
 import os
 
-import mongokit
 from paste.deploy.loadwsgi import NicerConfigParser
-from paste.deploy.converters import asint, asbool
+from paste.deploy.converters import asbool
 
 from mediagoblin import storage
 from mediagoblin.db import models

@@ -16,7 +16,6 @@
 
 from webob import Response, exc
 from mediagoblin.db.util import ObjectId, DESCENDING
-import wtforms
 
 
 def user_home(request):

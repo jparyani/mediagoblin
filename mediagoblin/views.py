@@ -14,13 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime
-
-from webob import Response, exc
-import wtforms
-from mediagoblin.db import models
-from mediagoblin.db.util import ObjectId, DESCENDING
-import gettext
+from webob import Response
+from mediagoblin.db.util import DESCENDING
 
 def root_view(request):
     media_entries = request.db.MediaEntry.find(
