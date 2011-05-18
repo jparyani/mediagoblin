@@ -16,6 +16,8 @@
 
 import mongokit
 
+from paste.deploy.converters import asint
+
 # Imports that other modules might use
 from pymongo import DESCENDING
 from mongokit import ObjectId
