@@ -20,8 +20,6 @@
   {% if user %}
     <h1>User page for '{{ user.username }}'</h1>
 
-    {#- Should we outsource such a media 'gallery' view to it's own file?
-        It could be useful for the home page and other views too -#}
     <ul>
       
       {% include "mediagoblin/utils/object_gallery.html" %}

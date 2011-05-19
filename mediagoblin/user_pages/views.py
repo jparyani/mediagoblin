@@ -33,9 +33,14 @@ def user_home(request):
                 .find({'uploader': user, 'state': 'processed'}) \
                .sort('created', DESCENDING)
 
-    pagination = Pagination(2, cursor, request)
+    try:
+        page = int(request.str_GET['page'])
+    except KeyError:
+        page = 1
+            
+    pagination = Pagination(cursor, page)
     media_entries = pagination()
-    
+
     #if no data is available, return NotFound
     if media_entries == None:
         return exc.HTTPNotFound()

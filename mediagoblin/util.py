@@ -28,7 +28,7 @@ from mediagoblin import globals as mgoblin_globals
 
 import urllib
 from math import ceil
-
+import copy
 
 TESTS_ENABLED = False
 def _activate_testing():
@@ -297,20 +297,27 @@ def setup_gettext(locale):
 
 class Pagination(object):
     """
-    Pagination class
+    Pagination class,
+    initialization through __init__(self, page=1, per_page=2, cursor) 
+    get actual data slice through __call__()
     """
-    def __init__(self, per_page, cursor, request):
-        try:
-            self.page = int(request.str_GET['page'])
-        except KeyError:
-            self.page = 1
 
+    def __init__(self, cursor, page=1, per_page=2):
+        """
+        initializes Pagination
+        -- page,       requested page
+        -- per_page,   number of objects per page
+        -- cursor,     db cursor 
+        """
+        self.page = page    
         self.per_page = per_page
         self.cursor = cursor
-        self.request = request
         self.total_count = self.cursor.count()
 
     def __call__(self):
+        """
+        returns slice of objects for the requested page
+        """
         return self.cursor.skip((self.page-1)*self.per_page) \
                           .limit(self.per_page)
 
@@ -338,7 +345,14 @@ class Pagination(object):
                     yield None
                 yield num
                 last = num
-     
-    def url_generator(self, page):
-        return '%s?%s' % (self.request.path_info, \
-                          urllib.urlencode({'page':str(page)}))
+
+    def get_page_url(self, path_info, page_no, get_params=None):
+        """ 
+        Get a new page based of the path_info, the new page number,
+        and existing get parameters.
+        """ 
+        new_get_params = copy.copy(get_params or {})
+        new_get_params['page'] = page_no
+        return "%s?%s" % (
+            path_info, urllib.urlencode(new_get_params))
+    
