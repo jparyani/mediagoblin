@@ -27,7 +27,6 @@ import translitcodec
 from mediagoblin import globals as mgoblin_globals
 
 import urllib
-from pymongo import ASCENDING, DESCENDING
 from math import ceil
 
 
@@ -300,53 +299,20 @@ class Pagination(object):
     """
     Pagination class
     """
-    def __init__(self):
-        pass
-
-    def __call__(self, args):
-        """
-        input values:
-        {'page': ...,       ---    requested page
-         'per_page': ...,   ---    objects per page
-          'request': ...,   ---    webob request object for url generation
-          'collection' ...  ---    db collection, thats to be queried
-          'query': {'user': xxx},  query restrictions, db.collection.find(query)
-          }
-
-        add:
-           option for sorting attribute
-           ascending, descending option
-           range based pagination
-        """
-        self.per_page = args['per_page']
-        self.request = args['request']
-
+    def __init__(self, per_page, cursor, request):
         try:
-            self.page = abs(int(args['request'].str_GET['page']))
-        # set default page, if page value is not set    
+            self.page = int(request.str_GET['page'])
         except KeyError:
             self.page = 1
-        # return None(404 Error) if page is set, but has no value or has an invalid value    
-        except ValueError:
-            return None
 
-        ######################################################
-        #
-        # db queries should be changed into range based pagination
-        # save count and current page in some user session data
-        #
-        ######################################################
+        self.per_page = per_page
+        self.cursor = cursor
+        self.request = request
+        self.total_count = self.cursor.count()
 
-        collection =  getattr(self.request.db, args['collection'])
-
-        self.total_count = collection.find(args['query']).count()
-
-        #check if requested page is valid, not larger than available number of pages
-        if self.page > self.pages:
-             return None
-        
-        return collection.find(args['query']).sort('created',DESCENDING) \
-            .skip((self.page-1)*self.per_page).limit(self.per_page)
+    def __call__(self):
+        return self.cursor.skip((self.page-1)*self.per_page) \
+                          .limit(self.per_page)
 
     @property
     def pages(self):

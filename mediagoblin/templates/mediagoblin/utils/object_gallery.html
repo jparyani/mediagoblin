@@ -16,21 +16,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
+{% import 'mediagoblin/utils/pagination.html' as paginationmacro  %}   
 
-  <div>
-    {% if media_entries %}
-        <ul>
-	  {% for entry in media_entries %}
-          <li>
-            <a href="{{ request.urlgen('mediagoblin.user_pages.media_home',
-                     user= entry.uploader.username, m_id= entry._id) }}">
-              <img src="{{ request.app.public_store.file_url(
-			entry['media_files']['thumb']) }}" /></a>
-          </li>
-	  {% endfor %}
-	</ul>
-	
-	{% import 'mediagoblin/utils/pagination.html' as paginationmacro %}
-	{{ paginationmacro.render_pagination(pagination) }}
-    {%  endif %}
-  </div>
+<div>
+  {% if media_entries %}
+    <ul>
+      {% for entry in media_entries %}
+        <li>
+          <a href="{{ request.urlgen('mediagoblin.user_pages.media_home',
+               user= entry.uploader.username, m_id= entry._id) }}">
+          <img src="{{ request.app.public_store.file_url(
+		  entry['media_files']['thumb']) }}" /></a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    {{ paginationmacro.render_pagination(pagination) }}
+
+  {%  endif %}
+</div>
