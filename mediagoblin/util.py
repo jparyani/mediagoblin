@@ -29,6 +29,8 @@ from mediagoblin import globals as mgoblin_globals
 import urllib
 from math import ceil
 import copy
+import decorators
+from webob import exc
 
 TESTS_ENABLED = False
 def _activate_testing():
@@ -298,11 +300,11 @@ def setup_gettext(locale):
 class Pagination(object):
     """
     Pagination class,
-    initialization through __init__(self, page=1, per_page=2, cursor) 
+    initialization through __init__(self, cursor, page=1, per_page=2):
     get actual data slice through __call__()
     """
 
-    def __init__(self, cursor, page=1, per_page=2):
+    def __init__(self, page, cursor, per_page=2):
         """
         initializes Pagination
         -- page,       requested page

@@ -21,6 +21,9 @@ import wtforms
 from mediagoblin.util import Pagination
 from pymongo import ASCENDING, DESCENDING
 
+from mediagoblin.decorators import uses_pagination
+
+@uses_pagination
 def user_home(request):
     """'Homepage' of a User()"""
     user = request.db.User.find_one({
@@ -32,13 +35,9 @@ def user_home(request):
     cursor = request.db.MediaEntry \
                 .find({'uploader': user, 'state': 'processed'}) \
                .sort('created', DESCENDING)
+    
 
-    try:
-        page = int(request.str_GET['page'])
-    except KeyError:
-        page = 1
-            
-    pagination = Pagination(cursor, page)
+    pagination = Pagination( int(request.str_GET['page']), cursor)
     media_entries = pagination()
 
     #if no data is available, return NotFound
