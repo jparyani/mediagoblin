@@ -18,7 +18,7 @@ from webob import Response, exc
 from mediagoblin.db.util import ObjectId, DESCENDING
 from mediagoblin.util import Pagination
 
-from mediagoblin.decorators import uses_pagination
+from mediagoblin.decorators import uses_pagination, get_media_entry
 
 
 @uses_pagination
@@ -52,15 +52,11 @@ def user_home(request, page):
              'pagination': pagination}))
 
 
-def media_home(request):
+@get_media_entry
+def media_home(request, media):
     """'Homepage' of a MediaEntry()"""
-    media = request.db.MediaEntry.find_one({
-            '_id': ObjectId(request.matchdict['m_id']),
-            'state': 'processed'})
-
     # Check that media uploader and user correspond.
-    if not media or \
-            media['uploader'].get('username') != request.matchdict['user']:
+    if media['uploader'].get('username') != request.matchdict['user']:
         return exc.HTTPNotFound()
 
     template = request.template_env.get_template(
@@ -69,4 +65,3 @@ def media_home(request):
         template.render(
             {'request': request,
              'media': media}))
-

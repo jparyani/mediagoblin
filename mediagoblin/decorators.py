@@ -17,6 +17,8 @@
 
 from webob import exc
 
+from mediagoblin.db.util import ObjectId
+
 
 def _make_safe(decorator, original):
     """
@@ -59,5 +61,29 @@ def uses_pagination(controller):
             return exc.HTTPNotFound()
 
         return controller(request, page=page, *args, **kwargs)    
+
+    return _make_safe(wrapper, controller)
+
+
+def get_media_entry(controller):
+    """
+    Pass in a MediaEntry based off of a url component
+    """
+    def wrapper(request, *args, **kwargs):
+        media = request.db.MediaEntry.find_one(
+            {'slug': request.matchdict['media'],
+             'state': 'processed'})
+
+        # no media via slug?  Grab it via ObjectId
+        if not media:
+            media = request.db.MediaEntry.find_one(
+                {'_id': ObjectId(request.matchdict['media']),
+                 'state': 'processed'})
+
+            # Still no media?  Okay, 404.
+            if not media:
+                return exc.HTTPNotFound()
+
+        return controller(request, media=media, *args, **kwargs)
 
     return _make_safe(wrapper, controller)
