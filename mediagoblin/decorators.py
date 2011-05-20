@@ -44,3 +44,22 @@ def require_active_login(controller):
         return controller(request, *args, **kwargs)
 
     return _make_safe(new_controller_func, controller)
+
+
+def uses_pagination(controller):
+    """
+    Check request GET 'page' key for wrong values
+    """
+    def wrapper(request, *args, **kwargs):
+        try:
+            page = int(request.str_GET['page'])
+            if page < 0:
+                return exc.HTTPNotFound()
+        except ValueError:
+            return exc.HTTPNotFound()
+        except KeyError:
+            request.str_GET['page'] = 1
+
+        return controller(request, *args, **kwargs)    
+
+    return _make_safe(wrapper,controller)

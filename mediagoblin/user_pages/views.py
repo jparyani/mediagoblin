@@ -16,8 +16,11 @@
 
 from webob import Response, exc
 from mediagoblin.db.util import ObjectId, DESCENDING
+from mediagoblin.util import Pagination
 
+from mediagoblin.decorators import uses_pagination
 
+@uses_pagination
 def user_home(request):
     """'Homepage' of a User()"""
     user = request.db.User.find_one({
@@ -26,18 +29,27 @@ def user_home(request):
     if not user:
         return exc.HTTPNotFound()
 
-    medias = request.db.MediaEntry.find({
-            'uploader': user,
-            'state': 'processed'}).sort('created', DESCENDING)
+    cursor = request.db.MediaEntry \
+                .find({'uploader': user, 'state': 'processed'}) \
+               .sort('created', DESCENDING)
+    
 
+    pagination = Pagination( int(request.str_GET['page']), cursor)
+    media_entries = pagination()
+
+    #if no data is available, return NotFound
+    if media_entries == None:
+        return exc.HTTPNotFound()
+    
     template = request.template_env.get_template(
         'mediagoblin/user_pages/user.html')
+
     return Response(
         template.render(
             {'request': request,
              'user': user,
-             'media_entries': medias}))
-
+             'media_entries': media_entries,
+             'pagination': pagination}))
 
 def media_home(request):
     """'Homepage' of a MediaEntry()"""
@@ -56,3 +68,4 @@ def media_home(request):
         template.render(
             {'request': request,
              'media': media}))
+

@@ -26,6 +26,11 @@ import translitcodec
 
 from mediagoblin import globals as mgoblin_globals
 
+import urllib
+from math import ceil
+import copy
+import decorators
+from webob import exc
 
 TESTS_ENABLED = False
 def _activate_testing():
@@ -290,3 +295,66 @@ def setup_gettext(locale):
 
     mgoblin_globals.setup_globals(
         translations=this_gettext)
+
+
+class Pagination(object):
+    """
+    Pagination class,
+    initialization through __init__(self, cursor, page=1, per_page=2):
+    get actual data slice through __call__()
+    """
+
+    def __init__(self, page, cursor, per_page=2):
+        """
+        initializes Pagination
+        -- page,       requested page
+        -- per_page,   number of objects per page
+        -- cursor,     db cursor 
+        """
+        self.page = page    
+        self.per_page = per_page
+        self.cursor = cursor
+        self.total_count = self.cursor.count()
+
+    def __call__(self):
+        """
+        returns slice of objects for the requested page
+        """
+        return self.cursor.skip((self.page-1)*self.per_page) \
+                          .limit(self.per_page)
+
+    @property
+    def pages(self):
+        return int(ceil(self.total_count / float(self.per_page)))
+
+    @property
+    def has_prev(self):
+        return self.page > 1
+
+    @property
+    def has_next(self):
+        return self.page < self.pages
+
+    def iter_pages(self, left_edge=2, left_current=2,
+                   right_current=5, right_edge=2):
+        last = 0
+        for num in xrange(1, self.pages + 1):
+            if num <= left_edge or \
+               (num > self.page - left_current - 1 and \
+                num < self.page + right_current) or \
+               num > self.pages - right_edge:
+                if last + 1 != num:
+                    yield None
+                yield num
+                last = num
+
+    def get_page_url(self, path_info, page_no, get_params=None):
+        """ 
+        Get a new page based of the path_info, the new page number,
+        and existing get parameters.
+        """ 
+        new_get_params = copy.copy(get_params or {})
+        new_get_params['page'] = page_no
+        return "%s?%s" % (
+            path_info, urllib.urlencode(new_get_params))
+    
