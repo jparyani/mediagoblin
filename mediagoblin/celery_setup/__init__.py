@@ -76,6 +76,7 @@ DEFAULT_SETTINGS_MODULE = 'mediagoblin.celery_setup.dummy_settings_module'
 
 def setup_celery_from_config(app_config, global_config,
                              settings_module=DEFAULT_SETTINGS_MODULE,
+                             force_celery_always_eager=False,
                              set_environ=True):
     """
     Take a mediagoblin app config and the global config from a paste
@@ -85,6 +86,7 @@ def setup_celery_from_config(app_config, global_config,
     - app_config: the application config section
     - global_config: the entire paste config, all sections
     - settings_module: the module to populate, as a string
+    - 
     - set_environ: if set, this will CELERY_CONFIG_MODULE to the
       settings_module
     """
@@ -135,6 +137,9 @@ def setup_celery_from_config(app_config, global_config,
     # add mandatory celery imports
     celery_imports = celery_settings.setdefault('CELERY_IMPORTS', [])
     celery_imports.extend(MANDATORY_CELERY_IMPORTS)
+
+    if force_celery_always_eager:
+        celery_settings['CELERY_ALWAYS_EAGER'] = True
 
     __import__(settings_module)
     this_module = sys.modules[settings_module]

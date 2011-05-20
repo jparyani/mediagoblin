@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
 import urllib
 
 import routes
@@ -138,7 +139,12 @@ def paste_app_factory(global_config, **app_config):
         raise ImproperlyConfigured(
             "One of direct_remote_path or direct_remote_paths must be provided")
 
-    setup_celery_from_config(app_config, global_config)
+    if asbool(os.environ.get('CELERY_ALWAYS_EAGER')):
+        setup_celery_from_config(
+            app_config, global_config,
+            force_celery_always_eager=True)
+    else:
+        setup_celery_from_config(app_config, global_config)
 
     mgoblin_app = MediaGoblinApp(
         connection, db,
