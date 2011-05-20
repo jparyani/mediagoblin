@@ -52,14 +52,12 @@ def uses_pagination(controller):
     """
     def wrapper(request, *args, **kwargs):
         try:
-            page = int(request.str_GET['page'])
+            page = int(request.GET.get('page', 1))
             if page < 0:
                 return exc.HTTPNotFound()
         except ValueError:
             return exc.HTTPNotFound()
-        except KeyError:
-            request.str_GET['page'] = 1
 
-        return controller(request, *args, **kwargs)    
+        return controller(request, page, *args, **kwargs)    
 
     return _make_safe(wrapper,controller)

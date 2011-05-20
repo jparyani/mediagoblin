@@ -20,8 +20,9 @@ from mediagoblin.util import Pagination
 
 from mediagoblin.decorators import uses_pagination
 
+
 @uses_pagination
-def user_home(request):
+def user_home(request, page):
     """'Homepage' of a User()"""
     user = request.db.User.find_one({
             'username': request.matchdict['user'],
@@ -32,9 +33,8 @@ def user_home(request):
     cursor = request.db.MediaEntry \
                 .find({'uploader': user, 'state': 'processed'}) \
                .sort('created', DESCENDING)
-    
 
-    pagination = Pagination( int(request.str_GET['page']), cursor)
+    pagination = Pagination(page, cursor)
     media_entries = pagination()
 
     #if no data is available, return NotFound
