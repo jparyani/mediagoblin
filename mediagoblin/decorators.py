@@ -58,6 +58,6 @@ def uses_pagination(controller):
         except ValueError:
             return exc.HTTPNotFound()
 
-        return controller(request, page, *args, **kwargs)    
+        return controller(request, page=page, *args, **kwargs)    
 
     return _make_safe(wrapper,controller)
