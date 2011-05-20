@@ -322,8 +322,8 @@ class Pagination(object):
         """
         Returns slice of objects for the requested page
         """
-        return self.cursor.skip((self.page-1)*self.per_page) \
-                          .limit(self.per_page)
+        return self.cursor.skip(
+            (self.page - 1) * self.per_page).limit(self.per_page)
 
     @property
     def pages(self):
