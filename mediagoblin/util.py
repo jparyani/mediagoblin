@@ -297,6 +297,8 @@ def setup_gettext(locale):
         translations=this_gettext)
 
 
+PAGINATION_DEFAULT_PER_PAGE = 30
+
 class Pagination(object):
     """
     Pagination class for mongodb queries.
@@ -305,7 +307,7 @@ class Pagination(object):
     get actual data slice through __call__().
     """
 
-    def __init__(self, page, cursor, per_page=2):
+    def __init__(self, page, cursor, per_page=PAGINATION_DEFAULT_PER_PAGE):
         """
         Initializes Pagination
 
