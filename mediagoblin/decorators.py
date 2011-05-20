@@ -60,4 +60,4 @@ def uses_pagination(controller):
 
         return controller(request, page=page, *args, **kwargs)    
 
-    return _make_safe(wrapper,controller)
+    return _make_safe(wrapper, controller)
