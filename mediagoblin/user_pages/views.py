@@ -30,9 +30,9 @@ def user_home(request, page):
     if not user:
         return exc.HTTPNotFound()
 
-    cursor = request.db.MediaEntry \
-                .find({'uploader': user, 'state': 'processed'}) \
-               .sort('created', DESCENDING)
+    cursor = request.db.MediaEntry.find(
+        {'uploader': user,
+         'state': 'processed'}).sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)
     media_entries = pagination()
@@ -50,6 +50,7 @@ def user_home(request, page):
              'user': user,
              'media_entries': media_entries,
              'pagination': pagination}))
+
 
 def media_home(request):
     """'Homepage' of a MediaEntry()"""
