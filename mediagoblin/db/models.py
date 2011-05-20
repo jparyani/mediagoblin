@@ -117,6 +117,24 @@ class MediaEntry(Document):
         if duplicate:
             self['slug'] = "%s-%s" % (self['_id'], self['slug'])
 
+    def url_for_self(self, urlgen):
+        """
+        Generate an appropriate url for ourselves
+
+        Use a slug if we have one, else use our '_id'.
+        """
+        if self.get('slug'):
+            return urlgen(
+                'mediagoblin.user_pages.media_home',
+                user=self['uploader']['username'],
+                media=self['slug'])
+        else:
+            return urlgen(
+                'mediagoblin.user_pages.media_home',
+                user=self['uploader']['username'],
+                media=unicode(self['_id']))
+
+
 REGISTER_MODELS = [MediaEntry, User]
 
 

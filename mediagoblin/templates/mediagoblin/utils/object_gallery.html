@@ -22,8 +22,7 @@
       <ul>
         {% for entry in media_entries %}
           <li>
-            <a href="{{ request.urlgen('mediagoblin.user_pages.media_home',
-                 user= entry.uploader.username, m_id= entry._id) }}">
+            <a href="{{ entry.url_for_self(request.urlgen) }}">
             <img src="{{ request.app.public_store.file_url(
 		   entry['media_files']['thumb']) }}" /></a>
           </li>
