@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from webob import Response, exc
-from mediagoblin.db.util import ObjectId, DESCENDING
+from mediagoblin.db.util import DESCENDING
 from mediagoblin.util import Pagination
 
 from mediagoblin.decorators import uses_pagination, get_media_entry
