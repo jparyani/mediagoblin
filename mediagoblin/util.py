@@ -299,9 +299,10 @@ def setup_gettext(locale):
 
 class Pagination(object):
     """
-    Pagination class,
-    initialization through __init__(self, cursor, page=1, per_page=2):
-    get actual data slice through __call__()
+    Pagination class for mongodb queries.
+
+    Initialization through __init__(self, cursor, page=1, per_page=2),
+    get actual data slice through __call__().
     """
 
     def __init__(self, page, cursor, per_page=2):
