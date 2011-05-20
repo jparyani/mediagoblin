@@ -306,10 +306,12 @@ class Pagination(object):
 
     def __init__(self, page, cursor, per_page=2):
         """
-        initializes Pagination
-        -- page,       requested page
-        -- per_page,   number of objects per page
-        -- cursor,     db cursor 
+        Initializes Pagination
+
+        Args:
+         - page: requested page
+         - per_page: number of objects per page
+         - cursor: db cursor 
         """
         self.page = page    
         self.per_page = per_page
@@ -318,7 +320,7 @@ class Pagination(object):
 
     def __call__(self):
         """
-        returns slice of objects for the requested page
+        Returns slice of objects for the requested page
         """
         return self.cursor.skip((self.page-1)*self.per_page) \
                           .limit(self.per_page)
