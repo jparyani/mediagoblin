@@ -4,7 +4,6 @@
  Hacking HOWTO
 ===============
 
-
 So you want to hack on GNU MediaGoblin?
 =======================================
 
@@ -26,12 +25,9 @@ new things.
 Third you'll need to :ref:`get the requirements
 <get-requirements-section>`.
 
-Fourth, you'll need to build a development environment.  For this step, there are two options: 
-
-1. :ref:`buildout and bootstrap <hacking-with-buildout>` (easier) OR
-2. :ref:`virtualenv <hacking-with-virtualenv>` (more flexible, but harder)
-
-Pick one---don't do both!
+Fourth, you'll need to build a development environment.  We use buildout,
+but if you want to use virtualenv, there's a set of mediocre not-very-supported
+steps in the `wiki <https://gitorious.org/mediagoblin/pages/Home>`_.
 
 
 .. _get-requirements-section:
@@ -65,14 +61,9 @@ requirements::
 
 .. _hacking-with-buildout:
 
+
 How to set up and maintain an environment for hacking with buildout
 ===================================================================
-
-.. Note::
-
-   Either follow the instructions in this section OR follow the ones
-   in :ref:`hacking-with-virtualenv`.  But don't do both!
-
 
 **Requirements**
 
@@ -124,104 +115,14 @@ To do this, do::
 
     rm -rf bin develop-eggs eggs mediagoblin.egg-info parts user_dev
 
-Usually buildout works pretty great and is super easy, but if you get
-problems with python-dateutil conflicts on your system, you may need
-to use virtualenv instead.
-
-
-.. _hacking-with-virtualenv:
-
-How to set up and maintain an environment for hacking with virtualenv
-=====================================================================
-
-.. Note::
-
-   Either follow the instructions in this section OR follow the ones
-   in :ref:`hacking-with-buildout`.  But don't do both!
-
-
-**Requirements**
-
-* virtualenv: http://pypi.python.org/pypi/virtualenv
-* virtualenv wrapper:
-  http://www.doughellmann.com/projects/virtualenvwrapper/ (be sure to
-  read the `install instructions
-  <http://www.doughellmann.com/docs/virtualenvwrapper/install.html>`_)
-
-
-**Create a development environment**
-
-1. Clone the repository::
-
-       git clone http://git.gitorious.org/mediagoblin/mediagoblin.git
-
-2. Create a virtual environment::
-
-       mkvirtualenv --no-site-packages mediagoblin
-
-3. If that doesn't put you in the virutal environment you just
-   created, then do::
-
-       workon mediagoblin
-
-4. Run::
-
-       python setup.py develop
-
-That's it!
-
-
-**Activating a virtual environment**
-
-When you want to work on GNU MediaGoblin, you need to activate the
-virtual environment like this::
-
-    workon mediagoblin
-
-
-**Deactivating a virtual environment**
-
-If you want to deactivate it, you can do this::
-
-    deactivate
-
-
-**Updating a virtual environment with dependency changes**
-
-1. Enter the virtual environment.
-
-2. Run::
-
-      python setup.py develop
-
-
-**Updating a virtual environment with code changes**
-
-You don't need to do anything---code changes are automatically
-available.
-
-
-**Deleting a virtual environment**
-
-At some point you may want to delete your virtual environment.
-Perhaps it's to start over.  Perhaps it's so you can test building
-development environments with virtualenv.
-
-To do this, do::
-
-    rmvirtualenv mediagoblin
-
 
 Running the server
 ==================
 
-If you did buildout, run::
+Run::
 
     ./bin/paster serve mediagoblin.ini --reload
 
-If you did virtualenv, run::
-
-    paster serve mediagoblin.ini --reload
 
 Running celeryd
 ===============
@@ -230,38 +131,28 @@ You need to do this if you want your media to process and actually
 show up.  It's probably a good idea in development to have the web
 server (above) running in one terminal and celeryd in another window.
 
-If you did buildout, run::
+Run::
 
     CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_celery ./bin/celeryd
 
-If you did virtualenv, run::
-
-    CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_celery celeryd
 
 Running the test suite
 ======================
 
-If you did buildout, run::
+Run::
 
     ./bin/nosetests
 
-If you did virtualenv, run::
-
-    nosetests
 
 Running a shell
 ===============
 
 If you want a shell with your database pre-setup and an instantiated
-application ready and at your fingertips...
+application ready and at your fingertips....
 
-If you did buildout, run::
+Run::
 
     ./bin/gmg shell
-
-If you did virtualenv, run::
-
-    gmg shell
 
 
 Troubleshooting
@@ -276,7 +167,8 @@ If you see this::
 
 then make sure mongodb is installed and running.
 
-If it's installed, check the mongodb log.  On my machine, that's ``/var/log/mongodb/mongodb.log``.  If you see something like::
+If it's installed, check the mongodb log.  On my machine, that's 
+``/var/log/mongodb/mongodb.log``.  If you see something like::
 
     old lock file: /var/lib/mongodb/mongod.lock.  probably means...
 
@@ -398,6 +290,8 @@ getting the hang of it:
   it easier to get the hang of git if you're coming from other version
   control systems
 
+There's also a git mission at `OpenHatch <http://openhatch.org/>`_.
+
 
 Learning other utilities
 ------------------------
@@ -406,5 +300,5 @@ The `OpenHatch <http://openhatch.org/>`_ site has a series of
 `training missions <http://openhatch.org/missions/>`_ which are
 designed to help you learn how to use these tools.
 
-If you're new to tar, diff and patch, we highly recommend you sign up
-with OpenHatch and do the missions.
+If you're new to tar, diff, patch and git, we highly recommend you sign
+up with OpenHatch and do the missions.
