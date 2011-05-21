@@ -55,10 +55,6 @@ def user_home(request, page):
 @get_user_media_entry
 def media_home(request, media):
     """'Homepage' of a MediaEntry()"""
-    # Check that media uploader and user correspond.
-    if media['uploader'].get('username') != request.matchdict['user']:
-        return exc.HTTPNotFound()
-
     template = request.template_env.get_template(
         'mediagoblin/user_pages/media.html')
     return Response(
