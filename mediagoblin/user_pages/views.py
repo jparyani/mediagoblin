@@ -18,7 +18,7 @@ from webob import Response, exc
 from mediagoblin.db.util import DESCENDING
 from mediagoblin.util import Pagination
 
-from mediagoblin.decorators import uses_pagination, get_media_entry
+from mediagoblin.decorators import uses_pagination, get_user_media_entry
 
 
 @uses_pagination
@@ -52,7 +52,7 @@ def user_home(request, page):
              'pagination': pagination}))
 
 
-@get_media_entry
+@get_user_media_entry
 def media_home(request, media):
     """'Homepage' of a MediaEntry()"""
     # Check that media uploader and user correspond.

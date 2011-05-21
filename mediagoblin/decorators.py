@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from bson.errors import InvalidId
 from webob import exc
 
 from mediagoblin.db.util import ObjectId
@@ -65,20 +66,31 @@ def uses_pagination(controller):
     return _make_safe(wrapper, controller)
 
 
-def get_media_entry(controller):
+def get_user_media_entry(controller):
     """
     Pass in a MediaEntry based off of a url component
     """
     def wrapper(request, *args, **kwargs):
+        user = request.db.User.find_one(
+            {'username': request.matchdict['user']})
+
+        if not user:
+            return exc.HTTPNotFound()
+
         media = request.db.MediaEntry.find_one(
             {'slug': request.matchdict['media'],
-             'state': 'processed'})
+             'state': 'processed',
+             'uploader._id': user['_id']})
 
         # no media via slug?  Grab it via ObjectId
         if not media:
-            media = request.db.MediaEntry.find_one(
-                {'_id': ObjectId(request.matchdict['media']),
-                 'state': 'processed'})
+            try:
+                media = request.db.MediaEntry.find_one(
+                    {'_id': ObjectId(request.matchdict['media']),
+                     'state': 'processed',
+                     'uploader._id': user['_id']})
+            except InvalidId:
+                return exc.HTTPNotFound()
 
             # Still no media?  Okay, 404.
             if not media:
