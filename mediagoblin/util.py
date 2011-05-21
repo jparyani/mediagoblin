@@ -353,8 +353,7 @@ class Pagination(object):
 
     def get_page_url(self, request, page_no):
         """ 
-        Get a new page based of the request, the new page number,
-        and existing get parameters.
+        Get a new page url based of the request, and the new page number.
         """ 
         path_info = request.path_info
         get_params = request.GET
@@ -362,4 +361,3 @@ class Pagination(object):
         new_get_params['page'] = page_no
         return "%s?%s" % (
             path_info, urllib.urlencode(new_get_params))
-    
