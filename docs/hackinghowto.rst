@@ -143,7 +143,8 @@ same time?  For development purposes there's a shortcut::
 
 This way the web server will block on processing items until they are
 done, but you don't need to run celery separately (which is probably
-good enough for development purposes).
+good enough for development purposes, but something you almost
+certainly shouldn't do in production).
 
 
 Running the test suite
