@@ -29,8 +29,6 @@ from mediagoblin import globals as mgoblin_globals
 import urllib
 from math import ceil
 import copy
-import decorators
-from webob import exc
 
 TESTS_ENABLED = False
 def _activate_testing():
@@ -353,11 +351,13 @@ class Pagination(object):
                 yield num
                 last = num
 
-    def get_page_url(self, path_info, page_no, get_params=None):
+    def get_page_url(self, request, page_no):
         """ 
-        Get a new page based of the path_info, the new page number,
+        Get a new page based of the request, the new page number,
         and existing get parameters.
         """ 
+        path_info = request.path_info
+        get_params = request.GET
         new_get_params = copy.copy(get_params or {})
         new_get_params['page'] = page_no
         return "%s?%s" % (
