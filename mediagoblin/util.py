@@ -351,13 +351,20 @@ class Pagination(object):
                 yield num
                 last = num
 
-    def get_page_url(self, request, page_no):
+    def get_page_url_explicit(self, base_url, get_params, page_no):
         """ 
-        Get a new page url based of the request, and the new page number.
+        Get a page url by adding a page= parameter to the base url
         """ 
-        path_info = request.path_info
-        get_params = request.GET
         new_get_params = copy.copy(get_params or {})
         new_get_params['page'] = page_no
         return "%s?%s" % (
-            path_info, urllib.urlencode(new_get_params))
+            base_url, urllib.urlencode(new_get_params))
+
+    def get_page_url(self, request, page_no):
+        """ 
+        Get a new page url based of the request, and the new page number.
+
+        This is a nice wrapper around get_page_url_explicit()
+        """ 
+        return self.get_page_url_explicit(
+            request.path_info, request.GET, page_no)
