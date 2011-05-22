@@ -22,7 +22,7 @@
   {% if media %}
   <h1>Media details for <a 
              href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-             user= media.uploader.username) }}">{{media.uploader.username}}</a>
+             user= media.uploader().username) }}">{{media.uploader.username}}</a>
              / {{media.title}}
   </h1>
   <div>
@@ -32,7 +32,7 @@
           <br/>Uploaded on {{ "%4d-%02d-%02d"|format(media.created.year,
              media.created.month,media.created.day)}} by <a 
              href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                   user= media.uploader.username) }}">{{media.uploader.username}}</a>
+                   user= media.uploader().username) }}">{{media.uploader.username}}</a>
           <br/>Description: {{media.description}}
   </div>
   {% else %}

@@ -127,16 +127,21 @@ class MediaEntry(Document):
 
         Use a slug if we have one, else use our '_id'.
         """
+        uploader = self.uploader()
+
         if self.get('slug'):
             return urlgen(
                 'mediagoblin.user_pages.media_home',
-                user=self['uploader']['username'],
+                user=uploader['username'],
                 media=self['slug'])
         else:
             return urlgen(
                 'mediagoblin.user_pages.media_home',
-                user=self['uploader']['username'],
+                user=uploader['username'],
                 media=unicode(self['_id']))
+
+    def uploader(self):
+        return self.db.User.find_one({'_id': self['uploader']})
 
 
 REGISTER_MODELS = [MediaEntry, User]

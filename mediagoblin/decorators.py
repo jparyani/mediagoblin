@@ -80,7 +80,7 @@ def get_user_media_entry(controller):
         media = request.db.MediaEntry.find_one(
             {'slug': request.matchdict['media'],
              'state': 'processed',
-             'uploader._id': user['_id']})
+             'uploader': user['_id']})
 
         # no media via slug?  Grab it via ObjectId
         if not media:
@@ -88,7 +88,7 @@ def get_user_media_entry(controller):
                 media = request.db.MediaEntry.find_one(
                     {'_id': ObjectId(request.matchdict['media']),
                      'state': 'processed',
-                     'uploader._id': user['_id']})
+                     'uploader': user['_id']})
             except InvalidId:
                 return exc.HTTPNotFound()
 

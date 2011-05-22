@@ -31,7 +31,7 @@ def user_home(request, page):
         return exc.HTTPNotFound()
 
     cursor = request.db.MediaEntry.find(
-        {'uploader': user,
+        {'uploader': user['_id'],
          'state': 'processed'}).sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)

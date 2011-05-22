@@ -46,7 +46,7 @@ def submit_start(request):
             entry['title'] = request.POST['title'] or unicode(splitext(filename)[0])
             entry['description'] = request.POST.get('description')
             entry['media_type'] = u'image' # heh
-            entry['uploader'] = request.user
+            entry['uploader'] = request.user['_id']
 
             # Save, just so we can get the entry id for the sake of using
             # it to generate the file path
