@@ -20,20 +20,27 @@
 
   {# temporarily, an "image gallery" that isn't one really ;) #}
   {% if media %}
-  <h1>Media details for <a 
-             href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-             user= media.uploader().username) }}">{{media.uploader().username}}</a>
-             / {{media.title}}
+  <h1>
+    Media details for
+    <a href="{{ request.urlgen(
+                  'mediagoblin.user_pages.user_home',
+                  user=media.uploader().username) }}">
+      {{- media.uploader().username }}</a>
+    / {{media.title}}
   </h1>
   <div>
     <img src="{{ request.app.public_store.file_url(
                   media.media_files.main) }}" />
-
-          <br/>Uploaded on {{ "%4d-%02d-%02d"|format(media.created.year,
-             media.created.month,media.created.day)}} by <a 
-             href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                   user= media.uploader().username) }}">{{media.uploader().username}}</a>
-          <br/>Description: {{media.description}}
+    <br />
+    Uploaded on
+    {{ "%4d-%02d-%02d"|format(media.created.year,
+                              media.created.month, media.created.day) }}
+    by
+    <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                               user= media.uploader().username) }}">
+      {{- media.uploader().username }}</a>
+    <br />
+    Description: {{ media.description }}
   </div>
   {% else %}
   <p>Sorry, no such media found.<p/>
