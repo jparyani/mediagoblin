@@ -21,6 +21,8 @@ from mongokit import Document, Set
 from mediagoblin import util
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin import globals as mediagoblin_globals
+from mediagoblin.db import migrations
+from mediagoblin.db.util import ObjectId
 
 ###################
 # Custom validators
@@ -67,7 +69,7 @@ class MediaEntry(Document):
     __collection__ = 'media_entries'
 
     structure = {
-        'uploader': User,
+        'uploader': ObjectId,
         'title': unicode,
         'slug': unicode,
         'created': datetime.datetime,
@@ -98,6 +100,8 @@ class MediaEntry(Document):
     default_values = {
         'created': datetime.datetime.utcnow,
         'state': u'unprocessed'}
+
+    migration_handler = migrations.MediaEntryMigration
 
     # Actually we should referene uniqueness by uploader, but we
     # should fix http://bugs.foocorp.net/issues/340 first.

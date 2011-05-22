@@ -24,6 +24,10 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.shell:shell_parser_setup',
         'func': 'mediagoblin.gmg_commands.shell:shell',
         'help': 'Run a shell with some tools pre-setup'},
+    'migrate': {
+        'setup': 'mediagoblin.gmg_commands.migrate:migrate_parser_setup',
+        'func': 'mediagoblin.gmg_commands.migrate:migrate',
+        'help': 'Apply all unapplied bulk migrations to the database'},
     }
 
 
