@@ -16,12 +16,9 @@
 
 
 import code
-import os
 
-from paste.deploy.loadwsgi import NicerConfigParser
-
-from mediagoblin import app
 from mediagoblin import globals as mgoblin_globals
+from mediagoblin.gmg_commands import util as commands_util
 
 
 def shell_parser_setup(subparser):
@@ -45,22 +42,9 @@ Available vars:
 
 def shell(args):
     """
+    Setup a shell for the user
     """
-    # Duplicated from from_celery.py, remove when we have the generic util
-    parser = NicerConfigParser(args.conf_file)
-    parser.read(args.conf_file)
-    parser._defaults.setdefault(
-        'here', os.path.dirname(os.path.abspath(args.conf_file)))
-    parser._defaults.setdefault(
-        '__file__', os.path.abspath(args.conf_file))
-
-    mgoblin_section = dict(parser.items(args.app_section))
-    mgoblin_conf = dict(
-        [(section_name, dict(parser.items(section_name)))
-         for section_name in parser.sections()])
-
-    mgoblin_app = app.paste_app_factory(
-        mgoblin_conf, **mgoblin_section)
+    mgoblin_app = commands_util.setup_app(args)
 
     code.interact(
         banner=SHELL_BANNER,
