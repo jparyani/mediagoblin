@@ -96,7 +96,7 @@ While hacking on GNU MediaGoblin over time, you'll eventually have to
 update your development environment because the dependencies have
 changed.  To do that, run::
 
-    ./bin/buildout
+    ./bin/buildout && ./bin/gmg migrate
 
 
 **Updating for code changes**
