@@ -1,6 +1,5 @@
 body {
     background-color: #272727;
-    background-image: url('../images/back.png');
     color: #f7f7f7;
     font-family: sans;
     padding:none;
@@ -45,7 +44,7 @@ label {
 }
 
 .mediagoblin_content {
-    width: 800px;
+    width: 960px;
     margin-left: auto;
     margin-right: auto;
 }
