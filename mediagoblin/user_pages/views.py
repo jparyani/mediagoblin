@@ -20,6 +20,7 @@ from mediagoblin.util import Pagination
 
 from mediagoblin.decorators import uses_pagination, get_user_media_entry
 
+from werkzeug.contrib.atom import AtomFeed
 
 @uses_pagination
 def user_home(request, page):
@@ -61,3 +62,36 @@ def media_home(request, media):
         template.render(
             {'request': request,
              'media': media}))
+
+ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 5
+
+def atom_feed(request):
+    """
+    generates the atom feed with the newest images
+    """
+
+    user = request.db.User.find_one({
+               'username': request.matchdict['user'],
+               'status': 'active'})
+    if not user:
+	return exc.HTTPNotFound()
+
+    cursor = request.db.MediaEntry.find({
+                 'uploader': user['_id'],
+                 'state': 'processed'}) \
+                 .sort('created', DESCENDING) \
+                 .limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
+
+    feed = AtomFeed(request.matchdict['user'],
+               feed_url=request.url,
+               url=request.host_url)
+            
+    for entry in cursor:
+        feed.add(entry.get('title'),
+            entry.get('description'),
+            content_type='html',
+            author=request.matchdict['user'],
+            updated=entry.get('created'),
+            url=entry.url_for_self(request.urlgen))
+
+    return feed.get_response() 
