@@ -52,6 +52,10 @@ label {
     margin-right: auto;
 }
 
+.mediagoblin_header_right {
+    float:right;
+}
+
 .button_red, .button_green {
     font-family: 'Carter One', arial, serif;
     height: 28px;

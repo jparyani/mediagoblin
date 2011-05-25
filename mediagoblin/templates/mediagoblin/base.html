@@ -32,7 +32,7 @@
               {% block mediagoblin_logo %}
                 <a href="{{ request.urlgen('index') }}"><img src="{{ request.staticdirect('/images/icon.png') }}" class="icon" /></a>
               {% endblock %}{% block mediagoblin_header_title %}MediaGoblin Home{% endblock %}
-              
+        <div class="mediagoblin_header_right">
           {% if request.user %}
                 Welcome {{ request.user['username'] }}! --
                 <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">
@@ -41,6 +41,7 @@
                 <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
                   Login</a>
           {% endif %}
+        </div>
       </div>
       </div>
       {% endblock %}
