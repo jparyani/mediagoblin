@@ -30,7 +30,7 @@
       <div class="mediagoblin_header">
       <div class="mediagoblin_content">
               {% block mediagoblin_logo %}
-                <a href="{{ request.urlgen('index') }}">MediaGoblin</a>
+                <a href="{{ request.urlgen('index') }}"><img src="{{ request.staticdirect('/images/icon.png') }}" class="icon" /></a>
               {% endblock %}{% block mediagoblin_header_title %}MediaGoblin Home{% endblock %}
           {% if request.user %}
                 Welcome {{ request.user['username'] }}! --
