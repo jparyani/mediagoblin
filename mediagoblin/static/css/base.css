@@ -56,20 +56,20 @@ label {
     float:right;
 }
 
-.button_red, .button_green {
-    font-family: 'Carter One', arial, serif;
-    height: 28px;
-    min-width: 99px;
-    box-shadow: 0px 0px 5px #000;
-    border-radius: 5px;
-    border: none;
-    color: #272727;
-    margin: 10px;
-    font-size: 1em;
-    float: left;
-    display: block;
-    text-align: center;
-    padding-top: 4px;
+.button {
+    font-family:'Carter One', arial, serif;
+    height:32px;
+    min-width:99px;
+    background-color:#86d4b1;
+    box-shadow:0px 0px 4px #000;
+    border-radius:5px;
+    border:none;
+    color:#272727;
+    margin:10px;
+    font-size:1em;
+    float:left;
+    display:block;
+    text-align:center;
     padding-left:11px;
     padding-right:11px;
 }
@@ -84,12 +84,3 @@ label {
     left:0px;
     margin-top:-20px;
 }
-
-.button_red {
-    background-image: url('../images/button_red.png');
-}
-
-.button_green {
-    background-image: url('../images/button_green.png');
-}
-
