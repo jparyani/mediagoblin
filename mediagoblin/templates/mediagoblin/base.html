@@ -32,9 +32,6 @@
               {% block mediagoblin_logo %}
                 <a href="{{ request.urlgen('index') }}">MediaGoblin</a>
               {% endblock %}{% block mediagoblin_header_title %}MediaGoblin Home{% endblock %}
-              {% block mediagoblin_header_subtitle %}
-                Clever subtitle here!
-              {% endblock %}
           {% if request.user %}
                 Welcome {{ request.user['username'] }}! --
                 <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">
