@@ -34,9 +34,8 @@
               {% endblock %}{% block mediagoblin_header_title %}MediaGoblin Home{% endblock %}
         <div class="mediagoblin_header_right">
           {% if request.user %}
-                Welcome {{ request.user['username'] }}! --
-                <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">
-                  Logout</a>
+                {{ request.user['username'] }}'s account 
+                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">logout</a>)
           {% else %}
                 <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
                   Login</a>
