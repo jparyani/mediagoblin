@@ -20,7 +20,7 @@ body {
 h1 {
     font-family: 'Carter One', arial, serif;
     margin-bottom: 20px;
-    margin-top:50px;
+    margin-top:40px;
 }
 
 a {
@@ -35,10 +35,10 @@ label {
 
 .mediagoblin_header {
     width:100%;
-    height:60px;
+    height:36px;
     background-color:#393939;
-    padding-top:40px;
-    margin-bottom:80px;
+    padding-top:14px;
+    margin-bottom:40px;
 }
 
 .icon {
