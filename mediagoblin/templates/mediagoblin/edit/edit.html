@@ -1,3 +1,4 @@
+{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
@@ -13,25 +14,25 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
 
-from routes import Mapper
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
-from mediagoblin.auth.routing import auth_routes
-from mediagoblin.submit.routing import submit_routes
-from mediagoblin.user_pages.routing import user_routes
-from mediagoblin.edit.routing import edit_routes
+{% block mediagoblin_content %}
+  <h1>Edit details for {{ media.title }}</h1>
 
-def get_mapper():
-    mapping = Mapper()
-    mapping.minimization = False
-
-    mapping.connect(
-        "index", "/",
-        controller="mediagoblin.views:root_view")
-
-    mapping.extend(auth_routes, '/auth')
-    mapping.extend(submit_routes, '/submit')
-    mapping.extend(user_routes, '/u')
-    mapping.extend(edit_routes, '/edit')
-
-    return mapping
+  <form action="{{ request.urlgen('mediagoblin.edit.edit_media',
+                               media= media._id) }}"
+        method="POST" enctype="multipart/form-data">
+    <table>
+      {{ wtforms_util.render_table(form) }}
+      <tr>
+        <td></td>
+        <td><input type="submit" value="submit" class="button_green" /></td>
+      </tr>
+    </table>
+  </form>
+  <img src="{{ request.app.public_store.file_url(
+         media['media_files']['thumb']) }}" />
+{% endblock %}    

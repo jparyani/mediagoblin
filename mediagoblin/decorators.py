@@ -99,3 +99,23 @@ def get_user_media_entry(controller):
         return controller(request, media=media, *args, **kwargs)
 
     return _make_safe(wrapper, controller)
+
+def get_media_entry_by_id(controller):
+    """
+    Pass in a MediaEntry based off of a url component
+    """
+    def wrapper(request, *args, **kwargs):
+        try:
+            media = request.db.MediaEntry.find_one(
+                {'_id': ObjectId(request.matchdict['media']),
+                 'state': 'processed'})
+        except InvalidId:
+            return exc.HTTPNotFound()
+
+        # Still no media?  Okay, 404.
+        if not media:
+            return exc.HTTPNotFound()
+
+        return controller(request, media=media, *args, **kwargs)
+
+    return _make_safe(wrapper, controller)

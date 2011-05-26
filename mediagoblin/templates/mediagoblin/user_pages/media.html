@@ -41,6 +41,9 @@
       {{- media.uploader().username }}</a>
     <br />
     Description: {{ media.description }}
+    <br />
+    <a href="{{ request.urlgen('mediagoblin.edit.edit_media',
+                               media= media._id) }}">Edit</a>
   </div>
   {% else %}
   <p>Sorry, no such media found.<p/>
