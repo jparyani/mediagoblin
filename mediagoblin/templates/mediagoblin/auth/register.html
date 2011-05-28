@@ -20,11 +20,11 @@
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {% block mediagoblin_content %}
-  <h1>Create an account!</h1>
 
   <form action="{{ request.urlgen('mediagoblin.auth.register') }}"
         method="POST" enctype="multipart/form-data">
     <div class="register_box form_box">
+      <h1>Create an account!</h1>
       {{ wtforms_util.render_divs(register_form) }}
       <div class="form_submit_buttons">
         <input type="submit" value="submit" class="button" />
