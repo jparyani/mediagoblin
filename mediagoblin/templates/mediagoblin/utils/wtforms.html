@@ -26,13 +26,11 @@
       {%- endif %}
       <div class="form_field_input">{{ field }}</div>
       {%- if field.errors -%}
-        <div class="form_field_errors">
-          <ul>
-            {% for error in field.errors %}
-              <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-        </div>
+        {% for error in field.errors %}
+          <div class="form_field_error">
+            {{ error }}
+          </div>
+        {% endfor %}
       {%- endif %}
     </div>
   {% endfor %}

@@ -1,9 +1,9 @@
 body {
-    background-color: #272727;
-    color: #f7f7f7;
-    font-family: sans;
-    padding:none;
-    margin:0px;
+  background-color: #272727;
+  color: #f7f7f7;
+  font-family: sans;
+  padding:none;
+  margin:0px;
 }
 
 /* Carter One font */
@@ -18,15 +18,13 @@ body {
 /* text styles */
 
 h1 {
-    font-family: 'Carter One', arial, serif;
-    margin-bottom: 20px;
-    margin-top:40px;
+  font-family: 'Carter One', arial, serif;
+  margin-bottom: 20px;
+  margin-top:40px;
 }
 
-28px
-
 a {
-    color: #86D4B1;
+  color: #86D4B1;
 }
 
 label {
@@ -36,82 +34,90 @@ label {
 /* website structure */
 
 .mediagoblin_header {
-    width:100%;
-    height:36px;
-    background-color:#393939;
-    padding-top:14px;
-    margin-bottom:40px;
+  width:100%;
+  height:36px;
+  background-color:#393939;
+  padding-top:14px;
+  margin-bottom:40px;
 }
 
 .icon {
-    vertical-align:middle;
-    margin-right:10px;
+  vertical-align:middle;
+  margin-right:10px;
 }
 
 .mediagoblin_container {
-    width: 960px;
-    margin-left: auto;
-    margin-right: auto;
+  width: 960px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .mediagoblin_header_right {
-    float:right;
+  float:right;
 }
 
 .button {
-    font-family:'Carter One', arial, serif;
-    height:32px;
-    min-width:99px;
-    background-color:#86d4b1;
-    box-shadow:0px 0px 4px #000;
-    border-radius:5px;
-    border:none;
-    color:#272727;
-    margin:10px;
-    font-size:1em;
-    float:left;
-    display:block;
-    text-align:center;
-    padding-left:11px;
-    padding-right:11px;
+  font-family:'Carter One', arial, serif;
+  height:32px;
+  min-width:99px;
+  background-color:#86d4b1;
+  box-shadow:0px 0px 4px #000;
+  border-radius:5px;
+  border:none;
+  color:#272727;
+  margin:10px;
+  font-size:1em;
+  float:left;
+  display:block;
+  text-align:center;
+  padding-left:11px;
+  padding-right:11px;
 }
 
 /* common website elements */
 
 .dotted_line {
-    width:100%;
-    height:0px;
-    border-bottom: dotted 1px #5f5f5f;
-    position:absolute;
-    left:0px;
-    margin-top:-20px;
+  width:100%;
+  height:0px;
+  border-bottom: dotted 1px #5f5f5f;
+  position:absolute;
+  left:0px;
+  margin-top:-20px;
 }
 
 /* forms */
 
 .form_box {
-    width:300px;
-    margin-left:auto;
-    margin-right:auto;
-    background-color:#393939;
-    padding:0px 83px 83px;
-    border-top:5px solid #d49086;
-    font-size:18px;
+  width:300px;
+  margin-left:auto;
+  margin-right:auto;
+  background-color:#393939;
+  padding:0px 83px 83px;
+  border-top:5px solid #d49086;
+  font-size:18px;
 }
 
 .form_box h1 {
-    font-size:28px;
+  font-size:28px;
 }
 
 .form_field_input input {
-    width:300px;
-    font-size:18px;
+  width:300px;
+  font-size:18px;
 }
 
 .form_field_box {
-    margin-bottom:20px;
+  margin-bottom:24px;
 }
 
-.form_field_label {
-    margin-bottom:4px;
+.form_field_label,.form_field_input {
+  margin-bottom:4px;
+}
+
+.form_field_error {
+  background-color:#87453b;
+  border:none;
+  font-size:16px;
+  padding:9px;
+  margin-top:8px;
 }
