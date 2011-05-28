@@ -22,25 +22,18 @@
   {% if media %}
     <img class="media_image" src="{{ request.app.public_store.file_url(
                   media.media_files.main) }}" />
-    <br />
     <h1>
-      Media details for
-      <a href="{{ request.urlgen(
-                   'mediagoblin.user_pages.user_home',
-                    user=media.uploader().username) }}">
-        {{- media.uploader().username }}</a>
-      / {{media.title}}
+      {{media.title}}
     </h1>
-    Uploaded on
+    <p>{{ media.description }}</p>
+    <p>Uploaded on
     {{ "%4d-%02d-%02d"|format(media.created.year,
                               media.created.month, media.created.day) }}
     by
     <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                user= media.uploader().username) }}">
-      {{- media.uploader().username }}</a>
-    <br />
-    Description: {{ media.description }}
+      {{- media.uploader().username }}</a></p>
   {% else %}
   <p>Sorry, no such media found.<p/>
   {% endif %}
-{% endblock %}    
+{% endblock %}
