@@ -84,3 +84,28 @@ label {
     left:0px;
     margin-top:-20px;
 }
+
+/* forms */
+
+.form_box {
+    width:300px;
+    margin-left:auto;
+    margin-right:auto;
+    background-color:#393939;
+    padding:50px 83px 83px;
+    border-top:5px solid #d49086;
+    font-size:18px;
+}
+
+.form_field_input input {
+    width:300px;
+    font-size:18px;
+}
+
+.form_field_box {
+    margin-bottom:20px;
+}
+
+.form_field_label {
+    margin-bottom:4px;
+}
