@@ -46,9 +46,17 @@ label {
   margin-bottom:40px;
 }
 
-.icon {
-  vertical-align:middle;
+a.mediagoblin_logo {
+  width:34px;
+  height:25px;
   margin-right:10px;
+  background-image:url('../images/icon.png');
+  background-position:0px 0px;
+  display:inline-block;
+}
+
+a.mediagoblin_logo:hover {
+  background-position:0px -28px;
 }
 
 .mediagoblin_container {
