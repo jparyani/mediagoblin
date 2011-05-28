@@ -35,6 +35,7 @@
       {% if next %}
         <input type="hidden" name="next" value="{{ next }}" class="button" />
       {% endif %}
+      <p>Don't have an account yet? <a href="{{ request.urlgen('mediagoblin.auth.register') }}">Create one here!</a></p>
     </div>
   </form>
 {% endblock %}
