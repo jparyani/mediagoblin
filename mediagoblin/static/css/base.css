@@ -101,6 +101,10 @@ label {
   font-size:18px;
 }
 
+.submit_box {
+  width:600px;
+}
+
 .form_box h1 {
   font-size:28px;
 }
