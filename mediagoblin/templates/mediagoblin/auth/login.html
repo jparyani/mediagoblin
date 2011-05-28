@@ -20,25 +20,21 @@
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {% block mediagoblin_content %}
-  <h1>Login:</h1>
 
   <form action="{{ request.urlgen('mediagoblin.auth.login') }}"
         method="POST" enctype="multipart/form-data">
-
-    {% if login_failed %}
-      <p><i>Login failed!</i></p>
-    {% endif %}
-
-    <table>
-      {{ wtforms_util.render_table(login_form) }}
-      <tr>
-        <td></td>
-        <td><input type="submit" value="submit" class="button"/></td>
-      </tr>
-    </table>
-
-    {% if next %}
-      <input type="hidden" name="next" value="{{ next }}" class="button" />
-    {% endif %}
+    <div class="login_box form_box">
+      <h1>Log in</h1>
+      {% if login_failed %}
+        <div class="form_field_error">Login failed!</div>
+      {% endif %}
+      {{ wtforms_util.render_divs(login_form) }}
+      <div class="form_submit_buttons">
+        <input type="submit" value="submit" class="button"/>
+      </div>
+      {% if next %}
+        <input type="hidden" name="next" value="{{ next }}" class="button" />
+      {% endif %}
+    </div>
   </form>
 {% endblock %}
