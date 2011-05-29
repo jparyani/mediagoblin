@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 
 from webob import Response, exc
 
@@ -31,8 +32,11 @@ def register(request):
 
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
+
         users_with_username = \
-            request.db.User.find({'username': request.POST['username']}).count()
+            request.db.User.find({
+                'username': request.POST['username'].lower()
+            }).count()
 
         if users_with_username:
             register_form.username.errors.append(
@@ -41,7 +45,8 @@ def register(request):
         else:
             # Create the user
             entry = request.db.User()
-            entry['username'] = request.POST['username']
+            entry['username'] = request.POST['username'].lower()
+            entry['username_repr'] = request.POST['username']
             entry['email'] = request.POST['email']
             entry['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
@@ -61,7 +66,7 @@ def register(request):
                 # example "GNU MediaGoblin @ Wandborg - [...]".   
                 'GNU MediaGoblin - Verify email',
                 email_template.render(
-                    username=entry['username'],
+                    username=entry['username_repr'],
                     verification_url='http://{host}{uri}?userid={userid}&token={verification_key}'.format(
                         host=request.host,
                         uri=request.urlgen('mediagoblin.auth.verify_email'),
@@ -101,7 +106,7 @@ def login(request):
 
     if request.method == 'POST' and login_form.validate():
         user = request.db.User.one(
-            {'username': request.POST['username']})
+            {'username': request.POST['username'].lower()})
 
         if user and user.check_login(request.POST['password']):
             # set up login in session
