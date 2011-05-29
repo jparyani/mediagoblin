@@ -146,3 +146,15 @@ img.media_image {
   margin-left:auto;
   margin-right:auto;
 }
+
+li.media_thumbnail {
+        width: 200px;
+        min-height: 250px;
+        display: -moz-inline-stack;
+        display: inline-block;
+        vertical-align: top;
+        margin: 5px;
+        zoom: 1;
+        *display: inline;
+        _height: 250px;
+}
