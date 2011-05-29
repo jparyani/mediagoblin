@@ -28,11 +28,8 @@
   {% if user %}
     <h1>User page for '{{ user.username }}'</h1>
 
-    <ul>
-      
-      {% include "mediagoblin/utils/object_gallery.html" %}
+    {% include "mediagoblin/utils/object_gallery.html" %}
 
-    </ul>
     <a href={{ request.urlgen(
                    'mediagoblin.user_pages.atom_feed',
                    user=user.username) }}> atom feed</a>
