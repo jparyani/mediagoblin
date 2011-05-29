@@ -38,7 +38,6 @@ class User(Document):
 
     structure = {
         'username': unicode,
-        'username_repr': unicode,
         'email': unicode,
         'created': datetime.datetime,
         'plugin_data': dict, # plugins can dump stuff here.
@@ -49,7 +48,7 @@ class User(Document):
         'is_admin': bool,
         }
 
-    required_fields = ['username', 'username_repr', 'created', 'pw_hash', 'email']
+    required_fields = ['username', 'created', 'pw_hash', 'email']
 
     default_values = {
         'created': datetime.datetime.utcnow,

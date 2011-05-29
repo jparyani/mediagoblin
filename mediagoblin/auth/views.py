@@ -44,7 +44,6 @@ def register(request):
             # Create the user
             entry = request.db.User()
             entry['username'] = request.POST['username'].lower()
-            entry['username_repr'] = request.POST['username']
             entry['email'] = request.POST['email']
             entry['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
@@ -64,7 +63,7 @@ def register(request):
                 # example "GNU MediaGoblin @ Wandborg - [...]".   
                 'GNU MediaGoblin - Verify email',
                 email_template.render(
-                    username=entry['username_repr'],
+                    username=entry['username'],
                     verification_url='http://{host}{uri}?userid={userid}&token={verification_key}'.format(
                         host=request.host,
                         uri=request.urlgen('mediagoblin.auth.verify_email'),
