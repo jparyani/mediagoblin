@@ -147,14 +147,17 @@ img.media_image {
   margin-right:auto;
 }
 
+ul.media_thumbnail {
+  padding:0px;
+}
+
 li.media_thumbnail {
-        width: 200px;
-        min-height: 250px;
-        display: -moz-inline-stack;
-        display: inline-block;
-        vertical-align: top;
-        margin: 5px;
-        zoom: 1;
-        *display: inline;
-        _height: 250px;
+  width:200px;
+  height:133px;
+  display:-moz-inline-stack;
+  display:inline-block;
+  vertical-align:top;
+  margin:0px 10px 10px 0px;
+  zoom:1;
+. *display:inline;
 }
