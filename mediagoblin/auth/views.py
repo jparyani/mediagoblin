@@ -168,3 +168,18 @@ def verify_email(request):
             {'request': request,
              'user': user,
              'verification_successful': verification_successful}))
+
+def verify_email_notice(request):
+    """
+    Verify warning view.
+
+    When the user tries to do some action that requires their account
+    to be verified beforehand, this view is called upon!
+    """
+
+    template = request.template_env.get_template(
+        'mediagoblin/auth/verification_needed.html')
+    return Response(
+        template.render(
+            {'request': request}))
+

@@ -41,7 +41,7 @@ def require_active_login(controller):
             # here because an *active* user is required.
             return exc.HTTPFound(
                 location="%s?next=%s" % (
-                    request.urlgen("mediagoblin.auth.login"),
+                    request.urlgen("mediagoblin.auth.verify_email_notice"),
                     request.path_info))
 
         return controller(request, *args, **kwargs)
