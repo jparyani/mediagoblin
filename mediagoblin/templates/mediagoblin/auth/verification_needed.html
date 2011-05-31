@@ -24,6 +24,6 @@
   </p>
 
   <p>
-    Still haven't received an email? <a href="#">Click here to resend it.</a>
+    Still haven't received an email? <a href="{{ request.urlgen('mediagoblin.auth.resend_verification') }}">Click here to resend it.</a>
   </p>
 {% endblock %}
