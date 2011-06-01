@@ -149,12 +149,16 @@ def verify_email(request):
     validates GET parameters against database and unlocks the user account, if
     you are lucky :)
     """
+    # If we don't have userid and token parameters, we can't do anything; 404
+    if not request.GET.has_key('userid') or not request.GET.has_key('token'):
+        return exc.HTTPNotFound()
+
     user = request.db.User.find_one(
-        {'_id': bson.objectid.ObjectId(unicode(request.GET.get('userid')))})
+        {'_id': bson.objectid.ObjectId(unicode(request.GET['userid']))})
 
     verification_successful = bool
 
-    if user and user['verification_key'] == unicode(request.GET.get('token')):
+    if user and user['verification_key'] == unicode(request.GET['token']):
         user['status'] = u'active'
         user['email_verified'] = True
         verification_successful = True
