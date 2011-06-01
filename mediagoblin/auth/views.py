@@ -168,3 +168,59 @@ def verify_email(request):
             {'request': request,
              'user': user,
              'verification_successful': verification_successful}))
+
+def verify_email_notice(request):
+    """
+    Verify warning view.
+
+    When the user tries to do some action that requires their account
+    to be verified beforehand, this view is called upon!
+    """
+
+    template = request.template_env.get_template(
+        'mediagoblin/auth/verification_needed.html')
+    return Response(
+        template.render(
+            {'request': request}))
+
+def resend_activation(request):
+    """
+    The reactivation view
+
+    Resend the activation email.
+    """
+
+    request.user.generate_new_verification_key()
+
+    # Copied shamelessly from the register view above.
+
+    email_template = request.template_env.get_template(
+        'mediagoblin/auth/verification_email.txt')
+
+    # TODO: There is no error handling in place
+    send_email(
+        mgoblin_globals.email_sender_address,
+        [request.user['email']],
+        # TODO
+        # Due to the distributed nature of GNU MediaGoblin, we should
+        # find a way to send some additional information about the 
+        # specific GNU MediaGoblin instance in the subject line. For 
+        # example "GNU MediaGoblin @ Wandborg - [...]".   
+        'GNU MediaGoblin - Verify email',
+        email_template.render(
+            username=request.user['username'],
+            verification_url='http://{host}{uri}?userid={userid}&token={verification_key}'.format(
+                host=request.host,
+                uri=request.urlgen('mediagoblin.auth.verify_email'),
+                userid=unicode(request.user['_id']),
+                verification_key=request.user['verification_key'])))
+
+
+    # TODO: For now, we use the successful registration page until we get a 
+    # proper messaging system.
+
+    template = request.template_env.get_template(
+        'mediagoblin/auth/register_success.html')
+    return exc.HTTPFound(
+        location=request.urlgen('mediagoblin.auth.register_success'))
+
