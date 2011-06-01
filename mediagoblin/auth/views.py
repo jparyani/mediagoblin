@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import bson.objectid
 from webob import Response, exc
 
 from mediagoblin.auth import lib as auth_lib
@@ -148,7 +149,6 @@ def verify_email(request):
     validates GET parameters against database and unlocks the user account, if
     you are lucky :)
     """
-    import bson.objectid
     user = request.db.User.find_one(
         {'_id': bson.objectid.ObjectId(unicode(request.GET.get('userid')))})
 
