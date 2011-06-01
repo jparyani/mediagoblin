@@ -140,6 +140,7 @@ def logout(request):
     return exc.HTTPFound(
         location=request.urlgen("index"))
 
+
 def verify_email(request):
     """
     Email verification view
@@ -183,6 +184,7 @@ def verify_email_notice(request):
         template.render(
             {'request': request}))
 
+
 def resend_activation(request):
     """
     The reactivation view
@@ -215,12 +217,13 @@ def resend_activation(request):
                 userid=unicode(request.user['_id']),
                 verification_key=request.user['verification_key'])))
 
-
-    # TODO: For now, we use the successful registration page until we get a 
-    # proper messaging system.
-
-    template = request.template_env.get_template(
-        'mediagoblin/auth/register_success.html')
     return exc.HTTPFound(
-        location=request.urlgen('mediagoblin.auth.register_success'))
+        location=request.urlgen('mediagoblin.auth.resend_verification_success'))
 
+
+def resend_activation_success(request):
+    template = request.template_env.get_template(
+        'mediagoblin/auth/resent_verification_email.html')
+    return Response(
+        template.render(
+            {'request': request}))

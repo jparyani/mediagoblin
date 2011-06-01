@@ -30,4 +30,7 @@ auth_routes = [
     Route('mediagoblin.auth.verify_email_notice', '/verification_required/',
           controller='mediagoblin.auth.views:verify_email_notice'),
     Route('mediagoblin.auth.resend_verification', '/resend_verification/',
-          controller='mediagoblin.auth.views:resend_activation')]
+          controller='mediagoblin.auth.views:resend_activation'),
+    Route('mediagoblin.auth.resend_verification_success',
+          '/resend_verification_success/',
+          controller='mediagoblin.auth.views:resend_activation_success')]
