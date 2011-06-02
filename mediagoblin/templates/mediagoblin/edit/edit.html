@@ -25,13 +25,12 @@
   <form action="{{ request.urlgen('mediagoblin.edit.edit_media',
                                media= media._id) }}"
         method="POST" enctype="multipart/form-data">
-    <table>
-      {{ wtforms_util.render_table(form) }}
-      <tr>
-        <td></td>
-        <td><input type="submit" value="submit" class="button" /></td>
-      </tr>
-    </table>
+    <div class="submit_box form_box">
+      {{ wtforms_util.render_divs(form) }}
+      <div class="form_submit_buttons">
+        <input type="submit" value="submit" class="button" />
+      </div>
+    </div>
   </form>
   <img src="{{ request.app.public_store.file_url(
          media['media_files']['thumb']) }}" />
