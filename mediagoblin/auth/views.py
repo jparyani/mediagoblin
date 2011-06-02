@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import bson.objectid
 from webob import Response, exc
 
+from mediagoblin.db.util import ObjectId
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.util import send_email
@@ -154,7 +154,7 @@ def verify_email(request):
         return exc.HTTPNotFound()
 
     user = request.db.User.find_one(
-        {'_id': bson.objectid.ObjectId(unicode(request.GET['userid']))})
+        {'_id': ObjectId(unicode(request.GET['userid']))})
 
     verification_successful = bool
 
