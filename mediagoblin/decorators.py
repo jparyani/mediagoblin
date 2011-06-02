@@ -36,9 +36,12 @@ def require_active_login(controller):
     Require an active login from the user.
     """
     def new_controller_func(request, *args, **kwargs):
-        if not request.user or not request.user.get('status') == u'active':
-            # TODO: Indicate to the user that they were redirected
-            # here because an *active* user is required.
+        if request.user and \
+                request.user.get('status') == u'needs_email_verification':
+            return exc.HTTPFound(
+                location = request.urlgen(
+                    'mediagoblin.auth.verify_email_notice'))
+        elif not request.user or request.user.get('status') != u'active':
             return exc.HTTPFound(
                 location="%s?next=%s" % (
                     request.urlgen("mediagoblin.auth.login"),

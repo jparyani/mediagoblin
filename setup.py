@@ -18,7 +18,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "mediagoblin",
-    version = "0.0.1",
+    version = "0.0.2",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     zip_safe=False,
     # scripts and dependencies
@@ -45,7 +45,7 @@ setup(
     test_suite='nose.collector',
 
     license = 'AGPLv3',
-    author = 'Christopher Webber',
+    author = 'Free Software Foundation and contributors',
     author_email = 'cwebber@gnu.org',
     entry_points = """\
       [console_scripts]
