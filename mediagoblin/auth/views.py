@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+import bson.objectid
 from webob import Response, exc
 
 from mediagoblin.auth import lib as auth_lib
@@ -31,8 +31,11 @@ def register(request):
 
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
+
         users_with_username = \
-            request.db.User.find({'username': request.POST['username']}).count()
+            request.db.User.find({
+                'username': request.POST['username'].lower()
+            }).count()
 
         if users_with_username:
             register_form.username.errors.append(
@@ -41,7 +44,7 @@ def register(request):
         else:
             # Create the user
             entry = request.db.User()
-            entry['username'] = request.POST['username']
+            entry['username'] = request.POST['username'].lower()
             entry['email'] = request.POST['email']
             entry['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
@@ -101,7 +104,7 @@ def login(request):
 
     if request.method == 'POST' and login_form.validate():
         user = request.db.User.one(
-            {'username': request.POST['username']})
+            {'username': request.POST['username'].lower()})
 
         if user and user.check_login(request.POST['password']):
             # set up login in session
@@ -138,6 +141,7 @@ def logout(request):
     return exc.HTTPFound(
         location=request.urlgen("index"))
 
+
 def verify_email(request):
     """
     Email verification view
@@ -145,13 +149,16 @@ def verify_email(request):
     validates GET parameters against database and unlocks the user account, if
     you are lucky :)
     """
-    import bson.objectid
+    # If we don't have userid and token parameters, we can't do anything; 404
+    if not request.GET.has_key('userid') or not request.GET.has_key('token'):
+        return exc.HTTPNotFound()
+
     user = request.db.User.find_one(
-        {'_id': bson.objectid.ObjectId(unicode(request.GET.get('userid')))})
+        {'_id': bson.objectid.ObjectId(unicode(request.GET['userid']))})
 
     verification_successful = bool
 
-    if user and user['verification_key'] == unicode(request.GET.get('token')):
+    if user and user['verification_key'] == unicode(request.GET['token']):
         user['status'] = u'active'
         user['email_verified'] = True
         verification_successful = True
@@ -166,3 +173,61 @@ def verify_email(request):
             {'request': request,
              'user': user,
              'verification_successful': verification_successful}))
+
+def verify_email_notice(request):
+    """
+    Verify warning view.
+
+    When the user tries to do some action that requires their account
+    to be verified beforehand, this view is called upon!
+    """
+
+    template = request.template_env.get_template(
+        'mediagoblin/auth/verification_needed.html')
+    return Response(
+        template.render(
+            {'request': request}))
+
+
+def resend_activation(request):
+    """
+    The reactivation view
+
+    Resend the activation email.
+    """
+
+    request.user.generate_new_verification_key()
+
+    # Copied shamelessly from the register view above.
+
+    email_template = request.template_env.get_template(
+        'mediagoblin/auth/verification_email.txt')
+
+    # TODO: There is no error handling in place
+    send_email(
+        mgoblin_globals.email_sender_address,
+        [request.user['email']],
+        # TODO
+        # Due to the distributed nature of GNU MediaGoblin, we should
+        # find a way to send some additional information about the 
+        # specific GNU MediaGoblin instance in the subject line. For 
+        # example "GNU MediaGoblin @ Wandborg - [...]".   
+        'GNU MediaGoblin - Verify email',
+        email_template.render(
+            username=request.user['username'],
+            verification_url='http://{host}{uri}?userid={userid}&token={verification_key}'.format(
+                host=request.host,
+                uri=request.urlgen('mediagoblin.auth.verify_email'),
+                userid=unicode(request.user['_id']),
+                verification_key=request.user['verification_key'])))
+
+    return exc.HTTPFound(
+        location=request.urlgen('mediagoblin.auth.resend_verification_success'))
+
+
+def resend_activation_success(request):
+    template = request.template_env.get_template(
+        'mediagoblin/auth/resent_verification_email.html')
+    return Response(
+        template.render(
+            {'request': request}))

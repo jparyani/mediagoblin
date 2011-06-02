@@ -17,7 +17,7 @@
 #}
 <html>
   <head>
-    <title>{% block title %}MediaGoblin{% endblock title %}</title>
+    <title>{% block title %}GNU MediaGoblin{% endblock title %}</title>
     <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/base.css') }}"/>
     {% block mediagoblin_head %}
@@ -30,13 +30,12 @@
       <div class="mediagoblin_header">
       <div class="mediagoblin_container">
               {% block mediagoblin_logo %}
-                <a href="{{ request.urlgen('index') }}"><img src="{{ request.staticdirect('/images/icon.png') }}" class="icon" /></a>
-              {% endblock %}{% block mediagoblin_header_title %}GNU MediaGoblin Home{% endblock %}
+                <a class="mediagoblin_logo" href="{{ request.urlgen('index') }}"></a>
+              {% endblock %}{% block mediagoblin_header_title %}{% endblock %}
         <div class="mediagoblin_header_right">
           {% if request.user %}
-                Welcome {{ request.user['username'] }}! --
-                <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">
-                  Logout</a>
+                {{ request.user['username'] }}'s account 
+                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">logout</a>)
           {% else %}
                 <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
                   Login</a>

@@ -64,6 +64,14 @@ class User(Document):
         return auth_lib.bcrypt_check_password(
             password, self['pw_hash'])
 
+    def generate_new_verification_key(self):
+        """
+        Create a new verification key, overwriting the old one.
+        """
+
+        self['verification_key'] = unicode(uuid.uuid4())
+        self.save(validate=False)
+
 
 class MediaEntry(Document):
     __collection__ = 'media_entries'
@@ -95,7 +103,7 @@ class MediaEntry(Document):
         'thumbnail_file': [unicode]}
 
     required_fields = [
-        'uploader', 'created', 'media_type']
+        'uploader', 'created', 'media_type', 'slug']
 
     default_values = {
         'created': datetime.datetime.utcnow,
@@ -103,11 +111,10 @@ class MediaEntry(Document):
 
     migration_handler = migrations.MediaEntryMigration
 
-    # Actually we should referene uniqueness by uploader, but we
-    # should fix http://bugs.foocorp.net/issues/340 first.
-    # indexes = [
-    #     {'fields': ['uploader', 'slug'],
-    #      'unique': True}]
+    indexes = [
+        # Referene uniqueness of slugs by uploader
+        {'fields': ['uploader', 'slug'],
+         'unique': True}]
 
     def main_mediafile(self):
         pass

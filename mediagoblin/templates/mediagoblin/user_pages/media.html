@@ -20,32 +20,22 @@
 
   {# temporarily, an "image gallery" that isn't one really ;) #}
   {% if media %}
-  <h1>
-    Media details for
-    <a href="{{ request.urlgen(
-                  'mediagoblin.user_pages.user_home',
-                  user=media.uploader().username) }}">
-      {{- media.uploader().username }}</a>
-    / {{media.title}}
-  </h1>
-  <div>
-    <img src="{{ request.app.public_store.file_url(
+    <img class="media_image" src="{{ request.app.public_store.file_url(
                   media.media_files.main) }}" />
-    <br />
-    Uploaded on
+    <h1>
+      {{media.title}}
+    </h1>
+    <p>{{ media.description }}</p>
+    <p>Uploaded on
     {{ "%4d-%02d-%02d"|format(media.created.year,
                               media.created.month, media.created.day) }}
     by
     <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                user= media.uploader().username) }}">
-      {{- media.uploader().username }}</a>
-    <br />
-    Description: {{ media.description }}
-    <br />
-    <a href="{{ request.urlgen('mediagoblin.edit.edit_media',
-                               media= media._id) }}">Edit</a>
-  </div>
+      {{- media.uploader().username }}</a></p>
+    <p><a href="{{ request.urlgen('mediagoblin.edit.edit_media',
+                               media= media._id) }}">Edit</a></p>
   {% else %}
   <p>Sorry, no such media found.<p/>
   {% endif %}
-{% endblock %}    
+{% endblock %}
