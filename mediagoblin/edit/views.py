@@ -5,9 +5,22 @@ from webob import Response, exc
 from mediagoblin.edit import forms
 from mediagoblin.decorators import require_active_login, get_media_entry_by_id
 
+
+def may_edit_media(request, media):
+    """Check, if the request's user may edit the media details"""
+    if media['uploader'] == request.user['_id']:
+        return True
+    if request.user['is_admin']:
+        return True
+    return False
+    
+
 @get_media_entry_by_id
 @require_active_login
 def edit_media(request, media):
+    if not may_edit_media(request, media):
+        return exc.HTTPForbidden()
+
     form = forms.EditForm(request.POST,
         title = media['title'],
         slug = media['slug'],
