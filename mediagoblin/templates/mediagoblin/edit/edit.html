@@ -23,6 +23,7 @@
   <h1>Edit details for {{ media.title }}</h1>
 
   <form action="{{ request.urlgen('mediagoblin.edit.edit_media',
+                               user= media.uploader().username,
                                media= media._id) }}"
         method="POST" enctype="multipart/form-data">
     <div class="submit_box form_box">

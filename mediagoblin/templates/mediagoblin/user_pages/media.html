@@ -34,6 +34,7 @@
                                user= media.uploader().username) }}">
       {{- media.uploader().username }}</a></p>
     <p><a href="{{ request.urlgen('mediagoblin.edit.edit_media',
+                               user= media.uploader().username,
                                media= media._id) }}">Edit</a></p>
   {% else %}
   <p>Sorry, no such media found.<p/>

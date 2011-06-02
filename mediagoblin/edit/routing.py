@@ -17,6 +17,6 @@
 from routes.route import Route
 
 edit_routes = [
-    Route('mediagoblin.edit.edit_media', "/{media}/",
+    Route('mediagoblin.edit.edit_media', "/{user}/{media}/",
         controller="mediagoblin.edit.views:edit_media"),
 ]
