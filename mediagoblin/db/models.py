@@ -64,14 +64,6 @@ class User(Document):
         return auth_lib.bcrypt_check_password(
             password, self['pw_hash'])
 
-    def generate_new_verification_key(self):
-        """
-        Create a new verification key, overwriting the old one.
-        """
-
-        self['verification_key'] = unicode(uuid.uuid4())
-        self.save(validate=False)
-
 
 class MediaEntry(Document):
     __collection__ = 'media_entries'

@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import uuid
+
 from webob import Response, exc
 
 from mediagoblin.db.util import ObjectId
@@ -195,8 +197,8 @@ def resend_activation(request):
 
     Resend the activation email.
     """
-
-    request.user.generate_new_verification_key()
+    request.user['verification_key'] = unicode(uuid.uuid4())
+    request.user.save()
 
     # Copied shamelessly from the register view above.
 
