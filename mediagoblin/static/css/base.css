@@ -69,23 +69,6 @@ a.mediagoblin_logo:hover {
   float:right;
 }
 
-.button {
-  font-family:'Carter One', arial, serif;
-  height:32px;
-  min-width:99px;
-  background-color:#86d4b1;
-  box-shadow:0px 0px 4px #000;
-  border-radius:5px;
-  border:none;
-  color:#272727;
-  margin:10px;
-  font-size:1em;
-  display:block;
-  text-align:center;
-  padding-left:11px;
-  padding-right:11px;
-}
-
 /* common website elements */
 
 .dotted_line {
@@ -95,6 +78,28 @@ a.mediagoblin_logo:hover {
   position:absolute;
   left:0px;
   margin-top:-20px;
+}
+
+.button {
+  font-family:'Carter One', arial, serif;
+  height:32px;
+  min-width:99px;
+  background-color:#86d4b1;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#86d4b1), to(#62caa2)); 
+  background-image: -webkit-linear-gradient(top, #86d4b1, #62caa2); 
+  background-image:    -moz-linear-gradient(top, #86d4b1, #62caa2); 
+  background-image:     -ms-linear-gradient(top, #86d4b1, #62caa2); 
+  background-image:      -o-linear-gradient(top, #86d4b1, #62caa2); 
+  background-image:         linear-gradient(top, #86d4b1, #62caa2);
+  box-shadow:0px 0px 4px #000;
+  border-radius:5px;
+  border:none;
+  color:#272727;
+  margin:10px 0px;
+  font-size:1em;
+  text-align:center;
+  padding-left:11px;
+  padding-right:11px;
 }
 
 /* forms */
@@ -137,6 +142,10 @@ a.mediagoblin_logo:hover {
   padding:9px;
   margin-top:8px;
   margin-bottom:8px;
+}
+
+.form_submit_buttons {
+  text-align:right;
 }
 
 /* media pages */
