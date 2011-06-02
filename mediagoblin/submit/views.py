@@ -21,7 +21,7 @@ from webob import Response, exc
 from werkzeug.utils import secure_filename
 
 from mediagoblin.decorators import require_active_login
-from mediagoblin.submit import forms as submit_forms
+from mediagoblin.submit import forms as submit_forms, security
 from mediagoblin.process_media import process_media_initial
 
 
@@ -38,6 +38,9 @@ def submit_start(request):
                 and request.POST['file'].file):
             submit_form.file.errors.append(
                 u'You must provide a file.')
+        elif not security.check_filetype(request.POST['file']):
+            submit_form.file.errors.append(
+                u'The file doesn\'t seem to be an image!')
         else:
             filename = request.POST['file'].filename
 
