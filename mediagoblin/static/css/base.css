@@ -109,8 +109,9 @@ a.mediagoblin_logo:hover {
   margin-left:auto;
   margin-right:auto;
   background-color:#393939;
-  padding:0px 83px 30px 83px;
-  border-top:5px solid #d49086;
+  background-image:url("../images/background_lines.png");
+  background-repeat:repeat-x;
+  padding:1px 83px 30px 83px;
   font-size:18px;
 }
 
