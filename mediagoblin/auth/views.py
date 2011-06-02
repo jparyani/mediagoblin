@@ -158,8 +158,6 @@ def verify_email(request):
     user = request.db.User.find_one(
         {'_id': ObjectId(unicode(request.GET['userid']))})
 
-    verification_successful = bool
-
     if user and user['verification_key'] == unicode(request.GET['token']):
         user['status'] = u'active'
         user['email_verified'] = True
