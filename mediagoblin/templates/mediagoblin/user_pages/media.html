@@ -20,11 +20,11 @@
 
   {# temporarily, an "image gallery" that isn't one really ;) #}
   {% if media %}
-    <img class="media_image" src="{{ request.app.public_store.file_url(
-                  media.media_files.main) }}" />
     <h1>
       {{media.title}}
     </h1>
+    <img class="media_image" src="{{ request.app.public_store.file_url(
+                  media.media_files.main) }}" />
     <p>{{ media.description }}</p>
     <p>Uploaded on
     {{ "%4d-%02d-%02d"|format(media.created.year,
