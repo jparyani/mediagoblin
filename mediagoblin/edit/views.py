@@ -34,18 +34,25 @@ def edit_media(request, media):
         description = media['description'])
 
     if request.method == 'POST' and form.validate():
-        media['title'] = request.POST['title']
-        media['description'] = request.POST['description']
-        media['slug'] = request.POST['slug']
-        try:
-            media.save()
-        except Exception as e:
-            return exc.HTTPConflict(detail = str(e))
+        # Make sure there isn't already a MediaEntry with such a slug
+        # and userid.
+        existing_user_slug_entries = request.db.MediaEntry.find(
+            {'slug': request.POST['slug'],
+             'uploader': media['uploader'],
+             '_id': {'$ne': media['_id']}}).count()
+        
+        if existing_user_slug_entries:
+            form.slug.errors.append(
+                u'An entry with that slug already exists for this user.')
+        else:
+            media['title'] = request.POST['title']
+            media['description'] = request.POST['description']
+            media['slug'] = request.POST['slug']
 
-        # redirect
-        return exc.HTTPFound(
-            location=request.urlgen("mediagoblin.user_pages.media_home",
-                user=media.uploader()['username'], media=media['_id']))
+            # redirect
+            return exc.HTTPFound(
+                location=request.urlgen("mediagoblin.user_pages.media_home",
+                    user=media.uploader()['username'], media=media['_id']))
 
     # render
     template = request.template_env.get_template(
