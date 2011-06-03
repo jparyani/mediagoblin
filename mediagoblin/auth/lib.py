@@ -19,6 +19,9 @@ import random
 
 import bcrypt
 
+from mediagoblin.util import send_email
+from mediagoblin import globals as mgoblin_globals
+
 
 def bcrypt_check_password(raw_pass, stored_hash, extra_salt=None):
     """
@@ -84,3 +87,34 @@ def fake_login_attempt():
     randplus_hashed_pass = bcrypt.hashpw(hashed_pass, rand_salt)
 
     randplus_stored_hash == randplus_hashed_pass
+
+
+def send_verification_email(user, request):
+    """
+    Send the verification email to users to activate their accounts.
+
+    Args:
+    - user: a user object
+    - request: the request 
+    """
+
+    email_template = request.template_env.get_template(
+        'mediagoblin/auth/verification_email.txt')
+
+    # TODO: There is no error handling in place
+    send_email(
+        mgoblin_globals.email_sender_address,
+        [user['email']],
+        # TODO
+        # Due to the distributed nature of GNU MediaGoblin, we should
+        # find a way to send some additional information about the 
+        # specific GNU MediaGoblin instance in the subject line. For 
+        # example "GNU MediaGoblin @ Wandborg - [...]".   
+        'GNU MediaGoblin - Verify your email!',
+        email_template.render(
+            username=user['username'],
+            verification_url='http://{host}{uri}?userid={userid}&token={verification_key}'.format(
+            host=request.host,
+            uri=request.urlgen('mediagoblin.auth.verify_email'),
+            userid=unicode(user['_id']),
+            verification_key=user['verification_key'])))
