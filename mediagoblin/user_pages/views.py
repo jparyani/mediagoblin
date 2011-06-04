@@ -16,7 +16,7 @@
 
 from webob import Response, exc
 from mediagoblin.db.util import DESCENDING
-from mediagoblin.util import Pagination
+from mediagoblin.util import Pagination, render_template
 
 from mediagoblin.decorators import uses_pagination, get_user_media_entry
 
@@ -42,13 +42,10 @@ def user_home(request, page):
     if media_entries == None:
         return exc.HTTPNotFound()
     
-    template = request.template_env.get_template(
-        'mediagoblin/user_pages/user.html')
-
     return Response(
-        template.render(
-            {'request': request,
-             'user': user,
+        render_template(
+            request, 'mediagoblin/user_pages/user.html',
+            {'user': user,
              'media_entries': media_entries,
              'pagination': pagination}))
 
@@ -56,12 +53,11 @@ def user_home(request, page):
 @get_user_media_entry
 def media_home(request, media):
     """'Homepage' of a MediaEntry()"""
-    template = request.template_env.get_template(
-        'mediagoblin/user_pages/media.html')
     return Response(
-        template.render(
-            {'request': request,
-             'media': media}))
+        render_template(
+            request, 'mediagoblin/user_pages/media.html',
+            {'media': media}))
+
 
 ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 5
 

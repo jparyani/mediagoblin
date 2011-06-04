@@ -20,6 +20,7 @@ from cgi import FieldStorage
 from webob import Response, exc
 from werkzeug.utils import secure_filename
 
+from mediagoblin.util import render_template
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms
 from mediagoblin.process_media import process_media_initial
@@ -80,18 +81,14 @@ def submit_start(request):
                 location=request.urlgen("mediagoblin.submit.success"))
 
     # render
-    template = request.template_env.get_template(
-        'mediagoblin/submit/start.html')
     return Response(
-        template.render(
-            {'request': request,
-             'submit_form': submit_form}))
+        render_template(
+            request, 'mediagoblin/submit/start.html',
+            {'submit_form': submit_form}))
 
 
 def submit_success(request):
     # render
-    template = request.template_env.get_template(
-        'mediagoblin/submit/success.html')
     return Response(
-        template.render(
-            {'request': request}))
+        render_template(
+            request, 'mediagoblin/submit/success.html', {}))

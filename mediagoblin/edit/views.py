@@ -17,6 +17,7 @@
 
 from webob import Response, exc
 
+from mediagoblin.util import render_template
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry
@@ -56,10 +57,8 @@ def edit_media(request, media):
                     user=media.uploader()['username'], media=media['slug']))
 
     # render
-    template = request.template_env.get_template(
-        'mediagoblin/edit/edit.html')
     return Response(
-        template.render(
-            {'request': request,
-             'media': media,
+        render_template(
+            request, 'mediagoblin/edit/edit.html',
+            {'media': media,
              'form': form}))

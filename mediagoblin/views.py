@@ -15,15 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from webob import Response
+
+from mediagoblin.util import render_template
 from mediagoblin.db.util import DESCENDING
 
 def root_view(request):
     media_entries = request.db.MediaEntry.find(
         {u'state': u'processed'}).sort('created', DESCENDING)
     
-    template = request.template_env.get_template(
-        'mediagoblin/root.html')
     return Response(
-        template.render(
-            {'request': request,
-             'media_entries': media_entries}))
+        render_template(
+            request, 'mediagoblin/root.html',
+             {'media_entries': media_entries}))

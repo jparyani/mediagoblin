@@ -18,6 +18,7 @@ import uuid
 
 from webob import Response, exc
 
+from mediagoblin.util import render_template
 from mediagoblin.db.util import ObjectId
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
@@ -58,20 +59,16 @@ def register(request):
                 location=request.urlgen("mediagoblin.auth.register_success"))
 
     # render
-    template = request.template_env.get_template(
-        'mediagoblin/auth/register.html')
     return Response(
-        template.render(
-            {'request': request,
-             'register_form': register_form}))
+        render_template(
+            request, 'mediagoblin/auth/register.html',
+            {'register_form': register_form}))
 
 
 def register_success(request):
-    template = request.template_env.get_template(
-        'mediagoblin/auth/register_success.html')
     return Response(
-        template.render(
-            {'request': request}))
+        render_template(
+            request, 'mediagoblin/auth/register_success.html', {}))
 
 
 def login(request):
@@ -106,12 +103,10 @@ def login(request):
             login_failed = True
 
     # render
-    template = request.template_env.get_template(
-        'mediagoblin/auth/login.html')
     return Response(
-        template.render(
-            {'request': request,
-             'login_form': login_form,
+        render_template(
+            request, 'mediagoblin/auth/login.html',
+            {'login_form': login_form,
              'next': request.GET.get('next') or request.POST.get('next'),
              'login_failed': login_failed}))
 
@@ -146,12 +141,10 @@ def verify_email(request):
     else:
         verification_successful = False
         
-    template = request.template_env.get_template(
-        'mediagoblin/auth/verify_email.html')
     return Response(
-        template.render(
-            {'request': request,
-             'user': user,
+        render_template(
+            request, 'mediagoblin/auth/verify_email.html',
+            {'user': user,
              'verification_successful': verification_successful}))
 
 def verify_email_notice(request):
@@ -161,12 +154,9 @@ def verify_email_notice(request):
     When the user tries to do some action that requires their account
     to be verified beforehand, this view is called upon!
     """
-
-    template = request.template_env.get_template(
-        'mediagoblin/auth/verification_needed.html')
     return Response(
-        template.render(
-            {'request': request}))
+        render_template(
+            request, 'mediagoblin/auth/verification_needed.html', {}))
 
 
 def resend_activation(request):
@@ -186,8 +176,6 @@ def resend_activation(request):
 
 
 def resend_activation_success(request):
-    template = request.template_env.get_template(
-        'mediagoblin/auth/resent_verification_email.html')
     return Response(
-        template.render(
-            {'request': request}))
+        render_template(
+            request, 'mediagoblin/auth/resent_verification_email.html', {}))
