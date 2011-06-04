@@ -53,7 +53,7 @@ def edit_media(request, media):
             # redirect
             return exc.HTTPFound(
                 location=request.urlgen("mediagoblin.user_pages.media_home",
-                    user=media.uploader()['username'], media=media['_id']))
+                    user=media.uploader()['username'], media=media['slug']))
 
     # render
     template = request.template_env.get_template(
