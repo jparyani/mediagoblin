@@ -48,6 +48,7 @@ def edit_media(request, media):
             media['title'] = request.POST['title']
             media['description'] = request.POST['description']
             media['slug'] = request.POST['slug']
+            media.save()
 
             # redirect
             return exc.HTTPFound(
