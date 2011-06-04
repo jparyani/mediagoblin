@@ -78,6 +78,33 @@ def get_jinja_env(template_loader, locale):
     return template_env
 
 
+# We'll store context information here when doing unit tests
+TEMPLATE_TEST_CONTEXT = {}
+
+
+def render_template(request, template, context):
+    """
+    Render a template with context.
+
+    Always inserts the request into the context, so you don't have to.
+    Also stores the context if we're doing unit tests.  Helpful!
+    """
+    template = request.template_env.get_template(
+        template)
+    context['request'] = request
+    rendered = template.render(context)
+
+    if TESTS_ENABLED:
+        TEMPLATE_TEST_CONTEXT[template] = context
+
+    return rendered
+
+
+def clear_test_template_context():
+    global TEMPLATE_TEST_CONTEXT
+    TEMPLATE_TEST_CONTEXT = {}
+
+
 def setup_user_in_request(request):
     """
     Examine a request and tack on a request.user parameter if that's
