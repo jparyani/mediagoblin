@@ -41,6 +41,7 @@ setup(
         'Babel',
         'translitcodec',
         'argparse',
+        'webtest',
         ],
     test_suite='nose.collector',
 
