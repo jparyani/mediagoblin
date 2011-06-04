@@ -25,6 +25,7 @@ import urllib
 from math import ceil
 import copy
 
+from babel.localedata import exists
 import jinja2
 import translitcodec
 from paste.deploy.loadwsgi import NicerConfigParser
@@ -58,6 +59,9 @@ def get_jinja_loader(user_template_path=None):
         return jinja2.PackageLoader('mediagoblin', 'templates')
 
 
+SETUP_JINJA_ENVS = {}
+
+
 def get_jinja_env(template_loader, locale):
     """
     Set up the Jinja environment, 
@@ -67,6 +71,11 @@ def get_jinja_env(template_loader, locale):
     """
     setup_gettext(locale)
 
+    # If we have a jinja environment set up with this locale, just
+    # return that one.
+    if SETUP_JINJA_ENVS.has_key(locale):
+        return SETUP_JINJA_ENVS[locale]
+
     template_env = jinja2.Environment(
         loader=template_loader, autoescape=True,
         extensions=['jinja2.ext.i18n'])
@@ -74,6 +83,9 @@ def get_jinja_env(template_loader, locale):
     template_env.install_gettext_callables(
         mgoblin_globals.translations.gettext,
         mgoblin_globals.translations.ngettext)
+
+    if exists(locale):
+        SETUP_JINJA_ENVS[locale] = template_env
 
     return template_env
 
@@ -330,6 +342,8 @@ def read_config_file(conf_file):
     return mgoblin_conf
 
 
+SETUP_GETTEXTS = {}
+
 def setup_gettext(locale):
     """
     Setup the gettext instance based on this locale
@@ -340,8 +354,13 @@ def setup_gettext(locale):
 
     # TODO: fallback nicely on translations from pt_PT to pt if not
     # available, etc.
-    this_gettext = gettext.translation(
-        'mediagoblin', TRANSLATIONS_PATH, [locale], fallback=True)
+    if SETUP_GETTEXTS.has_key(locale):
+        this_gettext = SETUP_GETTEXTS[locale]
+    else:
+        this_gettext = gettext.translation(
+            'mediagoblin', TRANSLATIONS_PATH, [locale], fallback=True)
+        if exists(locale):
+            SETUP_GETTEXTS[locale] = this_gettext
 
     mgoblin_globals.setup_globals(
         translations=this_gettext)
