@@ -140,6 +140,7 @@ def setup_celery_from_config(app_config, global_config,
 
     if force_celery_always_eager:
         celery_settings['CELERY_ALWAYS_EAGER'] = True
+        celery_settings['CELERY_EAGER_PROPAGATES_EXCEPTIONS'] = True
 
     __import__(settings_module)
     this_module = sys.modules[settings_module]
