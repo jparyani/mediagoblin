@@ -22,5 +22,7 @@ user_routes = [
     Route('mediagoblin.user_pages.media_home', '/{user}/m/{media}/',
         requirements=dict(m_id="[0-9a-fA-F]{24}"),
         controller="mediagoblin.user_pages.views:media_home"),
+    Route('mediagoblin.edit.edit_media', "/{user}/m/{media}/edit/",
+        controller="mediagoblin.edit.views:edit_media"),
     Route('mediagoblin.user_pages.atom_feed', '/{user}/atom/',
         controller="mediagoblin.user_pages.views:atom_feed")]
