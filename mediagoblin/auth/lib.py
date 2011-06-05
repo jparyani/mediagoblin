@@ -19,7 +19,7 @@ import random
 
 import bcrypt
 
-from mediagoblin.util import send_email
+from mediagoblin.util import send_email, render_template
 from mediagoblin import globals as mgoblin_globals
 
 
@@ -101,9 +101,14 @@ def send_verification_email(user, request):
     - user: a user object
     - request: the request 
     """
-
-    email_template = request.template_env.get_template(
-        'mediagoblin/auth/verification_email.txt')
+    rendered_email = render_template(
+        request, 'mediagoblin/auth/verification_email.txt',
+        {'username': user['username'],
+         'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
+                host=request.host,
+                uri=request.urlgen('mediagoblin.auth.verify_email'),
+                userid=unicode(user['_id']),
+                verification_key=user['verification_key'])})
 
     # TODO: There is no error handling in place
     send_email(
@@ -115,10 +120,4 @@ def send_verification_email(user, request):
         # specific GNU MediaGoblin instance in the subject line. For 
         # example "GNU MediaGoblin @ Wandborg - [...]".   
         'GNU MediaGoblin - Verify your email!',
-        email_template.render(
-            username=user['username'],
-            verification_url=EMAIL_VERIFICATION_TEMPLATE.format(
-                host=request.host,
-                uri=request.urlgen('mediagoblin.auth.verify_email'),
-                userid=unicode(user['_id']),
-                verification_key=user['verification_key'])))
+        rendered_email)
