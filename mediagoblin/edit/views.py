@@ -17,7 +17,7 @@
 
 from webob import exc
 
-from mediagoblin.util import render_to_response
+from mediagoblin.util import render_to_response, redirect
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry
@@ -51,10 +51,8 @@ def edit_media(request, media):
             media['slug'] = request.POST['slug']
             media.save()
 
-            # redirect
-            return exc.HTTPFound(
-                location=request.urlgen("mediagoblin.user_pages.media_home",
-                    user=media.uploader()['username'], media=media['slug']))
+            return redirect(request, "mediagoblin.user_pages.media_home",
+                user=media.uploader()['username'], media=media['slug'])
 
     return render_to_response(request,
         'mediagoblin/edit/edit.html',

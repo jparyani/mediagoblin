@@ -18,7 +18,7 @@ import uuid
 
 from webob import exc
 
-from mediagoblin.util import render_to_response
+from mediagoblin.util import render_to_response, redirect
 from mediagoblin.db.util import ObjectId
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
@@ -54,9 +54,7 @@ def register(request):
             
             send_verification_email(entry, request)
 
-            # Redirect to register_success
-            return exc.HTTPFound(
-                location=request.urlgen("mediagoblin.auth.register_success"))
+            return redirect(request, "mediagoblin.auth.register_success")
 
     return render_to_response(request,
         'mediagoblin/auth/register.html',
@@ -90,8 +88,7 @@ def login(request):
             if request.POST.get('next'):
                 return exc.HTTPFound(location=request.POST['next'])
             else:
-                return exc.HTTPFound(
-                    location=request.urlgen("index"))
+                return redirect(request, "index")
 
         else:
             # Prevent detecting who's on this system by testing login
@@ -110,8 +107,7 @@ def logout(request):
     # Maybe deleting the user_id parameter would be enough?
     request.session.delete()
     
-    return exc.HTTPFound(
-        location=request.urlgen("index"))
+    return redirect(request, "index")
 
 
 def verify_email(request):
@@ -164,8 +160,7 @@ def resend_activation(request):
 
     send_verification_email(request.user, request)
 
-    return exc.HTTPFound(
-        location=request.urlgen('mediagoblin.auth.resend_verification_success'))
+    return redirect(request, 'mediagoblin.auth.resend_verification_success')
 
 
 def resend_activation_success(request):
