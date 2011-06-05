@@ -77,11 +77,12 @@ def submit_start(request):
 
             return redirect(request, "mediagoblin.submit.success")
 
-    return render_to_response(request,
+    return render_to_response(
+        request,
         'mediagoblin/submit/start.html',
         {'submit_form': submit_form})
 
 
 def submit_success(request):
-    return render_to_response(request,
-        'mediagoblin/submit/success.html', {})
+    return render_to_response(
+        request, 'mediagoblin/submit/success.html', {})

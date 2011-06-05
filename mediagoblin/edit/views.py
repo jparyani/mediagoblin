@@ -54,7 +54,8 @@ def edit_media(request, media):
             return redirect(request, "mediagoblin.user_pages.media_home",
                 user=media.uploader()['username'], media=media['slug'])
 
-    return render_to_response(request,
+    return render_to_response(
+        request,
         'mediagoblin/edit/edit.html',
         {'media': media,
          'form': form})

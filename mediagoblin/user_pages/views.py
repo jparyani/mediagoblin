@@ -42,7 +42,8 @@ def user_home(request, page):
     if media_entries == None:
         return exc.HTTPNotFound()
     
-    return render_to_response(request,
+    return render_to_response(
+        request,
         'mediagoblin/user_pages/user.html',
         {'user': user,
          'media_entries': media_entries,
@@ -52,7 +53,8 @@ def user_home(request, page):
 @get_user_media_entry
 def media_home(request, media):
     """'Homepage' of a MediaEntry()"""
-    return render_to_response(request,
+    return render_to_response(
+        request,
         'mediagoblin/user_pages/media.html',
         {'media': media})
 
