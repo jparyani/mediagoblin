@@ -14,16 +14,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from webob import Response
-
-from mediagoblin.util import render_template
+from mediagoblin.util import render_to_response
 from mediagoblin.db.util import DESCENDING
 
 def root_view(request):
     media_entries = request.db.MediaEntry.find(
         {u'state': u'processed'}).sort('created', DESCENDING)
     
-    return Response(
-        render_template(
+    return render_to_response(
             request, 'mediagoblin/root.html',
-             {'media_entries': media_entries}))
+             {'media_entries': media_entries})

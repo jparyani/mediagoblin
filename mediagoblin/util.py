@@ -29,6 +29,7 @@ from babel.localedata import exists
 import jinja2
 import translitcodec
 from paste.deploy.loadwsgi import NicerConfigParser
+from webob import Response
 
 from mediagoblin import globals as mgoblin_globals
 from mediagoblin.db.util import ObjectId
@@ -115,6 +116,11 @@ def render_template(request, template, context):
 def clear_test_template_context():
     global TEMPLATE_TEST_CONTEXT
     TEMPLATE_TEST_CONTEXT = {}
+
+
+def render_to_response(request, template, context):
+    """Much like Django's shortcut.render()"""
+    return Response(render_template(request, template, context))
 
 
 def setup_user_in_request(request):
