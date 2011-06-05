@@ -22,6 +22,15 @@ def root_view(request):
         {u'state': u'processed'}).sort('created', DESCENDING)
     
     return render_to_response(
-        request,
-        'mediagoblin/root.html',
+        request, 'mediagoblin/root.html',
         {'media_entries': media_entries})
+
+
+def simple_template_render(request):
+    """
+    A view for absolutely simple template rendering.
+    Just make sure 'template' is in the matchdict!
+    """
+    template_name = request.matchdict['template']
+    return render_to_response(
+        request, template_name, {})

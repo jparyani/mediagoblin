@@ -20,5 +20,5 @@ submit_routes = [
     Route('mediagoblin.submit.start', '/',
           controller='mediagoblin.submit.views:submit_start'),
     Route('mediagoblin.submit.success', '/success/',
-          controller='mediagoblin.submit.views:submit_success'),
-    ]
+          template='mediagoblin/submit/success.html',
+          controller='mediagoblin.views:simple_template_render')]

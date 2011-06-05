@@ -62,12 +62,6 @@ def register(request):
         {'register_form': register_form})
 
 
-def register_success(request):
-    return render_to_response(
-        request,
-        'mediagoblin/auth/register_success.html', {})
-
-
 def login(request):
     """
     MediaGoblin login view.
@@ -141,16 +135,6 @@ def verify_email(request):
         {'user': user,
          'verification_successful': verification_successful})
 
-def verify_email_notice(request):
-    """
-    Verify warning view.
-
-    When the user tries to do some action that requires their account
-    to be verified beforehand, this view is called upon!
-    """
-    return render_to_response(
-        request, 'mediagoblin/auth/verification_needed.html', {})
-
 
 def resend_activation(request):
     """
@@ -158,15 +142,9 @@ def resend_activation(request):
 
     Resend the activation email.
     """
-
     request.user['verification_key'] = unicode(uuid.uuid4())
     request.user.save()
 
     send_verification_email(request.user, request)
 
     return redirect(request, 'mediagoblin.auth.resend_verification_success')
-
-
-def resend_activation_success(request):
-    return render_to_response(
-        request, 'mediagoblin/auth/resent_verification_email.html', {})
