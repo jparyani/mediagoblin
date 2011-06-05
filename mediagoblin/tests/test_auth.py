@@ -66,6 +66,9 @@ def test_bcrypt_gen_password_hash():
 
 
 def test_register_views():
+    """
+    Massive test function that all our registration-related views all work.
+    """
     util.clear_test_template_context()
     test_app = get_test_app()
 
