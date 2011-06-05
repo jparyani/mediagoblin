@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from webob import Response, exc
+from webob import exc
 from mediagoblin.db.util import DESCENDING
-from mediagoblin.util import Pagination, render_template
+from mediagoblin.util import Pagination, render_to_response
 
 from mediagoblin.decorators import uses_pagination, get_user_media_entry
 
@@ -42,21 +42,19 @@ def user_home(request, page):
     if media_entries == None:
         return exc.HTTPNotFound()
     
-    return Response(
-        render_template(
-            request, 'mediagoblin/user_pages/user.html',
-            {'user': user,
-             'media_entries': media_entries,
-             'pagination': pagination}))
+    return render_to_response(request,
+        'mediagoblin/user_pages/user.html',
+        {'user': user,
+         'media_entries': media_entries,
+         'pagination': pagination})
 
 
 @get_user_media_entry
 def media_home(request, media):
     """'Homepage' of a MediaEntry()"""
-    return Response(
-        render_template(
-            request, 'mediagoblin/user_pages/media.html',
-            {'media': media}))
+    return render_to_response(request,
+        'mediagoblin/user_pages/media.html',
+        {'media': media})
 
 
 ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 5

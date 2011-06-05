@@ -17,10 +17,9 @@
 from os.path import splitext
 from cgi import FieldStorage
 
-from webob import Response, exc
 from werkzeug.utils import secure_filename
 
-from mediagoblin.util import render_template
+from mediagoblin.util import render_to_response, redirect
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms
 from mediagoblin.process_media import process_media_initial
@@ -76,19 +75,13 @@ def submit_start(request):
             # queue it for processing
             process_media_initial.delay(unicode(entry['_id']))
 
-            # redirect
-            return exc.HTTPFound(
-                location=request.urlgen("mediagoblin.submit.success"))
+            return redirect(request, "mediagoblin.submit.success")
 
-    # render
-    return Response(
-        render_template(
-            request, 'mediagoblin/submit/start.html',
-            {'submit_form': submit_form}))
+    return render_to_response(request,
+        'mediagoblin/submit/start.html',
+        {'submit_form': submit_form})
 
 
 def submit_success(request):
-    # render
-    return Response(
-        render_template(
-            request, 'mediagoblin/submit/success.html', {}))
+    return render_to_response(request,
+        'mediagoblin/submit/success.html', {})

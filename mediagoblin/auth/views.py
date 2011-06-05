@@ -16,9 +16,9 @@
 
 import uuid
 
-from webob import Response, exc
+from webob import exc
 
-from mediagoblin.util import render_template
+from mediagoblin.util import render_to_response, redirect
 from mediagoblin.db.util import ObjectId
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
@@ -54,21 +54,16 @@ def register(request):
             
             send_verification_email(entry, request)
 
-            # Redirect to register_success
-            return exc.HTTPFound(
-                location=request.urlgen("mediagoblin.auth.register_success"))
+            return redirect(request, "mediagoblin.auth.register_success")
 
-    # render
-    return Response(
-        render_template(
-            request, 'mediagoblin/auth/register.html',
-            {'register_form': register_form}))
+    return render_to_response(request,
+        'mediagoblin/auth/register.html',
+        {'register_form': register_form})
 
 
 def register_success(request):
-    return Response(
-        render_template(
-            request, 'mediagoblin/auth/register_success.html', {}))
+    return render_to_response(request,
+        'mediagoblin/auth/register_success.html', {})
 
 
 def login(request):
@@ -93,8 +88,7 @@ def login(request):
             if request.POST.get('next'):
                 return exc.HTTPFound(location=request.POST['next'])
             else:
-                return exc.HTTPFound(
-                    location=request.urlgen("index"))
+                return redirect(request, "index")
 
         else:
             # Prevent detecting who's on this system by testing login
@@ -102,21 +96,18 @@ def login(request):
             auth_lib.fake_login_attempt()
             login_failed = True
 
-    # render
-    return Response(
-        render_template(
-            request, 'mediagoblin/auth/login.html',
-            {'login_form': login_form,
-             'next': request.GET.get('next') or request.POST.get('next'),
-             'login_failed': login_failed}))
+    return render_to_response(request,
+        'mediagoblin/auth/login.html',
+        {'login_form': login_form,
+         'next': request.GET.get('next') or request.POST.get('next'),
+         'login_failed': login_failed})
 
 
 def logout(request):
     # Maybe deleting the user_id parameter would be enough?
     request.session.delete()
     
-    return exc.HTTPFound(
-        location=request.urlgen("index"))
+    return redirect(request, "index")
 
 
 def verify_email(request):
@@ -141,11 +132,10 @@ def verify_email(request):
     else:
         verification_successful = False
         
-    return Response(
-        render_template(
-            request, 'mediagoblin/auth/verify_email.html',
-            {'user': user,
-             'verification_successful': verification_successful}))
+    return render_to_response(request,
+        'mediagoblin/auth/verify_email.html',
+        {'user': user,
+         'verification_successful': verification_successful})
 
 def verify_email_notice(request):
     """
@@ -154,9 +144,8 @@ def verify_email_notice(request):
     When the user tries to do some action that requires their account
     to be verified beforehand, this view is called upon!
     """
-    return Response(
-        render_template(
-            request, 'mediagoblin/auth/verification_needed.html', {}))
+    return render_to_response(request,
+        'mediagoblin/auth/verification_needed.html', {})
 
 
 def resend_activation(request):
@@ -171,11 +160,9 @@ def resend_activation(request):
 
     send_verification_email(request.user, request)
 
-    return exc.HTTPFound(
-        location=request.urlgen('mediagoblin.auth.resend_verification_success'))
+    return redirect(request, 'mediagoblin.auth.resend_verification_success')
 
 
 def resend_activation_success(request):
-    return Response(
-        render_template(
-            request, 'mediagoblin/auth/resent_verification_email.html', {}))
+    return render_to_response(request,
+        'mediagoblin/auth/resent_verification_email.html', {})
