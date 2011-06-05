@@ -14,11 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import urlparse
+
+from nose.tools import assert_equal
 
 from mediagoblin.auth import lib as auth_lib
-
 from mediagoblin.tests.tools import get_test_app
-
 from mediagoblin import globals as mgoblin_globals
 from mediagoblin import util
 
@@ -139,10 +140,51 @@ def test_register_views():
 
     # Successful register
     # -------------------
+    util.clear_test_template_context()
+    response = test_app.post(
+        '/auth/register/', {
+            'username': 'happygirl',
+            'password': 'iamsohappy',
+            'confirm_password': 'iamsohappy',
+            'email': 'happygrrl@example.org'})
+    response.follow()
+
     ## Did we redirect to the proper page?  Use the right template?
+    assert_equal(
+        urlparse.urlsplit(response.location)[2],
+        '/auth/register/success/')
+    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+        'mediagoblin/auth/register_success.html')
+
     ## Make sure user is in place
-    ## Make sure we get email confirmation
-    ## Try logging in
+    new_user = mgoblin_globals.database.User.find_one(
+        {'username': 'happygirl'})
+    assert new_user
+    assert new_user['status'] == u'needs_email_verification'
+    assert new_user['email_verified'] == False
+
+    ## Make sure we get email confirmation, and try verifying
+    assert len(util.EMAIL_TEST_INBOX) == 1
+    message = util.EMAIL_TEST_INBOX.pop()
+    assert message['To'] == 'happygrrl@example.org'
+    email_context = util.TEMPLATE_TEST_CONTEXT[
+        'mediagoblin/auth/verification_email.txt']
+    assert email_context['verification_url'] in message.get_payload(decode=True)
+
+    path = urlparse.urlsplit(email_context['verification_url'])[2]
+    get_params = urlparse.urlsplit(email_context['verification_url'])[3]
+    assert path == u'/auth/verify_email/'
+    parsed_get_params = urlparse.parse_qs(get_params)
+
+    ### user should have these same parameters
+    assert parsed_get_params['userid'] == [
+        unicode(new_user['_id'])]
+    assert parsed_get_params['token'] == [
+        new_user['verification_key']]
+    
+    ## Verify the email
+
+    ## TODO: Try logging in
     
     # Uniqueness checks
     # -----------------
