@@ -19,6 +19,7 @@ from mediagoblin.auth import lib as auth_lib
 
 from mediagoblin.tests.tools import get_test_app
 
+from mediagoblin import globals as mgoblin_globals
 from mediagoblin import util
 
 
@@ -68,12 +69,16 @@ def test_register_views():
     test_app = get_test_app()
 
     # Test doing a simple GET on the page
+    # -----------------------------------
+
     test_app.get('/auth/register/')
     # Make sure it rendered with the appropriate template
     assert util.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/auth/register.html')
     
     # Try to register without providing anything, should error
+    # --------------------------------------------------------
+
     util.clear_test_template_context()
     test_app.post(
         '/auth/register/', {})
@@ -83,3 +88,62 @@ def test_register_views():
     assert form.password.errors == [u'This field is required.']
     assert form.confirm_password.errors == [u'This field is required.']
     assert form.email.errors == [u'This field is required.']
+
+    # Try to register with fields that are known to be invalid
+    # --------------------------------------------------------
+
+    ## too short
+    util.clear_test_template_context()
+    test_app.post(
+        '/auth/register/', {
+            'username': 'l',
+            'password': 'o',
+            'confirm_password': 'o',
+            'email': 'l'})
+    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
+    form = context['register_form']
+
+    assert form.username.errors == [
+        u'Field must be between 3 and 30 characters long.']
+    assert form.password.errors == [
+        u'Field must be between 6 and 30 characters long.']
+
+    ## bad form
+    util.clear_test_template_context()
+    test_app.post(
+        '/auth/register/', {
+            'username': '@_@',
+            'email': 'lollerskates'})
+    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
+    form = context['register_form']
+
+    assert form.username.errors == [
+        u'Invalid input.']
+    assert form.email.errors == [
+        u'Invalid email address.']
+
+    ## mismatching passwords
+    util.clear_test_template_context()
+    test_app.post(
+        '/auth/register/', {
+            'password': 'herpderp',
+            'confirm_password': 'derpherp'})
+    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
+    form = context['register_form']
+
+    assert form.password.errors == [
+        u'Passwords must match.']
+
+    ## At this point there should be no users in the database ;)
+    assert not mgoblin_globals.database.User.find().count()
+
+    # Successful register
+    # -------------------
+    ## Did we redirect to the proper page?  Use the right template?
+    ## Make sure user is in place
+    ## Make sure we get email confirmation
+    ## Try logging in
+    
+    # We shouldn't be able to register with that user twice though...
+
+    # Also check for double instances of an email address
