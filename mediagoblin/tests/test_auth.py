@@ -17,6 +17,10 @@
 
 from mediagoblin.auth import lib as auth_lib
 
+from mediagoblin.tests.tools import get_test_app
+
+from mediagoblin import util
+
 
 ########################
 # Test bcrypt auth funcs
@@ -57,3 +61,25 @@ def test_bcrypt_gen_password_hash():
         pw, hashed_pw, '3><7R45417')
     assert not auth_lib.bcrypt_check_password(
         'notthepassword', hashed_pw, '3><7R45417')
+
+
+def test_register_views():
+    util.clear_test_template_context()
+    test_app = get_test_app()
+
+    # Test doing a simple GET on the page
+    test_app.get('/auth/register/')
+    # Make sure it rendered with the appropriate template
+    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+        'mediagoblin/auth/register.html')
+    
+    # Try to register without providing anything, should error
+    util.clear_test_template_context()
+    test_app.post(
+        '/auth/register/', {})
+    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
+    form = context['register_form']
+    assert form.username.errors == [u'This field is required.']
+    assert form.password.errors == [u'This field is required.']
+    assert form.confirm_password.errors == [u'This field is required.']
+    assert form.email.errors == [u'This field is required.']
