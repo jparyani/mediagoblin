@@ -80,13 +80,11 @@ def submit_start(request):
             return exc.HTTPFound(
                 location=request.urlgen("mediagoblin.submit.success"))
 
-    # render
-    return render_to_response(
-            request, 'mediagoblin/submit/start.html',
-            {'submit_form': submit_form})
+    return render_to_response(request,
+        'mediagoblin/submit/start.html',
+        {'submit_form': submit_form})
 
 
 def submit_success(request):
-    # render
-    return render_to_response(
-            request, 'mediagoblin/submit/success.html', {})
+    return render_to_response(request,
+        'mediagoblin/submit/success.html', {})

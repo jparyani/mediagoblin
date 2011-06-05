@@ -42,19 +42,19 @@ def user_home(request, page):
     if media_entries == None:
         return exc.HTTPNotFound()
     
-    return render_to_response(
-            request, 'mediagoblin/user_pages/user.html',
-            {'user': user,
-             'media_entries': media_entries,
-             'pagination': pagination})
+    return render_to_response(request,
+        'mediagoblin/user_pages/user.html',
+        {'user': user,
+         'media_entries': media_entries,
+         'pagination': pagination})
 
 
 @get_user_media_entry
 def media_home(request, media):
     """'Homepage' of a MediaEntry()"""
-    return render_to_response(
-            request, 'mediagoblin/user_pages/media.html',
-            {'media': media})
+    return render_to_response(request,
+        'mediagoblin/user_pages/media.html',
+        {'media': media})
 
 
 ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 5

@@ -58,15 +58,14 @@ def register(request):
             return exc.HTTPFound(
                 location=request.urlgen("mediagoblin.auth.register_success"))
 
-    # render
-    return render_to_response(
-            request, 'mediagoblin/auth/register.html',
-            {'register_form': register_form})
+    return render_to_response(request,
+        'mediagoblin/auth/register.html',
+        {'register_form': register_form})
 
 
 def register_success(request):
-    return render_to_response(
-            request, 'mediagoblin/auth/register_success.html', {})
+    return render_to_response(request,
+        'mediagoblin/auth/register_success.html', {})
 
 
 def login(request):
@@ -100,12 +99,11 @@ def login(request):
             auth_lib.fake_login_attempt()
             login_failed = True
 
-    # render
-    return render_to_response(
-            request, 'mediagoblin/auth/login.html',
-            {'login_form': login_form,
-             'next': request.GET.get('next') or request.POST.get('next'),
-             'login_failed': login_failed})
+    return render_to_response(request,
+        'mediagoblin/auth/login.html',
+        {'login_form': login_form,
+         'next': request.GET.get('next') or request.POST.get('next'),
+         'login_failed': login_failed})
 
 
 def logout(request):
@@ -138,10 +136,10 @@ def verify_email(request):
     else:
         verification_successful = False
         
-    return render_to_response(
-            request, 'mediagoblin/auth/verify_email.html',
-            {'user': user,
-             'verification_successful': verification_successful})
+    return render_to_response(request,
+        'mediagoblin/auth/verify_email.html',
+        {'user': user,
+         'verification_successful': verification_successful})
 
 def verify_email_notice(request):
     """
@@ -150,8 +148,8 @@ def verify_email_notice(request):
     When the user tries to do some action that requires their account
     to be verified beforehand, this view is called upon!
     """
-    return render_to_response(
-            request, 'mediagoblin/auth/verification_needed.html', {})
+    return render_to_response(request,
+        'mediagoblin/auth/verification_needed.html', {})
 
 
 def resend_activation(request):
@@ -171,5 +169,5 @@ def resend_activation(request):
 
 
 def resend_activation_success(request):
-    return render_to_response(
-            request, 'mediagoblin/auth/resent_verification_email.html', {})
+    return render_to_response(request,
+        'mediagoblin/auth/resent_verification_email.html', {})

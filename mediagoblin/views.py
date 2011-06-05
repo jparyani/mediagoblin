@@ -21,6 +21,6 @@ def root_view(request):
     media_entries = request.db.MediaEntry.find(
         {u'state': u'processed'}).sort('created', DESCENDING)
     
-    return render_to_response(
-            request, 'mediagoblin/root.html',
-             {'media_entries': media_entries})
+    return render_to_response(request,
+        'mediagoblin/root.html',
+        {'media_entries': media_entries})
