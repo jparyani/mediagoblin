@@ -94,7 +94,7 @@ def get_jinja_env(template_loader, locale):
 TEMPLATE_TEST_CONTEXT = {}
 
 
-def render_template(request, template, context):
+def render_template(request, template_path, context):
     """
     Render a template with context.
 
@@ -102,12 +102,12 @@ def render_template(request, template, context):
     Also stores the context if we're doing unit tests.  Helpful!
     """
     template = request.template_env.get_template(
-        template)
+        template_path)
     context['request'] = request
     rendered = template.render(context)
 
     if TESTS_ENABLED:
-        TEMPLATE_TEST_CONTEXT[template] = context
+        TEMPLATE_TEST_CONTEXT[template_path] = context
 
     return rendered
 
