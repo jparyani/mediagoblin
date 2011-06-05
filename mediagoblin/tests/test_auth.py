@@ -213,5 +213,18 @@ def test_register_views():
     # Uniqueness checks
     # -----------------
     ## We shouldn't be able to register with that user twice
+    util.clear_test_template_context()
+    response = test_app.post(
+        '/auth/register/', {
+            'username': 'happygirl',
+            'password': 'iamsohappy2',
+            'confirm_password': 'iamsohappy2',
+            'email': 'happygrrl2@example.org'})
+    
+    context = util.TEMPLATE_TEST_CONTEXT[
+        'mediagoblin/auth/register.html']
+    form = context['register_form']
+    assert form.username.errors == [
+        u'Sorry, a user with that name already exists.']
 
-    ## Also check for double instances of an email address
+    ## TODO: Also check for double instances of an email address?
