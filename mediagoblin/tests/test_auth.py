@@ -144,6 +144,8 @@ def test_register_views():
     ## Make sure we get email confirmation
     ## Try logging in
     
-    # We shouldn't be able to register with that user twice though...
+    # Uniqueness checks
+    # -----------------
+    ## We shouldn't be able to register with that user twice
 
-    # Also check for double instances of an email address
+    ## Also check for double instances of an email address
