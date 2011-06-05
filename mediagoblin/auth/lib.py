@@ -89,6 +89,10 @@ def fake_login_attempt():
     randplus_stored_hash == randplus_hashed_pass
 
 
+EMAIL_VERIFICATION_TEMPLATE = (
+    u"http://{host}{uri}?"
+    u"userid={userid}&token={verification_key}")
+
 def send_verification_email(user, request):
     """
     Send the verification email to users to activate their accounts.
@@ -113,8 +117,8 @@ def send_verification_email(user, request):
         'GNU MediaGoblin - Verify your email!',
         email_template.render(
             username=user['username'],
-            verification_url='http://{host}{uri}?userid={userid}&token={verification_key}'.format(
-            host=request.host,
-            uri=request.urlgen('mediagoblin.auth.verify_email'),
-            userid=unicode(user['_id']),
-            verification_key=user['verification_key'])))
+            verification_url=EMAIL_VERIFICATION_TEMPLATE.format(
+                host=request.host,
+                uri=request.urlgen('mediagoblin.auth.verify_email'),
+                userid=unicode(user['_id']),
+                verification_key=user['verification_key'])))
