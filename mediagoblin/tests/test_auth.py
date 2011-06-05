@@ -182,7 +182,31 @@ def test_register_views():
     assert parsed_get_params['token'] == [
         new_user['verification_key']]
     
-    ## Verify the email
+    ## Try verifying with bs verification key, shouldn't work
+    util.clear_test_template_context()
+    test_app.get(
+        "/auth/verify_email/?userid=%s&token=total_bs" % unicode(
+            new_user['_id']))
+    context = util.TEMPLATE_TEST_CONTEXT[
+        'mediagoblin/auth/verify_email.html']
+    assert context['verification_successful'] == False
+    new_user = mgoblin_globals.database.User.find_one(
+        {'username': 'happygirl'})
+    assert new_user
+    assert new_user['status'] == u'needs_email_verification'
+    assert new_user['email_verified'] == False
+
+    ## Verify the email activation works
+    util.clear_test_template_context()
+    test_app.get("%s?%s" % (path, get_params))
+    context = util.TEMPLATE_TEST_CONTEXT[
+        'mediagoblin/auth/verify_email.html']
+    assert context['verification_successful'] == True
+    new_user = mgoblin_globals.database.User.find_one(
+        {'username': 'happygirl'})
+    assert new_user
+    assert new_user['status'] == u'active'
+    assert new_user['email_verified'] == True
 
     ## TODO: Try logging in
     
