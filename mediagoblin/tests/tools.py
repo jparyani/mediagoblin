@@ -18,10 +18,9 @@
 import pkg_resources
 import os, shutil
 
-from paste.deploy import appconfig
+from paste.deploy import appconfig, loadapp
 from webtest import TestApp
 
-from mediagoblin import app
 from mediagoblin.db.open import setup_connection_and_db_from_config
 
 
@@ -88,7 +87,7 @@ def get_test_app(dump_old_app=True):
     # TODO: Drop and recreate indexes
 
     # setup app and return
-    test_app = app.paste_app_factory(
-        config.global_conf, **config.local_conf)
+    test_app = loadapp(
+        'config:' + TEST_APP_CONFIG)
 
     return TestApp(test_app)
