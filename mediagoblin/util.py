@@ -44,6 +44,26 @@ def _activate_testing():
     TESTS_ENABLED = True
 
 
+def clear_test_buckets():
+    """
+    We store some things for testing purposes that should be cleared
+    when we want a "clean slate" of information for our next round of
+    tests.  Call this function to wipe all that stuff clean.
+
+    Also wipes out some other things we might redefine during testing,
+    like the jinja envs.
+    """
+    global SETUP_JINJA_ENVS
+    SETUP_JINJA_ENVS = {}
+
+    global EMAIL_TEST_INBOX
+    global EMAIL_TEST_MBOX_INBOX
+    EMAIL_TEST_INBOX = []
+    EMAIL_TEST_MBOX_INBOX = []
+
+    clear_test_template_context()
+
+
 def get_jinja_loader(user_template_path=None):
     """
     Set up the Jinja template loaders, possibly allowing for user
