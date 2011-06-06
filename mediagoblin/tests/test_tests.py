@@ -14,11 +14,25 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from routes.route import Route
+from mediagoblin.tests.tools import get_test_app
 
-submit_routes = [
-    Route('mediagoblin.submit.start', '/',
-          controller='mediagoblin.submit.views:submit_start'),
-    Route('mediagoblin.submit.success', '/success/',
-          template='mediagoblin/submit/success.html',
-          controller='mediagoblin.views:simple_template_render')]
+from mediagoblin import globals as mgoblin_globals
+
+
+def test_get_test_app_wipes_db():
+    """
+    Make sure we get a fresh database on every wipe :)
+    """
+    get_test_app()
+    assert mgoblin_globals.database.User.find().count() == 0
+
+    new_user = mgoblin_globals.database.User()
+    new_user['username'] = u'lolcat'
+    new_user['email'] = u'lol@cats.example.org'
+    new_user['pw_hash'] = u'pretend_this_is_a_hash'
+    new_user.save()
+    assert mgoblin_globals.database.User.find().count() == 1
+
+    get_test_app()
+
+    assert mgoblin_globals.database.User.find().count() == 0

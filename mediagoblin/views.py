@@ -14,16 +14,23 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from webob import Response
+from mediagoblin.util import render_to_response
 from mediagoblin.db.util import DESCENDING
 
 def root_view(request):
     media_entries = request.db.MediaEntry.find(
         {u'state': u'processed'}).sort('created', DESCENDING)
     
-    template = request.template_env.get_template(
-        'mediagoblin/root.html')
-    return Response(
-        template.render(
-            {'request': request,
-             'media_entries': media_entries}))
+    return render_to_response(
+        request, 'mediagoblin/root.html',
+        {'media_entries': media_entries})
+
+
+def simple_template_render(request):
+    """
+    A view for absolutely simple template rendering.
+    Just make sure 'template' is in the matchdict!
+    """
+    template_name = request.matchdict['template']
+    return render_to_response(
+        request, template_name, {})

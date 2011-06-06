@@ -20,7 +20,8 @@ auth_routes = [
     Route('mediagoblin.auth.register', '/register/',
           controller='mediagoblin.auth.views:register'),
     Route('mediagoblin.auth.register_success', '/register/success/',
-          controller='mediagoblin.auth.views:register_success'),
+          template='mediagoblin/auth/register_success.html',
+          controller='mediagoblin.views:simple_template_render'),
     Route('mediagoblin.auth.login', '/login/',
           controller='mediagoblin.auth.views:login'),
     Route('mediagoblin.auth.logout', '/logout/',
@@ -28,9 +29,11 @@ auth_routes = [
     Route('mediagoblin.auth.verify_email', '/verify_email/',
           controller='mediagoblin.auth.views:verify_email'),
     Route('mediagoblin.auth.verify_email_notice', '/verification_required/',
-          controller='mediagoblin.auth.views:verify_email_notice'),
+          template='mediagoblin/auth/verification_needed.html',
+          controller='mediagoblin.views:simple_template_render'),
     Route('mediagoblin.auth.resend_verification', '/resend_verification/',
           controller='mediagoblin.auth.views:resend_activation'),
     Route('mediagoblin.auth.resend_verification_success',
           '/resend_verification_success/',
-          controller='mediagoblin.auth.views:resend_activation_success')]
+          template='mediagoblin/auth/resent_verification_email.html',
+          controller='mediagoblin.views:simple_template_render')]

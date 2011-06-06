@@ -152,7 +152,7 @@ Running the test suite
 
 Run::
 
-    ./bin/nosetests
+    CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_tests ./bin/nosetests
 
 
 Running a shell

@@ -14,11 +14,30 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from routes.route import Route
+import os
 
-submit_routes = [
-    Route('mediagoblin.submit.start', '/',
-          controller='mediagoblin.submit.views:submit_start'),
-    Route('mediagoblin.submit.success', '/success/',
-          template='mediagoblin/submit/success.html',
-          controller='mediagoblin.views:simple_template_render')]
+from mediagoblin.tests.tools import TEST_APP_CONFIG
+from mediagoblin import util
+from mediagoblin.celery_setup import setup_celery_from_config
+from mediagoblin.globals import setup_globals
+
+
+OUR_MODULENAME = 'mediagoblin.celery_setup.from_tests'
+
+
+def setup_self(setup_globals_func=setup_globals):
+    """
+    Set up celery for testing's sake, which just needs to set up
+    celery and celery only.
+    """
+    mgoblin_conf = util.read_config_file(TEST_APP_CONFIG)
+    mgoblin_section = mgoblin_conf['app:mediagoblin']
+
+    setup_celery_from_config(
+        mgoblin_section, mgoblin_conf,
+        settings_module=OUR_MODULENAME,
+        set_environ=False)
+
+
+if os.environ.get('CELERY_CONFIG_MODULE') == OUR_MODULENAME:
+    setup_self()

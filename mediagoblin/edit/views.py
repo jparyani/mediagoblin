@@ -15,8 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from webob import Response, exc
+from webob import exc
 
+from mediagoblin.util import render_to_response, redirect
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry
@@ -48,17 +49,13 @@ def edit_media(request, media):
             media['title'] = request.POST['title']
             media['description'] = request.POST['description']
             media['slug'] = request.POST['slug']
+            media.save()
 
-            # redirect
-            return exc.HTTPFound(
-                location=request.urlgen("mediagoblin.user_pages.media_home",
-                    user=media.uploader()['username'], media=media['_id']))
+            return redirect(request, "mediagoblin.user_pages.media_home",
+                user=media.uploader()['username'], media=media['slug'])
 
-    # render
-    template = request.template_env.get_template(
-        'mediagoblin/edit/edit.html')
-    return Response(
-        template.render(
-            {'request': request,
-             'media': media,
-             'form': form}))
+    return render_to_response(
+        request,
+        'mediagoblin/edit/edit.html',
+        {'media': media,
+         'form': form})

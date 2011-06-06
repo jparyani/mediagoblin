@@ -18,17 +18,22 @@ from email.MIMEText import MIMEText
 import gettext
 import pkg_resources
 import smtplib
+import os
 import sys
 import re
-import jinja2
-from mediagoblin.db.util import ObjectId
-import translitcodec
-
-from mediagoblin import globals as mgoblin_globals
-
 import urllib
 from math import ceil
 import copy
+
+from babel.localedata import exists
+import jinja2
+import translitcodec
+from paste.deploy.loadwsgi import NicerConfigParser
+from webob import Response, exc
+
+from mediagoblin import globals as mgoblin_globals
+from mediagoblin.db.util import ObjectId
+
 
 TESTS_ENABLED = False
 def _activate_testing():
@@ -37,6 +42,26 @@ def _activate_testing():
     """
     global TESTS_ENABLED
     TESTS_ENABLED = True
+
+
+def clear_test_buckets():
+    """
+    We store some things for testing purposes that should be cleared
+    when we want a "clean slate" of information for our next round of
+    tests.  Call this function to wipe all that stuff clean.
+
+    Also wipes out some other things we might redefine during testing,
+    like the jinja envs.
+    """
+    global SETUP_JINJA_ENVS
+    SETUP_JINJA_ENVS = {}
+
+    global EMAIL_TEST_INBOX
+    global EMAIL_TEST_MBOX_INBOX
+    EMAIL_TEST_INBOX = []
+    EMAIL_TEST_MBOX_INBOX = []
+
+    clear_test_template_context()
 
 
 def get_jinja_loader(user_template_path=None):
@@ -55,6 +80,9 @@ def get_jinja_loader(user_template_path=None):
         return jinja2.PackageLoader('mediagoblin', 'templates')
 
 
+SETUP_JINJA_ENVS = {}
+
+
 def get_jinja_env(template_loader, locale):
     """
     Set up the Jinja environment, 
@@ -64,6 +92,11 @@ def get_jinja_env(template_loader, locale):
     """
     setup_gettext(locale)
 
+    # If we have a jinja environment set up with this locale, just
+    # return that one.
+    if SETUP_JINJA_ENVS.has_key(locale):
+        return SETUP_JINJA_ENVS[locale]
+
     template_env = jinja2.Environment(
         loader=template_loader, autoescape=True,
         extensions=['jinja2.ext.i18n'])
@@ -72,7 +105,47 @@ def get_jinja_env(template_loader, locale):
         mgoblin_globals.translations.gettext,
         mgoblin_globals.translations.ngettext)
 
+    if exists(locale):
+        SETUP_JINJA_ENVS[locale] = template_env
+
     return template_env
+
+
+# We'll store context information here when doing unit tests
+TEMPLATE_TEST_CONTEXT = {}
+
+
+def render_template(request, template_path, context):
+    """
+    Render a template with context.
+
+    Always inserts the request into the context, so you don't have to.
+    Also stores the context if we're doing unit tests.  Helpful!
+    """
+    template = request.template_env.get_template(
+        template_path)
+    context['request'] = request
+    rendered = template.render(context)
+
+    if TESTS_ENABLED:
+        TEMPLATE_TEST_CONTEXT[template_path] = context
+
+    return rendered
+
+
+def clear_test_template_context():
+    global TEMPLATE_TEST_CONTEXT
+    TEMPLATE_TEST_CONTEXT = {}
+
+
+def render_to_response(request, template, context):
+    """Much like Django's shortcut.render()"""
+    return Response(render_template(request, template, context))
+
+
+def redirect(request, *args, **kwargs):
+    """Returns a HTTPFound(), takes a request and then urlgen params"""
+    return exc.HTTPFound(location=request.urlgen(*args, **kwargs))
 
 
 def setup_user_in_request(request):
@@ -278,6 +351,30 @@ def get_locale_from_request(request):
     return locale_to_lower_upper(target_lang)
 
 
+def read_config_file(conf_file):
+    """
+    Read a paste deploy style config file and process it.
+    """
+    if not os.path.exists(conf_file):
+        raise IOError(
+            "MEDIAGOBLIN_CONFIG not set or file does not exist")
+
+    parser = NicerConfigParser(conf_file)
+    parser.read(conf_file)
+    parser._defaults.setdefault(
+        'here', os.path.dirname(os.path.abspath(conf_file)))
+    parser._defaults.setdefault(
+        '__file__', os.path.abspath(conf_file))
+
+    mgoblin_conf = dict(
+        [(section_name, dict(parser.items(section_name)))
+         for section_name in parser.sections()])
+
+    return mgoblin_conf
+
+
+SETUP_GETTEXTS = {}
+
 def setup_gettext(locale):
     """
     Setup the gettext instance based on this locale
@@ -288,8 +385,13 @@ def setup_gettext(locale):
 
     # TODO: fallback nicely on translations from pt_PT to pt if not
     # available, etc.
-    this_gettext = gettext.translation(
-        'mediagoblin', TRANSLATIONS_PATH, [locale], fallback=True)
+    if SETUP_GETTEXTS.has_key(locale):
+        this_gettext = SETUP_GETTEXTS[locale]
+    else:
+        this_gettext = gettext.translation(
+            'mediagoblin', TRANSLATIONS_PATH, [locale], fallback=True)
+        if exists(locale):
+            SETUP_GETTEXTS[locale] = this_gettext
 
     mgoblin_globals.setup_globals(
         translations=this_gettext)

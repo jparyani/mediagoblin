@@ -27,7 +27,9 @@ class RegistrationForm(wtforms.Form):
         'Password',
         [wtforms.validators.Required(),
          wtforms.validators.Length(min=6, max=30),
-         wtforms.validators.EqualTo('confirm_password')])
+         wtforms.validators.EqualTo(
+                'confirm_password',
+                'Passwords must match.')])
     confirm_password = wtforms.PasswordField(
         'Confirm password',
         [wtforms.validators.Required()])
