@@ -24,6 +24,8 @@ def check_filetype(posted_file):
     if not guess_type(posted_file.filename) in ALLOWED:
         return False
 
+    # TODO: This should be handled by the processing stage.  We should
+    # handle error detection there.
     try:
         image = image_open(posted_file.file)
     except IOError:
