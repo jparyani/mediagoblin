@@ -21,6 +21,8 @@ import os, shutil
 from paste.deploy import appconfig, loadapp
 from webtest import TestApp
 
+from mediagoblin import util
+from mediagoblin.decorators import _make_safe
 from mediagoblin.db.open import setup_connection_and_db_from_config
 
 
@@ -91,3 +93,17 @@ def get_test_app(dump_old_app=True):
         'config:' + TEST_APP_CONFIG)
 
     return TestApp(test_app)
+
+
+def setup_fresh_app(func):
+    """
+    Decorator to setup a fresh test application for this function.
+
+    Cleans out test buckets and passes in a new, fresh test_app.
+    """
+    def wrapper(*args, **kwargs):
+        test_app = get_test_app()
+        util.clear_test_buckets()
+        return func(test_app, *args, **kwargs)
+
+    return _make_safe(wrapper, func)

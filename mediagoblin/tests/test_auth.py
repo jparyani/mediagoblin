@@ -19,7 +19,7 @@ import urlparse
 from nose.tools import assert_equal
 
 from mediagoblin.auth import lib as auth_lib
-from mediagoblin.tests.tools import get_test_app
+from mediagoblin.tests.tools import setup_fresh_app
 from mediagoblin import globals as mgoblin_globals
 from mediagoblin import util
 
@@ -65,13 +65,11 @@ def test_bcrypt_gen_password_hash():
         'notthepassword', hashed_pw, '3><7R45417')
 
 
-def test_register_views():
+@setup_fresh_app
+def test_register_views(test_app):
     """
     Massive test function that all our registration-related views all work.
     """
-    util.clear_test_template_context()
-    test_app = get_test_app()
-
     # Test doing a simple GET on the page
     # -----------------------------------
 
