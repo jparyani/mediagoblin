@@ -119,6 +119,11 @@ a.mediagoblin_logo:hover {
   width:600px;
 }
 
+.edit_box {
+  width:600px;
+  background-image:url("../images/background_edit.png");
+}
+
 .form_box h1 {
   font-size:28px;
 }
