@@ -49,6 +49,36 @@ def user_home(request, page):
          'media_entries': media_entries,
          'pagination': pagination})
 
+@uses_pagination
+def user_gallery(request, page):
+    """'Gallery' of a User()"""
+    user = request.db.User.find_one({
+            'username': request.matchdict['user'],
+            'status': 'active'})
+    if not user:
+        return exc.HTTPNotFound()
+
+    cursor = request.db.MediaEntry.find(
+        {'uploader': user['_id'],
+         'state': 'processed'}).sort('created', DESCENDING)
+
+    pagination = Pagination(page, cursor)
+    media_entries = pagination()
+
+    #if no data is available, return NotFound
+    if media_entries == None:
+        return exc.HTTPNotFound()
+    
+    template = request.template_env.get_template(
+        'mediagoblin/user_pages/gallery.html')
+
+    return Response(
+        template.render(
+            {'request': request,
+             'user': user,
+             'media_entries': media_entries,
+             'pagination': pagination}))
+
 
 @get_user_media_entry
 def media_home(request, media):
