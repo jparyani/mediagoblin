@@ -29,7 +29,8 @@
       <h1>Editing {{ media.title }}</h1>
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
-        <input type="submit" value="save changes" class="button" />
+        <a href="{{ media.url_for_self(request.urlgen) }}">Cancel</a>
+        <input type="submit" value="Save changes" class="button" />
       </div>
       <img src="{{ request.app.public_store.file_url(
          media['media_files']['thumb']) }}" />
