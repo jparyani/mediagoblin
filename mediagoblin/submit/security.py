@@ -16,19 +16,11 @@
 
 from mimetypes import guess_type
 
-from Image import open as image_open
 
 ALLOWED = ['image/jpeg', 'image/png', 'image/tiff', 'image/gif']
 
 def check_filetype(posted_file):
-    if not guess_type(posted_file.filename) in ALLOWED:
-        return False
-
-    # TODO: This should be handled by the processing stage.  We should
-    # handle error detection there.
-    try:
-        image = image_open(posted_file.file)
-    except IOError:
+    if not guess_type(posted_file.filename)[0] in ALLOWED:
         return False
 
     return True
