@@ -18,16 +18,16 @@
 {# only display if {{pagination}} is defined #}
 
 {% if pagination %}
-  <div class=pagination>
+  <div class="pagination">
 
       {% if pagination.has_prev %}
-        <a href={{ pagination.get_page_url(request, pagination.page-1) }}>&laquo; Prev</>
+        <a href="{{ pagination.get_page_url(request, pagination.page-1) }}">&laquo; Prev</>
       {% endif %}
 
       {%- for page in pagination.iter_pages() %}
         {% if page %}
           {% if page != pagination.page %}
-	    <a href={{ pagination.get_page_url(request, page) }}>{{ page }}</a>
+	    <a href="{{ pagination.get_page_url(request, page) }}">{{ page }}</a>
           {% else %}
             <strong>{{ page }}</strong>
           {% endif %}
@@ -37,7 +37,7 @@
       {%- endfor %}
 
       {% if pagination.has_next %}
-        <a href={{ pagination.get_page_url(request, pagination.page+1) }}>Next &raquo;</a>
+        <a href="{{ pagination.get_page_url(request, pagination.page + 1) }}">Next &raquo;</a>
       {% endif %}
    </div>
 {% endif %}
