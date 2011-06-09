@@ -69,15 +69,12 @@ def user_gallery(request, page):
     if media_entries == None:
         return exc.HTTPNotFound()
     
-    template = request.template_env.get_template(
-        'mediagoblin/user_pages/gallery.html')
-
-    return Response(
-        template.render(
-            {'request': request,
-             'user': user,
-             'media_entries': media_entries,
-             'pagination': pagination}))
+    return render_to_response(
+        request,
+        'mediagoblin/user_pages/gallery.html',
+        {'user': user,
+         'media_entries': media_entries,
+         'pagination': pagination})
 
 
 @get_user_media_entry
