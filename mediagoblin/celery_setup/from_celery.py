@@ -23,13 +23,12 @@ from mediagoblin import storage
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.celery_setup import setup_celery_from_config
 from mediagoblin.globals import setup_globals
-from mediagoblin import globals as mgoblin_globals
 
 
-OUR_MODULENAME = 'mediagoblin.celery_setup.from_celery'
+OUR_MODULENAME = __name__
 
 
-def setup_self(setup_globals_func=setup_globals):
+def setup_self():
     """
     Transform this module into a celery config module by reading the
     mediagoblin config file.  Set the environment variable
@@ -76,7 +75,7 @@ def setup_self(setup_globals_func=setup_globals):
     queue_store = storage.storage_system_from_paste_config(
         mgoblin_section, 'queuestore')
 
-    setup_globals_func(
+    setup_globals(
         db_connection=connection,
         database=db,
         public_store=public_store,
