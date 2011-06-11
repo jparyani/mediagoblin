@@ -214,3 +214,20 @@ def test_basic_storage_url_for_file():
         ['dir1', 'dir2', 'filename.txt'])
     expected = 'http://media.example.org/ourmedia/dir1/dir2/filename.txt'
     assert result == expected
+
+
+def test_basic_storage_get_local_path():
+    tmpdir, this_storage = get_tmp_filestorage()
+    
+    result = this_storage.get_local_path(
+        ['dir1', 'dir2', 'filename.txt'])
+
+    expected = os.path.join(
+        tmpdir, 'dir1/dir2/filename.txt')
+
+    assert result == expected
+
+
+def test_basic_storage_is_local():
+    tmpdir, this_storage = get_tmp_filestorage()
+    assert this_storage.local_storage is True

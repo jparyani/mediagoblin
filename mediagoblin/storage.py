@@ -60,6 +60,9 @@ class StorageInterface(object):
     StorageInterface.
     """
 
+    # Whether this file store is on the local filesystem.
+    local_storage = False
+
     def __raise_not_implemented(self):
         """
         Raise a warning about some component not implemented by a
@@ -127,11 +130,24 @@ class StorageInterface(object):
         else:
             return filepath
 
+    def get_local_path(self, filepath):
+        """
+        If this is a local_storage implementation, give us a link to
+        the local filesystem reference to this file.
+
+        >>> storage_handler.get_local_path(['foo', 'bar', 'baz.jpg'])
+        u'/path/to/mounting/foo/bar/baz.jpg'
+        """
+        # Subclasses should override this method, if applicable.
+        self.__raise_not_implemented()
+
 
 class BasicFileStorage(StorageInterface):
     """
     Basic local filesystem implementation of storage API
     """
+
+    local_storage = True
 
     def __init__(self, base_dir, base_url=None, **kwargs):
         """
@@ -177,6 +193,9 @@ class BasicFileStorage(StorageInterface):
             self.base_url,
             '/'.join(clean_listy_filepath(filepath)))
 
+    def get_local_path(self, filepath):
+        return self._resolve_filepath(filepath)
+
 
 ###########
 # Utilities
@@ -187,7 +206,7 @@ def clean_listy_filepath(listy_filepath):
     Take a listy filepath (like ['dir1', 'dir2', 'filename.jpg']) and
     clean out any nastiness from it.
 
-    For example:
+
     >>> clean_listy_filepath([u'/dir1/', u'foo/../nasty', u'linooks.jpg'])
     [u'dir1', u'foo_.._nasty', u'linooks.jpg']
 
