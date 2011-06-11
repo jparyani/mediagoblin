@@ -231,3 +231,19 @@ def test_basic_storage_get_local_path():
 def test_basic_storage_is_local():
     tmpdir, this_storage = get_tmp_filestorage()
     assert this_storage.local_storage is True
+
+
+def test_basic_storage_copy_locally():
+    tmpdir, this_storage = get_tmp_filestorage()
+
+    dest_tmpdir = tempfile.mkdtemp()
+
+    filepath = ['dir1', 'dir2', 'ourfile.txt']
+    with this_storage.get_file(filepath, 'w') as our_file:
+        our_file.write('Testing this file')
+
+    new_file_dest = os.path.join(dest_tmpdir, 'file2.txt')
+
+    this_storage.copy_locally(filepath, new_file_dest)
+    
+    assert file(new_file_dest).read() == 'Testing this file'

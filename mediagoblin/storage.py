@@ -16,6 +16,7 @@
 
 import os
 import re
+import shutil
 import urlparse
 import uuid
 
@@ -140,6 +141,24 @@ class StorageInterface(object):
         """
         # Subclasses should override this method, if applicable.
         self.__raise_not_implemented()
+
+    def copy_locally(self, filepath, dest_path):
+        """
+        Copy this file locally.
+
+        A basic working method for this is provided that should
+        function both for local_storage systems and remote storge
+        systems, but if more efficient systems for copying locally
+        apply to your system, override this method with something more
+        appropriate.
+        """
+        if self.local_storage:
+            shutil.copy(
+                self.get_local_path(filepath), dest_path)
+        else:
+            with self.get_file(filepath, 'rb') as source_file:
+                with file(dest_path, 'wb') as dest_file:
+                    dest_file.write(source_file.read())
 
 
 class BasicFileStorage(StorageInterface):
@@ -272,3 +291,5 @@ def storage_system_from_paste_config(paste_config, storage_prefix):
 
     storage_class = util.import_component(storage_class)
     return storage_class(**config_params)
+
+
