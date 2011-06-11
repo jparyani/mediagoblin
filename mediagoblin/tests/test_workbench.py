@@ -17,6 +17,8 @@
 import os
 import tempfile
 
+from nose.tools import assert_raises
+
 from mediagoblin.process_media import workbench
 
 
@@ -32,13 +34,21 @@ class TestWorkbench(object):
 
     def test_destroy_workbench(self):
         # kill a workbench
-        workbench = self.workbench_manager.create_workbench()
-        tmpfile = file(os.path.join(workbench, 'temp.txt'), 'w')
+        this_workbench = self.workbench_manager.create_workbench()
+        tmpfile = file(os.path.join(this_workbench, 'temp.txt'), 'w')
         with tmpfile:
             tmpfile.write('lollerskates')
 
-        assert os.path.exists(os.path.join(workbench, 'temp.txt'))
+        assert os.path.exists(os.path.join(this_workbench, 'temp.txt'))
 
-        self.workbench_manager.destroy_workbench(workbench)
-        assert not os.path.exists(os.path.join(workbench, 'temp.txt'))
-        assert not os.path.exists(workbench)
+        self.workbench_manager.destroy_workbench(this_workbench)
+        assert not os.path.exists(os.path.join(this_workbench, 'temp.txt'))
+        assert not os.path.exists(this_workbench)
+
+        # make sure we can't kill other stuff though
+        dont_kill_this = tempfile.mkdtemp()
+
+        assert_raises(
+            workbench.WorkbenchOutsideScope,
+            self.workbench_manager.destroy_workbench,
+            dont_kill_this)
