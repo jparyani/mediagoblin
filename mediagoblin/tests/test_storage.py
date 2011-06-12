@@ -52,6 +52,11 @@ class FakeStorageSystem():
         self.foobie = foobie
         self.blech = blech
 
+class FakeRemoteStorage(storage.BasicFileStorage):
+    # Theoretically despite this, all the methods should work but it
+    # should force copying to the workbench
+    local_storage = False
+
 
 def test_storage_system_from_paste_config():
     this_storage = storage.storage_system_from_paste_config(
@@ -81,9 +86,12 @@ def test_storage_system_from_paste_config():
 # Basic file storage tests
 ##########################
 
-def get_tmp_filestorage(mount_url=None):
+def get_tmp_filestorage(mount_url=None, fake_remote=False):
     tmpdir = tempfile.mkdtemp()
-    this_storage = storage.BasicFileStorage(tmpdir, mount_url)
+    if fake_remote:
+        this_storage = FakeRemoteStorage(tmpdir, mount_url)
+    else:
+        this_storage = storage.BasicFileStorage(tmpdir, mount_url)
     return tmpdir, this_storage
 
 
