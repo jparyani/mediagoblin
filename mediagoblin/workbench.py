@@ -70,9 +70,9 @@ class WorkbenchManager(object):
 
         shutil.rmtree(workbench)
 
-    def possibly_localize_file(self, workbench, storage, filepath,
-                               filename_if_copying=None,
-                               keep_extension_if_copying=True):
+    def localized_file(self, workbench, storage, filepath,
+                       filename_if_copying=None,
+                       keep_extension_if_copying=True):
         """
         Possibly localize the file from this storage system (for read-only
         purposes, modifications should be written to a new file.).
@@ -93,22 +93,22 @@ class WorkbenchManager(object):
           localized_filename
 
         Examples:
-          >>> wb_manager.possibly_localize_file(
+          >>> wb_manager.localized_file(
           ...     '/our/workbench/subdir', local_storage,
           ...     ['path', 'to', 'foobar.jpg'])
           u'/local/storage/path/to/foobar.jpg'
 
-          >>> wb_manager.possibly_localize_file(
+          >>> wb_manager.localized_file(
           ...     '/our/workbench/subdir', remote_storage,
           ...     ['path', 'to', 'foobar.jpg'])
           '/our/workbench/subdir/foobar.jpg'
 
-          >>> wb_manager.possibly_localize_file(
+          >>> wb_manager.localized_file(
           ...     '/our/workbench/subdir', remote_storage,
           ...     ['path', 'to', 'foobar.jpg'], 'source.jpeg', False)
           '/our/workbench/subdir/foobar.jpeg'
 
-          >>> wb_manager.possibly_localize_file(
+          >>> wb_manager.localized_file(
           ...     '/our/workbench/subdir', remote_storage,
           ...     ['path', 'to', 'foobar.jpg'], 'source', True)
           '/our/workbench/subdir/foobar.jpg'

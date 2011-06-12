@@ -32,7 +32,7 @@ def process_media_initial(media_id):
         {'_id': ObjectId(media_id)})
 
     queued_filepath = entry['queued_media_file']
-    queued_filename = mg_globals.workbench_manager.possibly_localize_file(
+    queued_filename = mg_globals.workbench_manager.localized_file(
         workbench, mg_globals.queue_store, queued_filepath,
         'source')
 

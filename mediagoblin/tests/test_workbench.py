@@ -54,7 +54,7 @@ class TestWorkbench(object):
             self.workbench_manager.destroy_workbench,
             dont_kill_this)
 
-    def test_possibly_localize_file(self):
+    def test_localized_file(self):
         tmpdir, this_storage = get_tmp_filestorage()
         this_workbench = self.workbench_manager.create_workbench()
         
@@ -65,7 +65,7 @@ class TestWorkbench(object):
             our_file.write('Our file')
 
         # with a local file storage
-        filename = self.workbench_manager.possibly_localize_file(
+        filename = self.workbench_manager.localized_file(
             this_workbench, this_storage, filepath)
         assert filename == os.path.join(
             tmpdir, 'dir1/dir2/ourfile.txt')
@@ -77,20 +77,20 @@ class TestWorkbench(object):
         with this_storage.get_file(filepath, 'w') as our_file:
             our_file.write('Our file')
 
-        filename = self.workbench_manager.possibly_localize_file(
+        filename = self.workbench_manager.localized_file(
             this_workbench, this_storage, filepath)
         assert filename == os.path.join(
             this_workbench, 'ourfile.txt')
         
         # fake remote file storage, filename_if_copying set
-        filename = self.workbench_manager.possibly_localize_file(
+        filename = self.workbench_manager.localized_file(
             this_workbench, this_storage, filepath, 'thisfile')
         assert filename == os.path.join(
             this_workbench, 'thisfile.txt')
 
         # fake remote file storage, filename_if_copying set,
         # keep_extension_if_copying set to false
-        filename = self.workbench_manager.possibly_localize_file(
+        filename = self.workbench_manager.localized_file(
             this_workbench, this_storage, filepath, 'thisfile.text', False)
         assert filename == os.path.join(
             this_workbench, 'thisfile.text')
