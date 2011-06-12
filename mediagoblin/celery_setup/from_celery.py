@@ -23,8 +23,7 @@ from mediagoblin import storage
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.celery_setup import setup_celery_from_config
 from mediagoblin.globals import setup_globals
-from mediagoblin.process_media.workbench import (
-    WorkbenchManager, DEFAULT_WORKBENCH_DIR)
+from mediagoblin.workbench import WorkbenchManager, DEFAULT_WORKBENCH_DIR
 
 
 OUR_MODULENAME = 'mediagoblin.celery_setup.from_celery'
