@@ -126,7 +126,7 @@ class WorkbenchManager(object):
             else:
                 orig_filename, orig_ext = os.path.splitext(filepath[-1])
                 if keep_extension_if_copying and orig_ext:
-                    dest_filename = filename_if_copying + '.' + orig_ext
+                    dest_filename = filename_if_copying + orig_ext
                 else:
                     dest_filename = filename_if_copying
 
