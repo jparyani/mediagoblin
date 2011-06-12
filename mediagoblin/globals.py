@@ -19,6 +19,15 @@ database = None
 public_store = None
 queue_store = None
 
+# Dump mail to stdout instead of sending it:
+email_debug_mode = False
+
+# Address for sending out mails
+email_sender_address = None
+
+# A WorkBenchManager
+workbench_manager = None
+
 # gettext
 translations = gettext.find(
     'mediagoblin',
@@ -30,4 +39,6 @@ def setup_globals(**kwargs):
     from mediagoblin import globals as mg_globals
 
     for key, value in kwargs.iteritems():
+        if not hasattr(mg_globals, key):
+            raise AssertionError("Global %s not known" % key)
         setattr(mg_globals, key, value)
