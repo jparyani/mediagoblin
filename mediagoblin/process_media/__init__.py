@@ -24,6 +24,13 @@ from mediagoblin import mg_globals as mgg
 THUMB_SIZE = 200, 200
 
 
+def create_pub_filepath(entry, filename):
+    return mgg.public_store.get_unique_filepath(
+            ['media_entries',
+             unicode(entry['_id']),
+             filename])
+
+
 @task
 def process_media_initial(media_id):
     workbench = mgg.workbench_manager.create_workbench()
@@ -45,10 +52,7 @@ def process_media_initial(media_id):
         if thumb.mode != "RGB":
             thumb = thumb.convert("RGB")
 
-        thumb_filepath = mgg.public_store.get_unique_filepath(
-            ['media_entries',
-             unicode(entry['_id']),
-             'thumbnail.jpg'])
+        thumb_filepath = create_pub_filepath(entry, 'thumbnail.jpg')
 
         thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
         with thumb_file:
@@ -59,15 +63,13 @@ def process_media_initial(media_id):
     queued_file = file(queued_filename, 'rb')
 
     with queued_file:
-        main_filepath = mgg.public_store.get_unique_filepath(
-            ['media_entries',
-             unicode(entry['_id']),
-             queued_filepath[-1]])
+        main_filepath = create_pub_filepath(entry, queued_filepath[-1])
         
         with mgg.public_store.get_file(main_filepath, 'wb') as main_file:
             main_file.write(queued_file.read())
 
     mgg.queue_store.delete_file(queued_filepath)
+    entry['queued_media_file'] = []
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict['thumb'] = thumb_filepath
     media_files_dict['main'] = main_filepath
