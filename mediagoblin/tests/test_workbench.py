@@ -20,6 +20,7 @@ import tempfile
 from nose.tools import assert_raises
 
 from mediagoblin.process_media import workbench
+from mediagoblin.tests.test_storage import get_tmp_filestorage
 
 
 class TestWorkbench(object):
@@ -52,3 +53,45 @@ class TestWorkbench(object):
             workbench.WorkbenchOutsideScope,
             self.workbench_manager.destroy_workbench,
             dont_kill_this)
+
+    def test_possibly_localize_file(self):
+        tmpdir, this_storage = get_tmp_filestorage()
+        this_workbench = self.workbench_manager.create_workbench()
+        
+        # Write a brand new file
+        filepath = ['dir1', 'dir2', 'ourfile.txt']
+
+        with this_storage.get_file(filepath, 'w') as our_file:
+            our_file.write('Our file')
+
+        # with a local file storage
+        filename, copied = self.workbench_manager.possibly_localize_file(
+            this_workbench, this_storage, filepath)
+        assert copied is False
+        assert filename == os.path.join(
+            tmpdir, 'dir1/dir2/ourfile.txt')
+
+        # with a fake remote file storage
+        tmpdir, this_storage = get_tmp_filestorage(fake_remote=True)
+
+        # ... write a brand new file, again ;)
+        with this_storage.get_file(filepath, 'w') as our_file:
+            our_file.write('Our file')
+
+        filename, copied = self.workbench_manager.possibly_localize_file(
+            this_workbench, this_storage, filepath)
+        assert filename == os.path.join(
+            this_workbench, 'ourfile.txt')
+        
+        # fake remote file storage, filename_if_copying set
+        filename, copied = self.workbench_manager.possibly_localize_file(
+            this_workbench, this_storage, filepath, 'thisfile')
+        assert filename == os.path.join(
+            this_workbench, 'thisfile.txt')
+
+        # fake remote file storage, filename_if_copying set,
+        # keep_extension_if_copying set to false
+        filename, copied = self.workbench_manager.possibly_localize_file(
+            this_workbench, this_storage, filepath, 'thisfile.text', False)
+        assert filename == os.path.join(
+            this_workbench, 'thisfile.text')
