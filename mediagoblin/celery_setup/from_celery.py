@@ -26,10 +26,10 @@ from mediagoblin.globals import setup_globals
 from mediagoblin.workbench import WorkbenchManager, DEFAULT_WORKBENCH_DIR
 
 
-OUR_MODULENAME = 'mediagoblin.celery_setup.from_celery'
+OUR_MODULENAME = __name__
 
 
-def setup_self(setup_globals_func=setup_globals):
+def setup_self():
     """
     Transform this module into a celery config module by reading the
     mediagoblin config file.  Set the environment variable
@@ -80,7 +80,7 @@ def setup_self(setup_globals_func=setup_globals):
         mgoblin_section.get(
             'workbench_path', DEFAULT_WORKBENCH_DIR))
 
-    setup_globals_func(
+    setup_globals(
         db_connection=connection,
         database=db,
         public_store=public_store,
