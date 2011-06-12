@@ -16,7 +16,7 @@
 
 from mediagoblin.tests.tools import get_test_app
 
-from mediagoblin import globals as mgoblin_globals
+from mediagoblin import mg_globals
 
 
 def test_get_test_app_wipes_db():
@@ -24,15 +24,15 @@ def test_get_test_app_wipes_db():
     Make sure we get a fresh database on every wipe :)
     """
     get_test_app()
-    assert mgoblin_globals.database.User.find().count() == 0
+    assert mg_globals.database.User.find().count() == 0
 
-    new_user = mgoblin_globals.database.User()
+    new_user = mg_globals.database.User()
     new_user['username'] = u'lolcat'
     new_user['email'] = u'lol@cats.example.org'
     new_user['pw_hash'] = u'pretend_this_is_a_hash'
     new_user.save()
-    assert mgoblin_globals.database.User.find().count() == 1
+    assert mg_globals.database.User.find().count() == 1
 
     get_test_app()
 
-    assert mgoblin_globals.database.User.find().count() == 0
+    assert mg_globals.database.User.find().count() == 0

@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from .. import globals
+from mediagoblin import mg_globals
 
 
 def setup_package():
@@ -22,5 +22,5 @@ def setup_package():
 
 def teardown_package():
     print "Killing db ..."
-    globals.db_connection.drop_database(globals.database.name)
+    mg_globals.db_connection.drop_database(mg_globals.database.name)
     print "... done"

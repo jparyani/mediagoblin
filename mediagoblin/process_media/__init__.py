@@ -18,7 +18,7 @@ import Image
 from mediagoblin.db.util import ObjectId
 from celery.task import task
 
-from mediagoblin import globals as mg_globals
+from mediagoblin import mg_globals
 
 
 THUMB_SIZE = 200, 200

@@ -17,7 +17,6 @@
 
 from mediagoblin.db import migrations
 from mediagoblin.gmg_commands import util as commands_util
-from mediagoblin import globals as mgoblin_globals
 
 
 def migrate_parser_setup(subparser):

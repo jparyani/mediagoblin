@@ -22,7 +22,7 @@ from paste.deploy.converters import asbool
 from mediagoblin import storage
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.celery_setup import setup_celery_from_config
-from mediagoblin.globals import setup_globals
+from mediagoblin.mg_globals import setup_globals
 from mediagoblin.workbench import WorkbenchManager, DEFAULT_WORKBENCH_DIR
 
 

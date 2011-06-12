@@ -20,7 +20,7 @@ from mongokit import Document, Set
 
 from mediagoblin import util
 from mediagoblin.auth import lib as auth_lib
-from mediagoblin import globals as mediagoblin_globals
+from mediagoblin import mg_globals
 from mediagoblin.db import migrations
 from mediagoblin.db.util import ObjectId
 
@@ -114,7 +114,7 @@ class MediaEntry(Document):
     def generate_slug(self):
         self['slug'] = util.slugify(self['title'])
 
-        duplicate = mediagoblin_globals.database.media_entries.find_one(
+        duplicate = mg_globals.database.media_entries.find_one(
             {'slug': self['slug']})
         
         if duplicate:

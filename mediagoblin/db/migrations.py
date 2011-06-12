@@ -16,8 +16,6 @@
 
 from mongokit import DocumentMigration
 
-from mediagoblin import globals as mediagoblin_globals
-
 
 class MediaEntryMigration(DocumentMigration):
     def allmigration01_uploader_to_reference(self):
