@@ -41,6 +41,9 @@ def process_media_initial(media_id):
     with queued_file:
         thumb = Image.open(queued_file)
         thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
+        # ensure color mode is compatible with jpg
+        if thumb.mode != "RGB":
+            thumb = thumb.convert("RGB")
 
         thumb_filepath = mgg.public_store.get_unique_filepath(
             ['media_entries',
