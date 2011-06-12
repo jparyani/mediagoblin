@@ -18,7 +18,7 @@ import Image
 from mediagoblin.db.util import ObjectId
 from celery.task import task
 
-from mediagoblin.globals import database, queue_store, public_store
+from mediagoblin import globals as mg_globals
 
 
 THUMB_SIZE = 200, 200
@@ -26,40 +26,50 @@ THUMB_SIZE = 200, 200
 
 @task
 def process_media_initial(media_id):
-    entry = database.MediaEntry.one(
+    workbench = mg_globals.workbench_manager.create_workbench()
+
+    entry = mg_globals.database.MediaEntry.one(
         {'_id': ObjectId(media_id)})
 
     queued_filepath = entry['queued_media_file']
-    queued_file = queue_store.get_file(queued_filepath, 'r')
+    queued_filename = mg_globals.workbench_manager.localized_file(
+        workbench, mg_globals.queue_store, queued_filepath,
+        'source')
+
+    queued_file = file(queued_filename, 'r')
 
     with queued_file:
         thumb = Image.open(queued_file)
         thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
 
-        thumb_filepath = public_store.get_unique_filepath(
+        thumb_filepath = mg_globals.public_store.get_unique_filepath(
             ['media_entries',
              unicode(entry['_id']),
              'thumbnail.jpg'])
 
-        with public_store.get_file(thumb_filepath, 'w') as thumb_file:
+        thumb_file = mg_globals.public_store.get_file(thumb_filepath, 'w')
+        with thumb_file:
             thumb.save(thumb_file, "JPEG")
 
     # we have to re-read because unlike PIL, not everything reads
     # things in string representation :)
-    queued_file = queue_store.get_file(queued_filepath, 'rb')
+    queued_file = file(queued_filename, 'rb')
 
     with queued_file:
-        main_filepath = public_store.get_unique_filepath(
+        main_filepath = mg_globals.public_store.get_unique_filepath(
             ['media_entries',
              unicode(entry['_id']),
              queued_filepath[-1]])
         
-        with public_store.get_file(main_filepath, 'wb') as main_file:
+        with mg_globals.public_store.get_file(main_filepath, 'wb') as main_file:
             main_file.write(queued_file.read())
 
-    queue_store.delete_file(queued_filepath)
+    mg_globals.queue_store.delete_file(queued_filepath)
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict['thumb'] = thumb_filepath
     media_files_dict['main'] = main_filepath
     entry['state'] = u'processed'
     entry.save()
+
+    # clean up workbench
+    mg_globals.workbench_manager.destroy_workbench(workbench)

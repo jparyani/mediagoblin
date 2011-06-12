@@ -25,6 +25,7 @@ from mediagoblin import routing, util, storage, staticdirect
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.globals import setup_globals
 from mediagoblin.celery_setup import setup_celery_from_config
+from mediagoblin.workbench import WorkbenchManager, DEFAULT_WORKBENCH_DIR
 
 
 class Error(Exception): pass
@@ -39,7 +40,8 @@ class MediaGoblinApp(object):
                  public_store, queue_store,
                  staticdirector,
                  email_sender_address, email_debug_mode,
-                 user_template_path=None):
+                 user_template_path=None,
+                 workbench_path=DEFAULT_WORKBENCH_DIR):
         # Get the template environment
         self.template_loader = util.get_jinja_loader(user_template_path)
         
@@ -66,7 +68,8 @@ class MediaGoblinApp(object):
             db_connection=connection,
             database=self.db,
             public_store=self.public_store,
-            queue_store=self.queue_store)
+            queue_store=self.queue_store,
+            workbench_manager=WorkbenchManager(workbench_path))
 
     def __call__(self, environ, start_response):
         request = Request(environ)
@@ -154,6 +157,7 @@ def paste_app_factory(global_config, **app_config):
         email_sender_address=app_config.get(
             'email_sender_address', 'notice@mediagoblin.example.org'),
         email_debug_mode=asbool(app_config.get('email_debug_mode')),
-        user_template_path=app_config.get('local_templates'))
+        user_template_path=app_config.get('local_templates'),
+        workbench_path=app_config.get('workbench_path', DEFAULT_WORKBENCH_DIR))
 
     return mgoblin_app

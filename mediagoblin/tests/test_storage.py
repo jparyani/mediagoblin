@@ -52,6 +52,11 @@ class FakeStorageSystem():
         self.foobie = foobie
         self.blech = blech
 
+class FakeRemoteStorage(storage.BasicFileStorage):
+    # Theoretically despite this, all the methods should work but it
+    # should force copying to the workbench
+    local_storage = False
+
 
 def test_storage_system_from_paste_config():
     this_storage = storage.storage_system_from_paste_config(
@@ -81,9 +86,12 @@ def test_storage_system_from_paste_config():
 # Basic file storage tests
 ##########################
 
-def get_tmp_filestorage(mount_url=None):
+def get_tmp_filestorage(mount_url=None, fake_remote=False):
     tmpdir = tempfile.mkdtemp()
-    this_storage = storage.BasicFileStorage(tmpdir, mount_url)
+    if fake_remote:
+        this_storage = FakeRemoteStorage(tmpdir, mount_url)
+    else:
+        this_storage = storage.BasicFileStorage(tmpdir, mount_url)
     return tmpdir, this_storage
 
 
@@ -214,3 +222,36 @@ def test_basic_storage_url_for_file():
         ['dir1', 'dir2', 'filename.txt'])
     expected = 'http://media.example.org/ourmedia/dir1/dir2/filename.txt'
     assert result == expected
+
+
+def test_basic_storage_get_local_path():
+    tmpdir, this_storage = get_tmp_filestorage()
+    
+    result = this_storage.get_local_path(
+        ['dir1', 'dir2', 'filename.txt'])
+
+    expected = os.path.join(
+        tmpdir, 'dir1/dir2/filename.txt')
+
+    assert result == expected
+
+
+def test_basic_storage_is_local():
+    tmpdir, this_storage = get_tmp_filestorage()
+    assert this_storage.local_storage is True
+
+
+def test_basic_storage_copy_locally():
+    tmpdir, this_storage = get_tmp_filestorage()
+
+    dest_tmpdir = tempfile.mkdtemp()
+
+    filepath = ['dir1', 'dir2', 'ourfile.txt']
+    with this_storage.get_file(filepath, 'w') as our_file:
+        our_file.write('Testing this file')
+
+    new_file_dest = os.path.join(dest_tmpdir, 'file2.txt')
+
+    this_storage.copy_locally(filepath, new_file_dest)
+    
+    assert file(new_file_dest).read() == 'Testing this file'
