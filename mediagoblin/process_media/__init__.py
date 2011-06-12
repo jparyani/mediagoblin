@@ -26,11 +26,17 @@ THUMB_SIZE = 200, 200
 
 @task
 def process_media_initial(media_id):
+    workbench = mg_globals.workbench_manager.create_workbench()
+
     entry = mg_globals.database.MediaEntry.one(
         {'_id': ObjectId(media_id)})
 
     queued_filepath = entry['queued_media_file']
-    queued_file = mg_globals.queue_store.get_file(queued_filepath, 'r')
+    queued_filename = mg_globals.workbench_manager.possibly_localize_file(
+        workbench, mg_globals.queue_store, queued_filepath,
+        'source')
+
+    queued_file = file(queued_filename, 'r')
 
     with queued_file:
         thumb = Image.open(queued_file)
@@ -47,7 +53,7 @@ def process_media_initial(media_id):
 
     # we have to re-read because unlike PIL, not everything reads
     # things in string representation :)
-    queued_file = mg_globals.queue_store.get_file(queued_filepath, 'rb')
+    queued_file = file(queued_filename, 'rb')
 
     with queued_file:
         main_filepath = mg_globals.public_store.get_unique_filepath(
@@ -64,3 +70,6 @@ def process_media_initial(media_id):
     media_files_dict['main'] = main_filepath
     entry['state'] = u'processed'
     entry.save()
+
+    # clean up workbench
+    mg_globals.workbench_manager.destroy_workbench(workbench)
