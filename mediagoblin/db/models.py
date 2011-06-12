@@ -73,7 +73,8 @@ class MediaEntry(Document):
         'title': unicode,
         'slug': unicode,
         'created': datetime.datetime,
-        'description': unicode,
+        'description': unicode, # May contain markdown/up
+        'description_html': unicode, # May contain plaintext, or HTML
         'media_type': unicode,
         'media_data': dict, # extra data relevant to this media_type
         'plugin_data': dict, # plugins can dump stuff here.

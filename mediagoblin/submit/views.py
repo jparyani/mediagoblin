@@ -48,6 +48,13 @@ def submit_start(request):
             entry = request.db.MediaEntry()
             entry['title'] = request.POST['title'] or unicode(splitext(filename)[0])
             entry['description'] = request.POST.get('description')
+            
+            import markdown
+            md = markdown.Markdown(
+                safe_mode = 'escape')
+            entry['description_html'] = md.convert(
+                entry['description'])
+            
             entry['media_type'] = u'image' # heh
             entry['uploader'] = request.user['_id']
 

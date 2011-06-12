@@ -42,6 +42,7 @@ setup(
         'translitcodec',
         'argparse',
         'webtest',
+        'Markdown',
         ],
     test_suite='nose.collector',
 

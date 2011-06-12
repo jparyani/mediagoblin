@@ -47,7 +47,14 @@ def edit_media(request, media):
                 u'An entry with that slug already exists for this user.')
         else:
             media['title'] = request.POST['title']
-            media['description'] = request.POST['description']
+            media['description'] = request.POST.get('description')
+            
+            import markdown
+            md = markdown.Markdown(
+                safe_mode = 'escape')
+            media['description_html'] = md.convert(
+                media['description'])
+
             media['slug'] = request.POST['slug']
             media.save()
 
