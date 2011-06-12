@@ -30,24 +30,31 @@ class TestWorkbench(object):
 
     def test_create_workbench(self):
         workbench = self.workbench_manager.create_workbench()
-        assert os.path.isdir(workbench)
-        assert workbench.startswith(self.workbench_manager.base_workbench_dir)
+        assert os.path.isdir(workbench.dir)
+        assert workbench.dir.startswith(self.workbench_manager.base_workbench_dir)
+
+    def test_joinpath(self):
+        this_workbench = self.workbench_manager.create_workbench()
+        tmpname = this_workbench.joinpath('temp.txt')
+        assert tmpname == os.path.join(this_workbench.dir, 'temp.txt')
+        self.workbench_manager.destroy_workbench(this_workbench)
 
     def test_destroy_workbench(self):
         # kill a workbench
         this_workbench = self.workbench_manager.create_workbench()
-        tmpfile = file(os.path.join(this_workbench, 'temp.txt'), 'w')
+        tmpfile_name = this_workbench.joinpath('temp.txt')
+        tmpfile = file(tmpfile_name, 'w')
         with tmpfile:
             tmpfile.write('lollerskates')
 
-        assert os.path.exists(os.path.join(this_workbench, 'temp.txt'))
+        assert os.path.exists(tmpfile_name)
 
         self.workbench_manager.destroy_workbench(this_workbench)
-        assert not os.path.exists(os.path.join(this_workbench, 'temp.txt'))
-        assert not os.path.exists(this_workbench)
+        assert not os.path.exists(tmpfile_name)
+        assert not os.path.exists(this_workbench.dir)
 
         # make sure we can't kill other stuff though
-        dont_kill_this = tempfile.mkdtemp()
+        dont_kill_this = workbench.Workbench(tempfile.mkdtemp())
 
         assert_raises(
             workbench.WorkbenchOutsideScope,
@@ -65,8 +72,7 @@ class TestWorkbench(object):
             our_file.write('Our file')
 
         # with a local file storage
-        filename = self.workbench_manager.localized_file(
-            this_workbench, this_storage, filepath)
+        filename = this_workbench.localized_file(this_storage, filepath)
         assert filename == os.path.join(
             tmpdir, 'dir1/dir2/ourfile.txt')
 
@@ -80,17 +86,17 @@ class TestWorkbench(object):
         filename = self.workbench_manager.localized_file(
             this_workbench, this_storage, filepath)
         assert filename == os.path.join(
-            this_workbench, 'ourfile.txt')
+            this_workbench.dir, 'ourfile.txt')
         
         # fake remote file storage, filename_if_copying set
         filename = self.workbench_manager.localized_file(
             this_workbench, this_storage, filepath, 'thisfile')
         assert filename == os.path.join(
-            this_workbench, 'thisfile.txt')
+            this_workbench.dir, 'thisfile.txt')
 
         # fake remote file storage, filename_if_copying set,
         # keep_extension_if_copying set to false
         filename = self.workbench_manager.localized_file(
             this_workbench, this_storage, filepath, 'thisfile.text', False)
         assert filename == os.path.join(
-            this_workbench, 'thisfile.text')
+            this_workbench.dir, 'thisfile.text')
