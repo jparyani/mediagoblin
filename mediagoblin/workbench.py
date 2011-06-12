@@ -89,37 +89,32 @@ class WorkbenchManager(object):
         filename_if_copying yourself, it'll be set for you (assuming such an
         extension can be extacted from the filename in the filepath).
 
-        Also returns whether or not it copied the file locally.
-
         Returns:
-          (localized_filename, copied_locally)
-          The first of these bieng the absolute filename as described above as a
-          unicode string, the second being a boolean stating whether or not we
-          had to copy the file locally.
+          localized_filename
 
         Examples:
           >>> wb_manager.possibly_localize_file(
           ...     '/our/workbench/subdir', local_storage,
           ...     ['path', 'to', 'foobar.jpg'])
-          (u'/local/storage/path/to/foobar.jpg', False)
+          u'/local/storage/path/to/foobar.jpg'
 
           >>> wb_manager.possibly_localize_file(
           ...     '/our/workbench/subdir', remote_storage,
           ...     ['path', 'to', 'foobar.jpg'])
-          (u'/our/workbench/subdir/foobar.jpg', True)
+          '/our/workbench/subdir/foobar.jpg'
 
           >>> wb_manager.possibly_localize_file(
           ...     '/our/workbench/subdir', remote_storage,
           ...     ['path', 'to', 'foobar.jpg'], 'source.jpeg', False)
-          (u'/our/workbench/subdir/foobar.jpeg', True)
+          '/our/workbench/subdir/foobar.jpeg'
 
           >>> wb_manager.possibly_localize_file(
           ...     '/our/workbench/subdir', remote_storage,
           ...     ['path', 'to', 'foobar.jpg'], 'source', True)
-          (u'/our/workbench/subdir/foobar.jpg', True)
+          '/our/workbench/subdir/foobar.jpg'
         """
         if storage.local_storage:
-            return (storage.get_local_path(filepath), False)
+            return storage.get_local_path(filepath)
         else:
             if filename_if_copying is None:
                 dest_filename = filepath[-1]
@@ -137,4 +132,4 @@ class WorkbenchManager(object):
             storage.copy_locally(
                 filepath, full_dest_filename)
 
-            return (full_dest_filename, True)
+            return full_dest_filename
