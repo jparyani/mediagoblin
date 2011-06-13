@@ -81,9 +81,9 @@ There are three ways to let us know how to get it:
 1. (preferred) **push changes to publicly available git clone and let
    us know where to find it**
 
-   Push your branch to your publicly available git clone and add a
-   comment to the issue with the url for your clone and the branch to
-   look at.
+   Push your feature/bugfix/issue branch to your publicly available
+   git clone and add a comment to the issue with the url for your
+   clone and the branch to look at.
 
 2. **attaching the patch files to the issue**
 
