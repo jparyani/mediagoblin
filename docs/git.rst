@@ -23,10 +23,11 @@ Do::
     git clone git://gitorious.org/mediagoblin/mediagoblin.git
 
 
-How to send in patches
-======================
+How to contribute changes
+=========================
 
-**Tie your changes to issues in the issue tracker**
+Tie your changes to issues in the issue tracker
+-----------------------------------------------
 
 All patches should be tied to issues in the `issue tracker
 <http://bugs.foocorp.net/projects/mediagoblin/issues>`_.  That makes
@@ -37,7 +38,9 @@ description of what it is you're trying to fix/implement, the better
 everyone else is able to understand why you're doing what you're
 doing.
 
-**Use bugfix branches**
+
+Use bugfix branches to make changes
+-----------------------------------
 
 The best way to isolate your changes is to create a branch based off
 of the MediaGoblin repository master branch, do the changes related to
@@ -56,7 +59,9 @@ Further, if you isolate your changes to a branch, then you can work on
 multiple issues at the same time and they don't conflict with one
 another.
 
-**Properly document your changes**
+
+Properly document your changes
+------------------------------
 
 Include comments in the code.
 
@@ -68,7 +73,8 @@ Write comprehensive comments in the issue tracker about what you're
 doing and why.
 
 
-**How to send us your changes**
+How to send us your changes
+---------------------------
 
 There are three ways to let us know how to get it:
 
