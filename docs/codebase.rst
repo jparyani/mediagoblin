@@ -4,6 +4,10 @@
  Codebase Documentation
 ========================
 
+.. contents:: Sections
+   :local:
+
+
 This chapter covers the libraries that GNU MediaGoblin uses as well as
 various recipes for getting things done.
 
