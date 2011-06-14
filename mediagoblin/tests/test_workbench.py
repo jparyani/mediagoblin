@@ -37,7 +37,7 @@ class TestWorkbench(object):
         this_workbench = self.workbench_manager.create_workbench()
         tmpname = this_workbench.joinpath('temp.txt')
         assert tmpname == os.path.join(this_workbench.dir, 'temp.txt')
-        self.workbench_manager.destroy_workbench(this_workbench)
+        this_workbench.destroy_self()
 
     def test_destroy_workbench(self):
         # kill a workbench
@@ -49,17 +49,10 @@ class TestWorkbench(object):
 
         assert os.path.exists(tmpfile_name)
 
-        self.workbench_manager.destroy_workbench(this_workbench)
+        wb_dir = this_workbench.dir
+        this_workbench.destroy_self()
         assert not os.path.exists(tmpfile_name)
-        assert not os.path.exists(this_workbench.dir)
-
-        # make sure we can't kill other stuff though
-        dont_kill_this = workbench.Workbench(tempfile.mkdtemp())
-
-        assert_raises(
-            workbench.WorkbenchOutsideScope,
-            self.workbench_manager.destroy_workbench,
-            dont_kill_this)
+        assert not os.path.exists(wb_dir)
 
     def test_localized_file(self):
         tmpdir, this_storage = get_tmp_filestorage()

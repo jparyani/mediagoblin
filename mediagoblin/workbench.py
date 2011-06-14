@@ -23,24 +23,21 @@ DEFAULT_WORKBENCH_DIR = os.path.join(
     tempfile.gettempdir(), u'mgoblin_workbench')
 
 
-# Exception(s)
-# ------------
-
-class WorkbenchOutsideScope(Exception):
-    """
-    Raised when a workbench is outside a WorkbenchManager scope.
-    """
-    pass
-
-
 # Actual workbench stuff
 # ----------------------
 
 class Workbench(object):
     """
     Represent the directory for the workbench
+
+    WARNING: DO NOT create Workbench objects on your own,
+    let the WorkbenchManager do that for you!
     """
     def __init__(self, dir):
+        """
+        WARNING: DO NOT create Workbench objects on your own,
+        let the WorkbenchManager do that for you!
+        """
         self.dir = dir
 
     def __unicode__(self):
@@ -117,6 +114,19 @@ class Workbench(object):
 
             return full_dest_filename
 
+    def destroy_self(self):
+        """
+        Destroy this workbench!  Deletes the directory and all its contents!
+
+        WARNING: Does no checks for a sane value in self.dir!
+        """
+        # just in case
+        workbench = os.path.abspath(self.dir)
+
+        shutil.rmtree(workbench)
+
+        del self.dir
+
 
 class WorkbenchManager(object):
     """
@@ -136,18 +146,3 @@ class WorkbenchManager(object):
         Create and return the path to a new workbench (directory).
         """
         return Workbench(tempfile.mkdtemp(dir=self.base_workbench_dir))
-
-    def destroy_workbench(self, workbench):
-        """
-        Destroy this workbench!  Deletes the directory and all its contents!
-
-        Makes sure the workbench actually belongs to this manager though.
-        """
-        # just in case
-        workbench = os.path.abspath(workbench.dir)
-
-        if not workbench.startswith(self.base_workbench_dir):
-            raise WorkbenchOutsideScope(
-                "Can't destroy workbench outside the base workbench dir")
-
-        shutil.rmtree(workbench)

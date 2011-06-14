@@ -75,4 +75,4 @@ def process_media_initial(media_id):
     entry.save()
 
     # clean up workbench
-    mgg.workbench_manager.destroy_workbench(workbench)
+    workbench.destroy_self()
