@@ -83,20 +83,19 @@ class TestWorkbench(object):
         with this_storage.get_file(filepath, 'w') as our_file:
             our_file.write('Our file')
 
-        filename = self.workbench_manager.localized_file(
-            this_workbench, this_storage, filepath)
+        filename = this_workbench.localized_file(this_storage, filepath)
         assert filename == os.path.join(
             this_workbench.dir, 'ourfile.txt')
         
         # fake remote file storage, filename_if_copying set
-        filename = self.workbench_manager.localized_file(
-            this_workbench, this_storage, filepath, 'thisfile')
+        filename = this_workbench.localized_file(
+            this_storage, filepath, 'thisfile')
         assert filename == os.path.join(
             this_workbench.dir, 'thisfile.txt')
 
         # fake remote file storage, filename_if_copying set,
         # keep_extension_if_copying set to false
-        filename = self.workbench_manager.localized_file(
-            this_workbench, this_storage, filepath, 'thisfile.text', False)
+        filename = this_workbench.localized_file(
+            this_storage, filepath, 'thisfile.text', False)
         assert filename == os.path.join(
             this_workbench.dir, 'thisfile.text')

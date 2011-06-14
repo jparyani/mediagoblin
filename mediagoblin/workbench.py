@@ -151,6 +151,3 @@ class WorkbenchManager(object):
                 "Can't destroy workbench outside the base workbench dir")
 
         shutil.rmtree(workbench)
-
-    def localized_file(self, workbench, *args, **kwargs):
-        return workbench.localized_file(*args, **kwargs)
