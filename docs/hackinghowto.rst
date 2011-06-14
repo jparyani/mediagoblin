@@ -4,6 +4,10 @@
  Hacking HOWTO
 ===============
 
+.. contents:: Sections
+   :local:
+
+
 So you want to hack on GNU MediaGoblin?
 =======================================
 

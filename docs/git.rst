@@ -2,6 +2,10 @@
  Git, Cloning and Patches
 ==========================
 
+.. contents:: Sections
+   :local:
+
+
 GNU MediaGoblin uses git for all our version control and we have the
 repositories hosted on `Gitorious <http://gitorious.org/>`_.  We have
 two repositories:
