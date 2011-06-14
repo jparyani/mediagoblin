@@ -47,10 +47,15 @@ def register(request):
 
         users_with_username = request.db.User.find(
             {'username': request.POST['username'].lower()}).count()
+        users_with_email = request.db.User.find(
+            {'email': request.POST['email'].lower()}).count()
 
         if users_with_username:
             register_form.username.errors.append(
                 _(u'Sorry, a user with that name already exists.'))
+        elif users_with_email:
+            register_form.email.errors.append(
+                _(u'Sorry, that email address has already been taken.'))
 
         else:
             # Create the user
