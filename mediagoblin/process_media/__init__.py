@@ -39,8 +39,8 @@ def process_media_initial(media_id):
         {'_id': ObjectId(media_id)})
 
     queued_filepath = entry['queued_media_file']
-    queued_filename = mgg.workbench_manager.localized_file(
-        workbench, mgg.queue_store, queued_filepath,
+    queued_filename = workbench.localized_file(
+        mgg.queue_store, queued_filepath,
         'source')
 
     queued_file = file(queued_filename, 'r')
@@ -77,4 +77,4 @@ def process_media_initial(media_id):
     entry.save()
 
     # clean up workbench
-    mgg.workbench_manager.destroy_workbench(workbench)
+    workbench.destroy_self()
