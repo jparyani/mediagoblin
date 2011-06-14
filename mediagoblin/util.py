@@ -30,6 +30,7 @@ import jinja2
 import translitcodec
 from paste.deploy.loadwsgi import NicerConfigParser
 from webob import Response, exc
+from lxml.html.clean import Cleaner
 
 from mediagoblin import mg_globals
 from mediagoblin.db.util import ObjectId
@@ -371,6 +372,32 @@ def read_config_file(conf_file):
          for section_name in parser.sections()])
 
     return mgoblin_conf
+
+
+# A super strict version of the lxml.html cleaner class
+HTML_CLEANER = Cleaner(
+    scripts=True,
+    javascript=True,
+    comments=True,
+    style=True,
+    links=True,
+    page_structure=True,
+    processing_instructions=True,
+    embedded=True,
+    frames=True,
+    forms=True,
+    annoying_tags=True,
+    allow_tags=[
+        'div', 'b', 'i', 'em', 'strong', 'p', 'ul', 'ol', 'li', 'a', 'br'],
+    remove_unknown_tags=False, # can't be used with allow_tags
+    safe_attrs_only=True,
+    add_nofollow=True, # for now
+    host_whitelist=(),
+    whitelist_tags=set([]))
+
+
+def clean_html(html):
+    return HTML_CLEANER.clean_html(html)
 
 
 SETUP_GETTEXTS = {}
