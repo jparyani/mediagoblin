@@ -27,7 +27,7 @@ translations = gettext.find(
 
 
 def setup_globals(**kwargs):
-    from mediagoblin import globals as mg_globals
+    from mediagoblin import mg_globals
 
     for key, value in kwargs.iteritems():
         setattr(mg_globals, key, value)

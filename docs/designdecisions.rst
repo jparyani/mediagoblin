@@ -4,6 +4,10 @@
  Design Decisions
 ==================
 
+.. contents:: Sections
+   :local:
+
+
 This chapter talks a bit about design decisions.
 
 

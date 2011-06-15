@@ -13,3 +13,14 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+from mediagoblin import mg_globals
+
+
+def setup_package():
+    pass
+
+def teardown_package():
+    print "Killing db ..."
+    mg_globals.db_connection.drop_database(mg_globals.database.name)
+    print "... done"

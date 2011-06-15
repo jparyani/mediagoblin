@@ -4,6 +4,10 @@
  Contributing HOWTO
 ====================
 
+.. contents:: Sections
+   :local:
+
+
 .. _join-the-community-section:
 
 Join the community!

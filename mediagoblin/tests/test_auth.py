@@ -20,7 +20,7 @@ from nose.tools import assert_equal
 
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.tests.tools import setup_fresh_app
-from mediagoblin import globals as mgoblin_globals
+from mediagoblin import mg_globals
 from mediagoblin import util
 
 
@@ -137,7 +137,7 @@ def test_register_views(test_app):
         u'Passwords must match.']
 
     ## At this point there should be no users in the database ;)
-    assert not mgoblin_globals.database.User.find().count()
+    assert not mg_globals.database.User.find().count()
 
     # Successful register
     # -------------------
@@ -158,7 +158,7 @@ def test_register_views(test_app):
         'mediagoblin/auth/register_success.html')
 
     ## Make sure user is in place
-    new_user = mgoblin_globals.database.User.find_one(
+    new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
     assert new_user
     assert new_user['status'] == u'needs_email_verification'
@@ -191,7 +191,7 @@ def test_register_views(test_app):
     context = util.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/auth/verify_email.html']
     assert context['verification_successful'] == False
-    new_user = mgoblin_globals.database.User.find_one(
+    new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
     assert new_user
     assert new_user['status'] == u'needs_email_verification'
@@ -203,7 +203,7 @@ def test_register_views(test_app):
     context = util.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/auth/verify_email.html']
     assert context['verification_successful'] == True
-    new_user = mgoblin_globals.database.User.find_one(
+    new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
     assert new_user
     assert new_user['status'] == u'active'

@@ -19,13 +19,12 @@ import os
 from mediagoblin.tests.tools import TEST_APP_CONFIG
 from mediagoblin import util
 from mediagoblin.celery_setup import setup_celery_from_config
-from mediagoblin.globals import setup_globals
 
 
-OUR_MODULENAME = 'mediagoblin.celery_setup.from_tests'
+OUR_MODULENAME = __name__
 
 
-def setup_self(setup_globals_func=setup_globals):
+def setup_self():
     """
     Set up celery for testing's sake, which just needs to set up
     celery and celery only.
