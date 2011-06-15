@@ -17,7 +17,7 @@
 
 import code
 
-from mediagoblin import globals as mgoblin_globals
+from mediagoblin import mg_globals
 from mediagoblin.gmg_commands import util as commands_util
 
 
@@ -35,7 +35,7 @@ GNU MediaGoblin shell!
 ----------------------
 Available vars:
  - mgoblin_app: instantiated mediagoblin application
- - mgoblin_globals: mediagoblin.globals
+ - mg_globals: mediagoblin.globals
  - db: database instance
 """
 
@@ -50,5 +50,5 @@ def shell(args):
         banner=SHELL_BANNER,
         local={
             'mgoblin_app': mgoblin_app,
-            'mgoblin_globals': mgoblin_globals,
-            'db': mgoblin_globals.database})
+            'mg_globals': mg_globals,
+            'db': mg_globals.database})

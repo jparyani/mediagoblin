@@ -23,54 +23,34 @@ DEFAULT_WORKBENCH_DIR = os.path.join(
     tempfile.gettempdir(), u'mgoblin_workbench')
 
 
-# Exception(s)
-# ------------
-
-class WorkbenchOutsideScope(Exception):
-    """
-    Raised when a workbench is outside a WorkbenchManager scope.
-    """
-    pass
-
-
 # Actual workbench stuff
 # ----------------------
 
-class WorkbenchManager(object):
+class Workbench(object):
     """
-    A system for generating and destroying workbenches.
+    Represent the directory for the workbench
 
-    Workbenches are actually just subdirectories of a temporary storage space
-    for during the processing stage.
+    WARNING: DO NOT create Workbench objects on your own,
+    let the WorkbenchManager do that for you!
     """
-
-    def __init__(self, base_workbench_dir):
-        self.base_workbench_dir = os.path.abspath(base_workbench_dir)
-        if not os.path.exists(self.base_workbench_dir):
-            os.makedirs(self.base_workbench_dir)
-        
-    def create_workbench(self):
+    def __init__(self, dir):
         """
-        Create and return the path to a new workbench (directory).
+        WARNING: DO NOT create Workbench objects on your own,
+        let the WorkbenchManager do that for you!
         """
-        return tempfile.mkdtemp(dir=self.base_workbench_dir)
+        self.dir = dir
 
-    def destroy_workbench(self, workbench):
-        """
-        Destroy this workbench!  Deletes the directory and all its contents!
+    def __unicode__(self):
+        return unicode(self.dir)
+    def __str__(self):
+        return str(self.dir)
+    def __repr__(self):
+        return repr(self.dir)
 
-        Makes sure the workbench actually belongs to this manager though.
-        """
-        # just in case
-        workbench = os.path.abspath(workbench)
+    def joinpath(self, *args):
+        return os.path.join(self.dir, *args)
 
-        if not workbench.startswith(self.base_workbench_dir):
-            raise WorkbenchOutsideScope(
-                "Can't destroy workbench outside the base workbench dir")
-
-        shutil.rmtree(workbench)
-
-    def localized_file(self, workbench, storage, filepath,
+    def localized_file(self, storage, filepath,
                        filename_if_copying=None,
                        keep_extension_if_copying=True):
         """
@@ -126,10 +106,43 @@ class WorkbenchManager(object):
                     dest_filename = filename_if_copying
 
             full_dest_filename = os.path.join(
-                workbench, dest_filename)
+                self.dir, dest_filename)
 
             # copy it over
             storage.copy_locally(
                 filepath, full_dest_filename)
 
             return full_dest_filename
+
+    def destroy_self(self):
+        """
+        Destroy this workbench!  Deletes the directory and all its contents!
+
+        WARNING: Does no checks for a sane value in self.dir!
+        """
+        # just in case
+        workbench = os.path.abspath(self.dir)
+
+        shutil.rmtree(workbench)
+
+        del self.dir
+
+
+class WorkbenchManager(object):
+    """
+    A system for generating and destroying workbenches.
+
+    Workbenches are actually just subdirectories of a temporary storage space
+    for during the processing stage.
+    """
+
+    def __init__(self, base_workbench_dir):
+        self.base_workbench_dir = os.path.abspath(base_workbench_dir)
+        if not os.path.exists(self.base_workbench_dir):
+            os.makedirs(self.base_workbench_dir)
+        
+    def create_workbench(self):
+        """
+        Create and return the path to a new workbench (directory).
+        """
+        return Workbench(tempfile.mkdtemp(dir=self.base_workbench_dir))

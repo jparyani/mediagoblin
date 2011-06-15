@@ -30,8 +30,9 @@ import jinja2
 import translitcodec
 from paste.deploy.loadwsgi import NicerConfigParser
 from webob import Response, exc
+from lxml.html.clean import Cleaner
 
-from mediagoblin import globals as mgoblin_globals
+from mediagoblin import mg_globals
 from mediagoblin.db.util import ObjectId
 
 TESTS_ENABLED = False
@@ -101,8 +102,8 @@ def get_jinja_env(template_loader, locale):
         extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
 
     template_env.install_gettext_callables(
-        mgoblin_globals.translations.gettext,
-        mgoblin_globals.translations.ngettext)
+        mg_globals.translations.gettext,
+        mg_globals.translations.ngettext)
 
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env
@@ -263,9 +264,9 @@ def send_email(from_addr, to_addrs, subject, message_body):
      - message_body: email body text
     """
     # TODO: make a mock mhost if testing is enabled
-    if TESTS_ENABLED or mgoblin_globals.email_debug_mode:
+    if TESTS_ENABLED or mg_globals.email_debug_mode:
         mhost = FakeMhost()
-    elif not mgoblin_globals.email_debug_mode:
+    elif not mg_globals.email_debug_mode:
         mhost = smtplib.SMTP()
 
     mhost.connect()
@@ -278,7 +279,7 @@ def send_email(from_addr, to_addrs, subject, message_body):
     if TESTS_ENABLED:
         EMAIL_TEST_INBOX.append(message)
 
-    if getattr(mgoblin_globals, 'email_debug_mode', False):
+    if getattr(mg_globals, 'email_debug_mode', False):
         print u"===== Email ====="
         print u"From address: %s" % message['From']
         print u"To addresses: %s" % message['To']
@@ -372,6 +373,32 @@ def read_config_file(conf_file):
     return mgoblin_conf
 
 
+# A super strict version of the lxml.html cleaner class
+HTML_CLEANER = Cleaner(
+    scripts=True,
+    javascript=True,
+    comments=True,
+    style=True,
+    links=True,
+    page_structure=True,
+    processing_instructions=True,
+    embedded=True,
+    frames=True,
+    forms=True,
+    annoying_tags=True,
+    allow_tags=[
+        'div', 'b', 'i', 'em', 'strong', 'p', 'ul', 'ol', 'li', 'a', 'br'],
+    remove_unknown_tags=False, # can't be used with allow_tags
+    safe_attrs_only=True,
+    add_nofollow=True, # for now
+    host_whitelist=(),
+    whitelist_tags=set([]))
+
+
+def clean_html(html):
+    return HTML_CLEANER.clean_html(html)
+
+
 SETUP_GETTEXTS = {}
 
 def setup_gettext(locale):
@@ -392,7 +419,7 @@ def setup_gettext(locale):
         if exists(locale):
             SETUP_GETTEXTS[locale] = this_gettext
 
-    mgoblin_globals.setup_globals(
+    mg_globals.setup_globals(
         translations=this_gettext)
 
 

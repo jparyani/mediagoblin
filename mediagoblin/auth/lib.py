@@ -20,7 +20,7 @@ import random
 import bcrypt
 
 from mediagoblin.util import send_email, render_template
-from mediagoblin import globals as mgoblin_globals
+from mediagoblin import mg_globals
 
 
 def bcrypt_check_password(raw_pass, stored_hash, extra_salt=None):
@@ -112,7 +112,7 @@ def send_verification_email(user, request):
 
     # TODO: There is no error handling in place
     send_email(
-        mgoblin_globals.email_sender_address,
+        mg_globals.email_sender_address,
         [user['email']],
         # TODO
         # Due to the distributed nature of GNU MediaGoblin, we should

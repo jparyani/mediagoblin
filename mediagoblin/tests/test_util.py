@@ -103,3 +103,22 @@ def test_locale_to_lower_lower():
     # crazy renditions.  Useful?
     assert util.locale_to_lower_lower('en-US') == 'en-us'
     assert util.locale_to_lower_lower('en_us') == 'en-us'
+
+
+def test_html_cleaner():
+    # Remove images
+    result = util.clean_html(
+        '<p>Hi everybody! '
+        '<img src="http://example.org/huge-purple-barney.png" /></p>\n'
+        '<p>:)</p>')
+    assert result == (
+        '<div>'
+        '<p>Hi everybody! </p>\n'
+        '<p>:)</p>'
+        '</div>')
+
+    # Remove evil javascript
+    result = util.clean_html(
+        '<p><a href="javascript:nasty_surprise">innocent link!</a></p>')
+    assert result == (
+        '<p><a href="">innocent link!</a></p>')
