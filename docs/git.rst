@@ -136,7 +136,7 @@ Slartibartfast does the following:
 4. Slartibartfast pushes his changes to his clone (the remote is named
    ``origin``)::
 
-       git push origin issue_42
+       git push origin issue_42 --set-upstream
 
 5. Slartibartfast adds a comment to issue 42 with the url for his
    repository and the name of the branch he put the code in.  He also
