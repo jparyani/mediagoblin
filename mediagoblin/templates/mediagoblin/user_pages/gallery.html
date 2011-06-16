@@ -26,7 +26,9 @@
 
 {% block mediagoblin_content -%}
   {% if user %}
-    <h1>'{{ user.username }}' gallery</h1>
+    <h1>gallery for <a href="{{ request.urlgen(
+	                            'mediagoblin.user_pages.user_home',
+                                 user=user.username) }}">{{ user.username }}</a></h1>
 
     {% include "mediagoblin/utils/object_gallery.html" %}
 
