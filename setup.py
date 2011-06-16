@@ -42,6 +42,7 @@ setup(
         'translitcodec',
         'argparse',
         'webtest',
+        'ConfigObj',
         ],
     test_suite='nose.collector',
 
