@@ -77,7 +77,7 @@ def test_register_views(test_app):
     # Make sure it rendered with the appropriate template
     assert util.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/auth/register.html')
-    
+
     # Try to register without providing anything, should error
     # --------------------------------------------------------
 
@@ -182,7 +182,7 @@ def test_register_views(test_app):
         unicode(new_user['_id'])]
     assert parsed_get_params['token'] == [
         new_user['verification_key']]
-    
+
     ## Try verifying with bs verification key, shouldn't work
     util.clear_test_template_context()
     test_app.get(
@@ -209,8 +209,6 @@ def test_register_views(test_app):
     assert new_user['status'] == u'active'
     assert new_user['email_verified'] == True
 
-    ## TODO: Try logging in
-    
     # Uniqueness checks
     # -----------------
     ## We shouldn't be able to register with that user twice
@@ -221,7 +219,7 @@ def test_register_views(test_app):
             'password': 'iamsohappy2',
             'confirm_password': 'iamsohappy2',
             'email': 'happygrrl2@example.org'})
-    
+
     context = util.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/auth/register.html']
     form = context['register_form']
@@ -229,3 +227,43 @@ def test_register_views(test_app):
         u'Sorry, a user with that name already exists.']
 
     ## TODO: Also check for double instances of an email address?
+
+
+@setup_fresh_app
+def test_authentication_views(test_app):
+    """
+    Test logging in and logging out
+    """
+    # Make a new user
+    test_user = mg_globals.database.User()
+    test_user['username'] = u'chris'
+    test_user['email'] = u'chris@example.com'
+    test_user['pw_hash'] = auth_lib.bcrypt_gen_password_hash('toast')
+    test_user.save()
+
+    # Get login
+    test_app.get('/auth/login/')
+    # Make sure it rendered with the appropriate template
+    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+        'mediagoblin/auth/login.html')
+
+    # Log in as that user
+    util.clear_test_template_context()
+    response = test_app.post(
+        '/auth/login/', {
+            'username': u'chris',
+            'password': 'toast'})
+    response.follow()
+    assert_equal(
+        urlparse.urlsplit(response.location)[2],
+        '/')
+    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+        'mediagoblin/root.html')
+
+    # Make sure we're in the session or something
+    session = util.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']['request'].session
+    assert session['user_id'] == unicode(test_user['_id'])
+
+    # Log out as that user
+    # Make sure we're not in the session
+
