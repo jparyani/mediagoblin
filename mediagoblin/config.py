@@ -82,7 +82,7 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
     return config, validation_result
 
 
-REPORT_HEADER = """\
+REPORT_HEADER = u"""\
 There were validation problems loading this config file:
 --------------------------------------------------------
 """
