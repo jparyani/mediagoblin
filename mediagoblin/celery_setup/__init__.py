@@ -22,6 +22,7 @@ MANDATORY_CELERY_IMPORTS = ['mediagoblin.process_media']
 
 DEFAULT_SETTINGS_MODULE = 'mediagoblin.celery_setup.dummy_settings_module'
 
+
 def setup_celery_from_config(app_config, global_config,
                              settings_module=DEFAULT_SETTINGS_MODULE,
                              force_celery_always_eager=False,
@@ -43,9 +44,8 @@ def setup_celery_from_config(app_config, global_config,
         # Don't setup celery based on our config file.
         return
 
-    celery_conf_section = app_config.get('celery_section', 'celery')
-    if global_config.has_key(celery_conf_section):
-        celery_conf = global_config[celery_conf_section]
+    if global_config.has_key('celery'):
+        celery_conf = global_config['celery']
     else:
         celery_conf = {}
     
