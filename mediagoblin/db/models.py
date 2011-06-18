@@ -46,6 +46,8 @@ class User(Document):
         'status': unicode,
         'verification_key': unicode,
         'is_admin': bool,
+        'website_url' : unicode,
+        'bio' : unicode
         }
 
     required_fields = ['username', 'created', 'pw_hash', 'email']
