@@ -58,7 +58,7 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
     config_path = os.path.abspath(config_path)
 
     config_spec = ConfigObj(
-        CONFIG_SPEC_PATH,
+        config_spec,
         encoding='UTF8', list_values=False, _inspec=True)
 
     _setup_defaults(config_spec, config_path)
