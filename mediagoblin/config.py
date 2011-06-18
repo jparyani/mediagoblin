@@ -17,7 +17,7 @@
 import os
 import pkg_resources
 
-from configobj import ConfigObj
+from configobj import ConfigObj, flatten_errors
 from validate import Validator
 
 
@@ -42,13 +42,18 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
     Also provides %(__file__)s and %(here)s values of this file and
     its directory respectively similar to paste deploy.
 
+    This function doesn't itself raise any exceptions if validation
+    fails, you'll have to do something
+
     Args:
      - config_path: path to the config file
      - config_spec: config file that provides defaults and value types
        for validation / conversion.  Defaults to mediagoblin/config_spec.ini
 
     Returns:
-      A read ConfigObj object.
+      A tuple like: (config, validation_result)
+      ... where 'conf' is the parsed config object and 'validation_result'
+      is the information from the validation process.
     """
     config_path = os.path.abspath(config_path)
 
@@ -58,14 +63,60 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
 
     _setup_defaults(config_spec, config_path)
 
-    conf = ConfigObj(
+    config = ConfigObj(
         config_path,
         configspec=config_spec,
         interpolation='ConfigParser')
 
-    _setup_defaults(conf, config_path)
+    _setup_defaults(config, config_path)
 
-    conf.validate(Validator())
+    # For now the validator just works with the default functions,
+    # but in the future if we want to add additional validation/configuration
+    # functions we'd add them to validator.functions here.
+    # 
+    # See also:
+    #   http://www.voidspace.org.uk/python/validate.html#adding-functions
+    validator = Validator()
+    validation_result = config.validate(validator, preserve_errors=True)
 
-    return conf
+    return config, validation_result
 
+
+REPORT_HEADER = """\
+There were validation problems loading this config file:
+--------------------------------------------------------
+"""
+
+
+def generate_validation_report(config, validation_result):
+    """
+    Generate a report if necessary of problems while validating.
+
+    Returns:
+      Either a string describing for a user the problems validating
+      this config or None if there are no problems.
+    """
+    report = []
+
+    # Organize the report
+    for entry in flatten_errors(config, validation_result):
+        # each entry is a tuple
+        section_list, key, error = entry
+
+        if key is not None:
+            section_list.append(key)
+        else:
+            section_list.append(u'[missing section]')
+
+        section_string = u':'.join(section_list)
+
+        if error == False:
+            # We don't care about missing values for now.
+            continue
+
+        report.append(u"%s = %s" % (section_string, error))
+
+    if report:
+        return REPORT_HEADER + u"\n".join(report)
+    else:
+        return None
