@@ -46,7 +46,7 @@ class User(Document):
         'status': unicode,
         'verification_key': unicode,
         'is_admin': bool,
-        'website_url' : unicode,
+        'url' : unicode,
         'bio' : unicode
         }
 

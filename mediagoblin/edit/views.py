@@ -59,3 +59,23 @@ def edit_media(request, media):
         'mediagoblin/edit/edit.html',
         {'media': media,
          'form': form})
+    
+@require_active_login
+def edit_profile(request):
+
+    form = forms.EditProfileForm(request.POST,
+        url = user['url'],
+        bio = user['bio'])
+
+    if request.method == 'POST' and form.validate():
+            user['url'] = request.POST['url']
+            user['bio'] = request.POST['bio']
+            user.save()
+
+            return redirect(request, "index", user=user.username)
+
+    return render_to_response(
+        request,
+        'mediagoblin/edit/edit_profile.html',
+        {'user': user,
+         'form': form})
