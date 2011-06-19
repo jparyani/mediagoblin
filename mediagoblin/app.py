@@ -75,9 +75,9 @@ class MediaGoblinApp(object):
             app_config.get('user_template_path'))
         
         # Set up storage systems
-        self.public_store = storage.storage_system_from_paste_config(
+        self.public_store = storage.storage_system_from_config(
             app_config, 'publicstore')
-        self.queue_store = storage.storage_system_from_paste_config(
+        self.queue_store = storage.storage_system_from_config(
             app_config, 'queuestore')
 
         # set up routing
