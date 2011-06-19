@@ -242,17 +242,69 @@ def test_authentication_views(test_app):
     test_user.save()
 
     # Get login
+    # ---------
     test_app.get('/auth/login/')
-    # Make sure it rendered with the appropriate template
     assert util.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/auth/login.html')
 
-    # Log in as that user
+    # Failed login - blank form
+    # -------------------------
+    util.clear_test_template_context()
+    response = test_app.post('/auth/login/')
+    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
+    form = context['login_form']
+    assert form.username.errors == [u'This field is required.']
+    assert form.password.errors == [u'This field is required.']
+
+    # Failed login - blank user
+    # -------------------------
+    util.clear_test_template_context()
+    response = test_app.post(
+        '/auth/login/', {
+            'password': u'toast'})
+    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
+    form = context['login_form']
+    assert form.username.errors == [u'This field is required.']
+
+    # Failed login - blank password
+    # -----------------------------
+    util.clear_test_template_context()
+    response = test_app.post(
+        '/auth/login/', {
+            'username': u'chris'})
+    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
+    form = context['login_form']
+    assert form.password.errors == [u'This field is required.']
+
+    # Failed login - bad user
+    # -----------------------
+    util.clear_test_template_context()
+    response = test_app.post(
+        '/auth/login/', {
+            'username': u'steve',
+            'password': 'toast'})
+    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
+    assert context['login_failed']
+
+    # Failed login - bad password
+    # ---------------------------
+    util.clear_test_template_context()
+    response = test_app.post(
+        '/auth/login/', {
+            'username': u'chris',
+            'password': 'jam'})
+    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
+    assert context['login_failed']
+
+    # Successful login
+    # ----------------
     util.clear_test_template_context()
     response = test_app.post(
         '/auth/login/', {
             'username': u'chris',
             'password': 'toast'})
+
+    # User should be redirected
     response.follow()
     assert_equal(
         urlparse.urlsplit(response.location)[2],
@@ -260,10 +312,28 @@ def test_authentication_views(test_app):
     assert util.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/root.html')
 
-    # Make sure we're in the session or something
-    session = util.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']['request'].session
+    # Make sure user is in the session
+    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
+    session = context['request'].session
     assert session['user_id'] == unicode(test_user['_id'])
 
-    # Log out as that user
-    # Make sure we're not in the session
+    # TODO: test custom redirect when next=True
+
+    # Successful logout
+    # -----------------
+    util.clear_test_template_context()
+    response = test_app.get('/auth/logout/')
+
+    # Should be redirected to index page
+    response.follow()
+    assert_equal(
+        urlparse.urlsplit(response.location)[2],
+        '/')
+    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+        'mediagoblin/root.html')
+
+    # Make sure the user is not in the session
+    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
+    session = context['request'].session
+    assert session.has_key('user_id') == False
 
