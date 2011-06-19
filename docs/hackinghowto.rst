@@ -158,7 +158,7 @@ Running the test suite
 
 Run::
 
-    ./bin/nosetests
+    ./runtests.sh
 
 
 Running a shell
