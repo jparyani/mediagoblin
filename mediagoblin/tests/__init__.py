@@ -21,6 +21,7 @@ def setup_package():
     pass
 
 def teardown_package():
-    print "Killing db ..."
-    mg_globals.db_connection.drop_database(mg_globals.database.name)
-    print "... done"
+    if mg_globals.db_connection:
+        print "Killing db ..."
+        mg_globals.db_connection.drop_database(mg_globals.database.name)
+        print "... done"

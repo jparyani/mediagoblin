@@ -125,7 +125,7 @@ Running the server
 
 Run::
 
-    ./bin/paster serve mediagoblin.ini --reload
+    ./bin/paster serve server.ini --reload
 
 
 Running celeryd
@@ -143,7 +143,7 @@ Run::
 Too much work?  Don't want to run an http server and celeryd at the
 same time?  For development purposes there's a shortcut::
 
-    CELERY_ALWAYS_EAGER=true ./bin/paster serve mediagoblin.ini --reload
+    CELERY_ALWAYS_EAGER=true ./bin/paster serve server.ini --reload
 
 This way the web server will block on processing items until they are
 done, but you don't need to run celery separately (which is probably
@@ -156,7 +156,7 @@ Running the test suite
 
 Run::
 
-    CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_tests ./bin/nosetests
+    ./bin/nosetests
 
 
 Running a shell

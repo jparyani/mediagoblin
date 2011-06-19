@@ -247,7 +247,7 @@ def clean_listy_filepath(listy_filepath):
     return cleaned_filepath
 
 
-def storage_system_from_paste_config(paste_config, storage_prefix):
+def storage_system_from_config(paste_config, storage_prefix):
     """
     Utility for setting up a storage system from the paste app config.
 
@@ -266,7 +266,7 @@ def storage_system_from_paste_config(paste_config, storage_prefix):
       An instantiated storage system.
 
     Example:
-      storage_system_from_paste_config(
+      storage_system_from_config(
         {'publicstore_base_url': '/media/',
          'publicstore_base_dir': '/var/whatever/media/'},
         'publicstore')

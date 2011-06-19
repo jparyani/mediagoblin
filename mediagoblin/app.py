@@ -18,14 +18,15 @@ import os
 import urllib
 
 import routes
-from paste.deploy.converters import asbool
 from webob import Request, exc
 
 from mediagoblin import routing, util, storage, staticdirect
+from mediagoblin.config import (
+    read_mediagoblin_config, generate_validation_report)
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.celery_setup import setup_celery_from_config
-from mediagoblin.workbench import WorkbenchManager, DEFAULT_WORKBENCH_DIR
+from mediagoblin.workbench import WorkbenchManager
 
 
 class Error(Exception): pass
@@ -34,42 +35,102 @@ class ImproperlyConfigured(Error): pass
 
 class MediaGoblinApp(object):
     """
-    Really basic wsgi app using routes and WebOb.
+    WSGI application of MediaGoblin
+
+    ... this is the heart of the program!
     """
-    def __init__(self, connection, db,
-                 public_store, queue_store,
-                 staticdirector,
-                 email_sender_address, email_debug_mode,
-                 user_template_path=None,
-                 workbench_path=DEFAULT_WORKBENCH_DIR):
+    def __init__(self, config_path, setup_celery=True):
+        """
+        Initialize the application based on a configuration file.
+
+        Arguments:
+         - config_path: path to the configuration file we're opening.
+         - setup_celery: whether or not to setup celery during init.
+           (Note: setting 'celery_setup_elsewhere' also disables
+           setting up celery.)
+        """
+        ##############
+        # Setup config
+        ##############
+
+        # Open and setup the config
+        global_config, validation_result = read_mediagoblin_config(config_path)
+        app_config = global_config['mediagoblin']
+        # report errors if necessary
+        validation_report = generate_validation_report(
+            global_config, validation_result)
+        if validation_report:
+            raise ImproperlyConfigured(validation_report)
+
+        ##########################################
+        # Setup other connections / useful objects
+        ##########################################
+
+        # Set up the database
+        self.connection, self.db = setup_connection_and_db_from_config(
+            app_config)
+
         # Get the template environment
-        self.template_loader = util.get_jinja_loader(user_template_path)
+        self.template_loader = util.get_jinja_loader(
+            app_config.get('user_template_path'))
         
         # Set up storage systems
-        self.public_store = public_store
-        self.queue_store = queue_store
-
-        # Set up database
-        self.connection = connection
-        self.db = db
+        self.public_store = storage.storage_system_from_config(
+            app_config, 'publicstore')
+        self.queue_store = storage.storage_system_from_config(
+            app_config, 'queuestore')
 
         # set up routing
         self.routing = routing.get_mapper()
 
         # set up staticdirector tool
-        self.staticdirector = staticdirector
+        if app_config.has_key('direct_remote_path'):
+            self.staticdirector = staticdirect.RemoteStaticDirect(
+                app_config['direct_remote_path'].strip())
+        elif app_config.has_key('direct_remote_paths'):
+            direct_remote_path_lines = app_config[
+                'direct_remote_paths'].strip().splitlines()
+            self.staticdirector = staticdirect.MultiRemoteStaticDirect(
+                dict([line.strip().split(' ', 1)
+                      for line in direct_remote_path_lines]))
+        else:
+            raise ImproperlyConfigured(
+                "One of direct_remote_path or "
+                "direct_remote_paths must be provided")
 
+        # Setup celery, if appropriate
+        if setup_celery and not app_config.get('celery_setup_elsewhere'):
+            if os.environ.get('CELERY_ALWAYS_EAGER'):
+                setup_celery_from_config(
+                    app_config, global_config,
+                    force_celery_always_eager=True)
+            else:
+                setup_celery_from_config(app_config, global_config)
+
+        #######################################################
+        # Insert appropriate things into mediagoblin.mg_globals
+        #
         # certain properties need to be accessed globally eg from
         # validators, etc, which might not access to the request
         # object.
+        #######################################################
+
         setup_globals(
-            email_sender_address=email_sender_address,
-            email_debug_mode=email_debug_mode,
-            db_connection=connection,
+            app_config=app_config,
+            global_config=global_config,
+
+            # TODO: No need to set these two up as globals, we could
+            # just read them out of mg_globals.app_config
+            email_sender_address=app_config['email_sender_address'],
+            email_debug_mode=app_config['email_debug_mode'],
+
+            # Actual, useful to everyone objects
+            app=self,
+            db_connection=self.connection,
             database=self.db,
             public_store=self.public_store,
             queue_store=self.queue_store,
-            workbench_manager=WorkbenchManager(workbench_path))
+            workbench_manager=WorkbenchManager(app_config['workbench_path']))
 
     def __call__(self, environ, start_response):
         request = Request(environ)
@@ -119,45 +180,6 @@ class MediaGoblinApp(object):
 
 
 def paste_app_factory(global_config, **app_config):
-    # Get the database connection
-    connection, db = setup_connection_and_db_from_config(app_config)
-
-    # Set up the storage systems.
-    public_store = storage.storage_system_from_paste_config(
-        app_config, 'publicstore')
-    queue_store = storage.storage_system_from_paste_config(
-        app_config, 'queuestore')
-
-    # Set up the staticdirect system
-    if app_config.has_key('direct_remote_path'):
-        staticdirector = staticdirect.RemoteStaticDirect(
-            app_config['direct_remote_path'].strip())
-    elif app_config.has_key('direct_remote_paths'):
-        direct_remote_path_lines = app_config[
-            'direct_remote_paths'].strip().splitlines()
-        staticdirector = staticdirect.MultiRemoteStaticDirect(
-            dict([line.strip().split(' ', 1)
-                  for line in direct_remote_path_lines]))
-    else:
-        raise ImproperlyConfigured(
-            "One of direct_remote_path or direct_remote_paths must be provided")
-
-    if not asbool(app_config.get('celery_setup_elsewhere')):
-        if asbool(os.environ.get('CELERY_ALWAYS_EAGER')):
-            setup_celery_from_config(
-                app_config, global_config,
-                force_celery_always_eager=True)
-        else:
-            setup_celery_from_config(app_config, global_config)
-
-    mgoblin_app = MediaGoblinApp(
-        connection, db,
-        public_store=public_store, queue_store=queue_store,
-        staticdirector=staticdirector,
-        email_sender_address=app_config.get(
-            'email_sender_address', 'notice@mediagoblin.example.org'),
-        email_debug_mode=asbool(app_config.get('email_debug_mode')),
-        user_template_path=app_config.get('local_templates'),
-        workbench_path=app_config.get('workbench_path', DEFAULT_WORKBENCH_DIR))
+    mgoblin_app = MediaGoblinApp(app_config['config'])
 
     return mgoblin_app
