@@ -20,5 +20,4 @@ from routes.route import Route
 edit_routes = [
     # Media editing view handled in user_pages/routing.py
     Route('mediagoblin.edit.profile', '/{user}/profile/',
-        controller="mediagoblin.edit.views:edit_profile")
-]
+        controller="mediagoblin.edit.views:edit_profile")]

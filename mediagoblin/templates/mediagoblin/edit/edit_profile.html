@@ -20,7 +20,7 @@
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {% block mediagoblin_content %}
-  <h1>Edit details for {{ user }}</h1>
+  <h1>Edit details for {{ user['username'] }}</h1>
 
   <form action="{{ request.urlgen('mediagoblin.edit.profile',
                                user=user.username) }}"

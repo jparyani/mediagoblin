@@ -63,16 +63,17 @@ def edit_media(request, media):
 @require_active_login
 def edit_profile(request):
 
+    user = request.user
     form = forms.EditProfileForm(request.POST,
-        url = user['url'],
-        bio = user['bio'])
+        url = user.get('url'),
+        bio = user.get('bio'))
 
     if request.method == 'POST' and form.validate():
             user['url'] = request.POST['url']
             user['bio'] = request.POST['bio']
             user.save()
 
-            return redirect(request, "index", user=user.username)
+            return redirect(request, "index", user=user['username'])
 
     return render_to_response(
         request,
