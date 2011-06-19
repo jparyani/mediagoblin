@@ -125,6 +125,7 @@ class MediaGoblinApp(object):
             email_debug_mode=app_config['email_debug_mode'],
 
             # Actual, useful to everyone objects
+            app=self,
             db_connection=self.connection,
             database=self.db,
             public_store=self.public_store,
