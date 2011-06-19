@@ -17,6 +17,13 @@
 import pkg_resources
 
 from mediagoblin import celery_setup
+from mediagoblin.config import read_mediagoblin_config
+
+
+TEST_CELERY_CONF_NOSPECIALDB = pkg_resources.resource_filename(
+    'mediagoblin.tests', 'fake_celery_conf.ini')
+TEST_CELERY_CONF_MGSPECIALDB = pkg_resources.resource_filename(
+    'mediagoblin.tests', 'fake_celery_conf_mgdb.ini')
 
 
 def test_setup_celery_from_config():
@@ -27,14 +34,12 @@ def test_setup_celery_from_config():
         for var in vars_to_wipe:
             delattr(module, var)
 
+    global_config, validation_result = read_mediagoblin_config(
+        TEST_CELERY_CONF_NOSPECIALDB)
+    app_config = global_config['mediagoblin']
+
     celery_setup.setup_celery_from_config(
-        {},
-        {'something': {'or': 'other'},
-         'celery': {'some_variable': 'floop',
-                    'mail_port': '2000',
-                    'CELERYD_ETA_SCHEDULER_PRECISION': '1.3',
-                    'celery_result_persistent': 'true',
-                    'celery_imports': 'foo.bar.baz this.is.an.import'}},
+        app_config, global_config,
         'mediagoblin.tests.fake_celery_module', set_environ=False)
 
     from mediagoblin.tests import fake_celery_module
@@ -53,17 +58,12 @@ def test_setup_celery_from_config():
 
     _wipe_testmodule_clean(fake_celery_module)
 
+    global_config, validation_result = read_mediagoblin_config(
+        TEST_CELERY_CONF_MGSPECIALDB)
+    app_config = global_config['mediagoblin']
+
     celery_setup.setup_celery_from_config(
-        {'db_host': 'mongodb.example.org',
-         'db_port': '8080',
-         'db_name': 'captain_lollerskates',
-         'celery_section': 'vegetable'},
-        {'something': {'or': 'other'},
-         'vegetable': {'some_variable': 'poolf',
-                       'mail_port': '2020',
-                       'CELERYD_ETA_SCHEDULER_PRECISION': '3.1',
-                       'celery_result_persistent': 'false',
-                       'celery_imports': 'baz.bar.foo import.is.a.this'}},
+        app_config, global_config,
         'mediagoblin.tests.fake_celery_module', set_environ=False)
     
     from mediagoblin.tests import fake_celery_module
