@@ -25,7 +25,7 @@ from mediagoblin.config import (
     read_mediagoblin_config, generate_validation_report)
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.mg_globals import setup_globals
-from mediagoblin.celery_setup import setup_celery_from_config
+from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.workbench import WorkbenchManager
 
 

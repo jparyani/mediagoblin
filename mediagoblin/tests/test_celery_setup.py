@@ -16,7 +16,7 @@
 
 import pkg_resources
 
-from mediagoblin import celery_setup
+from mediagoblin.init import celery as celery_setup
 from mediagoblin.config import read_mediagoblin_config
 
 

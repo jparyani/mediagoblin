@@ -27,4 +27,4 @@ else
     exit 1
 fi
 
-CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_tests $NOSETESTS $@
+CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests $NOSETESTS $@
