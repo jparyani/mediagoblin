@@ -47,10 +47,12 @@ class BadCeleryEnviron(Exception): pass
 
 
 def get_test_app(dump_old_app=True):
-    if os.environ.get('CELERY_CONFIG_MODULE'):
+    if not os.environ.get('CELERY_CONFIG_MODULE') == \
+            'mediagoblin.celery_setup.from_tests':
         raise BadCeleryEnviron(
-            u"Sorry, you *ABSOLUTELY MUST *NOT* run nosetests with the\n"
-            u"CELERY_CONFIG_MODULE set to anything.")
+            u"Sorry, you *absolutely* must run nosetests with the\n"
+            u"mediagoblin.celery_setup.from_tests module.  Like so:\n"
+            u"$ CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_tests ./bin/nosetests")
 
     global MGOBLIN_APP
     global CELERY_SETUP
