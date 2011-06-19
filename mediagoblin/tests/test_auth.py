@@ -317,8 +317,6 @@ def test_authentication_views(test_app):
     session = context['request'].session
     assert session['user_id'] == unicode(test_user['_id'])
 
-    # TODO: test custom redirect when next=True
-
     # Successful logout
     # -----------------
     util.clear_test_template_context()
@@ -336,4 +334,16 @@ def test_authentication_views(test_app):
     context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
     session = context['request'].session
     assert session.has_key('user_id') == False
+
+    # User is redirected to custom URL if POST['next'] is set
+    # -------------------------------------------------------
+    util.clear_test_template_context()
+    response = test_app.post(
+        '/auth/login/', {
+            'username': u'chris',
+            'password': 'toast',
+            'next' : '/u/chris/'})
+    assert_equal(
+        urlparse.urlsplit(response.location)[2],
+        '/u/chris/')
 
