@@ -58,8 +58,8 @@ class FakeRemoteStorage(storage.BasicFileStorage):
     local_storage = False
 
 
-def test_storage_system_from_paste_config():
-    this_storage = storage.storage_system_from_paste_config(
+def test_storage_system_from_config():
+    this_storage = storage.storage_system_from_config(
         {'somestorage_base_url': 'http://example.org/moodia/',
          'somestorage_base_dir': '/tmp/',
          'somestorage_garbage_arg': 'garbage_arg',
@@ -69,7 +69,7 @@ def test_storage_system_from_paste_config():
     assert this_storage.base_dir == '/tmp/'
     assert this_storage.__class__ is storage.BasicFileStorage
 
-    this_storage = storage.storage_system_from_paste_config(
+    this_storage = storage.storage_system_from_config(
         {'somestorage_foobie': 'eiboof',
          'somestorage_blech': 'hcelb',
          'somestorage_garbage_arg': 'garbage_arg',

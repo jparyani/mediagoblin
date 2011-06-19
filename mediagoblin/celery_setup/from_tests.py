@@ -16,27 +16,11 @@
 
 import os
 
-from mediagoblin.tests.tools import TEST_APP_CONFIG
-from mediagoblin import util
-from mediagoblin.celery_setup import setup_celery_from_config
+from mediagoblin.celery_setup.from_celery import setup_self
 
 
 OUR_MODULENAME = __name__
 
 
-def setup_self():
-    """
-    Set up celery for testing's sake, which just needs to set up
-    celery and celery only.
-    """
-    mgoblin_conf = util.read_config_file(TEST_APP_CONFIG)
-    mgoblin_section = mgoblin_conf['app:mediagoblin']
-
-    setup_celery_from_config(
-        mgoblin_section, mgoblin_conf,
-        settings_module=OUR_MODULENAME,
-        set_environ=False)
-
-
 if os.environ.get('CELERY_CONFIG_MODULE') == OUR_MODULENAME:
-    setup_self()
+    setup_self(check_environ_for_conf=False, module_name=OUR_MODULENAME)

@@ -123,32 +123,34 @@ To do this, do::
 Running the server
 ==================
 
-Run::
+If you want to get things running quickly and without hassle, just
+run::
 
-    ./bin/paster serve mediagoblin.ini --reload
+    ./lazyserver.sh
+
+This will start up a python server where you can begin playing with
+mediagoblin.  It will also run celery in "always eager" mode so you
+don't have to start a separate process for it.
+
+This is fine in development, but if you want to actually run celery
+separately for testing (or deployment purposes), you'll want to run
+the server independently::
+
+    ./bin/paster serve server.ini --reload
 
 
 Running celeryd
 ===============
 
-You need to do this if you want your media to process and actually
-show up.  It's probably a good idea in development to have the web
-server (above) running in one terminal and celeryd in another window.
+If you aren't using ./lazyserver.sh or otherwise aren't running celery
+in always eager mode, you'll need to do this if you want your media to
+process and actually show up.  It's probably a good idea in
+development to have the web server (above) running in one terminal and
+celeryd in another window.
 
 Run::
 
     CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_celery ./bin/celeryd
-
-
-Too much work?  Don't want to run an http server and celeryd at the
-same time?  For development purposes there's a shortcut::
-
-    CELERY_ALWAYS_EAGER=true ./bin/paster serve mediagoblin.ini --reload
-
-This way the web server will block on processing items until they are
-done, but you don't need to run celery separately (which is probably
-good enough for development purposes, but something you almost
-certainly shouldn't do in production).
 
 
 Running the test suite
@@ -156,7 +158,7 @@ Running the test suite
 
 Run::
 
-    CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_tests ./bin/nosetests
+    ./bin/nosetests
 
 
 Running a shell

@@ -15,10 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import os
-
-from paste.deploy.loadwsgi import NicerConfigParser
-
 from mediagoblin import app
 
 
@@ -26,20 +22,6 @@ def setup_app(args):
     """
     Setup the application after reading the mediagoblin config files
     """
-    # Duplicated from from_celery.py, remove when we have the generic util
-    parser = NicerConfigParser(args.conf_file)
-    parser.read(args.conf_file)
-    parser._defaults.setdefault(
-        'here', os.path.dirname(os.path.abspath(args.conf_file)))
-    parser._defaults.setdefault(
-        '__file__', os.path.abspath(args.conf_file))
-
-    mgoblin_section = dict(parser.items(args.app_section))
-    mgoblin_conf = dict(
-        [(section_name, dict(parser.items(section_name)))
-         for section_name in parser.sections()])
-
-    mgoblin_app = app.paste_app_factory(
-        mgoblin_conf, **mgoblin_section)
+    mgoblin_app = app.MediaGoblinApp(args.conf_file)
 
     return mgoblin_app
