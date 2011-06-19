@@ -25,9 +25,6 @@ def shell_parser_setup(subparser):
     subparser.add_argument(
         '-cf', '--conf_file', default='mediagoblin.ini',
         help="Config file used to set up environment")
-    subparser.add_argument(
-        '-cs', '--app_section', default='app:mediagoblin',
-        help="Section of the config file where the app config is stored.")
 
 
 SHELL_BANNER = """\
