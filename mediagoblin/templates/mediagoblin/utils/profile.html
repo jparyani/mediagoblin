@@ -15,28 +15,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "mediagoblin/base.html" %}
 
-{% block mediagoblin_head %}
-    <link rel="alternate" type="application/atom+xml"
-          href="{{ request.urlgen(
-	               'mediagoblin.user_pages.atom_feed',
-                       user=user.username) }}">
-{% endblock mediagoblin_head %}
-
-{% block mediagoblin_content -%}
-  {% if user %}
-    <h1>User page for '{{ user.username }}'</h1>
-    
-    {% include "mediagoblin/utils/profile.html" %}
-
-    {% include "mediagoblin/utils/object_gallery.html" %}
-
-    <a href={{ request.urlgen(
-                   'mediagoblin.user_pages.atom_feed',
-                   user=user.username) }}> atom feed</a>
-  {% else %}
-    {# This *should* not occur as the view makes sure we pass in a user. #}
-    <p>Sorry, no such user found.<p/>
-  {% endif %}
+{% block profile_content -%}
+  <div>
+    <ul>
+      {% if user.url %}
+          <li>
+            <a href="{{ user.url }}">homepage</a>
+          </li>
+      {%  endif %}
+      
+      {% if user.bio %}
+          <li>
+            {{ user.bio }}
+          </li>
+      {%  endif %}
+    </ul>
+  </div>
 {% endblock %}    
