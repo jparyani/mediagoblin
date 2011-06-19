@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import pkg_resources
+
 from mediagoblin import celery_setup
 from mediagoblin.config import read_mediagoblin_config
 
