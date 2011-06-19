@@ -18,20 +18,25 @@
 import pkg_resources
 import os, shutil
 
-from paste.deploy import appconfig, loadapp
+from paste.deploy import loadapp
 from webtest import TestApp
 
-from mediagoblin import util
+from mediagoblin import util, mg_globals
+from mediagoblin.config import read_mediagoblin_config
+from mediagoblin.celery_setup import setup_celery_from_config
 from mediagoblin.decorators import _make_safe
 from mediagoblin.db.open import setup_connection_and_db_from_config
 
 
 MEDIAGOBLIN_TEST_DB_NAME = '__mediagoblinunittests__'
+TEST_SERVER_CONFIG = pkg_resources.resource_filename(
+    'mediagoblin.tests', 'test_server.ini')
 TEST_APP_CONFIG = pkg_resources.resource_filename(
-    'mediagoblin.tests', 'mgoblin_test_app.ini')
+    'mediagoblin.tests', 'test_mgoblin_app.ini')
 TEST_USER_DEV = pkg_resources.resource_filename(
     'mediagoblin.tests', 'test_user_dev')
 MGOBLIN_APP = None
+CELERY_SETUP = False
 
 USER_DEV_DIRECTORIES_TO_SETUP = [
     'media/public', 'media/queue',
@@ -42,12 +47,13 @@ class BadCeleryEnviron(Exception): pass
 
 
 def get_test_app(dump_old_app=True):
-    if not os.environ.get('CELERY_CONFIG_MODULE') == \
-            'mediagoblin.celery_setup.from_tests':
+    if os.environ.get('CELERY_CONFIG_MODULE'):
         raise BadCeleryEnviron(
-            u"Sorry, you *absolutely* must run nosetests with the\n"
-            u"mediagoblin.celery_setup.from_tests module.  Like so:\n"
-            u"$ CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_tests ./bin/nosetests")
+            u"Sorry, you *ABSOLUTELY MUST *NOT* run nosetests with the\n"
+            u"CELERY_CONFIG_MODULE set to anything.")
+
+    global MGOBLIN_APP
+    global CELERY_SETUP
 
     # Just return the old app if that exists and it's okay to set up
     # and return
@@ -63,16 +69,13 @@ def get_test_app(dump_old_app=True):
         os.makedirs(full_dir)
 
     # Get app config
-    config = appconfig(
-        'config:' + os.path.basename(TEST_APP_CONFIG),
-        relative_to=os.path.dirname(TEST_APP_CONFIG),
-        name='mediagoblin')
+    global_config, validation_result = read_mediagoblin_config(TEST_APP_CONFIG)
+    app_config = global_config['mediagoblin']
 
     # Wipe database
     # @@: For now we're dropping collections, but we could also just
     # collection.remove() ?
-    connection, db = setup_connection_and_db_from_config(
-        config.local_conf)
+    connection, db = setup_connection_and_db_from_config(app_config)
 
     collections_to_wipe = [
         collection
@@ -90,9 +93,19 @@ def get_test_app(dump_old_app=True):
 
     # setup app and return
     test_app = loadapp(
-        'config:' + TEST_APP_CONFIG)
+        'config:' + TEST_SERVER_CONFIG)
 
-    return TestApp(test_app)
+    app = TestApp(test_app)
+    MGOBLIN_APP = app
+
+    # setup celery
+    if not CELERY_SETUP:
+        setup_celery_from_config(
+            mg_globals.app_config, mg_globals.global_config,
+            set_environ=True)
+        CELERY_SETUP = True
+
+    return app
 
 
 def setup_fresh_app(func):
