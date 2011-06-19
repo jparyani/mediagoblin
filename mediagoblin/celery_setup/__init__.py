@@ -28,12 +28,12 @@ def setup_celery_from_config(app_config, global_config,
                              force_celery_always_eager=False,
                              set_environ=True):
     """
-    Take a mediagoblin app config and the global config from a paste
-    factory and try to set up a celery settings module from this.
+    Take a mediagoblin app config and try to set up a celery settings
+    module from this.
 
     Args:
     - app_config: the application config section
-    - global_config: the entire paste config, all sections
+    - global_config: the entire ConfigObj loaded config, all sections
     - settings_module: the module to populate, as a string
     - force_celery_always_eager: whether or not to force celery into
       always eager mode; good for development and small installs
