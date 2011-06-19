@@ -18,7 +18,6 @@ from email.MIMEText import MIMEText
 import gettext
 import pkg_resources
 import smtplib
-import os
 import sys
 import re
 import urllib
@@ -28,7 +27,6 @@ import copy
 from babel.localedata import exists
 import jinja2
 import translitcodec
-from paste.deploy.loadwsgi import NicerConfigParser
 from webob import Response, exc
 from lxml.html.clean import Cleaner
 
@@ -350,28 +348,6 @@ def get_locale_from_request(request):
         target_lang = 'en'
 
     return locale_to_lower_upper(target_lang)
-
-
-def read_config_file(conf_file):
-    """
-    Read a paste deploy style config file and process it.
-    """
-    if not os.path.exists(conf_file):
-        raise IOError(
-            "MEDIAGOBLIN_CONFIG not set or file does not exist")
-
-    parser = NicerConfigParser(conf_file)
-    parser.read(conf_file)
-    parser._defaults.setdefault(
-        'here', os.path.dirname(os.path.abspath(conf_file)))
-    parser._defaults.setdefault(
-        '__file__', os.path.abspath(conf_file))
-
-    mgoblin_conf = dict(
-        [(section_name, dict(parser.items(section_name)))
-         for section_name in parser.sections()])
-
-    return mgoblin_conf
 
 
 # A super strict version of the lxml.html cleaner class

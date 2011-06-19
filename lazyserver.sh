@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
@@ -14,14 +16,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin import mg_globals
+if [ -f ./bin/paster ]; then
+    echo "Using ./bin/paster";
+    export PASTER="./bin/paster";
+elif which paster > /dev/null; then
+    echo "Using paster from \$PATH";
+    export PASTER="paster";
+else
+    echo "No paster found, exiting! X_X";
+    exit 1
+fi
 
-
-def setup_package():
-    pass
-
-def teardown_package():
-    if mg_globals.db_connection:
-        print "Killing db ..."
-        mg_globals.db_connection.drop_database(mg_globals.database.name)
-        print "... done"
+CELERY_ALWAYS_EAGER=true $PASTER serve server.ini --reload
