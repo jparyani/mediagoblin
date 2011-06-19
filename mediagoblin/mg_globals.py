@@ -44,6 +44,12 @@ app = None
 
 
 def setup_globals(**kwargs):
+    """
+    Sets up a bunch of globals in this module.
+
+    Takes the globals to setup as keyword arguments.  If globals are
+    specified that aren't set as variables above, then throw an error.
+    """
     from mediagoblin import mg_globals
 
     for key, value in kwargs.iteritems():
