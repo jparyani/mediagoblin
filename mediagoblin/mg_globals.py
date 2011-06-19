@@ -5,6 +5,7 @@ In some places, we need to access the database, public_store, queue_store
 import gettext
 import pkg_resources
 
+
 #############################
 # General mediagoblin globals
 #############################
@@ -33,6 +34,13 @@ translations = gettext.find(
     'mediagoblin',
     pkg_resources.resource_filename(
     'mediagoblin', 'translations'), ['en'])
+
+# app and global config objects
+app_config = None
+global_config = None
+
+# The actual app object
+app = None
 
 
 def setup_globals(**kwargs):
