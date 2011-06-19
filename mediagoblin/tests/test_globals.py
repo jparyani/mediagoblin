@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from nose.tools import assert_raises
+
 from mediagoblin import mg_globals
 
 class TestGlobals(object):
@@ -36,3 +38,8 @@ class TestGlobals(object):
         assert mg_globals.database == 'my favorite database!'
         assert mg_globals.public_store == 'my favorite public_store!'
         assert mg_globals.queue_store == 'my favorite queue_store!'
+
+        assert_raises(
+            AssertionError,
+            mg_globals.setup_globals,
+            no_such_global_foo = "Dummy")
