@@ -108,8 +108,8 @@ Contributing changes
 --------------------
 
 Slartibartfast from the planet Magrathea far off in the universe has
-decided that he is bored with fjords and wants to fix issue 42 and
-send us the changes.
+decided that he is bored with fjords and wants to fix issue 42 (the
+meaning of life bug) and send us the changes.
 
 Slartibartfast has cloned the MediaGoblin repository and his clone
 lives on gitorious.
@@ -125,18 +125,18 @@ Slartibartfast does the following:
        git fetch --all -p
 
 2. Creates a branch from the tip of the MediaGoblin repository (the
-   remote is named ``gmg``) master branch called ``issue_42``::
+   remote is named ``gmg``) master branch called ``bug42_meaning_of_life``::
 
-       git checkout -b issue_42 gmg/master
+       git checkout -b bug42_meaning_of_life gmg/master
 
-3. Slartibartfast works hard on his changes in the ``issue_42``
+3. Slartibartfast works hard on his changes in the ``bug42_meaning_of_life``
    branch.  When done, he wants to notify us that he has made changes
    he wants us to see.
 
 4. Slartibartfast pushes his changes to his clone (the remote is named
    ``origin``)::
 
-       git push origin issue_42 --set-upstream
+       git push origin bug42_meaning_of_life --set-upstream
 
 5. Slartibartfast adds a comment to issue 42 with the url for his
    repository and the name of the branch he put the code in.  He also
@@ -155,19 +155,19 @@ He runs the unit tests and discovers there's a bug in the code!
 
 Then he does this:
 
-1. He checks out the ``issue_42`` branch::
+1. He checks out the ``bug42_meaning_of_life`` branch::
 
-       git checkout issue_42
+       git checkout bug42_meaning_of_life
 
-2. He fixes the bug and checks it into the ``issue_42`` branch.
+2. He fixes the bug and checks it into the ``bug42_meaning_of_life`` branch.
 
 3. He pushes his changes to his clone (the remote is named ``origin``)::
 
-       git push origin issue_42
+       git push origin bug42_meaning_of_life
 
 4. He adds another comment to issue 42 explaining about the mistake
    and how he fixed it and that he's pushed the new change to the
-   ``issue_42`` branch of his publicly available clone.
+   ``bug42_meaning_of_life`` branch of his publicly available clone.
 
 
 What happens next
@@ -180,7 +180,7 @@ request with his changes and explains what they are.
 Later, someone checks out his code and finds a problem with it.  He
 adds a comment to the issue tracker specifying the problem and asks
 Slartibartfast to fix it.  Slartibartfst goes through the above steps
-again, fixes the issue, pushes it to his ``issue_42`` branch and adds
+again, fixes the issue, pushes it to his ``bug42_meaning_of_life`` branch and adds
 another comment to the issue tracker about how he fixed it.
 
 Later, someone checks out his code and is happy with it.  Someone
@@ -192,8 +192,8 @@ Slartibartfast is notified of this.  Slartibartfast does a::
    git fetch --all
 
 The changes show up in the ``master`` branch of the ``gmg`` remote.
-Slartibartfast now deletes his ``issue_42`` branch because he doesn't
-need it anymore.
+Slartibartfast now deletes his ``bug42_meaning_of_life`` branch
+because he doesn't need it anymore.
 
 
 How to learn git
