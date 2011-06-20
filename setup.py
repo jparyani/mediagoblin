@@ -43,6 +43,7 @@ setup(
         'argparse',
         'webtest',
         'ConfigObj',
+        'Markdown',
         ## For now we're expecting that users will install this from
         ## their package managers.
         # 'lxml',

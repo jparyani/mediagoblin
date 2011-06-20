@@ -108,10 +108,10 @@ def atom_feed(request):
     feed = AtomFeed(request.matchdict['user'],
                feed_url=request.url,
                url=request.host_url)
-            
+    
     for entry in cursor:
         feed.add(entry.get('title'),
-            entry.get('description'),
+            entry.get('description_html'),
             content_type='html',
             author=request.matchdict['user'],
             updated=entry.get('created'),

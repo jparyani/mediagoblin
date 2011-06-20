@@ -33,7 +33,6 @@ from lxml.html.clean import Cleaner
 from mediagoblin import mg_globals
 from mediagoblin.db.util import ObjectId
 
-
 TESTS_ENABLED = False
 def _activate_testing():
     """
@@ -98,7 +97,7 @@ def get_jinja_env(template_loader, locale):
 
     template_env = jinja2.Environment(
         loader=template_loader, autoescape=True,
-        extensions=['jinja2.ext.i18n'])
+        extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
 
     template_env.install_gettext_callables(
         mg_globals.translations.gettext,
