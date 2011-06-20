@@ -30,7 +30,7 @@ from mediagoblin.db.open import setup_connection_and_db_from_config
 
 MEDIAGOBLIN_TEST_DB_NAME = '__mediagoblinunittests__'
 TEST_SERVER_CONFIG = pkg_resources.resource_filename(
-    'mediagoblin.tests', 'test_server.ini')
+    'mediagoblin.tests', 'test_paste.ini')
 TEST_APP_CONFIG = pkg_resources.resource_filename(
     'mediagoblin.tests', 'test_mgoblin_app.ini')
 TEST_USER_DEV = pkg_resources.resource_filename(
