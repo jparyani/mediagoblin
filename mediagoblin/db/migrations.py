@@ -49,5 +49,21 @@ class MediaEntryMigration(DocumentMigration):
                         'description_html': cleaned_markdown_conversion(
                             doc['description'])}}
         
-
-MIGRATE_CLASSES = ['MediaEntry']
+class UserMigration(DocumentMigration):
+    def allmigration01_add_bio_and_url_profile(self):
+        """
+        User can elaborate profile with home page and biography
+        """
+        self.target = {'username': {'$exists': True}, 'url': {'$exists': False},
+                          'bio': {'$exists': False}}
+        if not self.status:
+            for doc in self.collection.find(self.target):
+                self.update = {
+                    '$set': {
+                        'url': '', 
+                        'bio': ''}}
+                self.collection.update(
+                    self.target, self.update, multi=True, safe=True)
+                        
+                        
+MIGRATE_CLASSES = ['MediaEntry','User']
