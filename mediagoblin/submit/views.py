@@ -19,12 +19,11 @@ from cgi import FieldStorage
 
 from werkzeug.utils import secure_filename
 
-from mediagoblin.util import render_to_response, redirect, clean_html
+from mediagoblin.util import (
+    render_to_response, redirect, cleaned_markdown_conversion)
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
 from mediagoblin.process_media import process_media_initial
-
-import markdown
 
 
 @require_active_login
@@ -48,14 +47,13 @@ def submit_start(request):
 
             # create entry and save in database
             entry = request.db.MediaEntry()
-            entry['title'] = request.POST['title'] or unicode(splitext(filename)[0])
+            entry['title'] = (
+                request.POST['title']
+                or unicode(splitext(filename)[0]))
+
             entry['description'] = request.POST.get('description')
-            
-            md = markdown.Markdown(
-                safe_mode = 'escape')
-            entry['description_html'] = clean_html(
-                md.convert(
-                    entry['description']))
+            entry['description_html'] = cleaned_markdown_conversion(
+                entry['description'])
             
             entry['media_type'] = u'image' # heh
             entry['uploader'] = request.user['_id']
