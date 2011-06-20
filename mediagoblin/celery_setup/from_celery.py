@@ -16,80 +16,42 @@
 
 import os
 
-from paste.deploy.loadwsgi import NicerConfigParser
-from paste.deploy.converters import asbool
-
-from mediagoblin import storage
-from mediagoblin.db.open import setup_connection_and_db_from_config
+from mediagoblin import app, mg_globals
 from mediagoblin.celery_setup import setup_celery_from_config
-from mediagoblin.mg_globals import setup_globals
-from mediagoblin.workbench import WorkbenchManager, DEFAULT_WORKBENCH_DIR
 
 
 OUR_MODULENAME = __name__
 
 
-def setup_self():
+def setup_self(check_environ_for_conf=True, module_name=OUR_MODULENAME):
     """
     Transform this module into a celery config module by reading the
     mediagoblin config file.  Set the environment variable
-    MEDIAGOBLIN_CONFIG to specify where this config file is at and
-    what section it uses.
+    MEDIAGOBLIN_CONFIG to specify where this config file is.
 
-    By default it defaults to 'mediagoblin.ini:app:mediagoblin'.
+    By default it defaults to 'mediagoblin.ini'.
 
-    The first colon ":" is a delimiter between the filename and the
-    config section, so in this case the filename is 'mediagoblin.ini'
-    and the section where mediagoblin is defined is 'app:mediagoblin'.
-
-    Args:
-    - 'setup_globals_func': this is for testing purposes only.  Don't
-      set this!
+    Note that if celery_setup_elsewhere is set in your config file,
+    this simply won't work.
     """
-    mgoblin_conf_file, mgoblin_section = os.environ.get(
-        'MEDIAGOBLIN_CONFIG', 'mediagoblin.ini:app:mediagoblin').split(':', 1)
+    if check_environ_for_conf:
+        mgoblin_conf_file = os.path.abspath(
+            os.environ.get('MEDIAGOBLIN_CONFIG', 'mediagoblin.ini'))
+    else:
+        mgoblin_conf_file = 'mediagoblin.ini'
+
     if not os.path.exists(mgoblin_conf_file):
         raise IOError(
             "MEDIAGOBLIN_CONFIG not set or file does not exist")
         
-    parser = NicerConfigParser(mgoblin_conf_file)
-    parser.read(mgoblin_conf_file)
-    parser._defaults.setdefault(
-        'here', os.path.dirname(os.path.abspath(mgoblin_conf_file)))
-    parser._defaults.setdefault(
-        '__file__', os.path.abspath(mgoblin_conf_file))
-
-    mgoblin_section = dict(parser.items(mgoblin_section))
-    mgoblin_conf = dict(
-        [(section_name, dict(parser.items(section_name)))
-         for section_name in parser.sections()])
+    # By setting the environment variable here we should ensure that
+    # this is the module that gets set up.
+    os.environ['CELERY_CONFIG_MODULE'] = module_name
+    app.MediaGoblinApp(mgoblin_conf_file, setup_celery=False)
     setup_celery_from_config(
-        mgoblin_section, mgoblin_conf,
-        settings_module=OUR_MODULENAME,
+        mg_globals.app_config, mg_globals.global_config,
+        settings_module=module_name,
         set_environ=False)
-
-    connection, db = setup_connection_and_db_from_config(mgoblin_section)
-
-    # Set up the storage systems.
-    public_store = storage.storage_system_from_paste_config(
-        mgoblin_section, 'publicstore')
-    queue_store = storage.storage_system_from_paste_config(
-        mgoblin_section, 'queuestore')
-
-    workbench_manager = WorkbenchManager(
-        mgoblin_section.get(
-            'workbench_path', DEFAULT_WORKBENCH_DIR))
-
-    setup_globals(
-        db_connection=connection,
-        database=db,
-        public_store=public_store,
-        email_debug_mode=asbool(mgoblin_section.get('email_debug_mode')),
-        email_sender_address=mgoblin_section.get(
-            'email_sender_address', 
-            'notice@mediagoblin.example.org'),
-        queue_store=queue_store,
-        workbench_manager=workbench_manager)
 
 
 if os.environ['CELERY_CONFIG_MODULE'] == OUR_MODULENAME:

@@ -42,7 +42,11 @@ setup(
         'translitcodec',
         'argparse',
         'webtest',
-        'lxml',
+        'ConfigObj',
+        'Markdown',
+        ## For now we're expecting that users will install this from
+        ## their package managers.
+        # 'lxml',
         ],
     test_suite='nose.collector',
 

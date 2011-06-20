@@ -25,7 +25,9 @@
     </h1>
     <img class="media_image" src="{{ request.app.public_store.file_url(
                   media.media_files.main) }}" />
-    <p>{{ media.description }}</p>
+    {% autoescape False %}
+    <p>{{ media.description_html }}</p>
+    {% endautoescape %}
     <p>Uploaded on
     {{ "%4d-%02d-%02d"|format(media.created.year,
                               media.created.month, media.created.day) }}

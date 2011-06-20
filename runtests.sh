@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
@@ -14,14 +16,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin import mg_globals
+if [ -f ./bin/nosetests ]; then
+    echo "Using ./bin/nosetests";
+    export NOSETESTS="./bin/nosetests";
+elif which nosetests > /dev/null; then
+    echo "Using nosetests from \$PATH";
+    export NOSETESTS="nosetests";
+else
+    echo "No nosetests found, exiting! X_X";
+    exit 1
+fi
 
-
-def setup_package():
-    pass
-
-def teardown_package():
-    if mg_globals.db_connection:
-        print "Killing db ..."
-        mg_globals.db_connection.drop_database(mg_globals.database.name)
-        print "... done"
+CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_tests $NOSETESTS $@

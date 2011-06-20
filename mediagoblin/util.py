@@ -18,7 +18,6 @@ from email.MIMEText import MIMEText
 import gettext
 import pkg_resources
 import smtplib
-import os
 import sys
 import re
 import urllib
@@ -28,13 +27,12 @@ import copy
 from babel.localedata import exists
 import jinja2
 import translitcodec
-from paste.deploy.loadwsgi import NicerConfigParser
 from webob import Response, exc
 from lxml.html.clean import Cleaner
+import markdown
 
 from mediagoblin import mg_globals
 from mediagoblin.db.util import ObjectId
-
 
 TESTS_ENABLED = False
 def _activate_testing():
@@ -100,7 +98,7 @@ def get_jinja_env(template_loader, locale):
 
     template_env = jinja2.Environment(
         loader=template_loader, autoescape=True,
-        extensions=['jinja2.ext.i18n'])
+        extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
 
     template_env.install_gettext_callables(
         mg_globals.translations.gettext,
@@ -352,28 +350,6 @@ def get_locale_from_request(request):
     return locale_to_lower_upper(target_lang)
 
 
-def read_config_file(conf_file):
-    """
-    Read a paste deploy style config file and process it.
-    """
-    if not os.path.exists(conf_file):
-        raise IOError(
-            "MEDIAGOBLIN_CONFIG not set or file does not exist")
-
-    parser = NicerConfigParser(conf_file)
-    parser.read(conf_file)
-    parser._defaults.setdefault(
-        'here', os.path.dirname(os.path.abspath(conf_file)))
-    parser._defaults.setdefault(
-        '__file__', os.path.abspath(conf_file))
-
-    mgoblin_conf = dict(
-        [(section_name, dict(parser.items(section_name)))
-         for section_name in parser.sections()])
-
-    return mgoblin_conf
-
-
 # A super strict version of the lxml.html cleaner class
 HTML_CLEANER = Cleaner(
     scripts=True,
@@ -398,6 +374,16 @@ HTML_CLEANER = Cleaner(
 
 def clean_html(html):
     return HTML_CLEANER.clean_html(html)
+
+
+MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')
+
+
+def cleaned_markdown_conversion(text):
+    """
+    Take a block of text, run it through MarkDown, and clean its HTML.
+    """
+    return clean_html(MARKDOWN_INSTANCE.convert(text))
 
 
 SETUP_GETTEXTS = {}
