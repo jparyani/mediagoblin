@@ -29,10 +29,10 @@ import jinja2
 import translitcodec
 from webob import Response, exc
 from lxml.html.clean import Cleaner
+import markdown
 
 from mediagoblin import mg_globals
 from mediagoblin.db.util import ObjectId
-
 
 TESTS_ENABLED = False
 def _activate_testing():
@@ -98,7 +98,7 @@ def get_jinja_env(template_loader, locale):
 
     template_env = jinja2.Environment(
         loader=template_loader, autoescape=True,
-        extensions=['jinja2.ext.i18n'])
+        extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
 
     template_env.install_gettext_callables(
         mg_globals.translations.gettext,
@@ -374,6 +374,16 @@ HTML_CLEANER = Cleaner(
 
 def clean_html(html):
     return HTML_CLEANER.clean_html(html)
+
+
+MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')
+
+
+def cleaned_markdown_conversion(text):
+    """
+    Take a block of text, run it through MarkDown, and clean its HTML.
+    """
+    return clean_html(MARKDOWN_INSTANCE.convert(text))
 
 
 SETUP_GETTEXTS = {}

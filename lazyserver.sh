@@ -27,4 +27,4 @@ else
     exit 1
 fi
 
-CELERY_ALWAYS_EAGER=true $PASTER serve server.ini --reload
+CELERY_ALWAYS_EAGER=true $PASTER serve paste.ini --reload

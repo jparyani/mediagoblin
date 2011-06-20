@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin.util import cleaned_markdown_conversion
+
 from mongokit import DocumentMigration
 
 
@@ -33,5 +35,19 @@ class MediaEntryMigration(DocumentMigration):
                 self.collection.update(
                     self.target, self.update, multi=True, safe=True)
 
+    def allmigration02_add_description_html(self):
+        """
+        Now that we can have rich descriptions via Markdown, we should
+        update all existing entries to record the rich description versions.
+        """
+        self.target = {'description_html': {'$exists': False}}
+
+        if not self.status:
+            for doc in self.collection.find(self.target):
+                self.update = {
+                    '$set': {
+                        'description_html': cleaned_markdown_conversion(
+                            doc['description'])}}
+        
 
 MIGRATE_CLASSES = ['MediaEntry']

@@ -17,10 +17,12 @@
 
 from webob import exc
 
-from mediagoblin.util import render_to_response, redirect
+from mediagoblin.util import render_to_response, redirect, clean_html
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry
+
+import markdown
 
 
 @get_user_media_entry
@@ -47,7 +49,14 @@ def edit_media(request, media):
                 u'An entry with that slug already exists for this user.')
         else:
             media['title'] = request.POST['title']
-            media['description'] = request.POST['description']
+            media['description'] = request.POST.get('description')
+            
+            md = markdown.Markdown(
+                safe_mode = 'escape')
+            media['description_html'] = clean_html(
+                md.convert(
+                    media['description']))
+
             media['slug'] = request.POST['slug']
             media.save()
 

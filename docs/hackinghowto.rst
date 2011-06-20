@@ -136,7 +136,7 @@ This is fine in development, but if you want to actually run celery
 separately for testing (or deployment purposes), you'll want to run
 the server independently::
 
-    ./bin/paster serve server.ini --reload
+    ./bin/paster serve paste.ini --reload
 
 
 Running celeryd
@@ -158,7 +158,7 @@ Running the test suite
 
 Run::
 
-    ./bin/nosetests
+    ./runtests.sh
 
 
 Running a shell
