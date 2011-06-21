@@ -2,6 +2,10 @@
  GNU MediaGoblin
 =================
 
+.. contents:: Sections
+   :local:
+
+
 What is GNU MediaGoblin
 =======================
 
