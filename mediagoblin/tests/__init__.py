@@ -16,11 +16,13 @@
 
 from mediagoblin import mg_globals
 
-from mediagoblin.tests.tools import MEDIAGOBLIN_TEST_DB_NAME
+from mediagoblin.tests.tools import (
+    MEDIAGOBLIN_TEST_DB_NAME, suicide_if_bad_celery_environ)
 
 
 def setup_package():
-    pass
+    suicide_if_bad_celery_environ()
+
 
 def teardown_package():
     if ((mg_globals.db_connection

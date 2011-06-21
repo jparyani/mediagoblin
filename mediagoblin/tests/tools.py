@@ -42,17 +42,23 @@ USER_DEV_DIRECTORIES_TO_SETUP = [
     'media/public', 'media/queue',
     'beaker/sessions/data', 'beaker/sessions/lock']
 
+BAD_CELERY_MESSAGE = """\
+Sorry, you *absolutely* must run nosetests with the
+mediagoblin.celery_setup.from_tests module.  Like so:
+$ CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_tests ./bin/nosetests"""
+
 
 class BadCeleryEnviron(Exception): pass
 
 
-def get_test_app(dump_old_app=True):
+def suicide_if_bad_celery_environ():
     if not os.environ.get('CELERY_CONFIG_MODULE') == \
             'mediagoblin.celery_setup.from_tests':
-        raise BadCeleryEnviron(
-            u"Sorry, you *absolutely* must run nosetests with the\n"
-            u"mediagoblin.celery_setup.from_tests module.  Like so:\n"
-            u"$ CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_tests ./bin/nosetests")
+        raise BadCeleryEnviron(BAD_CELERY_MESSAGE)
+    
+
+def get_test_app(dump_old_app=True):
+    suicide_if_bad_celery_environ()
 
     global MGOBLIN_APP
     global CELERY_SETUP
