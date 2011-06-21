@@ -54,16 +54,15 @@ class UserMigration(DocumentMigration):
         """
         User can elaborate profile with home page and biography
         """
-        self.target = {'username': {'$exists': True}, 'url': {'$exists': False},
-                          'bio': {'$exists': False}}
+        self.target = {'url': {'$exists': False},
+                       'bio': {'$exists': False}}
         if not self.status:
             for doc in self.collection.find(self.target):
                 self.update = {
-                    '$set': {
-                        'url': '', 
-                        'bio': ''}}
+                    '$set': {'url': '', 
+                             'bio': ''}}
                 self.collection.update(
                     self.target, self.update, multi=True, safe=True)
                         
                         
-MIGRATE_CLASSES = ['MediaEntry','User']
+MIGRATE_CLASSES = ['MediaEntry', 'User']
