@@ -40,7 +40,8 @@ class MediaEntryMigration(DocumentMigration):
         Now that we can have rich descriptions via Markdown, we should
         update all existing entries to record the rich description versions.
         """
-        self.target = {'description_html': {'$exists': False}}
+        self.target = {'description_html': {'$exists': False},
+                       'description': {'$exists': True}}
 
         if not self.status:
             for doc in self.collection.find(self.target):
