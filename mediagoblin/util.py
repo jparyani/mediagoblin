@@ -383,6 +383,11 @@ def cleaned_markdown_conversion(text):
     """
     Take a block of text, run it through MarkDown, and clean its HTML.
     """
+    # Markdown will do nothing with and clean_html can do nothing with
+    # an empty string :)
+    if not text:
+        return u''
+
     return clean_html(MARKDOWN_INSTANCE.convert(text))
 
 
