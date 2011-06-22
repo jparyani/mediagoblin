@@ -24,9 +24,7 @@
   {% if request.user %}
     <p>
       <a href="{{ request.urlgen('mediagoblin.submit.start') }}">Submit an item</a> 
-      <a href="{{ request.urlgen(
-                      'mediagoblin.edit.profile', 
-                      user=request.user.username) }}">Edit profile</a>
+      <a href="{{ request.urlgen('mediagoblin.edit.profile') }}">Edit profile</a>
     </p>
   {% else %}
     <p>
