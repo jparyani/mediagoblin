@@ -69,6 +69,7 @@ def edit_media(request, media):
         {'media': media,
          'form': form})
     
+
 @require_active_login
 def edit_profile(request):
 
