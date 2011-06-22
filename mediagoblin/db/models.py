@@ -46,6 +46,8 @@ class User(Document):
         'status': unicode,
         'verification_key': unicode,
         'is_admin': bool,
+        'url' : unicode,
+        'bio' : unicode
         }
 
     required_fields = ['username', 'created', 'pw_hash', 'email']
@@ -56,6 +58,8 @@ class User(Document):
         'status': u'needs_email_verification',
         'verification_key': lambda: unicode(uuid.uuid4()),
         'is_admin': False}
+        
+    migration_handler = migrations.UserMigration
 
     def check_login(self, password):
         """

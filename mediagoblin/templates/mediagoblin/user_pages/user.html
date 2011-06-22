@@ -27,6 +27,8 @@
 {% block mediagoblin_content -%}
   {% if user %}
     <h1>User page for '{{ user.username }}'</h1>
+    
+    {% include "mediagoblin/utils/profile.html" %}
 
     {% include "mediagoblin/utils/object_gallery.html" %}
 
