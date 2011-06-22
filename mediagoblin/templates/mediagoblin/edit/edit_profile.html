@@ -20,12 +20,12 @@
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {% block mediagoblin_content %}
-  <h1>Edit details for {{ user['username'] }}</h1>
 
   <form action="{{ request.urlgen('mediagoblin.edit.profile',
                                user=user.username) }}"
         method="POST" enctype="multipart/form-data">
-    <div class="submit_box form_box">
+    <div class="edit_box form_box">
+      <h1>Editing {{ user['username'] }}'s profile</h1>
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
         <input type="submit" value="submit" class="button" />

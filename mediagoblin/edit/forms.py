@@ -27,8 +27,8 @@ class EditForm(wtforms.Form):
     description = wtforms.TextAreaField('Description of this work')
 
 class EditProfileForm(wtforms.Form):
-    url = wtforms.TextField(
-        'website URL',
-        [wtforms.validators.URL(message='Improperly formed URL')])
-    bio = wtforms.TextAreaField('bio',
+    bio = wtforms.TextAreaField('Bio',
         [wtforms.validators.Length(min=0, max=500)])
+    url = wtforms.TextField(
+        'Website',
+        [wtforms.validators.URL(message='Improperly formed URL')])
