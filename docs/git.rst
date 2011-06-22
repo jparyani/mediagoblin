@@ -80,7 +80,7 @@ doing and why.
 How to send us your changes
 ---------------------------
 
-There are three ways to let us know how to get it:
+There are two ways to let us know how to get it:
 
 1. *(preferred)* **push changes to publicly available git clone and
    let us know where to find it**
