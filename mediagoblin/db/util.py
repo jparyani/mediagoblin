@@ -17,4 +17,5 @@
 
 # Imports that other modules might use
 from pymongo import DESCENDING
+from pymongo.errors import InvalidId
 from mongokit import ObjectId
