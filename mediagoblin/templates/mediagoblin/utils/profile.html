@@ -15,32 +15,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "mediagoblin/base.html" %}
 
-{% block mediagoblin_content %}
-  
-  <h1>{% trans %}Welcome to GNU MediaGoblin!{% endtrans %}</h1>
-
-  {% if request.user %}
-    <p>
-      <a href="{{ request.urlgen('mediagoblin.submit.start') }}">Submit an item</a> 
-      <a href="{{ request.urlgen('mediagoblin.edit.profile') }}">Edit profile</a>
-    </p>
-  {% else %}
-    <p>
-      If you have an account, you can
-      <a href="{{ request.urlgen('mediagoblin.auth.login') }}">Login</a>.
-    </p>
-    <p>
-      If you don't have an account, please 
-      <a href="{{ request.urlgen('mediagoblin.auth.register') }}">Register</a>.
-    </p>
-  {% endif %}
-
-  {# temporarily, an "image gallery" that isn't one really ;) #}
-
+{% block profile_content -%}
   <div>
-    {% include "mediagoblin/utils/object_gallery.html" %}
+    <ul>
+      {% if user.url %}
+          <li>
+            <a href="{{ user.url }}">homepage</a>
+          </li>
+      {%  endif %}
+      
+      {% if user.bio %}
+          <li>
+            {{ user.bio }}
+          </li>
+      {%  endif %}
+    </ul>
   </div>
-
-{% endblock %}
+{% endblock %}    

@@ -25,3 +25,10 @@ class EditForm(wtforms.Form):
     slug = wtforms.TextField(
         'Slug')
     description = wtforms.TextAreaField('Description of this work')
+
+class EditProfileForm(wtforms.Form):
+    url = wtforms.TextField(
+        'website URL',
+        [wtforms.validators.URL(message='Improperly formed URL')])
+    bio = wtforms.TextAreaField('bio',
+        [wtforms.validators.Length(min=0, max=500)])
