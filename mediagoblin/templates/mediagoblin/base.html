@@ -35,6 +35,8 @@
         <div class="mediagoblin_header_right">
           {% if request.user %}
                 {{ request.user['username'] }}'s account 
+                <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                                            user= request.user['username']) }}">home</a> 
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_gallery',
                                             user= request.user['username']) }}">gallery</a> 
                 (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">logout</a>)

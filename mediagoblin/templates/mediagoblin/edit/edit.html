@@ -20,19 +20,21 @@
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {% block mediagoblin_content %}
-  <h1>Edit details for {{ media.title }}</h1>
 
   <form action="{{ request.urlgen('mediagoblin.edit.edit_media',
                                user= media.uploader().username,
                                media= media._id) }}"
         method="POST" enctype="multipart/form-data">
-    <div class="submit_box form_box">
+    <div class="edit_box form_box">
+      <h1>Editing {{ media.title }}</h1>
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
-        <input type="submit" value="submit" class="button" />
+        <a href="{{ media.url_for_self(request.urlgen) }}">Cancel</a>
+        <input type="submit" value="Save changes" class="button" />
       </div>
+      <img src="{{ request.app.public_store.file_url(
+         media['media_files']['thumb']) }}" />
     </div>
   </form>
-  <img src="{{ request.app.public_store.file_url(
-         media['media_files']['thumb']) }}" />
+  
 {% endblock %}    

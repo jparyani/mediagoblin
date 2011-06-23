@@ -373,6 +373,10 @@ HTML_CLEANER = Cleaner(
 
 
 def clean_html(html):
+    # clean_html barfs on an empty string
+    if not html:
+        return u''
+
     return HTML_CLEANER.clean_html(html)
 
 

@@ -22,20 +22,19 @@
   <h1>{% trans %}Welcome to GNU MediaGoblin!{% endtrans %}</h1>
 
   {% if request.user %}
-  <p>
-    <a href="{{ request.urlgen('mediagoblin.submit.start') }}">Submit an item</a>.
-  </p>
-
+    <p>
+      <a href="{{ request.urlgen('mediagoblin.submit.start') }}">Submit an item</a> 
+      <a href="{{ request.urlgen('mediagoblin.edit.profile') }}">Edit profile</a>
+    </p>
   {% else %}
-  <p>
-    If you have an account, you can
-    <a href="{{ request.urlgen('mediagoblin.auth.login') }}">Login</a>.
-  </p>
-  <p>
-    If you don't have an account, please 
-    <a href="{{ request.urlgen('mediagoblin.auth.register') }}">Register</a>.
-  </p>
-
+    <p>
+      If you have an account, you can
+      <a href="{{ request.urlgen('mediagoblin.auth.login') }}">Login</a>.
+    </p>
+    <p>
+      If you don't have an account, please 
+      <a href="{{ request.urlgen('mediagoblin.auth.register') }}">Register</a>.
+    </p>
   {% endif %}
 
   {# temporarily, an "image gallery" that isn't one really ;) #}

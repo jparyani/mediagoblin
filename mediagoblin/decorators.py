@@ -15,11 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from bson.errors import InvalidId
 from webob import exc
 
 from mediagoblin.util import redirect
-from mediagoblin.db.util import ObjectId
+from mediagoblin.db.util import ObjectId, InvalidId
 
 
 def _make_safe(decorator, original):

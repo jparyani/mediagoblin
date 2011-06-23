@@ -80,10 +80,10 @@ doing and why.
 How to send us your changes
 ---------------------------
 
-There are three ways to let us know how to get it:
+There are two ways to let us know how to get it:
 
-1. (preferred) **push changes to publicly available git clone and let
-   us know where to find it**
+1. *(preferred)* **push changes to publicly available git clone and
+   let us know where to find it**
 
    Push your feature/bugfix/issue branch to your publicly available
    git clone and add a comment to the issue with the url for your
@@ -93,14 +93,22 @@ There are three ways to let us know how to get it:
 
    Run::
 
-       git format-patch -o patches <remote>/master
+       git format-patch --stdout <remote>/master > issue_<number>.patch
        
-   Then tar up the newly created ``patches`` directory and attach the
-   directory to the issue.
+   ``format-patch`` creates a patch of all the commits that are in
+   your branch that aren't in ``<remote>/master``.  The ``--stdout``
+   flag causes all this output to go to stdout where it's redirected
+   to a file named ``issue_<number>.patch``.  That file should be
+   based on the issue you're working with.  For example,
+   ``issue_42.patch`` is a good filename and ``issue_42_rev2.patch``
+   is good if you did a revision of it.
+
+   Having said all that, the filename isn't wildly important.
 
 
 Example workflow
 ================
+
 Here's an example workflow.
 
 
@@ -124,19 +132,29 @@ Slartibartfast does the following:
 
        git fetch --all -p
 
+   This tells ``git fetch`` to fetch all the recent data from all of
+   the remotes (``--all``) and prune any branches that have been
+   deleted in the remotes (``-p``).
+
 2. Creates a branch from the tip of the MediaGoblin repository (the
    remote is named ``gmg``) master branch called ``bug42_meaning_of_life``::
 
        git checkout -b bug42_meaning_of_life gmg/master
 
+   This creates a new branch (``-b``) named ``bug42_meaning_of_life`` based
+   on the tip of the ``master`` branch of the remote named ``gmg`` and checks
+   it out.
+
 3. Slartibartfast works hard on his changes in the ``bug42_meaning_of_life``
    branch.  When done, he wants to notify us that he has made changes
    he wants us to see.
 
-4. Slartibartfast pushes his changes to his clone (the remote is named
-   ``origin``)::
+4. Slartibartfast pushes his changes to his clone::
 
        git push origin bug42_meaning_of_life --set-upstream
+
+   This pushes the changes in the ``bug42_meaning_of_life`` branch to the
+   remote named ``origin``.
 
 5. Slartibartfast adds a comment to issue 42 with the url for his
    repository and the name of the branch he put the code in.  He also

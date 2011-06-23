@@ -28,7 +28,7 @@ from mediagoblin.decorators import _make_safe
 from mediagoblin.db.open import setup_connection_and_db_from_config
 
 
-MEDIAGOBLIN_TEST_DB_NAME = '__mediagoblinunittests__'
+MEDIAGOBLIN_TEST_DB_NAME = u'__mediagoblin_tests__'
 TEST_SERVER_CONFIG = pkg_resources.resource_filename(
     'mediagoblin.tests', 'test_paste.ini')
 TEST_APP_CONFIG = pkg_resources.resource_filename(
@@ -42,17 +42,23 @@ USER_DEV_DIRECTORIES_TO_SETUP = [
     'media/public', 'media/queue',
     'beaker/sessions/data', 'beaker/sessions/lock']
 
+BAD_CELERY_MESSAGE = """\
+Sorry, you *absolutely* must run nosetests with the
+mediagoblin.celery_setup.from_tests module.  Like so:
+$ CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_tests ./bin/nosetests"""
+
 
 class BadCeleryEnviron(Exception): pass
 
 
-def get_test_app(dump_old_app=True):
+def suicide_if_bad_celery_environ():
     if not os.environ.get('CELERY_CONFIG_MODULE') == \
             'mediagoblin.celery_setup.from_tests':
-        raise BadCeleryEnviron(
-            u"Sorry, you *absolutely* must run nosetests with the\n"
-            u"mediagoblin.celery_setup.from_tests module.  Like so:\n"
-            u"$ CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_tests ./bin/nosetests")
+        raise BadCeleryEnviron(BAD_CELERY_MESSAGE)
+    
+
+def get_test_app(dump_old_app=True):
+    suicide_if_bad_celery_environ()
 
     global MGOBLIN_APP
     global CELERY_SETUP
@@ -78,6 +84,7 @@ def get_test_app(dump_old_app=True):
     # @@: For now we're dropping collections, but we could also just
     # collection.remove() ?
     connection, db = setup_connection_and_db_from_config(app_config)
+    assert db.name == MEDIAGOBLIN_TEST_DB_NAME
 
     collections_to_wipe = [
         collection
@@ -86,10 +93,6 @@ def get_test_app(dump_old_app=True):
 
     for collection in collections_to_wipe:
         db.drop_collection(collection)
-
-    # Don't need these anymore...
-    del(connection)
-    del(db)
 
     # TODO: Drop and recreate indexes
 

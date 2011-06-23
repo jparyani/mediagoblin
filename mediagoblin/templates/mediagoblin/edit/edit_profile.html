@@ -1,3 +1,4 @@
+{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
@@ -13,22 +14,22 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
 
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
-import wtforms
+{% block mediagoblin_content %}
 
-
-class EditForm(wtforms.Form):
-    title = wtforms.TextField(
-        'Title',
-        [wtforms.validators.Length(min=0, max=500)])
-    slug = wtforms.TextField(
-        'Slug')
-    description = wtforms.TextAreaField('Description of this work')
-
-class EditProfileForm(wtforms.Form):
-    bio = wtforms.TextAreaField('Bio',
-        [wtforms.validators.Length(min=0, max=500)])
-    url = wtforms.TextField(
-        'Website',
-        [wtforms.validators.URL(message='Improperly formed URL')])
+  <form action="{{ request.urlgen('mediagoblin.edit.profile',
+                               user=user.username) }}"
+        method="POST" enctype="multipart/form-data">
+    <div class="edit_box form_box">
+      <h1>Editing {{ user['username'] }}'s profile</h1>
+      {{ wtforms_util.render_divs(form) }}
+      <div class="form_submit_buttons">
+        <input type="submit" value="submit" class="button" />
+      </div>
+    </div>
+  </form>
+{% endblock %}    

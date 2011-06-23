@@ -16,12 +16,17 @@
 
 from mediagoblin import mg_globals
 
+from mediagoblin.tests.tools import (
+    MEDIAGOBLIN_TEST_DB_NAME, suicide_if_bad_celery_environ)
+
 
 def setup_package():
-    pass
+    suicide_if_bad_celery_environ()
+
 
 def teardown_package():
-    if mg_globals.db_connection:
-        print "Killing db ..."
-        mg_globals.db_connection.drop_database(mg_globals.database.name)
-        print "... done"
+    if ((mg_globals.db_connection
+         and mg_globals.database.name == MEDIAGOBLIN_TEST_DB_NAME)):
+            print "Killing db ..."
+            mg_globals.db_connection.drop_database(MEDIAGOBLIN_TEST_DB_NAME)
+            print "... done"

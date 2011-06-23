@@ -34,10 +34,12 @@
     by
     <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                user= media.uploader().username) }}">
-      {{- media.uploader().username }}</a></p>
-    <p><a href="{{ request.urlgen('mediagoblin.edit.edit_media',
-                               user= media.uploader().username,
-                               media= media._id) }}">Edit</a></p>
+      {{- media.uploader().username }}</a></p>   
+    {% if media['uploader'] == request.user['_id'] %}
+      <p><a href="{{ request.urlgen('mediagoblin.edit.edit_media',
+                                    user= media.uploader().username,
+                                    media= media._id) }}">Edit</a></p>
+    {% endif %}
   {% else %}
   <p>Sorry, no such media found.<p/>
   {% endif %}
