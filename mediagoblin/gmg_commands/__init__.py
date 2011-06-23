@@ -31,15 +31,15 @@ SUBCOMMAND_MAP = {
     'adduser':{
         'setup': 'mediagoblin.gmg_commands.users:adduser_parser_setup',
         'func': 'mediagoblin.gmg_commands.users:adduser',
-        'help': 'Creates an user, \nUsage: adduser -u username -p password -m email'},
+        'help': 'Creates an user'},
     'makeadmin': {
         'setup': 'mediagoblin.gmg_commands.users:makeadmin_parser_setup',
         'func': 'mediagoblin.gmg_commands.users:makeadmin',
-        'help': 'Makes admin an user, \nUsage: makeadmin -u username'},
+        'help': 'Changes a user\'s password'},
     'changepw': {
         'setup': 'mediagoblin.gmg_commands.users:changepw_parser_setup',
         'func': 'mediagoblin.gmg_commands.users:changepw',
-        'help': 'Makes admin an user, \nUsage: changepw -u username -p new_password'},
+        'help': 'Makes admin an user'},
     }
 
 
