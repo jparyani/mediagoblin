@@ -25,7 +25,8 @@
                                user= media.uploader().username,
                                media= media._id) }}"
         method="POST" enctype="multipart/form-data">
-    <div class="edit_box form_box">
+    <div class="grid_2 alpha">&nbsp;</div>
+    <div class="grid_6 prefix_1 suffix_1 edit_box form_box">
       <h1>Editing {{ media.title }}</h1>
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
@@ -35,6 +36,7 @@
       <img src="{{ request.app.public_store.file_url(
          media['media_files']['thumb']) }}" />
     </div>
+    <div class="grid_2 omega">&nbsp;</div>
   </form>
   
 {% endblock %}    

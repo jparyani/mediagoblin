@@ -19,6 +19,8 @@
   <head>
     <title>{% block title %}GNU MediaGoblin{% endblock title %}</title>
     <link rel="stylesheet" type="text/css"
+          href="{{ request.staticdirect('/css/contrib/960_12_col.css') }}"/>
+    <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/base.css') }}"/>
     {% block mediagoblin_head %}
     {% endblock mediagoblin_head %}
@@ -28,29 +30,33 @@
     {% block mediagoblin_body %}
       {% block mediagoblin_header %}
       <div class="mediagoblin_header">
-      <div class="mediagoblin_container">
-              {% block mediagoblin_logo %}
-                <a class="mediagoblin_logo" href="{{ request.urlgen('index') }}"></a>
-              {% endblock %}{% block mediagoblin_header_title %}{% endblock %}
-        <div class="mediagoblin_header_right">
-          {% if request.user %}
-                {{ request.user['username'] }}'s account 
-                <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                            user= request.user['username']) }}">home</a> 
-                <a href="{{ request.urlgen('mediagoblin.user_pages.user_gallery',
-                                            user= request.user['username']) }}">gallery</a> 
-                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">logout</a>)
-          {% else %}
-                <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
-                  Login</a>
-          {% endif %}
+        <div class="container_12">
+          <div class="grid_12">
+                  {% block mediagoblin_logo %}
+                    <a class="mediagoblin_logo" href="{{ request.urlgen('index') }}"></a>
+                  {% endblock %}{% block mediagoblin_header_title %}{% endblock %}
+            <div class="mediagoblin_header_right">
+              {% if request.user %}
+                    {{ request.user['username'] }}'s account 
+                    <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                                                user= request.user['username']) }}">home</a> 
+                    <a href="{{ request.urlgen('mediagoblin.user_pages.user_gallery',
+                                                user= request.user['username']) }}">gallery</a> 
+                    (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">logout</a>)
+              {% else %}
+                    <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
+                      Login</a>
+              {% endif %}
+            </div>
+          </div>
         </div>
       </div>
-      </div>
       {% endblock %}
-      <div class="mediagoblin_container">
-        {% block mediagoblin_content %}
-        {% endblock mediagoblin_content %}
+      <div class="container_12">
+        <div class="grid_12">
+          {% block mediagoblin_content %}
+          {% endblock mediagoblin_content %}
+        </div>
       </div>
     {% endblock mediagoblin_body %}
   </body>
