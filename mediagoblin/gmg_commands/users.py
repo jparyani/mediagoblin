@@ -41,7 +41,7 @@ def adduser(args):
         entry['email_verified'] = True
         entry.save(validate=True)
 
-        print "User Created: Already Verified :)"
+        print "User created (and email marked as verified)"
 
 
 def makeadmin_parser_setup(subparser):
