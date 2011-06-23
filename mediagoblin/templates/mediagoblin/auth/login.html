@@ -23,7 +23,6 @@
 
   <form action="{{ request.urlgen('mediagoblin.auth.login') }}"
         method="POST" enctype="multipart/form-data">
-    <div class="grid_3 alpha">&nbsp;</div>
     <div class="grid_4 prefix_1 suffix_1 form_box">
       <h1>Log in</h1>
       {% if login_failed %}
@@ -39,6 +38,5 @@
       {% endif %}
       <p>Don't have an account yet?<br /><a href="{{ request.urlgen('mediagoblin.auth.register') }}">Create one here!</a></p>
     </div>
-    <div class="grid_3 omega">&nbsp;</div>
   </form>
 {% endblock %}
