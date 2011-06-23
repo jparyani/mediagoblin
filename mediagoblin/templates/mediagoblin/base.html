@@ -37,11 +37,9 @@
                   {% endblock %}{% block mediagoblin_header_title %}{% endblock %}
             <div class="mediagoblin_header_right">
               {% if request.user %}
-                    {{ request.user['username'] }}'s account 
                     <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                                user= request.user['username']) }}">home</a> 
-                    <a href="{{ request.urlgen('mediagoblin.user_pages.user_gallery',
-                                                user= request.user['username']) }}">gallery</a> 
+                                                user= request.user['username']) }}">
+                                                {{ request.user['username'] }}</a>'s account 
                     (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">logout</a>)
               {% else %}
                     <a href="{{ request.urlgen('mediagoblin.auth.login') }}">

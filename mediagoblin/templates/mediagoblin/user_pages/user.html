@@ -26,11 +26,15 @@
 
 {% block mediagoblin_content -%}
   {% if user %}
-    <h1>User page for '{{ user.username }}'</h1>
+    <h1>{{ user.username }}'s profile</h1>
     
     {% include "mediagoblin/utils/profile.html" %}
 
     {% include "mediagoblin/utils/object_gallery.html" %}
+
+    <p><a href="{{ request.urlgen('mediagoblin.user_pages.user_gallery',
+                    user= request.user['username']) }}">View all of {{ user.username }}'s media</a></p> 
+
 
     <a href={{ request.urlgen(
                    'mediagoblin.user_pages.atom_feed',
