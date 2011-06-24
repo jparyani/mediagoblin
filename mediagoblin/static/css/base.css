@@ -59,12 +59,6 @@ a.mediagoblin_logo:hover {
   background-position:0px -28px;
 }
 
-.mediagoblin_container {
-  width: 960px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .mediagoblin_header_right {
   float:right;
 }
@@ -105,22 +99,19 @@ a.mediagoblin_logo:hover {
 /* forms */
 
 .form_box {
-  width:300px;
-  margin-left:auto;
-  margin-right:auto;
   background-color:#393939;
   background-image:url("../images/background_lines.png");
   background-repeat:repeat-x;
-  padding:1px 83px 30px 83px;
   font-size:18px;
-}
-
-.submit_box {
-  width:600px;
+  padding-bottom:30px;
+  padding-top:1px;
+  margin-left:auto;
+  margin-right:auto;
+  display:block;
+  float:none;
 }
 
 .edit_box {
-  width:600px;
   background-image:url("../images/background_edit.png");
 }
 

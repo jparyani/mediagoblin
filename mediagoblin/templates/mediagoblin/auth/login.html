@@ -23,7 +23,7 @@
 
   <form action="{{ request.urlgen('mediagoblin.auth.login') }}"
         method="POST" enctype="multipart/form-data">
-    <div class="login_box form_box">
+    <div class="grid_4 prefix_1 suffix_1 form_box">
       <h1>Log in</h1>
       {% if login_failed %}
         <div class="form_field_error">Login failed!</div>
@@ -36,7 +36,7 @@
         <input type="hidden" name="next" value="{{ next }}" class="button"
                style="display: none;"/>
       {% endif %}
-      <p>Don't have an account yet? <a href="{{ request.urlgen('mediagoblin.auth.register') }}">Create one here!</a></p>
+      <p>Don't have an account yet?<br /><a href="{{ request.urlgen('mediagoblin.auth.register') }}">Create one here!</a></p>
     </div>
   </form>
 {% endblock %}
