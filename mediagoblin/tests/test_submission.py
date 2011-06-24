@@ -19,7 +19,7 @@ import urlparse
 from nose.tools import assert_equal
 
 from mediagoblin.auth import lib as auth_lib
-from mediagoblin.tests.tools import setup_fresh_app
+from mediagoblin.tests.tools import setup_fresh_app, get_test_app
 from mediagoblin import mg_globals
 from mediagoblin import util
 
@@ -34,12 +34,14 @@ from mediagoblin import util
 
 class TestSubmission:
     def setUp(self):
+        self.test_app = get_test_app()
+
         test_user = mg_globals.database.User()
         test_user['username'] = u'chris'
         test_user['email'] = u'chris@example.com'
         test_user['pw_hash'] = auth_lib.bcrypt_gen_password_hash('toast')
         test_user.save()
 
-    @setup_fresh_app
-    def test_something(test_app, self):
+    def test_something(self):
         pass
+
