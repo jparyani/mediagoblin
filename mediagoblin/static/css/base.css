@@ -186,7 +186,7 @@ ul.media_thumbnail {
 
 li.media_thumbnail {
   width:200px;
-  height:133px;
+  height:200px;
   display:-moz-inline-stack;
   display:inline-block;
   vertical-align:top;
