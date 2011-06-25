@@ -146,8 +146,8 @@ a.mediagoblin_logo:hover {
   font-size:28px;
 }
 
-.form_field_input input {
-  width:300px;
+.form_field_input input, .form_field_input textarea {
+  width:460px;
   font-size:18px;
 }
 
