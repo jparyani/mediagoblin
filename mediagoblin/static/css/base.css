@@ -191,6 +191,7 @@ li.media_thumbnail {
   display:inline-block;
   vertical-align:top;
   margin:0px 10px 10px 0px;
+  text-align:center;
   zoom:1;
 . *display:inline;
 }
