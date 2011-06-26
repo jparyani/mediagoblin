@@ -25,16 +25,18 @@
     </h1>
     <img class="media_image" src="{{ request.app.public_store.file_url(
                   media.media_files.main) }}" />
+    <p>
+      Uploaded on
+      {{ "%4d-%02d-%02d"|format(media.created.year,
+                                media.created.month, media.created.day) }}
+      by
+      <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                                 user= media.uploader().username) }}">
+        {{- media.uploader().username }}</a>
+    </p>   
     {% autoescape False %}
-    <p>{{ media.description_html }}</p>
+      <p>{{ media.description_html }}</p>
     {% endautoescape %}
-    <p>Uploaded on
-    {{ "%4d-%02d-%02d"|format(media.created.year,
-                              media.created.month, media.created.day) }}
-    by
-    <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                               user= media.uploader().username) }}">
-      {{- media.uploader().username }}</a></p>   
     {% if media['uploader'] == request.user['_id'] %}
       <p><a href="{{ request.urlgen('mediagoblin.edit.edit_media',
                                     user= media.uploader().username,

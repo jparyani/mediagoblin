@@ -147,7 +147,7 @@ a.mediagoblin_logo:hover {
 }
 
 .form_field_input input, .form_field_input textarea {
-  width:460px;
+  width:100%;
   font-size:18px;
 }
 
@@ -191,6 +191,7 @@ li.media_thumbnail {
   display:inline-block;
   vertical-align:top;
   margin:0px 10px 10px 0px;
+  text-align:center;
   zoom:1;
 . *display:inline;
 }
