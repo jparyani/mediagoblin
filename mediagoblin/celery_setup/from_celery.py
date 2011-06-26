@@ -23,7 +23,8 @@ from mediagoblin.celery_setup import setup_celery_from_config
 OUR_MODULENAME = __name__
 
 
-def setup_self(check_environ_for_conf=True, module_name=OUR_MODULENAME):
+def setup_self(check_environ_for_conf=True, module_name=OUR_MODULENAME,
+               default_conf_file='mediagoblin.ini'):
     """
     Transform this module into a celery config module by reading the
     mediagoblin config file.  Set the environment variable
@@ -36,9 +37,9 @@ def setup_self(check_environ_for_conf=True, module_name=OUR_MODULENAME):
     """
     if check_environ_for_conf:
         mgoblin_conf_file = os.path.abspath(
-            os.environ.get('MEDIAGOBLIN_CONFIG', 'mediagoblin.ini'))
+            os.environ.get('MEDIAGOBLIN_CONFIG', default_conf_file))
     else:
-        mgoblin_conf_file = 'mediagoblin.ini'
+        mgoblin_conf_file = default_conf_file
 
     if not os.path.exists(mgoblin_conf_file):
         raise IOError(
@@ -48,6 +49,7 @@ def setup_self(check_environ_for_conf=True, module_name=OUR_MODULENAME):
     # this is the module that gets set up.
     os.environ['CELERY_CONFIG_MODULE'] = module_name
     app.MediaGoblinApp(mgoblin_conf_file, setup_celery=False)
+
     setup_celery_from_config(
         mg_globals.app_config, mg_globals.global_config,
         settings_module=module_name,

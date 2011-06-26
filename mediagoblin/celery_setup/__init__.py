@@ -40,10 +40,6 @@ def setup_celery_from_config(app_config, global_config,
     - set_environ: if set, this will CELERY_CONFIG_MODULE to the
       settings_module
     """
-    if app_config.get('celery_setup_elsewhere') == True:
-        # Don't setup celery based on our config file.
-        return
-
     if global_config.has_key('celery'):
         celery_conf = global_config['celery']
     else:

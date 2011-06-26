@@ -16,11 +16,15 @@
 
 import os
 
+from mediagoblin.tests.tools import TEST_APP_CONFIG
 from mediagoblin.celery_setup.from_celery import setup_self
 
 
 OUR_MODULENAME = __name__
+CELERY_SETUP = False
 
 
 if os.environ.get('CELERY_CONFIG_MODULE') == OUR_MODULENAME:
-    setup_self(check_environ_for_conf=False, module_name=OUR_MODULENAME)
+    setup_self(check_environ_for_conf=False, module_name=OUR_MODULENAME,
+               default_conf_file=TEST_APP_CONFIG)
+    CELERY_SETUP = True
