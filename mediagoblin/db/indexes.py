@@ -37,6 +37,8 @@ REQUIRED READING:
 
  - http://www.mongodb.org/display/DOCS/Indexes
  - http://www.mongodb.org/display/DOCS/Indexing+Advice+and+FAQ
+
+
 """
 
 from pymongo import ASCENDING, DESCENDING
@@ -51,7 +53,7 @@ ACTIVE_INDEXES = {}
 # ------------------
 
 MEDIAENTRY_INDEXES = {
-    'mediaentry_uploader_slug_unique': {
+    'uploader_slug_unique': {
         # Matching an object to an uploader + slug.
         # MediaEntries are unique on these two combined, eg:
         #   /u/${myuser}/m/${myslugname}/
@@ -59,12 +61,12 @@ MEDIAENTRY_INDEXES = {
                   ('slug', ASCENDING)],
         'unique': True},
 
-    'mediaentry_created': {
+    'created': {
         # A global index for all media entries created, in descending
         # order.  This is used for the site's frontpage.
         'index': [('created', DESCENDING)]},
 
-    'mediaentry_uploader_created': {
+    'uploader_created': {
         # Indexing on uploaders and when media entries are created.
         # Used for showing a user gallery, etc.
         'index': [('uploader', ASCENDING),
@@ -78,15 +80,15 @@ ACTIVE_INDEXES['media_entries'] = MEDIAENTRY_INDEXES
 # ------------
 
 USER_INDEXES = {
-    'user_username_unique': {
+    'username_unique': {
         # Index usernames, and make sure they're unique.
         # ... I guess we might need to adjust this once we're federated :)
         'index': 'username',
         'unique': True},
-    'user_created': {
+    'created': {
         # All most recently created users
         'index': 'created'}}
-    
+
 
 ACTIVE_INDEXES['users'] = USER_INDEXES
 
@@ -94,5 +96,9 @@ ACTIVE_INDEXES['users'] = USER_INDEXES
 ####################
 # Deprecated indexes
 ####################
+
+# @@: Do we really need to keep the index form if we're removing by
+# key name? I guess it's helpful to keep the record...
+
 
 DEPRECATED_INDEXES = {}
