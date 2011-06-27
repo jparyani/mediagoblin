@@ -174,11 +174,15 @@ a.mediagoblin_logo:hover {
 
 /* media pages */
 
-img.media_image {
-  display:block;
-  margin-left:auto;
-  margin-right:auto;
+.media_image{
+  width:640px;
 }
+
+.media_sidebar{
+  width:280px;
+}
+
+/* media galleries */
 
 ul.media_thumbnail {
   padding:0px;
