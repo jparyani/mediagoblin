@@ -19,7 +19,6 @@
 {% block mediagoblin_content %}
   {# temporarily, an "image gallery" that isn't one really ;) #}
   {% if media %}
-
     <div class="grid_8 alpha media_image">
       <img src="{{ request.app.public_store.file_url(
                     media.media_files.main) }}" />
