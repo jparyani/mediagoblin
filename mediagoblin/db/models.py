@@ -147,8 +147,32 @@ class MediaEntry(Document):
     def uploader(self):
         return self.db.User.find_one({'_id': self['uploader']})
 
+class MediaComment(Document):
+    __collection__ = 'media_comments'
 
-REGISTER_MODELS = [MediaEntry, User]
+    structure = {
+        'media_entry': ObjectId,
+        'author': ObjectId,
+        'created': datetime.datetime,
+        'content': unicode,
+        'content_html': unicode}
+
+    required_fields = [
+        'author', 'created', 'content']
+
+    default_values = {
+        'created': datetime.datetime.utcnow}
+
+    def media_entry(self):
+        pass
+
+    def author(self):
+        return self.db.User.find_one({'_id': self['author']})
+
+REGISTER_MODELS = [
+    MediaEntry,
+    User,
+    MediaComment]
 
 
 def register_models(connection):
