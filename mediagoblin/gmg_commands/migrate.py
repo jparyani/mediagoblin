@@ -16,6 +16,7 @@
 
 
 from mediagoblin.db import migrations
+from mediagoblin.db import util as db_util
 from mediagoblin.gmg_commands import util as commands_util
 
 
@@ -27,8 +28,17 @@ def migrate_parser_setup(subparser):
 
 def migrate(args):
     mgoblin_app = commands_util.setup_app(args)
-    print "Applying migrations..."
 
+    # Clear old indexes
+    print "== Clearing old indexes... =="
+    removed_indexes = db_util.remove_deprecated_indexes(mgoblin_app.db)
+
+    for collection, index_name in removed_indexes:
+        print "Removed index '%s' in collection '%s'" % (
+            index_name, collection)
+    
+    # Migrate
+    print "== Applying migrations... =="
     for model_name in migrations.MIGRATE_CLASSES:
         model = getattr(mgoblin_app.db, model_name)
 
@@ -38,4 +48,10 @@ def migrate(args):
         migration = model.migration_handler(model)
         migration.migrate_all(collection=model.collection)
             
-    print "... done."
+    # Add new indexes
+    print "== Adding new indexes... =="
+    new_indexes = db_util.add_new_indexes(mgoblin_app.db)
+
+    for collection, index_name in new_indexes:
+        print "Added index '%s' to collection '%s'" % (
+            index_name, collection)
