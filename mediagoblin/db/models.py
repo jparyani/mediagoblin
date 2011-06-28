@@ -22,7 +22,8 @@ from mediagoblin import util
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin import mg_globals
 from mediagoblin.db import migrations
-from mediagoblin.db.util import ObjectId
+from mediagoblin.db.util import DESCENDING, ObjectId
+from mediagoblin.util import Pagination
 
 ###################
 # Custom validators
@@ -115,7 +116,22 @@ class MediaEntry(Document):
 
     def main_mediafile(self):
         pass
-
+    
+    def get_comments(self, page):
+        cursor = self.db.MediaComment.find({
+                'media_entry': self['_id']}).sort('created', DESCENDING)
+        
+        pagination = Pagination(page, cursor)
+        comments = pagination()
+        
+        data = list()
+        for comment in comments:
+            comment['author'] = self.db.User.find_one({
+                    '_id': comment['author']})
+            data.append(comment)
+            
+        return (data, pagination)
+        
     def generate_slug(self):
         self['slug'] = util.slugify(self['title'])
 
@@ -158,13 +174,13 @@ class MediaComment(Document):
         'content_html': unicode}
 
     required_fields = [
-        'author', 'created', 'content']
+        'media_entry', 'author', 'created', 'content']
 
     default_values = {
         'created': datetime.datetime.utcnow}
 
     def media_entry(self):
-        pass
+        return self.db.MediaEntry.find_one({'_id': self['media_entry']})
 
     def author(self):
         return self.db.User.find_one({'_id': self['author']})
