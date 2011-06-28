@@ -41,6 +41,16 @@ def add_new_indexes(database, active_indexes=ACTIVE_INDEXES):
     """
     Add any new indexes to the database.
 
+    Args:
+     - database: pymongo or mongokit database instance.
+     - active_indexes: indexes to possibly add in the pattern of:
+       {'collection_name': {
+            'identifier': {
+                'index': [index_foo_goes_here],
+                'unique': True}}
+       where 'index' is the index to add and all other options are
+       arguments for collection.create_index.
+
     Returns:
       A list of indexes added in form ('collection', 'index_name')
     """
@@ -68,16 +78,21 @@ def remove_deprecated_indexes(database, deprecated_indexes=DEPRECATED_INDEXES):
     """
     Remove any deprecated indexes from the database.
 
+    Args:
+     - database: pymongo or mongokit database instance.
+     - deprecated_indexes: the indexes to deprecate in the pattern of:
+       {'collection': ['index_identifier1', 'index_identifier2']}
+
     Returns:
       A list of indexes removed in form ('collection', 'index_name')
     """
     indexes_removed = []
 
-    for collection_name, indexes in deprecated_indexes.iteritems():
+    for collection_name, index_names in deprecated_indexes.iteritems():
         collection = database[collection_name]
         collection_indexes = collection.index_information().keys()
 
-        for index_name, index_data in indexes.iteritems():
+        for index_name in index_names:
             if index_name in collection_indexes:
                 collection.drop_index(index_name)
 
