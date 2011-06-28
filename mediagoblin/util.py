@@ -106,8 +106,6 @@ def get_jinja_env(template_loader, locale):
         mg_globals.translations.ngettext)
 
     # All templates will know how to ...
-    # ... add a new message to the message queue
-    template_env.globals['add_message'] = messages.add_message
     # ... fetch all waiting messages and remove them from the queue
     template_env.globals['fetch_messages'] = messages.fetch_messages
 
