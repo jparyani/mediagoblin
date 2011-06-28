@@ -17,9 +17,12 @@
 """
 Indexes for the local database.
 
+To add new indexes
+------------------
+
 Indexes are recorded in the following format:
 
-INDEXES = {
+ACTIVE_INDEXES = {
     'collection_name': {
         'identifier': {  # key identifier used for possibly deprecating later
             'index': [index_foo_goes_here]}}
@@ -39,6 +42,21 @@ REQUIRED READING:
  - http://www.mongodb.org/display/DOCS/Indexing+Advice+and+FAQ
 
 
+To remove deprecated indexes
+----------------------------
+
+Removing deprecated indexes is easier, just do:
+
+INACTIVE_INDEXES = {
+    'collection_name': [
+        'deprecated_index_identifier1', 'deprecated_index_identifier2']}
+        
+... etc.
+
+If an index has been deprecated that identifier should NEVER BE USED
+AGAIN.  Eg, if you previously had 'awesomepants_unique', you shouldn't
+use 'awesomepants_unique' again, you should create a totally new name
+or at worst use 'awesomepants_unique2'.
 """
 
 from pymongo import ASCENDING, DESCENDING
@@ -96,9 +114,5 @@ ACTIVE_INDEXES['users'] = USER_INDEXES
 ####################
 # Deprecated indexes
 ####################
-
-# @@: Do we really need to keep the index form if we're removing by
-# key name? I guess it's helpful to keep the record...
-
 
 DEPRECATED_INDEXES = {}
