@@ -108,11 +108,6 @@ class MediaEntry(Document):
 
     migration_handler = migrations.MediaEntryMigration
 
-    indexes = [
-        # Referene uniqueness of slugs by uploader
-        {'fields': ['uploader', 'slug'],
-         'unique': True}]
-
     def main_mediafile(self):
         pass
 

@@ -16,23 +16,47 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
+{# Generically render a field #}
+{% macro render_field_div(field) %}
+  <div class="form_field_box">
+    <div class="form_field_label">{{ field.label }}</div>
+    {% if field.description -%}
+      <div class="form_field_description">{{ field.description }}</div>
+    {%- endif %}
+    <div class="form_field_input">{{ field }}</div>
+    {%- if field.errors -%}
+      {% for error in field.errors %}
+        <div class="form_field_error">
+          {{ error }}
+        </div>
+      {% endfor %}
+    {%- endif %}
+  </div>
+{%- endmacro %}
+
+{# Generically render a textarea
+ # ... mostly the same thing except it includes rows and cols #}
+{% macro render_textarea_div(field, rows=8, cols=20) %}
+  <div class="form_field_box">
+    <div class="form_field_label">{{ field.label }}</div>
+    {% if field.description -%}
+      <div class="form_field_description">{{ field.description }}</div>
+    {%- endif %}
+    <div class="form_field_input">{{ field(rows=rows, cols=cols) }}</div>
+    {%- if field.errors -%}
+      {% for error in field.errors %}
+        <div class="form_field_error">
+          {{ error }}
+        </div>
+      {% endfor %}
+    {%- endif %}
+  </div>
+{%- endmacro %}
+
 {# Auto-render a form as a series of divs #}
 {% macro render_divs(form) -%}
   {% for field in form %}
-    <div class="form_field_box">
-      <div class="form_field_label">{{ field.label }}</div>
-      {% if field.description -%}
-        <div class="form_field_description">{{ field.description }}</div>
-      {%- endif %}
-      <div class="form_field_input">{{ field }}</div>
-      {%- if field.errors -%}
-        {% for error in field.errors %}
-          <div class="form_field_error">
-            {{ error }}
-          </div>
-        {% endfor %}
-      {%- endif %}
-    </div>
+    {{ render_field_div(field) }}
   {% endfor %}
 {%- endmacro %}
 

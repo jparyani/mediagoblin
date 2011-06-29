@@ -21,9 +21,8 @@ import os, shutil
 from paste.deploy import loadapp
 from webtest import TestApp
 
-from mediagoblin import util, mg_globals
+from mediagoblin import util
 from mediagoblin.config import read_mediagoblin_config
-from mediagoblin.celery_setup import setup_celery_from_config
 from mediagoblin.decorators import _make_safe
 from mediagoblin.db.open import setup_connection_and_db_from_config
 
@@ -36,7 +35,6 @@ TEST_APP_CONFIG = pkg_resources.resource_filename(
 TEST_USER_DEV = pkg_resources.resource_filename(
     'mediagoblin.tests', 'test_user_dev')
 MGOBLIN_APP = None
-CELERY_SETUP = False
 
 USER_DEV_DIRECTORIES_TO_SETUP = [
     'media/public', 'media/queue',
@@ -60,8 +58,10 @@ def suicide_if_bad_celery_environ():
 def get_test_app(dump_old_app=True):
     suicide_if_bad_celery_environ()
 
+    # Leave this imported as it sets up celery.
+    from mediagoblin.celery_setup import from_tests
+
     global MGOBLIN_APP
-    global CELERY_SETUP
 
     # Just return the old app if that exists and it's okay to set up
     # and return
@@ -102,13 +102,6 @@ def get_test_app(dump_old_app=True):
 
     app = TestApp(test_app)
     MGOBLIN_APP = app
-
-    # setup celery
-    if not CELERY_SETUP:
-        setup_celery_from_config(
-            mg_globals.app_config, mg_globals.global_config,
-            set_environ=True)
-        CELERY_SETUP = True
 
     return app
 

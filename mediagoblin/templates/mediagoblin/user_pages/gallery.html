@@ -20,15 +20,16 @@
 {% block mediagoblin_head %}
     <link rel="alternate" type="application/atom+xml"
           href="{{ request.urlgen(
-	               'mediagoblin.user_pages.atom_feed',
+                       'mediagoblin.user_pages.atom_feed',
                        user=user.username) }}">
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_content -%}
   {% if user %}
-    <h1><a href="{{ request.urlgen(
-	                            'mediagoblin.user_pages.user_home',
-                                 user=user.username) }}">{{ user.username }}</a>'s media</h1>
+    <h1>
+      <a href="{{ request.urlgen(
+                      'mediagoblin.user_pages.user_home',
+                      user=user.username) }}">{{ user.username }}</a>'s media</h1>
 
     {% include "mediagoblin/utils/object_gallery.html" %}
 

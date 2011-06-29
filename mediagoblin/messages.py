@@ -14,17 +14,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
+DEBUG = 'debug'
+INFO = 'info'
+SUCCESS = 'success'
+WARNING = 'warning'
+ERROR = 'error'
 
-from mediagoblin.tests.tools import TEST_APP_CONFIG
-from mediagoblin.celery_setup.from_celery import setup_self
+def add_message(request, level, text):
+    messages = request.session.setdefault('messages', [])
+    messages.append({'level': level, 'text': text})
+    request.session.save()
 
-
-OUR_MODULENAME = __name__
-CELERY_SETUP = False
-
-
-if os.environ.get('CELERY_CONFIG_MODULE') == OUR_MODULENAME:
-    setup_self(check_environ_for_conf=False, module_name=OUR_MODULENAME,
-               default_conf_file=TEST_APP_CONFIG)
-    CELERY_SETUP = True
+def fetch_messages(request, clear_from_session=True):
+    messages = request.session.get('messages')
+    if messages and clear_from_session:
+        # Save that we removed the messages from the session
+        request.session['messages'] = []
+        request.session.save()
+    return messages

@@ -4,6 +4,12 @@ body {
   font-family: sans-serif;
   padding:none;
   margin:0px;
+  height:100%;
+}
+
+form {
+  margin:0px;
+  padding:0px;
 }
 
 /* Carter One font */
@@ -38,12 +44,74 @@ label {
 
 /* website structure */
 
+.mediagoblin_body {
+  position:relative;
+  min-height:100%;
+}
+
 .mediagoblin_header {
   width:100%;
   height:36px;
   background-color:#393939;
   padding-top:14px;
   margin-bottom:40px;
+}
+
+.mediagoblin_footer {
+  width:100%;
+  height:26px;
+  background-color:#393939;
+  bottom:0px;
+  padding-top:8px;
+  position:absolute;
+  text-align:center;
+  font-size:14px;
+  color:#999;
+}
+
+.mediagoblin_content {
+  padding-bottom:74px;
+}
+
+ul.mediagoblin_messages {
+  list-style:none inside;
+  color:#393932;
+  margin:2px;
+  padding:2px;
+}
+
+ul.mediagoblin_messages li {
+  background-color:#d4d4d4;
+  border-style:solid;
+  border-width:3px;
+  border-color:#959595;
+  margin:5px;
+  padding:8px;
+}
+
+ul.mediagoblin_messages li.message_success {
+  background-color: #88d486;
+  border-color: #5bba59;
+}
+
+ul.mediagoblin_messages li.message_warning {
+  background-color: #d4c686;
+  border-color: #baa959;
+}
+
+ul.mediagoblin_messages li.message_error {
+  background-color: #d48686;
+  border-color: #ba5959;
+}
+
+ul.mediagoblin_messages li.message_info {
+  background-color: #86b9d4;
+  border-color: #5998ba;
+}
+
+ul.mediagoblin_messages li.message_debug {
+  background-color: #aa86d4;
+  border-color: #8659ba;
 }
 
 a.mediagoblin_logo {
@@ -119,8 +187,8 @@ a.mediagoblin_logo:hover {
   font-size:28px;
 }
 
-.form_field_input input {
-  width:300px;
+.form_field_input input, .form_field_input textarea {
+  width:100%;
   font-size:18px;
 }
 
@@ -159,11 +227,12 @@ ul.media_thumbnail {
 
 li.media_thumbnail {
   width:200px;
-  height:133px;
+  height:200px;
   display:-moz-inline-stack;
   display:inline-block;
   vertical-align:top;
   margin:0px 10px 10px 0px;
+  text-align:center;
   zoom:1;
 . *display:inline;
 }
