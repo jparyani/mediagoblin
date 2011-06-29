@@ -27,4 +27,7 @@ user_routes = [
     Route('mediagoblin.edit.edit_media', "/{user}/m/{media}/edit/",
         controller="mediagoblin.edit.views:edit_media"),
     Route('mediagoblin.user_pages.atom_feed', '/{user}/atom/',
-        controller="mediagoblin.user_pages.views:atom_feed")]
+        controller="mediagoblin.user_pages.views:atom_feed"),
+    Route('mediagoblin.user_pages.media_post_comment',
+          '/{user}/m/{media}/comment/add/',
+          controller="mediagoblin.user_pages.views:media_post_comment")]
