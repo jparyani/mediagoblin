@@ -73,6 +73,47 @@ label {
   padding-bottom:74px;
 }
 
+ul.mediagoblin_messages {
+  list-style:none inside;
+  color:#393932;
+  margin:2px;
+  padding:2px;
+}
+
+ul.mediagoblin_messages li {
+  background-color:#d4d4d4;
+  border-style:solid;
+  border-width:3px;
+  border-color:#959595;
+  margin:5px;
+  padding:8px;
+}
+
+ul.mediagoblin_messages li.message_success {
+  background-color: #88d486;
+  border-color: #5bba59;
+}
+
+ul.mediagoblin_messages li.message_warning {
+  background-color: #d4c686;
+  border-color: #baa959;
+}
+
+ul.mediagoblin_messages li.message_error {
+  background-color: #d48686;
+  border-color: #ba5959;
+}
+
+ul.mediagoblin_messages li.message_info {
+  background-color: #86b9d4;
+  border-color: #5998ba;
+}
+
+ul.mediagoblin_messages li.message_debug {
+  background-color: #aa86d4;
+  border-color: #8659ba;
+}
+
 a.mediagoblin_logo {
   width:34px;
   height:25px;
