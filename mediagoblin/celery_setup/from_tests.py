@@ -25,6 +25,9 @@ CELERY_SETUP = False
 
 
 if os.environ.get('CELERY_CONFIG_MODULE') == OUR_MODULENAME:
-    setup_self(check_environ_for_conf=False, module_name=OUR_MODULENAME,
-               default_conf_file=TEST_APP_CONFIG)
-    CELERY_SETUP = True
+    if CELERY_SETUP:
+        pass
+    else:
+        setup_self(check_environ_for_conf=False, module_name=OUR_MODULENAME,
+                   default_conf_file=TEST_APP_CONFIG)
+        CELERY_SETUP = True
