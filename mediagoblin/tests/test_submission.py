@@ -23,25 +23,59 @@ from mediagoblin.tests.tools import setup_fresh_app, get_test_app
 from mediagoblin import mg_globals
 from mediagoblin import util
 
-#TEST_JPG = ''
+IMAGE_ROOT = 'mediagoblin/tests/test_submission'
+GOOD_JPG = 'good.jpg'
+GOOD_PNG = 'good.png'
+EVIL_JPG = ''
+EVIL_PNG = ''
+
 
 # TODO:
 # - Define test files as globals
 #   - supported mime types
 #   - unsupported mime type with supported extension
 # - Remove any imports that aren't neccessary
-# - Get setup fixture working
 
 class TestSubmission:
     def setUp(self):
         self.test_app = get_test_app()
 
+        # TODO: Possibly abstract into a decorator like:
+        # @as_authenticated_user('chris')
         test_user = mg_globals.database.User()
         test_user['username'] = u'chris'
         test_user['email'] = u'chris@example.com'
         test_user['pw_hash'] = auth_lib.bcrypt_gen_password_hash('toast')
         test_user.save()
 
-    def test_something(self):
+        self.test_app.post(
+            '/auth/login/', {
+                'username': u'chris',
+                'password': 'toast'})
+
+    def test_missing_fields(self):
+        # Test missing title
+        # Test missing description (if it's required)
+        # Test missing file
+        pass
+
+    def test_normal_uploads(self):
+        # FYI:
+        # upload_files is for file uploads. It should be a list of
+        # [(fieldname, filename, file_content)]. You can also use
+        # just [(fieldname, filename)] and the file content will be
+        # read from disk.
+
+        # Test JPG
+        # Test PNG
+        # Test additional supported formats
+
+        #resp = self.test_app.get('/')
+        #print resp
+        pass
+
+    def test_malicious_uploads(self):
+        # Test non-supported file with .jpg extension
+        # Test non-supported file with .png extension
         pass
 
