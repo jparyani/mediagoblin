@@ -111,6 +111,16 @@ USER_INDEXES = {
 ACTIVE_INDEXES['users'] = USER_INDEXES
 
 
+# MediaComment indexes
+
+MEDIA_COMMENT_INDEXES = {
+   'mediaentry_created': {
+        'index': [('media_entry', ASCENDING),
+                  ('created', DESCENDING)]}}
+
+ACTIVE_INDEXES['media_comments'] = MEDIA_COMMENT_INDEXES
+
+
 ####################
 # Deprecated indexes
 ####################
