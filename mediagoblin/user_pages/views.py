@@ -15,12 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from webob import exc
-from mediagoblin.db.util import DESCENDING
-from mediagoblin.util import Pagination, render_to_response
 
-from mediagoblin.decorators import uses_pagination, get_user_media_entry
+from mediagoblin import messages
+from mediagoblin.db.util import DESCENDING, ObjectId
+from mediagoblin.util import (
+    Pagination, render_to_response, redirect, cleaned_markdown_conversion)
+from mediagoblin.user_pages import forms as user_forms
+
+from mediagoblin.decorators import uses_pagination, get_user_media_entry, \
+    require_active_login
 
 from werkzeug.contrib.atom import AtomFeed
+
 
 @uses_pagination
 def user_home(request, page):
@@ -78,12 +84,46 @@ def user_gallery(request, page):
 
 
 @get_user_media_entry
-def media_home(request, media):
-    """'Homepage' of a MediaEntry()"""
+@uses_pagination
+def media_home(request, media, **kwargs):
+    """
+    'Homepage' of a MediaEntry()
+    """
+
+    comment_form = user_forms.MediaCommentForm(request.POST)
+
+    (comments, pagination) = media.get_comments(kwargs.get('page'))
+
     return render_to_response(
         request,
         'mediagoblin/user_pages/media.html',
-        {'media': media})
+        {'media': media,
+         'comments': comments,
+         'pagination': pagination,
+         'comment_form': comment_form})
+
+
+@require_active_login
+def media_post_comment(request):
+    """
+    recieves POST from a MediaEntry() comment form, saves the comment.
+    """
+    comment = request.db.MediaComment()
+    comment['media_entry'] = ObjectId(request.matchdict['media'])
+    comment['author'] = request.user['_id']
+    comment['content'] = request.POST['comment']
+
+    comment['content_html'] = cleaned_markdown_conversion(comment['content'])
+
+    comment.save()
+
+    messages.add_message(
+        request, messages.SUCCESS,
+        'Comment posted!')
+
+    return redirect(request, 'mediagoblin.user_pages.media_home',
+        media = request.matchdict['media'],
+        user = request.matchdict['user'])
 
 
 ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 5
@@ -117,4 +157,4 @@ def atom_feed(request):
             updated=entry.get('created'),
             url=entry.url_for_self(request.urlgen))
 
-    return feed.get_response() 
+    return feed.get_response()
