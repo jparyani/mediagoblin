@@ -19,14 +19,17 @@
 {% block mediagoblin_content %}
   {# temporarily, an "image gallery" that isn't one really ;) #}
   {% if media %}
-  
-    <h1>Media details for {{media.title}}</h1>
-    <div>
+    <div class="grid_8 alpha media_image">
       <img src="{{ request.app.public_store.file_url(
                     media.media_files.main) }}" />
-  
-      <br/>Uploaded: {{ media.created}}
-      <br/>Description: {{media.description}}
+      <h1>Media details for {{media.title}}</h1>
+      <p>
+        <br/>Uploaded: {{ media.created}}
+        <br/>Description: {{media.description}}
+      </p>
+    </div>
+    <div class="grid_4 omega sidebar">
+      <p>Uploaded: {{ media.created}}</p>
     </div>
   {% else %}
     <p>Sorry, no such media found.<p/>

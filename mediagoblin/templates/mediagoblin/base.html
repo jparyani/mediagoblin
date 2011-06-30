@@ -51,16 +51,13 @@
           </div>
         </div>
       {% endblock %}
-      
-      {% include "mediagoblin/utils/messages.html" %}
-
       <div class="container_12 mediagoblin_content">
         <div class="grid_12">
+          {% include "mediagoblin/utils/messages.html" %}
           {% block mediagoblin_content %}
           {% endblock mediagoblin_content %}
         </div>
       </div>
-
       {% block mediagoblin_footer %}
         <div class="mediagoblin_footer">
           <div class="container_12">
