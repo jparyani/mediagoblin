@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from webob import exc
+
+from mediagoblin import messages
 from mediagoblin.db.util import DESCENDING, ObjectId
 from mediagoblin.util import (
     Pagination, render_to_response, redirect, cleaned_markdown_conversion)
@@ -114,6 +116,10 @@ def media_post_comment(request):
     comment['content_html'] = cleaned_markdown_conversion(comment['content'])
 
     comment.save()
+
+    messages.add_message(
+        request, messages.SUCCESS,
+        'Comment posted!')
 
     return redirect(request, 'mediagoblin.user_pages.media_home',
         media = request.matchdict['media'],
