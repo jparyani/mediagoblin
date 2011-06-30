@@ -16,8 +16,8 @@
 
 from webob import exc
 from mediagoblin.db.util import DESCENDING, ObjectId
-from mediagoblin.util import Pagination, render_to_response, redirect, \
-    clean_html
+from mediagoblin.util import (
+    Pagination, render_to_response, redirect, cleaned_markdown_conversion)
 from mediagoblin.user_pages import forms as user_forms
 
 from mediagoblin.decorators import uses_pagination, get_user_media_entry, \
@@ -25,7 +25,6 @@ from mediagoblin.decorators import uses_pagination, get_user_media_entry, \
 
 from werkzeug.contrib.atom import AtomFeed
 
-import markdown
 
 @uses_pagination
 def user_home(request, page):
@@ -101,6 +100,7 @@ def media_home(request, media, **kwargs):
          'pagination': pagination,
          'comment_form': comment_form})
 
+
 @require_active_login
 def media_post_comment(request):
     """
@@ -111,17 +111,14 @@ def media_post_comment(request):
     comment['author'] = request.user['_id']
     comment['content'] = request.POST['comment']
 
-    md = markdown.Markdown(
-        safe_mode = 'escape')
-    comment['content_html'] = clean_html(
-        md.convert(
-            comment['content']))
+    comment['content_html'] = cleaned_markdown_conversion(comment['content'])
 
     comment.save()
 
     return redirect(request, 'mediagoblin.user_pages.media_home',
         media = request.matchdict['media'],
         user = request.matchdict['user'])
+
 
 ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 5
 
