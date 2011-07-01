@@ -254,3 +254,29 @@ li.media_thumbnail {
   zoom:1;
 . *display:inline;
 }
+
+/* icons */
+
+.iconFeed{
+  width:16px;
+  height:16px;
+  background-image:url('../images/iconFeed.png');
+  float:left;
+  margin-right:5px;
+}
+
+.iconEdit{
+  width:16px;
+  height:16px;
+  background-image:url('../images/iconEdit.png');
+  float:left;
+  margin-right:5px;
+}
+
+.iconDelete{
+  width:16px;
+  height:16px;
+  background-image:url('../images/iconDelete.png');
+  float:left;
+  margin-right:5px;
+}
