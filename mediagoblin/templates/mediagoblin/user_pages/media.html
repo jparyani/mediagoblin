@@ -68,13 +68,18 @@
         <h3>Comments</h3>
         {% for comment in comments %}
           <div class="comment_wrapper" id="comment-{{ comment['_id'] }}">
-  	  <div class="comment_author">By: 
+  	  
+            <div class="comment_content">
+              {% autoescape False %}
+                {{ comment.content_html }}
+              {% endautoescape %}
+  	  </div>
+  	  <div class="comment_author">&mdash; 
   	    <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                           user = comment['author']['username']) }}">
-  	      {{ comment['author']['username'] }}
-  	    </a>
-  	  </div>
-  	  <div class="comment_datetime">
+  	      {{ comment['author']['username'] }}</a> at 
+  	  <!--</div>
+  	  <div class="comment_datetime">-->
   	    <a href="#comment-{{ comment['_id'] }}">
   	      {{ "%4d-%02d-%02d %02d:%02d"|format(comment.created.year,
   	                                   comment.created.month,
@@ -82,11 +87,6 @@
   	                                   comment.created.hour,
   	                                   comment.created.minute) }}
   	    </a>
-  	  </div>
-            <div class="comment_content">
-              {% autoescape False %}
-                {{ comment.content_html }}
-              {% endautoescape %}
   	  </div>
   	</div>
         {% endfor %}

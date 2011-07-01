@@ -223,6 +223,20 @@ a.mediagoblin_logo:hover {
   width:280px;
 }
 
+/* comments */
+
+.comment_author {
+  margin-bottom:40px;
+  font-size:14px;
+  text-align:right;
+  border-top:1px solid #393939;
+  padding-top:4px;
+}
+
+.comment_content p {
+  margin-bottom:4px;
+}
+
 /* media galleries */
 
 ul.media_thumbnail {
