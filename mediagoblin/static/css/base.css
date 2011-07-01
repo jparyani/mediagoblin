@@ -254,26 +254,7 @@ li.media_thumbnail {
 
 /* icons */
 
-.iconFeed{
-  width:16px;
-  height:16px;
-  background-image:url('../images/iconFeed.png');
-  float:left;
-  margin-right:5px;
-}
-
-.iconEdit{
-  width:16px;
-  height:16px;
-  background-image:url('../images/iconEdit.png');
-  float:left;
-  margin-right:5px;
-}
-
-.iconDelete{
-  width:16px;
-  height:16px;
-  background-image:url('../images/iconDelete.png');
-  float:left;
-  margin-right:5px;
+img.media_icon{
+  margin:0 4px;
+  vertical-align:sub;
 }

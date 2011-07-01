@@ -23,38 +23,32 @@
   {# temporarily, an "image gallery" that isn't one really ;) #}
   {% if media %}
     <div class="grid_8 alpha media_image">
-      <h1>
-        {{media.title}}
-      </h1>
       <img src="{{ request.app.public_store.file_url(
                     media.media_files.main) }}" />
+      <h2>
+        {{media.title}}
+      </h2>
+      {% autoescape False %}
+        <p>{{ media.description_html }}</p>
+      {% endautoescape %}
       <p>
-        Uploaded on
+        &mdash;&nbsp;uploaded on
         {{ "%4d-%02d-%02d"|format(media.created.year,
                                   media.created.month, media.created.day) }}
         by
         <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                    user= media.uploader().username) }}">
           {{- media.uploader().username }}</a>
-      </p>   
-
-      {% autoescape False %}
-        <p>{{ media.description_html }}</p>
-      {% endautoescape %}
-
-      {% if media['uploader'] == request.user['_id'] %}
-        <p><a href="{{ request.urlgen('mediagoblin.edit.edit_media',
-                                      user= media.uploader().username,
-                                      media= media._id) }}">Edit</a></p>
-      {% endif %}
+      </p>
+      <br /><br />
+      <h3>Comments</h3>
       {% if request.user %}
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
                                          user= media.uploader().username,
                                          media=media._id) }}" method="POST">
-          <h3>Post a comment!</h3>
           {{ wtforms_util.render_field_div(comment_form.comment) }}
           <div class="form_submit_buttons">
-            <input type="submit" value="Submit" class="button" />
+            <input type="submit" value="Post comment!" class="button" />
           </div>
         </form>
       {% endif %}
@@ -63,7 +57,6 @@
       {{ wtforms_util.render_field_div(submit_form.file) }}
       #}
       {% if comments %}
-        <h3>Comments</h3>
         {% for comment in comments %}
           <div class="comment_wrapper" id="comment-{{ comment['_id'] }}">
             <div class="comment_content">
@@ -91,7 +84,15 @@
       </div>
     {% endif %}
     <div class="grid_4 omega media_sidebar">
-      <p>This is a sidebar! Yay!</p>
+      <h3>Sidebar content here!</h3>
+      <p>
+       {% if media['uploader'] == request.user['_id'] %}
+        <p><a href="{{ request.urlgen('mediagoblin.edit.edit_media',
+                                      user= media.uploader().username,
+                                      media= media._id) }}"><img src="{{ request.staticdirect('/images/iconEdit.png') }}" class="media_icon" />edit</a></p>
+        <p><img src="{{ request.staticdirect('/images/iconDelete.png') }}" class="media_icon" />delete</p>
+        {% endif %}
+      </p>
     </div>
   {% else %}
   <p>Sorry, no such media found.<p/>
