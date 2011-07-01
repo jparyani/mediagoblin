@@ -29,7 +29,7 @@
           {% if page != pagination.page %}
 	    <a href="{{ pagination.get_page_url(request, page) }}">{{ page }}</a>
           {% else %}
-            <strong>{{ page }}</strong>
+            {{ page }}
           {% endif %}
         {% else %}
           <span class="ellipsis">…</span>
