@@ -58,42 +58,38 @@
           </div>
         </form>
       {% endif %}
-
       {#
       {{ wtforms_util.render_textarea_div(submit_form.description) }}
       {{ wtforms_util.render_field_div(submit_form.file) }}
       #}
-
       {% if comments %}
         <h3>Comments</h3>
         {% for comment in comments %}
           <div class="comment_wrapper" id="comment-{{ comment['_id'] }}">
-  	  
             <div class="comment_content">
               {% autoescape False %}
                 {{ comment.content_html }}
               {% endautoescape %}
-  	  </div>
-  	  <div class="comment_author">&mdash; 
-  	    <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                          user = comment['author']['username']) }}">
-  	      {{ comment['author']['username'] }}</a> at 
-  	  <!--</div>
-  	  <div class="comment_datetime">-->
-  	    <a href="#comment-{{ comment['_id'] }}">
-  	      {{ "%4d-%02d-%02d %02d:%02d"|format(comment.created.year,
-  	                                   comment.created.month,
-  	                                   comment.created.day,
-  	                                   comment.created.hour,
-  	                                   comment.created.minute) }}
-  	    </a>
-  	  </div>
-  	</div>
+            </div>
+            <div class="comment_author">&mdash; 
+              <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                                user = comment['author']['username']) }}">
+              {{ comment['author']['username'] }}</a> at 
+          <!--</div>
+          <div class="comment_datetime">-->
+              <a href="#comment-{{ comment['_id'] }}">
+                {{ "%4d-%02d-%02d %02d:%02d"|format(comment.created.year,
+                                         comment.created.month,
+                                         comment.created.day,
+                                         comment.created.hour,
+                                         comment.created.minute) }}
+              </a>
+            </div>
+         </div>
         {% endfor %}
         {% include "mediagoblin/utils/pagination.html" %}
       </div>
     {% endif %}
-
     <div class="grid_4 omega media_sidebar">
       <p>This is a sidebar! Yay!</p>
     </div>
