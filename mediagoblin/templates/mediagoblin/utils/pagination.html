@@ -19,7 +19,7 @@
 
 {% if pagination %}
   <div class="pagination">
-
+  <p>
       {% if pagination.has_prev %}
         <a href="{{ pagination.get_page_url(request, pagination.page-1) }}">&laquo; Prev</a>
       {% endif %}
@@ -39,6 +39,7 @@
       {% if pagination.has_next %}
         <a href="{{ pagination.get_page_url(request, pagination.page + 1) }}">Next &raquo;</a>
       {% endif %}
+     </p>
    </div>
 {% endif %}
 

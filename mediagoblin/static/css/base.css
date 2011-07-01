@@ -155,6 +155,10 @@ a.mediagoblin_logo:hover {
   padding-right:11px;
 }
 
+.pagination{
+text-align:center;
+}
+
 /* forms */
 
 .form_box {
