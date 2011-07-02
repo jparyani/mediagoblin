@@ -52,10 +52,7 @@
           </div>
         </form>
       {% endif %}
-      {#
-      {{ wtforms_util.render_textarea_div(submit_form.description) }}
-      {{ wtforms_util.render_field_div(submit_form.file) }}
-      #}
+
       {% if comments %}
         {% for comment in comments %}
           <div class="comment_wrapper" id="comment-{{ comment['_id'] }}">
