@@ -18,6 +18,18 @@
 Database Abstraction/Wrapper Layer
 ==================================
 
+  **NOTE from Chris Webber:** I asked Elrond to explain why he put
+  ASCENDING and DESCENDING in db/util.py when we could just import from
+  pymongo.  Read beow for why, but note that nobody is actually doing
+  this and there's no proof that we'll ever support more than
+  MongoDB... it would be a huge amount of work to do so.
+  
+  If you really want to prove that possible, jump on IRC and talk to
+  us about making such a branch.  In the meanwhile, it doesn't hurt to
+  have things as they are... if it ever makes it hard for us to
+  actually do things, we might revisit or remove this.  But for more
+  information, read below.
+
 This submodule is for most of the db specific stuff.
 
 There are two main ideas here:
