@@ -22,7 +22,7 @@ from paste.deploy import loadapp
 from webtest import TestApp
 
 from mediagoblin import util
-from mediagoblin.config import read_mediagoblin_config
+from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.decorators import _make_safe
 from mediagoblin.db.open import setup_connection_and_db_from_config
 

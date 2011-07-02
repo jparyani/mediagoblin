@@ -21,7 +21,7 @@ import routes
 from webob import Request, exc
 
 from mediagoblin import routing, util, storage, staticdirect
-from mediagoblin.config import (
+from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.mg_globals import setup_globals

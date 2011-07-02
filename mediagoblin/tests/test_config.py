@@ -16,7 +16,7 @@
 
 import pkg_resources
 
-from mediagoblin import config
+from mediagoblin.init import config
 
 
 CARROT_CONF_GOOD = pkg_resources.resource_filename(
