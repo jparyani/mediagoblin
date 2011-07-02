@@ -17,9 +17,9 @@
 
 {# only display if {{pagination}} is defined #}
 
-{% if pagination %}
+{% if pagination and pagination.pages > 1 %}
   <div class="pagination">
-  <p>
+    <p>
       {% if pagination.has_prev %}
         <a href="{{ pagination.get_page_url(request, pagination.page-1) }}">&laquo; Prev</a>
       {% endif %}
