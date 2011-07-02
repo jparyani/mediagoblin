@@ -57,6 +57,7 @@
 
       {% if comments %}
         {% for comment in comments %}
+          {% set comment_author = comment.author() %}
           <div class="comment_wrapper" id="comment-{{ comment['_id'] }}">
             <div class="comment_content">
               {% autoescape False %}
@@ -65,8 +66,8 @@
             </div>
             <div class="comment_author">&mdash; 
               <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                user = comment['author']['username']) }}">
-              {{ comment['author']['username'] }}</a> at 
+                                user = comment_author['username']) }}">
+              {{ comment_author['username'] }}</a> at 
             <!--</div>
             <div class="comment_datetime">-->
               <a href="#comment-{{ comment['_id'] }}">
