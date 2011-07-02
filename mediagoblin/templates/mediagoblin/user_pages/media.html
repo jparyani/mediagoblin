@@ -28,9 +28,11 @@
       <h2>
         {{media.title}}
       </h2>
+
       {% autoescape False %}
         <p>{{ media.description_html }}</p>
       {% endautoescape %}
+
       <p>
         &mdash;&nbsp;uploaded on
         {{ "%4d-%02d-%02d"|format(media.created.year,
@@ -41,6 +43,7 @@
           {{- media.uploader().username }}</a>
       </p>
       <br /><br />
+
       <h3>Comments</h3>
       {% if request.user %}
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
@@ -65,8 +68,8 @@
               <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                 user = comment['author']['username']) }}">
               {{ comment['author']['username'] }}</a> at 
-          <!--</div>
-          <div class="comment_datetime">-->
+            <!--</div>
+            <div class="comment_datetime">-->
               <a href="#comment-{{ comment['_id'] }}">
                 {{ "%4d-%02d-%02d %02d:%02d"|format(comment.created.year,
                                          comment.created.month,
@@ -75,8 +78,9 @@
                                          comment.created.minute) }}
               </a>
             </div>
-         </div>
+          </div>
         {% endfor %}
+
         {% include "mediagoblin/utils/pagination.html" %}
       </div>
     {% endif %}
@@ -100,6 +104,6 @@
       </p>
     </div>
   {% else %}
-  <p>Sorry, no such media found.<p/>
+    <p>Sorry, no such media found.<p/>
   {% endif %}
 {% endblock %}
