@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
@@ -16,15 +14,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if [ -f ./bin/nosetests ]; then
-    echo "Using ./bin/nosetests";
-    export NOSETESTS="./bin/nosetests";
-elif which nosetests > /dev/null; then
-    echo "Using nosetests from \$PATH";
-    export NOSETESTS="nosetests";
-else
-    echo "No nosetests found, exiting! X_X";
-    exit 1
-fi
+import jinja2
 
-CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests $NOSETESTS $@
+
+def get_jinja_loader(user_template_path=None):
+    """
+    Set up the Jinja template loaders, possibly allowing for user
+    overridden templates.
+
+    (In the future we may have another system for providing theming;
+    for now this is good enough.)
+    """
+    if user_template_path:
+        return jinja2.ChoiceLoader(
+            [jinja2.FileSystemLoader(user_template_path),
+             jinja2.PackageLoader('mediagoblin', 'templates')])
+    else:
+        return jinja2.PackageLoader('mediagoblin', 'templates')

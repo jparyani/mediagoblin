@@ -17,7 +17,7 @@
 import os
 
 from mediagoblin.tests.tools import TEST_APP_CONFIG
-from mediagoblin.celery_setup.from_celery import setup_self
+from mediagoblin.init.celery.from_celery import setup_self
 
 
 OUR_MODULENAME = __name__

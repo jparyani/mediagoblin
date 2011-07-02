@@ -64,22 +64,6 @@ def clear_test_buckets():
     clear_test_template_context()
 
 
-def get_jinja_loader(user_template_path=None):
-    """
-    Set up the Jinja template loaders, possibly allowing for user
-    overridden templates.
-
-    (In the future we may have another system for providing theming;
-    for now this is good enough.)
-    """
-    if user_template_path:
-        return jinja2.ChoiceLoader(
-            [jinja2.FileSystemLoader(user_template_path),
-             jinja2.PackageLoader('mediagoblin', 'templates')])
-    else:
-        return jinja2.PackageLoader('mediagoblin', 'templates')
-
-
 SETUP_JINJA_ENVS = {}
 
 

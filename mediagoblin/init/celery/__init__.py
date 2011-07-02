@@ -20,7 +20,7 @@ import sys
 
 MANDATORY_CELERY_IMPORTS = ['mediagoblin.process_media']
 
-DEFAULT_SETTINGS_MODULE = 'mediagoblin.celery_setup.dummy_settings_module'
+DEFAULT_SETTINGS_MODULE = 'mediagoblin.init.celery.dummy_settings_module'
 
 
 def setup_celery_from_config(app_config, global_config,

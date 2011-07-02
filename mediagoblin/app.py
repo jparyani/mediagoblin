@@ -21,11 +21,12 @@ import routes
 from webob import Request, exc
 
 from mediagoblin import routing, util, storage, staticdirect
-from mediagoblin.config import (
+from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.mg_globals import setup_globals
-from mediagoblin.celery_setup import setup_celery_from_config
+from mediagoblin.init.celery import setup_celery_from_config
+from mediagoblin.init import get_jinja_loader
 from mediagoblin.workbench import WorkbenchManager
 
 
@@ -71,7 +72,7 @@ class MediaGoblinApp(object):
             app_config)
 
         # Get the template environment
-        self.template_loader = util.get_jinja_loader(
+        self.template_loader = get_jinja_loader(
             app_config.get('user_template_path'))
         
         # Set up storage systems

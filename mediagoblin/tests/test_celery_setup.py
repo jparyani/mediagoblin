@@ -16,8 +16,8 @@
 
 import pkg_resources
 
-from mediagoblin import celery_setup
-from mediagoblin.config import read_mediagoblin_config
+from mediagoblin.init import celery as celery_setup
+from mediagoblin.init.config import read_mediagoblin_config
 
 
 TEST_CELERY_CONF_NOSPECIALDB = pkg_resources.resource_filename(
