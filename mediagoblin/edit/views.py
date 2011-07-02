@@ -17,6 +17,7 @@
 
 from webob import exc
 
+from mediagoblin import messages
 from mediagoblin.util import render_to_response, redirect, clean_html
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
@@ -83,7 +84,10 @@ def edit_profile(request):
             user['bio'] = request.POST['bio']
             user.save()
 
-            return redirect(request, "index", user=user['username'])
+            messages.add_message(request, 
+            	                 messages.SUCCESS, 
+            	                 'Profile edited!')
+            return redirect(request, "mediagoblin.edit.profile")
 
     return render_to_response(
         request,
