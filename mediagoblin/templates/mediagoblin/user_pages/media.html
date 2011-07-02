@@ -89,8 +89,8 @@
        {% if media['uploader'] == request.user['_id'] %}
         <p><a href="{{ request.urlgen('mediagoblin.edit.edit_media',
                                       user= media.uploader().username,
-                                      media= media._id) }}"><img src="{{ request.staticdirect('/images/iconEdit.png') }}" class="media_icon" />edit</a></p>
-        <p><img src="{{ request.staticdirect('/images/iconDelete.png') }}" class="media_icon" />delete</p>
+                                      media= media._id) }}"><img src="{{ request.staticdirect('/images/icon_edit.png') }}" class="media_icon" />edit</a></p>
+        <p><img src="{{ request.staticdirect('/images/icon_delete.png') }}" class="media_icon" />delete</p>
         {% endif %}
       </p>
     </div>
