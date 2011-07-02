@@ -22,7 +22,7 @@ from mediagoblin import util
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin import mg_globals
 from mediagoblin.db import migrations
-from mediagoblin.db.util import DESCENDING, ObjectId
+from mediagoblin.db.util import ASCENDING, DESCENDING, ObjectId
 from mediagoblin.util import Pagination
 
 ###################
@@ -154,6 +154,32 @@ class MediaEntry(Document):
                 'mediagoblin.user_pages.media_home',
                 user=uploader['username'],
                 media=unicode(self['_id']))
+            
+    def url_to_prev(self, urlgen):
+        """
+        Provide a url to the previous entry from this user, if there is one
+        """
+        cursor = self.db.MediaEntry.find({'_id' : {"$lt": self['_id']}, 
+                                          'uploader': self['uploader']}).sort(
+                                                    '_id', DESCENDING).limit(1)
+                                                    
+        if cursor.count():
+            return urlgen('mediagoblin.user_pages.media_home',
+                          user=self.uploader()['username'],
+                          media=unicode(cursor[0]['_id']))
+        
+    def url_to_next(self, urlgen):
+        """
+        Provide a url to the next entry from this user, if there is one
+        """
+        cursor = self.db.MediaEntry.find({'_id' : {"$gt": self['_id']}, 
+                                          'uploader': self['uploader']}).sort(
+                                                    '_id', ASCENDING).limit(1)
+
+        if cursor.count():
+            return urlgen('mediagoblin.user_pages.media_home',
+                          user=self.uploader()['username'],
+                          media=unicode(cursor[0]['_id']))
 
     def uploader(self):
         return self.db.User.find_one({'_id': self['uploader']})
