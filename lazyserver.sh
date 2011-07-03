@@ -16,6 +16,22 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+if [ "$1" = "-h" ]
+then
+  echo "$0 [-h] [-c paste.ini] ARGS_to_paster"
+  echo "   For example:"
+  echo "       $0 -c fcgi.ini port_number=23371"
+  exit 1
+fi
+
+PASTE_INI=paste.ini
+if [ "$1" = "-c" ]
+then
+  PASTE_INI="$2"
+  shift
+  shift
+fi
+
 if [ -f ./bin/paster ]; then
     echo "Using ./bin/paster";
     export PASTER="./bin/paster";
@@ -27,4 +43,5 @@ else
     exit 1
 fi
 
-CELERY_ALWAYS_EAGER=true $PASTER serve paste.ini --reload
+set -x
+CELERY_ALWAYS_EAGER=true $PASTER serve $PASTE_INI "$@" --reload
