@@ -69,7 +69,7 @@ def edit_media(request, media):
             and request.method != 'POST':
         messages.add_message(
             request, messages.WARNING,
-            'You are editing another user\'s media. Proceed with caution.')
+            "You are editing another user's media. Proceed with caution.")
         
 
     return render_to_response(
@@ -90,7 +90,7 @@ def edit_profile(request):
         if request.method != 'POST':
             messages.add_message(
                 request, messages.WARNING,
-                'You are editing a user\'s profile. Proceed with caution.')
+                "You are editing a user's profile. Proceed with caution.")
     else:
         user = request.user
 
