@@ -91,6 +91,7 @@
       </div>
     {% endif %}
     <div class="grid_4 omega media_sidebar">
+      {% include "mediagoblin/utils/prev_next.html" %}
       <h3>Sidebar content here!</h3>
       <p>
         {% if media['uploader'] == request.user['_id'] %}

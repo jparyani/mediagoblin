@@ -30,7 +30,7 @@ document relevant to here:
 import copy
 
 # Imports that other modules might use
-from pymongo import DESCENDING
+from pymongo import ASCENDING, DESCENDING
 from pymongo.errors import InvalidId
 from mongokit import ObjectId
 
