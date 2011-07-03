@@ -94,7 +94,8 @@
       {% include "mediagoblin/utils/prev_next.html" %}
       <h3>Sidebar content here!</h3>
       <p>
-        {% if media['uploader'] == request.user['_id'] %}
+        {% if media['uploader'] == request.user['_id'] or 
+                                   request.user['is_admin'] %}
           <p>
             <a href="{{ request.urlgen('mediagoblin.edit.edit_media',
                                        user= media.uploader().username,
