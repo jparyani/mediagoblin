@@ -123,7 +123,7 @@ class MediaEntry(Document):
         (media_size, media_path)
         """
         media_sizes = media_map.keys()
-        print media_sizes
+
         for media_size in DISPLAY_IMAGE_FETCHING_ORDER:
             if media_size in media_sizes:
                 return media_map[media_size]
