@@ -10,6 +10,7 @@ mediagoblin.egg-info
 *.pyo
 docs/_build/
 user_dev/
+mediagoblin_user.ini
 server-log.txt
 *~
 *.swp
