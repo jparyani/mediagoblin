@@ -208,16 +208,6 @@ text-align:center;
   text-align:right;
 }
 
-/* media pages */
-
-.media_image{
-  width:640px;
-}
-
-.media_sidebar{
-  width:280px;
-}
-
 /* comments */
 
 .comment_author {

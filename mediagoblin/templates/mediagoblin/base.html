@@ -23,7 +23,7 @@
     <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/contrib/text.css') }}"/>
     <link rel="stylesheet" type="text/css"
-          href="{{ request.staticdirect('/css/contrib/960_12_col.css') }}"/>
+          href="{{ request.staticdirect('/css/contrib/960_16_col.css') }}"/>
     <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/base.css') }}"/>
     {% block mediagoblin_head %}
@@ -35,8 +35,8 @@
     <div class="mediagoblin_body">
       {% block mediagoblin_header %}
         <div class="mediagoblin_header">
-          <div class="container_12">
-            <div class="grid_12">
+          <div class="container_16">
+            <div class="grid_16">
               {% block mediagoblin_logo %}
                 <a class="mediagoblin_logo" href="{{ request.urlgen('index') }}"></a>
               {% endblock %}{% block mediagoblin_header_title %}{% endblock %}
@@ -55,8 +55,8 @@
           </div>
         </div>
       {% endblock %}
-      <div class="container_12 mediagoblin_content">
-        <div class="grid_12">
+      <div class="container_16 mediagoblin_content">
+        <div class="grid_16">
           {% include "mediagoblin/utils/messages.html" %}
           {% block mediagoblin_content %}
           {% endblock mediagoblin_content %}
@@ -64,8 +64,8 @@
       </div>
       {% block mediagoblin_footer %}
         <div class="mediagoblin_footer">
-          <div class="container_12">
-            <div class="grid_12">
+          <div class="container_16">
+            <div class="grid_16">
               Powered by <a href="http://mediagoblin.org">MediaGoblin</a>, a <a href="http://gnu.org/">GNU project</a>
             </div>
           </div>

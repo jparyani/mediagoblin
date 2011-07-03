@@ -24,7 +24,7 @@
   <form action="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{ 
                                                      user['username'] }}"
         method="POST" enctype="multipart/form-data">
-    <div class="grid_6 prefix_1 suffix_1 edit_box form_box">
+    <div class="grid_8 prefix_1 suffix_1 edit_box form_box">
       <h1>Editing {{ user['username'] }}'s profile</h1>
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
