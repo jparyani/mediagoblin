@@ -23,10 +23,14 @@ form {
 
 /* text styles */
 
-h1 {
+h1{
   font-family: 'Carter One', arial, serif;
   margin-bottom: 20px;
   margin-top:40px;
+}
+
+h2{
+  margin-top:20px;
 }
 
 p {
@@ -250,7 +254,7 @@ img.media_icon{
   padding: 6px 0pt;
   font-family: 'Carter One', arial, serif;
   font-size:2em;
-  margin:0;
+  margin:0 0 20px
 }
 
 p.navigation_button{
