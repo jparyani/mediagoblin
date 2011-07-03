@@ -21,7 +21,7 @@ from celery.task import task
 from mediagoblin import mg_globals as mgg
 
 
-THUMB_SIZE = 200, 200
+THUMB_SIZE = 180, 135
 MEDIUM_SIZE = 640, 640
 
 
