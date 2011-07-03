@@ -74,7 +74,18 @@ def edit_media(request, media):
 @require_active_login
 def edit_profile(request):
 
-    user = request.user
+    # admins may edit any user profile given a username in the querystring
+    edit_username = request.GET.get('username')
+    if request.user['is_admin'] and request.user['username'] != edit_username:
+        user = request.db.User.find_one({'username': edit_username})
+        # No need to warn again if admin just submitted an edited profile
+        if request.method != 'POST':
+            messages.add_message(
+                request, messages.WARNING,
+                'You are editing a user\'s profile. Proceed with caution.')
+    else:
+        user = request.user
+
     form = forms.EditProfileForm(request.POST,
         url = user.get('url'),
         bio = user.get('bio'))
@@ -87,7 +98,9 @@ def edit_profile(request):
             messages.add_message(request, 
             	                 messages.SUCCESS, 
             	                 'Profile edited!')
-            return redirect(request, "mediagoblin.edit.profile")
+            return redirect(request, 
+            	           "mediagoblin.edit.profile", 
+            	            username=edit_username)
 
     return render_to_response(
         request,

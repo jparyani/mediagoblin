@@ -27,6 +27,10 @@
 {% block mediagoblin_content -%}
   {% if user %}
     <h1>{{ user.username }}'s profile</h1>
+    {% if request.user == user.username or request.user['is_admin'] %}
+       <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{ 
+           user.username }}"> Edit</a>
+    {% endif %}
     
     {% include "mediagoblin/utils/profile.html" %}
 
