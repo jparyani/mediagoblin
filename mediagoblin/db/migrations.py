@@ -49,7 +49,7 @@ class MediaEntryMigration(DocumentMigration):
                     '$set': {
                         'description_html': cleaned_markdown_conversion(
                             doc['description'])}}
-        
+
 class UserMigration(DocumentMigration):
     def allmigration01_add_bio_and_url_profile(self):
         """

@@ -35,6 +35,8 @@ from mediagoblin import mg_globals
 from mediagoblin import messages
 from mediagoblin.db.util import ObjectId
 
+DISPLAY_IMAGE_FETCHING_ORDER = [u'medium', u'original', u'thumb']
+
 TESTS_ENABLED = False
 def _activate_testing():
     """

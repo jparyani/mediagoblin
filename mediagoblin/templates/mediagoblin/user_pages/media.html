@@ -26,13 +26,8 @@
       <h1>
         {{media.title}}
       </h1>
-      {% if media.media_files.medium %}
-        <img class="media_image" src="{{ request.app.public_store.file_url(
-				      media.media_files.medium) }}" />
-      {% else %}
-        <img class="media_image" src="{{ request.app.public_store.file_url(
-                  media.media_files.main) }}" />
-      {% endif %}
+      <img class="media_image" src="{{ request.app.public_store.file_url(
+                                         media.get_display_media(media.media_files)) }}" />
       <p>
         Uploaded on
         {{ "%4d-%02d-%02d"|format(media.created.year,

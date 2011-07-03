@@ -24,6 +24,7 @@ from mediagoblin import mg_globals
 from mediagoblin.db import migrations
 from mediagoblin.db.util import DESCENDING, ObjectId
 from mediagoblin.util import Pagination
+from mediagoblin.util import DISPLAY_IMAGE_FETCHING_ORDER
 
 ###################
 # Custom validators
@@ -108,6 +109,24 @@ class MediaEntry(Document):
         'state': u'unprocessed'}
 
     migration_handler = migrations.MediaEntryMigration
+
+    def get_display_media(self, media_map, fetch_order=DISPLAY_IMAGE_FETCHING_ORDER):
+        """
+        Find the best media for display.
+
+        Args:
+        - media_map: a dict like
+          {u'image_size': [u'dir1', u'dir2', u'image.jpg']}
+        - fetch_order: the order we should try fetching images in
+
+        Returns:
+        (media_size, media_path)
+        """
+        media_sizes = media_map.keys()
+        print media_sizes
+        for media_size in DISPLAY_IMAGE_FETCHING_ORDER:
+            if media_size in media_sizes:
+                return media_map[media_size]
 
     def main_mediafile(self):
         pass
