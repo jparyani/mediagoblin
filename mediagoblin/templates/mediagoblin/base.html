@@ -19,6 +19,10 @@
   <head>
     <title>{% block title %}GNU MediaGoblin{% endblock title %}</title>
     <link rel="stylesheet" type="text/css"
+          href="{{ request.staticdirect('/css/contrib/reset.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{{ request.staticdirect('/css/contrib/text.css') }}"/>
+    <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/contrib/960_12_col.css') }}"/>
     <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/base.css') }}"/>
