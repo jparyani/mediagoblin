@@ -15,31 +15,48 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
-{# only display if {{pagination}} is defined #}
+{% macro render_pagination(request, pagination,
+                           base_url=None, preserve_get_params=True) %}
+  {# only display if {{pagination}} is defined #}
+  {% if pagination and pagination.pages > 1 %}
+    {% if not base_url %}
+      {% set base_url = request.path_info %}
+    {% endif %}
 
-{% if pagination and pagination.pages > 1 %}
-  <div class="pagination">
-    <p>
-      {% if pagination.has_prev %}
-        <a href="{{ pagination.get_page_url(request, pagination.page-1) }}">&laquo; Prev</a>
-      {% endif %}
+    {% if preserve_get_params %}
+      {% set get_params = request.GET %}
+    {% else %}
+      {% set get_params = {} %}
+    {% endif %}
 
-      {%- for page in pagination.iter_pages() %}
-        {% if page %}
-          {% if page != pagination.page %}
-      <a href="{{ pagination.get_page_url(request, page) }}">{{ page }}</a>
-          {% else %}
-            {{ page }}
-          {% endif %}
-        {% else %}
-          <span class="ellipsis">…</span>
+    <div class="pagination">
+      <p>
+        {% if pagination.has_prev %}
+          <a href="{{ pagination.get_page_url_explicit(
+                          base_url, get_params,
+                          pagination.page - 1) }}">&laquo; Prev</a>
         {% endif %}
-      {%- endfor %}
-
-      {% if pagination.has_next %}
-        <a href="{{ pagination.get_page_url(request, pagination.page + 1) }}">Next &raquo;</a>
-      {% endif %}
-     </p>
-   </div>
-{% endif %}
-
+  
+        {%- for page in pagination.iter_pages() %}
+          {% if page %}
+            {% if page != pagination.page %}
+              <a href="{{ pagination.get_page_url_explicit(
+                              base_url, get_params,
+                              page) }}">{{ page }}</a>
+            {% else %}
+              {{ page }}
+            {% endif %}
+          {% else %}
+            <span class="ellipsis">…</span>
+          {% endif %}
+        {%- endfor %}
+  
+        {% if pagination.has_next %}
+          <a href="{{ pagination.get_page_url_explicit(
+                          base_url, get_params,
+                          pagination.page + 1) }}">Next &raquo;</a>
+        {% endif %}
+       </p>
+     </div>
+  {% endif %}
+{% endmacro %}

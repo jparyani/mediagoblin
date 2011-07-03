@@ -48,10 +48,15 @@ def user_home(request, page):
     if media_entries == None:
         return exc.HTTPNotFound()
     
+    user_gallery_url = request.urlgen(
+        'mediagoblin.user_pages.user_gallery',
+        user=user['username'])
+
     return render_to_response(
         request,
         'mediagoblin/user_pages/user.html',
         {'user': user,
+         'user_gallery_url': user_gallery_url,
          'media_entries': media_entries,
          'pagination': pagination})
 

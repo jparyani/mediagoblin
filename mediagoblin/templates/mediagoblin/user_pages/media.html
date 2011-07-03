@@ -18,6 +18,7 @@
 {% extends "mediagoblin/base.html" %}
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+{% from "mediagoblin/utils/pagination.html" import render_pagination %}
 
 {% block mediagoblin_content %}
   {% if media %}
@@ -87,7 +88,7 @@
           </div>
         {% endfor %}
 
-        {% include "mediagoblin/utils/pagination.html" %}
+        {{ render_pagination(request, pagination) }}
       </div>
     {% endif %}
     <div class="grid_4 omega media_sidebar">

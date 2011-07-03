@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
+{% from "mediagoblin/utils/pagination.html" import render_pagination %}
+
 {% block object_gallery_content -%}
   <div>
     {% if media_entries %}
@@ -28,8 +30,12 @@
           </li>
         {% endfor %}
       </ul>
-      {% include "mediagoblin/utils/pagination.html" %}
-    {%  endif %}
-
+      {% if pagination_base_url %}
+        {# different url, so set that and don't keep the get params #}
+        {{ render_pagination(request, pagination, pagination_base_url, False) }}
+      {% else %}
+        {{ render_pagination(request, pagination) }}
+      {% endif %}
+    {% endif %}
   </div>
 {% endblock %}    
