@@ -19,17 +19,14 @@
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
 
 {% block object_gallery_content -%}
-  <div>
     {% if media_entries %}
-      <ul class="media_thumbnail">
-        {% for entry in media_entries %}
-          <li class="media_thumbnail">
-            <a href="{{ entry.url_for_self(request.urlgen) }}">
-            <img src="{{ request.app.public_store.file_url(
+      {% for entry in media_entries %}
+        <div class="media_thumbnail">
+          <a href="{{ entry.url_for_self(request.urlgen) }}">
+          <img src="{{ request.app.public_store.file_url(
 		   entry['media_files']['thumb']) }}" /></a>
-          </li>
-        {% endfor %}
-      </ul>
+        </div>
+      {% endfor %}
       {% if pagination_base_url %}
         {# different url, so set that and don't keep the get params #}
         {{ render_pagination(request, pagination, pagination_base_url, False) }}
@@ -37,5 +34,4 @@
         {{ render_pagination(request, pagination) }}
       {% endif %}
     {% endif %}
-  </div>
-{% endblock %}    
+{% endblock %}

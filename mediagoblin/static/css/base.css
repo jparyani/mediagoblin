@@ -221,20 +221,14 @@ text-align:center;
 
 /* media galleries */
 
-ul.media_thumbnail {
+.media_thumbnail {
   padding:0px;
-}
-
-li.media_thumbnail {
-  width:200px;
-  height:200px;
-  display:-moz-inline-stack;
-  display:inline-block;
-  vertical-align:top;
+  width:180px;
+  height:135px;
+  overflow:hidden;
+  float:left;
   margin:0px 10px 10px 0px;
   text-align:center;
-  zoom:1;
-. *display:inline;
 }
 
 /* icons */

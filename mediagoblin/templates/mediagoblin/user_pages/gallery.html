@@ -31,7 +31,11 @@
                       'mediagoblin.user_pages.user_home',
                       user=user.username) }}">{{ user.username }}</a>'s media</h1>
 
-    {% include "mediagoblin/utils/object_gallery.html" %}
+    </div>
+    <div class="container_16 media_gallery">
+      {% include "mediagoblin/utils/object_gallery.html" %}
+    </div>
+    <div class="grid_16">
 
     <a href={{ request.urlgen(
                    'mediagoblin.user_pages.atom_feed',
