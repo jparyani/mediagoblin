@@ -20,16 +20,16 @@
   <div>
     <ul>
       {% if user.url %}
-          <li>
-            <a href="{{ user.url }}">homepage</a>
-          </li>
-      {%  endif %}
+        <li>
+          <a href="{{ user.url }}">homepage</a>
+        </li>
+      {% endif %}
       
       {% if user.bio %}
-          <li>
-            {{ user.bio }}
-          </li>
-      {%  endif %}
+        <li>
+          {{ user.bio }}
+        </li>
+      {% endif %}
     </ul>
   </div>
 {% endblock %}    
