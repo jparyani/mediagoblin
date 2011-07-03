@@ -20,17 +20,16 @@
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {% block mediagoblin_content %}
-
   <form action="{{ request.urlgen('mediagoblin.submit.start') }}"
         method="POST" enctype="multipart/form-data">
     <div class="grid_6 prefix_1 suffix_1 form_box">
       <h1>Submit yer media</h1>
+      {{ wtforms_util.render_field_div(submit_form.file) }}
       {{ wtforms_util.render_field_div(submit_form.title) }}
       {{ wtforms_util.render_textarea_div(submit_form.description) }}
-      {{ wtforms_util.render_field_div(submit_form.file) }}
       <div class="form_submit_buttons">
       <input type="submit" value="Submit" class="button" />
       </div>
     </div>
   </form>
-{% endblock %}    
+{% endblock %}
