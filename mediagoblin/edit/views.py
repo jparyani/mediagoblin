@@ -64,6 +64,14 @@ def edit_media(request, media):
             return redirect(request, "mediagoblin.user_pages.media_home",
                 user=media.uploader()['username'], media=media['slug'])
 
+    if request.user['is_admin'] \
+            and media['uploader'] != request.user['_id'] \
+            and request.method != 'POST':
+        messages.add_message(
+            request, messages.WARNING,
+            'You are editing another user\'s media. Proceed with caution.')
+        
+
     return render_to_response(
         request,
         'mediagoblin/edit/edit.html',
