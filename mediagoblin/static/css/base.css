@@ -237,3 +237,26 @@ img.media_icon{
   margin:0 4px;
   vertical-align:sub;
 }
+
+/* navigation */
+
+.navigation_button{
+  width: 139px;
+  display:block;
+  float:left;
+  text-align: center;
+  background-color: #393939;
+  text-decoration: none;
+  padding: 6px 0pt;
+  font-family: 'Carter One', arial, serif;
+  font-size:2em;
+  margin:0;
+}
+
+p.navigation_button{
+  color:#272727;
+}
+
+.navigation_left{
+  margin-right:2px;
+}

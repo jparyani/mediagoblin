@@ -23,23 +23,21 @@
 <div>
   {# There are no previous entries for the very first media entry #}
   {% if prev_entry_url %}
-    <a href="{{ prev_entry_url }}">
-      {# TODO - insert 'Previous' and 'X' image sources #}
-      Previous 
+    <a class="navigation_button navigation_left" href="{{ prev_entry_url }}">
+      &lt;
     </a>
   {% else %}
     {# This is the first entry. display greyed-out 'previous' image #}
-    X 
+    <p class="navigation_button">X</p>
   {% endif %}
 
   {# Likewise, this could be the very last media entry #}
   {% if next_entry_url %}
-    <a href="{{ next_entry_url }}">
-      {# TODO - insert 'Next' and 'X' image sources #}
-       Next
+    <a class="navigation_button" href="{{ next_entry_url }}">
+       &gt;
     </a>
   {% else %}
     {# This is the last entry. display greyed-out 'next' image #}
-     X
+    <p class="navigation_button">X</p>
   {% endif %}
 </div>
