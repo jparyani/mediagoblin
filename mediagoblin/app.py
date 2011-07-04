@@ -21,17 +21,12 @@ import routes
 from webob import Request, exc
 
 from mediagoblin import routing, util, storage
-from mediagoblin.init.config import (
-    read_mediagoblin_config, generate_validation_report)
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
-from mediagoblin.init import get_jinja_loader, get_staticdirector
+from mediagoblin.init import get_jinja_loader, get_staticdirector, \
+    setup_global_and_app_config
 from mediagoblin.workbench import WorkbenchManager
-
-
-class Error(Exception): pass
-class ImproperlyConfigured(Error): pass
 
 
 class MediaGoblinApp(object):
@@ -55,13 +50,7 @@ class MediaGoblinApp(object):
         ##############
 
         # Open and setup the config
-        global_config, validation_result = read_mediagoblin_config(config_path)
-        app_config = global_config['mediagoblin']
-        # report errors if necessary
-        validation_report = generate_validation_report(
-            global_config, validation_result)
-        if validation_report:
-            raise ImproperlyConfigured(validation_report)
+        global_config, app_config = setup_global_and_app_config(config_path)
 
         ##########################################
         # Setup other connections / useful objects

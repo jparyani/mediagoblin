@@ -16,11 +16,24 @@
 
 import jinja2
 from mediagoblin import staticdirect
+from mediagoblin.init.config import (
+    read_mediagoblin_config, generate_validation_report)
 
 
 class Error(Exception): pass
 class ImproperlyConfigured(Error): pass
 
+
+def setup_global_and_app_config(config_path):
+    global_config, validation_result = read_mediagoblin_config(config_path)
+    app_config = global_config['mediagoblin']
+    # report errors if necessary
+    validation_report = generate_validation_report(
+        global_config, validation_result)
+    if validation_report:
+        raise ImproperlyConfigured(validation_report)
+
+    return global_config, app_config
 
 def get_jinja_loader(user_template_path=None):
     """
