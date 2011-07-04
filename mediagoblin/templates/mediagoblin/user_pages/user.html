@@ -35,6 +35,12 @@
                        user.username }}">Edit profile</a>
     {% endif %}
 
+    {% if request.user['_id'] == user['_id'] %}
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.submit.start') }}">Submit an item</a> 
+      </p>
+    {% endif %}
+
     {% set pagination_base_url = user_gallery_url %}
     {% include "mediagoblin/utils/object_gallery.html" %}
 
