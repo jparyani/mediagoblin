@@ -20,13 +20,13 @@ import urllib
 import routes
 from webob import Request, exc
 
-from mediagoblin import routing, util, storage, staticdirect
+from mediagoblin import routing, util, storage
 from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
-from mediagoblin.init import get_jinja_loader
+from mediagoblin.init import get_jinja_loader, get_staticdirector
 from mediagoblin.workbench import WorkbenchManager
 
 
@@ -85,19 +85,7 @@ class MediaGoblinApp(object):
         self.routing = routing.get_mapper()
 
         # set up staticdirector tool
-        if app_config.has_key('direct_remote_path'):
-            self.staticdirector = staticdirect.RemoteStaticDirect(
-                app_config['direct_remote_path'].strip())
-        elif app_config.has_key('direct_remote_paths'):
-            direct_remote_path_lines = app_config[
-                'direct_remote_paths'].strip().splitlines()
-            self.staticdirector = staticdirect.MultiRemoteStaticDirect(
-                dict([line.strip().split(' ', 1)
-                      for line in direct_remote_path_lines]))
-        else:
-            raise ImproperlyConfigured(
-                "One of direct_remote_path or "
-                "direct_remote_paths must be provided")
+        self.staticdirector = get_staticdirector(app_config)
 
         # Setup celery, if appropriate
         if setup_celery and not app_config.get('celery_setup_elsewhere'):
