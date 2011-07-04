@@ -25,8 +25,8 @@ form {
 
 h1{
   font-family: 'Carter One', arial, serif;
-  margin-bottom: 20px;
-  margin-top:40px;
+  margin-bottom: 15px;
+  margin-top:15px;
 }
 
 h2{
@@ -190,7 +190,7 @@ text-align:center;
   height:180px;
   overflow:hidden;
   float:left;
-  margin:0px 10px 10px 0px;
+  margin:0px 4px 10px 4px;
   text-align:center;
 }
 
@@ -260,7 +260,8 @@ ul.mediagoblin_messages {
 
 /* profile stuff */
 
-.profile_content p, .profile_bio {
+.profile_content {
   padding: 6px;
   background-color: #393939;
+  margin-bottom: 10px;
 }
