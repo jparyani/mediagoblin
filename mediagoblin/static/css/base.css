@@ -257,3 +257,10 @@ ul.mediagoblin_messages {
   background-color: #f7f7f7;
   color:#272727;
 }
+
+/* profile stuff */
+
+.profile_content p, .profile_bio {
+  padding: 6px;
+  background-color: #393939;
+}
