@@ -54,7 +54,7 @@ def process_media_initial(media_id):
 
     thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
     with thumb_file:
-        thumb.save(thumb_file, "JPEG")
+        thumb.save(thumb_file, "JPEG", quality=90)
 
     """
     Create medium file, used in `media.html`
@@ -69,7 +69,7 @@ def process_media_initial(media_id):
 
     medium_file = mgg.public_store.get_file(medium_filepath, 'w')
     with medium_file:
-        medium.save(medium_file, "JPEG")
+        medium.save(medium_file, "JPEG", quality=90)
 
     # we have to re-read because unlike PIL, not everything reads
     # things in string representation :)
