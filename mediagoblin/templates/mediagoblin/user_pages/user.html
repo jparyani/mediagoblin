@@ -27,9 +27,9 @@
 {% block mediagoblin_content -%}
   {% if user %}
     <h1>{{ user.username }}'s profile</h1>
-    {% if request.user.username == user.username or request.user['is_admin'] %}
+    {% if request.user['_id'] == user['_id'] or request.user['is_admin'] %}
        <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{ 
-           user.username }}"> Edit</a>
+           user.username }}">Edit profile</a>
     {% endif %}
     
     {% include "mediagoblin/utils/profile.html" %}
