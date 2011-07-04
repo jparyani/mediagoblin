@@ -18,6 +18,7 @@ import jinja2
 from mediagoblin import staticdirect
 from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
+from mediagoblin.mg_globals import setup_globals
 
 
 class Error(Exception): pass
@@ -32,6 +33,10 @@ def setup_global_and_app_config(config_path):
         global_config, validation_result)
     if validation_report:
         raise ImproperlyConfigured(validation_report)
+
+    setup_globals(
+        app_config=app_config,
+        global_config=global_config)
 
     return global_config, app_config
 

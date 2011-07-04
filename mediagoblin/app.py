@@ -94,9 +94,6 @@ class MediaGoblinApp(object):
         #######################################################
 
         setup_globals(
-            app_config=app_config,
-            global_config=global_config,
-
             # TODO: No need to set these two up as globals, we could
             # just read them out of mg_globals.app_config
             email_sender_address=app_config['email_sender_address'],
