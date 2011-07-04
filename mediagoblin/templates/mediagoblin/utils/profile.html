@@ -17,17 +17,19 @@
 #}
 
 {% block profile_content -%}
-  <div class="profile_content">
-    {% if user.url %}
-      <p class="profile_homepage">
-        <a href="{{ user.url }}">homepage</a>
-      </p>
-    {% endif %}
+  {% if user.url or user.bio %}
+    <div class="profile_content">
+      {% if user.url %}
+        <div class="profile_homepage">
+          <a href="{{ user.url }}">{{ user.url }}</a>
+        </div>
+      {% endif %}
     
-    {% if user.bio %}
-      <p class="profile_bio">
-        {{ user.bio }}
-      </p>
-    {% endif %}
-  </div>
+      {% if user.bio %}
+        <div class="profile_bio">
+          {{ user.bio }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
 {% endblock %}    
