@@ -39,6 +39,16 @@ git archive \
     --prefix=mediagoblin-$PREFIX/ \
     $REVISH > mediagoblin-$PREFIX.tar
 
+if [[ $? -ne 0 ]]
+then
+    echo "git archive command failed.  See above text for reason."
+    if [[ -e mediagoblin-$PREFIX.tar ]]
+    then
+        rm mediagoblin-$PREFIX.tar
+    fi
+    exit 1;
+fi
+
 echo "compressing...."
 gzip mediagoblin-$PREFIX.tar
 
