@@ -147,9 +147,9 @@ class MediaEntry(Document):
         """
         Provide a url to the previous entry from this user, if there is one
         """
-        cursor = self.db.MediaEntry.find({'_id' : {"$lt": self['_id']}, 
+        cursor = self.db.MediaEntry.find({'_id' : {"$gt": self['_id']}, 
                                           'uploader': self['uploader']}).sort(
-                                                    '_id', DESCENDING).limit(1)
+                                                    '_id', ASCENDING).limit(1)
                                                     
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
@@ -160,9 +160,9 @@ class MediaEntry(Document):
         """
         Provide a url to the next entry from this user, if there is one
         """
-        cursor = self.db.MediaEntry.find({'_id' : {"$gt": self['_id']}, 
+        cursor = self.db.MediaEntry.find({'_id' : {"$lt": self['_id']}, 
                                           'uploader': self['uploader']}).sort(
-                                                    '_id', ASCENDING).limit(1)
+                                                    '_id', DESCENDING).limit(1)
 
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
