@@ -189,7 +189,7 @@ def test_register_views(test_app):
         "/auth/verify_email/?userid=%s&token=total_bs" % unicode(
             new_user['_id']))
     context = util.TEMPLATE_TEST_CONTEXT[
-        'mediagoblin/auth/verify_email.html']
+        'mediagoblin/user_pages/user.html']
     assert context['verification_successful'] == False
     new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
@@ -201,7 +201,7 @@ def test_register_views(test_app):
     util.clear_test_template_context()
     test_app.get("%s?%s" % (path, get_params))
     context = util.TEMPLATE_TEST_CONTEXT[
-        'mediagoblin/auth/verify_email.html']
+        'mediagoblin/user_pages/user.html']
     assert context['verification_successful'] == True
     new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
