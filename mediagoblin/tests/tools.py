@@ -22,7 +22,7 @@ from paste.deploy import loadapp
 from webtest import TestApp
 
 from mediagoblin import util
-from mediagoblin.config import read_mediagoblin_config
+from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.decorators import _make_safe
 from mediagoblin.db.open import setup_connection_and_db_from_config
 
@@ -42,8 +42,8 @@ USER_DEV_DIRECTORIES_TO_SETUP = [
 
 BAD_CELERY_MESSAGE = """\
 Sorry, you *absolutely* must run nosetests with the
-mediagoblin.celery_setup.from_tests module.  Like so:
-$ CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_tests ./bin/nosetests"""
+mediagoblin.init.celery.from_tests module.  Like so:
+$ CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests ./bin/nosetests"""
 
 
 class BadCeleryEnviron(Exception): pass
@@ -51,7 +51,7 @@ class BadCeleryEnviron(Exception): pass
 
 def suicide_if_bad_celery_environ():
     if not os.environ.get('CELERY_CONFIG_MODULE') == \
-            'mediagoblin.celery_setup.from_tests':
+            'mediagoblin.init.celery.from_tests':
         raise BadCeleryEnviron(BAD_CELERY_MESSAGE)
     
 
@@ -59,7 +59,7 @@ def get_test_app(dump_old_app=True):
     suicide_if_bad_celery_environ()
 
     # Leave this imported as it sets up celery.
-    from mediagoblin.celery_setup import from_tests
+    from mediagoblin.init.celery import from_tests
 
     global MGOBLIN_APP
 

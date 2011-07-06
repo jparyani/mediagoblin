@@ -14,20 +14,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-
-from mediagoblin.tests.tools import TEST_APP_CONFIG
-from mediagoblin.celery_setup.from_celery import setup_self
+import jinja2
 
 
-OUR_MODULENAME = __name__
-CELERY_SETUP = False
+def get_jinja_loader(user_template_path=None):
+    """
+    Set up the Jinja template loaders, possibly allowing for user
+    overridden templates.
 
-
-if os.environ.get('CELERY_CONFIG_MODULE') == OUR_MODULENAME:
-    if CELERY_SETUP:
-        pass
+    (In the future we may have another system for providing theming;
+    for now this is good enough.)
+    """
+    if user_template_path:
+        return jinja2.ChoiceLoader(
+            [jinja2.FileSystemLoader(user_template_path),
+             jinja2.PackageLoader('mediagoblin', 'templates')])
     else:
-        setup_self(check_environ_for_conf=False, module_name=OUR_MODULENAME,
-                   default_conf_file=TEST_APP_CONFIG)
-        CELERY_SETUP = True
+        return jinja2.PackageLoader('mediagoblin', 'templates')

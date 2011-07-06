@@ -48,10 +48,15 @@ def user_home(request, page):
     if media_entries == None:
         return exc.HTTPNotFound()
     
+    user_gallery_url = request.urlgen(
+        'mediagoblin.user_pages.user_gallery',
+        user=user['username'])
+
     return render_to_response(
         request,
         'mediagoblin/user_pages/user.html',
         {'user': user,
+         'user_gallery_url': user_gallery_url,
          'media_entries': media_entries,
          'pagination': pagination})
 
@@ -82,17 +87,19 @@ def user_gallery(request, page):
          'media_entries': media_entries,
          'pagination': pagination})
 
+MEDIA_COMMENTS_PER_PAGE = 50
 
 @get_user_media_entry
 @uses_pagination
-def media_home(request, media, **kwargs):
+def media_home(request, media, page, **kwargs):
     """
     'Homepage' of a MediaEntry()
     """
 
-    comment_form = user_forms.MediaCommentForm(request.POST)
+    pagination = Pagination(page, media.get_comments(), MEDIA_COMMENTS_PER_PAGE)
+    comments = pagination()
 
-    (comments, pagination) = media.get_comments(kwargs.get('page'))
+    comment_form = user_forms.MediaCommentForm(request.POST)
 
     return render_to_response(
         request,

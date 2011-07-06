@@ -17,7 +17,7 @@
 import os
 
 from mediagoblin import app, mg_globals
-from mediagoblin.celery_setup import setup_celery_from_config
+from mediagoblin.init.celery import setup_celery_from_config
 
 
 OUR_MODULENAME = __name__

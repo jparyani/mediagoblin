@@ -150,7 +150,7 @@ celeryd in another window.
 
 Run::
 
-    CELERY_CONFIG_MODULE=mediagoblin.celery_setup.from_celery ./bin/celeryd
+    CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery ./bin/celeryd
 
 
 Running the test suite

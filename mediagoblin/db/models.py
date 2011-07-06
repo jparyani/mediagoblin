@@ -22,8 +22,7 @@ from mediagoblin import util
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin import mg_globals
 from mediagoblin.db import migrations
-from mediagoblin.db.util import DESCENDING, ObjectId
-from mediagoblin.util import Pagination
+from mediagoblin.db.util import ASCENDING, DESCENDING, ObjectId
 
 ###################
 # Custom validators
@@ -109,24 +108,13 @@ class MediaEntry(Document):
 
     migration_handler = migrations.MediaEntryMigration
 
+    def get_comments(self):
+        return self.db.MediaComment.find({
+                'media_entry': self['_id']}).sort('created', DESCENDING)
+
     def main_mediafile(self):
         pass
-    
-    def get_comments(self, page):
-        cursor = self.db.MediaComment.find({
-                'media_entry': self['_id']}).sort('created', DESCENDING)
-        
-        pagination = Pagination(page, cursor)
-        comments = pagination()
-        
-        data = list()
-        for comment in comments:
-            comment['author'] = self.db.User.find_one({
-                    '_id': comment['author']})
-            data.append(comment)
-            
-        return (data, pagination)
-        
+
     def generate_slug(self):
         self['slug'] = util.slugify(self['title'])
 
@@ -154,6 +142,32 @@ class MediaEntry(Document):
                 'mediagoblin.user_pages.media_home',
                 user=uploader['username'],
                 media=unicode(self['_id']))
+            
+    def url_to_prev(self, urlgen):
+        """
+        Provide a url to the previous entry from this user, if there is one
+        """
+        cursor = self.db.MediaEntry.find({'_id' : {"$lt": self['_id']}, 
+                                          'uploader': self['uploader']}).sort(
+                                                    '_id', DESCENDING).limit(1)
+                                                    
+        if cursor.count():
+            return urlgen('mediagoblin.user_pages.media_home',
+                          user=self.uploader()['username'],
+                          media=unicode(cursor[0]['_id']))
+        
+    def url_to_next(self, urlgen):
+        """
+        Provide a url to the next entry from this user, if there is one
+        """
+        cursor = self.db.MediaEntry.find({'_id' : {"$gt": self['_id']}, 
+                                          'uploader': self['uploader']}).sort(
+                                                    '_id', ASCENDING).limit(1)
+
+        if cursor.count():
+            return urlgen('mediagoblin.user_pages.media_home',
+                          user=self.uploader()['username'],
+                          media=unicode(cursor[0]['_id']))
 
     def uploader(self):
         return self.db.User.find_one({'_id': self['uploader']})

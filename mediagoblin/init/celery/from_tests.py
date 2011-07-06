@@ -1,4 +1,3 @@
-{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
@@ -14,24 +13,21 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
-{% extends "mediagoblin/base.html" %}
-{% block mediagoblin_content %}
-  {# temporarily, an "image gallery" that isn't one really ;) #}
-  {% if media %}
-    <div class="grid_8 alpha media_image">
-      <img src="{{ request.app.public_store.file_url(
-                    media.media_files.main) }}" />
-      <h1>Media details for {{media.title}}</h1>
-      <p>
-        <br/>Uploaded: {{ media.created}}
-        <br/>Description: {{media.description}}
-      </p>
-    </div>
-    <div class="grid_4 omega sidebar">
-      <p>Uploaded: {{ media.created}}</p>
-    </div>
-  {% else %}
-    <p>Sorry, no such media found.<p/>
-  {% endif %}
-{% endblock %}    
+
+import os
+
+from mediagoblin.tests.tools import TEST_APP_CONFIG
+from mediagoblin.init.celery.from_celery import setup_self
+
+
+OUR_MODULENAME = __name__
+CELERY_SETUP = False
+
+
+if os.environ.get('CELERY_CONFIG_MODULE') == OUR_MODULENAME:
+    if CELERY_SETUP:
+        pass
+    else:
+        setup_self(check_environ_for_conf=False, module_name=OUR_MODULENAME,
+                   default_conf_file=TEST_APP_CONFIG)
+        CELERY_SETUP = True

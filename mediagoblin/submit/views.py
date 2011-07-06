@@ -24,6 +24,7 @@ from mediagoblin.util import (
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
 from mediagoblin.process_media import process_media_initial
+from mediagoblin.messages import add_message, SUCCESS
 
 
 @require_active_login
@@ -85,7 +86,10 @@ def submit_start(request):
             # queue it for processing
             process_media_initial.delay(unicode(entry['_id']))
 
-            return redirect(request, "mediagoblin.submit.success")
+            add_message(request, SUCCESS, 'Woohoo! Submitted!')
+
+            return redirect(request, "mediagoblin.user_pages.user_home",
+                            user = request.user['username'])
 
     return render_to_response(
         request,

@@ -21,7 +21,8 @@ from celery.task import task
 from mediagoblin import mg_globals as mgg
 
 
-THUMB_SIZE = 200, 200
+THUMB_SIZE = 180, 180
+MEDIUM_SIZE = 640, 640
 
 
 def create_pub_filepath(entry, filename):
@@ -43,20 +44,32 @@ def process_media_initial(media_id):
         mgg.queue_store, queued_filepath,
         'source')
 
-    queued_file = file(queued_filename, 'r')
+    thumb = Image.open(queued_filename)
+    thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
+    # ensure color mode is compatible with jpg
+    if thumb.mode != "RGB":
+        thumb = thumb.convert("RGB")
 
-    with queued_file:
-        thumb = Image.open(queued_file)
-        thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
-        # ensure color mode is compatible with jpg
-        if thumb.mode != "RGB":
-            thumb = thumb.convert("RGB")
+    thumb_filepath = create_pub_filepath(entry, 'thumbnail.jpg')
 
-        thumb_filepath = create_pub_filepath(entry, 'thumbnail.jpg')
+    thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
+    with thumb_file:
+        thumb.save(thumb_file, "JPEG", quality=90)
 
-        thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
-        with thumb_file:
-            thumb.save(thumb_file, "JPEG")
+    """
+    Create medium file, used in `media.html`
+    """
+    medium = Image.open(queued_filename)
+    medium.thumbnail(MEDIUM_SIZE, Image.ANTIALIAS)
+
+    if medium.mode != "RGB":
+        medium = medium.convert("RGB")
+
+    medium_filepath = create_pub_filepath(entry, 'medium.jpg')
+
+    medium_file = mgg.public_store.get_file(medium_filepath, 'w')
+    with medium_file:
+        medium.save(medium_file, "JPEG", quality=90)
 
     # we have to re-read because unlike PIL, not everything reads
     # things in string representation :)
@@ -73,6 +86,7 @@ def process_media_initial(media_id):
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict['thumb'] = thumb_filepath
     media_files_dict['main'] = main_filepath
+    media_files_dict['medium'] = medium_filepath
     entry['state'] = u'processed'
     entry.save()
 

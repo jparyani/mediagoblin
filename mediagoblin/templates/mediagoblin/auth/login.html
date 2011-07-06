@@ -20,10 +20,9 @@
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {% block mediagoblin_content %}
-
   <form action="{{ request.urlgen('mediagoblin.auth.login') }}"
         method="POST" enctype="multipart/form-data">
-    <div class="grid_4 prefix_1 suffix_1 form_box">
+    <div class="grid_6 prefix_1 suffix_1 form_box">
       <h1>Log in</h1>
       {% if login_failed %}
         <div class="form_field_error">Login failed!</div>
