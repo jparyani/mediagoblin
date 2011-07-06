@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import urlparse
+from os import getcwd
 
 from nose.tools import assert_equal
 
@@ -23,11 +24,12 @@ from mediagoblin.tests.tools import setup_fresh_app, get_test_app
 from mediagoblin import mg_globals
 from mediagoblin import util
 
-IMAGE_ROOT = 'mediagoblin/tests/test_submission'
+IMAGE_ROOT = getcwd() + '/mediagoblin/tests/test_submission/'
 GOOD_JPG = 'good.jpg'
 GOOD_PNG = 'good.png'
-EVIL_JPG = ''
-EVIL_PNG = ''
+EVIL_FILE = 'evil'
+EVIL_JPG = 'evil.jpg'
+EVIL_PNG = 'evil.png'
 
 
 # TODO:
@@ -45,6 +47,8 @@ class TestSubmission:
         test_user = mg_globals.database.User()
         test_user['username'] = u'chris'
         test_user['email'] = u'chris@example.com'
+        test_user['email_verified'] = True
+        test_user['status'] = u'active'
         test_user['pw_hash'] = auth_lib.bcrypt_gen_password_hash('toast')
         test_user.save()
 
@@ -54,10 +58,25 @@ class TestSubmission:
                 'password': 'toast'})
 
     def test_missing_fields(self):
-        # Test missing title
-        # Test missing description (if it's required)
-        # Test missing file
-        pass
+        # Test blank form
+        # ---------------
+        util.clear_test_template_context()
+        response = self.test_app.post(
+            '/submit/', {})
+        context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
+        form = context['submit_form']
+        assert form.file.errors == [u'You must provide a file.']
+
+        # Test blank file
+        # ---------------
+        util.clear_test_template_context()
+        response = self.test_app.post(
+            '/submit/', {
+                'title': 'test title'})
+        context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
+        form = context['submit_form']
+        assert form.file.errors == [u'You must provide a file.']
+
 
     def test_normal_uploads(self):
         # FYI:
@@ -67,15 +86,78 @@ class TestSubmission:
         # read from disk.
 
         # Test JPG
-        # Test PNG
-        # Test additional supported formats
+        # --------
+        util.clear_test_template_context()
+        response = self.test_app.post(
+            '/submit/', {
+                'title': 'Normal upload 1'
+                }, upload_files=[(
+                    'file', IMAGE_ROOT + GOOD_JPG)])
 
-        #resp = self.test_app.get('/')
-        #print resp
-        pass
+        # User should be redirected
+        response.follow()
+        assert_equal(
+            urlparse.urlsplit(response.location)[2],
+            '/submit/success/')
+        assert util.TEMPLATE_TEST_CONTEXT.has_key(
+            'mediagoblin/submit/success.html')
+
+        # Test PNG
+        # --------
+        util.clear_test_template_context()
+        response = self.test_app.post(
+            '/submit/', {
+                'title': 'Normal upload 2'
+                }, upload_files=[(
+                    'file', IMAGE_ROOT + GOOD_PNG)])
+
+        response.follow()
+        assert_equal(
+            urlparse.urlsplit(response.location)[2],
+            '/submit/success/')
+        assert util.TEMPLATE_TEST_CONTEXT.has_key(
+            'mediagoblin/submit/success.html')
+
+        # TODO: Test additional supported formats
+
 
     def test_malicious_uploads(self):
+        # Test non-suppoerted file with non-supported extension
+        # -----------------------------------------------------
+        util.clear_test_template_context()
+        response = self.test_app.post(
+            '/submit/', {
+                'title': 'Malicious Upload 2'
+                }, upload_files=[(
+                    'file', IMAGE_ROOT + EVIL_FILE)])
+
+        context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
+        form = context['submit_form']
+        assert form.file.errors == ['The file doesn\'t seem to be an image!']
+
         # Test non-supported file with .jpg extension
+        # -------------------------------------------
+        util.clear_test_template_context()
+        response = self.test_app.post(
+            '/submit/', {
+                'title': 'Malicious Upload 2'
+                }, upload_files=[(
+                    'file', IMAGE_ROOT + EVIL_JPG)])
+
+        context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
+        form = context['submit_form']
+        assert form.file.errors == ['The file doesn\'t seem to be an image!']
+
         # Test non-supported file with .png extension
-        pass
+        # -------------------------------------------
+        util.clear_test_template_context()
+        response = self.test_app.post(
+            '/submit/', {
+                'title': 'Malicious Upload 3'
+                }, upload_files=[(
+                    'file', IMAGE_ROOT + EVIL_PNG)])
+
+        context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
+        form = context['submit_form']
+        assert form.file.errors == ['The file doesn\'t seem to be an image!']
 
