@@ -1,6 +1,6 @@
 body {
-  background-color: #272727;
-  color: #f7f7f7;
+  background-color: #1F1F1F;
+  color: #aaa;
   font-family: sans-serif;
   padding:none;
   margin:0px;
@@ -18,7 +18,7 @@ form {
   font-family: 'Carter One';
   font-style: normal;
   font-weight: normal;
-  src: local('CarterOne'), url('http://themes.googleusercontent.com/font?kit=VjW2qt1pkqVtO22ObxgEBRsxEYwM7FgeyaSgU71cLG0') format('woff');
+  src: local('CarterOne'), url('http://themes.googleusercontent.com/font?kit=FWNn6ITYqL6or7ZTmBxRhq3fkYX5z1QtDUdIWoaaD_k') format('woff');
 }
 
 /* text styles */
@@ -39,7 +39,7 @@ p {
 }
 
 a {
-  color: #86D4B1;
+  color: #fff;
 }
 
 label {
@@ -56,7 +56,7 @@ label {
 .mediagoblin_header {
   width:100%;
   height:36px;
-  background-color:#393939;
+  background-color:#2F2F2F;
   padding-top:14px;
   margin-bottom:40px;
 }
@@ -64,7 +64,7 @@ label {
 .mediagoblin_footer {
   width:100%;
   height:26px;
-  background-color:#393939;
+  background-color:#2F2F2F;
   bottom:0px;
   padding-top:8px;
   position:absolute;
@@ -160,6 +160,7 @@ text-align:center;
 
 .form_field_error {
   background-color:#87453b;
+  color:#fff;
   border:none;
   font-size:16px;
   padding:9px;
