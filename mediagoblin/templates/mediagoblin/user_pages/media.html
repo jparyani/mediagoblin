@@ -55,7 +55,7 @@
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
                                          user= media.uploader().username,
                                          media=media._id) }}" method="POST">
-          {{ wtforms_util.render_field_div(comment_form.comment) }}
+          {{ wtforms_util.render_field_div(comment_form.field_comment) }}
           <div class="form_submit_buttons">
             <input type="submit" value="Post comment!" class="button" />
           </div>
@@ -65,7 +65,12 @@
       {% if comments %}
         {% for comment in comments %}
           {% set comment_author = comment.author() %}
-          <div class="comment_wrapper" id="comment-{{ comment['_id'] }}">
+	    {% if pagination.active_id == comment._id %}
+              <div class="comment_wrapper comment_active" id="comment-{{ comment['_id'] }}">
+		<a name="comment" id="comment"></a>
+            {% else %}
+              <div class="comment_wrapper" id="comment-{{ comment['_id'] }}">
+	    {% endif %}
             <div class="comment_content">
               {% autoescape False %}
                 {{ comment.content_html }}
@@ -77,7 +82,10 @@
               {{ comment_author['username'] }}</a> at 
             <!--</div>
             <div class="comment_datetime">-->
-              <a href="#comment-{{ comment['_id'] }}">
+              <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
+		       comment = comment['_id'],
+		       user = media.uploader().username,
+		       media = media._id) }}#comment">
                 {{ "%4d-%02d-%02d %02d:%02d"|format(comment.created.year,
                                          comment.created.month,
                                          comment.created.day,
@@ -88,7 +96,10 @@
           </div>
         {% endfor %}
 
-        {{ render_pagination(request, pagination) }}
+        {{ render_pagination(request, pagination, 
+	      request.urlgen('mediagoblin.user_pages.media_home',
+	      user = media.uploader().username,
+	      media = media._id)) }}
       </div>
     {% endif %}
     <div class="grid_5 omega">
