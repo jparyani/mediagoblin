@@ -18,7 +18,9 @@ import jinja2
 from mediagoblin import staticdirect
 from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
+from mediagoblin import mg_globals
 from mediagoblin.mg_globals import setup_globals
+from mediagoblin.workbench import WorkbenchManager
 
 
 class Error(Exception): pass
@@ -70,3 +72,11 @@ def get_staticdirector(app_config):
         raise ImproperlyConfigured(
             "One of direct_remote_path or "
             "direct_remote_paths must be provided")
+
+
+def setup_workbench():
+    app_config = mg_globals.app_config
+
+    workbench_manager = WorkbenchManager(app_config['workbench_path'])
+
+    setup_globals(workbench_manager = workbench_manager)

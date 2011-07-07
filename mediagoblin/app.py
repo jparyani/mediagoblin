@@ -25,8 +25,7 @@ from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init import get_jinja_loader, get_staticdirector, \
-    setup_global_and_app_config
-from mediagoblin.workbench import WorkbenchManager
+    setup_global_and_app_config, setup_workbench
 
 
 class MediaGoblinApp(object):
@@ -104,8 +103,8 @@ class MediaGoblinApp(object):
             db_connection=self.connection,
             database=self.db,
             public_store=self.public_store,
-            queue_store=self.queue_store,
-            workbench_manager=WorkbenchManager(app_config['workbench_path']))
+            queue_store=self.queue_store)
+        setup_workbench()
 
     def __call__(self, environ, start_response):
         request = Request(environ)
