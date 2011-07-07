@@ -18,6 +18,7 @@ import uuid
 
 from webob import exc
 
+from mediagoblin import messages
 from mediagoblin.util import render_to_response, redirect
 from mediagoblin.db.util import ObjectId
 from mediagoblin.auth import lib as auth_lib
@@ -124,16 +125,23 @@ def verify_email(request):
     if user and user['verification_key'] == unicode(request.GET['token']):
         user['status'] = u'active'
         user['email_verified'] = True
-        verification_successful = True
         user.save()
+        verification_successful = True
+        messages.add_message(request, 
+                             messages.SUCCESS, 
+                            'Your email address has been verified. ' \
+                            'You may now login!')
     else:
         verification_successful = False
+        messages.add_message(request, 
+                             messages.ERROR, 
+                            'The verification key or user id is incorrect')   
         
     return render_to_response(
         request,
-        'mediagoblin/auth/verify_email.html',
+        'mediagoblin/user_pages/user.html',
         {'user': user,
-         'verification_successful': verification_successful})
+        'verification_successful' : verification_successful})
 
 
 def resend_activation(request):
