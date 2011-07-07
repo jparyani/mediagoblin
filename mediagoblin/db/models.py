@@ -154,7 +154,7 @@ class MediaEntry(Document):
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
                           user=self.uploader()['username'],
-                          media=unicode(cursor[0]['_id']))
+                          media=unicode(cursor[0]['slug']))
         
     def url_to_next(self, urlgen):
         """
@@ -167,7 +167,7 @@ class MediaEntry(Document):
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
                           user=self.uploader()['username'],
-                          media=unicode(cursor[0]['_id']))
+                          media=unicode(cursor[0]['slug']))
 
     def uploader(self):
         return self.db.User.find_one({'_id': self['uploader']})
