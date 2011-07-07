@@ -127,10 +127,11 @@ def verify_email(request):
         user['email_verified'] = True
         user.save()
         verification_successful = True
-        messages.add_message(request, 
-                             messages.SUCCESS, 
-                            'Your email address has been verified. ' \
-                            'You may now login!')
+        messages.add_message(
+            request, 
+            messages.SUCCESS, 
+            ('Your email address has been verified. '
+             'You may now login, edit your profile, and submit images!'))
     else:
         verification_successful = False
         messages.add_message(request, 
