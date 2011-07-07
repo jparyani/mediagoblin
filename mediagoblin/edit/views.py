@@ -108,7 +108,7 @@ def edit_profile(request):
             	                 'Profile edited!')
             return redirect(request,
                            'mediagoblin.user_pages.user_home',
-            	            username=edit_username)
+            	            user=edit_username)
 
     return render_to_response(
         request,
