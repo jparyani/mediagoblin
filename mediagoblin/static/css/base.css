@@ -122,6 +122,10 @@ a.mediagoblin_logo:hover {
 text-align:center;
 }
 
+.pagination_arrow{
+  margin:5px;
+}
+
 /* forms */
 
 .form_box {
