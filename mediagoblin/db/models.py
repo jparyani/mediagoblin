@@ -150,8 +150,7 @@ class MediaEntry(Document):
         cursor = self.db.MediaEntry.find({'_id' : {"$lt": self['_id']}, 
                                           'uploader': self['uploader'],
                                           'state': 'processed'}).sort(
-                                                    '_id', DESCENDING).limit(1)
-                                                    
+                                                    '_id', ASCENDING).limit(1)
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
                           user=self.uploader()['username'],
@@ -164,7 +163,7 @@ class MediaEntry(Document):
         cursor = self.db.MediaEntry.find({'_id' : {"$gt": self['_id']}, 
                                           'uploader': self['uploader'],
                                           'state': 'processed'}).sort(
-                                                    '_id', ASCENDING).limit(1)
+                                                    '_id', DESCENDING).limit(1)
 
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
@@ -173,6 +172,7 @@ class MediaEntry(Document):
 
     def uploader(self):
         return self.db.User.find_one({'_id': self['uploader']})
+
 
 class MediaComment(Document):
     __collection__ = 'media_comments'
