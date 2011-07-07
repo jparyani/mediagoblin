@@ -55,7 +55,7 @@
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
                                          user= media.uploader().username,
                                          media=media._id) }}" method="POST">
-          {{ wtforms_util.render_field_div(comment_form.field_comment) }}
+          {{ wtforms_util.render_field_div(comment_form.comment_content) }}
           <div class="form_submit_buttons">
             <input type="submit" value="Post comment!" class="button" />
           </div>

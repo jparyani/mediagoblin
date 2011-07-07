@@ -124,7 +124,7 @@ def media_post_comment(request):
     comment = request.db.MediaComment()
     comment['media_entry'] = ObjectId(request.matchdict['media'])
     comment['author'] = request.user['_id']
-    comment['content'] = request.POST['field_comment']
+    comment['content'] = request.POST['comment_content']
 
     comment['content_html'] = cleaned_markdown_conversion(comment['content'])
 

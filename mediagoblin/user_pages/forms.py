@@ -17,5 +17,6 @@
 import wtforms
 
 class MediaCommentForm(wtforms.Form):
-	field_comment = wtforms.TextAreaField('Comment',
-    	[wtforms.validators.Required()])
+	comment_content = wtforms.TextAreaField(
+		'Comment',
+		[wtforms.validators.Required()])
