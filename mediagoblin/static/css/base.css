@@ -205,14 +205,14 @@ img.media_icon{
 /* navigation */
 
 .navigation_button{
-  width: 139px;
+  width:139px;
   display:block;
   float:left;
-  text-align: center;
-  background-color: #393939;
-  text-decoration: none;
-  padding: 6px 0pt;
-  font-family: 'Carter One', arial, serif;
+  text-align:center;
+  background-color:#393939;
+  text-decoration:none;
+  padding:12px 0pt;
+  font-family:'Carter One', arial, serif;
   font-size:2em;
   margin:0 0 20px
 }
