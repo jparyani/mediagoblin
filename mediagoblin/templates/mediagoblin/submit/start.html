@@ -25,6 +25,7 @@
     <div class="grid_8 prefix_1 suffix_1 form_box">
       <h1>Submit yer media</h1>
       {{ wtforms_util.render_field_div(submit_form.file) }}
+      {{ wtforms_util.render_field_div(submit_form.tags) }}
       {{ wtforms_util.render_field_div(submit_form.title) }}
       {{ wtforms_util.render_textarea_div(submit_form.description) }}
       <div class="form_submit_buttons">

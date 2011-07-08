@@ -16,6 +16,7 @@
 
 
 from webob import exc
+from string import split
 
 from mediagoblin import messages
 from mediagoblin.util import render_to_response, redirect, clean_html
@@ -35,7 +36,8 @@ def edit_media(request, media):
     form = forms.EditForm(request.POST,
         title = media['title'],
         slug = media['slug'],
-        description = media['description'])
+        description = media['description'],
+        tags = ' '.join(media['tags']))
 
     if request.method == 'POST' and form.validate():
         # Make sure there isn't already a MediaEntry with such a slug
@@ -59,6 +61,7 @@ def edit_media(request, media):
                     media['description']))
 
             media['slug'] = request.POST['slug']
+            media['tags'] = split(request.POST['tags'])
             media.save()
 
             return redirect(request, "mediagoblin.user_pages.media_home",

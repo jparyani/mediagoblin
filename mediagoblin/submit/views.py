@@ -16,6 +16,7 @@
 
 from os.path import splitext
 from cgi import FieldStorage
+from string import split
 
 from werkzeug.utils import secure_filename
 
@@ -58,6 +59,7 @@ def submit_start(request):
             
             entry['media_type'] = u'image' # heh
             entry['uploader'] = request.user['_id']
+            entry['tags'] = split(request.POST.get('tags'))
 
             # Save, just so we can get the entry id for the sake of using
             # it to generate the file path
