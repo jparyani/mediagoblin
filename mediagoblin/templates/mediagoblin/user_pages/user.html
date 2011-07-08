@@ -28,6 +28,7 @@
   {% if user %}
     <h1>{{ user.username }}'s profile</h1>
 
+    <div class="grid_6 alpha">
     {% include "mediagoblin/utils/profile.html" %}
 
     {% if request.user['_id'] == user['_id'] or request.user['is_admin'] %}
@@ -40,6 +41,8 @@
         <a href="{{ request.urlgen('mediagoblin.submit.start') }}">Submit an item</a> 
       </p>
     {% endif %}
+    </div>
+    <div class="grid_10 omega">
 
     {% set pagination_base_url = user_gallery_url %}
     {% include "mediagoblin/utils/object_gallery.html" %}
@@ -55,4 +58,6 @@
     {# This *should* not occur as the view makes sure we pass in a user. #}
     <p>Sorry, no such user found.<p/>
   {% endif %}
+  
+    </div>
 {% endblock %}
