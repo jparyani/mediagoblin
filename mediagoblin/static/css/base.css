@@ -56,6 +56,23 @@ label {
   margin-bottom:40px;
 }
 
+.header_submit{
+  background-color:#aaa;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(##D2D2D2), to(#aaa)); 
+  background-image: -webkit-linear-gradient(top, #D2D2D2, #aaa); 
+  background-image:    -moz-linear-gradient(top, #D2D2D2, #aaa); 
+  background-image:     -ms-linear-gradient(top, #D2D2D2, #aaa); 
+  background-image:      -o-linear-gradient(top, #D2D2D2, #aaa); 
+  background-image:         linear-gradient(top, #D2D2D2, #aaa);
+  box-shadow:0px 0px 4px #000;
+  color:#272727;
+  border-radius:5px 5px 5px 5px;
+  padding:5px 8px;
+  text-decoration:none;
+  border:medium none;
+  font-family:'Carter One',arial,serif;
+}
+
 .mediagoblin_footer {
   width:100%;
   height:26px;

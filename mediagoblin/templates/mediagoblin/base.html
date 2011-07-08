@@ -39,7 +39,11 @@
             <div class="grid_16">
               {% block mediagoblin_logo %}
                 <a class="mediagoblin_logo" href="{{ request.urlgen('index') }}"></a>
-              {% endblock %}{% block mediagoblin_header_title %}{% endblock %}
+              {% endblock %}
+              {% if request.user %}
+              <a class="header_submit" href="{{ request.urlgen('mediagoblin.submit.start') }}">Submit media</a>
+              {% endif %}
+              {% block mediagoblin_header_title %}{% endblock %}
               <div class="mediagoblin_header_right">
                 {% if request.user %}
                   <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
