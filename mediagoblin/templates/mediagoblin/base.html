@@ -38,7 +38,7 @@
           <div class="container_16">
             <div class="grid_16">
               {% block mediagoblin_logo %}
-                <a class="mediagoblin_logo" href="{{ request.urlgen('index') }}"></a>
+                <a class="mediagoblin_logo" href="{{ request.urlgen('index') }}"><img src="{{ request.staticdirect('/images/logo.png') }}" alt="Mediagoblin logo" /></a>
               {% endblock %}
               {% if request.user %}
               <a class="header_submit" href="{{ request.urlgen('mediagoblin.submit.start') }}">Submit media</a>

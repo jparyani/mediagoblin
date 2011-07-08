@@ -57,6 +57,7 @@ label {
 }
 
 .header_submit{
+  color:#272727;
   background-color:#aaa;
   background-image: -webkit-gradient(linear, left top, left bottom, from(##D2D2D2), to(#aaa)); 
   background-image: -webkit-linear-gradient(top, #D2D2D2, #aaa); 
@@ -65,9 +66,9 @@ label {
   background-image:      -o-linear-gradient(top, #D2D2D2, #aaa); 
   background-image:         linear-gradient(top, #D2D2D2, #aaa);
   box-shadow:0px 0px 4px #000;
-  color:#272727;
   border-radius:5px 5px 5px 5px;
-  padding:5px 8px;
+  margin:8px;
+  padding:3px 8px;
   text-decoration:none;
   border:medium none;
   font-family:'Carter One',arial,serif;
@@ -87,19 +88,6 @@ label {
 
 .mediagoblin_content {
   padding-bottom:74px;
-}
-
-a.mediagoblin_logo {
-  width:34px;
-  height:25px;
-  margin-right:10px;
-  background-image:url('../images/icon.png');
-  background-position:0px 0px;
-  display:inline-block;
-}
-
-a.mediagoblin_logo:hover {
-  background-position:0px -28px;
 }
 
 .mediagoblin_header_right {
