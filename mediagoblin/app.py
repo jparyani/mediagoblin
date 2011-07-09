@@ -104,6 +104,9 @@ class MediaGoblinApp(object):
             database=self.db,
             public_store=self.public_store,
             queue_store=self.queue_store)
+
+        # Workbench *currently* only used by celery, so this only
+        # matters in always eager mode :)
         setup_workbench()
 
     def __call__(self, environ, start_response):
