@@ -119,6 +119,9 @@ MIGRATIONS = {}
 
 
 class RegisterMigration(object):
+    """
+    Tool for registering migrations
+    """
     def __init__(self, migration_number, migration_registry=MIGRATIONS):
         self.migration_number = migration_number
         self.migration_registry = migration_registry
@@ -161,13 +164,14 @@ class MigrationManager(object):
 
     def latest_migration(self):
         """
-        Return a tuple like:
-          (migration_number, migration_func)
-
-        Where migration_number is the number of the latest migration
-        and migration func is the actual function that would be run.
+        Return a migration number for the latest migration, or 0 if
+        there are no migrations.
         """
-        return self.sorted_migrations[-1]
+        if self.sorted_migrations:
+            return self.sorted_migrations[-1][0]
+        else:
+            # If no migrations have been set, we start at 0.
+            return 0
 
     def set_current_migration(self, migration_number=None):
         """
