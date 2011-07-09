@@ -95,8 +95,14 @@ def media_home(request, media, page, **kwargs):
     """
     'Homepage' of a MediaEntry()
     """
+    if ObjectId(request.matchdict.get('comment')):
+        pagination = Pagination(
+            page, media.get_comments(), MEDIA_COMMENTS_PER_PAGE,
+            ObjectId(request.matchdict.get('comment')))
+    else:
+        pagination = Pagination(
+            page, media.get_comments(), MEDIA_COMMENTS_PER_PAGE)
 
-    pagination = Pagination(page, media.get_comments(), MEDIA_COMMENTS_PER_PAGE)
     comments = pagination()
 
     comment_form = user_forms.MediaCommentForm(request.POST)
@@ -118,7 +124,7 @@ def media_post_comment(request):
     comment = request.db.MediaComment()
     comment['media_entry'] = ObjectId(request.matchdict['media'])
     comment['author'] = request.user['_id']
-    comment['content'] = request.POST['comment']
+    comment['content'] = request.POST['comment_content']
 
     comment['content_html'] = cleaned_markdown_conversion(comment['content'])
 
