@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin import mg_globals
 from mediagoblin.util import render_to_response
 from mediagoblin.db.util import DESCENDING
 
@@ -23,7 +24,8 @@ def root_view(request):
     
     return render_to_response(
         request, 'mediagoblin/root.html',
-        {'media_entries': media_entries})
+        {'media_entries': media_entries,
+        'allow_registration': mg_globals.app_config["allow_registration"]})
 
 
 def simple_template_render(request):

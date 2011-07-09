@@ -19,6 +19,7 @@ import uuid
 from webob import exc
 
 from mediagoblin import messages
+from mediagoblin import mg_globals
 from mediagoblin.util import render_to_response, redirect
 from mediagoblin.db.util import ObjectId
 from mediagoblin.auth import lib as auth_lib
@@ -30,6 +31,11 @@ def register(request):
     """
     Your classic registration view!
     """
+
+    # Redirects to indexpage if registrations are disabled
+    if not mg_globals.app_config["allow_registration"]:
+        return redirect(request, "index")
+
     register_form = auth_forms.RegistrationForm(request.POST)
 
     if request.method == 'POST' and register_form.validate():
