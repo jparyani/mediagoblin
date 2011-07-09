@@ -104,7 +104,8 @@ def login(request):
         'mediagoblin/auth/login.html',
         {'login_form': login_form,
          'next': request.GET.get('next') or request.POST.get('next'),
-         'login_failed': login_failed})
+         'login_failed': login_failed,
+         'allow_registration': mg_globals.app_config["allow_registration"]})
 
 
 def logout(request):
