@@ -20,18 +20,12 @@ import urllib
 import routes
 from webob import Request, exc
 
-from mediagoblin import routing, util, storage, staticdirect
-from mediagoblin.init.config import (
-    read_mediagoblin_config, generate_validation_report)
+from mediagoblin import routing, util, storage
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
-from mediagoblin.init import get_jinja_loader
-from mediagoblin.workbench import WorkbenchManager
-
-
-class Error(Exception): pass
-class ImproperlyConfigured(Error): pass
+from mediagoblin.init import get_jinja_loader, get_staticdirector, \
+    setup_global_and_app_config, setup_workbench
 
 
 class MediaGoblinApp(object):
@@ -55,13 +49,7 @@ class MediaGoblinApp(object):
         ##############
 
         # Open and setup the config
-        global_config, validation_result = read_mediagoblin_config(config_path)
-        app_config = global_config['mediagoblin']
-        # report errors if necessary
-        validation_report = generate_validation_report(
-            global_config, validation_result)
-        if validation_report:
-            raise ImproperlyConfigured(validation_report)
+        global_config, app_config = setup_global_and_app_config(config_path)
 
         ##########################################
         # Setup other connections / useful objects
@@ -85,19 +73,7 @@ class MediaGoblinApp(object):
         self.routing = routing.get_mapper()
 
         # set up staticdirector tool
-        if app_config.has_key('direct_remote_path'):
-            self.staticdirector = staticdirect.RemoteStaticDirect(
-                app_config['direct_remote_path'].strip())
-        elif app_config.has_key('direct_remote_paths'):
-            direct_remote_path_lines = app_config[
-                'direct_remote_paths'].strip().splitlines()
-            self.staticdirector = staticdirect.MultiRemoteStaticDirect(
-                dict([line.strip().split(' ', 1)
-                      for line in direct_remote_path_lines]))
-        else:
-            raise ImproperlyConfigured(
-                "One of direct_remote_path or "
-                "direct_remote_paths must be provided")
+        self.staticdirector = get_staticdirector(app_config)
 
         # Setup celery, if appropriate
         if setup_celery and not app_config.get('celery_setup_elsewhere'):
@@ -117,9 +93,6 @@ class MediaGoblinApp(object):
         #######################################################
 
         setup_globals(
-            app_config=app_config,
-            global_config=global_config,
-
             # TODO: No need to set these two up as globals, we could
             # just read them out of mg_globals.app_config
             email_sender_address=app_config['email_sender_address'],
@@ -130,8 +103,8 @@ class MediaGoblinApp(object):
             db_connection=self.connection,
             database=self.db,
             public_store=self.public_store,
-            queue_store=self.queue_store,
-            workbench_manager=WorkbenchManager(app_config['workbench_path']))
+            queue_store=self.queue_store)
+        setup_workbench()
 
     def __call__(self, environ, start_response):
         request = Request(environ)
