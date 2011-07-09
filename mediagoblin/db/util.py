@@ -233,5 +233,5 @@ class MigrationManager(object):
         Install all migrations that need to be installed, quietly.
         """
         for migration_number, migration_func in self.iteratively_migrate():
-            # No need to say anything... we're just migrating iteratively.
+            # No need to say anything... we're just migrating quietly.
             pass
