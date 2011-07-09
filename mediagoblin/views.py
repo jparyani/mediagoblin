@@ -25,7 +25,7 @@ def root_view(request):
     return render_to_response(
         request, 'mediagoblin/root.html',
         {'media_entries': media_entries,
-        'allow_registration': mg_globals.app_config["allow_registration"]})
+         'allow_registration': mg_globals.app_config["allow_registration"]})
 
 
 def simple_template_render(request):
