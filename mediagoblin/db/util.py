@@ -136,6 +136,8 @@ class RegisterMigration(object):
     0.  0 is the default "no migrations" state!
     """
     def __init__(self, migration_number, migration_registry=MIGRATIONS):
+        assert migration_number > 0, "Migration number must be > 0!"
+
         self.migration_number = migration_number
         self.migration_registry = migration_registry
 
@@ -196,7 +198,7 @@ class MigrationManager(object):
             {'$set': {'current_migration': migration_number}},
             upsert=True)
 
-    def database_current_migration(self, install_if_missing=True):
+    def database_current_migration(self, install_if_missing=False):
         """
         Return the current migration in the database.
         """
