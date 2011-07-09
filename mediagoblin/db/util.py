@@ -121,6 +121,19 @@ MIGRATIONS = {}
 class RegisterMigration(object):
     """
     Tool for registering migrations
+
+    Call like:
+
+    @RegisterMigration(33)
+    def update_dwarves(database):
+        [...]
+
+    This will register your migration with the default migration
+    registry.  Alternately, to specify a very specific
+    migration_registry, you can pass in that as the second argument.
+
+    Note, the number of your migration should NEVER be 0 or less than
+    0.  0 is the default "no migrations" state!
     """
     def __init__(self, migration_number, migration_registry=MIGRATIONS):
         self.migration_number = migration_number
