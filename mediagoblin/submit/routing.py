@@ -18,7 +18,4 @@ from routes.route import Route
 
 submit_routes = [
     Route('mediagoblin.submit.start', '/',
-          controller='mediagoblin.submit.views:submit_start'),
-    Route('mediagoblin.submit.success', '/success/',
-          template='mediagoblin/submit/success.html',
-          controller='mediagoblin.views:simple_template_render')]
+          controller='mediagoblin.submit.views:submit_start')]

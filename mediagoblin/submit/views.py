@@ -95,8 +95,3 @@ def submit_start(request):
         request,
         'mediagoblin/submit/start.html',
         {'submit_form': submit_form})
-
-
-def submit_success(request):
-    return render_to_response(
-        request, 'mediagoblin/submit/success.html', {})
