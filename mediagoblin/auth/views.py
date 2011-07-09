@@ -31,9 +31,12 @@ def register(request):
     """
     Your classic registration view!
     """
-
     # Redirects to indexpage if registrations are disabled
     if not mg_globals.app_config["allow_registration"]:
+        messages.add_message(
+            request,
+            messages.WARNING,
+            ('Sorry, registration is disabled on this instance.'))
         return redirect(request, "index")
 
     register_form = auth_forms.RegistrationForm(request.POST)
