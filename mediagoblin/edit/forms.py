@@ -32,4 +32,5 @@ class EditProfileForm(wtforms.Form):
         [wtforms.validators.Length(min=0, max=500)])
     url = wtforms.TextField(
         'Website',
-        [wtforms.validators.URL(message='Improperly formed URL')])
+        [wtforms.validators.Optional(),
+         wtforms.validators.URL(message='Improperly formed URL')])
