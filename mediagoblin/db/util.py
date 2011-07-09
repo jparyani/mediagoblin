@@ -245,7 +245,7 @@ class MigrationManager(object):
             self.set_current_migration(migration_number)
             yield migration_number, migration_func
         
-    def run_outdated_migrations(self):
+    def run_new_migrations(self):
         """
         Install all migrations that need to be installed, quietly.
         """
