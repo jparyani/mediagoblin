@@ -61,7 +61,7 @@ def register(request):
             entry['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
             entry.save(validate=True)
-            
+
             send_verification_email(entry, request)
 
             return redirect(request, "mediagoblin.auth.register_success")
@@ -114,7 +114,7 @@ def login(request):
 def logout(request):
     # Maybe deleting the user_id parameter would be enough?
     request.session.delete()
-    
+
     return redirect(request, "index")
 
 
@@ -138,16 +138,16 @@ def verify_email(request):
         user.save()
         verification_successful = True
         messages.add_message(
-            request, 
-            messages.SUCCESS, 
+            request,
+            messages.SUCCESS,
             ('Your email address has been verified. '
              'You may now login, edit your profile, and submit images!'))
     else:
         verification_successful = False
-        messages.add_message(request, 
-                             messages.ERROR, 
-                            'The verification key or user id is incorrect')   
-        
+        messages.add_message(request,
+                             messages.ERROR,
+                            'The verification key or user id is incorrect')
+
     return render_to_response(
         request,
         'mediagoblin/user_pages/user.html',
