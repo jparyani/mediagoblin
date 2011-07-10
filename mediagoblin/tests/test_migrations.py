@@ -17,6 +17,7 @@
 
 from pymongo import Connection
 
+from mediagoblin.tests.tools import install_fixtures_simple
 from mediagoblin.db.util import RegisterMigration, MigrationManager
 
 # This one will get filled with local migrations
@@ -39,7 +40,9 @@ def creature_add_magical_powers(database):
     This defaults to [], an empty list.  Since we haven't declared any
     magical powers, all existing monsters should 
     """
-    pass
+    database['creatures'].update(
+        {'magical_powers': {'$exists': False}},
+        {'$set': {'magical_powers': []}})
 
 
 @RegisterMigration(2, TEST_MIGRATION_REGISTRY)
@@ -49,7 +52,9 @@ def creature_rename_num_legs_to_num_limbs(database):
     just how many legs.  We don't care about the ambiguous distinction
     between arms/legs currently.
     """
-    pass
+    database['creatures'].update(
+        {'num_legs': {'$exists': True}},
+        {'$rename': {'num_legs': 'num_limbs'}})
 
 
 @RegisterMigration(3, TEST_MIGRATION_REGISTRY)
@@ -58,7 +63,9 @@ def creature_remove_is_demon(database):
     It turns out we don't care much about whether creatures are demons
     or not.
     """
-    pass
+    database['creatures'].update(
+        {'is_demon': {'$exists': True}},
+        {'$unset': {'is_demon': 1}})
 
 
 @RegisterMigration(4, TEST_MIGRATION_REGISTRY)
@@ -78,7 +85,18 @@ def level_exits_dict_to_list(database):
        {'name': 'trapdoor',
         'exits_to': 'dungeon_level_id'}]
     """
-    pass
+    target = database['levels'].find(
+        {'exits': {'$type': 3}})
+
+    for level in target:
+        new_exits = []
+        for exit_name, exits_to in level['exits'].items():
+            new_exits.append(
+                {'name': exit_name,
+                 'exits_to': exits_to})
+
+        level['exits'] = new_exits
+        database['levels'].save(level)
 
 
 UNMIGRATED_DBDATA = {
