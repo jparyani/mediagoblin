@@ -198,19 +198,25 @@ class MigrationManager(object):
             {u'$set': {u'current_migration': migration_number}},
             upsert=True)
 
-    def database_current_migration(self, install_if_missing=False):
+    def install_migration_version_if_missing(self):
+        """
+        Sets the migration to the latest version if no migration
+        version at all is set.
+        """
+        mgoblin_metadata = self.database[u'app_metadata'].find_one(
+            {u'_id': u'mediagoblin'})
+        if not mgoblin_metadata:
+            latest_migration = self.latest_migration()
+            self.set_current_migration(latest_migration)
+
+    def database_current_migration(self):
         """
         Return the current migration in the database.
         """
         mgoblin_metadata = self.database[u'app_metadata'].find_one(
             {u'_id': u'mediagoblin'})
         if not mgoblin_metadata:
-            if install_if_missing:
-                latest_migration = self.latest_migration()
-                self.set_current_migration(latest_migration)
-                return latest_migration
-            else:
-                return None
+            return None
         else:
             return mgoblin_metadata[u'current_migration']
 
@@ -227,6 +233,7 @@ class MigrationManager(object):
         Get a list of migrations to run still, if any.
         """
         db_current_migration = self.database_current_migration()
+
         return [
             (migration_number, migration_func)
             for migration_number, migration_func in self.sorted_migrations
@@ -244,6 +251,11 @@ class MigrationManager(object):
            run post-migration.  Takes (migration_number, migration_func)
            as arguments
         """
+        # If we aren't set to any version number, presume we're at the
+        # latest (which means we'll do nothing here...)
+        # @@: should this be in migrations_to_run()?
+        self.install_migration_version_if_missing()
+
         for migration_number, migration_func in self.migrations_to_run():
             if pre_callback:
                 pre_callback(migration_number, migration_func)
