@@ -232,25 +232,22 @@ class MigrationManager(object):
             for migration_number, migration_func in self.sorted_migrations
             if migration_number > db_current_migration]
 
-    def iteratively_migrate(self):
+    def migrate_new(self, pre_callback=None, post_callback=None):
         """
-        Iteratively run all migrations.
+        Run all migrations.
 
-        Useful if you need to print some message about each migration
-        after you run it.
-
-        Each time you loop over this, it'll return the migration
-        number and migration function.
+        Includes two optional args:
+         - pre_callback: if called, this is a callback on something to
+           run pre-migration.  Takes (migration_number, migration_func)
+           as arguments
+         - pre_callback: if called, this is a callback on something to
+           run post-migration.  Takes (migration_number, migration_func)
+           as arguments
         """
         for migration_number, migration_func in self.migrations_to_run():
+            if pre_callback:
+                pre_callback(migration_number, migration_func)
             migration_func(self.database)
             self.set_current_migration(migration_number)
-            yield migration_number, migration_func
-        
-    def run_new_migrations(self):
-        """
-        Install all migrations that need to be installed, quietly.
-        """
-        for migration_number, migration_func in self.iteratively_migrate():
-            # No need to say anything... we're just migrating quietly.
-            pass
+            if post_callback:
+                post_callback(migration_number, migration_func)
