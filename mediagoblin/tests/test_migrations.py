@@ -129,10 +129,77 @@ UNMIGRATED_DBDATA = {
                 'portal': 'necroplex'}}]}
                     
 
+EXPECTED_POST_MIGRATION_UNMIGRATED_DBDATA = {
+    'creatures': [
+        {'name': 'centipede',
+         'num_limbs': 100,
+         'magical_powers': []},
+        {'name': 'wolf',
+         'num_limbs': 4,
+         # kept around namely to check that it *isn't* removed!
+         'magical_powers': []},
+        {'name': 'wizardsnake',
+         'num_limbs': 0,
+         'magical_powers': []}],
+    'levels': [
+        {'_id': 'necroplex',
+         'name': 'The Necroplex',
+         'description': 'A complex full of pure deathzone.',
+         'exits': [
+                {'name': 'deathwell',
+                 'exits_to': 'evilstorm'},
+                {'name': 'portal',
+                 'exits_to': 'central_park'}]},
+        {'_id': 'evilstorm',
+         'name': 'Evil Storm',
+         'description': 'A storm full of pure evil.',
+         'exits': []}, # you can't escape the evilstorm
+        {'_id': 'central_park',
+         'name': 'Central Park, NY, NY',
+         'description': "New York's friendly Central Park.",
+         'exits': [
+                {'name': 'portal',
+                 'exits_to': 'necroplex'}]}]}
+
 # We want to make sure that if we're at migration 3, migration 3
 # doesn't get re-run.
 
 SEMI_MIGRATED_DBDATA = {
+    'creatures': [
+        {'name': 'centipede',
+         'num_limbs': 100,
+         'magical_powers': []},
+        {'name': 'wolf',
+         'num_limbs': 4,
+         # kept around namely to check that it *isn't* removed!
+         'is_demon': False,
+         'magical_powers': [
+                'ice_breath', 'death_stare']},
+        {'name': 'wizardsnake',
+         'num_limbs': 0,
+         'magical_powers': [
+                'death_rattle', 'sneaky_stare',
+                'slithery_smoke', 'treacherous_tremors'],
+         'is_demon': True}],
+    'levels': [
+        {'_id': 'necroplex',
+         'name': 'The Necroplex',
+         'description': 'A complex full of pure deathzone.',
+         'exits': {
+                'deathwell': 'evilstorm',
+                'portal': 'central_park'}},
+        {'_id': 'evilstorm',
+         'name': 'Evil Storm',
+         'description': 'A storm full of pure evil.',
+         'exits': {}}, # you can't escape the evilstorm
+        {'_id': 'central_park',
+         'name': 'Central Park, NY, NY',
+         'description': "New York's friendly Central Park.",
+         'exits': {
+                'portal': 'necroplex'}}]}
+
+
+EXPECTED_POST_MIGRATION_SEMI_MIGRATED_DBDATA = {
     'creatures': [
         {'name': 'centipede',
          'num_limbs': 100,
@@ -168,6 +235,7 @@ SEMI_MIGRATED_DBDATA = {
          'exits': [
                 {'name': 'portal',
                  'exits_to': 'necroplex'}]}]}
+    
 
 
 class TestMigrations(object):
@@ -178,7 +246,54 @@ class TestMigrations(object):
         self.db = Connection()[MIGRATION_DB_NAME]
         self.migration_manager = MigrationManager(
             self.db, TEST_MIGRATION_REGISTRY)
+        self.empty_migration_manager = MigrationManager(
+            self.db, TEST_EMPTY_MIGRATION_REGISTRY)
 
     def tearDown(self):
         self.connection.drop_database(MIGRATION_DB_NAME)
 
+    def test_migrations_registered_and_sorted(self):
+        """
+        Make sure that migrations get registered and are sorted right
+        in the migration manager
+        """
+        assert TEST_MIGRATION_REGISTRY == {
+            1: creature_add_magical_powers,
+            2: creature_rename_num_legs_to_num_limbs,
+            3: creature_remove_is_demon,
+            4: level_exits_dict_to_list}
+        assert self.migration_manager.sorted_migrations == [
+            (1, creature_add_magical_powers),
+            (2, creature_rename_num_legs_to_num_limbs),
+            (3, creature_remove_is_demon),
+            (4, level_exits_dict_to_list)]
+        assert self.empty_migration_manager.sorted_migrations == []
+
+    def test_run_full_migrations(self):
+        """
+        Make sure that running the full migration suite from 0 updates
+        everything
+        """
+        pass
+
+    def test_run_partial_migrations(self):
+        """
+        Make sure that running full migration suite from 3 only runs
+        last migration
+        """
+
+        pass
+
+    def test_migrations_recorded_as_latest(self):
+        """
+        Make sure that if we don't have a migration_status
+        pre-recorded it's marked as the latest
+        """
+        pass
+
+    def test_no_migrations_recorded_as_zero(self):
+        """
+        Make sure that if we don't have a migration_status
+        but there *are* no migrations that it's marked as 0
+        """
+        pass
