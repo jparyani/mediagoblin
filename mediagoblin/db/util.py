@@ -188,7 +188,7 @@ class MigrationManager(object):
             # If no migrations have been set, we start at 0.
             return 0
 
-    def set_current_migration(self, migration_number=None):
+    def set_current_migration(self, migration_number):
         """
         Set the migration in the database to migration_number
         """
