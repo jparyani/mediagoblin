@@ -193,17 +193,17 @@ class MigrationManager(object):
         Set the migration in the database to migration_number
         """
         # Add the mediagoblin migration if necessary
-        self.database['app_metadata'].update(
-            {'_id': 'mediagoblin'},
-            {'$set': {'current_migration': migration_number}},
+        self.database[u'app_metadata'].update(
+            {u'_id': u'mediagoblin'},
+            {u'$set': {u'current_migration': migration_number}},
             upsert=True)
 
     def database_current_migration(self, install_if_missing=False):
         """
         Return the current migration in the database.
         """
-        mgoblin_metadata = self.database['app_metadata'].find_one(
-            {'_id': 'mediagoblin'})
+        mgoblin_metadata = self.database[u'app_metadata'].find_one(
+            {u'_id': u'mediagoblin'})
         if not mgoblin_metadata:
             if install_if_missing:
                 latest_migration = self.latest_migration()
@@ -212,7 +212,7 @@ class MigrationManager(object):
             else:
                 return None
         else:
-            return mgoblin_metadata['current_migration']
+            return mgoblin_metadata[u'current_migration']
 
     def database_at_latest_migration(self):
         """
