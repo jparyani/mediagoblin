@@ -101,6 +101,10 @@ def edit_profile(request):
     if request.method == 'POST' and form.validate():
             user['url'] = request.POST['url']
             user['bio'] = request.POST['bio']
+
+            md = markdown.Markdown(safe_mode = 'escape')
+            user['bio_html'] = clean_html(md.convert(user['bio']))
+
             user.save()
 
             messages.add_message(request, 

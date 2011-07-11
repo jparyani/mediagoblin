@@ -18,9 +18,9 @@
 
 {% block profile_content -%}
   {% if user.bio %}
-    <p>
-      {{ user.bio }}
-    </p>
+    {% autoescape False %}
+    <p>{{ user.bio_html }}</p>
+    {% endautoescape %}
   {% endif %}
   {% if user.url %}
     <p>
