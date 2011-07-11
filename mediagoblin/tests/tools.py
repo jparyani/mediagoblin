@@ -118,3 +118,35 @@ def setup_fresh_app(func):
         return func(test_app, *args, **kwargs)
 
     return _make_safe(wrapper, func)
+
+
+def install_fixtures_simple(db, fixtures):
+    """
+    Very simply install fixtures in the database
+    """
+    for collection_name, collection_fixtures in fixtures.iteritems():
+        collection = db[collection_name]
+        for fixture in collection_fixtures:
+            collection.insert(fixture)
+
+
+def assert_db_meets_expected(db, expected):
+    """
+    Assert a database contains the things we expect it to.
+
+    Objects are found via '_id', so you should make sure your document
+    has an _id.
+
+    Args:
+     - db: pymongo or mongokit database connection
+     - expected: the data we expect.  Formatted like:
+         {'collection_name': [
+             {'_id': 'foo',
+              'some_field': 'some_value'},]}
+    """
+    for collection_name, collection_data in expected.iteritems():
+        collection = db[collection_name]
+        for expected_document in collection_data:
+            document = collection.find_one({'_id': expected_document['_id']})
+            assert document is not None  # make sure it exists
+            assert document == expected_document  # make sure it matches
