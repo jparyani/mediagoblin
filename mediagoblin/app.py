@@ -24,6 +24,7 @@ from mediagoblin import routing, util, storage, staticdirect
 from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
 from mediagoblin.db.open import setup_connection_and_db_from_config
+from mediagoblin.db.util import MigrationManager
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init import get_jinja_loader
@@ -70,6 +71,16 @@ class MediaGoblinApp(object):
         # Set up the database
         self.connection, self.db = setup_connection_and_db_from_config(
             app_config)
+
+        # Init the migration number if necessary
+        migration_manager = MigrationManager(self.db)
+        migration_manager.install_migration_version_if_missing()
+
+        # Tiny hack to warn user if our migration is out of date
+        if not migration_manager.database_at_latest_migration():
+            print (
+                "*WARNING:* Your migrations are out of date, "
+                "maybe run ./bin/gmg migrate?")
 
         # Get the template environment
         self.template_loader = get_jinja_loader(
