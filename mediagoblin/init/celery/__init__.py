@@ -62,7 +62,7 @@ def setup_celery_from_config(app_config, global_config,
         celery_mongo_settings['port'] = app_config['db_port']
         if celery_settings['BROKER_BACKEND'] == 'mongodb':
             celery_settings['BROKER_PORT'] = app_config['db_port']
-    celery_mongo_settings['database'] = app_config.get('db_name', 'mediagoblin')
+    celery_mongo_settings['database'] = app_config['db_name']
 
     celery_settings['CELERY_MONGODB_BACKEND_SETTINGS'] = celery_mongo_settings
 
