@@ -337,7 +337,19 @@ class TestMigrations(object):
         Make sure that running full migration suite from 3 only runs
         last migration
         """
-        pass
+        self.migration_manager.set_current_migration(3)
+        assert self.migration_manager.database_current_migration() == 3
+        install_fixtures_simple(self.db, SEMI_MIGRATED_DBDATA)
+        self.migration_manager.migrate_new(post_callback=self._record_migration)
+
+        assert self.run_migrations == [
+            (4, level_exits_dict_to_list)]
+
+        assert_db_meets_expected(
+            self.db, EXPECTED_POST_MIGRATION_SEMI_MIGRATED_DBDATA)
+
+        # Make sure the migration is recorded correctly
+        assert self.migration_manager.database_current_migration() == 4
 
     def test_migrations_recorded_as_latest(self):
         """
