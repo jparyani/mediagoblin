@@ -15,8 +15,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.util import cleaned_markdown_conversion
+# from mediagoblin.db.util import RegisterMigration
 
 from mongokit import DocumentMigration
+
+
+# This is where the first new-style migration will be written!
+# 
+# Please see mediagoblin/tests/test_migrations.py for some examples of
+# basic migrations.
+
+# @RegisterMigration(1)
+# def do_something(database):
+#     pass
 
 
 class MediaEntryMigration(DocumentMigration):
