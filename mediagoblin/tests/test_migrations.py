@@ -17,8 +17,9 @@
 
 from pymongo import Connection
 
-from mediagoblin.tests.tools import install_fixtures_simple
-from mediagoblin.db.util import RegisterMigration, MigrationManager
+from mediagoblin.tests.tools import (
+    install_fixtures_simple, assert_db_meets_expected)
+from mediagoblin.db.util import RegisterMigration, MigrationManager, ObjectId
 
 # This one will get filled with local migrations
 TEST_MIGRATION_REGISTRY = {}
@@ -38,11 +39,12 @@ def creature_add_magical_powers(database):
     Add lists of magical powers.
 
     This defaults to [], an empty list.  Since we haven't declared any
-    magical powers, all existing monsters should 
+    magical powers, all existing monsters should
     """
     database['creatures'].update(
         {'magical_powers': {'$exists': False}},
-        {'$set': {'magical_powers': []}})
+        {'$set': {'magical_powers': []}},
+        multi=True)
 
 
 @RegisterMigration(2, TEST_MIGRATION_REGISTRY)
@@ -52,9 +54,17 @@ def creature_rename_num_legs_to_num_limbs(database):
     just how many legs.  We don't care about the ambiguous distinction
     between arms/legs currently.
     """
-    database['creatures'].update(
-        {'num_legs': {'$exists': True}},
-        {'$rename': {'num_legs': 'num_limbs'}})
+    # $rename not available till 1.7.2+, Debian Stable only includes
+    # 1.4.4... we should do renames manually for now :(
+
+    collection = database['creatures']
+    target = collection.find(
+        {'num_legs': {'$exists': True}})
+
+    for document in target:
+        # A lame manual renaming.
+        document['num_limbs'] = document.pop('num_legs')
+        collection.save(document)
 
 
 @RegisterMigration(3, TEST_MIGRATION_REGISTRY)
@@ -65,7 +75,8 @@ def creature_remove_is_demon(database):
     """
     database['creatures'].update(
         {'is_demon': {'$exists': True}},
-        {'$unset': {'is_demon': 1}})
+        {'$unset': {'is_demon': 1}},
+        multi=True)
 
 
 @RegisterMigration(4, TEST_MIGRATION_REGISTRY)
@@ -85,7 +96,8 @@ def level_exits_dict_to_list(database):
        {'name': 'trapdoor',
         'exits_to': 'dungeon_level_id'}]
     """
-    target = database['levels'].find(
+    collection = database['levels']
+    target = collection.find(
         {'exits': {'$type': 3}})
 
     for level in target:
@@ -96,19 +108,26 @@ def level_exits_dict_to_list(database):
                  'exits_to': exits_to})
 
         level['exits'] = new_exits
-        database['levels'].save(level)
+        collection.save(level)
 
+
+CENTIPEDE_OBJECTID = ObjectId()
+WOLF_OBJECTID = ObjectId()
+WIZARDSNAKE_OBJECTID = ObjectId()
 
 UNMIGRATED_DBDATA = {
     'creatures': [
-        {'name': 'centipede',
+        {'_id': CENTIPEDE_OBJECTID,
+         'name': 'centipede',
          'num_legs': 100,
          'is_demon': False},
-        {'name': 'wolf',
+        {'_id': WOLF_OBJECTID,
+         'name': 'wolf',
          'num_legs': 4,
          'is_demon': False},
         # don't ask me what a wizardsnake is.
-        {'name': 'wizardsnake',
+        {'_id': WIZARDSNAKE_OBJECTID,
+         'name': 'wizardsnake',
          'num_legs': 0,
          'is_demon': True}],
     'levels': [
@@ -127,18 +146,21 @@ UNMIGRATED_DBDATA = {
          'description': "New York's friendly Central Park.",
          'exits': {
                 'portal': 'necroplex'}}]}
-                    
+
 
 EXPECTED_POST_MIGRATION_UNMIGRATED_DBDATA = {
     'creatures': [
-        {'name': 'centipede',
+        {'_id': CENTIPEDE_OBJECTID,
+         'name': 'centipede',
          'num_limbs': 100,
          'magical_powers': []},
-        {'name': 'wolf',
+        {'_id': WOLF_OBJECTID,
+         'name': 'wolf',
          'num_limbs': 4,
          # kept around namely to check that it *isn't* removed!
          'magical_powers': []},
-        {'name': 'wizardsnake',
+        {'_id': WIZARDSNAKE_OBJECTID,
+         'name': 'wizardsnake',
          'num_limbs': 0,
          'magical_powers': []}],
     'levels': [
@@ -166,16 +188,19 @@ EXPECTED_POST_MIGRATION_UNMIGRATED_DBDATA = {
 
 SEMI_MIGRATED_DBDATA = {
     'creatures': [
-        {'name': 'centipede',
+        {'_id': CENTIPEDE_OBJECTID,
+         'name': 'centipede',
          'num_limbs': 100,
          'magical_powers': []},
-        {'name': 'wolf',
+        {'_id': WOLF_OBJECTID,
+         'name': 'wolf',
          'num_limbs': 4,
          # kept around namely to check that it *isn't* removed!
          'is_demon': False,
          'magical_powers': [
                 'ice_breath', 'death_stare']},
-        {'name': 'wizardsnake',
+        {'_id': WIZARDSNAKE_OBJECTID,
+         'name': 'wizardsnake',
          'num_limbs': 0,
          'magical_powers': [
                 'death_rattle', 'sneaky_stare',
@@ -201,16 +226,19 @@ SEMI_MIGRATED_DBDATA = {
 
 EXPECTED_POST_MIGRATION_SEMI_MIGRATED_DBDATA = {
     'creatures': [
-        {'name': 'centipede',
+        {'_id': CENTIPEDE_OBJECTID,
+         'name': 'centipede',
          'num_limbs': 100,
          'magical_powers': []},
-        {'name': 'wolf',
+        {'_id': WOLF_OBJECTID,
+         'name': 'wolf',
          'num_limbs': 4,
          # kept around namely to check that it *isn't* removed!
          'is_demon': False,
          'magical_powers': [
                 'ice_breath', 'death_stare']},
-        {'name': 'wizardsnake',
+        {'_id': WIZARDSNAKE_OBJECTID,
+         'name': 'wizardsnake',
          'num_limbs': 0,
          'magical_powers': [
                 'death_rattle', 'sneaky_stare',
@@ -235,7 +263,6 @@ EXPECTED_POST_MIGRATION_SEMI_MIGRATED_DBDATA = {
          'exits': [
                 {'name': 'portal',
                  'exits_to': 'necroplex'}]}]}
-    
 
 
 class TestMigrations(object):
@@ -248,9 +275,13 @@ class TestMigrations(object):
             self.db, TEST_MIGRATION_REGISTRY)
         self.empty_migration_manager = MigrationManager(
             self.db, TEST_EMPTY_MIGRATION_REGISTRY)
+        self.run_migrations = []
 
     def tearDown(self):
         self.connection.drop_database(MIGRATION_DB_NAME)
+
+    def _record_migration(self, migration_number, migration_func):
+        self.run_migrations.append((migration_number, migration_func))
 
     def test_migrations_registered_and_sorted(self):
         """
@@ -274,14 +305,38 @@ class TestMigrations(object):
         Make sure that running the full migration suite from 0 updates
         everything
         """
-        pass
+        self.migration_manager.set_current_migration(0)
+        assert self.migration_manager.database_current_migration() == 0
+        install_fixtures_simple(self.db, UNMIGRATED_DBDATA)
+        self.migration_manager.migrate_new(post_callback=self._record_migration)
+
+        assert self.run_migrations == [
+            (1, creature_add_magical_powers),
+            (2, creature_rename_num_legs_to_num_limbs),
+            (3, creature_remove_is_demon),
+            (4, level_exits_dict_to_list)]
+
+        assert_db_meets_expected(
+            self.db, EXPECTED_POST_MIGRATION_UNMIGRATED_DBDATA)
+
+        # Make sure the migration is recorded correctly
+        assert self.migration_manager.database_current_migration() == 4
+
+        # run twice!  It should do nothing the second time.
+        # ------------------------------------------------
+        self.run_migrations = []
+        self.migration_manager.migrate_new(post_callback=self._record_migration)
+        assert self.run_migrations == []
+        assert_db_meets_expected(
+            self.db, EXPECTED_POST_MIGRATION_UNMIGRATED_DBDATA)
+        assert self.migration_manager.database_current_migration() == 4
+
 
     def test_run_partial_migrations(self):
         """
         Make sure that running full migration suite from 3 only runs
         last migration
         """
-
         pass
 
     def test_migrations_recorded_as_latest(self):
