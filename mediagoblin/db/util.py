@@ -115,6 +115,9 @@ def remove_deprecated_indexes(database, deprecated_indexes=DEPRECATED_INDEXES):
 # Don't set this yourself!  RegisterMigration will automatically fill
 # this with stuff via decorating methods in migrations.py
 
+class MissingCurrentMigration(Exception): pass
+
+
 MIGRATIONS = {}
 
 
@@ -163,6 +166,16 @@ class MigrationManager(object):
         self.database = database
         self.migration_registry = migration_registry
         self._sorted_migrations = None
+
+    def _ensure_current_migration_record(self):
+        """
+        If there isn't a database[u'app_metadata'] mediagoblin entry
+        with the 'current_migration', throw an error.
+        """
+        if self.database_current_migration() is None:
+            MissingCurrentMigration(
+                "Tried to call function which requires "
+                "'current_migration' set in database")
 
     @property
     def sorted_migrations(self):
@@ -235,9 +248,7 @@ class MigrationManager(object):
         Note that calling this will set your migration version to the
         latest version if it isn't installed to anything yet!
         """
-        # If we aren't set to any version number, presume we're at the
-        # latest (which means we'll do nothing here...)
-        self.install_migration_version_if_missing()
+        self._ensure_current_migration_record()
 
         db_current_migration = self.database_current_migration()
 
@@ -258,6 +269,10 @@ class MigrationManager(object):
            run post-migration.  Takes (migration_number, migration_func)
            as arguments
         """
+        # If we aren't set to any version number, presume we're at the
+        # latest (which means we'll do nothing here...)
+        self.install_migration_version_if_missing()
+
         for migration_number, migration_func in self.migrations_to_run():
             if pre_callback:
                 pre_callback(migration_number, migration_func)
