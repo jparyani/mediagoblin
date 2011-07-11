@@ -88,6 +88,13 @@ MEDIAENTRY_INDEXES = {
         # Indexing on uploaders and when media entries are created.
         # Used for showing a user gallery, etc.
         'index': [('uploader', ASCENDING),
+                  ('created', DESCENDING)]},
+
+    'uploader_tags_created': {
+        # Indexing on the media uploader, the associated tags, and timestamp
+        # Used for showing media items matching a tag search, most recent first.
+        'index': [('uploader', ASCENDING),
+                  ('tags', DESCENDING),
                   ('created', DESCENDING)]}}
 
 
