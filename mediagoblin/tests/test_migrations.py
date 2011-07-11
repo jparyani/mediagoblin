@@ -356,11 +356,13 @@ class TestMigrations(object):
         Make sure that if we don't have a migration_status
         pre-recorded it's marked as the latest
         """
-        pass
+        self.migration_manager.install_migration_version_if_missing()
+        assert self.migration_manager.database_current_migration() == 4
 
     def test_no_migrations_recorded_as_zero(self):
         """
         Make sure that if we don't have a migration_status
         but there *are* no migrations that it's marked as 0
         """
-        pass
+        self.empty_migration_manager.install_migration_version_if_missing()
+        assert self.empty_migration_manager.database_current_migration() == 0
