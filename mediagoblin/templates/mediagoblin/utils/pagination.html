@@ -34,9 +34,16 @@
         {% if pagination.has_prev %}
           <a href="{{ pagination.get_page_url_explicit(
                           base_url, get_params,
-                          pagination.page - 1) }}">&laquo; Prev</a>
+                          pagination.page - 1) }}"><img class="pagination_arrow" src="/mgoblin_static/images/pagination_left.png" alt="Previous page" />Newer</a>
         {% endif %}
-  
+        {% if pagination.has_next %}
+          <a href="{{ pagination.get_page_url_explicit(
+                          base_url, get_params,
+                          pagination.page + 1) }}">Older<img class="pagination_arrow" src="/mgoblin_static/images/pagination_right.png" alt="Next page" />
+          </a>
+        {% endif %}
+        <br />
+        Go to page: 
         {%- for page in pagination.iter_pages() %}
           {% if page %}
             {% if page != pagination.page %}
@@ -50,12 +57,6 @@
             <span class="ellipsis">…</span>
           {% endif %}
         {%- endfor %}
-  
-        {% if pagination.has_next %}
-          <a href="{{ pagination.get_page_url_explicit(
-                          base_url, get_params,
-                          pagination.page + 1) }}">Next &raquo;</a>
-        {% endif %}
        </p>
      </div>
   {% endif %}

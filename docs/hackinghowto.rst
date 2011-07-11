@@ -57,6 +57,11 @@ requirements::
     sudo apt-get install mongodb git-core python python-dev \
          python-lxml
 
+On Fedora::
+
+    yum install mongodb-server python-paste-deploy python-paste-script \
+         git-core python python-devel
+
 .. YouCanHelp::
 
    If you have instructions for other GNU/Linux distributions to set

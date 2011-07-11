@@ -18,6 +18,8 @@ import uuid
 
 from webob import exc
 
+from mediagoblin import messages
+from mediagoblin import mg_globals
 from mediagoblin.util import render_to_response, redirect
 from mediagoblin.db.util import ObjectId
 from mediagoblin.auth import lib as auth_lib
@@ -29,6 +31,14 @@ def register(request):
     """
     Your classic registration view!
     """
+    # Redirects to indexpage if registrations are disabled
+    if not mg_globals.app_config["allow_registration"]:
+        messages.add_message(
+            request,
+            messages.WARNING,
+            ('Sorry, registration is disabled on this instance.'))
+        return redirect(request, "index")
+
     register_form = auth_forms.RegistrationForm(request.POST)
 
     if request.method == 'POST' and register_form.validate():
@@ -51,7 +61,7 @@ def register(request):
             entry['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
             entry.save(validate=True)
-            
+
             send_verification_email(entry, request)
 
             return redirect(request, "mediagoblin.auth.register_success")
@@ -97,13 +107,14 @@ def login(request):
         'mediagoblin/auth/login.html',
         {'login_form': login_form,
          'next': request.GET.get('next') or request.POST.get('next'),
-         'login_failed': login_failed})
+         'login_failed': login_failed,
+         'allow_registration': mg_globals.app_config["allow_registration"]})
 
 
 def logout(request):
     # Maybe deleting the user_id parameter would be enough?
     request.session.delete()
-    
+
     return redirect(request, "index")
 
 
@@ -124,16 +135,24 @@ def verify_email(request):
     if user and user['verification_key'] == unicode(request.GET['token']):
         user['status'] = u'active'
         user['email_verified'] = True
-        verification_successful = True
         user.save()
+        verification_successful = True
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            ('Your email address has been verified. '
+             'You may now login, edit your profile, and submit images!'))
     else:
         verification_successful = False
-        
+        messages.add_message(request,
+                             messages.ERROR,
+                            'The verification key or user id is incorrect')
+
     return render_to_response(
         request,
-        'mediagoblin/auth/verify_email.html',
+        'mediagoblin/user_pages/user.html',
         {'user': user,
-         'verification_successful': verification_successful})
+        'verification_successful' : verification_successful})
 
 
 def resend_activation(request):

@@ -106,9 +106,9 @@ def edit_profile(request):
             messages.add_message(request, 
             	                 messages.SUCCESS, 
             	                 'Profile edited!')
-            return redirect(request, 
-            	           "mediagoblin.edit.profile", 
-            	            username=edit_username)
+            return redirect(request,
+                           'mediagoblin.user_pages.user_home',
+            	            user=edit_username)
 
     return render_to_response(
         request,

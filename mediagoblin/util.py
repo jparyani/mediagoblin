@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import division
+
 from email.MIMEText import MIMEText
 import gettext
 import pkg_resources
@@ -21,7 +23,7 @@ import smtplib
 import sys
 import re
 import urllib
-from math import ceil
+from math import ceil, floor
 import copy
 
 from babel.localedata import exists
@@ -34,6 +36,8 @@ import markdown
 from mediagoblin import mg_globals
 from mediagoblin import messages
 from mediagoblin.db.util import ObjectId
+
+from itertools import izip, count
 
 TESTS_ENABLED = False
 def _activate_testing():
@@ -133,7 +137,16 @@ def render_to_response(request, template, context):
 
 def redirect(request, *args, **kwargs):
     """Returns a HTTPFound(), takes a request and then urlgen params"""
-    return exc.HTTPFound(location=request.urlgen(*args, **kwargs))
+    
+    querystring = None
+    if kwargs.get('querystring'):
+        querystring = kwargs.get('querystring')
+        del kwargs['querystring']
+
+    return exc.HTTPFound(
+        location=''.join([
+                request.urlgen(*args, **kwargs),
+                querystring if querystring else '']))
 
 
 def setup_user_in_request(request):
@@ -418,7 +431,8 @@ class Pagination(object):
     get actual data slice through __call__().
     """
 
-    def __init__(self, page, cursor, per_page=PAGINATION_DEFAULT_PER_PAGE):
+    def __init__(self, page, cursor, per_page=PAGINATION_DEFAULT_PER_PAGE,
+                 jump_to_id=False):
         """
         Initializes Pagination
 
@@ -426,11 +440,25 @@ class Pagination(object):
          - page: requested page
          - per_page: number of objects per page
          - cursor: db cursor 
+         - jump_to_id: ObjectId, sets the page to the page containing the object
+           with _id == jump_to_id.
         """
-        self.page = page    
+        self.page = page
         self.per_page = per_page
         self.cursor = cursor
         self.total_count = self.cursor.count()
+        self.active_id = None
+
+        if jump_to_id:
+            cursor = copy.copy(self.cursor)
+
+            for (doc, increment) in izip(cursor, count(0)):
+                if doc['_id'] == jump_to_id:
+                    self.page = 1 + int(floor(increment / self.per_page))
+
+                    self.active_id = jump_to_id
+                    break
+
 
     def __call__(self):
         """
