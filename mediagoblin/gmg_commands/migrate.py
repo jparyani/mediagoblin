@@ -14,10 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
 
 from mediagoblin.db import migrations
 from mediagoblin.db import util as db_util
-from mediagoblin.gmg_commands import util as commands_util
+from mediagoblin.db.open import setup_connection_and_db_from_config
+from mediagoblin.init.config import read_mediagoblin_config
 
 
 def migrate_parser_setup(subparser):
@@ -25,32 +27,38 @@ def migrate_parser_setup(subparser):
         '-cf', '--conf_file', default='mediagoblin.ini',
         help="Config file used to set up environment")
 
+def _print_started_migration(migration_number, migration_func):
+    sys.stdout.write(
+        "Running migration %s, '%s'... " % (
+            migration_number, migration_func.func_name))
+
+def _print_finished_migration(migration_number, migration_func):
+    print "done."
+
 
 def migrate(args):
-    mgoblin_app = commands_util.setup_app(args)
+    config, validation_result = read_mediagoblin_config(args.conf_file)
+    connection, db = setup_connection_and_db_from_config(
+        config['mediagoblin'], use_pymongo=True)
+    migration_manager = db_util.MigrationManager(db)
 
     # Clear old indexes
     print "== Clearing old indexes... =="
-    removed_indexes = db_util.remove_deprecated_indexes(mgoblin_app.db)
+    removed_indexes = db_util.remove_deprecated_indexes(db)
 
     for collection, index_name in removed_indexes:
         print "Removed index '%s' in collection '%s'" % (
             index_name, collection)
     
     # Migrate
-    print "== Applying migrations... =="
-    for model_name in migrations.MIGRATE_CLASSES:
-        model = getattr(mgoblin_app.db, model_name)
-
-        if not hasattr(model, 'migration_handler') or not model.collection:
-            continue
-
-        migration = model.migration_handler(model)
-        migration.migrate_all(collection=model.collection)
+    print "\n== Applying migrations... =="
+    migration_manager.migrate_new(
+        pre_callback=_print_started_migration,
+        post_callback=_print_finished_migration)
             
     # Add new indexes
-    print "== Adding new indexes... =="
-    new_indexes = db_util.add_new_indexes(mgoblin_app.db)
+    print "\n== Adding new indexes... =="
+    new_indexes = db_util.add_new_indexes(db)
 
     for collection, index_name in new_indexes:
         print "Added index '%s' to collection '%s'" % (
