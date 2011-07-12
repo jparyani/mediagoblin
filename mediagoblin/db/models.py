@@ -16,12 +16,11 @@
 
 import datetime, uuid
 
-from mongokit import Document, Set
+from mongokit import Document
 
 from mediagoblin import util
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin import mg_globals
-from mediagoblin.db import migrations
 from mediagoblin.db.util import ASCENDING, DESCENDING, ObjectId
 
 ###################
@@ -59,8 +58,6 @@ class User(Document):
         'verification_key': lambda: unicode(uuid.uuid4()),
         'is_admin': False}
         
-    migration_handler = migrations.UserMigration
-
     def check_login(self, password):
         """
         See if a user can login with this password
@@ -105,8 +102,6 @@ class MediaEntry(Document):
     default_values = {
         'created': datetime.datetime.utcnow,
         'state': u'unprocessed'}
-
-    migration_handler = migrations.MediaEntryMigration
 
     def get_comments(self):
         return self.db.MediaComment.find({
@@ -195,6 +190,7 @@ class MediaComment(Document):
 
     def author(self):
         return self.db.User.find_one({'_id': self['author']})
+
 
 REGISTER_MODELS = [
     MediaEntry,

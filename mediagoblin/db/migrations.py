@@ -14,67 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.util import cleaned_markdown_conversion
-# from mediagoblin.db.util import RegisterMigration
+from mediagoblin.db.util import RegisterMigration
 
-from mongokit import DocumentMigration
-
-
-# This is where the first new-style migration will be written!
-# 
 # Please see mediagoblin/tests/test_migrations.py for some examples of
 # basic migrations.
 
 # @RegisterMigration(1)
 # def do_something(database):
 #     pass
-
-
-class MediaEntryMigration(DocumentMigration):
-    def allmigration01_uploader_to_reference(self):
-        """
-        Old MediaEntry['uploader'] accidentally embedded the User instead
-        of referencing it.  Fix that!
-        """
-        # uploader is an associative array
-        self.target = {'uploader': {'$type': 3}}
-        if not self.status:
-            for doc in self.collection.find(self.target):
-                self.update = {
-                    '$set': {
-                        'uploader': doc['uploader']['_id']}}
-                self.collection.update(
-                    self.target, self.update, multi=True, safe=True)
-
-    def allmigration02_add_description_html(self):
-        """
-        Now that we can have rich descriptions via Markdown, we should
-        update all existing entries to record the rich description versions.
-        """
-        self.target = {'description_html': {'$exists': False},
-                       'description': {'$exists': True}}
-
-        if not self.status:
-            for doc in self.collection.find(self.target):
-                self.update = {
-                    '$set': {
-                        'description_html': cleaned_markdown_conversion(
-                            doc['description'])}}
-        
-class UserMigration(DocumentMigration):
-    def allmigration01_add_bio_and_url_profile(self):
-        """
-        User can elaborate profile with home page and biography
-        """
-        self.target = {'url': {'$exists': False},
-                       'bio': {'$exists': False}}
-        if not self.status:
-            for doc in self.collection.find(self.target):
-                self.update = {
-                    '$set': {'url': '', 
-                             'bio': ''}}
-                self.collection.update(
-                    self.target, self.update, multi=True, safe=True)
-                        
-                        
-MIGRATE_CLASSES = ['MediaEntry', 'User']
