@@ -60,7 +60,7 @@ requirements::
 On Fedora::
 
     yum install mongodb-server python-paste-deploy python-paste-script \
-         git-core python python-devel
+         git-core python python-devel python-lxml
 
 .. YouCanHelp::
 
