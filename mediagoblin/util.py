@@ -265,9 +265,9 @@ def send_email(from_addr, to_addrs, subject, message_body):
      - message_body: email body text
     """
     # TODO: make a mock mhost if testing is enabled
-    if TESTS_ENABLED or mg_globals.email_debug_mode:
+    if TESTS_ENABLED or mg_globals.app_config['email_debug_mode']:
         mhost = FakeMhost()
-    elif not mg_globals.email_debug_mode:
+    elif not mg_globals.app_config['email_debug_mode']:
         mhost = smtplib.SMTP()
 
     mhost.connect()
@@ -280,7 +280,7 @@ def send_email(from_addr, to_addrs, subject, message_body):
     if TESTS_ENABLED:
         EMAIL_TEST_INBOX.append(message)
 
-    if getattr(mg_globals, 'email_debug_mode', False):
+    if mg_globals.app_config['email_debug_mode']:
         print u"===== Email ====="
         print u"From address: %s" % message['From']
         print u"To addresses: %s" % message['To']
