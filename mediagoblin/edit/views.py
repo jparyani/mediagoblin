@@ -63,7 +63,9 @@ def edit_media(request, media):
                     media['description']))
 
             media['slug'] = request.POST['slug']
-            media['tags'] = convert_to_tag_list(request.POST['tags'])
+
+            # Process the user's folksonomy "tags"
+            media['tags'] = convert_to_tag_list(request)
             media.save()
 
             return redirect(request, "mediagoblin.user_pages.media_home",

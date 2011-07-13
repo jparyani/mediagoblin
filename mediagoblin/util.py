@@ -372,19 +372,39 @@ def clean_html(html):
 
 TAGS_DELIMITER = u' '
 TAGS_CASE_SENSITIVE = False
+TAGS_MAX_LENGTH = 50
 
-def convert_to_tag_list(tag_string):
+def convert_to_tag_list(request):
     """
-    Filter input from a "tags" field,
+    Filter input from any "tags" field in the session,
 
     Strips trailing, leading, and internal whitespace, and also converts
-    the user input into an array of tags
+    the "tags" text into an array of tags
     """
+    tag_string = request.POST.get('tags')
     taglist = []
     if tag_string:
+
+        # Strip out internal, trailing, and leading whitespace
         stripped_tag_string = u' '.join(tag_string.strip().split())
+
+        # Split the tag string into a list of tags
         for tag in stripped_tag_string.split(TAGS_DELIMITER):
+
+            # Do not permit duplicate tags
             if tag.strip() and tag not in taglist:
+
+                # Enforce maximum tag length
+                if len(tag) > TAGS_MAX_LENGTH:
+                    tag = tag[:TAGS_MAX_LENGTH] + u'...'
+                    messages.add_message(
+                             request, messages.WARNING, \
+                             u'Tag truncated to ' + unicode(TAGS_MAX_LENGTH) + \
+                             u' characters.')
+                    messages.add_message(
+                       request, messages.INFO, \
+                       u'Why the long tag? Seriously.')
+
                 if TAGS_CASE_SENSITIVE:
                     taglist.append(tag.strip())
                 else:
