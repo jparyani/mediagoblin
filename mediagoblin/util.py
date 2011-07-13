@@ -384,7 +384,7 @@ def convert_to_tag_list(tag_string):
     if tag_string:
         stripped_tag_string = u' '.join(tag_string.strip().split())
         for tag in stripped_tag_string.split(TAGS_DELIMITER):
-            if tag.strip():
+            if tag.strip() and tag not in taglist:
                 if TAGS_CASE_SENSITIVE:
                     taglist.append(tag.strip())
                 else:
