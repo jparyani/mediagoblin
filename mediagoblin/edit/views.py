@@ -19,8 +19,9 @@ from webob import exc
 from string import split
 
 from mediagoblin import messages
-from mediagoblin.util import render_to_response, redirect, clean_html, \
-                             TAGS_DELIMITER
+from mediagoblin.util import (
+    render_to_response, redirect, clean_html, TAGS_DELIMITER, \
+    convert_to_tag_list)
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry
@@ -62,7 +63,7 @@ def edit_media(request, media):
                     media['description']))
 
             media['slug'] = request.POST['slug']
-            media['tags'] = request.POST['tags'].split(TAGS_DELIMITER)
+            media['tags'] = convert_to_tag_list(request.POST['tags'])
             media.save()
 
             return redirect(request, "mediagoblin.user_pages.media_home",

@@ -17,8 +17,6 @@
 
 import wtforms
 
-from mediagoblin.util import convert_to_tag_list
-
 
 class EditForm(wtforms.Form):
     title = wtforms.TextField(

@@ -371,6 +371,7 @@ def clean_html(html):
 
 
 TAGS_DELIMITER = u' '
+TAGS_CASE_SENSITIVE = False
 
 def convert_to_tag_list(tag_string):
     """
@@ -379,12 +380,16 @@ def convert_to_tag_list(tag_string):
     Strips trailing, leading, and internal whitespace, and also converts
     the user input into an array of tags
     """
+    taglist = []
     if tag_string:
-        taglist = []
         stripped_tag_string = u' '.join(tag_string.strip().split())
         for tag in stripped_tag_string.split(TAGS_DELIMITER):
-            if tag.strip(): taglist.append(tag.strip())
-        return taglist
+            if tag.strip():
+                if TAGS_CASE_SENSITIVE:
+                    taglist.append(tag.strip())
+                else:
+                    taglist.append(tag.strip().lower())
+    return taglist
 
 
 MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')

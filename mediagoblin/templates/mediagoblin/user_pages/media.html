@@ -48,10 +48,6 @@
                                    user= media.uploader().username) }}">
           {{- media.uploader().username }}</a>
       </p>
-      
-      <p>
-        {{ ' '.join(media.tags) }}
-      </p>
       <br />
 
       <h3>Comments</h3>
@@ -114,6 +110,11 @@
           </p>
         {% endif %}
       </p>
+      {% if media.tags %}
+        <p>
+          {{ ' '.join(media.tags) }}
+        </p>
+      {% endif %}
     </div>
   {% else %}
     <p>Sorry, no such media found.<p/>
