@@ -17,6 +17,8 @@
 
 import wtforms
 
+from mediagoblin.util import convert_to_tag_list
+
 
 class SubmitStartForm(wtforms.Form):
     title = wtforms.TextField(
@@ -24,4 +26,4 @@ class SubmitStartForm(wtforms.Form):
         [wtforms.validators.Length(min=0, max=500)])
     description = wtforms.TextAreaField('Description of this work')
     file = wtforms.FileField('File')
-    tags = wtforms.TextField('Tags')
+    tags = wtforms.TextField('Tags', filters=[convert_to_tag_list])

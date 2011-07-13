@@ -22,6 +22,7 @@ import sys
 import re
 import urllib
 from math import ceil
+from string import strip
 import copy
 
 from babel.localedata import exists
@@ -369,8 +370,24 @@ def clean_html(html):
     return HTML_CLEANER.clean_html(html)
 
 
-MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')
+TAGS_DELIMITER = ' '
 
+def convert_to_tag_list(tag_string):
+    """
+    Filter input from a "tags" field,
+
+    Strips trailing, leading, and internal whitespace, and also converts
+    the user input into an array of tags
+    """
+    if tag_string:
+        taglist = []
+        stripped_tag_string = ' '.join(tag_string.strip().split())
+        for tag in stripped_tag_string.split(TAGS_DELIMITER):
+            if tag.strip(): taglist.append(tag.strip())
+        return taglist
+
+
+MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')
 
 def cleaned_markdown_conversion(text):
     """

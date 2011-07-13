@@ -17,6 +17,8 @@
 
 import wtforms
 
+from mediagoblin.util import convert_to_tag_list
+
 
 class EditForm(wtforms.Form):
     title = wtforms.TextField(
@@ -25,8 +27,7 @@ class EditForm(wtforms.Form):
     slug = wtforms.TextField(
         'Slug')
     description = wtforms.TextAreaField('Description of this work')
-    tags = wtforms.TextField(
-    	'Tags')
+    tags = wtforms.TextField('Tags', filters=[convert_to_tag_list])
 
 class EditProfileForm(wtforms.Form):
     bio = wtforms.TextAreaField('Bio',
