@@ -62,7 +62,7 @@ def edit_media(request, media):
                     media['description']))
 
             media['slug'] = request.POST['slug']
-            media['tags'] = split(request.POST['tags'])
+            media['tags'] = request.POST['tags'].split(TAGS_DELIMITER)
             media.save()
 
             return redirect(request, "mediagoblin.user_pages.media_home",

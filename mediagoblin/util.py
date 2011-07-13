@@ -370,7 +370,7 @@ def clean_html(html):
     return HTML_CLEANER.clean_html(html)
 
 
-TAGS_DELIMITER = ' '
+TAGS_DELIMITER = u' '
 
 def convert_to_tag_list(tag_string):
     """
@@ -381,7 +381,7 @@ def convert_to_tag_list(tag_string):
     """
     if tag_string:
         taglist = []
-        stripped_tag_string = ' '.join(tag_string.strip().split())
+        stripped_tag_string = u' '.join(tag_string.strip().split())
         for tag in stripped_tag_string.split(TAGS_DELIMITER):
             if tag.strip(): taglist.append(tag.strip())
         return taglist
