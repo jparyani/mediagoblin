@@ -28,6 +28,9 @@ from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init import get_jinja_loader, get_staticdirector, \
     setup_global_and_app_config, setup_workbench
 
+# This MUST be imported so as to set up the appropriate migrations!
+from mediagoblin.db import migrations
+
 
 class MediaGoblinApp(object):
     """

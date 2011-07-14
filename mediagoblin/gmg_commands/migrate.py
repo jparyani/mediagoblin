@@ -16,10 +16,12 @@
 
 import sys
 
-from mediagoblin.db import migrations
 from mediagoblin.db import util as db_util
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.init.config import read_mediagoblin_config
+
+# This MUST be imported so as to set up the appropriate migrations!
+from mediagoblin.db import migrations
 
 
 def migrate_parser_setup(subparser):
