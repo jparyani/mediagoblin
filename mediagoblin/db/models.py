@@ -46,7 +46,8 @@ class User(Document):
         'verification_key': unicode,
         'is_admin': bool,
         'url' : unicode,
-        'bio' : unicode
+        'bio' : unicode,     # May contain markdown
+        'bio_html': unicode, # May contain plaintext, or HTML
         }
 
     required_fields = ['username', 'created', 'pw_hash', 'email']
