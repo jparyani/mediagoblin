@@ -20,12 +20,6 @@ database = None
 public_store = None
 queue_store = None
 
-# Dump mail to stdout instead of sending it:
-email_debug_mode = False
-
-# Address for sending out mails
-email_sender_address = None
-
 # A WorkBenchManager
 workbench_manager = None
 
