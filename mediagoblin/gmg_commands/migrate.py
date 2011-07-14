@@ -27,13 +27,17 @@ def migrate_parser_setup(subparser):
         '-cf', '--conf_file', default='mediagoblin.ini',
         help="Config file used to set up environment")
 
+
 def _print_started_migration(migration_number, migration_func):
     sys.stdout.write(
         "Running migration %s, '%s'... " % (
             migration_number, migration_func.func_name))
+    sys.stdout.flush()
+
 
 def _print_finished_migration(migration_number, migration_func):
-    print "done."
+    sys.stdout.write("done.\n")
+    sys.stdout.flush()
 
 
 def migrate(args):
