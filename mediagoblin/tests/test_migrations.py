@@ -15,11 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from nose.tools import assert_raises
 from pymongo import Connection
 
 from mediagoblin.tests.tools import (
     install_fixtures_simple, assert_db_meets_expected)
-from mediagoblin.db.util import RegisterMigration, MigrationManager, ObjectId
+from mediagoblin.db.util import (
+    RegisterMigration, MigrationManager, ObjectId,
+    MissingCurrentMigration)
 
 # This one will get filled with local migrations
 TEST_MIGRATION_REGISTRY = {}
@@ -366,3 +369,34 @@ class TestMigrations(object):
         """
         self.empty_migration_manager.install_migration_version_if_missing()
         assert self.empty_migration_manager.database_current_migration() == 0
+
+    def test_migrations_to_run(self):
+        """
+        Make sure we get the right list of migrations to run
+        """
+        self.migration_manager.set_current_migration(0)
+
+        assert self.migration_manager.migrations_to_run() == [
+            (1, creature_add_magical_powers),
+            (2, creature_rename_num_legs_to_num_limbs),
+            (3, creature_remove_is_demon),
+            (4, level_exits_dict_to_list)]
+
+        self.migration_manager.set_current_migration(3)
+
+        assert self.migration_manager.migrations_to_run() == [
+            (4, level_exits_dict_to_list)]
+
+        self.migration_manager.set_current_migration(4)
+
+        assert self.migration_manager.migrations_to_run() == []
+
+
+    def test_no_migrations_raises_exception(self):
+        """
+        If we don't have the current migration set in the database,
+        this should error out.
+        """
+        assert_raises(
+            MissingCurrentMigration,
+            self.migration_manager.migrations_to_run)
