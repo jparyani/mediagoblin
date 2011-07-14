@@ -173,7 +173,7 @@ class MigrationManager(object):
         with the 'current_migration', throw an error.
         """
         if self.database_current_migration() is None:
-            MissingCurrentMigration(
+            raise MissingCurrentMigration(
                 "Tried to call function which requires "
                 "'current_migration' set in database")
 
