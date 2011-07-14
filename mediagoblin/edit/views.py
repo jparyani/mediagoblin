@@ -18,12 +18,11 @@
 from webob import exc
 
 from mediagoblin import messages
-from mediagoblin.util import render_to_response, redirect, clean_html
+from mediagoblin.util import (
+    render_to_response, redirect, cleaned_markdown_conversion)
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry
-
-import markdown
 
 
 @get_user_media_entry
@@ -51,12 +50,9 @@ def edit_media(request, media):
         else:
             media['title'] = request.POST['title']
             media['description'] = request.POST.get('description')
-            
-            md = markdown.Markdown(
-                safe_mode = 'escape')
-            media['description_html'] = clean_html(
-                md.convert(
-                    media['description']))
+
+            media['description_html'] = cleaned_markdown_conversion(
+                media['description'])
 
             media['slug'] = request.POST['slug']
             media.save()
@@ -102,8 +98,7 @@ def edit_profile(request):
             user['url'] = request.POST['url']
             user['bio'] = request.POST['bio']
 
-            md = markdown.Markdown(safe_mode = 'escape')
-            user['bio_html'] = clean_html(md.convert(user['bio']))
+            user['bio_html'] = cleaned_markdown_conversion(user['bio'])
 
             user.save()
 
