@@ -38,6 +38,7 @@ def connect_database_from_config(app_config, use_pymongo=False):
             app_config.get('db_host'), port)
     return connection
 
+
 def setup_connection_and_db_from_config(app_config, use_pymongo=False):
     """
     Setup connection and database from config.
@@ -45,7 +46,7 @@ def setup_connection_and_db_from_config(app_config, use_pymongo=False):
     Optionally use pymongo instead of mongokit.
     """
     connection = connect_database_from_config(app_config, use_pymongo)
-    database_path = app_config.get('db_name', 'mediagoblin')
+    database_path = app_config['db_name']
     db = connection[database_path]
 
     if not use_pymongo:

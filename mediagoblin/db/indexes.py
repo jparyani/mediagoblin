@@ -45,11 +45,13 @@ REQUIRED READING:
 To remove deprecated indexes
 ----------------------------
 
-Removing deprecated indexes is easier, just do:
+Removing deprecated indexes is the same, just move the index into the
+deprecated indexes mapping.
 
-INACTIVE_INDEXES = {
-    'collection_name': [
-        'deprecated_index_identifier1', 'deprecated_index_identifier2']}
+DEPRECATED_INDEXES = {
+    'collection_name': {
+        'deprecated_index_identifier1': {
+            'index': [index_foo_goes_here]}}
         
 ... etc.
 
