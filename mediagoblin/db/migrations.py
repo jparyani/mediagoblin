@@ -15,10 +15,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.db.util import RegisterMigration
+from mediagoblin.util import cleaned_markdown_conversion
+
 
 # Please see mediagoblin/tests/test_migrations.py for some examples of
 # basic migrations.
 
-# @RegisterMigration(1)
-# def do_something(database):
-#     pass
+
+@RegisterMigration(1)
+def user_add_bio_html(database):
+    """
+    Users now have richtext bios via Markdown, reflect appropriately.
+    """
+    collection = database['users']
+
+    target = collection.find(
+        {'bio_html': {'$exists': False}})
+
+    for document in target:
+        document['bio_html'] = cleaned_markdown_conversion(
+            document['bio'])
+        collection.save(document)
