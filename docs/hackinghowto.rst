@@ -85,7 +85,7 @@ After installing the requirements, follow these steps:
 
 1. Clone the repository::
 
-       git clone http://git.gitorious.org/mediagoblin/mediagoblin.git
+       git clone git://gitorious.org/mediagoblin/mediagoblin.git
 
 2. Bootstrap and run buildout::
 
