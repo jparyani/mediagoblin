@@ -39,6 +39,8 @@ from mediagoblin.db.util import ObjectId
 
 from itertools import izip, count
 
+DISPLAY_IMAGE_FETCHING_ORDER = [u'medium', u'original', u'thumb']
+
 TESTS_ENABLED = False
 def _activate_testing():
     """

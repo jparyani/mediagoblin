@@ -57,36 +57,43 @@ def process_media_initial(media_id):
         thumb.save(thumb_file, "JPEG", quality=90)
 
     """
-    Create medium file, used in `media.html`
+    If the size of the original file exceeds the specified size of a `medium`
+    file, a `medium.jpg` files is created and later associated with the media
+    entry.
     """
     medium = Image.open(queued_filename)
-    medium.thumbnail(MEDIUM_SIZE, Image.ANTIALIAS)
+    medium_processed = False
 
-    if medium.mode != "RGB":
-        medium = medium.convert("RGB")
+    if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1]:
+        medium.thumbnail(MEDIUM_SIZE, Image.ANTIALIAS)
 
-    medium_filepath = create_pub_filepath(entry, 'medium.jpg')
+        if medium.mode != "RGB":
+            medium = medium.convert("RGB")
 
-    medium_file = mgg.public_store.get_file(medium_filepath, 'w')
-    with medium_file:
-        medium.save(medium_file, "JPEG", quality=90)
+        medium_filepath = create_pub_filepath(entry, 'medium.jpg')
+
+        medium_file = mgg.public_store.get_file(medium_filepath, 'w')
+        with medium_file:
+            medium.save(medium_file, "JPEG", quality=90)
+            medium_processed = True
 
     # we have to re-read because unlike PIL, not everything reads
     # things in string representation :)
     queued_file = file(queued_filename, 'rb')
 
     with queued_file:
-        main_filepath = create_pub_filepath(entry, queued_filepath[-1])
+        original_filepath = create_pub_filepath(entry, queued_filepath[-1])
         
-        with mgg.public_store.get_file(main_filepath, 'wb') as main_file:
-            main_file.write(queued_file.read())
+        with mgg.public_store.get_file(original_filepath, 'wb') as original_file:
+            original_file.write(queued_file.read())
 
     mgg.queue_store.delete_file(queued_filepath)
     entry['queued_media_file'] = []
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict['thumb'] = thumb_filepath
-    media_files_dict['main'] = main_filepath
-    media_files_dict['medium'] = medium_filepath
+    media_files_dict['original'] = original_filepath
+    if medium_processed:
+        media_files_dict['medium'] = medium_filepath
     entry['state'] = u'processed'
     entry.save()
 
