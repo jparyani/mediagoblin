@@ -37,6 +37,32 @@ from mediagoblin.util import DISPLAY_IMAGE_FETCHING_ORDER
 
 
 class User(Document):
+    """
+    A user of MediaGoblin.
+
+    Structure:
+     - username: The username of this user, should be unique to this instance.
+     - email: Email address of this user
+     - created: When the user was created
+     - plugin_data: a mapping of extra plugin information for this User.
+       Nothing uses this yet as we don't have plugins, but someday we
+       might... :)
+     - pw_hash: Hashed version of user's password.
+     - email_verified: Whether or not the user has verified their email or not.
+       Most parts of the site are disabled for users who haven't yet.
+     - status: whether or not the user is active, etc.  Currently only has two
+       values, 'needs_email_verification' or 'active'.  (In the future, maybe
+       we'll change this to a boolean with a key of 'active' and have a
+       separate field for a reason the user's been disabled if that's
+       appropriate... email_verified is already separate, after all.)
+     - verification_key: If the user is awaiting email verification, the user
+       will have to provide this key (which will be encoded in the presented
+       URL) in order to confirm their email as active.
+     - is_admin: Whether or not this user is an administrator or not.
+     - url: this user's personal webpage/website, if appropriate.
+     - bio: biography of this user (plaintext, in markdown)
+     - bio_html: biography of the user converted to proper HTML.
+    """
     __collection__ = 'users'
 
     structure = {
