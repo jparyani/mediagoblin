@@ -194,7 +194,14 @@ If it's installed, check the mongodb log.  On my machine, that's
 
     old lock file: /var/lib/mongodb/mongod.lock.  probably means...
 
-Then delete the lock file and relaunch mongodb.
+in that case you might have had an unclean shutdown.  Try::
+
+    sudo mongod --repair
+
+If that didn't work, just delete the lock file and relaunch mongodb.
+
+Anyway, then start the mongodb server in whatever way is appropriate
+for your distro / OS.
 
 
 pkg_resources.DistributionNotFound: distribute
