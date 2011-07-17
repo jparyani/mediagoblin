@@ -36,3 +36,19 @@ def user_add_bio_html(database):
         document['bio_html'] = cleaned_markdown_conversion(
             document['bio'])
         collection.save(document)
+
+
+@RegisterMigration(2)
+def mediaentry_mediafiles_main_to_original(database):
+    """
+    Rename "main" media file to "original".
+    """
+    collection = database['media_entries']
+    target = collection.find(
+        {'media_files.main': {'$exists': True}})
+
+    for document in target:
+        original = document['media_files'].pop('main')
+        document['media_files']['original'] = original
+
+        collection.save(document)
