@@ -42,7 +42,8 @@ def creature_add_magical_powers(database):
     Add lists of magical powers.
 
     This defaults to [], an empty list.  Since we haven't declared any
-    magical powers, all existing monsters should
+    magical powers, all existing monsters, setting to an empty list is
+    fine.
     """
     database['creatures'].update(
         {'magical_powers': {'$exists': False}},
