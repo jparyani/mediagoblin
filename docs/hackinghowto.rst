@@ -197,6 +197,18 @@ If it's installed, check the mongodb log.  On my machine, that's
 Then delete the lock file and relaunch mongodb.
 
 
+pkg_resources.DistributionNotFound: distribute
+----------------------------------------------
+
+If you get this while running buildout::
+
+   pkg_resources.DistributionNotFound: distribute
+
+Try this commmand instead::
+
+   python bootstrap.py --distribute && ./bin/buildout
+
+
 Wiping your user data
 =====================
 
