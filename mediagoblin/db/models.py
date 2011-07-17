@@ -171,7 +171,6 @@ class MediaEntry(Document):
        viewing the work.  (currently unused.)
 
      - thumbnail_file: Deprecated... we should remove this ;)
-
     """
     __collection__ = 'media_entries'
 
@@ -294,6 +293,18 @@ class MediaEntry(Document):
 
 
 class MediaComment(Document):
+    """
+    A comment on a MediaEntry.
+
+    Structure:
+     - media_entry: The media entry this comment is attached to
+     - author: user who posted this comment
+     - created: when the comment was created
+     - content: plaintext (but markdown'able) version of the comment's content.
+     - content_html: the actual html-rendered version of the comment displayed.
+       Run through Markdown and the HTML cleaner.
+    """
+
     __collection__ = 'media_comments'
 
     structure = {
