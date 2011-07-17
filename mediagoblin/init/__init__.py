@@ -20,6 +20,8 @@ from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
 from mediagoblin import mg_globals
 from mediagoblin.mg_globals import setup_globals
+from mediagoblin.db.open import setup_connection_and_db_from_config
+from mediagoblin.db.util import MigrationManager
 from mediagoblin.workbench import WorkbenchManager
 
 
@@ -41,6 +43,33 @@ def setup_global_and_app_config(config_path):
         global_config=global_config)
 
     return global_config, app_config
+
+
+def setup_database():
+    app_config = mg_globals.app_config
+
+    # This MUST be imported so as to set up the appropriate migrations!
+    from mediagoblin.db import migrations
+
+    # Set up the database
+    connection, db = setup_connection_and_db_from_config(app_config)
+
+    # Init the migration number if necessary
+    migration_manager = MigrationManager(db)
+    migration_manager.install_migration_version_if_missing()
+
+    # Tiny hack to warn user if our migration is out of date
+    if not migration_manager.database_at_latest_migration():
+        print (
+            "*WARNING:* Your migrations are out of date, "
+            "maybe run ./bin/gmg migrate?")
+
+    setup_globals(
+        db_connection = connection,
+        database = db)
+
+    return connection, db
+
 
 def get_jinja_loader(user_template_path=None):
     """
