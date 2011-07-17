@@ -21,15 +21,10 @@ import routes
 from webob import Request, exc
 
 from mediagoblin import routing, util, storage
-from mediagoblin.db.open import setup_connection_and_db_from_config
-from mediagoblin.db.util import MigrationManager
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init import get_jinja_loader, get_staticdirector, \
-    setup_global_and_app_config, setup_workbench
-
-# This MUST be imported so as to set up the appropriate migrations!
-from mediagoblin.db import migrations
+    setup_global_and_app_config, setup_workbench, setup_database
 
 
 class MediaGoblinApp(object):
@@ -60,18 +55,7 @@ class MediaGoblinApp(object):
         ##########################################
 
         # Set up the database
-        self.connection, self.db = setup_connection_and_db_from_config(
-            app_config)
-
-        # Init the migration number if necessary
-        migration_manager = MigrationManager(self.db)
-        migration_manager.install_migration_version_if_missing()
-
-        # Tiny hack to warn user if our migration is out of date
-        if not migration_manager.database_at_latest_migration():
-            print (
-                "*WARNING:* Your migrations are out of date, "
-                "maybe run ./bin/gmg migrate?")
+        self.connection, self.db = setup_database()
 
         # Get the template environment
         self.template_loader = get_jinja_loader(
@@ -108,8 +92,6 @@ class MediaGoblinApp(object):
 
         setup_globals(
             app=self,
-            db_connection=self.connection,
-            database=self.db,
             public_store=self.public_store,
             queue_store=self.queue_store)
 
