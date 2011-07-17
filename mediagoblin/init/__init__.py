@@ -23,6 +23,7 @@ from mediagoblin.mg_globals import setup_globals
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.db.util import MigrationManager
 from mediagoblin.workbench import WorkbenchManager
+from mediagoblin.storage import storage_system_from_config
 
 
 class Error(Exception): pass
@@ -101,6 +102,19 @@ def get_staticdirector(app_config):
         raise ImproperlyConfigured(
             "One of direct_remote_path or "
             "direct_remote_paths must be provided")
+
+
+def setup_storage():
+    app_config = mg_globals.app_config
+
+    public_store = storage_system_from_config(app_config, 'publicstore')
+    queue_store = storage_system_from_config(app_config, 'queuestore')
+
+    setup_globals(
+        public_store = public_store,
+        queue_store = queue_store)
+
+    return public_store, queue_store
 
 
 def setup_workbench():

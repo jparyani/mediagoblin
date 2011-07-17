@@ -20,11 +20,12 @@ import urllib
 import routes
 from webob import Request, exc
 
-from mediagoblin import routing, util, storage
+from mediagoblin import routing, util
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init import get_jinja_loader, get_staticdirector, \
-    setup_global_and_app_config, setup_workbench, setup_database
+    setup_global_and_app_config, setup_workbench, setup_database, \
+    setup_storage
 
 
 class MediaGoblinApp(object):
@@ -62,10 +63,7 @@ class MediaGoblinApp(object):
             app_config.get('user_template_path'))
         
         # Set up storage systems
-        self.public_store = storage.storage_system_from_config(
-            app_config, 'publicstore')
-        self.queue_store = storage.storage_system_from_config(
-            app_config, 'queuestore')
+        self.public_store, self.queue_store = setup_storage()
 
         # set up routing
         self.routing = routing.get_mapper()
@@ -90,10 +88,7 @@ class MediaGoblinApp(object):
         # object.
         #######################################################
 
-        setup_globals(
-            app=self,
-            public_store=self.public_store,
-            queue_store=self.queue_store)
+        setup_globals(app = self)
 
         # Workbench *currently* only used by celery, so this only
         # matters in always eager mode :)
