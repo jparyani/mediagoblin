@@ -216,6 +216,82 @@ class BasicFileStorage(StorageInterface):
         return self._resolve_filepath(filepath)
 
 
+class MountStorage(StorageInterface):
+    def __init__(self, **kwargs):
+        self.mounttab = {}
+
+    def mount(self, dirpath, backend):
+        """
+        Mount a new backend under dirpath
+        """
+        new_ent = clean_listy_filepath(dirpath)
+        new_ent.append(u'')
+
+        print "Mounting:", repr(new_ent)
+        already, rem_1, table, rem_2 = self.resolve_to_backend(new_ent, True)
+        print "===", repr(already), repr(rem_1), repr(rem_2)
+
+        assert rem_1.pop(-1) == u'', "Internal Error 1"
+        assert rem_2.pop(-1) == u'', "Internal Error 2"
+        assert (already is None) or (len(rem_2) > 0), "Already mounted"
+        for part in rem_2:
+            table[part] = {}
+            table = table[part]
+        table[None] = backend
+
+    def resolve_to_backend(self, filepath, extra_info = False):
+        """
+        extra_info = True is for internal use!
+
+        Normally, returns the backend and the filepath inside that backend.
+
+        With extra_info = True it returns the last directory node and the
+        remaining filepath from there in addition.
+        """
+        table = self.mounttab
+        filepath = filepath[:]
+        res_fp = None
+        while True:
+            new_be = table.get(None)
+            if (new_be is not None) or res_fp is None:
+                res_be = new_be
+                res_fp = filepath[:]
+                res_extra = (table, filepath[:])
+                # print "... New res: %r, %r, %r" % (res_be, res_fp, res_extra)
+            if len(filepath) == 0:
+                break
+            query = filepath.pop(0)
+            entry = table.get(query)
+            if entry is not None:
+                table = entry
+                res_extra = (table, filepath[:])
+            else:
+                break
+        if extra_info:
+            return (res_be, res_fp) + res_extra
+        else:
+            return (res_be, res_fp)
+
+    def __repr__(self, table = None, indent = ""):
+        res = []
+        if table is None:
+            res.append("MountStorage<")
+            table = self.mounttab
+        v = table.get(None)
+        if v:
+            res.append(indent + "On this level: " + repr(v))
+        for k, v in table.iteritems():
+            if k == None:
+                continue
+            res.append(indent + repr(k) + ":")
+            res += self.__repr__(v, indent + "  ")
+        if table is self.mounttab:
+            res.append(">")
+            return "\n".join(res)
+        else:
+            return res
+
+
 ###########
 # Utilities
 ###########
