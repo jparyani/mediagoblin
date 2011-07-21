@@ -24,6 +24,7 @@ import urllib
 from math import ceil
 from string import strip
 import copy
+import wtforms
 
 from babel.localedata import exists
 import jinja2
@@ -374,14 +375,13 @@ TAGS_DELIMITER = u' '
 TAGS_CASE_SENSITIVE = False
 TAGS_MAX_LENGTH = 50
 
-def convert_to_tag_list(request):
+def convert_to_tag_list(tag_string):
     """
-    Filter input from any "tags" field in the session,
+    Filter input from incoming string containing user tags,
 
     Strips trailing, leading, and internal whitespace, and also converts
     the "tags" text into an array of tags
     """
-    tag_string = request.POST.get('tags')
     taglist = []
     if tag_string:
 
@@ -394,22 +394,29 @@ def convert_to_tag_list(request):
             # Do not permit duplicate tags
             if tag.strip() and tag not in taglist:
 
-                # Enforce maximum tag length
-                if len(tag) > TAGS_MAX_LENGTH:
-                    tag = tag[:TAGS_MAX_LENGTH] + u'...'
-                    messages.add_message(
-                             request, messages.WARNING, \
-                             u'Tag truncated to ' + unicode(TAGS_MAX_LENGTH) + \
-                             u' characters.')
-                    messages.add_message(
-                       request, messages.INFO, \
-                       u'Why the long tag? Seriously.')
-
                 if TAGS_CASE_SENSITIVE:
                     taglist.append(tag.strip())
                 else:
                     taglist.append(tag.strip().lower())
     return taglist
+
+
+TOO_LONG_TAG_WARNING = \
+    u'Tags must be shorter than %s characters.  Tags that are too long: %s'
+
+def tag_length_validator(form, field):
+    """
+    Make sure tags do not exceed the maximum tag length.
+    """
+    tags = convert_to_tag_list(field.data)
+    too_long_tags = [
+        tag for tag in tags
+        if len(tag) > TAGS_MAX_LENGTH]
+
+    if too_long_tags:
+        raise wtforms.ValidationError(
+            TOO_LONG_TAG_WARNING % (
+                TAGS_MAX_LENGTH, ', '.join(too_long_tags)))
 
 
 MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')

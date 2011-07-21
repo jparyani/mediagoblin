@@ -16,6 +16,7 @@
 
 
 import wtforms
+from mediagoblin.util import tag_length_validator, TOO_LONG_TAG_WARNING
 
 
 class SubmitStartForm(wtforms.Form):
@@ -24,4 +25,6 @@ class SubmitStartForm(wtforms.Form):
         [wtforms.validators.Length(min=0, max=500)])
     description = wtforms.TextAreaField('Description of this work')
     file = wtforms.FileField('File')
-    tags = wtforms.TextField('Tags')
+    tags = wtforms.TextField(
+        'Tags',
+        [tag_length_validator])

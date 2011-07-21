@@ -16,6 +16,7 @@
 
 
 import wtforms
+from mediagoblin.util import tag_length_validator, TOO_LONG_TAG_WARNING
 
 
 class EditForm(wtforms.Form):
@@ -25,7 +26,9 @@ class EditForm(wtforms.Form):
     slug = wtforms.TextField(
         'Slug')
     description = wtforms.TextAreaField('Description of this work')
-    tags = wtforms.TextField('Tags')
+    tags = wtforms.TextField(
+        'Tags',
+        [tag_length_validator])
 
 class EditProfileForm(wtforms.Form):
     bio = wtforms.TextAreaField('Bio',

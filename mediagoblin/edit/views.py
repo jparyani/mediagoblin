@@ -55,6 +55,7 @@ def edit_media(request, media):
         else:
             media['title'] = request.POST['title']
             media['description'] = request.POST.get('description')
+            media['tags'] = convert_to_tag_list(request.POST.get('tags'))
             
             md = markdown.Markdown(
                 safe_mode = 'escape')
@@ -63,9 +64,6 @@ def edit_media(request, media):
                     media['description']))
 
             media['slug'] = request.POST['slug']
-
-            # Process the user's folksonomy "tags"
-            media['tags'] = convert_to_tag_list(request)
             media.save()
 
             return redirect(request, "mediagoblin.user_pages.media_home",
