@@ -78,6 +78,8 @@ class User(Document):
         'url' : unicode,
         'bio' : unicode,     # May contain markdown
         'bio_html': unicode, # May contain plaintext, or HTML
+        'fp_token': unicode, # forgotten password verification key
+        'fp_token_expire': datetime.datetime
         }
 
     required_fields = ['username', 'created', 'pw_hash', 'email']

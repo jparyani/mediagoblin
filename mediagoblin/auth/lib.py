@@ -47,7 +47,7 @@ def bcrypt_check_password(raw_pass, stored_hash, extra_salt=None):
     # number (thx to zooko on this advice, which I hopefully
     # incorporated right.)
     #
-    # See also: 
+    # See also:
     rand_salt = bcrypt.gensalt(5)
     randplus_stored_hash = bcrypt.hashpw(stored_hash, rand_salt)
     randplus_hashed_pass = bcrypt.hashpw(hashed_pass, rand_salt)
@@ -99,7 +99,7 @@ def send_verification_email(user, request):
 
     Args:
     - user: a user object
-    - request: the request 
+    - request: the request
     """
     rendered_email = render_template(
         request, 'mediagoblin/auth/verification_email.txt',
@@ -116,8 +116,38 @@ def send_verification_email(user, request):
         [user['email']],
         # TODO
         # Due to the distributed nature of GNU MediaGoblin, we should
-        # find a way to send some additional information about the 
-        # specific GNU MediaGoblin instance in the subject line. For 
-        # example "GNU MediaGoblin @ Wandborg - [...]".   
+        # find a way to send some additional information about the
+        # specific GNU MediaGoblin instance in the subject line. For
+        # example "GNU MediaGoblin @ Wandborg - [...]".
         'GNU MediaGoblin - Verify your email!',
         rendered_email)
+
+
+EMAIL_FP_VERIFICATION_TEMPLATE = (
+    u"http://{host}{uri}?"
+    u"userid={userid}&token={fp_verification_key}")
+
+def send_fp_verification_email(user,request):
+    """
+    Send the verification email to users to change their password.
+
+    Args:
+    - user: a user object
+    - request: the request
+    """
+    rendered_email = render_template(
+        request, 'mediagoblin/auth/fp_verification_email.txt',
+        {'username': user['username'],
+         'verification_url': EMAIL_FP_VERIFICATION_TEMPLATE.format(
+                host=request.host,
+                uri=request.urlgen('mediagoblin.auth.verify_forgot_password'),
+                userid=unicode(user['_id']),
+                fp_verification_key=user['fp_verification_key'])})
+
+    # TODO: There is no error handling in place
+    send_email(
+        mg_globals.email_sender_address,
+        [user['email']],
+        'GNU MediaGoblin - Change forgotten password!',
+        rendered_email)
+

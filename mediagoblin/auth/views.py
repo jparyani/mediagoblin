@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import uuid
+import datetime
 
 from webob import exc
 
@@ -22,10 +23,11 @@ from mediagoblin import messages
 from mediagoblin import mg_globals
 from mediagoblin.util import render_to_response, redirect, render_404
 from mediagoblin.util import pass_to_ugettext as _
-from mediagoblin.db.util import ObjectId
+from mediagoblin.db.util import ObjectId, InvalidId
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
-from mediagoblin.auth.lib import send_verification_email
+from mediagoblin.auth.lib import send_verification_email, \
+                                 send_fp_verification_email
 
 
 def register(request):
@@ -187,3 +189,93 @@ def resend_activation(request):
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
         user=request.user['username'])
+
+
+def forgot_password(request):
+    """
+    Forgot password view
+
+    Sends an email whit an url to renew forgoten password
+    """
+    fp_form = auth_forms.ForgotPassForm(request.POST)
+
+    if request.method == 'POST' and fp_form.validate():
+        user = request.db.User.one(
+               {'$or': [{'username': request.POST['username']},
+               {'email': request.POST['username']}]})
+
+        if not user:
+            fp_form.username.errors.append(
+                u"Sorry, the username doesn't exists")
+        else:
+            user['fp_verification_key'] = unicode(uuid.uuid4())
+            user['fp_token_expire'] = datetime.datetime.now() + \
+                                      datetime.timedelta(days=10)
+            user.save()
+
+            send_fp_verification_email(user, request)
+
+            return redirect(request, 'mediagoblin.auth.fp_email_sent')
+
+    return render_to_response(
+    request,
+    'mediagoblin/auth/forgot_password.html',
+    {'fp_form': fp_form})
+
+
+def verify_forgot_password(request):
+    if request.method == 'GET':
+       # If we don't have userid and token parameters, we can't do anything;404
+        if (not request.GET.has_key('userid') or
+           not request.GET.has_key('token')):
+            return exc.HTTPNotFound('You must provide userid and token')
+
+        # check if it's a valid Id
+        try:
+            user = request.db.User.find_one(
+                {'_id': ObjectId(unicode(request.GET['userid']))})
+        except InvalidId:
+            return exc.HTTPNotFound('Invalid id')
+
+        # check if we have a real user and correct token
+        if (user and
+           user['fp_verification_key'] == unicode(request.GET['token'])):
+            cp_form = auth_forms.ChangePassForm(request.GET)
+
+            return render_to_response(
+                   request,
+                   'mediagoblin/auth/change_fp.html',
+                   {'cp_form': cp_form})
+        # in case there is a valid id but no user whit that id in the db
+        else:
+            return exc.HTTPNotFound('User not found')
+    if request.method == 'POST':
+        # verification doing here to prevent POST values modification
+        try:
+            user = request.db.User.find_one(
+                {'_id': ObjectId(unicode(request.POST['userid']))})
+        except InvalidId:
+            return exc.HTTPNotFound('Invalid id')
+
+        cp_form = auth_forms.ChangePassForm(request.POST)
+
+        # verification doing here to prevent POST values modification
+        # if token and id are correct they are able to change their password
+        if (user and
+           user['fp_verification_key'] == unicode(request.POST['token'])):
+
+            if cp_form.validate():
+                user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+                    request.POST['password'])
+                user['fp_verification_key'] = None
+                user.save()
+
+                return redirect(request,
+                            'mediagoblin.auth.fp_changed_success')
+            else:
+                return render_to_response(
+                       request,
+                       'mediagoblin/auth/change_fp.html',
+                       {'cp_form': cp_form})
+        else:
+            return exc.HTTPNotFound('User not found')
