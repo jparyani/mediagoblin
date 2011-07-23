@@ -237,6 +237,7 @@ class MountStorage(StorageInterface):
         for part in rem_2:
             table[part] = {}
             table = table[part]
+        assert not table.has_key(None), "Huh? Already mounted?!"
         table[None] = backend
 
     def resolve_to_backend(self, filepath, extra_info = False):
@@ -272,19 +273,19 @@ class MountStorage(StorageInterface):
         else:
             return (res_be, res_fp)
 
-    def __repr__(self, table = None, indent = ""):
+    def __repr__(self, table = None, indent = []):
         res = []
         if table is None:
             res.append("MountStorage<")
             table = self.mounttab
         v = table.get(None)
         if v:
-            res.append(indent + "On this level: " + repr(v))
+            res.append("  " * len(indent) + repr(indent) + ": " + repr(v))
         for k, v in table.iteritems():
             if k == None:
                 continue
-            res.append(indent + repr(k) + ":")
-            res += self.__repr__(v, indent + "  ")
+            res.append("  " * len(indent) + repr(k) + ":")
+            res += self.__repr__(v, indent + [k])
         if table is self.mounttab:
             res.append(">")
             return "\n".join(res)
