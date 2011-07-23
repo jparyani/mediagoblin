@@ -292,6 +292,34 @@ class MountStorage(StorageInterface):
         else:
             return res
 
+    def file_exists(self, filepath):
+        backend, filepath = self.resolve_to_backend(filepath)
+        return backend.file_exists(filepath)
+
+    def get_file(self, filepath, mode='r'):
+        backend, filepath = self.resolve_to_backend(filepath)
+        return backend.get_file(filepath, mode)
+
+    def delete_file(self, filepath):
+        backend, filepath = self.resolve_to_backend(filepath)
+        return backend.delete_file(filepath)
+
+    def file_url(self, filepath):
+        backend, filepath = self.resolve_to_backend(filepath)
+        return backend.file_url(filepath)
+
+    def get_local_path(self, filepath):
+        backend, filepath = self.resolve_to_backend(filepath)
+        return backend.get_local_path(filepath)
+
+    def copy_locally(self, filepath, dest_path):
+        """
+        Need to override copy_locally, because the local_storage
+        attribute is not correct.
+        """
+        backend, filepath = self.resolve_to_backend(filepath)
+        backend.copy_locally(filepath, dest_path)
+
 
 ###########
 # Utilities
