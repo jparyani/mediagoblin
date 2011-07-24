@@ -1,0 +1,17 @@
+diff --git a/mediagoblin/templates/mediagoblin/user_pages/user.html b/mediagoblin/templates/mediagoblin/user_pages/user.html
+index 9d99ac5..a2b85af 100644
+--- a/mediagoblin/templates/mediagoblin/user_pages/user.html
++++ b/mediagoblin/templates/mediagoblin/user_pages/user.html
+@@ -42,9 +42,9 @@
+       <a href={{ request.urlgen(
+                      'mediagoblin.user_pages.atom_feed',
+                      user=user.username) }}>atom feed</a>
+-      {% else %}
+-      {# This *should* not occur as the view makes sure we pass in a user. #}
+-      <p>Sorry, no such user found.<p/>
+     </div>
++  {% else %}
++    {# This *should* not occur as the view makes sure we pass in a user. #}
++    <p>Sorry, no such user found.<p/>
+   {% endif %}
+ {% endblock %}
