@@ -63,6 +63,10 @@ Further, if you isolate your changes to a branch, then you can work on
 multiple issues at the same time and they don't conflict with one
 another.
 
+Name your branches using the isue number and something that makes it clear
+what it's about.  For example, if you were working on tagging, you
+might name your branch ``360_tagging``.
+
 
 Properly document your changes
 ------------------------------
