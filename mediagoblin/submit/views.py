@@ -84,7 +84,8 @@ def submit_start(request):
             entry.save(validate=True)
 
             # queue it for processing
-            process_media_initial.delay(unicode(entry['_id']))
+            result = process_media_initial.delay(unicode(entry['_id']))
+            entry['queued_task_id'] = result.task_id
 
             add_message(request, SUCCESS, 'Woohoo! Submitted!')
 

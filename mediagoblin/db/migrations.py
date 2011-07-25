@@ -52,3 +52,15 @@ def mediaentry_mediafiles_main_to_original(database):
         document['media_files']['original'] = original
 
         collection.save(document)
+
+
+@RegisterMigration(3)
+def mediaentry_add_queued_task_id(database):
+    """
+    Add the 'queued_task_id' field for entries that don't have it.
+    """
+    collection = database['media_entries']
+    collection.update(
+        {'queued_task_id': {'$exists': False}},
+        {'$set': {'queued_task_id': None}},
+        multi=True)

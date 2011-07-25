@@ -162,6 +162,8 @@ class MediaEntry(Document):
        queued for processing.  This is stored in the mg_globals.queue_store
        storage system.
 
+     - queued_task_id: celery task id.  Use this to fetch the task state.
+
      - media_files: Files relevant to this that have actually been processed
        and are available for various types of display.  Stored like:
          {'thumb': ['dir1', 'dir2', 'pic.png'}
@@ -190,6 +192,7 @@ class MediaEntry(Document):
         # For now let's assume there can only be one main file queued
         # at a time
         'queued_media_file': [unicode],
+        'queued_task_id': unicode,
 
         # A dictionary of logical names to filepaths
         'media_files': dict,
