@@ -1,10 +1,12 @@
 body {
-  background-color: #1F1F1F;
-  color: #aaa;
+  background-color: #111;
+  background-image:url("../images/background.png");
+  color: #999;
   font-family: sans-serif;
   padding:none;
   margin:0px;
   height:100%;
+  font: 16px "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 form {
@@ -18,23 +20,31 @@ form {
   font-family: 'Carter One';
   font-style: normal;
   font-weight: normal;
-  src: local('CarterOne'), url('http://themes.googleusercontent.com/font?kit=FWNn6ITYqL6or7ZTmBxRhq3fkYX5z1QtDUdIWoaaD_k') format('woff');
+  src: local('CarterOne'), url('http://themes.googleusercontent.com/font?kit=VjW2qt1pkqVtO22ObxgEBRsxEYwM7FgeyaSgU71cLG0') format('woff');
 }
 
 /* text styles */
 
 h1{
-  font-family: 'Carter One', arial, serif;
+  font-family:'Carter One',arial,serif;
   margin-bottom: 15px;
   margin-top:15px;
+  color:#fff;
+  font-size: 30px;
 }
 
 h2{
   margin-top:20px;
+  color:#fff;
+}
+
+h3{
+  border-bottom:1px solid #222;
+  font-size:18px;
 }
 
 a {
-  color: #fff;
+  color: #999;
 }
 
 label {
@@ -49,11 +59,10 @@ label {
 }
 
 .mediagoblin_header {
-  width:100%;
   height:36px;
-  background-color:#2F2F2F;
   padding-top:14px;
-  margin-bottom:40px;
+  margin-bottom:20px;
+  border-bottom:1px solid #222222;
 }
 
 .header_submit{
@@ -75,12 +84,10 @@ label {
 }
 
 .mediagoblin_footer {
-  width:100%;
   height:30px;
-  background-color:#2F2F2F;
+  border-top:1px solid #222222;
   bottom:0px;
   padding-top:8px;
-  position:absolute;
   text-align:center;
   font-size:14px;
   color:#999;
@@ -129,7 +136,7 @@ text-align:center;
 /* forms */
 
 .form_box {
-  background-color:#393939;
+  background-color:#222;
   background-image:url("../images/background_lines.png");
   background-repeat:repeat-x;
   font-size:18px;
@@ -181,6 +188,7 @@ text-align:center;
 .comment_author {
   margin-bottom:40px;
   padding-top:4px;
+  font-size:14px;
 }
 
 .comment_content p {
@@ -213,7 +221,7 @@ img.media_icon{
   display:block;
   float:left;
   text-align:center;
-  background-color:#393939;
+  background-color:#222;
   text-decoration:none;
   padding:12px 0pt;
   font-family:'Carter One', arial, serif;
