@@ -371,10 +371,6 @@ def clean_html(html):
     return HTML_CLEANER.clean_html(html)
 
 
-TAGS_DELIMITER = u' '
-TAGS_CASE_SENSITIVE = False
-TAGS_MAX_LENGTH = 50
-
 def convert_to_tag_list(tag_string):
     """
     Filter input from incoming string containing user tags,
@@ -389,12 +385,13 @@ def convert_to_tag_list(tag_string):
         stripped_tag_string = u' '.join(tag_string.strip().split())
 
         # Split the tag string into a list of tags
-        for tag in stripped_tag_string.split(TAGS_DELIMITER):
+        for tag in stripped_tag_string.split(
+                                       mg_globals.app_config['tags_delimiter']):
 
             # Do not permit duplicate tags
             if tag.strip() and tag not in taglist:
 
-                if TAGS_CASE_SENSITIVE:
+                if mg_globals.app_config['tags_case_sensitive']:
                     taglist.append(tag.strip())
                 else:
                     taglist.append(tag.strip().lower())
@@ -411,12 +408,12 @@ def tag_length_validator(form, field):
     tags = convert_to_tag_list(field.data)
     too_long_tags = [
         tag for tag in tags
-        if len(tag) > TAGS_MAX_LENGTH]
+        if len(tag) > mg_globals.app_config['tags_max_length']]
 
     if too_long_tags:
         raise wtforms.ValidationError(
-            TOO_LONG_TAG_WARNING % (
-                TAGS_MAX_LENGTH, ', '.join(too_long_tags)))
+            TOO_LONG_TAG_WARNING % (mg_globals.app_config['tags_max_length'], \
+                                    ', '.join(too_long_tags)))
 
 
 MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')

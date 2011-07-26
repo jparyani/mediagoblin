@@ -19,9 +19,9 @@ from webob import exc
 from string import split
 
 from mediagoblin import messages
+from mediagoblin import mg_globals
 from mediagoblin.util import (
-    render_to_response, redirect, clean_html, TAGS_DELIMITER, \
-    convert_to_tag_list)
+    render_to_response, redirect, clean_html, convert_to_tag_list)
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry
@@ -39,7 +39,7 @@ def edit_media(request, media):
         title = media['title'],
         slug = media['slug'],
         description = media['description'],
-        tags = TAGS_DELIMITER.join(media['tags']))
+        tags = mg_globals.app_config['tags_delimiter'].join(media['tags']))
 
     if request.method == 'POST' and form.validate():
         # Make sure there isn't already a MediaEntry with such a slug
