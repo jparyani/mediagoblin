@@ -50,6 +50,10 @@
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                             user= request.user['username']) }}">
                   {{ request.user['username'] }}</a>'s account 
+                <!-- the following link should only appear when verification is needed -->
+                <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                                            user= request.user['username']) }}" class="highlight">
+                  needs verification!</a>
                 (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">logout</a>)
               {% else %}
                  <a href="{{ request.urlgen('mediagoblin.auth.login') }}">

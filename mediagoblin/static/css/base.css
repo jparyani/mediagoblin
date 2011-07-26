@@ -47,6 +47,10 @@ a {
   color: #999;
 }
 
+a.highlight {
+  color: #fff;
+}
+
 label {
   font-weight: normal;
 }
