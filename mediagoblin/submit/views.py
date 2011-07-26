@@ -62,7 +62,7 @@ def submit_start(request):
             entry['uploader'] = request.user['_id']
 
             # Process the user's folksonomy "tags"
-            entry['tags'] = convert_to_tag_list(request)
+            entry['tags'] = convert_to_tag_list(request.POST.get('tags'))
 
             # Save, just so we can get the entry id for the sake of using
             # it to generate the file path
