@@ -18,18 +18,18 @@
 
 if [ "$1" = "-h" ]
 then
-  echo "$0 [-h] [-c paste.ini] ARGS_to_paster"
-  echo "   For example:"
-  echo "       $0 -c fcgi.ini port_number=23371"
-  exit 1
+    echo "$0 [-h] [-c paste.ini] ARGS_to_paster"
+    echo "   For example:"
+    echo "       $0 -c fcgi.ini port_number=23371"
+    exit 1
 fi
 
 PASTE_INI=paste.ini
 if [ "$1" = "-c" ]
 then
-  PASTE_INI="$2"
-  shift
-  shift
+    PASTE_INI="$2"
+    shift
+    shift
 fi
 
 if [ -f ./bin/paster ]; then
