@@ -21,7 +21,8 @@ from string import split
 from mediagoblin import messages
 from mediagoblin import mg_globals
 from mediagoblin.util import (
-    render_to_response, redirect, clean_html, convert_to_tag_list)
+    render_to_response, redirect, clean_html, convert_to_tag_list_of_dicts,
+    media_tags_as_string)
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry
@@ -39,7 +40,7 @@ def edit_media(request, media):
         title = media['title'],
         slug = media['slug'],
         description = media['description'],
-        tags = mg_globals.app_config['tags_delimiter'].join(media['tags']))
+        tags = media_tags_as_string(media['tags']))
 
     if request.method == 'POST' and form.validate():
         # Make sure there isn't already a MediaEntry with such a slug
@@ -55,7 +56,8 @@ def edit_media(request, media):
         else:
             media['title'] = request.POST['title']
             media['description'] = request.POST.get('description')
-            media['tags'] = convert_to_tag_list(request.POST.get('tags'))
+            media['tags'] = convert_to_tag_list_of_dicts(
+                                   request.POST.get('tags'))
             
             md = markdown.Markdown(
                 safe_mode = 'escape')

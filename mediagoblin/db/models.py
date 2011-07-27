@@ -82,7 +82,7 @@ class MediaEntry(Document):
         'media_type': unicode,
         'media_data': dict, # extra data relevant to this media_type
         'plugin_data': dict, # plugins can dump stuff here.
-        'tags': [unicode],
+        'tags': [dict],
         'state': unicode,
 
         # For now let's assume there can only be one main file queued

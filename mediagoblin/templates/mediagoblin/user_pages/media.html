@@ -111,9 +111,7 @@
         {% endif %}
       </p>
       {% if media.tags %}
-        <p>
-          {{ ' '.join(media.tags) }}
-        </p>
+        {% include "mediagoblin/utils/tags.html" %}
       {% endif %}
     </div>
   {% else %}

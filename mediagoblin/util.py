@@ -371,7 +371,7 @@ def clean_html(html):
     return HTML_CLEANER.clean_html(html)
 
 
-def convert_to_tag_list(tag_string):
+def convert_to_tag_list_of_dicts(tag_string):
     """
     Filter input from incoming string containing user tags,
 
@@ -389,14 +389,28 @@ def convert_to_tag_list(tag_string):
                                        mg_globals.app_config['tags_delimiter']):
 
             # Do not permit duplicate tags
-            if tag.strip() and tag not in taglist:
+            if tag.strip() and tag.strip() not in taglist:
 
                 if mg_globals.app_config['tags_case_sensitive']:
-                    taglist.append(tag.strip())
+                    taglist.append({'name': tag.strip(),
+                                    'slug': slugify(tag.strip())})
                 else:
-                    taglist.append(tag.strip().lower())
+                    taglist.append({'name': tag.strip().lower(),
+                                    'slug': slugify(tag.strip().lower())})
     return taglist
 
+
+def media_tags_as_string(media_entry_tags):
+    """
+    Generate a string from a media item's tags, stored as a list of dicts
+
+    This is the opposite of convert_to_tag_list_of_dicts
+    """
+    media_tag_string = ''
+    if media_entry_tags:
+        media_tag_string = mg_globals.app_config['tags_delimiter'].join(
+                                      [tag['name'] for tag in media_entry_tags])
+    return media_tag_string
 
 TOO_LONG_TAG_WARNING = \
     u'Tags must be shorter than %s characters.  Tags that are too long: %s'
@@ -405,10 +419,10 @@ def tag_length_validator(form, field):
     """
     Make sure tags do not exceed the maximum tag length.
     """
-    tags = convert_to_tag_list(field.data)
+    tags = convert_to_tag_list_of_dicts(field.data)
     too_long_tags = [
-        tag for tag in tags
-        if len(tag) > mg_globals.app_config['tags_max_length']]
+        tag['name'] for tag in tags
+        if len(tag['name']) > mg_globals.app_config['tags_max_length']]
 
     if too_long_tags:
         raise wtforms.ValidationError(
