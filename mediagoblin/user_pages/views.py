@@ -22,8 +22,8 @@ from mediagoblin.util import (
     Pagination, render_to_response, redirect, cleaned_markdown_conversion)
 from mediagoblin.user_pages import forms as user_forms
 
-from mediagoblin.decorators import uses_pagination, get_user_media_entry, \
-    require_active_login
+from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
+    require_active_login)
 
 from werkzeug.contrib.atom import AtomFeed
 

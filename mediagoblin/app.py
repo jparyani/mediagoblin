@@ -23,9 +23,9 @@ from webob import Request, exc
 from mediagoblin import routing, util
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
-from mediagoblin.init import get_jinja_loader, get_staticdirector, \
-    setup_global_and_app_config, setup_workbench, setup_database, \
-    setup_storage
+from mediagoblin.init import (get_jinja_loader, get_staticdirector,
+    setup_global_and_app_config, setup_workbench, setup_database,
+    setup_storage)
 
 
 class MediaGoblinApp(object):
