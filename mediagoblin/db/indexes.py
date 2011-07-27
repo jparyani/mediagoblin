@@ -95,14 +95,14 @@ MEDIAENTRY_INDEXES = {
         # Used for showing media items matching a tag search, most recent first.
         'index': [('state', ASCENDING),
                   ('uploader', ASCENDING),
-                  ('tags', DESCENDING),
+                  ('tags.slug', DESCENDING),
                   ('created', DESCENDING)]},
 
     'state_tags_created': {
         # Indexing on processed?, media tags, and timestamp (across all users)
         # This is used for a front page tag search.
         'index': [('state', ASCENDING),
-                  ('tags', DESCENDING),
+                  ('tags.slug', DESCENDING),
                   ('created', DESCENDING)]}}
 
 
