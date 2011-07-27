@@ -12,7 +12,7 @@ What is GNU MediaGoblin?
 * Federated with OStatus!
 * Customizable!
 * A place for people to collaborate and show off original and derived
-  creations. Free, as in freedom. We’re a GNU project in the making,
+  creations.  Free, as in freedom.  We’re a GNU project in the making,
   afterall.
 
 
@@ -34,5 +34,5 @@ Where is the documentation?
 ===========================
 
 Documentation is located in the ``docs/`` directory in a "raw"
-restructured-text form.  It is also mirrored at
+restructured-text form.  It is also available at
 http://docs.mediagoblin.org/ in HTML form.
