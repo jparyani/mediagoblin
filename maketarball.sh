@@ -1,28 +1,30 @@
 #!/bin/bash
 
-# usage: maketarball
-#        maketarball <tag>
+# usage: maketarball [-d] <rev-ish>
 #
-# With no arguments, this creates a source tarball from git master with a
-# filename based on today's date.
-#
-# With a <tag> argument, this creates a tarball of the tag.
+# Creates a tarball from a rev-ish.  If -d is passed in, then it adds
+# the date to the directory name.
 #
 # Examples:
 #
-#    ./maketarball
+#    ./maketarball -d master
 #    ./maketarball v0.0.2
+
+if [[ -z "$1" ]]; then
+    echo "Usage: ./maketarball [-d] <rev-ish>";
+    exit 1;
+fi
 
 NOWDATE=`date "+%Y-%m-%d"`
 
-if [ -z "$1" ]
-then
-    REVISH=master
+if [[ $@ == *-d* ]]; then
+    REVISH=$2
     PREFIX="$NOWDATE-$REVISH"
 else
     REVISH=$1
     PREFIX="$REVISH"
 fi
+
 
 # convert PREFIX to all lowercase.
 # nix the v from tag names.
