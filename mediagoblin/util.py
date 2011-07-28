@@ -388,8 +388,8 @@ def convert_to_tag_list_of_dicts(tag_string):
         for tag in stripped_tag_string.split(
                                        mg_globals.app_config['tags_delimiter']):
 
-            # Do not permit duplicate tags
-            if tag.strip() and tag.strip() not in taglist:
+            # Ignore empty or duplicate tags
+            if tag.strip() and tag.strip() not in [t['name'] for t in taglist]:
 
                 if mg_globals.app_config['tags_case_sensitive']:
                     taglist.append({'name': tag.strip(),
