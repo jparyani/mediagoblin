@@ -62,8 +62,14 @@ def register(request):
                 request.POST['password'])
             user.save(validate=True)
 
+            # log the user in
+            request.session['user_id'] = unicode(user['_id'])
+            request.session.save()
+
+            # send verification email
             send_verification_email(user, request)
 
+            # give the user a message and redirect
             messages.add_message(
                 request,
                 messages.INFO,

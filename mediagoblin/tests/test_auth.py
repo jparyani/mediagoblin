@@ -164,6 +164,11 @@ def test_register_views(test_app):
     assert new_user['status'] == u'needs_email_verification'
     assert new_user['email_verified'] == False
 
+    ## Make sure user is logged in
+    request = util.TEMPLATE_TEST_CONTEXT[
+        'mediagoblin/user_pages/user.html']['request']
+    assert request.session['user_id'] == unicode(new_user['_id'])
+
     ## Make sure we get email confirmation, and try verifying
     assert len(util.EMAIL_TEST_INBOX) == 1
     message = util.EMAIL_TEST_INBOX.pop()
