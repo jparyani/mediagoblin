@@ -69,12 +69,8 @@ def register(request):
             # send verification email
             send_verification_email(user, request)
 
-            # give the user a message and redirect
-            messages.add_message(
-                request,
-                messages.INFO,
-                ('Registration successful! '
-                 'You should get a registration email soon.'))
+            # redirect the user to their homepage... there will be a
+            # message waiting for them to verify their email
             return redirect(
                 request, 'mediagoblin.user_pages.user_home',
                 user=user['username'])
