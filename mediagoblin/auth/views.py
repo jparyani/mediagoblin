@@ -166,4 +166,10 @@ def resend_activation(request):
 
     send_verification_email(request.user, request)
 
-    return redirect(request, 'mediagoblin.auth.resend_verification_success')
+    messages.add_message(
+        request,
+        messages.INFO,
+        'Resent your verification email.')
+    return redirect(
+        request, 'mediagoblin.user_pages.user_home',
+        user=request.user['username'])
