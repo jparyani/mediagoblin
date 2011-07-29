@@ -62,7 +62,7 @@
                 {% if request.user.status == "needs_email_verification" %}
                   <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                               user=request.user['username']) }}"
-                     class="highlight">
+                     class="header_submit">
                     needs verification!</a>
                 {% endif %}
 
