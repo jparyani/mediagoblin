@@ -56,7 +56,7 @@
               {% if request.user %}
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                             user= request.user['username']) }}">
-                  {{ request.user['username'] }}</a>'s account 
+                  {{ request.user['username'] }}</a>
 
                 {# the following link should only appear when verification is needed #}
                 {% if request.user.status == "needs_email_verification" %}
