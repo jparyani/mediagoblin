@@ -153,9 +153,9 @@ def test_register_views(test_app):
     ## Did we redirect to the proper page?  Use the right template?
     assert_equal(
         urlparse.urlsplit(response.location)[2],
-        '/auth/register/success/')
+        '/u/happygirl/')
     assert util.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/auth/register_success.html')
+        'mediagoblin/user_pages/user.html')
 
     ## Make sure user is in place
     new_user = mg_globals.database.User.find_one(

@@ -55,16 +55,23 @@ def register(request):
 
         else:
             # Create the user
-            entry = request.db.User()
-            entry['username'] = request.POST['username'].lower()
-            entry['email'] = request.POST['email']
-            entry['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+            user = request.db.User()
+            user['username'] = request.POST['username'].lower()
+            user['email'] = request.POST['email']
+            user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
-            entry.save(validate=True)
+            user.save(validate=True)
 
-            send_verification_email(entry, request)
+            send_verification_email(user, request)
 
-            return redirect(request, "mediagoblin.auth.register_success")
+            messages.add_message(
+                request,
+                messages.INFO,
+                ('Registration successful! '
+                 'You should get a registration email soon.'))
+            return redirect(
+                request, 'mediagoblin.user_pages.user_home',
+                user=user['username'])
 
     return render_to_response(
         request,

@@ -19,9 +19,6 @@ from routes.route import Route
 auth_routes = [
     Route('mediagoblin.auth.register', '/register/',
           controller='mediagoblin.auth.views:register'),
-    Route('mediagoblin.auth.register_success', '/register/success/',
-          template='mediagoblin/auth/register_success.html',
-          controller='mediagoblin.views:simple_template_render'),
     Route('mediagoblin.auth.login', '/login/',
           controller='mediagoblin.auth.views:login'),
     Route('mediagoblin.auth.logout', '/logout/',
