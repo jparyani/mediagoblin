@@ -25,22 +25,49 @@
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_content -%}
-  {% if user %}
-    <!-- this is the "Need verification!" box -->
-    <div class="grid_6 prefix_1 suffix_1 form_box">
-      <h1>Verification needed</h1>
-      <!-- this should only be visible when you are this user -->
-      <p>Almost done! Your account still needs to be verified.</p>
-      <p>An email should arrive in a few moments with instructions on how to do so.</p>
-      <p>In case it doesn't:</p>
-      <!-- I don't know whether the following should be a link or an input button, but it should resend the email -->
-      <a href="somewhere" class="button">Resend verification email</a>
-      <!-- this should be visible if you're somebody else or not logged in -->
-      <p>Someone has registered an account with this username, but it still has to be verified.</p>
-      <p>If you are that person but you've lost your verification email, you can <a href="{{ request.urlgen('mediagoblin.auth.login') }}">log in</a> and resend it.</p>
-    </div>
-    {#
+  {# If no user... #}
+  {% if not user %}
+    <p>Sorry, no such user found.<p/>
+
+  {# User exists, but needs verification #}
+  {% elif user.status == "needs_email_verification" %}
+    {% if user == request.user %}
+      {# this should only be visible when you are this user #}
+      <div class="grid_6 prefix_1 suffix_1 form_box">
+        <h1>Verification needed</h1>
+
+        <p>Almost done! Your account still needs to be verified.</p>
+        <p>
+          An email should arrive in a few moments with instructions
+          on how to do so.
+        </p>
+        <p>In case it doesn't:</p>
+  
+        <a href="somewhere" class="button">Resend verification email</a>
+      </div>
+    {% else %}
+      {# if the user is not you, but still needs to verify their email #}
+      <div class="grid_6 prefix_1 suffix_1 form_box">
+        <h1>Verification needed</h1>
+
+        <p>
+          Someone has registered an account with this username, but it
+          still has to be verified.
+        </p>
+  
+        <p>
+          If you are that person but you've lost your verification
+          email, you can
+          <a href="{{ request.urlgen('mediagoblin.auth.login') }}">log in</a>
+          and resend it.
+        </p>
+      </div>
+    {% endif %}
+
+  {# Active(?) (or at least verified at some point) user, horray! #}
+  {% else %}
     <h1>{{ user.username }}'s profile</h1>
+
     <div class="grid_6 alpha">
       {% include "mediagoblin/utils/profile.html" %}
       {% if request.user['_id'] == user['_id'] or request.user['is_admin'] %}
@@ -48,6 +75,7 @@
                         user.username }}">Edit profile</a>
       {% endif %}
     </div>
+
     <div class="grid_10 omega">
       {% set pagination_base_url = user_gallery_url %}
       {% include "mediagoblin/utils/object_gallery.html" %}
@@ -56,10 +84,7 @@
                      'mediagoblin.user_pages.atom_feed',
                      user=user.username) }}>atom feed</a>
     </div>
+
     <div class="clear"></div>
-    #}
-  {% else %}
-    {# This *should* not occur as the view makes sure we pass in a user. #}
-    <p>Sorry, no such user found.<p/>
   {% endif %}
 {% endblock %}

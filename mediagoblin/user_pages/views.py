@@ -32,10 +32,14 @@ from werkzeug.contrib.atom import AtomFeed
 def user_home(request, page):
     """'Homepage' of a User()"""
     user = request.db.User.find_one({
-            'username': request.matchdict['user'],
-            'status': 'active'})
+            'username': request.matchdict['user']})
     if not user:
         return exc.HTTPNotFound()
+    elif user['status'] != u'active':
+        return render_to_response(
+            request,
+            'mediagoblin/user_pages/user.html',
+            {'user': user})
 
     cursor = request.db.MediaEntry.find(
         {'uploader': user['_id'],
