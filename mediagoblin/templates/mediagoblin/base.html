@@ -45,7 +45,7 @@
                      alt="Mediagoblin logo" />
               </a>
             {% endblock %}
-            {% if request.user %}
+            {% if request.user and request.user['status'] == 'active' %}
               <a class="header_submit"
                  href="{{ request.urlgen('mediagoblin.submit.start') }}">
                 Submit media
