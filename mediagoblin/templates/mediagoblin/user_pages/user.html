@@ -43,7 +43,8 @@
         </p>
         <p>In case it doesn't:</p>
   
-        <a href="somewhere" class="button">Resend verification email</a>
+        <a href="{{ request.urlgen('mediagoblin.auth.resend_verification') }}"
+           class="button">Resend verification email</a>
       </div>
     {% else %}
       {# if the user is not you, but still needs to verify their email #}
