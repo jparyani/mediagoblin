@@ -38,8 +38,9 @@ def require_active_login(controller):
     def new_controller_func(request, *args, **kwargs):
         if request.user and \
                 request.user.get('status') == u'needs_email_verification':
-            return redirect(request,
-                    'mediagoblin.auth.verify_email_notice')
+            return redirect(
+                request, 'mediagoblin.user_pages.user_home',
+                user=request.user['username'])
         elif not request.user or request.user.get('status') != u'active':
             return exc.HTTPFound(
                 location="%s?next=%s" % (
