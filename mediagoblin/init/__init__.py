@@ -61,9 +61,16 @@ def setup_database():
 
     # Tiny hack to warn user if our migration is out of date
     if not migration_manager.database_at_latest_migration():
-        print (
-            "*WARNING:* Your migrations are out of date, "
-            "maybe run ./bin/gmg migrate?")
+        db_migration_num = migration_manager.database_current_migration()
+        latest_migration_num = migration_manager.latest_migration()
+        if db_migration_num < latest_migration_num:
+            print (
+                "*WARNING:* Your migrations are out of date, "
+                "maybe run ./bin/gmg migrate?")
+        elif db_migration_num > latest_migration_num:
+            print (
+                "*WARNING:* Your migrations are out of date... "
+                "in fact they appear to be from the future?!")
 
     setup_globals(
         db_connection = connection,
