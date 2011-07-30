@@ -116,6 +116,9 @@
           </p>
         {% endif %}
       </p>
+      {% if media.tags %}
+        {% include "mediagoblin/utils/tags.html" %}
+      {% endif %}
     </div>
   {% else %}
     <p>Sorry, no such media found.<p/>

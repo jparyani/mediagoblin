@@ -16,11 +16,13 @@
 
 from os.path import splitext
 from cgi import FieldStorage
+from string import split
 
 from werkzeug.utils import secure_filename
 
 from mediagoblin.util import (
-    render_to_response, redirect, cleaned_markdown_conversion)
+    render_to_response, redirect, cleaned_markdown_conversion, \
+    convert_to_tag_list_of_dicts)
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
 from mediagoblin.process_media import process_media_initial
@@ -58,6 +60,10 @@ def submit_start(request):
             
             entry['media_type'] = u'image' # heh
             entry['uploader'] = request.user['_id']
+
+            # Process the user's folksonomy "tags"
+            entry['tags'] = convert_to_tag_list_of_dicts(
+                                request.POST.get('tags'))
 
             # Save, just so we can get the entry id for the sake of using
             # it to generate the file path

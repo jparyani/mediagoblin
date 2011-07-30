@@ -25,6 +25,7 @@ import re
 import urllib
 from math import ceil, floor
 import copy
+import wtforms
 
 from babel.localedata import exists
 import jinja2
@@ -384,8 +385,66 @@ def clean_html(html):
     return HTML_CLEANER.clean_html(html)
 
 
-MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')
+def convert_to_tag_list_of_dicts(tag_string):
+    """
+    Filter input from incoming string containing user tags,
 
+    Strips trailing, leading, and internal whitespace, and also converts
+    the "tags" text into an array of tags
+    """
+    taglist = []
+    if tag_string:
+
+        # Strip out internal, trailing, and leading whitespace
+        stripped_tag_string = u' '.join(tag_string.strip().split())
+
+        # Split the tag string into a list of tags
+        for tag in stripped_tag_string.split(
+                                       mg_globals.app_config['tags_delimiter']):
+
+            # Ignore empty or duplicate tags
+            if tag.strip() and tag.strip() not in [t['name'] for t in taglist]:
+
+                if mg_globals.app_config['tags_case_sensitive']:
+                    taglist.append({'name': tag.strip(),
+                                    'slug': slugify(tag.strip())})
+                else:
+                    taglist.append({'name': tag.strip().lower(),
+                                    'slug': slugify(tag.strip().lower())})
+    return taglist
+
+
+def media_tags_as_string(media_entry_tags):
+    """
+    Generate a string from a media item's tags, stored as a list of dicts
+
+    This is the opposite of convert_to_tag_list_of_dicts
+    """
+    media_tag_string = ''
+    if media_entry_tags:
+        media_tag_string = mg_globals.app_config['tags_delimiter'].join(
+                                      [tag['name'] for tag in media_entry_tags])
+    return media_tag_string
+
+TOO_LONG_TAG_WARNING = \
+    u'Tags must be shorter than %s characters.  Tags that are too long: %s'
+
+def tag_length_validator(form, field):
+    """
+    Make sure tags do not exceed the maximum tag length.
+    """
+    tags = convert_to_tag_list_of_dicts(field.data)
+    too_long_tags = [
+        tag['name'] for tag in tags
+        if len(tag['name']) > mg_globals.app_config['tags_max_length']]
+
+    if too_long_tags:
+        raise wtforms.ValidationError(
+            TOO_LONG_TAG_WARNING % (mg_globals.app_config['tags_max_length'], \
+                                    ', '.join(too_long_tags)))
+
+
+MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')
 
 def cleaned_markdown_conversion(text):
     """
