@@ -35,6 +35,9 @@ EVIL_JPG = pkg_resources.resource_filename(
 EVIL_PNG = pkg_resources.resource_filename(
   'mediagoblin.tests', 'test_submission/evil.png')
 
+GOOD_TAG_STRING = 'yin,yang'
+BAD_TAG_STRING = 'rage,' + 'f' * 26 + 'u' * 26
+
 
 class TestSubmission:
     def setUp(self):
@@ -110,6 +113,42 @@ class TestSubmission:
         assert util.TEMPLATE_TEST_CONTEXT.has_key(
             'mediagoblin/user_pages/user.html')
 
+    def test_tags(self):
+        # Good tag string
+        # --------
+        util.clear_test_template_context()
+        response = self.test_app.post(
+            '/submit/', {
+                'title': 'Balanced Goblin',
+                'tags': GOOD_TAG_STRING
+                }, upload_files=[(
+                    'file', GOOD_JPG)])
+
+        # New media entry with correct tags should be created
+        response.follow()
+        context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/user_pages/user.html']
+        request = context['request']
+        media = request.db.MediaEntry.find({'title': 'Balanced Goblin'})[0]
+        assert_equal(media['tags'],
+                     [{'name': u'yin', 'slug': u'yin'},
+                                            {'name': u'yang', 'slug': u'yang'}])
+
+        # Test tags that are too long
+        # ---------------
+        util.clear_test_template_context()
+        response = self.test_app.post(
+            '/submit/', {
+                'title': 'Balanced Goblin',
+                'tags': BAD_TAG_STRING
+                }, upload_files=[(
+                    'file', GOOD_JPG)])
+
+        # Too long error should be raised
+        context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
+        form = context['submit_form']
+        assert form.tags.errors == [
+            u'Tags must be shorter than 50 characters.  Tags that are too long'\
+             ': ffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuuuu']
 
     def test_malicious_uploads(self):
         # Test non-suppoerted file with non-supported extension
