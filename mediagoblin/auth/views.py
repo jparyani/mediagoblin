@@ -145,23 +145,19 @@ def verify_email(request):
         user['status'] = u'active'
         user['email_verified'] = True
         user.save()
-        verification_successful = True
         messages.add_message(
             request,
             messages.SUCCESS,
             ('Your email address has been verified. '
              'You may now login, edit your profile, and submit images!'))
     else:
-        verification_successful = False
         messages.add_message(request,
                              messages.ERROR,
                             'The verification key or user id is incorrect')
 
-    return render_to_response(
-        request,
-        'mediagoblin/user_pages/user.html',
-        {'user': user,
-        'verification_successful' : verification_successful})
+    return redirect(
+        request, 'mediagoblin.user_pages.user_home',
+        user=request.user['username'])
 
 
 def resend_activation(request):
