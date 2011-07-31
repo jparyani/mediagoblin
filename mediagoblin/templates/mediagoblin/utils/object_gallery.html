@@ -19,7 +19,7 @@
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
 
 {% block object_gallery_content -%}
-  {% if media_entries %}
+  {% if media_entries and media_entries.count() %}
     {% for entry in media_entries %}
       <div class="media_thumbnail">
         <a href="{{ entry.url_for_self(request.urlgen) }}">
@@ -35,7 +35,7 @@
     {% endif %}
   {% else %}
     <p>
-      <i>There doesn't seem to be anything here...</i>
+      <i>There doesn't seem to be any media here yet...</i>
     </p>
   {% endif %}
 {% endblock %}
