@@ -80,6 +80,7 @@
     <div class="grid_10 omega">
       {% set pagination_base_url = user_gallery_url %}
       {% include "mediagoblin/utils/object_gallery.html" %}
+      <div class="clear"></div>
       <p><a href="{{ user_gallery_url }}">View all of {{ user.username }}'s media</a></p>
       <a href={{ request.urlgen(
                      'mediagoblin.user_pages.atom_feed',
