@@ -33,5 +33,9 @@
     {% else %}
       {{ render_pagination(request, pagination) }}
     {% endif %}
+  {% else %}
+    <p>
+      <i>There doesn't seem to be anything here...</i>
+    </p>
   {% endif %}
 {% endblock %}
