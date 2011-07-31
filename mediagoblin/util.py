@@ -405,12 +405,8 @@ def convert_to_tag_list_of_dicts(tag_string):
             # Ignore empty or duplicate tags
             if tag.strip() and tag.strip() not in [t['name'] for t in taglist]:
 
-                if mg_globals.app_config['tags_case_sensitive']:
-                    taglist.append({'name': tag.strip(),
-                                    'slug': slugify(tag.strip())})
-                else:
-                    taglist.append({'name': tag.strip().lower(),
-                                    'slug': slugify(tag.strip().lower())})
+                taglist.append({'name': tag.strip(),
+                                'slug': slugify(tag.strip())})
     return taglist
 
 
