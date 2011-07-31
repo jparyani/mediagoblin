@@ -472,7 +472,10 @@ def storage_system_from_config(paste_config, storage_prefix):
            base_url='/media/',
            base_dir='/var/whatever/media')
     """
-    prefix_re = re.compile('^%s_(.+)$' % re.escape(storage_prefix))
+    if storage_prefix is not None:
+        prefix_re = re.compile('^%s_(.+)$' % re.escape(storage_prefix))
+    else:
+        prefix_re = re.compile('^(.+)$')
 
     config_params = dict(
         [(prefix_re.match(key).groups()[0], value)
@@ -484,6 +487,8 @@ def storage_system_from_config(paste_config, storage_prefix):
         config_params.pop('storage_class')
     else:
         storage_class = "mediagoblin.storage:BasicFileStorage"
+
+    print storage_class, repr(config_params)
 
     storage_class = util.import_component(storage_class)
     return storage_class(**config_params)

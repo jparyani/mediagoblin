@@ -113,9 +113,23 @@ def get_staticdirector(app_config):
 
 def setup_storage():
     app_config = mg_globals.app_config
+    global_config = mg_globals.global_config
 
-    public_store = storage_system_from_config(app_config, 'publicstore')
-    queue_store = storage_system_from_config(app_config, 'queuestore')
+    key_short = 'publicstore'
+    key_long = "storage:" + key_short
+    if global_config.has_key(key_long):
+        print "New style"
+        public_store = storage_system_from_config(global_config[key_long], None)
+    else:
+        print "old style"
+        public_store = storage_system_from_config(app_config, key_short)
+
+    key_short = 'queuestore'
+    key_long = "storage:" + key_short
+    if global_config.has_key(key_long):
+        queue_store = storage_system_from_config(global_config[key_long], None)
+    else:
+        queue_store = storage_system_from_config(app_config, key_short)
 
     setup_globals(
         public_store = public_store,
