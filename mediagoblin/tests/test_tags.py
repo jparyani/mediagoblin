@@ -30,13 +30,6 @@ def test_list_of_dicts_conversion(test_app):
     # Leading, trailing, and internal whitespace should be removed and slugified
     assert util.convert_to_tag_list_of_dicts('sleep , 6    AM, chainsaw! ') == [
                               {'name': u'sleep', 'slug': u'sleep'},
-                              {'name': u'6 am', 'slug': u'6-am'},
-                              {'name': u'chainsaw!', 'slug': u'chainsaw'}]
-
-    # Make sure case-sensitivity is retained when desired
-    mg_globals.app_config['tags_case_sensitive'] = True
-    assert util.convert_to_tag_list_of_dicts('sleep , 6    AM, chainsaw! ') == [
-                              {'name': u'sleep', 'slug': u'sleep'},
                               {'name': u'6 AM', 'slug': u'6-am'},
                               {'name': u'chainsaw!', 'slug': u'chainsaw'}]
 
