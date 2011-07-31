@@ -1,0 +1,39 @@
+{#
+    default/layout.html
+    ~~~~~~~~~~~~~~~~~~~
+
+    Sphinx layout template for the default theme.
+
+    :copyright: Copyright 2007-2010 by the Sphinx team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
+#}
+{% extends "basic/layout.html" %}
+
+{% if theme_collapsiblesidebar|tobool %}
+{% set script_files = script_files + ['_static/sidebar.js'] %}
+{% endif %}
+
+{%- block footer %}
+    <div class="footer">
+    <div>
+    {% trans path=pathto('copyright'), copyright=copyright|e %}&copy; <a href="{{ path }}">Copyright</a> {{ copyright }}.{% endtrans %}
+    {%- if last_updated %}
+      {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
+    {%- endif %}
+    {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
+    </div>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">{{ shorttitle|e }}</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bluesock.org/~willg/" property="cc:attributionName" rel="cc:attributionURL">Will Kahn-Greene</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.<br />
+    </div>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-163840-8']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+{%- endblock %}
