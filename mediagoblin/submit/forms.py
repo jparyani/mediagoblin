@@ -16,7 +16,7 @@
 
 
 import wtforms
-from mediagoblin.util import tag_length_validator, TOO_LONG_TAG_WARNING
+from mediagoblin.util import tag_length_validator
 
 
 class SubmitStartForm(wtforms.Form):
