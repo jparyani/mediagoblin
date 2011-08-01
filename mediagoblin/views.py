@@ -15,17 +15,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin import mg_globals
-from mediagoblin.util import render_to_response
+from mediagoblin.util import render_to_response, Pagination
 from mediagoblin.db.util import DESCENDING
+from mediagoblin.decorators import uses_pagination
 
-def root_view(request):
-    media_entries = request.db.MediaEntry.find(
+@uses_pagination
+def root_view(request, page):
+    cursor = request.db.MediaEntry.find(
         {u'state': u'processed'}).sort('created', DESCENDING)
-    
+
+    pagination = Pagination(page, cursor)
+    media_entries = pagination()
+
     return render_to_response(
         request, 'mediagoblin/root.html',
         {'media_entries': media_entries,
-         'allow_registration': mg_globals.app_config["allow_registration"]})
+         'allow_registration': mg_globals.app_config["allow_registration"],
+         'pagination': pagination})
 
 
 def simple_template_render(request):
