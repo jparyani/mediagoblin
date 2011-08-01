@@ -27,6 +27,7 @@
                          entry['media_files']['thumb']) }}" /></a>
       </div>
     {% endfor %}
+    <div class="clear"></div>
     {% if pagination_base_url %}
       {# different url, so set that and don't keep the get params #}
       {{ render_pagination(request, pagination, pagination_base_url, False) }}
