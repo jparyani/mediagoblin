@@ -23,8 +23,11 @@
 {% block mediagoblin_content %}
   {% if media %}
     <div class="grid_11 alpha">
-      <img class="media_image" src="{{ request.app.public_store.file_url(
-                                         media.get_display_media(media.media_files)) }}" />
+      <div class="media_image_container">
+        <img class="media_image"
+             src="{{ request.app.public_store.file_url(
+                         media.get_display_media(media.media_files)) }}" />
+      </div>
 
       <h2>
         {{media.title}}
