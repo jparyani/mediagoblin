@@ -143,7 +143,7 @@ def media_post_comment(request):
         user = request.matchdict['user'])
 
 
-ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 5
+ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 15
 
 def atom_feed(request):
     """
