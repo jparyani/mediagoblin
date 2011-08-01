@@ -97,9 +97,11 @@
 	      media = media._id)) }}
       </div>
     {% endif %}
+
     <div class="grid_5 omega">
       {% include "mediagoblin/utils/prev_next.html" %}
       <h3>Sidebar content here!</h3>
+
       <p>
         {% if media['uploader'] == request.user['_id'] or 
                                    request.user['is_admin'] %}
@@ -116,6 +118,7 @@
           </p>
         {% endif %}
       </p>
+
       {% if media.tags %}
         {% include "mediagoblin/utils/tags.html" %}
       {% endif %}

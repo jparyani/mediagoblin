@@ -275,3 +275,13 @@ ul.mediagoblin_messages {
   background-color: #f7f7f7;
   color: #272727;
 }
+
+ul.mediaentry_tags {
+  list-style-type: none;
+}
+
+ul.mediaentry_tags li {
+  display: inline;
+  margin: 0px 5px 0px 0px;
+  padding: 0px;
+}
