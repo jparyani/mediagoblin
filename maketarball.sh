@@ -154,10 +154,13 @@ then
         mv docs/build/texinfo/ docs/texinfo/
 
         rm -rf docs/build/
+        rm -rf docs/source/mgext/*.pyc
     else
+        # this is the old directory structure pre-0.0.4
         mv docs/_build/html/ docs/html/
 
         rm -rf docs/_build/
+        rm -rf docs/mgext/*.pyc
     fi
 
     popd
