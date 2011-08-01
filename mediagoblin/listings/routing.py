@@ -14,27 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from routes import Mapper
 
-from mediagoblin.auth.routing import auth_routes
-from mediagoblin.submit.routing import submit_routes
-from mediagoblin.user_pages.routing import user_routes
-from mediagoblin.edit.routing import edit_routes
-from mediagoblin.listings.routing import tag_routes
+from routes.route import Route
 
-
-def get_mapper():
-    mapping = Mapper()
-    mapping.minimization = False
-
-    mapping.connect(
-        "index", "/",
-        controller="mediagoblin.views:root_view")
-
-    mapping.extend(auth_routes, '/auth')
-    mapping.extend(submit_routes, '/submit')
-    mapping.extend(user_routes, '/u')
-    mapping.extend(edit_routes, '/edit')
-    mapping.extend(tag_routes, '/tag')
-
-    return mapping
+tag_routes = [
+    # Route('mediagoblin.listings.tags_home', "/",
+    #    controller="mediagoblin.listings.views:tags_home"),
+    Route('mediagoblin.listings.tags_listing', "/{tag}/",
+        controller="mediagoblin.listings.views:tag_listing")]
+    

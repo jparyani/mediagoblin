@@ -17,9 +17,13 @@
 #}
 
 {% block tags_content -%}
+  <h4>Tags</h4>
   <ul class="mediaentry_tags">
     {% for tag in media.tags %}
-      <li class="tag">{{ tag['name'] }}</li>
+      <li class="tag">
+        <a href="{{ request.urlgen(
+                        'mediagoblin.listings.tags_listing',
+                        tag=tag['slug']) }}">{{ tag['name'] }}</li>
     {% endfor %}
   </ul>
 {% endblock %}
