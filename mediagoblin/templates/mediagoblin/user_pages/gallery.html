@@ -36,10 +36,10 @@
       {% include "mediagoblin/utils/object_gallery.html" %}
     </div>
     <div class="grid_16">
-
-    <a href={{ request.urlgen(
-                   'mediagoblin.user_pages.atom_feed',
-                   user=user.username) }}> atom feed</a>
+      <a href={{ request.urlgen(
+                     'mediagoblin.user_pages.atom_feed',
+                     user=user.username) }}>atom feed</a>
+    </div>
   {% else %}
     {# This *should* not occur as the view makes sure we pass in a user. #}
     <p>Sorry, no such user found.<p/>
