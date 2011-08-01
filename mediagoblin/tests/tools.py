@@ -58,6 +58,9 @@ def suicide_if_bad_celery_environ():
 def get_test_app(dump_old_app=True):
     suicide_if_bad_celery_environ()
 
+    # Make sure we've turned on testing
+    util._activate_testing()
+
     # Leave this imported as it sets up celery.
     from mediagoblin.init.celery import from_tests
 
