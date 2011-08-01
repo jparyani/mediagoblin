@@ -18,7 +18,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "mediagoblin",
-    version = "0.0.3",
+    version = "0.0.4",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     zip_safe=False,
     # scripts and dependencies
