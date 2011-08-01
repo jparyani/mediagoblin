@@ -21,5 +21,8 @@ tag_routes = [
     # Route('mediagoblin.listings.tags_home', "/",
     #    controller="mediagoblin.listings.views:tags_home"),
     Route('mediagoblin.listings.tags_listing', "/{tag}/",
-        controller="mediagoblin.listings.views:tag_listing")]
+        controller="mediagoblin.listings.views:tag_listing"),
+    Route('mediagoblin.listings.tag_atom_feed', "/{tag}/atom/",
+        controller="mediagoblin.listings.views:tag_atom_feed"),
+    ]
     

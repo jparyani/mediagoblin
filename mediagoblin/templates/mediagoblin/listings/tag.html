@@ -17,6 +17,13 @@
 #}
 {% extends "mediagoblin/base.html" %}
 
+{% block mediagoblin_head %}
+    <link rel="alternate" type="application/atom+xml"
+          href="{{ request.urlgen(
+                       'mediagoblin.listings.tag_atom_feed',
+                       tag=tag_slug) }}">
+{% endblock mediagoblin_head %}
+
 {% block mediagoblin_content -%}
   <h1>
     Media tagged with: {{ tag_name }}
@@ -24,5 +31,11 @@
 
   <div class="container_16 media_gallery">
     {% include "mediagoblin/utils/object_gallery.html" %}
+  </div>
+
+  <div class="grid_16">
+    <a href="{{ request.urlgen(
+                  'mediagoblin.listings.tag_atom_feed',
+                  tag=tag_slug) }}">atom feed</a>
   </div>
 {% endblock %}
