@@ -17,60 +17,159 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# usage: maketarball [-d] <rev-ish>
+# usage: maketarball [-drh] REVISH
 #
-# Creates a tarball from a rev-ish.  If -d is passed in, then it adds
-# the date to the directory name.
+# Creates a tarball of the repository at rev REVISH.
+
+# If -d is passed in, then it adds the date to the directory name.
+# 
+# If -r is passed in, then it does some additional things required
+# for a release-ready tarball.
+#
+# If -h is passed in, shows help and exits.
 #
 # Examples:
 #
-#    ./maketarball -d master
 #    ./maketarball v0.0.2
+#    ./maketarball -d master
+#    ./maketarball -r v0.0.2
+
+
+USAGE="Usage: $0 -h | [-dr] REVISH"
+
+REVISH="none"
+PREFIX="none"
+NOWDATE=""
+RELEASE="no"
+
+while getopts ":dhr" opt;
+do
+    case "$opt" in
+        h)
+            echo "$USAGE"
+            echo ""
+            echo "Creates a tarball of the repository at rev REVISH."
+            echo ""
+            echo "   -h   Shows this help message"
+            echo "   -d   Includes date in tar file name and directory"
+            echo "   -r   Performs other release-related actions"
+            exit 0
+            ;;
+        d)
+            NOWDATE=`date "+%Y-%m-%d-"`
+            shift $((OPTIND-1))
+            ;;
+        r)
+            RELEASE="yes"
+            shift $((OPTIND-1))
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            echo "$USAGE" >&2
+            ;;
+    esac 
+done
 
 if [[ -z "$1" ]]; then
-    echo "Usage: $0 [-d] <rev-ish>";
+    echo "$USAGE";
     exit 1;
 fi
 
-NOWDATE=`date "+%Y-%m-%d"`
+REVISH=$1
+PREFIX="$NOWDATE$REVISH"
 
-if [[ $@ == *-d* ]]; then
-    REVISH=$2
-    PREFIX="$NOWDATE-$REVISH"
-else
-    REVISH=$1
-    PREFIX="$REVISH"
-fi
-
-
-# convert PREFIX to all lowercase.
-# nix the v from tag names.
+# convert PREFIX to all lowercase and nix the v from tag names.
 PREFIX=`echo "$PREFIX" | tr '[A-Z]' '[a-z]' | sed s/v//`
 
-echo "== REVISH $REVISH"
-echo "== PREFIX $PREFIX"
+# build the filename base minus the .tar.gz stuff--this is also
+# the directory in the tarball.
+FNBASE="mediagoblin-$PREFIX"
+
+STARTDIR=`pwd`
+
+function cleanup {
+    pushd $STARTDIR
+
+    if [[ -e tmp ]]
+    then
+        echo "+ cleaning up tmp/"
+        rm -rf tmp
+    fi
+    popd
+}
+
+echo "+ Building tarball from: $REVISH"
+echo "+ Using prefix:          $PREFIX"
+echo "+ Release?:              $RELEASE"
 
 echo ""
 
-echo "generating archive...."
+if [[ -e tmp ]]
+then
+    echo "+ there's an existing tmp/.  please remove it."
+    exit 1
+fi
+
+mkdir $STARTDIR/tmp
+echo "+ generating archive...."
 git archive \
     --format=tar \
-    --prefix=mediagoblin-$PREFIX/ \
-    $REVISH > mediagoblin-$PREFIX.tar
+    --prefix=$FNBASE/ \
+    $REVISH > tmp/$FNBASE.tar
 
 if [[ $? -ne 0 ]]
 then
-    echo "git archive command failed.  See above text for reason."
-    if [[ -e mediagoblin-$PREFIX.tar ]]
-    then
-        rm mediagoblin-$PREFIX.tar
-    fi
-    exit 1;
+    echo "+ git archive command failed.  See above text for reason."
+    cleanup
+    exit 1
 fi
 
-echo "compressing...."
-gzip mediagoblin-$PREFIX.tar
 
-echo "archive at mediagoblin-$PREFIX.tar.gz"
+if [[ $RELEASE = "yes" ]]
+then
+    pushd tmp/
+    tar -xvf $FNBASE.tar
 
-echo "done."
+    pushd $FNBASE
+    pushd docs
+
+    echo "+ generating html docs"
+    make html
+    if [[ $? -ne 0 ]]
+    then
+        echo "+ sphinx docs generation failed.  See above text for reason."
+        cleanup
+        exit 1
+    fi
+
+    # NOTE: this doesn't work for gmg prior to v0.0.4.
+    echo "+ generating texinfo docs (doesn't work prior to v0.0.4)"
+    make info
+    popd
+
+    echo "+ moving docs to the right place"
+    if [[ -e docs/build/html/ ]]
+    then
+        mv docs/build/html/ docs/html/
+        mv docs/build/texinfo/ docs/texinfo/
+
+        rm -rf docs/build/
+    else
+        mv docs/_build/html/ docs/html/
+
+        rm -rf docs/_build/
+    fi
+
+    popd
+
+    tar -cvf $FNBASE.tar $FNBASE
+    popd
+fi
+
+
+echo "+ compressing...."
+gzip tmp/$FNBASE.tar
+
+echo "+ archive at tmp/$FNBASE.tar.gz"
+
+echo "+ done."
