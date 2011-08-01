@@ -221,4 +221,4 @@ because he doesn't need it anymore.
 How to learn git
 ================
 
-Check out :ref:`hacking-howto-git`!
+Check out `the wiki <http://wiki.mediagoblin.org/>`_.

@@ -21,7 +21,7 @@ various recipes for getting things done.
    for where we hang out.
 
 For more information on how to get started hacking on GNU MediaGoblin,
-see :ref:`hacking-howto`.
+see `the wiki <http://wiki.mediagoblin.org/>`_.
 
 
 Software Stack

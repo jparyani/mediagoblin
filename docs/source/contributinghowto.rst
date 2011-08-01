@@ -46,8 +46,8 @@ Here are some things you can do today:
     **Write/Fix some code**
 
         If you are a coder and you're looking to code, check out the
-        :ref:`hacking-howto`.  We even have tips on *becoming* a coder
-        and we're willing to help you!
+        `wiki <http://wiki.mediagoblin.org/`_.  We even have tips on 
+        *becoming* a coder and we're willing to help you!
 
 
     **Send encouragement**
@@ -135,7 +135,7 @@ the project, Chris Webber, will make a custom drawing of a goblin
 dedicated specifically to you.
 
 For why we're doing copyright assignment, see the
-:ref:`design-decisions-chapter`.
+`wiki <http://wiki.mediagoblin.org/>`_.
 
 
 .. _filing-bugs:

@@ -15,11 +15,9 @@ Table of Contents:
    mediagoblin
    contributinghowto
    deploymenthowto
-   hackinghowto
    theminghowto
    git
    codebase
-   designdecisions
    vision
 
 
