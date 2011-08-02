@@ -103,11 +103,9 @@
 
     <div class="grid_5 omega">
       {% include "mediagoblin/utils/prev_next.html" %}
-      <h3>Sidebar content here!</h3>
-
-      <p>
         {% if media['uploader'] == request.user['_id'] or 
                                    request.user['is_admin'] %}
+          <h3>Temporary button holder</h3>
           <p>
             <a href="{{ request.urlgen('mediagoblin.edit.edit_media',
                                        user= media.uploader().username,
@@ -120,7 +118,6 @@
                  class="media_icon" />delete
           </p>
         {% endif %}
-      </p>
 
       {% if media.tags %}
         {% include "mediagoblin/utils/tags.html" %}
