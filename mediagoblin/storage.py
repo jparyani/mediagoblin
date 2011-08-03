@@ -19,6 +19,7 @@ import re
 import shutil
 import urlparse
 import uuid
+import cloudfiles
 
 from werkzeug.utils import secure_filename
 
@@ -159,6 +160,61 @@ class StorageInterface(object):
             with self.get_file(filepath, 'rb') as source_file:
                 with file(dest_path, 'wb') as dest_file:
                     dest_file.write(source_file.read())
+
+
+class CloudFilesStorage(StorageInterface):
+    def __init__(self, **kwargs):
+        self.param_container = kwargs.get('cloudfiles_container')
+        self.param_user = kwargs.get('cloudfiles_user')
+        self.param_api_key = kwargs.get('cloudfiles_api_key')
+        self.param_host = kwargs.get('cloudfiles_host')
+        self.param_use_servicenet = kwargs.get('cloudfiles_use_servicenet')
+
+        if not self.param_host:
+            print('No CloudFiles host URL specified, defaulting to Rackspace US')
+
+        self.connection = cloudfiles.get_connection(
+            username=self.param_user,
+            api_key=self.param_api_key,
+            servicenet=True if self.param_use_servicenet == 'true' or \
+                self.param_use_servicenet == True else False)
+
+        if not self.param_container in [self.connection.get_container(self.param_container)]:
+            self.container = self.connection.create_container(self.param_container)
+            self.container.make_public(
+                ttl=60 * 60 * 2)
+        else:
+            self.container = self.connection.get_container(self.param_container)
+
+    def _resolve_filepath(self, filepath):
+            return '-'.join(
+                clean_listy_filepath(filepath))
+
+    def file_exists(self, filepath):
+        try:
+            object = self.container.get_object(
+                self._resolve_filepath(filepath))
+            return True
+        except cloudfiles.errors.NoSuchObject:
+            return False
+
+    def get_file(self, filepath, mode='r'):
+        try:
+            obj = self.container.get_object(
+                self._resolve_filepath(filepath))
+        except cloudfiles.errors.NoSuchObject:
+            obj = self.container.create_object(
+                self._resolve_filepath(filepath))
+
+        return obj
+
+    def delete_file(self, filepath):
+        # TODO: Also delete unused directories if empty (safely, with
+        # checks to avoid race conditions).
+        self.container.delete_object(filepath)
+
+    def file_url(self, filepath):
+        return self.get_file(filepath).public_uri()
 
 
 class BasicFileStorage(StorageInterface):
