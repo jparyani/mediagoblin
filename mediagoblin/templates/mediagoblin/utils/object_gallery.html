@@ -18,15 +18,46 @@
 
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
 
+{% macro media_grid(media_list, col_number=5) %}
+    {% set num_items = media_list.count() %}
+    {% set col_counter = 0 %}
+    {% set row_counter = 0 %}
+    {% set item_counter = 0 %}
+    
+    {% set num_rows = num_items // col_number %}
+    {% if num_items % col_number != 0 %}
+        {% set num_rows = num_rows + 1 %}
+    {% endif %}
+    
+    <div class="thumb_gallery">
+    {% for entry in media_list %}
+        {% if col_counter == 0 %}
+        <div class="thumb_row {% if row_counter == 0 %}thumb_row_first{% endif %}{% if num_rows == row_counter + 1 %}thumb_row_last{% endif %}">
+        {% endif %}
+        
+            <div class="media_thumbnail thumb_entry {% if col_counter == 0 %}thumb_entry_first{% endif %}{% if col_number == col_counter + 1 or num_items == item_counter + 1 %}thumb_entry_last{% endif %}">
+            <a href="{{ entry.url_for_self(request.urlgen) }}">
+            <img src="{{ request.app.public_store.file_url(
+                             entry['media_files']['thumb']) }}" /></a>
+            </div>
+        
+        {% if col_number == col_counter + 1 or num_items == item_counter + 1 %}
+        </div>
+        {% set row_counter = row_counter + 1 %}
+        {% endif %}
+        
+        {% set item_counter = item_counter + 1 %}
+        {% set col_counter = col_counter + 1 %}
+        {% if col_counter == col_number %}
+            {% set col_counter = 0 %}
+        {% endif %}
+    {% endfor %}
+    </div>
+{%- endmacro %}
+
 {% block object_gallery_content -%}
   {% if media_entries and media_entries.count() %}
-    {% for entry in media_entries %}
-      <div class="media_thumbnail">
-        <a href="{{ entry.url_for_self(request.urlgen) }}">
-        <img src="{{ request.app.public_store.file_url(
-                         entry['media_files']['thumb']) }}" /></a>
-      </div>
-    {% endfor %}
+    {{ media_grid(media_entries) }}
     <div class="clear"></div>
     {% if pagination_base_url %}
       {# different url, so set that and don't keep the get params #}
