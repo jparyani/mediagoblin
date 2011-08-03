@@ -33,6 +33,10 @@ hang out, see `our Join page <http://mediagoblin.org/join/>`_
 Where is the documentation?
 ===========================
 
-Documentation is located in the ``docs/`` directory in a "raw"
-restructured-text form.  It is also available at
-http://docs.mediagoblin.org/ in HTML form.
+The beginnings of a user manual is located in the ``docs/`` directory
+in HTML, Texinfo, and source (Restructured Text) forms.  It's also
+available online at http://docs.mediagoblin.org/ in HTML form.
+
+Contributor/developer documentation as well as documentation on the
+project processes and infrastructure is located on 
+`the wiki <http://wiki.mediagoblin.org/>`_.

@@ -18,7 +18,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "mediagoblin",
-    version = "0.0.3",
+    version = "0.0.4",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     zip_safe=False,
     # scripts and dependencies
@@ -49,21 +49,32 @@ setup(
         # 'lxml',
         ],
     test_suite='nose.collector',
-
-    license = 'AGPLv3',
-    author = 'Free Software Foundation and contributors',
-    author_email = 'cwebber@gnu.org',
     entry_points = """\
-      [console_scripts]
-      gmg = mediagoblin.gmg_commands:main_cli
+        [console_scripts]
+        gmg = mediagoblin.gmg_commands:main_cli
 
-      [paste.app_factory]
-      app = mediagoblin.app:paste_app_factory
+        [paste.app_factory]
+        app = mediagoblin.app:paste_app_factory
 
-      [zc.buildout]
-      make_user_dev_dirs = mediagoblin.buildout_recipes:MakeUserDevDirs
+        [zc.buildout]
+        make_user_dev_dirs = mediagoblin.buildout_recipes:MakeUserDevDirs
 
-      [babel.extractors]
-      jinja2 = jinja2.ext:babel_extract
-      """,
+        [babel.extractors]
+        jinja2 = jinja2.ext:babel_extract
+        """,
+ 
+    license='AGPLv3',
+    author='Free Software Foundation and contributors',
+    author_email='cwebber@gnu.org',
+    url="http://mediagoblin.org/",
+    download_url="http://mediagoblin.org/download/",
+    long_description=open('README').read(),
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Environment :: Web Environment",
+        "License :: OSI Approved :: GNU Affero General Public License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Topic :: Internet :: WWW/HTTP :: Dynamic Content"
+        ],
     )
