@@ -225,14 +225,11 @@ class MountStorage(StorageInterface):
         Mount a new backend under dirpath
         """
         new_ent = clean_listy_filepath(dirpath)
-        new_ent.append(u'')
 
         print "Mounting:", repr(new_ent)
         already, rem_1, table, rem_2 = self.resolve_to_backend(new_ent, True)
         print "===", repr(already), repr(rem_1), repr(rem_2)
 
-        assert rem_1.pop(-1) == u'', "Internal Error 1"
-        assert rem_2.pop(-1) == u'', "Internal Error 2"
         assert (already is None) or (len(rem_2) > 0), "Already mounted"
         for part in rem_2:
             table[part] = {}
