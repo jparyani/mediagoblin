@@ -19,6 +19,7 @@ import re
 import shutil
 import urlparse
 import uuid
+import cloudfiles
 
 from werkzeug.utils import secure_filename
 
@@ -28,11 +29,21 @@ from mediagoblin import util
 # Errors
 ########
 
-class Error(Exception): pass
-class InvalidFilepath(Error): pass
-class NoWebServing(Error): pass
 
-class NotImplementedError(Error): pass
+class Error(Exception):
+    pass
+
+
+class InvalidFilepath(Error):
+    pass
+
+
+class NoWebServing(Error):
+    pass
+
+
+class NotImplementedError(Error):
+    pass
 
 
 ###############################################
@@ -117,7 +128,7 @@ class StorageInterface(object):
         Eg, if the filename doesn't exist:
         >>> storage_handler.get_unique_filename(['dir1', 'dir2', 'fname.jpg'])
         [u'dir1', u'dir2', u'fname.jpg']
-        
+
         But if a file does exist, let's get one back with at uuid tacked on:
         >>> storage_handler.get_unique_filename(['dir1', 'dir2', 'fname.jpg'])
         [u'dir1', u'dir2', u'd02c3571-dd62-4479-9d62-9e3012dada29-fname.jpg']
@@ -184,7 +195,7 @@ class BasicFileStorage(StorageInterface):
         """
         return os.path.join(
             self.base_dir, *clean_listy_filepath(filepath))
-        
+
     def file_exists(self, filepath):
         return os.path.exists(self._resolve_filepath(filepath))
 
@@ -214,6 +225,65 @@ class BasicFileStorage(StorageInterface):
 
     def get_local_path(self, filepath):
         return self._resolve_filepath(filepath)
+
+
+class CloudFilesStorage(StorageInterface):
+    def __init__(self, **kwargs):
+        self.param_container = kwargs.get('cloudfiles_container')
+        self.param_user = kwargs.get('cloudfiles_user')
+        self.param_api_key = kwargs.get('cloudfiles_api_key')
+        self.param_host = kwargs.get('cloudfiles_host')
+        self.param_use_servicenet = kwargs.get('cloudfiles_use_servicenet')
+
+        if not self.param_host:
+            print('No CloudFiles host URL specified, '
+                  'defaulting to Rackspace US')
+
+        self.connection = cloudfiles.get_connection(
+            username=self.param_user,
+            api_key=self.param_api_key,
+            servicenet=True if self.param_use_servicenet == 'true' or \
+                self.param_use_servicenet == True else False)
+
+        if not self.param_container == \
+                self.connection.get_container(self.param_container):
+            self.container = self.connection.create_container(
+                self.param_container)
+            self.container.make_public(
+                ttl=60 * 60 * 2)
+        else:
+            self.container = self.connection.get_container(
+                self.param_container)
+
+    def _resolve_filepath(self, filepath):
+        return '/'.join(
+            clean_listy_filepath(filepath))
+
+    def file_exists(self, filepath):
+        try:
+            object = self.container.get_object(
+                self._resolve_filepath(filepath))
+            return True
+        except cloudfiles.errors.NoSuchObject:
+            return False
+
+    def get_file(self, filepath, mode='r'):
+        try:
+            obj = self.container.get_object(
+                self._resolve_filepath(filepath))
+        except cloudfiles.errors.NoSuchObject:
+            obj = self.container.create_object(
+                self._resolve_filepath(filepath))
+
+        return obj
+
+    def delete_file(self, filepath):
+        # TODO: Also delete unused directories if empty (safely, with
+        # checks to avoid race conditions).
+        self.container.delete_object(filepath)
+
+    def file_url(self, filepath):
+        return self.get_file(filepath).public_uri()
 
 
 ###########
@@ -283,7 +353,7 @@ def storage_system_from_config(paste_config, storage_prefix):
          for key, value in paste_config.iteritems()
          if prefix_re.match(key)])
 
-    if config_params.has_key('storage_class'):
+    if 'storage_class' in config_params:
         storage_class = config_params['storage_class']
         config_params.pop('storage_class')
     else:
@@ -291,5 +361,3 @@ def storage_system_from_config(paste_config, storage_prefix):
 
     storage_class = util.import_component(storage_class)
     return storage_class(**config_params)
-
-

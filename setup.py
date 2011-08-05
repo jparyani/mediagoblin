@@ -44,6 +44,7 @@ setup(
         'webtest',
         'ConfigObj',
         'Markdown',
+        'python-cloudfiles',
         ## For now we're expecting that users will install this from
         ## their package managers.
         # 'lxml',
