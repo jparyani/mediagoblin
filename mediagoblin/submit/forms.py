@@ -28,3 +28,6 @@ class SubmitStartForm(wtforms.Form):
     tags = wtforms.TextField(
         'Tags',
         [tag_length_validator])
+    attachment = wtforms.FileField(
+        'Attachment',
+        [wtforms.validators.Optional()])

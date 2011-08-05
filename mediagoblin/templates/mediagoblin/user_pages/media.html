@@ -105,6 +105,20 @@
       {% include "mediagoblin/utils/prev_next.html" %}
       <h3>Sidebar content here!</h3>
 
+      {% if media.attachment_files %}
+      <dl>
+	<dd>Attachments</dd>
+	{% for attachment in media.attachment_files %}
+	<dt>
+	  <a href="{{ request.app.public_store.file_url(
+      attachment.filepath) }}">
+	    {{ attachment.name }}
+	  </a>
+	</dt>
+	{% endfor %}
+      </dl>
+      {% endif %}
+
       <p>
         {% if media['uploader'] == request.user['_id'] or 
                                    request.user['is_admin'] %}

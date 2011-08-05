@@ -28,6 +28,9 @@
       {{ wtforms_util.render_field_div(submit_form.title) }}
       {{ wtforms_util.render_textarea_div(submit_form.description) }}
       {{ wtforms_util.render_field_div(submit_form.tags) }}
+      {% if app_config.allow_attachments %}
+        {{ wtforms_util.render_field_div(submit_form.attachment) }}
+      {% endif %}
       <div class="form_submit_buttons">
       <input type="submit" value="Submit" class="button" />
       </div>

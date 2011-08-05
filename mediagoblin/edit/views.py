@@ -34,11 +34,20 @@ def edit_media(request, media):
     if not may_edit_media(request, media):
         return exc.HTTPForbidden()
 
-    form = forms.EditForm(request.POST,
+
+    defaults = dict(
         title = media['title'],
         slug = media['slug'],
         description = media['description'],
         tags = media_tags_as_string(media['tags']))
+
+    if len(media['attachment_files']):
+        defaults['attachment_name'] = media['attachment_files'][0]['name']
+
+
+    form = forms.EditForm(
+        request.POST,
+        **defaults)
 
     if request.method == 'POST' and form.validate():
         # Make sure there isn't already a MediaEntry with such a slug
@@ -59,6 +68,12 @@ def edit_media(request, media):
             
             media['description_html'] = cleaned_markdown_conversion(
                 media['description'])
+
+            if 'attachment_name' in request.POST:
+                media['attachment_files'][0]['name'] = request.POST['attachment_name']
+
+            if 'attachment_delete' in request.POST and 'y' == request.POST['attachment_delete']:
+                del media['attachment_files'][0]
 
             media['slug'] = request.POST['slug']
             media.save()

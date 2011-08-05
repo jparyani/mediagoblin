@@ -30,6 +30,10 @@ class EditForm(wtforms.Form):
     tags = wtforms.TextField(
         'Tags',
         [tag_length_validator])
+    attachment_name = wtforms.TextField(
+        'Attachment title')
+    attachment_delete = wtforms.BooleanField(
+        'Delete attachment')
 
 class EditProfileForm(wtforms.Form):
     bio = wtforms.TextAreaField('Bio',
