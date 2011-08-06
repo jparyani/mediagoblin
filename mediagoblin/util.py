@@ -240,6 +240,9 @@ class FakeMhost(object):
     def connect(self):
         pass
 
+    def login(self):
+        pass
+
     def sendmail(self, from_addr, to_addrs, message):
         EMAIL_TEST_MBOX_INBOX.append(
             {'from': from_addr,
@@ -267,13 +270,20 @@ def send_email(from_addr, to_addrs, subject, message_body):
      - subject: subject of the email
      - message_body: email body text
     """
-    # TODO: make a mock mhost if testing is enabled
     if TESTS_ENABLED or mg_globals.app_config['email_debug_mode']:
         mhost = FakeMhost()
     elif not mg_globals.app_config['email_debug_mode']:
-        mhost = smtplib.SMTP()
+        if not mg_globals.app_config['email_smtp_host']:
+            mhost = smtplib.SMTP()
+        else:
+            mhost = smtplib.SMTP(
+                mg_globals.app_config['email_smtp_host'],
+                mg_globals.app_config['email_smtp_port'])
 
-    mhost.connect()
+    if mg_globals.app_config['email_smtp_user']:
+        mhost.login(
+            mg_globals.app_config['email_smtp_user'],
+            mg_globals.app_config['email_smtp_pass'])
 
     message = MIMEText(message_body.encode('utf-8'), 'plain', 'utf-8')
     message['Subject'] = subject
