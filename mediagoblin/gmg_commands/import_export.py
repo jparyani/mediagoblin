@@ -38,6 +38,12 @@ def import_export_parse_setup(subparser):
     subparser.add_argument(
         '--mongodump_path', default='mongodump',
         help='mongodump binary')
+    subparser.add_argument(
+        '--mongorestore_path', default='mongorestore',
+        help='mongorestore binary')
+    subparser.add_argument(
+        '--extract_path', default='/tmp/mediagoblin-import',
+        help='the directory to which the tarball should be extracted temporarily')
 
 def _export_database(db, args):
     print "\n== Exporting database ==\n"
@@ -55,12 +61,21 @@ def _export_database(db, args):
     print "\n== Database exported ==\n"
 
 def _import_database(db, args):
-    pass
+    command = '{mongorestore_path} -d {database} -o {mongodump_cache}'.format(
+        mongorestore_path=args.mongorestore_path,
+        database=db.name,
+        mongodump_cache=args.mongodump_cache)
 
 def env_import(args):    
     config, validation_result = read_mediagoblin_config(args.conf_file)
     connection, db = setup_connection_and_db_from_config(
         config['mediagoblin'], use_pymongo=True)
+
+    tf = tarfile.open(
+        args.tar_file,
+        mode='r|gz')
+    
+    tf.extractall(args.extract_path)
 
 def env_export(args):
     config, validation_result = read_mediagoblin_config(args.conf_file)
