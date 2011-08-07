@@ -1,0 +1,8 @@
+[mediagoblin.mediagoblin]
+file_filter = mediagoblin/i18n/<lang>/LC_MESSAGES/mediagoblin.po
+source_file = mediagoblin/i18n/en/LC_MESSAGES/mediagoblin.po
+source_lang = en
+
+[main]
+host = https://www.transifex.net
+
