@@ -23,13 +23,13 @@
   <form action="{{ request.urlgen('mediagoblin.submit.start') }}"
         method="POST" enctype="multipart/form-data">
     <div class="grid_8 prefix_1 suffix_1 form_box">
-      <h1>Submit yer media</h1>
+      <h1>{% trans %}Submit yer media{% endtrans %}</h1>
       {{ wtforms_util.render_field_div(submit_form.file) }}
       {{ wtforms_util.render_field_div(submit_form.title) }}
       {{ wtforms_util.render_textarea_div(submit_form.description) }}
       {{ wtforms_util.render_field_div(submit_form.tags) }}
       <div class="form_submit_buttons">
-      <input type="submit" value="Submit" class="button" />
+      <input type="submit" value="{% trans %}Submit{% endtrans %}" class="button" />
       </div>
     </div>
   </form>
