@@ -117,19 +117,11 @@ def setup_storage():
 
     key_short = 'publicstore'
     key_long = "storage:" + key_short
-    if global_config.has_key(key_long):
-        print "New style"
-        public_store = storage_system_from_config(global_config[key_long], None)
-    else:
-        print "old style"
-        public_store = storage_system_from_config(app_config, key_short)
+    public_store = storage_system_from_config(global_config[key_long], None)
 
     key_short = 'queuestore'
     key_long = "storage:" + key_short
-    if global_config.has_key(key_long):
-        queue_store = storage_system_from_config(global_config[key_long], None)
-    else:
-        queue_store = storage_system_from_config(app_config, key_short)
+    queue_store = storage_system_from_config(global_config[key_long], None)
 
     setup_globals(
         public_store = public_store,
