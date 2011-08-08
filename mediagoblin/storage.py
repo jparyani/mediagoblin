@@ -313,13 +313,16 @@ class MountStorage(StorageInterface):
 
         print "Mounting:", repr(new_ent)
         already, rem_1, table, rem_2 = self._resolve_to_backend(new_ent, True)
-        print "===", repr(already), repr(rem_1), repr(rem_2)
+        print "===", repr(already), repr(rem_1), repr(rem_2), len(table)
 
-        assert (already is None) or (len(rem_2) > 0), "Already mounted"
+        assert (len(rem_2) > 0) or (None not in table), \
+            "That path is already mounted"
+        assert (len(rem_2) > 0) or (len(table)==0), \
+            "A longer path is already mounted here"
+
         for part in rem_2:
             table[part] = {}
             table = table[part]
-        assert not table.has_key(None), "Huh? Already mounted?!"
         table[None] = backend
 
     def _resolve_to_backend(self, filepath, extra_info = False):
