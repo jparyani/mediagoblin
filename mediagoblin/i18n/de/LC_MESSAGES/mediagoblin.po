@@ -1,0 +1,25 @@
+# Translations template for PROJECT.
+# Copyright (C) 2011 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# 
+#   <cwebber@dustycloud.org>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: GNU MediaGoblin\n"
+"Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
+"POT-Creation-Date: 2011-08-06 23:01-0500\n"
+"PO-Revision-Date: 2011-08-07 14:06+0000\n"
+"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"Language-Team: German (http://www.transifex.net/projects/p/mediagoblin/team/de/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: mediagoblin/templates/mediagoblin/root.html:21
+msgid "Welcome to GNU MediaGoblin!"
+msgstr "Willkommen bei GNU MediaGoblin!"
+
+

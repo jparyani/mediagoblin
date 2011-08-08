@@ -300,7 +300,7 @@ def send_email(from_addr, to_addrs, subject, message_body):
 
 
 TRANSLATIONS_PATH = pkg_resources.resource_filename(
-    'mediagoblin', 'translations')
+    'mediagoblin', 'i18n')
 
 
 def locale_to_lower_upper(locale):
