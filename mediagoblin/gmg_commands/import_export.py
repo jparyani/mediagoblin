@@ -19,6 +19,7 @@ from mediagoblin import mg_globals
 from mediagoblin.db import util as db_util
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.init.config import read_mediagoblin_config
+from mediagoblin import util as mg_util
 
 import shlex
 import tarfile
@@ -33,7 +34,7 @@ def import_export_parse_setup(subparser):
         '-cf', '--conf_file', default='mediagoblin.ini',
         help='Config file used to set up environment')
     subparser.add_argument(
-        '--mongodump_cache', default='mongodump',
+        '--mongodump_cache', default='/tmp/mediagoblin/mongodump',
         help='mongodump cache directory')
     subparser.add_argument(
         '--mongodump_path', default='mongodump',
@@ -42,12 +43,15 @@ def import_export_parse_setup(subparser):
         '--mongorestore_path', default='mongorestore',
         help='mongorestore binary')
     subparser.add_argument(
-        '--extract_path', default='/tmp/mediagoblin-import',
+        '--extract_path', default='/tmp/mediagoblin/import',
         help='the directory to which the tarball should be extracted temporarily')
+    subparser.add_argument(
+        '--media_cache_path', default='/tmp/mediagoblin/mediaentries',
+        help='')
 
 def _export_database(db, args):
     print "\n== Exporting database ==\n"
-
+    
     command = '{mongodump_path} -d {database} -o {mongodump_cache}'.format(
         mongodump_path=args.mongodump_path,
         database=db.name,
@@ -59,6 +63,13 @@ def _export_database(db, args):
     p.wait()
 
     print "\n== Database exported ==\n"
+
+def _export_media(db, args):
+    for entry in db.media_entries.find():
+        storage = mg_util.import_component(
+            'mediagoblin.storage:BasicFileStorage')()
+        print(storage.get_file(entry['media_files']['medium']))
+        print(entry)
 
 def _import_database(db, args):
     command = '{mongorestore_path} -d {database} -o {mongodump_cache}'.format(
@@ -74,7 +85,7 @@ def env_import(args):
     tf = tarfile.open(
         args.tar_file,
         mode='r|gz')
-    
+
     tf.extractall(args.extract_path)
 
 def env_export(args):
@@ -90,6 +101,8 @@ def env_export(args):
         if not overwrite == 'yes':
             print "Aborting."
             return
+
+    _export_media(db, args)
 
     tf = tarfile.open(
         args.tar_file,
