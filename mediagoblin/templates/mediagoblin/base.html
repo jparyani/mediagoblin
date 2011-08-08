@@ -85,7 +85,9 @@
       {% block mediagoblin_footer %}
         <div class="container_16">
           <div class="grid_16 mediagoblin_footer">
-            {% trans %}Powered by <a href="http://mediagoblin.org">MediaGoblin</a>, a <a href="http://gnu.org/">GNU project</a>{% endtrans %}
+            {% trans -%}
+              Powered by <a href="http://mediagoblin.org">MediaGoblin</a>, a <a href="http://gnu.org/">GNU project</a>
+            {%- endtrans %}
           </div>
         </div>
       {% endblock %}

@@ -38,13 +38,15 @@
       {% endautoescape %}
 
       <p>
-        {% trans date="%4d-%02d-%02d"|format(media.created.year,
-               media.created.month, media.created.day), user_url=
-               request.urlgen('mediagoblin.user_pages.user_home',user=
-               media.uploader().username),
-               username=media.uploader().username %}
-               &mdash;&nbsp;uploaded on {{ date }} by <a href="{{
-               user_url }}">{{ username }}{% endtrans %}</a>
+        {% trans date="%4d-%02d-%02d"|format(
+                   media.created.year,
+                   media.created.month, media.created.day),
+                 user_url=request.urlgen(
+                   'mediagoblin.user_pages.user_home',
+                   user=media.uploader().username),
+                 username=media.uploader().username -%}
+          &mdash;&nbsp;uploaded on {{ date }} by <a href="{{ user_url }}">{{ username }}</a>
+        {%- endtrans %}
       </p>
       <br />
 

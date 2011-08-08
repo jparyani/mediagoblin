@@ -25,9 +25,11 @@
     <div class="grid_6 prefix_1 suffix_1 form_box">
       <h1>{% trans %}Log in{% endtrans %}</h1>
       {% if login_failed %}
-        <div class="form_field_error">{% trans %}Login failed!{%
-      endtrans %}</div> {% endif %} {{
-      wtforms_util.render_divs(login_form) }}
+        <div class="form_field_error">
+          {% trans %}Login failed!{% endtrans %}
+        </div>
+      {% endif %}
+      {{ wtforms_util.render_divs(login_form) }}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Submit{% endtrans %}" class="button"/>
       </div>
@@ -36,10 +38,13 @@
                style="display: none;"/>
       {% endif %}
       {% if allow_registration %}
-        <p>{% trans %}Don't have an account yet?{% endtrans
-      %}<br /><a href="{{ request.urlgen('mediagoblin.auth.register')
-      }}">{% trans %}Create one here!{% endtrans %}</a></p> {% endif
-      %}
+        <p>
+          {% trans %}Don't have an account yet?{% endtrans %}
+          <br />
+          <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
+            {%- trans %}Create one here!{% endtrans %}</a>
+        </p>
+      {% endif %}
     </div>
   </form>
 {% endblock %}
