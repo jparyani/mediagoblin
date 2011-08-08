@@ -38,24 +38,24 @@
       {% endautoescape %}
 
       <p>
-        &mdash;&nbsp;uploaded on
-        {{ "%4d-%02d-%02d"|format(media.created.year,
-                                  media.created.month, media.created.day) }}
-        by
-        <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                   user= media.uploader().username) }}">
-          {{- media.uploader().username }}</a>
+        {% trans date="%4d-%02d-%02d"|format(media.created.year,
+               media.created.month, media.created.day), user_url=
+               request.urlgen('mediagoblin.user_pages.user_home',user=
+               media.uploader().username),
+               username=media.uploader().username %}
+               &mdash;&nbsp;uploaded on {{ date }} by <a href="{{
+               user_url }}">{{ username }}{% endtrans %}</a>
       </p>
       <br />
 
-      <h3>Comments</h3>
+      <h3>{% trans %}Comments{% endtrans %}</h3>
       {% if request.user %}
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
                                          user= media.uploader().username,
                                          media=media._id) }}" method="POST">
           {{ wtforms_util.render_field_div(comment_form.comment_content) }}
           <div class="form_submit_buttons">
-            <input type="submit" value="Post comment!" class="button" />
+            <input type="submit" value="{% trans %}Post comment!{% endtrans %}" class="button" />
           </div>
         </form>
       {% endif %}
@@ -77,7 +77,7 @@
             <div class="comment_author">&mdash; 
               <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                 user = comment_author['username']) }}">
-              {{ comment_author['username'] }}</a> at 
+              {{ comment_author['username'] }}</a> {% trans %}at{% endtrans %} 
             <!--</div>
             <div class="comment_datetime">-->
               <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
@@ -115,7 +115,7 @@
           </p>
           <p>
             <img src="{{ request.staticdirect('/images/icon_delete.png') }}"
-                 class="media_icon" />delete
+                 class="media_icon" />{% trans %}delete{% endtrans %}
           </p>
         {% endif %}
 
@@ -124,6 +124,6 @@
       {% endif %}
     </div>
   {% else %}
-    <p>Sorry, no such media found.<p/>
+    <p>{% trans %}Sorry, no such media found.{% endtrans %}<p/>
   {% endif %}
 {% endblock %}
