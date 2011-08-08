@@ -19,6 +19,7 @@ from mediagoblin.db.util import ObjectId
 from celery.task import task
 
 from mediagoblin import mg_globals as mgg
+from contextlib import contextmanager
 
 
 THUMB_SIZE = 180, 180
@@ -31,6 +32,12 @@ def create_pub_filepath(entry, filename):
              unicode(entry['_id']),
              filename])
 
+@contextmanager
+def closing(callback):
+    try:
+        yield callback
+    finally:
+        pass
 
 @task
 def process_media_initial(media_id):
@@ -53,7 +60,7 @@ def process_media_initial(media_id):
     thumb_filepath = create_pub_filepath(entry, 'thumbnail.jpg')
 
     thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
-    with thumb_file:
+    with closing(thumb_file):
         thumb.save(thumb_file, "JPEG", quality=90)
 
     """
@@ -73,7 +80,7 @@ def process_media_initial(media_id):
         medium_filepath = create_pub_filepath(entry, 'medium.jpg')
 
         medium_file = mgg.public_store.get_file(medium_filepath, 'w')
-        with medium_file:
+        with closing(medium_file):
             medium.save(medium_file, "JPEG", quality=90)
             medium_processed = True
 
@@ -84,7 +91,7 @@ def process_media_initial(media_id):
     with queued_file:
         original_filepath = create_pub_filepath(entry, queued_filepath[-1])
         
-        with mgg.public_store.get_file(original_filepath, 'wb') as original_file:
+        with closing(mgg.public_store.get_file(original_filepath, 'wb')) as original_file:
             original_file.write(queued_file.read())
 
     mgg.queue_store.delete_file(queued_filepath)

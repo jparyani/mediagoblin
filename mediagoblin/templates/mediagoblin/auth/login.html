@@ -23,20 +23,27 @@
   <form action="{{ request.urlgen('mediagoblin.auth.login') }}"
         method="POST" enctype="multipart/form-data">
     <div class="grid_6 prefix_1 suffix_1 form_box">
-      <h1>Log in</h1>
+      <h1>{% trans %}Log in{% endtrans %}</h1>
       {% if login_failed %}
-        <div class="form_field_error">Login failed!</div>
+        <div class="form_field_error">
+          {% trans %}Login failed!{% endtrans %}
+        </div>
       {% endif %}
       {{ wtforms_util.render_divs(login_form) }}
       <div class="form_submit_buttons">
-        <input type="submit" value="submit" class="button"/>
+        <input type="submit" value="{% trans %}Submit{% endtrans %}" class="button"/>
       </div>
       {% if next %}
         <input type="hidden" name="next" value="{{ next }}" class="button"
                style="display: none;"/>
       {% endif %}
       {% if allow_registration %}
-        <p>Don't have an account yet?<br /><a href="{{ request.urlgen('mediagoblin.auth.register') }}">Create one here!</a></p>
+        <p>
+          {% trans %}Don't have an account yet?{% endtrans %}
+          <br />
+          <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
+            {%- trans %}Create one here!{% endtrans %}</a>
+        </p>
       {% endif %}
     </div>
   </form>

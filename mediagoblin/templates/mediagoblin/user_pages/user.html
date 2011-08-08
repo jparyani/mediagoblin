@@ -27,53 +27,62 @@
 {% block mediagoblin_content -%}
   {# If no user... #}
   {% if not user %}
-    <p>Sorry, no such user found.<p/>
+    <p>{% trans %}Sorry, no such user found.{% endtrans %}<p/>
 
   {# User exists, but needs verification #}
   {% elif user.status == "needs_email_verification" %}
     {% if user == request.user %}
       {# this should only be visible when you are this user #}
       <div class="grid_6 prefix_1 suffix_1 form_box">
-        <h1>Verification needed</h1>
+        <h1>{% trans %}Verification needed{% endtrans %}</h1>
 
-        <p>Almost done! Your account still needs to be verified.</p>
         <p>
-          An email should arrive in a few moments with instructions
-          on how to do so.
+          {% trans -%}
+            Almost done! Your account still needs to be verified.
+          {%- endtrans %}
         </p>
-        <p>In case it doesn't:</p>
+        <p>
+          {% trans -%}
+            An email should arrive in a few moments with instructions on how to do so.
+          {%- endtrans %}
+        </p>
+        <p>{% trans %}In case it doesn't:{% endtrans %}</p>
   
         <a href="{{ request.urlgen('mediagoblin.auth.resend_verification') }}"
-           class="button">Resend verification email</a>
+           class="button">{% trans %}Resend verification email{% endtrans %}</a>
       </div>
     {% else %}
       {# if the user is not you, but still needs to verify their email #}
       <div class="grid_6 prefix_1 suffix_1 form_box">
-        <h1>Verification needed</h1>
+        <h1>{% trans %}Verification needed{% endtrans %}</h1>
 
         <p>
-          Someone has registered an account with this username, but it
-          still has to be verified.
+          {% trans -%}
+            Someone has registered an account with this username, but it still has to be verified.
+          {%- endtrans %}
         </p>
   
         <p>
-          If you are that person but you've lost your verification
-          email, you can
-          <a href="{{ request.urlgen('mediagoblin.auth.login') }}">log in</a>
-          and resend it.
+          {% trans login_url=request.urlgen('mediagoblin.auth.login') -%}
+            If you are that person but you've lost your verification email, you can <a href="{{ login_url }}">log in</a> and resend it.
+          {%- endtrans %}
         </p>
       </div>
     {% endif %}
 
   {# Active(?) (or at least verified at some point) user, horray! #}
   {% else %}
-    <h1>{{ user.username }}'s profile</h1>
+    <h1>
+      {%- trans username=user.username %}{{ username }}'s profile{% endtrans -%}
+    </h1>
 
     <div class="grid_6 alpha">
       {% include "mediagoblin/utils/profile.html" %}
       {% if request.user['_id'] == user['_id'] or request.user['is_admin'] %}
         <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
-                        user.username }}">Edit profile</a>
+                        user.username }}">
+          {%- trans %}Edit profile{% endtrans -%}
+        </a>
       {% endif %}
     </div>
 
@@ -81,10 +90,16 @@
       {% set pagination_base_url = user_gallery_url %}
       {% include "mediagoblin/utils/object_gallery.html" %}
       <div class="clear"></div>
-      <p><a href="{{ user_gallery_url }}">View all of {{ user.username }}'s media</a></p>
-      <a href={{ request.urlgen(
-                     'mediagoblin.user_pages.atom_feed',
-                     user=user.username) }}>atom feed</a>
+      <p>
+        <a href="{{ user_gallery_url }}">
+          {% trans username=user.username -%}
+            View all of {{ username }}'s media{% endtrans -%}
+        </a>
+      </p>
+      <a href="{{ request.urlgen( 'mediagoblin.user_pages.atom_feed',
+                     user=user.username) }}">
+        {%- trans %}atom feed{% endtrans -%}
+      </a>
     </div>
 
     <div class="clear"></div>

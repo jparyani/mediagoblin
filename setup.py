@@ -44,6 +44,7 @@ setup(
         'webtest',
         'ConfigObj',
         'Markdown',
+        'python-cloudfiles',
         ## For now we're expecting that users will install this from
         ## their package managers.
         # 'lxml',
@@ -52,6 +53,7 @@ setup(
     entry_points = """\
         [console_scripts]
         gmg = mediagoblin.gmg_commands:main_cli
+        pybabel = mediagoblin.babel.messages.frontend:main
 
         [paste.app_factory]
         app = mediagoblin.app:paste_app_factory

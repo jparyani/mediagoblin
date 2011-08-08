@@ -22,17 +22,21 @@
 
   {% if request.user %}
     <p>
-      <a href="{{ request.urlgen('mediagoblin.submit.start') }}">Submit an item</a> 
+      <a href="{{ request.urlgen('mediagoblin.submit.start') }}">
+        {%- trans %}Submit an item{% endtrans -%}
+      </a> 
     </p>
   {% else %}
     <p>
-      If you have an account, you can
-      <a href="{{ request.urlgen('mediagoblin.auth.login') }}">Login</a>.
+      {% trans login_url=request.urlgen('mediagoblin.auth.login') -%}
+        If you have an account, you can <a href="{{ login_url }}">Login</a>.
+      {%- endtrans %}
     </p>
     {% if allow_registration %}
       <p>
-        If you don't have an account, please 
-        <a href="{{ request.urlgen('mediagoblin.auth.register') }}">Register</a>.
+        {% trans register_url=request.urlgen('mediagoblin.auth.register') -%}
+          If you don't have an account, please  <a href="{{ register_url }}">Register</a>.
+        {%- endtrans %}
       </p>
     {% endif %}
   {% endif %}
