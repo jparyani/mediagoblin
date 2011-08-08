@@ -287,6 +287,21 @@ class CloudFilesStorage(StorageInterface):
 
 
 class MountStorage(StorageInterface):
+    """
+    Experimental "Mount" virtual Storage Interface
+    
+    This isn't an interface to some real storage, instead
+    it's a redirecting interface, that redirects requests
+    to other "StorageInterface"s.
+    For example, requests for ["store1", "a"] to first
+    storage with the path ["a"], etc.
+    
+    To set this up, you currently need to call the mount()
+    method with the target path and a backend, that shall
+    be available under that target path.
+    You have to mount things in a sensible order,
+    especially you can't mount ["a", "b"] before ["a"].
+    """
     def __init__(self, **kwargs):
         self.mounttab = {}
 
