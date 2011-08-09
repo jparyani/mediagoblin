@@ -478,6 +478,22 @@ def setup_gettext(locale):
         translations=this_gettext)
 
 
+# Force en to be setup before anything else so that
+# mg_globals.translations is never None
+setup_gettext('en')
+
+
+def pass_to_ugettext(*args, **kwargs):
+    """
+    Pass a translation on to the appropriate ugettext method.
+
+    The reason we can't have a global ugettext method is because
+    mg_globals gets swapped out by the application per-request.
+    """
+    return mg_globals.translations.ugettext(
+        *args, **kwargs)
+
+
 PAGINATION_DEFAULT_PER_PAGE = 30
 
 class Pagination(object):
