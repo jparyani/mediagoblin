@@ -21,6 +21,7 @@ from webob import exc
 from mediagoblin import messages
 from mediagoblin import mg_globals
 from mediagoblin.util import render_to_response, redirect
+from mediagoblin.util import pass_to_ugettext as _
 from mediagoblin.db.util import ObjectId
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
@@ -36,7 +37,7 @@ def register(request):
         messages.add_message(
             request,
             messages.WARNING,
-            ('Sorry, registration is disabled on this instance.'))
+            _('Sorry, registration is disabled on this instance.'))
         return redirect(request, "index")
 
     register_form = auth_forms.RegistrationForm(request.POST)
@@ -51,7 +52,7 @@ def register(request):
 
         if users_with_username:
             register_form.username.errors.append(
-                u'Sorry, a user with that name already exists.')
+                _(u'Sorry, a user with that name already exists.'))
 
         else:
             # Create the user
@@ -148,12 +149,13 @@ def verify_email(request):
         messages.add_message(
             request,
             messages.SUCCESS,
-            ('Your email address has been verified. '
-             'You may now login, edit your profile, and submit images!'))
+            _("Your email address has been verified. "
+              "You may now login, edit your profile, and submit images!"))
     else:
-        messages.add_message(request,
-                             messages.ERROR,
-                            'The verification key or user id is incorrect')
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _('The verification key or user id is incorrect'))
 
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
@@ -174,7 +176,7 @@ def resend_activation(request):
     messages.add_message(
         request,
         messages.INFO,
-        'Resent your verification email.')
+        _('Resent your verification email.'))
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
         user=request.user['username'])

@@ -16,34 +16,36 @@
 
 import wtforms
 
+from mediagoblin.util import pass_to_ugettext as _
+
 
 class RegistrationForm(wtforms.Form):
     username = wtforms.TextField(
-        'Username',
+        _('Username'),
         [wtforms.validators.Required(),
          wtforms.validators.Length(min=3, max=30),
          wtforms.validators.Regexp(r'^\w+$')])
     password = wtforms.PasswordField(
-        'Password',
+        _('Password'),
         [wtforms.validators.Required(),
          wtforms.validators.Length(min=6, max=30),
          wtforms.validators.EqualTo(
                 'confirm_password',
-                'Passwords must match.')])
+                _('Passwords must match.'))])
     confirm_password = wtforms.PasswordField(
-        'Confirm password',
+        _('Confirm password'),
         [wtforms.validators.Required()])
     email = wtforms.TextField(
-        'Email address',
+        _('Email address'),
         [wtforms.validators.Required(),
          wtforms.validators.Email()])
 
 
 class LoginForm(wtforms.Form):
     username = wtforms.TextField(
-        'Username',
+        _('Username'),
         [wtforms.validators.Required(),
          wtforms.validators.Regexp(r'^\w+$')])
     password = wtforms.PasswordField(
-        'Password',
+        _('Password'),
         [wtforms.validators.Required()])

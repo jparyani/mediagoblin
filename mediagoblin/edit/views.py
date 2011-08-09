@@ -23,6 +23,7 @@ from mediagoblin import mg_globals
 from mediagoblin.util import (
     render_to_response, redirect, clean_html, convert_to_tag_list_of_dicts,
     media_tags_as_string, cleaned_markdown_conversion)
+from mediagoblin.util import pass_to_ugettext as _
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry
@@ -50,7 +51,7 @@ def edit_media(request, media):
         
         if existing_user_slug_entries:
             form.slug.errors.append(
-                u'An entry with that slug already exists for this user.')
+                _(u'An entry with that slug already exists for this user.'))
         else:
             media['title'] = request.POST['title']
             media['description'] = request.POST.get('description')
@@ -71,7 +72,7 @@ def edit_media(request, media):
             and request.method != 'POST':
         messages.add_message(
             request, messages.WARNING,
-            "You are editing another user's media. Proceed with caution.")
+            _("You are editing another user's media. Proceed with caution."))
         
 
     return render_to_response(
@@ -92,7 +93,7 @@ def edit_profile(request):
         if request.method != 'POST':
             messages.add_message(
                 request, messages.WARNING,
-                "You are editing a user's profile. Proceed with caution.")
+                _("You are editing a user's profile. Proceed with caution."))
     else:
         user = request.user
 

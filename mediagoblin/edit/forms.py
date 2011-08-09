@@ -16,25 +16,28 @@
 
 
 import wtforms
+
 from mediagoblin.util import tag_length_validator, TOO_LONG_TAG_WARNING
+from mediagoblin.util import pass_to_ugettext as _
 
 
 class EditForm(wtforms.Form):
     title = wtforms.TextField(
-        'Title',
+        _('Title'),
         [wtforms.validators.Length(min=0, max=500)])
     slug = wtforms.TextField(
-        'Slug',
-        [wtforms.validators.Required(message="The slug can't be empty")])
+        _('Slug'),
+        [wtforms.validators.Required(message=_("The slug can't be empty"))])
     description = wtforms.TextAreaField('Description of this work')
     tags = wtforms.TextField(
-        'Tags',
+        _('Tags'),
         [tag_length_validator])
 
 class EditProfileForm(wtforms.Form):
-    bio = wtforms.TextAreaField('Bio',
+    bio = wtforms.TextAreaField(
+        _('Bio'),
         [wtforms.validators.Length(min=0, max=500)])
     url = wtforms.TextField(
-        'Website',
+        _('Website'),
         [wtforms.validators.Optional(),
-         wtforms.validators.URL(message='Improperly formed URL')])
+         wtforms.validators.URL(message=_('Improperly formed URL'))])
