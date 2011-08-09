@@ -443,7 +443,7 @@ def clean_listy_filepath(listy_filepath):
     return cleaned_filepath
 
 
-def storage_system_from_config(paste_config, storage_prefix):
+def storage_system_from_config(config):
     """
     Utility for setting up a storage system from the paste app config.
 
@@ -472,15 +472,9 @@ def storage_system_from_config(paste_config, storage_prefix):
            base_url='/media/',
            base_dir='/var/whatever/media')
     """
-    if storage_prefix is not None:
-        prefix_re = re.compile('^%s_(.+)$' % re.escape(storage_prefix))
-    else:
-        prefix_re = re.compile('^(.+)$')
-
-    config_params = dict(
-        [(prefix_re.match(key).groups()[0], value)
-         for key, value in paste_config.iteritems()
-         if prefix_re.match(key)])
+    # This construct is needed, because dict(config) does
+    # not replace the variables in the config items.
+    config_params = dict(config.iteritems())
 
     if 'storage_class' in config_params:
         storage_class = config_params['storage_class']
