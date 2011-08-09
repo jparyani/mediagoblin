@@ -93,7 +93,7 @@ def get_jinja_env(template_loader, locale):
         extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
 
     template_env.install_gettext_callables(
-        mg_globals.translations.gettext,
+        mg_globals.translations.ugettext,
         mg_globals.translations.ngettext)
 
     # All templates will know how to ...
