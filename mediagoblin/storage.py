@@ -482,7 +482,5 @@ def storage_system_from_config(config):
     else:
         storage_class = "mediagoblin.storage:BasicFileStorage"
 
-    print storage_class, repr(config_params)
-
     storage_class = util.import_component(storage_class)
     return storage_class(**config_params)
