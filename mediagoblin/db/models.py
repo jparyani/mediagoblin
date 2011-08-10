@@ -169,8 +169,6 @@ class MediaEntry(Document):
      - attachment_files: A list of "attachment" files, ones that aren't
        critical to this piece of media but may be usefully relevant to people
        viewing the work.  (currently unused.)
-
-     - thumbnail_file: Deprecated... we should remove this ;)
     """
     __collection__ = 'media_entries'
 
@@ -196,10 +194,7 @@ class MediaEntry(Document):
 
         # The following should be lists of lists, in appropriate file
         # record form
-        'attachment_files': list,
-
-        # This one should just be a single file record
-        'thumbnail_file': [unicode]}
+        'attachment_files': list}
 
     required_fields = [
         'uploader', 'created', 'media_type', 'slug']
