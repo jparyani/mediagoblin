@@ -28,11 +28,13 @@ import copy
 import wtforms
 
 from babel.localedata import exists
+from babel.support import LazyProxy
 import jinja2
 import translitcodec
 from webob import Response, exc
 from lxml.html.clean import Cleaner
 import markdown
+from wtforms.form import Form
 
 from mediagoblin import mg_globals
 from mediagoblin import messages
@@ -94,7 +96,7 @@ def get_jinja_env(template_loader, locale):
 
     template_env.install_gettext_callables(
         mg_globals.translations.ugettext,
-        mg_globals.translations.ngettext)
+        mg_globals.translations.ungettext)
 
     # All templates will know how to ...
     # ... fetch all waiting messages and remove them from the queue
@@ -492,6 +494,50 @@ def pass_to_ugettext(*args, **kwargs):
     """
     return mg_globals.translations.ugettext(
         *args, **kwargs)
+
+
+def lazy_pass_to_ugettext(*args, **kwargs):
+    """
+    Lazily pass to ugettext.
+
+    This is useful if you have to define a translation on a module
+    level but you need it to not translate until the time that it's
+    used as a string.
+    """
+    return LazyProxy(pass_to_ugettext, *args, **kwargs)
+
+
+def pass_to_ngettext(*args, **kwargs):
+    """
+    Pass a translation on to the appropriate ngettext method.
+
+    The reason we can't have a global ngettext method is because
+    mg_globals gets swapped out by the application per-request.
+    """
+    return mg_globals.translations.ngettext(
+        *args, **kwargs)
+
+
+def lazy_pass_to_ngettext(*args, **kwargs):
+    """
+    Lazily pass to ngettext.
+
+    This is useful if you have to define a translation on a module
+    level but you need it to not translate until the time that it's
+    used as a string.
+    """
+    return LazyProxy(pass_to_ngettext, *args, **kwargs)
+
+
+def fake_ugettext_passthrough(string):
+    """
+    Fake a ugettext call for extraction's sake ;)
+
+    In wtforms there's a separate way to define a method to translate
+    things... so we just need to mark up the text so that it can be
+    extracted, not so that it's actually run through gettext.
+    """
+    return string
 
 
 PAGINATION_DEFAULT_PER_PAGE = 30
