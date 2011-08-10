@@ -2,42 +2,41 @@
 # Copyright (C) 2011 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # 
-#   <mediagoblin.org@samba-tng.org>, 2011.
-#   <cwebber@dustycloud.org>, 2011.
+#   <jacobo@gnu.org>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
 "POT-Creation-Date: 2011-08-08 22:53-0500\n"
-"PO-Revision-Date: 2011-08-09 19:03+0000\n"
-"Last-Translator: elrond <mediagoblin.org@samba-tng.org>\n"
-"Language-Team: German (http://www.transifex.net/projects/p/mediagoblin/team/de/)\n"
+"PO-Revision-Date: 2011-08-10 03:38+0000\n"
+"Last-Translator: nvjacobo <jacobo@gnu.org>\n"
+"Language-Team: Spanish (Castilian) (http://www.transifex.net/projects/p/mediagoblin/team/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
-"Language: de\n"
+"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: mediagoblin/auth/forms.py:24 mediagoblin/auth/forms.py:46
 msgid "Username"
-msgstr "Benutzername"
+msgstr "Nombre de Usuario"
 
 #: mediagoblin/auth/forms.py:29 mediagoblin/auth/forms.py:50
 msgid "Password"
-msgstr "Passwort"
+msgstr "Contraseña"
 
 #: mediagoblin/auth/forms.py:34
 msgid "Passwords must match."
-msgstr "Passwörter müssen übereinstimmen."
+msgstr ""
 
 #: mediagoblin/auth/forms.py:36
 msgid "Confirm password"
-msgstr "Passwort wiederholen"
+msgstr ""
 
 #: mediagoblin/auth/forms.py:39
 msgid "Email address"
-msgstr "E-Mail-Adresse"
+msgstr ""
 
 #: mediagoblin/auth/views.py:40
 msgid "Sorry, registration is disabled on this instance."
@@ -52,8 +51,6 @@ msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
 msgstr ""
-"Ihre E-Mail-Adresse wurde bestätigt. Sie können sich jetzt anmelden, Ihr "
-"Profil bearbeiten und Bilder hochladen!"
 
 #: mediagoblin/auth/views.py:158
 msgid "The verification key or user id is incorrect"
@@ -62,11 +59,11 @@ msgstr ""
 #: mediagoblin/auth/views.py:179
 #: mediagoblin/templates/mediagoblin/auth/resent_verification_email.html:22
 msgid "Resent your verification email."
-msgstr ""
+msgstr "Reenvíe su correo electrónico de verificación"
 
 #: mediagoblin/edit/forms.py:26 mediagoblin/submit/forms.py:26
 msgid "Title"
-msgstr "Titel"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:29
 msgid "Slug"
@@ -82,43 +79,43 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:38
 msgid "Bio"
-msgstr ""
+msgstr "Bio"
 
 #: mediagoblin/edit/forms.py:41
 msgid "Website"
-msgstr "Webseite"
+msgstr "Sitio web"
 
 #: mediagoblin/edit/forms.py:43
 msgid "Improperly formed URL"
-msgstr ""
+msgstr "URL de forma incorrecta"
 
 #: mediagoblin/edit/views.py:54
 msgid "An entry with that slug already exists for this user."
-msgstr ""
+msgstr "Una entrada con esa ficha ya existe para este usuario."
 
 #: mediagoblin/edit/views.py:75
 msgid "You are editing another user's media. Proceed with caution."
-msgstr ""
+msgstr "."
 
 #: mediagoblin/edit/views.py:96
 msgid "You are editing a user's profile. Proceed with caution."
-msgstr ""
+msgstr "."
 
 #: mediagoblin/submit/forms.py:29
 msgid "File"
-msgstr "Datei"
+msgstr "Archivo"
 
 #: mediagoblin/submit/views.py:45
 msgid "You must provide a file."
-msgstr ""
+msgstr "Usted debe proporcionar un archivo."
 
 #: mediagoblin/submit/views.py:48
 msgid "The file doesn't seem to be an image!"
-msgstr ""
+msgstr "El archivo no parece ser una imagen!"
 
 #: mediagoblin/submit/views.py:96
 msgid "Woohoo! Submitted!"
-msgstr ""
+msgstr "Woohoo! Enviado!"
 
 #: mediagoblin/templates/mediagoblin/base.html:22
 msgid "GNU MediaGoblin"
@@ -126,38 +123,42 @@ msgstr "GNU MediaGoblin"
 
 #: mediagoblin/templates/mediagoblin/base.html:45
 msgid "Mediagoblin logo"
-msgstr "Mediagoblin Logo"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:51
 msgid "Submit media"
-msgstr "Medien hochladen"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:62
 msgid "verify your email!"
-msgstr "Bitte bestätigen Sie Ihre E-Mail-Adresse!"
+msgstr "Verifique su correo electrónico"
 
 #: mediagoblin/templates/mediagoblin/base.html:72
 msgid "Login"
-msgstr "Anmelden"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:88
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU project</a>"
 msgstr ""
+"Potenciado por <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
+"href=\"http://gnu.org/\">GNU project</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:21
 msgid "Welcome to GNU MediaGoblin!"
-msgstr "Willkommen bei GNU MediaGoblin!"
+msgstr "¡Bienvenido a GNU MediaGoblin!"
 
 #: mediagoblin/templates/mediagoblin/root.html:26
 msgid "Submit an item"
-msgstr "Eintrag hochladen"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 #, python-format
 msgid "If you have an account, you can <a href=\"%(login_url)s\">Login</a>."
 msgstr ""
+"Si tiene una cuenta, puede iniciar sesión <a "
+"href=\"%(login_url)s\">Login</a>."
 
 #: mediagoblin/templates/mediagoblin/root.html:37
 #, python-format
@@ -168,18 +169,18 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:26
 msgid "Log in"
-msgstr "Anmelden"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:29
 msgid "Login failed!"
-msgstr "Anmeldung fehlgeschlagen!"
+msgstr "El inicio de sesión fallo"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:34
 #: mediagoblin/templates/mediagoblin/auth/register.html:30
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
 #: mediagoblin/templates/mediagoblin/submit/start.html:32
 msgid "Submit"
-msgstr "Speichern"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:42
 msgid "Don't have an account yet?"
@@ -187,7 +188,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:45
 msgid "Create one here!"
-msgstr ""
+msgstr "Crea una aquí"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:27
 msgid "Create an account!"
@@ -207,15 +208,15 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/edit/edit.html:29
 #, python-format
 msgid "Editing %(media_title)s"
-msgstr "%(media_title)s bearbeiten"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:36
 msgid "Cancel"
-msgstr "Abbrechen"
+msgstr "Cancelar"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
 msgid "Save changes"
-msgstr "Änderungen speichern"
+msgstr "Salvar cambios"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:29
 #, python-format
@@ -234,7 +235,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Submit yer media"
-msgstr "Medien hochladen"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
 #, python-format
@@ -244,7 +245,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:51
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:30
 msgid "Sorry, no such user found."
-msgstr ""
+msgstr "Lo sentimos, no se ha encontrado el usuario."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:37
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:57
@@ -288,7 +289,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:84
 msgid "Edit profile"
-msgstr "Profil bearbeiten"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:95
 #, python-format
