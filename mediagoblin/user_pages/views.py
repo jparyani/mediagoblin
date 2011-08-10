@@ -154,7 +154,7 @@ def atom_feed(request):
                'username': request.matchdict['user'],
                'status': 'active'})
     if not user:
-	return exc.HTTPNotFound()
+        return exc.HTTPNotFound()
 
     cursor = request.db.MediaEntry.find({
                  'uploader': user['_id'],
