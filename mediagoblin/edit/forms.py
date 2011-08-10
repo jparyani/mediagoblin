@@ -18,7 +18,7 @@
 import wtforms
 
 from mediagoblin.util import tag_length_validator, TOO_LONG_TAG_WARNING
-from mediagoblin.util import pass_to_ugettext as _
+from mediagoblin.util import fake_ugettext_passthrough as _
 
 
 class EditForm(wtforms.Form):

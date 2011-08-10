@@ -16,7 +16,10 @@
 
 import wtforms
 
+from mediagoblin.util import pass_to_ugettext as _
+
+
 class MediaCommentForm(wtforms.Form):
-	comment_content = wtforms.TextAreaField(
-		'Comment',
-		[wtforms.validators.Required()])
+    comment_content = wtforms.TextAreaField(
+            _('Comment'),
+            [wtforms.validators.Required()])
