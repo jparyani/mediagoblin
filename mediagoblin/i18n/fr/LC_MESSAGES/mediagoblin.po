@@ -2,124 +2,120 @@
 # Copyright (C) 2011 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # 
-#   <jacobo@gnu.org>, 2011.
+#   <marktraceur@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
 "POT-Creation-Date: 2011-08-08 22:53-0500\n"
-"PO-Revision-Date: 2011-08-10 20:30+0000\n"
-"Last-Translator: nvjacobo <jacobo@gnu.org>\n"
-"Language-Team: Spanish (Castilian) (http://www.transifex.net/projects/p/mediagoblin/team/es/)\n"
+"PO-Revision-Date: 2011-08-10 21:24+0000\n"
+"Last-Translator: MarkTraceur <marktraceur@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
-"Language: es\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
 #: mediagoblin/auth/forms.py:24 mediagoblin/auth/forms.py:46
 msgid "Username"
-msgstr "Nombre de Usuario"
+msgstr ""
 
 #: mediagoblin/auth/forms.py:29 mediagoblin/auth/forms.py:50
 msgid "Password"
-msgstr "Contraseña"
+msgstr ""
 
 #: mediagoblin/auth/forms.py:34
 msgid "Passwords must match."
-msgstr "Las contraseñas deben coincidir."
+msgstr ""
 
 #: mediagoblin/auth/forms.py:36
 msgid "Confirm password"
-msgstr "Confirme su contraseña"
+msgstr ""
 
 #: mediagoblin/auth/forms.py:39
 msgid "Email address"
-msgstr "Dirección de correo electrónico"
+msgstr ""
 
 #: mediagoblin/auth/views.py:40
 msgid "Sorry, registration is disabled on this instance."
-msgstr "Lo sentimos, el registro está deshabilitado en este momento."
+msgstr ""
 
 #: mediagoblin/auth/views.py:55
 msgid "Sorry, a user with that name already exists."
-msgstr "Lo sentimos, un usuario con ese nombre ya existe."
+msgstr ""
 
 #: mediagoblin/auth/views.py:152
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
 msgstr ""
-"Su dirección de correo electrónico ha sido verificada. Ahora puede ingresar,"
-" editar su perfil, y enviar las imágenes!"
 
 #: mediagoblin/auth/views.py:158
 msgid "The verification key or user id is incorrect"
 msgstr ""
-"La clave de la verificación o la identificación del usuario es incorrecta"
 
 #: mediagoblin/auth/views.py:179
 #: mediagoblin/templates/mediagoblin/auth/resent_verification_email.html:22
 msgid "Resent your verification email."
-msgstr "Reenvíe su correo electrónico de verificación"
+msgstr "Nous avons renvoyé votre e-mail de vérification."
 
 #: mediagoblin/edit/forms.py:26 mediagoblin/submit/forms.py:26
 msgid "Title"
-msgstr "Título"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:29
 msgid "Slug"
-msgstr "Ficha"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:30
 msgid "The slug can't be empty"
-msgstr "La ficha no puede estar vacia"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:31
 msgid "Tags"
-msgstr "Etiquetas"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:38
 msgid "Bio"
-msgstr "Bio"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:41
 msgid "Website"
-msgstr "Sitio web"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:43
 msgid "Improperly formed URL"
-msgstr "URL de forma incorrecta"
+msgstr ""
 
 #: mediagoblin/edit/views.py:54
 msgid "An entry with that slug already exists for this user."
-msgstr "Una entrada con esa ficha ya existe para este usuario."
+msgstr ""
 
 #: mediagoblin/edit/views.py:75
 msgid "You are editing another user's media. Proceed with caution."
 msgstr ""
-"Usted está editando el contenido de otro usuario. Proceder con precaución."
 
 #: mediagoblin/edit/views.py:96
 msgid "You are editing a user's profile. Proceed with caution."
-msgstr "Usted está editando un perfil de usuario. Proceder con precaucións."
+msgstr ""
 
 #: mediagoblin/submit/forms.py:29
 msgid "File"
-msgstr "Archivo"
+msgstr ""
 
 #: mediagoblin/submit/views.py:45
 msgid "You must provide a file."
-msgstr "Usted debe proporcionar un archivo."
+msgstr ""
 
 #: mediagoblin/submit/views.py:48
 msgid "The file doesn't seem to be an image!"
-msgstr "El archivo no parece ser una imagen!"
+msgstr ""
 
 #: mediagoblin/submit/views.py:96
 msgid "Woohoo! Submitted!"
-msgstr "Woohoo! Enviado!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:22
 msgid "GNU MediaGoblin"
@@ -127,42 +123,41 @@ msgstr "GNU MediaGoblin"
 
 #: mediagoblin/templates/mediagoblin/base.html:45
 msgid "Mediagoblin logo"
-msgstr "Mediagoblin logo"
+msgstr "logo de MediaGoblin"
 
 #: mediagoblin/templates/mediagoblin/base.html:51
 msgid "Submit media"
-msgstr "Enviar contenido"
+msgstr "Soumettez des médias"
 
 #: mediagoblin/templates/mediagoblin/base.html:62
 msgid "verify your email!"
-msgstr "Verifique su correo electrónico"
+msgstr "vérifiez votre addresse e-mail"
 
 #: mediagoblin/templates/mediagoblin/base.html:72
 msgid "Login"
-msgstr "Conectarse"
+msgstr "Connexion"
 
 #: mediagoblin/templates/mediagoblin/base.html:88
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU project</a>"
 msgstr ""
-"Potenciado por <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
-"href=\"http://gnu.org/\">GNU project</a>"
+"Alimenté par <a href=\"http://mediagoblin.org\">MediaGoblin</a>, un <a "
+"href=\"http://gnu.org/\">projet GNU</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:21
 msgid "Welcome to GNU MediaGoblin!"
-msgstr "¡Bienvenido a GNU MediaGoblin!"
+msgstr "Bienvenue à GNU MediaGoblin!"
 
 #: mediagoblin/templates/mediagoblin/root.html:26
 msgid "Submit an item"
-msgstr "Enviar un item"
+msgstr "Soumettez un fichier"
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 #, python-format
 msgid "If you have an account, you can <a href=\"%(login_url)s\">Login</a>."
 msgstr ""
-"Si tiene una cuenta, puede iniciar sesión <a "
-"href=\"%(login_url)s\">Login</a>."
+"Si vous avez un compte, vous pouvez <a href=\"%(login_url)s\">Connecter</a>."
 
 #: mediagoblin/templates/mediagoblin/root.html:37
 #, python-format
@@ -170,35 +165,35 @@ msgid ""
 "If you don't have an account, please  <a "
 "href=\"%(register_url)s\">Register</a>."
 msgstr ""
-"Si no tienes una cuenta, por favor, <a "
-"href=\"%(register_url)s\">Regístrese</a> ."
+"Si vous n'avez pas un compte, s'il vous plaît, <a "
+"href=\"%(register_url)s\">vous inscrivez</a>."
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:26
 msgid "Log in"
-msgstr "Conectarse"
+msgstr "Connexion"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:29
 msgid "Login failed!"
-msgstr "El inicio de sesión fallo"
+msgstr "Connexion manqué"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:34
 #: mediagoblin/templates/mediagoblin/auth/register.html:30
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
 #: mediagoblin/templates/mediagoblin/submit/start.html:32
 msgid "Submit"
-msgstr "Enviar"
+msgstr "Soumettez"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:42
 msgid "Don't have an account yet?"
-msgstr "¿No tienes una cuenta?"
+msgstr "N'avez-vous toujours un compte?"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:45
 msgid "Create one here!"
-msgstr "Crea una aquí"
+msgstr "En créez un ici!"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:27
 msgid "Create an account!"
-msgstr "Crea una cuenta!"
+msgstr "Créez un compte!"
 
 #: mediagoblin/templates/mediagoblin/auth/verification_email.txt:19
 #, python-format
@@ -210,81 +205,81 @@ msgid ""
 "\n"
 "%(verification_url)s"
 msgstr ""
-"Hola %(username)s , para activar su cuenta MediaGoblin GNU, abra ls "
-"siguiente URL en su navegador: %(verification_url)s "
+"Bonjour, %(username)s,\n"
+"\n"
+"pour activer votre compte de GNU MediaGoblin, ouvrez l'URL suite avec votre navigateur web:\n"
+"\n"
+"%(verification_url)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:29
 #, python-format
 msgid "Editing %(media_title)s"
-msgstr "Edición %(media_title)s "
+msgstr "On édit %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:36
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr "Annulez"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
 msgid "Save changes"
-msgstr "Salvar cambios"
+msgstr "Enregistrez les modifications"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:29
 #, python-format
 msgid "Editing %(username)s's profile"
-msgstr "Edición %(username)s  de perfil"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/listings/tag.html:29
 msgid "Media tagged with:"
-msgstr "El contenido con la etiqueta:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/listings/tag.html:40
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:46
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:101
 msgid "atom feed"
-msgstr "feed Atom"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Submit yer media"
-msgstr "Envíe su contenido"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
-msgstr "Contenido de <a href=\"%(user_url)s\">%(username)s</a>'s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:51
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:30
 msgid "Sorry, no such user found."
-msgstr "Lo sentimos, no se ha encontrado el usuario."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:37
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:57
 msgid "Verification needed"
-msgstr "Verificación necesaria"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:40
 msgid "Almost done! Your account still needs to be verified."
-msgstr "Ya está casi hecho! Su cuenta tiene que ser verificada."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:45
 msgid ""
 "An email should arrive in a few moments with instructions on how to do so."
 msgstr ""
-"Un e-mail debe llegar en unos momentos con las instrucciones para hacerlo."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:49
 msgid "In case it doesn't:"
-msgstr "En caso de que no:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:52
 msgid "Resend verification email"
-msgstr "Reenviar correo electrónico de verificación"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:60
 msgid ""
 "Someone has registered an account with this username, but it still has to be"
 " verified."
 msgstr ""
-"Alguien ha registrado una cuenta con este nombre de usuario, pero todavía "
-"tiene que ser verificado."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:66
 #, python-format
@@ -292,21 +287,19 @@ msgid ""
 "If you are that person but you've lost your verification email, you can <a "
 "href=\"%(login_url)s\">log in</a> and resend it."
 msgstr ""
-"Si usted es esa persona, pero usted ha perdido su correo electrónico de "
-"verificación, usted puede reenviarlo <a href=\"%(login_url)s\">acceder</a>."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:76
 #, python-format
 msgid "%(username)s's profile"
-msgstr "Perfil de %(username)s's"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:84
 msgid "Edit profile"
-msgstr "Editar perfil"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:95
 #, python-format
 msgid "View all of %(username)s's media"
-msgstr "Ver todo el contenido de %(username)s's "
+msgstr ""
 
 
