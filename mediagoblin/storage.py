@@ -290,16 +290,29 @@ class MountStorage(StorageInterface):
     """
     Experimental "Mount" virtual Storage Interface
     
-    This isn't an interface to some real storage, instead
-    it's a redirecting interface, that redirects requests
-    to other "StorageInterface"s.
-    For example, requests for ["store1", "a"] to first
-    storage with the path ["a"], etc.
+    This isn't an interface to some real storage, instead it's a
+    redirecting interface, that redirects requests to other
+    "StorageInterface"s.
+
+    For example, say you have the paths:
+
+     1. ['user_data', 'cwebber', 'avatar.jpg']
+     2. ['user_data', 'elrond', 'avatar.jpg']
+     3. ['media_entries', '34352f304c3f4d0ad8ad0f043522b6f2', 'thumb.jpg']
+
+    You could mount media_entries under CloudFileStorage and user_data
+    under BasicFileStorage.  Then 1 would be passed to
+    BasicFileStorage under the path ['cwebber', 'avatar.jpg'] and 3
+    would be passed to CloudFileStorage under
+    ['34352f304c3f4d0ad8ad0f043522b6f2', 'thumb.jpg'].
+
+    In other words, this is kind of like mounting /home/ and /etc/
+    under different filesystems on your operating system... but with
+    mediagoblin filestorages :)
     
-    To set this up, you currently need to call the mount()
-    method with the target path and a backend, that shall
-    be available under that target path.
-    You have to mount things in a sensible order,
+    To set this up, you currently need to call the mount() method with
+    the target path and a backend, that shall be available under that
+    target path.  You have to mount things in a sensible order,
     especially you can't mount ["a", "b"] before ["a"].
     """
     def __init__(self, **kwargs):
