@@ -20,6 +20,7 @@ from string import split
 
 from werkzeug.utils import secure_filename
 
+from mediagoblin.db.util import ObjectId
 from mediagoblin.util import (
     render_to_response, redirect, cleaned_markdown_conversion, \
     convert_to_tag_list_of_dicts)
@@ -51,6 +52,7 @@ def submit_start(request):
 
             # create entry and save in database
             entry = request.db.MediaEntry()
+            entry['_id'] = ObjectId()
             entry['title'] = (
                 request.POST['title']
                 or unicode(splitext(filename)[0]))
@@ -65,10 +67,6 @@ def submit_start(request):
             # Process the user's folksonomy "tags"
             entry['tags'] = convert_to_tag_list_of_dicts(
                                 request.POST.get('tags'))
-
-            # Save, just so we can get the entry id for the sake of using
-            # it to generate the file path
-            entry.save(validate=False)
 
             # Generate a slug from the title
             entry.generate_slug()
