@@ -14,9 +14,13 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
+-#}
+
+{% trans username=username, verification_url=verification_url|safe -%}
 Hi {{ username }},
 
-to activate your GNU MediaGoblin account, open the following URL in your web browser
+to activate your GNU MediaGoblin account, open the following URL in
+your web browser:
 
-{{ verification_url|safe }}
+{{ verification_url }}
+{%- endtrans %}

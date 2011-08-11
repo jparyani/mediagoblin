@@ -19,6 +19,7 @@ import re
 import shutil
 import urlparse
 import uuid
+import cloudfiles
 
 from werkzeug.utils import secure_filename
 
@@ -28,11 +29,21 @@ from mediagoblin import util
 # Errors
 ########
 
-class Error(Exception): pass
-class InvalidFilepath(Error): pass
-class NoWebServing(Error): pass
 
-class NotImplementedError(Error): pass
+class Error(Exception):
+    pass
+
+
+class InvalidFilepath(Error):
+    pass
+
+
+class NoWebServing(Error):
+    pass
+
+
+class NotImplementedError(Error):
+    pass
 
 
 ###############################################
@@ -117,7 +128,7 @@ class StorageInterface(object):
         Eg, if the filename doesn't exist:
         >>> storage_handler.get_unique_filename(['dir1', 'dir2', 'fname.jpg'])
         [u'dir1', u'dir2', u'fname.jpg']
-        
+
         But if a file does exist, let's get one back with at uuid tacked on:
         >>> storage_handler.get_unique_filename(['dir1', 'dir2', 'fname.jpg'])
         [u'dir1', u'dir2', u'd02c3571-dd62-4479-9d62-9e3012dada29-fname.jpg']
@@ -184,7 +195,7 @@ class BasicFileStorage(StorageInterface):
         """
         return os.path.join(
             self.base_dir, *clean_listy_filepath(filepath))
-        
+
     def file_exists(self, filepath):
         return os.path.exists(self._resolve_filepath(filepath))
 
@@ -214,6 +225,191 @@ class BasicFileStorage(StorageInterface):
 
     def get_local_path(self, filepath):
         return self._resolve_filepath(filepath)
+
+
+class CloudFilesStorage(StorageInterface):
+    def __init__(self, **kwargs):
+        self.param_container = kwargs.get('cloudfiles_container')
+        self.param_user = kwargs.get('cloudfiles_user')
+        self.param_api_key = kwargs.get('cloudfiles_api_key')
+        self.param_host = kwargs.get('cloudfiles_host')
+        self.param_use_servicenet = kwargs.get('cloudfiles_use_servicenet')
+
+        if not self.param_host:
+            print('No CloudFiles host URL specified, '
+                  'defaulting to Rackspace US')
+
+        self.connection = cloudfiles.get_connection(
+            username=self.param_user,
+            api_key=self.param_api_key,
+            servicenet=True if self.param_use_servicenet == 'true' or \
+                self.param_use_servicenet == True else False)
+
+        if not self.param_container == \
+                self.connection.get_container(self.param_container):
+            self.container = self.connection.create_container(
+                self.param_container)
+            self.container.make_public(
+                ttl=60 * 60 * 2)
+        else:
+            self.container = self.connection.get_container(
+                self.param_container)
+
+    def _resolve_filepath(self, filepath):
+        return '/'.join(
+            clean_listy_filepath(filepath))
+
+    def file_exists(self, filepath):
+        try:
+            object = self.container.get_object(
+                self._resolve_filepath(filepath))
+            return True
+        except cloudfiles.errors.NoSuchObject:
+            return False
+
+    def get_file(self, filepath, mode='r'):
+        try:
+            obj = self.container.get_object(
+                self._resolve_filepath(filepath))
+        except cloudfiles.errors.NoSuchObject:
+            obj = self.container.create_object(
+                self._resolve_filepath(filepath))
+
+        return obj
+
+    def delete_file(self, filepath):
+        # TODO: Also delete unused directories if empty (safely, with
+        # checks to avoid race conditions).
+        self.container.delete_object(filepath)
+
+    def file_url(self, filepath):
+        return self.get_file(filepath).public_uri()
+
+
+class MountStorage(StorageInterface):
+    """
+    Experimental "Mount" virtual Storage Interface
+    
+    This isn't an interface to some real storage, instead
+    it's a redirecting interface, that redirects requests
+    to other "StorageInterface"s.
+    For example, requests for ["store1", "a"] to first
+    storage with the path ["a"], etc.
+    
+    To set this up, you currently need to call the mount()
+    method with the target path and a backend, that shall
+    be available under that target path.
+    You have to mount things in a sensible order,
+    especially you can't mount ["a", "b"] before ["a"].
+    """
+    def __init__(self, **kwargs):
+        self.mounttab = {}
+
+    def mount(self, dirpath, backend):
+        """
+        Mount a new backend under dirpath
+        """
+        new_ent = clean_listy_filepath(dirpath)
+
+        print "Mounting:", repr(new_ent)
+        already, rem_1, table, rem_2 = self._resolve_to_backend(new_ent, True)
+        print "===", repr(already), repr(rem_1), repr(rem_2), len(table)
+
+        assert (len(rem_2) > 0) or (None not in table), \
+            "That path is already mounted"
+        assert (len(rem_2) > 0) or (len(table)==0), \
+            "A longer path is already mounted here"
+
+        for part in rem_2:
+            table[part] = {}
+            table = table[part]
+        table[None] = backend
+
+    def _resolve_to_backend(self, filepath, extra_info = False):
+        """
+        extra_info = True is for internal use!
+
+        Normally, returns the backend and the filepath inside that backend.
+
+        With extra_info = True it returns the last directory node and the
+        remaining filepath from there in addition.
+        """
+        table = self.mounttab
+        filepath = filepath[:]
+        res_fp = None
+        while True:
+            new_be = table.get(None)
+            if (new_be is not None) or res_fp is None:
+                res_be = new_be
+                res_fp = filepath[:]
+                res_extra = (table, filepath[:])
+                # print "... New res: %r, %r, %r" % (res_be, res_fp, res_extra)
+            if len(filepath) == 0:
+                break
+            query = filepath.pop(0)
+            entry = table.get(query)
+            if entry is not None:
+                table = entry
+                res_extra = (table, filepath[:])
+            else:
+                break
+        if extra_info:
+            return (res_be, res_fp) + res_extra
+        else:
+            return (res_be, res_fp)
+
+    def resolve_to_backend(self, filepath):
+        backend, filepath = self._resolve_to_backend(filepath)
+        if backend is None:
+            raise Error("Path not mounted")
+        return backend, filepath
+
+    def __repr__(self, table = None, indent = []):
+        res = []
+        if table is None:
+            res.append("MountStorage<")
+            table = self.mounttab
+        v = table.get(None)
+        if v:
+            res.append("  " * len(indent) + repr(indent) + ": " + repr(v))
+        for k, v in table.iteritems():
+            if k == None:
+                continue
+            res.append("  " * len(indent) + repr(k) + ":")
+            res += self.__repr__(v, indent + [k])
+        if table is self.mounttab:
+            res.append(">")
+            return "\n".join(res)
+        else:
+            return res
+
+    def file_exists(self, filepath):
+        backend, filepath = self.resolve_to_backend(filepath)
+        return backend.file_exists(filepath)
+
+    def get_file(self, filepath, mode='r'):
+        backend, filepath = self.resolve_to_backend(filepath)
+        return backend.get_file(filepath, mode)
+
+    def delete_file(self, filepath):
+        backend, filepath = self.resolve_to_backend(filepath)
+        return backend.delete_file(filepath)
+
+    def file_url(self, filepath):
+        backend, filepath = self.resolve_to_backend(filepath)
+        return backend.file_url(filepath)
+
+    def get_local_path(self, filepath):
+        backend, filepath = self.resolve_to_backend(filepath)
+        return backend.get_local_path(filepath)
+
+    def copy_locally(self, filepath, dest_path):
+        """
+        Need to override copy_locally, because the local_storage
+        attribute is not correct.
+        """
+        backend, filepath = self.resolve_to_backend(filepath)
+        backend.copy_locally(filepath, dest_path)
 
 
 ###########
@@ -283,7 +479,7 @@ def storage_system_from_config(paste_config, storage_prefix):
          for key, value in paste_config.iteritems()
          if prefix_re.match(key)])
 
-    if config_params.has_key('storage_class'):
+    if 'storage_class' in config_params:
         storage_class = config_params['storage_class']
         config_params.pop('storage_class')
     else:
@@ -291,5 +487,3 @@ def storage_system_from_config(paste_config, storage_prefix):
 
     storage_class = util.import_component(storage_class)
     return storage_class(**config_params)
-
-

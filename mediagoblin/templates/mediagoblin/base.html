@@ -19,13 +19,13 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>{% block title %}GNU MediaGoblin{% endblock title %}</title>
+    <title>{% block title %}{% trans %}GNU MediaGoblin{% endtrans %}{% endblock title %}</title>
     <link rel="stylesheet" type="text/css"
-          href="{{ request.staticdirect('/css/contrib/reset.css') }}"/>
+          href="{{ request.staticdirect('/css/extlib/reset.css') }}"/>
     <link rel="stylesheet" type="text/css"
-          href="{{ request.staticdirect('/css/contrib/text.css') }}"/>
+          href="{{ request.staticdirect('/css/extlib/text.css') }}"/>
     <link rel="stylesheet" type="text/css"
-          href="{{ request.staticdirect('/css/contrib/960_16_col.css') }}"/>
+          href="{{ request.staticdirect('/css/extlib/960_16_col.css') }}"/>
     <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/base.css') }}"/>
     {% block mediagoblin_head %}
@@ -36,27 +36,41 @@
     {% block mediagoblin_body %}
     <div class="mediagoblin_body">
       {% block mediagoblin_header %}
-        <div class="mediagoblin_header">
-          <div class="container_16">
-            <div class="grid_16">
-              {% block mediagoblin_logo %}
-                <a class="mediagoblin_logo" href="{{ request.urlgen('index') }}"><img src="{{ request.staticdirect('/images/logo.png') }}" alt="Mediagoblin logo" /></a>
-              {% endblock %}
+        <div class="container_16">
+          <div class="grid_16 mediagoblin_header">
+            {% block mediagoblin_logo %}
+              <a class="mediagoblin_logo"
+                 href="{{ request.urlgen('index') }}">
+                <img src="{{ request.staticdirect('/images/logo.png') }}"
+                     alt="{% trans %}Mediagoblin logo{% endtrans %}" />
+              </a>
+            {% endblock %}
+            {% if request.user and request.user['status'] == 'active' %}
+              <a class="header_submit"
+                 href="{{ request.urlgen('mediagoblin.submit.start') }}">
+                {% trans %}Submit media{% endtrans %}
+              </a>
+            {% endif %}
+            {% block mediagoblin_header_title %}{% endblock %}
+            <div class="mediagoblin_header_right">
               {% if request.user %}
-              <a class="header_submit" href="{{ request.urlgen('mediagoblin.submit.start') }}">Submit media</a>
-              {% endif %}
-              {% block mediagoblin_header_title %}{% endblock %}
-              <div class="mediagoblin_header_right">
-                {% if request.user %}
+                {# the following link should only appear when verification is needed #}
+                {% if request.user.status == "needs_email_verification" %}
                   <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                              user= request.user['username']) }}">
-                    {{ request.user['username'] }}</a>'s account 
-                  (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">logout</a>)
-                {% else %}
-                   <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
-                     Login</a>
+                                              user=request.user['username']) }}"
+                     class="header_submit">
+                    {% trans %}verify your email!{% endtrans %}</a>
                 {% endif %}
-              </div>
+
+                <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                                            user= request.user['username']) }}">
+                  {{ request.user['username'] }}</a>
+
+                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">logout</a>)
+              {% else %}
+                <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
+                  {% trans %}Login{% endtrans %}</a>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -69,11 +83,11 @@
         </div>
       </div>
       {% block mediagoblin_footer %}
-        <div class="mediagoblin_footer">
-          <div class="container_16">
-            <div class="grid_16">
+        <div class="container_16">
+          <div class="grid_16 mediagoblin_footer">
+            {% trans -%}
               Powered by <a href="http://mediagoblin.org">MediaGoblin</a>, a <a href="http://gnu.org/">GNU project</a>
-            </div>
+            {%- endtrans %}
           </div>
         </div>
       {% endblock %}

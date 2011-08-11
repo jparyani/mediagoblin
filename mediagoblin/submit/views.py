@@ -16,11 +16,14 @@
 
 from os.path import splitext
 from cgi import FieldStorage
+from string import split
 
 from werkzeug.utils import secure_filename
 
 from mediagoblin.util import (
-    render_to_response, redirect, cleaned_markdown_conversion)
+    render_to_response, redirect, cleaned_markdown_conversion, \
+    convert_to_tag_list_of_dicts)
+from mediagoblin.util import pass_to_ugettext as _
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
 from mediagoblin.process_media import process_media_initial
@@ -39,10 +42,10 @@ def submit_start(request):
                 and isinstance(request.POST['file'], FieldStorage)
                 and request.POST['file'].file):
             submit_form.file.errors.append(
-                u'You must provide a file.')
+                _(u'You must provide a file.'))
         elif not security.check_filetype(request.POST['file']):
             submit_form.file.errors.append(
-                u'The file doesn\'t seem to be an image!')
+                _(u"The file doesn't seem to be an image!"))
         else:
             filename = request.POST['file'].filename
 
@@ -58,6 +61,10 @@ def submit_start(request):
             
             entry['media_type'] = u'image' # heh
             entry['uploader'] = request.user['_id']
+
+            # Process the user's folksonomy "tags"
+            entry['tags'] = convert_to_tag_list_of_dicts(
+                                request.POST.get('tags'))
 
             # Save, just so we can get the entry id for the sake of using
             # it to generate the file path
@@ -87,7 +94,7 @@ def submit_start(request):
             result = process_media_initial.delay(unicode(entry['_id']))
             entry['queued_task_id'] = result.task_id
 
-            add_message(request, SUCCESS, 'Woohoo! Submitted!')
+            add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
             return redirect(request, "mediagoblin.user_pages.user_home",
                             user = request.user['username'])

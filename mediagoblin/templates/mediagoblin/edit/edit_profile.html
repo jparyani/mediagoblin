@@ -25,10 +25,14 @@
                                                      user['username'] }}"
         method="POST" enctype="multipart/form-data">
     <div class="grid_8 prefix_1 suffix_1 edit_box form_box">
-      <h1>Editing {{ user['username'] }}'s profile</h1>
+      <h1>
+        {%- trans username=user['username'] -%}
+          Editing {{ username }}'s profile
+        {%- endtrans %}
+      </h1>
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
-        <input type="submit" value="submit" class="button" />
+        <input type="submit" value="{% trans %}Submit{% endtrans %}" class="button" />
       </div>
     </div>
   </form>

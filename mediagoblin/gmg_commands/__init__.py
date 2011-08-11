@@ -40,6 +40,10 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.users:changepw_parser_setup',
         'func': 'mediagoblin.gmg_commands.users:changepw',
         'help': 'Makes admin an user'},
+    'wipealldata': {
+        'setup': 'mediagoblin.gmg_commands.wipealldata:wipe_parser_setup',
+        'func': 'mediagoblin.gmg_commands.wipealldata:wipe',
+        'help': 'Wipes **all** the data for this MediaGoblin instance'},
     }
 
 

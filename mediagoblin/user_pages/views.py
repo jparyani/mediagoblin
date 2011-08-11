@@ -22,8 +22,8 @@ from mediagoblin.util import (
     Pagination, render_to_response, redirect, cleaned_markdown_conversion)
 from mediagoblin.user_pages import forms as user_forms
 
-from mediagoblin.decorators import uses_pagination, get_user_media_entry, \
-    require_active_login
+from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
+    require_active_login)
 
 from werkzeug.contrib.atom import AtomFeed
 
@@ -32,10 +32,14 @@ from werkzeug.contrib.atom import AtomFeed
 def user_home(request, page):
     """'Homepage' of a User()"""
     user = request.db.User.find_one({
-            'username': request.matchdict['user'],
-            'status': 'active'})
+            'username': request.matchdict['user']})
     if not user:
         return exc.HTTPNotFound()
+    elif user['status'] != u'active':
+        return render_to_response(
+            request,
+            'mediagoblin/user_pages/user.html',
+            {'user': user})
 
     cursor = request.db.MediaEntry.find(
         {'uploader': user['_id'],
@@ -139,7 +143,7 @@ def media_post_comment(request):
         user = request.matchdict['user'])
 
 
-ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 5
+ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 15
 
 def atom_feed(request):
     """
@@ -150,7 +154,7 @@ def atom_feed(request):
                'username': request.matchdict['user'],
                'status': 'active'})
     if not user:
-	return exc.HTTPNotFound()
+        return exc.HTTPNotFound()
 
     cursor = request.db.MediaEntry.find({
                  'uploader': user['_id'],

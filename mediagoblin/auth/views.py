@@ -21,6 +21,7 @@ from webob import exc
 from mediagoblin import messages
 from mediagoblin import mg_globals
 from mediagoblin.util import render_to_response, redirect
+from mediagoblin.util import pass_to_ugettext as _
 from mediagoblin.db.util import ObjectId
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
@@ -36,7 +37,7 @@ def register(request):
         messages.add_message(
             request,
             messages.WARNING,
-            ('Sorry, registration is disabled on this instance.'))
+            _('Sorry, registration is disabled on this instance.'))
         return redirect(request, "index")
 
     register_form = auth_forms.RegistrationForm(request.POST)
@@ -51,20 +52,29 @@ def register(request):
 
         if users_with_username:
             register_form.username.errors.append(
-                u'Sorry, a user with that name already exists.')
+                _(u'Sorry, a user with that name already exists.'))
 
         else:
             # Create the user
-            entry = request.db.User()
-            entry['username'] = request.POST['username'].lower()
-            entry['email'] = request.POST['email']
-            entry['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+            user = request.db.User()
+            user['username'] = request.POST['username'].lower()
+            user['email'] = request.POST['email']
+            user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
-            entry.save(validate=True)
+            user.save(validate=True)
 
-            send_verification_email(entry, request)
+            # log the user in
+            request.session['user_id'] = unicode(user['_id'])
+            request.session.save()
 
-            return redirect(request, "mediagoblin.auth.register_success")
+            # send verification email
+            send_verification_email(user, request)
+
+            # redirect the user to their homepage... there will be a
+            # message waiting for them to verify their email
+            return redirect(
+                request, 'mediagoblin.user_pages.user_home',
+                user=user['username'])
 
     return render_to_response(
         request,
@@ -136,23 +146,20 @@ def verify_email(request):
         user['status'] = u'active'
         user['email_verified'] = True
         user.save()
-        verification_successful = True
         messages.add_message(
             request,
             messages.SUCCESS,
-            ('Your email address has been verified. '
-             'You may now login, edit your profile, and submit images!'))
+            _("Your email address has been verified. "
+              "You may now login, edit your profile, and submit images!"))
     else:
-        verification_successful = False
-        messages.add_message(request,
-                             messages.ERROR,
-                            'The verification key or user id is incorrect')
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _('The verification key or user id is incorrect'))
 
-    return render_to_response(
-        request,
-        'mediagoblin/user_pages/user.html',
-        {'user': user,
-        'verification_successful' : verification_successful})
+    return redirect(
+        request, 'mediagoblin.user_pages.user_home',
+        user=request.user['username'])
 
 
 def resend_activation(request):
@@ -166,4 +173,10 @@ def resend_activation(request):
 
     send_verification_email(request.user, request)
 
-    return redirect(request, 'mediagoblin.auth.resend_verification_success')
+    messages.add_message(
+        request,
+        messages.INFO,
+        _('Resent your verification email.'))
+    return redirect(
+        request, 'mediagoblin.user_pages.user_home',
+        user=request.user['username'])

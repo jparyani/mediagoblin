@@ -27,21 +27,27 @@
 {% block mediagoblin_content -%}
   {% if user %}
     <h1>
-      <a href="{{ request.urlgen(
-                      'mediagoblin.user_pages.user_home',
-                      user=user.username) }}">{{ user.username }}</a>'s media</h1>
+      {%- trans username=user.username,
+                user_url=request.urlgen(
+                           'mediagoblin.user_pages.user_home',
+                            user=user.username) -%}
+        <a href="{{ user_url }}">{{ username }}</a>'s media
+      {%- endtrans %}
+    </h1>
 
     </div>
     <div class="container_16 media_gallery">
       {% include "mediagoblin/utils/object_gallery.html" %}
     </div>
     <div class="grid_16">
-
-    <a href={{ request.urlgen(
-                   'mediagoblin.user_pages.atom_feed',
-                   user=user.username) }}> atom feed</a>
+      <a href="{{ request.urlgen(
+                     'mediagoblin.user_pages.atom_feed',
+                     user=user.username) }}">
+        {%- trans %}atom feed{% endtrans -%}
+      </a>
+    </div>
   {% else %}
     {# This *should* not occur as the view makes sure we pass in a user. #}
-    <p>Sorry, no such user found.<p/>
+    <p>{% trans %}Sorry, no such user found.{% endtrans %}<p/>
   {% endif %}
 {% endblock %}    

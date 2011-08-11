@@ -23,6 +23,7 @@ from mediagoblin.mg_globals import setup_globals
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.db.util import MigrationManager
 from mediagoblin.workbench import WorkbenchManager
+from mediagoblin.storage import storage_system_from_config
 
 
 class Error(Exception): pass
@@ -60,9 +61,16 @@ def setup_database():
 
     # Tiny hack to warn user if our migration is out of date
     if not migration_manager.database_at_latest_migration():
-        print (
-            "*WARNING:* Your migrations are out of date, "
-            "maybe run ./bin/gmg migrate?")
+        db_migration_num = migration_manager.database_current_migration()
+        latest_migration_num = migration_manager.latest_migration()
+        if db_migration_num < latest_migration_num:
+            print (
+                "*WARNING:* Your migrations are out of date, "
+                "maybe run ./bin/gmg migrate?")
+        elif db_migration_num > latest_migration_num:
+            print (
+                "*WARNING:* Your migrations are out of date... "
+                "in fact they appear to be from the future?!")
 
     setup_globals(
         db_connection = connection,
@@ -101,6 +109,19 @@ def get_staticdirector(app_config):
         raise ImproperlyConfigured(
             "One of direct_remote_path or "
             "direct_remote_paths must be provided")
+
+
+def setup_storage():
+    app_config = mg_globals.app_config
+
+    public_store = storage_system_from_config(app_config, 'publicstore')
+    queue_store = storage_system_from_config(app_config, 'queuestore')
+
+    setup_globals(
+        public_store = public_store,
+        queue_store = queue_store)
+
+    return public_store, queue_store
 
 
 def setup_workbench():

@@ -23,8 +23,11 @@
 {% block mediagoblin_content %}
   {% if media %}
     <div class="grid_11 alpha">
-      <img class="media_image" src="{{ request.app.public_store.file_url(
-                                         media.get_display_media(media.media_files)) }}" />
+      <div class="media_image_container">
+        <img class="media_image"
+             src="{{ request.app.public_store.file_url(
+                         media.get_display_media(media.media_files)) }}" />
+      </div>
 
       <h2>
         {{media.title}}
@@ -35,24 +38,26 @@
       {% endautoescape %}
 
       <p>
-        &mdash;&nbsp;uploaded on
-        {{ "%4d-%02d-%02d"|format(media.created.year,
-                                  media.created.month, media.created.day) }}
-        by
-        <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                   user= media.uploader().username) }}">
-          {{- media.uploader().username }}</a>
+        {% trans date="%4d-%02d-%02d"|format(
+                   media.created.year,
+                   media.created.month, media.created.day),
+                 user_url=request.urlgen(
+                   'mediagoblin.user_pages.user_home',
+                   user=media.uploader().username),
+                 username=media.uploader().username -%}
+          &mdash;&nbsp;uploaded on {{ date }} by <a href="{{ user_url }}">{{ username }}</a>
+        {%- endtrans %}
       </p>
       <br />
 
-      <h3>Comments</h3>
+      <h3>{% trans %}Comments{% endtrans %}</h3>
       {% if request.user %}
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
                                          user= media.uploader().username,
                                          media=media._id) }}" method="POST">
           {{ wtforms_util.render_field_div(comment_form.comment_content) }}
           <div class="form_submit_buttons">
-            <input type="submit" value="Post comment!" class="button" />
+            <input type="submit" value="{% trans %}Post comment!{% endtrans %}" class="button" />
           </div>
         </form>
       {% endif %}
@@ -74,7 +79,7 @@
             <div class="comment_author">&mdash; 
               <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                 user = comment_author['username']) }}">
-              {{ comment_author['username'] }}</a> at 
+              {{ comment_author['username'] }}</a> {% trans %}at{% endtrans %} 
             <!--</div>
             <div class="comment_datetime">-->
               <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
@@ -97,12 +102,12 @@
 	      media = media._id)) }}
       </div>
     {% endif %}
+
     <div class="grid_5 omega">
       {% include "mediagoblin/utils/prev_next.html" %}
-      <h3>Sidebar content here!</h3>
-      <p>
         {% if media['uploader'] == request.user['_id'] or 
                                    request.user['is_admin'] %}
+          <h3>Temporary button holder</h3>
           <p>
             <a href="{{ request.urlgen('mediagoblin.edit.edit_media',
                                        user= media.uploader().username,
@@ -112,12 +117,15 @@
           </p>
           <p>
             <img src="{{ request.staticdirect('/images/icon_delete.png') }}"
-                 class="media_icon" />delete
+                 class="media_icon" />{% trans %}delete{% endtrans %}
           </p>
         {% endif %}
-      </p>
+
+      {% if media.tags %}
+        {% include "mediagoblin/utils/tags.html" %}
+      {% endif %}
     </div>
   {% else %}
-    <p>Sorry, no such media found.<p/>
+    <p>{% trans %}Sorry, no such media found.{% endtrans %}<p/>
   {% endif %}
 {% endblock %}

@@ -20,6 +20,8 @@ from mediagoblin.auth.routing import auth_routes
 from mediagoblin.submit.routing import submit_routes
 from mediagoblin.user_pages.routing import user_routes
 from mediagoblin.edit.routing import edit_routes
+from mediagoblin.listings.routing import tag_routes
+
 
 def get_mapper():
     mapping = Mapper()
@@ -33,5 +35,6 @@ def get_mapper():
     mapping.extend(submit_routes, '/submit')
     mapping.extend(user_routes, '/u')
     mapping.extend(edit_routes, '/edit')
+    mapping.extend(tag_routes, '/tag')
 
     return mapping

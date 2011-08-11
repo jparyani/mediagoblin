@@ -25,13 +25,16 @@ import re
 import urllib
 from math import ceil, floor
 import copy
+import wtforms
 
 from babel.localedata import exists
+from babel.support import LazyProxy
 import jinja2
 import translitcodec
 from webob import Response, exc
 from lxml.html.clean import Cleaner
 import markdown
+from wtforms.form import Form
 
 from mediagoblin import mg_globals
 from mediagoblin import messages
@@ -92,8 +95,8 @@ def get_jinja_env(template_loader, locale):
         extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
 
     template_env.install_gettext_callables(
-        mg_globals.translations.gettext,
-        mg_globals.translations.ngettext)
+        mg_globals.translations.ugettext,
+        mg_globals.translations.ungettext)
 
     # All templates will know how to ...
     # ... fetch all waiting messages and remove them from the queue
@@ -299,7 +302,7 @@ def send_email(from_addr, to_addrs, subject, message_body):
 
 
 TRANSLATIONS_PATH = pkg_resources.resource_filename(
-    'mediagoblin', 'translations')
+    'mediagoblin', 'i18n')
 
 
 def locale_to_lower_upper(locale):
@@ -384,8 +387,62 @@ def clean_html(html):
     return HTML_CLEANER.clean_html(html)
 
 
-MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')
+def convert_to_tag_list_of_dicts(tag_string):
+    """
+    Filter input from incoming string containing user tags,
 
+    Strips trailing, leading, and internal whitespace, and also converts
+    the "tags" text into an array of tags
+    """
+    taglist = []
+    if tag_string:
+
+        # Strip out internal, trailing, and leading whitespace
+        stripped_tag_string = u' '.join(tag_string.strip().split())
+
+        # Split the tag string into a list of tags
+        for tag in stripped_tag_string.split(
+                                       mg_globals.app_config['tags_delimiter']):
+
+            # Ignore empty or duplicate tags
+            if tag.strip() and tag.strip() not in [t['name'] for t in taglist]:
+
+                taglist.append({'name': tag.strip(),
+                                'slug': slugify(tag.strip())})
+    return taglist
+
+
+def media_tags_as_string(media_entry_tags):
+    """
+    Generate a string from a media item's tags, stored as a list of dicts
+
+    This is the opposite of convert_to_tag_list_of_dicts
+    """
+    media_tag_string = ''
+    if media_entry_tags:
+        media_tag_string = mg_globals.app_config['tags_delimiter'].join(
+                                      [tag['name'] for tag in media_entry_tags])
+    return media_tag_string
+
+TOO_LONG_TAG_WARNING = \
+    u'Tags must be shorter than %s characters.  Tags that are too long: %s'
+
+def tag_length_validator(form, field):
+    """
+    Make sure tags do not exceed the maximum tag length.
+    """
+    tags = convert_to_tag_list_of_dicts(field.data)
+    too_long_tags = [
+        tag['name'] for tag in tags
+        if len(tag['name']) > mg_globals.app_config['tags_max_length']]
+
+    if too_long_tags:
+        raise wtforms.ValidationError(
+            TOO_LONG_TAG_WARNING % (mg_globals.app_config['tags_max_length'], \
+                                    ', '.join(too_long_tags)))
+
+
+MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')
 
 def cleaned_markdown_conversion(text):
     """
@@ -421,6 +478,66 @@ def setup_gettext(locale):
 
     mg_globals.setup_globals(
         translations=this_gettext)
+
+
+# Force en to be setup before anything else so that
+# mg_globals.translations is never None
+setup_gettext('en')
+
+
+def pass_to_ugettext(*args, **kwargs):
+    """
+    Pass a translation on to the appropriate ugettext method.
+
+    The reason we can't have a global ugettext method is because
+    mg_globals gets swapped out by the application per-request.
+    """
+    return mg_globals.translations.ugettext(
+        *args, **kwargs)
+
+
+def lazy_pass_to_ugettext(*args, **kwargs):
+    """
+    Lazily pass to ugettext.
+
+    This is useful if you have to define a translation on a module
+    level but you need it to not translate until the time that it's
+    used as a string.
+    """
+    return LazyProxy(pass_to_ugettext, *args, **kwargs)
+
+
+def pass_to_ngettext(*args, **kwargs):
+    """
+    Pass a translation on to the appropriate ngettext method.
+
+    The reason we can't have a global ngettext method is because
+    mg_globals gets swapped out by the application per-request.
+    """
+    return mg_globals.translations.ngettext(
+        *args, **kwargs)
+
+
+def lazy_pass_to_ngettext(*args, **kwargs):
+    """
+    Lazily pass to ngettext.
+
+    This is useful if you have to define a translation on a module
+    level but you need it to not translate until the time that it's
+    used as a string.
+    """
+    return LazyProxy(pass_to_ngettext, *args, **kwargs)
+
+
+def fake_ugettext_passthrough(string):
+    """
+    Fake a ugettext call for extraction's sake ;)
+
+    In wtforms there's a separate way to define a method to translate
+    things... so we just need to mark up the text so that it can be
+    extracted, not so that it's actually run through gettext.
+    """
+    return string
 
 
 PAGINATION_DEFAULT_PER_PAGE = 30
