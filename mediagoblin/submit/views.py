@@ -87,9 +87,13 @@ def submit_start(request):
             # Add queued filename to the entry
             entry['queued_media_file'] = queue_filepath
 
-            # queue it for processing
+            # Save now so we have this data before kicking off processing
+            entry.save(validate=False)
+
             result = process_media_initial.delay(unicode(entry['_id']))
-            entry['queued_task_id'] = result.task_id
+
+            # Save the task id
+            entry['queued_task_id'] = unicode(result.task_id)
             entry.save(validate=True)
 
             add_message(request, SUCCESS, _('Woohoo! Submitted!'))
