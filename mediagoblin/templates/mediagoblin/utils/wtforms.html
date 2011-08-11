@@ -23,7 +23,11 @@
     {% if field.description -%}
       <div class="form_field_description">{{ _(field.description) }}</div>
     {%- endif %}
-    <div class="form_field_input">{{ field }}</div>
+    {% if field.type == "TextAreaField" %}
+      <div class="form_field_input">{{ field(rows=8, cols=20) }}</div>
+    {% else %}
+      <div class="form_field_input">{{ field }}</div>
+    {% endif %}
     {%- if field.errors -%}
       {% for error in field.errors %}
         <div class="form_field_error">

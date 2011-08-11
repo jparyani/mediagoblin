@@ -22,11 +22,11 @@ from mediagoblin.util import fake_ugettext_passthrough as _
 
 
 class SubmitStartForm(wtforms.Form):
+    file = wtforms.FileField(_('File'))
     title = wtforms.TextField(
         _('Title'),
         [wtforms.validators.Length(min=0, max=500)])
     description = wtforms.TextAreaField('Description of this work')
-    file = wtforms.FileField(_('File'))
     tags = wtforms.TextField(
         _('Tags'),
         [tag_length_validator])
