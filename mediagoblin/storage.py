@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import re
 import shutil
 import urlparse
 import uuid
@@ -443,29 +442,25 @@ def clean_listy_filepath(listy_filepath):
     return cleaned_filepath
 
 
-def storage_system_from_config(config):
+def storage_system_from_config(config_section):
     """
-    Utility for setting up a storage system from the paste app config.
+    Utility for setting up a storage system from a config section.
 
-    Note that a special argument may be passed in to the paste_config
-    which is "${storage_prefix}_storage_class" which will provide an
+    Note that a special argument may be passed in to
+    the config_section which is "storage_class" which will provide an
     import path to a storage system.  This defaults to
     "mediagoblin.storage:BasicFileStorage" if otherwise undefined.
 
     Arguments:
-     - paste_config: dictionary of config parameters
-     - storage_prefix: the storage system we're setting up / will be
-       getting keys/arguments from.  For example 'publicstore' will
-       grab all arguments that are like 'publicstore_FOO'.
+     - config_section: dictionary of config parameters
 
     Returns:
       An instantiated storage system.
 
     Example:
       storage_system_from_config(
-        {'publicstore_base_url': '/media/',
-         'publicstore_base_dir': '/var/whatever/media/'},
-        'publicstore')
+        {'base_url': '/media/',
+         'base_dir': '/var/whatever/media/'})
 
        Will return:
          BasicFileStorage(
@@ -474,7 +469,7 @@ def storage_system_from_config(config):
     """
     # This construct is needed, because dict(config) does
     # not replace the variables in the config items.
-    config_params = dict(config.iteritems())
+    config_params = dict(config_section.iteritems())
 
     if 'storage_class' in config_params:
         storage_class = config_params['storage_class']
