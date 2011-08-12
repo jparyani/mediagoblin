@@ -166,7 +166,7 @@ def verify_email(request):
 
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
-        user = user['username'])
+        user=user['username'])
 
 
 def resend_activation(request):
