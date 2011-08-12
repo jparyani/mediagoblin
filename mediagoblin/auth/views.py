@@ -50,14 +50,18 @@ def register(request):
         users_with_email = request.db.User.find(
             {'email': request.POST['email'].lower()}).count()
 
+        extra_validation_passes = True
+
         if users_with_username:
             register_form.username.errors.append(
                 _(u'Sorry, a user with that name already exists.'))
-        elif users_with_email:
+            extra_validation_passes = False
+        if users_with_email:
             register_form.email.errors.append(
                 _(u'Sorry, that email address has already been taken.'))
+            extra_validation_passes = False
 
-        else:
+        if extra_validation_passes:
             # Create the user
             user = request.db.User()
             user['username'] = request.POST['username'].lower()
