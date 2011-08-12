@@ -62,6 +62,7 @@ def mediaentry_remove_thumbnail_file(database):
     database['media_entries'].update(
         {'thumbnail_file': {'$exists': True}},
         {'$unset': {'thumbnail_file': 1}},
+        multi=True)
 
 
 @RegisterMigration(4)
