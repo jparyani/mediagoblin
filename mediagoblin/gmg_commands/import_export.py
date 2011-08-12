@@ -51,44 +51,6 @@ def import_export_parse_setup(subparser):
         help='')
 
 
-def _export_database(db, args):
-    print "\n== Exporting database ==\n"
-
-    command = '{mongodump_path} -d {database} -o {mongodump_cache}'.format(
-        mongodump_path=args.mongodump_path,
-        database=db.name,
-        mongodump_cache=args._cache_path['database'])
-
-    p = subprocess.Popen(
-        shlex.split(command))
-
-    p.wait()
-
-    print "\n== Database exported ==\n"
-
-
-def _export_media(db, args):
-    print "\n== Exporting media ==\n"
-
-    media_cache = BasicFileStorage(
-        args._cache_path['media'])
-
-    # TODO: Add export of queue files
-    queue_cache = BasicFileStorage(
-        args._cache_path['queue'])
-
-    for entry in db.media_entries.find():
-        for name, path in entry['media_files'].items():
-            mc_file = media_cache.get_file(path, mode='wb')
-            mc_file.write(
-                mg_globals.public_store.get_file(path, mode='rb').read())
-
-            print(mc_file)
-        print(entry)
-
-    print "\n== Media exported ==\n"
-
-
 def _import_media(db, args):
     """
     Import media files
@@ -117,26 +79,31 @@ def _import_media(db, args):
 
 
 def _import_database(db, args):
+    """
+    Restore mongo database from ___.bson files
+    """
     print "\n== Importing database ==\n"
-    command = '{mongorestore_path} -d {database}'
-    '{backup_dir}/{database}'.format(
-        mongorestore_path=args.mongorestore_path,
-        database=db.name,
-        backup_dir=args._cache_path['database'])
 
-    print command
-
-    p = subprocess.Popen(
-        shlex.split(command))
+    p = subprocess.Popen([
+            args.mongorestore_path,
+            '-d', db.name,
+            os.path.join(args._cache_path['database'], db.name)])
+    
+    print p
 
     p.wait()
 
+    print "\n== Database imported ==\n"
+
 
 def env_import(args):
-    args.cache_path += 'mediagoblin-data'
-    args = _setup_paths(args)
-
+    """
+    Restore mongo database and media files from a tar archive
+    """
+    # args.cache_path += 'mediagoblin-data'
     setup_global_and_app_config(args.conf_file)
+
+    # Creates mg_globals.public_store and mg_globals.queue_store
     setup_storage()
 
     config, validation_result = read_mediagoblin_config(args.conf_file)
@@ -149,13 +116,20 @@ def env_import(args):
 
     tf.extractall(args.cache_path)
 
+    args.cache_path += 'mediagoblin-data'
+    args = _setup_paths(args)
+
     # Import database from extracted data
     _import_database(db, args)
 
     _import_media(db, args)
 
+    # _clean(args)
 
 def _setup_paths(args):
+    """
+    Populate ``args`` variable with cache subpaths
+    """
     args._cache_path = dict()
     PATH_MAP = {
         'media': 'media',
@@ -169,6 +143,9 @@ def _setup_paths(args):
 
 
 def _create_archive(args):
+    """
+    Create the tar archive
+    """
     print "\n== Compressing to archive ==\n"
 
     tf = tarfile.open(
@@ -182,10 +159,16 @@ def _create_archive(args):
 
 
 def _clean(args):
+    """
+    Remove cache directory
+    """
     shutil.rmtree(args.cache_path)
 
 
-def _check(args):
+def _export_check(args):
+    """
+    Run security checks for export command
+    """
     if os.path.exists(args.tar_file):
         overwrite = raw_input(
             'The output file already exists. '
@@ -205,10 +188,53 @@ def _check(args):
     return True
 
 
+def _export_database(db, args):
+    print "\n== Exporting database ==\n"
+
+    command = '{mongodump_path} -d {database} -o {mongodump_cache}'.format(
+        mongodump_path=args.mongodump_path,
+        database=db.name,
+        mongodump_cache=args._cache_path['database'])
+
+    p = subprocess.Popen([
+            args.mongodump_path,
+            '-d', db.name,
+            '-o', args._cache_path['database']])
+
+    p.wait()
+
+    print "\n== Database exported ==\n"
+
+
+def _export_media(db, args):
+    print "\n== Exporting media ==\n"
+
+    media_cache = BasicFileStorage(
+        args._cache_path['media'])
+
+    # TODO: Add export of queue files
+    queue_cache = BasicFileStorage(
+        args._cache_path['queue'])
+
+    for entry in db.media_entries.find():
+        for name, path in entry['media_files'].items():
+            mc_file = media_cache.get_file(path, mode='wb')
+            mc_file.write(
+                mg_globals.public_store.get_file(path, mode='rb').read())
+
+            print(mc_file)
+        print(entry)
+
+    print "\n== Media exported ==\n"
+
+
 def env_export(args):
+    """
+    Export database and media files to a tar archive
+    """
     args = _setup_paths(args)
 
-    if not _check(args):
+    if not _export_check(args):
         print "\n== Checks did not pass, exiting ==\n"
         sys.exit(0)
 
