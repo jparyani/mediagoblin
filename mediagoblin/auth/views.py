@@ -45,20 +45,27 @@ def register(request):
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
 
-        users_with_username = \
-            request.db.User.find({
-                'username': request.POST['username'].lower()
-            }).count()
+        users_with_username = request.db.User.find(
+            {'username': request.POST['username'].lower()}).count()
+        users_with_email = request.db.User.find(
+            {'email': request.POST['email'].lower()}).count()
+
+        extra_validation_passes = True
 
         if users_with_username:
             register_form.username.errors.append(
                 _(u'Sorry, a user with that name already exists.'))
+            extra_validation_passes = False
+        if users_with_email:
+            register_form.email.errors.append(
+                _(u'Sorry, that email address has already been taken.'))
+            extra_validation_passes = False
 
-        else:
+        if extra_validation_passes:
             # Create the user
             user = request.db.User()
             user['username'] = request.POST['username'].lower()
-            user['email'] = request.POST['email']
+            user['email'] = request.POST['email'].lower()
             user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
             user.save(validate=True)
@@ -159,7 +166,7 @@ def verify_email(request):
 
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
-        user=request.user['username'])
+        user=user['username'])
 
 
 def resend_activation(request):

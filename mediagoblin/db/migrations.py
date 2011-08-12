@@ -55,6 +55,16 @@ def mediaentry_mediafiles_main_to_original(database):
 
 
 @RegisterMigration(3)
+def mediaentry_remove_thumbnail_file(database):
+    """
+    Use media_files['thumb'] instead of media_entries['thumbnail_file']
+    """
+    database['media_entries'].update(
+        {'thumbnail_file': {'$exists': True}},
+        {'$unset': {'thumbnail_file': 1}},
+
+
+@RegisterMigration(4)
 def mediaentry_add_queued_task_id(database):
     """
     Add the 'queued_task_id' field for entries that don't have it.
