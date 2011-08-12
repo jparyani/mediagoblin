@@ -45,10 +45,8 @@ def register(request):
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
 
-        users_with_username = \
-            request.db.User.find({
-                'username': request.POST['username'].lower()
-            }).count()
+        users_with_username = request.db.User.find(
+            {'username': request.POST['username'].lower()}).count()
 
         if users_with_username:
             register_form.username.errors.append(
