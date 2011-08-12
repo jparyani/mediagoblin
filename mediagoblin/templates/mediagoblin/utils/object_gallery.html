@@ -18,7 +18,7 @@
 
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
 
-{% macro media_grid(media_list, col_number=5) %}
+{% macro media_grid(request, media_list, col_number=5) %}
     {% set num_items = media_list.count() %}
     {% set col_counter = 0 %}
     {% set row_counter = 0 %}
@@ -55,9 +55,22 @@
     </div>
 {%- endmacro %}
 
-{% block object_gallery_content -%}
+
+{#
+  Render a media gallery with pagination.
+
+  Args:
+   - request: Request
+   - media_entries: pymongo cursor of media entries
+   - pagination: Paginator object
+   - pagination_base_url: If you want the pagination to point to a
+     different URL, point it here
+   - col_number: How many columns per row (default 5)
+#}
+{% macro object_gallery(request, media_entries, pagination,
+                        pagination_base_url=None, col_number=5) %}
   {% if media_entries and media_entries.count() %}
-    {{ media_grid(media_entries) }}
+    {{ media_grid(request, media_entries, col_number=col_number) }}
     <div class="clear"></div>
     {% if pagination_base_url %}
       {# different url, so set that and don't keep the get params #}
@@ -70,4 +83,4 @@
       <i>There doesn't seem to be any media here yet...</i>
     </p>
   {% endif %}
-{% endblock %}
+{% endmacro %}
