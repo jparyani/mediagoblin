@@ -21,6 +21,8 @@ from celery.task import task
 from mediagoblin import mg_globals as mgg
 from contextlib import contextmanager
 
+from mediagoblin.process_media.errors import BadMediaFail
+
 
 THUMB_SIZE = 180, 180
 MEDIUM_SIZE = 640, 640
@@ -51,7 +53,11 @@ def process_media_initial(media_id):
         mgg.queue_store, queued_filepath,
         'source')
 
-    thumb = Image.open(queued_filename)
+    try:
+        thumb = Image.open(queued_filename)
+    except IOError:
+        raise BadMediaFail()
+
     thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
     # ensure color mode is compatible with jpg
     if thumb.mode != "RGB":
