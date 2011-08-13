@@ -17,7 +17,7 @@
 import Image
 
 from contextlib import contextmanager
-from celery.task import task, Task
+from celery.task import Task
 from celery import registry
 
 from mediagoblin.db.util import ObjectId
@@ -86,6 +86,18 @@ process_media = registry.tasks[ProcessMedia.name]
 
 
 def mark_entry_failed(entry_id, exc):
+    """
+    Mark a media entry as having failed in its conversion.
+
+    Uses the exception that was raised to mark more information.  If the
+    exception is a derivative of BaseProcessingFail then we can store extra
+    information that can be useful for users telling them why their media failed
+    to process.
+
+    Args:
+     - entry_id: The id of the media entry
+
+    """
     # Was this a BaseProcessingFail?  In other words, was this a
     # type of error that we know how to handle?
     if isinstance(exc, BaseProcessingFail):
