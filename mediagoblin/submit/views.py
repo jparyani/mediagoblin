@@ -14,9 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import uuid
+
 from os.path import splitext
 from cgi import FieldStorage
-from string import split
 
 from werkzeug.utils import secure_filename
 
@@ -27,7 +28,7 @@ from mediagoblin.util import (
 from mediagoblin.util import pass_to_ugettext as _
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
-from mediagoblin.process_media import process_media_initial
+from mediagoblin.process_media import process_media
 from mediagoblin.messages import add_message, SUCCESS
 
 
@@ -87,14 +88,23 @@ def submit_start(request):
             # Add queued filename to the entry
             entry['queued_media_file'] = queue_filepath
 
+            # We generate this ourselves so we know what the taks id is for
+            # retrieval later.
+            # (If we got it off the task's auto-generation, there'd be a risk of
+            # a race condition when we'd save after sending off the task)
+            task_id = unicode(uuid.uuid4())
+            entry['queued_task_id'] = task_id
+
             # Save now so we have this data before kicking off processing
-            entry.save(validate=False)
-
-            result = process_media_initial.delay(unicode(entry['_id']))
-
-            # Save the task id
-            entry['queued_task_id'] = unicode(result.task_id)
             entry.save(validate=True)
+
+            # Pass off to processing
+            #
+            # (... don't change entry after this point to avoid race
+            # conditions with changes to the document via processing code)
+            process_media.apply_async(
+                [unicode(entry['_id'])], {},
+                task_id=task_id)
 
             add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
