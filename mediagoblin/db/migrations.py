@@ -75,3 +75,20 @@ def mediaentry_add_queued_task_id(database):
         {'queued_task_id': {'$exists': False}},
         {'$set': {'queued_task_id': None}},
         multi=True)
+
+
+@RegisterMigration(5)
+def mediaentry_add_fail_error_and_metadata(database):
+    """
+    Add 'fail_error' and 'fail_metadata' fields to media entries
+    """
+    collection = database['media_entries']
+    collection.update(
+        {'fail_error': {'$exists': False}},
+        {'$set': {'fail_error': None}},
+        multi=True)
+    
+    collection.update(
+        {'fail_metadata': {'$exists': False}},
+        {'$set': {'fail_metadata': {}}},
+        multi=True)
