@@ -147,11 +147,9 @@ def process_image(entry):
     with closing(thumb_file):
         thumb.save(thumb_file, "JPEG", quality=90)
 
-    """
-    If the size of the original file exceeds the specified size of a `medium`
-    file, a `medium.jpg` files is created and later associated with the media
-    entry.
-    """
+    # If the size of the original file exceeds the specified size of a `medium`
+    # file, a `medium.jpg` files is created and later associated with the media
+    # entry.
     medium = Image.open(queued_filename)
     medium_processed = False
 
