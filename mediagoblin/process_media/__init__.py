@@ -59,7 +59,14 @@ class ProcessMedia(Task):
         """
         entry = mgg.database.MediaEntry.one(
             {'_id': ObjectId(media_id)})
-        process_image(entry)
+
+        # Try to process, and handle expected errors.
+        try:
+            process_image(entry)
+        except BaseProcessingFail, exc:
+            mark_entry_failed(entry[u'_id'], exc)
+            return
+            
         entry['state'] = u'processed'
         entry.save()
 
@@ -71,31 +78,34 @@ class ProcessMedia(Task):
         we can use that to get more information about the failure and store that
         for conveying information to users about the failure, etc.
         """
-        media_id = args[0]
-        entry = mgg.database.MediaEntry.one(
-            {'_id': ObjectId(media_id)})
-
-        entry[u'state'] = u'failed'
-
-        # Was this a BaseProcessingFail?  In other words, was this a
-        # type of error that we know how to handle?
-        if isinstance(exc, BaseProcessingFail):
-            # Looks like yes, so record information about that failure and any
-            # metadata the user might have supplied.
-            entry[u'fail_error'] = exc.exception_path
-            entry[u'fail_metadata'] = exc.metadata
-        else:
-            # Looks like no, so just mark it as failed and don't record a
-            # failure_error (we'll assume it wasn't handled) and don't record
-            # metadata (in fact overwrite it if somehow it had previous info
-            # here)
-            entry[u'fail_error'] = None
-            entry[u'fail_metadata'] = {}
-
-        entry.save()
+        entry_id = args[0]
+        mark_entry_failed(entry_id, exc)
 
 
 process_media = registry.tasks[ProcessMedia.name]
+
+
+def mark_entry_failed(entry_id, exc):
+    # Was this a BaseProcessingFail?  In other words, was this a
+    # type of error that we know how to handle?
+    if isinstance(exc, BaseProcessingFail):
+        # Looks like yes, so record information about that failure and any
+        # metadata the user might have supplied.
+        mgg.database['media_entries'].update(
+            {'_id': entry_id},
+            {'$set': {u'state': u'failed',
+                      u'fail_error': exc.exception_path,
+                      u'fail_metadata': exc.metadata}})
+    else:
+        # Looks like no, so just mark it as failed and don't record a
+        # failure_error (we'll assume it wasn't handled) and don't record
+        # metadata (in fact overwrite it if somehow it had previous info
+        # here)
+        mgg.database['media_entries'].update(
+            {'_id': entry_id},
+            {'$set': {u'state': u'failed',
+                      u'fail_error': None,
+                      u'fail_metadata': {}}})
 
 
 def process_image(entry):

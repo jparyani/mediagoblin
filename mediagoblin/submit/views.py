@@ -28,7 +28,7 @@ from mediagoblin.util import (
 from mediagoblin.util import pass_to_ugettext as _
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
-from mediagoblin.process_media import process_media
+from mediagoblin.process_media import process_media, mark_entry_failed
 from mediagoblin.messages import add_message, SUCCESS
 
 
@@ -102,9 +102,22 @@ def submit_start(request):
             #
             # (... don't change entry after this point to avoid race
             # conditions with changes to the document via processing code)
-            process_media.apply_async(
-                [unicode(entry['_id'])], {},
-                task_id=task_id)
+            try:
+                process_media.apply_async(
+                    [unicode(entry['_id'])], {},
+                    task_id=task_id)
+            except BaseException as exc:
+                # The purpose of this section is because when running in "lazy"
+                # or always-eager-with-exceptions-propagated celery mode that
+                # the failure handling won't happen on Celery end.  Since we
+                # expect a lot of users to run things in this way we have to
+                # capture stuff here.
+                #
+                # ... not completely the diaper pattern because the exception is
+                # re-raised :)
+                mark_entry_failed(entry[u'_id'], exc)
+                # re-raise the exception
+                raise
 
             add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
