@@ -297,6 +297,13 @@ class MediaEntry(Document):
     def uploader(self):
         return self.db.User.find_one({'_id': self['uploader']})
 
+    def get_fail_exception(self):
+        """
+        Get the exception that's appropriate for this error
+        """
+        if self['fail_error']:
+            return util.import_component(self['fail_error'])
+
 
 class MediaComment(Document):
     """
