@@ -291,3 +291,15 @@ ul.mediaentry_tags li {
   margin: 0px 5px 0px 0px;
   padding: 0px;
 }
+
+
+/* media processing panel */
+
+table.media_panel {
+  width: 100%;
+}
+
+table.media_panel th {
+  font-weight: bold;
+  padding-bottom: 4px;
+}

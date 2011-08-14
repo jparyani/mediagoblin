@@ -1,4 +1,4 @@
-# GNU MediaGoblin -- federated, autonomous media hosting
+# MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 Free Software Foundation, Inc
 #
 # This program is free software: you can redistribute it and/or modify
@@ -175,3 +175,53 @@ def atom_feed(request):
             url=entry.url_for_self(request.urlgen))
 
     return feed.get_response()
+
+
+@require_active_login
+def processing_panel(request):
+    """
+    Show to the user what media is still in conversion/processing...
+    and what failed, and why!
+    """
+    # Get the user
+    user = request.db.User.find_one(
+        {'username': request.matchdict['user'],
+         'status': 'active'})
+
+    # Make sure the user exists and is active
+    if not user:
+        return exc.HTTPNotFound()
+    elif user['status'] != u'active':
+        return render_to_response(
+            request,
+            'mediagoblin/user_pages/user.html',
+            {'user': user})
+
+    # XXX: Should this be a decorator?
+    #
+    # Make sure we have permission to access this user's panel.  Only
+    # admins and this user herself should be able to do so.
+    if not (user[u'_id'] == request.user[u'_id']
+            or request.user.is_admin):
+        # No?  Let's simply redirect to this user's homepage then.
+        return redirect(
+            request, 'mediagoblin.user_pages.user_home',
+            user=request.matchdict['user'])
+
+    # Get media entries which are in-processing
+    processing_entries = request.db.MediaEntry.find(
+        {'uploader': user['_id'],
+         'state': 'processing'}).sort('created', DESCENDING)
+
+    # Get media entries which have failed to process
+    failed_entries = request.db.MediaEntry.find(
+        {'uploader': user['_id'],
+         'state': 'failed'}).sort('created', DESCENDING)
+
+    # Render to response
+    return render_to_response(
+        request,
+        'mediagoblin/user_pages/processing_panel.html',
+        {'user': user,
+         'processing_entries': processing_entries,
+         'failed_entries': failed_entries})
