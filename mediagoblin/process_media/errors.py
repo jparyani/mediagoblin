@@ -29,21 +29,11 @@ class BaseProcessingFail(Exception):
   
     @property
     def exception_path(self):
-        return u"%s.%s" % (
+        return u"%s:%s" % (
             self.__class__.__module__, self.__class__.__name__)
 
     def __init__(self, **metadata):
         self.metadata = metadata or {}
-  
-    def generate_error_message(self):
-        """
-        Generate an error to display to users in the panel.
-  
-        Uses this class's general_message, possibly interpolated
-        with any metadata in self.metadata['error_message_vars'],
-        if appropriate.
-        """
-        return self.general_message % self.metadata.get('error_message_vars', {})
   
   
 class BadMediaFail(BaseProcessingFail):
