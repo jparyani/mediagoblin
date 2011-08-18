@@ -14,19 +14,9 @@ form {
   padding: 0px;
 }
 
-/* Carter One font */
-
-@font-face {
-  font-family: 'Carter One';
-  font-style: normal;
-  font-weight: normal;
-  src: local('CarterOne'), url('http://themes.googleusercontent.com/font?kit=VjW2qt1pkqVtO22ObxgEBRsxEYwM7FgeyaSgU71cLG0') format('woff');
-}
-
 /* text styles */
 
 h1{
-  font-family: 'Carter One',arial,serif;
   margin-bottom: 15px;
   margin-top: 15px;
   color: #fff;
@@ -39,12 +29,12 @@ h2{
 }
 
 h3{
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid #333;
   font-size: 18px;
 }
 
 a {
-  color: #999;
+  color: #86D4B1;
 }
 
 a.highlight {
@@ -66,7 +56,12 @@ label {
   height: 36px;
   padding-top: 14px;
   margin-bottom: 20px;
-  border-bottom: 1px solid #222222;
+  border-bottom: 1px solid #333;
+}
+
+a.mediagoblin_logo{
+  color:#fff;
+  font-weight:bold;
 }
 
 .header_submit{
@@ -79,17 +74,16 @@ label {
   background-image:      -o-linear-gradient(top, #D2D2D2, #aaa); 
   background-image:         linear-gradient(top, #D2D2D2, #aaa);
   box-shadow: 0px 0px 4px #000;
-  border-radius: 5px 5px 5px 5px;
+  border-radius: 3px;
   margin: 8px;
   padding: 3px 8px;
   text-decoration: none;
   border: medium none;
-  font-family: 'Carter One',arial,serif;
 }
 
 .mediagoblin_footer {
   height: 30px;
-  border-top: 1px solid #222222;
+  border-top: 1px solid #333;
   bottom: 0px;
   padding-top: 8px;
   text-align: center;
@@ -108,7 +102,6 @@ label {
 /* common website elements */
 
 .button {
-  font-family: 'Carter One', arial, serif;
   height: 32px;
   min-width: 99px;
   background-color: #86d4b1;
@@ -119,7 +112,7 @@ label {
   background-image:      -o-linear-gradient(top, #86d4b1, #62caa2); 
   background-image:         linear-gradient(top, #86d4b1, #62caa2);
   box-shadow: 0px 0px 4px #000;
-  border-radius: 5px;
+  border-radius: 3px;
   border: none;
   color: #272727;
   margin: 10px 0px 10px 15px;
@@ -214,8 +207,16 @@ text-align: center;
 
 /* media detail */
 
-.media_image_container {
+.media_image_container{
   text-align: center;
+}
+
+h2.media_title{
+  margin-bottom:0px;
+}
+
+p.media_uploader{
+  font-size:0.9em;
 }
 
 /* icons */
@@ -232,10 +233,9 @@ img.media_icon{
   display: block;
   float: left;
   text-align: center;
-  background-color: #222;
+  background-color: #333;
   text-decoration: none;
   padding: 12px 0pt;
-  font-family: 'Carter One', arial, serif;
   font-size: 2em;
   margin: 0 0 20px
 }
