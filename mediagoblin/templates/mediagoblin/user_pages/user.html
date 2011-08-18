@@ -100,8 +100,9 @@
         </a>
       </p>
       <a href="{{ request.urlgen( 'mediagoblin.user_pages.atom_feed',
-                     user=user.username) }}">
-        {%- trans %}atom feed{% endtrans -%}
+                     user=user.username) }}"
+                     ><img src="{{ request.staticdirect('/images/icon_feed.png') }}"
+                     class="media_icon" />{%- trans %}atom feed{% endtrans -%}
       </a>
     </div>
 
