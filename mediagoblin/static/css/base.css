@@ -79,6 +79,7 @@ a.mediagoblin_logo{
   padding: 3px 8px;
   text-decoration: none;
   border: medium none;
+  font-style: normal;
 }
 
 .mediagoblin_footer {
@@ -128,6 +129,14 @@ text-align: center;
 
 .pagination_arrow{
   margin: 5px;
+}
+
+.empty_space{
+  background-color: #222;
+  font-style: italic;
+  text-align: center;
+  height: 160px;
+  padding-top: 70px;
 }
 
 /* forms */
