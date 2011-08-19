@@ -39,10 +39,6 @@
     {% set feed_url = request.urlgen(
                'mediagoblin.listings.tag_atom_feed',
                tag=tag_slug) %}
-    <a href="{{ feed_url }}">
-      <img src="{{ request.staticdirect('/images/icon_feed.png') }}"
-           class="media_icon" alt="{% trans %}feed icon{% endtrans %} />
-    </a>
-    <a href="{{ feed_url }}">{%- trans %}Atom feed{% endtrans -%}</a>
+    {% include "mediagoblin/utils/feed_link.html" %}
   </div>
 {% endblock %}
