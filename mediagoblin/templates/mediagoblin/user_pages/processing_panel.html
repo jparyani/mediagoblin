@@ -1,0 +1,67 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011 Free Software Foundation, Inc
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% block mediagoblin_content %}
+
+<h1>{% trans %}Media processing panel{% endtrans %}</h1>
+
+<p>
+  {% trans %}You can track the state of media being processed for your gallery here.{% endtrans %}
+</p>
+    
+<h2>{% trans %}Media in-processing{% endtrans %}</h2>
+
+{% if processing_entries.count() %}
+  <table class="media_panel processing">
+    <tr>
+      <th>Title</th>
+      <th>When submitted</th>
+      <th>Status</th>
+    </tr>
+    {% for media_entry in processing_entries %}
+      <tr>
+        <td>{{ media_entry['title'] }}</td>
+        <td>{{ media_entry['created'].strftime("%m-%d-%Y %I:%M %p") }}</td>
+        <td></td>
+      </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p><i>{% trans %}No media in-processing{% endtrans %}</i></p>
+{% endif %}  
+
+{% if failed_entries.count() %}
+  <h2>{% trans %}These uploads failed to process:{% endtrans %}</h2>
+
+  <table class="media_panel failed">
+    <tr>
+      <th>Title</th>
+      <th>When submitted</th>
+      <th>Reason for failure</th>
+    </tr>
+    {% for media_entry in failed_entries %}
+      <tr>
+        <td>{{ media_entry['title'] }}</td>
+        <td>{{ media_entry['created'].strftime("%m-%d-%Y %I:%M %p") }}</td>
+        <td>{{ media_entry.get_fail_exception().general_message }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endif %}  
+{% endblock %}

@@ -33,4 +33,8 @@ user_routes = [
         controller="mediagoblin.user_pages.views:atom_feed"),
     Route('mediagoblin.user_pages.media_post_comment',
           '/{user}/m/{media}/comment/add/',
-          controller="mediagoblin.user_pages.views:media_post_comment")]
+          controller="mediagoblin.user_pages.views:media_post_comment"),
+    Route('mediagoblin.user_pages.processing_panel',
+          '/{user}/panel/',
+          controller="mediagoblin.user_pages.views:processing_panel"),
+    ]

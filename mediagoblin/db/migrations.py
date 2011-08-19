@@ -53,6 +53,7 @@ def mediaentry_mediafiles_main_to_original(database):
 
         collection.save(document)
 
+
 @RegisterMigration(3)
 def mediaentry_remove_thumbnail_file(database):
     """
@@ -61,4 +62,33 @@ def mediaentry_remove_thumbnail_file(database):
     database['media_entries'].update(
         {'thumbnail_file': {'$exists': True}},
         {'$unset': {'thumbnail_file': 1}},
+        multi=True)
+
+
+@RegisterMigration(4)
+def mediaentry_add_queued_task_id(database):
+    """
+    Add the 'queued_task_id' field for entries that don't have it.
+    """
+    collection = database['media_entries']
+    collection.update(
+        {'queued_task_id': {'$exists': False}},
+        {'$set': {'queued_task_id': None}},
+        multi=True)
+
+
+@RegisterMigration(5)
+def mediaentry_add_fail_error_and_metadata(database):
+    """
+    Add 'fail_error' and 'fail_metadata' fields to media entries
+    """
+    collection = database['media_entries']
+    collection.update(
+        {'fail_error': {'$exists': False}},
+        {'$set': {'fail_error': None}},
+        multi=True)
+    
+    collection.update(
+        {'fail_metadata': {'$exists': False}},
+        {'$set': {'fail_metadata': {}}},
         multi=True)
