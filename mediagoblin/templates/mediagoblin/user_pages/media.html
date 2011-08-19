@@ -28,16 +28,10 @@
              src="{{ request.app.public_store.file_url(
                          media.get_display_media(media.media_files)) }}" />
       </div>
-
-      <h2>
+      <h2 class="media_title">
         {{media.title}}
       </h2>
-
-      {% autoescape False %}
-        <p>{{ media.description_html }}</p>
-      {% endautoescape %}
-
-      <p>
+      <p class="media_uploader">
         {% trans date="%4d-%02d-%02d"|format(
                    media.created.year,
                    media.created.month, media.created.day),
@@ -45,11 +39,13 @@
                    'mediagoblin.user_pages.user_home',
                    user=media.uploader().username),
                  username=media.uploader().username -%}
-          &mdash;&nbsp;uploaded on {{ date }} by <a href="{{ user_url }}">{{ username }}</a>
+          Uploaded on {{ date }} by <a href="{{ user_url }}">{{ username }}</a>
         {%- endtrans %}
       </p>
+      {% autoescape False %}
+        <p>{{ media.description_html }}</p>
+      {% endautoescape %}
       <br />
-
       <h3>{% trans %}Comments{% endtrans %}</h3>
       {% if request.user %}
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 

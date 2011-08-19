@@ -2,126 +2,127 @@
 # Copyright (C) 2011 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # 
-#   <transifex@wandborg.se>, 2011.
+#   <john_w1954@fastmail.fm>, 2011.
+# Fernando Inocencio <faigos@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
 "POT-Creation-Date: 2011-08-13 19:47-0500\n"
-"PO-Revision-Date: 2011-08-16 13:22+0000\n"
-"Last-Translator: joar <transifex@wandborg.se>\n"
-"Language-Team: Swedish (http://www.transifex.net/projects/p/mediagoblin/team/sv/)\n"
+"PO-Revision-Date: 2011-08-15 20:33+0000\n"
+"Last-Translator: fajro <faigos@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
-"Language: sv\n"
+"Language: eo\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: mediagoblin/auth/forms.py:24 mediagoblin/auth/forms.py:46
 msgid "Username"
-msgstr "Användarnamn"
+msgstr "Uzantnomo"
 
 #: mediagoblin/auth/forms.py:29 mediagoblin/auth/forms.py:50
 msgid "Password"
-msgstr "Lösenord"
+msgstr "Pasvorton"
 
 #: mediagoblin/auth/forms.py:34
 msgid "Passwords must match."
-msgstr "Lösenorden måste vara identiska."
+msgstr "Pasvortoj devas koincidi. "
 
 #: mediagoblin/auth/forms.py:36
 msgid "Confirm password"
-msgstr "Bekräfta lösenord"
+msgstr "Retajpu pasvorton"
 
 #: mediagoblin/auth/forms.py:39
 msgid "Email address"
-msgstr "E-postadress"
+msgstr "Retadreso"
 
 #: mediagoblin/auth/views.py:40
 msgid "Sorry, registration is disabled on this instance."
-msgstr "Vi beklagar, registreringen är avtängd på den här instansen."
+msgstr "Bedaŭrinde, registrado estas malaktivita en tiu ĉi instanco."
 
 #: mediagoblin/auth/views.py:57
 msgid "Sorry, a user with that name already exists."
-msgstr "En användare med det användarnamnet finns redan."
+msgstr "Bedaŭrinde, uzanto kun tiu nomo jam ekzistas."
 
 #: mediagoblin/auth/views.py:61
 msgid "Sorry, that email address has already been taken."
-msgstr "Den e-postadressen är redan tagen."
+msgstr ""
 
 #: mediagoblin/auth/views.py:159
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
 msgstr ""
-"Din e-postadress är verifierad. Du kan nu logga in, redigera din profil och "
-"ladda upp filer!"
+"Vian retadreson estas kontrolita. Vi povas nun ensaluti, redakti vian "
+"profilon, kaj alŝuti bildojn!"
 
 #: mediagoblin/auth/views.py:165
 msgid "The verification key or user id is incorrect"
-msgstr "Verifieringsnyckeln eller användar-IDt är fel."
+msgstr "La kontrol-kodo aŭ la uzantonomo ne estas korekta"
 
 #: mediagoblin/auth/views.py:186
 #: mediagoblin/templates/mediagoblin/auth/resent_verification_email.html:22
 msgid "Resent your verification email."
-msgstr "Skickade ett nytt verifierings-email."
+msgstr "Resendi vian kontrol-mesaĝon."
 
 #: mediagoblin/edit/forms.py:26 mediagoblin/submit/forms.py:27
 msgid "Title"
-msgstr "Titel"
+msgstr "Titolo"
 
 #: mediagoblin/edit/forms.py:29
 msgid "Slug"
-msgstr "Sökvägsnamn"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:30
 msgid "The slug can't be empty"
-msgstr "Sökvägsnamnet kan inte vara tomt"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:31
 msgid "Tags"
-msgstr "Taggar"
+msgstr "Etikedoj"
 
 #: mediagoblin/edit/forms.py:38
 msgid "Bio"
-msgstr "Presentation"
+msgstr "Bio"
 
 #: mediagoblin/edit/forms.py:41
 msgid "Website"
-msgstr "Hemsida"
+msgstr "Retejo"
 
 #: mediagoblin/edit/forms.py:43
 msgid "Improperly formed URL"
-msgstr "Ogiltig URL"
+msgstr ""
 
 #: mediagoblin/edit/views.py:54
 msgid "An entry with that slug already exists for this user."
-msgstr "Ett inlägg med det sökvägsnamnet existerar redan."
+msgstr ""
 
 #: mediagoblin/edit/views.py:75
 msgid "You are editing another user's media. Proceed with caution."
-msgstr "Var försiktig, du redigerar någon annans inlägg."
+msgstr ""
 
 #: mediagoblin/edit/views.py:96
 msgid "You are editing a user's profile. Proceed with caution."
-msgstr "Var försiktig, du redigerar en annan användares profil."
+msgstr ""
 
 #: mediagoblin/submit/forms.py:25
 msgid "File"
-msgstr "Fil"
+msgstr "Dosiero"
 
 #: mediagoblin/submit/views.py:46
 msgid "You must provide a file."
-msgstr "Du måste ange en fil"
+msgstr "Vi devas provizi dosieron."
 
 #: mediagoblin/submit/views.py:49
 msgid "The file doesn't seem to be an image!"
-msgstr "Filen verkar inte vara en giltig bildfil!"
+msgstr ""
 
 #: mediagoblin/submit/views.py:94
 msgid "Woohoo! Submitted!"
-msgstr "Tjohoo! Upladdat!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:22
 msgid "GNU MediaGoblin"
@@ -129,40 +130,40 @@ msgstr "GNU MediaGoblin"
 
 #: mediagoblin/templates/mediagoblin/base.html:45
 msgid "Mediagoblin logo"
-msgstr "MediaGoblin logo"
+msgstr " Logogramo de Mediagoblin"
 
 #: mediagoblin/templates/mediagoblin/base.html:51
 msgid "Submit media"
-msgstr "Ladda upp"
+msgstr "Alŝuti aŭd-vid-dosieron"
 
 #: mediagoblin/templates/mediagoblin/base.html:62
 msgid "verify your email!"
-msgstr "Verifiera din e-postadress!"
+msgstr "kontrolu vian retpoŝton! "
 
 #: mediagoblin/templates/mediagoblin/base.html:72
 msgid "Login"
-msgstr "Logga in"
+msgstr "Ensaluti"
 
 #: mediagoblin/templates/mediagoblin/base.html:88
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU project</a>"
 msgstr ""
-"Drivs av <a href=\"http://mediagoblin.org\">MediaGoblin</a>, ett <a "
-"href=\"http://gnu.org/\">GNU</a>-projekt"
+"Provizita de <a href=\"http://mediagoblin.org\">MediaGoblin</a>, unu el la "
+"<a href=\"http://gnu.org/\">GNU projectoj</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:23
 msgid "Welcome to GNU MediaGoblin!"
-msgstr "Välkommen till GNU MediaGoblin!"
+msgstr "Bonvenon al GNU MediaGoblin!"
 
 #: mediagoblin/templates/mediagoblin/root.html:28
 msgid "Submit an item"
-msgstr "Ladda upp"
+msgstr "Alŝuti dosieron"
 
 #: mediagoblin/templates/mediagoblin/root.html:33
 #, python-format
 msgid "If you have an account, you can <a href=\"%(login_url)s\">Login</a>."
-msgstr "Har du ett konto? <a href=\"%(login_url)s\">Logga in</a>."
+msgstr "Se vi havas konton, vi povas <a href=\"%(login_url)s\">Ensaluti</a>."
 
 #: mediagoblin/templates/mediagoblin/root.html:39
 #, python-format
@@ -170,34 +171,34 @@ msgid ""
 "If you don't have an account, please  <a "
 "href=\"%(register_url)s\">Register</a>."
 msgstr ""
-"Har du inget konto? <a href=\"%(register_url)s\">Registrera ett konto</a>."
+"Se vi ne havas konton, bonvolu  <a href=\"%(register_url)s\">Registriĝi</a>."
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:26
 msgid "Log in"
-msgstr "Logga in"
+msgstr "Ensaluti"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:29
 msgid "Login failed!"
-msgstr "Inloggning misslyckades!"
+msgstr "Ensalutado malsukcesis!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:34
 #: mediagoblin/templates/mediagoblin/auth/register.html:30
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
 #: mediagoblin/templates/mediagoblin/submit/start.html:29
 msgid "Submit"
-msgstr "Skicka"
+msgstr "Alŝuti"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:42
 msgid "Don't have an account yet?"
-msgstr "Har du inget konto?"
+msgstr "Ĉu ankoraŭ sen konto?"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:45
 msgid "Create one here!"
-msgstr "Skapa ett!"
+msgstr "Kreu unu ĉi tie!"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:27
 msgid "Create an account!"
-msgstr "Skapa ett konto!"
+msgstr "Kreu konton!"
 
 #: mediagoblin/templates/mediagoblin/auth/verification_email.txt:19
 #, python-format
@@ -209,84 +210,84 @@ msgid ""
 "\n"
 "%(verification_url)s"
 msgstr ""
-"Hej %(username)s,\n"
+"Sal %(username)s,\n"
 "\n"
-"oppna den följande URLen i din webbläsare för att aktivera ditt konto på GNU MediaGoblin:\n"
+"por aktivigi vian GNU MediaGoblin konton, malfermu la sekvantan URLon en via retumilo:\n"
 "\n"
 "%(verification_url)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:29
 #, python-format
 msgid "Editing %(media_title)s"
-msgstr "Redigerar %(media_title)s"
+msgstr "Editing %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:36
 msgid "Cancel"
-msgstr "Avbryt"
+msgstr "Nuligi"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
 msgid "Save changes"
-msgstr "Spara"
+msgstr "Konservi ŝanĝojn"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:29
 #, python-format
 msgid "Editing %(username)s's profile"
-msgstr "Redigerar %(username)ss profil"
+msgstr "Redaktanta profilon de %(username)s'"
 
 #: mediagoblin/templates/mediagoblin/listings/tag.html:31
 msgid "Media tagged with:"
-msgstr "Taggat med:"
+msgstr "Dosiero markita kiel:"
 
 #: mediagoblin/templates/mediagoblin/listings/tag.html:42
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:48
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:104
 msgid "atom feed"
-msgstr "atom-feed"
+msgstr "Atom-a informfluado"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Submit yer media"
-msgstr "Ladda upp"
+msgstr "Alŝutu vian aŭd-vid-dosieron"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:32
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
-msgstr "<a href=\"%(user_url)s\">%(username)s</a>s media"
+msgstr "<a href=\"%(user_url)s\">%(username)s</a>-a aŭd-vid-dosiero"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:53
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:32
 msgid "Sorry, no such user found."
-msgstr "Finns ingen sådan användare ännu."
+msgstr "Uzanto ne trovita."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:39
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:59
 msgid "Verification needed"
-msgstr "Verifiering krävs"
+msgstr "Kontrolon bezonata"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:42
 msgid "Almost done! Your account still needs to be verified."
-msgstr "Nästan klart! Nu behöver du bara verifiera ditt konto."
+msgstr "Preskaŭ farite! Via konto ankoraŭ devas esti kontrolita."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:47
 msgid ""
 "An email should arrive in a few moments with instructions on how to do so."
 msgstr ""
-"Ett e-postmeddelande med instruktioner kommer att hamna hos dig inom kort."
+"Retmesaĝo alvenos post kelkaj momentoj kun instrukcioj pri kiel tion fari."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:51
 msgid "In case it doesn't:"
-msgstr "Om det inte skulle göra det:"
+msgstr "Se tio ne okazas:"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:54
 msgid "Resend verification email"
-msgstr "Skicka ett nytt e-postmeddelande"
+msgstr "Resendu kontrolmesaĝon"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:62
 msgid ""
 "Someone has registered an account with this username, but it still has to be"
 " verified."
 msgstr ""
-"Det finns redan ett konto med det här användarnamnet, men det behöver "
-"verifieras."
+"Iu registris konton kun tiu ĉi uzantonomo, sed ĝi devas ankoraŭ esti "
+"kontrolita."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:68
 #, python-format
@@ -294,26 +295,25 @@ msgid ""
 "If you are that person but you've lost your verification email, you can <a "
 "href=\"%(login_url)s\">log in</a> and resend it."
 msgstr ""
-"Om det är du som är den personen och har förlorat ditt e-postmeddelande med "
-"detaljer om hur du verifierar ditt konto så kan du <a "
-"href=\"%(login_url)s\">logga in</a> och begära ett nytt."
+"Se vi estas tiu sed vi perdis vian kontrolmesaĝon, vi povas <a "
+"href=\"%(login_url)s\">ensaluti</a> kaj resendi ĝin."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:78
 #, python-format
 msgid "%(username)s's profile"
-msgstr "%(username)ss profil"
+msgstr "%(username)s'-a profilo"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:86
 msgid "Edit profile"
-msgstr "Redigera profil"
+msgstr "Redakti profilo"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:98
 #, python-format
 msgid "View all of %(username)s's media"
-msgstr "Se all media från %(username)s"
+msgstr "Rigardu ĉiuj aŭd-vid-dosierojn de %(username)s'"
 
 #: mediagoblin/user_pages/forms.py:24
 msgid "Comment"
-msgstr "Kommentar"
+msgstr "Komento"
 
 

@@ -36,10 +36,9 @@
   </div>
 
   <div class="grid_16">
-    <a href="{{ request.urlgen(
-                  'mediagoblin.listings.tag_atom_feed',
-                  tag=tag_slug) }}">
-      {%- trans %}atom feed{% endtrans -%}
-    </a>
+    {% set feed_url = request.urlgen(
+               'mediagoblin.listings.tag_atom_feed',
+               tag=tag_slug) %}
+    {% include "mediagoblin/utils/feed_link.html" %}
   </div>
 {% endblock %}

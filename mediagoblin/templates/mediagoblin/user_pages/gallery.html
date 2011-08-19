@@ -37,16 +37,15 @@
       {%- endtrans %}
     </h1>
 
-    </div>
     <div class="container_16 media_gallery">
       {{ object_gallery(request, media_entries, pagination) }}
     </div>
+
     <div class="grid_16">
-      <a href="{{ request.urlgen(
-                     'mediagoblin.user_pages.atom_feed',
-                     user=user.username) }}">
-        {%- trans %}atom feed{% endtrans -%}
-      </a>
+      {% set feed_url = request.urlgen(
+                'mediagoblin.user_pages.atom_feed',
+                user=user.username) %}
+      {% include "mediagoblin/utils/feed_link.html" %}
     </div>
   {% else %}
     {# This *should* not occur as the view makes sure we pass in a user. #}
