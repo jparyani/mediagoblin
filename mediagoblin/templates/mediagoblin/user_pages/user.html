@@ -78,15 +78,29 @@
       {%- trans username=user.username %}{{ username }}'s profile{% endtrans -%}
     </h1>
 
-    <div class="grid_6 alpha">
-      {% include "mediagoblin/utils/profile.html" %}
-      {% if request.user['_id'] == user['_id'] or request.user['is_admin'] %}
+    {% if request.user['_id'] == user['_id']
+       and not user['url'] and not user['profile'] %}
+      <div class="grid_6 alpha empty_space">
+        <p>
+          {% trans %}Here's a spot to tell others about yourself.{% endtrans %}
+        </p>
         <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
-                        user.username }}">
+                          user.username }}"
+           class="header_submit">
           {%- trans %}Edit profile{% endtrans -%}
         </a>
-      {% endif %}
-    </div>
+      </div>
+    {% else %}
+      <div class="grid_6 alpha">
+        {% include "mediagoblin/utils/profile.html" %}
+        {% if request.user['_id'] == user['_id'] or request.user['is_admin'] %}
+          <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
+                          user.username }}">
+            {%- trans %}Edit profile{% endtrans -%}
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
 
     <div class="grid_10 omega">
       {{ object_gallery(request, media_entries, pagination,
