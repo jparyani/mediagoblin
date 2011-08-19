@@ -36,11 +36,13 @@
   </div>
 
   <div class="grid_16">
-    <a href="{{ request.urlgen(
-                  'mediagoblin.listings.tag_atom_feed',
-                  tag=tag_slug) }}"
-                  ><img src="{{ request.staticdirect('/images/icon_feed.png') }}"
-                     class="media_icon" />{%- trans %}atom feed{% endtrans -%}
+    {% set feed_url = request.urlgen(
+               'mediagoblin.listings.tag_atom_feed',
+               tag=tag_slug) %}
+    <a href="{{ feed_url }}">
+      <img src="{{ request.staticdirect('/images/icon_feed.png') }}"
+             class="media_icon" />
     </a>
+    <a href="{{ feed_url }}">{%- trans %}Atom feed{% endtrans -%}</a>
   </div>
 {% endblock %}

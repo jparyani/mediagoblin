@@ -37,16 +37,19 @@
       {%- endtrans %}
     </h1>
 
-    </div>
     <div class="container_16 media_gallery">
       {{ object_gallery(request, media_entries, pagination) }}
     </div>
+
     <div class="grid_16">
-      <a href="{{ request.urlgen(
-                     'mediagoblin.user_pages.atom_feed',
-                     user=user.username) }}">
-        {%- trans %}atom feed{% endtrans -%}
+      {% set feed_url = request.urlgen(
+                'mediagoblin.user_pages.atom_feed',
+                user=user.username) %}
+      <a href="{{ feed_url }}">
+        <img src="{{ request.staticdirect('/images/icon_feed.png') }}"
+               class="media_icon" />
       </a>
+      <a href="{{ feed_url }}">{%- trans %}Atom feed{% endtrans -%}</a>
     </div>
   {% else %}
     {# This *should* not occur as the view makes sure we pass in a user. #}
