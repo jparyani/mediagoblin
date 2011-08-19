@@ -111,27 +111,50 @@
       </div>
     {% endif %}
 
-    <div class="grid_10 omega">
-      {{ object_gallery(request, media_entries, pagination,
-                        pagination_base_url=user_gallery_url, col_number=3) }}
-      {% include "mediagoblin/utils/object_gallery.html" %}
-      <div class="clear"></div>
-      <p>
-        <a href="{{ user_gallery_url }}">
-          {% trans username=user.username -%}
-            View all of {{ username }}'s media{% endtrans -%}
+    {% if media_entries.count() %}
+      <div class="grid_10 omega">
+        {{ object_gallery(request, media_entries, pagination,
+                          pagination_base_url=user_gallery_url, col_number=3) }}
+        {% include "mediagoblin/utils/object_gallery.html" %}
+        <div class="clear"></div>
+        <p>
+          <a href="{{ user_gallery_url }}">
+            {% trans username=user.username -%}
+              View all of {{ username }}'s media{% endtrans -%}
+          </a>
+        </p>
+        {% set feed_url = request.urlgen(
+                  'mediagoblin.user_pages.atom_feed',
+                  user=user.username) %}
+        <a href="{{ feed_url }}">
+          <img src="{{ request.staticdirect('/images/icon_feed.png') }}"
+               class="media_icon" alt="{% trans %}feed icon{% endtrans %}" />
         </a>
-      </p>
-      {% set feed_url = request.urlgen(
-                'mediagoblin.user_pages.atom_feed',
-                user=user.username) %}
-      <a href="{{ feed_url }}">
-        <img src="{{ request.staticdirect('/images/icon_feed.png') }}"
-             class="media_icon" alt="{% trans %}feed icon{% endtrans %}" />
-      </a>
-      <a href="{{ feed_url }}">{%- trans %}Atom feed{% endtrans -%}</a>
-    </div>
-
+        <a href="{{ feed_url }}">{%- trans %}Atom feed{% endtrans -%}</a>
+      </div>
+    {% else %}
+      {% if request.user['_id'] == user['_id'] %}
+        <div class="grid_10 omega empty_space">
+          <p>
+            {% trans -%}
+            This is where your media will appear, but you don't seem to have added anything yet.
+            {%- endtrans %}
+          </p>
+          <a class="header_submit"
+             href="{{ request.urlgen('mediagoblin.submit.start') }}">
+            {%- trans %}Add media{% endtrans -%}
+          </a>
+        </div>
+      {% else %}
+        <div class="grid_10 omega empty_space">
+          <p>
+            {% trans -%}
+            There doesn't seem to be any media here yet...
+            {%- endtrans %}
+          </p>
+        </div>
+      {% endif %}
+    {% endif %}
     <div class="clear"></div>
   {% endif %}
 {% endblock %}
