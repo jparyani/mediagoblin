@@ -47,7 +47,7 @@
                 user=user.username) %}
       <a href="{{ feed_url }}">
         <img src="{{ request.staticdirect('/images/icon_feed.png') }}"
-               class="media_icon" />
+             class="media_icon" alt="{% trans %}feed icon{% endtrans %}" />
       </a>
       <a href="{{ feed_url }}">{%- trans %}Atom feed{% endtrans -%}</a>
     </div>
