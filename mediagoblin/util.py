@@ -100,7 +100,10 @@ def get_jinja_env(template_loader, locale):
 
     # All templates will know how to ...
     # ... fetch all waiting messages and remove them from the queue
+    # ... construct a grid of thumbnails or other media
     template_env.globals['fetch_messages'] = messages.fetch_messages
+    template_env.globals['gridify_list'] = gridify_list
+    template_env.globals['gridify_cursor'] = gridify_cursor
 
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env
@@ -628,3 +631,32 @@ class Pagination(object):
         """ 
         return self.get_page_url_explicit(
             request.path_info, request.GET, page_no)
+
+
+def gridify_list(this_list, num_cols=5):
+    """
+    Generates a list of lists where each sub-list's length depends on
+    the number of columns in the list
+    """
+    grid = []
+
+    # Figure out how many rows we should have
+    num_rows = int(ceil(float(len(this_list)) / num_cols))
+
+    for row_num in range(num_rows):
+        slice_min = row_num * num_cols
+        slice_max = (row_num + 1) * num_cols
+
+        row = this_list[slice_min:slice_max]
+
+        grid.append(row)
+
+    return grid
+
+
+def gridify_cursor(this_cursor, num_cols=5):
+    """
+    Generates a list of lists where each sub-list's length depends on
+    the number of columns in the list
+    """
+    return gridify_list(list(this_cursor), num_cols)
