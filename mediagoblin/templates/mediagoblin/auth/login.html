@@ -31,7 +31,7 @@
       {% endif %}
       {{ wtforms_util.render_divs(login_form) }}
       <div class="form_submit_buttons">
-        <input type="submit" value="{% trans %}Submit{% endtrans %}" class="button"/>
+        <input type="submit" value="{% trans %}Log in{% endtrans %}" class="button"/>
       </div>
       {% if next %}
         <input type="hidden" name="next" value="{{ next }}" class="button"
