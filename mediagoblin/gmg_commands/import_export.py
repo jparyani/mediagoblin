@@ -14,22 +14,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin import mg_globals
-from mediagoblin.db import util as db_util
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.init.config import read_mediagoblin_config
-from mediagoblin import util as mg_util
 from mediagoblin.storage import BasicFileStorage
 from mediagoblin.init import setup_storage, setup_global_and_app_config
 
-import shlex
 import shutil
 import tarfile
 import subprocess
 import os.path
 import os
-import re
 import sys
 
 
