@@ -116,7 +116,7 @@ a.mediagoblin_logo{
   bottom: 0px;
   padding-top: 8px;
   text-align: center;
-  font-size: 0.8125em;
+  font-size: 0.875em;
   color: #999;
 }
 
@@ -149,6 +149,8 @@ a.mediagoblin_logo{
   padding-left: 11px;
   padding-right: 11px;
   text-decoration: none;
+  font-family:'Lato', sans-serif;
+  font-size:1em;
 }
 
 .pagination{
