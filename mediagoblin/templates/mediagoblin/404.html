@@ -19,11 +19,16 @@
 
 {% block mediagoblin_content %}
   <h1>{% trans %}Oops!{% endtrans %}</h1>
-<div class="grid_8 alpha">
-  <p>There doesn't seem to be a page at this address. Sorry!</p>
-  <p>If you're sure the address is correct, maybe the page you're looking for has been moved or deleted.</p>
-</div>
-<div class="grid_8 omega">
-  <img src="{{ request.staticdirect('/images/404.png') }}" />
-</div>
+
+  <div class="grid_8 alpha">
+    <p>{% trans %}There doesn't seem to be a page at this address. Sorry!{% endtrans %}</p>
+    <p>
+      {%- trans %}If you're sure the address is correct, maybe the page you're looking for has been moved or deleted.{% endtrans -%}
+    </p>
+  </div>
+
+  <div class="grid_8 omega">
+    <img src="{{ request.staticdirect('/images/404.png') }}"
+         alt="{% trans %}Image of 404 goblin stressing out{% endtrans %}" />
+  </div>
 {% endblock %}
