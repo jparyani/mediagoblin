@@ -34,9 +34,7 @@
       </h2>
 
       <p class="media_uploader">
-        {% trans date="%4d-%02d-%02d"|format(
-                   media.created.year,
-                   media.created.month, media.created.day),
+        {% trans date=media.created.strftime("%Y-%m-%d"),
                  user_url=request.urlgen(
                    'mediagoblin.user_pages.user_home',
                    user=media.uploader().username),
@@ -88,11 +86,7 @@
 		       comment = comment['_id'],
 		       user = media.uploader().username,
 		       media = media._id) }}#comment">
-                {{ "%4d-%02d-%02d %02d:%02d"|format(comment.created.year,
-                                         comment.created.month,
-                                         comment.created.day,
-                                         comment.created.hour,
-                                         comment.created.minute) }}
+                {{ comment.created.strftime("%Y-%m-%d %I:%M%p") }}
               </a>
             </div>
           </div>
