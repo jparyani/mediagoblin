@@ -26,21 +26,25 @@
    <div class="grid_11 alpha">
       <h1>{% trans %}Hi there, media lover! MediaGoblin is...{% endtrans %}</h1>
       <ul>
-        <li>The perfect place for your media! No, seriously.</li>
-        <li>This is just placeholder text though. In the future this will all make sense, trust me.</li>
-        <li>It might talk about all the awesome features we've got. Or about how great federation is.</li>
-        <li>Or that it's free software and a GNU project, so anyone can help improve and share it.</li>
-        <li>No matter what, it's probably good to have <a href="example.com">a link</a> here. You never know.</li>
+        <li>{% trans %}The perfect place for your media!{% endtrans %}</li>
+        <li>{% trans %}A place for people to collaborate and show off original and derived creations!{% endtrans %}</li>
+        <li>{% trans %}Free, as in freedom. (We’re a <a href="http://gnu.org">GNU project</a> in the making, after all.){% endtrans %}</li>
+        <li>{% trans %}Aiming to make the world a better place through decentralization and (eventually, coming soon!) federation!{% endtrans %}</li>
+        <li>{% trans %}Built for extensibility.  (Multiple media types coming soon to the software, including video support!){% endtrans %}</li>
+        <li>{% trans %}Powered by people like you.  (<a href="http://mediagoblin.org/pages/join.html">You can help us improve this software!</a>){% endtrans %}</li>
       </ul>
+
       {% if allow_registration %}
         <p>Excited to join us? To add your own media, make collections and save favorites...<p>
         <a class="header_submit_highlight" href="{{ request.urlgen('mediagoblin.auth.register') }}">Create a free account</a> or
         <a class="header_submit" href="http://wiki.mediagoblin.org/HackingHowto">Set up MediaGoblin on your own server</a>
       {% endif %}
     </div>
+
     <div class="grid_5 omega">
       <img src="{{ request.staticdirect('/images/frontpage_image.png') }}" />
     </div>
+
     <div class="clear"></div>
   {% endif %}
   <h2>Most recent media</h2>
