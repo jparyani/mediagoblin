@@ -74,10 +74,9 @@
             </div>
             <div class="comment_author">&mdash; 
               <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                user = comment_author['username']) }}">
-              {{ comment_author['username'] }}</a> {% trans %}at{% endtrans %} 
-            <!--</div>
-            <div class="comment_datetime">-->
+                            user = comment_author['username']) }}">
+                {{ comment_author['username'] }}</a>
+              {% trans %}at{% endtrans %} 
               <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
 		       comment = comment['_id'],
 		       user = media.uploader().username,
