@@ -138,9 +138,11 @@ def clear_test_template_context():
     TEMPLATE_TEST_CONTEXT = {}
 
 
-def render_to_response(request, template, context):
+def render_to_response(request, template, context, status=200):
     """Much like Django's shortcut.render()"""
-    return Response(render_template(request, template, context))
+    return Response(
+        render_template(request, template, context),
+        status=status)
 
 
 def redirect(request, *args, **kwargs):
