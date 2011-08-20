@@ -93,7 +93,7 @@ a.mediagoblin_logo{
   font-weight: bold;
 }
 
-.header_submit{
+.header_submit, .header_submit_highlight{
   color: #272727;
   background-color: #aaa;
   background-image: -webkit-gradient(linear, left top, left bottom, from(##D2D2D2), to(#aaa)); 
@@ -109,6 +109,10 @@ a.mediagoblin_logo{
   text-decoration: none;
   border: medium none;
   font-style: normal;
+}
+
+.header_submit_highlight{
+background-image: -moz-linear-gradient(center top , rgb(134, 212, 177), rgb(109, 173, 144));
 }
 
 .mediagoblin_footer {

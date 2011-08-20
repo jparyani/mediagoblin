@@ -20,28 +20,29 @@
 {% from "mediagoblin/utils/object_gallery.html" import object_gallery %}
 
 {% block mediagoblin_content %}
-  <h1>{% trans %}Welcome to GNU MediaGoblin!{% endtrans %}</h1>
-
   {% if request.user %}
-    <p>
-      <a href="{{ request.urlgen('mediagoblin.submit.start') }}">
-        {%- trans %}Submit an item{% endtrans -%}
-      </a> 
-    </p>
+    <h1>Explore</h1>
   {% else %}
-    <p>
-      {% trans login_url=request.urlgen('mediagoblin.auth.login') -%}
-        If you have an account, you can <a href="{{ login_url }}">Login</a>.
-      {%- endtrans %}
-    </p>
-    {% if allow_registration %}
-      <p>
-        {% trans register_url=request.urlgen('mediagoblin.auth.register') -%}
-          If you don't have an account, please  <a href="{{ register_url }}">Register</a>.
-        {%- endtrans %}
-      </p>
-    {% endif %}
+   <div class="grid_11 alpha">
+      <h1>{% trans %}Hi there, media lover! MediaGoblin is...{% endtrans %}</h1>
+      <ul>
+        <li>The perfect place for your media! No, seriously.</li>
+        <li>This is just placeholder text though. In the future this will all make sense, trust me.</li>
+        <li>It might talk about all the awesome features we've got. Or about how great federation is.</li>
+        <li>Or that it's free software and a GNU project, so anyone can help improve and share it.</li>
+        <li>No matter what, it's probably good to have <a href="example.com">a link</a> here. You never know.</li>
+      </ul>
+      {% if allow_registration %}
+        <p>Excited to join us? To add your own media, make collections and save favorites...<p>
+        <a class="header_submit_highlight" href="{{ request.urlgen('mediagoblin.auth.register') }}">Create a free account</a> or
+        <a class="header_submit" href="http://wiki.mediagoblin.org/HackingHowto">Set up MediaGoblin on your own server</a>
+      {% endif %}
+    </div>
+    <div class="grid_5 omega">
+      <img src="{{ request.staticdirect('/images/frontpage_image.png') }}" />
+    </div>
+    <div class="clear"></div>
   {% endif %}
-
+  <h2>Most recent media</h2>
   {{ object_gallery(request, media_entries, pagination) }}
 {% endblock %}
