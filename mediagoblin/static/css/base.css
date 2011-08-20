@@ -1,3 +1,30 @@
+/* @font-face */
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Lato Bold'), local('Lato-Bold'), url('http://themes.googleusercontent.com/static/fonts/lato/v1/wkfQbvfT_02e2IWO3yYueQ.woff') format('woff');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Lato Italic'), local('Lato-Italic'), url('http://themes.googleusercontent.com/static/fonts/lato/v1/oUan5VrEkpzIazlUe5ieaA.woff') format('woff');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Lato Bold Italic'), local('Lato-BoldItalic'), url('http://themes.googleusercontent.com/static/fonts/lato/v1/HkF_qI1x_noxlxhrhMQYED8E0i7KZn-EPnyo3HZu7kw.woff') format('woff');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lato Regular'), local('Lato-Regular'), url('http://themes.googleusercontent.com/static/fonts/lato/v1/9k-RPmcnxYEPm8CNFsH2gg.woff') format('woff');
+}
+
 body {
   background-color: #111;
   background-image: url("../images/background.png");
@@ -7,6 +34,7 @@ body {
   margin: 0px;
   height: 100%;
   font: 16px "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family:'Lato', sans-serif;
 }
 
 form {
