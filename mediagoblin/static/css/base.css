@@ -74,7 +74,7 @@ label {
   font-weight: normal;
 }
 
-input {
+input, textarea {
   font-size:1em;
   font-family:'Lato', sans-serif;
 }

@@ -64,10 +64,10 @@
                                             user= request.user['username']) }}">
                   {{ request.user['username'] }}</a>
 
-                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">logout</a>)
+                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">log out</a>)
               {% else %}
                 <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
-                  {% trans %}Login{% endtrans %}</a>
+                  {% trans %}Log in{% endtrans %}</a>
               {% endif %}
             </div>
           </div>
