@@ -101,6 +101,23 @@ class MediaGoblinApp(object):
         ## Routing / controller loading stuff
         route_match = self.routing.match(path_info)
 
+        ## Attach utilities to the request object
+        request.matchdict = route_match
+        request.urlgen = routes.URLGenerator(self.routing, environ)
+        # Do we really want to load this via middleware?  Maybe?
+        request.session = request.environ['beaker.session']
+        # Attach self as request.app
+        # Also attach a few utilities from request.app for convenience?
+        request.app = self
+        request.locale = util.get_locale_from_request(request)
+            
+        request.template_env = util.get_jinja_env(
+            self.template_loader, request.locale)
+        request.db = self.db
+        request.staticdirect = self.staticdirector
+
+        util.setup_user_in_request(request)
+
         # No matching page?
         if route_match is None:
             # Try to do see if we have a match with a trailing slash
@@ -120,23 +137,6 @@ class MediaGoblinApp(object):
 
         controller = util.import_component(route_match['controller'])
         request.start_response = start_response
-
-        ## Attach utilities to the request object
-        request.matchdict = route_match
-        request.urlgen = routes.URLGenerator(self.routing, environ)
-        # Do we really want to load this via middleware?  Maybe?
-        request.session = request.environ['beaker.session']
-        # Attach self as request.app
-        # Also attach a few utilities from request.app for convenience?
-        request.app = self
-        request.locale = util.get_locale_from_request(request)
-            
-        request.template_env = util.get_jinja_env(
-            self.template_loader, request.locale)
-        request.db = self.db
-        request.staticdirect = self.staticdirector
-
-        util.setup_user_in_request(request)
 
         return controller(request)(environ, start_response)
 
