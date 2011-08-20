@@ -133,6 +133,7 @@ class MediaGoblinApp(object):
                 return request.get_response(redirect)(environ, start_response)
 
             # Okay, no matches.  404 time!
+            request.matchdict = {}  # in case our template expects it
             return util.render_404(request)(environ, start_response)
 
         controller = util.import_component(route_match['controller'])
