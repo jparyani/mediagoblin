@@ -26,7 +26,7 @@
       <h1>{% trans %}Log in{% endtrans %}</h1>
       {% if login_failed %}
         <div class="form_field_error">
-          {% trans %}Login failed!{% endtrans %}
+          {% trans %}Logging in failed!{% endtrans %}
         </div>
       {% endif %}
       {{ wtforms_util.render_divs(login_form) }}
