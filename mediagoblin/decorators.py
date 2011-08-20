@@ -17,7 +17,7 @@
 
 from webob import exc
 
-from mediagoblin.util import redirect
+from mediagoblin.util import redirect, render_404
 from mediagoblin.db.util import ObjectId, InvalidId
 
 
@@ -60,9 +60,9 @@ def uses_pagination(controller):
         try:
             page = int(request.GET.get('page', 1))
             if page < 0:
-                return exc.HTTPNotFound()
+                return render_404(request)
         except ValueError:
-            return exc.HTTPNotFound()
+            return render_404(request)
 
         return controller(request, page=page, *args, **kwargs)
 
@@ -78,7 +78,7 @@ def get_user_media_entry(controller):
             {'username': request.matchdict['user']})
 
         if not user:
-            return exc.HTTPNotFound()
+            return render_404(request)
 
         media = request.db.MediaEntry.find_one(
             {'slug': request.matchdict['media'],
@@ -93,11 +93,11 @@ def get_user_media_entry(controller):
                      'state': 'processed',
                      'uploader': user['_id']})
             except InvalidId:
-                return exc.HTTPNotFound()
+                return render_404(request)
 
             # Still no media?  Okay, 404.
             if not media:
-                return exc.HTTPNotFound()
+                return render_404(request)
 
         return controller(request, media=media, *args, **kwargs)
 
@@ -113,11 +113,11 @@ def get_media_entry_by_id(controller):
                 {'_id': ObjectId(request.matchdict['media']),
                  'state': 'processed'})
         except InvalidId:
-            return exc.HTTPNotFound()
+            return render_404(request)
 
         # Still no media?  Okay, 404.
         if not media:
-            return exc.HTTPNotFound()
+            return render_404(request)
 
         return controller(request, media=media, *args, **kwargs)
 

@@ -19,7 +19,8 @@ from webob import exc
 from mediagoblin import messages
 from mediagoblin.db.util import DESCENDING, ObjectId
 from mediagoblin.util import (
-    Pagination, render_to_response, redirect, cleaned_markdown_conversion)
+    Pagination, render_to_response, redirect, cleaned_markdown_conversion,
+    render_404)
 from mediagoblin.user_pages import forms as user_forms
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
@@ -34,7 +35,7 @@ def user_home(request, page):
     user = request.db.User.find_one({
             'username': request.matchdict['user']})
     if not user:
-        return exc.HTTPNotFound()
+        return render_404(request)
     elif user['status'] != u'active':
         return render_to_response(
             request,
@@ -50,7 +51,7 @@ def user_home(request, page):
 
     #if no data is available, return NotFound
     if media_entries == None:
-        return exc.HTTPNotFound()
+        return render_404(request)
     
     user_gallery_url = request.urlgen(
         'mediagoblin.user_pages.user_gallery',
@@ -71,7 +72,7 @@ def user_gallery(request, page):
             'username': request.matchdict['user'],
             'status': 'active'})
     if not user:
-        return exc.HTTPNotFound()
+        return render_404(request)
 
     cursor = request.db.MediaEntry.find(
         {'uploader': user['_id'],
@@ -82,7 +83,7 @@ def user_gallery(request, page):
 
     #if no data is available, return NotFound
     if media_entries == None:
-        return exc.HTTPNotFound()
+        return render_404(request)
     
     return render_to_response(
         request,
@@ -154,7 +155,7 @@ def atom_feed(request):
                'username': request.matchdict['user'],
                'status': 'active'})
     if not user:
-        return exc.HTTPNotFound()
+        return render_404(request)
 
     cursor = request.db.MediaEntry.find({
                  'uploader': user['_id'],
@@ -190,7 +191,7 @@ def processing_panel(request):
 
     # Make sure the user exists and is active
     if not user:
-        return exc.HTTPNotFound()
+        return render_404(request)
     elif user['status'] != u'active':
         return render_to_response(
             request,

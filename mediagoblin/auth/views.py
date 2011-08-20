@@ -20,7 +20,7 @@ from webob import exc
 
 from mediagoblin import messages
 from mediagoblin import mg_globals
-from mediagoblin.util import render_to_response, redirect
+from mediagoblin.util import render_to_response, redirect, render_404
 from mediagoblin.util import pass_to_ugettext as _
 from mediagoblin.db.util import ObjectId
 from mediagoblin.auth import lib as auth_lib
@@ -144,7 +144,7 @@ def verify_email(request):
     """
     # If we don't have userid and token parameters, we can't do anything; 404
     if not request.GET.has_key('userid') or not request.GET.has_key('token'):
-        return exc.HTTPNotFound()
+        return render_404(request)
 
     user = request.db.User.find_one(
         {'_id': ObjectId(unicode(request.GET['userid']))})
