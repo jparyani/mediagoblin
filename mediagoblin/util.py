@@ -348,8 +348,10 @@ def get_locale_from_request(request):
     accept_lang_matches = request.accept_language.best_matches()
 
     # Your routing can explicitly specify a target language
-    if request.matchdict.has_key('locale'):
-        target_lang = request.matchdict['locale']
+    matchdict = request.matchdict or {}
+
+    if matchdict.has_key('locale'):
+        target_lang = matchdict['locale']
     elif request.session.has_key('target_lang'):
         target_lang = request.session['target_lang']
     # Pull the first acceptable language
@@ -662,3 +664,11 @@ def gridify_cursor(this_cursor, num_cols=5):
     the number of columns in the list
     """
     return gridify_list(list(this_cursor), num_cols)
+
+
+def render_404(request):
+    """
+    Render a 404.
+    """
+    return render_to_response(
+        request, 'mediagoblin/404.html', {}, status=400)

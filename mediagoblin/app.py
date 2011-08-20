@@ -133,7 +133,7 @@ class MediaGoblinApp(object):
                 return request.get_response(redirect)(environ, start_response)
 
             # Okay, no matches.  404 time!
-            return exc.HTTPNotFound()(environ, start_response)
+            return util.render_404(request)(environ, start_response)
 
         controller = util.import_component(route_match['controller'])
         request.start_response = start_response
