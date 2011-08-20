@@ -74,6 +74,11 @@ label {
   font-weight: normal;
 }
 
+input {
+  font-size:1em;
+  font-family:'Lato', sans-serif;
+}
+
 /* website structure */
 
 .mediagoblin_body {
