@@ -28,7 +28,7 @@
 body {
   background-color: #111;
   background-image: url("../images/background.png");
-  color: #999;
+  color: #C3C3C3;
   font-family: sans-serif;
   padding: none;
   margin: 0px;
@@ -52,6 +52,7 @@ h1{
 }
 
 h2{
+  font-size: 1.375em;
   margin-top: 20px;
   color: #fff;
 }
@@ -117,7 +118,6 @@ a.mediagoblin_logo{
   padding-top: 8px;
   text-align: center;
   font-size: 0.875em;
-  color: #999;
 }
 
 .mediagoblin_content {
