@@ -26,6 +26,7 @@ import subprocess
 import os.path
 import os
 import sys
+from contextlib import closing
 
 
 def import_export_parse_setup(subparser):
@@ -147,7 +148,7 @@ def _create_archive(args):
         args.tar_file,
         mode='w|gz')
 
-    with tf:
+    with closing(tf):
         tf.add(args.cache_path, 'mediagoblin-data/')
 
     print "\n== Archiving done ==\n"
