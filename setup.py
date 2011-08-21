@@ -58,6 +58,9 @@ setup(
         [paste.app_factory]
         app = mediagoblin.app:paste_app_factory
 
+        [paste.filter_app_factory]
+        errors = mediagoblin.errormiddleware:mgoblin_error_middleware
+
         [zc.buildout]
         make_user_dev_dirs = mediagoblin.buildout_recipes:MakeUserDevDirs
 
