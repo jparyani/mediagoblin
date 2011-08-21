@@ -49,5 +49,12 @@ MGOBLIN_ERROR_MESSAGE = """\
 
 
 def mgoblin_error_middleware(app, global_conf, **kw):
+    """
+    MediaGoblin wrapped error middleware.
+
+    This is really just wrapping the error middleware from Paste.
+    It should take all of Paste's default options, so see:
+      http://pythonpaste.org/modules/exceptions.html
+    """
     kw['error_message'] = MGOBLIN_ERROR_MESSAGE
     return make_error_middleware(app, global_conf, **kw)
