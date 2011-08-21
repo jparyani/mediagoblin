@@ -95,7 +95,6 @@ def env_import(args):
     if not args.cache_path:
         args.cache_path = tempfile.mkdtemp()
 
-    # args.cache_path += 'mediagoblin-data'
     setup_global_and_app_config(args.conf_file)
 
     # Creates mg_globals.public_store and mg_globals.queue_store
@@ -111,7 +110,8 @@ def env_import(args):
 
     tf.extractall(args.cache_path)
 
-    args.cache_path += 'mediagoblin-data'
+    args.cache_path = os.path.join(
+        args.cache_path, 'mediagoblin-data')
     args = _setup_paths(args)
 
     # Import database from extracted data
