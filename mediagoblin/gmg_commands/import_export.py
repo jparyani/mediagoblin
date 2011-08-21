@@ -115,7 +115,8 @@ def env_import(args):
 
     _import_media(db, args)
 
-    # _clean(args)
+    _clean(args)
+
 
 def _setup_paths(args):
     """
