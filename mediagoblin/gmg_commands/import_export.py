@@ -22,6 +22,7 @@ from mediagoblin.init import setup_storage, setup_global_and_app_config
 
 import shutil
 import tarfile
+import tempfile
 import subprocess
 import os.path
 import os
@@ -43,8 +44,8 @@ def import_export_parse_setup(subparser):
         '--mongorestore_path', default='mongorestore',
         help='mongorestore binary')
     subparser.add_argument(
-        '--cache_path', default='/tmp/mediagoblin/',
-        help='')
+        '--cache_path',
+        help='Temporary directory where files will be temporarily dumped')
 
 
 def _import_media(db, args):
@@ -91,6 +92,9 @@ def env_import(args):
     """
     Restore mongo database and media files from a tar archive
     """
+    if not args.cache_path:
+        args.cache_path = tempfile.mkdtemp()
+
     # args.cache_path += 'mediagoblin-data'
     setup_global_and_app_config(args.conf_file)
 
@@ -171,12 +175,6 @@ def _export_check(args):
 
             return False
 
-    if os.path.exists(args.cache_path):
-        print 'The cache directory must not exist before you run this script'
-        print 'Cache directory: ', args.cache_path
-
-        return False
-
     return True
 
 
@@ -221,6 +219,15 @@ def env_export(args):
     """
     Export database and media files to a tar archive
     """
+    if args.cache_path:
+        if os.path.exists(args.cache_path):
+            print 'The cache directory must not exist before you run this script'
+            print 'Cache directory: ', args.cache_path
+
+            return False
+    else:
+        args.cache_path = tempfile.mkdtemp()
+
     args = _setup_paths(args)
 
     if not _export_check(args):
