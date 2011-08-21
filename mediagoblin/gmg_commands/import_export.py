@@ -68,9 +68,6 @@ def _import_media(db, args):
             media_file.write(
                 media_cache.get_file(path, mode='rb').read())
 
-            print(media_file)
-        print(entry)
-
     print "\n== Media imported ==\n"
 
 
@@ -85,8 +82,6 @@ def _import_database(db, args):
             '-d', db.name,
             os.path.join(args._cache_path['database'], db.name)])
     
-    print p
-
     p.wait()
 
     print "\n== Database imported ==\n"
@@ -217,9 +212,6 @@ def _export_media(db, args):
             mc_file = media_cache.get_file(path, mode='wb')
             mc_file.write(
                 mg_globals.public_store.get_file(path, mode='rb').read())
-
-            print(mc_file)
-        print(entry)
 
     print "\n== Media exported ==\n"
 
