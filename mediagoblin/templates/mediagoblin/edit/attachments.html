@@ -18,18 +18,37 @@
 {% extends "mediagoblin/base.html" %}
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
-
 {% block mediagoblin_content %}
-  <form action="{{ request.urlgen('mediagoblin.submit.start') }}"
+  <form action="{{ request.urlgen('mediagoblin.edit.attachments',
+                               user= media.uploader().username,
+                               media= media._id) }}"
         method="POST" enctype="multipart/form-data">
-    <div class="grid_8 prefix_1 suffix_1 form_box">
-      <h1>Submit yer media</h1>
-      {{ wtforms_util.render_field_div(submit_form.file) }}
-      {{ wtforms_util.render_field_div(submit_form.title) }}
-      {{ wtforms_util.render_textarea_div(submit_form.description) }}
-      {{ wtforms_util.render_field_div(submit_form.tags) }}
+    <div class="grid_8 prefix_1 suffix_1 edit_box form_box">
+      <h1>Editing attachments for {{ media.title }}</h1>
+      <div style="text-align: center;" >
+        <img src="{{ request.app.public_store.file_url(
+                         media['media_files']['thumb']) }}" />
+      </div>
+
+      {% if media.attachment_files|count %}
+      <h2>Attachments</h2>
+      <ul>
+	{% for attachment in media.attachment_files %}
+          <li>
+	    <a target="_blank" href="{{ request.app.public_store.file_url(
+				     attachment['filepath']) }}">
+	      {{ attachment.name -}}
+	    </a><br />
+	  </li>
+	{% endfor %}
+      </ul>
+      {% endif %}
+
+      <h2>Add attachment</h2>
+      {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
-      <input type="submit" value="Submit" class="button" />
+        <a href="{{ media.url_for_self(request.urlgen) }}">Cancel</a>
+        <input type="submit" value="Save changes" class="button" />
       </div>
     </div>
   </form>

@@ -16,7 +16,7 @@
 
 from webob import exc
 
-from mediagoblin import messages
+from mediagoblin import messages, mg_globals
 from mediagoblin.db.util import DESCENDING, ObjectId
 from mediagoblin.util import (
     Pagination, render_to_response, redirect, cleaned_markdown_conversion)
@@ -117,7 +117,8 @@ def media_home(request, media, page, **kwargs):
         {'media': media,
          'comments': comments,
          'pagination': pagination,
-         'comment_form': comment_form})
+         'comment_form': comment_form,
+         'app_config': mg_globals.app_config})
 
 
 @require_active_login

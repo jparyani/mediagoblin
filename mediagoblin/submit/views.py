@@ -76,31 +76,6 @@ def submit_start(request):
             # Generate a slug from the title
             entry.generate_slug()
 
-            # Add any attachements
-            if (mg_globals.app_config['allow_attachments']
-                and request.POST.has_key('attachment')
-                and isinstance(request.POST['attachment'], FieldStorage)
-                and request.POST['attachment'].file):
-
-                attachment_public_filepath = mg_globals.public_store.get_unique_filepath(
-                    ['media_entries',
-                     unicode('attachment-%s' % entry['_id']),
-                     secure_filename(request.POST['attachment'].filename)])
-
-                attachment_public_file = mg_globals.public_store.get_file(
-                    attachment_public_filepath, 'wb')
-
-                try:
-                    attachment_public_file.write(request.POST['attachment'].file.read())
-                finally:
-                    request.POST['attachment'].file.close()
-
-                entry['attachment_files'] = [dict(
-                        name=request.POST['attachment'].filename,
-                        filepath=attachment_public_filepath,
-                        created=datetime.utcnow()
-                        )]
-
             # Now store generate the queueing related filename
             queue_filepath = request.app.queue_store.get_unique_filepath(
                 ['media_entries',

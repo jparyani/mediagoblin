@@ -17,6 +17,10 @@
 
 from webob import exc
 from string import split
+from cgi import FieldStorage
+from datetime import datetime
+
+from werkzeug.utils import secure_filename
 
 from mediagoblin import messages
 from mediagoblin import mg_globals
@@ -34,16 +38,14 @@ def edit_media(request, media):
     if not may_edit_media(request, media):
         return exc.HTTPForbidden()
 
-
     defaults = dict(
-        title = media['title'],
-        slug = media['slug'],
-        description = media['description'],
-        tags = media_tags_as_string(media['tags']))
+        title=media['title'],
+        slug=media['slug'],
+        description=media['description'],
+        tags=media_tags_as_string(media['tags']))
 
     if len(media['attachment_files']):
         defaults['attachment_name'] = media['attachment_files'][0]['name']
-
 
     form = forms.EditForm(
         request.POST,
@@ -56,7 +58,7 @@ def edit_media(request, media):
             {'slug': request.POST['slug'],
              'uploader': media['uploader'],
              '_id': {'$ne': media['_id']}}).count()
-        
+
         if existing_user_slug_entries:
             form.slug.errors.append(
                 u'An entry with that slug already exists for this user.')
@@ -65,14 +67,16 @@ def edit_media(request, media):
             media['description'] = request.POST.get('description')
             media['tags'] = convert_to_tag_list_of_dicts(
                                    request.POST.get('tags'))
-            
+
             media['description_html'] = cleaned_markdown_conversion(
                 media['description'])
 
             if 'attachment_name' in request.POST:
-                media['attachment_files'][0]['name'] = request.POST['attachment_name']
+                media['attachment_files'][0]['name'] = \
+                    request.POST['attachment_name']
 
-            if 'attachment_delete' in request.POST and 'y' == request.POST['attachment_delete']:
+            if 'attachment_delete' in request.POST \
+                    and 'y' == request.POST['attachment_delete']:
                 del media['attachment_files'][0]
 
             media['slug'] = request.POST['slug']
@@ -87,18 +91,68 @@ def edit_media(request, media):
         messages.add_message(
             request, messages.WARNING,
             "You are editing another user's media. Proceed with caution.")
-        
 
     return render_to_response(
         request,
         'mediagoblin/edit/edit.html',
         {'media': media,
          'form': form})
-    
+
+
+@get_user_media_entry
+@require_active_login
+def edit_attachments(request, media):
+    if mg_globals.app_config['allow_attachments']:
+        form = forms.EditAttachmentsForm()
+
+        # Add any attachements
+        if ('attachment_file' in request.POST
+            and isinstance(request.POST['attachment_file'], FieldStorage)
+            and request.POST['attachment_file'].file):
+
+            attachment_public_filepath \
+                = mg_globals.public_store.get_unique_filepath(
+                ['media_entries', unicode(media['_id']), 'attachment',
+                 secure_filename(request.POST['attachment_file'].filename)])
+
+            attachment_public_file = mg_globals.public_store.get_file(
+                attachment_public_filepath, 'wb')
+
+            try:
+                attachment_public_file.write(
+                    request.POST['attachment_file'].file.read())
+            finally:
+                request.POST['attachment_file'].file.close()
+
+            media['attachment_files'].append(dict(
+                    name=request.POST['attachment_name'] \
+                        or request.POST['attachment_file'].filename,
+                    filepath=attachment_public_filepath,
+                    created=datetime.utcnow()
+                    ))
+
+            media.save()
+
+            messages.add_message(
+                request, messages.SUCCESS,
+                "You added the attachment %s!" \
+                    % (request.POST['attachment_name']
+                       or request.POST['attachment_file'].filename))
+
+            return redirect(request, 'mediagoblin.user_pages.media_home',
+                            user=media.uploader()['username'],
+                            media=media['slug'])
+        return render_to_response(
+            request,
+            'mediagoblin/edit/attachments.html',
+            {'media': media,
+             'form': form})
+    else:
+        return exc.HTTPForbidden()
+
 
 @require_active_login
 def edit_profile(request):
-
     # admins may edit any user profile given a username in the querystring
     edit_username = request.GET.get('username')
     if request.user['is_admin'] and request.user['username'] != edit_username:
@@ -112,8 +166,8 @@ def edit_profile(request):
         user = request.user
 
     form = forms.EditProfileForm(request.POST,
-        url = user.get('url'),
-        bio = user.get('bio'))
+        url=user.get('url'),
+        bio=user.get('bio'))
 
     if request.method == 'POST' and form.validate():
             user['url'] = request.POST['url']
@@ -123,12 +177,12 @@ def edit_profile(request):
 
             user.save()
 
-            messages.add_message(request, 
-            	                 messages.SUCCESS, 
-            	                 'Profile edited!')
+            messages.add_message(request,
+                                 messages.SUCCESS,
+                                 'Profile edited!')
             return redirect(request,
                            'mediagoblin.user_pages.user_home',
-            	            user=edit_username)
+                            user=edit_username)
 
     return render_to_response(
         request,
