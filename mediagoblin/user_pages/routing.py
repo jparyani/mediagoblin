@@ -29,6 +29,8 @@ user_routes = [
           controller="mediagoblin.user_pages.views:media_home"),
     Route('mediagoblin.edit.edit_media', "/{user}/m/{media}/edit/",
         controller="mediagoblin.edit.views:edit_media"),
+    Route('mediagoblin.confirm.confirm_delete', "/{user}/m/{media}/confirm/",
+        controller="mediagoblin.confirm.views:confirm_delete"),
     Route('mediagoblin.user_pages.atom_feed', '/{user}/atom/',
         controller="mediagoblin.user_pages.views:atom_feed"),
     Route('mediagoblin.user_pages.media_post_comment',

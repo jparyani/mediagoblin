@@ -55,10 +55,10 @@ def submit_start(request):
             entry = request.db.MediaEntry()
             entry['_id'] = ObjectId()
             entry['title'] = (
-                request.POST['title']
+                unicode(request.POST['title'])
                 or unicode(splitext(filename)[0]))
 
-            entry['description'] = request.POST.get('description')
+            entry['description'] = unicode(request.POST.get('description'))
             entry['description_html'] = cleaned_markdown_conversion(
                 entry['description'])
             

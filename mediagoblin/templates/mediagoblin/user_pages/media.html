@@ -127,8 +127,11 @@
                      class="media_icon" />edit</a>
           </p>
           <p>
-            <img src="{{ request.staticdirect('/images/icon_delete.png') }}"
-                 class="media_icon" />{% trans %}delete{% endtrans %}
+            <a href="{{ request.urlgen('mediagoblin.confirm.confirm_delete',
+                                       user= media.uploader().username,
+                                       media= media._id) }}"
+               ><img src="{{ request.staticdirect('/images/icon_delete.png') }}"
+                 class="media_icon" />{% trans %}delete{% endtrans %}</a>
           </p>
         {% endif %}
 

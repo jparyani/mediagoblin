@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import uuid
 
 from webob import exc
 from string import split
@@ -53,15 +54,17 @@ def edit_media(request, media):
             form.slug.errors.append(
                 _(u'An entry with that slug already exists for this user.'))
         else:
-            media['title'] = request.POST['title']
-            media['description'] = request.POST.get('description')
+            media['title'] = unicode(request.POST['title'])
+            media['description'] = unicode(request.POST.get('description'))
             media['tags'] = convert_to_tag_list_of_dicts(
                                    request.POST.get('tags'))
             
             media['description_html'] = cleaned_markdown_conversion(
                 media['description'])
 
-            media['slug'] = request.POST['slug']
+            media['slug'] = unicode(request.POST['slug'])
+            task_id = unicode(uuid.uuid4())
+            media['queued_task_id'] = task_id
             media.save()
 
             return redirect(request, "mediagoblin.user_pages.media_home",
@@ -102,8 +105,8 @@ def edit_profile(request):
         bio = user.get('bio'))
 
     if request.method == 'POST' and form.validate():
-            user['url'] = request.POST['url']
-            user['bio'] = request.POST['bio']
+            user['url'] = unicode(request.POST['url'])
+            user['bio'] = unicode(request.POST['bio'])
 
             user['bio_html'] = cleaned_markdown_conversion(user['bio'])
 
