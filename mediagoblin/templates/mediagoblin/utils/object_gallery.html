@@ -25,13 +25,18 @@
                  {%- if loop.first %} thumb_row_first
                  {%- elif loop.last %} thumb_row_last{% endif %}">
         {% for entry in row %}
+          {% set entry_url = entry.url_for_self(request.urlgen) %}
           <td class="media_thumbnail thumb_entry
                      {%- if loop.first %} thumb_entry_first
                      {%- elif loop.last %} thumb_entry_last{% endif %}">
-            <a href="{{ entry.url_for_self(request.urlgen) }}">
+            <a href="{{ entry_url }}">
               <img src="{{ request.app.public_store.file_url(
                              entry['media_files']['thumb']) }}" />
             </a>
+            {% if entry['title'] %}
+              <br />
+              <a href="{{ entry_url }}">{{ entry['title'] }}</a>
+            {% endif %}
           </td>
         {% endfor %}
       </tr>

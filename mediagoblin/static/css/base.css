@@ -244,6 +244,11 @@ text-align: center;
   text-align: center;
 }
 
+.media_thumbnail a {
+  color: #eee;
+  text-decoration: none;
+}
+
 /* media detail */
 
 h2.media_title{
