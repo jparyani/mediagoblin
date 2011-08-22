@@ -42,8 +42,9 @@
           <div class="grid_16 mediagoblin_header">
             {% block mediagoblin_logo %}
               <a class="mediagoblin_logo" href="{{ request.urlgen('index') }}">
-                MediaGoblin<img src="{{ request.staticdirect('/images/logo.png') }}"
-                     alt="{% trans %}MediaGoblin logo{% endtrans %}" /></a>
+                <img src="{{ request.staticdirect('/images/logo.png') }}"
+                     alt="{% trans %}MediaGoblin logo{% endtrans %}" />
+              </a>
             {% endblock %}
             {% if request.user and request.user['status'] == 'active' %}
               <a class="header_submit"
