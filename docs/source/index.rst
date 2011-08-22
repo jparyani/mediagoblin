@@ -12,11 +12,10 @@ Table of Contents:
    :maxdepth: 2
 
    foreword
-   mediagoblin
-   contributinghowto
+   about_mediagoblin
    deploymenthowto
    theminghowto
-   git
+   contributinghowto
    codebase
    vision
 
