@@ -149,9 +149,11 @@
       {% if app_config['allow_attachments']
             and (media['uploader'] == request.user['_id']
                  or request.user['is_admin']) %}
-        <a href="{{ request.urlgen('mediagoblin.edit.attachments',
-                      user=media.uploader().username,
-                      media=media._id) }}">Add attachment</a>
+        <p>
+          <a href="{{ request.urlgen('mediagoblin.edit.attachments',
+                        user=media.uploader().username,
+                        media=media._id) }}">Add attachment</a>
+        </p>
       {% endif %}
 
       {% if media.tags %}
