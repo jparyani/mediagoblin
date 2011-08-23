@@ -19,7 +19,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>{% block title %}GNU MediaGoblin{% endblock title %}</title>
+    <title>{% block title %}{% trans %}GNU MediaGoblin{% endtrans %}{% endblock title %}</title>
     <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/extlib/reset.css') }}"/>
     <link rel="stylesheet" type="text/css"
@@ -28,6 +28,8 @@
           href="{{ request.staticdirect('/css/extlib/960_16_col.css') }}"/>
     <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/base.css') }}"/>
+    <link rel="shortcut icon"
+          href="{{ request.staticdirect('/images/goblin.ico') }}" />
     {% block mediagoblin_head %}
     {% endblock mediagoblin_head %}
   </head>
@@ -40,15 +42,14 @@
           <div class="grid_16 mediagoblin_header">
             {% block mediagoblin_logo %}
               <a class="mediagoblin_logo"
-                 href="{{ request.urlgen('index') }}">
-                <img src="{{ request.staticdirect('/images/logo.png') }}"
-                     alt="Mediagoblin logo" />
-              </a>
+                 href="{{ request.urlgen('index') }}"
+                 ><img src="{{ request.staticdirect('/images/logo.png') }}"
+                     alt="{% trans %}MediaGoblin logo{% endtrans %}" /></a>
             {% endblock %}
             {% if request.user and request.user['status'] == 'active' %}
               <a class="header_submit"
                  href="{{ request.urlgen('mediagoblin.submit.start') }}">
-                Submit media
+                {% trans %}Submit media{% endtrans %}
               </a>
             {% endif %}
             {% block mediagoblin_header_title %}{% endblock %}
@@ -59,17 +60,17 @@
                   <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                               user=request.user['username']) }}"
                      class="header_submit">
-                    verify your email!</a>
+                    {% trans %}verify your email!{% endtrans %}</a>
                 {% endif %}
 
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                             user= request.user['username']) }}">
                   {{ request.user['username'] }}</a>
 
-                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">logout</a>)
+                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">log out</a>)
               {% else %}
                 <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
-                  Login</a>
+                  {% trans %}Log in{% endtrans %}</a>
               {% endif %}
             </div>
           </div>
@@ -85,7 +86,9 @@
       {% block mediagoblin_footer %}
         <div class="container_16">
           <div class="grid_16 mediagoblin_footer">
-            Powered by <a href="http://mediagoblin.org">MediaGoblin</a>, a <a href="http://gnu.org/">GNU project</a>
+            {% trans -%}
+              Powered by <a href="http://mediagoblin.org">MediaGoblin</a>, a <a href="http://gnu.org/">GNU project</a>
+            {%- endtrans %}
           </div>
         </div>
       {% endblock %}

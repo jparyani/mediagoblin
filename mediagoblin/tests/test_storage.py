@@ -60,23 +60,20 @@ class FakeRemoteStorage(storage.BasicFileStorage):
 
 def test_storage_system_from_config():
     this_storage = storage.storage_system_from_config(
-        {'somestorage_base_url': 'http://example.org/moodia/',
-         'somestorage_base_dir': '/tmp/',
-         'somestorage_garbage_arg': 'garbage_arg',
-         'garbage_arg': 'trash'},
-        'somestorage')
+        {'base_url': 'http://example.org/moodia/',
+         'base_dir': '/tmp/',
+         'garbage_arg': 'garbage_arg',
+         'garbage_arg': 'trash'})
     assert this_storage.base_url == 'http://example.org/moodia/'
     assert this_storage.base_dir == '/tmp/'
     assert this_storage.__class__ is storage.BasicFileStorage
 
     this_storage = storage.storage_system_from_config(
-        {'somestorage_foobie': 'eiboof',
-         'somestorage_blech': 'hcelb',
-         'somestorage_garbage_arg': 'garbage_arg',
-         'garbage_arg': 'trash',
-         'somestorage_storage_class':
-             'mediagoblin.tests.test_storage:FakeStorageSystem'},
-         'somestorage')
+        {'foobie': 'eiboof',
+         'blech': 'hcelb',
+         'garbage_arg': 'garbage_arg',
+         'storage_class':
+             'mediagoblin.tests.test_storage:FakeStorageSystem'})
     assert this_storage.foobie == 'eiboof'
     assert this_storage.blech == 'hcelb'
     assert this_storage.__class__ is FakeStorageSystem

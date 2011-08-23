@@ -1,12 +1,40 @@
+/* @font-face */
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Lato Bold'), local('Lato-Bold'), url('http://themes.googleusercontent.com/static/fonts/lato/v1/wkfQbvfT_02e2IWO3yYueQ.woff') format('woff');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Lato Italic'), local('Lato-Italic'), url('http://themes.googleusercontent.com/static/fonts/lato/v1/oUan5VrEkpzIazlUe5ieaA.woff') format('woff');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Lato Bold Italic'), local('Lato-BoldItalic'), url('http://themes.googleusercontent.com/static/fonts/lato/v1/HkF_qI1x_noxlxhrhMQYED8E0i7KZn-EPnyo3HZu7kw.woff') format('woff');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lato Regular'), local('Lato-Regular'), url('http://themes.googleusercontent.com/static/fonts/lato/v1/9k-RPmcnxYEPm8CNFsH2gg.woff') format('woff');
+}
+
 body {
   background-color: #111;
   background-image: url("../images/background.png");
-  color: #999;
+  color: #C3C3C3;
   font-family: sans-serif;
   padding: none;
   margin: 0px;
   height: 100%;
   font: 16px "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family:'Lato', sans-serif;
 }
 
 form {
@@ -14,37 +42,28 @@ form {
   padding: 0px;
 }
 
-/* Carter One font */
-
-@font-face {
-  font-family: 'Carter One';
-  font-style: normal;
-  font-weight: normal;
-  src: local('CarterOne'), url('http://themes.googleusercontent.com/font?kit=VjW2qt1pkqVtO22ObxgEBRsxEYwM7FgeyaSgU71cLG0') format('woff');
-}
-
 /* text styles */
 
 h1{
-  font-family: 'Carter One',arial,serif;
   margin-bottom: 15px;
   margin-top: 15px;
   color: #fff;
-  font-size: 30px;
+  font-size: 1.875em;
 }
 
 h2{
+  font-size: 1.375em;
   margin-top: 20px;
   color: #fff;
 }
 
 h3{
-  border-bottom: 1px solid #222;
-  font-size: 18px;
+  border-bottom: 1px solid #333;
+  font-size: 1.125em;
 }
 
 a {
-  color: #999;
+  color: #86D4B1;
 }
 
 a.highlight {
@@ -53,6 +72,11 @@ a.highlight {
 
 label {
   font-weight: normal;
+}
+
+input, textarea {
+  font-size:1em;
+  font-family:'Lato', sans-serif;
 }
 
 /* website structure */
@@ -66,10 +90,15 @@ label {
   height: 36px;
   padding-top: 14px;
   margin-bottom: 20px;
-  border-bottom: 1px solid #222222;
+  border-bottom: 1px solid #333;
 }
 
-.header_submit{
+a.mediagoblin_logo{
+  color: #fff;
+  font-weight: bold;
+}
+
+.header_submit, .header_submit_highlight{
   color: #272727;
   background-color: #aaa;
   background-image: -webkit-gradient(linear, left top, left bottom, from(##D2D2D2), to(#aaa)); 
@@ -79,22 +108,25 @@ label {
   background-image:      -o-linear-gradient(top, #D2D2D2, #aaa); 
   background-image:         linear-gradient(top, #D2D2D2, #aaa);
   box-shadow: 0px 0px 4px #000;
-  border-radius: 5px 5px 5px 5px;
+  border-radius: 3px;
   margin: 8px;
   padding: 3px 8px;
   text-decoration: none;
   border: medium none;
-  font-family: 'Carter One',arial,serif;
+  font-style: normal;
+}
+
+.header_submit_highlight{
+background-image: -moz-linear-gradient(center top , rgb(134, 212, 177), rgb(109, 173, 144));
 }
 
 .mediagoblin_footer {
   height: 30px;
-  border-top: 1px solid #222222;
+  border-top: 1px solid #333;
   bottom: 0px;
   padding-top: 8px;
   text-align: center;
-  font-size: 14px;
-  color: #999;
+  font-size: 0.875em;
 }
 
 .mediagoblin_content {
@@ -108,7 +140,6 @@ label {
 /* common website elements */
 
 .button {
-  font-family: 'Carter One', arial, serif;
   height: 32px;
   min-width: 99px;
   background-color: #86d4b1;
@@ -119,15 +150,16 @@ label {
   background-image:      -o-linear-gradient(top, #86d4b1, #62caa2); 
   background-image:         linear-gradient(top, #86d4b1, #62caa2);
   box-shadow: 0px 0px 4px #000;
-  border-radius: 5px;
+  border-radius: 3px;
   border: none;
   color: #272727;
   margin: 10px 0px 10px 15px;
-  font-size: 1em;
   text-align: center;
   padding-left: 11px;
   padding-right: 11px;
   text-decoration: none;
+  font-family:'Lato', sans-serif;
+  font-size:1em;
 }
 
 .pagination{
@@ -138,13 +170,20 @@ text-align: center;
   margin: 5px;
 }
 
+.empty_space{
+  background-color: #222;
+  font-style: italic;
+  text-align: center;
+  height: 160px;
+  padding-top: 70px;
+}
+
 /* forms */
 
 .form_box {
   background-color: #222;
   background-image: url("../images/background_lines.png");
   background-repeat: repeat-x;
-  font-size: 18px;
   padding-bottom: 30px;
   padding-top: 30px;
   margin-left: auto;
@@ -157,13 +196,8 @@ text-align: center;
   background-image: url("../images/background_edit.png");
 }
 
-.form_box h1 {
-  font-size: 28px;
-}
-
 .form_field_input input, .form_field_input textarea {
   width: 100%;
-  font-size: 18px;
 }
 
 .form_field_box {
@@ -178,7 +212,6 @@ text-align: center;
   background-color: #87453b;
   color: #fff;
   border: none;
-  font-size: 16px;
   padding: 9px;
   margin-top: 8px;
   margin-bottom: 8px;
@@ -193,7 +226,7 @@ text-align: center;
 .comment_author {
   margin-bottom: 40px;
   padding-top: 4px;
-  font-size: 14px;
+  font-size: 0.9em;
 }
 
 .comment_content p {
@@ -205,17 +238,26 @@ text-align: center;
 .media_thumbnail {
   padding: 0px;
   width: 180px;
-  height: 180px;
   overflow: hidden;
   float: left;
   margin: 0px 4px 10px 4px;
   text-align: center;
+  font-size: 0.875em;
+}
+
+.media_thumbnail a {
+  color: #eee;
+  text-decoration: none;
 }
 
 /* media detail */
 
-.media_image_container {
-  text-align: center;
+h2.media_title{
+  margin-bottom: 0px;
+}
+
+p.media_uploader{
+  font-size: 0.9em;
 }
 
 /* icons */
@@ -232,10 +274,9 @@ img.media_icon{
   display: block;
   float: left;
   text-align: center;
-  background-color: #222;
+  background-color: #333;
   text-decoration: none;
   padding: 12px 0pt;
-  font-family: 'Carter One', arial, serif;
   font-size: 2em;
   margin: 0 0 20px
 }
@@ -290,4 +331,16 @@ ul.mediaentry_tags li {
   display: inline;
   margin: 0px 5px 0px 0px;
   padding: 0px;
+}
+
+
+/* media processing panel */
+
+table.media_panel {
+  width: 100%;
+}
+
+table.media_panel th {
+  font-weight: bold;
+  padding-bottom: 4px;
 }

@@ -28,11 +28,13 @@ import copy
 import wtforms
 
 from babel.localedata import exists
+from babel.support import LazyProxy
 import jinja2
 import translitcodec
 from webob import Response, exc
 from lxml.html.clean import Cleaner
 import markdown
+from wtforms.form import Form
 
 from mediagoblin import mg_globals
 from mediagoblin import messages
@@ -93,12 +95,15 @@ def get_jinja_env(template_loader, locale):
         extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
 
     template_env.install_gettext_callables(
-        mg_globals.translations.gettext,
-        mg_globals.translations.ngettext)
+        mg_globals.translations.ugettext,
+        mg_globals.translations.ungettext)
 
     # All templates will know how to ...
     # ... fetch all waiting messages and remove them from the queue
+    # ... construct a grid of thumbnails or other media
     template_env.globals['fetch_messages'] = messages.fetch_messages
+    template_env.globals['gridify_list'] = gridify_list
+    template_env.globals['gridify_cursor'] = gridify_cursor
 
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env
@@ -133,9 +138,11 @@ def clear_test_template_context():
     TEMPLATE_TEST_CONTEXT = {}
 
 
-def render_to_response(request, template, context):
+def render_to_response(request, template, context, status=200):
     """Much like Django's shortcut.render()"""
-    return Response(render_template(request, template, context))
+    return Response(
+        render_template(request, template, context),
+        status=status)
 
 
 def redirect(request, *args, **kwargs):
@@ -300,7 +307,7 @@ def send_email(from_addr, to_addrs, subject, message_body):
 
 
 TRANSLATIONS_PATH = pkg_resources.resource_filename(
-    'mediagoblin', 'translations')
+    'mediagoblin', 'i18n')
 
 
 def locale_to_lower_upper(locale):
@@ -341,8 +348,10 @@ def get_locale_from_request(request):
     accept_lang_matches = request.accept_language.best_matches()
 
     # Your routing can explicitly specify a target language
-    if request.matchdict.has_key('locale'):
-        target_lang = request.matchdict['locale']
+    matchdict = request.matchdict or {}
+
+    if matchdict.has_key('locale'):
+        target_lang = matchdict['locale']
     elif request.session.has_key('target_lang'):
         target_lang = request.session['target_lang']
     # Pull the first acceptable language
@@ -478,6 +487,66 @@ def setup_gettext(locale):
         translations=this_gettext)
 
 
+# Force en to be setup before anything else so that
+# mg_globals.translations is never None
+setup_gettext('en')
+
+
+def pass_to_ugettext(*args, **kwargs):
+    """
+    Pass a translation on to the appropriate ugettext method.
+
+    The reason we can't have a global ugettext method is because
+    mg_globals gets swapped out by the application per-request.
+    """
+    return mg_globals.translations.ugettext(
+        *args, **kwargs)
+
+
+def lazy_pass_to_ugettext(*args, **kwargs):
+    """
+    Lazily pass to ugettext.
+
+    This is useful if you have to define a translation on a module
+    level but you need it to not translate until the time that it's
+    used as a string.
+    """
+    return LazyProxy(pass_to_ugettext, *args, **kwargs)
+
+
+def pass_to_ngettext(*args, **kwargs):
+    """
+    Pass a translation on to the appropriate ngettext method.
+
+    The reason we can't have a global ngettext method is because
+    mg_globals gets swapped out by the application per-request.
+    """
+    return mg_globals.translations.ngettext(
+        *args, **kwargs)
+
+
+def lazy_pass_to_ngettext(*args, **kwargs):
+    """
+    Lazily pass to ngettext.
+
+    This is useful if you have to define a translation on a module
+    level but you need it to not translate until the time that it's
+    used as a string.
+    """
+    return LazyProxy(pass_to_ngettext, *args, **kwargs)
+
+
+def fake_ugettext_passthrough(string):
+    """
+    Fake a ugettext call for extraction's sake ;)
+
+    In wtforms there's a separate way to define a method to translate
+    things... so we just need to mark up the text so that it can be
+    extracted, not so that it's actually run through gettext.
+    """
+    return string
+
+
 PAGINATION_DEFAULT_PER_PAGE = 30
 
 class Pagination(object):
@@ -566,3 +635,40 @@ class Pagination(object):
         """ 
         return self.get_page_url_explicit(
             request.path_info, request.GET, page_no)
+
+
+def gridify_list(this_list, num_cols=5):
+    """
+    Generates a list of lists where each sub-list's length depends on
+    the number of columns in the list
+    """
+    grid = []
+
+    # Figure out how many rows we should have
+    num_rows = int(ceil(float(len(this_list)) / num_cols))
+
+    for row_num in range(num_rows):
+        slice_min = row_num * num_cols
+        slice_max = (row_num + 1) * num_cols
+
+        row = this_list[slice_min:slice_max]
+
+        grid.append(row)
+
+    return grid
+
+
+def gridify_cursor(this_cursor, num_cols=5):
+    """
+    Generates a list of lists where each sub-list's length depends on
+    the number of columns in the list
+    """
+    return gridify_list(list(this_cursor), num_cols)
+
+
+def render_404(request):
+    """
+    Render a 404.
+    """
+    return render_to_response(
+        request, 'mediagoblin/404.html', {}, status=400)

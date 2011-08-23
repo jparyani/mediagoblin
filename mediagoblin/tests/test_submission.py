@@ -156,7 +156,7 @@ class TestSubmission:
         util.clear_test_template_context()
         response = self.test_app.post(
             '/submit/', {
-                'title': 'Malicious Upload 2'
+                'title': 'Malicious Upload 1'
                 }, upload_files=[(
                     'file', EVIL_FILE)])
 
@@ -164,33 +164,46 @@ class TestSubmission:
         form = context['submit_form']
         assert form.file.errors == ['The file doesn\'t seem to be an image!']
 
-        # NOTE: The following 2 tests will fail. These can be uncommented
-        #       after http://bugs.foocorp.net/issues/324 is resolved and
-        #       bad files are handled properly.
+        # NOTE: The following 2 tests will ultimately fail, but they
+        #   *will* pass the initial form submission step.  Instead,
+        #   they'll be caught as failures during the processing step.
 
         # Test non-supported file with .jpg extension
         # -------------------------------------------
-        #util.clear_test_template_context()
-        #response = self.test_app.post(
-        #    '/submit/', {
-        #        'title': 'Malicious Upload 2'
-        #        }, upload_files=[(
-        #            'file', EVIL_JPG)])
+        util.clear_test_template_context()
+        response = self.test_app.post(
+           '/submit/', {
+               'title': 'Malicious Upload 2'
+               }, upload_files=[(
+                   'file', EVIL_JPG)])
+        response.follow()
+        assert_equal(
+            urlparse.urlsplit(response.location)[2],
+            '/u/chris/')
 
-        #context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
-        #form = context['submit_form']
-        #assert form.file.errors == ['The file doesn\'t seem to be an image!']
+        entry = mg_globals.database.MediaEntry.find_one(
+            {'title': 'Malicious Upload 2'})
+        assert_equal(entry['state'], 'failed')
+        assert_equal(
+            entry['fail_error'],
+            u'mediagoblin.process_media.errors:BadMediaFail')
 
         # Test non-supported file with .png extension
         # -------------------------------------------
-        #util.clear_test_template_context()
-        #response = self.test_app.post(
-        #    '/submit/', {
-        #        'title': 'Malicious Upload 3'
-        #        }, upload_files=[(
-        #            'file', EVIL_PNG)])
+        util.clear_test_template_context()
+        response = self.test_app.post(
+           '/submit/', {
+               'title': 'Malicious Upload 3'
+               }, upload_files=[(
+                   'file', EVIL_PNG)])
+        response.follow()
+        assert_equal(
+            urlparse.urlsplit(response.location)[2],
+            '/u/chris/')
 
-        #context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
-        #form = context['submit_form']
-        #assert form.file.errors == ['The file doesn\'t seem to be an image!']
-
+        entry = mg_globals.database.MediaEntry.find_one(
+            {'title': 'Malicious Upload 3'})
+        assert_equal(entry['state'], 'failed')
+        assert_equal(
+            entry['fail_error'],
+            u'mediagoblin.process_media.errors:BadMediaFail')

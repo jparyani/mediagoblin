@@ -101,26 +101,6 @@ class MediaGoblinApp(object):
         ## Routing / controller loading stuff
         route_match = self.routing.match(path_info)
 
-        # No matching page?
-        if route_match is None:
-            # Try to do see if we have a match with a trailing slash
-            # added and if so, redirect
-            if not path_info.endswith('/') \
-                    and request.method == 'GET' \
-                    and self.routing.match(path_info + '/'):
-                new_path_info = path_info + '/'
-                if request.GET:
-                    new_path_info = '%s?%s' % (
-                        new_path_info, urllib.urlencode(request.GET))
-                redirect = exc.HTTPFound(location=new_path_info)
-                return request.get_response(redirect)(environ, start_response)
-
-            # Okay, no matches.  404 time!
-            return exc.HTTPNotFound()(environ, start_response)
-
-        controller = util.import_component(route_match['controller'])
-        request.start_response = start_response
-
         ## Attach utilities to the request object
         request.matchdict = route_match
         request.urlgen = routes.URLGenerator(self.routing, environ)
@@ -137,6 +117,27 @@ class MediaGoblinApp(object):
         request.staticdirect = self.staticdirector
 
         util.setup_user_in_request(request)
+
+        # No matching page?
+        if route_match is None:
+            # Try to do see if we have a match with a trailing slash
+            # added and if so, redirect
+            if not path_info.endswith('/') \
+                    and request.method == 'GET' \
+                    and self.routing.match(path_info + '/'):
+                new_path_info = path_info + '/'
+                if request.GET:
+                    new_path_info = '%s?%s' % (
+                        new_path_info, urllib.urlencode(request.GET))
+                redirect = exc.HTTPFound(location=new_path_info)
+                return request.get_response(redirect)(environ, start_response)
+
+            # Okay, no matches.  404 time!
+            request.matchdict = {}  # in case our template expects it
+            return util.render_404(request)(environ, start_response)
+
+        controller = util.import_component(route_match['controller'])
+        request.start_response = start_response
 
         return controller(request)(environ, start_response)
 

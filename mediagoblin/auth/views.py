@@ -20,7 +20,8 @@ from webob import exc
 
 from mediagoblin import messages
 from mediagoblin import mg_globals
-from mediagoblin.util import render_to_response, redirect
+from mediagoblin.util import render_to_response, redirect, render_404
+from mediagoblin.util import pass_to_ugettext as _
 from mediagoblin.db.util import ObjectId
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
@@ -36,7 +37,7 @@ def register(request):
         messages.add_message(
             request,
             messages.WARNING,
-            ('Sorry, registration is disabled on this instance.'))
+            _('Sorry, registration is disabled on this instance.'))
         return redirect(request, "index")
 
     register_form = auth_forms.RegistrationForm(request.POST)
@@ -44,20 +45,27 @@ def register(request):
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
 
-        users_with_username = \
-            request.db.User.find({
-                'username': request.POST['username'].lower()
-            }).count()
+        users_with_username = request.db.User.find(
+            {'username': request.POST['username'].lower()}).count()
+        users_with_email = request.db.User.find(
+            {'email': request.POST['email'].lower()}).count()
+
+        extra_validation_passes = True
 
         if users_with_username:
             register_form.username.errors.append(
-                u'Sorry, a user with that name already exists.')
+                _(u'Sorry, a user with that name already exists.'))
+            extra_validation_passes = False
+        if users_with_email:
+            register_form.email.errors.append(
+                _(u'Sorry, that email address has already been taken.'))
+            extra_validation_passes = False
 
-        else:
+        if extra_validation_passes:
             # Create the user
             user = request.db.User()
             user['username'] = request.POST['username'].lower()
-            user['email'] = request.POST['email']
+            user['email'] = request.POST['email'].lower()
             user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
             user.save(validate=True)
@@ -136,7 +144,7 @@ def verify_email(request):
     """
     # If we don't have userid and token parameters, we can't do anything; 404
     if not request.GET.has_key('userid') or not request.GET.has_key('token'):
-        return exc.HTTPNotFound()
+        return render_404(request)
 
     user = request.db.User.find_one(
         {'_id': ObjectId(unicode(request.GET['userid']))})
@@ -148,16 +156,17 @@ def verify_email(request):
         messages.add_message(
             request,
             messages.SUCCESS,
-            ('Your email address has been verified. '
-             'You may now login, edit your profile, and submit images!'))
+            _("Your email address has been verified. "
+              "You may now login, edit your profile, and submit images!"))
     else:
-        messages.add_message(request,
-                             messages.ERROR,
-                            'The verification key or user id is incorrect')
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _('The verification key or user id is incorrect'))
 
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
-        user=request.user['username'])
+        user=user['username'])
 
 
 def resend_activation(request):
@@ -174,7 +183,7 @@ def resend_activation(request):
     messages.add_message(
         request,
         messages.INFO,
-        'Resent your verification email.')
+        _('Resent your verification email.'))
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
         user=request.user['username'])

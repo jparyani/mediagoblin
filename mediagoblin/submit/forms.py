@@ -16,15 +16,17 @@
 
 
 import wtforms
+
 from mediagoblin.util import tag_length_validator
+from mediagoblin.util import fake_ugettext_passthrough as _
 
 
 class SubmitStartForm(wtforms.Form):
+    file = wtforms.FileField(_('File'))
     title = wtforms.TextField(
-        'Title',
+        _('Title'),
         [wtforms.validators.Length(min=0, max=500)])
     description = wtforms.TextAreaField('Description of this work')
-    file = wtforms.FileField('File')
     tags = wtforms.TextField(
-        'Tags',
+        _('Tags'),
         [tag_length_validator])

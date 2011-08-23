@@ -44,6 +44,14 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.wipealldata:wipe_parser_setup',
         'func': 'mediagoblin.gmg_commands.wipealldata:wipe',
         'help': 'Wipes **all** the data for this MediaGoblin instance'},
+    'env_export': {
+        'setup': 'mediagoblin.gmg_commands.import_export:import_export_parse_setup',
+        'func': 'mediagoblin.gmg_commands.import_export:env_export',
+        'help': 'Exports the data for this MediaGoblin instance'},
+    'env_import': {
+        'setup': 'mediagoblin.gmg_commands.import_export:import_export_parse_setup',
+        'func': 'mediagoblin.gmg_commands.import_export:env_import',
+        'help': 'Exports the data for this MediaGoblin instance'},
     }
 
 

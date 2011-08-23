@@ -162,6 +162,8 @@ class MediaEntry(Document):
        queued for processing.  This is stored in the mg_globals.queue_store
        storage system.
 
+     - queued_task_id: celery task id.  Use this to fetch the task state.
+
      - media_files: Files relevant to this that have actually been processed
        and are available for various types of display.  Stored like:
          {'thumb': ['dir1', 'dir2', 'pic.png'}
@@ -170,7 +172,8 @@ class MediaEntry(Document):
        critical to this piece of media but may be usefully relevant to people
        viewing the work.  (currently unused.)
 
-     - thumbnail_file: Deprecated... we should remove this ;)
+     - fail_error: path to the exception raised 
+     - fail_metadata: 
     """
     __collection__ = 'media_entries'
 
@@ -190,6 +193,7 @@ class MediaEntry(Document):
         # For now let's assume there can only be one main file queued
         # at a time
         'queued_media_file': [unicode],
+        'queued_task_id': unicode,
 
         # A dictionary of logical names to filepaths
         'media_files': dict,
@@ -198,8 +202,10 @@ class MediaEntry(Document):
         # record form
         'attachment_files': list,
 
-        # This one should just be a single file record
-        'thumbnail_file': [unicode]}
+        # If things go badly in processing things, we'll store that
+        # data here
+        'fail_error': unicode,
+        'fail_metadata': dict}
 
     required_fields = [
         'uploader', 'created', 'media_type', 'slug']
@@ -290,6 +296,13 @@ class MediaEntry(Document):
 
     def uploader(self):
         return self.db.User.find_one({'_id': self['uploader']})
+
+    def get_fail_exception(self):
+        """
+        Get the exception that's appropriate for this error
+        """
+        if self['fail_error']:
+            return util.import_component(self['fail_error'])
 
 
 class MediaComment(Document):

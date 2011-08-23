@@ -26,15 +26,15 @@
                                media= media._id) }}"
         method="POST" enctype="multipart/form-data">
     <div class="grid_8 prefix_1 suffix_1 edit_box form_box">
-      <h1>Editing {{ media.title }}</h1>
+      <h1>{% trans media_title=media.title %}Editing {{ media_title }}{% endtrans %}</h1>
       <div style="text-align: center;" >
         <img src="{{ request.app.public_store.file_url(
                          media['media_files']['thumb']) }}" />
       </div>
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
-        <a href="{{ media.url_for_self(request.urlgen) }}">Cancel</a>
-        <input type="submit" value="Save changes" class="button" />
+        <a href="{{ media.url_for_self(request.urlgen) }}">{% trans %}Cancel{% endtrans %}</a>
+        <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button" />
       </div>
     </div>
   </form>
