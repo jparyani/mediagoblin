@@ -254,6 +254,8 @@ class CloudFilesStorage(StorageInterface):
             self.container = self.connection.get_container(
                 self.param_container)
 
+        self.container_uri = self.container.public_uri()
+
     def _resolve_filepath(self, filepath):
         return '/'.join(
             clean_listy_filepath(filepath))
@@ -282,7 +284,9 @@ class CloudFilesStorage(StorageInterface):
         self.container.delete_object(filepath)
 
     def file_url(self, filepath):
-        return self.get_file(filepath).public_uri()
+        return '/'.join([
+                self.container_uri,
+                self._resolve_filepath(filepath)])
 
 
 class MountStorage(StorageInterface):
