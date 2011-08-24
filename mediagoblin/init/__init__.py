@@ -14,7 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from beaker.cache import CacheManager
+from beaker.util import parse_cache_config_options
 import jinja2
+
 from mediagoblin import staticdirect
 from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
@@ -135,3 +138,16 @@ def setup_workbench():
     workbench_manager = WorkbenchManager(app_config['workbench_path'])
 
     setup_globals(workbench_manager = workbench_manager)
+
+
+def setup_beaker_cache():
+    """
+    Setup the Beaker Cache manager.
+    """
+    cache_config = mg_globals.global_config['beaker.cache']
+    cache_config = dict(
+        [(u'cache.%s' % key, value)
+         for key, value in cache_config.iteritems()])
+    cache = CacheManager(**parse_cache_config_options(cache_config))
+    setup_globals(cache=cache)
+    return cache
