@@ -36,7 +36,7 @@
     {% if user == request.user %}
       {# this should only be visible when you are this user #}
       <div class="grid_6 prefix_1 suffix_1 form_box">
-        <h1>{% trans %}Verification needed{% endtrans %}</h1>
+        <h1>{% trans %}Email verification needed{% endtrans %}</h1>
 
         <p>
           {% trans -%}
@@ -56,7 +56,7 @@
     {% else %}
       {# if the user is not you, but still needs to verify their email #}
       <div class="grid_6 prefix_1 suffix_1 form_box">
-        <h1>{% trans %}Verification needed{% endtrans %}</h1>
+        <h1>{% trans %}Email verification needed{% endtrans %}</h1>
 
         <p>
           {% trans -%}
