@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-08-24 20:20-0500\n"
-"PO-Revision-Date: 2011-08-25 01:22+0000\n"
+"POT-Creation-Date: 2011-08-25 07:41-0500\n"
+"PO-Revision-Date: 2011-08-25 12:41+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "Pasvorto"
 
 #: mediagoblin/auth/forms.py:34
 msgid "Passwords must match."
-msgstr "Pasvortoj devas koincidi. "
+msgstr "Pasvortoj devas esti egalaj."
 
 #: mediagoblin/auth/forms.py:36
 msgid "Confirm password"
@@ -103,7 +103,7 @@ msgstr "Vi priredaktas dosieron de alia uzanto. Agu singardeme."
 
 #: mediagoblin/edit/views.py:165
 msgid "You are editing a user's profile. Proceed with caution."
-msgstr "Vi redaktas profilon de uzanto. Agu singardeme."
+msgstr "Vi redaktas profilon de alia uzanto. Agu singardeme."
 
 #: mediagoblin/process_media/errors.py:44
 msgid "Invalid file given for media type."
@@ -138,6 +138,8 @@ msgid ""
 "If you're sure the address is correct, maybe the page you're looking for has"
 " been moved or deleted."
 msgstr ""
+"Se vi estas certa, ke la adreso estas ĝusta, eble la serĉata de vi paĝo "
+"estis movita aŭ forigita."
 
 #: mediagoblin/templates/mediagoblin/404.html:32
 msgid "Image of 404 goblin stressing out"
@@ -149,7 +151,7 @@ msgstr "GNU MediaGoblin"
 
 #: mediagoblin/templates/mediagoblin/base.html:47
 msgid "MediaGoblin logo"
-msgstr ""
+msgstr "Emblemo de MediaGoblin"
 
 #: mediagoblin/templates/mediagoblin/base.html:52
 msgid "Submit media"
@@ -170,8 +172,8 @@ msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU project</a>"
 msgstr ""
-"Funkciigata per <a href=\"http://mediagoblin.org\">MediaGoblin</a>, unu el "
-"la <a href=\"http://gnu.org/\">projektoj de GNU</a>"
+"Funkcias per <a href=\"http://mediagoblin.org\">MediaGoblin</a>, unu el la "
+"<a href=\"http://gnu.org/\">projektoj de GNU</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:27
 msgid "Hi there, media lover! MediaGoblin is..."
@@ -179,7 +181,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid "The perfect place for your media!"
-msgstr ""
+msgstr "La perfekta loko por viaj aŭd-vid-dosieroj!"
 
 #: mediagoblin/templates/mediagoblin/root.html:30
 msgid ""
@@ -189,7 +191,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid ""
-"Free, as in freedom. (We’re a <a href=\"http://gnu.org\">GNU project</a>, "
+"Free, as in freedom. (We’re a <a href=\"http://gnu.org\">GNU</a> project, "
 "after all.)"
 msgstr ""
 
@@ -214,7 +216,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:29
 msgid "Logging in failed!"
-msgstr ""
+msgstr "Ensaluto malsukcesis!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:42
 msgid "Don't have an account yet?"
@@ -251,7 +253,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/edit/edit.html:29
 #, python-format
 msgid "Editing %(media_title)s"
-msgstr "Editing %(media_title)s"
+msgstr "Priredaktado de %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:36
 msgid "Cancel"

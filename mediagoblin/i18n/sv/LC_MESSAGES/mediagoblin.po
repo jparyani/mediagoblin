@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-08-24 20:20-0500\n"
-"PO-Revision-Date: 2011-08-25 01:22+0000\n"
+"POT-Creation-Date: 2011-08-25 07:41-0500\n"
+"PO-Revision-Date: 2011-08-25 12:41+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Swedish (http://www.transifex.net/projects/p/mediagoblin/team/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -105,7 +105,7 @@ msgstr "Var försiktig, du redigerar en annan användares profil."
 
 #: mediagoblin/process_media/errors.py:44
 msgid "Invalid file given for media type."
-msgstr ""
+msgstr "Ogiltig fil för mediatypen."
 
 #: mediagoblin/submit/forms.py:25
 msgid "File"
@@ -125,21 +125,23 @@ msgstr "Tjohoo! Upladdat!"
 
 #: mediagoblin/templates/mediagoblin/404.html:21
 msgid "Oops!"
-msgstr ""
+msgstr "Ojoj!"
 
 #: mediagoblin/templates/mediagoblin/404.html:24
 msgid "There doesn't seem to be a page at this address. Sorry!"
-msgstr ""
+msgstr "Ledsen, det verkar inte vara någonting här."
 
 #: mediagoblin/templates/mediagoblin/404.html:26
 msgid ""
 "If you're sure the address is correct, maybe the page you're looking for has"
 " been moved or deleted."
 msgstr ""
+"Om du är säker på att adressen stämmer så kanske sidan du letar efter har "
+"flyttats eller tagits bort."
 
 #: mediagoblin/templates/mediagoblin/404.html:32
 msgid "Image of 404 goblin stressing out"
-msgstr ""
+msgstr "Bild av stressat 404-troll."
 
 #: mediagoblin/templates/mediagoblin/base.html:22
 msgid "GNU MediaGoblin"
@@ -147,7 +149,7 @@ msgstr "GNU MediaGoblin"
 
 #: mediagoblin/templates/mediagoblin/base.html:47
 msgid "MediaGoblin logo"
-msgstr ""
+msgstr "MediaGoblin-logotyp"
 
 #: mediagoblin/templates/mediagoblin/base.html:52
 msgid "Submit media"
@@ -173,21 +175,23 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:27
 msgid "Hi there, media lover! MediaGoblin is..."
-msgstr ""
+msgstr "Hej där mediaentusiast, MediaGoblin..."
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid "The perfect place for your media!"
-msgstr ""
+msgstr "Är ett perfekt ställe för din media!"
 
 #: mediagoblin/templates/mediagoblin/root.html:30
 msgid ""
 "A place for people to collaborate and show off original and derived "
 "creations!"
 msgstr ""
+"Är ett ställe för människor att samarbeta och visa upp originella och "
+"härrörande verk."
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid ""
-"Free, as in freedom. (We’re a <a href=\"http://gnu.org\">GNU project</a>, "
+"Free, as in freedom. (We’re a <a href=\"http://gnu.org\">GNU</a> project, "
 "after all.)"
 msgstr ""
 
@@ -196,6 +200,11 @@ msgid ""
 "Aiming to make the world a better place through decentralization and "
 "(eventually, coming soon!) federation!"
 msgstr ""
+"Arbetar för att göra världen till ett bättre ställe genom decentralisering "
+"och (så småningom, kommer snart!) -- Google Translate säger "
+"\"sammanslutning\", <em>en: <a "
+"href=\"http://en.wikipedia.org/wiki/Federation_(information_technology)\">federation</a></em>"
+" "
 
 #: mediagoblin/templates/mediagoblin/root.html:33
 msgid ""

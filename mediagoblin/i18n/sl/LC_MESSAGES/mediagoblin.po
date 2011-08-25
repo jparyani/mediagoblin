@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-08-24 20:20-0500\n"
-"PO-Revision-Date: 2011-08-25 01:22+0000\n"
+"POT-Creation-Date: 2011-08-25 07:41-0500\n"
+"PO-Revision-Date: 2011-08-25 12:41+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -48,7 +48,7 @@ msgstr "Oprostite, uporabnik s tem imenom že obstaja."
 
 #: mediagoblin/auth/views.py:61
 msgid "Sorry, that email address has already been taken."
-msgstr ""
+msgstr "Oprostite, ta e-poštni naslov je že v uporabi."
 
 #: mediagoblin/auth/views.py:159
 msgid ""
@@ -105,7 +105,7 @@ msgstr "Urejate uporabniški profil. Nadaljujte pazljivo."
 
 #: mediagoblin/process_media/errors.py:44
 msgid "Invalid file given for media type."
-msgstr ""
+msgstr "Za vrsto vsebine je bila podana napačna datoteka."
 
 #: mediagoblin/submit/forms.py:25
 msgid "File"
@@ -125,21 +125,23 @@ msgstr "Juhej! Poslano."
 
 #: mediagoblin/templates/mediagoblin/404.html:21
 msgid "Oops!"
-msgstr ""
+msgstr "Opa!"
 
 #: mediagoblin/templates/mediagoblin/404.html:24
 msgid "There doesn't seem to be a page at this address. Sorry!"
-msgstr ""
+msgstr "Oprostite. Videti je, da na tem naslovu ni nobene strani."
 
 #: mediagoblin/templates/mediagoblin/404.html:26
 msgid ""
 "If you're sure the address is correct, maybe the page you're looking for has"
 " been moved or deleted."
 msgstr ""
+"Če ste v točnost naslova prepričani, je bila iskana stran morda premaknjena "
+"ali pa izbrisana."
 
 #: mediagoblin/templates/mediagoblin/404.html:32
 msgid "Image of 404 goblin stressing out"
-msgstr ""
+msgstr "Slika napake 404 s paničnim škratom"
 
 #: mediagoblin/templates/mediagoblin/base.html:22
 msgid "GNU MediaGoblin"
@@ -147,7 +149,7 @@ msgstr "GNU MediaGoblin"
 
 #: mediagoblin/templates/mediagoblin/base.html:47
 msgid "MediaGoblin logo"
-msgstr ""
+msgstr "Logotip MediaGoblin"
 
 #: mediagoblin/templates/mediagoblin/base.html:52
 msgid "Submit media"
@@ -173,21 +175,23 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:27
 msgid "Hi there, media lover! MediaGoblin is..."
-msgstr ""
+msgstr "Pozdravljen, ljubitelj večpredstavnostnih vsebin! MediaGoblin je ..."
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid "The perfect place for your media!"
-msgstr ""
+msgstr "Popolno mesto za vaše večpredstavnostne vsebine."
 
 #: mediagoblin/templates/mediagoblin/root.html:30
 msgid ""
 "A place for people to collaborate and show off original and derived "
 "creations!"
 msgstr ""
+"Mesto, kjer ljudje lahko sodelujejo in razkazujejo originalne in predelane "
+"stvaritve."
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid ""
-"Free, as in freedom. (We’re a <a href=\"http://gnu.org\">GNU project</a>, "
+"Free, as in freedom. (We’re a <a href=\"http://gnu.org\">GNU</a> project, "
 "after all.)"
 msgstr ""
 
@@ -196,12 +200,16 @@ msgid ""
 "Aiming to make the world a better place through decentralization and "
 "(eventually, coming soon!) federation!"
 msgstr ""
+"Ustvarjen z namenom izboljšati svet, s pomočjo decentralizacije in (kmalu) "
+"federacije."
 
 #: mediagoblin/templates/mediagoblin/root.html:33
 msgid ""
 "Built for extensibility.  (Multiple media types coming soon to the software,"
 " including video support!)"
 msgstr ""
+"Zgrajen za razširjanje. (Kmalu bodo na voljo dodatne vrste vsebin, vključno "
+"podpora za video)"
 
 #: mediagoblin/templates/mediagoblin/root.html:34
 msgid ""
@@ -209,10 +217,13 @@ msgid ""
 "href=\"http://mediagoblin.org/pages/join.html\">You can help us improve this"
 " software!</a>)"
 msgstr ""
+"Sad dela ljudi, kot ste vi. (<a "
+"href=\"http://mediagoblin.org/pages/join.html\">Pri izboljševanju nam lahko "
+"pomagate tudi vi.</a>)"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:29
 msgid "Logging in failed!"
-msgstr ""
+msgstr "Prijava ni uspela."
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:42
 msgid "Don't have an account yet?"
@@ -228,7 +239,7 @@ msgstr "Ustvarite račun."
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:30
 msgid "Create"
-msgstr ""
+msgstr "Ustvari"
 
 #: mediagoblin/templates/mediagoblin/auth/verification_email.txt:19
 #, python-format
@@ -290,33 +301,33 @@ msgstr "Oprostite, tega uporabnika ni bilo moč najti."
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
 msgid "Media processing panel"
-msgstr ""
+msgstr "Podokno obdelovanja vsebine"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:25
 msgid ""
 "You can track the state of media being processed for your gallery here."
-msgstr ""
+msgstr "Tu lahko spremljate stanje vsebin, ki so v obdelavi za vašo galerijo."
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
 msgid "Media in-processing"
-msgstr ""
+msgstr "Vsebina v obdelavi"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:46
 msgid "No media in-processing"
-msgstr ""
+msgstr "V obdelavi ni nobene vsebine"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:50
 msgid "These uploads failed to process:"
-msgstr ""
+msgstr "Teh vsebin ni bilo moč obdelati:"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:39
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:59
 msgid "Email verification needed"
-msgstr ""
+msgstr "Potrebna je potrditev prek e-pošte"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:42
 msgid "Almost done! Your account still needs to be activated."
-msgstr ""
+msgstr "Skoraj ste zaključili. Svoj račun morate le še aktivirati."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:47
 msgid ""
@@ -336,6 +347,8 @@ msgid ""
 "Someone has registered an account with this username, but it still has to be"
 " activated."
 msgstr ""
+"Nekdo je s tem uporabniškim imenom že registriral račun, vendar mora biti še"
+" aktiviran."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:68
 #, python-format
@@ -353,7 +366,7 @@ msgstr "Profil – %(username)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:85
 msgid "Here's a spot to tell others about yourself."
-msgstr ""
+msgstr "Na tem mestu lahko drugim poveste nekaj o sebi."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:90
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:108
@@ -362,7 +375,7 @@ msgstr "Uredi profil"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:96
 msgid "This user hasn't filled in their profile (yet)."
-msgstr ""
+msgstr "Ta uporabnik še ni izpolnil svojega profila."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:122
 #, python-format
@@ -373,26 +386,26 @@ msgstr "Prikaži vso vsebino uporabnika %(username)s"
 msgid ""
 "This is where your media will appear, but you don't seem to have added "
 "anything yet."
-msgstr ""
+msgstr "Tu bo prikazana vaša vsebina, a trenutno še niste dodali nič."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:141
 msgid "Add media"
-msgstr ""
+msgstr "Dodaj vsebino"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:147
 msgid "There doesn't seem to be any media here yet..."
-msgstr ""
+msgstr "Videti je, da tu še ni nobene vsebine ..."
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 msgid "feed icon"
-msgstr ""
+msgstr "Ikona vira"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
 msgid "Atom feed"
-msgstr ""
+msgstr "Ikona Atom"
 
 #: mediagoblin/user_pages/forms.py:24
 msgid "Comment"
-msgstr ""
+msgstr "Komentar"
 
 
