@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-08-13 19:47-0500\n"
-"PO-Revision-Date: 2011-08-14 00:47+0000\n"
+"POT-Creation-Date: 2011-08-24 20:20-0500\n"
+"PO-Revision-Date: 2011-08-25 01:22+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -89,59 +89,79 @@ msgstr "自己紹介"
 msgid "Website"
 msgstr "URL"
 
-#: mediagoblin/edit/forms.py:43
-msgid "Improperly formed URL"
-msgstr "不適切な形式のURL"
-
-#: mediagoblin/edit/views.py:54
+#: mediagoblin/edit/views.py:65
 msgid "An entry with that slug already exists for this user."
 msgstr "そのスラグを持つエントリは、このユーザーは既に存在します。"
 
-#: mediagoblin/edit/views.py:75
+#: mediagoblin/edit/views.py:94
 msgid "You are editing another user's media. Proceed with caution."
 msgstr "あなたは、他のユーザーのメディアを編集しています。ご注意ください。"
 
-#: mediagoblin/edit/views.py:96
+#: mediagoblin/edit/views.py:165
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr "あなたは、他のユーザーのプロファイルを編集しています。ご注意ください。"
+
+#: mediagoblin/process_media/errors.py:44
+msgid "Invalid file given for media type."
+msgstr ""
 
 #: mediagoblin/submit/forms.py:25
 msgid "File"
 msgstr "ファイル"
 
-#: mediagoblin/submit/views.py:46
+#: mediagoblin/submit/views.py:47
 msgid "You must provide a file."
 msgstr "ファイルを提供する必要があります。"
 
-#: mediagoblin/submit/views.py:49
+#: mediagoblin/submit/views.py:50
 msgid "The file doesn't seem to be an image!"
 msgstr "ファイルが画像ではないようです！"
 
-#: mediagoblin/submit/views.py:94
+#: mediagoblin/submit/views.py:122
 msgid "Woohoo! Submitted!"
 msgstr "投稿終了！"
+
+#: mediagoblin/templates/mediagoblin/404.html:21
+msgid "Oops!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/404.html:24
+msgid "There doesn't seem to be a page at this address. Sorry!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/404.html:26
+msgid ""
+"If you're sure the address is correct, maybe the page you're looking for has"
+" been moved or deleted."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/404.html:32
+msgid "Image of 404 goblin stressing out"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:22
 msgid "GNU MediaGoblin"
 msgstr "GNU MediaGoblin"
 
-#: mediagoblin/templates/mediagoblin/base.html:45
-msgid "Mediagoblin logo"
-msgstr "MediaGoblinロゴ"
+#: mediagoblin/templates/mediagoblin/base.html:47
+msgid "MediaGoblin logo"
+msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:51
+#: mediagoblin/templates/mediagoblin/base.html:52
 msgid "Submit media"
 msgstr "コンテンツを投稿"
 
-#: mediagoblin/templates/mediagoblin/base.html:62
+#: mediagoblin/templates/mediagoblin/base.html:63
 msgid "verify your email!"
 msgstr "メアドを確認してください！"
 
-#: mediagoblin/templates/mediagoblin/base.html:72
-msgid "Login"
+#: mediagoblin/templates/mediagoblin/base.html:73
+#: mediagoblin/templates/mediagoblin/auth/login.html:26
+#: mediagoblin/templates/mediagoblin/auth/login.html:34
+msgid "Log in"
 msgstr "ログイン"
 
-#: mediagoblin/templates/mediagoblin/base.html:88
+#: mediagoblin/templates/mediagoblin/base.html:89
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU project</a>"
@@ -149,40 +169,48 @@ msgstr ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU project</a>"
 
-#: mediagoblin/templates/mediagoblin/root.html:23
-msgid "Welcome to GNU MediaGoblin!"
-msgstr "GNU MediaGoblinへようこそ！"
+#: mediagoblin/templates/mediagoblin/root.html:27
+msgid "Hi there, media lover! MediaGoblin is..."
+msgstr ""
 
-#: mediagoblin/templates/mediagoblin/root.html:28
-msgid "Submit an item"
-msgstr "アイテムを投稿"
+#: mediagoblin/templates/mediagoblin/root.html:29
+msgid "The perfect place for your media!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:30
+msgid ""
+"A place for people to collaborate and show off original and derived "
+"creations!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:31
+msgid ""
+"Free, as in freedom. (We’re a <a href=\"http://gnu.org\">GNU project</a>, "
+"after all.)"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:32
+msgid ""
+"Aiming to make the world a better place through decentralization and "
+"(eventually, coming soon!) federation!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:33
-#, python-format
-msgid "If you have an account, you can <a href=\"%(login_url)s\">Login</a>."
-msgstr "もしアカウントが持ったら、<a href=\"%(login_url)s\">ログイン</a>できます。"
-
-#: mediagoblin/templates/mediagoblin/root.html:39
-#, python-format
 msgid ""
-"If you don't have an account, please  <a "
-"href=\"%(register_url)s\">Register</a>."
-msgstr "アカウントが持っていなければ、<a href=\"%(register_url)s\">登録</a>してお願いします。"
+"Built for extensibility.  (Multiple media types coming soon to the software,"
+" including video support!)"
+msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:26
-msgid "Log in"
-msgstr "ログイン"
+#: mediagoblin/templates/mediagoblin/root.html:34
+msgid ""
+"Powered by people like you.  (<a "
+"href=\"http://mediagoblin.org/pages/join.html\">You can help us improve this"
+" software!</a>)"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:29
-msgid "Login failed!"
-msgstr "ログイン失敗！"
-
-#: mediagoblin/templates/mediagoblin/auth/login.html:34
-#: mediagoblin/templates/mediagoblin/auth/register.html:30
-#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
-#: mediagoblin/templates/mediagoblin/submit/start.html:29
-msgid "Submit"
-msgstr "送信"
+msgid "Logging in failed!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:42
 msgid "Don't have an account yet?"
@@ -195,6 +223,10 @@ msgstr "ここで作成！"
 #: mediagoblin/templates/mediagoblin/auth/register.html:27
 msgid "Create an account!"
 msgstr "アカウントを作成！"
+
+#: mediagoblin/templates/mediagoblin/auth/register.html:30
+msgid "Create"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/verification_email.txt:19
 #, python-format
@@ -222,6 +254,7 @@ msgid "Cancel"
 msgstr "キャンセル"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
+#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
 msgid "Save changes"
 msgstr "投稿する"
 
@@ -234,34 +267,53 @@ msgstr "%(username)sさんのプロフィールを編集中"
 msgid "Media tagged with:"
 msgstr "タグ付けされたコンテンツ："
 
-#: mediagoblin/templates/mediagoblin/listings/tag.html:42
-#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:48
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:104
-msgid "atom feed"
-msgstr "Atomフィード"
-
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Submit yer media"
 msgstr "コンテンツを投稿"
+
+#: mediagoblin/templates/mediagoblin/submit/start.html:29
+msgid "Submit"
+msgstr "送信"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:32
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
 msgstr "<a href=\"%(user_url)s\">%(username)s</a>さんのコンテンツ"
 
-#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:53
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:52
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:32
 msgid "Sorry, no such user found."
 msgstr "申し訳ありませんが、そのユーザーは見つかりませんでした。"
 
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
+msgid "Media processing panel"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:25
+msgid ""
+"You can track the state of media being processed for your gallery here."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
+msgid "Media in-processing"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:46
+msgid "No media in-processing"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:50
+msgid "These uploads failed to process:"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:39
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:59
-msgid "Verification needed"
-msgstr "確認必要"
+msgid "Email verification needed"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:42
-msgid "Almost done! Your account still needs to be verified."
-msgstr "ほぼ完了！アカウントを検証する必要があります。"
+msgid "Almost done! Your account still needs to be activated."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:47
 msgid ""
@@ -279,8 +331,8 @@ msgstr "確認メールを再送信"
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:62
 msgid ""
 "Someone has registered an account with this username, but it still has to be"
-" verified."
-msgstr "誰かがこのユーザ名でアカウントを登録しているが、まだ検証する必要があります。"
+" activated."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:68
 #, python-format
@@ -294,14 +346,45 @@ msgstr "あなたの確認メールを紛失した場合、<a href=\"%(login_url
 msgid "%(username)s's profile"
 msgstr "%(username)sさんのプロフィール"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:86
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:85
+msgid "Here's a spot to tell others about yourself."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:90
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:108
 msgid "Edit profile"
 msgstr "プロフィールを編集"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:98
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:96
+msgid "This user hasn't filled in their profile (yet)."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:122
 #, python-format
 msgid "View all of %(username)s's media"
 msgstr "%(username)sさんのコンテンツをすべて見る"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:135
+msgid ""
+"This is where your media will appear, but you don't seem to have added "
+"anything yet."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:141
+msgid "Add media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:147
+msgid "There doesn't seem to be any media here yet..."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
+msgid "feed icon"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
+msgid "Atom feed"
+msgstr ""
 
 #: mediagoblin/user_pages/forms.py:24
 msgid "Comment"
