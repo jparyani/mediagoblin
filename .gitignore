@@ -9,6 +9,7 @@ mediagoblin.egg-info
 *.pyc
 *.pyo
 docs/_build/
+docs/build
 user_dev/
 paste_local.ini
 mediagoblin_local.ini
