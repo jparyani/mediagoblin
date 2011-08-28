@@ -31,6 +31,14 @@
           Really delete {{ title }}?
         {%- endtrans %}
       </h1>
+      <p>
+	<em>
+	  {%- trans -%}
+	    If you choose yes, the media entry will be deleted <strong>permanently.</strong>
+	  {%- endtrans %}
+	</em>
+      </p>
+	  
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button" />
