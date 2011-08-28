@@ -9,43 +9,52 @@
 What is GNU MediaGoblin
 =======================
 
-Three years ago (2008), a number of free software luminaries got
-together at the FSF office to answer the question, "What should
-software freedom look like on the participatory web?"  Those thinkers
-included Richard Stallman---founder of the free software movement and
-instigator of the GNU project, Evan Prodromou---the driving force
-behind Status.net, a highly sucessful federated micro-blogging
-service, and FIXME.
+In 2008 a number of free software developers and activists gathered at
+the FSF to attempt to answer the question "What should software
+freedom look like on the participatory web?" Their answer, the 
+`Franklin Street Statement <http://autonomo.us/2008/07/franklin-street-statement/>`_, 
+has lead to the development of  `autonomo.us <http://autonomo.us/>`_
+community, and  free software projects including `Identi.ca <http://identi.ca/>`_ 
+and `Libre.fm <http://libre.fm/>`_. 
 
-Since that time Identi.ca and Libre.fm have answered the
-freedom-loving web-user's need for micro-blogging and music sharing.
-Now, GNU MediaGoblin is building a format for users to share photos.
-Later versions of MediaGoblin will include support for video and other
-media as well as tools to encourage collaboration on media projects.
+Identi.ca and Libre.fm address the need for micro-blogging and music
+sharing services and software that respect users' freedom and
+autonomy. GNU MediaGoblin emerges from this milieu to create a
+platform for us to share photos in an environment that respects our
+freedom and independence. In the future MediaGoblin will include
+support other media, like video, and provide tools to facilitate
+collaboration on media projects.
 
+Why Build GNU MediaGoblin
+=========================
 
-Why are we doing this?
-======================
+The Internet is designed--and works best--as a complex and endlessly
+resilient network. When key services and media outlets are
+concentrated in centralized platforms, the network becomes less useful
+and increasingly fragile. As always, the proprietary nature of these
+systems, hinders users ability to develop, extend, and understand
+their software; however, in the case of network services it also means
+that users must forfeit control of their data to the service
+providers. 
 
-Centralization and proprietization of media on the internet is a
-serious problem and makes the web go from a system of extreme
-resilience to a system of frightening fragility.  We believe people
-should be able to free their data from proprietary control and that
-means someone has to build the tools to make it possible.  We decided
-that in this case, that someone would be us!
- 
+Therefore, we believe that network services must be federated to avoid
+centralization and that everyone ought to have control over their
+data. In support of this, we've decided to help build the tools to
+make these kinds of services possible. We hope you'll join us, both as
+users and as contributors. 
 
-Who are you?
-============
+Who Contributes to the Project
+==============================
 
-Free software activists and folks who have worked on a variety of
-other projects like Libre.fm, GNU Social, Status.net, Miro, Miro
-Community, OpenHatch and other projects as well.  We're admirers and
-contributors.  We're writers and painters.  We're friendly and
-dedicated to computer user freedom.
+You do! 
 
+We are free software activists and folks who have worked on a variety
+of other projects including: Libre.fm, GNU Social, Status.net, Miro,
+Miro Community, and OpenHatch among others. We're programmers,
+musicians, writers, and painters. We're friendly and dedicated to
+software and network freedom.
 
-How can I participate?
+How Can I Participate?
 ======================
 
 See `Get Involved <http://mediagoblin.org/join/>`_ on the website..
@@ -56,15 +65,15 @@ How is GNU MediaGoblin licensed?
 
 GNU MediaGoblin software is released under an AGPLv3 license.
 
-See the ``COPYING`` file in the source for details.
+See the ``COPYING`` file in the source repository for details.
 
 
-Is this an official GNU Project?  What does that mean?
-======================================================
+Is MedaGobilin an official GNU project?  What does that mean?
+=============================================================
 
-We are!  It means that we meet the GNU Project's rigourous standards
-for free software.  To find out more about what that means, check out
-`the GNU site <http://gnu.org/>`_.
+MediaGoblin is an official GNU project! This status means that we the
+meet the GNU Project's rigorous standards for free software.  To find
+out more about what that means, check out `the GNU site <http://gnu.org/>`_.
 
 Please feel free to contact us with further questions!
 
