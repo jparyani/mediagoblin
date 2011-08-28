@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
 "POT-Creation-Date: 2011-08-25 07:41-0500\n"
-"PO-Revision-Date: 2011-08-25 12:41+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2011-08-25 13:07+0000\n"
+"Last-Translator: joar <transifex@wandborg.se>\n"
 "Language-Team: Swedish (http://www.transifex.net/projects/p/mediagoblin/team/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -194,6 +194,8 @@ msgid ""
 "Free, as in freedom. (We’re a <a href=\"http://gnu.org\">GNU</a> project, "
 "after all.)"
 msgstr ""
+"Är fritt som i frihet. (Vi är ju ett <a "
+"href=\"http://gnu.org\">GNU</a>-projekt.)"
 
 #: mediagoblin/templates/mediagoblin/root.html:32
 msgid ""
@@ -211,6 +213,8 @@ msgid ""
 "Built for extensibility.  (Multiple media types coming soon to the software,"
 " including video support!)"
 msgstr ""
+"Byggd för utbyggbarhet. (Flera mediatyper kommer snart till MediaGoblin, "
+"bland annat video!)"
 
 #: mediagoblin/templates/mediagoblin/root.html:34
 msgid ""
@@ -218,10 +222,13 @@ msgid ""
 "href=\"http://mediagoblin.org/pages/join.html\">You can help us improve this"
 " software!</a>)"
 msgstr ""
+"Drivs av människor som du. (<a "
+"href=\"http://mediagoblin.org/pages/join.html\">Du kan hjälpa os forbättra "
+"MediaGoblin!</a>)"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:29
 msgid "Logging in failed!"
-msgstr ""
+msgstr "Inloggning misslyckades!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:42
 msgid "Don't have an account yet?"
@@ -237,7 +244,7 @@ msgstr "Skapa ett konto!"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:30
 msgid "Create"
-msgstr ""
+msgstr "Skapa"
 
 #: mediagoblin/templates/mediagoblin/auth/verification_email.txt:19
 #, python-format
@@ -298,33 +305,33 @@ msgstr "Finns ingen sådan användare ännu."
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
 msgid "Media processing panel"
-msgstr ""
+msgstr "Mediabehandlingspanel"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:25
 msgid ""
 "You can track the state of media being processed for your gallery here."
-msgstr ""
+msgstr "Här kan du se status för mediabehandling av bilder i ditt galleri."
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
 msgid "Media in-processing"
-msgstr ""
+msgstr "Media under behandling"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:46
 msgid "No media in-processing"
-msgstr ""
+msgstr "Ingen media under behandling"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:50
 msgid "These uploads failed to process:"
-msgstr ""
+msgstr "De här behandlingarna misslyckades:"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:39
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:59
 msgid "Email verification needed"
-msgstr ""
+msgstr "E-postadressverifiering krävs."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:42
 msgid "Almost done! Your account still needs to be activated."
-msgstr ""
+msgstr "Nästan klar! Ditt konto behöver bara aktiveras."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:47
 msgid ""
@@ -345,6 +352,8 @@ msgid ""
 "Someone has registered an account with this username, but it still has to be"
 " activated."
 msgstr ""
+"Någon har redan registrerat ett konto med det här användarnamnet men det har"
+" inte aktiverats."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:68
 #, python-format
@@ -363,7 +372,7 @@ msgstr "%(username)ss profil"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:85
 msgid "Here's a spot to tell others about yourself."
-msgstr ""
+msgstr "Här kan du berätta för andra om dig själv."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:90
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:108
@@ -372,7 +381,7 @@ msgstr "Redigera profil"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:96
 msgid "This user hasn't filled in their profile (yet)."
-msgstr ""
+msgstr "Den här användaren har inte fyllt i sin profilsida ännu."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:122
 #, python-format
@@ -384,22 +393,24 @@ msgid ""
 "This is where your media will appear, but you don't seem to have added "
 "anything yet."
 msgstr ""
+"Här kommer din media att dyka upp, du verkar inte ha lagt till någonting "
+"ännu."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:141
 msgid "Add media"
-msgstr ""
+msgstr "Lägg till media"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:147
 msgid "There doesn't seem to be any media here yet..."
-msgstr ""
+msgstr "Det verkar inte finnas någon media här ännu."
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 msgid "feed icon"
-msgstr ""
+msgstr "feed-ikon"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
 msgid "Atom feed"
-msgstr ""
+msgstr "Atom-feed"
 
 #: mediagoblin/user_pages/forms.py:24
 msgid "Comment"
