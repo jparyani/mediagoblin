@@ -226,18 +226,19 @@ def verify_forgot_password(request):
        # If we don't have userid and token parameters, we can't do anything;404
         if (not request.GET.has_key('userid') or
            not request.GET.has_key('token')):
-            return exc.HTTPNotFound('You must provide userid and token')
+            return render_404(request)
 
         # check if it's a valid Id
         try:
             user = request.db.User.find_one(
                 {'_id': ObjectId(unicode(request.GET['userid']))})
         except InvalidId:
-            return exc.HTTPNotFound('Invalid id')
+            return render_404(request)
 
         # check if we have a real user and correct token
         if (user and
-           user['fp_verification_key'] == unicode(request.GET['token'])):
+           user['fp_verification_key'] == unicode(request.GET['token']) and
+           datetime.datetime.now() < user['fp_token_expire']):
             cp_form = auth_forms.ChangePassForm(request.GET)
 
             return render_to_response(
@@ -245,27 +246,30 @@ def verify_forgot_password(request):
                    'mediagoblin/auth/change_fp.html',
                    {'cp_form': cp_form})
         # in case there is a valid id but no user whit that id in the db
+        # or the token expired
         else:
-            return exc.HTTPNotFound('User not found')
+            return render_404(request)
     if request.method == 'POST':
         # verification doing here to prevent POST values modification
         try:
             user = request.db.User.find_one(
                 {'_id': ObjectId(unicode(request.POST['userid']))})
         except InvalidId:
-            return exc.HTTPNotFound('Invalid id')
+            return render_404(request)
 
         cp_form = auth_forms.ChangePassForm(request.POST)
 
         # verification doing here to prevent POST values modification
         # if token and id are correct they are able to change their password
         if (user and
-           user['fp_verification_key'] == unicode(request.POST['token'])):
+           user['fp_verification_key'] == unicode(request.POST['token']) and
+           datetime.datetime.now() < user['fp_token_expire']):
 
             if cp_form.validate():
                 user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                     request.POST['password'])
                 user['fp_verification_key'] = None
+                user['fp_token_expire'] = None
                 user.save()
 
                 return redirect(request,
@@ -276,4 +280,4 @@ def verify_forgot_password(request):
                        'mediagoblin/auth/change_fp.html',
                        {'cp_form': cp_form})
         else:
-            return exc.HTTPNotFound('User not found')
+            return render_404(request)
