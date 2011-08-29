@@ -204,10 +204,7 @@ def forgot_password(request):
                {'$or': [{'username': request.POST['username']},
                {'email': request.POST['username']}]})
 
-        if not user:
-            fp_form.username.errors.append(
-                u"Sorry, the username doesn't exists")
-        else:
+        if user:
             user['fp_verification_key'] = unicode(uuid.uuid4())
             user['fp_token_expire'] = datetime.datetime.now() + \
                                       datetime.timedelta(days=10)
@@ -215,7 +212,8 @@ def forgot_password(request):
 
             send_fp_verification_email(user, request)
 
-            return redirect(request, 'mediagoblin.auth.fp_email_sent')
+        # do not reveal whether or not there is a matching user, just move along
+        return redirect(request, 'mediagoblin.auth.fp_email_sent')
 
     return render_to_response(
     request,
