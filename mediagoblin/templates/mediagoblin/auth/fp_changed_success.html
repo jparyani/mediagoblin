@@ -19,7 +19,9 @@
 
 {% block mediagoblin_content %}
   <p>
-    Your password have been changed. Now you can <a href="{{ request.urlgen('mediagoblin.auth.login') }}">Login</a>
+    {% trans %}
+      Your password has been changed. Try to log in now.
+    {% endtrans %}
   </p>
 {% endblock %}
 
