@@ -100,8 +100,8 @@ def user_add_forgot_password_token_and_expires(database):
     Add token and expiration fields to help recover forgotten passwords
     """
     database['users'].update(
-        {'fp_token': {'$exists': False}},
-        {'$set': {'fp_token': ''}},
+        {'fp_verification_key': {'$exists': False}},
+        {'$set': {'fp_verification_key': ''}},
         multi=True)
     database['users'].update(
          {'fp_token_expire': {'$exists': False}},
