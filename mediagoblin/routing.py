@@ -21,6 +21,7 @@ from mediagoblin.submit.routing import submit_routes
 from mediagoblin.user_pages.routing import user_routes
 from mediagoblin.edit.routing import edit_routes
 from mediagoblin.listings.routing import tag_routes
+from mediagoblin.confirm.routing import confirm_routes
 
 
 def get_mapper():
@@ -36,5 +37,6 @@ def get_mapper():
     mapping.extend(user_routes, '/u')
     mapping.extend(edit_routes, '/edit')
     mapping.extend(tag_routes, '/tag')
+    mapping.extend(confirm_routes, '/confirm')
 
     return mapping
