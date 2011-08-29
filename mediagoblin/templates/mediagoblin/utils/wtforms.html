@@ -20,9 +20,6 @@
 {% macro render_field_div(field) %}
   <div class="form_field_box">
     <div class="form_field_label">{{ _(field.label.text) }}</div>
-    {% if field.description -%}
-      <div class="form_field_description">{{ _(field.description) }}</div>
-    {%- endif %}
     <div class="form_field_input">{{ field }}</div>
     {%- if field.errors -%}
       {% for error in field.errors %}
@@ -30,6 +27,9 @@
           {{ error }}
         </div>
       {% endfor %}
+    {%- endif %}
+    {% if field.description -%}
+      <div class="form_field_description">{{ _(field.description) }}</div>
     {%- endif %}
   </div>
 {%- endmacro %}

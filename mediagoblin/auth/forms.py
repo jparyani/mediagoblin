@@ -24,21 +24,29 @@ class RegistrationForm(wtforms.Form):
         _('Username'),
         [wtforms.validators.Required(),
          wtforms.validators.Length(min=3, max=30),
-         wtforms.validators.Regexp(r'^\w+$')])
+         wtforms.validators.Regexp(r'^\w+$')],
+        description=_(
+            u"This is the name other users will identify you with."))
     password = wtforms.PasswordField(
         _('Password'),
         [wtforms.validators.Required(),
          wtforms.validators.Length(min=6, max=30),
          wtforms.validators.EqualTo(
                 'confirm_password',
-                _('Passwords must match.'))])
+                _('Passwords must match.'))],
+        description=_(
+            u"Try to use a strong password!"))
     confirm_password = wtforms.PasswordField(
         _('Confirm password'),
-        [wtforms.validators.Required()])
+        [wtforms.validators.Required()],
+        description=_(
+            u"Type it again here to make sure there are no spelling mistakes."))
     email = wtforms.TextField(
         _('Email address'),
         [wtforms.validators.Required(),
-         wtforms.validators.Email()])
+         wtforms.validators.Email()],
+        description=_(
+            u"Your email will never be published."))
 
 
 class LoginForm(wtforms.Form):
