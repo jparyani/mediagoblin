@@ -174,7 +174,7 @@ class TestSubmission:
         # Do not confirm deletion
         # ---------------------------------------------------
         response = self.test_app.post(
-            request.urlgen('mediagoblin.confirm.confirm_delete',
+            request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                            # No work: user=media.uploader().username,
                            user=self.test_user['username'],
                            media=media['_id']),
@@ -193,7 +193,7 @@ class TestSubmission:
         # Confirm deletion
         # ---------------------------------------------------
         response = self.test_app.post(
-            request.urlgen('mediagoblin.confirm.confirm_delete',
+            request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                            # No work: user=media.uploader().username,
                            user=self.test_user['username'],
                            media=media['_id']),

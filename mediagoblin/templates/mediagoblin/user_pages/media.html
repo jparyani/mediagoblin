@@ -128,7 +128,7 @@
                    class="media_icon" />edit</a>
         </p>
         <p>
-          <a href="{{ request.urlgen('mediagoblin.confirm.confirm_delete',
+          <a href="{{ request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                                      user= media.uploader().username,
                                      media= media._id) }}"
              ><img src="{{ request.staticdirect('/images/icon_delete.png') }}"

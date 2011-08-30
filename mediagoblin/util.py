@@ -681,3 +681,18 @@ def render_404(request):
     """
     return render_to_response(
         request, 'mediagoblin/404.html', {}, status=400)
+
+def delete_media_files(media):
+    """
+    Delete all files associated with a MediaEntry
+
+    Arguments:
+     - media: A MediaEntry document
+    """
+    for handle, listpath in media['media_files'].items():
+        mg_globals.public_store.delete_file(
+            listpath)
+
+    for attachment in media['attachment_files']:
+        mg_globals.public_store.delete_file(
+            attachment['filepath'])

@@ -37,6 +37,5 @@ def get_mapper():
     mapping.extend(user_routes, '/u')
     mapping.extend(edit_routes, '/edit')
     mapping.extend(tag_routes, '/tag')
-    mapping.extend(confirm_routes, '/confirm')
 
     return mapping

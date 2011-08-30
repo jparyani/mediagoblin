@@ -23,3 +23,10 @@ class MediaCommentForm(wtforms.Form):
     comment_content = wtforms.TextAreaField(
         _('Comment'),
         [wtforms.validators.Required()])
+
+
+class ConfirmDeleteForm(wtforms.Form):
+    confirm = wtforms.RadioField('Confirm',
+                                 default='False',
+                                 choices=[('False', 'No, I made a mistake!'),
+                                          ('True', 'Yes, delete it!')])
