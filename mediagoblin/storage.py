@@ -19,6 +19,7 @@ import shutil
 import urlparse
 import uuid
 import cloudfiles
+import mimetypes
 
 from werkzeug.utils import secure_filename
 
@@ -275,6 +276,12 @@ class CloudFilesStorage(StorageInterface):
         except cloudfiles.errors.NoSuchObject:
             obj = self.container.create_object(
                 self._resolve_filepath(filepath))
+
+            mimetype = mimetypes.guess_type(
+                filepath[-1])
+
+            if mimetype:
+                obj.content_type = mimetype[0]
 
         return obj
 
