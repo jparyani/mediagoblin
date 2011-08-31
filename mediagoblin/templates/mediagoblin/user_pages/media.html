@@ -121,18 +121,22 @@
                                  request.user['is_admin'] %}
         <h3>Temporary button holder</h3>
         <p>
-          <a href="{{ request.urlgen('mediagoblin.edit.edit_media',
+          {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
                                      user= media.uploader().username,
-                                     media= media._id) }}"
+                                     media= media._id) %}
+          <a href="{{ edit_url }}"
              ><img src="{{ request.staticdirect('/images/icon_edit.png') }}"
-                   class="media_icon" />edit</a>
+                   class="media_icon" /></a>
+          <a href="{{ edit_url }}">{% trans %}edit{% endtrans %}</a>
         </p>
         <p>
-          <a href="{{ request.urlgen('mediagoblin.user_pages.media_confirm_delete',
+          {% set delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                                      user= media.uploader().username,
-                                     media= media._id) }}"
+                                     media= media._id) %}
+          <a href="{{ delete_url }}"
              ><img src="{{ request.staticdirect('/images/icon_delete.png') }}"
-               class="media_icon" />{% trans %}delete{% endtrans %}</a>
+               class="media_icon" /></a>
+          <a href="{{ delete_url }}">{% trans %}delete{% endtrans %}</a>
         </p>
       {% endif %}
 
