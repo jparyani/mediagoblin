@@ -51,6 +51,31 @@ def require_active_login(controller):
 
     return _make_safe(new_controller_func, controller)
 
+def user_may_delete_media(controller):
+    """
+    Require user ownership of the MediaEntry
+
+    Originally:
+def may_delete_media(request, media):
+    \"\"\"
+    Check, if the request's user may edit the media details
+    \"\"\"
+    if media['uploader'] == request.user['_id']:
+        return True
+    if request.user['is_admin']:
+        return True
+    return False
+    """
+    def wrapper(request, *args, **kwargs):
+        if not request.user['_id'] == request.db.MediaEntry.find_one(
+            {'_id': ObjectId(
+                    request.matchdict['media'])}).uploader()['_id']:
+            return exc.HTTPForbidden()
+
+        return controller(request, *args, **kwargs)
+
+    return _make_safe(wrapper, controller)
+
 
 def uses_pagination(controller):
     """
@@ -122,3 +147,4 @@ def get_media_entry_by_id(controller):
         return controller(request, media=media, *args, **kwargs)
 
     return _make_safe(wrapper, controller)
+

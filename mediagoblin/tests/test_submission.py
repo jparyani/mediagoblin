@@ -17,7 +17,7 @@
 import urlparse
 import pkg_resources
 
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true, assert_false
 
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.tests.tools import setup_fresh_app, get_test_app
@@ -52,6 +52,8 @@ class TestSubmission:
         test_user['status'] = u'active'
         test_user['pw_hash'] = auth_lib.bcrypt_gen_password_hash('toast')
         test_user.save()
+
+        self.test_user = test_user
 
         self.test_app.post(
             '/auth/login/', {
@@ -149,6 +151,63 @@ class TestSubmission:
         assert form.tags.errors == [
             u'Tags must be shorter than 50 characters.  Tags that are too long'\
              ': ffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuuuu']
+
+    def test_delete(self):
+        util.clear_test_template_context()
+        response = self.test_app.post(
+            '/submit/', {
+                'title': 'Balanced Goblin',
+                }, upload_files=[(
+                    'file', GOOD_JPG)])
+
+        # Post image
+        response.follow()
+
+        request = util.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/user_pages/user.html']['request']
+
+        media = request.db.MediaEntry.find({'title': 'Balanced Goblin'})[0]
+
+        # Does media entry exist?
+        assert_true(media)
+
+        # Do not confirm deletion
+        # ---------------------------------------------------
+        response = self.test_app.post(
+            request.urlgen('mediagoblin.user_pages.media_confirm_delete',
+                           # No work: user=media.uploader().username,
+                           user=self.test_user['username'],
+                           media=media['_id']),
+            {'confirm': 'False'})
+
+        response.follow()
+
+        request = util.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/user_pages/user.html']['request']
+
+        media = request.db.MediaEntry.find({'title': 'Balanced Goblin'})[0]
+
+        # Does media entry still exist?
+        assert_true(media)
+
+        # Confirm deletion
+        # ---------------------------------------------------
+        response = self.test_app.post(
+            request.urlgen('mediagoblin.user_pages.media_confirm_delete',
+                           # No work: user=media.uploader().username,
+                           user=self.test_user['username'],
+                           media=media['_id']),
+            {'confirm': 'True'})
+
+        response.follow()
+
+        request = util.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/user_pages/user.html']['request']
+
+        # Does media entry still exist?
+        assert_false(
+            request.db.MediaEntry.find(
+                {'_id': media['_id']}).count())
 
     def test_malicious_uploads(self):
         # Test non-suppoerted file with non-supported extension
