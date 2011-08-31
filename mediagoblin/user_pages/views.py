@@ -21,6 +21,7 @@ from mediagoblin.db.util import DESCENDING, ObjectId
 from mediagoblin.util import (
     Pagination, render_to_response, redirect, cleaned_markdown_conversion,
     render_404, delete_media_files)
+from mediagoblin.util import pass_to_ugettext as _
 from mediagoblin.user_pages import forms as user_forms
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
@@ -167,6 +168,13 @@ def media_confirm_delete(request, media):
             return redirect(request, "mediagoblin.user_pages.media_home",
                             user=media.uploader()['username'],
                             media=media['slug'])
+
+    if ((request.user[u'is_admin'] and
+         request.user[u'_id'] != media.uploader()[u'_id'])):
+        messages.add_message(
+            request, messages.WARNING,
+            _("You are about to delete another user's media. "
+              "Proceed with caution."))
 
     return render_to_response(
         request,
