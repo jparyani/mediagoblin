@@ -20,27 +20,29 @@
 {% set prev_entry_url = media.url_to_prev(request.urlgen) %}
 {% set next_entry_url = media.url_to_next(request.urlgen) %}
 
-<div>
-  {# There are no previous entries for the very first media entry #}
-  {% if prev_entry_url %}
-    <a class="navigation_button navigation_left" href="{{ prev_entry_url }}">
-      <img src="/mgoblin_static/images/navigation_left.png" alt="Previous image" />
-    </a>
-  {% else %}
-    {# This is the first entry. display greyed-out 'previous' image #}
-    <p class="navigation_button navigation_left">
-      <img src="/mgoblin_static/images/navigation_end.png" alt="No previous images" />
-    </p>
-  {% endif %}
-  {# Likewise, this could be the very last media entry #}
-  {% if next_entry_url %}
-    <a class="navigation_button" href="{{ next_entry_url }}">
-      <img src="/mgoblin_static/images/navigation_right.png" alt="Next image" />
-    </a>
-  {% else %}
-    {# This is the last entry. display greyed-out 'next' image #}
-    <p class="navigation_button">
-      <img src="/mgoblin_static/images/navigation_end.png" alt="No following images" />
-    </p>
-  {% endif %}
-</div>
+{% if prev_entry_url or next_entry_url %}
+  <div class="grid_5 alpha omega">
+    {# There are no previous entries for the very first media entry #}
+    {% if prev_entry_url %}
+      <a class="navigation_button navigation_left" href="{{ prev_entry_url }}">
+        <img src="/mgoblin_static/images/navigation_left.png" alt="Previous image" />
+      </a>
+    {% else %}
+      {# This is the first entry. display greyed-out 'previous' image #}
+      <p class="navigation_button navigation_left">
+        <img src="/mgoblin_static/images/navigation_end.png" alt="No previous images" />
+      </p>
+    {% endif %}
+    {# Likewise, this could be the very last media entry #}
+    {% if next_entry_url %}
+      <a class="navigation_button" href="{{ next_entry_url }}">
+        <img src="/mgoblin_static/images/navigation_right.png" alt="Next image" />
+      </a>
+    {% else %}
+      {# This is the last entry. display greyed-out 'next' image #}
+      <p class="navigation_button">
+        <img src="/mgoblin_static/images/navigation_end.png" alt="No following images" />
+      </p>
+    {% endif %}
+  </div>
+{% endif %}
