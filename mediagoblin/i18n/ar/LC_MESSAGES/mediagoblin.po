@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-08-25 07:41-0500\n"
-"PO-Revision-Date: 2011-08-25 12:41+0000\n"
+"POT-Creation-Date: 2011-08-30 22:51-0500\n"
+"PO-Revision-Date: 2011-08-31 03:51+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,50 +20,66 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5\n"
 
-#: mediagoblin/auth/forms.py:24 mediagoblin/auth/forms.py:46
+#: mediagoblin/auth/forms.py:24 mediagoblin/auth/forms.py:54
 msgid "Username"
 msgstr "اسم المستخدم"
 
-#: mediagoblin/auth/forms.py:29 mediagoblin/auth/forms.py:50
+#: mediagoblin/auth/forms.py:28
+msgid "This is the name other users will identify you with."
+msgstr ""
+
+#: mediagoblin/auth/forms.py:31 mediagoblin/auth/forms.py:58
 msgid "Password"
 msgstr "كلمة المرور"
 
-#: mediagoblin/auth/forms.py:34
+#: mediagoblin/auth/forms.py:36
 msgid "Passwords must match."
 msgstr "يجب أن تتطابق كلمتا المرور."
 
-#: mediagoblin/auth/forms.py:36
+#: mediagoblin/auth/forms.py:37
+msgid "Try to use a strong password!"
+msgstr ""
+
+#: mediagoblin/auth/forms.py:40
 msgid "Confirm password"
 msgstr "تأكيد كلمة المرور"
 
-#: mediagoblin/auth/forms.py:39
+#: mediagoblin/auth/forms.py:42
+msgid "Type it again here to make sure there are no spelling mistakes."
+msgstr ""
+
+#: mediagoblin/auth/forms.py:45
 msgid "Email address"
 msgstr "عنوان البريد الإلكتروني"
+
+#: mediagoblin/auth/forms.py:48
+msgid "Your email will never be published."
+msgstr ""
 
 #: mediagoblin/auth/views.py:40
 msgid "Sorry, registration is disabled on this instance."
 msgstr "عفوًا، التسجيل غير متاح هنا."
 
-#: mediagoblin/auth/views.py:57
+#: mediagoblin/auth/views.py:58
 msgid "Sorry, a user with that name already exists."
 msgstr "عذرا، مستخدم بهذا الاسم موجود فعلا."
 
-#: mediagoblin/auth/views.py:61
+#: mediagoblin/auth/views.py:62
 msgid "Sorry, that email address has already been taken."
 msgstr "عفوًا، هذا العنوان البريدي مستخدم."
 
-#: mediagoblin/auth/views.py:159
+#: mediagoblin/auth/views.py:160
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
 msgstr ""
 "تم التحقق من بريدك الإلكتروني. يمكنك الآن الولوج، تحرير ملفك، وإرسال الصور!"
 
-#: mediagoblin/auth/views.py:165
+#: mediagoblin/auth/views.py:166
 msgid "The verification key or user id is incorrect"
 msgstr "مفتاح التحقق أو معرف المستخدم خاطئ"
 
-#: mediagoblin/auth/views.py:186
+#: mediagoblin/auth/views.py:187
 #: mediagoblin/templates/mediagoblin/auth/resent_verification_email.html:22
 msgid "Resent your verification email."
 msgstr "أعيد إرسال رسالة التحقق."
@@ -92,15 +108,15 @@ msgstr "السيرة"
 msgid "Website"
 msgstr "الموقع الإلكتروني"
 
-#: mediagoblin/edit/views.py:65
+#: mediagoblin/edit/views.py:66
 msgid "An entry with that slug already exists for this user."
 msgstr ""
 
-#: mediagoblin/edit/views.py:94
+#: mediagoblin/edit/views.py:95
 msgid "You are editing another user's media. Proceed with caution."
 msgstr ""
 
-#: mediagoblin/edit/views.py:165
+#: mediagoblin/edit/views.py:166
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr ""
 
@@ -167,10 +183,8 @@ msgstr "لُج"
 #: mediagoblin/templates/mediagoblin/base.html:89
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
-"href=\"http://gnu.org/\">GNU project</a>"
+"href=\"http://gnu.org/\">GNU</a> project"
 msgstr ""
-"مدعوم بواسطة <a href=\"http://mediagoblin.org\">ميدياغوبلن</a>،  <a "
-"href=\"http://gnu.org/\">مشروع غنو</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:27
 msgid "Hi there, media lover! MediaGoblin is..."
@@ -259,6 +273,7 @@ msgstr "ألغِ"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:44
 msgid "Save changes"
 msgstr "احفظ التغييرات"
 
@@ -288,6 +303,17 @@ msgstr "وسائط <a href=\"%(user_url)s\">%(username)s</a>"
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:32
 msgid "Sorry, no such user found."
 msgstr "عذرا، لا يوجد مستخدم مماثل"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
+#, python-format
+msgid "Really delete %(title)s?"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:36
+msgid ""
+"If you choose yes, the media entry will be deleted "
+"<strong>permanently.</strong>"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
 msgid "Media processing panel"
@@ -394,6 +420,10 @@ msgstr ""
 
 #: mediagoblin/user_pages/forms.py:24
 msgid "Comment"
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:176
+msgid "You are about to delete another user's media. Proceed with caution."
 msgstr ""
 
 

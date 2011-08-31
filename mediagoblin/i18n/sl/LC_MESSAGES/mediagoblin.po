@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-08-25 07:41-0500\n"
-"PO-Revision-Date: 2011-08-25 12:41+0000\n"
+"POT-Creation-Date: 2011-08-30 22:51-0500\n"
+"PO-Revision-Date: 2011-08-31 03:51+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,39 +18,55 @@ msgstr ""
 "Language: sl\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3)\n"
 
-#: mediagoblin/auth/forms.py:24 mediagoblin/auth/forms.py:46
+#: mediagoblin/auth/forms.py:24 mediagoblin/auth/forms.py:54
 msgid "Username"
 msgstr "Uporabniško ime"
 
-#: mediagoblin/auth/forms.py:29 mediagoblin/auth/forms.py:50
+#: mediagoblin/auth/forms.py:28
+msgid "This is the name other users will identify you with."
+msgstr ""
+
+#: mediagoblin/auth/forms.py:31 mediagoblin/auth/forms.py:58
 msgid "Password"
 msgstr "Geslo"
 
-#: mediagoblin/auth/forms.py:34
+#: mediagoblin/auth/forms.py:36
 msgid "Passwords must match."
 msgstr "Gesli morata biti enaki."
 
-#: mediagoblin/auth/forms.py:36
+#: mediagoblin/auth/forms.py:37
+msgid "Try to use a strong password!"
+msgstr ""
+
+#: mediagoblin/auth/forms.py:40
 msgid "Confirm password"
 msgstr "Potrdite geslo"
 
-#: mediagoblin/auth/forms.py:39
+#: mediagoblin/auth/forms.py:42
+msgid "Type it again here to make sure there are no spelling mistakes."
+msgstr ""
+
+#: mediagoblin/auth/forms.py:45
 msgid "Email address"
 msgstr "E-poštni naslov"
+
+#: mediagoblin/auth/forms.py:48
+msgid "Your email will never be published."
+msgstr ""
 
 #: mediagoblin/auth/views.py:40
 msgid "Sorry, registration is disabled on this instance."
 msgstr "Oprostite, prijava za ta izvod ni omogočena."
 
-#: mediagoblin/auth/views.py:57
+#: mediagoblin/auth/views.py:58
 msgid "Sorry, a user with that name already exists."
 msgstr "Oprostite, uporabnik s tem imenom že obstaja."
 
-#: mediagoblin/auth/views.py:61
+#: mediagoblin/auth/views.py:62
 msgid "Sorry, that email address has already been taken."
 msgstr "Oprostite, ta e-poštni naslov je že v uporabi."
 
-#: mediagoblin/auth/views.py:159
+#: mediagoblin/auth/views.py:160
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
@@ -58,11 +74,11 @@ msgstr ""
 "Vaš e-poštni naslov je bil potrjen. Sedaj se lahko prijavite, uredite svoj "
 "profil in pošljete slike."
 
-#: mediagoblin/auth/views.py:165
+#: mediagoblin/auth/views.py:166
 msgid "The verification key or user id is incorrect"
 msgstr "Potrditveni ključ ali uporabniška identifikacija je napačna"
 
-#: mediagoblin/auth/views.py:186
+#: mediagoblin/auth/views.py:187
 #: mediagoblin/templates/mediagoblin/auth/resent_verification_email.html:22
 msgid "Resent your verification email."
 msgstr "Ponovno pošiljanje potrditvene e-pošte."
@@ -91,15 +107,15 @@ msgstr "Biografija"
 msgid "Website"
 msgstr "Spletna stran"
 
-#: mediagoblin/edit/views.py:65
+#: mediagoblin/edit/views.py:66
 msgid "An entry with that slug already exists for this user."
 msgstr "Vnos s to oznako za tega uporabnika že obstaja."
 
-#: mediagoblin/edit/views.py:94
+#: mediagoblin/edit/views.py:95
 msgid "You are editing another user's media. Proceed with caution."
 msgstr "Urejate vsebino drugega uporabnika. Nadaljujte pazljivo."
 
-#: mediagoblin/edit/views.py:165
+#: mediagoblin/edit/views.py:166
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr "Urejate uporabniški profil. Nadaljujte pazljivo."
 
@@ -168,10 +184,8 @@ msgstr "Prijava"
 #: mediagoblin/templates/mediagoblin/base.html:89
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
-"href=\"http://gnu.org/\">GNU project</a>"
+"href=\"http://gnu.org/\">GNU</a> project"
 msgstr ""
-"Stran poganja <a href=\"http://mediagoblin.org\">MediaGoblin</a>, del <a "
-"href=\"http://gnu.org/\">projekta GNU</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:27
 msgid "Hi there, media lover! MediaGoblin is..."
@@ -269,6 +283,7 @@ msgstr "Prekliči"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:44
 msgid "Save changes"
 msgstr "Shrani spremembe"
 
@@ -298,6 +313,17 @@ msgstr "Vsebina uporabnika <a href=\"%(user_url)s\">%(username)s</a>"
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:32
 msgid "Sorry, no such user found."
 msgstr "Oprostite, tega uporabnika ni bilo moč najti."
+
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
+#, python-format
+msgid "Really delete %(title)s?"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:36
+msgid ""
+"If you choose yes, the media entry will be deleted "
+"<strong>permanently.</strong>"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
 msgid "Media processing panel"
@@ -407,5 +433,9 @@ msgstr "Ikona Atom"
 #: mediagoblin/user_pages/forms.py:24
 msgid "Comment"
 msgstr "Komentar"
+
+#: mediagoblin/user_pages/views.py:176
+msgid "You are about to delete another user's media. Proceed with caution."
+msgstr ""
 
 
