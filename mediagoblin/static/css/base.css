@@ -208,6 +208,14 @@ text-align: center;
   margin-bottom: 4px;
 }
 
+.form_field_label {
+  font-size:1.125em;
+}
+
+.form_field_description {
+  font-style: italic;
+}
+
 .form_field_error {
   background-color: #87453b;
   color: #fff;
