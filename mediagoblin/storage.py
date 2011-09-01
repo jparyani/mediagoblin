@@ -232,7 +232,9 @@ class CloudFilesStorage(StorageInterface):
     class StorageObjectWrapper():
         """
         Wrapper for python-cloudfiles's cloudfiles.storage_object.Object
-        used to circumvent the mystic `medium.jpg` corruption issue.
+        used to circumvent the mystic `medium.jpg` corruption issue, where
+        we had both python-cloudfiles and PIL doing buffering on both
+        ends and that breaking things.
 
         This wrapper currently meets mediagoblin's needs for a public_store
         file-like object.
