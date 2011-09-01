@@ -17,7 +17,18 @@ License along with this program, in the file ``licenses/AGPLv3.txt``.
 If not, see <http://www.gnu.org/licenses/>.
 
 
-JavaScript files located in the ``mediagoblin/`` directory tree of
+Translation files located under ``mediagoblin/i18n/`` directory tree 
+are free software: you can redistribute it and/or modify it under the
+terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
+
+You should have received a copy of the GNU Affero General Public
+License along with this program, in the file ``licenses/AGPLv3.txt``.
+If not, see <http://www.gnu.org/licenses/>.
+
+
+JavaScript files located in the ``mediagoblin/`` directory tree 
 are free software: you can redistribute and/or modify them under the
 terms of the GNU Lesser General Public License as published by the
 Free Software Foundation, either version 3 of the License, or (at
