@@ -228,30 +228,11 @@ class BasicFileStorage(StorageInterface):
         return self._resolve_filepath(filepath)
 
 
+# ----------------------------------------------------
+# OpenStack/Rackspace Cloud's Swift/CloudFiles support
+# ----------------------------------------------------
+
 class CloudFilesStorage(StorageInterface):
-    class StorageObjectWrapper():
-        """
-        Wrapper for python-cloudfiles's cloudfiles.storage_object.Object
-        used to circumvent the mystic `medium.jpg` corruption issue, where
-        we had both python-cloudfiles and PIL doing buffering on both
-        ends and that breaking things.
-
-        This wrapper currently meets mediagoblin's needs for a public_store
-        file-like object.
-        """
-        def __init__(self, storage_object):
-            self.storage_object = storage_object
-
-        def read(self, *args, **kwargs):
-            return self.storage_object.read(*args, **kwargs)
-
-        def write(self, data, *args, **kwargs):
-            if self.storage_object.size and type(data) == str:
-                data = self.read() + data
-
-            self.storage_object.write(data, *args, **kwargs)
-
-
     def __init__(self, **kwargs):
         self.param_container = kwargs.get('cloudfiles_container')
         self.param_user = kwargs.get('cloudfiles_user')
@@ -323,6 +304,33 @@ class CloudFilesStorage(StorageInterface):
                 self.container_uri,
                 self._resolve_filepath(filepath)])
 
+
+class StorageObjectWrapper():
+    """
+    Wrapper for python-cloudfiles's cloudfiles.storage_object.Object
+    used to circumvent the mystic `medium.jpg` corruption issue, where
+    we had both python-cloudfiles and PIL doing buffering on both
+    ends and that breaking things.
+
+    This wrapper currently meets mediagoblin's needs for a public_store
+    file-like object.
+    """
+    def __init__(self, storage_object):
+        self.storage_object = storage_object
+
+    def read(self, *args, **kwargs):
+        return self.storage_object.read(*args, **kwargs)
+
+    def write(self, data, *args, **kwargs):
+        if self.storage_object.size and type(data) == str:
+            data = self.read() + data
+
+        self.storage_object.write(data, *args, **kwargs)
+
+
+# ------------
+# MountStorage
+# ------------
 
 class MountStorage(StorageInterface):
     """
