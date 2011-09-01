@@ -15,10 +15,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from setuptools import setup, find_packages
+import os
+import re
+
+READMEFILE = "README"
+VERSIONFILE = os.path.join("mediagoblin", "_version.py")
+VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
+
+
+def get_version():
+    verstrline = open(VERSIONFILE, "rt").read()
+    mo = re.search(VSRE, verstrline, re.M)
+    if mo:
+        return mo.group(1)
+    else:
+        raise RuntimeError("Unable to find version string in %s." % VERSIONFILE)
+
 
 setup(
     name = "mediagoblin",
-    version = "0.0.4",
+    version = get_version(),
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     zip_safe=False,
     # scripts and dependencies
@@ -73,7 +89,7 @@ setup(
     author_email='cwebber@gnu.org',
     url="http://mediagoblin.org/",
     download_url="http://mediagoblin.org/download/",
-    long_description=open('README').read(),
+    long_description=open(READMEFILE).read(),
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
