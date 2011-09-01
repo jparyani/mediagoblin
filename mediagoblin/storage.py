@@ -20,6 +20,7 @@ import urlparse
 import uuid
 import cloudfiles
 import mimetypes
+import tempfile
 
 from werkzeug.utils import secure_filename
 
@@ -228,6 +229,27 @@ class BasicFileStorage(StorageInterface):
 
 
 class CloudFilesStorage(StorageInterface):
+    class StorageObjectWrapper():
+        """
+        Wrapper for python-cloudfiles's cloudfiles.storage_object.Object
+        used to circumvent the mystic `medium.jpg` corruption issue.
+
+        This wrapper currently meets mediagoblin's needs for a public_store
+        file-like object.
+        """
+        def __init__(self, storage_object):
+            self.storage_object = storage_object
+
+        def read(self, *args, **kwargs):
+            return self.storage_object.read(*args, **kwargs)
+
+        def write(self, data, *args, **kwargs):
+            if self.storage_object.size and type(data) == str:
+                data = self.read() + data
+
+            self.storage_object.write(data, *args, **kwargs)
+
+
     def __init__(self, **kwargs):
         self.param_container = kwargs.get('cloudfiles_container')
         self.param_user = kwargs.get('cloudfiles_user')
@@ -269,7 +291,10 @@ class CloudFilesStorage(StorageInterface):
         except cloudfiles.errors.NoSuchObject:
             return False
 
-    def get_file(self, filepath, mode='r'):
+    def get_file(self, filepath, *args):
+        """
+        - Doesn't care about the "mode" argument
+        """
         try:
             obj = self.container.get_object(
                 self._resolve_filepath(filepath))
@@ -283,7 +308,7 @@ class CloudFilesStorage(StorageInterface):
             if mimetype:
                 obj.content_type = mimetype[0]
 
-        return obj
+        return self.StorageObjectWrapper(obj)
 
     def delete_file(self, filepath):
         # TODO: Also delete unused directories if empty (safely, with
