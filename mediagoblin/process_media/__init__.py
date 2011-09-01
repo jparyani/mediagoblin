@@ -142,8 +142,8 @@ def process_image(entry):
         thumb = thumb.convert("RGB")
 
     thumb_filepath = create_pub_filepath(entry, 'thumbnail.jpg')
-
     thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
+
     with closing(thumb_file):
         thumb.save(thumb_file, "JPEG", quality=90)
 
@@ -160,8 +160,8 @@ def process_image(entry):
             medium = medium.convert("RGB")
 
         medium_filepath = create_pub_filepath(entry, 'medium.jpg')
-
         medium_file = mgg.public_store.get_file(medium_filepath, 'w')
+
         with closing(medium_file):
             medium.save(medium_file, "JPEG", quality=90)
             medium_processed = True
