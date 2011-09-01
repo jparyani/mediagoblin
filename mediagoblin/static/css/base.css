@@ -114,6 +114,8 @@ a.mediagoblin_logo{
   text-decoration: none;
   border: medium none;
   font-style: normal;
+  font-weight: bold;
+  font-size: 1em;
 }
 
 .header_submit_highlight{
@@ -158,8 +160,9 @@ background-image: -moz-linear-gradient(center top , rgb(134, 212, 177), rgb(109,
   padding-left: 11px;
   padding-right: 11px;
   text-decoration: none;
-  font-family:'Lato', sans-serif;
-  font-size:1em;
+  font-family: 'Lato', sans-serif;
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 .pagination{
