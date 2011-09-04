@@ -349,12 +349,7 @@ def get_locale_from_request(request):
     Figure out what target language is most appropriate based on the
     request
     """
-    if request.method == 'GET':
-        request_form = request.GET
-    else:
-        import pdb
-        pdb.set_trace()
-        request_form = request.POST
+    request_form = request.GET or request.POST
 
     if request_form.has_key('lang'):
         return locale_to_lower_upper(request_form['lang'])
