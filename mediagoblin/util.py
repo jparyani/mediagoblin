@@ -349,7 +349,12 @@ def get_locale_from_request(request):
     Figure out what target language is most appropriate based on the
     request
     """
-    request_form = request.GET or request.POST
+    if request.method == 'GET':
+        request_form = request.GET
+    else:
+        import pdb
+        pdb.set_trace()
+        request_form = request.POST
 
     if request_form.has_key('lang'):
         return locale_to_lower_upper(request_form['lang'])
@@ -689,7 +694,7 @@ def delete_media_files(media):
     Arguments:
      - media: A MediaEntry document
     """
-    for handle, listpath in media['media_files'].items():
+    for listpath in media['media_files'].itervalues():
         mg_globals.public_store.delete_file(
             listpath)
 
