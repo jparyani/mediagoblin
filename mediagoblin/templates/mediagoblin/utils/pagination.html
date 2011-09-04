@@ -33,15 +33,18 @@
     <div class="pagination">
       <p>
         {% if pagination.has_prev %}
-          <a href="{{ pagination.get_page_url_explicit(
-                          base_url, get_params,
-                          pagination.page - 1) }}"><img class="pagination_arrow" src="/mgoblin_static/images/pagination_left.png" alt="Previous page" />Newer</a>
+          {% set prev_url = pagination.get_page_url_explicit(
+                   base_url, get_params,
+                   pagination.page - 1) %}
+          <a href="{{ prev_url }}"><img class="pagination_arrow" src="/mgoblin_static/images/pagination_left.png" alt="Previous page" /></a>
+          <a href="{{ prev_url }}">Newer</a>
         {% endif %}
         {% if pagination.has_next %}
-          <a href="{{ pagination.get_page_url_explicit(
-                          base_url, get_params,
-                          pagination.page + 1) }}">Older<img class="pagination_arrow" src="/mgoblin_static/images/pagination_right.png" alt="Next page" />
-          </a>
+          {% set next_url = pagination.get_page_url_explicit(
+                   base_url, get_params,
+                   pagination.page + 1) %}
+          <a href="{{ next_url }}">Older</a>
+          <a href="{{ next_url }}"><img class="pagination_arrow" src="/mgoblin_static/images/pagination_right.png" alt="Next page" /></a>
         {% endif %}
         <br />
         Go to page: 
