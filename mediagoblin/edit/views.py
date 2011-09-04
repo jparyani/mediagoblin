@@ -46,9 +46,6 @@ def edit_media(request, media):
         description=media['description'],
         tags=media_tags_as_string(media['tags']))
 
-    if len(media['attachment_files']):
-        defaults['attachment_name'] = media['attachment_files'][0]['name']
-
     form = forms.EditForm(
         request.POST,
         **defaults)
@@ -72,14 +69,6 @@ def edit_media(request, media):
 
             media['description_html'] = cleaned_markdown_conversion(
                 media['description'])
-
-            if 'attachment_name' in request.POST:
-                media['attachment_files'][0]['name'] = \
-                    request.POST['attachment_name']
-
-            if 'attachment_delete' in request.POST \
-                    and 'y' == request.POST['attachment_delete']:
-                del media['attachment_files'][0]
 
             media['slug'] = unicode(request.POST['slug'])
             media.save()
