@@ -222,62 +222,59 @@ def forgot_password(request):
 
 
 def verify_forgot_password(request):
+    # get session variables, and specifically check for presence of token
+    mysession = _process_for_token(request)
+    if not mysession['token_complete']:
+        return render_404(request)
+
+    session_token = mysession['vars']['token']
+    session_userid = mysession['vars']['userid']
+    session_vars = mysession['vars']
+
+    # check if it's a valid Id
+    try:
+        user = request.db.User.find_one(
+                                     {'_id': ObjectId(unicode(session_userid))})
+    except InvalidId:
+        return render_404(request)
+
+    # check if we have a real user and correct token
+    if (user and user['fp_verification_key'] == unicode(session_token) and
+                             datetime.datetime.now() < user['fp_token_expire']):
+        cp_form = auth_forms.ChangePassForm(session_vars)
+
+        if request.method == 'POST' and cp_form.validate():
+            user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+                request.POST['password'])
+            user['fp_verification_key'] = None
+            user['fp_token_expire'] = None
+            user.save()
+
+            return redirect(request, 'mediagoblin.auth.fp_changed_success')
+        else:
+            return render_to_response(request,
+                                      'mediagoblin/auth/change_fp.html',
+                                      {'cp_form': cp_form})
+    # in case there is a valid id but no user whit that id in the db
+    # or the token expired
+    else:
+        return render_404(request)
+
+
+def _process_for_token(request):
+    """
+    Checks for tokens in session without prior knowledge of request method
+
+    For now, returns whether the userid and token session variables exist, and
+    the session variables in a hash. Perhaps an object is warranted?
+    """
+    # retrieve the session variables
     if request.method == 'GET':
-       # If we don't have userid and token parameters, we can't do anything;404
-        if (not request.GET.has_key('userid') or
-           not request.GET.has_key('token')):
-            return render_404(request)
+        session_vars = request.GET
+    else:
+        session_vars = request.POST
 
-        # check if it's a valid Id
-        try:
-            user = request.db.User.find_one(
-                {'_id': ObjectId(unicode(request.GET['userid']))})
-        except InvalidId:
-            return render_404(request)
-
-        # check if we have a real user and correct token
-        if (user and
-           user['fp_verification_key'] == unicode(request.GET['token']) and
-           datetime.datetime.now() < user['fp_token_expire']):
-            cp_form = auth_forms.ChangePassForm(request.GET)
-
-            return render_to_response(
-                   request,
-                   'mediagoblin/auth/change_fp.html',
-                   {'cp_form': cp_form})
-        # in case there is a valid id but no user whit that id in the db
-        # or the token expired
-        else:
-            return render_404(request)
-    if request.method == 'POST':
-        # verification doing here to prevent POST values modification
-        try:
-            user = request.db.User.find_one(
-                {'_id': ObjectId(unicode(request.POST['userid']))})
-        except InvalidId:
-            return render_404(request)
-
-        cp_form = auth_forms.ChangePassForm(request.POST)
-
-        # verification doing here to prevent POST values modification
-        # if token and id are correct they are able to change their password
-        if (user and
-           user['fp_verification_key'] == unicode(request.POST['token']) and
-           datetime.datetime.now() < user['fp_token_expire']):
-
-            if cp_form.validate():
-                user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
-                    request.POST['password'])
-                user['fp_verification_key'] = None
-                user['fp_token_expire'] = None
-                user.save()
-
-                return redirect(request,
-                            'mediagoblin.auth.fp_changed_success')
-            else:
-                return render_to_response(
-                       request,
-                       'mediagoblin/auth/change_fp.html',
-                       {'cp_form': cp_form})
-        else:
-            return render_404(request)
+    mysession = {'vars': session_vars,
+                 'token_complete': session_vars.has_key('userid') and
+                                                  session_vars.has_key('token')}
+    return mysession
