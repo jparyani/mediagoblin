@@ -224,7 +224,7 @@ def forgot_password(request):
 def verify_forgot_password(request):
     # get session variables, and specifically check for presence of token
     mysession = _process_for_token(request)
-    if not mysession['token_complete']:
+    if not mysession['has_userid_and_token']:
         return render_404(request)
 
     session_token = mysession['vars']['token']
@@ -275,6 +275,6 @@ def _process_for_token(request):
         session_vars = request.POST
 
     mysession = {'vars': session_vars,
-                 'token_complete': session_vars.has_key('userid') and
+                 'has_userid_and_token': session_vars.has_key('userid') and
                                                   session_vars.has_key('token')}
     return mysession

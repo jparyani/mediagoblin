@@ -281,6 +281,16 @@ def test_register_views(test_app):
             new_user['_id']), status=400)
     assert response.status == '400 Bad Request'
 
+    ## Try using an expired token to change password, shouldn't work
+    util.clear_test_template_context()
+    real_token_expiration = new_user['fp_token_expire']
+    new_user['fp_token_expire'] = datetime.datetime.now()
+    new_user.save()
+    response = test_app.get("%s?%s" % (path, get_params), status=400)
+    assert response.status == '400 Bad Request'
+    new_user['fp_token_expire'] = real_token_expiration
+    new_user.save()
+
     ## Verify step 1 of password-change works -- can see form to change password
     util.clear_test_template_context()
     response = test_app.get("%s?%s" % (path, get_params))
