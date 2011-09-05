@@ -31,17 +31,20 @@
           Really delete {{ title }}?
         {%- endtrans %}
       </h1>
-      <p>
-	<em>
-	  {%- trans -%}
-	    If you choose yes, the media entry will be deleted <strong>permanently.</strong>
-	  {%- endtrans %}
-	</em>
-      </p>
 	  
-      {{ wtforms_util.render_divs(form) }}
+	  <div style="text-align: center;" >
+        <img src="{{ request.app.public_store.file_url(
+                         media['media_files']['thumb']) }}" />
+      </div>
+	  
+	  <br />
+	  
+      <p>
+		{{ form.confirm }}
+		{{ _(form.confirm.label.text) }}
+	  </p>
       <div class="form_submit_buttons">
-        <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button" />
+        <input type="submit" value="{% trans %}Delete Permanently{% endtrans %}" class="button" />
       </div>
     </div>
   </form>
