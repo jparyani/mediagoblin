@@ -44,7 +44,10 @@
 		{{ _(form.confirm.label.text) }}
 	  </p>
       <div class="form_submit_buttons">
+		
+		<a href="{{ media.url_for_self(request.urlgen) }}"><input type="button" value="{% trans %}Cancel{% endtrans %}" class="button" /></a>
         <input type="submit" value="{% trans %}Delete Permanently{% endtrans %}" class="button" />
+		
       </div>
     </div>
   </form>
