@@ -20,7 +20,7 @@ import urllib
 import routes
 from webob import Request, exc
 
-from mediagoblin import routing, util
+from mediagoblin import routing, util, middleware
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init import (get_jinja_loader, get_staticdirector,
@@ -61,7 +61,7 @@ class MediaGoblinApp(object):
         # Get the template environment
         self.template_loader = get_jinja_loader(
             app_config.get('user_template_path'))
-        
+
         # Set up storage systems
         self.public_store, self.queue_store = setup_storage()
 
@@ -94,11 +94,22 @@ class MediaGoblinApp(object):
         # matters in always eager mode :)
         setup_workbench()
 
+        # instantiate application middleware
+        self.middleware = [util.import_component(m)(self)
+                           for m in middleware.ENABLED_MIDDLEWARE]
+
+
     def __call__(self, environ, start_response):
         request = Request(environ)
-        path_info = request.path_info
+
+        # pass the request through our middleware classes
+        for m in self.middleware:
+            response = m.process_request(request)
+            if response is not None:
+                return response(environ, start_response)
 
         ## Routing / controller loading stuff
+        path_info = request.path_info
         route_match = self.routing.match(path_info)
 
         ## Attach utilities to the request object
@@ -110,7 +121,7 @@ class MediaGoblinApp(object):
         # Also attach a few utilities from request.app for convenience?
         request.app = self
         request.locale = util.get_locale_from_request(request)
-            
+
         request.template_env = util.get_jinja_env(
             self.template_loader, request.locale)
         request.db = self.db
@@ -139,7 +150,14 @@ class MediaGoblinApp(object):
         controller = util.import_component(route_match['controller'])
         request.start_response = start_response
 
-        return controller(request)(environ, start_response)
+        # get the response from the controller
+        response = controller(request)
+
+        # pass the response through the middleware
+        for m in self.middleware[::-1]:
+            m.process_response(request, response)
+
+        return response(environ, start_response)
 
 
 def paste_app_factory(global_config, **app_config):
