@@ -347,7 +347,7 @@ class CloudFilesStorageObjectWrapper():
         """
         return self
 
-    def __exit__(self, *args):
+    def __exit__(self, *exc_info):
         """
         Context Manger API implementation
         see self.__enter__()
