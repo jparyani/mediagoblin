@@ -16,4 +16,5 @@
 
 ENABLED_MIDDLEWARE = (
     'mediagoblin.middleware.noop:NoOpMiddleware',
+    'mediagoblin.middleware.csrf:CsrfMiddleware',
     )

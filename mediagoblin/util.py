@@ -39,6 +39,7 @@ from wtforms.form import Form
 from mediagoblin import mg_globals
 from mediagoblin import messages
 from mediagoblin.db.util import ObjectId
+from mediagoblin.middleware.csrf import render_csrf_form_token
 
 from itertools import izip, count
 
@@ -125,6 +126,8 @@ def render_template(request, template_path, context):
     template = request.template_env.get_template(
         template_path)
     context['request'] = request
+    context['csrf_token'] = render_csrf_form_token(request)
+
     rendered = template.render(context)
 
     if TESTS_ENABLED:
