@@ -42,6 +42,7 @@
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button" />
+	{{ csrf_token }}
       </div>
     </div>
   </form>
