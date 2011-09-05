@@ -16,7 +16,6 @@
 
 import Image
 
-from contextlib import contextmanager
 from celery.task import Task
 from celery import registry
 
@@ -34,14 +33,6 @@ def create_pub_filepath(entry, filename):
             ['media_entries',
              unicode(entry['_id']),
              filename])
-
-
-@contextmanager
-def closing(callback):
-    try:
-        yield callback
-    finally:
-        pass
 
 
 ################################
@@ -66,7 +57,7 @@ class ProcessMedia(Task):
         except BaseProcessingFail, exc:
             mark_entry_failed(entry[u'_id'], exc)
             return
-            
+
         entry['state'] = u'processed'
         entry.save()
 
@@ -144,7 +135,7 @@ def process_image(entry):
     thumb_filepath = create_pub_filepath(entry, 'thumbnail.jpg')
     thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
 
-    with closing(thumb_file):
+    with thumb_file:
         thumb.save(thumb_file, "JPEG", quality=90)
 
     # If the size of the original file exceeds the specified size of a `medium`
@@ -162,7 +153,7 @@ def process_image(entry):
         medium_filepath = create_pub_filepath(entry, 'medium.jpg')
         medium_file = mgg.public_store.get_file(medium_filepath, 'w')
 
-        with closing(medium_file):
+        with medium_file:
             medium.save(medium_file, "JPEG", quality=90)
             medium_processed = True
 
@@ -172,8 +163,8 @@ def process_image(entry):
 
     with queued_file:
         original_filepath = create_pub_filepath(entry, queued_filepath[-1])
-        
-        with closing(mgg.public_store.get_file(original_filepath, 'wb')) as original_file:
+
+        with mgg.public_store.get_file(original_filepath, 'wb') as original_file:
             original_file.write(queued_file.read())
 
     mgg.queue_store.delete_file(queued_filepath)
