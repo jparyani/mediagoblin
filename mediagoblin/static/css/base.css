@@ -141,7 +141,7 @@ background-image: -moz-linear-gradient(center top , rgb(134, 212, 177), rgb(109,
 
 /* common website elements */
 
-.button {
+.button, .cancel_link {
   height: 32px;
   min-width: 99px;
   background-color: #86d4b1;
@@ -163,6 +163,16 @@ background-image: -moz-linear-gradient(center top , rgb(134, 212, 177), rgb(109,
   font-family: 'Lato', sans-serif;
   font-size: 1.2em;
   font-weight: bold;
+}
+
+.cancel_link {
+  background-color: #aaa;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(##D2D2D2), to(#aaa)); 
+  background-image: -webkit-linear-gradient(top, #D2D2D2, #aaa); 
+  background-image:    -moz-linear-gradient(top, #D2D2D2, #aaa); 
+  background-image:     -ms-linear-gradient(top, #D2D2D2, #aaa); 
+  background-image:      -o-linear-gradient(top, #D2D2D2, #aaa); 
+  background-image:         linear-gradient(top, #D2D2D2, #aaa);
 }
 
 .pagination{

@@ -32,22 +32,22 @@
         {%- endtrans %}
       </h1>
 	  
-	  <div style="text-align: center;" >
+      <div style="text-align: center;" >
         <img src="{{ request.app.public_store.file_url(
                          media['media_files']['thumb']) }}" />
       </div>
 	  
-	  <br />
+      <br />
 	  
       <p>
-		{{ form.confirm }}
-		{{ _(form.confirm.label.text) }}
-	  </p>
+	{{ form.confirm }}
+	{{ _(form.confirm.label.text) }}
+      </p>
+
       <div class="form_submit_buttons">
-		
-		<a href="{{ media.url_for_self(request.urlgen) }}"><input type="button" value="{% trans %}Cancel{% endtrans %}" class="button" /></a>
+        {# TODO: This isn't a button really... might do unexpected things :) #}
+	<a class="cancel_link" href="{{ media.url_for_self(request.urlgen) }}">{% trans %}Cancel{% endtrans %}</a>
         <input type="submit" value="{% trans %}Delete Permanently{% endtrans %}" class="button" />
-		
       </div>
     </div>
   </form>
