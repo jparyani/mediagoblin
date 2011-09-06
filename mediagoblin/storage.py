@@ -291,7 +291,7 @@ class CloudFilesStorage(StorageInterface):
             if mimetype:
                 obj.content_type = mimetype[0]
 
-        return StorageObjectWrapper(obj, *args, **kwargs)
+        return CloudFilesStorageObjectWrapper(obj, *args, **kwargs)
 
     def delete_file(self, filepath):
         # TODO: Also delete unused directories if empty (safely, with
@@ -305,7 +305,7 @@ class CloudFilesStorage(StorageInterface):
                 self._resolve_filepath(filepath)])
 
 
-class StorageObjectWrapper():
+class CloudFilesStorageObjectWrapper():
     """
     Wrapper for python-cloudfiles's cloudfiles.storage_object.Object
     used to circumvent the mystic `medium.jpg` corruption issue, where
@@ -322,10 +322,37 @@ class StorageObjectWrapper():
         return self.storage_object.read(*args, **kwargs)
 
     def write(self, data, *args, **kwargs):
+        """
+        write data to the cloudfiles storage object
+
+        The original motivation for this wrapper is to ensure
+        that buffered writing to a cloudfiles storage object does not overwrite
+        any preexisting data.
+
+        Currently this method does not support any write modes except "append".
+        However if we should need it it would be easy implement.
+        """
         if self.storage_object.size and type(data) == str:
             data = self.read() + data
 
         self.storage_object.write(data, *args, **kwargs)
+
+    def close(self):
+        pass
+
+    def __enter__(self):
+        """
+        Context Manager API implementation
+        http://docs.python.org/library/stdtypes.html#context-manager-types
+        """
+        return self
+
+    def __exit__(self, *exc_info):
+        """
+        Context Manger API implementation
+        see self.__enter__()
+        """
+        self.close()
 
 
 # ------------
