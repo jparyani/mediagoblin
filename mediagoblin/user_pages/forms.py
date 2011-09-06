@@ -26,5 +26,5 @@ class MediaCommentForm(wtforms.Form):
 
 
 class ConfirmDeleteForm(wtforms.Form):
-    confirm = wtforms.BooleanField('I am sure I want to delete this',
-				 [wtforms.validators.Required()])
+    confirm = wtforms.BooleanField(
+        _('I am sure I want to delete this'))
