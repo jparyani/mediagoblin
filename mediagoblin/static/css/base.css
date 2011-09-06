@@ -365,3 +365,11 @@ table.media_panel th {
   font-weight: bold;
   padding-bottom: 4px;
 }
+
+
+/* Delete panel */
+
+.delete_checkbox_box {
+  margin-top: 10px;
+  margin-left: 10px;
+}
