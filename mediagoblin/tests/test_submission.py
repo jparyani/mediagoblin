@@ -178,7 +178,8 @@ class TestSubmission:
                            # No work: user=media.uploader().username,
                            user=self.test_user['username'],
                            media=media['_id']),
-            {'confirm': 'False'})
+            # no value means no confirm
+            {})
 
         response.follow()
 
@@ -197,7 +198,7 @@ class TestSubmission:
                            # No work: user=media.uploader().username,
                            user=self.test_user['username'],
                            media=media['_id']),
-            {'confirm': 'True'})
+            {'confirm': 'y'})
 
         response.follow()
 
