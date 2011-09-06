@@ -5,12 +5,13 @@
 #   <ekenbrand@hotmail.com>, 2011.
 #   <juangsub@gmail.com>, 2011.
 #   <jacobo@gnu.org>, 2011.
+# Mario Rodriguez <msrodriguez00@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-08-30 22:51-0500\n"
-"PO-Revision-Date: 2011-08-31 03:51+0000\n"
+"POT-Creation-Date: 2011-09-05 23:31-0500\n"
+"PO-Revision-Date: 2011-09-06 04:31+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Spanish (Castilian) (http://www.transifex.net/projects/p/mediagoblin/team/es/)\n"
 "MIME-Version: 1.0\n"
@@ -20,41 +21,30 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: mediagoblin/auth/forms.py:24 mediagoblin/auth/forms.py:54
+#: mediagoblin/auth/forms.py:24 mediagoblin/auth/forms.py:48
 msgid "Username"
 msgstr "Nombre de Usuario"
 
-#: mediagoblin/auth/forms.py:28
-msgid "This is the name other users will identify you with."
-msgstr ""
-
-#: mediagoblin/auth/forms.py:31 mediagoblin/auth/forms.py:58
+#: mediagoblin/auth/forms.py:29 mediagoblin/auth/forms.py:52
 msgid "Password"
 msgstr "Contraseña"
 
-#: mediagoblin/auth/forms.py:36
+#: mediagoblin/auth/forms.py:34
 msgid "Passwords must match."
 msgstr "Las contraseñas deben coincidir."
 
-#: mediagoblin/auth/forms.py:37
-msgid "Try to use a strong password!"
-msgstr ""
-
-#: mediagoblin/auth/forms.py:40
+#: mediagoblin/auth/forms.py:36
 msgid "Confirm password"
 msgstr "Confirme su contraseña"
 
-#: mediagoblin/auth/forms.py:42
+#: mediagoblin/auth/forms.py:38
 msgid "Type it again here to make sure there are no spelling mistakes."
 msgstr ""
+"Escriba de nuevo aquí para asegurarse de que no hay faltas de ortografía."
 
-#: mediagoblin/auth/forms.py:45
+#: mediagoblin/auth/forms.py:41
 msgid "Email address"
 msgstr "Dirección de correo electrónico"
-
-#: mediagoblin/auth/forms.py:48
-msgid "Your email will never be published."
-msgstr ""
 
 #: mediagoblin/auth/views.py:40
 msgid "Sorry, registration is disabled on this instance."
@@ -90,36 +80,41 @@ msgstr "Reenvíe su correo electrónico de verificación."
 msgid "Title"
 msgstr "Título"
 
-#: mediagoblin/edit/forms.py:29
-msgid "Slug"
-msgstr "Ficha"
-
-#: mediagoblin/edit/forms.py:30
-msgid "The slug can't be empty"
-msgstr "La ficha no puede estar vacía"
-
-#: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:31
+#: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:32
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: mediagoblin/edit/forms.py:38
+#: mediagoblin/edit/forms.py:33
+msgid "Slug"
+msgstr "Ficha"
+
+#: mediagoblin/edit/forms.py:34
+msgid "The slug can't be empty"
+msgstr "La ficha no puede estar vacía"
+
+#: mediagoblin/edit/forms.py:35
+msgid ""
+"The title part of this media's URL. You usually don't need to change this."
+msgstr ""
+
+#: mediagoblin/edit/forms.py:42
 msgid "Bio"
 msgstr "Bio"
 
-#: mediagoblin/edit/forms.py:41
+#: mediagoblin/edit/forms.py:45
 msgid "Website"
 msgstr "Sitio web"
 
-#: mediagoblin/edit/views.py:66
+#: mediagoblin/edit/views.py:63
 msgid "An entry with that slug already exists for this user."
 msgstr "Una entrada con esa ficha ya existe para este usuario."
 
-#: mediagoblin/edit/views.py:95
+#: mediagoblin/edit/views.py:84
 msgid "You are editing another user's media. Proceed with caution."
 msgstr ""
 "Usted está editando el contenido de otro usuario. Proceder con precaución."
 
-#: mediagoblin/edit/views.py:166
+#: mediagoblin/edit/views.py:155
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr "Usted está editando un perfil de usuario. Proceder con precaución."
 
@@ -130,6 +125,10 @@ msgstr "Archivo inálido para el formato seleccionado."
 #: mediagoblin/submit/forms.py:25
 msgid "File"
 msgstr "Archivo"
+
+#: mediagoblin/submit/forms.py:30
+msgid "Description of this work"
+msgstr ""
 
 #: mediagoblin/submit/views.py:47
 msgid "You must provide a file."
@@ -279,12 +278,12 @@ msgid "Editing %(media_title)s"
 msgstr "Edición %(media_title)s "
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:36
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
 msgid "Cancel"
 msgstr "Cancelar"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
-#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:44
 msgid "Save changes"
 msgstr "Salvar cambios"
 
@@ -318,12 +317,10 @@ msgstr "Lo sentimos, no se ha encontrado ese usuario."
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
 msgid "Really delete %(title)s?"
-msgstr ""
+msgstr "Realmente desea eliminar %(title)s ?"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:36
-msgid ""
-"If you choose yes, the media entry will be deleted "
-"<strong>permanently.</strong>"
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:50
+msgid "Delete Permanently"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
@@ -437,12 +434,26 @@ msgstr "ícono feed"
 msgid "Atom feed"
 msgstr "Atom feed"
 
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:40
+msgid "Newer"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:46
+msgid "Older"
+msgstr ""
+
 #: mediagoblin/user_pages/forms.py:24
 msgid "Comment"
 msgstr "Comentario"
 
+#: mediagoblin/user_pages/forms.py:30
+msgid "I am sure I want to delete this"
+msgstr ""
+
 #: mediagoblin/user_pages/views.py:176
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr ""
+"Usted está a punto de eliminar un medio de otro usuario. Proceder con "
+"cautela."
 
 

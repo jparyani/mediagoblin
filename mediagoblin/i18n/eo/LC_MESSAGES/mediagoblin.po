@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-08-30 22:51-0500\n"
-"PO-Revision-Date: 2011-08-31 03:51+0000\n"
+"POT-Creation-Date: 2011-09-05 23:31-0500\n"
+"PO-Revision-Date: 2011-09-06 04:31+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,41 +20,29 @@ msgstr ""
 "Language: eo\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: mediagoblin/auth/forms.py:24 mediagoblin/auth/forms.py:54
+#: mediagoblin/auth/forms.py:24 mediagoblin/auth/forms.py:48
 msgid "Username"
 msgstr "Uzantnomo"
 
-#: mediagoblin/auth/forms.py:28
-msgid "This is the name other users will identify you with."
-msgstr ""
-
-#: mediagoblin/auth/forms.py:31 mediagoblin/auth/forms.py:58
+#: mediagoblin/auth/forms.py:29 mediagoblin/auth/forms.py:52
 msgid "Password"
 msgstr "Pasvorto"
 
-#: mediagoblin/auth/forms.py:36
+#: mediagoblin/auth/forms.py:34
 msgid "Passwords must match."
 msgstr "Pasvortoj devas esti egalaj."
 
-#: mediagoblin/auth/forms.py:37
-msgid "Try to use a strong password!"
-msgstr ""
-
-#: mediagoblin/auth/forms.py:40
+#: mediagoblin/auth/forms.py:36
 msgid "Confirm password"
 msgstr "Retajpu pasvorton"
 
-#: mediagoblin/auth/forms.py:42
+#: mediagoblin/auth/forms.py:38
 msgid "Type it again here to make sure there are no spelling mistakes."
-msgstr ""
+msgstr "Retajpu ĝin por certigi, ke ne okazis mistajpoj."
 
-#: mediagoblin/auth/forms.py:45
+#: mediagoblin/auth/forms.py:41
 msgid "Email address"
 msgstr "Retpoŝtadreso"
-
-#: mediagoblin/auth/forms.py:48
-msgid "Your email will never be published."
-msgstr ""
 
 #: mediagoblin/auth/views.py:40
 msgid "Sorry, registration is disabled on this instance."
@@ -89,45 +77,54 @@ msgstr "Resendi vian kontrol-mesaĝon."
 msgid "Title"
 msgstr "Titolo"
 
-#: mediagoblin/edit/forms.py:29
-msgid "Slug"
-msgstr "La distingiga adresparto"
-
-#: mediagoblin/edit/forms.py:30
-msgid "The slug can't be empty"
-msgstr "La distingiga adresparto ne povas esti malplena"
-
-#: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:31
+#: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:32
 msgid "Tags"
 msgstr "Etikedoj"
 
-#: mediagoblin/edit/forms.py:38
+#: mediagoblin/edit/forms.py:33
+msgid "Slug"
+msgstr "La distingiga adresparto"
+
+#: mediagoblin/edit/forms.py:34
+msgid "The slug can't be empty"
+msgstr "La distingiga adresparto ne povas esti malplena"
+
+#: mediagoblin/edit/forms.py:35
+msgid ""
+"The title part of this media's URL. You usually don't need to change this."
+msgstr ""
+
+#: mediagoblin/edit/forms.py:42
 msgid "Bio"
 msgstr "Bio"
 
-#: mediagoblin/edit/forms.py:41
+#: mediagoblin/edit/forms.py:45
 msgid "Website"
 msgstr "Retejo"
 
-#: mediagoblin/edit/views.py:66
+#: mediagoblin/edit/views.py:63
 msgid "An entry with that slug already exists for this user."
 msgstr "Ĉi tiu uzanto jam havas dosieron kun tiu distingiga adresparto."
 
-#: mediagoblin/edit/views.py:95
+#: mediagoblin/edit/views.py:84
 msgid "You are editing another user's media. Proceed with caution."
 msgstr "Vi priredaktas dosieron de alia uzanto. Agu singardeme."
 
-#: mediagoblin/edit/views.py:166
+#: mediagoblin/edit/views.py:155
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr "Vi redaktas profilon de alia uzanto. Agu singardeme."
 
 #: mediagoblin/process_media/errors.py:44
 msgid "Invalid file given for media type."
-msgstr ""
+msgstr "La provizita dosiero ne konformas al la informtipo."
 
 #: mediagoblin/submit/forms.py:25
 msgid "File"
 msgstr "Dosiero"
+
+#: mediagoblin/submit/forms.py:30
+msgid "Description of this work"
+msgstr ""
 
 #: mediagoblin/submit/views.py:47
 msgid "You must provide a file."
@@ -147,7 +144,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/404.html:24
 msgid "There doesn't seem to be a page at this address. Sorry!"
-msgstr ""
+msgstr "Verŝajne ĉe ĉi tiu adreso ne estas paĝo. Ni bedaŭras!"
 
 #: mediagoblin/templates/mediagoblin/404.html:26
 msgid ""
@@ -159,7 +156,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/404.html:32
 msgid "Image of 404 goblin stressing out"
-msgstr ""
+msgstr "Bildo de 404-koboldo penŝvitanta."
 
 #: mediagoblin/templates/mediagoblin/base.html:22
 msgid "GNU MediaGoblin"
@@ -188,10 +185,12 @@ msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project"
 msgstr ""
+"Funkcias per &lt;a href=\"http://mediagoblin.org\"&gt;MediaGoblin&lt;/a&gt;,"
+" unu el la &lt;a href=\"http://gnu.org/\"&gt;projektoj de GNU&lt;/a&gt;"
 
 #: mediagoblin/templates/mediagoblin/root.html:27
 msgid "Hi there, media lover! MediaGoblin is..."
-msgstr ""
+msgstr "Saluton, artemulo! MediaGoblin estas…"
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid "The perfect place for your media!"
@@ -202,14 +201,15 @@ msgid ""
 "A place for people to collaborate and show off original and derived "
 "creations!"
 msgstr ""
+"Loko, kie homoj povas kunlabori, kaj elmeti originalajn kreaĵojn kaj "
+"derivaĵojn!"
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid ""
 "Free, as in freedom. (We’re a <a href=\"http://gnu.org\">GNU</a> project, "
 "after all.)"
 msgstr ""
-"Libera verko. (Ni ja estas projekto de &lt;a "
-"href=\"http://gnu.org\"&gt;GNU&lt;/a&gt;.)"
+"Libera verko. (Ni ja estas projekto de <a href=\"http://gnu.org\">GNU</a>.)"
 
 #: mediagoblin/templates/mediagoblin/root.html:32
 msgid ""
@@ -222,6 +222,8 @@ msgid ""
 "Built for extensibility.  (Multiple media types coming soon to the software,"
 " including video support!)"
 msgstr ""
+"Kreita por etendado. (Baldaŭ en la programo aperos subteno de pluraj "
+"informspecoj, inkluzive de filmoj!)"
 
 #: mediagoblin/templates/mediagoblin/root.html:34
 msgid ""
@@ -272,12 +274,12 @@ msgid "Editing %(media_title)s"
 msgstr "Priredaktado de %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:36
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
 msgid "Cancel"
 msgstr "Nuligi"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
-#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:44
 msgid "Save changes"
 msgstr "Konservi ŝanĝojn"
 
@@ -311,34 +313,34 @@ msgstr "Uzanto ne trovita."
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
 msgid "Really delete %(title)s?"
-msgstr ""
+msgstr "Ĉu efektive forigi %(title)s?"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:36
-msgid ""
-"If you choose yes, the media entry will be deleted "
-"<strong>permanently.</strong>"
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:50
+msgid "Delete Permanently"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
 msgid "Media processing panel"
-msgstr ""
+msgstr "Kontrolejo pri dosierpreparado."
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:25
 msgid ""
 "You can track the state of media being processed for your gallery here."
 msgstr ""
+"Ĉi tie vi povas informiĝi pri la stato de preparado de dosieroj por via "
+"galerio."
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
 msgid "Media in-processing"
-msgstr ""
+msgstr "Dosieroj preparataj"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:46
 msgid "No media in-processing"
-msgstr ""
+msgstr "Neniu dosieroj preparatas"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:50
 msgid "These uploads failed to process:"
-msgstr ""
+msgstr "Preparado de ĉi tiuj alŝutaĵoj malsukcesis:"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:39
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:59
@@ -347,7 +349,7 @@ msgstr "Necesas konfirmo de retpoŝtadreso"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:42
 msgid "Almost done! Your account still needs to be activated."
-msgstr ""
+msgstr "Preskaŭ finite! Restas nur validigi vian konton."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:47
 msgid ""
@@ -406,6 +408,7 @@ msgid ""
 "This is where your media will appear, but you don't seem to have added "
 "anything yet."
 msgstr ""
+"Ĝuste ĉi tie aperos viaj dosieroj, sed vi ŝajne ankoraŭ nenion alŝutis."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:141
 msgid "Add media"
@@ -421,14 +424,26 @@ msgstr "flusimbolo"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
 msgid "Atom feed"
+msgstr "Atom-a informfluo"
+
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:40
+msgid "Newer"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:46
+msgid "Older"
 msgstr ""
 
 #: mediagoblin/user_pages/forms.py:24
 msgid "Comment"
 msgstr "Komento"
 
+#: mediagoblin/user_pages/forms.py:30
+msgid "I am sure I want to delete this"
+msgstr ""
+
 #: mediagoblin/user_pages/views.py:176
 msgid "You are about to delete another user's media. Proceed with caution."
-msgstr ""
+msgstr "Vi estas forigonta dosieron de alia uzanto. Estu singardema."
 
 
