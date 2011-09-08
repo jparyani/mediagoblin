@@ -101,9 +101,9 @@ def user_add_forgot_password_token_and_expires(database):
     """
     database['users'].update(
         {'fp_verification_key': {'$exists': False}},
-        {'$set': {'fp_verification_key': ''}},
+        {'$set': {'fp_verification_key': None}},
         multi=True)
     database['users'].update(
          {'fp_token_expire': {'$exists': False}},
-         {'$set': {'fp_token_expire': ''}},
+         {'$set': {'fp_token_expire': None}},
          multi=True)
