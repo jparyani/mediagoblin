@@ -242,8 +242,10 @@ def verify_forgot_password(request):
         return render_404(request)
 
     # check if we have a real user and correct token
-    if (user and user['fp_verification_key'] == unicode(session_token) and
-                             datetime.datetime.now() < user['fp_token_expire']):
+    if ((user and user['fp_verification_key'] and
+         user['fp_verification_key'] == unicode(session_token) and
+         datetime.datetime.now() < user['fp_token_expire'])):
+
         cp_form = auth_forms.ChangePassForm(session_vars)
 
         if request.method == 'POST' and cp_form.validate():
@@ -255,9 +257,11 @@ def verify_forgot_password(request):
 
             return redirect(request, 'mediagoblin.auth.fp_changed_success')
         else:
-            return render_to_response(request,
-                                      'mediagoblin/auth/change_fp.html',
-                                      {'cp_form': cp_form})
+            return render_to_response(
+                request,
+                'mediagoblin/auth/change_fp.html',
+                {'cp_form': cp_form})
+
     # in case there is a valid id but no user whit that id in the db
     # or the token expired
     else:
