@@ -241,13 +241,15 @@ def test_register_views(test_app):
     ### Oops, forgot the password
     # -------------------
     util.clear_test_template_context()
-    response = test_app.post('/auth/forgotpass/', {'username': 'happygirl'})
+    response = test_app.post(
+        '/auth/forgot_password/',
+        {'username': 'happygirl'})
     response.follow()
 
     ## Did we redirect to the proper page?  Use the right template?
     assert_equal(
         urlparse.urlsplit(response.location)[2],
-        '/auth/fp_email_sent/')
+        '/auth/forgot_password/email_sent/')
     assert util.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/auth/fp_email_sent.html')
 
@@ -262,7 +264,7 @@ def test_register_views(test_app):
 
     path = urlparse.urlsplit(email_context['verification_url'])[2]
     get_params = urlparse.urlsplit(email_context['verification_url'])[3]
-    assert path == u'/auth/verifyforgotpass/'
+    assert path == u'/auth/forgot_password/verify/'
     parsed_get_params = urlparse.parse_qs(get_params)
 
     # user should have matching parameters
@@ -277,7 +279,7 @@ def test_register_views(test_app):
     ## Try using a bs password-changing verification key, shouldn't work
     util.clear_test_template_context()
     response = test_app.get(
-        "/auth/verifyforgotpass/?userid=%s&token=total_bs" % unicode(
+        "/auth/forgot_password/verify/?userid=%s&token=total_bs" % unicode(
             new_user['_id']), status=400)
     assert response.status == '400 Bad Request'
 
@@ -299,14 +301,14 @@ def test_register_views(test_app):
     ## Verify step 2.1 of password-change works -- report success to user
     util.clear_test_template_context()
     response = test_app.post(
-        '/auth/verifyforgotpass/', {
+        '/auth/forgot_password/verify/', {
             'userid': parsed_get_params['userid'],
             'password': 'iamveryveryhappy',
             'confirm_password': 'iamveryveryhappy',
             'token': parsed_get_params['token']})
     response.follow()
     assert util.TEMPLATE_TEST_CONTEXT.has_key(
-                                     'mediagoblin/auth/fp_changed_success.html')
+        'mediagoblin/auth/fp_changed_success.html')
 
     ## Verify step 2.2 of password-change works -- login w/ new password success
     util.clear_test_template_context()
