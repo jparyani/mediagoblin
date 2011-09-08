@@ -247,29 +247,29 @@ def verify_forgot_password(request):
     Check the forgot-password verification and possibly let the user
     change their password because of it.
     """
-    # get session variables, and specifically check for presence of token
-    mysession = _process_for_token(request)
-    if not mysession['has_userid_and_token']:
+    # get form data variables, and specifically check for presence of token
+    formdata = _process_for_token(request)
+    if not formdata['has_userid_and_token']:
         return render_404(request)
 
-    session_token = mysession['vars']['token']
-    session_userid = mysession['vars']['userid']
-    session_vars = mysession['vars']
+    formdata_token = formdata['vars']['token']
+    formdata_userid = formdata['vars']['userid']
+    formdata_vars = formdata['vars']
 
     # check if it's a valid Id
     try:
         user = request.db.User.find_one(
-                                     {'_id': ObjectId(unicode(session_userid))})
+            {'_id': ObjectId(unicode(formdata_userid))})
     except InvalidId:
         return render_404(request)
 
     # check if we have a real user and correct token
     if ((user and user['fp_verification_key'] and
-         user['fp_verification_key'] == unicode(session_token) and
+         user['fp_verification_key'] == unicode(formdata_token) and
          datetime.datetime.now() < user['fp_token_expire']
          and user['email_verified'] and user['status'] == 'active')):
 
-        cp_form = auth_forms.ChangePassForm(session_vars)
+        cp_form = auth_forms.ChangePassForm(formdata_vars)
 
         if request.method == 'POST' and cp_form.validate():
             user[u'pw_hash'] = auth_lib.bcrypt_gen_password_hash(
@@ -293,20 +293,20 @@ def verify_forgot_password(request):
 
 def _process_for_token(request):
     """
-    Checks for tokens in session without prior knowledge of request method
+    Checks for tokens in formdata without prior knowledge of request method
 
-    For now, returns whether the userid and token session variables exist, and
-    the session variables in a hash. Perhaps an object is warranted?
+    For now, returns whether the userid and token formdata variables exist, and
+    the formdata variables in a hash. Perhaps an object is warranted?
     """
-    # retrieve the session variables
+    # retrieve the formdata variables
     if request.method == 'GET':
-        session_vars = request.GET
+        formdata_vars = request.GET
     else:
-        session_vars = request.POST
+        formdata_vars = request.POST
 
-    mysession = {
-        'vars': session_vars,
+    formdata = {
+        'vars': formdata_vars,
         'has_userid_and_token':
-            session_vars.has_key('userid') and session_vars.has_key('token')}
+            formdata_vars.has_key('userid') and formdata_vars.has_key('token')}
 
-    return mysession
+    return formdata
