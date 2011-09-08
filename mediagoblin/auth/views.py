@@ -208,12 +208,27 @@ def forgot_password(request):
                 {'email': request.POST['username']})
 
         if user:
-            user['fp_verification_key'] = unicode(uuid.uuid4())
-            user['fp_token_expire'] = datetime.datetime.now() + \
-                                      datetime.timedelta(days=10)
-            user.save()
+            if user['email_verified'] and user['status'] == 'active':
+                user['fp_verification_key'] = unicode(uuid.uuid4())
+                user['fp_token_expire'] = datetime.datetime.now() + \
+                                          datetime.timedelta(days=10)
+                user.save()
 
-            send_fp_verification_email(user, request)
+                send_fp_verification_email(user, request)
+            else:
+                # special case... we can't send the email because the
+                # username is inactive / hasn't verified their email
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    _("Could not send password recovery email as "
+                      "your username is inactive or your account's "
+                      "email address has not been verified."))
+
+                return redirect(
+                    request, 'mediagoblin.user_pages.user_home',
+                    user=user['username'])
+
 
         # do not reveal whether or not there is a matching user, just move along
         return redirect(request, 'mediagoblin.auth.fp_email_sent')
@@ -244,7 +259,8 @@ def verify_forgot_password(request):
     # check if we have a real user and correct token
     if ((user and user['fp_verification_key'] and
          user['fp_verification_key'] == unicode(session_token) and
-         datetime.datetime.now() < user['fp_token_expire'])):
+         datetime.datetime.now() < user['fp_token_expire']
+         and user['email_verified'] and user['status'] == 'active')):
 
         cp_form = auth_forms.ChangePassForm(session_vars)
 
