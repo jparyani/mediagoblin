@@ -44,6 +44,12 @@
           <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
             {%- trans %}Create one here!{% endtrans %}</a>
         </p>
+        <p>
+          {% trans %}Forgot your password?{% endtrans %}
+          <br />
+          <a href="{{ request.urlgen('mediagoblin.auth.forgot_password') }}">
+            {%- trans %}Change it!{% endtrans %}</a>
+        </p>
       {% endif %}
     </div>
   </form>
