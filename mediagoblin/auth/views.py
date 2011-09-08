@@ -154,7 +154,10 @@ def verify_email(request):
     if user and user['verification_key'] == unicode(request.GET['token']):
         user['status'] = u'active'
         user['email_verified'] = True
+        user[u'verification_key'] = None
+
         user.save()
+
         messages.add_message(
             request,
             messages.SUCCESS,
