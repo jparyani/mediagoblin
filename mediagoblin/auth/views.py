@@ -219,9 +219,9 @@ def forgot_password(request):
         return redirect(request, 'mediagoblin.auth.fp_email_sent')
 
     return render_to_response(
-    request,
-    'mediagoblin/auth/forgot_password.html',
-    {'fp_form': fp_form})
+        request,
+        'mediagoblin/auth/forgot_password.html',
+        {'fp_form': fp_form})
 
 
 def verify_forgot_password(request):
@@ -277,7 +277,9 @@ def _process_for_token(request):
     else:
         session_vars = request.POST
 
-    mysession = {'vars': session_vars,
-                 'has_userid_and_token': session_vars.has_key('userid') and
-                                                  session_vars.has_key('token')}
+    mysession = {
+        'vars': session_vars,
+        'has_userid_and_token':
+            session_vars.has_key('userid') and session_vars.has_key('token')}
+
     return mysession
