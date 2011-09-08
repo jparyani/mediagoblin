@@ -200,9 +200,12 @@ def forgot_password(request):
     fp_form = auth_forms.ForgotPassForm(request.POST)
 
     if request.method == 'POST' and fp_form.validate():
-        user = request.db.User.one(
-               {'$or': [{'username': request.POST['username']},
-               {'email': request.POST['username']}]})
+        # '$or' not available till mongodb 1.5.3
+        user = request.db.User.find_one(
+            {'username': request.POST['username']})
+        if not user:
+            user = request.db.User.find_one(
+                {'email': request.POST['username']})
 
         if user:
             user['fp_verification_key'] = unicode(uuid.uuid4())
