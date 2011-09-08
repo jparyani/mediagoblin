@@ -26,8 +26,4 @@ auth_routes = [
     Route('mediagoblin.auth.verify_email', '/verify_email/',
           controller='mediagoblin.auth.views:verify_email'),
     Route('mediagoblin.auth.resend_verification', '/resend_verification/',
-          controller='mediagoblin.auth.views:resend_activation'),
-    Route('mediagoblin.auth.resend_verification_success',
-          '/resend_verification_success/',
-          template='mediagoblin/auth/resent_verification_email.html',
-          controller='mediagoblin.views:simple_template_render')]
+          controller='mediagoblin.auth.views:resend_activation')]
