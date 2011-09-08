@@ -243,6 +243,10 @@ def forgot_password(request):
 
 
 def verify_forgot_password(request):
+    """
+    Check the forgot-password verification and possibly let the user
+    change their password because of it.
+    """
     # get session variables, and specifically check for presence of token
     mysession = _process_for_token(request)
     if not mysession['has_userid_and_token']:
