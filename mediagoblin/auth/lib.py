@@ -127,7 +127,7 @@ EMAIL_FP_VERIFICATION_TEMPLATE = (
     u"http://{host}{uri}?"
     u"userid={userid}&token={fp_verification_key}")
 
-def send_fp_verification_email(user,request):
+def send_fp_verification_email(user, request):
     """
     Send the verification email to users to change their password.
 
