@@ -152,8 +152,8 @@ def verify_email(request):
         {'_id': ObjectId(unicode(request.GET['userid']))})
 
     if user and user['verification_key'] == unicode(request.GET['token']):
-        user['status'] = u'active'
-        user['email_verified'] = True
+        user[u'status'] = u'active'
+        user[u'email_verified'] = True
         user[u'verification_key'] = None
 
         user.save()
@@ -180,7 +180,7 @@ def resend_activation(request):
 
     Resend the activation email.
     """
-    request.user['verification_key'] = unicode(uuid.uuid4())
+    request.user[u'verification_key'] = unicode(uuid.uuid4())
     request.user.save()
 
     send_verification_email(request.user, request)
@@ -212,8 +212,8 @@ def forgot_password(request):
 
         if user:
             if user['email_verified'] and user['status'] == 'active':
-                user['fp_verification_key'] = unicode(uuid.uuid4())
-                user['fp_token_expire'] = datetime.datetime.now() + \
+                user[u'fp_verification_key'] = unicode(uuid.uuid4())
+                user[u'fp_token_expire'] = datetime.datetime.now() + \
                                           datetime.timedelta(days=10)
                 user.save()
 
@@ -268,10 +268,10 @@ def verify_forgot_password(request):
         cp_form = auth_forms.ChangePassForm(session_vars)
 
         if request.method == 'POST' and cp_form.validate():
-            user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+            user[u'pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
-            user['fp_verification_key'] = None
-            user['fp_token_expire'] = None
+            user[u'fp_verification_key'] = None
+            user[u'fp_token_expire'] = None
             user.save()
 
             return redirect(request, 'mediagoblin.auth.fp_changed_success')
