@@ -165,9 +165,8 @@ def media_confirm_delete(request, media):
             return redirect(request, "mediagoblin.user_pages.user_home",
                 user=username)
         else:
-            return redirect(request, "mediagoblin.user_pages.media_home",
-                            user=media.uploader()['username'],
-                            media=media['slug'])
+            return exc.HTTPFound(
+                location=media.url_for_self(request.urlgen))
 
     if ((request.user[u'is_admin'] and
          request.user[u'_id'] != media.uploader()[u'_id'])):
