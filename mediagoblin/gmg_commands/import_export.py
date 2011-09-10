@@ -27,7 +27,12 @@ import subprocess
 import os.path
 import os
 import sys
+import logging
 from contextlib import closing
+
+_log = logging.getLogger('gmg.import_export')
+logging.basicConfig()
+_log.setLevel(logging.INFO)
 
 
 def import_export_parse_setup(subparser):
@@ -49,12 +54,12 @@ def import_export_parse_setup(subparser):
 
 
 def _import_media(db, args):
-    """
+    '''
     Import media files
 
     Must be called after _import_database()
-    """
-    print "\n== Importing media ==\n"
+    '''
+    _log.info('-> Importing media...')
 
     media_cache = BasicFileStorage(
         args._cache_path['media'])
@@ -65,18 +70,22 @@ def _import_media(db, args):
 
     for entry in db.media_entries.find():
         for name, path in entry['media_files'].items():
+            _log.info('Importing: {0} - {1}'.format(
+                    entry['title'],
+                    name))
+
             media_file = mg_globals.public_store.get_file(path, mode='wb')
             media_file.write(
                 media_cache.get_file(path, mode='rb').read())
 
-    print "\n== Media imported ==\n"
+    _log.info('...Media imported')
 
 
 def _import_database(db, args):
-    """
+    '''
     Restore mongo database from ___.bson files
-    """
-    print "\n== Importing database ==\n"
+    '''
+    _log.info('-> Importing database...')
 
     p = subprocess.Popen([
             args.mongorestore_path,
@@ -85,13 +94,13 @@ def _import_database(db, args):
     
     p.wait()
 
-    print "\n== Database imported ==\n"
+    _log.info('...Database imported')
 
 
 def env_import(args):
-    """
+    '''
     Restore mongo database and media files from a tar archive
-    """
+    '''
     if not args.cache_path:
         args.cache_path = tempfile.mkdtemp()
 
@@ -100,9 +109,9 @@ def env_import(args):
     # Creates mg_globals.public_store and mg_globals.queue_store
     setup_storage()
 
-    config, validation_result = read_mediagoblin_config(args.conf_file)
+    global_config, app_config = setup_global_and_app_config(args.conf_file)
     connection, db = setup_connection_and_db_from_config(
-        config['mediagoblin'], use_pymongo=True)
+        app_config, use_pymongo=True)
 
     tf = tarfile.open(
         args.tar_file,
@@ -123,9 +132,9 @@ def env_import(args):
 
 
 def _setup_paths(args):
-    """
+    '''
     Populate ``args`` variable with cache subpaths
-    """
+    '''
     args._cache_path = dict()
     PATH_MAP = {
         'media': 'media',
@@ -139,10 +148,10 @@ def _setup_paths(args):
 
 
 def _create_archive(args):
-    """
+    '''
     Create the tar archive
-    """
-    print "\n== Compressing to archive ==\n"
+    '''
+    _log.info('-> Compressing to archive')
 
     tf = tarfile.open(
         args.tar_file,
@@ -151,27 +160,27 @@ def _create_archive(args):
     with closing(tf):
         tf.add(args.cache_path, 'mediagoblin-data/')
 
-    print "\n== Archiving done ==\n"
+    _log.info('...Archiving done')
 
 
 def _clean(args):
-    """
+    '''
     Remove cache directory
-    """
+    '''
     shutil.rmtree(args.cache_path)
 
 
 def _export_check(args):
-    """
+    '''
     Run security checks for export command
-    """
+    '''
     if os.path.exists(args.tar_file):
         overwrite = raw_input(
             'The output file already exists. '
             'Are you **SURE** you want to overwrite it? '
             '(yes/no)> ')
         if not overwrite == 'yes':
-            print "Aborting."
+            print 'Aborting.'
 
             return False
 
@@ -179,12 +188,7 @@ def _export_check(args):
 
 
 def _export_database(db, args):
-    print "\n== Exporting database ==\n"
-
-    command = '{mongodump_path} -d {database} -o {mongodump_cache}'.format(
-        mongodump_path=args.mongodump_path,
-        database=db.name,
-        mongodump_cache=args._cache_path['database'])
+    _log.info('-> Exporting database...')
 
     p = subprocess.Popen([
             args.mongodump_path,
@@ -193,11 +197,11 @@ def _export_database(db, args):
 
     p.wait()
 
-    print "\n== Database exported ==\n"
+    _log.info('...Database exported')
 
 
 def _export_media(db, args):
-    print "\n== Exporting media ==\n"
+    _log.info('-> Exporting media...')
 
     media_cache = BasicFileStorage(
         args._cache_path['media'])
@@ -208,21 +212,25 @@ def _export_media(db, args):
 
     for entry in db.media_entries.find():
         for name, path in entry['media_files'].items():
+            _log.info('Exporting {0} - {1}'.format(
+                    entry['title'],
+                    name))
+
             mc_file = media_cache.get_file(path, mode='wb')
             mc_file.write(
                 mg_globals.public_store.get_file(path, mode='rb').read())
 
-    print "\n== Media exported ==\n"
+    _log.info('...Media exported')
 
 
 def env_export(args):
-    """
+    '''
     Export database and media files to a tar archive
-    """
+    '''
     if args.cache_path:
         if os.path.exists(args.cache_path):
-            print 'The cache directory must not exist before you run this script'
-            print 'Cache directory: ', args.cache_path
+            _log.error('The cache directory must not exist before you run this script')
+            _log.error('Cache directory: {0}'.format(args.cache_path))
 
             return False
     else:
@@ -231,15 +239,15 @@ def env_export(args):
     args = _setup_paths(args)
 
     if not _export_check(args):
-        print "\n== Checks did not pass, exiting ==\n"
+        _log.error('Checks did not pass, exiting')
         sys.exit(0)
 
-    setup_global_and_app_config(args.conf_file)
-    setup_storage()
+    globa_config, app_config = setup_global_and_app_config(args.conf_file)
 
-    config, validation_result = read_mediagoblin_config(args.conf_file)
+    setup_storage()
+    
     connection, db = setup_connection_and_db_from_config(
-        config['mediagoblin'], use_pymongo=True)
+        app_config, use_pymongo=True)
 
     _export_database(db, args)
 
