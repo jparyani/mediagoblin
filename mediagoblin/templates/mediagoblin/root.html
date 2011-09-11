@@ -21,7 +21,7 @@
 
 {% block mediagoblin_content %}
   {% if request.user %}
-    <h1>Explore</h1>
+    <h1>{% trans %}Explore{% endtrans %}</h1>
   {% else %}
    <div class="grid_11 alpha">
       <h1>{% trans %}Hi there, media lover! MediaGoblin is...{% endtrans %}</h1>
@@ -35,9 +35,12 @@
       </ul>
 
       {% if allow_registration %}
-        <p>Excited to join us?<p>
-        <a class="header_submit_highlight" href="{{ request.urlgen('mediagoblin.auth.register') }}">Create a free account</a> or
-        <a class="header_submit" href="http://wiki.mediagoblin.org/HackingHowto">Set up MediaGoblin on your own server</a>
+        <p>{% trans %}Excited to join us?{% endtrans %}<p>
+        {% trans register_url=request.urlgen('mediagoblin.auth.register') %}
+          <a class="header_submit_highlight" href="{{ register_url }}">Create a free account</a>
+          or
+          <a class="header_submit" href="http://wiki.mediagoblin.org/HackingHowto">Set up MediaGoblin on your own server</a>
+        {% endtrans %}
       {% endif %}
     </div>
 
@@ -47,6 +50,6 @@
 
     <div class="clear"></div>
   {% endif %}
-  <h2>Most recent media</h2>
+  <h2>{% trans %}Most recent media{% endtrans %}</h2>
   {{ object_gallery(request, media_entries, pagination) }}
 {% endblock %}
