@@ -52,7 +52,7 @@ class FakeStorageSystem():
         self.foobie = foobie
         self.blech = blech
 
-class FakeRemoteStorage(storage.BasicFileStorage):
+class FakeRemoteStorage(storage.filestorage.BasicFileStorage):
     # Theoretically despite this, all the methods should work but it
     # should force copying to the workbench
     local_storage = False
@@ -66,7 +66,7 @@ def test_storage_system_from_config():
          'garbage_arg': 'trash'})
     assert this_storage.base_url == 'http://example.org/moodia/'
     assert this_storage.base_dir == '/tmp/'
-    assert this_storage.__class__ is storage.BasicFileStorage
+    assert this_storage.__class__ is storage.filestorage.BasicFileStorage
 
     this_storage = storage.storage_system_from_config(
         {'foobie': 'eiboof',
@@ -88,7 +88,7 @@ def get_tmp_filestorage(mount_url=None, fake_remote=False):
     if fake_remote:
         this_storage = FakeRemoteStorage(tmpdir, mount_url)
     else:
-        this_storage = storage.BasicFileStorage(tmpdir, mount_url)
+        this_storage = storage.filestorage.BasicFileStorage(tmpdir, mount_url)
     return tmpdir, this_storage
 
 
