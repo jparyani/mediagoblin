@@ -107,3 +107,11 @@ def user_add_forgot_password_token_and_expires(database):
          {'fp_token_expire': {'$exists': False}},
          {'$set': {'fp_token_expire': None}},
          multi=True)
+
+
+@RegisterMigration(7)
+def media_type_image_to_multimedia_type_image(database):
+    database['media_entries'].update(
+        {'media_type': 'image'},
+        {'$set': {'media_type': 'mediagoblin.media_types.image'}},
+        multi=True)

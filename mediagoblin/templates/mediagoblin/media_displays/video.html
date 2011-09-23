@@ -1,0 +1,8 @@
+{% extends 'mediagoblin/user_pages/media.html' %}
+{% block mediagoblin_media %}
+  <video width="640" height="" controls>
+    <source src="{{ request.app.public_store.file_url(
+		 media['media_files']['medium']) }}" 
+	    type='video/webm; codecs="vp8, vorbis"' />
+  </video>
+{% endblock %}

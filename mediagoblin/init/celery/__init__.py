@@ -17,8 +17,13 @@
 import os
 import sys
 
+from mediagoblin.media_types import get_media_types
+
 
 MANDATORY_CELERY_IMPORTS = ['mediagoblin.process_media']
+MANDATORY_CELERY_IMPORTS = [i for i in get_media_types()]
+
+print(MANDATORY_CELERY_IMPORTS)
 
 DEFAULT_SETTINGS_MODULE = 'mediagoblin.init.celery.dummy_settings_module'
 
