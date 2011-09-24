@@ -5,4 +5,12 @@
 		 media['media_files']['medium']) }}" 
 	    type='video/webm; codecs="vp8, vorbis"' />
   </video>
+  {% if 'original' in media.media_files %}
+    <a href="{{ request.app.public_store.file_url(
+	     media['media_files']['original']) }}">
+      {%- trans -%}
+        Original
+      {%- endtrans -%}
+    </a>
+  {% endif %}    
 {% endblock %}

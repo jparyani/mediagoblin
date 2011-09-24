@@ -51,6 +51,7 @@ def get_media_managers():
             
         yield media_type, sys.modules[media_type].MEDIA_MANAGER
 
+
 def get_media_manager(_media_type = None):
     for media_type, manager in get_media_managers():
         if media_type in _media_type:

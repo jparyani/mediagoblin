@@ -16,6 +16,7 @@
 
 import Image
 import tempfile
+import pkg_resources
 
 from celery.task import Task
 from celery import registry
@@ -25,10 +26,14 @@ from mediagoblin import mg_globals as mgg
 
 from mediagoblin.util import lazy_pass_to_ugettext as _
 
+import mediagoblin.media_types.video
+
 import gobject
+gobject.threads_init()
 
 import gst
 import arista
+import logging
 
 from arista.transcoder import TranscoderOptions
 
@@ -38,12 +43,17 @@ ARISTA_DEVICE_KEY = 'web'
 
 
 loop = None
+logger = logging.getLogger(__name__)
+logging.basicConfig()
+logger.setLevel(logging.DEBUG)
 
 
 def process_video(entry):
     """
     Code to process a video
     """
+    global loop
+    loop = None
     info = {}
     workbench = mgg.workbench_manager.create_workbench()
 
@@ -54,8 +64,11 @@ def process_video(entry):
 
     arista.init()
 
-    devices = arista.presets.get()
-    device = devices[ARISTA_DEVICE_KEY]
+
+    web_advanced_preset = pkg_resources.resource_filename(
+        __name__,
+        'presets/web-advanced.json')
+    device = arista.presets.load(web_advanced_preset)
 
     queue = arista.queue.TranscodeQueue()
     
@@ -69,38 +82,127 @@ def process_video(entry):
 
     preset = device.presets[device.default]
 
+    logger.debug('preset: {0}'.format(preset))
+
     opts = TranscoderOptions(uri, preset, output)
 
     queue.append(opts)
 
     info['entry'] = entry
 
-    queue.connect("entry-start", entry_start, info)
-#    queue.connect("entry-pass-setup", entry_pass_setup, options)
-    queue.connect("entry-error", entry_error, info)
-    queue.connect("entry-complete", entry_complete, info)
+    queue.connect("entry-start", _transcoding_start, info)
+    queue.connect("entry-pass-setup", _transcoding_pass_setup, info)
+    queue.connect("entry-error", _transcoding_error, info)
+    queue.connect("entry-complete", _transcoding_complete, info)
 
     info['loop'] = loop = gobject.MainLoop()
+    info['queued_filename'] = queued_filename
+    info['queued_filepath'] = queued_filepath
+    info['workbench'] = workbench
+
+    logger.debug('info: {0}'.format(info))
 
     loop.run()
+    
+    '''
+    try:
+        #thumb = Image.open(mediagoblin.media_types.video.MEDIA_MANAGER['default_thumb'])
+    except IOError:
+        raise BadMediaFail()
 
-    # we have to re-read because unlike PIL, not everything reads
-    # things in string representation :)
-    queued_file = file(queued_filename, 'rb')
+    thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
+    # ensure color mode is compatible with jpg
+    if thumb.mode != "RGB":
+        thumb = thumb.convert("RGB")
 
-    with queued_file:
-        original_filepath = create_pub_filepath(entry, queued_filepath[-1])
+    thumb_filepath = create_pub_filepath(entry, 'thumbnail.jpg')
+    thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
 
-        with mgg.public_store.get_file(original_filepath, 'wb') as original_file:
-            original_file.write(queued_file.read())
+    with thumb_file:
+        thumb.save(thumb_file, "JPEG", quality=90)
+    '''
 
-    mgg.queue_store.delete_file(queued_filepath)
-    entry['queued_media_file'] = []
-    media_files_dict = entry.setdefault('media_files', {})
-    media_files_dict['original'] = original_filepath
+def __close_processing(queue, qentry, info, error=False):
+    '''
+    Update MediaEntry, move files, handle errors
+    '''
+    if not error:
+        qentry.transcoder.stop()
+        gobject.idle_add(info['loop'].quit)
+        info['loop'].quit()
+
+        print('\n-> Saving video...\n')
+
+        with info['tmp_file'] as tmp_file:
+            mgg.public_store.get_file(info['medium_filepath'], 'wb').write(
+                tmp_file.read())
+            info['entry']['media_files']['medium'] = info['medium_filepath']
+
+        print('\n=== DONE! ===\n')
+
+        # we have to re-read because unlike PIL, not everything reads
+        # things in string representation :)
+        queued_file = file(info['queued_filename'], 'rb')
+
+        with queued_file:
+            original_filepath = create_pub_filepath(info['entry'], info['queued_filepath'][-1])
+
+            with mgg.public_store.get_file(original_filepath, 'wb') as original_file:
+                original_file.write(queued_file.read())
+
+        mgg.queue_store.delete_file(info['queued_filepath'])
+        info['entry']['queued_media_file'] = []
+        media_files_dict = info['entry'].setdefault('media_files', {})
+        media_files_dict['original'] = original_filepath
+        # media_files_dict['thumb'] = thumb_filepath
+
+        info['entry']['state'] = u'processed'
+        info['entry'].save()
+
+    else:
+        qentry.transcoder.stop()
+        gobject.idle_add(info['loop'].quit)
+        info['loop'].quit()
+        info['entry']['state'] = u'failed'
+        info['entry'].save()
 
     # clean up workbench
-    workbench.destroy_self()
+    info['workbench'].destroy_self()
+
+
+def _transcoding_start(queue, qentry, info):
+    logger.info('-> Starting transcoding')
+    logger.debug(queue, qentry, info)
+
+def _transcoding_complete(*args):
+    __close_processing(*args)
+    print(args)
+
+def _transcoding_error(*args):
+    logger.info('-> Error')
+    __close_processing(*args, error=True)
+    logger.debug(*args)
+
+def _transcoding_pass_setup(queue, qentry, options):
+    logger.info('-> Pass setup')
+    logger.debug(queue, qentry, options)
+
+
+def check_interrupted():
+    """
+        Check whether we have been interrupted by Ctrl-C and stop the
+        transcoder.
+    """
+    if interrupted:
+        try:
+            source = transcoder.pipe.get_by_name("source")
+            source.send_event(gst.event_new_eos())
+        except:
+            # Something pretty bad happened... just exit!
+            gobject.idle_add(loop.quit)
+            
+        return False
+    return True
     
 
 def create_pub_filepath(entry, filename):
@@ -161,9 +263,6 @@ class ProcessMedia(Task):
             mark_entry_failed(entry[u'_id'], exc)
             return
 
-        entry['state'] = u'processed'
-        entry.save()
-
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         """
         If the processing failed we should mark that in the database.
@@ -213,48 +312,3 @@ def mark_entry_failed(entry_id, exc):
                       u'fail_error': None,
                       u'fail_metadata': {}}})
 
-
-def entry_start(queue, entry, options):
-    print(queue, entry, options)
-
-def entry_complete(queue, entry, info):
-    entry.transcoder.stop()
-    gobject.idle_add(info['loop'].quit)
-
-    with info['tmp_file'] as tmp_file:
-        mgg.public_store.get_file(info['medium_filepath'], 'wb').write(
-            tmp_file.read())
-        info['entry']['media_files']['medium'] = info['medium_filepath']
-
-    print('\n=== DONE! ===\n')
-
-    print(queue, entry, info)
-
-def entry_error(queue, entry, options):
-    print(queue, entry, options)
-
-def signal_handler(signum, frame):
-    """
-        Handle Ctr-C gracefully and shut down the transcoder.
-    """
-    global interrupted
-    print
-    print _("Interrupt caught. Cleaning up... (Ctrl-C to force exit)")
-    interrupted = True
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
-
-def check_interrupted():
-    """
-        Check whether we have been interrupted by Ctrl-C and stop the
-        transcoder.
-    """
-    if interrupted:
-        try:
-            source = transcoder.pipe.get_by_name("source")
-            source.send_event(gst.event_new_eos())
-        except:
-            # Something pretty bad happened... just exit!
-            gobject.idle_add(loop.quit)
-            
-        return False
-    return True

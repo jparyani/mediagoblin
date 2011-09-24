@@ -1,0 +1,505 @@
+{
+    "make": "Generic",
+    "model": "Web Browser (Advanced)",
+    "description": "Media for World Wide Web",
+    "version": "0.1",
+    "author": {
+        "name": "Dionisio E Alonso",
+        "email": "dealonso@gmail.com"
+    },
+    "icon": "file://web.svg",
+    "default": "WebM 480p",
+    "presets": [
+        {
+            "name": "H.264 720p",
+            "extension": "mp4",
+            "container": "qtmux",
+            "vcodec": {
+                "name": "x264enc",
+                "container": "qtmux",
+                "width": [
+                    960, 1280
+                ],
+                "height": [
+                    720, 720
+                ],
+                "rate": [
+                    1, 30
+                ],
+                "passes": [
+                    "pass=qual quantizer=23 subme=6 cabac=0 threads=0"
+                ]
+            },
+            "acodec": {
+                "name": "faac",
+                "container": "qtmux",
+                "width": [
+                    8, 24
+                ],
+                "depth": [
+                    8, 24
+                ],
+                "rate": [
+                    8000, 96000
+                ],
+                "channels": [
+                    1, 2
+                ],
+                "passes": [
+                    "bitrate=131072 profile=LC"
+                ]
+            }
+        },
+        {
+            "name": "WebM 720p",
+            "extension": "webm",
+            "container": "webmmux",
+            "icon": "file://web-webm.svg",
+            "vcodec": {
+                "name": "vp8enc",
+                "container": "webmmux",
+                "width": [
+                    960, 1280
+                ],
+                "height": [
+                    720, 720
+                ],
+                "rate": [
+                    1, 30
+                ],
+                "passes": [
+                    "quality=5.75 threads=%(threads)s speed=2"
+                ]
+            },
+            "acodec": {
+                "name": "vorbisenc",
+                "container": "webmmux",
+                "width": [
+                    8, 32
+                ],
+                "depth": [
+                    8, 24
+                ],
+                "rate": [
+                    8000, 96000
+                ],
+                "channels": [
+                    1, 2
+                ],
+                "passes": [
+                    "quality=0.3"
+                ]
+            }
+        },
+        {
+            "name": "Flash Video 720p",
+            "extension": "flv",
+            "icon": "file://web-flv.png",
+            "container": "flvmux",
+            "vcodec": {
+                "name": "x264enc",
+                "container": "flvmux",
+                "width": [
+                    960, 1280
+                ],
+                "height": [
+                    720, 720
+                ],
+                "rate": [
+                    1, 30
+                ],
+                "passes": [
+                    "pass=qual quantizer=23 subme=6 cabac=0 threads=0"
+                ]
+            },
+            "acodec": {
+                "name": "faac",
+                "container": "flvmux",
+                "width": [
+                    8, 24
+                ],
+                "depth": [
+                    8, 24
+                ],
+                "rate": [
+                    8000, 96000
+                ],
+                "channels": [
+                    1, 2
+                ],
+                "passes": [
+                    "bitrate=131072 profile=LC"
+                ]
+            }
+        },
+
+        {
+            "name": "H.264 576p",
+            "extension": "mp4",
+            "container": "qtmux",
+            "vcodec": {
+                "name": "x264enc",
+                "container": "qtmux",
+                "width": [
+                    768, 1024
+                ],
+                "height": [
+                    576, 576
+                ],
+                "rate": [
+                    1, 30
+                ],
+                "passes": [
+                    "pass=qual quantizer=23 subme=6 cabac=0 threads=0"
+                ]
+            },
+            "acodec": {
+                "name": "faac",
+                "container": "qtmux",
+                "width": [
+                    8, 24
+                ],
+                "depth": [
+                    8, 24
+                ],
+                "rate": [
+                    8000, 96000
+                ],
+                "channels": [
+                    1, 2
+                ],
+                "passes": [
+                    "bitrate=131072 profile=LC"
+                ]
+            }
+        },
+        {
+            "name": "WebM 576p",
+            "extension": "webm",
+            "container": "webmmux",
+            "icon": "file://web-webm.svg",
+            "vcodec": {
+                "name": "vp8enc",
+                "container": "webmmux",
+                "width": [
+                    768, 1024
+                ],
+                "height": [
+                    576, 576
+                ],
+                "rate": [
+                    1, 30
+                ],
+                "passes": [
+                    "quality=5.75 threads=%(threads)s speed=2"
+                ]
+            },
+            "acodec": {
+                "name": "vorbisenc",
+                "container": "webmmux",
+                "width": [
+                    8, 32
+                ],
+                "depth": [
+                    8, 24
+                ],
+                "rate": [
+                    8000, 96000
+                ],
+                "channels": [
+                    1, 2
+                ],
+                "passes": [
+                    "quality=0.3"
+                ]
+            }
+        },
+        {
+            "name": "Flash Video 576p",
+            "extension": "flv",
+            "icon": "file://web-flv.png",
+            "container": "flvmux",
+            "vcodec": {
+                "name": "x264enc",
+                "container": "flvmux",
+                "width": [
+                    768, 1024
+                ],
+                "height": [
+                    576, 576
+                ],
+                "rate": [
+                    1, 30
+                ],
+                "passes": [
+                    "pass=qual quantizer=23 subme=6 cabac=0 threads=0"
+                ]
+            },
+            "acodec": {
+                "name": "faac",
+                "container": "flvmux",
+                "width": [
+                    8, 24
+                ],
+                "depth": [
+                    8, 24
+                ],
+                "rate": [
+                    8000, 96000
+                ],
+                "channels": [
+                    1, 2
+                ],
+                "passes": [
+                    "bitrate=131072 profile=LC"
+                ]
+            }
+        },
+
+        {
+            "name": "H.264 480p",
+            "extension": "mp4",
+            "container": "qtmux",
+            "vcodec": {
+                "name": "x264enc",
+                "container": "qtmux",
+                "width": [
+                    640, 854
+                ],
+                "height": [
+                    480, 480
+                ],
+                "rate": [
+                    1, 30
+                ],
+                "passes": [
+                    "pass=qual quantizer=23 subme=6 cabac=0 threads=0"
+                ]
+            },
+            "acodec": {
+                "name": "faac",
+                "container": "qtmux",
+                "width": [
+                    8, 24
+                ],
+                "depth": [
+                    8, 24
+                ],
+                "rate": [
+                    8000, 96000
+                ],
+                "channels": [
+                    1, 2
+                ],
+                "passes": [
+                    "bitrate=131072 profile=LC"
+                ]
+            }
+        },
+        {
+            "name": "WebM 480p",
+            "extension": "webm",
+            "container": "webmmux",
+            "icon": "file://web-webm.svg",
+            "vcodec": {
+                "name": "vp8enc",
+                "container": "webmmux",
+                "width": [
+                    640, 854
+                ],
+                "height": [
+                    480, 480
+                ],
+                "rate": [
+                    1, 30
+                ],
+                "passes": [
+                    "quality=5.75 threads=%(threads)s speed=2"
+                ]
+            },
+            "acodec": {
+                "name": "vorbisenc",
+                "container": "webmmux",
+                "width": [
+                    8, 32
+                ],
+                "depth": [
+                    8, 24
+                ],
+                "rate": [
+                    8000, 96000
+                ],
+                "channels": [
+                    1, 2
+                ],
+                "passes": [
+                    "quality=0.3"
+                ]
+            }
+        },
+        {
+            "name": "Flash Video 480p",
+            "extension": "flv",
+            "icon": "file://web-flv.png",
+            "container": "flvmux",
+            "vcodec": {
+                "name": "x264enc",
+                "container": "flvmux",
+                "width": [
+                    640, 854
+                ],
+                "height": [
+                    480, 480
+                ],
+                "rate": [
+                    1, 30
+                ],
+                "passes": [
+                    "pass=qual quantizer=23 subme=6 cabac=0 threads=0"
+                ]
+            },
+            "acodec": {
+                "name": "faac",
+                "container": "flvmux",
+                "width": [
+                    8, 24
+                ],
+                "depth": [
+                    8, 24
+                ],
+                "rate": [
+                    8000, 96000
+                ],
+                "channels": [
+                    1, 2
+                ],
+                "passes": [
+                    "bitrate=131072 profile=LC"
+                ]
+            }
+        },
+
+        {
+            "name": "H.264 360p",
+            "extension": "mp4",
+            "container": "qtmux",
+            "vcodec": {
+                "name": "x264enc",
+                "container": "qtmux",
+                "width": [
+                    480, 640
+                ],
+                "height": [
+                    360, 360
+                ],
+                "rate": [
+                    1, 30
+                ],
+                "passes": [
+                    "pass=qual quantizer=23 subme=6 cabac=0 threads=0"
+                ]
+            },
+            "acodec": {
+                "name": "faac",
+                "container": "qtmux",
+                "width": [
+                    8, 24
+                ],
+                "depth": [
+                    8, 24
+                ],
+                "rate": [
+                    8000, 96000
+                ],
+                "channels": [
+                    1, 2
+                ],
+                "passes": [
+                    "bitrate=131072 profile=LC"
+                ]
+            }
+        },
+        {
+            "name": "WebM 360p",
+            "extension": "webm",
+            "container": "webmmux",
+            "icon": "file://web-webm.svg",
+            "vcodec": {
+                "name": "vp8enc",
+                "container": "webmmux",
+                "width": [
+                    480, 640
+                ],
+                "height": [
+                    360, 360
+                ],
+                "rate": [
+                    1, 30
+                ],
+                "passes": [
+                    "quality=5.75 threads=%(threads)s speed=2"
+                ]
+            },
+            "acodec": {
+                "name": "vorbisenc",
+                "container": "webmmux",
+                "width": [
+                    8, 32
+                ],
+                "depth": [
+                    8, 24
+                ],
+                "rate": [
+                    8000, 96000
+                ],
+                "channels": [
+                    1, 2
+                ],
+                "passes": [
+                    "quality=0.3"
+                ]
+            }
+        },
+        {
+            "name": "Flash Video 360p",
+            "extension": "flv",
+            "icon": "file://web-flv.png",
+            "container": "flvmux",
+            "vcodec": {
+                "name": "x264enc",
+                "container": "flvmux",
+                "width": [
+                    480, 640
+                ],
+                "height": [
+                    360, 360
+                ],
+                "rate": [
+                    1, 30
+                ],
+                "passes": [
+                    "pass=qual quantizer=23 subme=6 cabac=0 threads=0"
+                ]
+            },
+            "acodec": {
+                "name": "faac",
+                "container": "flvmux",
+                "width": [
+                    8, 24
+                ],
+                "depth": [
+                    8, 24
+                ],
+                "rate": [
+                    8000, 96000
+                ],
+                "channels": [
+                    1, 2
+                ],
+                "passes": [
+                    "bitrate=131072 profile=LC"
+                ]
+            }
+        }
+    ]
+}
