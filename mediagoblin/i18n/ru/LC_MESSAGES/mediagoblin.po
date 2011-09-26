@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-09-11 16:16-0500\n"
-"PO-Revision-Date: 2011-09-11 21:16+0000\n"
+"POT-Creation-Date: 2011-09-25 20:26-0500\n"
+"PO-Revision-Date: 2011-09-26 01:25+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -37,7 +37,7 @@ msgstr "Подтвердите пароль"
 
 #: mediagoblin/auth/forms.py:39
 msgid "Type it again here to make sure there are no spelling mistakes."
-msgstr "Type it again here to make sure there are no spelling mistakes."
+msgstr "Наберите его ещё раз здесь, чтобы избежать опечаток."
 
 #: mediagoblin/auth/forms.py:42
 msgid "Email address"
@@ -53,7 +53,7 @@ msgstr "Извините, пользователь с этим именем уж
 
 #: mediagoblin/auth/views.py:64
 msgid "Sorry, that email address has already been taken."
-msgstr "Извините, этот адрес электнонной почты уже занят."
+msgstr "Извините, этот адрес электронной почты уже занят."
 
 #: mediagoblin/auth/views.py:165
 msgid ""
@@ -197,7 +197,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:27
 msgid "Hi there, media lover! MediaGoblin is..."
-msgstr "Привет, любитель мультимедиа! MediaGoblin это…"
+msgstr "Привет, любитель мультимедиа! MediaGoblin…"
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid "The perfect place for your media!"
@@ -230,8 +230,8 @@ msgid ""
 "Built for extensibility.  (Multiple media types coming soon to the software,"
 " including video support!)"
 msgstr ""
-"Built for extensibility.  (Multiple media types coming soon to the software,"
-" including video support!)"
+"Рассчитан на расширяемость.  (В программе скоро должна появиться поддержка "
+"других видов мультимедиа, таких как видео!)"
 
 #: mediagoblin/templates/mediagoblin/root.html:34
 msgid ""
@@ -250,37 +250,30 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/root.html:39
 #, python-format
 msgid ""
-"\n"
-"          <a class=\"header_submit_highlight\" href=\"%(register_url)s\">Create a free account</a>\n"
+"<a class=\"header_submit_highlight\" href=\"%(register_url)s\">Create a free account</a>\n"
 "          or\n"
-"          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>\n"
-"        "
+"          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:53
 msgid "Most recent media"
-msgstr ""
+msgstr "Самые новые файлы"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:27
 msgid "Enter your new password"
-msgstr ""
+msgstr "Введите свой новый пароль"
 
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
 msgid "Enter your username or email"
-msgstr ""
+msgstr "Введите Ваше имя пользователя или адрес электронной почты"
 
 #: mediagoblin/templates/mediagoblin/auth/fp_changed_success.html:22
-msgid ""
-"\n"
-"      Your password has been changed. Try to log in now.\n"
-"    "
+msgid "Your password has been changed. Try to log in now."
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/fp_email_sent.html:22
 msgid ""
-"\n"
-"      Check your inbox. We sent an email with a URL for changing your password.\n"
-"    "
+"Check your inbox. We sent an email with a URL for changing your password."
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/fp_verification_email.txt:19
@@ -311,11 +304,11 @@ msgstr "Создайте здесь!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:48
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Забыли свой пароль?"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:51
 msgid "Change it!"
-msgstr ""
+msgstr "Смените его!"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:27
 msgid "Create an account!"
@@ -376,7 +369,7 @@ msgstr "Подтвердить"
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:32
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
-msgstr "Файлы пользователя &lt;a href=\"%(user_url)s\"&gt;%(username)s&lt;/a&gt;"
+msgstr "Файлы пользователя <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:52
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:32
@@ -436,7 +429,7 @@ msgstr "А если нет, то:"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:54
 msgid "Resend verification email"
-msgstr "Повторно отправить подверждение на адрес электнонной почты"
+msgstr "Повторно отправить подверждение на адрес электронной почты"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:62
 msgid ""
@@ -516,6 +509,6 @@ msgstr "Я уверен, что хочу удалить это"
 
 #: mediagoblin/user_pages/views.py:175
 msgid "You are about to delete another user's media. Proceed with caution."
-msgstr ""
+msgstr "Вы на пороге удаления файла другого пользователя. Будьте осторожны."
 
 
