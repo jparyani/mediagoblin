@@ -36,11 +36,11 @@
 
       {% if allow_registration %}
         <p>{% trans %}Excited to join us?{% endtrans %}<p>
-        {% trans register_url=request.urlgen('mediagoblin.auth.register') %}
+        {% trans register_url=request.urlgen('mediagoblin.auth.register') -%}
           <a class="header_submit_highlight" href="{{ register_url }}">Create a free account</a>
           or
           <a class="header_submit" href="http://wiki.mediagoblin.org/HackingHowto">Set up MediaGoblin on your own server</a>
-        {% endtrans %}
+        {%- endtrans %}
       {% endif %}
     </div>
 
