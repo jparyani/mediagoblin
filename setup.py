@@ -61,6 +61,7 @@ setup(
         'ConfigObj',
         'Markdown',
         'python-cloudfiles',
+        'arista',
         ## For now we're expecting that users will install this from
         ## their package managers.
         # 'lxml',
