@@ -106,7 +106,7 @@ class CsrfMiddleware(object):
 
         return hashlib.md5("%s%s" %
                            (randrange(0, self.MAX_CSRF_KEY),
-                            mg_globals.app_config['secret_key'])).hexdigest()
+                            randrange(0, self.MAX_CSRF_KEY))).hexdigest()
 
     def verify_tokens(self, request):
         """Verify that the CSRF Cookie exists and that it matches the
