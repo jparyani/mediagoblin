@@ -17,7 +17,7 @@
 
 from webob import exc
 
-from mediagoblin.util import redirect, render_404
+from mediagoblin.tools.response import redirect, render_404
 from mediagoblin.db.util import ObjectId, InvalidId
 
 

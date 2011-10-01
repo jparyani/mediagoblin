@@ -17,7 +17,7 @@
 
 import wtforms
 
-from mediagoblin.util import tag_length_validator
+from mediagoblin.tools.text import tag_length_validator
 from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 
 

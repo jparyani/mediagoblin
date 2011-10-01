@@ -22,7 +22,7 @@ from nose.tools import assert_equal
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.tests.tools import setup_fresh_app
 from mediagoblin import mg_globals
-from mediagoblin.tools import template
+from mediagoblin.tools import template, mail
 
 
 ########################
@@ -171,8 +171,8 @@ def test_register_views(test_app):
     assert request.session['user_id'] == unicode(new_user['_id'])
 
     ## Make sure we get email confirmation, and try verifying
-    assert len(template.EMAIL_TEST_INBOX) == 1
-    message = template.EMAIL_TEST_INBOX.pop()
+    assert len(mail.EMAIL_TEST_INBOX) == 1
+    message = mail.EMAIL_TEST_INBOX.pop()
     assert message['To'] == 'happygrrl@example.org'
     email_context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/auth/verification_email.txt']
@@ -254,8 +254,8 @@ def test_register_views(test_app):
         'mediagoblin/auth/fp_email_sent.html')
 
     ## Make sure link to change password is sent by email
-    assert len(template.EMAIL_TEST_INBOX) == 1
-    message = template.EMAIL_TEST_INBOX.pop()
+    assert len(mail.EMAIL_TEST_INBOX) == 1
+    message = mail.EMAIL_TEST_INBOX.pop()
     assert message['To'] == 'happygrrl@example.org'
     email_context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/auth/fp_verification_email.txt']

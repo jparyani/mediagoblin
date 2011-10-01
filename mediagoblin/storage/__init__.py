@@ -21,7 +21,7 @@ import uuid
 
 from werkzeug.utils import secure_filename
 
-from mediagoblin import util
+from mediagoblin.tools import common
 
 ########
 # Errors
@@ -236,5 +236,5 @@ def storage_system_from_config(config_section):
     else:
         storage_class = 'mediagoblin.storage.filestorage:BasicFileStorage'
 
-    storage_class = util.import_component(storage_class)
+    storage_class = common.import_component(storage_class)
     return storage_class(**config_params)

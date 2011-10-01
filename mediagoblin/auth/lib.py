@@ -19,7 +19,7 @@ import random
 
 import bcrypt
 
-from mediagoblin.util import send_email
+from mediagoblin.tools.mail import send_email
 from mediagoblin.tools.template import render_template
 from mediagoblin import mg_globals
 
