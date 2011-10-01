@@ -103,10 +103,10 @@ def get_jinja_loader(user_template_path=None):
 
 
 def get_staticdirector(app_config):
-    if app_config.has_key('direct_remote_path'):
+    if 'direct_remote_path' in app_config:
         return staticdirect.RemoteStaticDirect(
             app_config['direct_remote_path'].strip())
-    elif app_config.has_key('direct_remote_paths'):
+    elif 'direct_remote_paths' in app_config:
         direct_remote_path_lines = app_config[
             'direct_remote_paths'].strip().splitlines()
         return staticdirect.MultiRemoteStaticDirect(

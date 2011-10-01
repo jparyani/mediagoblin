@@ -61,7 +61,7 @@ def main_cli():
 
     subparsers = parser.add_subparsers(help='sub-command help')
     for command_name, command_struct in SUBCOMMAND_MAP.iteritems():
-        if command_struct.has_key('help'):
+        if 'help' in command_struct:
             subparser = subparsers.add_parser(
                 command_name, help=command_struct['help'])
         else:

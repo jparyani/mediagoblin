@@ -40,7 +40,7 @@ def submit_start(request):
     submit_form = submit_forms.SubmitStartForm(request.POST)
 
     if request.method == 'POST' and submit_form.validate():
-        if not (request.POST.has_key('file')
+        if not ('file' in request.POST
                 and isinstance(request.POST['file'], FieldStorage)
                 and request.POST['file'].file):
             submit_form.file.errors.append(

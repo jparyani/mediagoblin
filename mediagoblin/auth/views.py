@@ -146,7 +146,7 @@ def verify_email(request):
     you are lucky :)
     """
     # If we don't have userid and token parameters, we can't do anything; 404
-    if not request.GET.has_key('userid') or not request.GET.has_key('token'):
+    if not 'userid' in request.GET or not 'token' in request.GET:
         return render_404(request)
 
     user = request.db.User.find_one(
@@ -307,6 +307,6 @@ def _process_for_token(request):
     formdata = {
         'vars': formdata_vars,
         'has_userid_and_token':
-            formdata_vars.has_key('userid') and formdata_vars.has_key('token')}
+            'userid' in formdata_vars and 'token' in formdata_vars}
 
     return formdata

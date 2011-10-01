@@ -89,7 +89,7 @@ def get_jinja_env(template_loader, locale):
 
     # If we have a jinja environment set up with this locale, just
     # return that one.
-    if SETUP_JINJA_ENVS.has_key(locale):
+    if locale in SETUP_JINJA_ENVS:
         return SETUP_JINJA_ENVS[locale]
 
     template_env = jinja2.Environment(
@@ -166,7 +166,7 @@ def setup_user_in_request(request):
     Examine a request and tack on a request.user parameter if that's
     appropriate.
     """
-    if not request.session.has_key('user_id'):
+    if not 'user_id' in request.session:
         request.user = None
         return
 
@@ -356,7 +356,7 @@ def get_locale_from_request(request):
     """
     request_form = request.GET or request.POST
 
-    if request_form.has_key('lang'):
+    if 'lang' in request_form:
         return locale_to_lower_upper(request_form['lang'])
 
     accept_lang_matches = request.accept_language.best_matches()
@@ -364,9 +364,9 @@ def get_locale_from_request(request):
     # Your routing can explicitly specify a target language
     matchdict = request.matchdict or {}
 
-    if matchdict.has_key('locale'):
+    if 'locale' in matchdict:
         target_lang = matchdict['locale']
-    elif request.session.has_key('target_lang'):
+    elif 'target_lang' in request.session:
         target_lang = request.session['target_lang']
     # Pull the first acceptable language
     elif accept_lang_matches:
@@ -393,9 +393,9 @@ HTML_CLEANER = Cleaner(
     annoying_tags=True,
     allow_tags=[
         'div', 'b', 'i', 'em', 'strong', 'p', 'ul', 'ol', 'li', 'a', 'br'],
-    remove_unknown_tags=False, # can't be used with allow_tags
+    remove_unknown_tags=False,  # can't be used with allow_tags
     safe_attrs_only=True,
-    add_nofollow=True, # for now
+    add_nofollow=True,  # for now
     host_whitelist=(),
     whitelist_tags=set([]))
 
@@ -492,7 +492,7 @@ def setup_gettext(locale):
 
     # TODO: fallback nicely on translations from pt_PT to pt if not
     # available, etc.
-    if SETUP_GETTEXTS.has_key(locale):
+    if locale in SETUP_GETTEXTS:
         this_gettext = SETUP_GETTEXTS[locale]
     else:
         this_gettext = gettext.translation(

@@ -148,7 +148,7 @@ class RegisterMigration(object):
     """
     def __init__(self, migration_number, migration_registry=MIGRATIONS):
         assert migration_number > 0, "Migration number must be > 0!"
-        assert not migration_registry.has_key(migration_number), \
+        assert migration_number not in migration_registry, \
             "Duplicate migration numbers detected!  That's not allowed!"
 
         self.migration_number = migration_number
