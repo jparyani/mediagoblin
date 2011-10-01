@@ -87,7 +87,7 @@ def mediaentry_add_fail_error_and_metadata(database):
         {'fail_error': {'$exists': False}},
         {'$set': {'fail_error': None}},
         multi=True)
-    
+
     collection.update(
         {'fail_metadata': {'$exists': False}},
         {'$set': {'fail_metadata': {}}},

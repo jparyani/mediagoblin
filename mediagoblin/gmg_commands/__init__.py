@@ -28,7 +28,7 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.migrate:migrate_parser_setup',
         'func': 'mediagoblin.gmg_commands.migrate:migrate',
         'help': 'Apply all unapplied bulk migrations to the database'},
-    'adduser':{
+    'adduser': {
         'setup': 'mediagoblin.gmg_commands.users:adduser_parser_setup',
         'func': 'mediagoblin.gmg_commands.users:adduser',
         'help': 'Creates an user'},
@@ -80,4 +80,3 @@ def main_cli():
 
 if __name__ == '__main__':
     main_cli()
-

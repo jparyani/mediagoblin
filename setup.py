@@ -29,16 +29,17 @@ def get_version():
     if mo:
         return mo.group(1)
     else:
-        raise RuntimeError("Unable to find version string in %s." % VERSIONFILE)
+        raise RuntimeError("Unable to find version string in %s." %
+                           VERSIONFILE)
 
 
 setup(
-    name = "mediagoblin",
-    version = get_version(),
+    name="mediagoblin",
+    version=get_version(),
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     zip_safe=False,
     # scripts and dependencies
-    install_requires = [
+    install_requires=[
         'setuptools',
         'PasteScript',
         'beaker',
@@ -66,7 +67,7 @@ setup(
         # 'lxml',
         ],
     test_suite='nose.collector',
-    entry_points = """\
+    entry_points="""\
         [console_scripts]
         gmg = mediagoblin.gmg_commands:main_cli
         pybabel = mediagoblin.babel.messages.frontend:main
@@ -83,7 +84,6 @@ setup(
         [babel.extractors]
         jinja2 = jinja2.ext:babel_extract
         """,
- 
     license='AGPLv3',
     author='Free Software Foundation and contributors',
     author_email='cwebber@gnu.org',

@@ -23,7 +23,7 @@ Database Abstraction/Wrapper Layer
   pymongo.  Read beow for why, but note that nobody is actually doing
   this and there's no proof that we'll ever support more than
   MongoDB... it would be a huge amount of work to do so.
-  
+
   If you really want to prove that possible, jump on IRC and talk to
   us about making such a branch.  In the meanwhile, it doesn't hurt to
   have things as they are... if it ever makes it hard for us to

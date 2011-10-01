@@ -233,8 +233,7 @@ def forgot_password(request):
                     request, 'mediagoblin.user_pages.user_home',
                     user=user['username'])
 
-
-        # do not reveal whether or not there is a matching user, just move along
+        # do not reveal whether or not there is a matching user
         return redirect(request, 'mediagoblin.auth.fp_email_sent')
 
     return render_to_response(

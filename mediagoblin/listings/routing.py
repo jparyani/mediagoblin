@@ -25,4 +25,3 @@ tag_routes = [
     Route('mediagoblin.listings.tag_atom_feed', "/{tag}/atom/",
         controller="mediagoblin.listings.views:tag_atom_feed"),
     ]
-    

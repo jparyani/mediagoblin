@@ -53,7 +53,7 @@ def user_home(request, page):
     #if no data is available, return NotFound
     if media_entries == None:
         return render_404(request)
-    
+
     user_gallery_url = request.urlgen(
         'mediagoblin.user_pages.user_gallery',
         user=user['username'])
@@ -65,6 +65,7 @@ def user_home(request, page):
          'user_gallery_url': user_gallery_url,
          'media_entries': media_entries,
          'pagination': pagination})
+
 
 @uses_pagination
 def user_gallery(request, page):
@@ -85,7 +86,7 @@ def user_gallery(request, page):
     #if no data is available, return NotFound
     if media_entries == None:
         return render_404(request)
-    
+
     return render_to_response(
         request,
         'mediagoblin/user_pages/gallery.html',
@@ -94,6 +95,7 @@ def user_gallery(request, page):
          'pagination': pagination})
 
 MEDIA_COMMENTS_PER_PAGE = 50
+
 
 @get_user_media_entry
 @uses_pagination
@@ -142,8 +144,8 @@ def media_post_comment(request):
         'Comment posted!')
 
     return redirect(request, 'mediagoblin.user_pages.media_home',
-        media = request.matchdict['media'],
-        user = request.matchdict['user'])
+        media=request.matchdict['media'],
+        user=request.matchdict['user'])
 
 
 @get_user_media_entry
@@ -184,6 +186,7 @@ def media_confirm_delete(request, media):
 
 ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 15
 
+
 def atom_feed(request):
     """
     generates the atom feed with the newest images
@@ -204,7 +207,7 @@ def atom_feed(request):
     feed = AtomFeed(request.matchdict['user'],
                feed_url=request.url,
                url=request.host_url)
-    
+
     for entry in cursor:
         feed.add(entry.get('title'),
             entry.get('description_html'),

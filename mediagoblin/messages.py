@@ -20,10 +20,12 @@ SUCCESS = 'success'
 WARNING = 'warning'
 ERROR = 'error'
 
+
 def add_message(request, level, text):
     messages = request.session.setdefault('messages', [])
     messages.append({'level': level, 'text': text})
     request.session.save()
+
 
 def fetch_messages(request, clear_from_session=True):
     messages = request.session.get('messages')

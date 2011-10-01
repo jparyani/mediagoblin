@@ -46,7 +46,7 @@ def tag_listing(request, page):
         {u'state': u'processed',
          u'tags.slug': tag_slug})
     cursor = cursor.sort('created', DESCENDING)
-         
+
     pagination = Pagination(page, cursor)
     media_entries = pagination()
 
@@ -62,6 +62,7 @@ def tag_listing(request, page):
 
 
 ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 15
+
 
 def tag_atom_feed(request):
     """

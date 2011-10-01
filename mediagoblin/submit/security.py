@@ -16,8 +16,8 @@
 
 from mimetypes import guess_type
 
-
 ALLOWED = ['image/jpeg', 'image/png', 'image/tiff', 'image/gif']
+
 
 def check_filetype(posted_file):
     if not guess_type(posted_file.filename)[0] in ALLOWED:

@@ -119,7 +119,7 @@ def edit_attachments(request, media):
                     name=request.POST['attachment_name'] \
                         or request.POST['attachment_file'].filename,
                     filepath=attachment_public_filepath,
-                    created=datetime.utcnow()
+                    created=datetime.utcnow(),
                     ))
 
             media.save()

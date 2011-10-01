@@ -42,8 +42,10 @@ class Workbench(object):
 
     def __unicode__(self):
         return unicode(self.dir)
+
     def __str__(self):
         return str(self.dir)
+
     def __repr__(self):
         return repr(self.dir)
 
@@ -140,7 +142,7 @@ class WorkbenchManager(object):
         self.base_workbench_dir = os.path.abspath(base_workbench_dir)
         if not os.path.exists(self.base_workbench_dir):
             os.makedirs(self.base_workbench_dir)
-        
+
     def create_workbench(self):
         """
         Create and return the path to a new workbench (directory).

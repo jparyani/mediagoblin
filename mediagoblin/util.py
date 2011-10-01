@@ -45,6 +45,8 @@ from itertools import izip, count
 DISPLAY_IMAGE_FETCHING_ORDER = [u'medium', u'original', u'thumb']
 
 TESTS_ENABLED = False
+
+
 def _activate_testing():
     """
     Call this to activate testing in util.py
@@ -78,7 +80,7 @@ SETUP_JINJA_ENVS = {}
 
 def get_jinja_env(template_loader, locale):
     """
-    Set up the Jinja environment, 
+    Set up the Jinja environment,
 
     (In the future we may have another system for providing theming;
     for now this is good enough.)
@@ -147,7 +149,7 @@ def render_to_response(request, template, context, status=200):
 
 def redirect(request, *args, **kwargs):
     """Returns a HTTPFound(), takes a request and then urlgen params"""
-    
+
     querystring = None
     if kwargs.get('querystring'):
         querystring = kwargs.get('querystring')
@@ -197,6 +199,7 @@ def import_component(import_string):
 
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
 
+
 def slugify(text, delim=u'-'):
     """
     Generates an ASCII-only slug. Taken from http://flask.pocoo.org/snippets/5/
@@ -213,7 +216,7 @@ def slugify(text, delim=u'-'):
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # We have two "test inboxes" here:
-# 
+#
 # EMAIL_TEST_INBOX:
 # ----------------
 #   If you're writing test views, you'll probably want to check this.
@@ -233,7 +236,7 @@ def slugify(text, delim=u'-'):
 # ***IMPORTANT!***
 # ----------------
 # Before running tests that call functions which send email, you should
-# always call _clear_test_inboxes() to "wipe" the inboxes clean. 
+# always call _clear_test_inboxes() to "wipe" the inboxes clean.
 
 EMAIL_TEST_INBOX = []
 EMAIL_TEST_MBOX_INBOX = []
@@ -253,6 +256,7 @@ class FakeMhost(object):
              'to': to_addrs,
              'message': message})
 
+
 def _clear_test_inboxes():
     global EMAIL_TEST_INBOX
     global EMAIL_TEST_MBOX_INBOX
@@ -262,6 +266,7 @@ def _clear_test_inboxes():
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ### </Special email test stuff>
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 def send_email(from_addr, to_addrs, subject, message_body):
     """
@@ -418,7 +423,7 @@ def convert_to_tag_list_of_dicts(tag_string):
 
         # Split the tag string into a list of tags
         for tag in stripped_tag_string.split(
-                                       mg_globals.app_config['tags_delimiter']):
+                mg_globals.app_config['tags_delimiter']):
 
             # Ignore empty or duplicate tags
             if tag.strip() and tag.strip() not in [t['name'] for t in taglist]:
@@ -437,11 +442,12 @@ def media_tags_as_string(media_entry_tags):
     media_tag_string = ''
     if media_entry_tags:
         media_tag_string = mg_globals.app_config['tags_delimiter'].join(
-                                      [tag['name'] for tag in media_entry_tags])
+            [tag['name'] for tag in media_entry_tags])
     return media_tag_string
 
 TOO_LONG_TAG_WARNING = \
     u'Tags must be shorter than %s characters.  Tags that are too long: %s'
+
 
 def tag_length_validator(form, field):
     """
@@ -460,6 +466,7 @@ def tag_length_validator(form, field):
 
 MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')
 
+
 def cleaned_markdown_conversion(text):
     """
     Take a block of text, run it through MarkDown, and clean its HTML.
@@ -473,6 +480,7 @@ def cleaned_markdown_conversion(text):
 
 
 SETUP_GETTEXTS = {}
+
 
 def setup_gettext(locale):
     """
@@ -558,6 +566,7 @@ def fake_ugettext_passthrough(string):
 
 PAGINATION_DEFAULT_PER_PAGE = 30
 
+
 class Pagination(object):
     """
     Pagination class for mongodb queries.
@@ -574,9 +583,9 @@ class Pagination(object):
         Args:
          - page: requested page
          - per_page: number of objects per page
-         - cursor: db cursor 
-         - jump_to_id: ObjectId, sets the page to the page containing the object
-           with _id == jump_to_id.
+         - cursor: db cursor
+         - jump_to_id: ObjectId, sets the page to the page containing the
+           object with _id == jump_to_id.
         """
         self.page = page
         self.per_page = per_page
@@ -593,7 +602,6 @@ class Pagination(object):
 
                     self.active_id = jump_to_id
                     break
-
 
     def __call__(self):
         """
@@ -628,20 +636,18 @@ class Pagination(object):
                 last = num
 
     def get_page_url_explicit(self, base_url, get_params, page_no):
-        """ 
-        Get a page url by adding a page= parameter to the base url
-        """ 
+        """Get a page url by adding a page= parameter to the base url
+        """
         new_get_params = copy.copy(get_params or {})
         new_get_params['page'] = page_no
         return "%s?%s" % (
             base_url, urllib.urlencode(new_get_params))
 
     def get_page_url(self, request, page_no):
-        """ 
-        Get a new page url based of the request, and the new page number.
+        """Get a new page url based of the request, and the new page number.
 
         This is a nice wrapper around get_page_url_explicit()
-        """ 
+        """
         return self.get_page_url_explicit(
             request.path_info, request.GET, page_no)
 
@@ -681,6 +687,7 @@ def render_404(request):
     """
     return render_to_response(
         request, 'mediagoblin/404.html', {}, status=400)
+
 
 def delete_media_files(media):
     """
