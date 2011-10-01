@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-09-11 16:16-0500\n"
-"PO-Revision-Date: 2011-09-11 21:16+0000\n"
+"POT-Creation-Date: 2011-09-25 20:26-0500\n"
+"PO-Revision-Date: 2011-09-26 01:25+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr "Adresa de e-mail"
 
 #: mediagoblin/auth/views.py:42
 msgid "Sorry, registration is disabled on this instance."
-msgstr "Ne pare rău, dar înscrierile sunt dezactivate pe această instanță."
+msgstr "Ne pare rău, dar înscrierile sunt dezactivate pe acest server."
 
 #: mediagoblin/auth/views.py:60
 msgid "Sorry, a user with that name already exists."
@@ -76,6 +76,8 @@ msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
 msgstr ""
+"E-mailul pentru recuperarea parolei nu a putut fi trimis deoarece contul tău"
+" e inactiv sau adresa ta de e-mail nu a fost confirmată."
 
 #: mediagoblin/edit/forms.py:26 mediagoblin/submit/forms.py:27
 msgid "Title"
@@ -197,7 +199,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:24
 msgid "Explore"
-msgstr ""
+msgstr "Explorează"
 
 #: mediagoblin/templates/mediagoblin/root.html:27
 msgid "Hi there, media lover! MediaGoblin is..."
@@ -250,42 +252,35 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:38
 msgid "Excited to join us?"
-msgstr ""
+msgstr "Vrei să ni te alături?"
 
 #: mediagoblin/templates/mediagoblin/root.html:39
 #, python-format
 msgid ""
-"\n"
-"          <a class=\"header_submit_highlight\" href=\"%(register_url)s\">Create a free account</a>\n"
+"<a class=\"header_submit_highlight\" href=\"%(register_url)s\">Create a free account</a>\n"
 "          or\n"
-"          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>\n"
-"        "
+"          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:53
 msgid "Most recent media"
-msgstr ""
+msgstr "Cele mai recente fișiere"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:27
 msgid "Enter your new password"
-msgstr ""
+msgstr "Introdu noua parolă"
 
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
 msgid "Enter your username or email"
-msgstr ""
+msgstr "Introdu numele de utilizator sau adresa de e-mail"
 
 #: mediagoblin/templates/mediagoblin/auth/fp_changed_success.html:22
-msgid ""
-"\n"
-"      Your password has been changed. Try to log in now.\n"
-"    "
+msgid "Your password has been changed. Try to log in now."
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/fp_email_sent.html:22
 msgid ""
-"\n"
-"      Check your inbox. We sent an email with a URL for changing your password.\n"
-"    "
+"Check your inbox. We sent an email with a URL for changing your password."
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/fp_verification_email.txt:19
@@ -301,6 +296,13 @@ msgid ""
 "If you think this is an error, just ignore this email and continue being\n"
 "a happy goblin!"
 msgstr ""
+"Bună, %(username)s\n"
+"\n"
+"Pentru a modifica parola ta la GNU MediaGoblin, accesează adresa următoare:\n"
+"\n"
+"%(verification_url)s\n"
+"\n"
+"Dacă ai primit acest mesaj din greșeală, ignoră-l și fii mai departe un elf fericit!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:29
 msgid "Logging in failed!"
@@ -316,11 +318,11 @@ msgstr "Creează-l aici!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:48
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Ai uitat parola?"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:51
 msgid "Change it!"
-msgstr ""
+msgstr "Schimb-o!"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:27
 msgid "Create an account!"
@@ -342,7 +344,7 @@ msgid ""
 msgstr ""
 "Bună, %(username)s,\n"
 "\n"
-"pentru activarea contului tău GNU MediaGoblin, accesează adresa următoare:\n"
+"pentru activarea contului tău la GNU MediaGoblin, accesează adresa următoare:\n"
 "\n"
 "%(verification_url)s"
 
@@ -421,7 +423,7 @@ msgstr "Aceste fișiere nu au putut fi procesate:"
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:39
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:59
 msgid "Email verification needed"
-msgstr "Este necesară verificarea adresei de e-mail"
+msgstr "Este necesară confirmarea adresei de e-mail"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:42
 msgid "Almost done! Your account still needs to be activated."
@@ -478,7 +480,7 @@ msgstr "Acest utilizator nu și-a completat (încă) profilul."
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:122
 #, python-format
 msgid "View all of %(username)s's media"
-msgstr "Toate fișierele media ale lui %(username)s"
+msgstr "Vezi toate fișierele media ale lui %(username)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:135
 msgid ""

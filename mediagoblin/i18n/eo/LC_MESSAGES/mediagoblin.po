@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-09-11 16:16-0500\n"
-"PO-Revision-Date: 2011-09-11 21:16+0000\n"
+"POT-Creation-Date: 2011-09-25 20:26-0500\n"
+"PO-Revision-Date: 2011-09-26 01:25+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -193,8 +193,8 @@ msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project"
 msgstr ""
-"Funkcias per &lt;a href=\"http://mediagoblin.org\"&gt;MediaGoblin&lt;/a&gt;,"
-" unu el la &lt;a href=\"http://gnu.org/\"&gt;projektoj de GNU&lt;/a&gt;"
+"Funkcias per <a href=\"http://mediagoblin.org\">MediaGoblin</a>, unu el la "
+"<a href=\"http://gnu.org/\">projektoj de GNU</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:24
 msgid "Explore"
@@ -244,9 +244,9 @@ msgid ""
 "href=\"http://mediagoblin.org/pages/join.html\">You can help us improve this"
 " software!</a>)"
 msgstr ""
-"Vivanta per homoj kiel vi.  (&lt;a "
-"href=\"http://mediagoblin.org/pages/join.html\"&gt;Vi povas helpi al ni "
-"plibonigi la programon!&lt;/a&gt;)"
+"Vivanta per homoj kiel vi.  (<a "
+"href=\"http://mediagoblin.org/pages/join.html\">Vi povas helpi al ni "
+"plibonigi la programon!</a>)"
 
 #: mediagoblin/templates/mediagoblin/root.html:38
 msgid "Excited to join us?"
@@ -255,37 +255,30 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/root.html:39
 #, python-format
 msgid ""
-"\n"
-"          <a class=\"header_submit_highlight\" href=\"%(register_url)s\">Create a free account</a>\n"
+"<a class=\"header_submit_highlight\" href=\"%(register_url)s\">Create a free account</a>\n"
 "          or\n"
-"          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>\n"
-"        "
+"          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:53
 msgid "Most recent media"
-msgstr ""
+msgstr "Plej nove aldonitaj dosieroj"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:27
 msgid "Enter your new password"
-msgstr ""
+msgstr "Enigu vian novan pasvorton"
 
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
 msgid "Enter your username or email"
-msgstr ""
+msgstr "Enigu vian salutnomon aŭ retpoŝtadreson"
 
 #: mediagoblin/templates/mediagoblin/auth/fp_changed_success.html:22
-msgid ""
-"\n"
-"      Your password has been changed. Try to log in now.\n"
-"    "
+msgid "Your password has been changed. Try to log in now."
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/fp_email_sent.html:22
 msgid ""
-"\n"
-"      Check your inbox. We sent an email with a URL for changing your password.\n"
-"    "
+"Check your inbox. We sent an email with a URL for changing your password."
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/fp_verification_email.txt:19
@@ -301,6 +294,13 @@ msgid ""
 "If you think this is an error, just ignore this email and continue being\n"
 "a happy goblin!"
 msgstr ""
+"Saluton, %(username)s,\n"
+"\n"
+"por ŝanĝi vian pasvorton ĉe GNUa MediaGoblin, sekvu la jenan retadreson per via TTT-legilo:\n"
+"\n"
+"%(verification_url)s\n"
+"\n"
+"Se vi pensas, ke ĉi tiu retletero estas sendita erare, simple ignoru ĝin kaj plu restu feliĉa koboldo!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:29
 msgid "Logging in failed!"
@@ -316,11 +316,11 @@ msgstr "Kreu ĝin ĉi tie!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:48
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Ĉu vi forgesis vian pasvorton?"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:51
 msgid "Change it!"
-msgstr ""
+msgstr "Ŝanĝu ĝin!"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:27
 msgid "Create an account!"

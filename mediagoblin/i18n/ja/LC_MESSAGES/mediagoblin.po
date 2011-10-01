@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-09-11 16:16-0500\n"
-"PO-Revision-Date: 2011-09-11 21:16+0000\n"
+"POT-Creation-Date: 2011-09-25 20:26-0500\n"
+"PO-Revision-Date: 2011-09-26 01:25+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -236,11 +236,9 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/root.html:39
 #, python-format
 msgid ""
-"\n"
-"          <a class=\"header_submit_highlight\" href=\"%(register_url)s\">Create a free account</a>\n"
+"<a class=\"header_submit_highlight\" href=\"%(register_url)s\">Create a free account</a>\n"
 "          or\n"
-"          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>\n"
-"        "
+"          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:53
@@ -256,17 +254,12 @@ msgid "Enter your username or email"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/fp_changed_success.html:22
-msgid ""
-"\n"
-"      Your password has been changed. Try to log in now.\n"
-"    "
+msgid "Your password has been changed. Try to log in now."
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/fp_email_sent.html:22
 msgid ""
-"\n"
-"      Check your inbox. We sent an email with a URL for changing your password.\n"
-"    "
+"Check your inbox. We sent an email with a URL for changing your password."
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/fp_verification_email.txt:19
