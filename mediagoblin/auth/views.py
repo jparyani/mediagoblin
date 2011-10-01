@@ -21,7 +21,7 @@ from webob import exc
 
 from mediagoblin import messages
 from mediagoblin import mg_globals
-from mediagoblin.util import render_to_response, redirect, render_404
+from mediagoblin.util import render_to_response, redirect, render_404, setup_user_in_request
 from mediagoblin.util import pass_to_ugettext as _
 from mediagoblin.db.util import ObjectId, InvalidId
 from mediagoblin.auth import lib as auth_lib
@@ -195,9 +195,18 @@ def resend_activation(request):
 
     Resend the activation email.
     """
+
+    if not request.GET.has_key('userid') or not request.GET.has_key('token'):
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _('You must be logged in so we know who to send the email to!'))
+        
+        return redirect(request, "/auth/login")
+
     request.user[u'verification_key'] = unicode(uuid.uuid4())
     request.user.save()
-
+    
     email_debug_message(request)
     send_verification_email(request.user, request)
 
