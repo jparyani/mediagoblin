@@ -30,6 +30,19 @@ from mediagoblin.auth.lib import send_verification_email, \
                                  send_fp_verification_email
 
 
+def email_debug_message(request):
+    """
+    If the server is running in email debug mode (which is
+    the current default), give a debug message to the user
+    so that they have an idea where to find their email.
+    """
+    if mg_globals.app_config['email_debug_mode']:
+        # DEBUG message, no need to translate
+        messages.add_message(request, messages.DEBUG,
+            u"This instance is running in email debug mode. "
+            u"The email will be on the console of the server process.")
+
+
 def register(request):
     """
     Your classic registration view!
@@ -78,6 +91,7 @@ def register(request):
             request.session.save()
 
             # send verification email
+            email_debug_message(request)
             send_verification_email(user, request)
 
             # redirect the user to their homepage... there will be a
@@ -184,6 +198,7 @@ def resend_activation(request):
     request.user[u'verification_key'] = unicode(uuid.uuid4())
     request.user.save()
 
+    email_debug_message(request)
     send_verification_email(request.user, request)
 
     messages.add_message(
@@ -204,6 +219,11 @@ def forgot_password(request):
     fp_form = auth_forms.ForgotPassForm(request.POST)
 
     if request.method == 'POST' and fp_form.validate():
+
+        # Here, so it doesn't depend on the actual mail being sent
+        # and thus doesn't reveal, wether mail was sent.
+        email_debug_message(request)
+
         # '$or' not available till mongodb 1.5.3
         user = request.db.User.find_one(
             {'username': request.POST['username']})
