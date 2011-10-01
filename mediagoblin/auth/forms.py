@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import wtforms
+import re
 
 from mediagoblin.util import fake_ugettext_passthrough as _
 
@@ -24,18 +25,14 @@ class RegistrationForm(wtforms.Form):
         _('Username'),
         [wtforms.validators.Required(),
          wtforms.validators.Length(min=3, max=30),
-         wtforms.validators.Regexp(r'^\w+$')],
-        description=_(
-            u"This is the name other users will identify you with."))
+         wtforms.validators.Regexp(r'^\w+$')])
     password = wtforms.PasswordField(
         _('Password'),
         [wtforms.validators.Required(),
          wtforms.validators.Length(min=6, max=30),
          wtforms.validators.EqualTo(
                 'confirm_password',
-                _('Passwords must match.'))],
-        description=_(
-            u"Try to use a strong password!"))
+                _('Passwords must match.'))])
     confirm_password = wtforms.PasswordField(
         _('Confirm password'),
         [wtforms.validators.Required()],
@@ -44,9 +41,7 @@ class RegistrationForm(wtforms.Form):
     email = wtforms.TextField(
         _('Email address'),
         [wtforms.validators.Required(),
-         wtforms.validators.Email()],
-        description=_(
-            u"Your email will never be published."))
+         wtforms.validators.Email()])
 
 
 class LoginForm(wtforms.Form):
@@ -57,3 +52,34 @@ class LoginForm(wtforms.Form):
     password = wtforms.PasswordField(
         _('Password'),
         [wtforms.validators.Required()])
+
+
+class ForgotPassForm(wtforms.Form):
+    username = wtforms.TextField(
+        'Username or email',
+        [wtforms.validators.Required()])
+
+    def validate_username(form,field):
+        if not (re.match(r'^\w+$',field.data) or
+               re.match(r'^.+@[^.].*\.[a-z]{2,10}$',field.data, re.IGNORECASE)):
+            raise wtforms.ValidationError(u'Incorrect input')
+
+
+class ChangePassForm(wtforms.Form):
+    password = wtforms.PasswordField(
+        'Password',
+        [wtforms.validators.Required(),
+         wtforms.validators.Length(min=6, max=30),
+         wtforms.validators.EqualTo(
+                'confirm_password',
+                'Passwords must match.')])
+    confirm_password = wtforms.PasswordField(
+        'Confirm password',
+        [wtforms.validators.Required()])
+    userid = wtforms.HiddenField(
+        '',
+        [wtforms.validators.Required()])
+    token = wtforms.HiddenField(
+        '',
+        [wtforms.validators.Required()])
+

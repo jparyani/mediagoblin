@@ -4,25 +4,25 @@
   font-family: 'Lato';
   font-style: normal;
   font-weight: 700;
-  src: local('Lato Bold'), local('Lato-Bold'), url('http://themes.googleusercontent.com/static/fonts/lato/v1/wkfQbvfT_02e2IWO3yYueQ.woff') format('woff');
+  src: local('Lato Bold'), local('Lato-Bold'), url('../fonts/Lato-Bold.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Lato';
   font-style: italic;
   font-weight: 400;
-  src: local('Lato Italic'), local('Lato-Italic'), url('http://themes.googleusercontent.com/static/fonts/lato/v1/oUan5VrEkpzIazlUe5ieaA.woff') format('woff');
+  src: local('Lato Italic'), local('Lato-Italic'), url('../fonts/Lato-Italic.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Lato';
   font-style: italic;
   font-weight: 700;
-  src: local('Lato Bold Italic'), local('Lato-BoldItalic'), url('http://themes.googleusercontent.com/static/fonts/lato/v1/HkF_qI1x_noxlxhrhMQYED8E0i7KZn-EPnyo3HZu7kw.woff') format('woff');
+  src: local('Lato Bold Italic'), local('Lato-BoldItalic'), url('../fonts/Lato-BoldItalic.ttf') format('truetype');
 }
 @font-face {
   font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
-  src: local('Lato Regular'), local('Lato-Regular'), url('http://themes.googleusercontent.com/static/fonts/lato/v1/9k-RPmcnxYEPm8CNFsH2gg.woff') format('woff');
+  src: local('Lato Regular'), local('Lato-Regular'), url('../fonts/Lato-Regular.woff') format('truetype');
 }
 
 body {
@@ -141,7 +141,7 @@ background-image: -moz-linear-gradient(center top , rgb(134, 212, 177), rgb(109,
 
 /* common website elements */
 
-.button {
+.button, .cancel_link {
   height: 32px;
   min-width: 99px;
   background-color: #86d4b1;
@@ -163,6 +163,16 @@ background-image: -moz-linear-gradient(center top , rgb(134, 212, 177), rgb(109,
   font-family: 'Lato', sans-serif;
   font-size: 1.2em;
   font-weight: bold;
+}
+
+.cancel_link {
+  background-color: #aaa;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(##D2D2D2), to(#aaa)); 
+  background-image: -webkit-linear-gradient(top, #D2D2D2, #aaa); 
+  background-image:    -moz-linear-gradient(top, #D2D2D2, #aaa); 
+  background-image:     -ms-linear-gradient(top, #D2D2D2, #aaa); 
+  background-image:      -o-linear-gradient(top, #D2D2D2, #aaa); 
+  background-image:         linear-gradient(top, #D2D2D2, #aaa);
 }
 
 .pagination{
@@ -354,4 +364,12 @@ table.media_panel {
 table.media_panel th {
   font-weight: bold;
   padding-bottom: 4px;
+}
+
+
+/* Delete panel */
+
+.delete_checkbox_box {
+  margin-top: 10px;
+  margin-left: 10px;
 }

@@ -692,7 +692,7 @@ def delete_media_files(media):
     Arguments:
      - media: A MediaEntry document
     """
-    for handle, listpath in media['media_files'].items():
+    for listpath in media['media_files'].itervalues():
         mg_globals.public_store.delete_file(
             listpath)
 

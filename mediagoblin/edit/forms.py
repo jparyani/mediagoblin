@@ -25,13 +25,17 @@ class EditForm(wtforms.Form):
     title = wtforms.TextField(
         _('Title'),
         [wtforms.validators.Length(min=0, max=500)])
-    slug = wtforms.TextField(
-        _('Slug'),
-        [wtforms.validators.Required(message=_("The slug can't be empty"))])
     description = wtforms.TextAreaField('Description of this work')
     tags = wtforms.TextField(
         _('Tags'),
         [tag_length_validator])
+    slug = wtforms.TextField(
+        _('Slug'),
+        [wtforms.validators.Required(message=_("The slug can't be empty"))],
+        description=_(
+            "The title part of this media's URL. "
+            "You usually don't need to change this."))
+
 
 class EditProfileForm(wtforms.Form):
     bio = wtforms.TextAreaField(
@@ -41,6 +45,7 @@ class EditProfileForm(wtforms.Form):
         _('Website'),
         [wtforms.validators.Optional(),
          wtforms.validators.URL(message='Improperly formed URL')])
+
 
 class EditAttachmentsForm(wtforms.Form):
     attachment_name = wtforms.TextField(

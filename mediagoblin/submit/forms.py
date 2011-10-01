@@ -26,7 +26,8 @@ class SubmitStartForm(wtforms.Form):
     title = wtforms.TextField(
         _('Title'),
         [wtforms.validators.Length(min=0, max=500)])
-    description = wtforms.TextAreaField('Description of this work')
+    description = wtforms.TextAreaField(
+        _('Description of this work'))
     tags = wtforms.TextField(
         _('Tags'),
         [tag_length_validator])

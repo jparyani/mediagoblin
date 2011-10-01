@@ -46,9 +46,6 @@ def edit_media(request, media):
         description=media['description'],
         tags=media_tags_as_string(media['tags']))
 
-    if len(media['attachment_files']):
-        defaults['attachment_name'] = media['attachment_files'][0]['name']
-
     form = forms.EditForm(
         request.POST,
         **defaults)
@@ -73,19 +70,11 @@ def edit_media(request, media):
             media['description_html'] = cleaned_markdown_conversion(
                 media['description'])
 
-            if 'attachment_name' in request.POST:
-                media['attachment_files'][0]['name'] = \
-                    request.POST['attachment_name']
-
-            if 'attachment_delete' in request.POST \
-                    and 'y' == request.POST['attachment_delete']:
-                del media['attachment_files'][0]
-
             media['slug'] = unicode(request.POST['slug'])
             media.save()
 
-            return redirect(request, "mediagoblin.user_pages.media_home",
-                user=media.uploader()['username'], media=media['slug'])
+            return exc.HTTPFound(
+                location=media.url_for_self(request.urlgen))
 
     if request.user['is_admin'] \
             and media['uploader'] != request.user['_id'] \
@@ -141,9 +130,8 @@ def edit_attachments(request, media):
                     % (request.POST['attachment_name']
                        or request.POST['attachment_file'].filename))
 
-            return redirect(request, 'mediagoblin.user_pages.media_home',
-                            user=media.uploader()['username'],
-                            media=media['slug'])
+            return exc.HTTPFound(
+                location=media.url_for_self(request.urlgen))
         return render_to_response(
             request,
             'mediagoblin/edit/attachments.html',

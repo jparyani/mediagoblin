@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-08-30 22:51-0500\n"
+"POT-Creation-Date: 2011-09-25 20:26-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,102 +17,99 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: mediagoblin/auth/forms.py:24 mediagoblin/auth/forms.py:54
+#: mediagoblin/auth/forms.py:25 mediagoblin/auth/forms.py:49
 msgid "Username"
 msgstr ""
 
-#: mediagoblin/auth/forms.py:28
-msgid "This is the name other users will identify you with."
-msgstr ""
-
-#: mediagoblin/auth/forms.py:31 mediagoblin/auth/forms.py:58
+#: mediagoblin/auth/forms.py:30 mediagoblin/auth/forms.py:53
 msgid "Password"
 msgstr ""
 
-#: mediagoblin/auth/forms.py:36
+#: mediagoblin/auth/forms.py:35
 msgid "Passwords must match."
 msgstr ""
 
 #: mediagoblin/auth/forms.py:37
-msgid "Try to use a strong password!"
-msgstr ""
-
-#: mediagoblin/auth/forms.py:40
 msgid "Confirm password"
 msgstr ""
 
-#: mediagoblin/auth/forms.py:42
+#: mediagoblin/auth/forms.py:39
 msgid "Type it again here to make sure there are no spelling mistakes."
 msgstr ""
 
-#: mediagoblin/auth/forms.py:45
+#: mediagoblin/auth/forms.py:42
 msgid "Email address"
 msgstr ""
 
-#: mediagoblin/auth/forms.py:48
-msgid "Your email will never be published."
-msgstr ""
-
-#: mediagoblin/auth/views.py:40
+#: mediagoblin/auth/views.py:42
 msgid "Sorry, registration is disabled on this instance."
 msgstr ""
 
-#: mediagoblin/auth/views.py:58
+#: mediagoblin/auth/views.py:60
 msgid "Sorry, a user with that name already exists."
 msgstr ""
 
-#: mediagoblin/auth/views.py:62
+#: mediagoblin/auth/views.py:64
 msgid "Sorry, that email address has already been taken."
 msgstr ""
 
-#: mediagoblin/auth/views.py:160
+#: mediagoblin/auth/views.py:165
 msgid ""
 "Your email address has been verified. You may now login, edit your "
 "profile, and submit images!"
 msgstr ""
 
-#: mediagoblin/auth/views.py:166
+#: mediagoblin/auth/views.py:171
 msgid "The verification key or user id is incorrect"
 msgstr ""
 
-#: mediagoblin/auth/views.py:187
-#: mediagoblin/templates/mediagoblin/auth/resent_verification_email.html:22
+#: mediagoblin/auth/views.py:192
 msgid "Resent your verification email."
+msgstr ""
+
+#: mediagoblin/auth/views.py:228
+msgid ""
+"Could not send password recovery email as your username is inactive or "
+"your account's email address has not been verified."
 msgstr ""
 
 #: mediagoblin/edit/forms.py:26 mediagoblin/submit/forms.py:27
 msgid "Title"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:29
-msgid "Slug"
-msgstr ""
-
-#: mediagoblin/edit/forms.py:30
-msgid "The slug can't be empty"
-msgstr ""
-
-#: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:31
+#: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:32
 msgid "Tags"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:38
+#: mediagoblin/edit/forms.py:33
+msgid "Slug"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:34
+msgid "The slug can't be empty"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:35
+msgid "The title part of this media's URL. You usually don't need to change this."
+msgstr ""
+
+#: mediagoblin/edit/forms.py:42
 msgid "Bio"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:41
+#: mediagoblin/edit/forms.py:45
 msgid "Website"
 msgstr ""
 
-#: mediagoblin/edit/views.py:66
+#: mediagoblin/edit/views.py:63
 msgid "An entry with that slug already exists for this user."
 msgstr ""
 
-#: mediagoblin/edit/views.py:95
+#: mediagoblin/edit/views.py:84
 msgid "You are editing another user's media. Proceed with caution."
 msgstr ""
 
-#: mediagoblin/edit/views.py:166
+#: mediagoblin/edit/views.py:154
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr ""
 
@@ -122,6 +119,10 @@ msgstr ""
 
 #: mediagoblin/submit/forms.py:25
 msgid "File"
+msgstr ""
+
+#: mediagoblin/submit/forms.py:30
+msgid "Description of this work"
 msgstr ""
 
 #: mediagoblin/submit/views.py:47
@@ -182,6 +183,10 @@ msgid ""
 "href=\"http://gnu.org/\">GNU</a> project"
 msgstr ""
 
+#: mediagoblin/templates/mediagoblin/root.html:24
+msgid "Explore"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/root.html:27
 msgid "Hi there, media lover! MediaGoblin is..."
 msgstr ""
@@ -221,6 +226,55 @@ msgid ""
 "this software!</a>)"
 msgstr ""
 
+#: mediagoblin/templates/mediagoblin/root.html:38
+msgid "Excited to join us?"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:39
+#, python-format
+msgid ""
+"<a class=\"header_submit_highlight\" href=\"%(register_url)s\">Create a "
+"free account</a>\n"
+"          or\n"
+"          <a class=\"header_submit\" "
+"href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on "
+"your own server</a>"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:53
+msgid "Most recent media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:27
+msgid "Enter your new password"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
+msgid "Enter your username or email"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/fp_changed_success.html:22
+msgid "Your password has been changed. Try to log in now."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/fp_email_sent.html:22
+msgid "Check your inbox. We sent an email with a URL for changing your password."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/fp_verification_email.txt:19
+#, python-format
+msgid ""
+"Hi %(username)s,\n"
+"\n"
+"to change your GNU MediaGoblin password, open the following URL in \n"
+"your web browser:\n"
+"\n"
+"%(verification_url)s\n"
+"\n"
+"If you think this is an error, just ignore this email and continue being\n"
+"a happy goblin!"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/auth/login.html:29
 msgid "Logging in failed!"
 msgstr ""
@@ -231,6 +285,14 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:45
 msgid "Create one here!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/login.html:48
+msgid "Forgot your password?"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/login.html:51
+msgid "Change it!"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:27
@@ -258,12 +320,12 @@ msgid "Editing %(media_title)s"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:36
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
 msgid "Cancel"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
-#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:44
 msgid "Save changes"
 msgstr ""
 
@@ -299,10 +361,8 @@ msgstr ""
 msgid "Really delete %(title)s?"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:36
-msgid ""
-"If you choose yes, the media entry will be deleted "
-"<strong>permanently.</strong>"
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:50
+msgid "Delete Permanently"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
@@ -404,11 +464,23 @@ msgstr ""
 msgid "Atom feed"
 msgstr ""
 
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:40
+msgid "Newer"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:46
+msgid "Older"
+msgstr ""
+
 #: mediagoblin/user_pages/forms.py:24
 msgid "Comment"
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:176
+#: mediagoblin/user_pages/forms.py:30
+msgid "I am sure I want to delete this"
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:175
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr ""
 

@@ -26,7 +26,5 @@ class MediaCommentForm(wtforms.Form):
 
 
 class ConfirmDeleteForm(wtforms.Form):
-    confirm = wtforms.RadioField('Confirm',
-                                 default='False',
-                                 choices=[('False', 'No, I made a mistake!'),
-                                          ('True', 'Yes, delete it!')])
+    confirm = wtforms.BooleanField(
+        _('I am sure I want to delete this'))
