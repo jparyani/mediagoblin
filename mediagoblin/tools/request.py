@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 Free Software Foundation, Inc
+# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -14,24 +14,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
+from mediagoblin.db.util import ObjectId
 
-DISPLAY_IMAGE_FETCHING_ORDER = [u'medium', u'original', u'thumb']
-
-global TESTS_ENABLED
-TESTS_ENABLED = False
-
-def import_component(import_string):
+def setup_user_in_request(request):
     """
-    Import a module component defined by STRING.  Probably a method,
-    class, or global variable.
-
-    Args:
-     - import_string: a string that defines what to import.  Written
-       in the format of "module1.module2:component"
+    Examine a request and tack on a request.user parameter if that's
+    appropriate.
     """
-    module_name, func_name = import_string.split(':', 1)
-    __import__(module_name)
-    module = sys.modules[module_name]
-    func = getattr(module, func_name)
-    return func
+    if not request.session.has_key('user_id'):
+        request.user = None
+        return
+
+    user = None
+    user = request.app.db.User.one(
+        {'_id': ObjectId(request.session['user_id'])})
+
+    if not user:
+        # Something's wrong... this user doesn't exist?  Invalidate
+        # this session.
+        request.session.invalidate()
+
+    request.user = user

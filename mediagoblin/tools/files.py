@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 Free Software Foundation, Inc
+# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -14,24 +14,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
+from mediagoblin import mg_globals
 
-DISPLAY_IMAGE_FETCHING_ORDER = [u'medium', u'original', u'thumb']
-
-global TESTS_ENABLED
-TESTS_ENABLED = False
-
-def import_component(import_string):
+def delete_media_files(media):
     """
-    Import a module component defined by STRING.  Probably a method,
-    class, or global variable.
+    Delete all files associated with a MediaEntry
 
-    Args:
-     - import_string: a string that defines what to import.  Written
-       in the format of "module1.module2:component"
+    Arguments:
+     - media: A MediaEntry document
     """
-    module_name, func_name = import_string.split(':', 1)
-    __import__(module_name)
-    module = sys.modules[module_name]
-    func = getattr(module, func_name)
-    return func
+    for listpath in media['media_files'].itervalues():
+        mg_globals.public_store.delete_file(
+            listpath)
+
+    for attachment in media['attachment_files']:
+        mg_globals.public_store.delete_file(
+            attachment['filepath'])
