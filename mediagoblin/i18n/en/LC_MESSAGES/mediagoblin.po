@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-09-25 20:26-0500\n"
+"POT-Creation-Date: 2011-10-01 19:51-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,33 +41,37 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
-#: mediagoblin/auth/views.py:42
+#: mediagoblin/auth/views.py:55
 msgid "Sorry, registration is disabled on this instance."
 msgstr ""
 
-#: mediagoblin/auth/views.py:60
+#: mediagoblin/auth/views.py:73
 msgid "Sorry, a user with that name already exists."
 msgstr ""
 
-#: mediagoblin/auth/views.py:64
+#: mediagoblin/auth/views.py:77
 msgid "Sorry, that email address has already been taken."
 msgstr ""
 
-#: mediagoblin/auth/views.py:165
+#: mediagoblin/auth/views.py:179
 msgid ""
 "Your email address has been verified. You may now login, edit your "
 "profile, and submit images!"
 msgstr ""
 
-#: mediagoblin/auth/views.py:171
+#: mediagoblin/auth/views.py:185
 msgid "The verification key or user id is incorrect"
 msgstr ""
 
-#: mediagoblin/auth/views.py:192
+#: mediagoblin/auth/views.py:203
+msgid "You must be logged in so we know who to send the email to!"
+msgstr ""
+
+#: mediagoblin/auth/views.py:216
 msgid "Resent your verification email."
 msgstr ""
 
-#: mediagoblin/auth/views.py:228
+#: mediagoblin/auth/views.py:257
 msgid ""
 "Could not send password recovery email as your username is inactive or "
 "your account's email address has not been verified."
