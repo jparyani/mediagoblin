@@ -16,7 +16,7 @@
 
 from mediagoblin.messages import fetch_messages, add_message
 from mediagoblin.tests.tools import setup_fresh_app
-from mediagoblin import util
+from mediagoblin.tools import template
 
 
 @setup_fresh_app
@@ -28,7 +28,7 @@ def test_messages(test_app):
     """
     # Aquire a request object
     test_app.get('/')
-    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
     request = context['request']
     
     # The message queue should be empty

@@ -17,7 +17,7 @@
 import email
 
 from mediagoblin import util
-
+from mediagoblin.tools import url, translate
 
 util._activate_testing()
 
@@ -71,38 +71,38 @@ I hope you like unit tests JUST AS MUCH AS I DO!"""
 I hope you like unit tests JUST AS MUCH AS I DO!"""
 
 def test_slugify():
-    assert util.slugify('a walk in the park') == 'a-walk-in-the-park'
-    assert util.slugify('A Walk in the Park') == 'a-walk-in-the-park'
-    assert util.slugify('a  walk in the park') == 'a-walk-in-the-park'
-    assert util.slugify('a walk in-the-park') == 'a-walk-in-the-park'
-    assert util.slugify('a w@lk in the park?') == 'a-w-lk-in-the-park'
-    assert util.slugify(u'a walk in the par\u0107') == 'a-walk-in-the-parc'
-    assert util.slugify(u'\u00E0\u0042\u00E7\u010F\u00EB\u0066') == 'abcdef'
+    assert url.slugify('a walk in the park') == 'a-walk-in-the-park'
+    assert url.slugify('A Walk in the Park') == 'a-walk-in-the-park'
+    assert url.slugify('a  walk in the park') == 'a-walk-in-the-park'
+    assert url.slugify('a walk in-the-park') == 'a-walk-in-the-park'
+    assert url.slugify('a w@lk in the park?') == 'a-w-lk-in-the-park'
+    assert url.slugify(u'a walk in the par\u0107') == 'a-walk-in-the-parc'
+    assert url.slugify(u'\u00E0\u0042\u00E7\u010F\u00EB\u0066') == 'abcdef'
 
 def test_locale_to_lower_upper():
     """
     Test cc.i18n.util.locale_to_lower_upper()
     """
-    assert util.locale_to_lower_upper('en') == 'en'
-    assert util.locale_to_lower_upper('en_US') == 'en_US'
-    assert util.locale_to_lower_upper('en-us') == 'en_US'
+    assert translate.locale_to_lower_upper('en') == 'en'
+    assert translate.locale_to_lower_upper('en_US') == 'en_US'
+    assert translate.locale_to_lower_upper('en-us') == 'en_US'
 
     # crazy renditions.  Useful?
-    assert util.locale_to_lower_upper('en-US') == 'en_US'
-    assert util.locale_to_lower_upper('en_us') == 'en_US'
+    assert translate.locale_to_lower_upper('en-US') == 'en_US'
+    assert translate.locale_to_lower_upper('en_us') == 'en_US'
 
 
 def test_locale_to_lower_lower():
     """
     Test cc.i18n.util.locale_to_lower_lower()
     """
-    assert util.locale_to_lower_lower('en') == 'en'
-    assert util.locale_to_lower_lower('en_US') == 'en-us'
-    assert util.locale_to_lower_lower('en-us') == 'en-us'
+    assert translate.locale_to_lower_lower('en') == 'en'
+    assert translate.locale_to_lower_lower('en_US') == 'en-us'
+    assert translate.locale_to_lower_lower('en-us') == 'en-us'
 
     # crazy renditions.  Useful?
-    assert util.locale_to_lower_lower('en-US') == 'en-us'
-    assert util.locale_to_lower_lower('en_us') == 'en-us'
+    assert translate.locale_to_lower_lower('en-US') == 'en-us'
+    assert translate.locale_to_lower_lower('en_us') == 'en-us'
 
 
 def test_html_cleaner():

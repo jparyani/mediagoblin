@@ -25,7 +25,7 @@ from mediagoblin.db import migrations
 from mediagoblin.db.util import ASCENDING, DESCENDING, ObjectId
 from mediagoblin.util import Pagination
 from mediagoblin.util import DISPLAY_IMAGE_FETCHING_ORDER
-
+from mediagoblin.tools import url
 
 ###################
 # Custom validators
@@ -242,7 +242,7 @@ class MediaEntry(Document):
         pass
 
     def generate_slug(self):
-        self['slug'] = util.slugify(self['title'])
+        self['slug'] = url.slugify(self['title'])
 
         duplicate = mg_globals.database.media_entries.find_one(
             {'slug': self['slug']})

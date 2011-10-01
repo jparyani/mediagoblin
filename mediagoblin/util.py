@@ -17,41 +17,42 @@
 from __future__ import division
 
 from email.MIMEText import MIMEText
-import gettext
-import pkg_resources
+#import gettext
+#import pkg_resources
 import smtplib
 import sys
-import re
+#import re
+#import translitcodec
 import urllib
 from math import ceil, floor
 import copy
 import wtforms
 
-from babel.localedata import exists
-from babel.support import LazyProxy
-import jinja2
-import translitcodec
+#from babel.localedata import exists
+#from babel.support import LazyProxy
+#import jinja2
 from webob import Response, exc
 from lxml.html.clean import Cleaner
 import markdown
 from wtforms.form import Form
 
 from mediagoblin import mg_globals
-from mediagoblin import messages
+#from mediagoblin import messages
 from mediagoblin.db.util import ObjectId
+from mediagoblin.tools import url
+from mediagoblin.tools import common
+from mediagoblin.tools.template import TEMPLATE_TEST_CONTEXT, render_template
 
 from itertools import izip, count
 
 DISPLAY_IMAGE_FETCHING_ORDER = [u'medium', u'original', u'thumb']
 
-TESTS_ENABLED = False
 def _activate_testing():
     """
     Call this to activate testing in util.py
     """
-    global TESTS_ENABLED
-    TESTS_ENABLED = True
 
+    common.TESTS_ENABLED = True
 
 def clear_test_buckets():
     """
@@ -73,64 +74,64 @@ def clear_test_buckets():
     clear_test_template_context()
 
 
-SETUP_JINJA_ENVS = {}
+# SETUP_JINJA_ENVS = {}
 
 
-def get_jinja_env(template_loader, locale):
-    """
-    Set up the Jinja environment, 
+# def get_jinja_env(template_loader, locale):
+#     """
+#     Set up the Jinja environment, 
 
-    (In the future we may have another system for providing theming;
-    for now this is good enough.)
-    """
-    setup_gettext(locale)
+#     (In the future we may have another system for providing theming;
+#     for now this is good enough.)
+#     """
+#     setup_gettext(locale)
 
-    # If we have a jinja environment set up with this locale, just
-    # return that one.
-    if SETUP_JINJA_ENVS.has_key(locale):
-        return SETUP_JINJA_ENVS[locale]
+#     # If we have a jinja environment set up with this locale, just
+#     # return that one.
+#     if SETUP_JINJA_ENVS.has_key(locale):
+#         return SETUP_JINJA_ENVS[locale]
 
-    template_env = jinja2.Environment(
-        loader=template_loader, autoescape=True,
-        extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
+#     template_env = jinja2.Environment(
+#         loader=template_loader, autoescape=True,
+#         extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
 
-    template_env.install_gettext_callables(
-        mg_globals.translations.ugettext,
-        mg_globals.translations.ungettext)
+#     template_env.install_gettext_callables(
+#         mg_globals.translations.ugettext,
+#         mg_globals.translations.ungettext)
 
-    # All templates will know how to ...
-    # ... fetch all waiting messages and remove them from the queue
-    # ... construct a grid of thumbnails or other media
-    template_env.globals['fetch_messages'] = messages.fetch_messages
-    template_env.globals['gridify_list'] = gridify_list
-    template_env.globals['gridify_cursor'] = gridify_cursor
+#     # All templates will know how to ...
+#     # ... fetch all waiting messages and remove them from the queue
+#     # ... construct a grid of thumbnails or other media
+#     template_env.globals['fetch_messages'] = messages.fetch_messages
+#     template_env.globals['gridify_list'] = gridify_list
+#     template_env.globals['gridify_cursor'] = gridify_cursor
 
-    if exists(locale):
-        SETUP_JINJA_ENVS[locale] = template_env
+#     if exists(locale):
+#         SETUP_JINJA_ENVS[locale] = template_env
 
-    return template_env
-
-
-# We'll store context information here when doing unit tests
-TEMPLATE_TEST_CONTEXT = {}
+#     return template_env
 
 
-def render_template(request, template_path, context):
-    """
-    Render a template with context.
+# # We'll store context information here when doing unit tests
+# TEMPLATE_TEST_CONTEXT = {}
 
-    Always inserts the request into the context, so you don't have to.
-    Also stores the context if we're doing unit tests.  Helpful!
-    """
-    template = request.template_env.get_template(
-        template_path)
-    context['request'] = request
-    rendered = template.render(context)
 
-    if TESTS_ENABLED:
-        TEMPLATE_TEST_CONTEXT[template_path] = context
+# def render_template(request, template_path, context):
+#     """
+#     Render a template with context.
 
-    return rendered
+#     Always inserts the request into the context, so you don't have to.
+#     Also stores the context if we're doing unit tests.  Helpful!
+#     """
+#     template = request.template_env.get_template(
+#         template_path)
+#     context['request'] = request
+#     rendered = template.render(context)
+
+#     if TESTS_ENABLED:
+#         TEMPLATE_TEST_CONTEXT[template_path] = context
+
+#     return rendered
 
 
 def clear_test_template_context():
@@ -195,18 +196,18 @@ def import_component(import_string):
     func = getattr(module, func_name)
     return func
 
-_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+# _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
 
-def slugify(text, delim=u'-'):
-    """
-    Generates an ASCII-only slug. Taken from http://flask.pocoo.org/snippets/5/
-    """
-    result = []
-    for word in _punct_re.split(text.lower()):
-        word = word.encode('translit/long')
-        if word:
-            result.append(word)
-    return unicode(delim.join(result))
+# def slugify(text, delim=u'-'):
+#     """
+#     Generates an ASCII-only slug. Taken from http://flask.pocoo.org/snippets/5/
+#     """
+#     result = []
+#     for word in _punct_re.split(text.lower()):
+#         word = word.encode('translit/long')
+#         if word:
+#             result.append(word)
+#     return unicode(delim.join(result))
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ### Special email test stuff begins HERE
@@ -274,7 +275,7 @@ def send_email(from_addr, to_addrs, subject, message_body):
      - subject: subject of the email
      - message_body: email body text
     """
-    if TESTS_ENABLED or mg_globals.app_config['email_debug_mode']:
+    if common.TESTS_ENABLED or mg_globals.app_config['email_debug_mode']:
         mhost = FakeMhost()
     elif not mg_globals.app_config['email_debug_mode']:
         mhost = smtplib.SMTP(
@@ -296,7 +297,7 @@ def send_email(from_addr, to_addrs, subject, message_body):
     message['From'] = from_addr
     message['To'] = ', '.join(to_addrs)
 
-    if TESTS_ENABLED:
+    if common.TESTS_ENABLED:
         EMAIL_TEST_INBOX.append(message)
 
     if mg_globals.app_config['email_debug_mode']:
@@ -310,67 +311,67 @@ def send_email(from_addr, to_addrs, subject, message_body):
     return mhost.sendmail(from_addr, to_addrs, message.as_string())
 
 
-###################
-# Translation tools
-###################
+# ###################
+# # Translation tools
+# ###################
 
 
-TRANSLATIONS_PATH = pkg_resources.resource_filename(
-    'mediagoblin', 'i18n')
+# TRANSLATIONS_PATH = pkg_resources.resource_filename(
+#     'mediagoblin', 'i18n')
 
 
-def locale_to_lower_upper(locale):
-    """
-    Take a locale, regardless of style, and format it like "en-us"
-    """
-    if '-' in locale:
-        lang, country = locale.split('-', 1)
-        return '%s_%s' % (lang.lower(), country.upper())
-    elif '_' in locale:
-        lang, country = locale.split('_', 1)
-        return '%s_%s' % (lang.lower(), country.upper())
-    else:
-        return locale.lower()
+# def locale_to_lower_upper(locale):
+#     """
+#     Take a locale, regardless of style, and format it like "en-us"
+#     """
+#     if '-' in locale:
+#         lang, country = locale.split('-', 1)
+#         return '%s_%s' % (lang.lower(), country.upper())
+#     elif '_' in locale:
+#         lang, country = locale.split('_', 1)
+#         return '%s_%s' % (lang.lower(), country.upper())
+#     else:
+#         return locale.lower()
 
 
-def locale_to_lower_lower(locale):
-    """
-    Take a locale, regardless of style, and format it like "en_US"
-    """
-    if '_' in locale:
-        lang, country = locale.split('_', 1)
-        return '%s-%s' % (lang.lower(), country.lower())
-    else:
-        return locale.lower()
+# def locale_to_lower_lower(locale):
+#     """
+#     Take a locale, regardless of style, and format it like "en_US"
+#     """
+#     if '_' in locale:
+#         lang, country = locale.split('_', 1)
+#         return '%s-%s' % (lang.lower(), country.lower())
+#     else:
+#         return locale.lower()
 
 
-def get_locale_from_request(request):
-    """
-    Figure out what target language is most appropriate based on the
-    request
-    """
-    request_form = request.GET or request.POST
+# def get_locale_from_request(request):
+#     """
+#     Figure out what target language is most appropriate based on the
+#     request
+#     """
+#     request_form = request.GET or request.POST
 
-    if request_form.has_key('lang'):
-        return locale_to_lower_upper(request_form['lang'])
+#     if request_form.has_key('lang'):
+#         return locale_to_lower_upper(request_form['lang'])
 
-    accept_lang_matches = request.accept_language.best_matches()
+#     accept_lang_matches = request.accept_language.best_matches()
 
-    # Your routing can explicitly specify a target language
-    matchdict = request.matchdict or {}
+#     # Your routing can explicitly specify a target language
+#     matchdict = request.matchdict or {}
 
-    if matchdict.has_key('locale'):
-        target_lang = matchdict['locale']
-    elif request.session.has_key('target_lang'):
-        target_lang = request.session['target_lang']
-    # Pull the first acceptable language
-    elif accept_lang_matches:
-        target_lang = accept_lang_matches[0]
-    # Fall back to English
-    else:
-        target_lang = 'en'
+#     if matchdict.has_key('locale'):
+#         target_lang = matchdict['locale']
+#     elif request.session.has_key('target_lang'):
+#         target_lang = request.session['target_lang']
+#     # Pull the first acceptable language
+#     elif accept_lang_matches:
+#         target_lang = accept_lang_matches[0]
+#     # Fall back to English
+#     else:
+#         target_lang = 'en'
 
-    return locale_to_lower_upper(target_lang)
+#     return locale_to_lower_upper(target_lang)
 
 
 # A super strict version of the lxml.html cleaner class
@@ -424,7 +425,7 @@ def convert_to_tag_list_of_dicts(tag_string):
             if tag.strip() and tag.strip() not in [t['name'] for t in taglist]:
 
                 taglist.append({'name': tag.strip(),
-                                'slug': slugify(tag.strip())})
+                                'slug': url.slugify(tag.strip())})
     return taglist
 
 
@@ -472,88 +473,88 @@ def cleaned_markdown_conversion(text):
     return clean_html(MARKDOWN_INSTANCE.convert(text))
 
 
-SETUP_GETTEXTS = {}
+# SETUP_GETTEXTS = {}
 
-def setup_gettext(locale):
-    """
-    Setup the gettext instance based on this locale
-    """
-    # Later on when we have plugins we may want to enable the
-    # multi-translations system they have so we can handle plugin
-    # translations too
+# def setup_gettext(locale):
+#     """
+#     Setup the gettext instance based on this locale
+#     """
+#     # Later on when we have plugins we may want to enable the
+#     # multi-translations system they have so we can handle plugin
+#     # translations too
 
-    # TODO: fallback nicely on translations from pt_PT to pt if not
-    # available, etc.
-    if SETUP_GETTEXTS.has_key(locale):
-        this_gettext = SETUP_GETTEXTS[locale]
-    else:
-        this_gettext = gettext.translation(
-            'mediagoblin', TRANSLATIONS_PATH, [locale], fallback=True)
-        if exists(locale):
-            SETUP_GETTEXTS[locale] = this_gettext
+#     # TODO: fallback nicely on translations from pt_PT to pt if not
+#     # available, etc.
+#     if SETUP_GETTEXTS.has_key(locale):
+#         this_gettext = SETUP_GETTEXTS[locale]
+#     else:
+#         this_gettext = gettext.translation(
+#             'mediagoblin', TRANSLATIONS_PATH, [locale], fallback=True)
+#         if exists(locale):
+#             SETUP_GETTEXTS[locale] = this_gettext
 
-    mg_globals.setup_globals(
-        translations=this_gettext)
-
-
-# Force en to be setup before anything else so that
-# mg_globals.translations is never None
-setup_gettext('en')
+#     mg_globals.setup_globals(
+#         translations=this_gettext)
 
 
-def pass_to_ugettext(*args, **kwargs):
-    """
-    Pass a translation on to the appropriate ugettext method.
-
-    The reason we can't have a global ugettext method is because
-    mg_globals gets swapped out by the application per-request.
-    """
-    return mg_globals.translations.ugettext(
-        *args, **kwargs)
+# # Force en to be setup before anything else so that
+# # mg_globals.translations is never None
+# setup_gettext('en')
 
 
-def lazy_pass_to_ugettext(*args, **kwargs):
-    """
-    Lazily pass to ugettext.
+# def pass_to_ugettext(*args, **kwargs):
+#     """
+#     Pass a translation on to the appropriate ugettext method.
 
-    This is useful if you have to define a translation on a module
-    level but you need it to not translate until the time that it's
-    used as a string.
-    """
-    return LazyProxy(pass_to_ugettext, *args, **kwargs)
-
-
-def pass_to_ngettext(*args, **kwargs):
-    """
-    Pass a translation on to the appropriate ngettext method.
-
-    The reason we can't have a global ngettext method is because
-    mg_globals gets swapped out by the application per-request.
-    """
-    return mg_globals.translations.ngettext(
-        *args, **kwargs)
+#     The reason we can't have a global ugettext method is because
+#     mg_globals gets swapped out by the application per-request.
+#     """
+#     return mg_globals.translations.ugettext(
+#         *args, **kwargs)
 
 
-def lazy_pass_to_ngettext(*args, **kwargs):
-    """
-    Lazily pass to ngettext.
+# def lazy_pass_to_ugettext(*args, **kwargs):
+#     """
+#     Lazily pass to ugettext.
 
-    This is useful if you have to define a translation on a module
-    level but you need it to not translate until the time that it's
-    used as a string.
-    """
-    return LazyProxy(pass_to_ngettext, *args, **kwargs)
+#     This is useful if you have to define a translation on a module
+#     level but you need it to not translate until the time that it's
+#     used as a string.
+#     """
+#     return LazyProxy(pass_to_ugettext, *args, **kwargs)
 
 
-def fake_ugettext_passthrough(string):
-    """
-    Fake a ugettext call for extraction's sake ;)
+# def pass_to_ngettext(*args, **kwargs):
+#     """
+#     Pass a translation on to the appropriate ngettext method.
 
-    In wtforms there's a separate way to define a method to translate
-    things... so we just need to mark up the text so that it can be
-    extracted, not so that it's actually run through gettext.
-    """
-    return string
+#     The reason we can't have a global ngettext method is because
+#     mg_globals gets swapped out by the application per-request.
+#     """
+#     return mg_globals.translations.ngettext(
+#         *args, **kwargs)
+
+
+# def lazy_pass_to_ngettext(*args, **kwargs):
+#     """
+#     Lazily pass to ngettext.
+
+#     This is useful if you have to define a translation on a module
+#     level but you need it to not translate until the time that it's
+#     used as a string.
+#     """
+#     return LazyProxy(pass_to_ngettext, *args, **kwargs)
+
+
+# def fake_ugettext_passthrough(string):
+#     """
+#     Fake a ugettext call for extraction's sake ;)
+
+#     In wtforms there's a separate way to define a method to translate
+#     things... so we just need to mark up the text so that it can be
+#     extracted, not so that it's actually run through gettext.
+#     """
+#     return string
 
 
 PAGINATION_DEFAULT_PER_PAGE = 30
@@ -646,33 +647,33 @@ class Pagination(object):
             request.path_info, request.GET, page_no)
 
 
-def gridify_list(this_list, num_cols=5):
-    """
-    Generates a list of lists where each sub-list's length depends on
-    the number of columns in the list
-    """
-    grid = []
+# def gridify_list(this_list, num_cols=5):
+#     """
+#     Generates a list of lists where each sub-list's length depends on
+#     the number of columns in the list
+#     """
+#     grid = []
 
-    # Figure out how many rows we should have
-    num_rows = int(ceil(float(len(this_list)) / num_cols))
+#     # Figure out how many rows we should have
+#     num_rows = int(ceil(float(len(this_list)) / num_cols))
 
-    for row_num in range(num_rows):
-        slice_min = row_num * num_cols
-        slice_max = (row_num + 1) * num_cols
+#     for row_num in range(num_rows):
+#         slice_min = row_num * num_cols
+#         slice_max = (row_num + 1) * num_cols
 
-        row = this_list[slice_min:slice_max]
+#         row = this_list[slice_min:slice_max]
 
-        grid.append(row)
+#         grid.append(row)
 
-    return grid
+#     return grid
 
 
-def gridify_cursor(this_cursor, num_cols=5):
-    """
-    Generates a list of lists where each sub-list's length depends on
-    the number of columns in the list
-    """
-    return gridify_list(list(this_cursor), num_cols)
+# def gridify_cursor(this_cursor, num_cols=5):
+#     """
+#     Generates a list of lists where each sub-list's length depends on
+#     the number of columns in the list
+#     """
+#     return gridify_list(list(this_cursor), num_cols)
 
 
 def render_404(request):

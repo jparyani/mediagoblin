@@ -25,7 +25,7 @@ from mediagoblin.db.util import ObjectId
 from mediagoblin.util import (
     render_to_response, redirect, cleaned_markdown_conversion, \
     convert_to_tag_list_of_dicts)
-from mediagoblin.util import pass_to_ugettext as _
+from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
 from mediagoblin.process_media import process_media, mark_entry_failed

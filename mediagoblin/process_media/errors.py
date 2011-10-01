@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.util import lazy_pass_to_ugettext as _
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 class BaseProcessingFail(Exception):
     """

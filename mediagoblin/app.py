@@ -21,6 +21,7 @@ import routes
 from webob import Request, exc
 
 from mediagoblin import routing, util, middleware
+from mediagoblin.tools import translate, template
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init import (get_jinja_loader, get_staticdirector,
@@ -123,9 +124,9 @@ class MediaGoblinApp(object):
         # Attach self as request.app
         # Also attach a few utilities from request.app for convenience?
         request.app = self
-        request.locale = util.get_locale_from_request(request)
+        request.locale = translate.get_locale_from_request(request)
 
-        request.template_env = util.get_jinja_env(
+        request.template_env = template.get_jinja_env(
             self.template_loader, request.locale)
         request.db = self.db
         request.staticdirect = self.staticdirector
