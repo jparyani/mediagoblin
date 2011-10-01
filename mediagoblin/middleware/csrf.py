@@ -34,16 +34,18 @@ class CsrfForm(Form):
     """Simple form to handle rendering a CSRF token and confirming it
     is included in the POST."""
 
-    csrf_token = HiddenField("", 
+    csrf_token = HiddenField("",
                              [validators.Required()])
+
 
 def render_csrf_form_token(request):
     """Render the CSRF token in a format suitable for inclusion in a
     form."""
 
-    form = CsrfForm(csrf_token = request.environ['CSRF_TOKEN'])
+    form = CsrfForm(csrf_token=request.environ['CSRF_TOKEN'])
 
     return form.csrf_token
+
 
 class CsrfMiddleware(object):
     """CSRF Protection Middleware
@@ -87,7 +89,8 @@ class CsrfMiddleware(object):
         response.set_cookie(
             mg_globals.app_config['csrf_cookie_name'],
             request.environ['CSRF_TOKEN'],
-            max_age=60*60*24*7*52, path='/',
+            max_age=60 * 60 * 24 * 7 * 52,
+            path='/',
             domain=mg_globals.app_config.get('csrf_cookie_domain', None),
             secure=(request.scheme.lower() == 'https'),
             httponly=True)
@@ -98,10 +101,9 @@ class CsrfMiddleware(object):
     def _make_token(self, request):
         """Generate a new token to use for CSRF protection."""
 
-        return hashlib.md5("%s%s" % 
-                           (randrange(0, self.MAX_CSRF_KEY), 
-                            mg_globals.app_config['secret_key'])
-                           ).hexdigest()
+        return hashlib.md5("%s%s" %
+                           (randrange(0, self.MAX_CSRF_KEY),
+                            mg_globals.app_config['secret_key'])).hexdigest()
 
     def verify_tokens(self, request):
         """Verify that the CSRF Cookie exists and that it matches the
@@ -109,7 +111,7 @@ class CsrfMiddleware(object):
 
         # confirm the cookie token was presented
         cookie_token = request.cookies.get(
-            mg_globals.app_config['csrf_cookie_name'], 
+            mg_globals.app_config['csrf_cookie_name'],
             None)
 
         if cookie_token is None:
@@ -128,4 +130,3 @@ class CsrfMiddleware(object):
         # either the tokens didn't match or the form token wasn't
         # present; either way, the request is denied
         return HTTPForbidden()
-
