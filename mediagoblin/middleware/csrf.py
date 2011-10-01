@@ -77,7 +77,10 @@ class CsrfMiddleware(object):
         # if this is a non-"safe" request (ie, one that could have
         # side effects), confirm that the CSRF tokens are present and
         # valid
-        if request.method not in self.SAFE_HTTP_METHODS:
+        if request.method not in self.SAFE_HTTP_METHODS \
+            and ('gmg.verify_csrf' in request.environ or
+                 'paste.testing' not in request.environ):
+
             return self.verify_tokens(request)
 
     def process_response(self, request, response):
