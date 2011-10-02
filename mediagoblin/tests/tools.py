@@ -21,7 +21,7 @@ import os, shutil
 from paste.deploy import loadapp
 from webtest import TestApp
 
-from mediagoblin import util
+from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.decorators import _make_safe
 from mediagoblin.db.open import setup_connection_and_db_from_config
@@ -59,7 +59,7 @@ def get_test_app(dump_old_app=True):
     suicide_if_bad_celery_environ()
 
     # Make sure we've turned on testing
-    util._activate_testing()
+    testing._activate_testing()
 
     # Leave this imported as it sets up celery.
     from mediagoblin.init.celery import from_tests
@@ -117,7 +117,7 @@ def setup_fresh_app(func):
     """
     def wrapper(*args, **kwargs):
         test_app = get_test_app()
-        util.clear_test_buckets()
+        testing.clear_test_buckets()
         return func(test_app, *args, **kwargs)
 
     return _make_safe(wrapper, func)

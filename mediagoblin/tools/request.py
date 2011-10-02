@@ -14,20 +14,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin.db.util import ObjectId
 
-import wtforms
+def setup_user_in_request(request):
+    """
+    Examine a request and tack on a request.user parameter if that's
+    appropriate.
+    """
+    if not request.session.has_key('user_id'):
+        request.user = None
+        return
 
-from mediagoblin.tools.text import tag_length_validator
-from mediagoblin.tools.translate import fake_ugettext_passthrough as _
+    user = None
+    user = request.app.db.User.one(
+        {'_id': ObjectId(request.session['user_id'])})
 
+    if not user:
+        # Something's wrong... this user doesn't exist?  Invalidate
+        # this session.
+        request.session.invalidate()
 
-class SubmitStartForm(wtforms.Form):
-    file = wtforms.FileField(_('File'))
-    title = wtforms.TextField(
-        _('Title'),
-        [wtforms.validators.Length(min=0, max=500)])
-    description = wtforms.TextAreaField(
-        _('Description of this work'))
-    tags = wtforms.TextField(
-        _('Tags'),
-        [tag_length_validator])
+    request.user = user

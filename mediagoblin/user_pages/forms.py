@@ -16,7 +16,7 @@
 
 import wtforms
 
-from mediagoblin.util import fake_ugettext_passthrough as _
+from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 
 
 class MediaCommentForm(wtforms.Form):

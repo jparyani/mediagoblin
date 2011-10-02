@@ -15,9 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.tests.tools import setup_fresh_app
-from mediagoblin import util
 from mediagoblin import mg_globals
-
+from mediagoblin.tools import text
 
 @setup_fresh_app
 def test_list_of_dicts_conversion(test_app):
@@ -28,23 +27,23 @@ def test_list_of_dicts_conversion(test_app):
     function performs the reverse operation when populating a form to edit tags.
     """
     # Leading, trailing, and internal whitespace should be removed and slugified
-    assert util.convert_to_tag_list_of_dicts('sleep , 6    AM, chainsaw! ') == [
+    assert text.convert_to_tag_list_of_dicts('sleep , 6    AM, chainsaw! ') == [
                               {'name': u'sleep', 'slug': u'sleep'},
                               {'name': u'6 AM', 'slug': u'6-am'},
                               {'name': u'chainsaw!', 'slug': u'chainsaw'}]
 
     # If the user enters two identical tags, record only one of them
-    assert util.convert_to_tag_list_of_dicts('echo,echo') == [{'name': u'echo',
+    assert text.convert_to_tag_list_of_dicts('echo,echo') == [{'name': u'echo',
                                                                'slug': u'echo'}]
 
     # Make sure converting the list of dicts to a string works
-    assert util.media_tags_as_string([{'name': u'yin', 'slug': u'yin'},
+    assert text.media_tags_as_string([{'name': u'yin', 'slug': u'yin'},
                                       {'name': u'yang', 'slug': u'yang'}]) == \
                                       u'yin,yang'
 
     # If the tag delimiter is a space then we expect different results
     mg_globals.app_config['tags_delimiter'] = u' '
-    assert util.convert_to_tag_list_of_dicts('unicorn ceramic nazi') == [
+    assert text.convert_to_tag_list_of_dicts('unicorn ceramic nazi') == [
                                        {'name': u'unicorn', 'slug': u'unicorn'},
                                        {'name': u'ceramic', 'slug': u'ceramic'},
                                        {'name': u'nazi', 'slug': u'nazi'}]

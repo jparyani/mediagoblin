@@ -14,20 +14,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin import mg_globals
 
-import wtforms
+def delete_media_files(media):
+    """
+    Delete all files associated with a MediaEntry
 
-from mediagoblin.tools.text import tag_length_validator
-from mediagoblin.tools.translate import fake_ugettext_passthrough as _
+    Arguments:
+     - media: A MediaEntry document
+    """
+    for listpath in media['media_files'].itervalues():
+        mg_globals.public_store.delete_file(
+            listpath)
 
-
-class SubmitStartForm(wtforms.Form):
-    file = wtforms.FileField(_('File'))
-    title = wtforms.TextField(
-        _('Title'),
-        [wtforms.validators.Length(min=0, max=500)])
-    description = wtforms.TextAreaField(
-        _('Description of this work'))
-    tags = wtforms.TextField(
-        _('Tags'),
-        [tag_length_validator])
+    for attachment in media['attachment_files']:
+        mg_globals.public_store.delete_file(
+            attachment['filepath'])

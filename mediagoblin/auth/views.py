@@ -21,8 +21,8 @@ from webob import exc
 
 from mediagoblin import messages
 from mediagoblin import mg_globals
-from mediagoblin.util import render_to_response, redirect, render_404
-from mediagoblin.util import pass_to_ugettext as _
+from mediagoblin.tools.response import render_to_response, redirect, render_404
+from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.db.util import ObjectId, InvalidId
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms

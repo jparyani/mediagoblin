@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011 Free Software Foundation, Inc
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -14,20 +14,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
 
-import wtforms
+DISPLAY_IMAGE_FETCHING_ORDER = [u'medium', u'original', u'thumb']
 
-from mediagoblin.tools.text import tag_length_validator
-from mediagoblin.tools.translate import fake_ugettext_passthrough as _
+global TESTS_ENABLED
+TESTS_ENABLED = False
 
+def import_component(import_string):
+    """
+    Import a module component defined by STRING.  Probably a method,
+    class, or global variable.
 
-class SubmitStartForm(wtforms.Form):
-    file = wtforms.FileField(_('File'))
-    title = wtforms.TextField(
-        _('Title'),
-        [wtforms.validators.Length(min=0, max=500)])
-    description = wtforms.TextAreaField(
-        _('Description of this work'))
-    tags = wtforms.TextField(
-        _('Tags'),
-        [tag_length_validator])
+    Args:
+     - import_string: a string that defines what to import.  Written
+       in the format of "module1.module2:component"
+    """
+    module_name, func_name = import_string.split(':', 1)
+    __import__(module_name)
+    module = sys.modules[module_name]
+    func = getattr(module, func_name)
+    return func

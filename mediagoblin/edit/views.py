@@ -25,14 +25,15 @@ from werkzeug.utils import secure_filename
 
 from mediagoblin import messages
 from mediagoblin import mg_globals
-from mediagoblin.util import (
-    render_to_response, redirect, clean_html, convert_to_tag_list_of_dicts,
-    media_tags_as_string, cleaned_markdown_conversion)
-from mediagoblin.util import pass_to_ugettext as _
+
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry
-
+from mediagoblin.tools.response import render_to_response, redirect
+from mediagoblin.tools.translate import pass_to_ugettext as _
+from mediagoblin.tools.text import (
+    clean_html, convert_to_tag_list_of_dicts,
+    media_tags_as_string, cleaned_markdown_conversion)
 
 @get_user_media_entry
 @require_active_login

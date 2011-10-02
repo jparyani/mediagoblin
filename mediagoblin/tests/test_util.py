@@ -16,10 +16,9 @@
 
 import email
 
-from mediagoblin import util
+from mediagoblin.tools import common, url, translate, mail, text, testing
 
-
-util._activate_testing()
+testing._activate_testing()
 
 
 def _import_component_testing_method(silly_string):
@@ -28,7 +27,7 @@ def _import_component_testing_method(silly_string):
 
 
 def test_import_component():
-    imported_func = util.import_component(
+    imported_func = common.import_component(
         'mediagoblin.tests.test_util:_import_component_testing_method')
     result = imported_func('hooobaladoobala')
     expected = u"'hooobaladoobala' is the silliest string I've ever seen"
@@ -36,10 +35,10 @@ def test_import_component():
 
 
 def test_send_email():
-    util._clear_test_inboxes()
+    mail._clear_test_inboxes()
 
     # send the email
-    util.send_email(
+    mail.send_email(
         "sender@mediagoblin.example.org",
         ["amanda@example.org", "akila@example.org"],
         "Testing is so much fun!",
@@ -48,8 +47,8 @@ def test_send_email():
 I hope you like unit tests JUST AS MUCH AS I DO!""")
 
     # check the main inbox
-    assert len(util.EMAIL_TEST_INBOX) == 1
-    message = util.EMAIL_TEST_INBOX.pop()
+    assert len(mail.EMAIL_TEST_INBOX) == 1
+    message = mail.EMAIL_TEST_INBOX.pop()
     assert message['From'] == "sender@mediagoblin.example.org"
     assert message['To'] == "amanda@example.org, akila@example.org"
     assert message['Subject'] == "Testing is so much fun!"
@@ -58,8 +57,8 @@ I hope you like unit tests JUST AS MUCH AS I DO!""")
 I hope you like unit tests JUST AS MUCH AS I DO!"""
 
     # Check everything that the FakeMhost.sendmail() method got is correct
-    assert len(util.EMAIL_TEST_MBOX_INBOX) == 1
-    mbox_dict = util.EMAIL_TEST_MBOX_INBOX.pop()
+    assert len(mail.EMAIL_TEST_MBOX_INBOX) == 1
+    mbox_dict = mail.EMAIL_TEST_MBOX_INBOX.pop()
     assert mbox_dict['from'] == "sender@mediagoblin.example.org"
     assert mbox_dict['to'] == ["amanda@example.org", "akila@example.org"]
     mbox_message = email.message_from_string(mbox_dict['message'])
@@ -71,43 +70,43 @@ I hope you like unit tests JUST AS MUCH AS I DO!"""
 I hope you like unit tests JUST AS MUCH AS I DO!"""
 
 def test_slugify():
-    assert util.slugify('a walk in the park') == 'a-walk-in-the-park'
-    assert util.slugify('A Walk in the Park') == 'a-walk-in-the-park'
-    assert util.slugify('a  walk in the park') == 'a-walk-in-the-park'
-    assert util.slugify('a walk in-the-park') == 'a-walk-in-the-park'
-    assert util.slugify('a w@lk in the park?') == 'a-w-lk-in-the-park'
-    assert util.slugify(u'a walk in the par\u0107') == 'a-walk-in-the-parc'
-    assert util.slugify(u'\u00E0\u0042\u00E7\u010F\u00EB\u0066') == 'abcdef'
+    assert url.slugify('a walk in the park') == 'a-walk-in-the-park'
+    assert url.slugify('A Walk in the Park') == 'a-walk-in-the-park'
+    assert url.slugify('a  walk in the park') == 'a-walk-in-the-park'
+    assert url.slugify('a walk in-the-park') == 'a-walk-in-the-park'
+    assert url.slugify('a w@lk in the park?') == 'a-w-lk-in-the-park'
+    assert url.slugify(u'a walk in the par\u0107') == 'a-walk-in-the-parc'
+    assert url.slugify(u'\u00E0\u0042\u00E7\u010F\u00EB\u0066') == 'abcdef'
 
 def test_locale_to_lower_upper():
     """
     Test cc.i18n.util.locale_to_lower_upper()
     """
-    assert util.locale_to_lower_upper('en') == 'en'
-    assert util.locale_to_lower_upper('en_US') == 'en_US'
-    assert util.locale_to_lower_upper('en-us') == 'en_US'
+    assert translate.locale_to_lower_upper('en') == 'en'
+    assert translate.locale_to_lower_upper('en_US') == 'en_US'
+    assert translate.locale_to_lower_upper('en-us') == 'en_US'
 
     # crazy renditions.  Useful?
-    assert util.locale_to_lower_upper('en-US') == 'en_US'
-    assert util.locale_to_lower_upper('en_us') == 'en_US'
+    assert translate.locale_to_lower_upper('en-US') == 'en_US'
+    assert translate.locale_to_lower_upper('en_us') == 'en_US'
 
 
 def test_locale_to_lower_lower():
     """
     Test cc.i18n.util.locale_to_lower_lower()
     """
-    assert util.locale_to_lower_lower('en') == 'en'
-    assert util.locale_to_lower_lower('en_US') == 'en-us'
-    assert util.locale_to_lower_lower('en-us') == 'en-us'
+    assert translate.locale_to_lower_lower('en') == 'en'
+    assert translate.locale_to_lower_lower('en_US') == 'en-us'
+    assert translate.locale_to_lower_lower('en-us') == 'en-us'
 
     # crazy renditions.  Useful?
-    assert util.locale_to_lower_lower('en-US') == 'en-us'
-    assert util.locale_to_lower_lower('en_us') == 'en-us'
+    assert translate.locale_to_lower_lower('en-US') == 'en-us'
+    assert translate.locale_to_lower_lower('en_us') == 'en-us'
 
 
 def test_html_cleaner():
     # Remove images
-    result = util.clean_html(
+    result = text.clean_html(
         '<p>Hi everybody! '
         '<img src="http://example.org/huge-purple-barney.png" /></p>\n'
         '<p>:)</p>')
@@ -118,7 +117,7 @@ def test_html_cleaner():
         '</div>')
 
     # Remove evil javascript
-    result = util.clean_html(
+    result = text.clean_html(
         '<p><a href="javascript:nasty_surprise">innocent link!</a></p>')
     assert result == (
         '<p><a href="">innocent link!</a></p>')

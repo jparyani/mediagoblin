@@ -17,7 +17,7 @@
 import wtforms
 import re
 
-from mediagoblin.util import fake_ugettext_passthrough as _
+from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 
 
 class RegistrationForm(wtforms.Form):
