@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from medigoblin.storage import StorageInterface, clean_listy_filepath
+from mediagoblin.storage import StorageInterface, clean_listy_filepath
 
 
 class MountStorage(StorageInterface):
