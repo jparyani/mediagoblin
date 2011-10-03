@@ -21,7 +21,9 @@ import os, shutil
 from paste.deploy import loadapp
 from webtest import TestApp
 
+from mediagoblin import mg_globals
 from mediagoblin.tools import testing
+from mediagoblin.middleware.testing import TestingMiddleware
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.decorators import _make_safe
 from mediagoblin.db.open import setup_connection_and_db_from_config
@@ -102,6 +104,10 @@ def get_test_app(dump_old_app=True):
     # setup app and return
     test_app = loadapp(
         'config:' + TEST_SERVER_CONFIG)
+
+    # Insert the TestingMiddleware, which can do some
+    # sanity checks on every request/response.
+    mg_globals.app.middleware.insert(0, TestingMiddleware(mg_globals.app))
 
     app = TestApp(test_app)
     MGOBLIN_APP = app
