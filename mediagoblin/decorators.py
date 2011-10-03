@@ -45,7 +45,7 @@ def require_active_login(controller):
             return exc.HTTPFound(
                 location="%s?next=%s" % (
                     request.urlgen("mediagoblin.auth.login"),
-                    request.path_info))
+                    request.full_path))
 
         return controller(request, *args, **kwargs)
 

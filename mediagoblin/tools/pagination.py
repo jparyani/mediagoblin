@@ -106,4 +106,4 @@ class Pagination(object):
         This is a nice wrapper around get_page_url_explicit()
         """ 
         return self.get_page_url_explicit(
-            request.path_info, request.GET, page_no)
+            request.full_path, request.GET, page_no)

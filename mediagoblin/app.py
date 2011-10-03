@@ -117,6 +117,17 @@ class MediaGoblinApp(object):
         path_info = request.path_info
         route_match = self.routing.match(path_info)
 
+        # By using fcgi, mediagoblin can run under a base path
+        # like /mediagoblin/. request.path_info contains the
+        # path inside mediagoblin. If the something needs the
+        # full path of the current page, that should include
+        # the basepath.
+        # Note: urlgen and routes are fine!
+        request.full_path = environ["SCRIPT_NAME"] + request.path_info
+        # python-routes uses SCRIPT_NAME. So let's use that too.
+        # The other option would be:
+        # request.full_path = environ["SCRIPT_URL"]
+
         ## Attach utilities to the request object
         request.matchdict = route_match
         request.urlgen = routes.URLGenerator(self.routing, environ)
