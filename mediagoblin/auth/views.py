@@ -196,7 +196,7 @@ def resend_activation(request):
     Resend the activation email.
     """
 
-    if not request.GET.has_key('userid') or not request.GET.has_key('token'):
+    if request.user is None:
         messages.add_message(
             request,
             messages.ERROR,
