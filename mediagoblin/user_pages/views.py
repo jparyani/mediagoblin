@@ -133,14 +133,19 @@ def media_post_comment(request):
     comment['media_entry'] = ObjectId(request.matchdict['media'])
     comment['author'] = request.user['_id']
     comment['content'] = unicode(request.POST['comment_content'])
-
     comment['content_html'] = cleaned_markdown_conversion(comment['content'])
 
-    comment.save()
+    if not comment['content'].strip():
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _("Empty comments are not allowed."))
+    else:
+        comment.save()
 
-    messages.add_message(
-        request, messages.SUCCESS,
-        'Comment posted!')
+        messages.add_message(
+            request, messages.SUCCESS,
+            'Comment posted!')
 
     return redirect(request, 'mediagoblin.user_pages.media_home',
         media = request.matchdict['media'],
