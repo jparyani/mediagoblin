@@ -196,6 +196,14 @@ def resend_activation(request):
     Resend the activation email.
     """
 
+    if request.user["email_verified"]:
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _("You've already verified your email address!"))
+        
+        return redirect(request, "mediagoblin.user_pages.user_home", user=request.user['username'])
+
     if request.user is None:
         messages.add_message(
             request,
