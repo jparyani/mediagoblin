@@ -145,7 +145,7 @@ def media_post_comment(request):
 
         messages.add_message(
             request, messages.SUCCESS,
-            'Comment posted!')
+            _('Comment posted!'))
 
     return redirect(request, 'mediagoblin.user_pages.media_home',
         media = request.matchdict['media'],
