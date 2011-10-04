@@ -17,8 +17,8 @@
 
 import wtforms
 
-from mediagoblin.util import tag_length_validator
-from mediagoblin.util import fake_ugettext_passthrough as _
+from mediagoblin.tools.text import tag_length_validator
+from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 
 
 class SubmitStartForm(wtforms.Form):

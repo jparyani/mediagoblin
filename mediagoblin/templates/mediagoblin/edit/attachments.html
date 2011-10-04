@@ -49,6 +49,7 @@
       <div class="form_submit_buttons">
         <a href="{{ media.url_for_self(request.urlgen) }}">Cancel</a>
         <input type="submit" value="Save changes" class="button" />
+	{{ csrf_token }}
       </div>
     </div>
   </form>

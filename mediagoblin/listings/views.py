@@ -16,7 +16,8 @@
 
 from mediagoblin.db.util import DESCENDING
 
-from mediagoblin.util import Pagination, render_to_response
+from mediagoblin.tools.pagination import Pagination
+from mediagoblin.tools.response import render_to_response
 from mediagoblin.decorators import uses_pagination
 
 from werkzeug.contrib.atom import AtomFeed

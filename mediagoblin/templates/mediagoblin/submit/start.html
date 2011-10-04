@@ -26,7 +26,8 @@
       <h1>{% trans %}Submit yer media{% endtrans %}</h1>
       {{ wtforms_util.render_divs(submit_form) }}
       <div class="form_submit_buttons">
-      <input type="submit" value="{% trans %}Submit{% endtrans %}" class="button" />
+        {{ csrf_token }}
+        <input type="submit" value="{% trans %}Submit{% endtrans %}" class="button" />
       </div>
     </div>
   </form>

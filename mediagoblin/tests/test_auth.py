@@ -22,7 +22,7 @@ from nose.tools import assert_equal
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.tests.tools import setup_fresh_app
 from mediagoblin import mg_globals
-from mediagoblin import util
+from mediagoblin.tools import template, mail
 
 
 ########################
@@ -76,16 +76,16 @@ def test_register_views(test_app):
 
     test_app.get('/auth/register/')
     # Make sure it rendered with the appropriate template
-    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+    assert template.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/auth/register.html')
 
     # Try to register without providing anything, should error
     # --------------------------------------------------------
 
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     test_app.post(
         '/auth/register/', {})
-    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
     form = context['register_form']
     assert form.username.errors == [u'This field is required.']
     assert form.password.errors == [u'This field is required.']
@@ -96,14 +96,14 @@ def test_register_views(test_app):
     # --------------------------------------------------------
 
     ## too short
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     test_app.post(
         '/auth/register/', {
             'username': 'l',
             'password': 'o',
             'confirm_password': 'o',
             'email': 'l'})
-    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
     form = context['register_form']
 
     assert form.username.errors == [
@@ -112,12 +112,12 @@ def test_register_views(test_app):
         u'Field must be between 6 and 30 characters long.']
 
     ## bad form
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     test_app.post(
         '/auth/register/', {
             'username': '@_@',
             'email': 'lollerskates'})
-    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
     form = context['register_form']
 
     assert form.username.errors == [
@@ -126,12 +126,12 @@ def test_register_views(test_app):
         u'Invalid email address.']
 
     ## mismatching passwords
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     test_app.post(
         '/auth/register/', {
             'password': 'herpderp',
             'confirm_password': 'derpherp'})
-    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
     form = context['register_form']
 
     assert form.password.errors == [
@@ -142,7 +142,7 @@ def test_register_views(test_app):
 
     # Successful register
     # -------------------
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.post(
         '/auth/register/', {
             'username': 'happygirl',
@@ -155,7 +155,7 @@ def test_register_views(test_app):
     assert_equal(
         urlparse.urlsplit(response.location)[2],
         '/u/happygirl/')
-    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+    assert template.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/user_pages/user.html')
 
     ## Make sure user is in place
@@ -166,15 +166,15 @@ def test_register_views(test_app):
     assert new_user['email_verified'] == False
 
     ## Make sure user is logged in
-    request = util.TEMPLATE_TEST_CONTEXT[
+    request = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/user_pages/user.html']['request']
     assert request.session['user_id'] == unicode(new_user['_id'])
 
     ## Make sure we get email confirmation, and try verifying
-    assert len(util.EMAIL_TEST_INBOX) == 1
-    message = util.EMAIL_TEST_INBOX.pop()
+    assert len(mail.EMAIL_TEST_INBOX) == 1
+    message = mail.EMAIL_TEST_INBOX.pop()
     assert message['To'] == 'happygrrl@example.org'
-    email_context = util.TEMPLATE_TEST_CONTEXT[
+    email_context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/auth/verification_email.txt']
     assert email_context['verification_url'] in message.get_payload(decode=True)
 
@@ -190,12 +190,12 @@ def test_register_views(test_app):
         new_user['verification_key']]
 
     ## Try verifying with bs verification key, shouldn't work
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.get(
         "/auth/verify_email/?userid=%s&token=total_bs" % unicode(
             new_user['_id']))
     response.follow()
-    context = util.TEMPLATE_TEST_CONTEXT[
+    context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/user_pages/user.html']
     # assert context['verification_successful'] == True
     # TODO: Would be good to test messages here when we can do so...
@@ -206,10 +206,10 @@ def test_register_views(test_app):
     assert new_user['email_verified'] == False
 
     ## Verify the email activation works
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.get("%s?%s" % (path, get_params))
     response.follow()
-    context = util.TEMPLATE_TEST_CONTEXT[
+    context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/user_pages/user.html']
     # assert context['verification_successful'] == True
     # TODO: Would be good to test messages here when we can do so...
@@ -222,7 +222,7 @@ def test_register_views(test_app):
     # Uniqueness checks
     # -----------------
     ## We shouldn't be able to register with that user twice
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.post(
         '/auth/register/', {
             'username': 'happygirl',
@@ -230,7 +230,7 @@ def test_register_views(test_app):
             'confirm_password': 'iamsohappy2',
             'email': 'happygrrl2@example.org'})
 
-    context = util.TEMPLATE_TEST_CONTEXT[
+    context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/auth/register.html']
     form = context['register_form']
     assert form.username.errors == [
@@ -240,7 +240,7 @@ def test_register_views(test_app):
 
     ### Oops, forgot the password
     # -------------------
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.post(
         '/auth/forgot_password/',
         {'username': 'happygirl'})
@@ -250,14 +250,14 @@ def test_register_views(test_app):
     assert_equal(
         urlparse.urlsplit(response.location)[2],
         '/auth/forgot_password/email_sent/')
-    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+    assert template.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/auth/fp_email_sent.html')
 
     ## Make sure link to change password is sent by email
-    assert len(util.EMAIL_TEST_INBOX) == 1
-    message = util.EMAIL_TEST_INBOX.pop()
+    assert len(mail.EMAIL_TEST_INBOX) == 1
+    message = mail.EMAIL_TEST_INBOX.pop()
     assert message['To'] == 'happygrrl@example.org'
-    email_context = util.TEMPLATE_TEST_CONTEXT[
+    email_context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/auth/fp_verification_email.txt']
     #TODO - change the name of verification_url to something forgot-password-ish
     assert email_context['verification_url'] in message.get_payload(decode=True)
@@ -277,14 +277,14 @@ def test_register_views(test_app):
     assert (new_user['fp_token_expire'] - datetime.datetime.now()).days == 9
 
     ## Try using a bs password-changing verification key, shouldn't work
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.get(
         "/auth/forgot_password/verify/?userid=%s&token=total_bs" % unicode(
             new_user['_id']), status=400)
     assert response.status == '400 Bad Request'
 
     ## Try using an expired token to change password, shouldn't work
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     real_token_expiration = new_user['fp_token_expire']
     new_user['fp_token_expire'] = datetime.datetime.now()
     new_user.save()
@@ -294,12 +294,12 @@ def test_register_views(test_app):
     new_user.save()
 
     ## Verify step 1 of password-change works -- can see form to change password
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.get("%s?%s" % (path, get_params))
-    assert util.TEMPLATE_TEST_CONTEXT.has_key('mediagoblin/auth/change_fp.html')
+    assert template.TEMPLATE_TEST_CONTEXT.has_key('mediagoblin/auth/change_fp.html')
 
     ## Verify step 2.1 of password-change works -- report success to user
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.post(
         '/auth/forgot_password/verify/', {
             'userid': parsed_get_params['userid'],
@@ -307,11 +307,11 @@ def test_register_views(test_app):
             'confirm_password': 'iamveryveryhappy',
             'token': parsed_get_params['token']})
     response.follow()
-    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+    assert template.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/auth/fp_changed_success.html')
 
     ## Verify step 2.2 of password-change works -- login w/ new password success
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.post(
         '/auth/login/', {
             'username': u'happygirl',
@@ -322,7 +322,7 @@ def test_register_views(test_app):
     assert_equal(
         urlparse.urlsplit(response.location)[2],
         '/')
-    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+    assert template.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/root.html')
 
 
@@ -341,61 +341,61 @@ def test_authentication_views(test_app):
     # Get login
     # ---------
     test_app.get('/auth/login/')
-    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+    assert template.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/auth/login.html')
 
     # Failed login - blank form
     # -------------------------
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.post('/auth/login/')
-    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
     form = context['login_form']
     assert form.username.errors == [u'This field is required.']
     assert form.password.errors == [u'This field is required.']
 
     # Failed login - blank user
     # -------------------------
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.post(
         '/auth/login/', {
             'password': u'toast'})
-    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
     form = context['login_form']
     assert form.username.errors == [u'This field is required.']
 
     # Failed login - blank password
     # -----------------------------
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.post(
         '/auth/login/', {
             'username': u'chris'})
-    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
     form = context['login_form']
     assert form.password.errors == [u'This field is required.']
 
     # Failed login - bad user
     # -----------------------
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.post(
         '/auth/login/', {
             'username': u'steve',
             'password': 'toast'})
-    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
     assert context['login_failed']
 
     # Failed login - bad password
     # ---------------------------
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.post(
         '/auth/login/', {
             'username': u'chris',
             'password': 'jam'})
-    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
     assert context['login_failed']
 
     # Successful login
     # ----------------
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.post(
         '/auth/login/', {
             'username': u'chris',
@@ -406,17 +406,17 @@ def test_authentication_views(test_app):
     assert_equal(
         urlparse.urlsplit(response.location)[2],
         '/')
-    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+    assert template.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/root.html')
 
     # Make sure user is in the session
-    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
     session = context['request'].session
     assert session['user_id'] == unicode(test_user['_id'])
 
     # Successful logout
     # -----------------
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.get('/auth/logout/')
 
     # Should be redirected to index page
@@ -424,17 +424,17 @@ def test_authentication_views(test_app):
     assert_equal(
         urlparse.urlsplit(response.location)[2],
         '/')
-    assert util.TEMPLATE_TEST_CONTEXT.has_key(
+    assert template.TEMPLATE_TEST_CONTEXT.has_key(
         'mediagoblin/root.html')
 
     # Make sure the user is not in the session
-    context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
     session = context['request'].session
     assert session.has_key('user_id') == False
 
     # User is redirected to custom URL if POST['next'] is set
     # -------------------------------------------------------
-    util.clear_test_template_context()
+    template.clear_test_template_context()
     response = test_app.post(
         '/auth/login/', {
             'username': u'chris',

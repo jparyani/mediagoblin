@@ -14,7 +14,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-ENABLED_MIDDLEWARE = (
-    'mediagoblin.middleware.noop:NoOpMiddleware',
-    'mediagoblin.middleware.csrf:CsrfMiddleware',
-    )
+from mediagoblin.db.util import ObjectId
+
+def setup_user_in_request(request):
+    """
+    Examine a request and tack on a request.user parameter if that's
+    appropriate.
+    """
+    if not request.session.has_key('user_id'):
+        request.user = None
+        return
+
+    user = None
+    user = request.app.db.User.one(
+        {'_id': ObjectId(request.session['user_id'])})
+
+    if not user:
+        # Something's wrong... this user doesn't exist?  Invalidate
+        # this session.
+        request.session.invalidate()
+
+    request.user = user

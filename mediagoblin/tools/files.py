@@ -14,7 +14,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-ENABLED_MIDDLEWARE = (
-    'mediagoblin.middleware.noop:NoOpMiddleware',
-    'mediagoblin.middleware.csrf:CsrfMiddleware',
-    )
+from mediagoblin import mg_globals
+
+def delete_media_files(media):
+    """
+    Delete all files associated with a MediaEntry
+
+    Arguments:
+     - media: A MediaEntry document
+    """
+    for listpath in media['media_files'].itervalues():
+        mg_globals.public_store.delete_file(
+            listpath)
+
+    for attachment in media['attachment_files']:
+        mg_globals.public_store.delete_file(
+            attachment['filepath'])

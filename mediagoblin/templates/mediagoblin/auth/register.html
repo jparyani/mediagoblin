@@ -26,6 +26,7 @@
     <div class="grid_6 prefix_1 suffix_1 form_box">
       <h1>{% trans %}Create an account!{% endtrans %}</h1>
       {{ wtforms_util.render_divs(register_form) }}
+      {{ csrf_token }}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Create{% endtrans %}"
                class="button" />

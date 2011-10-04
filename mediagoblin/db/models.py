@@ -18,14 +18,12 @@ import datetime, uuid
 
 from mongokit import Document
 
-from mediagoblin import util
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin import mg_globals
 from mediagoblin.db import migrations
 from mediagoblin.db.util import ASCENDING, DESCENDING, ObjectId
-from mediagoblin.util import Pagination
-from mediagoblin.util import DISPLAY_IMAGE_FETCHING_ORDER
-
+from mediagoblin.tools.pagination import Pagination
+from mediagoblin.tools import url, common
 
 ###################
 # Custom validators
@@ -220,7 +218,7 @@ class MediaEntry(Document):
         return self.db.MediaComment.find({
                 'media_entry': self['_id']}).sort('created', DESCENDING)
 
-    def get_display_media(self, media_map, fetch_order=DISPLAY_IMAGE_FETCHING_ORDER):
+    def get_display_media(self, media_map, fetch_order=common.DISPLAY_IMAGE_FETCHING_ORDER):
         """
         Find the best media for display.
 
@@ -234,7 +232,7 @@ class MediaEntry(Document):
         """
         media_sizes = media_map.keys()
 
-        for media_size in DISPLAY_IMAGE_FETCHING_ORDER:
+        for media_size in common.DISPLAY_IMAGE_FETCHING_ORDER:
             if media_size in media_sizes:
                 return media_map[media_size]
 
@@ -242,7 +240,7 @@ class MediaEntry(Document):
         pass
 
     def generate_slug(self):
-        self['slug'] = util.slugify(self['title'])
+        self['slug'] = url.slugify(self['title'])
 
         duplicate = mg_globals.database.media_entries.find_one(
             {'slug': self['slug']})
@@ -304,7 +302,7 @@ class MediaEntry(Document):
         Get the exception that's appropriate for this error
         """
         if self['fail_error']:
-            return util.import_component(self['fail_error'])
+            return common.import_component(self['fail_error'])
 
 
 class MediaComment(Document):

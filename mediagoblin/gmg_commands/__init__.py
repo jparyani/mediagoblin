@@ -16,7 +16,7 @@
 
 import argparse
 
-from mediagoblin import util as mg_util
+from mediagoblin.tools.common import import_component
 
 
 SUBCOMMAND_MAP = {
@@ -67,8 +67,8 @@ def main_cli():
         else:
             subparser = subparsers.add_parser(command_name)
 
-        setup_func = mg_util.import_component(command_struct['setup'])
-        exec_func = mg_util.import_component(command_struct['func'])
+        setup_func = import_component(command_struct['setup'])
+        exec_func = import_component(command_struct['func'])
 
         setup_func(subparser)
 

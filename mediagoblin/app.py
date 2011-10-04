@@ -20,7 +20,9 @@ import urllib
 import routes
 from webob import Request, exc
 
-from mediagoblin import routing, util, middleware
+from mediagoblin import routing, middleware
+from mediagoblin.tools import common, translate, template, response
+from mediagoblin.tools import request as mg_request
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init import (get_jinja_loader, get_staticdirector,
@@ -98,7 +100,7 @@ class MediaGoblinApp(object):
         setup_workbench()
 
         # instantiate application middleware
-        self.middleware = [util.import_component(m)(self)
+        self.middleware = [common.import_component(m)(self)
                            for m in middleware.ENABLED_MIDDLEWARE]
 
 
@@ -123,14 +125,14 @@ class MediaGoblinApp(object):
         # Attach self as request.app
         # Also attach a few utilities from request.app for convenience?
         request.app = self
-        request.locale = util.get_locale_from_request(request)
+        request.locale = translate.get_locale_from_request(request)
 
-        request.template_env = util.get_jinja_env(
+        request.template_env = template.get_jinja_env(
             self.template_loader, request.locale)
         request.db = self.db
         request.staticdirect = self.staticdirector
 
-        util.setup_user_in_request(request)
+        mg_request.setup_user_in_request(request)
 
         # No matching page?
         if route_match is None:
@@ -148,9 +150,9 @@ class MediaGoblinApp(object):
 
             # Okay, no matches.  404 time!
             request.matchdict = {}  # in case our template expects it
-            return util.render_404(request)(environ, start_response)
+            return response.render_404(request)(environ, start_response)
 
-        controller = util.import_component(route_match['controller'])
+        controller = common.import_component(route_match['controller'])
         request.start_response = start_response
 
         # get the response from the controller

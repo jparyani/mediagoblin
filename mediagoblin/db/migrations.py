@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.db.util import RegisterMigration
-from mediagoblin.util import cleaned_markdown_conversion
+from mediagoblin.tools.text import cleaned_markdown_conversion
 
 
 # Please see mediagoblin/tests/test_migrations.py for some examples of

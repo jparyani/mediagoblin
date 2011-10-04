@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011 Free Software Foundation, Inc
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -14,7 +14,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-ENABLED_MIDDLEWARE = (
-    'mediagoblin.middleware.noop:NoOpMiddleware',
-    'mediagoblin.middleware.csrf:CsrfMiddleware',
-    )
+import re
+import translitcodec
+
+_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+
+def slugify(text, delim=u'-'):
+    """
+    Generates an ASCII-only slug. Taken from http://flask.pocoo.org/snippets/5/
+    """
+    result = []
+    for word in _punct_re.split(text.lower()):
+        word = word.encode('translit/long')
+        if word:
+            result.append(word)
+    return unicode(delim.join(result))

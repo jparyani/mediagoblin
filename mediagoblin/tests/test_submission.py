@@ -22,7 +22,7 @@ from nose.tools import assert_equal, assert_true, assert_false
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.tests.tools import setup_fresh_app, get_test_app
 from mediagoblin import mg_globals
-from mediagoblin import util
+from mediagoblin.tools import template, common
 
 GOOD_JPG = pkg_resources.resource_filename(
   'mediagoblin.tests', 'test_submission/good.jpg')
@@ -63,20 +63,20 @@ class TestSubmission:
     def test_missing_fields(self):
         # Test blank form
         # ---------------
-        util.clear_test_template_context()
+        template.clear_test_template_context()
         response = self.test_app.post(
             '/submit/', {})
-        context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
+        context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
         form = context['submit_form']
         assert form.file.errors == [u'You must provide a file.']
 
         # Test blank file
         # ---------------
-        util.clear_test_template_context()
+        template.clear_test_template_context()
         response = self.test_app.post(
             '/submit/', {
                 'title': 'test title'})
-        context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
+        context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
         form = context['submit_form']
         assert form.file.errors == [u'You must provide a file.']
 
@@ -84,7 +84,7 @@ class TestSubmission:
     def test_normal_uploads(self):
         # Test JPG
         # --------
-        util.clear_test_template_context()
+        template.clear_test_template_context()
         response = self.test_app.post(
             '/submit/', {
                 'title': 'Normal upload 1'
@@ -96,12 +96,12 @@ class TestSubmission:
         assert_equal(
             urlparse.urlsplit(response.location)[2],
             '/u/chris/')
-        assert util.TEMPLATE_TEST_CONTEXT.has_key(
+        assert template.TEMPLATE_TEST_CONTEXT.has_key(
             'mediagoblin/user_pages/user.html')
 
         # Test PNG
         # --------
-        util.clear_test_template_context()
+        template.clear_test_template_context()
         response = self.test_app.post(
             '/submit/', {
                 'title': 'Normal upload 2'
@@ -112,13 +112,13 @@ class TestSubmission:
         assert_equal(
             urlparse.urlsplit(response.location)[2],
             '/u/chris/')
-        assert util.TEMPLATE_TEST_CONTEXT.has_key(
+        assert template.TEMPLATE_TEST_CONTEXT.has_key(
             'mediagoblin/user_pages/user.html')
 
     def test_tags(self):
         # Good tag string
         # --------
-        util.clear_test_template_context()
+        template.clear_test_template_context()
         response = self.test_app.post(
             '/submit/', {
                 'title': 'Balanced Goblin',
@@ -128,7 +128,7 @@ class TestSubmission:
 
         # New media entry with correct tags should be created
         response.follow()
-        context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/user_pages/user.html']
+        context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/user_pages/user.html']
         request = context['request']
         media = request.db.MediaEntry.find({'title': 'Balanced Goblin'})[0]
         assert_equal(media['tags'],
@@ -137,7 +137,7 @@ class TestSubmission:
 
         # Test tags that are too long
         # ---------------
-        util.clear_test_template_context()
+        template.clear_test_template_context()
         response = self.test_app.post(
             '/submit/', {
                 'title': 'Balanced Goblin',
@@ -146,14 +146,14 @@ class TestSubmission:
                     'file', GOOD_JPG)])
 
         # Too long error should be raised
-        context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
+        context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
         form = context['submit_form']
         assert form.tags.errors == [
             u'Tags must be shorter than 50 characters.  Tags that are too long'\
              ': ffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuuuu']
 
     def test_delete(self):
-        util.clear_test_template_context()
+        template.clear_test_template_context()
         response = self.test_app.post(
             '/submit/', {
                 'title': 'Balanced Goblin',
@@ -163,7 +163,7 @@ class TestSubmission:
         # Post image
         response.follow()
 
-        request = util.TEMPLATE_TEST_CONTEXT[
+        request = template.TEMPLATE_TEST_CONTEXT[
             'mediagoblin/user_pages/user.html']['request']
 
         media = request.db.MediaEntry.find({'title': 'Balanced Goblin'})[0]
@@ -183,7 +183,7 @@ class TestSubmission:
 
         response.follow()
 
-        request = util.TEMPLATE_TEST_CONTEXT[
+        request = template.TEMPLATE_TEST_CONTEXT[
             'mediagoblin/user_pages/user.html']['request']
 
         media = request.db.MediaEntry.find({'title': 'Balanced Goblin'})[0]
@@ -202,7 +202,7 @@ class TestSubmission:
 
         response.follow()
 
-        request = util.TEMPLATE_TEST_CONTEXT[
+        request = template.TEMPLATE_TEST_CONTEXT[
             'mediagoblin/user_pages/user.html']['request']
 
         # Does media entry still exist?
@@ -213,14 +213,14 @@ class TestSubmission:
     def test_malicious_uploads(self):
         # Test non-suppoerted file with non-supported extension
         # -----------------------------------------------------
-        util.clear_test_template_context()
+        template.clear_test_template_context()
         response = self.test_app.post(
             '/submit/', {
                 'title': 'Malicious Upload 1'
                 }, upload_files=[(
                     'file', EVIL_FILE)])
 
-        context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
+        context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
         form = context['submit_form']
         assert form.file.errors == ['The file doesn\'t seem to be an image!']
 
@@ -230,7 +230,7 @@ class TestSubmission:
 
         # Test non-supported file with .jpg extension
         # -------------------------------------------
-        util.clear_test_template_context()
+        template.clear_test_template_context()
         response = self.test_app.post(
            '/submit/', {
                'title': 'Malicious Upload 2'
@@ -250,7 +250,7 @@ class TestSubmission:
 
         # Test non-supported file with .png extension
         # -------------------------------------------
-        util.clear_test_template_context()
+        template.clear_test_template_context()
         response = self.test_app.post(
            '/submit/', {
                'title': 'Malicious Upload 3'
