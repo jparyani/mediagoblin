@@ -41,7 +41,7 @@
 	  
       <p class="delete_checkbox_box">
 	{{ form.confirm }}
-	{{ form.confirm.label }}
+	<label for="{{ _(form.confirm.name) }}">{{ _(form.confirm.label.text) }}</label>
       </p>
 
       <div class="form_submit_buttons">
