@@ -66,6 +66,7 @@ setup(
         ## their package managers.
         # 'lxml',
         ],
+    requires=['gst'],
     test_suite='nose.collector',
     entry_points = """\
         [console_scripts]

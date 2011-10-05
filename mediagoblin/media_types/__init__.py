@@ -17,6 +17,9 @@
 import os
 import sys
 
+from mediagoblin.util import lazy_pass_to_ugettext as _
+
+
 class FileTypeNotSupported(Exception):
     pass
 

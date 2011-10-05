@@ -17,16 +17,17 @@
 import Image
 import tempfile
 import pkg_resources
+import os
 
 from celery.task import Task
 from celery import registry
 
 from mediagoblin.db.util import ObjectId
 from mediagoblin import mg_globals as mgg
-
 from mediagoblin.util import lazy_pass_to_ugettext as _
-
-import mediagoblin.media_types.video
+from mediagoblin.process_media.errors import BaseProcessingFail, BadMediaFail
+from mediagoblin.process_media import mark_entry_failed
+from . import transcoders
 
 import gobject
 gobject.threads_init()
@@ -39,10 +40,12 @@ from arista.transcoder import TranscoderOptions
 
 THUMB_SIZE = 180, 180
 MEDIUM_SIZE = 640, 640
-ARISTA_DEVICE_KEY = 'web'
 
+ARISTA_DEVICE = 'devices/web-advanced.json'
+ARISTA_PRESET = None
 
-loop = None
+loop = None  # Is this even used?
+
 logger = logging.getLogger(__name__)
 logging.basicConfig()
 logger.setLevel(logging.DEBUG)
@@ -51,10 +54,20 @@ logger.setLevel(logging.DEBUG)
 def process_video(entry):
     """
     Code to process a video
+
+    Much of this code is derived from the arista-transcoder script in
+    the arista PyPI package and changed to match the needs of
+    MediaGoblin
+
+    This function sets up the arista video encoder in some kind of new thread
+    and attaches callbacks to that child process, hopefully, the
+    entry-complete callback will be called when the video is done.
     """
-    global loop
-    loop = None
+
+    ''' Empty dict, will store data which will be passed to the callback
+    functions '''
     info = {}
+
     workbench = mgg.workbench_manager.create_workbench()
 
     queued_filepath = entry['queued_media_file']
@@ -62,29 +75,36 @@ def process_video(entry):
         mgg.queue_store, queued_filepath,
         'source')
 
+    ''' Initialize arista '''
     arista.init()
 
+    ''' Loads a preset file which specifies the format of the output video'''
+    device = arista.presets.load(
+        pkg_resources.resource_filename(
+            __name__,
+            ARISTA_DEVICE))
 
-    web_advanced_preset = pkg_resources.resource_filename(
-        __name__,
-        'presets/web-advanced.json')
-    device = arista.presets.load(web_advanced_preset)
-
+    # FIXME: Is this needed since we only transcode one video?
     queue = arista.queue.TranscodeQueue()
-    
-    info['tmp_file'] = tmp_file = tempfile.NamedTemporaryFile()
 
-    info['medium_filepath'] = medium_filepath = create_pub_filepath(entry, 'video.webm')
+    info['tmp_file'] = tempfile.NamedTemporaryFile(delete=False)
 
-    output = tmp_file.name
+    info['medium_filepath'] = create_pub_filepath(
+        entry, 'video.webm')
 
-    uri = 'file://' + queued_filename
+    info['thumb_filepath'] = create_pub_filepath(
+        entry, 'thumbnail.jpg')
 
-    preset = device.presets[device.default]
+    # With the web-advanced.json device preset, this will select
+    # 480p WebM w/ OGG Vorbis
+    preset = device.presets[ARISTA_PRESET or device.default]
 
     logger.debug('preset: {0}'.format(preset))
 
-    opts = TranscoderOptions(uri, preset, output)
+    opts = TranscoderOptions(
+        'file://' + queued_filename,  # Arista did it this way, IIRC
+        preset,
+        info['tmp_file'].name)
 
     queue.append(opts)
 
@@ -95,68 +115,78 @@ def process_video(entry):
     queue.connect("entry-error", _transcoding_error, info)
     queue.connect("entry-complete", _transcoding_complete, info)
 
-    info['loop'] = loop = gobject.MainLoop()
+    # Add data to the info dict, making it available to the callbacks
+    info['loop'] = gobject.MainLoop()
     info['queued_filename'] = queued_filename
     info['queued_filepath'] = queued_filepath
     info['workbench'] = workbench
+    info['preset'] = preset
+
+    info['loop'].run()
 
     logger.debug('info: {0}'.format(info))
 
-    loop.run()
-    
-    '''
-    try:
-        #thumb = Image.open(mediagoblin.media_types.video.MEDIA_MANAGER['default_thumb'])
-    except IOError:
-        raise BadMediaFail()
 
-    thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
-    # ensure color mode is compatible with jpg
-    if thumb.mode != "RGB":
-        thumb = thumb.convert("RGB")
+def __create_thumbnail(info):
+    thumbnail = tempfile.NamedTemporaryFile()
 
-    thumb_filepath = create_pub_filepath(entry, 'thumbnail.jpg')
-    thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
+    logger.info('thumbnailing...')
+    transcoders.VideoThumbnailer(info['tmp_file'].name, thumbnail.name)
+    logger.debug('Done thumbnailing')
 
-    with thumb_file:
-        thumb.save(thumb_file, "JPEG", quality=90)
-    '''
+    os.remove(info['tmp_file'].name)
 
-def __close_processing(queue, qentry, info, error=False):
+    mgg.public_store.get_file(info['thumb_filepath'], 'wb').write(
+        thumbnail.read())
+
+    info['entry']['media_files']['thumb'] = info['thumb_filepath']
+    info['entry'].save()
+
+
+def __close_processing(queue, qentry, info, **kwargs):
     '''
-    Update MediaEntry, move files, handle errors
+    Updates MediaEntry, moves files, handles errors
     '''
-    if not error:
+    if not kwargs.get('error'):
+        logger.info('Transcoding successful')
+
         qentry.transcoder.stop()
         gobject.idle_add(info['loop'].quit)
-        info['loop'].quit()
+        info['loop'].quit()  # Do I have to do this again?
 
-        print('\n-> Saving video...\n')
+        logger.info('Saving files...')
 
+        # Write the transcoded media to the storage system
         with info['tmp_file'] as tmp_file:
             mgg.public_store.get_file(info['medium_filepath'], 'wb').write(
                 tmp_file.read())
             info['entry']['media_files']['medium'] = info['medium_filepath']
-
-        print('\n=== DONE! ===\n')
 
         # we have to re-read because unlike PIL, not everything reads
         # things in string representation :)
         queued_file = file(info['queued_filename'], 'rb')
 
         with queued_file:
-            original_filepath = create_pub_filepath(info['entry'], info['queued_filepath'][-1])
+            original_filepath = create_pub_filepath(
+                info['entry'],
+                info['queued_filepath'][-1])
 
-            with mgg.public_store.get_file(original_filepath, 'wb') as original_file:
+            with mgg.public_store.get_file(original_filepath, 'wb') as \
+                    original_file:
                 original_file.write(queued_file.read())
 
         mgg.queue_store.delete_file(info['queued_filepath'])
+
+
+        logger.debug('...Done')
+
         info['entry']['queued_media_file'] = []
         media_files_dict = info['entry'].setdefault('media_files', {})
         media_files_dict['original'] = original_filepath
-        # media_files_dict['thumb'] = thumb_filepath
 
         info['entry']['state'] = u'processed'
+        info['entry']['media_data'][u'preset'] = info['preset'].name
+        __create_thumbnail(info)
         info['entry'].save()
 
     else:
@@ -174,17 +204,20 @@ def _transcoding_start(queue, qentry, info):
     logger.info('-> Starting transcoding')
     logger.debug(queue, qentry, info)
 
+
 def _transcoding_complete(*args):
     __close_processing(*args)
     print(args)
 
-def _transcoding_error(*args):
-    logger.info('-> Error')
-    __close_processing(*args, error=True)
-    logger.debug(*args)
+
+def _transcoding_error(queue, qentry, info):
+    logger.info('Error')
+    __close_processing(queue, qentry, info, error=True)
+    logger.debug(queue, quentry, info)
+
 
 def _transcoding_pass_setup(queue, qentry, options):
-    logger.info('-> Pass setup')
+    logger.info('Pass setup')
     logger.debug(queue, qentry, options)
 
 
@@ -200,44 +233,16 @@ def check_interrupted():
         except:
             # Something pretty bad happened... just exit!
             gobject.idle_add(loop.quit)
-            
+
         return False
     return True
-    
+
 
 def create_pub_filepath(entry, filename):
     return mgg.public_store.get_unique_filepath(
             ['media_entries',
              unicode(entry['_id']),
              filename])
-
-
-class BaseProcessingFail(Exception):
-    """
-    Base exception that all other processing failure messages should
-    subclass from.
-  
-    You shouldn't call this itself; instead you should subclass it
-    and provid the exception_path and general_message applicable to
-    this error.
-    """
-    general_message = u''
-  
-    @property
-    def exception_path(self):
-        return u"%s:%s" % (
-            self.__class__.__module__, self.__class__.__name__)
-
-    def __init__(self, **metadata):
-        self.metadata = metadata or {}
-  
-  
-class BadMediaFail(BaseProcessingFail):
-    """
-    Error that should be raised when an inappropriate file was given
-    for the media type specified.
-    """
-    general_message = _(u'Invalid file given for media type.')
 
 
 ################################
@@ -311,4 +316,3 @@ def mark_entry_failed(entry_id, exc):
             {'$set': {u'state': u'failed',
                       u'fail_error': None,
                       u'fail_metadata': {}}})
-
