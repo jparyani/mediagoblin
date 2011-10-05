@@ -210,10 +210,10 @@ def _transcoding_complete(*args):
     print(args)
 
 
-def _transcoding_error(queue, qentry, info):
+def _transcoding_error(queue, qentry, info, *args):
     logger.info('Error')
     __close_processing(queue, qentry, info, error=True)
-    logger.debug(queue, quentry, info)
+    logger.debug(queue, quentry, info, *args)
 
 
 def _transcoding_pass_setup(queue, qentry, options):
