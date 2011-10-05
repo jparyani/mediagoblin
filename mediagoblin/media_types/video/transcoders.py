@@ -33,6 +33,7 @@ try:
 except:
     _log.error('pygst could not be imported')
 
+
 class VideoThumbnailer:
     def __init__(self, src, dst):
         self._set_up_pass(src, dst)
@@ -61,6 +62,7 @@ class VideoThumbnailer:
         self.pipeline.add(self.videoscale)
 
         self.capsfilter = gst.element_factory_make('capsfilter', 'capsfilter')
+        # FIXME: videoscale doesn't care about original ratios
         self.capsfilter.set_property('caps', gst.caps_from_string('video/x-raw-rgb, width=180, height=100'))
         self.pipeline.add(self.capsfilter)
 

@@ -202,23 +202,23 @@ def __close_processing(queue, qentry, info, **kwargs):
 
 def _transcoding_start(queue, qentry, info):
     logger.info('-> Starting transcoding')
-    logger.debug(queue, qentry, info)
+    logger.debug((queue, qentry, info))
 
 
 def _transcoding_complete(*args):
     __close_processing(*args)
-    print(args)
+    logger.debug(*args)
 
 
-def _transcoding_error(queue, qentry, info, *args):
+def _transcoding_error(queue, qentry, arg, info):
     logger.info('Error')
     __close_processing(queue, qentry, info, error=True)
-    logger.debug(queue, quentry, info, *args)
+    logger.debug((queue, quentry, info, arg))
 
 
 def _transcoding_pass_setup(queue, qentry, options):
     logger.info('Pass setup')
-    logger.debug(queue, qentry, options)
+    logger.debug((queue, qentry, options))
 
 
 def check_interrupted():
