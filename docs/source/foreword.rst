@@ -5,25 +5,15 @@ Foreword
 About the MediaGoblin Manual
 ============================
 
-Welcome to the GNU MediaGoblin manual. This document targets several
-classes of users, including: 
+This is the user manual for MediaGoblin.  It covers how to set up and
+configure MediaGoblin and the kind of information that someone running
+MediaGoblin would need to know.
 
-* users who would like to try the software locally, 
-* systems administrators who want to deploy and administer the
-  software in "production environments," and
-* anyone who wants to learn how MediaGoblin works. 
+We have other documentation at:
 
-Some information relevant to the MediaGoblin community members,
-including how to get involved (We want and love contributors!) To join
-as a contributor please see the following pages:
-
-* http://mediagoblin.org/pages/join.html for general "join us" information
+* http://mediagoblin.org/join/ for general "join us" information
 * http://wiki.mediagoblin.org/ for our contributor-focused wiki
 
-If you suspect that documentation on http://docs.mediagoblin.org is
-out of date, it might be. The documentation is updated regularly and
-the "living" version of this resource resides in the ``mediagoblin``
-repository with the project's source code the ``docs/`` directory. 
 
 Improving the MediaGobiin Manual
 ================================
@@ -31,16 +21,15 @@ Improving the MediaGobiin Manual
 There are a few ways---please pick whichever method is convenient for
 you!
 
-1. Write up a bug report in the bug tracker at http://bugs.foocorp.net/projects/mediagoblin/issues
+1. Write up a bug report in the bug tracker
 2. Tell someone on IRC ``#mediagoblin`` on Freenode.
-3. Send an email to Will ``willg at bluesock dot org``, or Sam at
-   ``sam@cyborginstitute.com``
+3. Write an email to the devel mailing list.
 
-When you tell us about your issue, please let us know:
+Information about the bugtracker, IRC and the mailing list is all on
+the `join page`_.
 
-* where you are looking (in git?  url of the web-page?)
-* what the issue is, and 
-* your thoughts on how to resolve it. 
+.. _join page: http://mediagoblin.org/join/
 
-We hope these materials are useful and we look forward to any and all
-feedback. 
+Patches are the most helpful, but even feedback on what you think
+could be improved and how to improve it is also helpful.
+

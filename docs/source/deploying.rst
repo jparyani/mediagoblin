@@ -1,8 +1,8 @@
-.. _deployment-howto:
+.. _deployment-chapter:
 
-==================
- Deployment HOWTO
-==================
+=======================
+ Deploying MediaGoblin
+=======================
 
 Step 1: Write code that can be deployed.
 

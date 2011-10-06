@@ -12,12 +12,11 @@ Table of Contents:
    :maxdepth: 2
 
    foreword
-   about_mediagoblin
-   deploymenthowto
-   theminghowto
-   contributinghowto
+   about
+   deploying
+   help
+   theming
    codebase
-   vision
 
 
 Indices and tables
