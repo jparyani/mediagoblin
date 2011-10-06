@@ -21,7 +21,8 @@ import routes
 from webob import Request, exc
 
 from mediagoblin import routing, middleware
-from mediagoblin.tools import common, translate, template, response
+from mediagoblin.tools import common, translate, template
+from mediagoblin.tools.response import render_404
 from mediagoblin.tools import request as mg_request
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
@@ -150,7 +151,7 @@ class MediaGoblinApp(object):
 
             # Okay, no matches.  404 time!
             request.matchdict = {}  # in case our template expects it
-            return response.render_404(request)(environ, start_response)
+            return render_404(request)(environ, start_response)
 
         controller = common.import_component(route_match['controller'])
         request.start_response = start_response
