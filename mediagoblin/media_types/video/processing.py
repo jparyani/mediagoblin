@@ -14,10 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import Image
 import tempfile
 import pkg_resources
 import os
+import logging
 
 from celery.task import Task
 from celery import registry
@@ -29,20 +29,8 @@ from mediagoblin.process_media.errors import BaseProcessingFail, BadMediaFail
 from mediagoblin.process_media import mark_entry_failed
 from . import transcoders
 
-import gobject
-gobject.threads_init()
-
-import gst
-import arista
-import logging
-
-from arista.transcoder import TranscoderOptions
-
 THUMB_SIZE = 180, 180
 MEDIUM_SIZE = 640, 640
-
-ARISTA_DEVICE = 'devices/web-advanced.json'
-ARISTA_PRESET = None
 
 loop = None  # Is this even used?
 
@@ -63,11 +51,6 @@ def process_video(entry):
     and attaches callbacks to that child process, hopefully, the
     entry-complete callback will be called when the video is done.
     """
-
-    ''' Empty dict, will store data which will be passed to the callback
-    functions '''
-    info = {}
-
     workbench = mgg.workbench_manager.create_workbench()
 
     queued_filepath = entry['queued_media_file']
@@ -75,57 +58,65 @@ def process_video(entry):
         mgg.queue_store, queued_filepath,
         'source')
 
-    ''' Initialize arista '''
-    arista.init()
+    medium_filepath = create_pub_filepath(
+        entry, '640p.webm')
 
-    ''' Loads a preset file which specifies the format of the output video'''
-    device = arista.presets.load(
-        pkg_resources.resource_filename(
-            __name__,
-            ARISTA_DEVICE))
-
-    # FIXME: Is this needed since we only transcode one video?
-    queue = arista.queue.TranscodeQueue()
-
-    info['tmp_file'] = tempfile.NamedTemporaryFile(delete=False)
-
-    info['medium_filepath'] = create_pub_filepath(
-        entry, 'video.webm')
-
-    info['thumb_filepath'] = create_pub_filepath(
+    thumbnail_filepath = create_pub_filepath(
         entry, 'thumbnail.jpg')
 
-    # With the web-advanced.json device preset, this will select
-    # 480p WebM w/ OGG Vorbis
-    preset = device.presets[ARISTA_PRESET or device.default]
 
-    logger.debug('preset: {0}'.format(preset))
+    # Create a temporary file for the video destination
+    tmp_dst = tempfile.NamedTemporaryFile()
 
-    opts = TranscoderOptions(
-        'file://' + queued_filename,  # Arista did it this way, IIRC
-        preset,
-        info['tmp_file'].name)
+    with tmp_dst:
+        # Transcode queued file to a VP8/vorbis file that fits in a 640x640 square
+        transcoder = transcoders.VideoTranscoder(queued_filename, tmp_dst.name)
 
-    queue.append(opts)
+        # Push transcoded video to public storage
+        mgg.public_store.get_file(medium_filepath, 'wb').write(
+            tmp_dst.read())
 
-    info['entry'] = entry
+        entry['media_files']['webm_640'] = medium_filepath
 
-    queue.connect("entry-start", _transcoding_start, info)
-    queue.connect("entry-pass-setup", _transcoding_pass_setup, info)
-    queue.connect("entry-error", _transcoding_error, info)
-    queue.connect("entry-complete", _transcoding_complete, info)
+        # Save the width and height of the transcoded video
+        entry['media_data']['video'] = {
+            u'width': transcoder.dst_data.videowidth,
+            u'height': transcoder.dst_data.videoheight}
 
-    # Add data to the info dict, making it available to the callbacks
-    info['loop'] = gobject.MainLoop()
-    info['queued_filename'] = queued_filename
-    info['queued_filepath'] = queued_filepath
-    info['workbench'] = workbench
-    info['preset'] = preset
+    # Create a temporary file for the video thumbnail
+    tmp_thumb = tempfile.NamedTemporaryFile()
 
-    info['loop'].run()
+    with tmp_thumb:
+        # Create a thumbnail.jpg that fits in a 180x180 square
+        transcoders.VideoThumbnailer(queued_filename, tmp_thumb.name)
 
-    logger.debug('info: {0}'.format(info))
+        # Push the thumbnail to public storage
+        mgg.public_store.get_file(thumbnail_filepath, 'wb').write(
+            tmp_thumb.read())
 
+        entry['media_files']['thumb'] = thumbnail_filepath
+
+
+    # Push original file to public storage
+    queued_file = file(queued_filename, 'rb')
+
+    with queued_file:
+        original_filepath = create_pub_filepath(
+            entry,
+            queued_filepath[-1])
+
+        with mgg.public_store.get_file(original_filepath, 'wb') as \
+                original_file:
+            original_file.write(queued_file.read())
+
+            entry['media_files']['original'] = original_filepath
+
+    mgg.queue_store.delete_file(queued_filepath)
+
+
+    # Save the MediaEntry
+    entry.save()
+    
 
 def __create_thumbnail(info):
     thumbnail = tempfile.NamedTemporaryFile()
@@ -138,6 +129,7 @@ def __create_thumbnail(info):
 
     mgg.public_store.get_file(info['thumb_filepath'], 'wb').write(
         thumbnail.read())
+
 
     info['entry']['media_files']['thumb'] = info['thumb_filepath']
     info['entry'].save()
@@ -266,6 +258,9 @@ class ProcessMedia(Task):
         except BaseProcessingFail, exc:
             mark_entry_failed(entry[u'_id'], exc)
             return
+
+        entry['state'] = u'processed'
+        entry.save()
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         """
