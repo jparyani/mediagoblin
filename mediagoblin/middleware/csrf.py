@@ -25,9 +25,9 @@ from mediagoblin import mg_globals
 # Use the system (hardware-based) random number generator if it exists.
 # -- this optimization is lifted from Django
 if hasattr(random, 'SystemRandom'):
-    randrange = random.SystemRandom().randrange
+    getrandbits = random.SystemRandom().getrandbits
 else:
-    randrange = random.randrange
+    getrandbits = random.getrandbits
 
 
 class CsrfForm(Form):
@@ -54,7 +54,7 @@ class CsrfMiddleware(object):
     and matches the form token for non-safe requests.
     """
 
-    MAX_CSRF_KEY = 2 << 63
+    CSRF_KEYLEN = 64
     SAFE_HTTP_METHODS = ("GET", "HEAD", "OPTIONS", "TRACE")
 
     def __init__(self, mg_app):
@@ -92,9 +92,8 @@ class CsrfMiddleware(object):
         response.set_cookie(
             mg_globals.app_config['csrf_cookie_name'],
             request.environ['CSRF_TOKEN'],
-            max_age=60 * 60 * 24 * 7 * 52,
-            path='/',
-            domain=mg_globals.app_config.get('csrf_cookie_domain', None),
+            path=request.environ['SCRIPT_NAME'],
+            domain=mg_globals.app_config.get('csrf_cookie_domain'),
             secure=(request.scheme.lower() == 'https'),
             httponly=True)
 
@@ -104,9 +103,7 @@ class CsrfMiddleware(object):
     def _make_token(self, request):
         """Generate a new token to use for CSRF protection."""
 
-        return hashlib.md5("%s%s" %
-                           (randrange(0, self.MAX_CSRF_KEY),
-                            randrange(0, self.MAX_CSRF_KEY))).hexdigest()
+        return "%s" % (getrandbits(self.CSRF_KEYLEN),)
 
     def verify_tokens(self, request):
         """Verify that the CSRF Cookie exists and that it matches the
