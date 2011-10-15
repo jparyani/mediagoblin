@@ -65,17 +65,7 @@
       <br />
       <h3>{% trans %}Comments{% endtrans %}</h3>
 
-      {% if request.user %}
-        <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
-                                         user= media.uploader().username,
-                                         media=media._id) }}" method="POST">
-          {{ wtforms_util.render_divs(comment_form) }}
-          <div class="form_submit_buttons">
-            <input type="submit" value="{% trans %}Post comment!{% endtrans %}" class="button" />
-	    {{ csrf_token }}
-          </div>
-        </form>
-      {% endif %}
+      <p><a href="#comment_form">{% trans %}Post a comment{% endtrans %}</a></p>
 
       {% if comments %}
         {% for comment in comments %}
@@ -107,6 +97,19 @@
             </div>
           </div>
         {% endfor %}
+
+    {% if request.user %}
+      <a name="comment_form"></a>
+      <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
+                                       user= media.uploader().username,
+                                       media=media._id) }}" method="POST">
+        {{ wtforms_util.render_divs(comment_form) }}
+        <div class="form_submit_buttons">
+          <input type="submit" value="{% trans %}Post comment!{% endtrans %}" class="button" />
+            {{ csrf_token }}
+        </div>
+      </form>
+    {% endif %}
 
         {{ render_pagination(request, pagination, 
 	      request.urlgen('mediagoblin.user_pages.media_home',
