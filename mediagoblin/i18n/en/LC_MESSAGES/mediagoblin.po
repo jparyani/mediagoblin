@@ -480,7 +480,11 @@ msgstr ""
 msgid "I am sure I want to delete this"
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:176
+#: mediagoblin/user_pages/views.py:142
+msgid "Empty comments are not allowed."
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:181
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr ""
 
