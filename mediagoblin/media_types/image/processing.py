@@ -24,6 +24,8 @@ from mediagoblin import mg_globals as mgg
 
 from mediagoblin.util import lazy_pass_to_ugettext as _
 
+from mediagoblin.process_media.errors import *
+
 THUMB_SIZE = 180, 180
 MEDIUM_SIZE = 640, 640
 
@@ -33,35 +35,6 @@ def create_pub_filepath(entry, filename):
             ['media_entries',
              unicode(entry['_id']),
              filename])
-
-
-class BaseProcessingFail(Exception):
-    """
-    Base exception that all other processing failure messages should
-    subclass from.
-  
-    You shouldn't call this itself; instead you should subclass it
-    and provid the exception_path and general_message applicable to
-    this error.
-    """
-    general_message = u''
-  
-    @property
-    def exception_path(self):
-        return u"%s:%s" % (
-            self.__class__.__module__, self.__class__.__name__)
-
-    def __init__(self, **metadata):
-        self.metadata = metadata or {}
-  
-  
-class BadMediaFail(BaseProcessingFail):
-    """
-    Error that should be raised when an inappropriate file was given
-    for the media type specified.
-    """
-    general_message = _(u'Invalid file given for media type.')
-
 
 ################################
 # Media processing initial steps
