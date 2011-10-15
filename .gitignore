@@ -3,6 +3,8 @@ bin/
 develop-eggs/
 build/
 eggs/
+lib/
+include/
 parts/
 .installed.cfg
 mediagoblin.egg-info
