@@ -45,7 +45,7 @@ setup(
         'routes',
         'pymongo',
         'mongokit',
-        'webob',
+        'webob<=1.2a2',
         'wtforms',
         'py-bcrypt',
         'nose',
