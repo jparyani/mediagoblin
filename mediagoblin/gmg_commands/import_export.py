@@ -19,7 +19,6 @@ from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.storage.filestorage import BasicFileStorage
 from mediagoblin.init import setup_storage, setup_global_and_app_config
-from mediagoblin.gmg_commands.util import option_add_conffile
 
 import shutil
 import tarfile
@@ -40,7 +39,6 @@ def import_export_parse_setup(subparser):
     # TODO: Add default
     subparser.add_argument(
         'tar_file')
-    option_add_conffile(subparser)
     subparser.add_argument(
         '--mongodump_path', default='mongodump',
         help='mongodump binary')

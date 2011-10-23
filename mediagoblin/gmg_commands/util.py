@@ -25,12 +25,3 @@ def setup_app(args):
     mgoblin_app = app.MediaGoblinApp(args.conf_file)
 
     return mgoblin_app
-
-
-def option_add_conffile(subparser):
-    """
-    Add the -cf option to a subparser
-    """
-    subparser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help="Config file used to set up environment")

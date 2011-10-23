@@ -16,7 +16,6 @@
 
 import sys
 
-from mediagoblin.gmg_commands.util import option_add_conffile
 from mediagoblin.db import util as db_util
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.init.config import read_mediagoblin_config
@@ -26,7 +25,7 @@ from mediagoblin.db import migrations
 
 
 def migrate_parser_setup(subparser):
-    option_add_conffile(subparser)
+    pass
 
 
 def _print_started_migration(migration_number, migration_func):

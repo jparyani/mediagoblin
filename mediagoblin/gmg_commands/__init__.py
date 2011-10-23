@@ -58,6 +58,9 @@ SUBCOMMAND_MAP = {
 def main_cli():
     parser = argparse.ArgumentParser(
         description='GNU MediaGoblin utilities.')
+    parser.add_argument(
+        '-cf', '--conf_file', default='mediagoblin.ini',
+        help="Config file used to set up environment")
 
     subparsers = parser.add_subparsers(help='sub-command help')
     for command_name, command_struct in SUBCOMMAND_MAP.iteritems():

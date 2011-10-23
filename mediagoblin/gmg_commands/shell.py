@@ -19,11 +19,10 @@ import code
 
 from mediagoblin import mg_globals
 from mediagoblin.gmg_commands import util as commands_util
-from mediagoblin.gmg_commands.util import option_add_conffile
 
 
 def shell_parser_setup(subparser):
-    option_add_conffile(subparser)
+    pass
 
 
 SHELL_BANNER = """\
