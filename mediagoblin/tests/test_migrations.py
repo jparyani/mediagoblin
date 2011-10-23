@@ -23,6 +23,7 @@ from mediagoblin.tests.tools import (
 from mediagoblin.db.util import (
     RegisterMigration, MigrationManager, ObjectId,
     MissingCurrentMigration)
+from mediagoblin.db.migrations import add_table_field
 
 # This one will get filled with local migrations
 TEST_MIGRATION_REGISTRY = {}
@@ -45,10 +46,7 @@ def creature_add_magical_powers(database):
     magical powers, all existing monsters, setting to an empty list is
     fine.
     """
-    database['creatures'].update(
-        {'magical_powers': {'$exists': False}},
-        {'$set': {'magical_powers': []}},
-        multi=True)
+    add_table_field(database, 'creatures', 'magical_powers', [])
 
 
 @RegisterMigration(2, TEST_MIGRATION_REGISTRY)

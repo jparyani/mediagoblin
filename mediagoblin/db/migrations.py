@@ -18,6 +18,17 @@ from mediagoblin.db.util import RegisterMigration
 from mediagoblin.tools.text import cleaned_markdown_conversion
 
 
+def add_table_field(db, table_name, field_name, default_value):
+    """
+    Add a new field to the table/collection named table_name.
+    The field will have the name field_name and the value default_value
+    """
+    db[table_name].update(
+        {field_name: {'$exists': False}},
+        {'$set': {field_name: default_value}},
+        multi=True)
+
+
 # Please see mediagoblin/tests/test_migrations.py for some examples of
 # basic migrations.
 
@@ -70,11 +81,7 @@ def mediaentry_add_queued_task_id(database):
     """
     Add the 'queued_task_id' field for entries that don't have it.
     """
-    collection = database['media_entries']
-    collection.update(
-        {'queued_task_id': {'$exists': False}},
-        {'$set': {'queued_task_id': None}},
-        multi=True)
+    add_table_field(database, 'media_entries', 'queued_task_id', None)
 
 
 @RegisterMigration(5)
@@ -82,16 +89,8 @@ def mediaentry_add_fail_error_and_metadata(database):
     """
     Add 'fail_error' and 'fail_metadata' fields to media entries
     """
-    collection = database['media_entries']
-    collection.update(
-        {'fail_error': {'$exists': False}},
-        {'$set': {'fail_error': None}},
-        multi=True)
-    
-    collection.update(
-        {'fail_metadata': {'$exists': False}},
-        {'$set': {'fail_metadata': {}}},
-        multi=True)
+    add_table_field(database, 'media_entries', 'fail_error', None)
+    add_table_field(database, 'media_entries', 'fail_metadata', {})
 
 
 @RegisterMigration(6)
@@ -99,11 +98,5 @@ def user_add_forgot_password_token_and_expires(database):
     """
     Add token and expiration fields to help recover forgotten passwords
     """
-    database['users'].update(
-        {'fp_verification_key': {'$exists': False}},
-        {'$set': {'fp_verification_key': None}},
-        multi=True)
-    database['users'].update(
-         {'fp_token_expire': {'$exists': False}},
-         {'$set': {'fp_token_expire': None}},
-         multi=True)
+    add_table_field(database, 'users', 'fp_verification_key', None)
+    add_table_field(database, 'users', 'fp_token_expire', None)
