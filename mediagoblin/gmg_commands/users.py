@@ -29,9 +29,6 @@ def adduser_parser_setup(subparser):
     subparser.add_argument(
         'email',
         help="Email to recieve notifications")
-    subparser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help="Config file used to set up environment")
 
 
 def adduser(args):
@@ -64,9 +61,6 @@ def makeadmin_parser_setup(subparser):
     subparser.add_argument(
         'username',
         help="Username to give admin level")
-    subparser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help="Config file used to set up environment")
 
 
 def makeadmin(args):
@@ -90,9 +84,6 @@ def changepw_parser_setup(subparser):
     subparser.add_argument(
         'password',
         help="Your NEW supersecret word to login")
-    subparser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help="Config file used to set up environment")
 
 
 def changepw(args):
