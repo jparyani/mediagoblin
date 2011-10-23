@@ -18,19 +18,32 @@
 
 if [ "$1" = "-h" ]
 then
-    echo "$0 [-h] [-c paste.ini] ARGS_to_paster"
+    echo "$0 [-h] [-c paste.ini] [ARGS_to_paster ...]"
+    echo ""
     echo "   For example:"
-    echo "       $0 -c fcgi.ini port_number=23371"
+    echo "         $0 -c fcgi.ini port_number=23371"
+    echo "     or: $0 --server-name=fcgi"
+    echo ""
+    echo "   The configfile defaults to paste_local.ini,"
+    echo "   if that is readable, otherwise paste.ini."
     exit 1
 fi
 
 PASTE_INI=paste.ini
+
+if [ -r paste_local.ini ]
+then
+    PASTE_INI=paste_local.ini
+fi
+
 if [ "$1" = "-c" ]
 then
     PASTE_INI="$2"
     shift
     shift
 fi
+
+echo "Using paste config: $PASTE_INI"
 
 if [ -f ./bin/paster ]; then
     echo "Using ./bin/paster";
