@@ -16,6 +16,7 @@
 
 import sys
 
+from mediagoblin.gmg_commands.util import option_add_conffile
 from mediagoblin.db import util as db_util
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.init.config import read_mediagoblin_config
@@ -25,9 +26,7 @@ from mediagoblin.db import migrations
 
 
 def migrate_parser_setup(subparser):
-    subparser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help="Config file used to set up environment")
+    option_add_conffile(subparser)
 
 
 def _print_started_migration(migration_number, migration_func):

@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.gmg_commands import util as commands_util
+from mediagoblin.gmg_commands.util import option_add_conffile
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin import mg_globals
 
@@ -29,9 +30,7 @@ def adduser_parser_setup(subparser):
     subparser.add_argument(
         'email',
         help="Email to recieve notifications")
-    subparser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help="Config file used to set up environment")
+    option_add_conffile(subparser)
 
 
 def adduser(args):
@@ -64,9 +63,7 @@ def makeadmin_parser_setup(subparser):
     subparser.add_argument(
         'username',
         help="Username to give admin level")
-    subparser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help="Config file used to set up environment")
+    option_add_conffile(subparser)
 
 
 def makeadmin(args):
@@ -90,9 +87,7 @@ def changepw_parser_setup(subparser):
     subparser.add_argument(
         'password',
         help="Your NEW supersecret word to login")
-    subparser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help="Config file used to set up environment")
+    option_add_conffile(subparser)
 
 
 def changepw(args):
