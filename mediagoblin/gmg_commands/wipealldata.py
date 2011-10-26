@@ -52,4 +52,4 @@ def wipe(args):
             print "nixing %s...." % directory
             shutil.rmtree(directory)
 
-    print "removed all your stuff!  okay, now re-run ./bin/buildout"
+    print "removed all your stuff!"
