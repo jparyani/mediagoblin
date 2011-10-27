@@ -123,7 +123,7 @@
 
       {% if media['uploader'] == request.user['_id'] or 
                                  request.user['is_admin'] %}
-        <h3>Temporary button holder</h3>
+        <h3>{% trans %}Actions{% endtrans %}</h3>
         <p>
           {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
                                      user= media.uploader().username,
