@@ -65,7 +65,9 @@
       <br />
       <h3>{% trans %}Comments{% endtrans %}</h3>
 
-      <p><a href="#comment_form">{% trans %}Post a comment{% endtrans %}</a></p>
+      {% if request.user %}
+        <p><a href="#comment_form">{% trans %}Post a comment{% endtrans %}</a></p>
+      {% endif %}
 
       {% if comments %}
         {% for comment in comments %}
