@@ -101,7 +101,6 @@
         {% endfor %}
 
         {% if request.user %}
-          <a name="comment_form"></a>
           <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
                                            user= media.uploader().username,
                                            media=media._id) }}" method="POST">
