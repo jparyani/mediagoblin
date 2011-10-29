@@ -178,6 +178,16 @@ class MediaGoblinApp(object):
 
 
 def paste_app_factory(global_config, **app_config):
-    mgoblin_app = MediaGoblinApp(app_config['config'])
+    configs = app_config['config'].split()
+    mediagoblin_config = None
+    for config in configs:
+        if os.path.exists(config) and os.access(config, os.R_OK):
+            mediagoblin_config = config
+            break
+
+    if not mediagoblin_config:
+        raise IOError("Usable mediagoblin config not found.")
+
+    mgoblin_app = MediaGoblinApp(mediagoblin_config)
 
     return mgoblin_app
