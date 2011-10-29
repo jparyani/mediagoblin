@@ -161,7 +161,6 @@ background-image: -moz-linear-gradient(center top , rgb(134, 212, 177), rgb(109,
   padding-right: 11px;
   text-decoration: none;
   font-family: 'Lato', sans-serif;
-  font-size: 1.2em;
   font-weight: bold;
 }
 
@@ -291,7 +290,7 @@ img.media_icon{
   display: block;
   float: left;
   text-align: center;
-  background-color: #333;
+  background-color: #222;
   text-decoration: none;
   padding: 12px 0pt;
   font-size: 2em;
