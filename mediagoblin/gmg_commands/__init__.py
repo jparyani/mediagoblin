@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
+import os
 
 from mediagoblin.tools.common import import_component
 
@@ -59,8 +60,11 @@ def main_cli():
     parser = argparse.ArgumentParser(
         description='GNU MediaGoblin utilities.')
     parser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help="Config file used to set up environment")
+        '-cf', '--conf_file', default=None,
+        help=(
+            "Config file used to set up environment.  "
+            "Default to mediagoblin_local.ini if readable, "
+            "otherwise mediagoblin.ini"))
 
     subparsers = parser.add_subparsers(help='sub-command help')
     for command_name, command_struct in SUBCOMMAND_MAP.iteritems():
@@ -78,6 +82,13 @@ def main_cli():
         subparser.set_defaults(func=exec_func)
 
     args = parser.parse_args()
+    if args.conf_file is None:
+        if os.path.exists('mediagoblin_local.ini') \
+                and os.access('mediagoblin_local.ini', os.R_OK):
+            args.conf_file = 'mediagoblin_local.ini'
+        else:
+            args.conf_file = 'mediagoblin.ini'
+
     args.func(args)
 
 
