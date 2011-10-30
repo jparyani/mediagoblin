@@ -72,6 +72,7 @@ Clone the repository:
 
 And setup the in-package virtualenv:
 
+  cd mediagoblin
   virtualenv . && ./bin/python setup.py develop
 
 (If you have problems here, consider trying to install virtualenv with
@@ -106,4 +107,83 @@ browser to ensure that things are working.
 Hook up to your webserver via fastcgi
 =====================================
 
+This section describes how to configure MediaGoblin to work via
+fastcgi.  Our configuration example will use nginx, as the author of
+this manual feels that nginx config files are easier to understand if
+you have no experience with any type of configuration file.  However,
+the translations to apache are not too hard.
+
+Also for the sake of this document, we'll assume you're running
+mediagoblin on the domain mediagoblin.example.org and your
+mediagoblin checkout in /var/www/mediagoblin.example.org/mediagoblin/
+
+Now in reality, you won't be running mediagoblin on such a domain or
+in such a directory, but it should be easy enough to move your stuff
+over.
+
+Anyway, in such an environment, make a config file in the normal place
+you'd make such an nginx config file... probably
+/etc/nginx/sites-available/mediagoblin.example.conf (and symlink said
+file over to /etc/nginx/sites-enabled/ to turn it on)
+
+Now put in that file:
+
+  server {
+    #################################################
+    # Stock useful config options, but ignore them :)
+    #################################################
+    server_name mediagoblin.example.org www.mediagoblin.example.org;
+    include /etc/nginx/mime.types;
+  
+    access_log /var/log/nginx/mediagoblin.example.access.log;
+    error_log /var/log/nginx/mediagoblin.example.error.log;
+  
+    autoindex off;
+    default_type  application/octet-stream;
+    sendfile on;
+    # tcp_nopush on;
+  
+    # Gzip
+    gzip on;
+    gzip_min_length 1024;
+    gzip_buffers 4 32k;
+    gzip_types text/plain text/html application/x-javascript text/javascript text/xml text/css;
+  
+    #####################################
+    # Mounting MediaGoblin stuff
+    # This is the section you should read
+    #####################################
+  
+    # MediaGoblin's stock static files: CSS, JS, etc.
+    location /mgoblin_static/ {
+      alias /var/www/mediagoblin.example.org/mediagoblin/static/;
+    }
+  
+    # Instance specific media:
+    location /mgoblin_media/ {
+      alias /var/www/mediagoblin.example.org/mediagoblin/user_dev/media/public/;
+    }
+  
+    # Mounting MediaGoblin itself via fastcgi.
+    location / {
+      fastcgi_pass 127.0.0.1:26543;
+      include /etc/nginx/fastcgi_params;
+    }
+  }
+
+At this point your config file should be properly set up to handle
+serving mediagoblin.  Now all you need to do is run it!
+
+Let's do a quick test.  Restart nginx so it picks up your changes,
+something probably like:
+
+  sudo /etc/init.d/nginx restart
+
+Now start up MediaGoblin.  "cd" to the MediaGoblin checkout and run:
+
+  ./lazyserver.sh --server-name=http http_host=127.0.0.1 http_port=26543
+
+Visit the site you've set up in your browser, eg
+http://example.mediagoblin.org (except with the real domain name or IP
+you're expecting to use. ;))
 
