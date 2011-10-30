@@ -181,7 +181,7 @@ something probably like:
 
 Now start up MediaGoblin.  "cd" to the MediaGoblin checkout and run:
 
-  ./lazyserver.sh --server-name=http http_host=127.0.0.1 http_port=26543
+  ./lazyserver.sh --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543
 
 Visit the site you've set up in your browser, eg
 http://example.mediagoblin.org (except with the real domain name or IP
