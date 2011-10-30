@@ -208,3 +208,25 @@ Visit the site you've set up in your browser, eg
 http://example.mediagoblin.org (except with the real domain name or IP
 you're expecting to use. ;))
 
+
+A more permanent mediagoblin process via paste
+==============================================
+
+At this point, you probably have a MediaGoblin instance that for most
+intents and purposes works, but lazyserver is... well, lazy.  You
+probably want to set up a process that you can launch in init scripts.
+
+Try something along the lines of:
+
+  CELERY_ALWAYS_EAGER=true \
+    /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
+    /srv/mediagoblin.example.org/mediagoblin/paste.ini \
+    --pid-file=/tmp/mediagoblin.pid \
+    --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543 \
+
+Feel free to adjust any of this.
+
+Note that this runs MediaGoblin in "always eager" mode with Celery.
+This is fine for development and smaller deployments.  However if
+you're getting into the really large deployment category, consider
+reading the section of this manual on Celery.
