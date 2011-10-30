@@ -163,7 +163,6 @@ Now put in that file:
     autoindex off;
     default_type  application/octet-stream;
     sendfile on;
-    # tcp_nopush on;
   
     # Gzip
     gzip on;
