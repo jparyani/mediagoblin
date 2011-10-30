@@ -58,6 +58,24 @@ running a smaller instance, consider following our `scaling down
 <http://wiki.mediagoblin.org/Scaling_Down>`_ guide (keeping in mind
 that the steps recommended here are tradeoffs!).
 
+
+Decide on a non-privileged user
+===============================
+
+As MediaGoblin does not require any special permissions, you
+should either decide on a user to run it as, or even better create a
+dedicated user for it. Consult your distribution's documentation on
+how to create dedicated service user. Make sure it does have a locked
+password, so nobody can login using this user.
+
+You should create a working dir for MediaGoblin. We assume you will
+check things out into /srv/mediagoblin.example.org/mediagoblin/ for
+this documentation, but you can choose whatever fits your local needs.
+
+Most of the remaining documentation assumes you're working as that
+user. As root, you might want to do "su - mediagoblinuser".
+
+
 Install MediaGoblin and Virtualenv
 ==================================
 
@@ -65,6 +83,10 @@ For the moment, let's assume you want to run the absolute most
 bleeding edge version of mediagoblin in mediagoblin master (possibly
 not the best choice in a production environment, so these docs should
 be fixed ;)).
+
+Change to (and possibly make) the appropriate parent directory:
+
+  cd /srv/mediagoblin.example.org/
 
 Clone the repository:
 
