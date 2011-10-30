@@ -107,6 +107,8 @@ def get_test_app(dump_old_app=True):
 
     # Insert the TestingMiddleware, which can do some
     # sanity checks on every request/response.
+    # Doing it this way is probably not the cleanest way.
+    # We'll fix it, when we have plugins!
     mg_globals.app.middleware.insert(0, TestingMiddleware(mg_globals.app))
 
     app = TestApp(test_app)
