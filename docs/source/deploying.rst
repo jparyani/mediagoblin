@@ -115,7 +115,7 @@ the translations to apache are not too hard.
 
 Also for the sake of this document, we'll assume you're running
 mediagoblin on the domain mediagoblin.example.org and your
-mediagoblin checkout in /var/www/mediagoblin.example.org/mediagoblin/
+mediagoblin checkout in /srv/mediagoblin.example.org/mediagoblin/
 
 Now in reality, you won't be running mediagoblin on such a domain or
 in such a directory, but it should be easy enough to move your stuff
@@ -156,12 +156,12 @@ Now put in that file:
   
     # MediaGoblin's stock static files: CSS, JS, etc.
     location /mgoblin_static/ {
-      alias /var/www/mediagoblin.example.org/mediagoblin/static/;
+      alias /srv/mediagoblin.example.org/mediagoblin/static/;
     }
   
     # Instance specific media:
     location /mgoblin_media/ {
-      alias /var/www/mediagoblin.example.org/mediagoblin/user_dev/media/public/;
+      alias /srv/mediagoblin.example.org/mediagoblin/user_dev/media/public/;
     }
   
     # Mounting MediaGoblin itself via fastcgi.
