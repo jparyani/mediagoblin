@@ -1,8 +1,6 @@
-.. _deployment-chapter:
-
-=======================
- Deploying MediaGoblin
-=======================
+=====================
+Deploying MediaGoblin
+=====================
 
 GNU MediaGoblin is fairly new and so at the time of writing, there
 aren't easy package-manager-friendly methods to install MediaGoblin.
@@ -17,216 +15,240 @@ Note: these tools are for administrators wanting to deploy a fresh
 install.  If instead you want to join in as a contributor, see our
 `Hacking HOWTO <http://wiki.mediagoblin.org/HackingHowto>`_ instead.
 
-Install dependencies
-====================
+Prepare System
+--------------
 
-First thing you want to do is install necessary dependencies.  Those
-are, roughly:
+Dependencies
+~~~~~~~~~~~~
 
- - Python 2.6 or 2.7
- - python-lxml - http://lxml.de/
- - git - http://git-scm.com/
- - MongoDB - http://www.mongodb.org/
- - Python Imaging Library (PIL) - http://www.pythonware.com/products/pil/
- - virtualenv - http://www.virtualenv.org/ 
+MediaGoblin has the following core dependencies:
 
-On a .deb based system (Debian, GnewSense, Trisquel, Ubuntu, etc) run
-the following:
+- Python 2.6 or 2.7
+- `python-lxml <http://lxml.de/>`_
+- `git <http://git-scm.com/>`_
+- `MongoDB <http://www.mongodb.org/>`_
+- `Python Imaging Library <http://www.pythonware.com/products/pil/>`_  (PIL)
+- `virtualenv <http://www.virtualenv.org/>`_
 
-  sudo apt-get install mongodb git-core python python-dev \
-    python-lxml python-imaging python-virtualenv 
+On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
+derivatives) issue the following command: ::
 
-On a .rpm based system (Fedora, RedHat, etc):
+  sudo apt-get install mongodb git-core python python-dev python-lxml python-imaging python-virtualenv
 
-  yum install mongodb-server python-paste-deploy python-paste-script \
-    git-core python python-devel python-lxml python-imaging python-virtualenv
+On a RPM-based system (e.g. Fedora, RedHat, and derivatives) issue the
+following command: ::
+
+  yum install mongodb-server python-paste-deploy python-paste-script git-core python python-devel python-lxml python-imaging python-virtualenv
 
 Configure MongoDB
-=================
+~~~~~~~~~~~~~~~~~
 
-So you have MongoDB installed... you should probably make sure that
-you have a few things configured before you start up MediaGoblin.
+After installing MongoDB some preliminary database configuration may
+be necessary.
 
-For one thing, you almost certainly want to make sure `journaling
-<http://www.mongodb.org/display/DOCS/Journaling>`_ is enabled.
-Journaling is automatically enabled on 64 bit systems post-MongoDB
-2.0, but you should check.  (Not turning on journaling means that if
-your server crashes you have a good chance of losing data!)
+Ensure that MongoDB `journaling <http://www.mongodb.org/display/DOCS/Journaling>`_
+is enabled. Journaling is enabled by default in version 2.0 and later
+64-bit MongoDB instances. Check your deployment, and consider enabling
+journaling if you're running 32-bit systems or earlier version.
 
-MongoDB can take a lot of space by default.  If you're planning on
-running a smaller instance, consider following our `scaling down
-<http://wiki.mediagoblin.org/Scaling_Down>`_ guide (keeping in mind
-that the steps recommended here are tradeoffs!).
+.. warning::
+
+   Running MongoDB without journaling risks general data corruption
+   and raises the possibility of losing data within a 60-second
+   window when the server restarts.
+
+   MediaGoblin recommends enabling MongoDB's journaling feature by
+   adding a ``--journal`` flag to the command line or a "``journal:
+   true``" option to the configuration file.
+
+MongoDB can take a lot of space by default. If you're planning on
+running a smaller instance, consider the `scaling down guide
+<http://wiki.mediagoblin.org/Scaling_Down>`_ for some appropriate
+tradeoffs to conserve space.
+
+Drop Privileges for MediaGoblin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As MediaGoblin does not require special permissions or elevated
+access, you should run MediaGoblin under an existing non-root user or
+preferably create a dedicated user for the purpose of running
+MediaGoblin. Consult your distribution's documentation on how to
+create "system account" or dedicated service user. Ensure that it is
+not possible to log in to your system with as this user.
+
+You should create a working directory for MediaGoblin. This document
+assumes your local git repository will be located at  ``/srv/mediagoblin.example.org/mediagoblin/``
+for this documentation. Substitute your prefer ed local deployment path
+as needed.
+
+This document assumes that all operations are performed as this
+user. To drop privileges to this user, run the following command: ::
 
 
-Decide on a non-privileged user
-===============================
+      su - [mediagoblin]``
 
-As MediaGoblin does not require any special permissions, you
-should either decide on a user to run it as, or even better create a
-dedicated user for it. Consult your distribution's documentation on
-how to create dedicated service user. Make sure it does have a locked
-password, so nobody can login using this user.
-
-You should create a working dir for MediaGoblin. We assume you will
-check things out into /srv/mediagoblin.example.org/mediagoblin/ for
-this documentation, but you can choose whatever fits your local needs.
-
-Most of the remaining documentation assumes you're working as that
-user. As root, you might want to do "su - mediagoblinuser".
-
+Where, "``[mediagoblin]`` is the username of the system user that will
+run MediaGoblin.
 
 Install MediaGoblin and Virtualenv
-==================================
+----------------------------------
 
-For the moment, let's assume you want to run the absolute most
-bleeding edge version of mediagoblin in mediagoblin master (possibly
-not the best choice in a production environment, so these docs should
-be fixed ;)).
+As of |version|, MediaGoblin has a rapid development pace. As a result
+the following instructions recommend installing from the ``master``
+branch of the git repository. Eventually production deployments will
+want to transition to running from more consistent releases.
 
-Change to (and possibly make) the appropriate parent directory:
+Issue the following commands, to create and change the working
+directory. Modify these commands to reflect your own environment: ::
 
-  cd /srv/mediagoblin.example.org/
+     mkdir -p /srv/mediagoblin.example.org/
+     cd /srv/mediagoblin.example.org/
 
-Clone the repository:
+Clone the MediaGoblin repository: ::
 
-  git clone git://gitorious.org/mediagoblin/mediagoblin.git
+     git clone git://gitorious.org/mediagoblin/mediagoblin.git
 
-And setup the in-package virtualenv:
+And setup the in-package virtualenv: ::
 
-  cd mediagoblin
-  virtualenv . && ./bin/python setup.py develop
+     cd mediagoblin
+     virtualenv . && ./bin/python setup.py develop
 
-(If you have problems here, consider trying to install virtualenv with
-one of the flags --distribute or --no-site-packages... Additionally if
-your system has python3.X as the default you might need to do
-virtualenv --python=python2.7 or --python=python2.6)
+.. note::
 
-(You might note that we've done an in-package install of
-virtualenv... this isn't the most traditional way to install
-virtualenv, and it might not even be the best.  But it's the easiest
-to explain without having to explain python packaging, and it works.)
+   If you have problems here, consider trying to install virtualenv
+   with the ``--distribute`` or ``--no-site-packages`` options. If
+   your system's default Python is in the 3.x series you man need to
+   run ``virtualenv`` with the  ``--python=python2.7`` or
+   ``--python=python2.6`` options.
 
-At this point your development environment should be setup.  You don't
-need to do anything else.  However if at any point you update your
-codebase, you should also run:
+The above provides an in-package install of ``virtualenv``. While this
+is counter to the conventional ``virtualenv`` configuration, it is
+more reliable and considerably easier to configure and illustrate. If
+you're familiar with Python packaging you may consider deploying with
+your preferred the method.
 
-  ./bin/python setup.py develop --upgrade && ./bin/gmg migrate. 
+This concludes the initial configuration of the development
+environment. In the future, if at any point you want update your
+codebase, you should also run: ::
 
+     ./bin/python setup.py develop --upgrade && ./bin/gmg migrate.
 
-Test-start the server
-=====================
+Deploy MediaGoblin Services
+---------------------------
 
-At this point mediagoblin should be properly installed.  You can
-test-start it like so:
+Test the Server
+~~~~~~~~~~~~~~~
 
-  ./lazyserver.sh --server-name=broadcast
+At this point MediaGoblin should be properly installed.  You can
+test the deployment with the following command: ::
+
+     ./lazyserver.sh --server-name=broadcast
 
 You should be able to connect to the machine on port 6543 in your
-browser to ensure that things are working.
+browser to confirm that the service is operable.
 
-
-Hook up to your webserver via fastcgi
-=====================================
+Connect the Webserver to MediaGoblin with FastCGI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This section describes how to configure MediaGoblin to work via
-fastcgi.  Our configuration example will use nginx, as the author of
-this manual feels that nginx config files are easier to understand if
-you have no experience with any type of configuration file.  However,
-the translations to apache are not too hard.
+fastcgi. Our configuration example will use nginx, however, you may
+use any webserver of your choice as long as it supports the FastCGI
+protocol. If you do not already have a web server, consider nginx, as
+the configuration files may be more clear than the
+alternatives.
 
-Also for the sake of this document, we'll assume you're running
-mediagoblin on the domain mediagoblin.example.org and your
-mediagoblin checkout in /srv/mediagoblin.example.org/mediagoblin/
+Create a configuration file at
+``/srv/mediagoblin.example.org/nginx.conf`` and create a symbolic link
+into a directory that will be included in your ``nginx`` configuration
+(e.g. "``/etc/nginx/sites-enabled`` or ``/etc/nginx/conf.d``) with
+one of the following commands (as the root user:) ::
 
-Now in reality, you won't be running mediagoblin on such a domain or
-in such a directory, but it should be easy enough to move your stuff
-over.
+     ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/conf.d/
+     ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/sites-enabled/
 
-Anyway, in such an environment, make a config file in the normal place
-you'd make such an nginx config file... probably
-/etc/nginx/sites-available/mediagoblin.example.conf (and symlink said
-file over to /etc/nginx/sites-enabled/ to turn it on)
+Modify these commands and locations depending on your preferences and
+the existing configuration of your nginx instance. The contents of
+this ``nginx.conf`` file should be modeled on the following: ::
 
-Now put in that file:
+     server {
+      #################################################
+      # Stock useful config options, but ignore them :)
+      #################################################
+      include /etc/nginx/mime.types;
 
-  server {
-    #################################################
-    # Stock useful config options, but ignore them :)
-    #################################################
-    server_name mediagoblin.example.org www.mediagoblin.example.org;
-    include /etc/nginx/mime.types;
-  
-    access_log /var/log/nginx/mediagoblin.example.access.log;
-    error_log /var/log/nginx/mediagoblin.example.error.log;
-  
-    autoindex off;
-    default_type  application/octet-stream;
-    sendfile on;
-  
-    # Gzip
-    gzip on;
-    gzip_min_length 1024;
-    gzip_buffers 4 32k;
-    gzip_types text/plain text/html application/x-javascript text/javascript text/xml text/css;
-  
-    #####################################
-    # Mounting MediaGoblin stuff
-    # This is the section you should read
-    #####################################
-  
-    # MediaGoblin's stock static files: CSS, JS, etc.
-    location /mgoblin_static/ {
-      alias /srv/mediagoblin.example.org/mediagoblin/static/;
-    }
-  
-    # Instance specific media:
-    location /mgoblin_media/ {
-      alias /srv/mediagoblin.example.org/mediagoblin/user_dev/media/public/;
-    }
-  
-    # Mounting MediaGoblin itself via fastcgi.
-    location / {
-      fastcgi_pass 127.0.0.1:26543;
-      include /etc/nginx/fastcgi_params;
-    }
-  }
+      autoindex off;
+      default_type  application/octet-stream;
+      sendfile on;
 
-At this point your config file should be properly set up to handle
-serving mediagoblin.  Now all you need to do is run it!
+      # Gzip
+      gzip on;
+      gzip_min_length 1024;
+      gzip_buffers 4 32k;
+      gzip_types text/plain text/html application/x-javascript text/javascript text/xml text/css;
 
-Let's do a quick test.  Restart nginx so it picks up your changes,
-something probably like:
+      #####################################
+      # Mounting MediaGoblin stuff
+      # This is the section you should read
+      #####################################
 
-  sudo /etc/init.d/nginx restart
+      server_name mediagoblin.example.org www.mediagoblin.example.org;
+      access_log /var/log/nginx/mediagoblin.example.access.log;
+      error_log /var/log/nginx/mediagoblin.example.error.log;
 
-Now start up MediaGoblin.  "cd" to the MediaGoblin checkout and run:
+      # MediaGoblin's stock static files: CSS, JS, etc.
+      location /mgoblin_static/ {
+         alias /srv/mediagoblin.example.org/mediagoblin/static/;
+      }
 
-  ./lazyserver.sh --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543
+      # Instance specific media:
+      location /mgoblin_media/ {
+         alias /srv/mediagoblin.example.org/mediagoblin/user_dev/media/public/;
+      }
 
-Visit the site you've set up in your browser, eg
-http://example.mediagoblin.org (except with the real domain name or IP
-you're expecting to use. ;))
+      # Mounting MediaGoblin itself via fastcgi.
+      location / {
+         fastcgi_pass 127.0.0.1:26543;
+         include /etc/nginx/fastcgi_params;
+      }
+     }
 
+Now, nginx instance is configured to serve the MediaGoblin
+application. Perform a quick test to ensure that this configuration
+works. Restart nginx so it picks up your changes, with a command that
+resembles one of the following (as the root user:) ::
 
-A more permanent mediagoblin process via paste
-==============================================
+     sudo /etc/init.d/nginx restart
+     sudo /etc/rc.d/nginx restart
 
-At this point, you probably have a MediaGoblin instance that for most
-intents and purposes works, but lazyserver is... well, lazy.  You
-probably want to set up a process that you can launch in init scripts.
+Now start MediaGoblin. Use the following command sequence as an
+example: ::
 
-Try something along the lines of:
+     cd /srv/mediagoblin.example.org/mediagoblin/
+     ./lazyserver.sh --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543
 
-  CELERY_ALWAYS_EAGER=true \
-    /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
-    /srv/mediagoblin.example.org/mediagoblin/paste.ini \
-    --pid-file=/tmp/mediagoblin.pid \
-    --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543 \
+Visit the site you've set up in your browser by visiting
+<http://mediagobilin.example.org>. You should see MediaGoblin!
 
-Feel free to adjust any of this.
+Production MediaGoblin Deployments with Paste
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Note that this runs MediaGoblin in "always eager" mode with Celery.
-This is fine for development and smaller deployments.  However if
-you're getting into the really large deployment category, consider
-reading the section of this manual on Celery.
+The instance configured with ``lazyserver`` is not ideal for a
+production MediaGoblin deployment. Ideally, you should be able to use
+a a control script (i.e. init script.) to launch and restart the
+MediaGoblin process.
+
+Use the following command as the basis for such a script: ::
+
+       CELERY_ALWAYS_EAGER=true \
+        /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
+        /srv/mediagoblin.example.org/mediagoblin/paste.ini \
+        --pid-file=/tmp/mediagoblin.pid \
+        --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543 \
+
+.. note::
+
+   The above configuration places MediaGoblin in "always eager" mode
+   with Celery. This is fine for development and smaller
+   deployments. However, if you're getting into the really large
+   deployment category, consider reading the section of this manual on
+   Celery.
