@@ -14,6 +14,7 @@ Table of Contents:
    foreword
    about
    deploying
+   configuration
    help
    theming
    codebase
