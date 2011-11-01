@@ -87,6 +87,17 @@ they sound like.
  - email_smtp_user
  - email_smtp_pass
 
+All other configuration changes
+-------------------------------
+
+To be perfectly honest, there are quite a few options and I'm not
+going to be able to get to documanting them all in time for 0.1.0.
+
+So here's a cop-out section saying that if you get into trouble, hop
+onto IRC and we'll help you out:
+
+  #mediagoblin on irc.freenode.net
+
 Celery
 ======
 
