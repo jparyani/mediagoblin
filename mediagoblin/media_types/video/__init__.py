@@ -23,4 +23,4 @@ MEDIA_MANAGER = {
                                 # 'mediagoblin.media_types.image.processing'?
     "display_template": "mediagoblin/media_displays/video.html",
     "default_thumb": "images/media_thumbs/video.jpg",
-    "accepted_extensions": ["mp4", "mov", "webm", "avi", "3gp", "3gpp"]}
+    "accepted_extensions": ["mp4", "mov", "webm", "avi", "3gp", "3gpp", "mkv", "ogv", "ogg"]}

@@ -29,7 +29,10 @@ _log = logging.getLogger(__name__)
 logging.basicConfig()
 _log.setLevel(logging.DEBUG)
 
-import gtk
+try:
+    import gtk
+except:
+    raise Exception('Could not find pygtk')
 
 try:
     import gobject
