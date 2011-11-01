@@ -15,18 +15,18 @@ make local modified versions of, and one extra file that might be
 helpful to look at.  Let's examine these.
 
 mediagoblin.ini
-  The config file for MediaGoblin, the application.  If you want to
+  This is the config file for MediaGoblin, the application.  If you want to
   tweak settings for MediaGoblin, you'll usually tweak them here.
 
 paste.ini
-  Primarily a server configuration file, on the python side
+  This is primarily a server configuration file, on the python side
   (specifically, on the wsgi side, via `paste deploy
   <http://pythonpaste.org/deploy/>`_ / `paste script
   <http://pythonpaste.org/script/>`_).  It also sets up some
   middleware that you can mostly ignore, except to configure
   sessions... more on that later.  If you are adding a different
   python server other than fastcgi / plain http, you might configure
-  it here.  Mostly you won't touch this file as much, probably.
+  it here.  You probably won't need to change this file very much.
 
 
 There's one more file that you certainly won't change unless you're
