@@ -64,6 +64,28 @@ file also, usually by a -cf flag.)
 Common changes
 ==============
 
+Enabling email notifications
+----------------------------
+
+You'll almost certainly want to enable sending emails.  By default,
+MediaGoblin doesn't really do this... for the sake of developer
+convenience, it runs in "email debug mode".  Change this:
+
+  email_debug_mode = false
+
+You can (and should) change the "from" email address by setting
+``email_sender_address``.
+
+Note that you need a mailer daemon running for this to work.
+
+If you have more custom SMTP settings, you also have the following
+options at your disposal, which are all optional, and do exactly what
+they sound like.
+
+ - email_smtp_host
+ - email_smtp_port
+ - email_smtp_user
+ - email_smtp_pass
 
 Celery
 ======
