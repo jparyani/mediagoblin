@@ -43,6 +43,23 @@ mediagoblin/config_spec.ini
 Making local copies
 ===================
 
+Assuming you're doing the virtualenv setup described elsewhere in this
+manual and you need to make local tweaks to the config files, there's
+an easy way to do that.
+
+To make changes to mediagoblin.ini:
+
+  cp mediagoblin.ini mediagoblin_local.ini
+
+To make changes to paste.ini:
+  cp paste.ini paste_local.ini
+
+From here you should be able to make direct adjustments to the files,
+and most of the commands described elsewhere in this manual will "notice"
+your local config files and use those instead of the non-local version.
+
+(Note that all commands provide a way to pass in a specific config
+file also, usually by a -cf flag.)
 
 Common changes
 ==============
