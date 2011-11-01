@@ -36,16 +36,16 @@ read and reference:
 mediagoblin/config_spec.ini
   This file is actually a specification for mediagoblin.ini itself, as
   a config file!  It defines types and defaults.  Sometimes it's a
-  good place to look for documentation... or to find out that hidden
+  good place to look for documentation... or to find that hidden
   option that we didn't tell you about. :)
 
 
 Making local copies
 ===================
 
-Assuming you're doing the virtualenv setup described elsewhere in this
-manual and you need to make local tweaks to the config files, there's
-an easy way to do that.
+Let's assume you're doing the virtualenv setup described elsewhere in this
+manual, and you need to make local tweaks to the config files. How do you do 
+that? Let's see.
 
 To make changes to mediagoblin.ini:
 
