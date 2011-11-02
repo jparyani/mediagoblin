@@ -130,7 +130,6 @@ def media_post_comment(request, media):
     """
     recieves POST from a MediaEntry() comment form, saves the comment.
     """
-    print "bloof!"
     assert request.method == 'POST'
 
     comment = request.db.MediaComment()
