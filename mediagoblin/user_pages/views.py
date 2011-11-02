@@ -124,13 +124,17 @@ def media_home(request, media, page, **kwargs):
          'app_config': mg_globals.app_config})
 
 
+@get_user_media_entry
 @require_active_login
-def media_post_comment(request):
+def media_post_comment(request, media):
     """
     recieves POST from a MediaEntry() comment form, saves the comment.
     """
+    print "bloof!"
+    assert request.method == 'POST'
+
     comment = request.db.MediaComment()
-    comment['media_entry'] = ObjectId(request.matchdict['media'])
+    comment['media_entry'] = media['_id']
     comment['author'] = request.user['_id']
     comment['content'] = unicode(request.POST['comment_content'])
     comment['content_html'] = cleaned_markdown_conversion(comment['content'])
@@ -147,9 +151,8 @@ def media_post_comment(request):
             request, messages.SUCCESS,
             _('Comment posted!'))
 
-    return redirect(request, 'mediagoblin.user_pages.media_home',
-        media = request.matchdict['media'],
-        user = request.matchdict['user'])
+    return exc.HTTPFound(
+        location=media.url_for_self(request.urlgen))
 
 
 @get_user_media_entry
