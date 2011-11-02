@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2011-10-03 21:29-0400\n"
+"POT-Creation-Date: 2011-11-01 23:14-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -482,6 +482,10 @@ msgstr ""
 
 #: mediagoblin/user_pages/views.py:142
 msgid "Empty comments are not allowed."
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:148
+msgid "Comment posted!"
 msgstr ""
 
 #: mediagoblin/user_pages/views.py:181

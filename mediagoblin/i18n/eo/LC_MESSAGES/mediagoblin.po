@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-09-25 20:26-0500\n"
-"PO-Revision-Date: 2011-09-26 01:25+0000\n"
+"POT-Creation-Date: 2011-11-01 23:14-0500\n"
+"PO-Revision-Date: 2011-11-02 04:13+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -45,19 +45,19 @@ msgstr "Retajpu ĝin por certigi, ke ne okazis mistajpoj."
 msgid "Email address"
 msgstr "Retpoŝtadreso"
 
-#: mediagoblin/auth/views.py:42
+#: mediagoblin/auth/views.py:55
 msgid "Sorry, registration is disabled on this instance."
 msgstr "Bedaŭrinde, registrado estas malaktivigita en tiu ĉi instalaĵo."
 
-#: mediagoblin/auth/views.py:60
+#: mediagoblin/auth/views.py:73
 msgid "Sorry, a user with that name already exists."
 msgstr "Bedaŭrinde, uzanto kun tiu nomo jam ekzistas."
 
-#: mediagoblin/auth/views.py:64
+#: mediagoblin/auth/views.py:77
 msgid "Sorry, that email address has already been taken."
 msgstr "Tiu retpoŝtadreso jam estas uzata."
 
-#: mediagoblin/auth/views.py:165
+#: mediagoblin/auth/views.py:179
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
@@ -65,60 +65,62 @@ msgstr ""
 "Via retpoŝtadreso estas konfirmita. Vi povas nun ensaluti, redakti vian "
 "profilon, kaj alŝuti bildojn!"
 
-#: mediagoblin/auth/views.py:171
+#: mediagoblin/auth/views.py:185
 msgid "The verification key or user id is incorrect"
 msgstr "La kontrol-kodo aŭ la uzantonomo ne estas korekta"
 
-#: mediagoblin/auth/views.py:192
+#: mediagoblin/auth/views.py:207
 msgid "Resent your verification email."
 msgstr "Resendi vian kontrol-mesaĝon."
 
-#: mediagoblin/auth/views.py:228
+#: mediagoblin/auth/views.py:248
 msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
 msgstr ""
+"Ni ne povas sendi pasvortsavan retleteron, ĉar aŭ via konto estas neaktiva, "
+"aŭ ĝia retpoŝtadreso ne estis konfirmita."
 
-#: mediagoblin/edit/forms.py:26 mediagoblin/submit/forms.py:27
+#: mediagoblin/edit/forms.py:24 mediagoblin/submit/forms.py:27
 msgid "Title"
 msgstr "Titolo"
 
-#: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:32
+#: mediagoblin/edit/forms.py:28 mediagoblin/submit/forms.py:32
 msgid "Tags"
 msgstr "Etikedoj"
 
-#: mediagoblin/edit/forms.py:33
+#: mediagoblin/edit/forms.py:31
 msgid "Slug"
 msgstr "La distingiga adresparto"
 
-#: mediagoblin/edit/forms.py:34
+#: mediagoblin/edit/forms.py:32
 msgid "The slug can't be empty"
 msgstr "La distingiga adresparto ne povas esti malplena"
 
-#: mediagoblin/edit/forms.py:35
+#: mediagoblin/edit/forms.py:33
 msgid ""
 "The title part of this media's URL. You usually don't need to change this."
 msgstr ""
 "La parto de la dosieradreso, bazita sur la dosiertitolo. Ordinare ne necesas"
 " ĝin ŝanĝi."
 
-#: mediagoblin/edit/forms.py:42
+#: mediagoblin/edit/forms.py:40
 msgid "Bio"
 msgstr "Bio"
 
-#: mediagoblin/edit/forms.py:45
+#: mediagoblin/edit/forms.py:43
 msgid "Website"
 msgstr "Retejo"
 
-#: mediagoblin/edit/views.py:63
+#: mediagoblin/edit/views.py:64
 msgid "An entry with that slug already exists for this user."
 msgstr "Ĉi tiu uzanto jam havas dosieron kun tiu distingiga adresparto."
 
-#: mediagoblin/edit/views.py:84
+#: mediagoblin/edit/views.py:85
 msgid "You are editing another user's media. Proceed with caution."
 msgstr "Vi priredaktas dosieron de alia uzanto. Agu singardeme."
 
-#: mediagoblin/edit/views.py:154
+#: mediagoblin/edit/views.py:155
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr "Vi redaktas profilon de alia uzanto. Agu singardeme."
 
@@ -134,15 +136,15 @@ msgstr "Dosiero"
 msgid "Description of this work"
 msgstr "Priskribo de ĉi tiu verko"
 
-#: mediagoblin/submit/views.py:47
+#: mediagoblin/submit/views.py:46
 msgid "You must provide a file."
 msgstr "Vi devas provizi dosieron."
 
-#: mediagoblin/submit/views.py:50
+#: mediagoblin/submit/views.py:49
 msgid "The file doesn't seem to be an image!"
 msgstr "La dosiero ŝajnas ne esti bildo!"
 
-#: mediagoblin/submit/views.py:122
+#: mediagoblin/submit/views.py:121
 msgid "Woohoo! Submitted!"
 msgstr "Hura! Alŝutitas!"
 
@@ -183,8 +185,8 @@ msgid "verify your email!"
 msgstr "konfirmu vian retpoŝtadreson! "
 
 #: mediagoblin/templates/mediagoblin/base.html:73
-#: mediagoblin/templates/mediagoblin/auth/login.html:26
-#: mediagoblin/templates/mediagoblin/auth/login.html:34
+#: mediagoblin/templates/mediagoblin/auth/login.html:27
+#: mediagoblin/templates/mediagoblin/auth/login.html:35
 msgid "Log in"
 msgstr "Ensaluti"
 
@@ -250,7 +252,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:38
 msgid "Excited to join us?"
-msgstr ""
+msgstr "Ĉu vi deziregas aliĝi nin?"
 
 #: mediagoblin/templates/mediagoblin/root.html:39
 #, python-format
@@ -259,27 +261,32 @@ msgid ""
 "          or\n"
 "          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr ""
+"<a class=\"header_submit_highlight\" href=\"%(register_url)s\">Kreu senpagan"
+" konton</a>⏎ aŭ⏎ <a class=\"header_submit\" "
+"href=\"http://wiki.mediagoblin.org/HackingHowto\">Kreu senpagan konton</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:53
 msgid "Most recent media"
 msgstr "Plej nove aldonitaj dosieroj"
 
-#: mediagoblin/templates/mediagoblin/auth/change_fp.html:27
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:29
 msgid "Enter your new password"
 msgstr "Enigu vian novan pasvorton"
 
-#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:29
 msgid "Enter your username or email"
 msgstr "Enigu vian salutnomon aŭ retpoŝtadreson"
 
 #: mediagoblin/templates/mediagoblin/auth/fp_changed_success.html:22
 msgid "Your password has been changed. Try to log in now."
-msgstr ""
+msgstr "Via pasvorto estis ŝanĝita. Nun provu ensaluti."
 
 #: mediagoblin/templates/mediagoblin/auth/fp_email_sent.html:22
 msgid ""
 "Check your inbox. We sent an email with a URL for changing your password."
 msgstr ""
+"Kontrolu vian retleterujon. Ni sendis retleteron kun retadreso por ŝanĝo de "
+"via pasvorto."
 
 #: mediagoblin/templates/mediagoblin/auth/fp_verification_email.txt:19
 #, python-format
@@ -302,23 +309,23 @@ msgstr ""
 "\n"
 "Se vi pensas, ke ĉi tiu retletero estas sendita erare, simple ignoru ĝin kaj plu restu feliĉa koboldo!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:29
+#: mediagoblin/templates/mediagoblin/auth/login.html:30
 msgid "Logging in failed!"
 msgstr "Ensaluto malsukcesis!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:42
+#: mediagoblin/templates/mediagoblin/auth/login.html:43
 msgid "Don't have an account yet?"
 msgstr "Ĉu ankoraŭ sen konto?"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:45
+#: mediagoblin/templates/mediagoblin/auth/login.html:46
 msgid "Create one here!"
 msgstr "Kreu ĝin ĉi tie!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:48
+#: mediagoblin/templates/mediagoblin/auth/login.html:49
 msgid "Forgot your password?"
 msgstr "Ĉu vi forgesis vian pasvorton?"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:51
+#: mediagoblin/templates/mediagoblin/auth/login.html:52
 msgid "Change it!"
 msgstr "Ŝanĝu ĝin!"
 
@@ -326,7 +333,7 @@ msgstr "Ŝanĝu ĝin!"
 msgid "Create an account!"
 msgstr "Kreu konton!"
 
-#: mediagoblin/templates/mediagoblin/auth/register.html:30
+#: mediagoblin/templates/mediagoblin/auth/register.html:31
 msgid "Create"
 msgstr "Krei"
 
@@ -374,7 +381,7 @@ msgstr "Dosieroj markitaj per:"
 msgid "Submit yer media"
 msgstr "Alŝutu vian aŭd-vid-dosieron"
 
-#: mediagoblin/templates/mediagoblin/submit/start.html:29
+#: mediagoblin/templates/mediagoblin/submit/start.html:30
 msgid "Submit"
 msgstr "Alŝuti"
 
@@ -522,7 +529,15 @@ msgstr "Komento"
 msgid "I am sure I want to delete this"
 msgstr "Mi estas certa, ke mi volas forigi ĉi tion"
 
-#: mediagoblin/user_pages/views.py:175
+#: mediagoblin/user_pages/views.py:142
+msgid "Empty comments are not allowed."
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:148
+msgid "Comment posted!"
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:181
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr "Vi estas forigonta dosieron de alia uzanto. Estu singardema."
 
