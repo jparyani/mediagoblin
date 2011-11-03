@@ -213,8 +213,12 @@ this ``nginx.conf`` file should be modeled on the following: ::
       # Mounting MediaGoblin itself via fastcgi.
       location / {
          fastcgi_pass 127.0.0.1:26543;
-         fastcgi_param PATH_INFO $fastcgi_script_name;
          include /etc/nginx/fastcgi_params;
+
+         # our understanding vs nginx's handling of script_name vs
+         # path_info don't match :)
+         fastcgi_param PATH_INFO $fastcgi_script_name;
+         fastcgi_param SCRIPT_NAME "";
       }
      }
 
