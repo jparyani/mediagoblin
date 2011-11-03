@@ -127,6 +127,11 @@ more reliable and considerably easier to configure and illustrate. If
 you're familiar with Python packaging you may consider deploying with
 your preferred the method.
 
+Assuming you are going to deploy with fastcgi, you should also install
+flup: ::
+
+     ./bin/easy_install flup
+
 This concludes the initial configuration of the development
 environment. In the future, if at any point you want update your
 codebase, you should also run: ::
