@@ -202,12 +202,12 @@ this ``nginx.conf`` file should be modeled on the following: ::
 
       # MediaGoblin's stock static files: CSS, JS, etc.
       location /mgoblin_static/ {
-         alias /srv/mediagoblin.example.org/mediagoblin/static/;
+         alias /srv/mediagoblin.example.org/mediagoblin/mediagoblin/static/;
       }
 
       # Instance specific media:
       location /mgoblin_media/ {
-         alias /srv/mediagoblin.example.org/mediagoblin/user_dev/media/public/;
+         alias /srv/mediagoblin.example.org/mediagoblin/mediagoblin/user_dev/media/public/;
       }
 
       # Mounting MediaGoblin itself via fastcgi.
