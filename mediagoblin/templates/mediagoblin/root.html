@@ -24,30 +24,21 @@
     <h1>{% trans %}Explore{% endtrans %}</h1>
   {% else %}
    <div class="grid_11 alpha">
-      <h1>{% trans %}Hi there, media lover! MediaGoblin is...{% endtrans %}</h1>
-      <ul>
-        <li>{% trans %}The perfect place for your media!{% endtrans %}</li>
-        <li>{% trans %}A place for people to collaborate and show off original and derived creations!{% endtrans %}</li>
-        <li>{% trans %}Free, as in freedom. (We’re a <a href="http://gnu.org">GNU</a> project, after all.){% endtrans %}</li>
-        <li>{% trans %}Aiming to make the world a better place through decentralization and (eventually, coming soon!) federation!{% endtrans %}</li>
-        <li>{% trans %}Built for extensibility.  (Multiple media types coming soon to the software, including video support!){% endtrans %}</li>
-        <li>{% trans %}Powered by people like you.  (<a href="http://mediagoblin.org/pages/join.html">You can help us improve this software!</a>){% endtrans %}</li>
-      </ul>
-
+      <h1>{% trans %}Hi there, welcome to this MediaGoblin site!{% endtrans %}</h1>
+      <p>{% trans %}Your finest source for all goblin-related media.{% endtrans %}</p>
+      <p>{% trans %}To add your own media, place comments, save your favourites and more, you can log in with your MediaGoblin account.{% endtrans %}</p>
       {% if allow_registration %}
-        <p>{% trans %}Excited to join us?{% endtrans %}<p>
+        <p>{% trans %}Don't have one yet? It's easy!{% endtrans %}</p>
         {% trans register_url=request.urlgen('mediagoblin.auth.register') -%}
-          <a class="header_submit_highlight" href="{{ register_url }}">Create a free account</a>
+          <a class="header_submit_highlight" href="{{ register_url }}">Create an account at this site</a>
           or
           <a class="header_submit" href="http://wiki.mediagoblin.org/HackingHowto">Set up MediaGoblin on your own server</a>
         {%- endtrans %}
       {% endif %}
     </div>
-
     <div class="grid_5 omega">
       <img src="{{ request.staticdirect('/images/frontpage_image.png') }}" />
     </div>
-
     <div class="clear"></div>
   {% endif %}
   <h2>{% trans %}Most recent media{% endtrans %}</h2>

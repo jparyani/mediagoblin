@@ -47,28 +47,22 @@
       <h2 class="media_title">
         {{ media.title }}
       </h2>
-
+      {% autoescape False %}
+        <p>{{ media.description_html }}</p>
+      {% endautoescape %}
       <p class="media_uploader">
         {% trans date=media.created.strftime("%Y-%m-%d"),
                  user_url=request.urlgen(
                    'mediagoblin.user_pages.user_home',
                    user=media.uploader().username),
                  username=media.uploader().username -%}
-          Uploaded on {{ date }} by <a href="{{ user_url }}">{{ username }}</a>
+          By <a href="{{ user_url }}">{{ username }}</a> on {{ date }}
         {%- endtrans %}
       </p>
-
-      {% autoescape False %}
-        <p>{{ media.description_html }}</p>
-      {% endautoescape %}
-
-      <br />
-      <h3>{% trans %}Comments{% endtrans %}</h3>
-
+      <h3></h3>
       {% if request.user %}
         <p><a href="#comment_form">{% trans %}Post a comment{% endtrans %}</a></p>
       {% endif %}
-
       {% if comments %}
         {% for comment in comments %}
           {% set comment_author = comment.author() %}
@@ -79,14 +73,10 @@
               <div class="comment_wrapper" id="comment-{{ comment['_id'] }}">
 	    {% endif %}
 
-            <div class="comment_content">
-              {% autoescape False %}
-                {{ comment.content_html }}
+            <div class="comment_content">{% autoescape False %}{{ comment.content_html }}
               {% endautoescape %}
-            </div>
-
-            <div class="comment_author">&mdash; 
-              <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+            <img src="{{ request.staticdirect('/images/icon_comment.png') }}" />
+            <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                             user = comment_author['username']) }}">
                 {{ comment_author['username'] }}</a>
               {% trans %}at{% endtrans %} 
@@ -94,7 +84,7 @@
 		       comment = comment['_id'],
 		       user = media.uploader().username,
 		       media = media._id) }}#comment">
-                {{ comment.created.strftime("%Y-%m-%d %I:%M%p") }}
+                {{ comment.created.strftime("%I:%M%p %Y-%m-%d") }}
               </a>
             </div>
           </div>
