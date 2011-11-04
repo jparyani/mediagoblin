@@ -30,27 +30,23 @@
           {% trans %}Logging in failed!{% endtrans %}
         </div>
       {% endif %}
+      {% if allow_registration %}
+        <p>
+          {% trans %}Don't have an account yet?{% endtrans %} <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
+            {%- trans %}Create one here!{% endtrans %}</a>
+        </p>
+      {% endif %}
       {{ wtforms_util.render_divs(login_form) }}
+        <p>
+          <a href="{{ request.urlgen('mediagoblin.auth.forgot_password') }}">
+          {% trans %}Forgot your password?{% endtrans %}</a>
+        </p>
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Log in{% endtrans %}" class="button"/>
       </div>
       {% if next %}
         <input type="hidden" name="next" value="{{ next }}" class="button"
                style="display: none;"/>
-      {% endif %}
-      {% if allow_registration %}
-        <p>
-          {% trans %}Don't have an account yet?{% endtrans %}
-          <br />
-          <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
-            {%- trans %}Create one here!{% endtrans %}</a>
-        </p>
-        <p>
-          {% trans %}Forgot your password?{% endtrans %}
-          <br />
-          <a href="{{ request.urlgen('mediagoblin.auth.forgot_password') }}">
-            {%- trans %}Change it!{% endtrans %}</a>
-        </p>
       {% endif %}
     </div>
   </form>
