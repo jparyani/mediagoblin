@@ -14,8 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import Image
+import os
 
+import Image
 from celery.task import Task
 from celery import registry
 
@@ -122,17 +123,16 @@ def process_image(entry):
         mgg.queue_store, queued_filepath,
         'source')
 
+    extension = os.path.splitext(queued_filename)[1]
+
     try:
         thumb = Image.open(queued_filename)
     except IOError:
         raise BadMediaFail()
 
     thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
-    # ensure color mode is compatible with jpg
-    if thumb.mode != "RGB":
-        thumb = thumb.convert("RGB")
 
-    thumb_filepath = create_pub_filepath(entry, 'thumbnail.jpg')
+    thumb_filepath = create_pub_filepath(entry, 'thumbnail' + extension)
     thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
 
     with thumb_file:
@@ -147,10 +147,7 @@ def process_image(entry):
     if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1]:
         medium.thumbnail(MEDIUM_SIZE, Image.ANTIALIAS)
 
-        if medium.mode != "RGB":
-            medium = medium.convert("RGB")
-
-        medium_filepath = create_pub_filepath(entry, 'medium.jpg')
+        medium_filepath = create_pub_filepath(entry, 'medium' + extension)
         medium_file = mgg.public_store.get_file(medium_filepath, 'w')
 
         with medium_file:
