@@ -136,7 +136,7 @@ def process_image(entry):
     thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
 
     with thumb_file:
-        thumb.save(thumb_file, "JPEG", quality=90)
+        thumb.save(thumb_file)
 
     # If the size of the original file exceeds the specified size of a `medium`
     # file, a `medium.jpg` files is created and later associated with the media
@@ -154,7 +154,7 @@ def process_image(entry):
         medium_file = mgg.public_store.get_file(medium_filepath, 'w')
 
         with medium_file:
-            medium.save(medium_file, "JPEG", quality=90)
+            medium.save(medium_file)
             medium_processed = True
 
     # we have to re-read because unlike PIL, not everything reads
