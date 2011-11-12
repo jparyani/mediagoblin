@@ -21,6 +21,7 @@ import os, shutil
 from paste.deploy import loadapp
 from webtest import TestApp
 
+from mediagoblin import mg_globals
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.decorators import _make_safe
@@ -47,6 +48,51 @@ $ CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests ./bin/nosetests"""
 
 
 class BadCeleryEnviron(Exception): pass
+
+
+class TestingMiddleware(object):
+    """
+    Middleware for the Unit tests
+    
+    It might make sense to perform some tests on all
+    requests/responses. Or prepare them in a special
+    manner. For example all html responses could be tested
+    for being valid html *after* being rendered.
+
+    This module is getting inserted at the front of the
+    middleware list, which means: requests are handed here
+    first, responses last. So this wraps up the "normal"
+    app.
+
+    If you need to add a test, either add it directly to
+    the appropiate process_request or process_response, or
+    create a new method and call it from process_*.
+    """
+
+    def __init__(self, mg_app):
+        self.app = mg_app
+
+    def process_request(self, request):
+        pass
+
+    def process_response(self, request, response):
+        # All following tests should be for html only!
+        if response.content_type != "text/html":
+            # Get out early
+            return
+
+        # If the template contains a reference to
+        # /mgoblin_static/ instead of using
+        # /request.staticdirect(), error out here.
+        # This could probably be implemented as a grep on
+        # the shipped templates easier...
+        if response.text.find("/mgoblin_static/") >= 0:
+            raise AssertionError(
+                "Response HTML contains reference to /mgoblin_static/ "
+                "instead of staticdirect. Request was for: "
+                + request.full_path)
+
+        return
 
 
 def suicide_if_bad_celery_environ():
@@ -102,6 +148,12 @@ def get_test_app(dump_old_app=True):
     # setup app and return
     test_app = loadapp(
         'config:' + TEST_SERVER_CONFIG)
+
+    # Insert the TestingMiddleware, which can do some
+    # sanity checks on every request/response.
+    # Doing it this way is probably not the cleanest way.
+    # We'll fix it, when we have plugins!
+    mg_globals.app.middleware.insert(0, TestingMiddleware(mg_globals.app))
 
     app = TestApp(test_app)
     MGOBLIN_APP = app
