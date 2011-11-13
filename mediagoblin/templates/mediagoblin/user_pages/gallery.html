@@ -26,6 +26,12 @@
                        user=user.username) }}">
 {% endblock mediagoblin_head %}
 
+{% block title %}
+  {%- trans username=user.username -%}
+    {{ username }}'s media
+  {%- endtrans %} &mdash; {{ super() }}
+{% endblock %}
+
 {% block mediagoblin_content -%}
   <h1>
     {%- trans username=user.username,
