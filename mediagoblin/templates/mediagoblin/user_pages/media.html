@@ -20,6 +20,8 @@
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
 
+{% block title %}{{ media.title }} &mdash; {{ super() }}{% endblock %}
+
 {% block mediagoblin_content %}
   {% if media %}
     <div class="grid_11 alpha">
