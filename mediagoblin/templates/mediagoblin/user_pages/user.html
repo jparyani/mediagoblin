@@ -26,6 +26,17 @@
                        user=user.username) }}">
 {% endblock mediagoblin_head %}
 
+{% block title %}
+  {%- if user -%}
+    {%- trans username=user.username -%}
+      {{ username }}'s profile
+    {%- endtrans %} &mdash; {{ super() }}
+  {%- else -%}
+    {{ super() }}
+  {%- endif -%}
+{% endblock %}
+
+
 {% block mediagoblin_content -%}
   {# If no user... #}
   {% if not user %}
