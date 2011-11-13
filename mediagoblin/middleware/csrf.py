@@ -98,7 +98,7 @@ class CsrfMiddleware(object):
             httponly=True)
 
         # update the Vary header
-        response.vary = getattr(response, 'vary', []) + ['Cookie']
+        response.vary = (getattr(response, 'vary') or []) + ['Cookie']
 
     def _make_token(self, request):
         """Generate a new token to use for CSRF protection."""
