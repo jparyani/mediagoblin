@@ -219,7 +219,7 @@ class MediaEntry(Document):
 
     def get_comments(self):
         return self.db.MediaComment.find({
-                'media_entry': self['_id']}).sort('created', DESCENDING)
+                'media_entry': self._id}).sort('created', DESCENDING)
 
     def get_display_media(self, media_map,
                           fetch_order=common.DISPLAY_IMAGE_FETCHING_ORDER):
@@ -250,7 +250,7 @@ class MediaEntry(Document):
             {'slug': self['slug']})
 
         if duplicate:
-            self['slug'] = "%s-%s" % (self['_id'], self['slug'])
+            self['slug'] = "%s-%s" % (self._id, self['slug'])
 
     def url_for_self(self, urlgen):
         """
@@ -269,13 +269,13 @@ class MediaEntry(Document):
             return urlgen(
                 'mediagoblin.user_pages.media_home',
                 user=uploader['username'],
-                media=unicode(self['_id']))
+                media=unicode(self._id))
 
     def url_to_prev(self, urlgen):
         """
         Provide a url to the previous entry from this user, if there is one
         """
-        cursor = self.db.MediaEntry.find({'_id': {"$gt": self['_id']},
+        cursor = self.db.MediaEntry.find({'_id': {"$gt": self._id},
                                           'uploader': self['uploader'],
                                           'state': 'processed'}).sort(
                                                     '_id', ASCENDING).limit(1)
@@ -288,7 +288,7 @@ class MediaEntry(Document):
         """
         Provide a url to the next entry from this user, if there is one
         """
-        cursor = self.db.MediaEntry.find({'_id': {"$lt": self['_id']},
+        cursor = self.db.MediaEntry.find({'_id': {"$lt": self._id},
                                           'uploader': self['uploader'],
                                           'state': 'processed'}).sort(
                                                     '_id', DESCENDING).limit(1)

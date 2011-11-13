@@ -32,7 +32,7 @@ MEDIUM_SIZE = 640, 640
 def create_pub_filepath(entry, filename):
     return mgg.public_store.get_unique_filepath(
             ['media_entries',
-             unicode(entry['_id']),
+             unicode(entry._id),
              filename])
 
 
@@ -56,7 +56,7 @@ class ProcessMedia(Task):
         try:
             process_image(entry)
         except BaseProcessingFail, exc:
-            mark_entry_failed(entry[u'_id'], exc)
+            mark_entry_failed(entry._id, exc)
             return
 
         entry['state'] = u'processed'

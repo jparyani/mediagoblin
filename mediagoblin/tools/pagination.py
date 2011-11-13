@@ -53,7 +53,7 @@ class Pagination(object):
             cursor = copy.copy(self.cursor)
 
             for (doc, increment) in izip(cursor, count(0)):
-                if doc['_id'] == jump_to_id:
+                if doc._id == jump_to_id:
                     self.page = 1 + int(floor(increment / self.per_page))
 
                     self.active_id = jump_to_id

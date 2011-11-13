@@ -87,7 +87,7 @@ def register(request):
             user.save(validate=True)
 
             # log the user in
-            request.session['user_id'] = unicode(user['_id'])
+            request.session['user_id'] = unicode(user._id)
             request.session.save()
 
             # send verification email
@@ -122,7 +122,7 @@ def login(request):
 
         if user and user.check_login(request.POST['password']):
             # set up login in session
-            request.session['user_id'] = unicode(user['_id'])
+            request.session['user_id'] = unicode(user._id)
             request.session.save()
 
             if request.POST.get('next'):

@@ -52,7 +52,7 @@ def submit_start(request):
 
             # create entry and save in database
             entry = request.db.MediaEntry()
-            entry['_id'] = ObjectId()
+            entry._id = ObjectId()
             entry['title'] = (
                 unicode(request.POST['title'])
                 or unicode(splitext(filename)[0]))
@@ -62,7 +62,7 @@ def submit_start(request):
                 entry['description'])
 
             entry['media_type'] = u'image'  # heh
-            entry['uploader'] = request.user['_id']
+            entry['uploader'] = request.user._id
 
             # Process the user's folksonomy "tags"
             entry['tags'] = convert_to_tag_list_of_dicts(
@@ -74,7 +74,7 @@ def submit_start(request):
             # Now store generate the queueing related filename
             queue_filepath = request.app.queue_store.get_unique_filepath(
                 ['media_entries',
-                 unicode(entry['_id']),
+                 unicode(entry._id),
                  secure_filename(filename)])
 
             # queue appropriately
@@ -105,7 +105,7 @@ def submit_start(request):
             # conditions with changes to the document via processing code)
             try:
                 process_media.apply_async(
-                    [unicode(entry['_id'])], {},
+                    [unicode(entry._id)], {},
                     task_id=task_id)
             except BaseException as exc:
                 # The purpose of this section is because when running in "lazy"
@@ -116,7 +116,7 @@ def submit_start(request):
                 #
                 # ... not completely the diaper pattern because the
                 # exception is re-raised :)
-                mark_entry_failed(entry[u'_id'], exc)
+                mark_entry_failed(entry._id, exc)
                 # re-raise the exception
                 raise
 

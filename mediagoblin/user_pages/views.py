@@ -45,7 +45,7 @@ def user_home(request, page):
             {'user': user})
 
     cursor = request.db.MediaEntry.find(
-        {'uploader': user['_id'],
+        {'uploader': user._id,
          'state': 'processed'}).sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)
@@ -78,7 +78,7 @@ def user_gallery(request, page):
         return render_404(request)
 
     cursor = request.db.MediaEntry.find(
-        {'uploader': user['_id'],
+        {'uploader': user._id,
          'state': 'processed'}).sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)
@@ -135,8 +135,8 @@ def media_post_comment(request, media):
     assert request.method == 'POST'
 
     comment = request.db.MediaComment()
-    comment['media_entry'] = media['_id']
-    comment['author'] = request.user['_id']
+    comment['media_entry'] = media._id
+    comment['author'] = request.user._id
     comment['content'] = unicode(request.POST['comment_content'])
     comment['content_html'] = cleaned_markdown_conversion(comment['content'])
 
@@ -179,7 +179,7 @@ def media_confirm_delete(request, media):
                 location=media.url_for_self(request.urlgen))
 
     if ((request.user[u'is_admin'] and
-         request.user[u'_id'] != media.uploader()[u'_id'])):
+         request.user._id != media.uploader()._id)):
         messages.add_message(
             request, messages.WARNING,
             _("You are about to delete another user's media. "
@@ -207,7 +207,7 @@ def atom_feed(request):
         return render_404(request)
 
     cursor = request.db.MediaEntry.find({
-                 'uploader': user['_id'],
+                 'uploader': user._id,
                  'state': 'processed'}) \
                  .sort('created', DESCENDING) \
                  .limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
@@ -251,7 +251,7 @@ def processing_panel(request):
     #
     # Make sure we have permission to access this user's panel.  Only
     # admins and this user herself should be able to do so.
-    if not (user[u'_id'] == request.user[u'_id']
+    if not (user._id == request.user._id
             or request.user.is_admin):
         # No?  Let's simply redirect to this user's homepage then.
         return redirect(
@@ -260,12 +260,12 @@ def processing_panel(request):
 
     # Get media entries which are in-processing
     processing_entries = request.db.MediaEntry.find(
-        {'uploader': user['_id'],
+        {'uploader': user._id,
          'state': 'processing'}).sort('created', DESCENDING)
 
     # Get media entries which have failed to process
     failed_entries = request.db.MediaEntry.find(
-        {'uploader': user['_id'],
+        {'uploader': user._id,
          'state': 'failed'}).sort('created', DESCENDING)
 
     # Render to response

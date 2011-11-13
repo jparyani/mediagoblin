@@ -69,10 +69,10 @@
         {% for comment in comments %}
           {% set comment_author = comment.author() %}
 	    {% if pagination.active_id == comment._id %}
-              <div class="comment_wrapper comment_active" id="comment-{{ comment['_id'] }}">
+              <div class="comment_wrapper comment_active" id="comment-{{ comment._id }}">
 		<a name="comment" id="comment"></a>
             {% else %}
-              <div class="comment_wrapper" id="comment-{{ comment['_id'] }}">
+              <div class="comment_wrapper" id="comment-{{ comment._id }}">
 	    {% endif %}
 
             <div class="comment_content">{% autoescape False %}{{ comment.content_html }}
@@ -83,7 +83,7 @@
                 {{ comment_author['username'] }}</a>
               {% trans %}at{% endtrans %} 
               <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
-		       comment = comment['_id'],
+		       comment = comment._id,
 		       user = media.uploader().username,
 		       media = media._id) }}#comment">
                 {{ comment.created.strftime("%I:%M%p %Y-%m-%d") }}
@@ -114,7 +114,7 @@
     <div class="grid_5 omega">
       {% include "mediagoblin/utils/prev_next.html" %}
 
-      {% if media['uploader'] == request.user['_id'] or 
+      {% if media['uploader'] == request.user._id or 
                                  request.user['is_admin'] %}
         <h3>{% trans %}Actions{% endtrans %}</h3>
         <p>
@@ -151,7 +151,7 @@
       {% endif %}
 
       {% if app_config['allow_attachments']
-            and (media['uploader'] == request.user['_id']
+            and (media['uploader'] == request.user._id
                  or request.user['is_admin']) %}
         <p>
           <a href="{{ request.urlgen('mediagoblin.edit.attachments',
