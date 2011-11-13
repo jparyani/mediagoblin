@@ -67,7 +67,7 @@
                                             user= request.user['username']) }}">
                   {{ request.user['username'] }}</a>
 
-                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">log out</a>)
+                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
               {% else %}
                 <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
                   {% trans %}Log in{% endtrans %}</a>
