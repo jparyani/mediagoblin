@@ -168,7 +168,7 @@ def verify_email(request):
 
     if user and user['verification_key'] == unicode(request.GET['token']):
         user[u'status'] = u'active'
-        user[u'email_verified'] = True
+        user.email_verified = True
         user[u'verification_key'] = None
 
         user.save()
@@ -249,7 +249,7 @@ def forgot_password(request):
                 {'email': request.POST['username']})
 
         if user:
-            if user['email_verified'] and user['status'] == 'active':
+            if user.email_verified and user['status'] == 'active':
                 user[u'fp_verification_key'] = unicode(uuid.uuid4())
                 user[u'fp_token_expire'] = datetime.datetime.now() + \
                                           datetime.timedelta(days=10)
@@ -304,7 +304,7 @@ def verify_forgot_password(request):
     if ((user and user['fp_verification_key'] and
          user['fp_verification_key'] == unicode(formdata_token) and
          datetime.datetime.now() < user['fp_token_expire']
-         and user['email_verified'] and user['status'] == 'active')):
+         and user.email_verified and user['status'] == 'active')):
 
         cp_form = auth_forms.ChangePassForm(formdata_vars)
 

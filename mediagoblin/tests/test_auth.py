@@ -163,7 +163,7 @@ def test_register_views(test_app):
         {'username': 'happygirl'})
     assert new_user
     assert new_user['status'] == u'needs_email_verification'
-    assert new_user['email_verified'] == False
+    assert new_user.email_verified == False
 
     ## Make sure user is logged in
     request = template.TEMPLATE_TEST_CONTEXT[
@@ -203,7 +203,7 @@ def test_register_views(test_app):
         {'username': 'happygirl'})
     assert new_user
     assert new_user['status'] == u'needs_email_verification'
-    assert new_user['email_verified'] == False
+    assert new_user.email_verified == False
 
     ## Verify the email activation works
     template.clear_test_template_context()
@@ -217,7 +217,7 @@ def test_register_views(test_app):
         {'username': 'happygirl'})
     assert new_user
     assert new_user['status'] == u'active'
-    assert new_user['email_verified'] == True
+    assert new_user.email_verified == True
 
     # Uniqueness checks
     # -----------------
