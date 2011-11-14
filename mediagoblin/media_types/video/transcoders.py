@@ -624,13 +624,16 @@ class VideoTranscoder:
         self.pipeline.add(self.decoder)
 
         # Video elements
+        self.videoqueue = gst.element_factory_make('queue', 'videoqueue')
+        self.pipeline.add(self.videoqueue)
+
         self.ffmpegcolorspace = gst.element_factory_make(
             'ffmpegcolorspace', 'ffmpegcolorspace')
         self.pipeline.add(self.ffmpegcolorspace)
 
-        self.videoscale = gst.element_factory_make('videoscale', 'videoscale')
-        self.videoscale.set_property('method', 2)  # I'm not sure this works
-        self.videoscale.set_property('add-borders', 0)
+        self.videoscale = gst.element_factory_make('ffvideoscale', 'videoscale')
+        #self.videoscale.set_property('method', 2)  # I'm not sure this works
+        #self.videoscale.set_property('add-borders', 0)
         self.pipeline.add(self.videoscale)
 
         self.capsfilter = gst.element_factory_make('capsfilter', 'capsfilter')
@@ -642,6 +645,9 @@ class VideoTranscoder:
         self.pipeline.add(self.vp8enc)
 
         # Audio elements
+        self.audioqueue = gst.element_factory_make('queue', 'audioqueue')
+        self.pipeline.add(self.audioqueue)
+
         self.audioconvert = gst.element_factory_make('audioconvert', 'audioconvert')
         self.pipeline.add(self.audioconvert)
 
@@ -679,6 +685,7 @@ class VideoTranscoder:
         self.filesrc.link(self.decoder)
 
         # Link all the video elements in a link to webmux
+        self.videoqueue.link(self.ffmpegcolorspace)
         self.ffmpegcolorspace.link(self.videoscale)
         self.videoscale.link(self.capsfilter)
         #self.capsfilter.link(self.xvimagesink)
@@ -688,6 +695,7 @@ class VideoTranscoder:
         if self.data.is_audio:
             # Link all the audio elements in a line to webmux
             #self.audioconvert.link(self.alsasink)
+            self.audioqueue.link(self.audioconvert)
             self.audioconvert.link(self.vorbisenc)
             self.vorbisenc.link(self.webmmux)
 
@@ -707,10 +715,10 @@ class VideoTranscoder:
         if self.ffmpegcolorspace.get_pad_template('sink')\
                 .get_caps().intersect(pad.get_caps()).is_empty():
             # It is NOT a video src pad.
-            pad.link(self.audioconvert.get_pad('sink'))
+            pad.link(self.audioqueue.get_pad('sink'))
         else:
             # It IS a video src pad.
-            pad.link(self.ffmpegcolorspace.get_pad('sink'))
+            pad.link(self.videoqueue.get_pad('sink'))
 
     def _setup_bus(self):
         self.bus = self.pipeline.get_bus()
