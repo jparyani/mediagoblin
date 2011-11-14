@@ -63,6 +63,7 @@ class User(Document):
      - bio_html: biography of the user converted to proper HTML.
     """
     __collection__ = 'users'
+    use_dot_notation = True
 
     structure = {
         'username': unicode,
@@ -177,6 +178,7 @@ class MediaEntry(Document):
      - fail_metadata:
     """
     __collection__ = 'media_entries'
+    use_dot_notation = True
 
     structure = {
         'uploader': ObjectId,
@@ -321,6 +323,7 @@ class MediaComment(Document):
     """
 
     __collection__ = 'media_comments'
+    use_dot_notation = True
 
     structure = {
         'media_entry': ObjectId,
