@@ -115,7 +115,7 @@ def send_verification_email(user, request):
     # TODO: There is no error handling in place
     send_email(
         mg_globals.app_config['email_sender_address'],
-        [user['email']],
+        [user.email],
         # TODO
         # Due to the distributed nature of GNU MediaGoblin, we should
         # find a way to send some additional information about the
@@ -150,6 +150,6 @@ def send_fp_verification_email(user, request):
     # TODO: There is no error handling in place
     send_email(
         mg_globals.app_config['email_sender_address'],
-        [user['email']],
+        [user.email],
         'GNU MediaGoblin - Change forgotten password!',
         rendered_email)

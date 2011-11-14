@@ -81,7 +81,7 @@ def register(request):
             # Create the user
             user = request.db.User()
             user.username = username
-            user['email'] = email
+            user.email = email
             user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
             user.save(validate=True)

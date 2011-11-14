@@ -51,7 +51,7 @@ def adduser(args):
         # Create the user
         entry = db.User()
         entry.username = unicode(args.username.lower())
-        entry['email'] = unicode(args.email)
+        entry.email = unicode(args.email)
         entry['pw_hash'] = auth_lib.bcrypt_gen_password_hash(args.password)
         entry['status'] = u'active'
         entry['email_verified'] = True

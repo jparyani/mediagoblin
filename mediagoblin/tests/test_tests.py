@@ -28,7 +28,7 @@ def test_get_test_app_wipes_db():
 
     new_user = mg_globals.database.User()
     new_user.username = u'lolcat'
-    new_user['email'] = u'lol@cats.example.org'
+    new_user.email = u'lol@cats.example.org'
     new_user['pw_hash'] = u'pretend_this_is_a_hash'
     new_user.save()
     assert mg_globals.database.User.find().count() == 1
