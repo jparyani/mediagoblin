@@ -60,14 +60,14 @@
                 {# the following link should only appear when verification is needed #}
                 {% if request.user.status == "needs_email_verification" %}
                   <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                              user=request.user['username']) }}"
+                                              user=request.user.username) }}"
                      class="button_action_highlight">
                     {% trans %}Verify your email!{% endtrans %}</a>
                 {% endif %}
 
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                            user= request.user['username']) }}">
-                  {{ request.user['username'] }}</a>
+                                            user= request.user.username) }}">
+                  {{ request.user.username }}</a>
 
                 (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
               {% else %}

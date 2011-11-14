@@ -268,12 +268,12 @@ class MediaEntry(Document):
         if self.get('slug'):
             return urlgen(
                 'mediagoblin.user_pages.media_home',
-                user=uploader['username'],
+                user=uploader.username,
                 media=self['slug'])
         else:
             return urlgen(
                 'mediagoblin.user_pages.media_home',
-                user=uploader['username'],
+                user=uploader.username,
                 media=unicode(self._id))
 
     def url_to_prev(self, urlgen):
@@ -286,7 +286,7 @@ class MediaEntry(Document):
                                                     '_id', ASCENDING).limit(1)
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
-                          user=self.get_uploader()['username'],
+                          user=self.get_uploader().username,
                           media=unicode(cursor[0]['slug']))
 
     def url_to_next(self, urlgen):
@@ -300,7 +300,7 @@ class MediaEntry(Document):
 
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
-                          user=self.get_uploader()['username'],
+                          user=self.get_uploader().username,
                           media=unicode(cursor[0]['slug']))
 
     def get_uploader(self):

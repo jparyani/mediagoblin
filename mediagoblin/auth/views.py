@@ -80,7 +80,7 @@ def register(request):
         if extra_validation_passes:
             # Create the user
             user = request.db.User()
-            user['username'] = username
+            user.username = username
             user['email'] = email
             user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
@@ -98,7 +98,7 @@ def register(request):
             # message waiting for them to verify their email
             return redirect(
                 request, 'mediagoblin.user_pages.user_home',
-                user=user['username'])
+                user=user.username)
 
     return render_to_response(
         request,
@@ -186,7 +186,7 @@ def verify_email(request):
 
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
-        user=user['username'])
+        user=user.username)
 
 
 def resend_activation(request):
@@ -224,7 +224,7 @@ def resend_activation(request):
         _('Resent your verification email.'))
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
-        user=request.user['username'])
+        user=request.user.username)
 
 
 def forgot_password(request):
@@ -268,7 +268,7 @@ def forgot_password(request):
 
                 return redirect(
                     request, 'mediagoblin.user_pages.user_home',
-                    user=user['username'])
+                    user=user.username)
 
         # do not reveal whether or not there is a matching user
         return redirect(request, 'mediagoblin.auth.fp_email_sent')

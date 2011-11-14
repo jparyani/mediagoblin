@@ -127,7 +127,7 @@ def submit_start(request):
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
                 return redirect(request, "mediagoblin.user_pages.user_home",
-                                user=request.user['username'])
+                                user=request.user.username)
             except InvalidFileType, exc:
                 submit_form.file.errors.append(
                     _(u'Invalid file type.'))

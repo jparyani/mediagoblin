@@ -105,7 +105,7 @@ def send_verification_email(user, request):
     """
     rendered_email = render_template(
         request, 'mediagoblin/auth/verification_email.txt',
-        {'username': user['username'],
+        {'username': user.username,
          'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
                 host=request.host,
                 uri=request.urlgen('mediagoblin.auth.verify_email'),
@@ -140,7 +140,7 @@ def send_fp_verification_email(user, request):
     """
     rendered_email = render_template(
         request, 'mediagoblin/auth/fp_verification_email.txt',
-        {'username': user['username'],
+        {'username': user.username,
          'verification_url': EMAIL_FP_VERIFICATION_TEMPLATE.format(
                 host=request.host,
                 uri=request.urlgen('mediagoblin.auth.verify_forgot_password'),
