@@ -96,7 +96,7 @@ class User(Document):
         See if a user can login with this password
         """
         return auth_lib.bcrypt_check_password(
-            password, self['pw_hash'])
+            password, self.pw_hash)
 
 
 class MediaEntry(Document):

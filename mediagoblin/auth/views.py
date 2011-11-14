@@ -82,7 +82,7 @@ def register(request):
             user = request.db.User()
             user.username = username
             user.email = email
-            user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
             user.save(validate=True)
 
@@ -309,7 +309,7 @@ def verify_forgot_password(request):
         cp_form = auth_forms.ChangePassForm(formdata_vars)
 
         if request.method == 'POST' and cp_form.validate():
-            user[u'pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
             user[u'fp_verification_key'] = None
             user[u'fp_token_expire'] = None
