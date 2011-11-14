@@ -177,13 +177,13 @@ def edit_profile(request):
                  'form': form})
 
         user.url = unicode(request.POST['url'])
-        user['bio'] = unicode(request.POST['bio'])
+        user.bio = unicode(request.POST['bio'])
 
         if password_matches:
             user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['new_password'])
 
-        user['bio_html'] = cleaned_markdown_conversion(user['bio'])
+        user.bio_html = cleaned_markdown_conversion(user['bio'])
 
         user.save()
 
