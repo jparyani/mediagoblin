@@ -110,7 +110,7 @@ def send_verification_email(user, request):
                 host=request.host,
                 uri=request.urlgen('mediagoblin.auth.verify_email'),
                 userid=unicode(user._id),
-                verification_key=user['verification_key'])})
+                verification_key=user.verification_key)})
 
     # TODO: There is no error handling in place
     send_email(

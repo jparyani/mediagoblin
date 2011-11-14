@@ -187,7 +187,7 @@ def test_register_views(test_app):
     assert parsed_get_params['userid'] == [
         unicode(new_user._id)]
     assert parsed_get_params['token'] == [
-        new_user['verification_key']]
+        new_user.verification_key]
 
     ## Try verifying with bs verification key, shouldn't work
     template.clear_test_template_context()

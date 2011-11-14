@@ -166,10 +166,10 @@ def verify_email(request):
     user = request.db.User.find_one(
         {'_id': ObjectId(unicode(request.GET['userid']))})
 
-    if user and user['verification_key'] == unicode(request.GET['token']):
+    if user and user.verification_key == unicode(request.GET['token']):
         user.status = u'active'
         user.email_verified = True
-        user[u'verification_key'] = None
+        user.verification_key = None
 
         user.save()
 
@@ -212,7 +212,7 @@ def resend_activation(request):
         
         return redirect(request, "mediagoblin.user_pages.user_home", user=request.user['username'])
 
-    request.user[u'verification_key'] = unicode(uuid.uuid4())
+    request.user.verification_key = unicode(uuid.uuid4())
     request.user.save()
     
     email_debug_message(request)
