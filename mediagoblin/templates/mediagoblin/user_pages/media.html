@@ -62,7 +62,7 @@
         {%- endtrans %}
       </p>
       <h3></h3>
-      {% if request.user %}
+      {% if request.user and comments.count() %}
         <p><a href="#comment_form">{% trans %}Post a comment{% endtrans %}</a></p>
       {% endif %}
       {% if comments %}
