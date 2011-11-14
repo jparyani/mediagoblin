@@ -78,7 +78,7 @@ def edit_media(request, media):
             return exc.HTTPFound(
                 location=media.url_for_self(request.urlgen))
 
-    if request.user['is_admin'] \
+    if request.user.is_admin \
             and media['uploader'] != request.user._id \
             and request.method != 'POST':
         messages.add_message(
@@ -147,7 +147,7 @@ def edit_attachments(request, media):
 def edit_profile(request):
     # admins may edit any user profile given a username in the querystring
     edit_username = request.GET.get('username')
-    if request.user['is_admin'] and request.user.username != edit_username:
+    if request.user.is_admin and request.user.username != edit_username:
         user = request.db.User.find_one({'username': edit_username})
         # No need to warn again if admin just submitted an edited profile
         if request.method != 'POST':

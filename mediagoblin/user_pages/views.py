@@ -191,7 +191,7 @@ def media_confirm_delete(request, media):
             return exc.HTTPFound(
                 location=media.url_for_self(request.urlgen))
 
-    if ((request.user[u'is_admin'] and
+    if ((request.user.is_admin and
          request.user._id != media.get_uploader()._id)):
         messages.add_message(
             request, messages.WARNING,

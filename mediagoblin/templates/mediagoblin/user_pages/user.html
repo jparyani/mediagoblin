@@ -113,7 +113,7 @@
     {% else %}
       <div class="grid_6 alpha">
         {% include "mediagoblin/utils/profile.html" %}
-        {% if request.user._id == user._id or request.user['is_admin'] %}
+        {% if request.user._id == user._id or request.user.is_admin %}
           <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
                           user.username }}">
             {%- trans %}Edit profile{% endtrans -%}

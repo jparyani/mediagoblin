@@ -73,7 +73,7 @@ def makeadmin(args):
 
     user = db.User.one({'username': unicode(args.username.lower())})
     if user:
-        user['is_admin'] = True
+        user.is_admin = True
         user.save()
         print 'The user is now Admin'
     else:

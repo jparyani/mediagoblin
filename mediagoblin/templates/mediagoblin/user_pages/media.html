@@ -116,7 +116,7 @@
     {% include "mediagoblin/utils/prev_next.html" %}
 
     {% if media['uploader'] == request.user._id or 
-                               request.user['is_admin'] %}
+                               request.user.is_admin %}
       <p>
         {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
                                    user= media.get_uploader().username,
@@ -146,7 +146,7 @@
 
     {% if app_config['allow_attachments']
           and (media['uploader'] == request.user._id
-               or request.user['is_admin']) %}
+               or request.user.is_admin) %}
       <p>
         <a href="{{ request.urlgen('mediagoblin.edit.attachments',
                       user=media.get_uploader().username,
