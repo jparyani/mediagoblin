@@ -176,7 +176,7 @@ def edit_profile(request):
                 {'user': user,
                  'form': form})
 
-        user['url'] = unicode(request.POST['url'])
+        user.url = unicode(request.POST['url'])
         user['bio'] = unicode(request.POST['bio'])
 
         if password_matches:
