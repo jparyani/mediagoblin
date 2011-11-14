@@ -48,7 +48,7 @@
                  ><img src="{{ request.staticdirect('/images/logo.png') }}"
                      alt="{% trans %}MediaGoblin logo{% endtrans %}" /></a>
             {% endblock %}
-            {% if request.user and request.user['status'] == 'active' %}
+            {% if request.user and request.user.status == 'active' %}
               <a class="button_action"
                  href="{{ request.urlgen('mediagoblin.submit.start') }}">
                 {% trans %}Submit media{% endtrans %}

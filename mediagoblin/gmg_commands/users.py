@@ -53,7 +53,7 @@ def adduser(args):
         entry.username = unicode(args.username.lower())
         entry.email = unicode(args.email)
         entry.pw_hash = auth_lib.bcrypt_gen_password_hash(args.password)
-        entry['status'] = u'active'
+        entry.status = u'active'
         entry.email_verified = True
         entry.save(validate=True)
 

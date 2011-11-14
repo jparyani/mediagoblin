@@ -162,7 +162,7 @@ def test_register_views(test_app):
     new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
     assert new_user
-    assert new_user['status'] == u'needs_email_verification'
+    assert new_user.status == u'needs_email_verification'
     assert new_user.email_verified == False
 
     ## Make sure user is logged in
@@ -202,7 +202,7 @@ def test_register_views(test_app):
     new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
     assert new_user
-    assert new_user['status'] == u'needs_email_verification'
+    assert new_user.status == u'needs_email_verification'
     assert new_user.email_verified == False
 
     ## Verify the email activation works
@@ -216,7 +216,7 @@ def test_register_views(test_app):
     new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
     assert new_user
-    assert new_user['status'] == u'active'
+    assert new_user.status == u'active'
     assert new_user.email_verified == True
 
     # Uniqueness checks

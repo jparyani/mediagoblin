@@ -40,7 +40,7 @@ def user_home(request, page):
             'username': request.matchdict['user']})
     if not user:
         return render_404(request)
-    elif user['status'] != u'active':
+    elif user.status != u'active':
         return render_to_response(
             request,
             'mediagoblin/user_pages/user.html',
@@ -254,7 +254,7 @@ def processing_panel(request):
     # Make sure the user exists and is active
     if not user:
         return render_404(request)
-    elif user['status'] != u'active':
+    elif user.status != u'active':
         return render_to_response(
             request,
             'mediagoblin/user_pages/user.html',
