@@ -274,7 +274,7 @@ def test_register_views(test_app):
 
     ### The forgotten password token should be set to expire in ~ 10 days
     # A few ticks have expired so there are only 9 full days left...
-    assert (new_user['fp_token_expire'] - datetime.datetime.now()).days == 9
+    assert (new_user.fp_token_expire - datetime.datetime.now()).days == 9
 
     ## Try using a bs password-changing verification key, shouldn't work
     template.clear_test_template_context()
@@ -285,12 +285,12 @@ def test_register_views(test_app):
 
     ## Try using an expired token to change password, shouldn't work
     template.clear_test_template_context()
-    real_token_expiration = new_user['fp_token_expire']
-    new_user['fp_token_expire'] = datetime.datetime.now()
+    real_token_expiration = new_user.fp_token_expire
+    new_user.fp_token_expire = datetime.datetime.now()
     new_user.save()
     response = test_app.get("%s?%s" % (path, get_params), status=404)
     assert_equal(response.status, '404 Not Found')
-    new_user['fp_token_expire'] = real_token_expiration
+    new_user.fp_token_expire = real_token_expiration
     new_user.save()
 
     ## Verify step 1 of password-change works -- can see form to change password
