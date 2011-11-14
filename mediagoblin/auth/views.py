@@ -250,7 +250,7 @@ def forgot_password(request):
 
         if user:
             if user.email_verified and user.status == 'active':
-                user[u'fp_verification_key'] = unicode(uuid.uuid4())
+                user.fp_verification_key = unicode(uuid.uuid4())
                 user[u'fp_token_expire'] = datetime.datetime.now() + \
                                           datetime.timedelta(days=10)
                 user.save()
@@ -301,8 +301,8 @@ def verify_forgot_password(request):
         return render_404(request)
 
     # check if we have a real user and correct token
-    if ((user and user['fp_verification_key'] and
-         user['fp_verification_key'] == unicode(formdata_token) and
+    if ((user and user.fp_verification_key and
+         user.fp_verification_key == unicode(formdata_token) and
          datetime.datetime.now() < user['fp_token_expire']
          and user.email_verified and user.status == 'active')):
 
@@ -311,7 +311,7 @@ def verify_forgot_password(request):
         if request.method == 'POST' and cp_form.validate():
             user.pw_hash = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
-            user[u'fp_verification_key'] = None
+            user.fp_verification_key = None
             user[u'fp_token_expire'] = None
             user.save()
 

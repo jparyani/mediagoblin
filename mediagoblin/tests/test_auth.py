@@ -270,7 +270,7 @@ def test_register_views(test_app):
     # user should have matching parameters
     new_user = mg_globals.database.User.find_one({'username': 'happygirl'})
     assert parsed_get_params['userid'] == [unicode(new_user._id)]
-    assert parsed_get_params['token'] == [new_user['fp_verification_key']]
+    assert parsed_get_params['token'] == [new_user.fp_verification_key]
 
     ### The forgotten password token should be set to expire in ~ 10 days
     # A few ticks have expired so there are only 9 full days left...

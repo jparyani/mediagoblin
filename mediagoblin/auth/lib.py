@@ -145,7 +145,7 @@ def send_fp_verification_email(user, request):
                 host=request.host,
                 uri=request.urlgen('mediagoblin.auth.verify_forgot_password'),
                 userid=unicode(user._id),
-                fp_verification_key=user['fp_verification_key'])})
+                fp_verification_key=user.fp_verification_key)})
 
     # TODO: There is no error handling in place
     send_email(
