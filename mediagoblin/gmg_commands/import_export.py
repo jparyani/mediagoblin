@@ -88,7 +88,7 @@ def _import_database(db, args):
             args.mongorestore_path,
             '-d', db.name,
             os.path.join(args._cache_path['database'], db.name)])
-    
+
     p.wait()
 
     _log.info('...Database imported')
@@ -226,7 +226,8 @@ def env_export(args):
     '''
     if args.cache_path:
         if os.path.exists(args.cache_path):
-            _log.error('The cache directory must not exist before you run this script')
+            _log.error('The cache directory must not exist '
+                       'before you run this script')
             _log.error('Cache directory: {0}'.format(args.cache_path))
 
             return False
@@ -242,7 +243,7 @@ def env_export(args):
     globa_config, app_config = setup_global_and_app_config(args.conf_file)
 
     setup_storage()
-    
+
     connection, db = setup_connection_and_db_from_config(
         app_config, use_pymongo=True)
 

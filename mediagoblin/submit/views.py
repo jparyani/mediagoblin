@@ -39,7 +39,7 @@ def submit_start(request):
     submit_form = submit_forms.SubmitStartForm(request.POST)
 
     if request.method == 'POST' and submit_form.validate():
-        if not (request.POST.has_key('file')
+        if not ('file' in request.POST
                 and isinstance(request.POST['file'], FieldStorage)
                 and request.POST['file'].file):
             submit_form.file.errors.append(
@@ -60,8 +60,8 @@ def submit_start(request):
             entry['description'] = unicode(request.POST.get('description'))
             entry['description_html'] = cleaned_markdown_conversion(
                 entry['description'])
-            
-            entry['media_type'] = u'image' # heh
+
+            entry['media_type'] = u'image'  # heh
             entry['uploader'] = request.user['_id']
 
             # Process the user's folksonomy "tags"
@@ -89,8 +89,10 @@ def submit_start(request):
 
             # We generate this ourselves so we know what the taks id is for
             # retrieval later.
-            # (If we got it off the task's auto-generation, there'd be a risk of
-            # a race condition when we'd save after sending off the task)
+
+            # (If we got it off the task's auto-generation, there'd be
+            # a risk of a race condition when we'd save after sending
+            # off the task)
             task_id = unicode(uuid.uuid4())
             entry['queued_task_id'] = task_id
 
@@ -112,8 +114,8 @@ def submit_start(request):
                 # expect a lot of users to run things in this way we have to
                 # capture stuff here.
                 #
-                # ... not completely the diaper pattern because the exception is
-                # re-raised :)
+                # ... not completely the diaper pattern because the
+                # exception is re-raised :)
                 mark_entry_failed(entry[u'_id'], exc)
                 # re-raise the exception
                 raise
@@ -121,7 +123,7 @@ def submit_start(request):
             add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
             return redirect(request, "mediagoblin.user_pages.user_home",
-                            user = request.user['username'])
+                            user=request.user['username'])
 
     return render_to_response(
         request,

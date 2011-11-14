@@ -21,6 +21,7 @@ DISPLAY_IMAGE_FETCHING_ORDER = [u'medium', u'original', u'thumb']
 global TESTS_ENABLED
 TESTS_ENABLED = False
 
+
 def import_component(import_string):
     """
     Import a module component defined by STRING.  Probably a method,

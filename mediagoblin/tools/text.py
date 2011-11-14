@@ -21,6 +21,7 @@ from lxml.html.clean import Cleaner
 from mediagoblin import mg_globals
 from mediagoblin.tools import url
 
+
 # A super strict version of the lxml.html cleaner class
 HTML_CLEANER = Cleaner(
     scripts=True,
@@ -42,12 +43,14 @@ HTML_CLEANER = Cleaner(
     host_whitelist=(),
     whitelist_tags=set([]))
 
+
 def clean_html(html):
     # clean_html barfs on an empty string
     if not html:
         return u''
 
     return HTML_CLEANER.clean_html(html)
+
 
 def convert_to_tag_list_of_dicts(tag_string):
     """
@@ -73,6 +76,7 @@ def convert_to_tag_list_of_dicts(tag_string):
                                 'slug': url.slugify(tag.strip())})
     return taglist
 
+
 def media_tags_as_string(media_entry_tags):
     """
     Generate a string from a media item's tags, stored as a list of dicts
@@ -85,8 +89,10 @@ def media_tags_as_string(media_entry_tags):
                                       [tag['name'] for tag in media_entry_tags])
     return media_tag_string
 
+
 TOO_LONG_TAG_WARNING = \
     u'Tags must be shorter than %s characters.  Tags that are too long: %s'
+
 
 def tag_length_validator(form, field):
     """
@@ -104,6 +110,7 @@ def tag_length_validator(form, field):
 
 
 MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')
+
 
 def cleaned_markdown_conversion(text):
     """

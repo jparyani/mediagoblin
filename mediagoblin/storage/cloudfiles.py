@@ -27,6 +27,7 @@ from mediagoblin.storage import StorageInterface, clean_listy_filepath
 import cloudfiles
 import mimetypes
 
+
 class CloudFilesStorage(StorageInterface):
     '''
     OpenStack/Rackspace Cloud's Swift/CloudFiles support

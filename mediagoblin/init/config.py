@@ -73,7 +73,7 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
     # For now the validator just works with the default functions,
     # but in the future if we want to add additional validation/configuration
     # functions we'd add them to validator.functions here.
-    # 
+    #
     # See also:
     #   http://www.voidspace.org.uk/python/validate.html#adding-functions
     validator = Validator()

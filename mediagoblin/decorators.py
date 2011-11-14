@@ -119,6 +119,7 @@ def get_user_media_entry(controller):
 
     return _make_safe(wrapper, controller)
 
+
 def get_media_entry_by_id(controller):
     """
     Pass in a MediaEntry based off of a url component
@@ -138,4 +139,3 @@ def get_media_entry_by_id(controller):
         return controller(request, media=media, *args, **kwargs)
 
     return _make_safe(wrapper, controller)
-

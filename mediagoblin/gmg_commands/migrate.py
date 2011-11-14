@@ -53,13 +53,13 @@ def migrate(args):
     for collection, index_name in removed_indexes:
         print "Removed index '%s' in collection '%s'" % (
             index_name, collection)
-    
+
     # Migrate
     print "\n== Applying migrations... =="
     migration_manager.migrate_new(
         pre_callback=_print_started_migration,
         post_callback=_print_finished_migration)
-            
+
     # Add new indexes
     print "\n== Adding new indexes... =="
     new_indexes = db_util.add_new_indexes(db)

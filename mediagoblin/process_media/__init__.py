@@ -66,9 +66,10 @@ class ProcessMedia(Task):
         """
         If the processing failed we should mark that in the database.
 
-        Assuming that the exception raised is a subclass of BaseProcessingFail,
-        we can use that to get more information about the failure and store that
-        for conveying information to users about the failure, etc.
+        Assuming that the exception raised is a subclass of
+        BaseProcessingFail, we can use that to get more information
+        about the failure and store that for conveying information to
+        users about the failure, etc.
         """
         entry_id = args[0]
         mark_entry_failed(entry_id, exc)
@@ -81,10 +82,10 @@ def mark_entry_failed(entry_id, exc):
     """
     Mark a media entry as having failed in its conversion.
 
-    Uses the exception that was raised to mark more information.  If the
-    exception is a derivative of BaseProcessingFail then we can store extra
-    information that can be useful for users telling them why their media failed
-    to process.
+    Uses the exception that was raised to mark more information.  If
+    the exception is a derivative of BaseProcessingFail then we can
+    store extra information that can be useful for users telling them
+    why their media failed to process.
 
     Args:
      - entry_id: The id of the media entry
@@ -161,7 +162,8 @@ def process_image(entry):
     with queued_file:
         original_filepath = create_pub_filepath(entry, queued_filepath[-1])
 
-        with mgg.public_store.get_file(original_filepath, 'wb') as original_file:
+        with mgg.public_store.get_file(original_filepath, 'wb') \
+            as original_file:
             original_file.write(queued_file.read())
 
     mgg.queue_store.delete_file(queued_filepath)

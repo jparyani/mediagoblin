@@ -94,6 +94,7 @@ EMAIL_VERIFICATION_TEMPLATE = (
     u"http://{host}{uri}?"
     u"userid={userid}&token={verification_key}")
 
+
 def send_verification_email(user, request):
     """
     Send the verification email to users to activate their accounts.
@@ -128,6 +129,7 @@ EMAIL_FP_VERIFICATION_TEMPLATE = (
     u"http://{host}{uri}?"
     u"userid={userid}&token={fp_verification_key}")
 
+
 def send_fp_verification_email(user, request):
     """
     Send the verification email to users to change their password.
@@ -151,4 +153,3 @@ def send_fp_verification_email(user, request):
         [user['email']],
         'GNU MediaGoblin - Change forgotten password!',
         rendered_email)
-

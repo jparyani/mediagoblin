@@ -40,25 +40,25 @@ def setup_celery_from_config(app_config, global_config,
     - set_environ: if set, this will CELERY_CONFIG_MODULE to the
       settings_module
     """
-    if global_config.has_key('celery'):
+    if 'celery' in global_config:
         celery_conf = global_config['celery']
     else:
         celery_conf = {}
-    
+
     celery_settings = {}
 
     # set up mongodb stuff
     celery_settings['CELERY_RESULT_BACKEND'] = 'mongodb'
-    if not celery_settings.has_key('BROKER_BACKEND'):
+    if 'BROKER_BACKEND' not in celery_settings:
         celery_settings['BROKER_BACKEND'] = 'mongodb'
 
     celery_mongo_settings = {}
 
-    if app_config.has_key('db_host'):
+    if 'db_host' in app_config:
         celery_mongo_settings['host'] = app_config['db_host']
         if celery_settings['BROKER_BACKEND'] == 'mongodb':
             celery_settings['BROKER_HOST'] = app_config['db_host']
-    if app_config.has_key('db_port'):
+    if 'db_port' in app_config:
         celery_mongo_settings['port'] = app_config['db_port']
         if celery_settings['BROKER_BACKEND'] == 'mongodb':
             celery_settings['BROKER_PORT'] = app_config['db_port']
@@ -84,6 +84,6 @@ def setup_celery_from_config(app_config, global_config,
 
     for key, value in celery_settings.iteritems():
         setattr(this_module, key, value)
-    
+
     if set_environ:
         os.environ['CELERY_CONFIG_MODULE'] = settings_module
