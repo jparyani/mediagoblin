@@ -29,6 +29,18 @@ _log = logging.getLogger(__name__)
 logging.basicConfig()
 _log.setLevel(logging.DEBUG)
 
+CPU_COUNT = 2
+try:
+    import multiprocessing
+    try:
+        CPU_COUNT = multiprocessing.cpu_count()
+    except NotImplementedError:
+        _log.warning('multiprocessing.cpu_count not implemented')
+        pass
+except ImportError:
+    _log.warning('Could not import multiprocessing, defaulting to 2 CPU cores')
+    pass
+
 try:
     import gtk
 except:
@@ -627,10 +639,13 @@ class VideoTranscoder:
         self.videoqueue = gst.element_factory_make('queue', 'videoqueue')
         self.pipeline.add(self.videoqueue)
 
+        self.videorate = gst.element_factory_make('videorate', 'videorate')
+        self.pipeline.add(self.videorate)
+
         self.ffmpegcolorspace = gst.element_factory_make(
             'ffmpegcolorspace', 'ffmpegcolorspace')
         self.pipeline.add(self.ffmpegcolorspace)
-
+        
         self.videoscale = gst.element_factory_make('ffvideoscale', 'videoscale')
         #self.videoscale.set_property('method', 2)  # I'm not sure this works
         #self.videoscale.set_property('add-borders', 0)
@@ -648,11 +663,22 @@ class VideoTranscoder:
         self.audioqueue = gst.element_factory_make('queue', 'audioqueue')
         self.pipeline.add(self.audioqueue)
 
+        self.audiorate = gst.element_factory_make('audiorate', 'audiorate')
+        self.pipeline.add(self.audiorate)
+
         self.audioconvert = gst.element_factory_make('audioconvert', 'audioconvert')
         self.pipeline.add(self.audioconvert)
 
+        self.audiocapsfilter = gst.element_factory_make('capsfilter', 'audiocapsfilter')
+        audiocaps = ['audio/x-raw-float']
+        self.audiocapsfilter.set_property(
+            'caps',
+            gst.caps_from_string(
+                ','.join(audiocaps)))
+        self.pipeline.add(self.audiocapsfilter)
+
         self.vorbisenc = gst.element_factory_make('vorbisenc', 'vorbisenc')
-        self.vorbisenc.set_property('quality', 0.7)
+        self.vorbisenc.set_property('quality', 1)
         self.pipeline.add(self.vorbisenc)
 
         # WebMmux & filesink
@@ -685,7 +711,8 @@ class VideoTranscoder:
         self.filesrc.link(self.decoder)
 
         # Link all the video elements in a link to webmux
-        self.videoqueue.link(self.ffmpegcolorspace)
+        self.videoqueue.link(self.videorate)
+        self.videorate.link(self.ffmpegcolorspace)
         self.ffmpegcolorspace.link(self.videoscale)
         self.videoscale.link(self.capsfilter)
         #self.capsfilter.link(self.xvimagesink)
@@ -695,8 +722,12 @@ class VideoTranscoder:
         if self.data.is_audio:
             # Link all the audio elements in a line to webmux
             #self.audioconvert.link(self.alsasink)
-            self.audioqueue.link(self.audioconvert)
-            self.audioconvert.link(self.vorbisenc)
+            self.audioqueue.link(self.audiorate)
+            self.audiorate.link(self.audioconvert)
+            self.audioconvert.link(self.audiocapsfilter)
+            self.audiocapsfilter.link(self.vorbisenc)
+            #self.audiocapsfilter.link(self.level)
+            #self.level.link(self.vorbisenc)
             self.vorbisenc.link(self.webmmux)
 
         self.webmmux.link(self.progressreport)
@@ -729,7 +760,7 @@ class VideoTranscoder:
         '''
         Sets up the output format (width, height) for the video
         '''
-        caps = ['video/x-raw-yuv', 'pixel-aspect-ratio=1/1']
+        caps = ['video/x-raw-yuv', 'pixel-aspect-ratio=1/1', 'framerate=30/1']
 
         if self.data.videoheight > self.data.videowidth:
             # Whoa! We have ourselves a portrait video!
@@ -743,7 +774,7 @@ class VideoTranscoder:
         self.capsfilter.set_property(
             'caps',
             gst.caps_from_string(
-                ', '.join(caps)))
+                ','.join(caps)))
 
     def _on_message(self, bus, message):
         _log.debug((bus, message, message.type))
