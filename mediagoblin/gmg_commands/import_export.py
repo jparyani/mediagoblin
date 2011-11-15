@@ -16,7 +16,6 @@
 
 from mediagoblin import mg_globals
 from mediagoblin.db.open import setup_connection_and_db_from_config
-from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.storage.filestorage import BasicFileStorage
 from mediagoblin.init import setup_storage, setup_global_and_app_config
 
@@ -209,7 +208,7 @@ def _export_media(db, args):
 
     for entry in db.media_entries.find():
         for name, path in entry['media_files'].items():
-            _log.info('Exporting {0} - {1}'.format(
+            _log.info(u'Exporting {0} - {1}'.format(
                     entry['title'],
                     name))
 
