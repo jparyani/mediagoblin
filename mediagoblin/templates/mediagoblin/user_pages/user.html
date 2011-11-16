@@ -78,7 +78,7 @@
       {%- trans username=user.username %}{{ username }}'s profile{% endtrans -%}
     </h1>
 
-    {% if not user['url'] and not user['profile'] %}
+    {% if not user['url'] and not user['bio'] %}
       {% if request.user['_id'] == user['_id'] %}
         <div class="grid_6 alpha empty_space">
           <p>
