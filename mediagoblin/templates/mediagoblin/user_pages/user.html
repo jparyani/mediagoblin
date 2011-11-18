@@ -26,6 +26,17 @@
                        user=user.username) }}">
 {% endblock mediagoblin_head %}
 
+{% block title %}
+  {%- if user -%}
+    {%- trans username=user.username -%}
+      {{ username }}'s profile
+    {%- endtrans %} &mdash; {{ super() }}
+  {%- else -%}
+    {{ super() }}
+  {%- endif -%}
+{% endblock %}
+
+
 {% block mediagoblin_content -%}
   {# If no user... #}
   {% if not user %}
@@ -79,7 +90,7 @@
     </h1>
 
     {% if not user['url'] and not user['bio'] %}
-      {% if request.user['_id'] == user['_id'] %}
+      {% if request.user._id == user._id %}
         <div class="grid_6 alpha empty_space">
           <p>
             {% trans %}Here's a spot to tell others about yourself.{% endtrans %}
@@ -102,7 +113,7 @@
     {% else %}
       <div class="grid_6 alpha">
         {% include "mediagoblin/utils/profile.html" %}
-        {% if request.user['_id'] == user['_id'] or request.user['is_admin'] %}
+        {% if request.user._id == user._id or request.user['is_admin'] %}
           <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
                           user.username }}">
             {%- trans %}Edit profile{% endtrans -%}
@@ -129,7 +140,7 @@
         {% include "mediagoblin/utils/feed_link.html" %}
       </div>
     {% else %}
-      {% if request.user['_id'] == user['_id'] %}
+      {% if request.user._id == user._id %}
         <div class="grid_10 omega empty_space">
           <p>
             {% trans -%}

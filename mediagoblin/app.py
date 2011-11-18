@@ -94,7 +94,7 @@ class MediaGoblinApp(object):
         # object.
         #######################################################
 
-        setup_globals(app = self)
+        setup_globals(app=self)
 
         # Workbench *currently* only used by celery, so this only
         # matters in always eager mode :)
@@ -103,7 +103,6 @@ class MediaGoblinApp(object):
         # instantiate application middleware
         self.middleware = [common.import_component(m)(self)
                            for m in middleware.ENABLED_MIDDLEWARE]
-
 
     def __call__(self, environ, start_response):
         request = Request(environ)

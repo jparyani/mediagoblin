@@ -57,7 +57,7 @@ def edit_media(request, media):
         existing_user_slug_entries = request.db.MediaEntry.find(
             {'slug': request.POST['slug'],
              'uploader': media['uploader'],
-             '_id': {'$ne': media['_id']}}).count()
+             '_id': {'$ne': media._id}}).count()
 
         if existing_user_slug_entries:
             form.slug.errors.append(
@@ -78,7 +78,7 @@ def edit_media(request, media):
                 location=media.url_for_self(request.urlgen))
 
     if request.user['is_admin'] \
-            and media['uploader'] != request.user['_id'] \
+            and media['uploader'] != request.user._id \
             and request.method != 'POST':
         messages.add_message(
             request, messages.WARNING,
@@ -104,7 +104,7 @@ def edit_attachments(request, media):
 
             attachment_public_filepath \
                 = mg_globals.public_store.get_unique_filepath(
-                ['media_entries', unicode(media['_id']), 'attachment',
+                ['media_entries', unicode(media._id), 'attachment',
                  secure_filename(request.POST['attachment_file'].filename)])
 
             attachment_public_file = mg_globals.public_store.get_file(
@@ -120,7 +120,7 @@ def edit_attachments(request, media):
                     name=request.POST['attachment_name'] \
                         or request.POST['attachment_file'].filename,
                     filepath=attachment_public_filepath,
-                    created=datetime.utcnow()
+                    created=datetime.utcnow(),
                     ))
 
             media.save()
@@ -170,7 +170,7 @@ def edit_profile(request):
 
             messages.add_message(request,
                                  messages.SUCCESS,
-                                 'Profile edited!')
+                                 _("Profile edited!"))
             return redirect(request,
                            'mediagoblin.user_pages.user_home',
                             user=edit_username)

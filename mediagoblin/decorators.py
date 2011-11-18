@@ -60,7 +60,7 @@ def user_may_delete_media(controller):
         uploader = request.db.MediaEntry.find_one(
             {'_id': ObjectId(request.matchdict['media'])}).uploader()
         if not (request.user['is_admin'] or
-                request.user['_id'] == uploader['_id']):
+                request.user._id == uploader._id):
             return exc.HTTPForbidden()
 
         return controller(request, *args, **kwargs)
@@ -99,7 +99,7 @@ def get_user_media_entry(controller):
         media = request.db.MediaEntry.find_one(
             {'slug': request.matchdict['media'],
              'state': 'processed',
-             'uploader': user['_id']})
+             'uploader': user._id})
 
         # no media via slug?  Grab it via ObjectId
         if not media:
@@ -107,7 +107,7 @@ def get_user_media_entry(controller):
                 media = request.db.MediaEntry.find_one(
                     {'_id': ObjectId(request.matchdict['media']),
                      'state': 'processed',
-                     'uploader': user['_id']})
+                     'uploader': user._id})
             except InvalidId:
                 return render_404(request)
 
@@ -118,6 +118,7 @@ def get_user_media_entry(controller):
         return controller(request, media=media, *args, **kwargs)
 
     return _make_safe(wrapper, controller)
+
 
 def get_media_entry_by_id(controller):
     """
@@ -138,4 +139,3 @@ def get_media_entry_by_id(controller):
         return controller(request, media=media, *args, **kwargs)
 
     return _make_safe(wrapper, controller)
-

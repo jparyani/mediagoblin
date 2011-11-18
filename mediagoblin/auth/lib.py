@@ -94,6 +94,7 @@ EMAIL_VERIFICATION_TEMPLATE = (
     u"http://{host}{uri}?"
     u"userid={userid}&token={verification_key}")
 
+
 def send_verification_email(user, request):
     """
     Send the verification email to users to activate their accounts.
@@ -108,7 +109,7 @@ def send_verification_email(user, request):
          'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
                 host=request.host,
                 uri=request.urlgen('mediagoblin.auth.verify_email'),
-                userid=unicode(user['_id']),
+                userid=unicode(user._id),
                 verification_key=user['verification_key'])})
 
     # TODO: There is no error handling in place
@@ -128,6 +129,7 @@ EMAIL_FP_VERIFICATION_TEMPLATE = (
     u"http://{host}{uri}?"
     u"userid={userid}&token={fp_verification_key}")
 
+
 def send_fp_verification_email(user, request):
     """
     Send the verification email to users to change their password.
@@ -142,7 +144,7 @@ def send_fp_verification_email(user, request):
          'verification_url': EMAIL_FP_VERIFICATION_TEMPLATE.format(
                 host=request.host,
                 uri=request.urlgen('mediagoblin.auth.verify_forgot_password'),
-                userid=unicode(user['_id']),
+                userid=unicode(user._id),
                 fp_verification_key=user['fp_verification_key'])})
 
     # TODO: There is no error handling in place
@@ -151,4 +153,3 @@ def send_fp_verification_email(user, request):
         [user['email']],
         'GNU MediaGoblin - Change forgotten password!',
         rendered_email)
-

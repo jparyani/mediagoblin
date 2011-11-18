@@ -20,6 +20,7 @@ from mediagoblin.tools.response import render_to_response
 from mediagoblin.db.util import DESCENDING
 from mediagoblin.decorators import uses_pagination
 
+
 @uses_pagination
 def root_view(request, page):
     cursor = request.db.MediaEntry.find(

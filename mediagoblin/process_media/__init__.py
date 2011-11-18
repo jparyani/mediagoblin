@@ -14,8 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import Image
+import os
 
+import Image
 from celery.task import Task
 from celery import registry
 
@@ -31,7 +32,7 @@ MEDIUM_SIZE = 640, 640
 def create_pub_filepath(entry, filename):
     return mgg.public_store.get_unique_filepath(
             ['media_entries',
-             unicode(entry['_id']),
+             unicode(entry._id),
              filename])
 
 
@@ -55,7 +56,7 @@ class ProcessMedia(Task):
         try:
             process_image(entry)
         except BaseProcessingFail, exc:
-            mark_entry_failed(entry[u'_id'], exc)
+            mark_entry_failed(entry._id, exc)
             return
 
         entry['state'] = u'processed'
@@ -65,9 +66,10 @@ class ProcessMedia(Task):
         """
         If the processing failed we should mark that in the database.
 
-        Assuming that the exception raised is a subclass of BaseProcessingFail,
-        we can use that to get more information about the failure and store that
-        for conveying information to users about the failure, etc.
+        Assuming that the exception raised is a subclass of
+        BaseProcessingFail, we can use that to get more information
+        about the failure and store that for conveying information to
+        users about the failure, etc.
         """
         entry_id = args[0]
         mark_entry_failed(entry_id, exc)
@@ -80,10 +82,10 @@ def mark_entry_failed(entry_id, exc):
     """
     Mark a media entry as having failed in its conversion.
 
-    Uses the exception that was raised to mark more information.  If the
-    exception is a derivative of BaseProcessingFail then we can store extra
-    information that can be useful for users telling them why their media failed
-    to process.
+    Uses the exception that was raised to mark more information.  If
+    the exception is a derivative of BaseProcessingFail then we can
+    store extra information that can be useful for users telling them
+    why their media failed to process.
 
     Args:
      - entry_id: The id of the media entry
@@ -122,21 +124,20 @@ def process_image(entry):
         mgg.queue_store, queued_filepath,
         'source')
 
+    extension = os.path.splitext(queued_filename)[1]
+
     try:
         thumb = Image.open(queued_filename)
     except IOError:
         raise BadMediaFail()
 
     thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
-    # ensure color mode is compatible with jpg
-    if thumb.mode != "RGB":
-        thumb = thumb.convert("RGB")
 
-    thumb_filepath = create_pub_filepath(entry, 'thumbnail.jpg')
+    thumb_filepath = create_pub_filepath(entry, 'thumbnail' + extension)
     thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
 
     with thumb_file:
-        thumb.save(thumb_file, "JPEG", quality=90)
+        thumb.save(thumb_file)
 
     # If the size of the original file exceeds the specified size of a `medium`
     # file, a `medium.jpg` files is created and later associated with the media
@@ -147,14 +148,11 @@ def process_image(entry):
     if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1]:
         medium.thumbnail(MEDIUM_SIZE, Image.ANTIALIAS)
 
-        if medium.mode != "RGB":
-            medium = medium.convert("RGB")
-
-        medium_filepath = create_pub_filepath(entry, 'medium.jpg')
+        medium_filepath = create_pub_filepath(entry, 'medium' + extension)
         medium_file = mgg.public_store.get_file(medium_filepath, 'w')
 
         with medium_file:
-            medium.save(medium_file, "JPEG", quality=90)
+            medium.save(medium_file)
             medium_processed = True
 
     # we have to re-read because unlike PIL, not everything reads
@@ -164,7 +162,8 @@ def process_image(entry):
     with queued_file:
         original_filepath = create_pub_filepath(entry, queued_filepath[-1])
 
-        with mgg.public_store.get_file(original_filepath, 'wb') as original_file:
+        with mgg.public_store.get_file(original_filepath, 'wb') \
+            as original_file:
             original_file.write(queued_file.read())
 
     mgg.queue_store.delete_file(queued_filepath)

@@ -29,7 +29,7 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.migrate:migrate_parser_setup',
         'func': 'mediagoblin.gmg_commands.migrate:migrate',
         'help': 'Apply all unapplied bulk migrations to the database'},
-    'adduser':{
+    'adduser': {
         'setup': 'mediagoblin.gmg_commands.users:adduser_parser_setup',
         'func': 'mediagoblin.gmg_commands.users:adduser',
         'help': 'Creates an user'},
@@ -68,7 +68,7 @@ def main_cli():
 
     subparsers = parser.add_subparsers(help='sub-command help')
     for command_name, command_struct in SUBCOMMAND_MAP.iteritems():
-        if command_struct.has_key('help'):
+        if 'help' in command_struct:
             subparser = subparsers.add_parser(
                 command_name, help=command_struct['help'])
         else:
@@ -94,4 +94,3 @@ def main_cli():
 
 if __name__ == '__main__':
     main_cli()
-

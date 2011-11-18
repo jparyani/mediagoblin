@@ -44,7 +44,7 @@ def setup_self(check_environ_for_conf=True, module_name=OUR_MODULENAME,
     if not os.path.exists(mgoblin_conf_file):
         raise IOError(
             "MEDIAGOBLIN_CONFIG not set or file does not exist")
-        
+
     # By setting the environment variable here we should ensure that
     # this is the module that gets set up.
     os.environ['CELERY_CONFIG_MODULE'] = module_name
