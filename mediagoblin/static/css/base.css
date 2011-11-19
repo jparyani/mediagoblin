@@ -99,20 +99,14 @@ a.mediagoblin_logo{
 }
 
 .header_submit, .header_submit_highlight{
-  color: #272727;
-  background-color: #aaa;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(##D2D2D2), to(#aaa)); 
-  background-image: -webkit-linear-gradient(top, #D2D2D2, #aaa); 
-  background-image:    -moz-linear-gradient(top, #D2D2D2, #aaa); 
-  background-image:     -ms-linear-gradient(top, #D2D2D2, #aaa); 
-  background-image:      -o-linear-gradient(top, #D2D2D2, #aaa); 
-  background-image:         linear-gradient(top, #D2D2D2, #aaa);
-  box-shadow: 0px 0px 4px #000;
-  border-radius: 3px;
+  color: #c3c3c3;
+  background-color: #2d2d2d;
+  border: 1px solid;
+  border-color: #323232 #232323 #1F1F1F;
+  border-radius: 4px;
   margin: 8px;
   padding: 3px 8px;
   text-decoration: none;
-  border: medium none;
   font-style: normal;
   font-weight: bold;
   font-size: 1em;
@@ -301,7 +295,7 @@ img.media_icon{
   background-color: #1d1d1d;
   border: 1px solid;
   border-color: #2c2c2c #232323 #1a1a1a;
-  border-radius: 3px;
+  border-radius: 4px;
   text-decoration: none;
   padding: 8px 0px 14px;
   font-size: 2em;
