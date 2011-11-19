@@ -162,17 +162,22 @@ def edit_profile(request):
         bio=user.get('bio'))
 
     if request.method == 'POST' and form.validate():
-        user['url'] = unicode(request.POST['url'])
-        user['bio'] = unicode(request.POST['bio'])
-
-        password_matches = auth_lib.bcrypt_check_password(request.POST['old_password'],
-                                                          user['pw_hash'])
+        password_matches = auth_lib.bcrypt_check_password(
+            request.POST['old_password'],
+            user['pw_hash'])
 
         if (request.POST['old_password'] or request.POST['new_password']) and not \
                 password_matches:
-            messages.add_message(request,
-                                 messages.ERROR,
-                                 _('Wrong password'))
+            form.old_password.errors.append(_('Wrong password'))
+
+            return render_to_response(
+                request,
+                'mediagoblin/edit/edit_profile.html',
+                {'user': user,
+                 'form': form})
+
+        user['url'] = unicode(request.POST['url'])
+        user['bio'] = unicode(request.POST['bio'])
 
         if password_matches:
             user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
@@ -187,7 +192,7 @@ def edit_profile(request):
                              _("Profile edited!"))
         return redirect(request,
                        'mediagoblin.user_pages.user_home',
-                        user=edit_username)
+                        user=user['username'])
 
     return render_to_response(
         request,
