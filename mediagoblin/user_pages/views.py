@@ -106,11 +106,15 @@ def media_home(request, media, page, **kwargs):
     """
     if ObjectId(request.matchdict.get('comment')):
         pagination = Pagination(
-            page, media.get_comments(True), MEDIA_COMMENTS_PER_PAGE,
+            page, media.get_comments(
+                mg_globals.app_config['comments_ascending']),
+            MEDIA_COMMENTS_PER_PAGE,
             ObjectId(request.matchdict.get('comment')))
     else:
         pagination = Pagination(
-            page, media.get_comments(True), MEDIA_COMMENTS_PER_PAGE)
+            page, media.get_comments(
+                mg_globals.app_config['comments_ascending']),
+            MEDIA_COMMENTS_PER_PAGE)
 
     comments = pagination()
 
