@@ -55,6 +55,8 @@ def get_jinja_env(template_loader, locale):
     template_env.globals['fetch_messages'] = messages.fetch_messages
     template_env.globals['gridify_list'] = gridify_list
     template_env.globals['gridify_cursor'] = gridify_cursor
+    template_env.globals['app_config'] = mg_globals.app_config
+    template_env.globals['global_config'] = mg_globals.global_config
 
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env
