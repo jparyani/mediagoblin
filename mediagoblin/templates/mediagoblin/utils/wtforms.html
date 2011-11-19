@@ -18,18 +18,16 @@
 
 {# Generically render a field #}
 {% macro render_field_div(field) %}
-  <div class="form_field_box">
-    <div class="form_field_label">{{ _(field.label.text) }}</div>
-    <div class="form_field_input">{{ field }}</div>
+  <p class="form_field_label"><label for="{{ field.name }}">{{ _(field.label.text) }}</label></p>
+  <div class="form_field_input">
+    {{ field }}
     {%- if field.errors -%}
       {% for error in field.errors %}
-        <div class="form_field_error">
-          {{ error }}
-        </div>
+        <p class="form_field_error">{{ error }}</p>
       {% endfor %}
     {%- endif %}
     {% if field.description -%}
-      <div class="form_field_description">{{ _(field.description) }}</div>
+      <p class="form_field_description">{{ _(field.description) }}</p>
     {%- endif %}
   </div>
 {%- endmacro %}

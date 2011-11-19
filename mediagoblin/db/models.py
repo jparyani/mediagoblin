@@ -14,7 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime, uuid
+import datetime
+import uuid
 
 from mongokit import Document
 
@@ -62,22 +63,23 @@ class User(Document):
      - bio_html: biography of the user converted to proper HTML.
     """
     __collection__ = 'users'
+    use_dot_notation = True
 
     structure = {
         'username': unicode,
         'email': unicode,
         'created': datetime.datetime,
-        'plugin_data': dict, # plugins can dump stuff here.
+        'plugin_data': dict,  # plugins can dump stuff here.
         'pw_hash': unicode,
         'email_verified': bool,
         'status': unicode,
         'verification_key': unicode,
         'is_admin': bool,
-        'url' : unicode,
-        'bio' : unicode,     # May contain markdown
-        'bio_html': unicode, # May contain plaintext, or HTML
-        'fp_verification_key': unicode, # forgotten password verification key
-        'fp_token_expire': datetime.datetime
+        'url': unicode,
+        'bio': unicode,      # May contain markdown
+        'bio_html': unicode,  # May contain plaintext, or HTML
+        'fp_verification_key': unicode,  # forgotten password verification key
+        'fp_token_expire': datetime.datetime,
         }
 
     required_fields = ['username', 'created', 'pw_hash', 'email']
@@ -172,21 +174,22 @@ class MediaEntry(Document):
        critical to this piece of media but may be usefully relevant to people
        viewing the work.  (currently unused.)
 
-     - fail_error: path to the exception raised 
-     - fail_metadata: 
+     - fail_error: path to the exception raised
+     - fail_metadata:
     """
     __collection__ = 'media_entries'
+    use_dot_notation = True
 
     structure = {
         'uploader': ObjectId,
         'title': unicode,
         'slug': unicode,
         'created': datetime.datetime,
-        'description': unicode, # May contain markdown/up
-        'description_html': unicode, # May contain plaintext, or HTML
+        'description': unicode,  # May contain markdown/up
+        'description_html': unicode,  # May contain plaintext, or HTML
         'media_type': unicode,
-        'media_data': dict, # extra data relevant to this media_type
-        'plugin_data': dict, # plugins can dump stuff here.
+        'media_data': dict,  # extra data relevant to this media_type
+        'plugin_data': dict,  # plugins can dump stuff here.
         'tags': [dict],
         'state': unicode,
 
@@ -214,11 +217,17 @@ class MediaEntry(Document):
         'created': datetime.datetime.utcnow,
         'state': u'unprocessed'}
 
-    def get_comments(self):
+    def get_comments(self, ascending=False):
+        if ascending:
+            order = ASCENDING
+        else:
+            order = DESCENDING
+            
         return self.db.MediaComment.find({
-                'media_entry': self['_id']}).sort('created', DESCENDING)
+                'media_entry': self._id}).sort('created', order)
 
-    def get_display_media(self, media_map, fetch_order=common.DISPLAY_IMAGE_FETCHING_ORDER):
+    def get_display_media(self, media_map,
+                          fetch_order=common.DISPLAY_IMAGE_FETCHING_ORDER):
         """
         Find the best media for display.
 
@@ -246,7 +255,7 @@ class MediaEntry(Document):
             {'slug': self['slug']})
 
         if duplicate:
-            self['slug'] = "%s-%s" % (self['_id'], self['slug'])
+            self['slug'] = "%s-%s" % (self._id, self['slug'])
 
     def url_for_self(self, urlgen):
         """
@@ -265,13 +274,13 @@ class MediaEntry(Document):
             return urlgen(
                 'mediagoblin.user_pages.media_home',
                 user=uploader['username'],
-                media=unicode(self['_id']))
+                media=unicode(self._id))
 
     def url_to_prev(self, urlgen):
         """
         Provide a url to the previous entry from this user, if there is one
         """
-        cursor = self.db.MediaEntry.find({'_id' : {"$gt": self['_id']},
+        cursor = self.db.MediaEntry.find({'_id': {"$gt": self._id},
                                           'uploader': self['uploader'],
                                           'state': 'processed'}).sort(
                                                     '_id', ASCENDING).limit(1)
@@ -284,7 +293,7 @@ class MediaEntry(Document):
         """
         Provide a url to the next entry from this user, if there is one
         """
-        cursor = self.db.MediaEntry.find({'_id' : {"$lt": self['_id']},
+        cursor = self.db.MediaEntry.find({'_id': {"$lt": self._id},
                                           'uploader': self['uploader'],
                                           'state': 'processed'}).sort(
                                                     '_id', DESCENDING).limit(1)
@@ -319,6 +328,7 @@ class MediaComment(Document):
     """
 
     __collection__ = 'media_comments'
+    use_dot_notation = True
 
     structure = {
         'media_entry': ObjectId,
@@ -351,4 +361,3 @@ def register_models(connection):
     Register all models in REGISTER_MODELS with this connection.
     """
     connection.register(REGISTER_MODELS)
-

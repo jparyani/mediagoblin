@@ -24,7 +24,7 @@ from mediagoblin.tools import common
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # We have two "test inboxes" here:
-# 
+#
 # EMAIL_TEST_INBOX:
 # ----------------
 #   If you're writing test views, you'll probably want to check this.
@@ -44,10 +44,11 @@ from mediagoblin.tools import common
 # ***IMPORTANT!***
 # ----------------
 # Before running tests that call functions which send email, you should
-# always call _clear_test_inboxes() to "wipe" the inboxes clean. 
+# always call _clear_test_inboxes() to "wipe" the inboxes clean.
 
 EMAIL_TEST_INBOX = []
 EMAIL_TEST_MBOX_INBOX = []
+
 
 class FakeMhost(object):
     """
@@ -63,11 +64,13 @@ class FakeMhost(object):
              'to': to_addrs,
              'message': message})
 
+
 def _clear_test_inboxes():
     global EMAIL_TEST_INBOX
     global EMAIL_TEST_MBOX_INBOX
     EMAIL_TEST_INBOX = []
     EMAIL_TEST_MBOX_INBOX = []
+
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ### </Special email test stuff>

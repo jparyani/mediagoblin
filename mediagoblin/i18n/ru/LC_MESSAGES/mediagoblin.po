@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-09-25 20:26-0500\n"
-"PO-Revision-Date: 2011-09-26 01:25+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"POT-Creation-Date: 2011-11-01 23:14-0500\n"
+"PO-Revision-Date: 2011-11-04 11:13+0000\n"
+"Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43,19 +43,19 @@ msgstr "Наберите его ещё раз здесь, чтобы избеж�
 msgid "Email address"
 msgstr "Адрес электронной почты"
 
-#: mediagoblin/auth/views.py:42
+#: mediagoblin/auth/views.py:55
 msgid "Sorry, registration is disabled on this instance."
 msgstr "Извините, на этом разделе регистрация запрещена."
 
-#: mediagoblin/auth/views.py:60
+#: mediagoblin/auth/views.py:73
 msgid "Sorry, a user with that name already exists."
 msgstr "Извините, пользователь с этим именем уже зарегистрирован."
 
-#: mediagoblin/auth/views.py:64
+#: mediagoblin/auth/views.py:77
 msgid "Sorry, that email address has already been taken."
 msgstr "Извините, этот адрес электронной почты уже занят."
 
-#: mediagoblin/auth/views.py:165
+#: mediagoblin/auth/views.py:179
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
@@ -63,61 +63,64 @@ msgstr ""
 "Адрес вашей электронной потвержден. Вы теперь можете войти и начать "
 "редактировать свой профиль и загружать новые изображения!"
 
-#: mediagoblin/auth/views.py:171
+#: mediagoblin/auth/views.py:185
 msgid "The verification key or user id is incorrect"
 msgstr "Неверный ключ проверки или идентификатор пользователя"
 
-#: mediagoblin/auth/views.py:192
+#: mediagoblin/auth/views.py:207
 msgid "Resent your verification email."
 msgstr "Переслать сообщение с подтверждением аккаунта."
 
-#: mediagoblin/auth/views.py:228
+#: mediagoblin/auth/views.py:248
 msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
 msgstr ""
+"Мы не можем отправить сообщение для восстановления пароля, потому что ваша "
+"учётная запись неактивна, либо указанный в ней адрес электронной почты не "
+"был подтверждён."
 
-#: mediagoblin/edit/forms.py:26 mediagoblin/submit/forms.py:27
+#: mediagoblin/edit/forms.py:24 mediagoblin/submit/forms.py:27
 msgid "Title"
 msgstr "Название"
 
-#: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:32
+#: mediagoblin/edit/forms.py:28 mediagoblin/submit/forms.py:32
 msgid "Tags"
 msgstr "Метки"
 
-#: mediagoblin/edit/forms.py:33
+#: mediagoblin/edit/forms.py:31
 msgid "Slug"
 msgstr "Отличительная часть адреса"
 
-#: mediagoblin/edit/forms.py:34
+#: mediagoblin/edit/forms.py:32
 msgid "The slug can't be empty"
 msgstr "Отличительная часть адреса необходима"
 
-#: mediagoblin/edit/forms.py:35
+#: mediagoblin/edit/forms.py:33
 msgid ""
 "The title part of this media's URL. You usually don't need to change this."
 msgstr ""
 "Часть адреса этого файла, производная от его названия. Её обычно не нужно "
 "изменять."
 
-#: mediagoblin/edit/forms.py:42
+#: mediagoblin/edit/forms.py:40
 msgid "Bio"
 msgstr "Биография"
 
-#: mediagoblin/edit/forms.py:45
+#: mediagoblin/edit/forms.py:43
 msgid "Website"
 msgstr "Сайт"
 
-#: mediagoblin/edit/views.py:63
+#: mediagoblin/edit/views.py:64
 msgid "An entry with that slug already exists for this user."
 msgstr ""
 "У этого пользователя уже есть файл с такой отличительной частью адреса."
 
-#: mediagoblin/edit/views.py:84
+#: mediagoblin/edit/views.py:85
 msgid "You are editing another user's media. Proceed with caution."
 msgstr "Вы редактируете файлы другого пользователя. Будьте осторожны."
 
-#: mediagoblin/edit/views.py:154
+#: mediagoblin/edit/views.py:155
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr "Вы редактируете профиль пользователя. Будьте осторожны."
 
@@ -133,15 +136,15 @@ msgstr "Файл"
 msgid "Description of this work"
 msgstr "Описание этого произведения"
 
-#: mediagoblin/submit/views.py:47
+#: mediagoblin/submit/views.py:46
 msgid "You must provide a file."
 msgstr "Вы должны загрузить файл."
 
-#: mediagoblin/submit/views.py:50
+#: mediagoblin/submit/views.py:49
 msgid "The file doesn't seem to be an image!"
 msgstr "Файл, похоже, не является картинкой!"
 
-#: mediagoblin/submit/views.py:122
+#: mediagoblin/submit/views.py:121
 msgid "Woohoo! Submitted!"
 msgstr "Ура! Файл загружен!"
 
@@ -180,8 +183,8 @@ msgid "verify your email!"
 msgstr "подтвердите ваш адрес электронной почты!"
 
 #: mediagoblin/templates/mediagoblin/base.html:73
-#: mediagoblin/templates/mediagoblin/auth/login.html:26
-#: mediagoblin/templates/mediagoblin/auth/login.html:34
+#: mediagoblin/templates/mediagoblin/auth/login.html:27
+#: mediagoblin/templates/mediagoblin/auth/login.html:35
 msgid "Log in"
 msgstr "Войти"
 
@@ -190,6 +193,8 @@ msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project"
 msgstr ""
+"Работает на <a href=\"http://mediagoblin.org\">MediaGoblin</a>, проекте <a "
+"href=\"http://gnu.org/\">GNU</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:24
 msgid "Explore"
@@ -259,11 +264,11 @@ msgstr ""
 msgid "Most recent media"
 msgstr "Самые новые файлы"
 
-#: mediagoblin/templates/mediagoblin/auth/change_fp.html:27
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:29
 msgid "Enter your new password"
 msgstr "Введите свой новый пароль"
 
-#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:29
 msgid "Enter your username or email"
 msgstr "Введите Ваше имя пользователя или адрес электронной почты"
 
@@ -290,23 +295,23 @@ msgid ""
 "a happy goblin!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:29
+#: mediagoblin/templates/mediagoblin/auth/login.html:30
 msgid "Logging in failed!"
 msgstr "Авторизация неуспешна!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:42
+#: mediagoblin/templates/mediagoblin/auth/login.html:43
 msgid "Don't have an account yet?"
 msgstr "Ещё нету аккаунта?"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:45
+#: mediagoblin/templates/mediagoblin/auth/login.html:46
 msgid "Create one here!"
 msgstr "Создайте здесь!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:48
+#: mediagoblin/templates/mediagoblin/auth/login.html:49
 msgid "Forgot your password?"
 msgstr "Забыли свой пароль?"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:51
+#: mediagoblin/templates/mediagoblin/auth/login.html:52
 msgid "Change it!"
 msgstr "Смените его!"
 
@@ -314,7 +319,7 @@ msgstr "Смените его!"
 msgid "Create an account!"
 msgstr "Создать аккаунт!"
 
-#: mediagoblin/templates/mediagoblin/auth/register.html:30
+#: mediagoblin/templates/mediagoblin/auth/register.html:31
 msgid "Create"
 msgstr "Создать"
 
@@ -362,7 +367,7 @@ msgstr "Файлы с меткой:"
 msgid "Submit yer media"
 msgstr "Загрузить файл(ы)"
 
-#: mediagoblin/templates/mediagoblin/submit/start.html:29
+#: mediagoblin/templates/mediagoblin/submit/start.html:30
 msgid "Submit"
 msgstr "Подтвердить"
 
@@ -429,7 +434,8 @@ msgstr "А если нет, то:"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:54
 msgid "Resend verification email"
-msgstr "Повторно отправить подверждение на адрес электронной почты"
+msgstr ""
+"Повторно отправить сообщение для подверждения адреса электронной почты"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:62
 msgid ""
@@ -507,7 +513,15 @@ msgstr "Комментарий"
 msgid "I am sure I want to delete this"
 msgstr "Я уверен, что хочу удалить это"
 
-#: mediagoblin/user_pages/views.py:175
+#: mediagoblin/user_pages/views.py:142
+msgid "Empty comments are not allowed."
+msgstr "Empty comments are not allowed."
+
+#: mediagoblin/user_pages/views.py:148
+msgid "Comment posted!"
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:181
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr "Вы на пороге удаления файла другого пользователя. Будьте осторожны."
 

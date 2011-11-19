@@ -26,9 +26,13 @@
                        tag=tag_slug) }}">
 {% endblock mediagoblin_head %}
 
+{% block title %}
+  {% trans %}Media tagged with: {{ tag_name }}{% endtrans %} &mdash; {{ super() }}
+{% endblock %}
+
 {% block mediagoblin_content -%}
   <h1>
-    {% trans %}Media tagged with:{% endtrans %} {{ tag_name }}
+    {% trans %}Media tagged with: {{ tag_name }}{% endtrans %}
   </h1>
 
   <div class="container_16 media_gallery">

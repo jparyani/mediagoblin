@@ -26,12 +26,14 @@ from mediagoblin import mg_globals
 @setup_fresh_app
 def test_csrf_cookie_set(test_app):
 
+    cookie_name = mg_globals.app_config['csrf_cookie_name']
+    
     # get login page
     response = test_app.get('/auth/login/')
 
     # assert that the mediagoblin nonce cookie has been set
     assert 'Set-Cookie' in response.headers
-    assert 'mediagoblin_nonce' in response.cookies_set
+    assert cookie_name in response.cookies_set
 
     # assert that we're also sending a vary header
     assert response.headers.get('Vary', False) == 'Cookie'

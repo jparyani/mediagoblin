@@ -1,0 +1,498 @@
+# Translations template for PROJECT.
+# Copyright (C) 2011 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# 
+# Translators:
+# వీవెన్  <veeven@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: GNU MediaGoblin\n"
+"Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
+"POT-Creation-Date: 2011-11-01 23:14-0500\n"
+"PO-Revision-Date: 2011-11-03 14:08+0000\n"
+"Last-Translator: veeven <veeven@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+"Language: te\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: mediagoblin/auth/forms.py:25 mediagoblin/auth/forms.py:49
+msgid "Username"
+msgstr "వాడుకరి పేరు"
+
+#: mediagoblin/auth/forms.py:30 mediagoblin/auth/forms.py:53
+msgid "Password"
+msgstr "సంకేతపదం"
+
+#: mediagoblin/auth/forms.py:35
+msgid "Passwords must match."
+msgstr ""
+
+#: mediagoblin/auth/forms.py:37
+msgid "Confirm password"
+msgstr ""
+
+#: mediagoblin/auth/forms.py:39
+msgid "Type it again here to make sure there are no spelling mistakes."
+msgstr ""
+
+#: mediagoblin/auth/forms.py:42
+msgid "Email address"
+msgstr "ఈమెయిలు చిరునామా"
+
+#: mediagoblin/auth/views.py:55
+msgid "Sorry, registration is disabled on this instance."
+msgstr ""
+
+#: mediagoblin/auth/views.py:73
+msgid "Sorry, a user with that name already exists."
+msgstr ""
+
+#: mediagoblin/auth/views.py:77
+msgid "Sorry, that email address has already been taken."
+msgstr ""
+
+#: mediagoblin/auth/views.py:179
+msgid ""
+"Your email address has been verified. You may now login, edit your profile, "
+"and submit images!"
+msgstr ""
+
+#: mediagoblin/auth/views.py:185
+msgid "The verification key or user id is incorrect"
+msgstr ""
+
+#: mediagoblin/auth/views.py:207
+msgid "Resent your verification email."
+msgstr ""
+
+#: mediagoblin/auth/views.py:248
+msgid ""
+"Could not send password recovery email as your username is inactive or your "
+"account's email address has not been verified."
+msgstr ""
+
+#: mediagoblin/edit/forms.py:24 mediagoblin/submit/forms.py:27
+msgid "Title"
+msgstr "శీర్షిక"
+
+#: mediagoblin/edit/forms.py:28 mediagoblin/submit/forms.py:32
+msgid "Tags"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:31
+msgid "Slug"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:32
+msgid "The slug can't be empty"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:33
+msgid ""
+"The title part of this media's URL. You usually don't need to change this."
+msgstr ""
+
+#: mediagoblin/edit/forms.py:40
+msgid "Bio"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:43
+msgid "Website"
+msgstr ""
+
+#: mediagoblin/edit/views.py:64
+msgid "An entry with that slug already exists for this user."
+msgstr ""
+
+#: mediagoblin/edit/views.py:85
+msgid "You are editing another user's media. Proceed with caution."
+msgstr ""
+
+#: mediagoblin/edit/views.py:155
+msgid "You are editing a user's profile. Proceed with caution."
+msgstr ""
+
+#: mediagoblin/process_media/errors.py:44
+msgid "Invalid file given for media type."
+msgstr ""
+
+#: mediagoblin/submit/forms.py:25
+msgid "File"
+msgstr ""
+
+#: mediagoblin/submit/forms.py:30
+msgid "Description of this work"
+msgstr ""
+
+#: mediagoblin/submit/views.py:46
+msgid "You must provide a file."
+msgstr ""
+
+#: mediagoblin/submit/views.py:49
+msgid "The file doesn't seem to be an image!"
+msgstr ""
+
+#: mediagoblin/submit/views.py:121
+msgid "Woohoo! Submitted!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/404.html:21
+msgid "Oops!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/404.html:24
+msgid "There doesn't seem to be a page at this address. Sorry!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/404.html:26
+msgid ""
+"If you're sure the address is correct, maybe the page you're looking for has"
+" been moved or deleted."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/404.html:32
+msgid "Image of 404 goblin stressing out"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:22
+msgid "GNU MediaGoblin"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:47
+msgid "MediaGoblin logo"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:52
+msgid "Submit media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:63
+msgid "verify your email!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:73
+#: mediagoblin/templates/mediagoblin/auth/login.html:27
+#: mediagoblin/templates/mediagoblin/auth/login.html:35
+msgid "Log in"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:89
+msgid ""
+"Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
+"href=\"http://gnu.org/\">GNU</a> project"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:24
+msgid "Explore"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:27
+msgid "Hi there, media lover! MediaGoblin is..."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:29
+msgid "The perfect place for your media!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:30
+msgid ""
+"A place for people to collaborate and show off original and derived "
+"creations!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:31
+msgid ""
+"Free, as in freedom. (We’re a <a href=\"http://gnu.org\">GNU</a> project, "
+"after all.)"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:32
+msgid ""
+"Aiming to make the world a better place through decentralization and "
+"(eventually, coming soon!) federation!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:33
+msgid ""
+"Built for extensibility.  (Multiple media types coming soon to the software,"
+" including video support!)"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:34
+msgid ""
+"Powered by people like you.  (<a "
+"href=\"http://mediagoblin.org/pages/join.html\">You can help us improve this"
+" software!</a>)"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:38
+msgid "Excited to join us?"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:39
+#, python-format
+msgid ""
+"<a class=\"header_submit_highlight\" href=\"%(register_url)s\">Create a free account</a>\n"
+"          or\n"
+"          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:53
+msgid "Most recent media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:29
+msgid "Enter your new password"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:29
+msgid "Enter your username or email"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/fp_changed_success.html:22
+msgid "Your password has been changed. Try to log in now."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/fp_email_sent.html:22
+msgid ""
+"Check your inbox. We sent an email with a URL for changing your password."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/fp_verification_email.txt:19
+#, python-format
+msgid ""
+"Hi %(username)s,\n"
+"\n"
+"to change your GNU MediaGoblin password, open the following URL in \n"
+"your web browser:\n"
+"\n"
+"%(verification_url)s\n"
+"\n"
+"If you think this is an error, just ignore this email and continue being\n"
+"a happy goblin!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/login.html:30
+msgid "Logging in failed!"
+msgstr "ప్రవేశం విఫలమయ్యింది!"
+
+#: mediagoblin/templates/mediagoblin/auth/login.html:43
+msgid "Don't have an account yet?"
+msgstr "మీకు ఇంకా ఖాతా లేదా?"
+
+#: mediagoblin/templates/mediagoblin/auth/login.html:46
+msgid "Create one here!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/login.html:49
+msgid "Forgot your password?"
+msgstr "మీ సంకేతపదాన్ని మర్చిపోయారా?"
+
+#: mediagoblin/templates/mediagoblin/auth/login.html:52
+msgid "Change it!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/register.html:27
+msgid "Create an account!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/register.html:31
+msgid "Create"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/verification_email.txt:19
+#, python-format
+msgid ""
+"Hi %(username)s,\n"
+"\n"
+"to activate your GNU MediaGoblin account, open the following URL in\n"
+"your web browser:\n"
+"\n"
+"%(verification_url)s"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/edit/edit.html:29
+#, python-format
+msgid "Editing %(media_title)s"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/edit/edit.html:36
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
+msgid "Cancel"
+msgstr "రద్దుచేయి"
+
+#: mediagoblin/templates/mediagoblin/edit/edit.html:37
+#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
+msgid "Save changes"
+msgstr "మార్పులను భద్రపరచు"
+
+#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:29
+#, python-format
+msgid "Editing %(username)s's profile"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/listings/tag.html:31
+msgid "Media tagged with:"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/submit/start.html:26
+msgid "Submit yer media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/submit/start.html:30
+msgid "Submit"
+msgstr "దాఖలు చెయ్యి"
+
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:32
+#, python-format
+msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:52
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:32
+msgid "Sorry, no such user found."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
+#, python-format
+msgid "Really delete %(title)s?"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:50
+msgid "Delete Permanently"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
+msgid "Media processing panel"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:25
+msgid ""
+"You can track the state of media being processed for your gallery here."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
+msgid "Media in-processing"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:46
+msgid "No media in-processing"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:50
+msgid "These uploads failed to process:"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:39
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:59
+msgid "Email verification needed"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:42
+msgid "Almost done! Your account still needs to be activated."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:47
+msgid ""
+"An email should arrive in a few moments with instructions on how to do so."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:51
+msgid "In case it doesn't:"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:54
+msgid "Resend verification email"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:62
+msgid ""
+"Someone has registered an account with this username, but it still has to be"
+" activated."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:68
+#, python-format
+msgid ""
+"If you are that person but you've lost your verification email, you can <a "
+"href=\"%(login_url)s\">log in</a> and resend it."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:78
+#, python-format
+msgid "%(username)s's profile"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:85
+msgid "Here's a spot to tell others about yourself."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:90
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:108
+msgid "Edit profile"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:96
+msgid "This user hasn't filled in their profile (yet)."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:122
+#, python-format
+msgid "View all of %(username)s's media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:135
+msgid ""
+"This is where your media will appear, but you don't seem to have added "
+"anything yet."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:141
+msgid "Add media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:147
+msgid "There doesn't seem to be any media here yet..."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
+msgid "feed icon"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
+msgid "Atom feed"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:40
+msgid "Newer"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:46
+msgid "Older"
+msgstr ""
+
+#: mediagoblin/user_pages/forms.py:24
+msgid "Comment"
+msgstr "వ్యాఖ్య"
+
+#: mediagoblin/user_pages/forms.py:30
+msgid "I am sure I want to delete this"
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:142
+msgid "Empty comments are not allowed."
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:148
+msgid "Comment posted!"
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:181
+msgid "You are about to delete another user's media. Proceed with caution."
+msgstr ""
+
+

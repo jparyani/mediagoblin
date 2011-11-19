@@ -45,7 +45,7 @@ def user_home(request, page):
             {'user': user})
 
     cursor = request.db.MediaEntry.find(
-        {'uploader': user['_id'],
+        {'uploader': user._id,
          'state': 'processed'}).sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)
@@ -54,7 +54,7 @@ def user_home(request, page):
     #if no data is available, return NotFound
     if media_entries == None:
         return render_404(request)
-    
+
     user_gallery_url = request.urlgen(
         'mediagoblin.user_pages.user_gallery',
         user=user['username'])
@@ -67,6 +67,7 @@ def user_home(request, page):
          'media_entries': media_entries,
          'pagination': pagination})
 
+
 @uses_pagination
 def user_gallery(request, page):
     """'Gallery' of a User()"""
@@ -77,7 +78,7 @@ def user_gallery(request, page):
         return render_404(request)
 
     cursor = request.db.MediaEntry.find(
-        {'uploader': user['_id'],
+        {'uploader': user._id,
          'state': 'processed'}).sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)
@@ -86,7 +87,7 @@ def user_gallery(request, page):
     #if no data is available, return NotFound
     if media_entries == None:
         return render_404(request)
-    
+
     return render_to_response(
         request,
         'mediagoblin/user_pages/gallery.html',
@@ -96,6 +97,7 @@ def user_gallery(request, page):
 
 MEDIA_COMMENTS_PER_PAGE = 50
 
+
 @get_user_media_entry
 @uses_pagination
 def media_home(request, media, page, **kwargs):
@@ -104,11 +106,15 @@ def media_home(request, media, page, **kwargs):
     """
     if ObjectId(request.matchdict.get('comment')):
         pagination = Pagination(
-            page, media.get_comments(), MEDIA_COMMENTS_PER_PAGE,
+            page, media.get_comments(
+                mg_globals.app_config['comments_ascending']),
+            MEDIA_COMMENTS_PER_PAGE,
             ObjectId(request.matchdict.get('comment')))
     else:
         pagination = Pagination(
-            page, media.get_comments(), MEDIA_COMMENTS_PER_PAGE)
+            page, media.get_comments(
+                mg_globals.app_config['comments_ascending']),
+            MEDIA_COMMENTS_PER_PAGE)
 
     comments = pagination()
 
@@ -124,27 +130,34 @@ def media_home(request, media, page, **kwargs):
          'app_config': mg_globals.app_config})
 
 
+@get_user_media_entry
 @require_active_login
-def media_post_comment(request):
+def media_post_comment(request, media):
     """
     recieves POST from a MediaEntry() comment form, saves the comment.
     """
-    comment = request.db.MediaComment()
-    comment['media_entry'] = ObjectId(request.matchdict['media'])
-    comment['author'] = request.user['_id']
-    comment['content'] = unicode(request.POST['comment_content'])
+    assert request.method == 'POST'
 
+    comment = request.db.MediaComment()
+    comment['media_entry'] = media._id
+    comment['author'] = request.user._id
+    comment['content'] = unicode(request.POST['comment_content'])
     comment['content_html'] = cleaned_markdown_conversion(comment['content'])
 
-    comment.save()
+    if not comment['content'].strip():
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _("Empty comments are not allowed."))
+    else:
+        comment.save()
 
-    messages.add_message(
-        request, messages.SUCCESS,
-        'Comment posted!')
+        messages.add_message(
+            request, messages.SUCCESS,
+            _('Comment posted!'))
 
-    return redirect(request, 'mediagoblin.user_pages.media_home',
-        media = request.matchdict['media'],
-        user = request.matchdict['user'])
+    return exc.HTTPFound(
+        location=media.url_for_self(request.urlgen))
 
 
 @get_user_media_entry
@@ -170,7 +183,7 @@ def media_confirm_delete(request, media):
                 location=media.url_for_self(request.urlgen))
 
     if ((request.user[u'is_admin'] and
-         request.user[u'_id'] != media.uploader()[u'_id'])):
+         request.user._id != media.uploader()._id)):
         messages.add_message(
             request, messages.WARNING,
             _("You are about to delete another user's media. "
@@ -185,6 +198,7 @@ def media_confirm_delete(request, media):
 
 ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 15
 
+
 def atom_feed(request):
     """
     generates the atom feed with the newest images
@@ -197,7 +211,7 @@ def atom_feed(request):
         return render_404(request)
 
     cursor = request.db.MediaEntry.find({
-                 'uploader': user['_id'],
+                 'uploader': user._id,
                  'state': 'processed'}) \
                  .sort('created', DESCENDING) \
                  .limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
@@ -205,7 +219,7 @@ def atom_feed(request):
     feed = AtomFeed(request.matchdict['user'],
                feed_url=request.url,
                url=request.host_url)
-    
+
     for entry in cursor:
         feed.add(entry.get('title'),
             entry.get('description_html'),
@@ -241,7 +255,7 @@ def processing_panel(request):
     #
     # Make sure we have permission to access this user's panel.  Only
     # admins and this user herself should be able to do so.
-    if not (user[u'_id'] == request.user[u'_id']
+    if not (user._id == request.user._id
             or request.user.is_admin):
         # No?  Let's simply redirect to this user's homepage then.
         return redirect(
@@ -250,12 +264,12 @@ def processing_panel(request):
 
     # Get media entries which are in-processing
     processing_entries = request.db.MediaEntry.find(
-        {'uploader': user['_id'],
+        {'uploader': user._id,
          'state': 'processing'}).sort('created', DESCENDING)
 
     # Get media entries which have failed to process
     failed_entries = request.db.MediaEntry.find(
-        {'uploader': user['_id'],
+        {'uploader': user._id,
          'state': 'failed'}).sort('created', DESCENDING)
 
     # Render to response

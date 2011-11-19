@@ -22,7 +22,7 @@
   font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
-  src: local('Lato Regular'), local('Lato-Regular'), url('../fonts/Lato-Regular.woff') format('truetype');
+  src: local('Lato Regular'), local('Lato-Regular'), url('../fonts/Lato-Regular.ttf') format('truetype');
 }
 
 body {
@@ -161,7 +161,6 @@ background-image: -moz-linear-gradient(center top , rgb(134, 212, 177), rgb(109,
   padding-right: 11px;
   text-decoration: none;
   font-family: 'Lato', sans-serif;
-  font-size: 1.2em;
   font-weight: bold;
 }
 
@@ -213,11 +212,11 @@ text-align: center;
   width: 100%;
 }
 
-.form_field_box {
-  margin-bottom: 24px;
+.form_field_input {
+  margin-bottom: 10px;
 }
 
-.form_field_label,.form_field_input {
+.form_field_label {
   margin-bottom: 4px;
 }
 
@@ -250,8 +249,12 @@ text-align: center;
   font-size: 0.9em;
 }
 
+.comment_content {
+  margin-bottom: 30px;
+}
+
 .comment_content p {
-  margin-bottom: 4px;
+  margin-bottom: 0px;
 }
 
 /* media galleries */
@@ -291,13 +294,16 @@ img.media_icon{
 /* navigation */
 
 .navigation_button{
-  width: 139px;
+  width: 135px;
   display: block;
   float: left;
   text-align: center;
-  background-color: #333;
+  background-color: #1d1d1d;
+  border: 1px solid;
+  border-color: #2c2c2c #232323 #1a1a1a;
+  border-radius: 3px;
   text-decoration: none;
-  padding: 12px 0pt;
+  padding: 8px 0px 14px;
   font-size: 2em;
   margin: 0 0 20px
 }
@@ -307,7 +313,7 @@ p.navigation_button{
 }
 
 .navigation_left{
-  margin-right: 2px;
+  margin-right: 6px;
 }
 
 /* messages */

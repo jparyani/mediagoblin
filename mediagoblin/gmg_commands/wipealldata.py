@@ -30,6 +30,10 @@ def wipe(args):
     print ""
     print "Running this will destroy your mediagoblin database,"
     print "remove all your media files in user_dev/, etc."
+    print ""
+    print "ALSO: This command is currently a hack and will only remove"
+    print "  things properly on the default setup!  If you've customized"
+    print "  your mediagoblin configs, it won't work (for now)."
 
     drop_it = raw_input(
         'Are you **SURE** you want to destroy your environment?  '
@@ -48,4 +52,4 @@ def wipe(args):
             print "nixing %s...." % directory
             shutil.rmtree(directory)
 
-    print "removed all your stuff!  okay, now re-run ./bin/buildout"
+    print "removed all your stuff!"

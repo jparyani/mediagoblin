@@ -177,7 +177,7 @@ class TestSubmission:
             request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                            # No work: user=media.uploader().username,
                            user=self.test_user['username'],
-                           media=media['_id']),
+                           media=media._id),
             # no value means no confirm
             {})
 
@@ -197,7 +197,7 @@ class TestSubmission:
             request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                            # No work: user=media.uploader().username,
                            user=self.test_user['username'],
-                           media=media['_id']),
+                           media=media._id),
             {'confirm': 'y'})
 
         response.follow()
@@ -208,7 +208,7 @@ class TestSubmission:
         # Does media entry still exist?
         assert_false(
             request.db.MediaEntry.find(
-                {'_id': media['_id']}).count())
+                {'_id': media._id}).count())
 
     def test_malicious_uploads(self):
         # Test non-suppoerted file with non-supported extension

@@ -93,8 +93,9 @@ MEDIAENTRY_INDEXES = {
                   ('created', DESCENDING)]},
 
     'state_uploader_tags_created': {
-        # Indexing on processed?, media uploader, associated tags, and timestamp
-        # Used for showing media items matching a tag search, most recent first.
+        # Indexing on processed?, media uploader, associated tags, and
+        # timestamp Used for showing media items matching a tag
+        # search, most recent first.
         'index': [('state', ASCENDING),
                   ('uploader', ASCENDING),
                   ('tags.slug', DESCENDING),

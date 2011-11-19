@@ -94,7 +94,7 @@ class MediaGoblinApp(object):
         # object.
         #######################################################
 
-        setup_globals(app = self)
+        setup_globals(app=self)
 
         # Workbench *currently* only used by celery, so this only
         # matters in always eager mode :)
@@ -103,7 +103,6 @@ class MediaGoblinApp(object):
         # instantiate application middleware
         self.middleware = [common.import_component(m)(self)
                            for m in middleware.ENABLED_MIDDLEWARE]
-
 
     def __call__(self, environ, start_response):
         request = Request(environ)
@@ -117,6 +116,17 @@ class MediaGoblinApp(object):
         ## Routing / controller loading stuff
         path_info = request.path_info
         route_match = self.routing.match(path_info)
+
+        # By using fcgi, mediagoblin can run under a base path
+        # like /mediagoblin/. request.path_info contains the
+        # path inside mediagoblin. If the something needs the
+        # full path of the current page, that should include
+        # the basepath.
+        # Note: urlgen and routes are fine!
+        request.full_path = environ["SCRIPT_NAME"] + request.path_info
+        # python-routes uses SCRIPT_NAME. So let's use that too.
+        # The other option would be:
+        # request.full_path = environ["SCRIPT_URL"]
 
         ## Attach utilities to the request object
         request.matchdict = route_match
@@ -167,6 +177,16 @@ class MediaGoblinApp(object):
 
 
 def paste_app_factory(global_config, **app_config):
-    mgoblin_app = MediaGoblinApp(app_config['config'])
+    configs = app_config['config'].split()
+    mediagoblin_config = None
+    for config in configs:
+        if os.path.exists(config) and os.access(config, os.R_OK):
+            mediagoblin_config = config
+            break
+
+    if not mediagoblin_config:
+        raise IOError("Usable mediagoblin config not found.")
+
+    mgoblin_app = MediaGoblinApp(mediagoblin_config)
 
     return mgoblin_app

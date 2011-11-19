@@ -29,7 +29,7 @@ def connect_database_from_config(app_config, use_pymongo=False):
     port = app_config.get('db_port')
     if port:
         port = asint(port)
-    
+
     if use_pymongo:
         connection = pymongo.Connection(
             app_config.get('db_host'), port)

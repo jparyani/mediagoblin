@@ -16,17 +16,18 @@
 
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
+
 class BaseProcessingFail(Exception):
     """
     Base exception that all other processing failure messages should
     subclass from.
-  
+
     You shouldn't call this itself; instead you should subclass it
     and provid the exception_path and general_message applicable to
     this error.
     """
     general_message = u''
-  
+
     @property
     def exception_path(self):
         return u"%s:%s" % (
@@ -34,8 +35,8 @@ class BaseProcessingFail(Exception):
 
     def __init__(self, **metadata):
         self.metadata = metadata or {}
-  
-  
+
+
 class BadMediaFail(BaseProcessingFail):
     """
     Error that should be raised when an inappropriate file was given

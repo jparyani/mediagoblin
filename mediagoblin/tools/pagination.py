@@ -19,7 +19,9 @@ import copy
 from math import ceil, floor
 from itertools import izip, count
 
+
 PAGINATION_DEFAULT_PER_PAGE = 30
+
 
 class Pagination(object):
     """
@@ -37,9 +39,9 @@ class Pagination(object):
         Args:
          - page: requested page
          - per_page: number of objects per page
-         - cursor: db cursor 
-         - jump_to_id: ObjectId, sets the page to the page containing the object
-           with _id == jump_to_id.
+         - cursor: db cursor
+         - jump_to_id: ObjectId, sets the page to the page containing the
+           object with _id == jump_to_id.
         """
         self.page = page
         self.per_page = per_page
@@ -51,7 +53,7 @@ class Pagination(object):
             cursor = copy.copy(self.cursor)
 
             for (doc, increment) in izip(cursor, count(0)):
-                if doc['_id'] == jump_to_id:
+                if doc._id == jump_to_id:
                     self.page = 1 + int(floor(increment / self.per_page))
 
                     self.active_id = jump_to_id
@@ -91,19 +93,19 @@ class Pagination(object):
                 last = num
 
     def get_page_url_explicit(self, base_url, get_params, page_no):
-        """ 
+        """
         Get a page url by adding a page= parameter to the base url
-        """ 
+        """
         new_get_params = copy.copy(get_params or {})
         new_get_params['page'] = page_no
         return "%s?%s" % (
             base_url, urllib.urlencode(new_get_params))
 
     def get_page_url(self, request, page_no):
-        """ 
+        """
         Get a new page url based of the request, and the new page number.
 
         This is a nice wrapper around get_page_url_explicit()
-        """ 
+        """
         return self.get_page_url_explicit(
-            request.path_info, request.GET, page_no)
+            request.full_path, request.GET, page_no)

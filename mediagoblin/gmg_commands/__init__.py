@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
+import os
 
 from mediagoblin.tools.common import import_component
 
@@ -28,7 +29,7 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.migrate:migrate_parser_setup',
         'func': 'mediagoblin.gmg_commands.migrate:migrate',
         'help': 'Apply all unapplied bulk migrations to the database'},
-    'adduser':{
+    'adduser': {
         'setup': 'mediagoblin.gmg_commands.users:adduser_parser_setup',
         'func': 'mediagoblin.gmg_commands.users:adduser',
         'help': 'Creates an user'},
@@ -58,10 +59,16 @@ SUBCOMMAND_MAP = {
 def main_cli():
     parser = argparse.ArgumentParser(
         description='GNU MediaGoblin utilities.')
+    parser.add_argument(
+        '-cf', '--conf_file', default=None,
+        help=(
+            "Config file used to set up environment.  "
+            "Default to mediagoblin_local.ini if readable, "
+            "otherwise mediagoblin.ini"))
 
     subparsers = parser.add_subparsers(help='sub-command help')
     for command_name, command_struct in SUBCOMMAND_MAP.iteritems():
-        if command_struct.has_key('help'):
+        if 'help' in command_struct:
             subparser = subparsers.add_parser(
                 command_name, help=command_struct['help'])
         else:
@@ -75,9 +82,15 @@ def main_cli():
         subparser.set_defaults(func=exec_func)
 
     args = parser.parse_args()
+    if args.conf_file is None:
+        if os.path.exists('mediagoblin_local.ini') \
+                and os.access('mediagoblin_local.ini', os.R_OK):
+            args.conf_file = 'mediagoblin_local.ini'
+        else:
+            args.conf_file = 'mediagoblin.ini'
+
     args.func(args)
 
 
 if __name__ == '__main__':
     main_cli()
-

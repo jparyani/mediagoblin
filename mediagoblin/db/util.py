@@ -118,11 +118,12 @@ def remove_deprecated_indexes(database, deprecated_indexes=DEPRECATED_INDEXES):
 #################
 
 # The default migration registry...
-# 
+#
 # Don't set this yourself!  RegisterMigration will automatically fill
 # this with stuff via decorating methods in migrations.py
 
-class MissingCurrentMigration(Exception): pass
+class MissingCurrentMigration(Exception):
+    pass
 
 
 MIGRATIONS = {}
@@ -147,7 +148,7 @@ class RegisterMigration(object):
     """
     def __init__(self, migration_number, migration_registry=MIGRATIONS):
         assert migration_number > 0, "Migration number must be > 0!"
-        assert not migration_registry.has_key(migration_number), \
+        assert migration_number not in migration_registry, \
             "Duplicate migration numbers detected!  That's not allowed!"
 
         self.migration_number = migration_number

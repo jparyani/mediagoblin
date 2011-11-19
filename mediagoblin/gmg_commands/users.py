@@ -29,9 +29,6 @@ def adduser_parser_setup(subparser):
     subparser.add_argument(
         'email',
         help="Email to recieve notifications")
-    subparser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help="Config file used to set up environment")
 
 
 def adduser(args):
@@ -41,7 +38,7 @@ def adduser(args):
     db = mg_globals.database
     users_with_username = \
         db.User.find({
-            'username': args.username.lower()
+            'username': args.username.lower(),
         }).count()
 
     if users_with_username:
@@ -64,9 +61,6 @@ def makeadmin_parser_setup(subparser):
     subparser.add_argument(
         'username',
         help="Username to give admin level")
-    subparser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help="Config file used to set up environment")
 
 
 def makeadmin(args):
@@ -74,7 +68,7 @@ def makeadmin(args):
 
     db = mg_globals.database
 
-    user = db.User.one({'username':unicode(args.username.lower())})
+    user = db.User.one({'username': unicode(args.username.lower())})
     if user:
         user['is_admin'] = True
         user.save()
@@ -90,9 +84,6 @@ def changepw_parser_setup(subparser):
     subparser.add_argument(
         'password',
         help="Your NEW supersecret word to login")
-    subparser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help="Config file used to set up environment")
 
 
 def changepw(args):
@@ -100,11 +91,10 @@ def changepw(args):
 
     db = mg_globals.database
 
-    user = db.User.one({'username':unicode(args.username.lower())})
+    user = db.User.one({'username': unicode(args.username.lower())})
     if user:
         user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(args.password)
         user.save()
         print 'Password successfully changed'
     else:
         print 'The user doesn\'t exist'
-

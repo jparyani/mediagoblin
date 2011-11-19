@@ -21,7 +21,7 @@
   {# only display if {{pagination}} is defined #}
   {% if pagination and pagination.pages > 1 %}
     {% if not base_url %}
-      {% set base_url = request.path_info %}
+      {% set base_url = request.full_path %}
     {% endif %}
 
     {% if preserve_get_params %}

@@ -16,7 +16,6 @@
 
 from mediagoblin import mg_globals
 from mediagoblin.db.open import setup_connection_and_db_from_config
-from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.storage.filestorage import BasicFileStorage
 from mediagoblin.init import setup_storage, setup_global_and_app_config
 
@@ -39,9 +38,6 @@ def import_export_parse_setup(subparser):
     # TODO: Add default
     subparser.add_argument(
         'tar_file')
-    subparser.add_argument(
-        '-cf', '--conf_file', default='mediagoblin.ini',
-        help='Config file used to set up environment')
     subparser.add_argument(
         '--mongodump_path', default='mongodump',
         help='mongodump binary')
@@ -91,7 +87,7 @@ def _import_database(db, args):
             args.mongorestore_path,
             '-d', db.name,
             os.path.join(args._cache_path['database'], db.name)])
-    
+
     p.wait()
 
     _log.info('...Database imported')
@@ -212,7 +208,7 @@ def _export_media(db, args):
 
     for entry in db.media_entries.find():
         for name, path in entry['media_files'].items():
-            _log.info('Exporting {0} - {1}'.format(
+            _log.info(u'Exporting {0} - {1}'.format(
                     entry['title'],
                     name))
 
@@ -229,7 +225,8 @@ def env_export(args):
     '''
     if args.cache_path:
         if os.path.exists(args.cache_path):
-            _log.error('The cache directory must not exist before you run this script')
+            _log.error('The cache directory must not exist '
+                       'before you run this script')
             _log.error('Cache directory: {0}'.format(args.cache_path))
 
             return False
@@ -245,7 +242,7 @@ def env_export(args):
     globa_config, app_config = setup_global_and_app_config(args.conf_file)
 
     setup_storage()
-    
+
     connection, db = setup_connection_and_db_from_config(
         app_config, use_pymongo=True)
 

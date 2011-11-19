@@ -29,8 +29,12 @@ from mediagoblin.workbench import WorkbenchManager
 from mediagoblin.storage import storage_system_from_config
 
 
-class Error(Exception): pass
-class ImproperlyConfigured(Error): pass
+class Error(Exception):
+    pass
+
+
+class ImproperlyConfigured(Error):
+    pass
 
 
 def setup_global_and_app_config(config_path):
@@ -76,8 +80,8 @@ def setup_database():
                 "in fact they appear to be from the future?!")
 
     setup_globals(
-        db_connection = connection,
-        database = db)
+        db_connection=connection,
+        database=db)
 
     return connection, db
 
@@ -99,10 +103,10 @@ def get_jinja_loader(user_template_path=None):
 
 
 def get_staticdirector(app_config):
-    if app_config.has_key('direct_remote_path'):
+    if 'direct_remote_path' in app_config:
         return staticdirect.RemoteStaticDirect(
             app_config['direct_remote_path'].strip())
-    elif app_config.has_key('direct_remote_paths'):
+    elif 'direct_remote_paths' in app_config:
         direct_remote_path_lines = app_config[
             'direct_remote_paths'].strip().splitlines()
         return staticdirect.MultiRemoteStaticDirect(
@@ -126,8 +130,8 @@ def setup_storage():
     queue_store = storage_system_from_config(global_config[key_long])
 
     setup_globals(
-        public_store = public_store,
-        queue_store = queue_store)
+        public_store=public_store,
+        queue_store=queue_store)
 
     return public_store, queue_store
 
@@ -137,7 +141,7 @@ def setup_workbench():
 
     workbench_manager = WorkbenchManager(app_config['workbench_path'])
 
-    setup_globals(workbench_manager = workbench_manager)
+    setup_globals(workbench_manager=workbench_manager)
 
 
 def setup_beaker_cache():
