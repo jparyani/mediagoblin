@@ -58,7 +58,7 @@ def user_may_delete_media(controller):
     """
     def wrapper(request, *args, **kwargs):
         uploader = request.db.MediaEntry.find_one(
-            {'_id': ObjectId(request.matchdict['media'])}).uploader()
+            {'slug': request.matchdict['media'] }).uploader()
         if not (request.user['is_admin'] or
                 request.user['_id'] == uploader['_id']):
             return exc.HTTPForbidden()
@@ -95,7 +95,6 @@ def get_user_media_entry(controller):
 
         if not user:
             return render_404(request)
-
         media = request.db.MediaEntry.find_one(
             {'slug': request.matchdict['media'],
              'state': 'processed',

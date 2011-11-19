@@ -124,7 +124,7 @@
         <p>
           {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
                                      user= media.uploader().username,
-                                     media= media._id) %}
+                                     media= media.slug) %}
           <a href="{{ edit_url }}"
              ><img src="{{ request.staticdirect('/images/icon_edit.png') }}"
                    class="media_icon" /></a>
@@ -133,7 +133,7 @@
         <p>
           {% set delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                                      user= media.uploader().username,
-                                     media= media._id) %}
+                                     media= media.slug) %}
           <a href="{{ delete_url }}"
              ><img src="{{ request.staticdirect('/images/icon_delete.png') }}"
                class="media_icon" /></a>
