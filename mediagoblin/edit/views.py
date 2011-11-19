@@ -26,6 +26,7 @@ from werkzeug.utils import secure_filename
 from mediagoblin import messages
 from mediagoblin import mg_globals
 
+from mediagoblin.auth import lib as auth_lib
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry
@@ -161,19 +162,32 @@ def edit_profile(request):
         bio=user.get('bio'))
 
     if request.method == 'POST' and form.validate():
-            user['url'] = unicode(request.POST['url'])
-            user['bio'] = unicode(request.POST['bio'])
+        user['url'] = unicode(request.POST['url'])
+        user['bio'] = unicode(request.POST['bio'])
 
-            user['bio_html'] = cleaned_markdown_conversion(user['bio'])
+        password_matches = auth_lib.bcrypt_check_password(request.POST['old_password'],
+                                                          user['pw_hash'])
 
-            user.save()
-
+        if (request.POST['old_password'] or request.POST['new_password']) and not \
+                password_matches:
             messages.add_message(request,
-                                 messages.SUCCESS,
-                                 _("Profile edited!"))
-            return redirect(request,
-                           'mediagoblin.user_pages.user_home',
-                            user=edit_username)
+                                 messages.ERROR,
+                                 _('Wrong password'))
+
+        if password_matches:
+            user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+                request.POST['new_password'])
+
+        user['bio_html'] = cleaned_markdown_conversion(user['bio'])
+
+        user.save()
+
+        messages.add_message(request,
+                             messages.SUCCESS,
+                             _("Profile edited!"))
+        return redirect(request,
+                       'mediagoblin.user_pages.user_home',
+                        user=edit_username)
 
     return render_to_response(
         request,

@@ -43,6 +43,19 @@ class EditProfileForm(wtforms.Form):
         _('Website'),
         [wtforms.validators.Optional(),
          wtforms.validators.URL(message='Improperly formed URL')])
+    old_password = wtforms.PasswordField(
+        _('Old password'),
+        [wtforms.validators.Optional()])
+    new_password = wtforms.PasswordField(
+        _('New Password'),
+        [wtforms.validators.Optional(),
+         wtforms.validators.Length(min=6, max=30),
+         wtforms.validators.EqualTo(
+                'confirm_password',
+                'Passwords must match.')])
+    confirm_password = wtforms.PasswordField(
+        'Confirm password',
+        [wtforms.validators.Optional()])
 
 
 class EditAttachmentsForm(wtforms.Form):
