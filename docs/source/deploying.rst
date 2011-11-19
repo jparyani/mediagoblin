@@ -207,7 +207,7 @@ this ``nginx.conf`` file should be modeled on the following: ::
 
       # Instance specific media:
       location /mgoblin_media/ {
-         alias /srv/mediagoblin.example.org/mediagoblin/mediagoblin/user_dev/media/public/;
+         alias /srv/mediagoblin.example.org/mediagoblin/user_dev/media/public/;
       }
 
       # Mounting MediaGoblin itself via fastcgi.
