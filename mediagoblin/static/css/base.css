@@ -212,7 +212,11 @@ text-align: center;
   width: 100%;
 }
 
-.form_field_label,.form_field_input {
+.form_field_input {
+  margin-bottom: 10px;
+}
+
+.form_field_label {
   margin-bottom: 4px;
 }
 
