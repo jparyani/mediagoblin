@@ -217,9 +217,14 @@ class MediaEntry(Document):
         'created': datetime.datetime.utcnow,
         'state': u'unprocessed'}
 
-    def get_comments(self):
+    def get_comments(self, ascending=False):
+        if ascending:
+            order = ASCENDING
+        else:
+            order = DESCENDING
+            
         return self.db.MediaComment.find({
-                'media_entry': self._id}).sort('created', DESCENDING)
+                'media_entry': self._id}).sort('created', order)
 
     def get_display_media(self, media_map,
                           fetch_order=common.DISPLAY_IMAGE_FETCHING_ORDER):
