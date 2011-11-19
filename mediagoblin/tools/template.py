@@ -52,6 +52,7 @@ def get_jinja_env(template_loader, locale):
     # All templates will know how to ...
     # ... fetch all waiting messages and remove them from the queue
     # ... construct a grid of thumbnails or other media
+    # ... have access to the global and app config
     template_env.globals['fetch_messages'] = messages.fetch_messages
     template_env.globals['gridify_list'] = gridify_list
     template_env.globals['gridify_cursor'] = gridify_cursor
