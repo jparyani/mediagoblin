@@ -17,13 +17,20 @@
 #}
 
 {% block tags_content -%}
-  <h3>Tags</h3>
-  <ul class="mediaentry_tags">
+  <p>{% trans %}Tagged with{% endtrans %}
     {% for tag in media.tags %}
-      <li class="tag">
-        <a href="{{ request.urlgen(
+      {% if loop.last %}
+      {% trans %}and{% endtrans %} <a href="{{ request.urlgen(
                         'mediagoblin.listings.tags_listing',
-                        tag=tag['slug']) }}">{{ tag['name'] }}</a></li>
+                        tag=tag['slug']) }}">{{ tag['name'] }}</a>.
+      {% elif loop.revindex==2 %}
+      <a href="{{ request.urlgen(
+                        'mediagoblin.listings.tags_listing',
+                        tag=tag['slug']) }}">{{ tag['name'] }}</a> 
+      {% else %}<a href="{{ request.urlgen(
+                        'mediagoblin.listings.tags_listing',
+                        tag=tag['slug']) }}">{{ tag['name'] }}</a>, 
+      {% endif %}
     {% endfor %}
-  </ul>
+  </p>
 {% endblock %}
