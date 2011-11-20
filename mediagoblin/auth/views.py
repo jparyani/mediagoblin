@@ -74,7 +74,7 @@ def register(request):
             extra_validation_passes = False
         if users_with_email:
             register_form.email.errors.append(
-                _(u'Sorry, that email address has already been taken.'))
+                _(u'Sorry, a user with that email address already exists.'))
             extra_validation_passes = False
 
         if extra_validation_passes:
