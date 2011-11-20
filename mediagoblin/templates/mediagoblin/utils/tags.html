@@ -24,15 +24,15 @@
         {% if media.tags|length > 1 %}
           {% trans %}and{% endtrans %}
         {% endif %}
-
         <a href="{{ request.urlgen(
                           'mediagoblin.listings.tags_listing',
                           tag=tag['slug']) }}">{{ tag['name'] }}</a>.
-        {% elif loop.revindex==2 %}
+      {% elif loop.revindex == 2 %}
         <a href="{{ request.urlgen(
                           'mediagoblin.listings.tags_listing',
                           tag=tag['slug']) }}">{{ tag['name'] }}</a> 
-        {% else %}<a href="{{ request.urlgen(
+      {% else %}
+        <a href="{{ request.urlgen(
                           'mediagoblin.listings.tags_listing',
                           tag=tag['slug']) }}">{{ tag['name'] }}</a>, 
       {% endif %}
