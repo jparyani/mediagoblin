@@ -63,11 +63,19 @@ msgstr ""
 msgid "The verification key or user id is incorrect"
 msgstr ""
 
-#: mediagoblin/auth/views.py:207
+#: mediagoblin/auth/views.py:203
+msgid "You must be logged in so we know who to send the email to!"
+msgstr ""
+
+#: mediagoblin/auth/views.py:211
+msgid "You've already verified your email address!"
+msgstr ""
+
+#: mediagoblin/auth/views.py:224
 msgid "Resent your verification email."
 msgstr ""
 
-#: mediagoblin/auth/views.py:248
+#: mediagoblin/auth/views.py:265
 msgid ""
 "Could not send password recovery email as your username is inactive or "
 "your account's email address has not been verified."
