@@ -62,7 +62,7 @@
         <p>{% trans %}In case it doesn't:{% endtrans %}</p>
   
         <a href="{{ request.urlgen('mediagoblin.auth.resend_verification') }}"
-           class="button">{% trans %}Resend verification email{% endtrans %}</a>
+           class="button_form">{% trans %}Resend verification email{% endtrans %}</a>
       </div>
     {% else %}
       {# if the user is not you, but still needs to verify their email #}
@@ -97,7 +97,7 @@
           </p>
           <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
                             user.username }}"
-             class="header_submit">
+             class="button_action">
             {%- trans %}Edit profile{% endtrans -%}
           </a>
         </div>
@@ -147,7 +147,7 @@
             This is where your media will appear, but you don't seem to have added anything yet.
             {%- endtrans %}
           </p>
-          <a class="header_submit"
+          <a class="button_action"
              href="{{ request.urlgen('mediagoblin.submit.start') }}">
             {%- trans %}Add media{% endtrans -%}
           </a>

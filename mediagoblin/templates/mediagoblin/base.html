@@ -47,7 +47,7 @@
                      alt="{% trans %}MediaGoblin logo{% endtrans %}" /></a>
             {% endblock %}
             {% if request.user and request.user['status'] == 'active' %}
-              <a class="header_submit"
+              <a class="button_action"
                  href="{{ request.urlgen('mediagoblin.submit.start') }}">
                 {% trans %}Submit media{% endtrans %}
               </a>
@@ -59,8 +59,8 @@
                 {% if request.user.status == "needs_email_verification" %}
                   <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                               user=request.user['username']) }}"
-                     class="header_submit">
-                    {% trans %}verify your email!{% endtrans %}</a>
+                     class="button_action_highlight">
+                    {% trans %}Verify your email!{% endtrans %}</a>
                 {% endif %}
 
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
