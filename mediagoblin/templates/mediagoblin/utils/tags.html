@@ -20,7 +20,10 @@
   <p>{% trans %}Tagged with{% endtrans %}
     {% for tag in media.tags %}
       {% if loop.last %}
-      {% trans %}and{% endtrans %} <a href="{{ request.urlgen(
+        {% if media.tags|length > 1 %}
+        {% trans %}and{% endtrans %}
+        {% endif %}
+      <a href="{{ request.urlgen(
                         'mediagoblin.listings.tags_listing',
                         tag=tag['slug']) }}">{{ tag['name'] }}</a>.
       {% elif loop.revindex==2 %}
