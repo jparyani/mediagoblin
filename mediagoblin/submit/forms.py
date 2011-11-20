@@ -30,4 +30,6 @@ class SubmitStartForm(wtforms.Form):
         _('Description of this work'))
     tags = wtforms.TextField(
         _('Tags'),
-        [tag_length_validator])
+        [tag_length_validator],
+        description=_(
+          "Seperate tags by commas or spaces."))
