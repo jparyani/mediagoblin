@@ -132,7 +132,9 @@ a.mediagoblin_logo{
 }
 
 .button_action_highlight{
-background-image: -moz-linear-gradient(center top , rgb(134, 212, 177), rgb(109, 173, 144));
+  background-color: #86D4B1;
+  border-color: #A2DEC3 #6CAA8E #5C9179;
+  color: #283F35;
 }
 
 
