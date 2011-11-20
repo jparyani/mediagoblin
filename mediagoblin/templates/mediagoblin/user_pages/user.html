@@ -62,7 +62,7 @@
         <p>{% trans %}In case it doesn't:{% endtrans %}</p>
   
         <a href="{{ request.urlgen('mediagoblin.auth.resend_verification') }}"
-           class="button_form">{% trans %}Resend verification email{% endtrans %}</a>
+           class="button_action_highlight">{% trans %}Resend verification email{% endtrans %}</a>
       </div>
     {% else %}
       {# if the user is not you, but still needs to verify their email #}
