@@ -202,7 +202,7 @@ def resend_activation(request):
             messages.ERROR,
             _('You must be logged in so we know who to send the email to!'))
         
-        return redirect(request, "/auth/login")
+        return redirect(request, 'mediagoblin.auth.login')
 
     if request.user["email_verified"]:
         messages.add_message(
