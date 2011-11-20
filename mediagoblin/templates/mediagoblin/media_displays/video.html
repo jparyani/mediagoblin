@@ -1,11 +1,17 @@
 {% extends 'mediagoblin/user_pages/media.html' %}
 {% block mediagoblin_media %}
-  <video width="{{ media.media_data.video.width }}"
-	 height="{{ media.media_data.video.height }}" controls="controls">
-    <source src="{{ request.app.public_store.file_url(
-		 media['media_files']['webm_640']) }}" 
-	    type='video/webm; codecs="vp8, vorbis"' />
-  </video>
+  <div class="video-player" style="position: relative;">
+    <video class="video-js vjs-default-skin"
+	   width="{{ media.media_data.video.width }}"
+	   height="{{ media.media_data.video.height }}"
+	   controls="controls"
+	   preload="auto"
+	   data-setup="">
+      <source src="{{ request.app.public_store.file_url(
+		   media['media_files']['webm_640']) }}" 
+	      type="video/webm; codecs=&quot;vp8, vorbis&quot;" />
+    </video>
+  </div>
   {% if 'original' in media.media_files %}
   <p>
     <a href="{{ request.app.public_store.file_url(

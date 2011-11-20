@@ -26,31 +26,33 @@ class FileTypeNotSupported(Exception):
 class InvalidFileType(Exception):
     pass
 
+# This should be more dynamic in the future. Perhaps put it in the .ini?
+# -- Joar
 MEDIA_TYPES = [
         'mediagoblin.media_types.image',
         'mediagoblin.media_types.video']
 
 
 def get_media_types():
+    '''
+    Generator that returns the available media types
+    '''
     for media_type in MEDIA_TYPES:
         yield media_type
 
 
 def get_media_managers():
+    '''
+    Generator that returns all available media managers
+    '''
     for media_type in get_media_types():
-        '''
-        FIXME
-        __import__ returns the lowest-level module. If the plugin is located
-        outside the conventional plugin module tree, it will not be loaded
-        properly because of the [...]ugin.media_types.
-
-        We need this if we want to support a separate site-specific plugin
-        folder.
-        '''
         try:
             __import__(media_type)
         except ImportError as e:
-            raise Exception('ERROR: Could not import {0}: {1}'.format(media_type, e))
+            raise Exception(
+                _('ERROR: Could not import {media_type}: {exception}').format(
+                    media_type=media_type,
+                    exception=e))
             
         yield media_type, sys.modules[media_type].MEDIA_MANAGER
 
@@ -67,8 +69,8 @@ def get_media_type_and_manager(filename):
             ext = os.path.splitext(filename)[1].lower()
         else:
             raise InvalidFileType(
-                'Could not find any file extension in "{0}"'.format(
-                    filename))
+                _('Could not find any file extension in "{filename}"').format(
+                    filename=filename))
 
         if ext[1:] in manager['accepted_extensions']:
             return media_type, manager

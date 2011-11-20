@@ -53,10 +53,13 @@ class ProcessMedia(Task):
 
         # Try to process, and handle expected errors.
         try:
+            __import__(entry['media_type'])
             process_image(entry)
         except BaseProcessingFail, exc:
             mark_entry_failed(entry[u'_id'], exc)
             return
+        except ImportError, exc:
+            mark_entry_failed(entry[u'_id'], exc)
 
         entry['state'] = u'processed'
         entry.save()

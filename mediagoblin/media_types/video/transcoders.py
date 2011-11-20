@@ -56,7 +56,6 @@ try:
     import pygst
     pygst.require('0.10')
     import gst
-    from gst import pbutils
     from gst.extend import discoverer
 except:
     raise Exception('gst/pygst 0.10 could not be found')

@@ -28,8 +28,15 @@
           href="{{ request.staticdirect('/css/extlib/960_16_col.css') }}"/>
     <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/base.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{{ request.staticdirect('/css/video-js.css') }}"/>
     <link rel="shortcut icon"
           href="{{ request.staticdirect('/images/goblin.ico') }}" />
+    <script type="text/javascript"
+	    src="{{ request.staticdirect('/js/lib/video.js') }}"></script>
+    <script type="text/javascript"
+	    src="{{ request.staticdirect('/js/video.js') }}"></script>
+    <script type="text/javascript" src="http://html5.kaltura.org/js" > </script> 
     {% block mediagoblin_head %}
     {% endblock mediagoblin_head %}
   </head>

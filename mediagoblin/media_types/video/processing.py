@@ -15,24 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import tempfile
-import pkg_resources
-import os
 import logging
+import os
 
 from celery.task import Task
 from celery import registry
 
 from mediagoblin.db.util import ObjectId
 from mediagoblin import mg_globals as mgg
-from mediagoblin.util import lazy_pass_to_ugettext as _
-from mediagoblin.process_media.errors import BaseProcessingFail, BadMediaFail
+from mediagoblin.process_media import BaseProcessingFail
 from mediagoblin.process_media import mark_entry_failed
 from . import transcoders
 
 THUMB_SIZE = 180, 180
 MEDIUM_SIZE = 640, 640
-
-loop = None  # Is this even used?
 
 logger = logging.getLogger(__name__)
 logging.basicConfig()
@@ -59,7 +55,11 @@ def process_video(entry):
         'source')
 
     medium_filepath = create_pub_filepath(
-        entry, '640p.webm')
+        entry,
+        '{original}-640p.webm'.format(
+            original=os.path.splitext(
+                queued_filepath[-1])[0]  # Select the 
+            ))
 
     thumbnail_filepath = create_pub_filepath(
         entry, 'thumbnail.jpg')
@@ -163,38 +163,3 @@ class ProcessMedia(Task):
 
 
 process_media = registry.tasks[ProcessMedia.name]
-
-
-def mark_entry_failed(entry_id, exc):
-    """
-    Mark a media entry as having failed in its conversion.
-
-    Uses the exception that was raised to mark more information.  If the
-    exception is a derivative of BaseProcessingFail then we can store extra
-    information that can be useful for users telling them why their media failed
-    to process.
-
-    Args:
-     - entry_id: The id of the media entry
-
-    """
-    # Was this a BaseProcessingFail?  In other words, was this a
-    # type of error that we know how to handle?
-    if isinstance(exc, BaseProcessingFail):
-        # Looks like yes, so record information about that failure and any
-        # metadata the user might have supplied.
-        mgg.database['media_entries'].update(
-            {'_id': entry_id},
-            {'$set': {u'state': u'failed',
-                      u'fail_error': exc.exception_path,
-                      u'fail_metadata': exc.metadata}})
-    else:
-        # Looks like no, so just mark it as failed and don't record a
-        # failure_error (we'll assume it wasn't handled) and don't record
-        # metadata (in fact overwrite it if somehow it had previous info
-        # here)
-        mgg.database['media_entries'].update(
-            {'_id': entry_id},
-            {'$set': {u'state': u'failed',
-                      u'fail_error': None,
-                      u'fail_metadata': {}}})
