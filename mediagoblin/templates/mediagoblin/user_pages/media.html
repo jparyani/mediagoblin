@@ -116,24 +116,17 @@
 
       {% if media['uploader'] == request.user._id or 
                                  request.user['is_admin'] %}
-        <h3>{% trans %}Actions{% endtrans %}</h3>
         <p>
           {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
                                      user= media.uploader().username,
                                      media= media._id) %}
-          <a href="{{ edit_url }}"
-             ><img src="{{ request.staticdirect('/images/icon_edit.png') }}"
-                   class="media_icon" /></a>
-          <a href="{{ edit_url }}">{% trans %}edit{% endtrans %}</a>
+          <a href="{{ edit_url }}">{% trans %}Edit{% endtrans %}</a>
         </p>
         <p>
           {% set delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                                      user= media.uploader().username,
                                      media= media._id) %}
-          <a href="{{ delete_url }}"
-             ><img src="{{ request.staticdirect('/images/icon_delete.png') }}"
-               class="media_icon" /></a>
-          <a href="{{ delete_url }}">{% trans %}delete{% endtrans %}</a>
+          <a href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
         </p>
       {% endif %}
 
