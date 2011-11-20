@@ -177,7 +177,7 @@ text-align: center;
 }
 
 .empty_space{
-  background-color: #222;
+  background-image: url("../images/empty_back.png");
   font-style: italic;
   text-align: center;
   height: 160px;
