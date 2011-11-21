@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import Image
+import os
 
 from celery.task import Task
 from celery import registry
@@ -22,19 +23,9 @@ from celery import registry
 from mediagoblin.db.util import ObjectId
 from mediagoblin import mg_globals as mgg
 
-from mediagoblin.util import lazy_pass_to_ugettext as _
-
-from mediagoblin.process_media.errors import *
-
-THUMB_SIZE = 180, 180
-MEDIUM_SIZE = 640, 640
-
-
-def create_pub_filepath(entry, filename):
-    return mgg.public_store.get_unique_filepath(
-            ['media_entries',
-             unicode(entry['_id']),
-             filename])
+from mediagoblin.processing import BaseProcessingFail, \
+    mark_entry_failed, BadMediaFail, create_pub_filepath, THUMB_SIZE, \
+    MEDIUM_SIZE
 
 ################################
 # Media processing initial steps
@@ -77,51 +68,22 @@ class ProcessMedia(Task):
 process_media = registry.tasks[ProcessMedia.name]
 
 
-def mark_entry_failed(entry_id, exc):
-    """
-    Mark a media entry as having failed in its conversion.
-
-    Uses the exception that was raised to mark more information.  If the
-    exception is a derivative of BaseProcessingFail then we can store extra
-    information that can be useful for users telling them why their media failed
-    to process.
-
-    Args:
-     - entry_id: The id of the media entry
-
-    """
-    # Was this a BaseProcessingFail?  In other words, was this a
-    # type of error that we know how to handle?
-    if isinstance(exc, BaseProcessingFail):
-        # Looks like yes, so record information about that failure and any
-        # metadata the user might have supplied.
-        mgg.database['media_entries'].update(
-            {'_id': entry_id},
-            {'$set': {u'state': u'failed',
-                      u'fail_error': exc.exception_path,
-                      u'fail_metadata': exc.metadata}})
-    else:
-        # Looks like no, so just mark it as failed and don't record a
-        # failure_error (we'll assume it wasn't handled) and don't record
-        # metadata (in fact overwrite it if somehow it had previous info
-        # here)
-        mgg.database['media_entries'].update(
-            {'_id': entry_id},
-            {'$set': {u'state': u'failed',
-                      u'fail_error': None,
-                      u'fail_metadata': {}}})
-
-
 def process_image(entry):
     """
     Code to process an image
     """
     workbench = mgg.workbench_manager.create_workbench()
+    # Conversions subdirectory to avoid collisions
+    conversions_subdir = os.path.join(
+        workbench.dir, 'conversions')
+    os.mkdir(conversions_subdir)
 
     queued_filepath = entry['queued_media_file']
     queued_filename = workbench.localized_file(
         mgg.queue_store, queued_filepath,
         'source')
+
+    extension = os.path.splitext(queued_filename)[1]
 
     try:
         thumb = Image.open(queued_filename)
@@ -129,15 +91,16 @@ def process_image(entry):
         raise BadMediaFail()
 
     thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
-    # ensure color mode is compatible with jpg
-    if thumb.mode != "RGB":
-        thumb = thumb.convert("RGB")
 
-    thumb_filepath = create_pub_filepath(entry, 'thumbnail.jpg')
-    thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
-
-    with thumb_file:
-        thumb.save(thumb_file, "JPEG", quality=90)
+    # Copy the thumb to the conversion subdir, then remotely.
+    thumb_filename = 'thumbnail' + extension
+    thumb_filepath = create_pub_filepath(entry, thumb_filename)
+    tmp_thumb_filename = os.path.join(
+        conversions_subdir, thumb_filename)
+    with file(tmp_thumb_filename, 'w') as thumb_file:
+        thumb.save(thumb_file)
+    mgg.public_store.copy_local_to_storage(
+        tmp_thumb_filename, thumb_filepath)
 
     # If the size of the original file exceeds the specified size of a `medium`
     # file, a `medium.jpg` files is created and later associated with the media
@@ -148,15 +111,18 @@ def process_image(entry):
     if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1]:
         medium.thumbnail(MEDIUM_SIZE, Image.ANTIALIAS)
 
-        if medium.mode != "RGB":
-            medium = medium.convert("RGB")
+        medium_filename = 'medium' + extension
+        medium_filepath = create_pub_filepath(entry, medium_filename)
+        tmp_medium_filename = os.path.join(
+            conversions_subdir, medium_filename)
 
-        medium_filepath = create_pub_filepath(entry, 'medium.jpg')
-        medium_file = mgg.public_store.get_file(medium_filepath, 'w')
+        with file(tmp_medium_filename, 'w') as medium_file:
+            medium.save(medium_file)
 
-        with medium_file:
-            medium.save(medium_file, "JPEG", quality=90)
-            medium_processed = True
+        mgg.public_store.copy_local_to_storage(
+            tmp_medium_filename, medium_filepath)
+
+        medium_processed = True
 
     # we have to re-read because unlike PIL, not everything reads
     # things in string representation :)
@@ -165,7 +131,8 @@ def process_image(entry):
     with queued_file:
         original_filepath = create_pub_filepath(entry, queued_filepath[-1])
 
-        with mgg.public_store.get_file(original_filepath, 'wb') as original_file:
+        with mgg.public_store.get_file(original_filepath, 'wb') \
+            as original_file:
             original_file.write(queued_file.read())
 
     mgg.queue_store.delete_file(queued_filepath)

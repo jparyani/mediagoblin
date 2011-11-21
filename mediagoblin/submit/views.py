@@ -19,6 +19,8 @@ import uuid
 from os.path import splitext
 from cgi import FieldStorage
 
+from celery import registry
+
 from werkzeug.utils import secure_filename
 
 from mediagoblin.db.util import ObjectId
@@ -27,7 +29,7 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
-from mediagoblin.process_media import mark_entry_failed
+from mediagoblin.processing import mark_entry_failed, ProcessMedia
 from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.media_types import get_media_type_and_manager
 
@@ -104,8 +106,9 @@ def submit_start(request):
             #
             # (... don't change entry after this point to avoid race
             # conditions with changes to the document via processing code)
+            process_media = registry.tasks[ProcessMedia.name]
             try:
-                media_manager['processor'].apply_async(
+                process_media.apply_async(
                     [unicode(entry._id)], {},
                     task_id=task_id)
             except BaseException as exc:

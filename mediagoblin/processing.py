@@ -14,15 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-
-import Image
 from celery.task import Task
-from celery import registry
 
 from mediagoblin.db.util import ObjectId
 from mediagoblin import mg_globals as mgg
-from mediagoblin.process_media.errors import BaseProcessingFail, BadMediaFail
+
+from mediagoblin.util import lazy_pass_to_ugettext as _
+
+from mediagoblin.media_types import get_media_manager
 
 
 THUMB_SIZE = 180, 180
@@ -42,6 +41,8 @@ def create_pub_filepath(entry, filename):
 
 class ProcessMedia(Task):
     """
+    DEPRECATED -- This now resides in the individual media plugins
+
     Pass this entry off for processing.
     """
     def run(self, media_id):
@@ -54,8 +55,9 @@ class ProcessMedia(Task):
 
         # Try to process, and handle expected errors.
         try:
-            __import__(entry['media_type'])
-            process_image(entry)
+            #__import__(entry['media_type'])
+            manager = get_media_manager(entry['media_type'])
+            manager['processor'](entry)
         except BaseProcessingFail, exc:
             mark_entry_failed(entry._id, exc)
             return
@@ -76,9 +78,6 @@ class ProcessMedia(Task):
         """
         entry_id = args[0]
         mark_entry_failed(entry_id, exc)
-
-
-process_media = registry.tasks[ProcessMedia.name]
 
 
 def mark_entry_failed(entry_id, exc):
@@ -116,80 +115,29 @@ def mark_entry_failed(entry_id, exc):
                       u'fail_metadata': {}}})
 
 
-def process_image(entry):
+class BaseProcessingFail(Exception):
     """
-    Code to process an image
+    Base exception that all other processing failure messages should
+    subclass from.
+
+    You shouldn't call this itself; instead you should subclass it
+    and provid the exception_path and general_message applicable to
+    this error.
     """
-    workbench = mgg.workbench_manager.create_workbench()
-    # Conversions subdirectory to avoid collisions
-    conversions_subdir = os.path.join(
-        workbench.dir, 'conversions')
-    os.mkdir(conversions_subdir)
+    general_message = u''
 
-    queued_filepath = entry['queued_media_file']
-    queued_filename = workbench.localized_file(
-        mgg.queue_store, queued_filepath,
-        'source')
+    @property
+    def exception_path(self):
+        return u"%s:%s" % (
+            self.__class__.__module__, self.__class__.__name__)
 
-    extension = os.path.splitext(queued_filename)[1]
+    def __init__(self, **metadata):
+        self.metadata = metadata or {}
 
-    try:
-        thumb = Image.open(queued_filename)
-    except IOError:
-        raise BadMediaFail()
 
-    thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
-
-    # Copy the thumb to the conversion subdir, then remotely.
-    thumb_filename = 'thumbnail' + extension
-    thumb_filepath = create_pub_filepath(entry, thumb_filename)
-    tmp_thumb_filename = os.path.join(
-        conversions_subdir, thumb_filename)
-    with file(tmp_thumb_filename, 'w') as thumb_file:
-        thumb.save(thumb_file)
-    mgg.public_store.copy_local_to_storage(
-        tmp_thumb_filename, thumb_filepath)
-
-    # If the size of the original file exceeds the specified size of a `medium`
-    # file, a `medium.jpg` files is created and later associated with the media
-    # entry.
-    medium = Image.open(queued_filename)
-    medium_processed = False
-
-    if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1]:
-        medium.thumbnail(MEDIUM_SIZE, Image.ANTIALIAS)
-
-        medium_filename = 'medium' + extension
-        medium_filepath = create_pub_filepath(entry, medium_filename)
-        tmp_medium_filename = os.path.join(
-            conversions_subdir, medium_filename)
-
-        with file(tmp_medium_filename, 'w') as medium_file:
-            medium.save(medium_file)
-
-        mgg.public_store.copy_local_to_storage(
-            tmp_medium_filename, medium_filepath)
-
-        medium_processed = True
-
-    # we have to re-read because unlike PIL, not everything reads
-    # things in string representation :)
-    queued_file = file(queued_filename, 'rb')
-
-    with queued_file:
-        original_filepath = create_pub_filepath(entry, queued_filepath[-1])
-
-        with mgg.public_store.get_file(original_filepath, 'wb') \
-            as original_file:
-            original_file.write(queued_file.read())
-
-    mgg.queue_store.delete_file(queued_filepath)
-    entry['queued_media_file'] = []
-    media_files_dict = entry.setdefault('media_files', {})
-    media_files_dict['thumb'] = thumb_filepath
-    media_files_dict['original'] = original_filepath
-    if medium_processed:
-        media_files_dict['medium'] = medium_filepath
-
-    # clean up workbench
-    workbench.destroy_self()
+class BadMediaFail(BaseProcessingFail):
+    """
+    Error that should be raised when an inappropriate file was given
+    for the media type specified.
+    """
+    general_message = _(u'Invalid file given for media type.')

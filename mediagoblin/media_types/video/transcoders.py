@@ -195,7 +195,6 @@ class VideoThumbnailer:
 
                 _log.debug('seek amount: {0}'.format(seek_amount))
 
-                
                 seek_result = self.thumbnail_pipeline.seek(
                     1.0,
                     gst.FORMAT_TIME,
@@ -204,14 +203,6 @@ class VideoThumbnailer:
                     seek_amount,
                     gst.SEEK_TYPE_NONE,
                     0)
-                '''
-
-                seek_result = self.thumbnail_pipeline.seek_simple(
-                    gst.FORMAT_TIME,
-                    gst.SEEK_FLAG_FLUSH | gst.SEEK_FLAG_ACCURATE,
-                    seek_amount)
-
-                '''
 
                 if not seek_result:
                     self.errors.append('COULD_NOT_SEEK')
@@ -576,17 +567,13 @@ class VideoTranscoder:
 
         elif t == gst.MESSAGE_ELEMENT:
             if message.structure.get_name() == 'progress':
-                data = {
-                    'structure': message.structure,
-                    'percent': message.structure['percent'],
-                    'total': message.structure['total'],
-                    'current': message.structure['current']}
+                data = dict(message.structure)
 
                 if self._progress_callback:
                     self._progress_callback(data)
 
                 _log.info('{percent}% done...'.format(
-                        percent=data['percent']))
+                        percent=data.get('percent')))
                 _log.debug(data)
 
         elif t == gst.MESSAGE_ERROR:

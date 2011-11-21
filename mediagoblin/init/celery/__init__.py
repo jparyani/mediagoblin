@@ -18,9 +18,7 @@ import os
 import sys
 
 
-MANDATORY_CELERY_IMPORTS = ['mediagoblin.process_media']
-
-print(MANDATORY_CELERY_IMPORTS)
+MANDATORY_CELERY_IMPORTS = ['mediagoblin.processing']
 
 DEFAULT_SETTINGS_MODULE = 'mediagoblin.init.celery.dummy_settings_module'
 

@@ -18,21 +18,15 @@ import tempfile
 import logging
 import os
 
-from celery.task import Task
-from celery import registry
-
-from mediagoblin.db.util import ObjectId
 from mediagoblin import mg_globals as mgg
-from mediagoblin.process_media import BaseProcessingFail
-from mediagoblin.process_media import mark_entry_failed
+from mediagoblin.processing import mark_entry_failed, \
+    THUMB_SIZE, MEDIUM_SIZE, create_pub_filepath
 from . import transcoders
 
-THUMB_SIZE = 180, 180
-MEDIUM_SIZE = 640, 640
-
-logger = logging.getLogger(__name__)
 logging.basicConfig()
-logger.setLevel(logging.DEBUG)
+
+_log = logging.getLogger(__name__)
+_log.setLevel(logging.DEBUG)
 
 
 def process_video(entry):
@@ -73,8 +67,10 @@ def process_video(entry):
         transcoder = transcoders.VideoTranscoder(queued_filename, tmp_dst.name)
 
         # Push transcoded video to public storage
+        _log.debug('Saving medium...')
         mgg.public_store.get_file(medium_filepath, 'wb').write(
             tmp_dst.read())
+        _log.debug('Saved medium')
 
         entry['media_files']['webm_640'] = medium_filepath
 
@@ -91,8 +87,10 @@ def process_video(entry):
         transcoders.VideoThumbnailer(queued_filename, tmp_thumb.name)
 
         # Push the thumbnail to public storage
+        _log.debug('Saving thumbnail...')
         mgg.public_store.get_file(thumbnail_filepath, 'wb').write(
             tmp_thumb.read())
+        _log.debug('Saved thumbnail')
 
         entry['media_files']['thumb'] = thumbnail_filepath
 
@@ -107,7 +105,9 @@ def process_video(entry):
 
         with mgg.public_store.get_file(original_filepath, 'wb') as \
                 original_file:
+            _log.debug('Saving original...')
             original_file.write(queued_file.read())
+            _log.debug('Saved original')
 
             entry['media_files']['original'] = original_filepath
 
@@ -116,50 +116,3 @@ def process_video(entry):
 
     # Save the MediaEntry
     entry.save()
-
-def create_pub_filepath(entry, filename):
-    return mgg.public_store.get_unique_filepath(
-            ['media_entries',
-             unicode(entry['_id']),
-             filename])
-
-
-################################
-# Media processing initial steps
-################################
-
-class ProcessMedia(Task):
-    """
-    Pass this entry off for processing.
-    """
-    def run(self, media_id):
-        """
-        Pass the media entry off to the appropriate processing function
-        (for now just process_image...)
-        """
-        entry = mgg.database.MediaEntry.one(
-            {'_id': ObjectId(media_id)})
-
-        # Try to process, and handle expected errors.
-        try:
-            process_video(entry)
-        except BaseProcessingFail, exc:
-            mark_entry_failed(entry[u'_id'], exc)
-            return
-
-        entry['state'] = u'processed'
-        entry.save()
-
-    def on_failure(self, exc, task_id, args, kwargs, einfo):
-        """
-        If the processing failed we should mark that in the database.
-
-        Assuming that the exception raised is a subclass of BaseProcessingFail,
-        we can use that to get more information about the failure and store that
-        for conveying information to users about the failure, etc.
-        """
-        entry_id = args[0]
-        mark_entry_failed(entry_id, exc)
-
-
-process_media = registry.tasks[ProcessMedia.name]
