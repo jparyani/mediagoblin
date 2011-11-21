@@ -64,7 +64,7 @@ def submit_start(request):
                 entry['description_html'] = cleaned_markdown_conversion(
                     entry['description'])
 
-                entry['uploader'] = request.user['_id']
+                entry.uploader = request.user._id
 
                 # Process the user's folksonomy "tags"
                 entry['tags'] = convert_to_tag_list_of_dicts(

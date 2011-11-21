@@ -281,7 +281,7 @@ class MediaEntry(Document):
         Provide a url to the previous entry from this user, if there is one
         """
         cursor = self.db.MediaEntry.find({'_id': {"$gt": self._id},
-                                          'uploader': self['uploader'],
+                                          'uploader': self.uploader,
                                           'state': 'processed'}).sort(
                                                     '_id', ASCENDING).limit(1)
         if cursor.count():
@@ -294,7 +294,7 @@ class MediaEntry(Document):
         Provide a url to the next entry from this user, if there is one
         """
         cursor = self.db.MediaEntry.find({'_id': {"$lt": self._id},
-                                          'uploader': self['uploader'],
+                                          'uploader': self.uploader,
                                           'state': 'processed'}).sort(
                                                     '_id', DESCENDING).limit(1)
 
@@ -304,7 +304,7 @@ class MediaEntry(Document):
                           media=unicode(cursor[0]['slug']))
 
     def get_uploader(self):
-        return self.db.User.find_one({'_id': self['uploader']})
+        return self.db.User.find_one({'_id': self.uploader})
 
     def get_fail_exception(self):
         """

@@ -57,7 +57,7 @@ def edit_media(request, media):
         # and userid.
         existing_user_slug_entries = request.db.MediaEntry.find(
             {'slug': request.POST['slug'],
-             'uploader': media['uploader'],
+             'uploader': media.uploader,
              '_id': {'$ne': media._id}}).count()
 
         if existing_user_slug_entries:
@@ -79,7 +79,7 @@ def edit_media(request, media):
                 location=media.url_for_self(request.urlgen))
 
     if request.user.is_admin \
-            and media['uploader'] != request.user._id \
+            and media.uploader != request.user._id \
             and request.method != 'POST':
         messages.add_message(
             request, messages.WARNING,
