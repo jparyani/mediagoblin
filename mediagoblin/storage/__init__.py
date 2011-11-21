@@ -169,6 +169,14 @@ class StorageInterface(object):
                 with file(dest_path, 'wb') as dest_file:
                     dest_file.write(source_file.read())
 
+    def copy_local_to_storage(self, filename, filepath):
+        """
+        Copy this file from locally to the storage system.
+        """
+        with self.get_file(filepath, 'wb') as dest_file:
+            with file(filename, 'rb') as source_file:
+                dest_file.write(source_file.read())
+
 
 ###########
 # Utilities

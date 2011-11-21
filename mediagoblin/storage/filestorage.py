@@ -20,6 +20,7 @@ from mediagoblin.storage import (
     NoWebServing)
 
 import os
+import shutil
 import urlparse
 
 
@@ -76,3 +77,16 @@ class BasicFileStorage(StorageInterface):
 
     def get_local_path(self, filepath):
         return self._resolve_filepath(filepath)
+
+    def copy_local_to_storage(self, filename, filepath):
+        """
+        Copy this file from locally to the storage system.
+        """
+        # Make directories if necessary
+        if len(filepath) > 1:
+            directory = self._resolve_filepath(filepath[:-1])
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+        shutil.copy(
+            filename, self.get_local_path(filepath))
