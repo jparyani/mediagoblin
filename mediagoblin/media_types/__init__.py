@@ -17,6 +17,7 @@
 import os
 import sys
 
+from mediagoblin import mg_globals
 from mediagoblin.util import lazy_pass_to_ugettext as _
 
 
@@ -29,8 +30,10 @@ class InvalidFileType(Exception):
 # This should be more dynamic in the future. Perhaps put it in the .ini?
 # -- Joar
 MEDIA_TYPES = [
-        'mediagoblin.media_types.image',
-        'mediagoblin.media_types.video']
+        'mediagoblin.media_types.image']
+
+if mg_globals.app_config['enable_video']:
+    MEDIA_TYPES.append('mediagoblin.media_types.video')
 
 
 def get_media_types():
