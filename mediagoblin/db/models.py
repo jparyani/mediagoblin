@@ -263,7 +263,7 @@ class MediaEntry(Document):
 
         Use a slug if we have one, else use our '_id'.
         """
-        uploader = self.uploader()
+        uploader = self.get_uploader()
 
         if self.get('slug'):
             return urlgen(
@@ -286,7 +286,7 @@ class MediaEntry(Document):
                                                     '_id', ASCENDING).limit(1)
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
-                          user=self.uploader()['username'],
+                          user=self.get_uploader()['username'],
                           media=unicode(cursor[0]['slug']))
 
     def url_to_next(self, urlgen):
@@ -300,10 +300,10 @@ class MediaEntry(Document):
 
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
-                          user=self.uploader()['username'],
+                          user=self.get_uploader()['username'],
                           media=unicode(cursor[0]['slug']))
 
-    def uploader(self):
+    def get_uploader(self):
         return self.db.User.find_one({'_id': self['uploader']})
 
     def get_fail_exception(self):

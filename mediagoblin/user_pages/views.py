@@ -169,7 +169,7 @@ def media_confirm_delete(request, media):
 
     if request.method == 'POST' and form.validate():
         if form.confirm.data is True:
-            username = media.uploader()['username']
+            username = media.get_uploader()['username']
 
             # Delete all files on the public storage
             delete_media_files(media)
@@ -188,7 +188,7 @@ def media_confirm_delete(request, media):
                 location=media.url_for_self(request.urlgen))
 
     if ((request.user[u'is_admin'] and
-         request.user._id != media.uploader()._id)):
+         request.user._id != media.get_uploader()._id)):
         messages.add_message(
             request, messages.WARNING,
             _("You are about to delete another user's media. "
