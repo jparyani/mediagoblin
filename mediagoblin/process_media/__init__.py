@@ -128,7 +128,9 @@ def process_image(entry):
         mgg.queue_store, queued_filepath,
         'source')
 
-    extension = os.path.splitext(queued_filename)[1]
+    filename_bits = os.path.splitext(queued_filename)
+    basename = os.path.split(filename_bits[0])[1]
+    extension = filename_bits[1].lower()
 
     try:
         thumb = Image.open(queued_filename)
@@ -174,7 +176,8 @@ def process_image(entry):
     queued_file = file(queued_filename, 'rb')
 
     with queued_file:
-        original_filepath = create_pub_filepath(entry, queued_filepath[-1])
+        #create_pub_filepath(entry, queued_filepath[-1])
+        original_filepath = create_pub_filepath(entry, basename + extension) 
 
         with mgg.public_store.get_file(original_filepath, 'wb') \
             as original_file:
