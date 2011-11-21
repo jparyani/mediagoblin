@@ -211,10 +211,12 @@ def _export_media(db, args):
             _log.info(u'Exporting {0} - {1}'.format(
                     entry['title'],
                     name))
-
-            mc_file = media_cache.get_file(path, mode='wb')
-            mc_file.write(
-                mg_globals.public_store.get_file(path, mode='rb').read())
+            try:
+                mc_file = media_cache.get_file(path, mode='wb')
+                mc_file.write(
+                    mg_globals.public_store.get_file(path, mode='rb').read())
+            except e:
+                _log.error('Failed: {0}'.format(e))
 
     _log.info('...Media exported')
 

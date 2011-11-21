@@ -14,11 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
+
 from mediagoblin import mg_globals
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.response import render_to_response
 from mediagoblin.db.util import DESCENDING
 from mediagoblin.decorators import uses_pagination
+from mediagoblin import media_types
+
 
 
 @uses_pagination
@@ -28,12 +32,12 @@ def root_view(request, page):
 
     pagination = Pagination(page, cursor)
     media_entries = pagination()
-
     return render_to_response(
         request, 'mediagoblin/root.html',
         {'media_entries': media_entries,
          'allow_registration': mg_globals.app_config["allow_registration"],
-         'pagination': pagination})
+         'pagination': pagination,
+         'sys': sys})
 
 
 def simple_template_render(request):

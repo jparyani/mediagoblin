@@ -27,8 +27,9 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
-from mediagoblin.process_media import process_media, mark_entry_failed
+from mediagoblin.process_media import mark_entry_failed
 from mediagoblin.messages import add_message, SUCCESS
+from mediagoblin.media_types import get_media_type_and_manager
 
 
 @require_active_login
@@ -44,15 +45,15 @@ def submit_start(request):
                 and request.POST['file'].file):
             submit_form.file.errors.append(
                 _(u'You must provide a file.'))
-        elif not security.check_filetype(request.POST['file']):
-            submit_form.file.errors.append(
-                _(u"The file doesn't seem to be an image!"))
         else:
             filename = request.POST['file'].filename
+
+            media_type, media_manager = get_media_type_and_manager(filename)
 
             # create entry and save in database
             entry = request.db.MediaEntry()
             entry['_id'] = ObjectId()
+            entry['media_type'] = unicode(media_type)
             entry['title'] = (
                 unicode(request.POST['title'])
                 or unicode(splitext(filename)[0]))
@@ -60,9 +61,8 @@ def submit_start(request):
             entry['description'] = unicode(request.POST.get('description'))
             entry['description_html'] = cleaned_markdown_conversion(
                 entry['description'])
-
-            entry['media_type'] = u'image'  # heh
-            entry['uploader'] = request.user._id
+            
+            entry['uploader'] = request.user['_id']
 
             # Process the user's folksonomy "tags"
             entry['tags'] = convert_to_tag_list_of_dicts(
@@ -70,6 +70,7 @@ def submit_start(request):
 
             # Generate a slug from the title
             entry.generate_slug()
+
 
             # Now store generate the queueing related filename
             queue_filepath = request.app.queue_store.get_unique_filepath(
@@ -104,7 +105,7 @@ def submit_start(request):
             # (... don't change entry after this point to avoid race
             # conditions with changes to the document via processing code)
             try:
-                process_media.apply_async(
+                media_manager['processor'].apply_async(
                     [unicode(entry._id)], {},
                     task_id=task_id)
             except BaseException as exc:

@@ -47,7 +47,10 @@ class Workbench(object):
         return str(self.dir)
 
     def __repr__(self):
-        return repr(self.dir)
+        try:
+            return str(self)
+        except AttributeError:
+            return 'None'
 
     def joinpath(self, *args):
         return os.path.join(self.dir, *args)
