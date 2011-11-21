@@ -172,6 +172,10 @@ class StorageInterface(object):
     def copy_local_to_storage(self, filename, filepath):
         """
         Copy this file from locally to the storage system.
+
+        This is kind of the opposite of copy_locally.  It's likely you
+        could override this method with something more appropriate to
+        your storage system.
         """
         with self.get_file(filepath, 'wb') as dest_file:
             with file(filename, 'rb') as source_file:
