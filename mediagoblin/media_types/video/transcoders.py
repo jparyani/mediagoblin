@@ -17,7 +17,6 @@
 from __future__ import division
 
 import os
-os.environ["GST_DEBUG_DUMP_DOT_DIR"] = "/tmp"
 os.putenv('GST_DEBUG_DUMP_DOT_DIR', '/tmp')
 
 import sys
@@ -498,28 +497,30 @@ class VideoTranscoder:
         # or audio sink
         self.filesrc.link(self.decoder)
 
-        # Link all the video elements in a link to webmux
-        self.videoqueue.link(self.videorate)
-        self.videorate.link(self.ffmpegcolorspace)
-        self.ffmpegcolorspace.link(self.videoscale)
-        self.videoscale.link(self.capsfilter)
-        #self.capsfilter.link(self.xvimagesink)
-        self.capsfilter.link(self.vp8enc)
-        self.vp8enc.link(self.webmmux)
+        # Link all the video elements in a row to webmmux
+        gst.element_link_many(
+            self.videoqueue,
+            self.videorate,
+            self.ffmpegcolorspace,
+            self.videoscale,
+            self.capsfilter,
+            self.vp8enc,
+            self.webmmux)
 
         if self.data.is_audio:
-            # Link all the audio elements in a line to webmux
-            #self.audioconvert.link(self.alsasink)
-            self.audioqueue.link(self.audiorate)
-            self.audiorate.link(self.audioconvert)
-            self.audioconvert.link(self.audiocapsfilter)
-            self.audiocapsfilter.link(self.vorbisenc)
-            #self.audiocapsfilter.link(self.level)
-            #self.level.link(self.vorbisenc)
-            self.vorbisenc.link(self.webmmux)
+            # Link all the audio elements in a row to webmux
+            gst.element_link_many(
+                self.audioqueue,
+                self.audiorate,
+                self.audioconvert,
+                self.audiocapsfilter,
+                self.vorbisenc,
+                self.webmmux)
 
-        self.webmmux.link(self.progressreport)
-        self.progressreport.link(self.filesink)
+        gst.element_link_many(
+            self.webmmux,
+            self.progressreport,
+            self.filesink)
 
         # Setup the message bus and connect _on_message to the pipeline
         self._setup_bus()
