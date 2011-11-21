@@ -222,7 +222,7 @@ class TestSubmission:
 
         context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
         form = context['submit_form']
-        assert form.file.errors == ['The file doesn\'t seem to be an image!']
+        assert form.file.errors == [u'Invalid file type.']
 
         # NOTE: The following 2 tests will ultimately fail, but they
         #   *will* pass the initial form submission step.  Instead,
@@ -246,7 +246,7 @@ class TestSubmission:
         assert_equal(entry['state'], 'failed')
         assert_equal(
             entry['fail_error'],
-            u'mediagoblin.process_media.errors:BadMediaFail')
+            u'mediagoblin.processing:BadMediaFail')
 
         # Test non-supported file with .png extension
         # -------------------------------------------
@@ -266,4 +266,4 @@ class TestSubmission:
         assert_equal(entry['state'], 'failed')
         assert_equal(
             entry['fail_error'],
-            u'mediagoblin.process_media.errors:BadMediaFail')
+            u'mediagoblin.processing:BadMediaFail')
