@@ -118,6 +118,10 @@ def process_image(entry):
     Code to process an image
     """
     workbench = mgg.workbench_manager.create_workbench()
+    # Conversions subdirectory to avoid collisions
+    conversions_subdir = os.path.join(
+        workbench.dir, 'conversions')
+    os.mkdir(conversions_subdir)
 
     queued_filepath = entry['queued_media_file']
     queued_filename = workbench.localized_file(
@@ -133,11 +137,15 @@ def process_image(entry):
 
     thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
 
-    thumb_filepath = create_pub_filepath(entry, 'thumbnail' + extension)
-    thumb_file = mgg.public_store.get_file(thumb_filepath, 'w')
-
-    with thumb_file:
+    # Copy the thumb to the conversion subdir, then remotely.
+    thumb_filename = 'thumbnail' + extension
+    thumb_filepath = create_pub_filepath(entry, thumb_filename)
+    tmp_thumb_filename = os.path.join(
+        conversions_subdir, thumb_filename)
+    with file(tmp_thumb_filename, 'w') as thumb_file:
         thumb.save(thumb_file)
+    mgg.public_store.copy_local_to_storage(
+        tmp_thumb_filename, thumb_filepath)
 
     # If the size of the original file exceeds the specified size of a `medium`
     # file, a `medium.jpg` files is created and later associated with the media
@@ -148,12 +156,18 @@ def process_image(entry):
     if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1]:
         medium.thumbnail(MEDIUM_SIZE, Image.ANTIALIAS)
 
-        medium_filepath = create_pub_filepath(entry, 'medium' + extension)
-        medium_file = mgg.public_store.get_file(medium_filepath, 'w')
+        medium_filename = 'medium' + extension
+        medium_filepath = create_pub_filepath(entry, medium_filename)
+        tmp_medium_filename = os.path.join(
+            conversions_subdir, medium_filename)
 
-        with medium_file:
+        with file(tmp_medium_filename, 'w') as medium_file:
             medium.save(medium_file)
-            medium_processed = True
+
+        mgg.public_store.copy_local_to_storage(
+            tmp_medium_filename, medium_filepath)
+
+        medium_processed = True
 
     # we have to re-read because unlike PIL, not everything reads
     # things in string representation :)
