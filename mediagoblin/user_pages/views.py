@@ -175,7 +175,8 @@ def media_confirm_delete(request, media):
             delete_media_files(media)
 
             media.delete()
-            messages.add_message(request, messages.SUCCESS, _('You deleted the media.'))
+            messages.add_message(
+                request, messages.SUCCESS, _('You deleted the media.'))
 
             return redirect(request, "mediagoblin.user_pages.user_home",
                 user=username)
