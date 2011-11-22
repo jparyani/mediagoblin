@@ -175,13 +175,14 @@ def media_confirm_delete(request, media):
             delete_media_files(media)
 
             media.delete()
+            messages.add_message(request, messages.SUCCESS, _('You deleted the media.'))
 
             return redirect(request, "mediagoblin.user_pages.user_home",
                 user=username)
         else:
             messages.add_message(
                 request, messages.ERROR,
-                _("The file was not deleted because you didn't check that you were sure."))
+                _("The media was not deleted because you didn't check that you were sure."))
             return exc.HTTPFound(
                 location=media.url_for_self(request.urlgen))
 
