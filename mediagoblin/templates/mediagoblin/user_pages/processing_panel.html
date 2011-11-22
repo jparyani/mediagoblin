@@ -36,7 +36,7 @@
     </tr>
     {% for media_entry in processing_entries %}
       <tr>
-        <td>{{ media_entry['title'] }}</td>
+        <td>{{ media_entry.title }}</td>
         <td>{{ media_entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
         <td></td>
       </tr>
@@ -57,7 +57,7 @@
     </tr>
     {% for media_entry in failed_entries %}
       <tr>
-        <td>{{ media_entry['title'] }}</td>
+        <td>{{ media_entry.title }}</td>
         <td>{{ media_entry['created'].strftime("%m-%d-%Y %I:%M %p") }}</td>
         <td>{{ media_entry.get_fail_exception().general_message }}</td>
       </tr>

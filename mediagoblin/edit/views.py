@@ -43,7 +43,7 @@ def edit_media(request, media):
         return exc.HTTPForbidden()
 
     defaults = dict(
-        title=media['title'],
+        title=media.title,
         slug=media['slug'],
         description=media['description'],
         tags=media_tags_as_string(media['tags']))
@@ -64,7 +64,7 @@ def edit_media(request, media):
             form.slug.errors.append(
                 _(u'An entry with that slug already exists for this user.'))
         else:
-            media['title'] = unicode(request.POST['title'])
+            media.title = unicode(request.POST['title'])
             media['description'] = unicode(request.POST.get('description'))
             media['tags'] = convert_to_tag_list_of_dicts(
                                    request.POST.get('tags'))

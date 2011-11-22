@@ -249,7 +249,7 @@ class MediaEntry(Document):
         pass
 
     def generate_slug(self):
-        self['slug'] = url.slugify(self['title'])
+        self['slug'] = url.slugify(self.title)
 
         duplicate = mg_globals.database.media_entries.find_one(
             {'slug': self['slug']})
