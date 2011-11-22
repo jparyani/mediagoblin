@@ -94,8 +94,8 @@ class VideoThumbnailer:
         self.videosink = gst.element_factory_make('fakesink', 'videosink')
         self.playbin.set_property('video-sink', self.videosink)
 
-        #self.audiosink = gst.element_factory_make('fakesink', 'audiosink')
-        #self.playbin.set_property('audio-sink', self.audiosink)
+        self.audiosink = gst.element_factory_make('fakesink', 'audiosink')
+        self.playbin.set_property('audio-sink', self.audiosink)
 
         self.bus = self.playbin.get_bus()
         self.bus.add_signal_watch()

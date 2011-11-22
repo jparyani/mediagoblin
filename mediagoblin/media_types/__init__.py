@@ -18,7 +18,7 @@ import os
 import sys
 
 from mediagoblin import mg_globals
-from mediagoblin.util import lazy_pass_to_ugettext as _
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 
 class FileTypeNotSupported(Exception):
@@ -49,13 +49,7 @@ def get_media_managers():
     Generator that returns all available media managers
     '''
     for media_type in get_media_types():
-        try:
-            __import__(media_type)
-        except ImportError as e:
-            raise Exception(
-                _('ERROR: Could not import {media_type}: {exception}').format(
-                    media_type=media_type,
-                    exception=e))
+        __import__(media_type)
             
         yield media_type, sys.modules[media_type].MEDIA_MANAGER
 

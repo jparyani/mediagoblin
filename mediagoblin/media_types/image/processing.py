@@ -31,42 +31,6 @@ from mediagoblin.processing import BaseProcessingFail, \
 # Media processing initial steps
 ################################
 
-class ProcessMedia(Task):
-    """
-    Pass this entry off for processing.
-    """
-    def run(self, media_id):
-        """
-        Pass the media entry off to the appropriate processing function
-        (for now just process_image...)
-        """
-        entry = mgg.database.MediaEntry.one(
-            {'_id': ObjectId(media_id)})
-
-        # Try to process, and handle expected errors.
-        try:
-            process_image(entry)
-        except BaseProcessingFail, exc:
-            mark_entry_failed(entry[u'_id'], exc)
-            return
-
-        entry['state'] = u'processed'
-        entry.save()
-
-    def on_failure(self, exc, task_id, args, kwargs, einfo):
-        """
-        If the processing failed we should mark that in the database.
-
-        Assuming that the exception raised is a subclass of BaseProcessingFail,
-        we can use that to get more information about the failure and store that
-        for conveying information to users about the failure, etc.
-        """
-        entry_id = args[0]
-        mark_entry_failed(entry_id, exc)
-
-
-process_media = registry.tasks[ProcessMedia.name]
-
 
 def process_image(entry):
     """

@@ -19,7 +19,7 @@ from celery.task import Task
 from mediagoblin.db.util import ObjectId
 from mediagoblin import mg_globals as mgg
 
-from mediagoblin.util import lazy_pass_to_ugettext as _
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 from mediagoblin.media_types import get_media_manager
 
