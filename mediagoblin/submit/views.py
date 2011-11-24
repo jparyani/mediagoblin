@@ -19,6 +19,8 @@ import uuid
 from os.path import splitext
 from cgi import FieldStorage
 
+from celery import registry
+
 from werkzeug.utils import secure_filename
 
 from mediagoblin.db.util import ObjectId
@@ -27,8 +29,9 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
-from mediagoblin.process_media import process_media, mark_entry_failed
+from mediagoblin.processing import mark_entry_failed, ProcessMedia
 from mediagoblin.messages import add_message, SUCCESS
+from mediagoblin.media_types import get_media_type_and_manager, InvalidFileType
 
 
 @require_active_login
@@ -44,86 +47,90 @@ def submit_start(request):
                 and request.POST['file'].file):
             submit_form.file.errors.append(
                 _(u'You must provide a file.'))
-        elif not security.check_filetype(request.POST['file']):
-            submit_form.file.errors.append(
-                _(u"The file doesn't seem to be an image!"))
         else:
-            filename = request.POST['file'].filename
-
-            # create entry and save in database
-            entry = request.db.MediaEntry()
-            entry['_id'] = ObjectId()
-            entry['title'] = (
-                unicode(request.POST['title'])
-                or unicode(splitext(filename)[0]))
-
-            entry['description'] = unicode(request.POST.get('description'))
-            entry['description_html'] = cleaned_markdown_conversion(
-                entry['description'])
-
-            entry['media_type'] = u'image'  # heh
-            entry['uploader'] = request.user._id
-
-            # Process the user's folksonomy "tags"
-            entry['tags'] = convert_to_tag_list_of_dicts(
-                                request.POST.get('tags'))
-
-            # Generate a slug from the title
-            entry.generate_slug()
-
-            # Now store generate the queueing related filename
-            queue_filepath = request.app.queue_store.get_unique_filepath(
-                ['media_entries',
-                 unicode(entry._id),
-                 secure_filename(filename)])
-
-            # queue appropriately
-            queue_file = request.app.queue_store.get_file(
-                queue_filepath, 'wb')
-
-            with queue_file:
-                queue_file.write(request.POST['file'].file.read())
-
-            # Add queued filename to the entry
-            entry['queued_media_file'] = queue_filepath
-
-            # We generate this ourselves so we know what the taks id is for
-            # retrieval later.
-
-            # (If we got it off the task's auto-generation, there'd be
-            # a risk of a race condition when we'd save after sending
-            # off the task)
-            task_id = unicode(uuid.uuid4())
-            entry['queued_task_id'] = task_id
-
-            # Save now so we have this data before kicking off processing
-            entry.save(validate=True)
-
-            # Pass off to processing
-            #
-            # (... don't change entry after this point to avoid race
-            # conditions with changes to the document via processing code)
             try:
-                process_media.apply_async(
-                    [unicode(entry._id)], {},
-                    task_id=task_id)
-            except BaseException as exc:
-                # The purpose of this section is because when running in "lazy"
-                # or always-eager-with-exceptions-propagated celery mode that
-                # the failure handling won't happen on Celery end.  Since we
-                # expect a lot of users to run things in this way we have to
-                # capture stuff here.
+                filename = request.POST['file'].filename
+                media_type, media_manager = get_media_type_and_manager(filename)
+
+                # create entry and save in database
+                entry = request.db.MediaEntry()
+                entry['_id'] = ObjectId()
+                entry['media_type'] = unicode(media_type)
+                entry['title'] = (
+                    unicode(request.POST['title'])
+                    or unicode(splitext(filename)[0]))
+
+                entry['description'] = unicode(request.POST.get('description'))
+                entry['description_html'] = cleaned_markdown_conversion(
+                    entry['description'])
+
+                entry['uploader'] = request.user['_id']
+
+                # Process the user's folksonomy "tags"
+                entry['tags'] = convert_to_tag_list_of_dicts(
+                    request.POST.get('tags'))
+
+                # Generate a slug from the title
+                entry.generate_slug()
+
+
+                # Now store generate the queueing related filename
+                queue_filepath = request.app.queue_store.get_unique_filepath(
+                    ['media_entries',
+                     unicode(entry._id),
+                     secure_filename(filename)])
+
+                # queue appropriately
+                queue_file = request.app.queue_store.get_file(
+                    queue_filepath, 'wb')
+
+                with queue_file:
+                    queue_file.write(request.POST['file'].file.read())
+
+                # Add queued filename to the entry
+                entry['queued_media_file'] = queue_filepath
+
+                # We generate this ourselves so we know what the taks id is for
+                # retrieval later.
+
+                # (If we got it off the task's auto-generation, there'd be
+                # a risk of a race condition when we'd save after sending
+                # off the task)
+                task_id = unicode(uuid.uuid4())
+                entry['queued_task_id'] = task_id
+
+                # Save now so we have this data before kicking off processing
+                entry.save(validate=True)
+
+                # Pass off to processing
                 #
-                # ... not completely the diaper pattern because the
-                # exception is re-raised :)
-                mark_entry_failed(entry._id, exc)
-                # re-raise the exception
-                raise
+                # (... don't change entry after this point to avoid race
+                # conditions with changes to the document via processing code)
+                process_media = registry.tasks[ProcessMedia.name]
+                try:
+                    process_media.apply_async(
+                        [unicode(entry._id)], {},
+                        task_id=task_id)
+                except BaseException as exc:
+                    # The purpose of this section is because when running in "lazy"
+                    # or always-eager-with-exceptions-propagated celery mode that
+                    # the failure handling won't happen on Celery end.  Since we
+                    # expect a lot of users to run things in this way we have to
+                    # capture stuff here.
+                    #
+                    # ... not completely the diaper pattern because the
+                    # exception is re-raised :)
+                    mark_entry_failed(entry._id, exc)
+                    # re-raise the exception
+                    raise
 
-            add_message(request, SUCCESS, _('Woohoo! Submitted!'))
+                add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
-            return redirect(request, "mediagoblin.user_pages.user_home",
-                            user=request.user['username'])
+                return redirect(request, "mediagoblin.user_pages.user_home",
+                                user=request.user['username'])
+            except InvalidFileType, exc:
+                submit_form.file.errors.append(
+                    _(u'Invalid file type.'))
 
     return render_to_response(
         request,

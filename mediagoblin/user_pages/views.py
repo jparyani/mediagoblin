@@ -30,6 +30,8 @@ from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
 
 from werkzeug.contrib.atom import AtomFeed
 
+from mediagoblin.media_types import get_media_manager
+
 
 @uses_pagination
 def user_home(request, page):
@@ -120,9 +122,11 @@ def media_home(request, media, page, **kwargs):
 
     comment_form = user_forms.MediaCommentForm(request.POST)
 
+    media_template_name = get_media_manager(media['media_type'])['display_template']
+
     return render_to_response(
         request,
-        'mediagoblin/user_pages/media.html',
+        media_template_name,
         {'media': media,
          'comments': comments,
          'pagination': pagination,

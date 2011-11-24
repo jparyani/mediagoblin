@@ -100,3 +100,11 @@ def user_add_forgot_password_token_and_expires(database):
     """
     add_table_field(database, 'users', 'fp_verification_key', None)
     add_table_field(database, 'users', 'fp_token_expire', None)
+
+
+@RegisterMigration(7)
+def media_type_image_to_multimedia_type_image(database):
+    database['media_entries'].update(
+        {'media_type': 'image'},
+        {'$set': {'media_type': 'mediagoblin.media_types.image'}},
+        multi=True)
