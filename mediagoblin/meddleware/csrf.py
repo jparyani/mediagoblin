@@ -21,6 +21,7 @@ from webob.exc import HTTPForbidden
 from wtforms import Form, HiddenField, validators
 
 from mediagoblin import mg_globals
+from mediagoblin.meddleware import BaseMeddleware
 
 # Use the system (hardware-based) random number generator if it exists.
 # -- this optimization is lifted from Django
@@ -47,7 +48,7 @@ def render_csrf_form_token(request):
     return form.csrf_token
 
 
-class CsrfMeddleware(object):
+class CsrfMeddleware(BaseMeddleware):
     """CSRF Protection Meddleware
 
     Adds a CSRF Cookie to responses and verifies that it is present
@@ -56,9 +57,6 @@ class CsrfMeddleware(object):
 
     CSRF_KEYLEN = 64
     SAFE_HTTP_METHODS = ("GET", "HEAD", "OPTIONS", "TRACE")
-
-    def __init__(self, mg_app):
-        self.app = mg_app
 
     def process_request(self, request):
         """For non-safe requests, confirm that the tokens are present

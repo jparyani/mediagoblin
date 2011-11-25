@@ -15,11 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-class NoOpMeddleware(object):
+from mediagoblin.meddleware import BaseMeddleware
 
-    def __init__(self, mg_app):
-        self.app = mg_app
 
+class NoOpMeddleware(BaseMeddleware):
     def process_request(self, request):
         pass
 

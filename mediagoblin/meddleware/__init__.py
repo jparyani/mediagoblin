@@ -18,3 +18,15 @@ ENABLED_MEDDLEWARE = (
     'mediagoblin.meddleware.noop:NoOpMeddleware',
     'mediagoblin.meddleware.csrf:CsrfMeddleware',
     )
+
+
+class BaseMeddleware(object):
+
+    def __init__(self, mg_app):
+        self.app = mg_app
+
+    def process_request(self, request):
+        pass
+
+    def process_response(self, request, response):
+        pass

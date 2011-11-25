@@ -26,6 +26,7 @@ from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.decorators import _make_safe
 from mediagoblin.db.open import setup_connection_and_db_from_config
+from mediagoblin.meddleware import BaseMeddleware
 
 
 MEDIAGOBLIN_TEST_DB_NAME = u'__mediagoblin_tests__'
@@ -50,7 +51,7 @@ $ CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests ./bin/nosetests"""
 class BadCeleryEnviron(Exception): pass
 
 
-class TestingMeddleware(object):
+class TestingMeddleware(BaseMeddleware):
     """
     Meddleware for the Unit tests
     
@@ -68,12 +69,6 @@ class TestingMeddleware(object):
     the appropiate process_request or process_response, or
     create a new method and call it from process_*.
     """
-
-    def __init__(self, mg_app):
-        self.app = mg_app
-
-    def process_request(self, request):
-        pass
 
     def process_response(self, request, response):
         # All following tests should be for html only!
