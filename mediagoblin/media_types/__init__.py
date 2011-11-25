@@ -27,20 +27,12 @@ class FileTypeNotSupported(Exception):
 class InvalidFileType(Exception):
     pass
 
-# This should be more dynamic in the future. Perhaps put it in the .ini?
-# -- Joar
-MEDIA_TYPES = [
-        'mediagoblin.media_types.image']
-
-if mg_globals.app_config['enable_video']:
-    MEDIA_TYPES.append('mediagoblin.media_types.video')
-
 
 def get_media_types():
-    '''
+    """
     Generator that returns the available media types
-    '''
-    for media_type in MEDIA_TYPES:
+    """
+    for media_type in mg_globals.app_config['media_types']:
         yield media_type
 
 
