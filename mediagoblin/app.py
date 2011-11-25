@@ -20,7 +20,7 @@ import urllib
 import routes
 from webob import Request, exc
 
-from mediagoblin import routing, middleware
+from mediagoblin import routing, meddleware
 from mediagoblin.tools import common, translate, template
 from mediagoblin.tools.response import render_404
 from mediagoblin.tools import request as mg_request
@@ -100,15 +100,15 @@ class MediaGoblinApp(object):
         # matters in always eager mode :)
         setup_workbench()
 
-        # instantiate application middleware
-        self.middleware = [common.import_component(m)(self)
-                           for m in middleware.ENABLED_MIDDLEWARE]
+        # instantiate application meddleware
+        self.meddleware = [common.import_component(m)(self)
+                           for m in meddleware.ENABLED_MEDDLEWARE]
 
     def __call__(self, environ, start_response):
         request = Request(environ)
 
-        # pass the request through our middleware classes
-        for m in self.middleware:
+        # pass the request through our meddleware classes
+        for m in self.meddleware:
             response = m.process_request(request)
             if response is not None:
                 return response(environ, start_response)
@@ -169,8 +169,8 @@ class MediaGoblinApp(object):
         # get the response from the controller
         response = controller(request)
 
-        # pass the response through the middleware
-        for m in self.middleware[::-1]:
+        # pass the response through the meddleware
+        for m in self.meddleware[::-1]:
             m.process_response(request, response)
 
         return response(environ, start_response)

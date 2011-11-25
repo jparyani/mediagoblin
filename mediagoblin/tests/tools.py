@@ -50,9 +50,9 @@ $ CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests ./bin/nosetests"""
 class BadCeleryEnviron(Exception): pass
 
 
-class TestingMiddleware(object):
+class TestingMeddleware(object):
     """
-    Middleware for the Unit tests
+    Meddleware for the Unit tests
     
     It might make sense to perform some tests on all
     requests/responses. Or prepare them in a special
@@ -60,7 +60,7 @@ class TestingMiddleware(object):
     for being valid html *after* being rendered.
 
     This module is getting inserted at the front of the
-    middleware list, which means: requests are handed here
+    meddleware list, which means: requests are handed here
     first, responses last. So this wraps up the "normal"
     app.
 
@@ -149,11 +149,11 @@ def get_test_app(dump_old_app=True):
     test_app = loadapp(
         'config:' + TEST_SERVER_CONFIG)
 
-    # Insert the TestingMiddleware, which can do some
+    # Insert the TestingMeddleware, which can do some
     # sanity checks on every request/response.
     # Doing it this way is probably not the cleanest way.
     # We'll fix it, when we have plugins!
-    mg_globals.app.middleware.insert(0, TestingMiddleware(mg_globals.app))
+    mg_globals.app.meddleware.insert(0, TestingMeddleware(mg_globals.app))
 
     app = TestApp(test_app)
     MGOBLIN_APP = app

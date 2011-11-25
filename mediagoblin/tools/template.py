@@ -21,7 +21,7 @@ from mediagoblin import mg_globals
 from mediagoblin import messages
 from mediagoblin.tools import common
 from mediagoblin.tools.translate import setup_gettext
-from mediagoblin.middleware.csrf import render_csrf_form_token
+from mediagoblin.meddleware.csrf import render_csrf_form_token
 
 
 SETUP_JINJA_ENVS = {}

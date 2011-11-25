@@ -47,8 +47,8 @@ def render_csrf_form_token(request):
     return form.csrf_token
 
 
-class CsrfMiddleware(object):
-    """CSRF Protection Middleware
+class CsrfMeddleware(object):
+    """CSRF Protection Meddleware
 
     Adds a CSRF Cookie to responses and verifies that it is present
     and matches the form token for non-safe requests.
