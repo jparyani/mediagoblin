@@ -58,7 +58,7 @@ class CsrfMeddleware(BaseMeddleware):
     CSRF_KEYLEN = 64
     SAFE_HTTP_METHODS = ("GET", "HEAD", "OPTIONS", "TRACE")
 
-    def process_request(self, request):
+    def process_request(self, request, controller):
         """For non-safe requests, confirm that the tokens are present
         and match.
         """

@@ -25,7 +25,7 @@ class BaseMeddleware(object):
     def __init__(self, mg_app):
         self.app = mg_app
 
-    def process_request(self, request):
+    def process_request(self, request, controller):
         pass
 
     def process_response(self, request, response):
