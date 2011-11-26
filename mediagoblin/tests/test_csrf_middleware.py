@@ -27,7 +27,7 @@ from mediagoblin import mg_globals
 def test_csrf_cookie_set(test_app):
 
     cookie_name = mg_globals.app_config['csrf_cookie_name']
-    
+
     # get login page
     response = test_app.get('/auth/login/')
 
@@ -69,3 +69,22 @@ def test_csrf_token_must_match(test_app):
                                   mg_globals.app_config['csrf_cookie_name'])},
                          extra_environ={'gmg.verify_csrf': True}).\
                          status_int == 200
+
+@setup_fresh_app
+def test_csrf_exempt(test_app):
+
+    # monkey with the views to decorate a known endpoint
+    import mediagoblin.auth.views
+    from mediagoblin.meddleware.csrf import csrf_exempt
+
+    mediagoblin.auth.views.login = csrf_exempt(
+        mediagoblin.auth.views.login
+    )
+
+    # construct a request with no cookie or form token
+    assert test_app.post('/auth/login/',
+                         extra_environ={'gmg.verify_csrf': True},
+                         expect_errors=False).status_int == 200
+
+    # restore the CSRF protection in case other tests expect it
+    mediagoblin.auth.views.login.csrf_enabled = True

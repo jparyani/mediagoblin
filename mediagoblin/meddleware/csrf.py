@@ -31,6 +31,13 @@ else:
     getrandbits = random.getrandbits
 
 
+def csrf_exempt(func):
+    """Decorate a Controller to exempt it from CSRF protection."""
+
+    func.csrf_enabled = False
+    return func
+
+
 class CsrfForm(Form):
     """Simple form to handle rendering a CSRF token and confirming it
     is included in the POST."""
@@ -75,9 +82,11 @@ class CsrfMeddleware(BaseMeddleware):
         # if this is a non-"safe" request (ie, one that could have
         # side effects), confirm that the CSRF tokens are present and
         # valid
-        if request.method not in self.SAFE_HTTP_METHODS \
-            and ('gmg.verify_csrf' in request.environ or
-                 'paste.testing' not in request.environ):
+        if (getattr(controller, 'csrf_enabled', True) and
+            request.method not in self.SAFE_HTTP_METHODS and
+            ('gmg.verify_csrf' in request.environ or
+             'paste.testing' not in request.environ)
+        ):
 
             return self.verify_tokens(request)
 
