@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
+# Al fred <devaleitzer@aim.com>, 2011.
 #   <devaleitzer@aim.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-11-01 23:14-0500\n"
-"PO-Revision-Date: 2011-11-02 04:13+0000\n"
+"POT-Creation-Date: 2011-11-27 15:25-0600\n"
+"PO-Revision-Date: 2011-11-27 21:28+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,6 +19,10 @@ msgstr ""
 "Generated-By: Babel 0.9.6\n"
 "Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: mediagoblin/processing.py:143
+msgid "Invalid file given for media type."
+msgstr "Aquest tipus de fitxer no és vàlid."
 
 #: mediagoblin/auth/forms.py:25 mediagoblin/auth/forms.py:49
 msgid "Username"
@@ -52,8 +57,8 @@ msgid "Sorry, a user with that name already exists."
 msgstr "Lamentablement aquest usuari ja existeix."
 
 #: mediagoblin/auth/views.py:77
-msgid "Sorry, that email address has already been taken."
-msgstr "Disculpeu, aquesta adreça electrònica ja s'està utilitzant."
+msgid "Sorry, a user with that email address already exists."
+msgstr ""
 
 #: mediagoblin/auth/views.py:179
 msgid ""
@@ -68,11 +73,19 @@ msgid "The verification key or user id is incorrect"
 msgstr ""
 "La clau de verificació o la identificació de l'usuari no són correctes."
 
-#: mediagoblin/auth/views.py:207
+#: mediagoblin/auth/views.py:203
+msgid "You must be logged in so we know who to send the email to!"
+msgstr ""
+
+#: mediagoblin/auth/views.py:211
+msgid "You've already verified your email address!"
+msgstr ""
+
+#: mediagoblin/auth/views.py:224
 msgid "Resent your verification email."
 msgstr "Torna'm a enviar el correu de verificació"
 
-#: mediagoblin/auth/views.py:248
+#: mediagoblin/auth/views.py:265
 msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
@@ -86,42 +99,62 @@ msgstr "Títol"
 msgid "Tags"
 msgstr "Etiquetes"
 
-#: mediagoblin/edit/forms.py:31
-msgid "Slug"
-msgstr ""
-
-#: mediagoblin/edit/forms.py:32
-msgid "The slug can't be empty"
+#: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:34
+msgid "Seperate tags by commas or spaces."
 msgstr ""
 
 #: mediagoblin/edit/forms.py:33
+msgid "Slug"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:34
+msgid "The slug can't be empty"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:35
 msgid ""
 "The title part of this media's URL. You usually don't need to change this."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:40
+#: mediagoblin/edit/forms.py:42
 msgid "Bio"
 msgstr "Biografia"
 
-#: mediagoblin/edit/forms.py:43
+#: mediagoblin/edit/forms.py:45
 msgid "Website"
 msgstr "Lloc web"
 
-#: mediagoblin/edit/views.py:64
+#: mediagoblin/edit/forms.py:49
+msgid "Old password"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:52
+msgid "New Password"
+msgstr ""
+
+#: mediagoblin/edit/views.py:65
 msgid "An entry with that slug already exists for this user."
 msgstr ""
 
-#: mediagoblin/edit/views.py:85
+#: mediagoblin/edit/views.py:86
 msgid "You are editing another user's media. Proceed with caution."
 msgstr "Esteu editant fitxers d'un altre usuari. Aneu amb compte."
 
-#: mediagoblin/edit/views.py:155
+#: mediagoblin/edit/views.py:156
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr "Esteu editant el perfil d'un usuari. Aneu amb compte"
 
-#: mediagoblin/process_media/errors.py:44
-msgid "Invalid file given for media type."
-msgstr "Aquest tipus de fitxer no és vàlid."
+#: mediagoblin/edit/views.py:171
+msgid "Wrong password"
+msgstr ""
+
+#: mediagoblin/edit/views.py:192
+msgid "Profile edited!"
+msgstr ""
+
+#: mediagoblin/media_types/__init__.py:61
+msgid "Could not find any file extension in \"{filename}\""
+msgstr ""
 
 #: mediagoblin/submit/forms.py:25
 msgid "File"
@@ -131,17 +164,17 @@ msgstr "Fitxer"
 msgid "Description of this work"
 msgstr ""
 
-#: mediagoblin/submit/views.py:46
+#: mediagoblin/submit/views.py:49
 msgid "You must provide a file."
 msgstr "Heu d'escollir un fitxer."
 
-#: mediagoblin/submit/views.py:49
-msgid "The file doesn't seem to be an image!"
-msgstr "El fitxer no és una imatge"
-
-#: mediagoblin/submit/views.py:121
+#: mediagoblin/submit/views.py:127
 msgid "Woohoo! Submitted!"
 msgstr "Visca! S'ha enviat!"
+
+#: mediagoblin/submit/views.py:133
+msgid "Invalid file type."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/404.html:21
 msgid "Oops!"
@@ -161,31 +194,31 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/404.html:32
 msgid "Image of 404 goblin stressing out"
-msgstr ""
+msgstr "Imatge de la pantalla 404, el goblin no sap què fer..."
 
-#: mediagoblin/templates/mediagoblin/base.html:22
-msgid "GNU MediaGoblin"
-msgstr "GNU MediaGoblin"
-
-#: mediagoblin/templates/mediagoblin/base.html:47
+#: mediagoblin/templates/mediagoblin/base.html:49
 msgid "MediaGoblin logo"
 msgstr "Logo de mediagoblin"
 
-#: mediagoblin/templates/mediagoblin/base.html:52
+#: mediagoblin/templates/mediagoblin/base.html:54
 msgid "Submit media"
 msgstr "Envia fitxers"
 
-#: mediagoblin/templates/mediagoblin/base.html:63
-msgid "verify your email!"
-msgstr "verifiqueu el correu electrònic"
+#: mediagoblin/templates/mediagoblin/base.html:65
+msgid "Verify your email!"
+msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:73
+#: mediagoblin/templates/mediagoblin/base.html:72
+msgid "log out"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:75
 #: mediagoblin/templates/mediagoblin/auth/login.html:27
-#: mediagoblin/templates/mediagoblin/auth/login.html:35
+#: mediagoblin/templates/mediagoblin/auth/login.html:45
 msgid "Log in"
 msgstr "Entra"
 
-#: mediagoblin/templates/mediagoblin/base.html:89
+#: mediagoblin/templates/mediagoblin/base.html:91
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project"
@@ -196,66 +229,32 @@ msgid "Explore"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:27
-msgid "Hi there, media lover! MediaGoblin is..."
-msgstr "Ei, fanàtic multimèdia! MediaGoblin és..."
+msgid "Hi there, welcome to this MediaGoblin site!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:28
+msgid "Your finest source for all goblin-related media."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:29
-msgid "The perfect place for your media!"
-msgstr "El lloc fitxer pels teus fitxers!"
-
-#: mediagoblin/templates/mediagoblin/root.html:30
 msgid ""
-"A place for people to collaborate and show off original and derived "
-"creations!"
+"To add your own media, place comments, save your favourites and more, you "
+"can log in with your MediaGoblin account."
 msgstr ""
-"Un lloc en el qual les persones poden col·laborar i mostrar les seves "
-"creacions originals o obres derivades."
 
 #: mediagoblin/templates/mediagoblin/root.html:31
-msgid ""
-"Free, as in freedom. (We’re a <a href=\"http://gnu.org\">GNU</a> project, "
-"after all.)"
+msgid "Don't have one yet? It's easy!"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:32
-msgid ""
-"Aiming to make the world a better place through decentralization and "
-"(eventually, coming soon!) federation!"
-msgstr ""
-"Amb l'objectiu de fer del món un lloc millor a través de la "
-"descentralització i (eventualment, aviat disponible!) La federació!"
-
-#: mediagoblin/templates/mediagoblin/root.html:33
-msgid ""
-"Built for extensibility.  (Multiple media types coming soon to the software,"
-" including video support!)"
-msgstr ""
-"Construït per l'ampliació. (Múltiples tipus de fitxers en breu amb el "
-"programari, incloent el suport de vídeo!)"
-
-#: mediagoblin/templates/mediagoblin/root.html:34
-msgid ""
-"Powered by people like you.  (<a "
-"href=\"http://mediagoblin.org/pages/join.html\">You can help us improve this"
-" software!</a>)"
-msgstr ""
-"Desenvolupat per persones com vostè. ( <a "
-"href=\"http://mediagoblin.org/pages/join.html\"> Podeu ajudar a millorar "
-"aquest programari!</a> )"
-
-#: mediagoblin/templates/mediagoblin/root.html:38
-msgid "Excited to join us?"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/root.html:39
 #, python-format
 msgid ""
-"<a class=\"header_submit_highlight\" href=\"%(register_url)s\">Create a free account</a>\n"
+"<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
 "          or\n"
-"          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
+"          <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/root.html:53
+#: mediagoblin/templates/mediagoblin/root.html:44
 msgid "Most recent media"
 msgstr ""
 
@@ -263,8 +262,12 @@ msgstr ""
 msgid "Enter your new password"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:29
-msgid "Enter your username or email"
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
+msgid "Recover password"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:30
+msgid "Send instructions"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/fp_changed_success.html:22
@@ -294,20 +297,16 @@ msgstr ""
 msgid "Logging in failed!"
 msgstr "Inici de sessió ha fallat!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:43
+#: mediagoblin/templates/mediagoblin/auth/login.html:35
 msgid "Don't have an account yet?"
 msgstr "Encara no teniu un compte?"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:46
+#: mediagoblin/templates/mediagoblin/auth/login.html:36
 msgid "Create one here!"
 msgstr "Creeu-ne un aquí!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:49
+#: mediagoblin/templates/mediagoblin/auth/login.html:42
 msgid "Forgot your password?"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/auth/login.html:52
-msgid "Change it!"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:27
@@ -355,9 +354,15 @@ msgstr "Desa els canvis"
 msgid "Editing %(username)s's profile"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/listings/tag.html:31
-msgid "Media tagged with:"
-msgstr "Etiquetat amb:"
+#: mediagoblin/templates/mediagoblin/listings/tag.html:30
+#: mediagoblin/templates/mediagoblin/listings/tag.html:35
+#, python-format
+msgid "Media tagged with: %(tag_name)s"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:19
+msgid "Original"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Submit yer media"
@@ -367,15 +372,15 @@ msgstr "Envieu els vostres fitxers"
 msgid "Submit"
 msgstr "Envia"
 
-#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:32
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
+#, python-format
+msgid "%(username)s's media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:37
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
 msgstr "<a href=\"%(user_url)s\">%(username)s</a>'s media"
-
-#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:52
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:32
-msgid "Sorry, no such user found."
-msgstr "Lamentablement no s'ha trobat l'usuari que cercàveu."
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -397,7 +402,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
 msgid "Media in-processing"
-msgstr ""
+msgstr "S'està processant el fitxer"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:46
 msgid "No media in-processing"
@@ -405,37 +410,49 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:50
 msgid "These uploads failed to process:"
+msgstr "No s'han pogut penjar els següents fitxers:"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:31
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:89
+#, python-format
+msgid "%(username)s's profile"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:39
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:59
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:43
+msgid "Sorry, no such user found."
+msgstr "Lamentablement no s'ha trobat l'usuari que cercàveu."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:50
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:70
 msgid "Email verification needed"
-msgstr ""
+msgstr "Cal que verifiqueu l'adreça electrònica"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:42
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:53
 msgid "Almost done! Your account still needs to be activated."
-msgstr ""
+msgstr "Gairebé esteu! Tan sols falta que activeu el vostre compte"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:47
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:58
 msgid ""
 "An email should arrive in a few moments with instructions on how to do so."
 msgstr "Us hauria d'arribar un correu amb les instruccions per a fer-ho."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:51
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:62
 msgid "In case it doesn't:"
-msgstr ""
+msgstr "Per si no hi fos:"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:54
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:65
 msgid "Resend verification email"
 msgstr "Torna'm a enviar el correu de verificació"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:62
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:73
 msgid ""
 "Someone has registered an account with this username, but it still has to be"
 " activated."
 msgstr ""
+"Algú ja ha registrat un compte amb aquest nom d'usuari, però encara l'ha "
+"d'activar."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:68
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:79
 #, python-format
 msgid ""
 "If you are that person but you've lost your verification email, you can <a "
@@ -444,46 +461,41 @@ msgstr ""
 "Si siu aqeust usuari però heu perdut el correu de verificació, podeu <a "
 "href=\"%(login_url)s\">entrar</a> i tornar-lo a enviar."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:78
-#, python-format
-msgid "%(username)s's profile"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:85
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:96
 msgid "Here's a spot to tell others about yourself."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:90
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:108
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:101
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:119
 msgid "Edit profile"
 msgstr "Edita el perfil"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:96
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:107
 msgid "This user hasn't filled in their profile (yet)."
-msgstr ""
+msgstr "Aquest usuari encara no ha escrit res al seu perfil."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:122
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:133
 #, python-format
 msgid "View all of %(username)s's media"
 msgstr "View all of %(username)s's media"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:135
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:146
 msgid ""
 "This is where your media will appear, but you don't seem to have added "
 "anything yet."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:141
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:152
 msgid "Add media"
-msgstr ""
+msgstr "Tots els fitxers"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:147
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:158
 msgid "There doesn't seem to be any media here yet..."
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 msgid "feed icon"
-msgstr ""
+msgstr "Icona RSS"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
 msgid "Atom feed"
@@ -497,6 +509,14 @@ msgstr ""
 msgid "Older"
 msgstr ""
 
+#: mediagoblin/templates/mediagoblin/utils/tags.html:20
+msgid "Tagged with"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/tags.html:25
+msgid "and"
+msgstr ""
+
 #: mediagoblin/user_pages/forms.py:24
 msgid "Comment"
 msgstr "Comentari"
@@ -505,15 +525,23 @@ msgstr "Comentari"
 msgid "I am sure I want to delete this"
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:142
+#: mediagoblin/user_pages/views.py:155
 msgid "Empty comments are not allowed."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:148
+#: mediagoblin/user_pages/views.py:161
 msgid "Comment posted!"
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:181
+#: mediagoblin/user_pages/views.py:183
+msgid "You deleted the media."
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:190
+msgid "The media was not deleted because you didn't check that you were sure."
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:198
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr ""
 
