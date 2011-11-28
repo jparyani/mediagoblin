@@ -19,7 +19,8 @@ from mediagoblin.meddleware import BaseMeddleware
 
 
 class NoOpMeddleware(BaseMeddleware):
-    def process_request(self, request):
+
+    def process_request(self, request, controller):
         pass
 
     def process_response(self, request, response):
