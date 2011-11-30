@@ -1,4 +1,3 @@
-{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
 #
@@ -14,6 +13,15 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
 
-{% extends 'mediagoblin/user_pages/media.html' %}
+from mediagoblin.media_types.ascii.processing import process_ascii
+
+
+MEDIA_MANAGER = {
+    "human_readable": "ASCII",
+    "processor": process_ascii, # alternately a string,
+                                # 'mediagoblin.media_types.image.processing'?
+    "display_template": "mediagoblin/media_displays/ascii.html",
+    "default_thumb": "images/media_thumbs/ascii.jpg",
+    "accepted_extensions": [
+        "txt"]}

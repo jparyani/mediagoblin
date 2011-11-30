@@ -17,3 +17,24 @@
 #}
 
 {% extends 'mediagoblin/user_pages/media.html' %}
+
+{% block mediagoblin_media %}
+  <div class="ascii-wrapper">
+    <pre>
+      {%- autoescape False -%}
+      {{- request.app.public_store.get_file(
+             media['media_files']['unicode']).read()|string -}}
+      {%- endautoescape -%}
+    </pre>
+  </div>
+  {% if 'original' in media.media_files %}
+  <p>
+    <a href="{{ request.app.public_store.file_url(
+	     media['media_files']['original']) }}">
+      {%- trans -%}
+        Original
+      {%- endtrans -%}
+    </a>
+  </p>
+  {% endif %}    
+{% endblock %}

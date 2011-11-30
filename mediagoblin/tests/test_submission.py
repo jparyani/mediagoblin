@@ -1,3 +1,4 @@
+
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
 #
@@ -16,6 +17,7 @@
 
 import urlparse
 import pkg_resources
+import re
 
 from nose.tools import assert_equal, assert_true, assert_false
 
@@ -216,7 +218,8 @@ class TestSubmission:
 
         context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
         form = context['submit_form']
-        assert form.file.errors == [u'Invalid file type.']
+        assert re.match(r'^Could not extract any file extension from ".*?"$', str(form.file.errors[0]))
+        assert len(form.file.errors) == 1
 
         # NOTE: The following 2 tests will ultimately fail, but they
         #   *will* pass the initial form submission step.  Instead,

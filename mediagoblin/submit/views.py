@@ -128,9 +128,13 @@ def submit_start(request):
 
                 return redirect(request, "mediagoblin.user_pages.user_home",
                                 user=request.user.username)
-            except InvalidFileType, exc:
+            except Exception as e:
+                '''
+                This section is intended to catch exceptions raised in 
+                mediagobling.media_types
+                '''
                 submit_form.file.errors.append(
-                    _(u'Invalid file type.'))
+                    e)
 
     return render_to_response(
         request,

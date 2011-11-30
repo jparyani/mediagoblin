@@ -69,16 +69,20 @@ def get_media_type_and_manager(filename):
     '''
     Get the media type and manager based on a filename
     '''
-    for media_type, manager in get_media_managers():
-        if filename.find('.') > 0:
-            # Get the file extension
-            ext = os.path.splitext(filename)[1].lower()
-        else:
-            raise InvalidFileType(
-                _('Could not find any file extension in "{filename}"').format(
-                    filename=filename))
+    if filename.find('.') > 0:
+        # Get the file extension
+        ext = os.path.splitext(filename)[1].lower()
+    else:
+        raise Exception(
+            _(u'Could not extract any file extension from "{filename}"').format(
+                filename=filename))
 
+    for media_type, manager in get_media_managers():
         # Omit the dot from the extension and match it against
         # the media manager
         if ext[1:] in manager['accepted_extensions']:
             return media_type, manager
+    else:
+        raise FileTypeNotSupported(
+            # TODO: Provide information on which file types are supported
+            _(u'Sorry, I don\'t support that file type :('))

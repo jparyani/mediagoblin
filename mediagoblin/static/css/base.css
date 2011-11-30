@@ -402,3 +402,15 @@ table.media_panel th {
   margin-top: 10px;
   margin-left: 10px;
 }
+
+/* ASCII art */
+
+@font-face {
+  font-family: Inconsolata;
+  src: local('Inconsolata'), url('../fonts/Inconsolata.otf') format('opentype')
+}
+
+.ascii-wrapper pre {
+  font-family: Inconsolata, monospace;
+  line-height: 1em;
+}
