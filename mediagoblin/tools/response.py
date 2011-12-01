@@ -30,7 +30,7 @@ def render_404(request):
     Render a 404.
     """
     return render_to_response(
-        request, 'mediagoblin/404.html', {}, status=400)
+        request, 'mediagoblin/404.html', {}, status=404)
 
 
 def redirect(request, *args, **kwargs):
