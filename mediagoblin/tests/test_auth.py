@@ -20,7 +20,7 @@ import datetime
 from nose.tools import assert_equal
 
 from mediagoblin.auth import lib as auth_lib
-from mediagoblin.tests.tools import setup_fresh_app
+from mediagoblin.tests.tools import setup_fresh_app, fixture_add_user
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, mail
 
@@ -332,11 +332,7 @@ def test_authentication_views(test_app):
     Test logging in and logging out
     """
     # Make a new user
-    test_user = mg_globals.database.User()
-    test_user['username'] = u'chris'
-    test_user['email'] = u'chris@example.com'
-    test_user['pw_hash'] = auth_lib.bcrypt_gen_password_hash('toast')
-    test_user.save()
+    test_user = fixture_add_user(active_user=False)
 
     # Get login
     # ---------

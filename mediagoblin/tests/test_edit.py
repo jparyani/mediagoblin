@@ -15,23 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin import mg_globals
-from mediagoblin.tests.tools import setup_fresh_app
+from mediagoblin.tests.tools import setup_fresh_app, fixture_add_user
 from mediagoblin.tools import template
-from mediagoblin.auth.lib import bcrypt_check_password, \
-                                 bcrypt_gen_password_hash
+from mediagoblin.auth.lib import bcrypt_check_password
 
 
 @setup_fresh_app
 def test_change_password(test_app):
     """Test changing password correctly and incorrectly"""
     # set up new user
-    test_user = mg_globals.database.User()
-    test_user['username'] = u'chris'
-    test_user['email'] = u'chris@example.com'
-    test_user['email_verified'] = True
-    test_user['status'] = u'active'
-    test_user['pw_hash'] = bcrypt_gen_password_hash('toast')
-    test_user.save()
+    test_user = fixture_add_user()
 
     test_app.post(
         '/auth/login/', {
@@ -73,13 +66,7 @@ def test_change_password(test_app):
 def change_bio_url(test_app):
     """Test changing bio and URL"""
     # set up new user
-    test_user = mg_globals.database.User()
-    test_user['username'] = u'chris'
-    test_user['email'] = u'chris@example.com'
-    test_user['email_verified'] = True
-    test_user['status'] = u'active'
-    test_user['pw_hash'] = bcrypt_gen_password_hash('toast')
-    test_user.save()
+    test_user = fixture_add_user()
 
     # test changing the bio and the URL properly
     test_app.post(

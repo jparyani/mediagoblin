@@ -19,8 +19,8 @@ import pkg_resources
 
 from nose.tools import assert_equal, assert_true, assert_false
 
-from mediagoblin.auth import lib as auth_lib
-from mediagoblin.tests.tools import setup_fresh_app, get_test_app
+from mediagoblin.tests.tools import setup_fresh_app, get_test_app, \
+    fixture_add_user
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, common
 
@@ -45,13 +45,7 @@ class TestSubmission:
 
         # TODO: Possibly abstract into a decorator like:
         # @as_authenticated_user('chris')
-        test_user = mg_globals.database.User()
-        test_user['username'] = u'chris'
-        test_user['email'] = u'chris@example.com'
-        test_user['email_verified'] = True
-        test_user['status'] = u'active'
-        test_user['pw_hash'] = auth_lib.bcrypt_gen_password_hash('toast')
-        test_user.save()
+        test_user = fixture_add_user()
 
         self.test_user = test_user
 
