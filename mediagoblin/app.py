@@ -107,12 +107,6 @@ class MediaGoblinApp(object):
     def __call__(self, environ, start_response):
         request = Request(environ)
 
-        # pass the request through our meddleware classes
-        for m in self.meddleware:
-            response = m.process_request(request)
-            if response is not None:
-                return response(environ, start_response)
-
         ## Routing / controller loading stuff
         path_info = request.path_info
         route_match = self.routing.match(path_info)
@@ -164,6 +158,13 @@ class MediaGoblinApp(object):
             return render_404(request)(environ, start_response)
 
         controller = common.import_component(route_match['controller'])
+
+        # pass the request through our meddleware classes
+        for m in self.meddleware:
+            response = m.process_request(request, controller)
+            if response is not None:
+                return response(environ, start_response)
+
         request.start_response = start_response
 
         # get the response from the controller

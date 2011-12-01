@@ -47,7 +47,7 @@
           <a href="{{ next_url }}"><img class="pagination_arrow" src="{{ request.staticdirect('/images/pagination_right.png') }}" alt="Next page" /></a>
         {% endif %}
         <br />
-        Go to page: 
+        {% trans %}Go to page:{% endtrans %}
         {%- for page in pagination.iter_pages() %}
           {% if page %}
             {% if page != pagination.page %}
