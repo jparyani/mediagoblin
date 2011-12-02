@@ -63,7 +63,7 @@ class MediaGoblinApp(object):
 
         # Get the template environment
         self.template_loader = get_jinja_loader(
-            app_config.get('user_template_path'))
+            app_config.get('local_templates'))
 
         # Set up storage systems
         self.public_store, self.queue_store = setup_storage()
