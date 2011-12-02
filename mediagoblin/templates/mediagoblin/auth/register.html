@@ -19,6 +19,26 @@
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
+{% block mediagoblin_head %}
+  <script>
+    $(document).ready(function(){
+      $("#password").after('<input type="text" value="" name="password_clear" id="password_clear" /><input type="checkbox" id="password_boolean" />Show password');
+      $('#password_clear').hide();
+      $('#password_boolean').click(function(){
+        if($('#password_boolean').prop("checked")) {
+          $('#password_clear').val($('#password').val());
+          $('#password').hide();
+          $('#password_clear').show();
+        } else {
+          $('#password').val($('#password_clear').val());
+          $('#password_clear').hide();
+          $('#password').show();
+        };
+      });
+    });
+  </script>
+{% endblock mediagoblin_head %}
+
 {% block mediagoblin_content %}
 
   <form action="{{ request.urlgen('mediagoblin.auth.register') }}"

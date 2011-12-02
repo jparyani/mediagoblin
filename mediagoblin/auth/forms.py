@@ -29,15 +29,7 @@ class RegistrationForm(wtforms.Form):
     password = wtforms.PasswordField(
         _('Password'),
         [wtforms.validators.Required(),
-         wtforms.validators.Length(min=6, max=30),
-         wtforms.validators.EqualTo(
-                'confirm_password',
-                _('Passwords must match.'))])
-    confirm_password = wtforms.PasswordField(
-        _('Confirm password'),
-        [wtforms.validators.Required()],
-        description=_(
-            u"Type it again here to make sure there are no spelling mistakes."))
+         wtforms.validators.Length(min=6, max=30)])
     email = wtforms.TextField(
         _('Email address'),
         [wtforms.validators.Required(),
