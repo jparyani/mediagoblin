@@ -43,6 +43,7 @@ HTML_CLEANER = Cleaner(
     host_whitelist=(),
     whitelist_tags=set([]))
 
+TAGS_DELIMITER=',';
 
 def clean_html(html):
     # clean_html barfs on an empty string
@@ -67,7 +68,7 @@ def convert_to_tag_list_of_dicts(tag_string):
 
         # Split the tag string into a list of tags
         for tag in stripped_tag_string.split(
-                                       mg_globals.app_config['tags_delimiter']):
+                                       TAGS_DELIMITER):
 
             # Ignore empty or duplicate tags
             if tag.strip() and tag.strip() not in [t['name'] for t in taglist]:
@@ -85,7 +86,7 @@ def media_tags_as_string(media_entry_tags):
     """
     media_tag_string = ''
     if media_entry_tags:
-        media_tag_string = mg_globals.app_config['tags_delimiter'].join(
+        media_tag_string = (TAGS_DELIMITER+u' ').join(
                                       [tag['name'] for tag in media_entry_tags])
     return media_tag_string
 

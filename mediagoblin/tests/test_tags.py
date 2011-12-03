@@ -39,11 +39,4 @@ def test_list_of_dicts_conversion(test_app):
     # Make sure converting the list of dicts to a string works
     assert text.media_tags_as_string([{'name': u'yin', 'slug': u'yin'},
                                       {'name': u'yang', 'slug': u'yang'}]) == \
-                                      u'yin,yang'
-
-    # If the tag delimiter is a space then we expect different results
-    mg_globals.app_config['tags_delimiter'] = u' '
-    assert text.convert_to_tag_list_of_dicts('unicorn ceramic nazi') == [
-                                       {'name': u'unicorn', 'slug': u'unicorn'},
-                                       {'name': u'ceramic', 'slug': u'ceramic'},
-                                       {'name': u'nazi', 'slug': u'nazi'}]
+                                      u'yin, yang'
