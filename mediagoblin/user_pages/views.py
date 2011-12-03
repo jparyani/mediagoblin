@@ -152,13 +152,13 @@ def media_post_comment(request, media):
         messages.add_message(
             request,
             messages.ERROR,
-            _("Empty comments are not allowed."))
+            _("Oops, your comment was empty."))
     else:
         comment.save()
 
         messages.add_message(
             request, messages.SUCCESS,
-            _('Comment posted!'))
+            _('Your comment has been posted!'))
 
     return exc.HTTPFound(
         location=media.url_for_self(request.urlgen))
