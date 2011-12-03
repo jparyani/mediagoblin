@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-11-27 15:25-0600\n"
-"PO-Revision-Date: 2011-11-27 21:28+0000\n"
+"POT-Creation-Date: 2011-12-03 16:57-0600\n"
+"PO-Revision-Date: 2011-12-03 22:56+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -64,7 +64,7 @@ msgstr "Un utilisateur existe déjà avec ce nom, désolé."
 
 #: mediagoblin/auth/views.py:77
 msgid "Sorry, a user with that email address already exists."
-msgstr ""
+msgstr "Désolé, il existe déjà un utilisateur ayant cette adresse e-mail."
 
 #: mediagoblin/auth/views.py:179
 msgid ""
@@ -81,10 +81,11 @@ msgstr "La clé de vérification ou le nom d'utilisateur est incorrect."
 #: mediagoblin/auth/views.py:203
 msgid "You must be logged in so we know who to send the email to!"
 msgstr ""
+"Vous devez être authentifié afin que nous sachions à qui envoyer l'e-mail !"
 
 #: mediagoblin/auth/views.py:211
 msgid "You've already verified your email address!"
-msgstr ""
+msgstr "Votre adresse e-mail a déjà été vérifiée !"
 
 #: mediagoblin/auth/views.py:224
 msgid "Resent your verification email."
@@ -107,7 +108,7 @@ msgid "Tags"
 msgstr "Tags"
 
 #: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:34
-msgid "Seperate tags by commas or spaces."
+msgid "Seperate tags by commas."
 msgstr ""
 
 #: mediagoblin/edit/forms.py:33
@@ -135,11 +136,11 @@ msgstr "Site web"
 
 #: mediagoblin/edit/forms.py:49
 msgid "Old password"
-msgstr ""
+msgstr "Ancien mot de passe."
 
 #: mediagoblin/edit/forms.py:52
 msgid "New Password"
-msgstr ""
+msgstr "Nouveau mot de passe"
 
 #: mediagoblin/edit/views.py:65
 msgid "An entry with that slug already exists for this user."
@@ -159,15 +160,15 @@ msgstr ""
 
 #: mediagoblin/edit/views.py:171
 msgid "Wrong password"
-msgstr ""
+msgstr "Mauvais mot de passe"
 
 #: mediagoblin/edit/views.py:192
 msgid "Profile edited!"
-msgstr ""
+msgstr "Profile mis à jour !"
 
 #: mediagoblin/media_types/__init__.py:61
 msgid "Could not find any file extension in \"{filename}\""
-msgstr ""
+msgstr "Impossible d'extraire une extension de fichier de \"{nomfichier}\""
 
 #: mediagoblin/submit/forms.py:25
 msgid "File"
@@ -187,11 +188,11 @@ msgstr "Youhou, c'est envoyé !"
 
 #: mediagoblin/submit/views.py:133
 msgid "Invalid file type."
-msgstr ""
+msgstr "Type de fichier invalide."
 
 #: mediagoblin/templates/mediagoblin/404.html:21
 msgid "Oops!"
-msgstr "Zut!"
+msgstr "Zut !"
 
 #: mediagoblin/templates/mediagoblin/404.html:24
 msgid "There doesn't seem to be a page at this address. Sorry!"
@@ -219,11 +220,11 @@ msgstr "Soumettre un média"
 
 #: mediagoblin/templates/mediagoblin/base.html:65
 msgid "Verify your email!"
-msgstr ""
+msgstr "Vérifiez votre adresse e-mail !"
 
 #: mediagoblin/templates/mediagoblin/base.html:72
 msgid "log out"
-msgstr ""
+msgstr "déconnexion"
 
 #: mediagoblin/templates/mediagoblin/base.html:75
 #: mediagoblin/templates/mediagoblin/auth/login.html:27
@@ -245,21 +246,23 @@ msgstr "Explorer"
 
 #: mediagoblin/templates/mediagoblin/root.html:27
 msgid "Hi there, welcome to this MediaGoblin site!"
-msgstr ""
+msgstr "Bonjour, et bienvenu sur ce site MediaGoblin !"
 
 #: mediagoblin/templates/mediagoblin/root.html:28
 msgid "Your finest source for all goblin-related media."
-msgstr ""
+msgstr "Là où ce trouve tout vos \"goblinesque\" media."
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid ""
 "To add your own media, place comments, save your favourites and more, you "
 "can log in with your MediaGoblin account."
 msgstr ""
+"Ajoutez vos propres medias, commentez ceux des autres, sauvegardez vos "
+"préférés et plus encore ! Faites tout cela depuis votre compte MediaGoblin."
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid "Don't have one yet? It's easy!"
-msgstr ""
+msgstr "Vous n'en avez pas ? C'est facile !"
 
 #: mediagoblin/templates/mediagoblin/root.html:32
 #, python-format
@@ -268,6 +271,9 @@ msgid ""
 "          or\n"
 "          <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr ""
+"<a class=\"button_action_highlight\" href=\"%(register_url)s\">Créez un compte sur ce site</a>\n"
+"          ou\n"
+"          <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Déployez MediaGoblin sur votre propre serveur</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:44
 msgid "Most recent media"
@@ -277,13 +283,18 @@ msgstr "Tout derniers media"
 msgid "Enter your new password"
 msgstr "Entrez un nouveau mot de passe"
 
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:33
+#: mediagoblin/templates/mediagoblin/submit/start.html:30
+msgid "Submit"
+msgstr "Soumettre"
+
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
 msgid "Recover password"
-msgstr ""
+msgstr "Récupérer le mot de passe"
 
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:30
 msgid "Send instructions"
-msgstr ""
+msgstr "Envoyer les instructions"
 
 #: mediagoblin/templates/mediagoblin/auth/fp_changed_success.html:22
 msgid "Your password has been changed. Try to log in now."
@@ -326,11 +337,11 @@ msgstr "La connexion a échoué!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:35
 msgid "Don't have an account yet?"
-msgstr "Pas encore de compte?"
+msgstr "Pas encore de compte ?"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:36
 msgid "Create one here!"
-msgstr "Créez-en un ici!"
+msgstr "Créez-en un ici !"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:42
 msgid "Forgot your password?"
@@ -338,7 +349,7 @@ msgstr "Vous avez oublié votre mot de passe ?"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:27
 msgid "Create an account!"
-msgstr "Créer un compte!"
+msgstr "Créer un compte !"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:31
 msgid "Create"
@@ -384,29 +395,54 @@ msgstr "Modification du profil de %(username)s"
 #: mediagoblin/templates/mediagoblin/listings/tag.html:35
 #, python-format
 msgid "Media tagged with: %(tag_name)s"
-msgstr ""
+msgstr "Médias taggés avec : %(tag_name)s "
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:19
 msgid "Original"
-msgstr ""
+msgstr "Original"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Submit yer media"
 msgstr "Soumettez ce média"
 
-#: mediagoblin/templates/mediagoblin/submit/start.html:30
-msgid "Submit"
-msgstr "Soumettre"
-
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
 #, python-format
 msgid "%(username)s's media"
-msgstr ""
+msgstr "Medias de %(username)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:37
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
 msgstr "Médias de <a href=\"%(user_url)s\">%(username)s</a>"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:58
+#, python-format
+msgid "By <a href=\"%(user_url)s\">%(username)s</a> on %(date)s"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:68
+msgid "Post a comment"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:86
+msgid "at"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:103
+msgid "Post comment!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:125
+msgid "Edit"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:131
+msgid "Delete"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:163
+msgid "Sorry, no such media found."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -542,13 +578,17 @@ msgstr "Nouveaux"
 msgid "Older"
 msgstr "Anciens"
 
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:50
+msgid "Go to page:"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
-msgstr ""
+msgstr "Taggé avec"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:25
 msgid "and"
-msgstr ""
+msgstr "et"
 
 #: mediagoblin/user_pages/forms.py:24
 msgid "Comment"
@@ -559,20 +599,22 @@ msgid "I am sure I want to delete this"
 msgstr "Je suis sûr de vouloir supprimer cela"
 
 #: mediagoblin/user_pages/views.py:155
-msgid "Empty comments are not allowed."
-msgstr "Les commentaires vides ne sont pas autorisés."
+msgid "Oops, your comment was empty."
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:161
-msgid "Comment posted!"
-msgstr "Votre commentaire a été posté !"
+msgid "Your comment has been posted!"
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:183
 msgid "You deleted the media."
-msgstr ""
+msgstr "Vous avez supprimé le media."
 
 #: mediagoblin/user_pages/views.py:190
 msgid "The media was not deleted because you didn't check that you were sure."
 msgstr ""
+"Ce media n'a pas été supprimé car vous n'avez pas confirmer que vous étiez "
+"sur."
 
 #: mediagoblin/user_pages/views.py:198
 msgid "You are about to delete another user's media. Proceed with caution."
