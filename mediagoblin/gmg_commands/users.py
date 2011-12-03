@@ -21,14 +21,14 @@ from mediagoblin import mg_globals
 
 def adduser_parser_setup(subparser):
     subparser.add_argument(
-        'username',
+        '--username','-u',
         help="Username used to login")
     subparser.add_argument(
-        'password',
-        help="Your supersecret word to login")
+        '--password','-p',
+        help="Your supersecret word to login, beware of storing it in bash history")
     subparser.add_argument(
-        'email',
-        help="Email to recieve notifications")
+        '--email','-e',
+        help="Email to receive notifications")
 
 
 def adduser(args):
