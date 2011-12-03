@@ -50,6 +50,9 @@ def render_csrf_form_token(request):
     """Render the CSRF token in a format suitable for inclusion in a
     form."""
 
+    if 'CSRF_TOKEN' not in request.environ:
+        return None
+
     form = CsrfForm(csrf_token=request.environ['CSRF_TOKEN'])
 
     return form.csrf_token

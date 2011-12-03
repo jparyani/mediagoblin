@@ -79,7 +79,9 @@ def render_template(request, template_path, context):
     template = request.template_env.get_template(
         template_path)
     context['request'] = request
-    context['csrf_token'] = render_csrf_form_token(request)
+    rendered_csrf_token = render_csrf_form_token(request)
+    if rendered_csrf_token is not None:
+        context['csrf_token'] = render_csrf_form_token(request)
     rendered = template.render(context)
 
     if common.TESTS_ENABLED:
