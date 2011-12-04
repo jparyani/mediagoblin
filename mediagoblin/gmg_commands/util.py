@@ -27,13 +27,13 @@ def setup_app(args):
 
     return mgoblin_app
 
-def prompt_if_not_set(variable,text,password=False):
+def prompt_if_not_set(variable, text, password=False):
     """
     Checks if the variable is None and prompt for a value if it is
     """
-    if (variable==None):
+    if variable is None:
         if not password:
-            variable=raw_input(text+' ')
+            variable=raw_input(text + u' ')
         else:
             variable=getpass.getpass(text)
     
