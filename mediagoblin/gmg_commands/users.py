@@ -18,22 +18,25 @@ from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin import mg_globals
 
-
 def adduser_parser_setup(subparser):
     subparser.add_argument(
-        'username',
+        '--username','-u',
         help="Username used to login")
     subparser.add_argument(
-        'password',
-        help="Your supersecret word to login")
+        '--password','-p',
+        help="Your supersecret word to login, beware of storing it in bash history")
     subparser.add_argument(
-        'email',
-        help="Email to recieve notifications")
+        '--email','-e',
+        help="Email to receive notifications")
 
 
 def adduser(args):
     #TODO: Lets trust admins this do not validate Emails :)
     commands_util.setup_app(args)
+
+    args.username = commands_util.prompt_if_not_set(args.username, "Username:")
+    args.password = commands_util.prompt_if_not_set(args.password, "Password:",True)
+    args.email = commands_util.prompt_if_not_set(args.email, "Email:")
 
     db = mg_globals.database
     users_with_username = \

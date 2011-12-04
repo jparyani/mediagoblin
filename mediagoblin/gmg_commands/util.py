@@ -16,6 +16,7 @@
 
 
 from mediagoblin import app
+import getpass
 
 
 def setup_app(args):
@@ -25,3 +26,15 @@ def setup_app(args):
     mgoblin_app = app.MediaGoblinApp(args.conf_file)
 
     return mgoblin_app
+
+def prompt_if_not_set(variable,text,password=False):
+    """
+    Checks if the variable is None and prompt for a value if it is
+    """
+    if (variable==None):
+        if not password:
+            variable=raw_input(text+' ')
+        else:
+            variable=getpass.getpass(text)
+    
+    return variable
