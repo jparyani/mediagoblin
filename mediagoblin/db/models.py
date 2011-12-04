@@ -131,7 +131,7 @@ class MediaEntry(Document):
        For example, images might contain some EXIF data that's not appropriate
        to other formats.  You might store it like:
 
-         mediaentry['media_data']['exif'] = {
+         mediaentry.media_data['exif'] = {
              'manufacturer': 'CASIO',
              'model': 'QV-4000',
              'exposure_time': .659}
@@ -139,7 +139,7 @@ class MediaEntry(Document):
        Alternately for video you might store:
 
          # play length in seconds
-         mediaentry['media_data']['play_length'] = 340
+         mediaentry.media_data['play_length'] = 340
 
        ... so what's appropriate here really depends on the media type.
 
