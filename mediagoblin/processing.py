@@ -55,8 +55,8 @@ class ProcessMedia(Task):
 
         # Try to process, and handle expected errors.
         try:
-            #__import__(entry['media_type'])
-            manager = get_media_manager(entry['media_type'])
+            #__import__(entry.media_type)
+            manager = get_media_manager(entry.media_type)
             manager['processor'](entry)
         except BaseProcessingFail, exc:
             mark_entry_failed(entry._id, exc)

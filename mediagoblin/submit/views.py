@@ -55,7 +55,7 @@ def submit_start(request):
                 # create entry and save in database
                 entry = request.db.MediaEntry()
                 entry['_id'] = ObjectId()
-                entry['media_type'] = unicode(media_type)
+                entry.media_type = unicode(media_type)
                 entry.title = (
                     unicode(request.POST['title'])
                     or unicode(splitext(filename)[0]))

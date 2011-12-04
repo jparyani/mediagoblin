@@ -122,7 +122,7 @@ def media_home(request, media, page, **kwargs):
 
     comment_form = user_forms.MediaCommentForm(request.POST)
 
-    media_template_name = get_media_manager(media['media_type'])['display_template']
+    media_template_name = get_media_manager(media.media_type)['display_template']
 
     return render_to_response(
         request,
