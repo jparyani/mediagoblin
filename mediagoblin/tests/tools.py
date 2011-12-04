@@ -27,6 +27,7 @@ from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.decorators import _make_safe
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.meddleware import BaseMeddleware
+from mediagoblin.auth.lib import bcrypt_gen_password_hash
 
 
 MEDIAGOBLIN_TEST_DB_NAME = u'__mediagoblin_tests__'
@@ -200,3 +201,19 @@ def assert_db_meets_expected(db, expected):
             document = collection.find_one({'_id': expected_document['_id']})
             assert document is not None  # make sure it exists
             assert document == expected_document  # make sure it matches
+
+
+def fixture_add_user(username = u'chris', password = 'toast',
+                     active_user = True):
+    test_user = mg_globals.database.User()
+    test_user.username = username
+    test_user.email = username + u'@example.com'
+    if password is not None:
+        test_user.pw_hash = bcrypt_gen_password_hash(password)
+    if active_user:
+        test_user.email_verified = True
+        test_user.status = u'active'
+
+    test_user.save()
+
+    return test_user
