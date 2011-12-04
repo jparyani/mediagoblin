@@ -44,7 +44,7 @@ def edit_media(request, media):
 
     defaults = dict(
         title=media.title,
-        slug=media['slug'],
+        slug=media.slug,
         description=media['description'],
         tags=media_tags_as_string(media['tags']))
 
@@ -72,7 +72,7 @@ def edit_media(request, media):
             media['description_html'] = cleaned_markdown_conversion(
                 media['description'])
 
-            media['slug'] = unicode(request.POST['slug'])
+            media.slug = unicode(request.POST['slug'])
             media.save()
 
             return exc.HTTPFound(

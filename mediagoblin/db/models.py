@@ -249,13 +249,13 @@ class MediaEntry(Document):
         pass
 
     def generate_slug(self):
-        self['slug'] = url.slugify(self.title)
+        self.slug = url.slugify(self.title)
 
         duplicate = mg_globals.database.media_entries.find_one(
-            {'slug': self['slug']})
+            {'slug': self.slug})
 
         if duplicate:
-            self['slug'] = "%s-%s" % (self._id, self['slug'])
+            self.slug = "%s-%s" % (self._id, self.slug)
 
     def url_for_self(self, urlgen):
         """
@@ -269,7 +269,7 @@ class MediaEntry(Document):
             return urlgen(
                 'mediagoblin.user_pages.media_home',
                 user=uploader.username,
-                media=self['slug'])
+                media=self.slug)
         else:
             return urlgen(
                 'mediagoblin.user_pages.media_home',
@@ -287,7 +287,7 @@ class MediaEntry(Document):
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
                           user=self.get_uploader().username,
-                          media=unicode(cursor[0]['slug']))
+                          media=unicode(cursor[0].slug))
 
     def url_to_next(self, urlgen):
         """
@@ -301,7 +301,7 @@ class MediaEntry(Document):
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
                           user=self.get_uploader().username,
-                          media=unicode(cursor[0]['slug']))
+                          media=unicode(cursor[0].slug))
 
     def get_uploader(self):
         return self.db.User.find_one({'_id': self.uploader})
