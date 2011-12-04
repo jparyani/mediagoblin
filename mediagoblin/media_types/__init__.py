@@ -51,6 +51,10 @@ def get_media_manager(_media_type = None):
         if media_type in _media_type:
             return manager
 
+    # Nope?  Then raise an error
+    raise FileTypeNotSupported(
+        "MediaManager not in enabled types.  Check media_types in config?")
+
 
 def get_media_type_and_manager(filename):
     for media_type, manager in get_media_managers():
