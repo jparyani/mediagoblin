@@ -45,7 +45,7 @@ def edit_media(request, media):
     defaults = dict(
         title=media.title,
         slug=media.slug,
-        description=media['description'],
+        description=media.description,
         tags=media_tags_as_string(media['tags']))
 
     form = forms.EditForm(
@@ -65,12 +65,12 @@ def edit_media(request, media):
                 _(u'An entry with that slug already exists for this user.'))
         else:
             media.title = unicode(request.POST['title'])
-            media['description'] = unicode(request.POST.get('description'))
+            media.description = unicode(request.POST.get('description'))
             media['tags'] = convert_to_tag_list_of_dicts(
                                    request.POST.get('tags'))
 
-            media['description_html'] = cleaned_markdown_conversion(
-                media['description'])
+            media.description_html = cleaned_markdown_conversion(
+                media.description)
 
             media.slug = unicode(request.POST['slug'])
             media.save()

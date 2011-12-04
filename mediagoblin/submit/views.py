@@ -60,9 +60,9 @@ def submit_start(request):
                     unicode(request.POST['title'])
                     or unicode(splitext(filename)[0]))
 
-                entry['description'] = unicode(request.POST.get('description'))
-                entry['description_html'] = cleaned_markdown_conversion(
-                    entry['description'])
+                entry.description = unicode(request.POST.get('description'))
+                entry.description_html = cleaned_markdown_conversion(
+                    entry.description)
 
                 entry.uploader = request.user._id
 
