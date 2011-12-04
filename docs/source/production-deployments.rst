@@ -7,32 +7,54 @@ MediaGoblin in actual production environments. Consider
 ":doc:`deploying`" for a basic overview of how to deploy Media
 Goblin.
 
-Celery
-------
+Deploy with Paste
+-----------------
+
+The instance configured with ``./lazyserver.sh`` is not ideal for a
+production MediaGoblin deployment. Ideally, you should be able to use
+an "init" or "control" script to launch and restart the MediaGoblin
+process.
+
+Use the following command as the basis for such a script: ::
+
+       CELERY_ALWAYS_EAGER=true \
+        /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
+        /srv/mediagoblin.example.org/mediagoblin/paste.ini \
+        --pid-file=/var/run/mediagoblin.pid \
+        --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543 \
+
+The above configuration places MediaGoblin in "always eager" mode
+with Celery, this means that submissions of content will be processed
+synchronously, and the user will advance to the next page only after
+processing is complete. If we take Celery out of "always eager mode,"
+the user will be able to immediately return to the MediaGoblin site
+while processing is ongoing. In these cases, use the following command
+as the basis for your script: ::
+
+       CELERY_ALWAYS_EAGER=false \
+        /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
+        /srv/mediagoblin.example.org/mediagoblin/paste.ini \
+        --pid-file=/var/run/mediagoblin.pid \
+        --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543 \
+
+Separate Celery
+---------------
 
 While the ``./lazyserer.sh`` configuration provides an efficient way to
 start using a MediaGoblin instance, it is not suitable for production
 deployments for several reasons:
 
-1. In nearly every scenario, work on the Celery queue will need to
-   balance with the demands of other processes, and cannot proceed
-   synchronously. This is a particularly relevant problem if you use
-   MediaGoblin to host Video content.
+In nearly every scenario, work on the Celery queue will need to
+balance with the demands of other processes, and cannot proceed
+synchronously. This is a particularly relevant problem if you use
+MediaGoblin to host video content. Processing with Celery ought to be
+operationally separate from the MediaGoblin application itself, this
+simplifies management and support better workload distribution.
 
-2. Processing with Celery ought to be operationally separate from the
-   MediaGoblin application itself, this simplifies management and
-   support better workload distribution.
-
-3. If your user submits something complex and it needs to process,
-   that's extra time your user has to sit around waiting when they
-   could get back immediately to doing things on the site.
-   Furthermore, if that processing step takes a long time, as it
-   certainly will for video, your user won't just be left waiting,
-   their connection will probably time out.
-
-Basically, if you're doing anything other than trivial images for a
-small set of users (or something similarly trivial, like ascii art),
-you want to switch over to doing a separate celery process.
+Basically, if you're doing anything beyond a trivial workload, such as
+image hosting for a small set of users, or have limited media types
+such as "ASCII art" or icon sharing, you will need to run ``celeryd``
+as a separate process.
 
 Build an :ref:`init script <init-script>` around the following
 command.
@@ -46,12 +68,15 @@ processes.
 .. _init-script:
 
 Use an Init Script
--------------------
+------------------
 
-TODO insert init script here
+Look in your system's ``/etc/init.d/`` or ``/etc/rc.d/`` directory for
+examples of how to build scripts that will start, stop, and restart
+MediaGoblin and Celery. These scripts will vary by
+distribution/operating system. In the future, MediaGoblin will provide
+example scripts as examples.
 
-Other Concerns
---------------
-
-TODO What are they?
-
+.. TODO insert init script here
+.. TODO are additional concernts ?
+   .. Other Concerns
+   .. --------------

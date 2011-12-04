@@ -14,6 +14,7 @@ Table of Contents:
    foreword
    about
    deploying
+   production-deployments
    configuration
    help
    theming
