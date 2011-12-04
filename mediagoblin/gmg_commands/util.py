@@ -35,6 +35,6 @@ def prompt_if_not_set(variable, text, password=False):
         if not password:
             variable=raw_input(text + u' ')
         else:
-            variable=getpass.getpass(text)
+            variable=getpass.getpass(text + u' ')
     
     return variable
