@@ -4,13 +4,14 @@
 # 
 # Translators:
 #   <gapop@hotmail.com>, 2011.
+# George Pop <gapop@hotmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-12-03 16:57-0600\n"
-"PO-Revision-Date: 2011-12-03 22:56+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"POT-Creation-Date: 2011-12-04 10:24-0600\n"
+"PO-Revision-Date: 2011-12-04 18:41+0000\n"
+"Last-Translator: gap <gapop@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -101,7 +102,7 @@ msgstr "Tag-uri"
 
 #: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:34
 msgid "Seperate tags by commas."
-msgstr ""
+msgstr "Desparte tag-urile prin virgulă."
 
 #: mediagoblin/edit/forms.py:33
 msgid "Slug"
@@ -155,7 +156,7 @@ msgstr "Parolă incorectă"
 msgid "Profile edited!"
 msgstr "Profilul a fost modificat!"
 
-#: mediagoblin/media_types/__init__.py:61
+#: mediagoblin/media_types/__init__.py:65
 msgid "Could not find any file extension in \"{filename}\""
 msgstr "Nu pot extrage extensia din „{filename}”"
 
@@ -238,8 +239,12 @@ msgid "Hi there, welcome to this MediaGoblin site!"
 msgstr "Salut, bine ai venit pe acest site MediaGoblin!"
 
 #: mediagoblin/templates/mediagoblin/root.html:28
-msgid "Your finest source for all goblin-related media."
-msgstr "Locul unde elfii își transmit fișierele media."
+msgid ""
+"This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
+"extraordinarily great piece of media hosting software."
+msgstr ""
+"Acest site folosește <a href=\"http://mediagoblin.org\">MediaGoblin</a>, un "
+"software excepțional pentru găzduirea fișierelor media."
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid ""
@@ -401,34 +406,30 @@ msgstr "Fișierele lui %(username)s"
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
 msgstr "Fișierele media ale lui <a href=\"%(user_url)s\">%(username)s</a>"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:58
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:57
 #, python-format
 msgid "By <a href=\"%(user_url)s\">%(username)s</a> on %(date)s"
-msgstr ""
+msgstr "De <a href=\"%(user_url)s\">%(username)s</a> la %(date)s"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:68
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:67
 msgid "Post a comment"
-msgstr ""
+msgstr "Scrie un comentariu"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:86
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:85
 msgid "at"
-msgstr ""
+msgstr "la"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:103
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:102
 msgid "Post comment!"
-msgstr ""
+msgstr "Trimite comentariul"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:125
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:124
 msgid "Edit"
-msgstr ""
+msgstr "Editare"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:131
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:130
 msgid "Delete"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:163
-msgid "Sorry, no such media found."
-msgstr ""
+msgstr "Șterge"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -561,7 +562,7 @@ msgstr "Mai vechi"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:50
 msgid "Go to page:"
-msgstr ""
+msgstr "Salt la pagina:"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
@@ -581,11 +582,11 @@ msgstr "Sunt sigur că doresc să șterg"
 
 #: mediagoblin/user_pages/views.py:155
 msgid "Oops, your comment was empty."
-msgstr ""
+msgstr "Hopa, ai uitat să scrii comentariul."
 
 #: mediagoblin/user_pages/views.py:161
 msgid "Your comment has been posted!"
-msgstr ""
+msgstr "Comentariul tău a fost trimis!"
 
 #: mediagoblin/user_pages/views.py:183
 msgid "You deleted the media."
