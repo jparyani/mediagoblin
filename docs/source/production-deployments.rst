@@ -23,7 +23,16 @@ deployments for several reasons:
    MediaGoblin application itself, this simplifies management and
    support better workload distribution.
 
-3. ... additional reason here. ....
+3. If your user submits something complex and it needs to process,
+   that's extra time your user has to sit around waiting when they
+   could get back immediately to doing things on the site.
+   Furthermore, if that processing step takes a long time, as it
+   certainly will for video, your user won't just be left waiting,
+   their connection will probably time out.
+
+Basically, if you're doing anything other than trivial images for a
+small set of users (or something similarly trivial, like ascii art),
+you want to switch over to doing a separate celery process.
 
 Build an :ref:`init script <init-script>` around the following
 command.
