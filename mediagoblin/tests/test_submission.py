@@ -171,7 +171,7 @@ class TestSubmission:
             request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                            # No work: user=media.uploader().username,
                            user=self.test_user['username'],
-                           media=media._id),
+                           media=media.slug),
             # no value means no confirm
             {})
 
@@ -191,7 +191,7 @@ class TestSubmission:
             request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                            # No work: user=media.uploader().username,
                            user=self.test_user['username'],
-                           media=media._id),
+                           media=media.slug),
             {'confirm': 'y'})
 
         response.follow()
