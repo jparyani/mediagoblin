@@ -23,7 +23,7 @@
 
   <form action="{{ request.urlgen('mediagoblin.user_pages.media_confirm_delete',
 		                  user=media.get_uploader().username,
-				  media=media.slug) }}"
+				  media=media._id) }}"
         method="POST" enctype="multipart/form-data">
     <div class="grid_8 prefix_1 suffix_1 edit_box form_box">
       <h1>
