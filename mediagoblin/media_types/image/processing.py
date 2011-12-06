@@ -17,15 +17,10 @@
 import Image
 import os
 
-from celery.task import Task
-from celery import registry
-
-from mediagoblin.db.util import ObjectId
 from mediagoblin import mg_globals as mgg
 
-from mediagoblin.processing import BaseProcessingFail, \
-    mark_entry_failed, BadMediaFail, create_pub_filepath, THUMB_SIZE, \
-    MEDIUM_SIZE
+from mediagoblin.processing import BadMediaFail, \
+    create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE
 
 ################################
 # Media processing initial steps

@@ -30,7 +30,7 @@ class InvalidFileType(Exception):
 
 def get_media_types():
     """
-    Generator that returns the available media types
+    Generator, yields the available media types
     """
     for media_type in mg_globals.app_config['media_types']:
         yield media_type
@@ -38,7 +38,7 @@ def get_media_types():
 
 def get_media_managers():
     '''
-    Generator that returns all available media managers
+    Generator, yields all enabled media managers
     '''
     for media_type in get_media_types():
         __import__(media_type)
@@ -46,20 +46,35 @@ def get_media_managers():
         yield media_type, sys.modules[media_type].MEDIA_MANAGER
 
 
-def get_media_manager(_media_type = None):
+def get_media_manager(_media_type):
+    '''
+    Get the MEDIA_MANAGER based on a media type string
+
+    Example::
+        get_media_type('mediagoblin.media_types.image')
+    '''
+    if not _media_type:
+        return False
+
     for media_type, manager in get_media_managers():
         if media_type in _media_type:
             return manager
 
 
 def get_media_type_and_manager(filename):
+    '''
+    Get the media type and manager based on a filename
+    '''
     for media_type, manager in get_media_managers():
         if filename.find('.') > 0:
+            # Get the file extension
             ext = os.path.splitext(filename)[1].lower()
         else:
             raise InvalidFileType(
                 _('Could not find any file extension in "{filename}"').format(
                     filename=filename))
 
+        # Omit the dot from the extension and match it against
+        # the media manager
         if ext[1:] in manager['accepted_extensions']:
             return media_type, manager

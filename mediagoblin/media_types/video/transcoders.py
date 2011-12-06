@@ -74,14 +74,14 @@ class VideoThumbnailer:
 
     buffer_probes = {}
 
-    errors = []
-
     def __init__(self, source_path, dest_path):
         '''
         Set up playbin pipeline in order to get video properties.
 
         Initializes and runs the gobject.MainLoop()
         '''
+        self.errors = []
+
         self.source_path = source_path
         self.dest_path = dest_path
 
