@@ -55,12 +55,8 @@
         <p>{{ media.description_html }}</p>
       {% endautoescape %}
       <p class="media_uploader">
-        {% trans date=media.created.strftime("%Y-%m-%d"),
-                 user_url=request.urlgen(
-                   'mediagoblin.user_pages.user_home',
-                   user=media.get_uploader().username),
-                 username=media.get_uploader().username -%}
-          By <a href="{{ user_url }}">{{ username }}</a> on {{ date }}
+        {% trans date=media.created.strftime("%Y-%m-%d") -%}
+          {{ date }}
         {%- endtrans %}
       </p>
       <h3></h3>
@@ -114,6 +110,13 @@
     {% endif %}
 
     <div class="grid_5 omega">
+      {% trans user_url=request.urlgen(
+                   'mediagoblin.user_pages.user_home',
+                   user=media.get_uploader().username),
+                 username=media.get_uploader().username -%}
+      <p>❖ Browsing media by <a href="{{ user_url }}">{{ username }}</a></p>
+      {%- endtrans %}
+      
       {% include "mediagoblin/utils/prev_next.html" %}
 
       {% if media['uploader'] == request.user._id or 
