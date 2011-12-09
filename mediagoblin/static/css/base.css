@@ -191,15 +191,12 @@ text-align: center;
   float: right;
 }
 
-textarea {
-  border: none;
-  background-color: #f1f1f1;
-  padding: 3px;
-}
-
 textarea#comment_content {
   width: 634px;
   height: 90px;
+  border: none;
+  background-color: #f1f1f1;
+  padding: 3px;
 }
 
 /* forms */
