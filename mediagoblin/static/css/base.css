@@ -117,7 +117,7 @@ a.mediagoblin_logo{
 
 /* common website elements */
 
-.button_action, .button_action_highlight{
+.button_action, .button_action_highlight {
   color: #c3c3c3;
   background-color: #363636;
   border: 1px solid;
@@ -128,15 +128,15 @@ a.mediagoblin_logo{
   text-decoration: none;
   font-style: normal;
   font-weight: bold;
-  font-size: 1em;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.button_action_highlight{
+.button_action_highlight {
   background-color: #86D4B1;
   border-color: #A2DEC3 #6CAA8E #5C9179;
   color: #283F35;
 }
-
 
 .button_form, .cancel_link {
   height: 32px;
@@ -171,20 +171,35 @@ a.mediagoblin_logo{
   background-image:         linear-gradient(top, #D2D2D2, #aaa);
 }
 
-.pagination{
+.pagination {
 text-align: center;
 }
 
-.pagination_arrow{
+.pagination_arrow {
   margin: 5px;
 }
 
-.empty_space{
+.empty_space {
   background-image: url("../images/empty_back.png");
   font-style: italic;
   text-align: center;
   height: 160px;
   padding-top: 70px;
+}
+
+.right_align {
+  float: right;
+}
+
+textarea {
+  border: none;
+  background-color: #f1f1f1;
+  padding: 3px;
+}
+
+textarea#comment_content {
+  width: 634px;
+  height: 90px;
 }
 
 /* forms */
