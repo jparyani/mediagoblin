@@ -17,12 +17,12 @@
 #}
 
 {% block tags_content -%}
-  <p>{% trans %}Tagged with{% endtrans %}
+  <p>{% trans %}View more media tagged with{% endtrans %}
     {% for tag in media.tags %}
       {% if loop.last %}
         {# the 'and' should only appear if there is more than one tag #}
         {% if media.tags|length > 1 %}
-          {% trans %}and{% endtrans %}
+          {% trans %}or{% endtrans %}
         {% endif %}
         <a href="{{ request.urlgen(
                           'mediagoblin.listings.tags_listing',
