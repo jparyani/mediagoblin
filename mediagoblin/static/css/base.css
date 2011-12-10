@@ -96,6 +96,7 @@ input, textarea {
 a.mediagoblin_logo{
   color: #fff;
   font-weight: bold;
+  margin-right: 8px;
 }
 
 .mediagoblin_footer {
@@ -123,7 +124,6 @@ a.mediagoblin_logo{
   border: 1px solid;
   border-color: #464646 #2B2B2B #252525;
   border-radius: 4px;
-  margin: 8px;
   padding: 3px 8px;
   text-decoration: none;
   font-style: normal;
@@ -285,24 +285,28 @@ textarea#comment_content {
 
 /* media detail */
 
-h2.media_title{
+h2.media_title {
   margin-bottom: 0px;
 }
 
-p.media_uploader{
+p.media_specs {
   font-size: 0.9em;
+  border-top: 1px solid #222;
+  border-bottom: 1px solid #222;
+  padding: 10px 0px;
+  color: #888;
 }
 
 /* icons */
 
-img.media_icon{
+img.media_icon {
   margin: 0 4px;
   vertical-align: sub;
 }
 
 /* navigation */
 
-.navigation_button{
+.navigation_button {
   width: 135px;
   display: block;
   float: left;
@@ -317,7 +321,7 @@ img.media_icon{
   margin: 0 0 20px
 }
 
-.navigation_left{
+.navigation_left {
   margin-right: 6px;
 }
 
