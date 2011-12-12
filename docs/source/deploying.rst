@@ -196,6 +196,9 @@ this ``nginx.conf`` file should be modeled on the following: ::
       # This is the section you should read
       #####################################
 
+      # Change this to update the upload size limit for your users
+      client_max_body_size 8m;
+
       server_name mediagoblin.example.org www.mediagoblin.example.org;
       access_log /var/log/nginx/mediagoblin.example.access.log;
       error_log /var/log/nginx/mediagoblin.example.error.log;
