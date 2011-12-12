@@ -16,6 +16,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#
+# This runs Mediagoblin using Paste with Celery set to always eager mode.
+# 
+
 if [ "$1" = "-h" ]
 then
     echo "$0 [-h] [-c paste.ini] [ARGS_to_paster ...]"
