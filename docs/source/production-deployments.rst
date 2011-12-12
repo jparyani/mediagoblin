@@ -4,8 +4,7 @@ Considerations for Production Deployments
 
 This document contains a number of suggestions for deploying
 MediaGoblin in actual production environments. Consider
-":doc:`deploying`" for a basic overview of how to deploy Media
-Goblin.
+":doc:`deploying`" for a basic overview of how to deploy MediaGoblin.
 
 Deploy with Paste
 -----------------
@@ -17,11 +16,11 @@ process.
 
 Use the following command as the basis for such a script: ::
 
-       CELERY_ALWAYS_EAGER=true \
-        /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
-        /srv/mediagoblin.example.org/mediagoblin/paste.ini \
-        --pid-file=/var/run/mediagoblin.pid \
-        --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543 \
+    CELERY_ALWAYS_EAGER=true \
+     /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
+     /srv/mediagoblin.example.org/mediagoblin/paste.ini \
+     --pid-file=/var/run/mediagoblin.pid \
+     --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543
 
 The above configuration places MediaGoblin in "always eager" mode
 with Celery, this means that submissions of content will be processed
@@ -31,11 +30,11 @@ the user will be able to immediately return to the MediaGoblin site
 while processing is ongoing. In these cases, use the following command
 as the basis for your script: ::
 
-       CELERY_ALWAYS_EAGER=false \
-        /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
-        /srv/mediagoblin.example.org/mediagoblin/paste.ini \
-        --pid-file=/var/run/mediagoblin.pid \
-        --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543 \
+    CELERY_ALWAYS_EAGER=false \
+     /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
+     /srv/mediagoblin.example.org/mediagoblin/paste.ini \
+     --pid-file=/var/run/mediagoblin.pid \
+     --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543
 
 Separate Celery
 ---------------
@@ -57,9 +56,9 @@ such as "ASCII art" or icon sharing, you will need to run ``celeryd``
 as a separate process.
 
 Build an :ref:`init script <init-script>` around the following
-command.
+command::
 
-      CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery ./bin/celeryd
+    CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery ./bin/celeryd
 
 Modify your existing MediaGoblin and application init scripts, if
 necessary, to prevent them from starting their own ``celeryd``
@@ -77,6 +76,6 @@ distribution/operating system. In the future, MediaGoblin will provide
 example scripts as examples.
 
 .. TODO insert init script here
-.. TODO are additional concernts ?
+.. TODO are additional concerns ?
    .. Other Concerns
    .. --------------
