@@ -41,6 +41,8 @@ def process_video(entry):
     and attaches callbacks to that child process, hopefully, the
     entry-complete callback will be called when the video is done.
     """
+    video_config = mgg.global_config['media_type:mediagoblin.media_types.video']
+
     workbench = mgg.workbench_manager.create_workbench()
 
     queued_filepath = entry['queued_media_file']
@@ -94,25 +96,24 @@ def process_video(entry):
 
         entry['media_files']['thumb'] = thumbnail_filepath
 
+    if video_config['keep_original']:
+        # Push original file to public storage
+        queued_file = file(queued_filename, 'rb')
 
-    # Push original file to public storage
-    queued_file = file(queued_filename, 'rb')
+        with queued_file:
+            original_filepath = create_pub_filepath(
+                entry,
+                queued_filepath[-1])
 
-    with queued_file:
-        original_filepath = create_pub_filepath(
-            entry,
-            queued_filepath[-1])
+            with mgg.public_store.get_file(original_filepath, 'wb') as \
+                    original_file:
+                _log.debug('Saving original...')
+                original_file.write(queued_file.read())
+                _log.debug('Saved original')
 
-        with mgg.public_store.get_file(original_filepath, 'wb') as \
-                original_file:
-            _log.debug('Saving original...')
-            original_file.write(queued_file.read())
-            _log.debug('Saved original')
-
-            entry['media_files']['original'] = original_filepath
+                entry['media_files']['original'] = original_filepath
 
     mgg.queue_store.delete_file(queued_filepath)
-
 
     # Save the MediaEntry
     entry.save()
