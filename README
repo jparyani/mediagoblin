@@ -8,19 +8,18 @@ What is GNU MediaGoblin?
 * Initially, a place to store all your photos that’s as awesome as, if
   not more awesome than, existing network services (Flickr, SmugMug,
   Picasa, etc)
-* Later, a place for all sorts of media, such as video, music, etc hosting.
-* Federated with OStatus!
 * Customizable!
 * A place for people to collaborate and show off original and derived
-  creations.  Free, as in freedom.  We’re a GNU project in the making,
-  afterall.
+  creations.  Free, as in freedom.  We’re a GNU project after all.
+* Later, a place for all sorts of media, such as video, music, etc hosting.
+* Later, federated with OStatus!
 
 
 Is it ready for me to use?
 ==========================
 
-Not yet!  We're working on it and we hope to have a usable system by
-September / October 2011.
+Yes!  But with caveats.  The software is usable and there are instances
+running, but it's still in its early stages.
 
 
 Can I help/hang out/participate/whisper sweet nothings in your ear?
@@ -33,9 +32,9 @@ hang out, see `our Join page <http://mediagoblin.org/join/>`_
 Where is the documentation?
 ===========================
 
-The beginnings of a user manual is located in the ``docs/`` directory
-in HTML, Texinfo, and source (Restructured Text) forms.  It's also
-available online at http://docs.mediagoblin.org/ in HTML form.
+The beginnings of a site administration manual is located in the ``docs/``
+directory in HTML, Texinfo, and source (Restructured Text) forms.  It's
+also available online at http://docs.mediagoblin.org/ in HTML form.
 
 Contributor/developer documentation as well as documentation on the
 project processes and infrastructure is located on 
