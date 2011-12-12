@@ -16,6 +16,7 @@ Table of Contents:
    deploying
    production-deployments
    configuration
+   media-types
    help
    theming
    codebase
