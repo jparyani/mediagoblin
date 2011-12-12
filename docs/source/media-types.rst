@@ -15,13 +15,13 @@ Video
 
 To enable video, first install gstreamer and the python-gstreamer
 bindings (as well as whatever gstremaer extensions you want,
-good/bad/ugly).  On Debianoid systems:
+good/bad/ugly).  On Debianoid systems::
 
     sudo apt-get install python-gst0.10
 
-Next, modify (and possibly copy over from mediagoblin.ini) your
-mediagoblin_local.ini.  Uncomment this line in the [mediagoblin]
-section:
+Next, modify (and possibly copy over from ``mediagoblin.ini``) your
+``mediagoblin_local.ini``.  Uncomment this line in the ``[mediagoblin]``
+section::
 
     media_types = mediagoblin.media_types.image, mediagoblin.media_types.video
 
