@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
 "POT-Creation-Date: 2011-12-04 10:24-0600\n"
-"PO-Revision-Date: 2011-12-04 16:49+0000\n"
+"PO-Revision-Date: 2011-12-05 23:20+0000\n"
 "Last-Translator: manolinux <mu@member.fsf.org>\n"
 "Language-Team: Spanish (Castilian) (http://www.transifex.net/projects/p/mediagoblin/team/es/)\n"
 "MIME-Version: 1.0\n"
@@ -83,12 +83,12 @@ msgstr ""
 #: mediagoblin/auth/views.py:203
 msgid "You must be logged in so we know who to send the email to!"
 msgstr ""
-"Debes iniciar sesión para que podamos saber a quién le enviamos el correo "
+"¡Debes iniciar sesión para que podamos saber a quién le enviamos el correo "
 "electrónico!"
 
 #: mediagoblin/auth/views.py:211
 msgid "You've already verified your email address!"
-msgstr "Ya haz verificado tu dirección de email!"
+msgstr "¡Ya has verificado tu dirección de correo!"
 
 #: mediagoblin/auth/views.py:224
 msgid "Resent your verification email."
@@ -113,7 +113,7 @@ msgstr "Etiquetas"
 
 #: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:34
 msgid "Seperate tags by commas."
-msgstr "Separar etiquetas por comas."
+msgstr "Separa las etiquetas con comas."
 
 #: mediagoblin/edit/forms.py:33
 msgid "Slug"
@@ -164,7 +164,7 @@ msgstr "Contraseña incorrecta"
 
 #: mediagoblin/edit/views.py:192
 msgid "Profile edited!"
-msgstr "Perfil editado!"
+msgstr "¡Perfil editado!"
 
 #: mediagoblin/media_types/__init__.py:65
 msgid "Could not find any file extension in \"{filename}\""
@@ -184,7 +184,7 @@ msgstr "Debes proporcionar un archivo."
 
 #: mediagoblin/submit/views.py:127
 msgid "Woohoo! Submitted!"
-msgstr "¡Woohoo! ¡Enviado!"
+msgstr "¡Yujú! ¡Enviado!"
 
 #: mediagoblin/submit/views.py:133
 msgid "Invalid file type."
@@ -192,7 +192,7 @@ msgstr "Tipo de archivo inválido."
 
 #: mediagoblin/templates/mediagoblin/404.html:21
 msgid "Oops!"
-msgstr "Ups!"
+msgstr "¡Ups!"
 
 #: mediagoblin/templates/mediagoblin/404.html:24
 msgid "There doesn't seem to be a page at this address. Sorry!"
@@ -220,7 +220,7 @@ msgstr "Enviar contenido"
 
 #: mediagoblin/templates/mediagoblin/base.html:65
 msgid "Verify your email!"
-msgstr "Verifica tu email!"
+msgstr "¡Verifica tu email!"
 
 #: mediagoblin/templates/mediagoblin/base.html:72
 msgid "log out"
@@ -246,7 +246,7 @@ msgstr "Explorar"
 
 #: mediagoblin/templates/mediagoblin/root.html:27
 msgid "Hi there, welcome to this MediaGoblin site!"
-msgstr "Hola, bienvenido a este sitio de MediaGoblin!"
+msgstr "Hola, ¡bienvenido a este sitio de MediaGoblin!"
 
 #: mediagoblin/templates/mediagoblin/root.html:28
 msgid ""
@@ -267,7 +267,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid "Don't have one yet? It's easy!"
-msgstr "Aún no tienes una? Es fácil!"
+msgstr "¿Aún no tienes una? ¡Es fácil!"
 
 #: mediagoblin/templates/mediagoblin/root.html:32
 #, python-format
@@ -325,10 +325,13 @@ msgid ""
 "If you think this is an error, just ignore this email and continue being\n"
 "a happy goblin!"
 msgstr ""
-"Hola %(username)s , para cambiar su contraseña de GNU MediaGoblin, abra la "
-"siguiente URL en su navegador: %(verification_url)s  Si usted piensa que "
-"esto es un error, simplemente ignore este mensaje y siga siendo un duende "
-"feliz!"
+"Hola %(username)s,\n"
+"\n"
+"Para cambiar tu contraseña de GNU MediaGoblin, abre la siguiente URL en un navegador:\n"
+"\n"
+"%(verification_url)s \n"
+"\n"
+"Si piensas que esto es un error, simplemente ignora este mensaje y sigue siendo un trasgo feliz."
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:30
 msgid "Logging in failed!"
@@ -373,7 +376,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/edit/edit.html:29
 #, python-format
 msgid "Editing %(media_title)s"
-msgstr "Edición %(media_title)s "
+msgstr "Editando %(media_title)s "
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:36
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
@@ -442,7 +445,7 @@ msgstr "Borrar"
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
 msgid "Really delete %(title)s?"
-msgstr "Realmente deseas eliminar %(title)s ?"
+msgstr "¿Realmente deseas eliminar %(title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:50
 msgid "Delete Permanently"
@@ -488,7 +491,7 @@ msgstr "Es necesario un correo electrónico de verificación"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:53
 msgid "Almost done! Your account still needs to be activated."
-msgstr "Casi terminas! Solo falta activar la cuenta."
+msgstr "¡Casi hemos terminado! Solo falta activar la cuenta."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:58
 msgid ""

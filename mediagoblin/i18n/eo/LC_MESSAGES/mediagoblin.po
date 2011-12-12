@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
 "POT-Creation-Date: 2011-12-04 10:24-0600\n"
-"PO-Revision-Date: 2011-12-04 19:15+0000\n"
+"PO-Revision-Date: 2011-12-06 20:04+0000\n"
 "Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -252,7 +252,7 @@ msgid ""
 "To add your own media, place comments, save your favourites and more, you "
 "can log in with your MediaGoblin account."
 msgstr ""
-"Por aldoni viajn proprajn dosierojn, fari liston de plej plaĉantaj por vi, "
+"Por aldoni viajn proprajn dosierojn, fari al vi liston de la plej plaĉaj, "
 "ks, vi povas ensaluti je via MediaGoblina konto."
 
 #: mediagoblin/templates/mediagoblin/root.html:31
@@ -272,7 +272,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:44
 msgid "Most recent media"
-msgstr "Plej nove aldonitaj dosieroj"
+msgstr "Laste aldonitaj dosieroj"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:29
 msgid "Enter your new password"

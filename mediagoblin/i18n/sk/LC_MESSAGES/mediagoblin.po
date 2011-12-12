@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
 "POT-Creation-Date: 2011-12-04 10:24-0600\n"
-"PO-Revision-Date: 2011-12-04 16:23+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2011-12-10 23:09+0000\n"
+"Last-Translator: martin <zatroch.martin@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -57,7 +57,7 @@ msgstr "Prepáč, rovnaké prihlasovacie meno už niekto používa."
 
 #: mediagoblin/auth/views.py:77
 msgid "Sorry, a user with that email address already exists."
-msgstr ""
+msgstr "Prepáč, používateľ s rovnakou e-mailovou adresou už existuje."
 
 #: mediagoblin/auth/views.py:179
 msgid ""
@@ -73,11 +73,11 @@ msgstr "Nesprávny overovací kľúč alebo používateľské ID"
 
 #: mediagoblin/auth/views.py:203
 msgid "You must be logged in so we know who to send the email to!"
-msgstr ""
+msgstr "Aby sme ti mohli zaslať e-mail, je potrebné byť prihláseným!"
 
 #: mediagoblin/auth/views.py:211
 msgid "You've already verified your email address!"
-msgstr ""
+msgstr "Tvoja e-mailová adresa už bola raz overená!"
 
 #: mediagoblin/auth/views.py:224
 msgid "Resent your verification email."
@@ -101,7 +101,7 @@ msgstr "Štítky"
 
 #: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:34
 msgid "Seperate tags by commas."
-msgstr ""
+msgstr "Oddeľ štítky pomocou čiarky."
 
 #: mediagoblin/edit/forms.py:33
 msgid "Slug"
@@ -126,11 +126,11 @@ msgstr "Webstránka"
 
 #: mediagoblin/edit/forms.py:49
 msgid "Old password"
-msgstr ""
+msgstr "Staré heslo"
 
 #: mediagoblin/edit/forms.py:52
 msgid "New Password"
-msgstr ""
+msgstr "Nové heslo"
 
 #: mediagoblin/edit/views.py:65
 msgid "An entry with that slug already exists for this user."
@@ -146,15 +146,15 @@ msgstr "Upravuješ používateľský profil. Pristupuj opatrne."
 
 #: mediagoblin/edit/views.py:171
 msgid "Wrong password"
-msgstr ""
+msgstr "Nesprávne heslo"
 
 #: mediagoblin/edit/views.py:192
 msgid "Profile edited!"
-msgstr ""
+msgstr "Profil upravený!"
 
 #: mediagoblin/media_types/__init__.py:65
 msgid "Could not find any file extension in \"{filename}\""
-msgstr ""
+msgstr "Nebolo možné nájsť žiadnu príponu v súbore \"{filename}\""
 
 #: mediagoblin/submit/forms.py:25
 msgid "File"
@@ -174,7 +174,7 @@ msgstr "Juchú! Úspešne vložené!"
 
 #: mediagoblin/submit/views.py:133
 msgid "Invalid file type."
-msgstr ""
+msgstr "Nesprávny typ súboru."
 
 #: mediagoblin/templates/mediagoblin/404.html:21
 msgid "Oops!"
@@ -206,11 +206,11 @@ msgstr "Vložiť výtvor"
 
 #: mediagoblin/templates/mediagoblin/base.html:65
 msgid "Verify your email!"
-msgstr ""
+msgstr "Over si e-mail!"
 
 #: mediagoblin/templates/mediagoblin/base.html:72
 msgid "log out"
-msgstr ""
+msgstr "odhlásenie"
 
 #: mediagoblin/templates/mediagoblin/base.html:75
 #: mediagoblin/templates/mediagoblin/auth/login.html:27
@@ -232,23 +232,27 @@ msgstr "Preskúmať"
 
 #: mediagoblin/templates/mediagoblin/root.html:27
 msgid "Hi there, welcome to this MediaGoblin site!"
-msgstr ""
+msgstr "Ahoj, vitaj na tejto MediaGoblin stránke!"
 
 #: mediagoblin/templates/mediagoblin/root.html:28
 msgid ""
 "This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
 "extraordinarily great piece of media hosting software."
 msgstr ""
+"Táto stránka používa <a href=\"http://mediagoblin.org\">MediaGoblin</a>, "
+"výnimočne skvelý kus softvéru na hostovanie médií."
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid ""
 "To add your own media, place comments, save your favourites and more, you "
 "can log in with your MediaGoblin account."
 msgstr ""
+"Pre pridanie vlastných výtvorov, vloženie komentárov, uloženie svojich "
+"obľúbených položiek a viac, sa musíš prihlásiť so svojim MediaGoblin účtom."
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid "Don't have one yet? It's easy!"
-msgstr ""
+msgstr "Ešte žiaden nemáš? Je to jednoduché!"
 
 #: mediagoblin/templates/mediagoblin/root.html:32
 #, python-format
@@ -257,6 +261,9 @@ msgid ""
 "          or\n"
 "          <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr ""
+"&lt;a class=\"header_submit_highlight\" href=\"%(register_url)s\"&gt;Vytvoriť bezplatný účet&lt;/a&gt;\n"
+"          alebo\n"
+"          &lt;a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\"&gt;Sprevádzkovať MediaGoblin na vlastnom serveri&lt;/a&gt;"
 
 #: mediagoblin/templates/mediagoblin/root.html:44
 msgid "Most recent media"
@@ -273,11 +280,11 @@ msgstr "Vložiť"
 
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
 msgid "Recover password"
-msgstr ""
+msgstr "Obnoviť heslo"
 
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:30
 msgid "Send instructions"
-msgstr ""
+msgstr "Zaslať inštrukcie"
 
 #: mediagoblin/templates/mediagoblin/auth/fp_changed_success.html:22
 msgid "Your password has been changed. Try to log in now."
@@ -377,11 +384,11 @@ msgstr "Úprava profilu, ktorý vlastní %(username)s"
 #: mediagoblin/templates/mediagoblin/listings/tag.html:35
 #, python-format
 msgid "Media tagged with: %(tag_name)s"
-msgstr ""
+msgstr "Výtvory označené s: %(tag_name)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:19
 msgid "Original"
-msgstr ""
+msgstr "Originál"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Submit yer media"
@@ -390,7 +397,7 @@ msgstr "Vlož svoj výtvor"
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
 #, python-format
 msgid "%(username)s's media"
-msgstr ""
+msgstr "Výtvory používateľa %(username)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:37
 #, python-format
@@ -400,27 +407,27 @@ msgstr "<a href=\"%(user_url)s\">Výtvory, ktoré vlastní %(username)s</a>"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:57
 #, python-format
 msgid "By <a href=\"%(user_url)s\">%(username)s</a> on %(date)s"
-msgstr ""
+msgstr "Od <a href=\"%(user_url)s\">%(username)s</a> v čase %(date)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:67
 msgid "Post a comment"
-msgstr ""
+msgstr "Zaslať komentár"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:85
 msgid "at"
-msgstr ""
+msgstr "o"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:102
 msgid "Post comment!"
-msgstr ""
+msgstr "Zaslať komentár!"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:124
 msgid "Edit"
-msgstr ""
+msgstr "Upraviť"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:130
 msgid "Delete"
-msgstr ""
+msgstr "Odstrániť"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -552,15 +559,15 @@ msgstr "Staršie"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:50
 msgid "Go to page:"
-msgstr ""
+msgstr "Ísť na stránku:"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
-msgstr ""
+msgstr "Označené s"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:25
 msgid "and"
-msgstr ""
+msgstr "a"
 
 #: mediagoblin/user_pages/forms.py:24
 msgid "Comment"
@@ -572,19 +579,19 @@ msgstr "Jednoznačne to chcem odstrániť"
 
 #: mediagoblin/user_pages/views.py:155
 msgid "Oops, your comment was empty."
-msgstr ""
+msgstr "Ajaj, tvoj komentár bol prázdny."
 
 #: mediagoblin/user_pages/views.py:161
 msgid "Your comment has been posted!"
-msgstr ""
+msgstr "Tvoj komentár bol zaslaný!"
 
 #: mediagoblin/user_pages/views.py:183
 msgid "You deleted the media."
-msgstr ""
+msgstr "Výtvor bol odstránený tebou."
 
 #: mediagoblin/user_pages/views.py:190
 msgid "The media was not deleted because you didn't check that you were sure."
-msgstr ""
+msgstr "Výtvor nebol odstránený, nakoľko chýbala tvoja konfirmácia."
 
 #: mediagoblin/user_pages/views.py:198
 msgid "You are about to delete another user's media. Proceed with caution."
