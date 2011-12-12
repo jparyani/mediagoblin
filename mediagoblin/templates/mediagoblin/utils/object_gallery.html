@@ -33,9 +33,9 @@
               <img src="{{ request.app.public_store.file_url(
                              entry['media_files']['thumb']) }}" />
             </a>
-            {% if entry['title'] %}
+            {% if entry.title %}
               <br />
-              <a href="{{ entry_url }}">{{ entry['title'] }}</a>
+              <a href="{{ entry_url }}">{{ entry.title }}</a>
             {% endif %}
           </td>
         {% endfor %}

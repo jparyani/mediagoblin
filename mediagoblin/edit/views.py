@@ -43,9 +43,9 @@ def edit_media(request, media):
         return exc.HTTPForbidden()
 
     defaults = dict(
-        title=media['title'],
-        slug=media['slug'],
-        description=media['description'],
+        title=media.title,
+        slug=media.slug,
+        description=media.description,
         tags=media_tags_as_string(media['tags']))
 
     form = forms.EditForm(
@@ -57,29 +57,29 @@ def edit_media(request, media):
         # and userid.
         existing_user_slug_entries = request.db.MediaEntry.find(
             {'slug': request.POST['slug'],
-             'uploader': media['uploader'],
+             'uploader': media.uploader,
              '_id': {'$ne': media._id}}).count()
 
         if existing_user_slug_entries:
             form.slug.errors.append(
                 _(u'An entry with that slug already exists for this user.'))
         else:
-            media['title'] = unicode(request.POST['title'])
-            media['description'] = unicode(request.POST.get('description'))
+            media.title = unicode(request.POST['title'])
+            media.description = unicode(request.POST.get('description'))
             media['tags'] = convert_to_tag_list_of_dicts(
                                    request.POST.get('tags'))
 
-            media['description_html'] = cleaned_markdown_conversion(
-                media['description'])
+            media.description_html = cleaned_markdown_conversion(
+                media.description)
 
-            media['slug'] = unicode(request.POST['slug'])
+            media.slug = unicode(request.POST['slug'])
             media.save()
 
             return exc.HTTPFound(
                 location=media.url_for_self(request.urlgen))
 
-    if request.user['is_admin'] \
-            and media['uploader'] != request.user._id \
+    if request.user.is_admin \
+            and media.uploader != request.user._id \
             and request.method != 'POST':
         messages.add_message(
             request, messages.WARNING,
@@ -147,7 +147,7 @@ def edit_attachments(request, media):
 def edit_profile(request):
     # admins may edit any user profile given a username in the querystring
     edit_username = request.GET.get('username')
-    if request.user['is_admin'] and request.user['username'] != edit_username:
+    if request.user.is_admin and request.user.username != edit_username:
         user = request.db.User.find_one({'username': edit_username})
         # No need to warn again if admin just submitted an edited profile
         if request.method != 'POST':
@@ -176,14 +176,14 @@ def edit_profile(request):
                 {'user': user,
                  'form': form})
 
-        user['url'] = unicode(request.POST['url'])
-        user['bio'] = unicode(request.POST['bio'])
+        user.url = unicode(request.POST['url'])
+        user.bio = unicode(request.POST['bio'])
 
         if password_matches:
             user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['new_password'])
 
-        user['bio_html'] = cleaned_markdown_conversion(user['bio'])
+        user.bio_html = cleaned_markdown_conversion(user['bio'])
 
         user.save()
 

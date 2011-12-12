@@ -50,11 +50,11 @@ def adduser(args):
     else:
         # Create the user
         entry = db.User()
-        entry['username'] = unicode(args.username.lower())
-        entry['email'] = unicode(args.email)
-        entry['pw_hash'] = auth_lib.bcrypt_gen_password_hash(args.password)
-        entry['status'] = u'active'
-        entry['email_verified'] = True
+        entry.username = unicode(args.username.lower())
+        entry.email = unicode(args.email)
+        entry.pw_hash = auth_lib.bcrypt_gen_password_hash(args.password)
+        entry.status = u'active'
+        entry.email_verified = True
         entry.save(validate=True)
 
         print "User created (and email marked as verified)"
@@ -73,7 +73,7 @@ def makeadmin(args):
 
     user = db.User.one({'username': unicode(args.username.lower())})
     if user:
-        user['is_admin'] = True
+        user.is_admin = True
         user.save()
         print 'The user is now Admin'
     else:
@@ -96,7 +96,7 @@ def changepw(args):
 
     user = db.User.one({'username': unicode(args.username.lower())})
     if user:
-        user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(args.password)
+        user.pw_hash = auth_lib.bcrypt_gen_password_hash(args.password)
         user.save()
         print 'Password successfully changed'
     else:

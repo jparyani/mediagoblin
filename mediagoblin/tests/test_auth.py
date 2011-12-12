@@ -162,8 +162,8 @@ def test_register_views(test_app):
     new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
     assert new_user
-    assert new_user['status'] == u'needs_email_verification'
-    assert new_user['email_verified'] == False
+    assert new_user.status == u'needs_email_verification'
+    assert new_user.email_verified == False
 
     ## Make sure user is logged in
     request = template.TEMPLATE_TEST_CONTEXT[
@@ -187,7 +187,7 @@ def test_register_views(test_app):
     assert parsed_get_params['userid'] == [
         unicode(new_user._id)]
     assert parsed_get_params['token'] == [
-        new_user['verification_key']]
+        new_user.verification_key]
 
     ## Try verifying with bs verification key, shouldn't work
     template.clear_test_template_context()
@@ -202,8 +202,8 @@ def test_register_views(test_app):
     new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
     assert new_user
-    assert new_user['status'] == u'needs_email_verification'
-    assert new_user['email_verified'] == False
+    assert new_user.status == u'needs_email_verification'
+    assert new_user.email_verified == False
 
     ## Verify the email activation works
     template.clear_test_template_context()
@@ -216,8 +216,8 @@ def test_register_views(test_app):
     new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
     assert new_user
-    assert new_user['status'] == u'active'
-    assert new_user['email_verified'] == True
+    assert new_user.status == u'active'
+    assert new_user.email_verified == True
 
     # Uniqueness checks
     # -----------------
@@ -270,11 +270,11 @@ def test_register_views(test_app):
     # user should have matching parameters
     new_user = mg_globals.database.User.find_one({'username': 'happygirl'})
     assert parsed_get_params['userid'] == [unicode(new_user._id)]
-    assert parsed_get_params['token'] == [new_user['fp_verification_key']]
+    assert parsed_get_params['token'] == [new_user.fp_verification_key]
 
     ### The forgotten password token should be set to expire in ~ 10 days
     # A few ticks have expired so there are only 9 full days left...
-    assert (new_user['fp_token_expire'] - datetime.datetime.now()).days == 9
+    assert (new_user.fp_token_expire - datetime.datetime.now()).days == 9
 
     ## Try using a bs password-changing verification key, shouldn't work
     template.clear_test_template_context()
@@ -285,12 +285,12 @@ def test_register_views(test_app):
 
     ## Try using an expired token to change password, shouldn't work
     template.clear_test_template_context()
-    real_token_expiration = new_user['fp_token_expire']
-    new_user['fp_token_expire'] = datetime.datetime.now()
+    real_token_expiration = new_user.fp_token_expire
+    new_user.fp_token_expire = datetime.datetime.now()
     new_user.save()
     response = test_app.get("%s?%s" % (path, get_params), status=404)
     assert_equal(response.status, '404 Not Found')
-    new_user['fp_token_expire'] = real_token_expiration
+    new_user.fp_token_expire = real_token_expiration
     new_user.save()
 
     ## Verify step 1 of password-change works -- can see form to change password

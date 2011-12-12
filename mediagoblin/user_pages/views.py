@@ -40,7 +40,7 @@ def user_home(request, page):
             'username': request.matchdict['user']})
     if not user:
         return render_404(request)
-    elif user['status'] != u'active':
+    elif user.status != u'active':
         return render_to_response(
             request,
             'mediagoblin/user_pages/user.html',
@@ -59,7 +59,7 @@ def user_home(request, page):
 
     user_gallery_url = request.urlgen(
         'mediagoblin.user_pages.user_gallery',
-        user=user['username'])
+        user=user.username)
 
     return render_to_response(
         request,
@@ -122,7 +122,7 @@ def media_home(request, media, page, **kwargs):
 
     comment_form = user_forms.MediaCommentForm(request.POST)
 
-    media_template_name = get_media_manager(media['media_type'])['display_template']
+    media_template_name = get_media_manager(media.media_type)['display_template']
 
     return render_to_response(
         request,
@@ -173,7 +173,7 @@ def media_confirm_delete(request, media):
 
     if request.method == 'POST' and form.validate():
         if form.confirm.data is True:
-            username = media.get_uploader()['username']
+            username = media.get_uploader().username
 
             # Delete all files on the public storage
             delete_media_files(media)
@@ -191,7 +191,7 @@ def media_confirm_delete(request, media):
             return exc.HTTPFound(
                 location=media.url_for_self(request.urlgen))
 
-    if ((request.user[u'is_admin'] and
+    if ((request.user.is_admin and
          request.user._id != media.get_uploader()._id)):
         messages.add_message(
             request, messages.WARNING,
@@ -254,7 +254,7 @@ def processing_panel(request):
     # Make sure the user exists and is active
     if not user:
         return render_404(request)
-    elif user['status'] != u'active':
+    elif user.status != u'active':
         return render_to_response(
             request,
             'mediagoblin/user_pages/user.html',

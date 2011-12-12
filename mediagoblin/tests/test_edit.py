@@ -44,7 +44,7 @@ def test_change_password(test_app):
     # test_user has to be fetched again in order to have the current values
     test_user = mg_globals.database.User.one({'username': 'chris'})
 
-    assert bcrypt_check_password('123456', test_user['pw_hash'])
+    assert bcrypt_check_password('123456', test_user.pw_hash)
 
     # test that the password cannot be changed if the given old_password
     # is wrong
@@ -59,7 +59,7 @@ def test_change_password(test_app):
 
     test_user = mg_globals.database.User.one({'username': 'chris'})
 
-    assert not bcrypt_check_password('098765', test_user['pw_hash'])
+    assert not bcrypt_check_password('098765', test_user.pw_hash)
 
 
 @setup_fresh_app
@@ -76,8 +76,8 @@ def change_bio_url(test_app):
 
     test_user = mg_globals.database.User.one({'username': 'chris'})
 
-    assert test_user['bio'] == u'I love toast!'
-    assert test_user['url'] == u'http://dustycloud.org/'
+    assert test_user.bio == u'I love toast!'
+    assert test_user.url == u'http://dustycloud.org/'
 
     # test changing the bio and the URL inproperly
     too_long_bio = 150 * 'T' + 150 * 'o' + 150 * 'a' + 150 * 's' + 150* 't'

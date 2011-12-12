@@ -67,7 +67,7 @@ def _import_media(db, args):
     for entry in db.media_entries.find():
         for name, path in entry['media_files'].items():
             _log.info('Importing: {0} - {1}'.format(
-                    entry['title'],
+                    entry.title,
                     name))
 
             media_file = mg_globals.public_store.get_file(path, mode='wb')
@@ -209,7 +209,7 @@ def _export_media(db, args):
     for entry in db.media_entries.find():
         for name, path in entry['media_files'].items():
             _log.info(u'Exporting {0} - {1}'.format(
-                    entry['title'],
+                    entry.title,
                     name))
             try:
                 mc_file = media_cache.get_file(path, mode='wb')

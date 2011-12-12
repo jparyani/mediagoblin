@@ -80,9 +80,9 @@ def register(request):
         if extra_validation_passes:
             # Create the user
             user = request.db.User()
-            user['username'] = username
-            user['email'] = email
-            user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+            user.username = username
+            user.email = email
+            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
             user.save(validate=True)
 
@@ -98,7 +98,7 @@ def register(request):
             # message waiting for them to verify their email
             return redirect(
                 request, 'mediagoblin.user_pages.user_home',
-                user=user['username'])
+                user=user.username)
 
     return render_to_response(
         request,
@@ -166,10 +166,10 @@ def verify_email(request):
     user = request.db.User.find_one(
         {'_id': ObjectId(unicode(request.GET['userid']))})
 
-    if user and user['verification_key'] == unicode(request.GET['token']):
-        user[u'status'] = u'active'
-        user[u'email_verified'] = True
-        user[u'verification_key'] = None
+    if user and user.verification_key == unicode(request.GET['token']):
+        user.status = u'active'
+        user.email_verified = True
+        user.verification_key = None
 
         user.save()
 
@@ -186,7 +186,7 @@ def verify_email(request):
 
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
-        user=user['username'])
+        user=user.username)
 
 
 def resend_activation(request):
@@ -212,7 +212,7 @@ def resend_activation(request):
         
         return redirect(request, "mediagoblin.user_pages.user_home", user=request.user['username'])
 
-    request.user[u'verification_key'] = unicode(uuid.uuid4())
+    request.user.verification_key = unicode(uuid.uuid4())
     request.user.save()
     
     email_debug_message(request)
@@ -224,7 +224,7 @@ def resend_activation(request):
         _('Resent your verification email.'))
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
-        user=request.user['username'])
+        user=request.user.username)
 
 
 def forgot_password(request):
@@ -249,9 +249,9 @@ def forgot_password(request):
                 {'email': request.POST['username']})
 
         if user:
-            if user['email_verified'] and user['status'] == 'active':
-                user[u'fp_verification_key'] = unicode(uuid.uuid4())
-                user[u'fp_token_expire'] = datetime.datetime.now() + \
+            if user.email_verified and user.status == 'active':
+                user.fp_verification_key = unicode(uuid.uuid4())
+                user.fp_token_expire = datetime.datetime.now() + \
                                           datetime.timedelta(days=10)
                 user.save()
 
@@ -268,7 +268,7 @@ def forgot_password(request):
 
                 return redirect(
                     request, 'mediagoblin.user_pages.user_home',
-                    user=user['username'])
+                    user=user.username)
 
         # do not reveal whether or not there is a matching user
         return redirect(request, 'mediagoblin.auth.fp_email_sent')
@@ -301,18 +301,18 @@ def verify_forgot_password(request):
         return render_404(request)
 
     # check if we have a real user and correct token
-    if ((user and user['fp_verification_key'] and
-         user['fp_verification_key'] == unicode(formdata_token) and
-         datetime.datetime.now() < user['fp_token_expire']
-         and user['email_verified'] and user['status'] == 'active')):
+    if ((user and user.fp_verification_key and
+         user.fp_verification_key == unicode(formdata_token) and
+         datetime.datetime.now() < user.fp_token_expire
+         and user.email_verified and user.status == 'active')):
 
         cp_form = auth_forms.ChangePassForm(formdata_vars)
 
         if request.method == 'POST' and cp_form.validate():
-            user[u'pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
-            user[u'fp_verification_key'] = None
-            user[u'fp_token_expire'] = None
+            user.fp_verification_key = None
+            user.fp_token_expire = None
             user.save()
 
             return redirect(request, 'mediagoblin.auth.fp_changed_success')

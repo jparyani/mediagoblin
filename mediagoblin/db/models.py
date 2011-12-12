@@ -96,7 +96,7 @@ class User(Document):
         See if a user can login with this password
         """
         return auth_lib.bcrypt_check_password(
-            password, self['pw_hash'])
+            password, self.pw_hash)
 
 
 class MediaEntry(Document):
@@ -131,7 +131,7 @@ class MediaEntry(Document):
        For example, images might contain some EXIF data that's not appropriate
        to other formats.  You might store it like:
 
-         mediaentry['media_data']['exif'] = {
+         mediaentry.media_data['exif'] = {
              'manufacturer': 'CASIO',
              'model': 'QV-4000',
              'exposure_time': .659}
@@ -139,7 +139,7 @@ class MediaEntry(Document):
        Alternately for video you might store:
 
          # play length in seconds
-         mediaentry['media_data']['play_length'] = 340
+         mediaentry.media_data['play_length'] = 340
 
        ... so what's appropriate here really depends on the media type.
 
@@ -249,13 +249,13 @@ class MediaEntry(Document):
         pass
 
     def generate_slug(self):
-        self['slug'] = url.slugify(self['title'])
+        self.slug = url.slugify(self.title)
 
         duplicate = mg_globals.database.media_entries.find_one(
-            {'slug': self['slug']})
+            {'slug': self.slug})
 
         if duplicate:
-            self['slug'] = "%s-%s" % (self._id, self['slug'])
+            self.slug = "%s-%s" % (self._id, self.slug)
 
     def url_for_self(self, urlgen):
         """
@@ -268,12 +268,12 @@ class MediaEntry(Document):
         if self.get('slug'):
             return urlgen(
                 'mediagoblin.user_pages.media_home',
-                user=uploader['username'],
-                media=self['slug'])
+                user=uploader.username,
+                media=self.slug)
         else:
             return urlgen(
                 'mediagoblin.user_pages.media_home',
-                user=uploader['username'],
+                user=uploader.username,
                 media=unicode(self._id))
 
     def url_to_prev(self, urlgen):
@@ -281,30 +281,30 @@ class MediaEntry(Document):
         Provide a url to the previous entry from this user, if there is one
         """
         cursor = self.db.MediaEntry.find({'_id': {"$gt": self._id},
-                                          'uploader': self['uploader'],
+                                          'uploader': self.uploader,
                                           'state': 'processed'}).sort(
                                                     '_id', ASCENDING).limit(1)
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
-                          user=self.get_uploader()['username'],
-                          media=unicode(cursor[0]['slug']))
+                          user=self.get_uploader().username,
+                          media=unicode(cursor[0].slug))
 
     def url_to_next(self, urlgen):
         """
         Provide a url to the next entry from this user, if there is one
         """
         cursor = self.db.MediaEntry.find({'_id': {"$lt": self._id},
-                                          'uploader': self['uploader'],
+                                          'uploader': self.uploader,
                                           'state': 'processed'}).sort(
                                                     '_id', DESCENDING).limit(1)
 
         if cursor.count():
             return urlgen('mediagoblin.user_pages.media_home',
-                          user=self.get_uploader()['username'],
-                          media=unicode(cursor[0]['slug']))
+                          user=self.get_uploader().username,
+                          media=unicode(cursor[0].slug))
 
     def get_uploader(self):
-        return self.db.User.find_one({'_id': self['uploader']})
+        return self.db.User.find_one({'_id': self.uploader})
 
     def get_fail_exception(self):
         """

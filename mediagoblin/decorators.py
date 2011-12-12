@@ -40,7 +40,7 @@ def require_active_login(controller):
                 request.user.get('status') == u'needs_email_verification':
             return redirect(
                 request, 'mediagoblin.user_pages.user_home',
-                user=request.user['username'])
+                user=request.user.username)
         elif not request.user or request.user.get('status') != u'active':
             return exc.HTTPFound(
                 location="%s?next=%s" % (
@@ -59,7 +59,7 @@ def user_may_delete_media(controller):
     def wrapper(request, *args, **kwargs):
         uploader = request.db.MediaEntry.find_one(
             {'_id': ObjectId(request.matchdict['media'])}).get_uploader()
-        if not (request.user['is_admin'] or
+        if not (request.user.is_admin or
                 request.user._id == uploader._id):
             return exc.HTTPForbidden()
 

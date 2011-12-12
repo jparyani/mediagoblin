@@ -55,16 +55,16 @@ def submit_start(request):
                 # create entry and save in database
                 entry = request.db.MediaEntry()
                 entry['_id'] = ObjectId()
-                entry['media_type'] = unicode(media_type)
-                entry['title'] = (
+                entry.media_type = unicode(media_type)
+                entry.title = (
                     unicode(request.POST['title'])
                     or unicode(splitext(filename)[0]))
 
-                entry['description'] = unicode(request.POST.get('description'))
-                entry['description_html'] = cleaned_markdown_conversion(
-                    entry['description'])
+                entry.description = unicode(request.POST.get('description'))
+                entry.description_html = cleaned_markdown_conversion(
+                    entry.description)
 
-                entry['uploader'] = request.user['_id']
+                entry.uploader = request.user._id
 
                 # Process the user's folksonomy "tags"
                 entry['tags'] = convert_to_tag_list_of_dicts(
@@ -127,7 +127,7 @@ def submit_start(request):
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
                 return redirect(request, "mediagoblin.user_pages.user_home",
-                                user=request.user['username'])
+                                user=request.user.username)
             except InvalidFileType, exc:
                 submit_form.file.errors.append(
                     _(u'Invalid file type.'))
