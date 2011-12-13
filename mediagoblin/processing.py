@@ -64,7 +64,7 @@ class ProcessMedia(Task):
         except ImportError, exc:
             mark_entry_failed(entry[u'_id'], exc)
 
-        entry['state'] = u'processed'
+        entry.state = u'processed'
         entry.save()
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):

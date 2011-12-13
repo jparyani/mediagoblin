@@ -240,7 +240,7 @@ class TestSubmission:
 
         entry = mg_globals.database.MediaEntry.find_one(
             {'title': 'Malicious Upload 2'})
-        assert_equal(entry['state'], 'failed')
+        assert_equal(entry.state, 'failed')
         assert_equal(
             entry['fail_error'],
             u'mediagoblin.processing:BadMediaFail')
@@ -260,7 +260,7 @@ class TestSubmission:
 
         entry = mg_globals.database.MediaEntry.find_one(
             {'title': 'Malicious Upload 3'})
-        assert_equal(entry['state'], 'failed')
+        assert_equal(entry.state, 'failed')
         assert_equal(
             entry['fail_error'],
             u'mediagoblin.processing:BadMediaFail')
