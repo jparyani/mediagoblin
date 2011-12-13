@@ -96,6 +96,7 @@ input, textarea {
 a.mediagoblin_logo{
   color: #fff;
   font-weight: bold;
+  margin-right: 8px;
 }
 
 .mediagoblin_footer {
@@ -117,27 +118,26 @@ a.mediagoblin_logo{
 
 /* common website elements */
 
-.button_action, .button_action_highlight{
+.button_action, .button_action_highlight {
+  display: inline-block;
   color: #c3c3c3;
   background-color: #363636;
   border: 1px solid;
   border-color: #464646 #2B2B2B #252525;
   border-radius: 4px;
-  margin: 8px;
   padding: 3px 8px;
+  font-size: 16px;
   text-decoration: none;
   font-style: normal;
   font-weight: bold;
-  font-size: 1em;
-  display: inline-block;
+  cursor: pointer;
 }
 
-.button_action_highlight{
+.button_action_highlight {
   background-color: #86D4B1;
   border-color: #A2DEC3 #6CAA8E #5C9179;
   color: #283F35;
 }
-
 
 .button_form, .cancel_link {
   height: 32px;
@@ -172,20 +172,32 @@ a.mediagoblin_logo{
   background-image:         linear-gradient(top, #D2D2D2, #aaa);
 }
 
-.pagination{
+.pagination {
 text-align: center;
 }
 
-.pagination_arrow{
+.pagination_arrow {
   margin: 5px;
 }
 
-.empty_space{
+.empty_space {
   background-image: url("../images/empty_back.png");
   font-style: italic;
   text-align: center;
   height: 160px;
   padding-top: 70px;
+}
+
+.right_align {
+  float: right;
+}
+
+textarea#comment_content {
+  width: 634px;
+  height: 90px;
+  border: none;
+  background-color: #f1f1f1;
+  padding: 3px;
 }
 
 /* forms */
@@ -274,24 +286,28 @@ text-align: center;
 
 /* media detail */
 
-h2.media_title{
+h2.media_title {
   margin-bottom: 0px;
 }
 
-p.media_uploader{
+p.media_specs {
   font-size: 0.9em;
+  border-top: 1px solid #222;
+  border-bottom: 1px solid #222;
+  padding: 10px 0px;
+  color: #888;
 }
 
 /* icons */
 
-img.media_icon{
+img.media_icon {
   margin: 0 4px;
   vertical-align: sub;
 }
 
 /* navigation */
 
-.navigation_button{
+.navigation_button {
   width: 135px;
   display: block;
   float: left;
@@ -306,7 +322,7 @@ img.media_icon{
   margin: 0 0 20px
 }
 
-.navigation_left{
+.navigation_left {
   margin-right: 6px;
 }
 
