@@ -45,7 +45,7 @@ def process_video(entry):
 
     workbench = mgg.workbench_manager.create_workbench()
 
-    queued_filepath = entry['queued_media_file']
+    queued_filepath = entry.queued_media_file
     queued_filename = workbench.localized_file(
         mgg.queue_store, queued_filepath,
         'source')

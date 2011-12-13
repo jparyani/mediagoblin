@@ -89,7 +89,7 @@ def submit_start(request):
                     queue_file.write(request.POST['file'].file.read())
 
                 # Add queued filename to the entry
-                entry['queued_media_file'] = queue_filepath
+                entry.queued_media_file = queue_filepath
 
                 # We generate this ourselves so we know what the taks id is for
                 # retrieval later.

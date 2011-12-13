@@ -37,7 +37,7 @@ def process_image(entry):
         workbench.dir, 'conversions')
     os.mkdir(conversions_subdir)
 
-    queued_filepath = entry['queued_media_file']
+    queued_filepath = entry.queued_media_file
     queued_filename = workbench.localized_file(
         mgg.queue_store, queued_filepath,
         'source')
@@ -98,7 +98,7 @@ def process_image(entry):
             original_file.write(queued_file.read())
 
     mgg.queue_store.delete_file(queued_filepath)
-    entry['queued_media_file'] = []
+    entry.queued_media_file = []
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict['thumb'] = thumb_filepath
     media_files_dict['original'] = original_filepath
