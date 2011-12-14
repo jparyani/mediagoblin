@@ -42,5 +42,5 @@ def xrd(request):
         'mediagoblin/webfinger/xrd.xml',
         {'request': request,
          'username': re.search(
-                r'^acct:([^@]*)',
-                request.GET.get('uri')).group(1)})
+                r'^(acct:)?([^@]*)',
+                request.GET.get('uri')).group(2)})
