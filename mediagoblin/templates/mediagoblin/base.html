@@ -52,7 +52,7 @@
             {% if request.user and request.user.status == 'active' %}
               <a class="button_action"
                  href="{{ request.urlgen('mediagoblin.submit.start') }}">
-                {% trans %}Submit media{% endtrans %}
+                {% trans %}Add media{% endtrans %}
               </a>
             {% endif %}
             {% block mediagoblin_header_title %}{% endblock %}
