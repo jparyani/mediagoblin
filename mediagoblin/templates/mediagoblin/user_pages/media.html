@@ -67,7 +67,7 @@
     {% endautoescape %}       
     <p class="media_specs">
       {% trans date=media.created.strftime("%Y-%m-%d") -%}
-        Added on {{ date }}. Licensed under an <a href="#">X license</a>.
+        Added on {{ date }}.
       {%- endtrans %}
       {% if media['uploader'] == request.user._id or 
                                request.user['is_admin'] %}
