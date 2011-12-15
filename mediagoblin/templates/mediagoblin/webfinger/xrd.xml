@@ -17,7 +17,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <XRD xmlns='http://docs.oasis-open.org/ns/xri/xrd-1.0'>
  
-    <Subject>{{ uri }}</Subject>
+    <Subject>{{ request.GET.get('uri') }}</Subject>
     <Alias>http://{{ request.host }}/u/{{ username }}</Alias>
  
     <Link rel='http://microformats.org/profile/hcard'
