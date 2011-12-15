@@ -18,7 +18,7 @@ class User(Base):
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     pw_hash = Column(Unicode, nullable=False)
     email_verified = Column(Boolean)
-    status = Column(Unicode, default="needs_email_verification", nullable=False)
+    status = Column(Unicode, default=u"needs_email_verification", nullable=False)
     verification_key = Column(Unicode)
     is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
@@ -93,3 +93,14 @@ class MediaComment(Base):
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     content = Column(UnicodeText, nullable=False)
     content_html = Column(UnicodeText)
+
+
+def show_table_init():
+    from sqlalchemy import create_engine
+    engine = create_engine('sqlite:///:memory:', echo=True)
+
+    Base.metadata.create_all(engine)
+
+
+if __name__ == '__main__':
+    show_table_init()
