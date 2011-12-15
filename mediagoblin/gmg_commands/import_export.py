@@ -64,7 +64,7 @@ def _import_media(db, args):
     queue_cache = BasicFileStorage(
         args._cache_path['queue'])
 
-    for entry in db.media_entries.find():
+    for entry in db.MediaEntry.find():
         for name, path in entry['media_files'].items():
             _log.info('Importing: {0} - {1}'.format(
                     entry.title,
@@ -107,7 +107,7 @@ def env_import(args):
 
     global_config, app_config = setup_global_and_app_config(args.conf_file)
     connection, db = setup_connection_and_db_from_config(
-        app_config, use_pymongo=True)
+        app_config)
 
     tf = tarfile.open(
         args.tar_file,
@@ -206,7 +206,7 @@ def _export_media(db, args):
     queue_cache = BasicFileStorage(
         args._cache_path['queue'])
 
-    for entry in db.media_entries.find():
+    for entry in db.MediaEntry.find():
         for name, path in entry['media_files'].items():
             _log.info(u'Exporting {0} - {1}'.format(
                     entry.title,
@@ -215,7 +215,7 @@ def _export_media(db, args):
                 mc_file = media_cache.get_file(path, mode='wb')
                 mc_file.write(
                     mg_globals.public_store.get_file(path, mode='rb').read())
-            except e:
+            except Exception as e:
                 _log.error('Failed: {0}'.format(e))
 
     _log.info('...Media exported')
@@ -246,7 +246,7 @@ def env_export(args):
     setup_storage()
 
     connection, db = setup_connection_and_db_from_config(
-        app_config, use_pymongo=True)
+        app_config)
 
     _export_database(db, args)
 
