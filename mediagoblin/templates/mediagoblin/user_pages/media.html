@@ -81,7 +81,7 @@
         <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
       {% endif %}
     </p>
-    <h3>{% trans %}23 comments{% endtrans %}
+    <h3>{% trans comment_count=comments.count() -%}{{ comment_count }} comments{%- endtrans %}
       <div class="right_align">
         <a
           {% if not request.user %}
