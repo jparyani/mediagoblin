@@ -25,7 +25,7 @@ class User(Base):
     bio = Column(UnicodeText) # ??
     bio_html = Column(UnicodeText) # ??
     fp_verification_key = Column(Unicode)
-    fp_verification_expire = Column(DateTime)
+    fp_token_expire = Column(DateTime)
 
     ## TODO
     # plugin data would be in a separate model
@@ -36,6 +36,7 @@ class MediaEntry(Base):
 
     id = Column(Integer, primary_key=True)
     uploader = Column(Integer, ForeignKey('users.id'), nullable=False)
+    title = Column(Unicode, nullable=False)
     slug = Column(Unicode, nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     description = Column(UnicodeText) # ??
