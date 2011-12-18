@@ -126,8 +126,22 @@ a.mediagoblin_logo{
   padding-top: 8px;
   text-align: center;
   font-size: 0.875em;
+  clear: both;
 }
 
+.media_pane {
+  width: 640px;
+  margin-left: 0px;
+  margin-right: 10px;
+  float: left;  
+}
+
+.media_sidebar {
+  width: 280px;
+  margin-left: 10px;
+  margin-right: 0px;
+  float: left;
+}
 
 /* common website elements */
 
