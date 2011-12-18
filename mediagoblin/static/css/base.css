@@ -389,3 +389,20 @@ table.media_panel th {
   margin-top: 10px;
   margin-left: 10px;
 }
+
+@media screen and (max-width: 480px)  {
+  .navigation_button {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    width: 50%;
+    margin: 0;
+  }
+  .navigation_left {
+    left: 0px;
+    width: 50%;
+  }
+  .media_image {
+    width: 480px;
+  }
+}
