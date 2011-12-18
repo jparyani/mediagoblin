@@ -418,6 +418,9 @@ table.media_panel th {
 }
 
 @media handheld and (max-width: 480px), screen and (max-device-width: 480px), screen and (max-width: 960px)  {
+  html {
+    padding:10px;
+  }
   .navigation_button {
     position: fixed;
     bottom: 0px;
@@ -427,9 +430,19 @@ table.media_panel th {
   }
   .navigation_left {
     left: 0px;
-    width: 50%;
   }
   .media_image {
-    width: 480px;
+    width: 100%;
+  }
+  .mediagoblin_body {
+    width: 100%;
+  }
+  .mediagoblin_header, .mediagoblin_content, .mediagoblin_footer, .media_pane {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .mediagoblin_footer {
+    margin-bottom: 100px;
   }
 }
