@@ -390,7 +390,7 @@ table.media_panel th {
   margin-left: 10px;
 }
 
-@media screen and (max-width: 480px)  {
+@media handheld and (max-width: 480px), screen and (max-device-width: 480px), screen and (max-width: 960px)  {
   .navigation_button {
     position: fixed;
     bottom: 0px;
