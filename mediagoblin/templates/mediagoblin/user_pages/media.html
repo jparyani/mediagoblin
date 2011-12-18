@@ -109,7 +109,7 @@
       {% endif %}
       {% if comments %}
         {% for comment in comments %}
-          {% set comment_author = comment.author() %}
+          {% set comment_author = comment.get_author %}
 	          {% if pagination.active_id == comment._id %}
               <div class="comment_wrapper comment_active" id="comment-{{ comment._id }}">
 		            <a name="comment" id="comment"></a>

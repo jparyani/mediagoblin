@@ -346,7 +346,8 @@ class MediaComment(Document):
     def media_entry(self):
         return self.db.MediaEntry.find_one({'_id': self['media_entry']})
 
-    def author(self):
+    @property
+    def get_author(self):
         return self.db.User.find_one({'_id': self['author']})
 
 
