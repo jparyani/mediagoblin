@@ -7,7 +7,8 @@ from mediagoblin.db.util import ObjectId
 from mediagoblin.db.sql.models import (Base, User, MediaEntry, MediaComment,
     Tag, MediaTag)
 
-Session = sessionmaker()
+# Session = sessionmaker()
+from mediagoblin.db.sql.base import Session
 
 
 obj_id_table = dict()
@@ -134,9 +135,13 @@ def main():
     Base.metadata.create_all(engine)
 
     convert_users(mk_db)
+    Session.remove()
     convert_media_entries(mk_db)
+    Session.remove()
     convert_media_tags(mk_db)
+    Session.remove()
     convert_media_comments(mk_db)
+    Session.remove()
 
 
 if __name__ == '__main__':

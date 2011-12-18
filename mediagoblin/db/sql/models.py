@@ -5,8 +5,10 @@ from sqlalchemy import (
     Column, Integer, Unicode, UnicodeText, DateTime, Boolean, ForeignKey,
     UniqueConstraint)
 
+from mediagoblin.db.sql.base import GMGTableBase
 
-Base = declarative_base()
+
+Base = declarative_base(cls=GMGTableBase)
 
 
 class User(Base):
