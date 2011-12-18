@@ -84,13 +84,23 @@ input, textarea {
 .mediagoblin_body {
   position: relative;
   min-height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 960px;
 }
 
 .mediagoblin_header {
+  width: 940px;
   height: 36px;
+  margin-left: 10px;
+  margin-right: 10px;
   padding-top: 14px;
   margin-bottom: 20px;
   border-bottom: 1px solid #333;
+}
+
+.mediagoblin_header_right {
+  float: right;
 }
 
 a.mediagoblin_logo{
@@ -99,8 +109,18 @@ a.mediagoblin_logo{
   margin-right: 8px;
 }
 
+.mediagoblin_content {
+  width: 940px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-bottom: 74px;
+}
+
 .mediagoblin_footer {
+  width: 940px;
   height: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
   border-top: 1px solid #333;
   bottom: 0px;
   padding-top: 8px;
@@ -108,13 +128,6 @@ a.mediagoblin_logo{
   font-size: 0.875em;
 }
 
-.mediagoblin_content {
-  padding-bottom: 74px;
-}
-
-.mediagoblin_header_right {
-  float: right;
-}
 
 /* common website elements */
 

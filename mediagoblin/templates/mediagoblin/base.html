@@ -37,8 +37,7 @@
     {% block mediagoblin_body %}
     <div class="mediagoblin_body">
       {% block mediagoblin_header %}
-        <div class="container_16">
-          <div class="grid_16 mediagoblin_header">
+          <div class="mediagoblin_header">
             {% block mediagoblin_logo %}
               <a class="mediagoblin_logo"
                  href="{{ request.urlgen('index') }}"
@@ -73,23 +72,18 @@
               {% endif %}
             </div>
           </div>
-        </div>
       {% endblock %}
-      <div class="container_16 mediagoblin_content">
-        <div class="grid_16">
+      <div class="mediagoblin_content">
           {% include "mediagoblin/utils/messages.html" %}
           {% block mediagoblin_content %}
           {% endblock mediagoblin_content %}
-        </div>
       </div>
       {% block mediagoblin_footer %}
-        <div class="container_16">
-          <div class="grid_16 mediagoblin_footer">
+          <div class="mediagoblin_footer">
             {% trans -%}
               Powered by <a href="http://mediagoblin.org">MediaGoblin</a>, a <a href="http://gnu.org/">GNU</a> project
             {%- endtrans %}
           </div>
-        </div>
       {% endblock %}
     {% endblock mediagoblin_body %}
     </div>
