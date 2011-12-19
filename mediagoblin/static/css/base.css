@@ -298,6 +298,14 @@ p.media_specs {
   color: #888;
 }
 
+.no_html5 {
+    background: black;
+    color: white;
+    text-align: center;
+    height: 160px;
+    padding: 130px 10px 20px 10px;
+}
+
 /* icons */
 
 img.media_icon {
