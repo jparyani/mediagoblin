@@ -57,10 +57,10 @@ def user_may_delete_media(controller):
     Require user ownership of the MediaEntry to delete.
     """
     def wrapper(request, *args, **kwargs):
-        uploader = request.db.MediaEntry.find_one(
-            {'_id': ObjectId(request.matchdict['media'])}).get_uploader()
+        uploader_id = request.db.MediaEntry.find_one(
+            {'_id': ObjectId(request.matchdict['media'])}).uploader
         if not (request.user.is_admin or
-                request.user._id == uploader._id):
+                request.user._id == uploader_id):
             return exc.HTTPForbidden()
 
         return controller(request, *args, **kwargs)

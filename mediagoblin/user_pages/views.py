@@ -192,7 +192,7 @@ def media_confirm_delete(request, media):
                 location=media.url_for_self(request.urlgen))
 
     if ((request.user.is_admin and
-         request.user._id != media.get_uploader()._id)):
+         request.user._id != media.uploader)):
         messages.add_message(
             request, messages.WARNING,
             _("You are about to delete another user's media. "
