@@ -282,10 +282,8 @@ class MediaEntry(Document):
                                           'uploader': self.uploader,
                                           'state': 'processed'}).sort(
                                                     '_id', ASCENDING).limit(1)
-        if cursor.count():
-            return urlgen('mediagoblin.user_pages.media_home',
-                          user=self.get_uploader().username,
-                          media=unicode(cursor[0].slug))
+        for media in cursor:
+            return media.url_for_self(urlgen)
 
     def url_to_next(self, urlgen):
         """
@@ -296,10 +294,8 @@ class MediaEntry(Document):
                                           'state': 'processed'}).sort(
                                                     '_id', DESCENDING).limit(1)
 
-        if cursor.count():
-            return urlgen('mediagoblin.user_pages.media_home',
-                          user=self.get_uploader().username,
-                          media=unicode(cursor[0].slug))
+        for media in cursor:
+            return media.url_for_self(urlgen)
 
     def get_uploader(self):
         return self.db.User.find_one({'_id': self.uploader})

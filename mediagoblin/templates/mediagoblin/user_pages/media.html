@@ -135,10 +135,8 @@
                 </div>
               </div>
         {% endfor %}
-      {{ render_pagination(request, pagination, 
-	          request.urlgen('mediagoblin.user_pages.media_home',
-	          user = media.get_uploader().username,
-	          media = media._id)) }}
+      {{ render_pagination(request, pagination,
+                 media.url_for_self(request.urlgen)) }}
     {% endif %}
   </div>
   <div class="grid_5 omega">
