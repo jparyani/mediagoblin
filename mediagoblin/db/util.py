@@ -34,7 +34,7 @@ from pymongo import ASCENDING, DESCENDING
 from pymongo.errors import InvalidId
 from mongokit import ObjectId
 
-from mediagoblin.db.indexes import ACTIVE_INDEXES, DEPRECATED_INDEXES
+from mediagoblin.db.mongo.indexes import ACTIVE_INDEXES, DEPRECATED_INDEXES
 
 
 ################
