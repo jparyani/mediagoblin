@@ -57,7 +57,7 @@ def setup_database():
     app_config = mg_globals.app_config
 
     # This MUST be imported so as to set up the appropriate migrations!
-    from mediagoblin.db import migrations
+    from mediagoblin.db.mongo import migrations
 
     # Set up the database
     connection, db = setup_connection_and_db_from_config(app_config)

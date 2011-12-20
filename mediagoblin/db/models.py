@@ -21,7 +21,7 @@ from mongokit import Document
 
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin import mg_globals
-from mediagoblin.db import migrations
+from mediagoblin.db.mongo import migrations
 from mediagoblin.db.mongo.util import ASCENDING, DESCENDING, ObjectId
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools import url, common
