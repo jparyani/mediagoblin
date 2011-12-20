@@ -122,6 +122,10 @@ class MediaGoblinApp(object):
         # The other option would be:
         # request.full_path = environ["SCRIPT_URL"]
 
+        # Fix up environ for urlgen
+        if environ.get('HTTPS', '').lower() == 'off':
+            environ.pop('HTTPS')
+
         ## Attach utilities to the request object
         request.matchdict = route_match
         request.urlgen = routes.URLGenerator(self.routing, environ)
