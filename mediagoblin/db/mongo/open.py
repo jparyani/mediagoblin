@@ -17,7 +17,7 @@
 import pymongo
 import mongokit
 from paste.deploy.converters import asint
-from mediagoblin.db import models
+from mediagoblin.db.mongo import models
 
 
 def connect_database_from_config(app_config, use_pymongo=False):
