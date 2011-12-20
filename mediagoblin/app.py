@@ -123,6 +123,7 @@ class MediaGoblinApp(object):
         # request.full_path = environ["SCRIPT_URL"]
 
         # Fix up environ for urlgen
+        # See bug: https://bitbucket.org/bbangert/routes/issue/55/cache_hostinfo-breaks-on-https-off
         if environ.get('HTTPS', '').lower() == 'off':
             environ.pop('HTTPS')
 
