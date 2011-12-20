@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.db.util import RegisterMigration
+from mediagoblin.db.mongo.util import RegisterMigration
 from mediagoblin.tools.text import cleaned_markdown_conversion
 
 

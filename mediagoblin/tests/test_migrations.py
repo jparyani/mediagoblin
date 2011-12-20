@@ -20,7 +20,7 @@ from pymongo import Connection
 
 from mediagoblin.tests.tools import (
     install_fixtures_simple, assert_db_meets_expected)
-from mediagoblin.db.util import (
+from mediagoblin.db.mongo.util import (
     RegisterMigration, MigrationManager, ObjectId,
     MissingCurrentMigration)
 from mediagoblin.db.migrations import add_table_field
