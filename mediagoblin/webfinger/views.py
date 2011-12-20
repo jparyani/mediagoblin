@@ -15,32 +15,100 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-import mediagoblin.mg_globals as mg_globals
 
-from mediagoblin.tools.response import render_to_response
+from urlparse import urlparse
 
-LRDD_TEMPLATE = '{protocol}://{host}/api/webfinger/xrd?uri={{uri}}'
+from mediagoblin.tools.response import render_to_response, render_404
 
 def host_meta(request):
     '''
     Webfinger host-meta
     '''
+
+    placeholder = 'MG_LRDD_PLACEHOLDER'
+
+    lrdd_title = 'GNU MediaGoblin - User lookup'
+
+    lrdd_template = request.urlgen(
+        'mediagoblin.webfinger.xrd',
+        uri=placeholder,
+        qualified=True)
+
     return render_to_response(
         request,
         'mediagoblin/webfinger/host-meta.xml',
         {'request': request,
-         'lrdd_template': LRDD_TEMPLATE.format(
-                protocol='http',
-                host=request.host)})
+         'lrdd_template': lrdd_template,
+         'lrdd_title': lrdd_title,
+         'placeholder': placeholder})
+
+MATCH_SCHEME_PATTERN = re.compile(r'^acct:')
 
 def xrd(request):
     ''' 
     Find user data based on a webfinger URI
     '''
-    return render_to_response(
-        request,
-        'mediagoblin/webfinger/xrd.xml',
-        {'request': request,
-         'username': re.search(
-                r'^(acct:)?([^@]*)',
-                request.GET.get('uri')).group(2)})
+    param_uri = request.GET.get('uri')
+
+    if not param_uri:
+        return render_404(request)
+
+    '''
+    :py:module:`urlparse` does not recognize usernames in URIs of the
+    form ``acct:user@example.org`` or ``user@example.org``.
+    '''
+    if not MATCH_SCHEME_PATTERN.search(param_uri):
+        # Assume the URI is in the form ``user@example.org``
+        uri = 'acct://' + param_uri
+    else:
+        # Assumes the URI looks like ``acct:user@example.org
+        uri = MATCH_SCHEME_PATTERN.sub(
+            'acct://', param_uri)
+
+    parsed = urlparse(uri)
+
+    xrd_subject = param_uri
+
+    # TODO: Verify that the user exists
+    # Q: Does webfinger support error handling in this case?
+    #    Returning 404 seems intuitive, need to check.
+    if parsed.username:
+        # The user object
+        # TODO: Fetch from database instead of using the MockUser
+        user = MockUser()
+        user.username = parsed.username
+
+        xrd_links = [
+            {'attrs': {
+                    'rel': 'http://microformats.org/profile/hcard',
+                    'href': request.urlgen(
+                        'mediagoblin.user_pages.user_home',
+                        user=user.username,
+                        qualified=True)}},
+            {'attrs': {
+                    'rel': 'http://schemas.google.com/g/2010#updates-from',
+                    'href': request.urlgen(
+                        'mediagoblin.user_pages.atom_feed',
+                        user=user.username,
+                        qualified=True)}}]
+
+        xrd_alias = request.urlgen(
+            'mediagoblin.user_pages.user_home',
+            user=user.username,
+            qualified=True)
+
+        return render_to_response(
+            request,
+            'mediagoblin/webfinger/xrd.xml',
+            {'request': request,
+             'subject': xrd_subject,
+             'alias': xrd_alias,
+             'links': xrd_links })
+    else:
+        return render_404(request)
+
+class MockUser(object):
+    '''
+    TEMPORARY user object
+    '''
+    username = None

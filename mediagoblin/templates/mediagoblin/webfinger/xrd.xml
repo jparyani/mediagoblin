@@ -14,16 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#}
-<?xml version='1.0' encoding='UTF-8'?>
-<XRD xmlns='http://docs.oasis-open.org/ns/xri/xrd-1.0'>
+<?xml version="1.0" encoding="UTF-8"?>
+<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
  
-    <Subject>{{ request.GET.get('uri') }}</Subject>
-    <Alias>http://{{ request.host }}/u/{{ username }}</Alias>
- 
-    <Link rel='http://microformats.org/profile/hcard'
-          href='http://{{ request.host }}/u/{{ username }}' />
-
-    <Link rel="http://schemas.google.com/g/2010#updates-from"
-          type="application/atom+xml"
-          href="http://{{ request.host }}/u/{{ username }}/atom/" />
+    <Subject>{{ subject }}</Subject>
+    <Alias>{{ alias }}</Alias>
+    {% for link in links %}
+    <Link 
+      {%- for attr, value in link.attrs.items() %} {{ attr }}="{{ value}}"
+      {%- endfor %} />
+    {%- endfor %}
 </XRD>

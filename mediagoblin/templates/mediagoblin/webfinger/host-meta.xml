@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#}
-<?xml version='1.0' encoding='UTF-8'?>
-<XRD xmlns='http://docs.oasis-open.org/ns/xri/xrd-1.0'
-     xmlns:hm='http://host-meta.net/xrd/1.0'>
+<?xml version="1.0" encoding="UTF-8"?>
+<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0"
+     xmlns:hm="http://host-meta.net/xrd/1.0">
  
     <hm:Host>{{ request.host }}</hm:Host>
  
-    <Link rel='lrdd'
-          template='{{ lrdd_template }}'>
-        <Title>{{ llrd_title }}</Title>
+    <Link rel="lrdd"
+          template="{{ lrdd_template|replace(placeholder, '{uri}') }}">
+        <Title>{{ lrdd_title }}</Title>
     </Link>
 </XRD>
