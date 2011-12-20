@@ -13,6 +13,9 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+For references, see docstring in mediagoblin/webfinger/__init__.py
+'''
 
 import re
 
