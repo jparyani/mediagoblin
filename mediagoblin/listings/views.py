@@ -86,7 +86,7 @@ def tag_atom_feed(request):
         feed.add(entry.get('title'),
             entry.get('description_html'),
             content_type='html',
-            author=entry.get_uploader().username,
+            author=entry.get_uploader.username,
             updated=entry.get('created'),
             url=entry.url_for_self(request.urlgen))
 

@@ -261,7 +261,7 @@ class MediaEntry(Document):
 
         Use a slug if we have one, else use our '_id'.
         """
-        uploader = self.get_uploader()
+        uploader = self.get_uploader
 
         if self.get('slug'):
             return urlgen(
@@ -297,6 +297,7 @@ class MediaEntry(Document):
         for media in cursor:
             return media.url_for_self(urlgen)
 
+    @property
     def get_uploader(self):
         return self.db.User.find_one({'_id': self.uploader})
 

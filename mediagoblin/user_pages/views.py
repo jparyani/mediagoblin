@@ -173,7 +173,7 @@ def media_confirm_delete(request, media):
 
     if request.method == 'POST' and form.validate():
         if form.confirm.data is True:
-            username = media.get_uploader().username
+            username = media.get_uploader.username
 
             # Delete all files on the public storage
             delete_media_files(media)
