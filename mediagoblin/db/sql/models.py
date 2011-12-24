@@ -58,6 +58,7 @@ class MediaEntry(Base):
     description = Column(UnicodeText) # ??
     description_html = Column(UnicodeText) # ??
     media_type = Column(Unicode, nullable=False)
+    state = Column(Unicode, nullable=False) # or use sqlalchemy.types.Enum?
     
     fail_error = Column(Unicode)
     fail_metadata = Column(UnicodeText)
