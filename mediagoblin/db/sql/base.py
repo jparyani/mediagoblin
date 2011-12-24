@@ -24,6 +24,4 @@ class GMGTableBase(object):
 
     @classmethod
     def one(cls, query_dict):
-        retval = cls.find_one(query_dict)
-        assert retval is not None
-        return retval
+        return cls.find(query_dict).one()
