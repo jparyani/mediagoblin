@@ -14,5 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.db.mongo.util import (ObjectId, InvalidId,
-    DESCENDING)
+try:
+    from mediagoblin.db.sql_switch import use_sql
+except ImportError:
+    use_sql = False
+
+if use_sql:
+    from mediagoblin.db.sql.fake import ObjectId, InvalidId, DESCENDING
+else:
+    from mediagoblin.db.mongo.util import ObjectId, InvalidId, DESCENDING
