@@ -4,6 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import (
     Column, Integer, Unicode, UnicodeText, DateTime, Boolean, ForeignKey,
     UniqueConstraint)
+from sqlalchemy.orm import relationship
 
 from mediagoblin.db.sql.base import GMGTableBase
 
@@ -71,6 +72,8 @@ class MediaEntry(Base):
         UniqueConstraint('uploader', 'slug'),
         {})
 
+    get_uploader = relationship(User)
+
     ## TODO
     # media_files
     # media_data
@@ -111,6 +114,8 @@ class MediaComment(Base):
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     content = Column(UnicodeText, nullable=False)
     content_html = Column(UnicodeText)
+
+    get_author = relationship(User)
 
 
 def show_table_init():
