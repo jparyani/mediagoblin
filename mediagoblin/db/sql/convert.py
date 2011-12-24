@@ -1,13 +1,12 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
 from mediagoblin.init import setup_global_and_app_config, setup_database
-from mediagoblin.db.util import ObjectId
+from mediagoblin.db.mongo.util import ObjectId
 
 from mediagoblin.db.sql.models import (Base, User, MediaEntry, MediaComment,
     Tag, MediaTag)
-
-# Session = sessionmaker()
+from mediagoblin.db.sql.open import setup_connection_and_db_from_config as \
+    sql_connect
+from mediagoblin.db.mongo.open import setup_connection_and_db_from_config as \
+    mongo_connect
 from mediagoblin.db.sql.base import Session
 
 
@@ -125,14 +124,13 @@ def convert_media_comments(mk_db):
 
 
 def main():
-    engine = create_engine('sqlite:///mediagoblin.db', echo=True)
-    Session.configure(bind=engine)
+    global_config, app_config = setup_global_and_app_config("mediagoblin.ini")
 
-    setup_global_and_app_config("mediagoblin.ini")
+    sql_conn, sql_db = sql_connect({'sql_engine': 'sqlite:///mediagoblin.db'})
 
-    mk_conn, mk_db = setup_database()
+    mk_conn, mk_db = mongo_connect(app_config)
 
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all(sql_db.engine)
 
     convert_users(mk_db)
     Session.remove()
