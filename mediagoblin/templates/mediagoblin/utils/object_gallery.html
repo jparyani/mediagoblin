@@ -68,7 +68,11 @@
     {% endif %}
   {% else %}
     <p>
-      <i>There doesn't seem to be any media here yet...</i>
+      <i>
+        {%- trans -%}
+          There doesn't seem to be any media here yet...
+        {%- endtrans -%}
+      </i>
     </p>
   {% endif %}
 {% endmacro %}
