@@ -84,6 +84,7 @@ def register(request):
             user.email = email
             user.pw_hash = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
+            user.verification_key = unicode(uuid.uuid4())
             user.save(validate=True)
 
             # log the user in

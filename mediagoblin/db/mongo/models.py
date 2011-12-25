@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import uuid
 
 from mongokit import Document
 
@@ -88,7 +87,6 @@ class User(Document):
         'created': datetime.datetime.utcnow,
         'email_verified': False,
         'status': u'needs_email_verification',
-        'verification_key': lambda: unicode(uuid.uuid4()),
         'is_admin': False}
 
     def check_login(self, password):
