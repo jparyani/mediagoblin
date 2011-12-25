@@ -205,7 +205,7 @@ def resend_activation(request):
         
         return redirect(request, 'mediagoblin.auth.login')
 
-    if request.user["email_verified"]:
+    if request.user.email_verified:
         messages.add_message(
             request,
             messages.ERROR,

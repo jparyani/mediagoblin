@@ -46,7 +46,7 @@ def edit_media(request, media):
         title=media.title,
         slug=media.slug,
         description=media.description,
-        tags=media_tags_as_string(media['tags']))
+        tags=media_tags_as_string(media.tags))
 
     form = forms.EditForm(
         request.POST,
@@ -165,7 +165,7 @@ def edit_profile(request):
         user.url = unicode(request.POST['url'])
         user.bio = unicode(request.POST['bio'])
 
-        user.bio_html = cleaned_markdown_conversion(user['bio'])
+        user.bio_html = cleaned_markdown_conversion(user.bio)
 
         user.save()
 
@@ -193,7 +193,7 @@ def edit_account(request):
     if request.method == 'POST' and form.validate():
         password_matches = auth_lib.bcrypt_check_password(
             request.POST['old_password'],
-            user['pw_hash'])
+            user.pw_hash)
 
         if (request.POST['old_password'] or request.POST['new_password']) and not \
                 password_matches:
@@ -206,7 +206,7 @@ def edit_account(request):
                  'form': form})
 
         if password_matches:
-            user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
                 request.POST['new_password'])
 
         user.save()
@@ -216,7 +216,7 @@ def edit_account(request):
                              _("Account settings saved"))
         return redirect(request,
                        'mediagoblin.user_pages.user_home',
-                        user=user['username'])
+                        user=user.username)
 
     return render_to_response(
         request,
