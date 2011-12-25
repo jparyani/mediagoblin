@@ -11,6 +11,18 @@ from mediagoblin.db.sql.base import GMGTableBase
 Base = declarative_base(cls=GMGTableBase)
 
 
+class SimpleFieldAlias(object):
+    """An alias for any field"""
+    def __init__(self, fieldname):
+        self.fieldname = fieldname
+
+    def __get__(self, instance, cls):
+        return getattr(instance, self.fieldname)
+
+    def __set__(self, instance, val):
+        setattr(instance, self.fieldname, val)
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -31,6 +43,8 @@ class User(Base):
 
     ## TODO
     # plugin data would be in a separate model
+
+    _id = SimpleFieldAlias("id")
 
 
 class MediaEntry(Base):
