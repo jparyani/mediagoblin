@@ -25,6 +25,17 @@ from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools import url
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
 
+
+class MongoPK(object):
+    """An alias for the _id primary key"""
+    def __get__(self, instance, cls):
+       return instance['_id']   
+    def __set__(self, instance, val):
+       instance['_id'] = val  
+    def __delete__(self, instance):
+       del instance['_id']
+
+
 ###################
 # Custom validators
 ###################
@@ -86,6 +97,8 @@ class User(Document, UserMixin):
         'email_verified': False,
         'status': u'needs_email_verification',
         'is_admin': False}
+
+    id = MongoPK()
 
 
 class MediaEntry(Document, MediaEntryMixin):
@@ -204,6 +217,8 @@ class MediaEntry(Document, MediaEntryMixin):
     default_values = {
         'created': datetime.datetime.utcnow,
         'state': u'unprocessed'}
+
+    id = MongoPK()
 
     def get_comments(self, ascending=False):
         if ascending:
