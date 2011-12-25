@@ -25,3 +25,6 @@ class GMGTableBase(object):
     @classmethod
     def one(cls, query_dict):
         return cls.find(query_dict).one()
+
+    def get(self, key):
+        return getattr(self, key)
