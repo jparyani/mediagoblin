@@ -1,4 +1,4 @@
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import scoped_session, sessionmaker, object_session
 
 
 Session = scoped_session(sessionmaker())
@@ -28,3 +28,11 @@ class GMGTableBase(object):
 
     def get(self, key):
         return getattr(self, key)
+
+    def save(self, validate = True):
+        assert validate
+        sess = object_session(self)
+        if sess is None:
+            sess = Session()
+        sess.add(self)
+        sess.commit()
