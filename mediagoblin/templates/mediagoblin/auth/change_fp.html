@@ -19,6 +19,11 @@
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
+{% block mediagoblin_head %}
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/js/show_password.js') }}"></script>
+{% endblock mediagoblin_head %}
+
 {% block mediagoblin_content %}
 
   <form action="{{ request.urlgen('mediagoblin.auth.verify_forgot_password') }}"
