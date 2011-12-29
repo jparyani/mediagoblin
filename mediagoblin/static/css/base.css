@@ -251,6 +251,11 @@ textarea#comment_content {
   text-align: right;
 }
 
+#password_boolean {
+  margin-top: 4px;
+  width: 20px;
+}
+
 /* comments */
 
 .comment_author {
