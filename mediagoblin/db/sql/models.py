@@ -216,6 +216,27 @@ class MediaComment(Base):
     get_author = relationship(User)
 
 
+MODELS = [
+    User, MediaEntry, Tag, MediaTag, MediaComment]
+
+
+######################################################
+# Special, migrations-tracking table
+#
+# Not listed in MODELS because this is special and not
+# really migrated, but used for migrations (for now)
+######################################################
+
+class MigrationData(Base):
+    __tablename__ = "migrations"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode, nullable=False, unique=True)
+    version = Column(Integer, nullable=False, default=0)
+
+######################################################
+
+
 def show_table_init():
     from sqlalchemy import create_engine
     engine = create_engine('sqlite:///:memory:', echo=True)
