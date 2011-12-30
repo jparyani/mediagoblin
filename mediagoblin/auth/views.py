@@ -232,15 +232,11 @@ def forgot_password(request):
     """
     Forgot password view
 
-    Sends an email whit an url to renew forgoten password
+    Sends an email with an url to renew forgotten password
     """
     fp_form = auth_forms.ForgotPassForm(request.POST)
 
     if request.method == 'POST' and fp_form.validate():
-
-        # Here, so it doesn't depend on the actual mail being sent
-        # and thus doesn't reveal, wether mail was sent.
-        email_debug_message(request)
 
         # '$or' not available till mongodb 1.5.3
         user = request.db.User.find_one(
@@ -257,6 +253,14 @@ def forgot_password(request):
                 user.save()
 
                 send_fp_verification_email(user, request)
+
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    _("An email has been sent with instructions on how to "
+                      "change your password."))
+                email_debug_message(request)
+
             else:
                 # special case... we can't send the email because the
                 # username is inactive / hasn't verified their email
@@ -270,9 +274,13 @@ def forgot_password(request):
                 return redirect(
                     request, 'mediagoblin.user_pages.user_home',
                     user=user.username)
-
-        # do not reveal whether or not there is a matching user
-        return redirect(request, 'mediagoblin.auth.fp_email_sent')
+            return redirect(request, 'mediagoblin.auth.login')
+        else:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                _("Couldn't find someone with that username or email."))
+            return redirect(request, 'mediagoblin.auth.forgot_password')
 
     return render_to_response(
         request,
