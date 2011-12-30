@@ -89,7 +89,6 @@ def test_register_views(test_app):
     form = context['register_form']
     assert form.username.errors == [u'This field is required.']
     assert form.password.errors == [u'This field is required.']
-    assert form.confirm_password.errors == [u'This field is required.']
     assert form.email.errors == [u'This field is required.']
 
     # Try to register with fields that are known to be invalid
@@ -101,7 +100,6 @@ def test_register_views(test_app):
         '/auth/register/', {
             'username': 'l',
             'password': 'o',
-            'confirm_password': 'o',
             'email': 'l'})
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
     form = context['register_form']
@@ -125,18 +123,6 @@ def test_register_views(test_app):
     assert form.email.errors == [
         u'Invalid email address.']
 
-    ## mismatching passwords
-    template.clear_test_template_context()
-    test_app.post(
-        '/auth/register/', {
-            'password': 'herpderp',
-            'confirm_password': 'derpherp'})
-    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
-    form = context['register_form']
-
-    assert form.password.errors == [
-        u'Passwords must match.']
-
     ## At this point there should be no users in the database ;)
     assert not mg_globals.database.User.find().count()
 
@@ -147,7 +133,6 @@ def test_register_views(test_app):
         '/auth/register/', {
             'username': 'happygirl',
             'password': 'iamsohappy',
-            'confirm_password': 'iamsohappy',
             'email': 'happygrrl@example.org'})
     response.follow()
 
@@ -227,7 +212,6 @@ def test_register_views(test_app):
         '/auth/register/', {
             'username': 'happygirl',
             'password': 'iamsohappy2',
-            'confirm_password': 'iamsohappy2',
             'email': 'happygrrl2@example.org'})
 
     context = template.TEMPLATE_TEST_CONTEXT[
@@ -304,7 +288,6 @@ def test_register_views(test_app):
         '/auth/forgot_password/verify/', {
             'userid': parsed_get_params['userid'],
             'password': 'iamveryveryhappy',
-            'confirm_password': 'iamveryveryhappy',
             'token': parsed_get_params['token']})
     response.follow()
     assert template.TEMPLATE_TEST_CONTEXT.has_key(
