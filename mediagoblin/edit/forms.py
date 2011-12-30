@@ -28,7 +28,7 @@ class EditForm(wtforms.Form):
         _('Tags'),
         [tag_length_validator],
         description=_(
-            "Seperate tags by commas."))
+            "Separate tags by commas."))
     slug = wtforms.TextField(
         _('Slug'),
         [wtforms.validators.Required(message=_("The slug can't be empty"))],

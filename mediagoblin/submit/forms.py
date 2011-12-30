@@ -32,4 +32,4 @@ class SubmitStartForm(wtforms.Form):
         _('Tags'),
         [tag_length_validator],
         description=_(
-          "Seperate tags by commas."))
+          "Separate tags by commas."))
