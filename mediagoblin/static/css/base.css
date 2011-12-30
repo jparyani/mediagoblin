@@ -29,7 +29,6 @@ body {
   background-color: #111;
   background-image: url("../images/background.png");
   color: #C3C3C3;
-  font-family: sans-serif;
   padding: none;
   margin: 0px;
   height: 100%;
@@ -94,7 +93,7 @@ input, textarea {
 }
 
 .mediagoblin_header {
-  width: 940px;
+  width: 100%;
   height: 36px;
   margin-left: 10px;
   margin-right: 10px;
@@ -118,14 +117,14 @@ a.mediagoblin_logo {
 }
 
 .mediagoblin_content {
-  width: 940px;
+  width: 100%;
   margin-left: 10px;
   margin-right: 10px;
   padding-bottom: 74px;
 }
 
 .mediagoblin_footer {
-  width: 940px;
+  width: 100%;
   height: 30px;
   margin-left: 10px;
   margin-right: 10px;
@@ -451,10 +450,22 @@ table.media_panel th {
   margin-left: 10px;
 }
 
-@media handheld and (max-width: 480px), screen and (max-device-width: 480px), screen and (max-width: 960px)  {
-  html {
-    padding:10px;
+@media screen and (max-width: 960px) {
+  .mediagoblin_body {
+    width: 100%;
   }
+  .mediagoblin_footer {
+    position: fixed;
+    left: 0px;
+    top: 100px;
+    width: 50px;
+    height: 20px;
+    background-color: #f00;
+  }
+}
+
+
+  /* old code
   .navigation_button {
     position: fixed;
     bottom: 0px;
@@ -465,18 +476,4 @@ table.media_panel th {
   .navigation_left {
     left: 0px;
   }
-  .media_image {
-    width: 100%;
-  }
-  .mediagoblin_body {
-    width: 100%;
-  }
-  .mediagoblin_header, .mediagoblin_content, .mediagoblin_footer, .media_pane {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-  }
-  .mediagoblin_footer {
-    margin-bottom: 100px;
-  }
-}
+  */
