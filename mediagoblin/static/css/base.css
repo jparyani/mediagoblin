@@ -44,22 +44,26 @@ form {
 
 /* text styles */
 
-h1{
+h1 {
   margin-bottom: 15px;
   margin-top: 15px;
   color: #fff;
   font-size: 1.875em;
 }
 
-h2{
+h2 {
   font-size: 1.375em;
   margin-top: 20px;
   color: #fff;
 }
 
-h3{
+h3 {
   border-bottom: 1px solid #333;
   font-size: 1.125em;
+}
+
+p {
+  margin-top: 0px;
 }
 
 a {
@@ -103,10 +107,14 @@ input, textarea {
   float: right;
 }
 
-a.mediagoblin_logo{
+a.mediagoblin_logo {
   color: #fff;
   font-weight: bold;
   margin-right: 8px;
+}
+
+.mediagoblin_logo img {
+  vertical-align: middle;
 }
 
 .mediagoblin_content {
@@ -140,6 +148,18 @@ a.mediagoblin_logo{
   width: 280px;
   margin-left: 10px;
   margin-right: 0px;
+  float: left;
+}
+
+.profile_sidebar {
+  width: 340px;
+  margin-right: 10px;
+  float: left;
+}
+
+.profile_showcase {
+  width: 580px;
+  margin-left: 10px;
   float: left;
 }
 
@@ -219,26 +239,31 @@ text-align: center;
   float: right;
 }
 
-textarea#comment_content {
-  width: 634px;
-  height: 90px;
-  border: none;
-  background-color: #f1f1f1;
-  padding: 3px;
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
 }
 
 /* forms */
 
-.form_box {
+.form_box,.form_box_xl {
   background-color: #222;
   background-image: url("../images/background_lines.png");
   background-repeat: repeat-x;
-  padding-bottom: 30px;
-  padding-top: 30px;
+  width: 340px;
+  padding: 30px 60px;
   margin-left: auto;
   margin-right: auto;
   display: block;
   float: none;
+}
+
+.form_box_xl {
+  width: 460px;
 }
 
 .edit_box {
@@ -292,6 +317,14 @@ textarea#comment_content {
 
 .comment_content p {
   margin-bottom: 0px;
+}
+
+textarea#comment_content {
+  width: 634px;
+  height: 90px;
+  border: none;
+  background-color: #f1f1f1;
+  padding: 3px;
 }
 
 /* media galleries */
@@ -358,6 +391,7 @@ img.media_icon {
 ul.mediagoblin_messages {
   list-style: none inside;
   color: #f7f7f7;
+  padding: 0;
 }
 
 .mediagoblin_messages li {

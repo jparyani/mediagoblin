@@ -21,28 +21,26 @@
 {% set next_entry_url = media.url_to_next(request.urlgen) %}
 
 {% if prev_entry_url or next_entry_url %}
-  <div class="grid_5 alpha omega">
-    {# There are no previous entries for the very first media entry #}
-    {% if prev_entry_url %}
-      <a class="navigation_button navigation_left" href="{{ prev_entry_url }}">
-        &larr; {% trans %}newer{% endtrans %}
-      </a>
-    {% else %}
-      {# This is the first entry. display greyed-out 'previous' image #}
-      <p class="navigation_button navigation_left">
-        &larr; {% trans %}newer{% endtrans %}
-      </p>
-    {% endif %}
-    {# Likewise, this could be the very last media entry #}
-    {% if next_entry_url %}
-      <a class="navigation_button" href="{{ next_entry_url }}">
-        {% trans %}older{% endtrans %} &rarr;
-      </a>
-    {% else %}
-      {# This is the last entry. display greyed-out 'next' image #}
-      <p class="navigation_button">
-        {% trans %}older{% endtrans %} &rarr;
-      </p>
-    {% endif %}
-  </div>
+  {# There are no previous entries for the very first media entry #}
+  {% if prev_entry_url %}
+    <a class="navigation_button navigation_left" href="{{ prev_entry_url }}">
+      &larr; {% trans %}newer{% endtrans %}
+    </a>
+  {% else %}
+    {# This is the first entry. display greyed-out 'previous' image #}
+    <p class="navigation_button navigation_left">
+      &larr; {% trans %}newer{% endtrans %}
+    </p>
+  {% endif %}
+  {# Likewise, this could be the very last media entry #}
+  {% if next_entry_url %}
+    <a class="navigation_button" href="{{ next_entry_url }}">
+      {% trans %}older{% endtrans %} &rarr;
+    </a>
+  {% else %}
+    {# This is the last entry. display greyed-out 'next' image #}
+    <p class="navigation_button">
+      {% trans %}older{% endtrans %} &rarr;
+    </p>
+  {% endif %}
 {% endif %}

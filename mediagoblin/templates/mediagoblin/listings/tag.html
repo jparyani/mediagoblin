@@ -35,14 +35,9 @@
     {% trans %}Media tagged with: {{ tag_name }}{% endtrans %}
   </h1>
 
-  <div class="container_16 media_gallery">
-    {{ object_gallery(request, media_entries, pagination) }}
-  </div>
+  {{ object_gallery(request, media_entries, pagination) }}
 
-  <div class="grid_16">
-    {% set feed_url = request.urlgen(
-               'mediagoblin.listings.tag_atom_feed',
-               tag=tag_slug) %}
-    {% include "mediagoblin/utils/feed_link.html" %}
-  </div>
+  {% set feed_url = request.urlgen('mediagoblin.listings.tag_atom_feed',
+                                   tag=tag_slug) %}
+  {% include "mediagoblin/utils/feed_link.html" %}
 {% endblock %}

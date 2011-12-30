@@ -46,7 +46,7 @@
   {% elif user.status == "needs_email_verification" %}
     {% if user == request.user %}
       {# this should only be visible when you are this user #}
-      <div class="grid_6 prefix_1 suffix_1 form_box">
+      <div class="form_box">
         <h1>{% trans %}Email verification needed{% endtrans %}</h1>
 
         <p>
@@ -66,7 +66,7 @@
       </div>
     {% else %}
       {# if the user is not you, but still needs to verify their email #}
-      <div class="grid_6 prefix_1 suffix_1 form_box">
+      <div class="form_box">
         <h1>{% trans %}Email verification needed{% endtrans %}</h1>
 
         <p>
@@ -91,7 +91,7 @@
 
     {% if not user.url and not user.bio %}
       {% if request.user._id == user._id %}
-        <div class="grid_6 alpha empty_space">
+        <div class="profile_sidebar empty_space">
           <p>
             {% trans %}Here's a spot to tell others about yourself.{% endtrans %}
           </p>
@@ -102,7 +102,7 @@
           </a>
         </div>
       {% else %}
-        <div class="grid_6 alpha empty_space">
+        <div class="profile_sidebar empty_space">
           <p>
             {% trans -%}
               This user hasn't filled in their profile (yet).
@@ -111,7 +111,7 @@
         </div>
       {% endif %}
     {% else %}
-      <div class="grid_6 alpha">
+      <div class="profile_sidebar">
         {% include "mediagoblin/utils/profile.html" %}
         {% if request.user._id == user._id or request.user.is_admin %}
           <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
@@ -123,7 +123,7 @@
     {% endif %}
 
     {% if media_entries.count() %}
-      <div class="grid_10 omega">
+      <div class="profile_showcase">
         {{ object_gallery(request, media_entries, pagination,
                           pagination_base_url=user_gallery_url, col_number=3) }}
         {% include "mediagoblin/utils/object_gallery.html" %}
@@ -141,7 +141,7 @@
       </div>
     {% else %}
       {% if request.user._id == user._id %}
-        <div class="grid_10 omega empty_space">
+        <div class="profile_showcase empty_space">
           <p>
             {% trans -%}
             This is where your media will appear, but you don't seem to have added anything yet.
@@ -153,7 +153,7 @@
           </a>
         </div>
       {% else %}
-        <div class="grid_10 omega empty_space">
+        <div class="profile_showcase empty_space">
           <p>
             {% trans -%}
             There doesn't seem to be any media here yet...

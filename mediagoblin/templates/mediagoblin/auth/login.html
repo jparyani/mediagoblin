@@ -23,7 +23,7 @@
   <form action="{{ request.urlgen('mediagoblin.auth.login') }}"
         method="POST" enctype="multipart/form-data">
     {{ csrf_token }}
-    <div class="grid_6 prefix_1 suffix_1 form_box">
+    <div class="form_box">
       <h1>{% trans %}Log in{% endtrans %}</h1>
       {% if login_failed %}
         <div class="form_field_error">
