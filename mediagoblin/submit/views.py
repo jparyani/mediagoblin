@@ -31,7 +31,8 @@ from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
 from mediagoblin.processing import mark_entry_failed, ProcessMedia
 from mediagoblin.messages import add_message, SUCCESS
-from mediagoblin.media_types import get_media_type_and_manager, InvalidFileType
+from mediagoblin.media_types import get_media_type_and_manager, \
+    InvalidFileType, FileTypeNotSupported
 
 
 @require_active_login
@@ -133,8 +134,13 @@ def submit_start(request):
                 This section is intended to catch exceptions raised in 
                 mediagobling.media_types
                 '''
-                submit_form.file.errors.append(
-                    e)
+
+                if isinstance(e, InvalidFileType) or \
+                        isinstance(e, FileTypeNotSupported):
+                    submit_form.file.errors.append(
+                        e)
+                else:
+                    raise
 
     return render_to_response(
         request,

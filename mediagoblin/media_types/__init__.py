@@ -73,7 +73,7 @@ def get_media_type_and_manager(filename):
         # Get the file extension
         ext = os.path.splitext(filename)[1].lower()
     else:
-        raise Exception(
+        raise InvalidFileType(
             _(u'Could not extract any file extension from "{filename}"').format(
                 filename=filename))
 

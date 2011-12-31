@@ -233,9 +233,9 @@ def test_register_views(test_app):
     ## Did we redirect to the proper page?  Use the right template?
     assert_equal(
         urlparse.urlsplit(response.location)[2],
-        '/auth/forgot_password/email_sent/')
+        '/auth/login/')
     assert template.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/auth/fp_email_sent.html')
+        'mediagoblin/auth/login.html')
 
     ## Make sure link to change password is sent by email
     assert len(mail.EMAIL_TEST_INBOX) == 1
