@@ -5,7 +5,10 @@ from sqlalchemy import (
     Column, Integer, Unicode, UnicodeText, DateTime, Boolean, ForeignKey,
     UniqueConstraint)
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm.collections import attribute_mapped_collection
+from sqlalchemy.ext.associationproxy import association_proxy
 
+from mediagoblin.db.sql.extratypes import PathTupleWithSlashes
 from mediagoblin.db.sql.base import GMGTableBase
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
 
@@ -65,7 +68,7 @@ class MediaEntry(Base, MediaEntryMixin):
     fail_error = Column(Unicode)
     fail_metadata = Column(UnicodeText)
 
-    queued_media_file = Column(Unicode)
+    queued_media_file = Column(PathTupleWithSlashes)
 
     queued_task_id = Column(Unicode)
 
@@ -75,11 +78,31 @@ class MediaEntry(Base, MediaEntryMixin):
 
     get_uploader = relationship(User)
 
+    media_files_helper = relationship("MediaFile",
+        collection_class=attribute_mapped_collection("name"),
+        cascade="all, delete-orphan"
+        )
+    media_files = association_proxy('media_files_helper', 'file_path',
+        creator=lambda k,v: MediaFile(name=k, file_path=v)
+        )
+
     ## TODO
-    # media_files
     # media_data
     # attachment_files
     # fail_error
+
+
+class MediaFile(Base):
+    __tablename__ = "mediafiles"
+
+    media_entry = Column(
+        Integer, ForeignKey(MediaEntry.id),
+        nullable=False, primary_key=True)
+    name = Column(Unicode, primary_key=True)
+    file_path = Column(PathTupleWithSlashes)
+
+    def __repr__(self):
+        return "<MediaFile %s: %r>" % (self.name, self.file_path)
 
 
 class Tag(Base):
