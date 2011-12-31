@@ -15,6 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import sys
+
+def _simple_printer(string):
+    """
+    Prints a string, but without an auto \n at the end.
+    """
+    sys.stdout.write(string)
+    sys.stdout.flush()
+
+
 class MigrationManager(object):
     """
     Migration handling tool.
@@ -23,7 +33,8 @@ class MigrationManager(object):
     to the latest migrations, etc.
     """
 
-    def __init__(self, name, models, migration_registry, database):
+    def __init__(self, name, models, migration_registry, database,
+                 printer=_simple_printer):
         """
         Args:
          - name: identifier of this section of the database
@@ -36,6 +47,7 @@ class MigrationManager(object):
         self.database = database
         self.migration_registry = migration_registry
         self._sorted_migrations = None
+        self.printer = printer
 
         # For convenience
         from mediagoblin.db.sql.models import MigrationData
@@ -98,23 +110,81 @@ class MigrationManager(object):
         #     if migration_number > db_current_migration]
         pass
 
-    def init_or_migrate(self):
+    def init_tables(self):
+        ## TODO
+        pass
+
+    def create_new_migration_record(self):
+        ## TODO
+        pass
+
+    def dry_run(self):
+        """
+        Print out a dry run of what we would have upgraded.
+        """
+        if self.database_current_migration() is None:
+            self.printer(
+                    u'~> Woulda initialized: %s\n' % self.name_for_printing())
+            return u'inited'
+
+        migrations_to_run = self.migrations_to_run()
+        if migrations_to_run:
+            self.printer(
+                u'~> Woulda updated %s:\n' % self.name_for_printing())
+
+            for migration_number, migration_func in migrations_to_run():
+                self.printer(
+                    u'   + Would update %s, "%s"\n' % (
+                        migration_number, migration_func.func_name))
+
+            return u'migrated'
+        
+    def name_for_printing(self):
+        if self.name == u'__main__':
+            return u"main mediagoblin tables"
+        else:
+            # TODO: Use the friendlier media manager "human readable" name
+            return u'media type "%s"' % self.name
+
+    def init_or_migrate(self, printer=_simple_printer):
+        """
+        Initialize the database or migrate if appropriate.
+
+        Returns information about whether or not we initialized
+        ('inited'), migrated ('migrated'), or did nothing (None)
+        """
         # Find out what migration number, if any, this database data is at,
         # and what the latest is.
+        migration_number = self.database_current_migration()
 
         # Is this our first time?  Is there even a table entry for
         # this identifier?
-        #
         # If so:
         #  - create all tables
         #  - create record in migrations registry
         #  - print / inform the user
         #  - return 'inited'
+        if migration_number is None:
+            self.printer(u"-> Initializing %s... " % self.name_for_printing())
+
+            self.init_tables()
+            # auto-set at latest migration number
+            self.create_new_migration_record()  
+            
+            self.printer(u"done.\n")
+            return u'inited'
 
         # Run migrations, if appropriate.
+        migrations_to_run = self.migrations_to_run()
+        if migrations_to_run:
+            self.printer(
+                u'~> Updating %s:\n' % self.name_for_printing())
+            for migration_number, migration_func in migrations_to_run():
+                self.printer(
+                    u'   + Running migration %s, "%s"\n' % (
+                        migration_number, migration_func.func_name))
 
-        # If ran migrations, return 'migrated'.  Otherwise, return None.
-        pass
+            return u'migrated'
 
 
 class RegisterMigration(object):
