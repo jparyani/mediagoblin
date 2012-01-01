@@ -324,7 +324,11 @@ def verify_forgot_password(request):
             user.fp_token_expire = None
             user.save()
 
-            return redirect(request, 'mediagoblin.auth.fp_changed_success')
+            messages.add_message(
+                request,
+                messages.INFO,
+                _("You can now log in using your new password."))
+            return redirect(request, 'mediagoblin.auth.login')
         else:
             return render_to_response(
                 request,

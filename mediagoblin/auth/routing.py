@@ -35,8 +35,4 @@ auth_routes = [
           controller='mediagoblin.auth.views:forgot_password'),
     Route('mediagoblin.auth.verify_forgot_password',
           '/forgot_password/verify/',
-          controller='mediagoblin.auth.views:verify_forgot_password'),
-    Route('mediagoblin.auth.fp_changed_success',
-          '/forgot_password/changed_success/',
-          template='mediagoblin/auth/fp_changed_success.html',
-          controller='mediagoblin.views:simple_template_render')]
+          controller='mediagoblin.auth.views:verify_forgot_password')]
