@@ -39,8 +39,4 @@ auth_routes = [
     Route('mediagoblin.auth.fp_changed_success',
           '/forgot_password/changed_success/',
           template='mediagoblin/auth/fp_changed_success.html',
-          controller='mediagoblin.views:simple_template_render'),
-    Route('mediagoblin.auth.fp_email_sent',
-          '/forgot_password/email_sent/',
-          template='mediagoblin/auth/fp_email_sent.html',
           controller='mediagoblin.views:simple_template_render')]
