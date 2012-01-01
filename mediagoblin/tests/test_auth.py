@@ -291,7 +291,7 @@ def test_register_views(test_app):
             'token': parsed_get_params['token']})
     response.follow()
     assert template.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/auth/fp_changed_success.html')
+        'mediagoblin/auth/login.html')
 
     ## Verify step 2.2 of password-change works -- login w/ new password success
     template.clear_test_template_context()
