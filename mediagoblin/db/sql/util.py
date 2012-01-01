@@ -68,6 +68,17 @@ class MigrationManager(object):
 
         return self._sorted_migrations
 
+    @property
+    def migration_data(self):
+        """
+        Get the migration row associated with this object, if any.
+        """
+        query = self.database.query(
+            self.migration_model).filter_by(name=self.name)[0]
+
+        if query.count():
+            return query[0]
+
     def latest_migration(self):
         """
         Return a migration number for the latest migration, or 0 if
@@ -83,32 +94,31 @@ class MigrationManager(object):
         """
         Return the current migration in the database.
         """
-        # TODO
+        return self.migration_data.version
 
     def set_current_migration(self, migration_number):
         """
         Set the migration in the database to migration_number
         """
-        # TODO
-        pass
+        self.migration_data = migration_number
+        self.database.commit()
 
     def migrations_to_run(self):
         """
         Get a list of migrations to run still, if any.
         
-        Note that calling this will set your migration version to the
-        latest version if it isn't installed to anything yet!
+        Note that this will fail if there's no migration record for
+        this class!
         """
-        ## TODO
-        # self._ensure_current_migration_record()
-        #
-        # db_current_migration = self.database_current_migration()
-        #
-        # return [
-        #     (migration_number, migration_func)
-        #     for migration_number, migration_func in self.sorted_migrations
-        #     if migration_number > db_current_migration]
-        pass
+        assert self.database_current_migration is None
+
+        db_current_migration = self.database_current_migration()
+        
+        return [
+            (migration_number, migration_func)
+            for migration_number, migration_func in self.sorted_migrations
+            if migration_number > db_current_migration]
+
 
     def init_tables(self):
         ## TODO
