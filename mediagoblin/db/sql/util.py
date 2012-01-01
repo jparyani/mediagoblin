@@ -146,7 +146,7 @@ class MigrationManager(object):
             # TODO: Use the friendlier media manager "human readable" name
             return u'media type "%s"' % self.name
 
-    def init_or_migrate(self, printer=_simple_printer):
+    def init_or_migrate(self):
         """
         Initialize the database or migrate if appropriate.
 
