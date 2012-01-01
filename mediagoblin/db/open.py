@@ -14,4 +14,5 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.db.mongo.open import setup_connection_and_db_from_config
+from mediagoblin.db.mongo.open import \
+    setup_connection_and_db_from_config, check_db_migrations_current

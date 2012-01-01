@@ -23,8 +23,8 @@ from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
 from mediagoblin import mg_globals
 from mediagoblin.mg_globals import setup_globals
-from mediagoblin.db.open import setup_connection_and_db_from_config
-from mediagoblin.db.util import MigrationManager
+from mediagoblin.db.open import setup_connection_and_db_from_config, \
+    check_db_migrations_current
 from mediagoblin.workbench import WorkbenchManager
 from mediagoblin.storage import storage_system_from_config
 
@@ -56,28 +56,10 @@ def setup_global_and_app_config(config_path):
 def setup_database():
     app_config = mg_globals.app_config
 
-    # This MUST be imported so as to set up the appropriate migrations!
-    from mediagoblin.db.mongo import migrations
-
     # Set up the database
     connection, db = setup_connection_and_db_from_config(app_config)
 
-    # Init the migration number if necessary
-    migration_manager = MigrationManager(db)
-    migration_manager.install_migration_version_if_missing()
-
-    # Tiny hack to warn user if our migration is out of date
-    if not migration_manager.database_at_latest_migration():
-        db_migration_num = migration_manager.database_current_migration()
-        latest_migration_num = migration_manager.latest_migration()
-        if db_migration_num < latest_migration_num:
-            print (
-                "*WARNING:* Your migrations are out of date, "
-                "maybe run ./bin/gmg migrate?")
-        elif db_migration_num > latest_migration_num:
-            print (
-                "*WARNING:* Your migrations are out of date... "
-                "in fact they appear to be from the future?!")
+    check_db_migrations_current(db)
 
     setup_globals(
         db_connection=connection,

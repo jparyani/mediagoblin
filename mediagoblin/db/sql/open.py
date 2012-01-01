@@ -27,3 +27,7 @@ def setup_connection_and_db_from_config(app_config):
     Session.configure(bind=engine)
 
     return "dummy conn", DatabaseMaster(engine)
+
+
+def check_db_migrations_current(db):
+    pass

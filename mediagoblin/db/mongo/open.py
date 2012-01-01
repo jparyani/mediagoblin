@@ -18,6 +18,7 @@ import pymongo
 import mongokit
 from paste.deploy.converters import asint
 from mediagoblin.db.mongo import models
+from mediagoblin.db.util import MigrationManager
 
 
 def connect_database_from_config(app_config, use_pymongo=False):
@@ -53,3 +54,25 @@ def setup_connection_and_db_from_config(app_config, use_pymongo=False):
         models.register_models(connection)
 
     return (connection, db)
+
+
+def check_db_migrations_current(db):
+    # This MUST be imported so as to set up the appropriate migrations!
+    from mediagoblin.db.mongo import migrations
+
+    # Init the migration number if necessary
+    migration_manager = MigrationManager(db)
+    migration_manager.install_migration_version_if_missing()
+
+    # Tiny hack to warn user if our migration is out of date
+    if not migration_manager.database_at_latest_migration():
+        db_migration_num = migration_manager.database_current_migration()
+        latest_migration_num = migration_manager.latest_migration()
+        if db_migration_num < latest_migration_num:
+            print (
+                "*WARNING:* Your migrations are out of date, "
+                "maybe run ./bin/gmg migrate?")
+        elif db_migration_num > latest_migration_num:
+            print (
+                "*WARNING:* Your migrations are out of date... "
+                "in fact they appear to be from the future?!")
