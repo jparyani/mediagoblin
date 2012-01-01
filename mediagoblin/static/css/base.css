@@ -257,7 +257,7 @@ textarea#comment_content {
   width: 20px;
 }
 
-textarea#description {
+textarea#description, textarea#bio {
   resize: vertical;
 }
 
