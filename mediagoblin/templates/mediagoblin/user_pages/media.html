@@ -23,17 +23,8 @@
 {% block title %}{{ media.title }} &mdash; {{ super() }}{% endblock %}
 
 {% block mediagoblin_head %}
-  <script>
-    $(document).ready(function(){
-      $('#form_comment').hide();
-      $('#button_addcomment').click(function(){
-          $(this).fadeOut('fast');
-          $('#form_comment').slideDown(function(){
-            $('#comment_content').focus();
-          });
-      });
-    });
-  </script>
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/js/comment_show.js') }}"></script>
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_content %}

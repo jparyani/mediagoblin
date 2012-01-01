@@ -1,0 +1,9 @@
+$(document).ready(function(){
+  $('#form_comment').hide();
+  $('#button_addcomment').click(function(){
+    $(this).fadeOut('fast');
+    $('#form_comment').slideDown(function(){
+        $('#comment_content').focus();
+    });
+  });
+});
