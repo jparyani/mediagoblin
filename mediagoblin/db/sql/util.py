@@ -181,10 +181,16 @@ class MigrationManager(object):
                 u'~> Updating %s:\n' % self.name_for_printing())
             for migration_number, migration_func in migrations_to_run():
                 self.printer(
-                    u'   + Running migration %s, "%s"\n' % (
+                    u'   + Running migration %s, "%s"... ' % (
                         migration_number, migration_func.func_name))
+                migration_func(self.database)
+                self.printer('done.')
 
             return u'migrated'
+
+        # Otherwise return None.  Well it would do this anyway, but
+        # for clarity... ;)
+        return None
 
 
 class RegisterMigration(object):
