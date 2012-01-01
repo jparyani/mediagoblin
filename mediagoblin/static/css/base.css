@@ -193,6 +193,7 @@ text-align: center;
 }
 
 textarea#comment_content {
+  resize: vertical;
   width: 634px;
   height: 90px;
   border: none;
@@ -254,6 +255,10 @@ textarea#comment_content {
 #password_boolean {
   margin-top: 4px;
   width: 20px;
+}
+
+textarea#description {
+  resize: vertical;
 }
 
 /* comments */
