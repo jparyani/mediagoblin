@@ -109,6 +109,13 @@ class MediaEntry(Base, MediaEntryMixin):
     # attachment_files
     # fail_error
 
+    def get_comments(self, ascending=False):
+        order_col = MediaComment.created
+        if not ascending:
+            order_col = desc(order_col)
+        return MediaComment.query.filter_by(
+            media_entry=self.id).order_by(order_col)
+
 
 class MediaFile(Base):
     __tablename__ = "mediafiles"
