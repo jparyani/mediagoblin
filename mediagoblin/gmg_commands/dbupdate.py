@@ -32,7 +32,7 @@ class DatabaseData(object):
             self.name, self.models, self.migrations, db)
 
 
-def gather_database_data(self, media_types):
+def gather_database_data(media_types):
     """
     Gather all database data relevant to the extensions we have
     installed so we can do migrations and table initialization.
