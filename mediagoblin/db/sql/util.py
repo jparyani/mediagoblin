@@ -137,9 +137,10 @@ class MigrationManager(object):
         """
         Create a new migration record for this migration set
         """
-        self.migration_model(
+        migration_record = self.migration_model(
             name=self.name,
             version=self.latest_migration())
+        self.database.add(migration_record)
         self.database.commit()
 
     def dry_run(self):
