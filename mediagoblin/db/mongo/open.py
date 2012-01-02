@@ -18,7 +18,7 @@ import pymongo
 import mongokit
 from paste.deploy.converters import asint
 from mediagoblin.db.mongo import models
-from mediagoblin.db.util import MigrationManager
+from mediagoblin.db.mongo.util import MigrationManager
 
 
 def connect_database_from_config(app_config, use_pymongo=False):
