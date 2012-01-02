@@ -107,7 +107,7 @@ class MigrationManager(object):
         Note that this will fail if there's no migration record for
         this class!
         """
-        assert self.database_current_migration is None
+        assert self.database_current_migration is not None
 
         db_current_migration = self.database_current_migration()
         
