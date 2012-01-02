@@ -127,7 +127,7 @@ class MigrationManager(object):
             assert not model.__table__.exists(self.database)
 
         self.migration_model.metadata.create_all(
-            self.database,
+            self.database.engine,
             tables=[model.__table__ for model in self.models])
 
     def create_new_migration_record(self):
