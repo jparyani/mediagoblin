@@ -140,6 +140,7 @@ class MigrationManager(object):
         self.migration_model(
             name=self.name,
             version=self.latest_migration())
+        self.database.commit()
 
     def dry_run(self):
         """
