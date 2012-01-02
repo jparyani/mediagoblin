@@ -73,11 +73,8 @@ class MigrationManager(object):
         """
         Get the migration row associated with this object, if any.
         """
-        query = self.database.query(
-            self.migration_model).filter_by(name=self.name)[0]
-
-        if query.count():
-            return query[0]
+        return self.database.query(
+            self.migration_model).filter_by(name=self.name).first()
 
     def latest_migration(self):
         """
