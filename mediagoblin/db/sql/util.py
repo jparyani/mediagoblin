@@ -126,6 +126,7 @@ class MigrationManager(object):
         """
         # sanity check before we proceed, none of these should be created
         for model in self.models:
+            # Maybe in the future just print out a "Yikes!" or something?
             assert not model.__table__.exists(self.database)
 
         self.migration_model.metadata.create_all(
@@ -133,8 +134,12 @@ class MigrationManager(object):
             tables=[model.__table__ for model in self.models])
 
     def create_new_migration_record(self):
-        ## TODO
-        pass
+        """
+        Create a new migration record for this migration set
+        """
+        self.migration_model(
+            name=self.name,
+            version=self.latest_migration())
 
     def dry_run(self):
         """
