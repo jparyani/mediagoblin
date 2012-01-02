@@ -121,8 +121,16 @@ class MigrationManager(object):
 
 
     def init_tables(self):
-        ## TODO
-        pass
+        """
+        Create all tables relative to this package
+        """
+        # sanity check before we proceed, none of these should be created
+        for model in self.models:
+            assert not model.__table__.exists(self.database)
+
+        self.migration_model.metadata.create_all(
+            self.database,
+            tables=[model.__table__ for model in self.models])
 
     def create_new_migration_record(self):
         ## TODO
@@ -163,6 +171,8 @@ class MigrationManager(object):
         Returns information about whether or not we initialized
         ('inited'), migrated ('migrated'), or did nothing (None)
         """
+        assure_migrations_table_setup(self.database)
+
         # Find out what migration number, if any, this database data is at,
         # and what the latest is.
         migration_number = self.database_current_migration()
