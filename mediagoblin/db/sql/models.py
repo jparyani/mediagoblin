@@ -230,8 +230,7 @@ MODELS = [
 class MigrationData(Base):
     __tablename__ = "migrations"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(Unicode, nullable=False, unique=True)
+    name = Column(Unicode, primary_key=True)
     version = Column(Integer, nullable=False, default=0)
 
 ######################################################
