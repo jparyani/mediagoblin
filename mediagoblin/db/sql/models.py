@@ -23,6 +23,7 @@ from sqlalchemy import (
     UniqueConstraint)
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm.collections import attribute_mapped_collection
+from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
 
 from mediagoblin.db.sql.extratypes import PathTupleWithSlashes
@@ -115,6 +116,26 @@ class MediaEntry(Base, MediaEntryMixin):
             order_col = desc(order_col)
         return MediaComment.query.filter_by(
             media_entry=self.id).order_by(order_col)
+
+    def url_to_prev(self, urlgen):
+        """get the next 'newer' entry by this user"""
+        media = MediaEntry.query.filter(
+            (MediaEntry.uploader == self.uploader)
+            & (MediaEntry.state == 'processed')
+            & (MediaEntry.id > self.id)).order_by(MediaEntry.id).first()
+
+        if media is not None:
+            return media.url_for_self(urlgen)
+
+    def url_to_next(self, urlgen):
+        """get the next 'older' entry by this user"""
+        media = MediaEntry.query.filter(
+            (MediaEntry.uploader == self.uploader)
+            & (MediaEntry.state == 'processed')
+            & (MediaEntry.id < self.id)).order_by(desc(MediaEntry.id)).first()
+
+        if media is not None:
+            return media.url_for_self(urlgen)
 
 
 class MediaFile(Base):
