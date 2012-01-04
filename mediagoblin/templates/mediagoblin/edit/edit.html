@@ -29,7 +29,7 @@
       <h1>{% trans media_title=media.title %}Editing {{ media_title }}{% endtrans %}</h1>
       <div style="text-align: center;" >
         <img src="{{ request.app.public_store.file_url(
-                         media['media_files']['thumb']) }}" />
+                         media.media_files['thumb']) }}" />
       </div>
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">

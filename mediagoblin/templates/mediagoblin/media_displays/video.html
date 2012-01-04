@@ -27,7 +27,7 @@
 	   preload="auto"
 	   data-setup="">
       <source src="{{ request.app.public_store.file_url(
-		   media['media_files']['webm_640']) }}" 
+		   media.media_files['webm_640']) }}" 
 	      type="video/webm; codecs=&quot;vp8, vorbis&quot;" />
 	  <div class="no_html5">
 	    {%- trans -%}Sorry, this video will not work because 
@@ -42,7 +42,7 @@
   {% if 'original' in media.media_files %}
   <p>
     <a href="{{ request.app.public_store.file_url(
-	     media['media_files']['original']) }}">
+	     media.media_files['original']) }}">
       {%- trans -%}
         Original
       {%- endtrans -%}

@@ -27,7 +27,7 @@
       <h1>Editing attachments for {{ media.title }}</h1>
       <div style="text-align: center;" >
         <img src="{{ request.app.public_store.file_url(
-                         media['media_files']['thumb']) }}" />
+                         media.media_files['thumb']) }}" />
       </div>
 
       {% if media.attachment_files|count %}

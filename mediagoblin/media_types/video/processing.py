@@ -74,7 +74,7 @@ def process_video(entry):
             tmp_dst.read())
         _log.debug('Saved medium')
 
-        entry['media_files']['webm_640'] = medium_filepath
+        entry.media_files['webm_640'] = medium_filepath
 
         # Save the width and height of the transcoded video
         entry.media_data['video'] = {
@@ -94,7 +94,7 @@ def process_video(entry):
             tmp_thumb.read())
         _log.debug('Saved thumbnail')
 
-        entry['media_files']['thumb'] = thumbnail_filepath
+        entry.media_files['thumb'] = thumbnail_filepath
 
     if video_config['keep_original']:
         # Push original file to public storage
@@ -111,7 +111,7 @@ def process_video(entry):
                 original_file.write(queued_file.read())
                 _log.debug('Saved original')
 
-                entry['media_files']['original'] = original_filepath
+                entry.media_files['original'] = original_filepath
 
     mgg.queue_store.delete_file(queued_filepath)
 

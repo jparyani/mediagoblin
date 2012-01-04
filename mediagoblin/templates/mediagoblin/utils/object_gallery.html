@@ -31,7 +31,7 @@
                      {%- elif loop.last %} thumb_entry_last{% endif %}">
             <a href="{{ entry_url }}">
               <img src="{{ request.app.public_store.file_url(
-                             entry['media_files']['thumb']) }}" />
+                             entry.media_files['thumb']) }}" />
             </a>
             {% if entry.title %}
               <br />

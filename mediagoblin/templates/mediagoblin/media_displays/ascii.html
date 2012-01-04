@@ -23,14 +23,14 @@
     <pre>
       {%- autoescape False -%}
       {{- request.app.public_store.get_file(
-             media['media_files']['unicode']).read()|string -}}
+             media.media_files['unicode']).read()|string -}}
       {%- endautoescape -%}
     </pre>
   </div>
   {% if 'original' in media.media_files %}
   <p>
     <a href="{{ request.app.public_store.file_url(
-	     media['media_files']['original']) }}">
+	     media.media_files['original']) }}">
       {%- trans -%}
         Original
       {%- endtrans -%}

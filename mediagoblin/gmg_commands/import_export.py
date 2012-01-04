@@ -65,7 +65,7 @@ def _import_media(db, args):
         args._cache_path['queue'])
 
     for entry in db.MediaEntry.find():
-        for name, path in entry['media_files'].items():
+        for name, path in entry.media_files.items():
             _log.info('Importing: {0} - {1}'.format(
                     entry.title,
                     name))
@@ -207,7 +207,7 @@ def _export_media(db, args):
         args._cache_path['queue'])
 
     for entry in db.MediaEntry.find():
-        for name, path in entry['media_files'].items():
+        for name, path in entry.media_files.items():
             _log.info(u'Exporting {0} - {1}'.format(
                     entry.title,
                     name))
