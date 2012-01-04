@@ -23,7 +23,11 @@ class EditForm(wtforms.Form):
     title = wtforms.TextField(
         _('Title'),
         [wtforms.validators.Length(min=0, max=500)])
-    description = wtforms.TextAreaField('Description of this work')
+    description = wtforms.TextAreaField(
+        _('Description of this work'),
+        description=_("""You can use
+                      <a href="http://daringfireball.net/projects/markdown/basics">
+                      Markdown</a> for formatting."""))
     tags = wtforms.TextField(
         _('Tags'),
         [tag_length_validator],
@@ -40,7 +44,11 @@ class EditForm(wtforms.Form):
 class EditProfileForm(wtforms.Form):
     bio = wtforms.TextAreaField(
         _('Bio'),
-        [wtforms.validators.Length(min=0, max=500)])
+        [wtforms.validators.Length(min=0, max=500)],
+        description=_(
+            """You can use
+            <a href="http://daringfireball.net/projects/markdown/basics">
+            Markdown</a> for formatting."""))
     url = wtforms.TextField(
         _('Website'),
         [wtforms.validators.Optional(),

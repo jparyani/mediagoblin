@@ -29,7 +29,7 @@
       {% endfor %}
     {%- endif %}
     {% if field.description -%}
-      <p class="form_field_description">{{ _(field.description) }}</p>
+      <p class="form_field_description">{{ _(field.description)|safe }}</p>
     {%- endif %}
   </div>
 {%- endmacro %}

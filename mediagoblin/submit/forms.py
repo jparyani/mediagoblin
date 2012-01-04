@@ -27,7 +27,10 @@ class SubmitStartForm(wtforms.Form):
         _('Title'),
         [wtforms.validators.Length(min=0, max=500)])
     description = wtforms.TextAreaField(
-        _('Description of this work'))
+        _('Description of this work'),
+        description=_("""You can use
+                      <a href="http://daringfireball.net/projects/markdown/basics">
+                      Markdown</a> for formatting."""))
     tags = wtforms.TextField(
         _('Tags'),
         [tag_length_validator],
