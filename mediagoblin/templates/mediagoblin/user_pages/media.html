@@ -60,8 +60,9 @@
       {% trans date=media.created.strftime("%Y-%m-%d") -%}
         Added on {{ date }}.
       {%- endtrans %}
-      {% if media['uploader'] == request.user._id or 
-                               request.user['is_admin'] %}
+      {% if request.user and
+            (media.uploader == request.user._id or 
+             request.user.is_admin) %}
         {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
                                    user= media.get_uploader.username,
                                    media= media._id) %}
