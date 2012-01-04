@@ -162,6 +162,35 @@ def edit_profile(request):
         bio=user.get('bio'))
 
     if request.method == 'POST' and form.validate():
+        user.url = unicode(request.POST['url'])
+        user.bio = unicode(request.POST['bio'])
+
+        user.bio_html = cleaned_markdown_conversion(user['bio'])
+
+        user.save()
+
+        messages.add_message(request,
+                             messages.SUCCESS,
+                             _("Profile changes saved"))
+        return redirect(request,
+                       'mediagoblin.user_pages.user_home',
+                        user=user['username'])
+
+    return render_to_response(
+        request,
+        'mediagoblin/edit/edit_profile.html',
+        {'user': user,
+         'form': form})
+
+
+@require_active_login
+def edit_account(request):
+    edit_username = request.GET.get('username')
+    user = request.user
+
+    form = forms.EditAccountForm(request.POST)
+
+    if request.method == 'POST' and form.validate():
         password_matches = auth_lib.bcrypt_check_password(
             request.POST['old_password'],
             user['pw_hash'])
@@ -172,30 +201,25 @@ def edit_profile(request):
 
             return render_to_response(
                 request,
-                'mediagoblin/edit/edit_profile.html',
+                'mediagoblin/edit/edit_account.html',
                 {'user': user,
                  'form': form})
-
-        user.url = unicode(request.POST['url'])
-        user.bio = unicode(request.POST['bio'])
 
         if password_matches:
             user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
                 request.POST['new_password'])
 
-        user.bio_html = cleaned_markdown_conversion(user['bio'])
-
         user.save()
 
         messages.add_message(request,
                              messages.SUCCESS,
-                             _("Profile edited!"))
+                             _("Account settings saved"))
         return redirect(request,
                        'mediagoblin.user_pages.user_home',
                         user=user['username'])
 
     return render_to_response(
         request,
-        'mediagoblin/edit/edit_profile.html',
+        'mediagoblin/edit/edit_account.html',
         {'user': user,
          'form': form})
