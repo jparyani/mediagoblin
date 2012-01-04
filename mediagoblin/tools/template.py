@@ -41,8 +41,11 @@ def get_jinja_env(template_loader, locale):
     if SETUP_JINJA_ENVS.has_key(locale):
         return SETUP_JINJA_ENVS[locale]
 
+    # jinja2.StrictUndefined will give exceptions on references
+    # to undefined/unknown variables in templates.
     template_env = jinja2.Environment(
         loader=template_loader, autoescape=True,
+        undefined=jinja2.StrictUndefined,
         extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
 
     template_env.install_gettext_callables(

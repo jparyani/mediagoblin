@@ -14,5 +14,5 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.db.mongo.util import (MigrationManager, ObjectId, InvalidId,
+from mediagoblin.db.mongo.util import (ObjectId, InvalidId,
     DESCENDING)
