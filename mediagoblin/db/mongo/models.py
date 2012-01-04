@@ -18,12 +18,12 @@ import datetime
 
 from mongokit import Document
 
-from mediagoblin.auth import lib as auth_lib
 from mediagoblin import mg_globals
 from mediagoblin.db.mongo import migrations
 from mediagoblin.db.mongo.util import ASCENDING, DESCENDING, ObjectId
 from mediagoblin.tools.pagination import Pagination
-from mediagoblin.tools import url, common
+from mediagoblin.tools import url
+from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
 
 ###################
 # Custom validators
@@ -34,7 +34,7 @@ from mediagoblin.tools import url, common
 ########
 
 
-class User(Document):
+class User(Document, UserMixin):
     """
     A user of MediaGoblin.
 
@@ -89,15 +89,8 @@ class User(Document):
         'status': u'needs_email_verification',
         'is_admin': False}
 
-    def check_login(self, password):
-        """
-        See if a user can login with this password
-        """
-        return auth_lib.bcrypt_check_password(
-            password, self.pw_hash)
 
-
-class MediaEntry(Document):
+class MediaEntry(Document, MediaEntryMixin):
     """
     Record of a piece of media.
 
@@ -224,28 +217,6 @@ class MediaEntry(Document):
         return self.db.MediaComment.find({
                 'media_entry': self._id}).sort('created', order)
 
-    def get_display_media(self, media_map,
-                          fetch_order=common.DISPLAY_IMAGE_FETCHING_ORDER):
-        """
-        Find the best media for display.
-
-        Args:
-        - media_map: a dict like
-          {u'image_size': [u'dir1', u'dir2', u'image.jpg']}
-        - fetch_order: the order we should try fetching images in
-
-        Returns:
-        (media_size, media_path)
-        """
-        media_sizes = media_map.keys()
-
-        for media_size in common.DISPLAY_IMAGE_FETCHING_ORDER:
-            if media_size in media_sizes:
-                return media_map[media_size]
-
-    def main_mediafile(self):
-        pass
-
     def generate_slug(self):
         self.slug = url.slugify(self.title)
 
@@ -254,25 +225,6 @@ class MediaEntry(Document):
 
         if duplicate:
             self.slug = "%s-%s" % (self._id, self.slug)
-
-    def url_for_self(self, urlgen):
-        """
-        Generate an appropriate url for ourselves
-
-        Use a slug if we have one, else use our '_id'.
-        """
-        uploader = self.get_uploader
-
-        if self.get('slug'):
-            return urlgen(
-                'mediagoblin.user_pages.media_home',
-                user=uploader.username,
-                media=self.slug)
-        else:
-            return urlgen(
-                'mediagoblin.user_pages.media_home',
-                user=uploader.username,
-                media=unicode(self._id))
 
     def url_to_prev(self, urlgen):
         """
@@ -300,13 +252,6 @@ class MediaEntry(Document):
     @property
     def get_uploader(self):
         return self.db.User.find_one({'_id': self.uploader})
-
-    def get_fail_exception(self):
-        """
-        Get the exception that's appropriate for this error
-        """
-        if self['fail_error']:
-            return common.import_component(self['fail_error'])
 
 
 class MediaComment(Document):
