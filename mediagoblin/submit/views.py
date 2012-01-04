@@ -74,7 +74,7 @@ def submit_start(request):
                 entry.uploader = request.user._id
 
                 # Process the user's folksonomy "tags"
-                entry['tags'] = convert_to_tag_list_of_dicts(
+                entry.tags = convert_to_tag_list_of_dicts(
                     request.POST.get('tags'))
 
                 # Generate a slug from the title

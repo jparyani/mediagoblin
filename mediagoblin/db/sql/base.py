@@ -77,3 +77,19 @@ class GMGTableBase(object):
 
 
 Base = declarative_base(cls=GMGTableBase)
+
+
+class DictReadAttrProxy(object):
+    """
+    Maps read accesses to obj['key'] to obj.key
+    and hides all the rest of the obj
+    """
+    def __init__(self, proxied_obj):
+        self.proxied_obj = proxied_obj
+
+    def __getitem__(self, key):
+        try:
+            return getattr(self.proxied_obj, key)
+        except AttributeError:
+            raise KeyError("%r is not an attribute on %r"
+                % (key, self.proxied_obj))

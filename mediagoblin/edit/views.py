@@ -69,7 +69,7 @@ def edit_media(request, media):
         else:
             media.title = unicode(request.POST['title'])
             media.description = unicode(request.POST.get('description'))
-            media['tags'] = convert_to_tag_list_of_dicts(
+            media.tags = convert_to_tag_list_of_dicts(
                                    request.POST.get('tags'))
 
             media.description_html = cleaned_markdown_conversion(
