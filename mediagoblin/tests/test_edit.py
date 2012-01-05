@@ -34,12 +34,10 @@ def test_change_password(test_app):
     # test that the password can be changed
     # template.clear_test_template_context()
     test_app.post(
-        '/edit/profile/', {
-            'bio': u'',
-            'url': u'',
+        '/edit/account/', {
             'old_password': 'toast',
             'new_password': '123456',
-            'confirm_password': '123456'})
+            })
 
     # test_user has to be fetched again in order to have the current values
     test_user = mg_globals.database.User.one({'username': 'chris'})
@@ -50,12 +48,10 @@ def test_change_password(test_app):
     # is wrong
     # template.clear_test_template_context()
     test_app.post(
-        '/edit/profile/', {
-            'bio': u'',
-            'url': u'',
+        '/edit/account/', {
             'old_password': 'toast',
             'new_password': '098765',
-            'confirm_password': '098765'})
+            })
 
     test_user = mg_globals.database.User.one({'username': 'chris'})
 
