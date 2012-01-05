@@ -77,17 +77,33 @@ def tag_atom_feed(request):
     cursor = cursor.sort('created', DESCENDING)
     cursor = cursor.limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
+    """
+    ATOM feed id is a tag URI (see http://en.wikipedia.org/wiki/Tag_URI)
+    """
     feed = AtomFeed(
         "MediaGoblin: Feed for tag '%s'" % tag_slug,
         feed_url=request.url,
-        url=request.host_url)
-
+        id='tag:'+request.host+',2011:gallery.tag-%s' % tag_slug,
+        links=[{'href': request.urlgen(
+                 'mediagoblin.listings.tags_listing',
+                 qualified=True, tag=tag_slug ),
+            'rel': 'alternate',
+            'type': 'text/html'}])
     for entry in cursor:
         feed.add(entry.get('title'),
             entry.get('description_html'),
+            id=entry.url_for_self(request.urlgen,qualified=True),
             content_type='html',
-            author=entry.get_uploader.username,
+            author={'name': entry.get_uploader.username,
+                'uri': request.urlgen(
+                    'mediagoblin.user_pages.user_home',
+                    qualified=True, user=entry.get_uploader.username)},
             updated=entry.get('created'),
-            url=entry.url_for_self(request.urlgen))
+            links=[{
+                'href':entry.url_for_self(
+                   request.urlgen,
+                   qualified=True),
+                'rel': 'alternate',
+                'type': 'text/html'}])
 
     return feed.get_response()

@@ -225,17 +225,37 @@ def atom_feed(request):
                  .sort('created', DESCENDING) \
                  .limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
-    feed = AtomFeed(request.matchdict['user'],
+    """
+    ATOM feed id is a tag URI (see http://en.wikipedia.org/wiki/Tag_URI)
+    """
+    feed = AtomFeed(
+               "MediaGoblin: Feed for user '%s'" % request.matchdict['user'],
                feed_url=request.url,
-               url=request.host_url)
+               id='tag:'+request.host+',2011:gallery.user-'+request.matchdict['user'],
+               links=[{
+                   'href': request.urlgen(
+                       'mediagoblin.user_pages.user_home',
+                       qualified=True,user=request.matchdict['user']),
+                   'rel': 'alternate',
+                   'type': 'text/html'}])
 
     for entry in cursor:
         feed.add(entry.get('title'),
             entry.get('description_html'),
+            id=entry.url_for_self(request.urlgen,qualified=True),
             content_type='html',
-            author=request.matchdict['user'],
+            author={
+                'name': entry.get_uploader.username,
+                'uri': request.urlgen(
+                    'mediagoblin.user_pages.user_home',
+                    qualified=True, user=entry.get_uploader.username)},
             updated=entry.get('created'),
-            url=entry.url_for_self(request.urlgen))
+            links=[{
+                'href': entry.url_for_self(
+                    request.urlgen,
+                    qualified=True),
+                'rel': 'alternate',
+                'type': 'text/html'}])
 
     return feed.get_response()
 
