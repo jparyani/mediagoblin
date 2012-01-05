@@ -19,7 +19,7 @@
 {# Generically render a field #}
 {% macro render_field_div(field) %}
   {% if field.label.text -%}
-    <p class="form_field_label"><label for="{{ field.name }}">{{ _(field.label.text) }}</label></p>
+    <p class="form_field_label"><label for="{{ field.label.field_id }}">{{ _(field.label.text) }}</label></p>
   {%- endif %}
   <div class="form_field_input">
     {{ field }}
