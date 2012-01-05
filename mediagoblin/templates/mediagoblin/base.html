@@ -29,22 +29,24 @@
           href="{{ request.staticdirect('/css/video-js.css') }}"/>
     <link rel="shortcut icon"
           href="{{ request.staticdirect('/images/goblin.ico') }}" />
-    <script type="text/javascript"
-          src="{{ request.staticdirect('/js/extlib/jquery.js') }}"></script>
+    <script src="{{ request.staticdirect('/js/extlib/jquery.js') }}"></script>
+    <!--[if lt IE 9]>
+      <script src="{{ request.staticdirect('/js/extlib/html5shiv.js') }}"></script>
+    <![endif]-->
     {% block mediagoblin_head %}
     {% endblock mediagoblin_head %}
   </head>
   <body>
     {% block mediagoblin_body %}
-    <div class="mediagoblin_body">
+    <div class="container">
       {% block mediagoblin_header %}
-          <div class="mediagoblin_header">
+          <header>
             {% block mediagoblin_logo %}
-              <a class="mediagoblin_logo"
+              <a class="logo"
                  href="{{ request.urlgen('index') }}"
                  ><img src="{{ request.staticdirect('/images/logo.png') }}"
                      alt="{% trans %}MediaGoblin logo{% endtrans %}" /></a>
-            {% endblock %}
+            {% endblock mediagoblin_logo %}
             {% if request.user and request.user.status == 'active' %}
               <a class="button_action"
                  href="{{ request.urlgen('mediagoblin.submit.start') }}">
@@ -52,7 +54,7 @@
               </a>
             {% endif %}
             {% block mediagoblin_header_title %}{% endblock %}
-            <div class="mediagoblin_header_right">
+            <div class="header_right">
               {% if request.user %}
                 {# the following link should only appear when verification is needed #}
                 {% if request.user.status == "needs_email_verification" %}
@@ -72,7 +74,7 @@
                   {% trans %}Log in{% endtrans %}</a>
               {% endif %}
             </div>
-          </div>
+          </header>
       {% endblock %}
       <div class="mediagoblin_content">
           {% include "mediagoblin/utils/messages.html" %}
@@ -80,12 +82,12 @@
           {% endblock mediagoblin_content %}
       </div>
       {% block mediagoblin_footer %}
-          <div class="mediagoblin_footer">
+          <footer>
             {% trans -%}
               Powered by <a href="http://mediagoblin.org">MediaGoblin</a>, a <a href="http://gnu.org/">GNU</a> project
             {%- endtrans %}
-          </div>
-      {% endblock %}
+          </footer>
+      {% endblock mediagoblin_footer %}
     {% endblock mediagoblin_body %}
     </div>
   </body>
