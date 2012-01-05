@@ -23,7 +23,7 @@
                                user= media.get_uploader.username,
                                media= media._id) }}"
         method="POST" enctype="multipart/form-data">
-    <div class="grid_8 prefix_1 suffix_1 edit_box form_box">
+    <div class="form_box">
       <h1>Editing attachments for {{ media.title }}</h1>
       <div style="text-align: center;" >
         <img src="{{ request.app.public_store.file_url(

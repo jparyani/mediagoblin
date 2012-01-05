@@ -22,7 +22,7 @@
 {% block mediagoblin_content %}
   <form action="{{ request.urlgen('mediagoblin.submit.start') }}"
         method="POST" enctype="multipart/form-data">
-    <div class="grid_8 prefix_1 suffix_1 form_box">
+    <div class="form_box_xl">
       <h1>{% trans %}Add your media{% endtrans %}</h1>
       {{ wtforms_util.render_divs(submit_form) }}
       <div class="form_submit_buttons">

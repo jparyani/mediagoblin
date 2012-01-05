@@ -25,19 +25,15 @@
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_content %}
-
   <form action="{{ request.urlgen('mediagoblin.auth.verify_forgot_password') }}"
         method="POST" enctype="multipart/form-data">
     {{ csrf_token }}
-
-    <div class="grid_6 prefix_1 suffix_1 form_box">
+    <div class="form_box">
       <h1>{% trans %}Set your new password{% endtrans %}</h1>
-
       {{ wtforms_util.render_divs(cp_form) }}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Set password{% endtrans %}" class="button_form"/>
       </div>
-
     </div>
   </form>
 {% endblock %}

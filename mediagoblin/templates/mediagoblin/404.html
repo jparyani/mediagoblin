@@ -18,17 +18,12 @@
 {% extends "mediagoblin/base.html" %}
 
 {% block mediagoblin_content %}
+  <img class="right_align" src="{{ request.staticdirect('/images/404.png') }}"
+       alt="{% trans %}Image of 404 goblin stressing out{% endtrans %}" />
   <h1>{% trans %}Oops!{% endtrans %}</h1>
-
-  <div class="grid_8 alpha">
-    <p>{% trans %}There doesn't seem to be a page at this address. Sorry!{% endtrans %}</p>
-    <p>
-      {%- trans %}If you're sure the address is correct, maybe the page you're looking for has been moved or deleted.{% endtrans -%}
-    </p>
-  </div>
-
-  <div class="grid_8 omega">
-    <img src="{{ request.staticdirect('/images/404.png') }}"
-         alt="{% trans %}Image of 404 goblin stressing out{% endtrans %}" />
-  </div>
+  <p>{% trans %}There doesn't seem to be a page at this address. Sorry!{% endtrans %}</p>
+  <p>
+    {%- trans %}If you're sure the address is correct, maybe the page you're looking for has been moved or deleted.{% endtrans -%}
+  </p>
+  <div class="clear"></div>
 {% endblock %}

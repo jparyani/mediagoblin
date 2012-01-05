@@ -42,14 +42,10 @@
     {%- endtrans %}
   </h1>
 
-  <div class="container_16 media_gallery">
-    {{ object_gallery(request, media_entries, pagination) }}
-  </div>
-
-  <div class="grid_16">
-    {% set feed_url = request.urlgen(
-              'mediagoblin.user_pages.atom_feed',
-              user=user.username) %}
-    {% include "mediagoblin/utils/feed_link.html" %}
-  </div>
+  {{ object_gallery(request, media_entries, pagination) }}
+    
+  {% set feed_url = request.urlgen('mediagoblin.user_pages.atom_feed',
+                                   user=user.username) %}
+  {% include "mediagoblin/utils/feed_link.html" %}
+    
 {% endblock %}    

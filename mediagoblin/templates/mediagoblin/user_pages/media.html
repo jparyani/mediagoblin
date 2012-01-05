@@ -28,7 +28,7 @@
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_content %}
-  <div class="grid_11 alpha">
+  <div class="media_pane">
     <div class="media_image_container">
       {% block mediagoblin_media %}
         {% set display_media = request.app.public_store.file_url(
@@ -137,7 +137,7 @@
                  media.url_for_self(request.urlgen)) }}
     {% endif %}
   </div>
-  <div class="grid_5 omega">
+  <div class="media_sidebar">
     {% trans user_url=request.urlgen(
                 'mediagoblin.user_pages.user_home',
                 user=media.get_uploader.username),
