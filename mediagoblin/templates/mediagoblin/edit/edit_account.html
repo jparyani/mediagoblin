@@ -29,7 +29,7 @@
   <form action="{{ request.urlgen('mediagoblin.edit.account') }}?username={{ 
                                                      user.username }}"
         method="POST" enctype="multipart/form-data">
-    <div class="grid_8 prefix_1 suffix_1 edit_box form_box">
+    <div class="form_box edit_box">
       <h1>
         {%- trans username=user.username -%}
           Changing {{ username }}'s account settings

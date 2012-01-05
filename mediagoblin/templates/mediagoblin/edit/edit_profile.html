@@ -24,7 +24,7 @@
   <form action="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{ 
                                                      user.username }}"
         method="POST" enctype="multipart/form-data">
-    <div class="form_box_xl">
+    <div class="form_box edit_box">
       <h1>
         {%- trans username=user.username -%}
           Editing {{ username }}'s profile
