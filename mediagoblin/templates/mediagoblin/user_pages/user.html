@@ -90,7 +90,7 @@
     </h1>
 
     {% if not user.url and not user.bio %}
-      {% if request.user._id == user._id %}
+      {% if request.user and (request.user._id == user._id) %}
         <div class="grid_6 alpha empty_space">
           <p>
             {% trans %}Here's a spot to tell others about yourself.{% endtrans %}
@@ -120,7 +120,7 @@
             {%- trans %}Edit profile{% endtrans -%}
           </a>
         {% endif %}
-        {% if request.user._id == user._id %}
+        {% if request.user and (request.user._id == user._id) %}
           <a href="{{ request.urlgen('mediagoblin.edit.account') }}">
             {%- trans %}Change account settings{% endtrans -%}
           </a>
