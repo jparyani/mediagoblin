@@ -123,6 +123,10 @@ div.footer {
     font-size: 75%;
 }
 
+div.sphinxsidebar {
+  width: 240px;
+}
+
 div.sphinxsidebarwrapper {
   padding: 10px 5px 0 30px;
 }
