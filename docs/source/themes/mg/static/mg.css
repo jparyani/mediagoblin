@@ -109,7 +109,7 @@ div.documentwrapper {
 }
 
 div.bodywrapper {
-    margin: 60px 0 0 230px;
+    margin: 0 0 0 270px;
 }
 
 div.body {
@@ -124,7 +124,7 @@ div.footer {
 }
 
 div.sphinxsidebarwrapper {
-  padding: 10px 5px 0 20px;
+  padding: 10px 5px 0 30px;
 }
 
 div.sphinxsidebar ul {
@@ -141,5 +141,5 @@ div.related {
 }
 
 p.logo {
-  margin-bottom: 20px;
+  margin-top: 30px;
 }
