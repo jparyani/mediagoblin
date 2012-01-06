@@ -479,3 +479,12 @@ table.media_panel th {
   font-family: Inconsolata, monospace;
   line-height: 1em;
 }
+
+@media screen and (max-width: 660px) {
+  .media_pane {
+    width: 100%;
+  }
+  img.media_image {
+    width: 100%;
+  }
+}
