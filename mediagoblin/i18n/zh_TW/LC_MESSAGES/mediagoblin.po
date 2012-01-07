@@ -4,14 +4,14 @@
 # 
 # Translators:
 #   <chc@citi.sinica.edu.tw>, 2011.
-# Harry Chen <harryhow@gmail.com>, 2011.
+# Harry Chen <harryhow@gmail.com>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
 "POT-Creation-Date: 2011-12-04 10:24-0600\n"
-"PO-Revision-Date: 2011-12-04 16:23+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2012-01-03 16:35+0000\n"
+"Last-Translator: Harry Chen <harryhow@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -98,7 +98,7 @@ msgstr "標籤"
 
 #: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:34
 msgid "Seperate tags by commas."
-msgstr ""
+msgstr "用逗點分開標籤。"
 
 #: mediagoblin/edit/forms.py:33
 msgid "Slug"
@@ -234,6 +234,8 @@ msgid ""
 "This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
 "extraordinarily great piece of media hosting software."
 msgstr ""
+"此網站正運行 <a href=\"http://mediagoblin.org\">媒體怪獸(MediaGoblin)</a>, "
+"他是一個超讚的媒體分享架站軟體."
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid ""
@@ -394,27 +396,27 @@ msgstr "<a href=\"%(user_url)s\">%(username)s</a>的媒體檔案"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:57
 #, python-format
 msgid "By <a href=\"%(user_url)s\">%(username)s</a> on %(date)s"
-msgstr ""
+msgstr "由 <a href=\"%(user_url)s\">%(username)s</a> 於 %(date)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:67
 msgid "Post a comment"
-msgstr ""
+msgstr "刊登評論"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:85
 msgid "at"
-msgstr ""
+msgstr "在"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:102
 msgid "Post comment!"
-msgstr ""
+msgstr "刊登評論！"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:124
 msgid "Edit"
-msgstr ""
+msgstr "編輯"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:130
 msgid "Delete"
-msgstr ""
+msgstr "刪除"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -541,7 +543,7 @@ msgstr "舊一點"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:50
 msgid "Go to page:"
-msgstr ""
+msgstr "跳到頁數："
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
@@ -561,11 +563,11 @@ msgstr "我確定我想要刪除"
 
 #: mediagoblin/user_pages/views.py:155
 msgid "Oops, your comment was empty."
-msgstr ""
+msgstr "啊，你的留言是空的。"
 
 #: mediagoblin/user_pages/views.py:161
 msgid "Your comment has been posted!"
-msgstr ""
+msgstr "你的留言已經刊登！"
 
 #: mediagoblin/user_pages/views.py:183
 msgid "You deleted the media."
