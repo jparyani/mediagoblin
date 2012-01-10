@@ -23,8 +23,16 @@
 {% block title %}{{ media.title }} &mdash; {{ super() }}{% endblock %}
 
 {% block mediagoblin_head %}
+  <link rel="stylesheet" 
+	href="{{ request.staticdirect('/extlib/leaflet/leaflet.css') }}" />
+<!--[if lte IE 8]><link rel="stylesheet"
+    href="{{ request.staticdirect('/extlib/leaflet/leaflet.ie.css') }}" /><![endif]-->
   <script type="text/javascript"
           src="{{ request.staticdirect('/js/comment_show.js') }}"></script>
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/extlib/leaflet/leaflet.js') }}"></script>
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/js/geolocation-map.js') }}"></script>
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_content %}
@@ -71,6 +79,21 @@
                                    user= media.get_uploader.username,
                                    media= media._id) %}
         <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
+      {% endif %}
+      {% if media.media_data.exif %}
+	{#-
+	TODO:
+	 - Render GPS data in a human-readable format
+	
+        <h4>EXIF</h4>
+	<table>
+	{% for tag, value in media.media_data.exif.items() %}
+	  <tr>
+	    <td>{{ tag }}</td>
+	    <td>{{ value }}</td>
+	  </tr>
+        {% endfor %}
+	</table>#}
       {% endif %}
     </p>
     {% if comments %}
@@ -171,6 +194,26 @@
       {% include "mediagoblin/utils/tags.html" %}
     {% endif %}
 
+    {% if media.media_data.gps %}
+      <h4>Map</h4>
+      <div>
+	{% set gps = media.media_data.gps %}
+ 	<div id="tile-map" style="width: 100%; height: 196px;">
+	  <input type="hidden" id="gps-longitude"
+		 value="{{ gps.longitude }}" />
+	  <input type="hidden" id="gps-latitude"
+		 value="{{ gps.latitude }}" />
+	</div>
+	<p>
+	  <small>
+	    View on 
+	    <a href="http://openstreetmap.org/?mlat={{ gps.latitude }}&mlon={{ gps.longitude }}">
+	      OpenStreetMap
+	    </a>
+	  </small>
+	</p>
+      </div>
+    {% endif %}
     {% include "mediagoblin/utils/license.html" %}
   </div>
 {% endblock %}
