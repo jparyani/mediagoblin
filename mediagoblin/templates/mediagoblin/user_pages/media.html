@@ -158,6 +158,7 @@
       </ul>
     {% endif %}
     {% if app_config['allow_attachments']
+          and request.user
           and (media.uploader == request.user._id
                or request.user.is_admin) %}
       <p>

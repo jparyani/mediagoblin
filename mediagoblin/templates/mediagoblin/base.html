@@ -22,11 +22,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>{% block title %}{{ app_config['html_title'] }}{% endblock %}</title>
     <link rel="stylesheet" type="text/css"
-          href="{{ request.staticdirect('/css/reset.css') }}"/>
+          href="{{ request.staticdirect('/css/extlib/reset.css') }}"/>
     <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/base.css') }}"/>
-    <link rel="stylesheet" type="text/css"
-          href="{{ request.staticdirect('/css/video-js.css') }}"/>
     <link rel="shortcut icon"
           href="{{ request.staticdirect('/images/goblin.ico') }}" />
     <script src="{{ request.staticdirect('/js/extlib/jquery.js') }}"></script>

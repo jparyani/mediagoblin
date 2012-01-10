@@ -7,6 +7,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 
 from mediagoblin.db.sql.base import GMGTableBase
+from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
 
 
 Base = declarative_base(cls=GMGTableBase)
@@ -24,7 +25,7 @@ class SimpleFieldAlias(object):
         setattr(instance, self.fieldname, val)
 
 
-class User(Base):
+class User(Base, UserMixin):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
@@ -48,7 +49,7 @@ class User(Base):
     _id = SimpleFieldAlias("id")
 
 
-class MediaEntry(Base):
+class MediaEntry(Base, MediaEntryMixin):
     __tablename__ = "media_entries"
 
     id = Column(Integer, primary_key=True)

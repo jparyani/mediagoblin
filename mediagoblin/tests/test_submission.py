@@ -51,10 +51,16 @@ class TestSubmission:
 
         self.test_user = test_user
 
+        self.login()
+
+    def login(self):
         self.test_app.post(
             '/auth/login/', {
                 'username': u'chris',
                 'password': 'toast'})
+
+    def logout(self):
+        self.test_app.get('/auth/logout/')
 
     def test_missing_fields(self):
         # Test blank form
@@ -94,6 +100,14 @@ class TestSubmission:
             '/u/chris/')
         assert template.TEMPLATE_TEST_CONTEXT.has_key(
             'mediagoblin/user_pages/user.html')
+
+        # Make sure the media view is at least reachable, logged in...
+        self.test_app.get('/u/chris/m/normal-upload-1/')
+        # ... and logged out too.
+        self.logout()
+        self.test_app.get('/u/chris/m/normal-upload-1/')
+        # Log back in for the remaining tests.
+        self.login()
 
         # Test PNG
         # --------
