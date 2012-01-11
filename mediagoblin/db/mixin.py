@@ -63,7 +63,7 @@ class MediaEntryMixin(object):
     def main_mediafile(self):
         pass
 
-    def url_for_self(self, urlgen):
+    def url_for_self(self, urlgen, **extra_args):
         """
         Generate an appropriate url for ourselves
 
@@ -75,12 +75,14 @@ class MediaEntryMixin(object):
             return urlgen(
                 'mediagoblin.user_pages.media_home',
                 user=uploader.username,
-                media=self.slug)
+                media=self.slug,
+                **extra_args)
         else:
             return urlgen(
                 'mediagoblin.user_pages.media_home',
                 user=uploader.username,
-                media=unicode(self._id))
+                media=unicode(self._id),
+                **extra_args)
 
     def get_fail_exception(self):
         """

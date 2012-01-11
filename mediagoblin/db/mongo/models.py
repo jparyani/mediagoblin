@@ -226,27 +226,6 @@ class MediaEntry(Document, MediaEntryMixin):
         if duplicate:
             self.slug = "%s-%s" % (self._id, self.slug)
 
-    def url_for_self(self, urlgen, **extra_args):
-        """
-        Generate an appropriate url for ourselves
-
-        Use a slug if we have one, else use our '_id'.
-        """
-        uploader = self.get_uploader
-
-        if self.get('slug'):
-            return urlgen(
-                'mediagoblin.user_pages.media_home',
-                user=uploader.username,
-                media=self.slug,
-                **extra_args)
-        else:
-            return urlgen(
-                'mediagoblin.user_pages.media_home',
-                user=uploader.username,
-                media=unicode(self._id),
-                **extra_args)
-
     def url_to_prev(self, urlgen):
         """
         Provide a url to the previous entry from this user, if there is one
