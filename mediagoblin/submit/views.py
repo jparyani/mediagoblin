@@ -126,7 +126,7 @@ def submit_start(request):
                     # re-raise the exception
                     raise
 
-                if mg_globals.app_config["push_enabled"]:
+                if mg_globals.app_config["push_url"]:
                     feed_url=request.urlgen(
                                        'mediagoblin.user_pages.atom_feed',
                                        qualified=True,user=request.user.username)

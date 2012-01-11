@@ -235,7 +235,7 @@ def atom_feed(request):
            'rel': 'alternate',
            'type': 'text/html'
            }];
-    if mg_globals.app_config["push_enabled"]:
+    if mg_globals.app_config["push_url"]:
         atomlinks.append({
             'rel': 'hub',
             'href': mg_globals.app_config["push_url"]})
