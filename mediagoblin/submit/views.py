@@ -20,6 +20,7 @@ from os.path import splitext
 from cgi import FieldStorage
 
 from celery import registry
+import urllib,urllib2
 
 from werkzeug.utils import secure_filename
 
@@ -124,6 +125,19 @@ def submit_start(request):
                     mark_entry_failed(entry._id, exc)
                     # re-raise the exception
                     raise
+
+                if mg_globals.app_config["push_enabled"]:
+                    feed_url=request.urlgen(
+                                       'mediagoblin.user_pages.atom_feed',
+                                       qualified=True,user=request.user.username)
+                    hubparameters = {
+                            'hub.mode': 'publish',
+                            'hub.url': feed_url}
+                    huburl = mg_globals.app_config["push_url"]
+                    hubdata = urllib.urlencode(hubparameters)
+                    hubheaders = {"Content-type": "application/x-www-form-urlencoded"}
+                    hubrequest = urllib2.Request(huburl, hubdata,hubheaders)
+                    hubresponse = urllib2.urlopen(hubrequest)
 
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
