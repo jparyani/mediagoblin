@@ -126,18 +126,20 @@ def submit_start(request):
                     # re-raise the exception
                     raise
 
-                if mg_globals.app_config["push_url"]:
+                if mg_globals.app_config["push_urls"]:
                     feed_url=request.urlgen(
                                        'mediagoblin.user_pages.atom_feed',
                                        qualified=True,user=request.user.username)
                     hubparameters = {
                             'hub.mode': 'publish',
                             'hub.url': feed_url}
-                    huburl = mg_globals.app_config["push_url"]
                     hubdata = urllib.urlencode(hubparameters)
-                    hubheaders = {"Content-type": "application/x-www-form-urlencoded"}
-                    hubrequest = urllib2.Request(huburl, hubdata,hubheaders)
-                    hubresponse = urllib2.urlopen(hubrequest)
+                    hubheaders = {
+                        "Content-type": "application/x-www-form-urlencoded",
+                        "Connection": "close"}
+                    for huburl in mg_globals.app_config["push_urls"]:
+                        hubrequest = urllib2.Request(huburl, hubdata,hubheaders)
+                        hubresponse = urllib2.urlopen(hubrequest)
 
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 

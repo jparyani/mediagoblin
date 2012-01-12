@@ -235,10 +235,11 @@ def atom_feed(request):
            'rel': 'alternate',
            'type': 'text/html'
            }];
-    if mg_globals.app_config["push_url"]:
-        atomlinks.append({
-            'rel': 'hub',
-            'href': mg_globals.app_config["push_url"]})
+    if mg_globals.app_config["push_urls"]:
+        for push_url in mg_globals.app_config["push_urls"]:
+            atomlinks.append({
+                'rel': 'hub',
+                'href': push_url})
 
     feed = AtomFeed(
                "MediaGoblin: Feed for user '%s'" % request.matchdict['user'],
