@@ -145,7 +145,7 @@
         {% include "mediagoblin/utils/feed_link.html" %}
       </div>
     {% else %}
-      {% if request.user._id == user._id %}
+      {% if request.user and (request.user._id == user._id) %}
         <div class="profile_showcase empty_space">
           <p>
             {% trans -%}
