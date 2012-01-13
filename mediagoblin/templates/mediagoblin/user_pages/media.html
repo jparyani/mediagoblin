@@ -97,7 +97,7 @@
                                          user= media.get_uploader.username,
                                          media=media._id) }}" method="POST" id="form_comment">
           <p>
-            {% trans %}Type your comment here. You can use <a href="http://daringfireball.net/projects/markdown/basics">Markdown</a> for formatting.{% endtrans %}
+            {% trans %}You can use <a href="http://daringfireball.net/projects/markdown/basics">Markdown</a> for formatting.{% endtrans %}
           </p>
           {{ wtforms_util.render_divs(comment_form) }}
           <div class="form_submit_buttons">

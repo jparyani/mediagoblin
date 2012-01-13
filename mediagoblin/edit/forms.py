@@ -45,10 +45,9 @@ class EditProfileForm(wtforms.Form):
     bio = wtforms.TextAreaField(
         _('Bio'),
         [wtforms.validators.Length(min=0, max=500)],
-        description=_(
-            """You can use
-            <a href="http://daringfireball.net/projects/markdown/basics">
-            Markdown</a> for formatting."""))
+        description=_("""You can use
+                      <a href="http://daringfireball.net/projects/markdown/basics">
+                      Markdown</a> for formatting."""))
     url = wtforms.TextField(
         _('Website'),
         [wtforms.validators.Optional(),
