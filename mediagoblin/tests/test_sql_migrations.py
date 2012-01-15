@@ -119,7 +119,7 @@ def level_exits_new_table(db_conn):
 # A hack!  At this point we freeze-fame and get just a partial list of
 # migrations
 
-PARTIAL_MIGRATIONS = copy.copy(FULL_MIGRATIONS)
+SET2_MIGRATIONS = copy.copy(FULL_MIGRATIONS)
 
 #######################################################
 # Migration set 3: Final migrations
