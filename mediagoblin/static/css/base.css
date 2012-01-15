@@ -32,8 +32,7 @@ body {
   padding: none;
   margin: 0px;
   height: 100%;
-  font: 16px "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,sans-serif;
-  font-family:'Lato', sans-serif;
+  font: 16px 'Lato', 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
 }
 
 form {
