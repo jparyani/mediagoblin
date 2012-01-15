@@ -102,16 +102,16 @@ SET2_MODELS = [Creature2, CreaturePower2, Level2, LevelExit2]
 
 @RegisterMigration(1, FULL_MIGRATIONS)
 def creature_remove_is_demon(db_conn):
+    metadata = MetaData(bind=db_conn.engine)
     creature_table = Table(
-        'creature', MetaData(),
+        'creature', metadata,
         autoload=True, autoload_with=db_conn.engine)
-    db_conn.execute(
-        creature_table.drop_column('is_demon'))
+    creature_table.drop_column('is_demon')
     
 
 @RegisterMigration(2, FULL_MIGRATIONS)
 def creature_powers_new_table(db_conn):
-    metadata = MetaData()
+    metadata = MetaData(bind=db_conn.engine)
     creature_powers = Table(
         'creature_power', metadata,
         Column('id', Integer, primary_key=True),
@@ -127,7 +127,7 @@ def creature_powers_new_table(db_conn):
 def level_exits_new_table(db_conn):
     # First, create the table
     # -----------------------
-    metadata = MetaData()
+    metadata = MetaData(bind=db_conn.engine)
     level_exits = Table(
         'level_exit', metadata,
         Column('id', Integer, primary_key=True),
@@ -165,7 +165,7 @@ def level_exits_new_table(db_conn):
 
     # Finally, drop the old level exits pickle table
     # ----------------------------------------------
-    
+    levels.drop_column('exits')    
 
 
 # A hack!  At this point we freeze-fame and get just a partial list of
