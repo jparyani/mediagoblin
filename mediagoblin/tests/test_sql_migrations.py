@@ -17,7 +17,7 @@
 import copy
 
 from sqlalchemy import (
-    Table, Column, MetaData,
+    Table, Column, MetaData, Index
     Integer, Float, Unicode, UnicodeText, DateTime, Boolean,
     ForeignKey, UniqueConstraint, PickleType)
 from sqlalchemy.ext.declarative import declarative_base
@@ -219,16 +219,36 @@ SET3_MODELS = [Creature3, CreaturePower3, Level3, LevelExit3]
 
 @RegisterMigration(4, FULL_MIGRATIONS)
 def creature_num_legs_to_num_limbs(db_conn):
-    pass
+    metadata = MetaData(bind=db_conn.engine)
+    creature_table = Table(
+        'creature', metadata,
+        autoload=True, autoload_with=db_conn.engine)
+    creature_table.c.num_legs.alter(name="num_limbs")
+
 
 @RegisterMigration(5, FULL_MIGRATIONS)
 def level_exit_index_from_and_to_level(db_conn):
-    pass
+    metadata = MetaData(bind=db_conn.engine)
+    level_exit = Table(
+        'level_exit', metadata,
+        autoload=True, autoload_with=db_conn.engine)
+    Index('ix_from_level', level_exit.c.from_level).create(engine)
+    Index('ix_to_exit', level_exit.c.to_exit).create(engine)
+
 
 @RegisterMigration(6, FULL_MIGRATIONS)
 def creature_power_index_creature(db_conn):
-    pass
+    metadata = MetaData(bind=db_conn.engine)
+    creature_power = Table(
+        'creature_power', metadata,
+        autoload=True, autoload_with=db_conn.engine)
+    Index('ix_creature', creature_power.c.creature).create(engine)
+
 
 @RegisterMigration(7, FULL_MIGRATIONS)
 def creature_power_hitpower_to_float(db_conn):
-    pass
+    metadata = MetaData(bind=db_conn.engine)
+    creature_power = Table(
+        'creature_power', metadata,
+        autoload=True, autoload_with=db_conn.engine)
+    creature_power.c.hitpower.alter(type=Float)
