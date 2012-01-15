@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2012, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -18,9 +18,10 @@ import copy
 
 from sqlalchemy import (
     Table, Column, MetaData,
-    Integer, Unicode, UnicodeText, DateTime, Boolean, ForeignKey,
-    UniqueConstraint, PickleType)
+    Integer, Float, Unicode, UnicodeText, DateTime, Boolean,
+    ForeignKey, UniqueConstraint, PickleType)
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.sql import select, insert
 from migrate import changeset
 
 from mediagoblin.db.sql.base import GMGTableBase
@@ -77,6 +78,7 @@ class CreaturePower2(Base2):
         Integer, ForeignKey('creature.id'), nullable=False)
     name = Column(Unicode)
     description = Column(Unicode)
+    hitpower = Column(Integer, nullable=False)
 
 class Level2(Base2):
     __tablename__ = "level"
@@ -109,11 +111,61 @@ def creature_remove_is_demon(db_conn):
 
 @RegisterMigration(2, FULL_MIGRATIONS)
 def creature_powers_new_table(db_conn):
-    pass
+    metadata = MetaData()
+    creature_powers = Table(
+        'creature_power', metadata,
+        Column('id', Integer, primary_key=True),
+        Column('creature', 
+               Integer, ForeignKey('creature.id'), nullable=False),
+        Column('name', Unicode),
+        Column('description', Unicode),
+        Column('hitpower', Integer, nullable=False))
+    metadata.create_all(db_conn.engine)
+
 
 @RegisterMigration(3, FULL_MIGRATIONS)
 def level_exits_new_table(db_conn):
-    pass
+    # First, create the table
+    # -----------------------
+    metadata = MetaData()
+    level_exits = Table(
+        'level_exit', metadata,
+        Column('id', Integer, primary_key=True),
+        Column('name', Unicode),
+        Column('from_level',
+               Integer, ForeignKey('level.id'), nullable=False),
+        Column('to_level',
+               Integer, ForeignKey('level.id'), nullable=False))
+    metadata.create_all(db_conn.engine)
+
+    # And now, convert all the old exit pickles to new level exits
+    # ------------------------------------------------------------
+
+    # Minimal representation of level table.
+    # Not auto-introspecting here because of pickle table.  I'm not
+    # sure sqlalchemy can auto-introspect pickle columns.
+    levels = Table(
+        'level', metadata,
+        Column('id', Integer, primary_key=True),
+        Column('exits', PickleType))
+
+    # query over and insert
+    result = db_conn.execute(
+        select([levels], levels.c.exits!=None))
+
+    for level in result:
+        this_exit = level['exits']
+        
+        # Insert the level exit
+        db_conn.execute(
+            level_exits.insert().values(
+                name=this_exit['name'],
+                from_level=this_exit['from_level'],
+                to_level=this_exit['to_level']))
+
+    # Finally, drop the old level exits pickle table
+    # ----------------------------------------------
+    
 
 
 # A hack!  At this point we freeze-fame and get just a partial list of
@@ -142,6 +194,7 @@ class CreaturePower3(Base3):
         Integer, ForeignKey('creature.id'), nullable=False, index=True)
     name = Column(Unicode)
     description = Column(Unicode)
+    hitpower = Column(Float, nullable=False)
 
 class Level3(Base3):
     __tablename__ = "level"
@@ -174,4 +227,8 @@ def level_exit_index_from_and_to_level(db_conn):
 
 @RegisterMigration(6, FULL_MIGRATIONS)
 def creature_power_index_creature(db_conn):
+    pass
+
+@RegisterMigration(7, FULL_MIGRATIONS)
+def creature_power_hitpower_to_float(db_conn):
     pass
