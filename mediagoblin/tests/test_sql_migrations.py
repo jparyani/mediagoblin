@@ -20,7 +20,7 @@ from sqlalchemy import (
     Table, Column, MetaData, Index
     Integer, Float, Unicode, UnicodeText, DateTime, Boolean,
     ForeignKey, UniqueConstraint, PickleType)
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import select, insert
 from migrate import changeset
@@ -70,6 +70,7 @@ class Creature2(Base2):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode, unique=True, nullable=False, index=True)
     num_legs = Column(Integer, nullable=False)
+    magical_powers = relationship("CreaturePower2")
 
 class CreaturePower2(Base2):
     __tablename__ = "creature_power"
@@ -196,6 +197,7 @@ class CreaturePower3(Base3):
     name = Column(Unicode)
     description = Column(Unicode)
     hitpower = Column(Float, nullable=False)
+    magical_powers = relationship("CreaturePower3")
 
 class Level3(Base3):
     __tablename__ = "level"
@@ -269,6 +271,7 @@ def _insert_migration1_objects(session):
                    num_legs=0,
                    is_demon=True)])
 
+    # Insert levels
     session.add_all(
         [Level1(id='necroplex',
                 name='The Necroplex',
@@ -288,3 +291,75 @@ def _insert_migration1_objects(session):
 
     session.commit()
 
+
+def _insert_migration2_objects(session):
+    # Insert creatures
+    session.add_all(
+        [Creature2(
+                name='centipede',
+                num_legs=100),
+         Creature2(
+                name='wolf',
+                num_legs=4,
+                magical_powers = [
+                    CreaturePower2(
+                        name="ice breath",
+                        description="A blast of icy breath!",
+                        hitpower=20),
+                    CreaturePower2(
+                        name="death stare",
+                        description="A frightening stare, for sure!",
+                        hitpower=45)]),
+         Creature2(
+                name='wizardsnake',
+                num_legs=0,
+                magical_powers=[
+                    CreaturePower2(
+                        name='death_rattle',
+                        description='A rattle... of DEATH!',
+                        hitpower=1000),
+                    CreaturePower2(
+                        name='sneaky_stare',
+                        description="The sneakiest stare you've ever seen!"
+                        hitpower=300),
+                    CreaturePower2(
+                        name='slithery_smoke',
+                        description="A blast of slithery, slithery smoke.",
+                        hitpower=10),
+                    CreaturePower2(
+                        name='treacherous_tremors',
+                        description="The ground shakes beneath footed animals!",
+                        hitpower=0)])])
+
+    # Insert levels
+    session.add_all(
+        [Level2(id='necroplex',
+                name='The Necroplex',
+                description='A complex full of pure deathzone.'),
+         Level2(id='evilstorm',
+                name='Evil Storm',
+                description='A storm full of pure evil.',
+                exits=[]), # you can't escape the evilstorm
+         Level2(id='central_park'
+                name='Central Park, NY, NY',
+                description="New York's friendly Central Park.")])
+
+    # necroplex exits
+    session.add_all(
+        [LevelExit2(name='deathwell',
+                    from_level='necroplex',
+                    to_level='evilstorm'),
+         LevelExit2(name='portal',
+                    from_level='necroplex',
+                    to_level='central_park')])
+
+    # there are no evilstorm exits because there is no exit from the
+    # evilstorm
+      
+    # central park exits
+    session.add_all(
+        [LevelExit2(name='portal',
+                    from_level='central_park',
+                    to_level='necroplex')]
+
+    session.commit()
