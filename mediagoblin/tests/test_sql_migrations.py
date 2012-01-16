@@ -235,6 +235,11 @@ SET3_MODELS = [Creature3, CreaturePower3, Level3, LevelExit3]
 
 @RegisterMigration(4, FULL_MIGRATIONS)
 def creature_num_legs_to_num_limbs(db_conn):
+    """
+    Turns out we're tracking all sorts of limbs, not "legs"
+    specifically.  Humans would be 4 here, for instance.  So we
+    renamed the column.
+    """
     metadata = MetaData(bind=db_conn.engine)
     creature_table = Table(
         'creature', metadata,
@@ -244,6 +249,9 @@ def creature_num_legs_to_num_limbs(db_conn):
 
 @RegisterMigration(5, FULL_MIGRATIONS)
 def level_exit_index_from_and_to_level(db_conn):
+    """
+    Index the from and to levels of the level exit table.
+    """
     metadata = MetaData(bind=db_conn.engine)
     level_exit = Table(
         'level_exit', metadata,
@@ -254,6 +262,9 @@ def level_exit_index_from_and_to_level(db_conn):
 
 @RegisterMigration(6, FULL_MIGRATIONS)
 def creature_power_index_creature(db_conn):
+    """
+    Index our foreign key relationship to the creatures
+    """
     metadata = MetaData(bind=db_conn.engine)
     creature_power = Table(
         'creature_power', metadata,
@@ -263,6 +274,13 @@ def creature_power_index_creature(db_conn):
 
 @RegisterMigration(7, FULL_MIGRATIONS)
 def creature_power_hitpower_to_float(db_conn):
+    """
+    Convert hitpower column on creature power table from integer to
+    float.
+
+    Turns out we want super precise values of how much hitpower there
+    really is.
+    """
     metadata = MetaData(bind=db_conn.engine)
     creature_power = Table(
         'creature_power', metadata,
