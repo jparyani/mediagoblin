@@ -20,6 +20,7 @@ from sqlalchemy import (
     Table, Column, MetaData, Index
     Integer, Float, Unicode, UnicodeText, DateTime, Boolean,
     ForeignKey, UniqueConstraint, PickleType)
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import select, insert
 from migrate import changeset
@@ -48,7 +49,7 @@ class Creature1(Base1):
 class Level1(Base1):
     __tablename__ = "level"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Unicode, primary_key=True)
     name = Column(Unicode, unique=True, nullable=False, index=True)
     description = Column(UnicodeText)
     exits = Column(PickleType)
@@ -83,7 +84,7 @@ class CreaturePower2(Base2):
 class Level2(Base2):
     __tablename__ = "level"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Unicode, primary_key=True)
     name = Column(Unicode)
     description = Column(UnicodeText)
 
@@ -93,9 +94,9 @@ class LevelExit2(Base2):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode)
     from_level = Column(
-        Integer, ForeignKey('level.id'), nullable=False)
+        Unicode, ForeignKey('level.id'), nullable=False)
     to_level = Column(
-        Integer, ForeignKey('level.id'), nullable=False)
+        Unicode, ForeignKey('level.id'), nullable=False)
 
 SET2_MODELS = [Creature2, CreaturePower2, Level2, LevelExit2]
 
@@ -199,7 +200,7 @@ class CreaturePower3(Base3):
 class Level3(Base3):
     __tablename__ = "level"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Unicode, primary_key=True)
     name = Column(Unicode)
     description = Column(UnicodeText)
 
@@ -209,9 +210,9 @@ class LevelExit3(Base3):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode)
     from_level = Column(
-        Integer, ForeignKey('level.id'), nullable=False, index=True)
+        Unicode, ForeignKey('level.id'), nullable=False, index=True)
     to_level = Column(
-        Integer, ForeignKey('level.id'), nullable=False, index=True)
+        Unicode, ForeignKey('level.id'), nullable=False, index=True)
 
 
 SET3_MODELS = [Creature3, CreaturePower3, Level3, LevelExit3]
@@ -252,3 +253,38 @@ def creature_power_hitpower_to_float(db_conn):
         'creature_power', metadata,
         autoload=True, autoload_with=db_conn.engine)
     creature_power.c.hitpower.alter(type=Float)
+
+
+def _insert_migration1_objects(session):
+    # Insert creatures
+    session.add_all(
+        [Creature1(name='centipede',
+                   num_legs=100,
+                   is_demon=False),
+         Creature1(name='wolf',
+                   num_legs=4,
+                   is_demon=False),
+         # don't ask me what a wizardsnake is.
+         Creature1(name='wizardsnake',
+                   num_legs=0,
+                   is_demon=True)])
+
+    session.add_all(
+        [Level1(id='necroplex',
+                name='The Necroplex',
+                description='A complex full of pure deathzone.',
+                exits={
+                    'deathwell': 'evilstorm',
+                    'portal': 'central_park'}),
+         Level1(id='evilstorm',
+                name='Evil Storm',
+                description='A storm full of pure evil.',
+                exits={}), # you can't escape the evilstorm
+         Level1(id='central_park'
+                name='Central Park, NY, NY',
+                description="New York's friendly Central Park.",
+                exits={
+                    'portal': 'necroplex'})])
+
+    session.commit()
+
