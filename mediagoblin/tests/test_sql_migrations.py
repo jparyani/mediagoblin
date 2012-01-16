@@ -104,6 +104,10 @@ SET2_MODELS = [Creature2, CreaturePower2, Level2, LevelExit2]
 
 @RegisterMigration(1, FULL_MIGRATIONS)
 def creature_remove_is_demon(db_conn):
+    """
+    Remove the is_demon field from the creature model.  We don't need
+    it!
+    """
     metadata = MetaData(bind=db_conn.engine)
     creature_table = Table(
         'creature', metadata,
@@ -113,6 +117,11 @@ def creature_remove_is_demon(db_conn):
 
 @RegisterMigration(2, FULL_MIGRATIONS)
 def creature_powers_new_table(db_conn):
+    """
+    Add a new table for creature powers.  Nothing needs to go in it
+    yet though as there wasn't anything that previously held this
+    information
+    """
     metadata = MetaData(bind=db_conn.engine)
     creature_powers = Table(
         'creature_power', metadata,
@@ -127,6 +136,10 @@ def creature_powers_new_table(db_conn):
 
 @RegisterMigration(3, FULL_MIGRATIONS)
 def level_exits_new_table(db_conn):
+    """
+    Make a new table for level exits and move the previously pickled
+    stuff over to here (then drop the old unneeded table)
+    """
     # First, create the table
     # -----------------------
     metadata = MetaData(bind=db_conn.engine)
@@ -258,6 +271,9 @@ def creature_power_hitpower_to_float(db_conn):
 
 
 def _insert_migration1_objects(session):
+    """
+    Test objects to insert for the first set of things
+    """
     # Insert creatures
     session.add_all(
         [Creature1(name='centipede',
@@ -293,6 +309,9 @@ def _insert_migration1_objects(session):
 
 
 def _insert_migration2_objects(session):
+    """
+    Test objects to insert for the second set of things
+    """
     # Insert creatures
     session.add_all(
         [Creature2(
