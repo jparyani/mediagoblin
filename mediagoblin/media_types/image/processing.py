@@ -20,8 +20,8 @@ import os
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import BadMediaFail, \
     create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE
-from mediagoblin.media_types.image.EXIF import process_file
-from mediagoblin.tools.translate import pass_to_ugettext as _
+from mediagoblin.tools.exif import exif_fix_image_orientation, \
+    extract_exif, clean_exif, get_gps_data, get_useful
 
 def process_image(entry):
     """
@@ -110,111 +110,14 @@ def process_image(entry):
 
     # Insert exif data into database
     media_data = entry.setdefault('media_data', {})
-    media_data['exif'] = clean_exif(exif_tags)
+    media_data['exif'] = {
+        'clean': clean_exif(exif_tags)}
+    media_data['exif']['useful'] = get_useful(
+        media_data['exif']['clean'])
     media_data['gps'] = gps_data
 
     # clean up workbench
     workbench.destroy_self()
-
-def exif_fix_image_orientation(im, exif_tags):
-    """
-    Translate any EXIF orientation to raw orientation
-
-    Cons:
-    - REDUCES IMAGE QUALITY by recompressig it
-
-    Pros:
-    - Cures my neck pain
-    """
-    # Rotate image
-    if 'Image Orientation' in exif_tags:
-        rotation_map = {
-            3: 180,
-            6: 270,
-            8: 90}
-        orientation = exif_tags['Image Orientation'].values[0]
-        if orientation in rotation_map.keys():
-            im = im.rotate(
-                rotation_map[orientation])
-
-    return im
-
-def extract_exif(filename):
-    """
-    Returns EXIF tags found in file at ``filename``
-    """
-    exif_tags = {}
-
-    try:
-        image = open(filename)
-        exif_tags = process_file(image)
-    except IOError:
-        BadMediaFail(_('Could not read the image file.'))
-
-    return exif_tags
-
-def clean_exif(exif):
-    # Clean the result from anything the database cannot handle
-
-    # Discard any JPEG thumbnail, for database compatibility
-    # and that I cannot see a case when we would use it.
-    # It takes up some space too.
-    disabled_tags = [
-        'Thumbnail JPEGInterchangeFormatLength',
-        'JPEGThumbnail',
-        'Thumbnail JPEGInterchangeFormat']
-
-    clean_exif = {}
-
-    for key, value in exif.items():
-        if not key in disabled_tags:
-            clean_exif[key] = str(value)
-
-    return clean_exif
-    
-
-def get_gps_data(exif):
-    """
-    Processes EXIF data returned by EXIF.py
-    """
-    if not 'Image GPSInfo' in exif:
-        return False
-
-    gps_data = {}
-
-    try:
-        dms_data = {
-            'latitude': exif['GPS GPSLatitude'],
-            'longitude': exif['GPS GPSLongitude']}
-
-        for key, dat in dms_data.items():
-            gps_data[key] = (
-                lambda v:
-                    float(v[0].num) / float(v[0].den) \
-                    + (float(v[1].num) / float(v[1].den) / 60 )\
-                    + (float(v[2].num) / float(v[2].den) / (60 * 60))
-                )(dat.values)
-    except KeyError:
-        pass
-
-    try:
-        gps_data['direction'] = (
-            lambda d:
-                float(d.num) / float(d.den)
-            )(exif['GPS GPSImgDirection'].values[0])
-    except KeyError:
-        pass
-
-    try:
-        gps_data['altitude'] = (
-            lambda a:
-                float(a.num) / float(a.den)
-            )(exif['GPS GPSAltitude'].values[0])
-    except KeyError:
-        pass
-
-    return gps_data
-
 
 if __name__ == '__main__':
     import sys
@@ -224,9 +127,11 @@ if __name__ == '__main__':
 
     result = extract_exif(sys.argv[1])
     gps = get_gps_data(result)
+    clean = clean_exif(result)
+    useful = get_useful(clean)
 
     import pdb
     pdb.set_trace()
 
     print pp.pprint(
-        result)
+        clean)

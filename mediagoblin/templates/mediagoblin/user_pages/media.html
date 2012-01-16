@@ -80,20 +80,21 @@
                                    media= media._id) %}
         <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
       {% endif %}
-      {% if media.media_data.exif %}
+      {% if media.media_data.has_key('exif') 
+	     and media.media_data.exif.has_key('useful') %}
 	{#-
 	TODO:
 	 - Render GPS data in a human-readable format
-	
+	#}
         <h4>EXIF</h4>
 	<table>
-	{% for tag, value in media.media_data.exif.items() %}
+	{% for key, tag in media.media_data.exif.useful.items() %}
 	  <tr>
-	    <td>{{ tag }}</td>
-	    <td>{{ value }}</td>
+	    <td>{{ key }}</td>
+	    <td>{{ tag.printable }}</td>
 	  </tr>
         {% endfor %}
-	</table>#}
+	</table>
       {% endif %}
     </p>
     {% if comments %}
@@ -194,7 +195,8 @@
       {% include "mediagoblin/utils/tags.html" %}
     {% endif %}
 
-    {% if media.media_data.gps %}
+    {% if media.media_data.has_key('gps')
+           and media.media_data.gps %}
       <h4>Map</h4>
       <div>
 	{% set gps = media.media_data.gps %}
