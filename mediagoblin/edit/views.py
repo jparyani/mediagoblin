@@ -47,8 +47,8 @@ def edit_media(request, media):
         title=media.title,
         slug=media.slug,
         description=media.description,
-        tags=media_tags_as_string(media.tags))
-        license=media.license)
+        tags=media_tags_as_string(media.tags),
+        license=media.license))
 
     form = forms.EditForm(
         request.POST,

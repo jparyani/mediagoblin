@@ -22,7 +22,7 @@ from mediagoblin import mg_globals
 from mediagoblin.db.mongo import migrations
 from mediagoblin.db.mongo.util import ASCENDING, DESCENDING, ObjectId
 from mediagoblin.tools.pagination import Pagination
-from mediagoblin.tools import url
+from mediagoblin.tools import url, licenses
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
 
 ###################
@@ -151,6 +151,8 @@ class MediaEntry(Document, MediaEntryMixin):
         "unprocessed": uploaded but needs to go through processing for display
         "processed": processed and able to be displayed
 
+     - license: URI for media's license.
+
      - queued_media_file: storage interface style filepath describing a file
        queued for processing.  This is stored in the mg_globals.queue_store
        storage system.
@@ -183,6 +185,7 @@ class MediaEntry(Document, MediaEntryMixin):
         'plugin_data': dict,  # plugins can dump stuff here.
         'tags': [dict],
         'state': unicode,
+        'license': unicode,
 
         # For now let's assume there can only be one main file queued
         # at a time
@@ -248,6 +251,10 @@ class MediaEntry(Document, MediaEntryMixin):
 
         for media in cursor:
             return media.url_for_self(urlgen)
+
+    def get_license_data(self):
+        """Return license dict for requested license"""
+        return licenses.SUPPORTED_LICENSES[self['license']]
 
     @property
     def get_uploader(self):
