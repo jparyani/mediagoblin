@@ -14,17 +14,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime, uuid
+import datetime
 
 from mongokit import Document
 
-from mediagoblin.auth import lib as auth_lib
 from mediagoblin import mg_globals
-from mediagoblin.db import migrations
-from mediagoblin.db.util import ASCENDING, DESCENDING, ObjectId
+from mediagoblin.db.mongo import migrations
+from mediagoblin.db.mongo.util import ASCENDING, DESCENDING, ObjectId
 from mediagoblin.tools.pagination import Pagination
-from mediagoblin.tools import url, common
-from mediagoblin.tools import licenses
+from mediagoblin.tools import url
+from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
 
 ###################
 # Custom validators
@@ -35,7 +34,7 @@ from mediagoblin.tools import licenses
 ########
 
 
-class User(Document):
+class User(Document, UserMixin):
     """
     A user of MediaGoblin.
 
@@ -63,22 +62,23 @@ class User(Document):
      - bio_html: biography of the user converted to proper HTML.
     """
     __collection__ = 'users'
+    use_dot_notation = True
 
     structure = {
         'username': unicode,
         'email': unicode,
         'created': datetime.datetime,
-        'plugin_data': dict, # plugins can dump stuff here.
+        'plugin_data': dict,  # plugins can dump stuff here.
         'pw_hash': unicode,
         'email_verified': bool,
         'status': unicode,
         'verification_key': unicode,
         'is_admin': bool,
-        'url' : unicode,
-        'bio' : unicode,     # May contain markdown
-        'bio_html': unicode, # May contain plaintext, or HTML
-        'fp_verification_key': unicode, # forgotten password verification key
-        'fp_token_expire': datetime.datetime
+        'url': unicode,
+        'bio': unicode,      # May contain markdown
+        'bio_html': unicode,  # May contain plaintext, or HTML
+        'fp_verification_key': unicode,  # forgotten password verification key
+        'fp_token_expire': datetime.datetime,
         }
 
     required_fields = ['username', 'created', 'pw_hash', 'email']
@@ -87,18 +87,10 @@ class User(Document):
         'created': datetime.datetime.utcnow,
         'email_verified': False,
         'status': u'needs_email_verification',
-        'verification_key': lambda: unicode(uuid.uuid4()),
         'is_admin': False}
 
-    def check_login(self, password):
-        """
-        See if a user can login with this password
-        """
-        return auth_lib.bcrypt_check_password(
-            password, self['pw_hash'])
 
-
-class MediaEntry(Document):
+class MediaEntry(Document, MediaEntryMixin):
     """
     Record of a piece of media.
 
@@ -130,7 +122,7 @@ class MediaEntry(Document):
        For example, images might contain some EXIF data that's not appropriate
        to other formats.  You might store it like:
 
-         mediaentry['media_data']['exif'] = {
+         mediaentry.media_data['exif'] = {
              'manufacturer': 'CASIO',
              'model': 'QV-4000',
              'exposure_time': .659}
@@ -138,7 +130,7 @@ class MediaEntry(Document):
        Alternately for video you might store:
 
          # play length in seconds
-         mediaentry['media_data']['play_length'] = 340
+         mediaentry.media_data['play_length'] = 340
 
        ... so what's appropriate here really depends on the media type.
 
@@ -159,8 +151,6 @@ class MediaEntry(Document):
         "unprocessed": uploaded but needs to go through processing for display
         "processed": processed and able to be displayed
 
-     - license: URI for entry's license
-
      - queued_media_file: storage interface style filepath describing a file
        queued for processing.  This is stored in the mg_globals.queue_store
        storage system.
@@ -175,25 +165,24 @@ class MediaEntry(Document):
        critical to this piece of media but may be usefully relevant to people
        viewing the work.  (currently unused.)
 
-     - fail_error: path to the exception raised 
-     - fail_metadata: 
-
+     - fail_error: path to the exception raised
+     - fail_metadata:
     """
     __collection__ = 'media_entries'
+    use_dot_notation = True
 
     structure = {
         'uploader': ObjectId,
         'title': unicode,
         'slug': unicode,
         'created': datetime.datetime,
-        'description': unicode, # May contain markdown/up
-        'description_html': unicode, # May contain plaintext, or HTML
+        'description': unicode,  # May contain markdown/up
+        'description_html': unicode,  # May contain plaintext, or HTML
         'media_type': unicode,
-        'media_data': dict, # extra data relevant to this media_type
-        'plugin_data': dict, # plugins can dump stuff here.
+        'media_data': dict,  # extra data relevant to this media_type
+        'plugin_data': dict,  # plugins can dump stuff here.
         'tags': [dict],
         'state': unicode,
-        'license': unicode, # License URI
 
         # For now let's assume there can only be one main file queued
         # at a time
@@ -219,99 +208,50 @@ class MediaEntry(Document):
         'created': datetime.datetime.utcnow,
         'state': u'unprocessed'}
 
-    def get_comments(self):
+    def get_comments(self, ascending=False):
+        if ascending:
+            order = ASCENDING
+        else:
+            order = DESCENDING
+            
         return self.db.MediaComment.find({
-                'media_entry': self['_id']}).sort('created', DESCENDING)
-
-    def get_display_media(self, media_map, fetch_order=common.DISPLAY_IMAGE_FETCHING_ORDER):
-        """
-        Find the best media for display.
-
-        Args:
-        - media_map: a dict like
-          {u'image_size': [u'dir1', u'dir2', u'image.jpg']}
-        - fetch_order: the order we should try fetching images in
-
-        Returns:
-        (media_size, media_path)
-        """
-        media_sizes = media_map.keys()
-
-        for media_size in common.DISPLAY_IMAGE_FETCHING_ORDER:
-            if media_size in media_sizes:
-                return media_map[media_size]
-
-    def main_mediafile(self):
-        pass
+                'media_entry': self._id}).sort('created', order)
 
     def generate_slug(self):
-        self['slug'] = url.slugify(self['title'])
+        self.slug = url.slugify(self.title)
 
         duplicate = mg_globals.database.media_entries.find_one(
-            {'slug': self['slug']})
+            {'slug': self.slug})
 
         if duplicate:
-            self['slug'] = "%s-%s" % (self['_id'], self['slug'])
-
-    def url_for_self(self, urlgen):
-        """
-        Generate an appropriate url for ourselves
-
-        Use a slug if we have one, else use our '_id'.
-        """
-        uploader = self.uploader()
-
-        if self.get('slug'):
-            return urlgen(
-                'mediagoblin.user_pages.media_home',
-                user=uploader['username'],
-                media=self['slug'])
-        else:
-            return urlgen(
-                'mediagoblin.user_pages.media_home',
-                user=uploader['username'],
-                media=unicode(self['_id']))
+            self.slug = "%s-%s" % (self._id, self.slug)
 
     def url_to_prev(self, urlgen):
         """
         Provide a url to the previous entry from this user, if there is one
         """
-        cursor = self.db.MediaEntry.find({'_id' : {"$gt": self['_id']},
-                                          'uploader': self['uploader'],
+        cursor = self.db.MediaEntry.find({'_id': {"$gt": self._id},
+                                          'uploader': self.uploader,
                                           'state': 'processed'}).sort(
                                                     '_id', ASCENDING).limit(1)
-        if cursor.count():
-            return urlgen('mediagoblin.user_pages.media_home',
-                          user=self.uploader()['username'],
-                          media=unicode(cursor[0]['slug']))
+        for media in cursor:
+            return media.url_for_self(urlgen)
 
     def url_to_next(self, urlgen):
         """
         Provide a url to the next entry from this user, if there is one
         """
-        cursor = self.db.MediaEntry.find({'_id' : {"$lt": self['_id']},
-                                          'uploader': self['uploader'],
+        cursor = self.db.MediaEntry.find({'_id': {"$lt": self._id},
+                                          'uploader': self.uploader,
                                           'state': 'processed'}).sort(
                                                     '_id', DESCENDING).limit(1)
 
-        if cursor.count():
-            return urlgen('mediagoblin.user_pages.media_home',
-                          user=self.uploader()['username'],
-                          media=unicode(cursor[0]['slug']))
+        for media in cursor:
+            return media.url_for_self(urlgen)
 
-    def uploader(self):
-        return self.db.User.find_one({'_id': self['uploader']})
-
-    def get_fail_exception(self):
-        """
-        Get the exception that's appropriate for this error
-        """
-        if self['fail_error']:
-            return common.import_component(self['fail_error'])
-
-    def get_license_data(self):
-        """Return license dict for requested license"""
-        return licenses.SUPPORTED_LICENSES[self['license']]
+    @property
+    def get_uploader(self):
+        return self.db.User.find_one({'_id': self.uploader})
 
 
 class MediaComment(Document):
@@ -328,6 +268,7 @@ class MediaComment(Document):
     """
 
     __collection__ = 'media_comments'
+    use_dot_notation = True
 
     structure = {
         'media_entry': ObjectId,
@@ -345,7 +286,8 @@ class MediaComment(Document):
     def media_entry(self):
         return self.db.MediaEntry.find_one({'_id': self['media_entry']})
 
-    def author(self):
+    @property
+    def get_author(self):
         return self.db.User.find_one({'_id': self['author']})
 
 
@@ -360,4 +302,3 @@ def register_models(connection):
     Register all models in REGISTER_MODELS with this connection.
     """
     connection.register(REGISTER_MODELS)
-
