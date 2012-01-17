@@ -24,6 +24,7 @@ from mediagoblin.db import migrations
 from mediagoblin.db.util import ASCENDING, DESCENDING, ObjectId
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools import url, common
+from mediagoblin.tools import licenses
 
 ###################
 # Custom validators
@@ -158,6 +159,8 @@ class MediaEntry(Document):
         "unprocessed": uploaded but needs to go through processing for display
         "processed": processed and able to be displayed
 
+     - license: URI for entry's license
+
      - queued_media_file: storage interface style filepath describing a file
        queued for processing.  This is stored in the mg_globals.queue_store
        storage system.
@@ -174,6 +177,7 @@ class MediaEntry(Document):
 
      - fail_error: path to the exception raised 
      - fail_metadata: 
+
     """
     __collection__ = 'media_entries'
 
@@ -189,6 +193,7 @@ class MediaEntry(Document):
         'plugin_data': dict, # plugins can dump stuff here.
         'tags': [dict],
         'state': unicode,
+        'license': unicode, # License URI
 
         # For now let's assume there can only be one main file queued
         # at a time
@@ -303,6 +308,10 @@ class MediaEntry(Document):
         """
         if self['fail_error']:
             return common.import_component(self['fail_error'])
+
+    def get_license_data(self):
+        """Return license dict for requested license"""
+        return licenses.SUPPORTED_LICENSES[self['license']]
 
 
 class MediaComment(Document):

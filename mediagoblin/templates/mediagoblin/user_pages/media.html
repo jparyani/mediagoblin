@@ -171,6 +171,8 @@
       {% if media.tags %}
         {% include "mediagoblin/utils/tags.html" %}
       {% endif %}
+
+      {% include "mediagoblin/utils/license.html" %}
     </div>
   {% else %}
     <p>{% trans %}Sorry, no such media found.{% endtrans %}<p/>

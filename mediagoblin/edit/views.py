@@ -34,6 +34,7 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.text import (
     clean_html, convert_to_tag_list_of_dicts,
     media_tags_as_string, cleaned_markdown_conversion)
+from mediagoblin.tools.licenses import SUPPORTED_LICENSES
 
 @get_user_media_entry
 @require_active_login
@@ -45,7 +46,8 @@ def edit_media(request, media):
         title=media['title'],
         slug=media['slug'],
         description=media['description'],
-        tags=media_tags_as_string(media['tags']))
+        tags=media_tags_as_string(media['tags']),
+        license=media['license'])
 
     form = forms.EditForm(
         request.POST,
@@ -70,6 +72,10 @@ def edit_media(request, media):
 
             media['description_html'] = cleaned_markdown_conversion(
                 media['description'])
+
+            media['license'] = (
+                unicode(request.POST.get('license'))
+                or '')
 
             media['slug'] = unicode(request.POST['slug'])
             media.save()

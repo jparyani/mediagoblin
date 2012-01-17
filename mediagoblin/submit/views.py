@@ -60,6 +60,10 @@ def submit_start(request):
             entry['description'] = unicode(request.POST.get('description'))
             entry['description_html'] = cleaned_markdown_conversion(
                 entry['description'])
+
+            entry['license'] = (
+                unicode(request.POST.get('license'))
+                or '')
             
             entry['media_type'] = u'image' # heh
             entry['uploader'] = request.user['_id']
