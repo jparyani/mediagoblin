@@ -21,6 +21,7 @@ from cgi import FieldStorage
 
 from celery import registry
 import urllib,urllib2
+import logging
 
 from werkzeug.utils import secure_filename
 
@@ -131,15 +132,24 @@ def submit_start(request):
                                        'mediagoblin.user_pages.atom_feed',
                                        qualified=True,user=request.user.username)
                     hubparameters = {
-                            'hub.mode': 'publish',
-                            'hub.url': feed_url}
+                        'hub.mode': 'publish',
+                        'hub.url': feed_url}
                     hubdata = urllib.urlencode(hubparameters)
                     hubheaders = {
                         "Content-type": "application/x-www-form-urlencoded",
                         "Connection": "close"}
                     for huburl in mg_globals.app_config["push_urls"]:
-                        hubrequest = urllib2.Request(huburl, hubdata,hubheaders)
-                        hubresponse = urllib2.urlopen(hubrequest)
+                        hubrequest = urllib2.Request(huburl, hubdata, hubheaders)
+                        try:
+                            hubresponse = urllib2.urlopen(hubrequest)
+                        except urllib2.HTTPError as exc:
+                            # This is not a big issue, the item will be fetched
+                            # by the PuSH server next time we hit it
+                            logging.getLogger(__name__).warning(
+                                "push url %r gave error %r", huburl, exc.code)
+                        except urllib2.URLError as exc:
+                            logging.getLogger(__name__).warning(
+                                "push url %r is unreachable %r", huburl, exc.reason)
 
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
