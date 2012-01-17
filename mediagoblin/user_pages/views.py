@@ -228,16 +228,25 @@ def atom_feed(request):
     """
     ATOM feed id is a tag URI (see http://en.wikipedia.org/wiki/Tag_URI)
     """
+    atomlinks = [{
+           'href': request.urlgen(
+               'mediagoblin.user_pages.user_home',
+               qualified=True,user=request.matchdict['user']),
+           'rel': 'alternate',
+           'type': 'text/html'
+           }];
+    if mg_globals.app_config["push_urls"]:
+        for push_url in mg_globals.app_config["push_urls"]:
+            atomlinks.append({
+                'rel': 'hub',
+                'href': push_url})
+
     feed = AtomFeed(
                "MediaGoblin: Feed for user '%s'" % request.matchdict['user'],
                feed_url=request.url,
                id='tag:'+request.host+',2011:gallery.user-'+request.matchdict['user'],
-               links=[{
-                   'href': request.urlgen(
-                       'mediagoblin.user_pages.user_home',
-                       qualified=True,user=request.matchdict['user']),
-                   'rel': 'alternate',
-                   'type': 'text/html'}])
+               links=atomlinks)
+
 
     for entry in cursor:
         feed.add(entry.get('title'),
