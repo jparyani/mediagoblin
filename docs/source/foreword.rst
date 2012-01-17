@@ -5,14 +5,14 @@ Foreword
 About the MediaGoblin Manual
 ============================
 
-This is the user manual for MediaGoblin.  It covers how to set up and
-configure MediaGoblin and the kind of information that someone running
-MediaGoblin would need to know.
+This is the site administrator manual for MediaGoblin.  It covers how
+to set up and configure MediaGoblin and the kind of information that
+someone running MediaGoblin would need to know.
 
 We have other documentation at:
 
 * http://mediagoblin.org/join/ for general "join us" information
-* http://wiki.mediagoblin.org/ for our contributor-focused wiki
+* http://wiki.mediagoblin.org/ for our contributor/developer-focused wiki
 
 
 Improving the MediaGobiin Manual

@@ -22,17 +22,17 @@
 {% block mediagoblin_content %}
 
   <form action="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{ 
-                                                     user['username'] }}"
+                                                     user.username }}"
         method="POST" enctype="multipart/form-data">
-    <div class="grid_8 prefix_1 suffix_1 edit_box form_box">
+    <div class="form_box edit_box">
       <h1>
-        {%- trans username=user['username'] -%}
+        {%- trans username=user.username -%}
           Editing {{ username }}'s profile
         {%- endtrans %}
       </h1>
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
-        <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button" />
+        <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button_form" />
 	{{ csrf_token }}
       </div>
     </div>

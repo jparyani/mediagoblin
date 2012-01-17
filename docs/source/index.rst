@@ -14,7 +14,9 @@ Table of Contents:
    foreword
    about
    deploying
+   production-deployments
    configuration
+   media-types
    help
    theming
    codebase

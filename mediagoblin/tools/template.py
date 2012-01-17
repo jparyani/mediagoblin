@@ -17,18 +17,19 @@
 from math import ceil
 import jinja2
 from babel.localedata import exists
-from babel.support import LazyProxy
 from mediagoblin import mg_globals
 from mediagoblin import messages
 from mediagoblin.tools import common
 from mediagoblin.tools.translate import setup_gettext
-from mediagoblin.middleware.csrf import render_csrf_form_token
+from mediagoblin.meddleware.csrf import render_csrf_form_token
+
 
 SETUP_JINJA_ENVS = {}
 
+
 def get_jinja_env(template_loader, locale):
     """
-    Set up the Jinja environment, 
+    Set up the Jinja environment,
 
     (In the future we may have another system for providing theming;
     for now this is good enough.)
@@ -40,8 +41,11 @@ def get_jinja_env(template_loader, locale):
     if SETUP_JINJA_ENVS.has_key(locale):
         return SETUP_JINJA_ENVS[locale]
 
+    # jinja2.StrictUndefined will give exceptions on references
+    # to undefined/unknown variables in templates.
     template_env = jinja2.Environment(
         loader=template_loader, autoescape=True,
+        undefined=jinja2.StrictUndefined,
         extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
 
     template_env.install_gettext_callables(
@@ -51,14 +55,18 @@ def get_jinja_env(template_loader, locale):
     # All templates will know how to ...
     # ... fetch all waiting messages and remove them from the queue
     # ... construct a grid of thumbnails or other media
+    # ... have access to the global and app config
     template_env.globals['fetch_messages'] = messages.fetch_messages
     template_env.globals['gridify_list'] = gridify_list
     template_env.globals['gridify_cursor'] = gridify_cursor
+    template_env.globals['app_config'] = mg_globals.app_config
+    template_env.globals['global_config'] = mg_globals.global_config
 
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env
 
     return template_env
+
 
 # We'll store context information here when doing unit tests
 TEMPLATE_TEST_CONTEXT = {}
@@ -74,10 +82,12 @@ def render_template(request, template_path, context):
     template = request.template_env.get_template(
         template_path)
     context['request'] = request
-    context['csrf_token'] = render_csrf_form_token(request)
+    rendered_csrf_token = render_csrf_form_token(request)
+    if rendered_csrf_token is not None:
+        context['csrf_token'] = render_csrf_form_token(request)
     rendered = template.render(context)
-    
-    if common.TESTS_ENABLED:        
+
+    if common.TESTS_ENABLED:
         TEMPLATE_TEST_CONTEXT[template_path] = context
 
     return rendered
@@ -86,6 +96,7 @@ def render_template(request, template_path, context):
 def clear_test_template_context():
     global TEMPLATE_TEST_CONTEXT
     TEMPLATE_TEST_CONTEXT = {}
+
 
 def gridify_list(this_list, num_cols=5):
     """

@@ -1,5 +1,5 @@
 # Translations template for PROJECT.
-# Copyright (C) 2011 ORGANIZATION
+# Copyright (C) 2012 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-11-01 23:14-0500\n"
-"PO-Revision-Date: 2011-11-02 04:13+0000\n"
+"POT-Creation-Date: 2012-01-07 13:47-0600\n"
+"PO-Revision-Date: 2012-01-07 19:44+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Swedish (http://www.transifex.net/projects/p/mediagoblin/team/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -20,27 +20,19 @@ msgstr ""
 "Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: mediagoblin/auth/forms.py:25 mediagoblin/auth/forms.py:49
+#: mediagoblin/processing.py:143
+msgid "Invalid file given for media type."
+msgstr "Ogiltig fil för mediatypen."
+
+#: mediagoblin/auth/forms.py:25 mediagoblin/auth/forms.py:41
 msgid "Username"
 msgstr "Användarnamn"
 
-#: mediagoblin/auth/forms.py:30 mediagoblin/auth/forms.py:53
+#: mediagoblin/auth/forms.py:30 mediagoblin/auth/forms.py:45
 msgid "Password"
 msgstr "Lösenord"
 
-#: mediagoblin/auth/forms.py:35
-msgid "Passwords must match."
-msgstr "Lösenorden måste vara identiska."
-
-#: mediagoblin/auth/forms.py:37
-msgid "Confirm password"
-msgstr "Bekräfta lösenord"
-
-#: mediagoblin/auth/forms.py:39
-msgid "Type it again here to make sure there are no spelling mistakes."
-msgstr "Skriv in det igen för att undvika stavfel."
-
-#: mediagoblin/auth/forms.py:42
+#: mediagoblin/auth/forms.py:34
 msgid "Email address"
 msgstr "E-postadress"
 
@@ -53,10 +45,10 @@ msgid "Sorry, a user with that name already exists."
 msgstr "En användare med det användarnamnet finns redan."
 
 #: mediagoblin/auth/views.py:77
-msgid "Sorry, that email address has already been taken."
-msgstr "Den e-postadressen är redan tagen."
+msgid "Sorry, a user with that email address already exists."
+msgstr ""
 
-#: mediagoblin/auth/views.py:179
+#: mediagoblin/auth/views.py:180
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
@@ -64,15 +56,28 @@ msgstr ""
 "Din e-postadress är verifierad. Du kan nu logga in, redigera din profil och "
 "ladda upp filer!"
 
-#: mediagoblin/auth/views.py:185
+#: mediagoblin/auth/views.py:186
 msgid "The verification key or user id is incorrect"
 msgstr "Verifieringsnyckeln eller användar-IDt är fel."
 
-#: mediagoblin/auth/views.py:207
+#: mediagoblin/auth/views.py:204
+msgid "You must be logged in so we know who to send the email to!"
+msgstr ""
+
+#: mediagoblin/auth/views.py:212
+msgid "You've already verified your email address!"
+msgstr ""
+
+#: mediagoblin/auth/views.py:225
 msgid "Resent your verification email."
 msgstr "Skickade ett nytt verifierings-email."
 
-#: mediagoblin/auth/views.py:248
+#: mediagoblin/auth/views.py:260
+msgid ""
+"An email has been sent with instructions on how to change your password."
+msgstr ""
+
+#: mediagoblin/auth/views.py:270
 msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
@@ -80,72 +85,127 @@ msgstr ""
 "Kunde inte skicka e-poståterställning av lösenord eftersom ditt användarnamn"
 " är inaktivt eller kontots e-postadress har inte verifierats."
 
+#: mediagoblin/auth/views.py:282
+msgid "Couldn't find someone with that username or email."
+msgstr ""
+
+#: mediagoblin/auth/views.py:330
+msgid "You can now log in using your new password."
+msgstr ""
+
 #: mediagoblin/edit/forms.py:24 mediagoblin/submit/forms.py:27
 msgid "Title"
 msgstr "Titel"
 
-#: mediagoblin/edit/forms.py:28 mediagoblin/submit/forms.py:32
+#: mediagoblin/edit/forms.py:27 mediagoblin/submit/forms.py:30
+msgid "Description of this work"
+msgstr "Beskrivning av verket"
+
+#: mediagoblin/edit/forms.py:28 mediagoblin/submit/forms.py:31
+msgid ""
+"You can use\n"
+"                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
+"                      Markdown</a> for formatting."
+msgstr ""
+
+#: mediagoblin/edit/forms.py:32 mediagoblin/submit/forms.py:35
 msgid "Tags"
 msgstr "Taggar"
 
-#: mediagoblin/edit/forms.py:31
+#: mediagoblin/edit/forms.py:34 mediagoblin/submit/forms.py:37
+msgid "Separate tags by commas."
+msgstr ""
+
+#: mediagoblin/edit/forms.py:37
 msgid "Slug"
 msgstr "Sökvägsnamn"
 
-#: mediagoblin/edit/forms.py:32
+#: mediagoblin/edit/forms.py:38
 msgid "The slug can't be empty"
 msgstr "Sökvägsnamnet kan inte vara tomt"
 
-#: mediagoblin/edit/forms.py:33
+#: mediagoblin/edit/forms.py:39
 msgid ""
-"The title part of this media's URL. You usually don't need to change this."
-msgstr "Sökvägstitlen för din media. Du brukar inte behöva ändra denna."
+"The title part of this media's address. You usually don't need to change "
+"this."
+msgstr ""
 
-#: mediagoblin/edit/forms.py:40
+#: mediagoblin/edit/forms.py:46
 msgid "Bio"
 msgstr "Presentation"
 
-#: mediagoblin/edit/forms.py:43
+#: mediagoblin/edit/forms.py:48
+msgid ""
+"You can use\n"
+"            <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
+"            Markdown</a> for formatting."
+msgstr ""
+
+#: mediagoblin/edit/forms.py:53
 msgid "Website"
 msgstr "Hemsida"
 
-#: mediagoblin/edit/views.py:64
+#: mediagoblin/edit/forms.py:60
+msgid "Old password"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:62
+msgid "Enter your old password to prove you own this account."
+msgstr ""
+
+#: mediagoblin/edit/forms.py:65
+msgid "New password"
+msgstr ""
+
+#: mediagoblin/edit/views.py:65
 msgid "An entry with that slug already exists for this user."
 msgstr "Ett inlägg med det sökvägsnamnet existerar redan."
 
-#: mediagoblin/edit/views.py:85
+#: mediagoblin/edit/views.py:86
 msgid "You are editing another user's media. Proceed with caution."
 msgstr "Var försiktig, du redigerar någon annans inlägg."
 
-#: mediagoblin/edit/views.py:155
+#: mediagoblin/edit/views.py:156
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr "Var försiktig, du redigerar en annan användares profil."
 
-#: mediagoblin/process_media/errors.py:44
-msgid "Invalid file given for media type."
-msgstr "Ogiltig fil för mediatypen."
+#: mediagoblin/edit/views.py:174
+msgid "Profile changes saved"
+msgstr ""
+
+#: mediagoblin/edit/views.py:200
+msgid "Wrong password"
+msgstr ""
+
+#: mediagoblin/edit/views.py:216
+msgid "Account settings saved"
+msgstr ""
+
+#: mediagoblin/media_types/__init__.py:77
+msgid "Could not extract any file extension from \"{filename}\""
+msgstr ""
+
+#: mediagoblin/media_types/__init__.py:88
+msgid "Sorry, I don't support that file type :("
+msgstr ""
 
 #: mediagoblin/submit/forms.py:25
 msgid "File"
 msgstr "Fil"
 
-#: mediagoblin/submit/forms.py:30
-msgid "Description of this work"
-msgstr "Beskrivning av verket"
-
-#: mediagoblin/submit/views.py:46
+#: mediagoblin/submit/views.py:50
 msgid "You must provide a file."
 msgstr "Du måste ange en fil"
 
-#: mediagoblin/submit/views.py:49
-msgid "The file doesn't seem to be an image!"
-msgstr "Filen verkar inte vara en giltig bildfil!"
-
-#: mediagoblin/submit/views.py:121
+#: mediagoblin/submit/views.py:128
 msgid "Woohoo! Submitted!"
 msgstr "Tjohoo! Upladdat!"
 
-#: mediagoblin/templates/mediagoblin/404.html:21
+#: mediagoblin/templates/mediagoblin/404.html:22
+msgid "Image of 404 goblin stressing out"
+msgstr "Bild av stressat 404-troll."
+
+#: mediagoblin/templates/mediagoblin/404.html:23
 msgid "Oops!"
 msgstr "Ojoj!"
 
@@ -161,33 +221,30 @@ msgstr ""
 "Om du är säker på att adressen stämmer så kanske sidan du letar efter har "
 "flyttats eller tagits bort."
 
-#: mediagoblin/templates/mediagoblin/404.html:32
-msgid "Image of 404 goblin stressing out"
-msgstr "Bild av stressat 404-troll."
-
-#: mediagoblin/templates/mediagoblin/base.html:22
-msgid "GNU MediaGoblin"
-msgstr "GNU MediaGoblin"
-
-#: mediagoblin/templates/mediagoblin/base.html:47
+#: mediagoblin/templates/mediagoblin/base.html:48
 msgid "MediaGoblin logo"
 msgstr "MediaGoblin-logotyp"
 
-#: mediagoblin/templates/mediagoblin/base.html:52
-msgid "Submit media"
-msgstr "Ladda upp"
+#: mediagoblin/templates/mediagoblin/base.html:53
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:157
+msgid "Add media"
+msgstr "Lägg till media"
 
-#: mediagoblin/templates/mediagoblin/base.html:63
-msgid "verify your email!"
-msgstr "Verifiera din e-postadress!"
+#: mediagoblin/templates/mediagoblin/base.html:64
+msgid "Verify your email!"
+msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:73
+#: mediagoblin/templates/mediagoblin/base.html:71
+msgid "log out"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:74
 #: mediagoblin/templates/mediagoblin/auth/login.html:27
-#: mediagoblin/templates/mediagoblin/auth/login.html:35
+#: mediagoblin/templates/mediagoblin/auth/login.html:45
 msgid "Log in"
 msgstr "Logga in"
 
-#: mediagoblin/templates/mediagoblin/base.html:89
+#: mediagoblin/templates/mediagoblin/base.html:86
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project"
@@ -199,97 +256,53 @@ msgstr ""
 msgid "Explore"
 msgstr "Utforska"
 
-#: mediagoblin/templates/mediagoblin/root.html:27
-msgid "Hi there, media lover! MediaGoblin is..."
-msgstr "Hej där mediaentusiast, MediaGoblin..."
+#: mediagoblin/templates/mediagoblin/root.html:26
+msgid "Hi there, welcome to this MediaGoblin site!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:28
+msgid ""
+"This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
+"extraordinarily great piece of media hosting software."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:29
-msgid "The perfect place for your media!"
-msgstr "Är ett perfekt ställe för din media!"
-
-#: mediagoblin/templates/mediagoblin/root.html:30
 msgid ""
-"A place for people to collaborate and show off original and derived "
-"creations!"
+"To add your own media, place comments, save your favourites and more, you "
+"can log in with your MediaGoblin account."
 msgstr ""
-"Är ett ställe för människor att samarbeta och visa upp originella och "
-"härrörande verk."
 
 #: mediagoblin/templates/mediagoblin/root.html:31
-msgid ""
-"Free, as in freedom. (We’re a <a href=\"http://gnu.org\">GNU</a> project, "
-"after all.)"
+msgid "Don't have one yet? It's easy!"
 msgstr ""
-"Är fritt som i frihet. (Vi är ju ett <a "
-"href=\"http://gnu.org\">GNU</a>-projekt.)"
 
 #: mediagoblin/templates/mediagoblin/root.html:32
-msgid ""
-"Aiming to make the world a better place through decentralization and "
-"(eventually, coming soon!) federation!"
-msgstr ""
-"Arbetar för att göra världen till ett bättre ställe genom decentralisering "
-"och (så småningom, kommer snart!) -- Google Translate säger "
-"\"sammanslutning\", <em>en: <a "
-"href=\"http://en.wikipedia.org/wiki/Federation_(information_technology)\">federation</a></em>"
-" "
-
-#: mediagoblin/templates/mediagoblin/root.html:33
-msgid ""
-"Built for extensibility.  (Multiple media types coming soon to the software,"
-" including video support!)"
-msgstr ""
-"Byggd för utbyggbarhet. (Flera mediatyper kommer snart till MediaGoblin, "
-"bland annat video!)"
-
-#: mediagoblin/templates/mediagoblin/root.html:34
-msgid ""
-"Powered by people like you.  (<a "
-"href=\"http://mediagoblin.org/pages/join.html\">You can help us improve this"
-" software!</a>)"
-msgstr ""
-"Drivs av människor som du. (<a "
-"href=\"http://mediagoblin.org/pages/join.html\">Du kan hjälpa os forbättra "
-"MediaGoblin!</a>)"
-
-#: mediagoblin/templates/mediagoblin/root.html:38
-msgid "Excited to join us?"
-msgstr "Nyfiken att gå med oss?"
-
-#: mediagoblin/templates/mediagoblin/root.html:39
 #, python-format
 msgid ""
-"<a class=\"header_submit_highlight\" href=\"%(register_url)s\">Create a free account</a>\n"
-"          or\n"
-"          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
+"<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
+"        or\n"
+"        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr ""
-"<a class=\"header_submit_highlight\" href=\"%(register_url)s\">Skapa ett konto gratis</a>\n"
-"\n"
-"          or\n"
-"          <a class=\"header_submit\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Installera MediaGoblin på din egen server</a>"
 
-#: mediagoblin/templates/mediagoblin/root.html:53
+#: mediagoblin/templates/mediagoblin/root.html:40
 msgid "Most recent media"
 msgstr "Senast medier"
 
-#: mediagoblin/templates/mediagoblin/auth/change_fp.html:29
-msgid "Enter your new password"
-msgstr "Fyll i ditt lösenord"
-
-#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:29
-msgid "Enter your username or email"
-msgstr "Fyll i ditt användarnamn eller lösenord"
-
-#: mediagoblin/templates/mediagoblin/auth/fp_changed_success.html:22
-msgid "Your password has been changed. Try to log in now."
-msgstr "Ditt lösenord är nu ändrat. Testa att logga in nu."
-
-#: mediagoblin/templates/mediagoblin/auth/fp_email_sent.html:22
-msgid ""
-"Check your inbox. We sent an email with a URL for changing your password."
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:32
+msgid "Set your new password"
 msgstr ""
-"Kolla din inkorg. Vi har skickat ett e-postmeddelande med en webbadress för "
-"att ändra ditt lösenord."
+
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:35
+msgid "Set password"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
+msgid "Recover password"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:30
+msgid "Send instructions"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/fp_verification_email.txt:19
 #, python-format
@@ -317,27 +330,23 @@ msgstr ""
 msgid "Logging in failed!"
 msgstr "Inloggning misslyckades!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:43
+#: mediagoblin/templates/mediagoblin/auth/login.html:35
 msgid "Don't have an account yet?"
 msgstr "Har du inget konto än?"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:46
+#: mediagoblin/templates/mediagoblin/auth/login.html:36
 msgid "Create one here!"
 msgstr "Skapa ett här!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:49
+#: mediagoblin/templates/mediagoblin/auth/login.html:42
 msgid "Forgot your password?"
 msgstr "Glömt ditt lösenord?"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:52
-msgid "Change it!"
-msgstr "Ändra!"
-
-#: mediagoblin/templates/mediagoblin/auth/register.html:27
+#: mediagoblin/templates/mediagoblin/auth/register.html:32
 msgid "Create an account!"
 msgstr "Skapa ett konto!"
 
-#: mediagoblin/templates/mediagoblin/auth/register.html:31
+#: mediagoblin/templates/mediagoblin/auth/register.html:36
 msgid "Create"
 msgstr "Skapa"
 
@@ -368,36 +377,114 @@ msgid "Cancel"
 msgstr "Avbryt"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:40
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
 msgid "Save changes"
 msgstr "Spara ändringar"
+
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:34
+#, python-format
+msgid "Changing %(username)s's account settings"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:29
 #, python-format
 msgid "Editing %(username)s's profile"
 msgstr "Redigerar %(username)ss profil"
 
-#: mediagoblin/templates/mediagoblin/listings/tag.html:31
-msgid "Media tagged with:"
-msgstr "Media taggat med:"
+#: mediagoblin/templates/mediagoblin/listings/tag.html:30
+#: mediagoblin/templates/mediagoblin/listings/tag.html:35
+#, python-format
+msgid "Media tagged with: %(tag_name)s"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:46
+msgid "Original"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:33
+msgid ""
+"Sorry, this video will not work because \n"
+"\t    your web browser does not support HTML5 \n"
+"\t    video."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:36
+msgid ""
+"You can get a modern web browser that \n"
+"\t    can play this video at <a href=\"http://getfirefox.com\">\n"
+"\t    http://getfirefox.com</a>!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
-msgid "Submit yer media"
-msgstr "Ladda upp"
+msgid "Add your media"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:30
-msgid "Submit"
-msgstr "Skicka"
+msgid "Add"
+msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:32
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
+#, python-format
+msgid "%(username)s's media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:37
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
 msgstr "<a href=\"%(user_url)s\">%(username)s</a>s media"
 
-#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:52
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:32
-msgid "Sorry, no such user found."
-msgstr "Ledsen, hittar ingen sådan användare."
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:60
+#, python-format
+msgid "Added on %(date)s."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:69
+msgid "Edit"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:73
+msgid "Delete"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:79
+#, python-format
+msgid "%(comment_count)s comment"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:81
+#, python-format
+msgid "%(comment_count)s comments"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:83
+msgid "No comments yet."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:91
+msgid "Add one"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:100
+msgid ""
+"Type your comment here. You can use <a "
+"href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
+" formatting."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:104
+msgid "Add this comment"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:126
+msgid "at"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:141
+#, python-format
+msgid "<p>❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a></p>"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -429,30 +516,40 @@ msgstr "Ingen media under behandling"
 msgid "These uploads failed to process:"
 msgstr "De här behandlingarna misslyckades:"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:39
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:59
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:31
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:89
+#, python-format
+msgid "%(username)s's profile"
+msgstr "%(username)ss profil"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:43
+msgid "Sorry, no such user found."
+msgstr "Ledsen, hittar ingen sådan användare."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:50
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:70
 msgid "Email verification needed"
 msgstr "E-postadressverifiering krävs."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:42
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:53
 msgid "Almost done! Your account still needs to be activated."
 msgstr "Nästan klar! Ditt konto behöver bara aktiveras."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:47
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:58
 msgid ""
 "An email should arrive in a few moments with instructions on how to do so."
 msgstr ""
 "Ett e-postmeddelande med instruktioner kommer att hamna hos dig inom kort."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:51
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:62
 msgid "In case it doesn't:"
 msgstr "Om det inte skulle göra det:"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:54
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:65
 msgid "Resend verification email"
 msgstr "Skicka ett nytt e-postmeddelande"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:62
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:73
 msgid ""
 "Someone has registered an account with this username, but it still has to be"
 " activated."
@@ -460,7 +557,7 @@ msgstr ""
 "Någon har redan registrerat ett konto med det här användarnamnet men det har"
 " inte aktiverats."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:68
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:79
 #, python-format
 msgid ""
 "If you are that person but you've lost your verification email, you can <a "
@@ -470,30 +567,29 @@ msgstr ""
 "detaljer om hur du verifierar ditt konto så kan du <a "
 "href=\"%(login_url)s\">logga in</a> och begära ett nytt."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:78
-#, python-format
-msgid "%(username)s's profile"
-msgstr "%(username)ss profil"
-
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:85
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:96
 msgid "Here's a spot to tell others about yourself."
 msgstr "Här kan du berätta för andra om dig själv."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:90
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:108
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:101
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:118
 msgid "Edit profile"
 msgstr "Redigera profil"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:96
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:106
 msgid "This user hasn't filled in their profile (yet)."
 msgstr "Den här användaren har inte fyllt i sin profilsida ännu."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:122
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:125
+msgid "Change account settings"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:138
 #, python-format
 msgid "View all of %(username)s's media"
 msgstr "Se all media från %(username)s"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:135
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:151
 msgid ""
 "This is where your media will appear, but you don't seem to have added "
 "anything yet."
@@ -501,11 +597,8 @@ msgstr ""
 "Här kommer din media att dyka upp, du verkar inte ha lagt till någonting "
 "ännu."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:141
-msgid "Add media"
-msgstr "Lägg till media"
-
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:147
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:163
+#: mediagoblin/templates/mediagoblin/utils/object_gallery.html:72
 msgid "There doesn't seem to be any media here yet..."
 msgstr "Det verkar inte finnas någon media här ännu."
 
@@ -517,31 +610,57 @@ msgstr "feed-ikon"
 msgid "Atom feed"
 msgstr "Atom-feed"
 
-#: mediagoblin/templates/mediagoblin/utils/pagination.html:40
-msgid "Newer"
-msgstr "Nyare"
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:39
+msgid "← Newer"
+msgstr ""
 
-#: mediagoblin/templates/mediagoblin/utils/pagination.html:46
-msgid "Older"
-msgstr "Äldre"
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:45
+msgid "Older →"
+msgstr ""
 
-#: mediagoblin/user_pages/forms.py:24
-msgid "Comment"
-msgstr "Kommentar"
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:48
+msgid "Go to page:"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/prev_next.html:27
+#: mediagoblin/templates/mediagoblin/utils/prev_next.html:32
+msgid "newer"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/prev_next.html:38
+#: mediagoblin/templates/mediagoblin/utils/prev_next.html:43
+msgid "older"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/tags.html:20
+msgid "View more media tagged with"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/tags.html:25
+msgid "or"
+msgstr ""
 
 #: mediagoblin/user_pages/forms.py:30
 msgid "I am sure I want to delete this"
 msgstr "Jag är säker på att jag vill radera detta"
 
-#: mediagoblin/user_pages/views.py:142
-msgid "Empty comments are not allowed."
+#: mediagoblin/user_pages/views.py:155
+msgid "Oops, your comment was empty."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:148
-msgid "Comment posted!"
+#: mediagoblin/user_pages/views.py:161
+msgid "Your comment has been posted!"
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:181
+#: mediagoblin/user_pages/views.py:183
+msgid "You deleted the media."
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:190
+msgid "The media was not deleted because you didn't check that you were sure."
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:198
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr "Du tänker radera en annan användares media. Var försiktig."
 

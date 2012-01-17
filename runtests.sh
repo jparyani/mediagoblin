@@ -23,7 +23,8 @@ elif which nosetests > /dev/null; then
     echo "Using nosetests from \$PATH";
     export NOSETESTS="nosetests";
 else
-    echo "No nosetests found, exiting! X_X";
+    echo "nosetests not found.  X_X";
+    echo "Please install 'nose'.  Exiting.";
     exit 1
 fi
 

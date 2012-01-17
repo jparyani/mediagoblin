@@ -26,6 +26,17 @@
                        user=user.username) }}">
 {% endblock mediagoblin_head %}
 
+{% block title %}
+  {%- if user -%}
+    {%- trans username=user.username -%}
+      {{ username }}'s profile
+    {%- endtrans %} &mdash; {{ super() }}
+  {%- else -%}
+    {{ super() }}
+  {%- endif -%}
+{% endblock %}
+
+
 {% block mediagoblin_content -%}
   {# If no user... #}
   {% if not user %}
@@ -35,7 +46,7 @@
   {% elif user.status == "needs_email_verification" %}
     {% if user == request.user %}
       {# this should only be visible when you are this user #}
-      <div class="grid_6 prefix_1 suffix_1 form_box">
+      <div class="form_box">
         <h1>{% trans %}Email verification needed{% endtrans %}</h1>
 
         <p>
@@ -51,11 +62,11 @@
         <p>{% trans %}In case it doesn't:{% endtrans %}</p>
   
         <a href="{{ request.urlgen('mediagoblin.auth.resend_verification') }}"
-           class="button">{% trans %}Resend verification email{% endtrans %}</a>
+           class="button_action_highlight">{% trans %}Resend verification email{% endtrans %}</a>
       </div>
     {% else %}
       {# if the user is not you, but still needs to verify their email #}
-      <div class="grid_6 prefix_1 suffix_1 form_box">
+      <div class="form_box">
         <h1>{% trans %}Email verification needed{% endtrans %}</h1>
 
         <p>
@@ -78,41 +89,46 @@
       {%- trans username=user.username %}{{ username }}'s profile{% endtrans -%}
     </h1>
 
-    {% if not user['url'] and not user['profile'] %}
-      {% if request.user['_id'] == user['_id'] %}
-        <div class="grid_6 alpha empty_space">
+    {% if not user.url and not user.bio %}
+      {% if request.user and (request.user._id == user._id) %}
+        <div class="profile_sidebar empty_space">
           <p>
             {% trans %}Here's a spot to tell others about yourself.{% endtrans %}
           </p>
           <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
                             user.username }}"
-             class="header_submit">
+             class="button_action">
             {%- trans %}Edit profile{% endtrans -%}
           </a>
-        </div>
       {% else %}
-        <div class="grid_6 alpha empty_space">
+        <div class="profile_sidebar empty_space">
           <p>
             {% trans -%}
               This user hasn't filled in their profile (yet).
             {%- endtrans %}
           </p>
-        </div>
       {% endif %}
     {% else %}
-      <div class="grid_6 alpha">
+      <div class="profile_sidebar">
         {% include "mediagoblin/utils/profile.html" %}
-        {% if request.user['_id'] == user['_id'] or request.user['is_admin'] %}
+        {% if request.user and
+              (request.user._id == user._id or request.user.is_admin) %}
           <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
                           user.username }}">
             {%- trans %}Edit profile{% endtrans -%}
           </a>
         {% endif %}
-      </div>
     {% endif %}
 
+      {% if request.user and (request.user._id == user._id) %}
+        <a href="{{ request.urlgen('mediagoblin.edit.account') }}">
+          {%- trans %}Change account settings{% endtrans -%}
+        </a>
+      {% endif %}
+    </div>
+
     {% if media_entries.count() %}
-      <div class="grid_10 omega">
+      <div class="profile_showcase">
         {{ object_gallery(request, media_entries, pagination,
                           pagination_base_url=user_gallery_url, col_number=3) }}
         {% include "mediagoblin/utils/object_gallery.html" %}
@@ -129,20 +145,20 @@
         {% include "mediagoblin/utils/feed_link.html" %}
       </div>
     {% else %}
-      {% if request.user['_id'] == user['_id'] %}
-        <div class="grid_10 omega empty_space">
+      {% if request.user and (request.user._id == user._id) %}
+        <div class="profile_showcase empty_space">
           <p>
             {% trans -%}
             This is where your media will appear, but you don't seem to have added anything yet.
             {%- endtrans %}
           </p>
-          <a class="header_submit"
+          <a class="button_action"
              href="{{ request.urlgen('mediagoblin.submit.start') }}">
             {%- trans %}Add media{% endtrans -%}
           </a>
         </div>
       {% else %}
-        <div class="grid_10 omega empty_space">
+        <div class="profile_showcase empty_space">
           <p>
             {% trans -%}
             There doesn't seem to be any media here yet...

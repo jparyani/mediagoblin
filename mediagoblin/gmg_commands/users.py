@@ -18,27 +18,30 @@ from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin import mg_globals
 
-
 def adduser_parser_setup(subparser):
     subparser.add_argument(
-        'username',
+        '--username','-u',
         help="Username used to login")
     subparser.add_argument(
-        'password',
-        help="Your supersecret word to login")
+        '--password','-p',
+        help="Your supersecret word to login, beware of storing it in bash history")
     subparser.add_argument(
-        'email',
-        help="Email to recieve notifications")
+        '--email','-e',
+        help="Email to receive notifications")
 
 
 def adduser(args):
     #TODO: Lets trust admins this do not validate Emails :)
     commands_util.setup_app(args)
 
+    args.username = commands_util.prompt_if_not_set(args.username, "Username:")
+    args.password = commands_util.prompt_if_not_set(args.password, "Password:",True)
+    args.email = commands_util.prompt_if_not_set(args.email, "Email:")
+
     db = mg_globals.database
     users_with_username = \
         db.User.find({
-            'username': args.username.lower()
+            'username': args.username.lower(),
         }).count()
 
     if users_with_username:
@@ -47,11 +50,11 @@ def adduser(args):
     else:
         # Create the user
         entry = db.User()
-        entry['username'] = unicode(args.username.lower())
-        entry['email'] = unicode(args.email)
-        entry['pw_hash'] = auth_lib.bcrypt_gen_password_hash(args.password)
-        entry['status'] = u'active'
-        entry['email_verified'] = True
+        entry.username = unicode(args.username.lower())
+        entry.email = unicode(args.email)
+        entry.pw_hash = auth_lib.bcrypt_gen_password_hash(args.password)
+        entry.status = u'active'
+        entry.email_verified = True
         entry.save(validate=True)
 
         print "User created (and email marked as verified)"
@@ -68,9 +71,9 @@ def makeadmin(args):
 
     db = mg_globals.database
 
-    user = db.User.one({'username':unicode(args.username.lower())})
+    user = db.User.one({'username': unicode(args.username.lower())})
     if user:
-        user['is_admin'] = True
+        user.is_admin = True
         user.save()
         print 'The user is now Admin'
     else:
@@ -91,11 +94,10 @@ def changepw(args):
 
     db = mg_globals.database
 
-    user = db.User.one({'username':unicode(args.username.lower())})
+    user = db.User.one({'username': unicode(args.username.lower())})
     if user:
-        user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(args.password)
+        user.pw_hash = auth_lib.bcrypt_gen_password_hash(args.password)
         user.save()
         print 'Password successfully changed'
     else:
         print 'The user doesn\'t exist'
-

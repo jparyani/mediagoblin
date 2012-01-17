@@ -50,7 +50,7 @@ def test_setup_celery_from_config():
     assert isinstance(fake_celery_module.CELERYD_ETA_SCHEDULER_PRECISION, float)
     assert fake_celery_module.CELERY_RESULT_PERSISTENT is True
     assert fake_celery_module.CELERY_IMPORTS == [
-        'foo.bar.baz', 'this.is.an.import', 'mediagoblin.process_media']
+        'foo.bar.baz', 'this.is.an.import', 'mediagoblin.processing']
     assert fake_celery_module.CELERY_MONGODB_BACKEND_SETTINGS == {
         'database': 'mediagoblin'}
     assert fake_celery_module.CELERY_RESULT_BACKEND == 'mongodb'
@@ -74,7 +74,7 @@ def test_setup_celery_from_config():
     assert isinstance(fake_celery_module.CELERYD_ETA_SCHEDULER_PRECISION, float)
     assert fake_celery_module.CELERY_RESULT_PERSISTENT is False
     assert fake_celery_module.CELERY_IMPORTS == [
-        'baz.bar.foo', 'import.is.a.this', 'mediagoblin.process_media']
+        'baz.bar.foo', 'import.is.a.this', 'mediagoblin.processing']
     assert fake_celery_module.CELERY_MONGODB_BACKEND_SETTINGS == {
         'database': 'captain_lollerskates',
         'host': 'mongodb.example.org',

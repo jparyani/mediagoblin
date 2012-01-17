@@ -1,0 +1,5 @@
+recursive-include mediagoblin/templates *.html
+recursive-include mediagoblin/static *.js *.css *.png *.svg
+recursive-include mediagoblin/tests *.ini
+recursive-include docs *.rst *.html
+

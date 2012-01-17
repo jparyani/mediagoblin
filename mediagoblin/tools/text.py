@@ -21,6 +21,7 @@ from lxml.html.clean import Cleaner
 from mediagoblin import mg_globals
 from mediagoblin.tools import url
 
+
 # A super strict version of the lxml.html cleaner class
 HTML_CLEANER = Cleaner(
     scripts=True,
@@ -42,12 +43,15 @@ HTML_CLEANER = Cleaner(
     host_whitelist=(),
     whitelist_tags=set([]))
 
+TAGS_DELIMITER=',';
+
 def clean_html(html):
     # clean_html barfs on an empty string
     if not html:
         return u''
 
     return HTML_CLEANER.clean_html(html)
+
 
 def convert_to_tag_list_of_dicts(tag_string):
     """
@@ -64,7 +68,7 @@ def convert_to_tag_list_of_dicts(tag_string):
 
         # Split the tag string into a list of tags
         for tag in stripped_tag_string.split(
-                                       mg_globals.app_config['tags_delimiter']):
+                                       TAGS_DELIMITER):
 
             # Ignore empty or duplicate tags
             if tag.strip() and tag.strip() not in [t['name'] for t in taglist]:
@@ -72,6 +76,7 @@ def convert_to_tag_list_of_dicts(tag_string):
                 taglist.append({'name': tag.strip(),
                                 'slug': url.slugify(tag.strip())})
     return taglist
+
 
 def media_tags_as_string(media_entry_tags):
     """
@@ -81,12 +86,14 @@ def media_tags_as_string(media_entry_tags):
     """
     media_tag_string = ''
     if media_entry_tags:
-        media_tag_string = mg_globals.app_config['tags_delimiter'].join(
+        media_tag_string = (TAGS_DELIMITER+u' ').join(
                                       [tag['name'] for tag in media_entry_tags])
     return media_tag_string
 
+
 TOO_LONG_TAG_WARNING = \
     u'Tags must be shorter than %s characters.  Tags that are too long: %s'
+
 
 def tag_length_validator(form, field):
     """
@@ -104,6 +111,7 @@ def tag_length_validator(form, field):
 
 
 MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')
+
 
 def cleaned_markdown_conversion(text):
     """

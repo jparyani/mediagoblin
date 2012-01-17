@@ -1,0 +1,29 @@
+{#
+    default/layout.html
+    ~~~~~~~~~~~~~~~~~~~
+
+    Sphinx layout template for the default theme.
+
+    :copyright: Copyright 2007-2010 by the Sphinx team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
+#}
+{% extends "basic/layout.html" %}
+
+{% if theme_collapsiblesidebar|tobool %}
+{% set script_files = script_files + ['_static/sidebar.js'] %}
+{% endif %}
+
+{%- block footer %}
+    <div class="footer">
+    <div>
+
+MediaGoblin documentation released into the public domain via <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.
+
+    {%- if last_updated %}
+      {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
+    {%- endif %}
+
+    {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
+    </div>
+    </div>
+{%- endblock %}

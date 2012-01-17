@@ -57,6 +57,10 @@ class FakeRemoteStorage(storage.filestorage.BasicFileStorage):
     # should force copying to the workbench
     local_storage = False
 
+    def copy_local_to_storage(self, *args, **kwargs):
+        return storage.StorageInterface.copy_local_to_storage(
+            self, *args, **kwargs)
+
 
 def test_storage_system_from_config():
     this_storage = storage.storage_system_from_config(
@@ -252,3 +256,26 @@ def test_basic_storage_copy_locally():
     this_storage.copy_locally(filepath, new_file_dest)
     
     assert file(new_file_dest).read() == 'Testing this file'
+
+
+def _test_copy_local_to_storage_works(tmpdir, this_storage):
+    local_filename = tempfile.mktemp()
+    with file(local_filename, 'w') as tmpfile:
+        tmpfile.write('haha')
+
+    this_storage.copy_local_to_storage(
+        local_filename, ['dir1', 'dir2', 'copiedto.txt'])
+
+    assert file(
+        os.path.join(tmpdir, 'dir1/dir2/copiedto.txt'),
+        'r').read() == 'haha'
+
+
+def test_basic_storage_copy_local_to_storage():
+    tmpdir, this_storage = get_tmp_filestorage()
+    _test_copy_local_to_storage_works(tmpdir, this_storage)
+
+
+def test_general_storage_copy_local_to_storage():
+    tmpdir, this_storage = get_tmp_filestorage(fake_remote=True)
+    _test_copy_local_to_storage_works(tmpdir, this_storage)

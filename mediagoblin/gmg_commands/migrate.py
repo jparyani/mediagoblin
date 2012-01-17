@@ -16,12 +16,12 @@
 
 import sys
 
-from mediagoblin.db import util as db_util
+from mediagoblin.db.mongo import util as db_util
 from mediagoblin.db.open import setup_connection_and_db_from_config
-from mediagoblin.init.config import read_mediagoblin_config
+from mediagoblin.init import setup_global_and_app_config
 
 # This MUST be imported so as to set up the appropriate migrations!
-from mediagoblin.db import migrations
+from mediagoblin.db.mongo import migrations
 
 
 def migrate_parser_setup(subparser):
@@ -41,9 +41,9 @@ def _print_finished_migration(migration_number, migration_func):
 
 
 def migrate(args):
-    config, validation_result = read_mediagoblin_config(args.conf_file)
+    global_config, app_config = setup_global_and_app_config(args.conf_file)
     connection, db = setup_connection_and_db_from_config(
-        config['mediagoblin'], use_pymongo=True)
+        app_config, use_pymongo=True)
     migration_manager = db_util.MigrationManager(db)
 
     # Clear old indexes
@@ -53,13 +53,13 @@ def migrate(args):
     for collection, index_name in removed_indexes:
         print "Removed index '%s' in collection '%s'" % (
             index_name, collection)
-    
+
     # Migrate
     print "\n== Applying migrations... =="
     migration_manager.migrate_new(
         pre_callback=_print_started_migration,
         post_callback=_print_finished_migration)
-            
+
     # Add new indexes
     print "\n== Adding new indexes... =="
     new_indexes = db_util.add_new_indexes(db)

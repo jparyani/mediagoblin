@@ -17,7 +17,9 @@
 import re
 import translitcodec
 
+
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+
 
 def slugify(text, delim=u'-'):
     """

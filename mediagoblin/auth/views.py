@@ -74,20 +74,21 @@ def register(request):
             extra_validation_passes = False
         if users_with_email:
             register_form.email.errors.append(
-                _(u'Sorry, that email address has already been taken.'))
+                _(u'Sorry, a user with that email address already exists.'))
             extra_validation_passes = False
 
         if extra_validation_passes:
             # Create the user
             user = request.db.User()
-            user['username'] = username
-            user['email'] = email
-            user['pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+            user.username = username
+            user.email = email
+            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
+            user.verification_key = unicode(uuid.uuid4())
             user.save(validate=True)
 
             # log the user in
-            request.session['user_id'] = unicode(user['_id'])
+            request.session['user_id'] = unicode(user._id)
             request.session.save()
 
             # send verification email
@@ -98,7 +99,7 @@ def register(request):
             # message waiting for them to verify their email
             return redirect(
                 request, 'mediagoblin.user_pages.user_home',
-                user=user['username'])
+                user=user.username)
 
     return render_to_response(
         request,
@@ -122,7 +123,7 @@ def login(request):
 
         if user and user.check_login(request.POST['password']):
             # set up login in session
-            request.session['user_id'] = unicode(user['_id'])
+            request.session['user_id'] = unicode(user._id)
             request.session.save()
 
             if request.POST.get('next'):
@@ -160,16 +161,16 @@ def verify_email(request):
     you are lucky :)
     """
     # If we don't have userid and token parameters, we can't do anything; 404
-    if not request.GET.has_key('userid') or not request.GET.has_key('token'):
+    if not 'userid' in request.GET or not 'token' in request.GET:
         return render_404(request)
 
     user = request.db.User.find_one(
         {'_id': ObjectId(unicode(request.GET['userid']))})
 
-    if user and user['verification_key'] == unicode(request.GET['token']):
-        user[u'status'] = u'active'
-        user[u'email_verified'] = True
-        user[u'verification_key'] = None
+    if user and user.verification_key == unicode(request.GET['token']):
+        user.status = u'active'
+        user.email_verified = True
+        user.verification_key = None
 
         user.save()
 
@@ -186,7 +187,7 @@ def verify_email(request):
 
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
-        user=user['username'])
+        user=user.username)
 
 
 def resend_activation(request):
@@ -195,9 +196,26 @@ def resend_activation(request):
 
     Resend the activation email.
     """
-    request.user[u'verification_key'] = unicode(uuid.uuid4())
-    request.user.save()
 
+    if request.user is None:
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _('You must be logged in so we know who to send the email to!'))
+        
+        return redirect(request, 'mediagoblin.auth.login')
+
+    if request.user.email_verified:
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _("You've already verified your email address!"))
+        
+        return redirect(request, "mediagoblin.user_pages.user_home", user=request.user['username'])
+
+    request.user.verification_key = unicode(uuid.uuid4())
+    request.user.save()
+    
     email_debug_message(request)
     send_verification_email(request.user, request)
 
@@ -207,22 +225,18 @@ def resend_activation(request):
         _('Resent your verification email.'))
     return redirect(
         request, 'mediagoblin.user_pages.user_home',
-        user=request.user['username'])
+        user=request.user.username)
 
 
 def forgot_password(request):
     """
     Forgot password view
 
-    Sends an email whit an url to renew forgoten password
+    Sends an email with an url to renew forgotten password
     """
     fp_form = auth_forms.ForgotPassForm(request.POST)
 
     if request.method == 'POST' and fp_form.validate():
-
-        # Here, so it doesn't depend on the actual mail being sent
-        # and thus doesn't reveal, wether mail was sent.
-        email_debug_message(request)
 
         # '$or' not available till mongodb 1.5.3
         user = request.db.User.find_one(
@@ -232,13 +246,21 @@ def forgot_password(request):
                 {'email': request.POST['username']})
 
         if user:
-            if user['email_verified'] and user['status'] == 'active':
-                user[u'fp_verification_key'] = unicode(uuid.uuid4())
-                user[u'fp_token_expire'] = datetime.datetime.now() + \
+            if user.email_verified and user.status == 'active':
+                user.fp_verification_key = unicode(uuid.uuid4())
+                user.fp_token_expire = datetime.datetime.now() + \
                                           datetime.timedelta(days=10)
                 user.save()
 
                 send_fp_verification_email(user, request)
+
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    _("An email has been sent with instructions on how to "
+                      "change your password."))
+                email_debug_message(request)
+
             else:
                 # special case... we can't send the email because the
                 # username is inactive / hasn't verified their email
@@ -251,11 +273,14 @@ def forgot_password(request):
 
                 return redirect(
                     request, 'mediagoblin.user_pages.user_home',
-                    user=user['username'])
-
-
-        # do not reveal whether or not there is a matching user, just move along
-        return redirect(request, 'mediagoblin.auth.fp_email_sent')
+                    user=user.username)
+            return redirect(request, 'mediagoblin.auth.login')
+        else:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                _("Couldn't find someone with that username or email."))
+            return redirect(request, 'mediagoblin.auth.forgot_password')
 
     return render_to_response(
         request,
@@ -285,21 +310,25 @@ def verify_forgot_password(request):
         return render_404(request)
 
     # check if we have a real user and correct token
-    if ((user and user['fp_verification_key'] and
-         user['fp_verification_key'] == unicode(formdata_token) and
-         datetime.datetime.now() < user['fp_token_expire']
-         and user['email_verified'] and user['status'] == 'active')):
+    if ((user and user.fp_verification_key and
+         user.fp_verification_key == unicode(formdata_token) and
+         datetime.datetime.now() < user.fp_token_expire
+         and user.email_verified and user.status == 'active')):
 
         cp_form = auth_forms.ChangePassForm(formdata_vars)
 
         if request.method == 'POST' and cp_form.validate():
-            user[u'pw_hash'] = auth_lib.bcrypt_gen_password_hash(
+            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
                 request.POST['password'])
-            user[u'fp_verification_key'] = None
-            user[u'fp_token_expire'] = None
+            user.fp_verification_key = None
+            user.fp_token_expire = None
             user.save()
 
-            return redirect(request, 'mediagoblin.auth.fp_changed_success')
+            messages.add_message(
+                request,
+                messages.INFO,
+                _("You can now log in using your new password."))
+            return redirect(request, 'mediagoblin.auth.login')
         else:
             return render_to_response(
                 request,
@@ -328,6 +357,6 @@ def _process_for_token(request):
     formdata = {
         'vars': formdata_vars,
         'has_userid_and_token':
-            formdata_vars.has_key('userid') and formdata_vars.has_key('token')}
+            'userid' in formdata_vars and 'token' in formdata_vars}
 
     return formdata

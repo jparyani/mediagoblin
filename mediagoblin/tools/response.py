@@ -17,22 +17,25 @@
 from webob import Response, exc
 from mediagoblin.tools.template import render_template
 
+
 def render_to_response(request, template, context, status=200):
     """Much like Django's shortcut.render()"""
     return Response(
         render_template(request, template, context),
         status=status)
 
+
 def render_404(request):
     """
     Render a 404.
     """
     return render_to_response(
-        request, 'mediagoblin/404.html', {}, status=400)
+        request, 'mediagoblin/404.html', {}, status=404)
+
 
 def redirect(request, *args, **kwargs):
     """Returns a HTTPFound(), takes a request and then urlgen params"""
-    
+
     querystring = None
     if kwargs.get('querystring'):
         querystring = kwargs.get('querystring')

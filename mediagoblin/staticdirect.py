@@ -14,31 +14,34 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import pkg_resources
-import urlparse
-
 ####################################
 # Staticdirect infrastructure.
 # Borrowed largely from cc.engine
 # by Chris Webber & Creative Commons
-# 
+#
 # This needs documentation!
 ####################################
 
 import pkg_resources
-import urlparse
+import logging
+
+_log = logging.getLogger(__name__)
+
 
 class StaticDirect(object):
     def __init__(self):
         self.cache = {}
 
     def __call__(self, filepath):
-        if self.cache.has_key(filepath):
+        if filepath in self.cache:
             return self.cache[filepath]
 
+        if not pkg_resources.resource_exists('mediagoblin',
+                'static' + filepath):
+            _log.info("StaticDirect resource %r not found locally",
+                filepath)
         static_direction = self.cache[filepath] = self.get(filepath)
         return static_direction
-        
 
     def get(self, filepath):
         # should be implemented by the individual staticdirector

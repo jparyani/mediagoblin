@@ -23,14 +23,18 @@ from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
 from mediagoblin import mg_globals
 from mediagoblin.mg_globals import setup_globals
-from mediagoblin.db.open import setup_connection_and_db_from_config
-from mediagoblin.db.util import MigrationManager
+from mediagoblin.db.open import setup_connection_and_db_from_config, \
+    check_db_migrations_current
 from mediagoblin.workbench import WorkbenchManager
 from mediagoblin.storage import storage_system_from_config
 
 
-class Error(Exception): pass
-class ImproperlyConfigured(Error): pass
+class Error(Exception):
+    pass
+
+
+class ImproperlyConfigured(Error):
+    pass
 
 
 def setup_global_and_app_config(config_path):
@@ -52,32 +56,14 @@ def setup_global_and_app_config(config_path):
 def setup_database():
     app_config = mg_globals.app_config
 
-    # This MUST be imported so as to set up the appropriate migrations!
-    from mediagoblin.db import migrations
-
     # Set up the database
     connection, db = setup_connection_and_db_from_config(app_config)
 
-    # Init the migration number if necessary
-    migration_manager = MigrationManager(db)
-    migration_manager.install_migration_version_if_missing()
-
-    # Tiny hack to warn user if our migration is out of date
-    if not migration_manager.database_at_latest_migration():
-        db_migration_num = migration_manager.database_current_migration()
-        latest_migration_num = migration_manager.latest_migration()
-        if db_migration_num < latest_migration_num:
-            print (
-                "*WARNING:* Your migrations are out of date, "
-                "maybe run ./bin/gmg migrate?")
-        elif db_migration_num > latest_migration_num:
-            print (
-                "*WARNING:* Your migrations are out of date... "
-                "in fact they appear to be from the future?!")
+    check_db_migrations_current(db)
 
     setup_globals(
-        db_connection = connection,
-        database = db)
+        db_connection=connection,
+        database=db)
 
     return connection, db
 
@@ -99,10 +85,10 @@ def get_jinja_loader(user_template_path=None):
 
 
 def get_staticdirector(app_config):
-    if app_config.has_key('direct_remote_path'):
+    if 'direct_remote_path' in app_config:
         return staticdirect.RemoteStaticDirect(
             app_config['direct_remote_path'].strip())
-    elif app_config.has_key('direct_remote_paths'):
+    elif 'direct_remote_paths' in app_config:
         direct_remote_path_lines = app_config[
             'direct_remote_paths'].strip().splitlines()
         return staticdirect.MultiRemoteStaticDirect(
@@ -126,8 +112,8 @@ def setup_storage():
     queue_store = storage_system_from_config(global_config[key_long])
 
     setup_globals(
-        public_store = public_store,
-        queue_store = queue_store)
+        public_store=public_store,
+        queue_store=queue_store)
 
     return public_store, queue_store
 
@@ -137,7 +123,7 @@ def setup_workbench():
 
     workbench_manager = WorkbenchManager(app_config['workbench_path'])
 
-    setup_globals(workbench_manager = workbench_manager)
+    setup_globals(workbench_manager=workbench_manager)
 
 
 def setup_beaker_cache():

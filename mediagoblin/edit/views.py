@@ -26,6 +26,7 @@ from werkzeug.utils import secure_filename
 from mediagoblin import messages
 from mediagoblin import mg_globals
 
+from mediagoblin.auth import lib as auth_lib
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry
@@ -43,11 +44,11 @@ def edit_media(request, media):
         return exc.HTTPForbidden()
 
     defaults = dict(
-        title=media['title'],
-        slug=media['slug'],
-        description=media['description'],
-        tags=media_tags_as_string(media['tags']),
-        license=media['license'])
+        title=media.title,
+        slug=media.slug,
+        description=media.description,
+        tags=media_tags_as_string(media.tags))
+        license=media.license)
 
     form = forms.EditForm(
         request.POST,
@@ -58,33 +59,34 @@ def edit_media(request, media):
         # and userid.
         existing_user_slug_entries = request.db.MediaEntry.find(
             {'slug': request.POST['slug'],
-             'uploader': media['uploader'],
-             '_id': {'$ne': media['_id']}}).count()
+             'uploader': media.uploader,
+             '_id': {'$ne': media._id}}).count()
 
         if existing_user_slug_entries:
             form.slug.errors.append(
                 _(u'An entry with that slug already exists for this user.'))
         else:
-            media['title'] = unicode(request.POST['title'])
-            media['description'] = unicode(request.POST.get('description'))
+            media.title = unicode(request.POST['title'])
+            media.description = unicode(request.POST.get('description'))
             media['tags'] = convert_to_tag_list_of_dicts(
                                    request.POST.get('tags'))
 
-            media['description_html'] = cleaned_markdown_conversion(
-                media['description'])
+            media.description_html = cleaned_markdown_conversion(
+                media.description)
 
-            media['license'] = (
+            media.license = (
                 unicode(request.POST.get('license'))
                 or '')
 
-            media['slug'] = unicode(request.POST['slug'])
+            media.slug = unicode(request.POST['slug'])
+
             media.save()
 
             return exc.HTTPFound(
                 location=media.url_for_self(request.urlgen))
 
-    if request.user['is_admin'] \
-            and media['uploader'] != request.user['_id'] \
+    if request.user.is_admin \
+            and media.uploader != request.user._id \
             and request.method != 'POST':
         messages.add_message(
             request, messages.WARNING,
@@ -110,7 +112,7 @@ def edit_attachments(request, media):
 
             attachment_public_filepath \
                 = mg_globals.public_store.get_unique_filepath(
-                ['media_entries', unicode(media['_id']), 'attachment',
+                ['media_entries', unicode(media._id), 'attachment',
                  secure_filename(request.POST['attachment_file'].filename)])
 
             attachment_public_file = mg_globals.public_store.get_file(
@@ -126,7 +128,7 @@ def edit_attachments(request, media):
                     name=request.POST['attachment_name'] \
                         or request.POST['attachment_file'].filename,
                     filepath=attachment_public_filepath,
-                    created=datetime.utcnow()
+                    created=datetime.utcnow(),
                     ))
 
             media.save()
@@ -152,7 +154,7 @@ def edit_attachments(request, media):
 def edit_profile(request):
     # admins may edit any user profile given a username in the querystring
     edit_username = request.GET.get('username')
-    if request.user['is_admin'] and request.user['username'] != edit_username:
+    if request.user.is_admin and request.user.username != edit_username:
         user = request.db.User.find_one({'username': edit_username})
         # No need to warn again if admin just submitted an edited profile
         if request.method != 'POST':
@@ -167,22 +169,64 @@ def edit_profile(request):
         bio=user.get('bio'))
 
     if request.method == 'POST' and form.validate():
-            user['url'] = unicode(request.POST['url'])
-            user['bio'] = unicode(request.POST['bio'])
+        user.url = unicode(request.POST['url'])
+        user.bio = unicode(request.POST['bio'])
 
-            user['bio_html'] = cleaned_markdown_conversion(user['bio'])
+        user.bio_html = cleaned_markdown_conversion(user.bio)
 
-            user.save()
+        user.save()
 
-            messages.add_message(request,
-                                 messages.SUCCESS,
-                                 'Profile edited!')
-            return redirect(request,
-                           'mediagoblin.user_pages.user_home',
-                            user=edit_username)
+        messages.add_message(request,
+                             messages.SUCCESS,
+                             _("Profile changes saved"))
+        return redirect(request,
+                       'mediagoblin.user_pages.user_home',
+                        user=user['username'])
 
     return render_to_response(
         request,
         'mediagoblin/edit/edit_profile.html',
+        {'user': user,
+         'form': form})
+
+
+@require_active_login
+def edit_account(request):
+    edit_username = request.GET.get('username')
+    user = request.user
+
+    form = forms.EditAccountForm(request.POST)
+
+    if request.method == 'POST' and form.validate():
+        password_matches = auth_lib.bcrypt_check_password(
+            request.POST['old_password'],
+            user.pw_hash)
+
+        if (request.POST['old_password'] or request.POST['new_password']) and not \
+                password_matches:
+            form.old_password.errors.append(_('Wrong password'))
+
+            return render_to_response(
+                request,
+                'mediagoblin/edit/edit_account.html',
+                {'user': user,
+                 'form': form})
+
+        if password_matches:
+            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
+                request.POST['new_password'])
+
+        user.save()
+
+        messages.add_message(request,
+                             messages.SUCCESS,
+                             _("Account settings saved"))
+        return redirect(request,
+                       'mediagoblin.user_pages.user_home',
+                        user=user.username)
+
+    return render_to_response(
+        request,
+        'mediagoblin/edit/edit_account.html',
         {'user': user,
          'form': form})

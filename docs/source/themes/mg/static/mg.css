@@ -1,0 +1,161 @@
+/*
+
+MediaGoblin theme - MediaGoblin-style Sphinx documentation theme
+
+Written in 2012 by Jef van Schendel <mail@jefvanschendel.nl>
+
+To the extent possible under law, the author(s) have dedicated all copyright and related and neighboring rights to this software to the public domain worldwide. This software is distributed without any warranty. 
+
+You should have received a copy of the CC0 Public Domain Dedication along with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>. 
+
+*/
+
+@import url("basic.css");
+
+/* text fonts and styles */
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Lato Bold'), local('Lato-Bold'), url('fonts/Lato-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Lato Italic'), local('Lato-Italic'), url('fonts/Lato-Italic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Lato Bold Italic'), local('Lato-BoldItalic'), url('fonts/Lato-BoldItalic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lato Regular'), local('Lato-Regular'), url('fonts/Lato-Regular.ttf') format('truetype');
+}
+
+body {
+  font: 16px 'Lato',Helvetica,Arial,sans-serif;
+  background-color: #FCFCFC;
+  color: #3C3C3C;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  border-bottom: 1px solid #CCCCCC;
+  background: none;
+  color: black;
+  font-weight: bold;
+  padding-bottom: 0.17em;
+  padding-top: 0.5em;
+}
+
+h1 {
+  font-size: 1.875em;
+}
+
+h2 {
+  font-size: 1.375em;
+}
+
+h3, h4, h5, h6 {
+  font-size: 1.125em;
+}
+
+p {
+  font-weight: normal;
+  margin: 0.4em 0 0.5em;
+}
+
+a {
+  color: #499776;
+}
+
+a:visited {
+  color: #2A5744;
+}
+
+a:active {
+  color: #65D1A3;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+  text-decoration: none;
+}
+
+div.topic, pre {
+  background-color: #F1F1F1;
+  border: 1px dashed #ccc;
+  color: black;
+  line-height: 1.1em;
+  padding: 1em;
+}
+
+code, tt {
+  font: 14px monospace,"Courier New";
+  background-color: #FFFFDD;
+  border: thin solid #bbb;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+pre {
+  font: 14px monospace,"Courier New";
+}
+
+div.related a, div.related a:visited, div.related a:active {
+  color: #86D4B1;
+}
+
+/* layout */
+
+div.documentwrapper {
+    float: left;
+    width: 100%;
+}
+
+div.bodywrapper {
+    margin: 0 0 0 270px;
+}
+
+div.body {
+    padding: 0 20px 30px 20px;
+}
+
+div.footer {
+    width: 100%;
+    padding: 9px 0 9px 0;
+    text-align: center;
+    font-size: 75%;
+}
+
+div.sphinxsidebar {
+  width: 240px;
+}
+
+div.sphinxsidebarwrapper {
+  padding: 10px 5px 0 30px;
+}
+
+div.sphinxsidebar ul {
+    margin: 10px 10px 10px 0;
+    padding: 0;
+}
+
+div.related {
+  line-height: 30px;
+  font-size: 90%;
+  width: 100%;
+  background-color: #161616;
+  color: #C3C3C3;
+}
+
+p.logo {
+  margin-top: 30px;
+}

@@ -20,7 +20,7 @@ import datetime
 from nose.tools import assert_equal
 
 from mediagoblin.auth import lib as auth_lib
-from mediagoblin.tests.tools import setup_fresh_app
+from mediagoblin.tests.tools import setup_fresh_app, fixture_add_user
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, mail
 
@@ -89,7 +89,6 @@ def test_register_views(test_app):
     form = context['register_form']
     assert form.username.errors == [u'This field is required.']
     assert form.password.errors == [u'This field is required.']
-    assert form.confirm_password.errors == [u'This field is required.']
     assert form.email.errors == [u'This field is required.']
 
     # Try to register with fields that are known to be invalid
@@ -101,7 +100,6 @@ def test_register_views(test_app):
         '/auth/register/', {
             'username': 'l',
             'password': 'o',
-            'confirm_password': 'o',
             'email': 'l'})
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
     form = context['register_form']
@@ -125,18 +123,6 @@ def test_register_views(test_app):
     assert form.email.errors == [
         u'Invalid email address.']
 
-    ## mismatching passwords
-    template.clear_test_template_context()
-    test_app.post(
-        '/auth/register/', {
-            'password': 'herpderp',
-            'confirm_password': 'derpherp'})
-    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
-    form = context['register_form']
-
-    assert form.password.errors == [
-        u'Passwords must match.']
-
     ## At this point there should be no users in the database ;)
     assert not mg_globals.database.User.find().count()
 
@@ -147,7 +133,6 @@ def test_register_views(test_app):
         '/auth/register/', {
             'username': 'happygirl',
             'password': 'iamsohappy',
-            'confirm_password': 'iamsohappy',
             'email': 'happygrrl@example.org'})
     response.follow()
 
@@ -162,13 +147,13 @@ def test_register_views(test_app):
     new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
     assert new_user
-    assert new_user['status'] == u'needs_email_verification'
-    assert new_user['email_verified'] == False
+    assert new_user.status == u'needs_email_verification'
+    assert new_user.email_verified == False
 
     ## Make sure user is logged in
     request = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/user_pages/user.html']['request']
-    assert request.session['user_id'] == unicode(new_user['_id'])
+    assert request.session['user_id'] == unicode(new_user._id)
 
     ## Make sure we get email confirmation, and try verifying
     assert len(mail.EMAIL_TEST_INBOX) == 1
@@ -185,15 +170,15 @@ def test_register_views(test_app):
 
     ### user should have these same parameters
     assert parsed_get_params['userid'] == [
-        unicode(new_user['_id'])]
+        unicode(new_user._id)]
     assert parsed_get_params['token'] == [
-        new_user['verification_key']]
+        new_user.verification_key]
 
     ## Try verifying with bs verification key, shouldn't work
     template.clear_test_template_context()
     response = test_app.get(
         "/auth/verify_email/?userid=%s&token=total_bs" % unicode(
-            new_user['_id']))
+            new_user._id))
     response.follow()
     context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/user_pages/user.html']
@@ -202,8 +187,8 @@ def test_register_views(test_app):
     new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
     assert new_user
-    assert new_user['status'] == u'needs_email_verification'
-    assert new_user['email_verified'] == False
+    assert new_user.status == u'needs_email_verification'
+    assert new_user.email_verified == False
 
     ## Verify the email activation works
     template.clear_test_template_context()
@@ -216,8 +201,8 @@ def test_register_views(test_app):
     new_user = mg_globals.database.User.find_one(
         {'username': 'happygirl'})
     assert new_user
-    assert new_user['status'] == u'active'
-    assert new_user['email_verified'] == True
+    assert new_user.status == u'active'
+    assert new_user.email_verified == True
 
     # Uniqueness checks
     # -----------------
@@ -227,7 +212,6 @@ def test_register_views(test_app):
         '/auth/register/', {
             'username': 'happygirl',
             'password': 'iamsohappy2',
-            'confirm_password': 'iamsohappy2',
             'email': 'happygrrl2@example.org'})
 
     context = template.TEMPLATE_TEST_CONTEXT[
@@ -249,9 +233,9 @@ def test_register_views(test_app):
     ## Did we redirect to the proper page?  Use the right template?
     assert_equal(
         urlparse.urlsplit(response.location)[2],
-        '/auth/forgot_password/email_sent/')
+        '/auth/login/')
     assert template.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/auth/fp_email_sent.html')
+        'mediagoblin/auth/login.html')
 
     ## Make sure link to change password is sent by email
     assert len(mail.EMAIL_TEST_INBOX) == 1
@@ -269,28 +253,28 @@ def test_register_views(test_app):
 
     # user should have matching parameters
     new_user = mg_globals.database.User.find_one({'username': 'happygirl'})
-    assert parsed_get_params['userid'] == [unicode(new_user['_id'])]
-    assert parsed_get_params['token'] == [new_user['fp_verification_key']]
+    assert parsed_get_params['userid'] == [unicode(new_user._id)]
+    assert parsed_get_params['token'] == [new_user.fp_verification_key]
 
     ### The forgotten password token should be set to expire in ~ 10 days
     # A few ticks have expired so there are only 9 full days left...
-    assert (new_user['fp_token_expire'] - datetime.datetime.now()).days == 9
+    assert (new_user.fp_token_expire - datetime.datetime.now()).days == 9
 
     ## Try using a bs password-changing verification key, shouldn't work
     template.clear_test_template_context()
     response = test_app.get(
         "/auth/forgot_password/verify/?userid=%s&token=total_bs" % unicode(
-            new_user['_id']), status=400)
-    assert response.status == '400 Bad Request'
+            new_user._id), status=404)
+    assert_equal(response.status, '404 Not Found')
 
     ## Try using an expired token to change password, shouldn't work
     template.clear_test_template_context()
-    real_token_expiration = new_user['fp_token_expire']
-    new_user['fp_token_expire'] = datetime.datetime.now()
+    real_token_expiration = new_user.fp_token_expire
+    new_user.fp_token_expire = datetime.datetime.now()
     new_user.save()
-    response = test_app.get("%s?%s" % (path, get_params), status=400)
-    assert response.status == '400 Bad Request'
-    new_user['fp_token_expire'] = real_token_expiration
+    response = test_app.get("%s?%s" % (path, get_params), status=404)
+    assert_equal(response.status, '404 Not Found')
+    new_user.fp_token_expire = real_token_expiration
     new_user.save()
 
     ## Verify step 1 of password-change works -- can see form to change password
@@ -304,11 +288,10 @@ def test_register_views(test_app):
         '/auth/forgot_password/verify/', {
             'userid': parsed_get_params['userid'],
             'password': 'iamveryveryhappy',
-            'confirm_password': 'iamveryveryhappy',
             'token': parsed_get_params['token']})
     response.follow()
     assert template.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/auth/fp_changed_success.html')
+        'mediagoblin/auth/login.html')
 
     ## Verify step 2.2 of password-change works -- login w/ new password success
     template.clear_test_template_context()
@@ -332,11 +315,7 @@ def test_authentication_views(test_app):
     Test logging in and logging out
     """
     # Make a new user
-    test_user = mg_globals.database.User()
-    test_user['username'] = u'chris'
-    test_user['email'] = u'chris@example.com'
-    test_user['pw_hash'] = auth_lib.bcrypt_gen_password_hash('toast')
-    test_user.save()
+    test_user = fixture_add_user(active_user=False)
 
     # Get login
     # ---------
@@ -412,7 +391,7 @@ def test_authentication_views(test_app):
     # Make sure user is in the session
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
     session = context['request'].session
-    assert session['user_id'] == unicode(test_user['_id'])
+    assert session['user_id'] == unicode(test_user._id)
 
     # Successful logout
     # -----------------

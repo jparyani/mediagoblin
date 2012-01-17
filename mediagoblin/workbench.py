@@ -42,10 +42,15 @@ class Workbench(object):
 
     def __unicode__(self):
         return unicode(self.dir)
+
     def __str__(self):
         return str(self.dir)
+
     def __repr__(self):
-        return repr(self.dir)
+        try:
+            return str(self)
+        except AttributeError:
+            return 'None'
 
     def joinpath(self, *args):
         return os.path.join(self.dir, *args)
@@ -140,7 +145,7 @@ class WorkbenchManager(object):
         self.base_workbench_dir = os.path.abspath(base_workbench_dir)
         if not os.path.exists(self.base_workbench_dir):
             os.makedirs(self.base_workbench_dir)
-        
+
     def create_workbench(self):
         """
         Create and return the path to a new workbench (directory).

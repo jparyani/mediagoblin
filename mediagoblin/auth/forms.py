@@ -29,15 +29,7 @@ class RegistrationForm(wtforms.Form):
     password = wtforms.PasswordField(
         _('Password'),
         [wtforms.validators.Required(),
-         wtforms.validators.Length(min=6, max=30),
-         wtforms.validators.EqualTo(
-                'confirm_password',
-                _('Passwords must match.'))])
-    confirm_password = wtforms.PasswordField(
-        _('Confirm password'),
-        [wtforms.validators.Required()],
-        description=_(
-            u"Type it again here to make sure there are no spelling mistakes."))
+         wtforms.validators.Length(min=6, max=30)])
     email = wtforms.TextField(
         _('Email address'),
         [wtforms.validators.Required(),
@@ -59,9 +51,10 @@ class ForgotPassForm(wtforms.Form):
         'Username or email',
         [wtforms.validators.Required()])
 
-    def validate_username(form,field):
-        if not (re.match(r'^\w+$',field.data) or
-               re.match(r'^.+@[^.].*\.[a-z]{2,10}$',field.data, re.IGNORECASE)):
+    def validate_username(form, field):
+        if not (re.match(r'^\w+$', field.data) or
+               re.match(r'^.+@[^.].*\.[a-z]{2,10}$', field.data,
+                        re.IGNORECASE)):
             raise wtforms.ValidationError(u'Incorrect input')
 
 
@@ -69,17 +62,10 @@ class ChangePassForm(wtforms.Form):
     password = wtforms.PasswordField(
         'Password',
         [wtforms.validators.Required(),
-         wtforms.validators.Length(min=6, max=30),
-         wtforms.validators.EqualTo(
-                'confirm_password',
-                'Passwords must match.')])
-    confirm_password = wtforms.PasswordField(
-        'Confirm password',
-        [wtforms.validators.Required()])
+         wtforms.validators.Length(min=6, max=30)])
     userid = wtforms.HiddenField(
         '',
         [wtforms.validators.Required()])
     token = wtforms.HiddenField(
         '',
         [wtforms.validators.Required()])
-

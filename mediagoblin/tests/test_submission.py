@@ -1,3 +1,4 @@
+
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
 #
@@ -16,11 +17,12 @@
 
 import urlparse
 import pkg_resources
+import re
 
 from nose.tools import assert_equal, assert_true, assert_false
 
-from mediagoblin.auth import lib as auth_lib
-from mediagoblin.tests.tools import setup_fresh_app, get_test_app
+from mediagoblin.tests.tools import setup_fresh_app, get_test_app, \
+    fixture_add_user
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, common
 
@@ -45,20 +47,20 @@ class TestSubmission:
 
         # TODO: Possibly abstract into a decorator like:
         # @as_authenticated_user('chris')
-        test_user = mg_globals.database.User()
-        test_user['username'] = u'chris'
-        test_user['email'] = u'chris@example.com'
-        test_user['email_verified'] = True
-        test_user['status'] = u'active'
-        test_user['pw_hash'] = auth_lib.bcrypt_gen_password_hash('toast')
-        test_user.save()
+        test_user = fixture_add_user()
 
         self.test_user = test_user
 
+        self.login()
+
+    def login(self):
         self.test_app.post(
             '/auth/login/', {
                 'username': u'chris',
                 'password': 'toast'})
+
+    def logout(self):
+        self.test_app.get('/auth/logout/')
 
     def test_missing_fields(self):
         # Test blank form
@@ -98,6 +100,14 @@ class TestSubmission:
             '/u/chris/')
         assert template.TEMPLATE_TEST_CONTEXT.has_key(
             'mediagoblin/user_pages/user.html')
+
+        # Make sure the media view is at least reachable, logged in...
+        self.test_app.get('/u/chris/m/normal-upload-1/')
+        # ... and logged out too.
+        self.logout()
+        self.test_app.get('/u/chris/m/normal-upload-1/')
+        # Log back in for the remaining tests.
+        self.login()
 
         # Test PNG
         # --------
@@ -176,8 +186,8 @@ class TestSubmission:
         response = self.test_app.post(
             request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                            # No work: user=media.uploader().username,
-                           user=self.test_user['username'],
-                           media=media['_id']),
+                           user=self.test_user.username,
+                           media=media._id),
             # no value means no confirm
             {})
 
@@ -196,8 +206,8 @@ class TestSubmission:
         response = self.test_app.post(
             request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                            # No work: user=media.uploader().username,
-                           user=self.test_user['username'],
-                           media=media['_id']),
+                           user=self.test_user.username,
+                           media=media._id),
             {'confirm': 'y'})
 
         response.follow()
@@ -208,7 +218,7 @@ class TestSubmission:
         # Does media entry still exist?
         assert_false(
             request.db.MediaEntry.find(
-                {'_id': media['_id']}).count())
+                {'_id': media._id}).count())
 
     def test_malicious_uploads(self):
         # Test non-suppoerted file with non-supported extension
@@ -222,7 +232,8 @@ class TestSubmission:
 
         context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
         form = context['submit_form']
-        assert form.file.errors == ['The file doesn\'t seem to be an image!']
+        assert re.match(r'^Could not extract any file extension from ".*?"$', str(form.file.errors[0]))
+        assert len(form.file.errors) == 1
 
         # NOTE: The following 2 tests will ultimately fail, but they
         #   *will* pass the initial form submission step.  Instead,
@@ -243,10 +254,10 @@ class TestSubmission:
 
         entry = mg_globals.database.MediaEntry.find_one(
             {'title': 'Malicious Upload 2'})
-        assert_equal(entry['state'], 'failed')
+        assert_equal(entry.state, 'failed')
         assert_equal(
             entry['fail_error'],
-            u'mediagoblin.process_media.errors:BadMediaFail')
+            u'mediagoblin.processing:BadMediaFail')
 
         # Test non-supported file with .png extension
         # -------------------------------------------
@@ -263,7 +274,7 @@ class TestSubmission:
 
         entry = mg_globals.database.MediaEntry.find_one(
             {'title': 'Malicious Upload 3'})
-        assert_equal(entry['state'], 'failed')
+        assert_equal(entry.state, 'failed')
         assert_equal(
             entry['fail_error'],
-            u'mediagoblin.process_media.errors:BadMediaFail')
+            u'mediagoblin.processing:BadMediaFail')

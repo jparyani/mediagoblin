@@ -31,11 +31,11 @@
                      {%- elif loop.last %} thumb_entry_last{% endif %}">
             <a href="{{ entry_url }}">
               <img src="{{ request.app.public_store.file_url(
-                             entry['media_files']['thumb']) }}" />
+                             entry.media_files['thumb']) }}" />
             </a>
-            {% if entry['title'] %}
+            {% if entry.title %}
               <br />
-              <a href="{{ entry_url }}">{{ entry['title'] }}</a>
+              <a href="{{ entry_url }}">{{ entry.title }}</a>
             {% endif %}
           </td>
         {% endfor %}
@@ -68,7 +68,11 @@
     {% endif %}
   {% else %}
     <p>
-      <i>There doesn't seem to be any media here yet...</i>
+      <i>
+        {%- trans -%}
+          There doesn't seem to be any media here yet...
+        {%- endtrans -%}
+      </i>
     </p>
   {% endif %}
 {% endmacro %}

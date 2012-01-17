@@ -94,6 +94,7 @@ EMAIL_VERIFICATION_TEMPLATE = (
     u"http://{host}{uri}?"
     u"userid={userid}&token={verification_key}")
 
+
 def send_verification_email(user, request):
     """
     Send the verification email to users to activate their accounts.
@@ -104,17 +105,17 @@ def send_verification_email(user, request):
     """
     rendered_email = render_template(
         request, 'mediagoblin/auth/verification_email.txt',
-        {'username': user['username'],
+        {'username': user.username,
          'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
                 host=request.host,
                 uri=request.urlgen('mediagoblin.auth.verify_email'),
-                userid=unicode(user['_id']),
-                verification_key=user['verification_key'])})
+                userid=unicode(user._id),
+                verification_key=user.verification_key)})
 
     # TODO: There is no error handling in place
     send_email(
         mg_globals.app_config['email_sender_address'],
-        [user['email']],
+        [user.email],
         # TODO
         # Due to the distributed nature of GNU MediaGoblin, we should
         # find a way to send some additional information about the
@@ -128,6 +129,7 @@ EMAIL_FP_VERIFICATION_TEMPLATE = (
     u"http://{host}{uri}?"
     u"userid={userid}&token={fp_verification_key}")
 
+
 def send_fp_verification_email(user, request):
     """
     Send the verification email to users to change their password.
@@ -138,17 +140,16 @@ def send_fp_verification_email(user, request):
     """
     rendered_email = render_template(
         request, 'mediagoblin/auth/fp_verification_email.txt',
-        {'username': user['username'],
+        {'username': user.username,
          'verification_url': EMAIL_FP_VERIFICATION_TEMPLATE.format(
                 host=request.host,
                 uri=request.urlgen('mediagoblin.auth.verify_forgot_password'),
-                userid=unicode(user['_id']),
-                fp_verification_key=user['fp_verification_key'])})
+                userid=unicode(user._id),
+                fp_verification_key=user.fp_verification_key)})
 
     # TODO: There is no error handling in place
     send_email(
         mg_globals.app_config['email_sender_address'],
-        [user['email']],
+        [user.email],
         'GNU MediaGoblin - Change forgotten password!',
         rendered_email)
-

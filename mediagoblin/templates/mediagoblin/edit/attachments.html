@@ -20,14 +20,14 @@
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 {% block mediagoblin_content %}
   <form action="{{ request.urlgen('mediagoblin.edit.attachments',
-                               user= media.uploader().username,
+                               user= media.get_uploader.username,
                                media= media._id) }}"
         method="POST" enctype="multipart/form-data">
-    <div class="grid_8 prefix_1 suffix_1 edit_box form_box">
+    <div class="form_box">
       <h1>Editing attachments for {{ media.title }}</h1>
       <div style="text-align: center;" >
         <img src="{{ request.app.public_store.file_url(
-                         media['media_files']['thumb']) }}" />
+                         media.media_files['thumb']) }}" />
       </div>
 
       {% if media.attachment_files|count %}
@@ -48,7 +48,7 @@
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
         <a href="{{ media.url_for_self(request.urlgen) }}">Cancel</a>
-        <input type="submit" value="Save changes" class="button" />
+        <input type="submit" value="Save changes" class="button_form" />
 	{{ csrf_token }}
       </div>
     </div>

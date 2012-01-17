@@ -16,7 +16,6 @@
 
 from mediagoblin import mg_globals
 from mediagoblin.db.open import setup_connection_and_db_from_config
-from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.storage.filestorage import BasicFileStorage
 from mediagoblin.init import setup_storage, setup_global_and_app_config
 
@@ -65,10 +64,10 @@ def _import_media(db, args):
     queue_cache = BasicFileStorage(
         args._cache_path['queue'])
 
-    for entry in db.media_entries.find():
-        for name, path in entry['media_files'].items():
+    for entry in db.MediaEntry.find():
+        for name, path in entry.media_files.items():
             _log.info('Importing: {0} - {1}'.format(
-                    entry['title'],
+                    entry.title,
                     name))
 
             media_file = mg_globals.public_store.get_file(path, mode='wb')
@@ -88,7 +87,7 @@ def _import_database(db, args):
             args.mongorestore_path,
             '-d', db.name,
             os.path.join(args._cache_path['database'], db.name)])
-    
+
     p.wait()
 
     _log.info('...Database imported')
@@ -108,7 +107,7 @@ def env_import(args):
 
     global_config, app_config = setup_global_and_app_config(args.conf_file)
     connection, db = setup_connection_and_db_from_config(
-        app_config, use_pymongo=True)
+        app_config)
 
     tf = tarfile.open(
         args.tar_file,
@@ -207,15 +206,17 @@ def _export_media(db, args):
     queue_cache = BasicFileStorage(
         args._cache_path['queue'])
 
-    for entry in db.media_entries.find():
-        for name, path in entry['media_files'].items():
-            _log.info('Exporting {0} - {1}'.format(
-                    entry['title'],
+    for entry in db.MediaEntry.find():
+        for name, path in entry.media_files.items():
+            _log.info(u'Exporting {0} - {1}'.format(
+                    entry.title,
                     name))
-
-            mc_file = media_cache.get_file(path, mode='wb')
-            mc_file.write(
-                mg_globals.public_store.get_file(path, mode='rb').read())
+            try:
+                mc_file = media_cache.get_file(path, mode='wb')
+                mc_file.write(
+                    mg_globals.public_store.get_file(path, mode='rb').read())
+            except Exception as e:
+                _log.error('Failed: {0}'.format(e))
 
     _log.info('...Media exported')
 
@@ -226,7 +227,8 @@ def env_export(args):
     '''
     if args.cache_path:
         if os.path.exists(args.cache_path):
-            _log.error('The cache directory must not exist before you run this script')
+            _log.error('The cache directory must not exist '
+                       'before you run this script')
             _log.error('Cache directory: {0}'.format(args.cache_path))
 
             return False
@@ -242,9 +244,9 @@ def env_export(args):
     globa_config, app_config = setup_global_and_app_config(args.conf_file)
 
     setup_storage()
-    
+
     connection, db = setup_connection_and_db_from_config(
-        app_config, use_pymongo=True)
+        app_config)
 
     _export_database(db, args)
 

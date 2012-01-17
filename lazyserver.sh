@@ -16,13 +16,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#
+# This runs Mediagoblin using Paste with Celery set to always eager mode.
+# 
+
 if [ "$1" = "-h" ]
 then
     echo "$0 [-h] [-c paste.ini] [ARGS_to_paster ...]"
     echo ""
     echo "   For example:"
     echo "         $0 -c fcgi.ini port_number=23371"
-    echo "     or: $0 --server-name=fcgi"
+    echo "     or: $0 --server-name=fcgi --log-file=paste.log"
     echo ""
     echo "   The configfile defaults to paste_local.ini,"
     echo "   if that is readable, otherwise paste.ini."

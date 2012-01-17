@@ -30,6 +30,8 @@ from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
 
 from werkzeug.contrib.atom import AtomFeed
 
+from mediagoblin.media_types import get_media_manager
+
 
 @uses_pagination
 def user_home(request, page):
@@ -38,14 +40,14 @@ def user_home(request, page):
             'username': request.matchdict['user']})
     if not user:
         return render_404(request)
-    elif user['status'] != u'active':
+    elif user.status != u'active':
         return render_to_response(
             request,
             'mediagoblin/user_pages/user.html',
             {'user': user})
 
     cursor = request.db.MediaEntry.find(
-        {'uploader': user['_id'],
+        {'uploader': user._id,
          'state': 'processed'}).sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)
@@ -54,10 +56,10 @@ def user_home(request, page):
     #if no data is available, return NotFound
     if media_entries == None:
         return render_404(request)
-    
+
     user_gallery_url = request.urlgen(
         'mediagoblin.user_pages.user_gallery',
-        user=user['username'])
+        user=user.username)
 
     return render_to_response(
         request,
@@ -66,6 +68,7 @@ def user_home(request, page):
          'user_gallery_url': user_gallery_url,
          'media_entries': media_entries,
          'pagination': pagination})
+
 
 @uses_pagination
 def user_gallery(request, page):
@@ -77,7 +80,7 @@ def user_gallery(request, page):
         return render_404(request)
 
     cursor = request.db.MediaEntry.find(
-        {'uploader': user['_id'],
+        {'uploader': user._id,
          'state': 'processed'}).sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)
@@ -86,7 +89,7 @@ def user_gallery(request, page):
     #if no data is available, return NotFound
     if media_entries == None:
         return render_404(request)
-    
+
     return render_to_response(
         request,
         'mediagoblin/user_pages/gallery.html',
@@ -96,6 +99,7 @@ def user_gallery(request, page):
 
 MEDIA_COMMENTS_PER_PAGE = 50
 
+
 @get_user_media_entry
 @uses_pagination
 def media_home(request, media, page, **kwargs):
@@ -104,19 +108,25 @@ def media_home(request, media, page, **kwargs):
     """
     if ObjectId(request.matchdict.get('comment')):
         pagination = Pagination(
-            page, media.get_comments(), MEDIA_COMMENTS_PER_PAGE,
+            page, media.get_comments(
+                mg_globals.app_config['comments_ascending']),
+            MEDIA_COMMENTS_PER_PAGE,
             ObjectId(request.matchdict.get('comment')))
     else:
         pagination = Pagination(
-            page, media.get_comments(), MEDIA_COMMENTS_PER_PAGE)
+            page, media.get_comments(
+                mg_globals.app_config['comments_ascending']),
+            MEDIA_COMMENTS_PER_PAGE)
 
     comments = pagination()
 
     comment_form = user_forms.MediaCommentForm(request.POST)
 
+    media_template_name = get_media_manager(media.media_type)['display_template']
+
     return render_to_response(
         request,
-        'mediagoblin/user_pages/media.html',
+        media_template_name,
         {'media': media,
          'comments': comments,
          'pagination': pagination,
@@ -133,8 +143,8 @@ def media_post_comment(request, media):
     assert request.method == 'POST'
 
     comment = request.db.MediaComment()
-    comment['media_entry'] = media['_id']
-    comment['author'] = request.user['_id']
+    comment['media_entry'] = media._id
+    comment['author'] = request.user._id
     comment['content'] = unicode(request.POST['comment_content'])
     comment['content_html'] = cleaned_markdown_conversion(comment['content'])
 
@@ -142,13 +152,13 @@ def media_post_comment(request, media):
         messages.add_message(
             request,
             messages.ERROR,
-            _("Empty comments are not allowed."))
+            _("Oops, your comment was empty."))
     else:
         comment.save()
 
         messages.add_message(
             request, messages.SUCCESS,
-            _('Comment posted!'))
+            _('Your comment has been posted!'))
 
     return exc.HTTPFound(
         location=media.url_for_self(request.urlgen))
@@ -163,21 +173,26 @@ def media_confirm_delete(request, media):
 
     if request.method == 'POST' and form.validate():
         if form.confirm.data is True:
-            username = media.uploader()['username']
+            username = media.get_uploader.username
 
             # Delete all files on the public storage
             delete_media_files(media)
 
             media.delete()
+            messages.add_message(
+                request, messages.SUCCESS, _('You deleted the media.'))
 
             return redirect(request, "mediagoblin.user_pages.user_home",
                 user=username)
         else:
+            messages.add_message(
+                request, messages.ERROR,
+                _("The media was not deleted because you didn't check that you were sure."))
             return exc.HTTPFound(
                 location=media.url_for_self(request.urlgen))
 
-    if ((request.user[u'is_admin'] and
-         request.user[u'_id'] != media.uploader()[u'_id'])):
+    if ((request.user.is_admin and
+         request.user._id != media.uploader)):
         messages.add_message(
             request, messages.WARNING,
             _("You are about to delete another user's media. "
@@ -192,6 +207,7 @@ def media_confirm_delete(request, media):
 
 ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 15
 
+
 def atom_feed(request):
     """
     generates the atom feed with the newest images
@@ -204,22 +220,42 @@ def atom_feed(request):
         return render_404(request)
 
     cursor = request.db.MediaEntry.find({
-                 'uploader': user['_id'],
+                 'uploader': user._id,
                  'state': 'processed'}) \
                  .sort('created', DESCENDING) \
                  .limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
-    feed = AtomFeed(request.matchdict['user'],
+    """
+    ATOM feed id is a tag URI (see http://en.wikipedia.org/wiki/Tag_URI)
+    """
+    feed = AtomFeed(
+               "MediaGoblin: Feed for user '%s'" % request.matchdict['user'],
                feed_url=request.url,
-               url=request.host_url)
-    
+               id='tag:'+request.host+',2011:gallery.user-'+request.matchdict['user'],
+               links=[{
+                   'href': request.urlgen(
+                       'mediagoblin.user_pages.user_home',
+                       qualified=True,user=request.matchdict['user']),
+                   'rel': 'alternate',
+                   'type': 'text/html'}])
+
     for entry in cursor:
         feed.add(entry.get('title'),
             entry.get('description_html'),
+            id=entry.url_for_self(request.urlgen,qualified=True),
             content_type='html',
-            author=request.matchdict['user'],
+            author={
+                'name': entry.get_uploader.username,
+                'uri': request.urlgen(
+                    'mediagoblin.user_pages.user_home',
+                    qualified=True, user=entry.get_uploader.username)},
             updated=entry.get('created'),
-            url=entry.url_for_self(request.urlgen))
+            links=[{
+                'href': entry.url_for_self(
+                    request.urlgen,
+                    qualified=True),
+                'rel': 'alternate',
+                'type': 'text/html'}])
 
     return feed.get_response()
 
@@ -238,7 +274,7 @@ def processing_panel(request):
     # Make sure the user exists and is active
     if not user:
         return render_404(request)
-    elif user['status'] != u'active':
+    elif user.status != u'active':
         return render_to_response(
             request,
             'mediagoblin/user_pages/user.html',
@@ -248,7 +284,7 @@ def processing_panel(request):
     #
     # Make sure we have permission to access this user's panel.  Only
     # admins and this user herself should be able to do so.
-    if not (user[u'_id'] == request.user[u'_id']
+    if not (user._id == request.user._id
             or request.user.is_admin):
         # No?  Let's simply redirect to this user's homepage then.
         return redirect(
@@ -257,12 +293,12 @@ def processing_panel(request):
 
     # Get media entries which are in-processing
     processing_entries = request.db.MediaEntry.find(
-        {'uploader': user['_id'],
+        {'uploader': user._id,
          'state': 'processing'}).sort('created', DESCENDING)
 
     # Get media entries which have failed to process
     failed_entries = request.db.MediaEntry.find(
-        {'uploader': user['_id'],
+        {'uploader': user._id,
          'state': 'failed'}).sort('created', DESCENDING)
 
     # Render to response

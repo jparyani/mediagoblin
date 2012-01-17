@@ -27,6 +27,7 @@ from mediagoblin.storage import StorageInterface, clean_listy_filepath
 import cloudfiles
 import mimetypes
 
+
 class CloudFilesStorage(StorageInterface):
     '''
     OpenStack/Rackspace Cloud's Swift/CloudFiles support
@@ -97,8 +98,14 @@ class CloudFilesStorage(StorageInterface):
     def delete_file(self, filepath):
         # TODO: Also delete unused directories if empty (safely, with
         # checks to avoid race conditions).
-        self.container.delete_object(
-            self._resolve_filepath(filepath))
+        try:
+            self.container.delete_object(
+                self._resolve_filepath(filepath))
+        except cloudfiles.container.ResponseError:
+            pass
+        finally:
+            pass
+        
 
     def file_url(self, filepath):
         return '/'.join([
