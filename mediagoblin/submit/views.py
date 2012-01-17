@@ -23,6 +23,8 @@ from celery import registry
 import urllib,urllib2
 import logging
 
+_log = logging.getLogger(__name__)
+
 from werkzeug.utils import secure_filename
 
 from mediagoblin.db.util import ObjectId
@@ -145,10 +147,10 @@ def submit_start(request):
                         except urllib2.HTTPError as exc:
                             # This is not a big issue, the item will be fetched
                             # by the PuSH server next time we hit it
-                            logging.getLogger(__name__).warning(
+                            _log.warning(
                                 "push url %r gave error %r", huburl, exc.code)
                         except urllib2.URLError as exc:
-                            logging.getLogger(__name__).warning(
+                            _log.warning(
                                 "push url %r is unreachable %r", huburl, exc.reason)
 
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
