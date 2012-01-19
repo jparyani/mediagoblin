@@ -17,10 +17,10 @@
 #}
 
 {% block license_content -%}
-  License: 
-  {% if media['license'] %}
-  <a href="{{ media['license'] }}">{{ media.get_license_data()['abbreviation'] }}</a>
+  {% trans %}License:{% endtrans %}
+  {% if media.license %}
+  <a href="{{ media.license }}">{{ media.get_license_data().abbreviation }}</a>
   {% else %}
-  All rights reserved
+  {% trans %}All rights reserved{% endtrans %}
   {% endif %}
 {% endblock %}

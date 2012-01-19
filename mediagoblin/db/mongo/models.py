@@ -22,7 +22,7 @@ from mediagoblin import mg_globals
 from mediagoblin.db.mongo import migrations
 from mediagoblin.db.mongo.util import ASCENDING, DESCENDING, ObjectId
 from mediagoblin.tools.pagination import Pagination
-from mediagoblin.tools import url, licenses
+from mediagoblin.tools import url
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
 
 ###################
@@ -251,10 +251,6 @@ class MediaEntry(Document, MediaEntryMixin):
 
         for media in cursor:
             return media.url_for_self(urlgen)
-
-    def get_license_data(self):
-        """Return license dict for requested license"""
-        return licenses.SUPPORTED_LICENSES[self['license']]
 
     @property
     def get_uploader(self):

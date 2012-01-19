@@ -28,7 +28,7 @@ real objects.
 """
 
 from mediagoblin.auth import lib as auth_lib
-from mediagoblin.tools import common
+from mediagoblin.tools import common, licenses
 
 
 class UserMixin(object):
@@ -90,3 +90,7 @@ class MediaEntryMixin(object):
         """
         if self['fail_error']:
             return common.import_component(self['fail_error'])
+
+    def get_license_data(self):
+        """Return license dict for requested license"""
+        return licenses.SUPPORTED_LICENSES[self.license]
