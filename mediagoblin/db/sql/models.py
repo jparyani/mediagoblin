@@ -1,3 +1,20 @@
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011,2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 import datetime
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -41,8 +58,8 @@ class User(Base, UserMixin):
     verification_key = Column(Unicode)
     is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
-    bio = Column(UnicodeText) # ??
-    bio_html = Column(UnicodeText) # ??
+    bio = Column(UnicodeText)  # ??
+    bio_html = Column(UnicodeText)  # ??
     fp_verification_key = Column(Unicode)
     fp_token_expire = Column(DateTime)
 
@@ -60,11 +77,11 @@ class MediaEntry(Base, MediaEntryMixin):
     title = Column(Unicode, nullable=False)
     slug = Column(Unicode, nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    description = Column(UnicodeText) # ??
-    description_html = Column(UnicodeText) # ??
+    description = Column(UnicodeText)  # ??
+    description_html = Column(UnicodeText)  # ??
     media_type = Column(Unicode, nullable=False)
-    state = Column(Unicode, nullable=False) # or use sqlalchemy.types.Enum?
-    
+    state = Column(Unicode, nullable=False)  # or use sqlalchemy.types.Enum?
+
     fail_error = Column(Unicode)
     fail_metadata = Column(UnicodeText)
 
@@ -83,7 +100,7 @@ class MediaEntry(Base, MediaEntryMixin):
         cascade="all, delete-orphan"
         )
     media_files = association_proxy('media_files_helper', 'file_path',
-        creator=lambda k,v: MediaFile(name=k, file_path=v)
+        creator=lambda k, v: MediaFile(name=k, file_path=v)
         )
 
     ## TODO
@@ -130,7 +147,7 @@ class MediaTag(Base):
 
 class MediaComment(Base):
     __tablename__ = "media_comments"
-    
+
     id = Column(Integer, primary_key=True)
     media_entry = Column(
         Integer, ForeignKey('media_entries.id'), nullable=False)
