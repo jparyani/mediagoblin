@@ -37,6 +37,7 @@ from mediagoblin.tools.text import (
     media_tags_as_string, cleaned_markdown_conversion)
 from mediagoblin.tools.licenses import SUPPORTED_LICENSES
 
+
 @get_user_media_entry
 @require_active_login
 def edit_media(request, media):
@@ -48,7 +49,7 @@ def edit_media(request, media):
         slug=media.slug,
         description=media.description,
         tags=media_tags_as_string(media.tags),
-        license=media.license))
+        license=media.license)
 
     form = forms.EditForm(
         request.POST,

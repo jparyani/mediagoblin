@@ -21,6 +21,7 @@ from mediagoblin.tools.text import tag_length_validator
 from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 from mediagoblin.tools.licenses import licenses_as_choices
 
+
 class SubmitStartForm(wtforms.Form):
     file = wtforms.FileField(_('File'))
     title = wtforms.TextField(

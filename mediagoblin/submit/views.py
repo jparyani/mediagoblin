@@ -69,7 +69,7 @@ def submit_start(request):
                 entry.description_html = cleaned_markdown_conversion(
                     entry.description)
 
-                entry['license'] = (
+                entry.license = (
                     unicode(request.POST.get('license'))
                     or '')
 
