@@ -29,6 +29,13 @@ from mediagoblin.db.sql.extratypes import PathTupleWithSlashes
 from mediagoblin.db.sql.base import Base, DictReadAttrProxy
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
 
+# It's actually kind of annoying how sqlalchemy-migrate does this, if
+# I understand it right, but whatever.  Anyway, don't remove this :P
+# 
+# We could do migration calls more manually instead of relying on
+# this import-based meddling...
+from migrate import changeset
+
 
 class SimpleFieldAlias(object):
     """An alias for any field"""
