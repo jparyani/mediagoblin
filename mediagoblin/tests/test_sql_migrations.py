@@ -400,3 +400,90 @@ def _insert_migration2_objects(session):
                     to_level='necroplex')]
 
     session.commit()
+
+
+def _insert_migration3_objects(session):
+    """
+    Test objects to insert for the third set of things
+    """
+    # Insert creatures
+    session.add_all(
+        [Creature3(
+                name='centipede',
+                num_limbs=100),
+         Creature3(
+                name='wolf',
+                num_limbs=4,
+                magical_powers = [
+                    CreaturePower3(
+                        name="ice breath",
+                        description="A blast of icy breath!",
+                        hitpower=20.0),
+                    CreaturePower3(
+                        name="death stare",
+                        description="A frightening stare, for sure!",
+                        hitpower=45.0)]),
+         Creature3(
+                name='wizardsnake',
+                num_limbs=0,
+                magical_powers=[
+                    CreaturePower3(
+                        name='death_rattle',
+                        description='A rattle... of DEATH!',
+                        hitpower=1000.0),
+                    CreaturePower3(
+                        name='sneaky_stare',
+                        description="The sneakiest stare you've ever seen!"
+                        hitpower=300.0),
+                    CreaturePower3(
+                        name='slithery_smoke',
+                        description="A blast of slithery, slithery smoke.",
+                        hitpower=10.0),
+                    CreaturePower3(
+                        name='treacherous_tremors',
+                        description="The ground shakes beneath footed animals!",
+                        hitpower=0.0)])],
+        # annnnnd one more to test a floating point hitpower
+        Creature3(
+                name='deity',
+                numb_limbs=30,
+                magical_powers[
+                    CreaturePower3(
+                        name='smite',
+                        description='Smitten by holy wrath!',
+                        hitpower=9999.9))
+
+    # Insert levels
+    session.add_all(
+        [Level3(id='necroplex',
+                name='The Necroplex',
+                description='A complex full of pure deathzone.'),
+         Level3(id='evilstorm',
+                name='Evil Storm',
+                description='A storm full of pure evil.',
+                exits=[]), # you can't escape the evilstorm
+         Level3(id='central_park'
+                name='Central Park, NY, NY',
+                description="New York's friendly Central Park.")])
+
+    # necroplex exits
+    session.add_all(
+        [LevelExit3(name='deathwell',
+                    from_level='necroplex',
+                    to_level='evilstorm'),
+         LevelExit3(name='portal',
+                    from_level='necroplex',
+                    to_level='central_park')])
+
+    # there are no evilstorm exits because there is no exit from the
+    # evilstorm
+      
+    # central park exits
+    session.add_all(
+        [LevelExit3(name='portal',
+                    from_level='central_park',
+                    to_level='necroplex')]
+
+    session.commit()
+
+
