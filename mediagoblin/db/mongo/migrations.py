@@ -108,3 +108,10 @@ def media_type_image_to_multimedia_type_image(database):
         {'media_type': 'image'},
         {'$set': {'media_type': 'mediagoblin.media_types.image'}},
         multi=True)
+
+@RegisterMigration(8)
+def mediaentry_add_license(database):
+    """
+    Add the 'license' field for entries that don't have it.
+    """
+    add_table_field(database, 'media_entries', 'license', '')
