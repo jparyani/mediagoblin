@@ -80,22 +80,6 @@
                                    media= media._id) %}
         <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
       {% endif %}
-      {% if media.media_data.has_key('exif') 
-	     and media.media_data.exif.has_key('useful') %}
-	{#-
-	TODO:
-	 - Render GPS data in a human-readable format
-	#}
-        <h4>EXIF</h4>
-	<table>
-	{% for key, tag in media.media_data.exif.useful.items() %}
-	  <tr>
-	    <td>{{ key }}</td>
-	    <td>{{ tag.printable }}</td>
-	  </tr>
-        {% endfor %}
-	</table>
-      {% endif %}
     </p>
     {% if comments %}
       <h3>
@@ -195,7 +179,10 @@
       {% include "mediagoblin/utils/tags.html" %}
     {% endif %}
 
+    {% include "mediagoblin/utils/license.html" %}
+
     {% if media.media_data.has_key('gps')
+           and app_config['geolocation_map_visible']
            and media.media_data.gps %}
       <h4>Map</h4>
       <div>
@@ -216,6 +203,22 @@
 	</p>
       </div>
     {% endif %}
-    {% include "mediagoblin/utils/license.html" %}
+    {% if media.media_data.has_key('exif')
+           and app_config['exif_visible']
+           and media.media_data.exif.has_key('useful') %}
+      {#-
+      TODO:
+      - Render GPS data in a human-readable format
+      #}
+      <h4>EXIF</h4>
+      <table>
+	{% for key, tag in media.media_data.exif.useful.items() %}
+          <tr>
+            <td>{{ key }}</td>
+            <td>{{ tag.printable }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
   </div>
 {% endblock %}
