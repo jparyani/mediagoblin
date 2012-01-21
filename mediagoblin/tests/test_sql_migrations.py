@@ -397,7 +397,7 @@ def _insert_migration2_objects(session):
     session.add_all(
         [LevelExit2(name='portal',
                     from_level='central_park',
-                    to_level='necroplex')]
+                    to_level='necroplex')])
 
     session.commit()
 
@@ -451,7 +451,7 @@ def _insert_migration3_objects(session):
                     CreaturePower3(
                         name='smite',
                         description='Smitten by holy wrath!',
-                        hitpower=9999.9))
+                        hitpower=9999.9))))
 
     # Insert levels
     session.add_all(
@@ -482,8 +482,58 @@ def _insert_migration3_objects(session):
     session.add_all(
         [LevelExit3(name='portal',
                     from_level='central_park',
-                    to_level='necroplex')]
+                    to_level='necroplex')])
 
     session.commit()
 
 
+def create_test_engine():
+    from sqlalchemy import create_engine
+    engine = create_engine('sqlite:///:memory:', echo=False)
+    return engine
+
+
+def test_set1_to_set3():
+    # Create / connect to database
+    # Create tables by migrating on empty initial set
+
+    # Install the initial set
+    # Check version in database
+    # Sanity check a few things in the database
+
+    # Migrate
+    # Make sure version matches expected
+    # Check all things in database match expected
+    pass
+
+
+def test_set2_to_set3():
+    # Create / connect to database
+    # Create tables by migrating on empty initial set
+
+    # Install the initial set
+    # Check version in database
+    # Sanity check a few things in the database
+
+    # Migrate
+    # Make sure version matches expected
+    # Check all things in database match expected
+    pass
+
+
+def test_set1_to_set2_to_set3():
+    # Create / connect to database
+    # Create tables by migrating on empty initial set
+
+    # Install the initial set
+    # Check version in database
+    # Sanity check a few things in the database
+
+    # Migrate
+    # Make sure version matches expected
+    # Check all things in database match expected
+
+    # Migrate again
+    # Make sure version matches expected again
+    # Check all things in database match expected again
+    pass
