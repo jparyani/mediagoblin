@@ -75,7 +75,7 @@ def edit_media(request, media):
             media.description_html = cleaned_markdown_conversion(
                 media.description)
 
-            media.license = unicode(request.POST.get('license')) or None
+            media.license = unicode(request.POST.get('license', '')) or None
 
             media.slug = unicode(request.POST['slug'])
 
