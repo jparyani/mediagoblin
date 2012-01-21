@@ -49,7 +49,7 @@ SUPPORTED_LICENSES = dict(SORTED_SUPPORTED_LICENSES)
 def licenses_as_choices():
     license_list = []
 
-    for uri, data in SUPPORTED_LICENSES.items():
+    for uri, data in SORTED_SUPPORTED_LICENSES:
         license_list.append((uri, data["abbreviation"]))
 
     return license_list
