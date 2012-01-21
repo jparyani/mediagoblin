@@ -114,4 +114,4 @@ def mediaentry_add_license(database):
     """
     Add the 'license' field for entries that don't have it.
     """
-    add_table_field(database, 'media_entries', 'license', '')
+    add_table_field(database, 'media_entries', 'license', None)

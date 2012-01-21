@@ -81,7 +81,7 @@ class MediaEntry(Base, MediaEntryMixin):
     description_html = Column(UnicodeText) # ??
     media_type = Column(Unicode, nullable=False)
     state = Column(Unicode, nullable=False) # or use sqlalchemy.types.Enum?
-    license = Column(Unicode, nullable=False)
+    license = Column(Unicode)
 
     fail_error = Column(Unicode)
     fail_metadata = Column(UnicodeText)

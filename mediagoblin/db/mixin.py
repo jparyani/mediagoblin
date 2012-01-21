@@ -93,4 +93,4 @@ class MediaEntryMixin(object):
 
     def get_license_data(self):
         """Return license dict for requested license"""
-        return licenses.SUPPORTED_LICENSES[self.license]
+        return licenses.SUPPORTED_LICENSES[self.license or ""]
