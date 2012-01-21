@@ -39,4 +39,5 @@ class SubmitStartForm(wtforms.Form):
           "Separate tags by commas."))
     license = wtforms.SelectField(
         _('License'),
+        [wtforms.validators.Optional(),],
         choices=licenses_as_choices())

@@ -42,6 +42,7 @@ class EditForm(wtforms.Form):
             "You usually don't need to change this."))
     license = wtforms.SelectField(
         _('License'),
+        [wtforms.validators.Optional(),],
         choices=licenses_as_choices())
 
 class EditProfileForm(wtforms.Form):
