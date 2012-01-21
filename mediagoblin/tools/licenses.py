@@ -14,44 +14,37 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-SUPPORTED_LICENSES = {
-    "": {
-        "name": "No license specified",
-        "abbreviation": "All rights reserved"
-        },
-    "http://creativecommons.org/licenses/by/3.0/": {
-        "name": "Creative Commons Attribution Unported 3.0",
-        "abbreviation": "CC BY 3.0"
-        },
-    "http://creativecommons.org/licenses/by-sa/3.0": {
-        "name": "Creative Commons Attribution-ShareAlike Unported 3.0",
-        "abbreviation": "CC BY-SA 3.0"
-        },
-    "http://creativecommons.org/licenses/by-nd/3.0": {
-        "name": "Creative Commons Attribution-NoDerivs 3.0 Unported",
-        "abbreviation": "CC BY-ND 3.0"
-        },
-    "http://creativecommons.org/licenses/by-nc/3.0": {
-        "name": "Creative Commons Attribution-NonCommercial Unported 3.0",
-        "abbreviation": "CC BY-NC 3.0"
-        },
-    "http://creativecommons.org/licenses/by-nc-sa/3.0": {
-        "name": "Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported",
-        "abbreviation": "CC BY-NC-SA 3.0"
-        },
-    "http://creativecommons.org/licenses/by-nc-nd/3.0": {
-        "name": "Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported",
-        "abbreviation": "CC BY-NC-ND 3.0"
-        },
-    "http://creativecommons.org/publicdomain/zero/1.0/": {
-        "name": "Creative Commons CC0 1.0 Universal",
-        "abbreviation": "CC0 1.0"
-        },
-    "http://creativecommons.org/publicdomain/mark/1.0/": {
-        "name": "Public Domain",
-        "abbreviation": "Public Domain"
-        },
-}
+SORTED_SUPPORTED_LICENSES = [
+    ("",
+     {"name": "No license specified",
+      "abbreviation": "All rights reserved"}),
+    ("http://creativecommons.org/licenses/by/3.0/",
+     {"name": "Creative Commons Attribution Unported 3.0",
+      "abbreviation": "CC BY 3.0"}),
+    ("http://creativecommons.org/licenses/by-sa/3.0",
+     {"name": "Creative Commons Attribution-ShareAlike Unported 3.0",
+      "abbreviation": "CC BY-SA 3.0"}),
+    ("http://creativecommons.org/licenses/by-nd/3.0",
+     {"name": "Creative Commons Attribution-NoDerivs 3.0 Unported",
+      "abbreviation": "CC BY-ND 3.0"}),
+    ("http://creativecommons.org/licenses/by-nc/3.0",
+     {"name": "Creative Commons Attribution-NonCommercial Unported 3.0",
+      "abbreviation": "CC BY-NC 3.0"}),
+    ("http://creativecommons.org/licenses/by-nc-sa/3.0",
+     {"name": "Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported",
+      "abbreviation": "CC BY-NC-SA 3.0"}),
+    ("http://creativecommons.org/licenses/by-nc-nd/3.0",
+     {"name": "Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported",
+      "abbreviation": "CC BY-NC-ND 3.0"}),
+    ("http://creativecommons.org/publicdomain/zero/1.0/",
+     {"name": "Creative Commons CC0 1.0 Universal",
+      "abbreviation": "CC0 1.0"}),
+    ("http://creativecommons.org/publicdomain/mark/1.0/",
+     {"name": "Public Domain",
+      "abbreviation": "Public Domain"})]
+
+SUPPORTED_LICENSES = dict(SORTED_SUPPORTED_LICENSES)
+
 
 def licenses_as_choices():
     license_list = []
