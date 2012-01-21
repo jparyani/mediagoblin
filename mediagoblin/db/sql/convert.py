@@ -78,7 +78,7 @@ def convert_media_entries(mk_db):
         copy_attrs(entry, new_entry,
             ('title', 'slug', 'created',
              'description', 'description_html',
-             'media_type', 'state',
+             'media_type', 'state', 'license',
              'fail_error',
              'queued_task_id',))
         copy_reference_attr(entry, new_entry, "uploader")
