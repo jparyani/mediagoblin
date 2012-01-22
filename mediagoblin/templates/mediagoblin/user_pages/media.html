@@ -127,7 +127,7 @@
             <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
                    comment = comment._id,
                    user = media.get_uploader.username,
-                   media = media.slug) }}#comment">
+                   media = media.slug_or_id) }}#comment">
               {{ comment.created.strftime("%I:%M%p %Y-%m-%d") }}
             </a>
           </div>

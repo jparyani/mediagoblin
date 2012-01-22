@@ -72,7 +72,7 @@ class MediaEntry(Base, MediaEntryMixin):
     id = Column(Integer, primary_key=True)
     uploader = Column(Integer, ForeignKey('users.id'), nullable=False)
     title = Column(Unicode, nullable=False)
-    slug = Column(Unicode, nullable=False)
+    slug = Column(Unicode)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     description = Column(UnicodeText) # ??
     description_html = Column(UnicodeText) # ??
