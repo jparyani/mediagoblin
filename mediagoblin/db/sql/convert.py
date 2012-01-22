@@ -49,7 +49,7 @@ def copy_reference_attr(entry, new_entry, ref_attr):
 def convert_users(mk_db):
     session = Session()
 
-    for entry in mk_db.User.find():
+    for entry in mk_db.User.find().sort('created'):
         print entry.username
 
         new_entry = User()
@@ -71,7 +71,7 @@ def convert_users(mk_db):
 def convert_media_entries(mk_db):
     session = Session()
 
-    for entry in mk_db.MediaEntry.find():
+    for entry in mk_db.MediaEntry.find().sort('created'):
         print repr(entry.title)
 
         new_entry = MediaEntry()
@@ -100,7 +100,7 @@ def convert_media_tags(mk_db):
     session = Session()
     session.autoflush = False
 
-    for media in mk_db.MediaEntry.find():
+    for media in mk_db.MediaEntry.find().sort('created'):
         print repr(media.title)
 
         for otag in media.tags:
@@ -127,7 +127,7 @@ def convert_media_tags(mk_db):
 def convert_media_comments(mk_db):
     session = Session()
 
-    for entry in mk_db.MediaComment.find():
+    for entry in mk_db.MediaComment.find().sort('created'):
         print repr(entry.content)
 
         new_entry = MediaComment()
