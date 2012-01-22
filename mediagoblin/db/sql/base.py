@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker, object_session
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql.expression import desc
@@ -73,3 +74,6 @@ class GMGTableBase(object):
             sess = Session()
         sess.add(self)
         sess.commit()
+
+
+Base = declarative_base(cls=GMGTableBase)

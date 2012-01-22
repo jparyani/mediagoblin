@@ -17,7 +17,6 @@
 
 import datetime
 
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import (
     Column, Integer, Unicode, UnicodeText, DateTime, Boolean, ForeignKey,
     UniqueConstraint)
@@ -27,11 +26,8 @@ from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
 
 from mediagoblin.db.sql.extratypes import PathTupleWithSlashes
-from mediagoblin.db.sql.base import GMGTableBase
+from mediagoblin.db.sql.base import Base
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
-
-
-Base = declarative_base(cls=GMGTableBase)
 
 
 class SimpleFieldAlias(object):
