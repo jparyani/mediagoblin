@@ -17,7 +17,7 @@
 
 import sys
 from mediagoblin.db.sql.base import Session
-from mediagoblin.db.sql.models import Tag, MediaTag
+from mediagoblin.db.sql.models import MediaEntry, Tag, MediaTag
 
 
 def _simple_printer(string):
@@ -283,6 +283,15 @@ def atomic_update(table, query_dict, update_values):
     table.find(query_dict).update(update_values,
     	synchronize_session=False)
     Session.commit()
+
+
+def check_media_slug_used(dummy_db, uploader_id, slug, ignore_m_id):
+    filt = (MediaEntry.uploader == uploader_id) \
+        & (MediaEntry.slug == slug)
+    if ignore_m_id is not None:
+        filt = filt & (MediaEntry.id != ignore_m_id)
+    does_exist = Session.query(MediaEntry.id).filter(filt).first() is not None
+    return does_exist
 
 
 def clean_orphan_tags():
