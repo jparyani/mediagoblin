@@ -17,6 +17,7 @@
 
 import sys
 from mediagoblin.db.sql.base import Session
+from mediagoblin.db.sql.models import Tag, MediaTag
 
 
 def _simple_printer(string):
@@ -282,3 +283,24 @@ def atomic_update(table, query_dict, update_values):
     table.find(query_dict).update(update_values,
     	synchronize_session=False)
     Session.commit()
+
+
+def clean_orphan_tags():
+    q1 = Session.query(Tag).outerjoin(MediaTag).filter(MediaTag.id==None)
+    for t in q1:
+        Session.delete(t)
+
+    # The "let the db do all the work" version:
+    # q1 = Session.query(Tag.id).outerjoin(MediaTag).filter(MediaTag.id==None)
+    # q2 = Session.query(Tag).filter(Tag.id.in_(q1))
+    # q2.delete(synchronize_session = False)
+
+    Session.commit()
+
+
+if __name__ == '__main__':
+    from mediagoblin.db.sql.open import setup_connection_and_db_from_config
+
+    conn,db = setup_connection_and_db_from_config({'sql_engine':'sqlite:///mediagoblin.db'})
+
+    clean_orphan_tags()
