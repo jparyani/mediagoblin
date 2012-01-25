@@ -16,13 +16,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
-{% block license_content -%}
-  <p>
-    {% trans %}License:{% endtrans %}
-    {% if media.license %}
-      <a href="{{ media.license }}">{{ media.get_license_data().abbreviation }}</a>
-    {% else %}
-      {% trans %}All rights reserved{% endtrans %}
-    {% endif %}
-  </p>
+{% block exif_content %}
+  {% if media.media_data.has_key('exif')
+        and app_config['exif_visible']
+        and media.media_data.exif.has_key('useful') %}
+    <h4>EXIF</h4>
+    <table>
+      {% for key, tag in media.media_data.exif.useful.items() %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ tag.printable }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% endif %}
 {% endblock %}
