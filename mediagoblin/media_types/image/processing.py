@@ -58,10 +58,13 @@ def process_image(entry):
     # Copy the thumb to the conversion subdir, then remotely.
     thumb_filename = 'thumbnail' + extension
     thumb_filepath = create_pub_filepath(entry, thumb_filename)
+
     tmp_thumb_filename = os.path.join(
         conversions_subdir, thumb_filename)
+
     with file(tmp_thumb_filename, 'w') as thumb_file:
         thumb.save(thumb_file)
+
     mgg.public_store.copy_local_to_storage(
         tmp_thumb_filename, thumb_filepath)
 
@@ -69,7 +72,8 @@ def process_image(entry):
     # file, a `medium.jpg` files is created and later associated with the media
     # entry.
     medium = Image.open(queued_filename)
-    # Fox orientation
+
+    # Fix orientation
     medium = exif_fix_image_orientation(medium, exif_tags)
 
     if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1]:
@@ -77,6 +81,7 @@ def process_image(entry):
 
     medium_filename = 'medium' + extension
     medium_filepath = create_pub_filepath(entry, medium_filename)
+
     tmp_medium_filename = os.path.join(
         conversions_subdir, medium_filename)
 
@@ -129,9 +134,6 @@ if __name__ == '__main__':
     gps = get_gps_data(result)
     clean = clean_exif(result)
     useful = get_useful(clean)
-
-    import pdb
-    pdb.set_trace()
 
     print pp.pprint(
         clean)

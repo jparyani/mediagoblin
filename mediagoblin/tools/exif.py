@@ -18,8 +18,6 @@ from mediagoblin.tools.extlib.EXIF import process_file, Ratio
 from mediagoblin.processing import BadMediaFail
 from mediagoblin.tools.translate import pass_to_ugettext as _
 
-from collections import OrderedDict
-
 # A list of tags that should be stored for faster access
 USEFUL_TAGS = [
     'Image Make',
@@ -73,8 +71,7 @@ def extract_exif(filename):
 
 def clean_exif(exif):
     '''
-    Clean the result from anyt
-hing the database cannot handle
+    Clean the result from anything the database cannot handle
     '''
     # Discard any JPEG thumbnail, for database compatibility
     # and that I cannot see a case when we would use it.
@@ -129,10 +126,10 @@ def get_gps_data(tags):
     """
     Processes EXIF data returned by EXIF.py
     """
-    if not 'Image GPSInfo' in tags:
-        return False
-
     gps_data = {}
+
+    if not 'Image GPSInfo' in tags:
+        return gps_data
 
     try:
         dms_data = {
