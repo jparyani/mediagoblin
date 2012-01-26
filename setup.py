@@ -38,6 +38,7 @@ setup(
     version=get_version(),
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     zip_safe=False,
+    include_package_data = True,
     # scripts and dependencies
     install_requires=[
         'setuptools',
