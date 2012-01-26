@@ -1,4 +1,4 @@
-recursive-include mediagoblin/templates *.html
+recursive-include mediagoblin/templates *.html *.txt
 recursive-include mediagoblin/static *.js *.css *.png *.svg *.ico
 recursive-include mediagoblin/tests *.ini
 recursive-include docs *.rst *.html
