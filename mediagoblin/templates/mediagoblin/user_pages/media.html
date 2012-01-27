@@ -23,16 +23,20 @@
 {% block title %}{{ media.title }} &mdash; {{ super() }}{% endblock %}
 
 {% block mediagoblin_head %}
-  <link rel="stylesheet" 
-	href="{{ request.staticdirect('/extlib/leaflet/leaflet.css') }}" />
 <!--[if lte IE 8]><link rel="stylesheet"
     href="{{ request.staticdirect('/extlib/leaflet/leaflet.ie.css') }}" /><![endif]-->
   <script type="text/javascript"
           src="{{ request.staticdirect('/js/comment_show.js') }}"></script>
-  <script type="text/javascript"
-          src="{{ request.staticdirect('/extlib/leaflet/leaflet.js') }}"></script>
-  <script type="text/javascript"
-          src="{{ request.staticdirect('/js/geolocation-map.js') }}"></script>
+
+  {% if app_config['geolocation_map_visible'] %}
+    <link rel="stylesheet"
+	  href="{{ request.staticdirect('/extlib/leaflet/leaflet.css') }}" />
+
+    <script type="text/javascript"
+            src="{{ request.staticdirect('/extlib/leaflet/leaflet.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ request.staticdirect('/js/geolocation-map.js') }}"></script>
+  {% endif %}
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_content %}
