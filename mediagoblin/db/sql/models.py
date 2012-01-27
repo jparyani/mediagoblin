@@ -50,7 +50,7 @@ class User(Base, UserMixin):
     email = Column(Unicode, nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     pw_hash = Column(Unicode, nullable=False)
-    email_verified = Column(Boolean)
+    email_verified = Column(Boolean, default=False)
     status = Column(Unicode, default=u"needs_email_verification", nullable=False)
     verification_key = Column(Unicode)
     is_admin = Column(Boolean, default=False, nullable=False)
@@ -77,7 +77,8 @@ class MediaEntry(Base, MediaEntryMixin):
     description = Column(UnicodeText) # ??
     description_html = Column(UnicodeText) # ??
     media_type = Column(Unicode, nullable=False)
-    state = Column(Unicode, nullable=False) # or use sqlalchemy.types.Enum?
+    state = Column(Unicode, default=u'unprocessed', nullable=False)
+        # or use sqlalchemy.types.Enum?
     license = Column(Unicode)
 
     fail_error = Column(Unicode)
@@ -112,6 +113,8 @@ class MediaEntry(Base, MediaEntryMixin):
     # media_data
     # attachment_files
     # fail_error
+
+    _id = SimpleFieldAlias("id")
 
     def get_comments(self, ascending=False):
         order_col = MediaComment.created
@@ -214,6 +217,8 @@ class MediaComment(Base):
     content_html = Column(UnicodeText)
 
     get_author = relationship(User)
+
+    _id = SimpleFieldAlias("id")
 
 
 def show_table_init():
