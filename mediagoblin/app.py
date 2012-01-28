@@ -184,6 +184,14 @@ class MediaGoblinApp(object):
         for m in self.meddleware[::-1]:
             m.process_response(request, response)
 
+        # Reset the sql session, so that the next request
+        # gets a fresh session
+        try:
+            self.db.reset_after_request()
+        except TypeError:
+            # We're still on mongo
+            pass
+
         return response(environ, start_response)
 
 

@@ -36,6 +36,7 @@ class DatabaseMaster(object):
         Session.flush()
 
     def reset_after_request(self):
+        Session.rollback()
         Session.remove()
 
 
