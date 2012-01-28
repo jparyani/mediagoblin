@@ -51,7 +51,7 @@ class Level1(Base1):
 
     id = Column(Unicode, primary_key=True)
     name = Column(Unicode, unique=True, nullable=False, index=True)
-    description = Column(UnicodeText)
+    description = Column(Unicode)
     exits = Column(PickleType)
 
 SET1_MODELS = [Creature1, Level1]
@@ -87,7 +87,7 @@ class Level2(Base2):
 
     id = Column(Unicode, primary_key=True)
     name = Column(Unicode)
-    description = Column(UnicodeText)
+    description = Column(Unicode)
 
 class LevelExit2(Base2):
     __tablename__ = "level_exit"
@@ -217,7 +217,7 @@ class Level3(Base3):
 
     id = Column(Unicode, primary_key=True)
     name = Column(Unicode)
-    description = Column(UnicodeText)
+    description = Column(Unicode)
 
 class LevelExit3(Base3):
     __tablename__ = "level_exit"
@@ -487,21 +487,101 @@ def _insert_migration3_objects(session):
     session.commit()
 
 
+def CollectingPrinter(object):
+    def __init__(self):
+        self.collection = []
+    
+    def __call__(self, string):
+        self.collection.append(string)
+
+    @property
+    def combined_string(self):
+        return u''.join(self.collection)
+
+
 def create_test_engine():
     from sqlalchemy import create_engine
     engine = create_engine('sqlite:///:memory:', echo=False)
-    return engine
+    sqlalchemy.orm import sessionmaker
+    Session = sessionmaker(bind=engine)
+    return engine, Session
+
+
+def assert_col_type(column, class):
+    assert isinstance(column.type, class)
 
 
 def test_set1_to_set3():
     # Create / connect to database
+    engine, Session = create_test_engine()
     # Create tables by migrating on empty initial set
+    printer = CollectingPrinter
+    migration_manager = MigrationManager(
+        '__main__', SET1_MODELS, SET1_MIGRATIONS, Session(),
+        printer)
+    # Check latest migration and database current migration
+    assert migration_manager.latest_migration == 0
+    assert migration_manager.database_current_migration == None
+
+    result = migration_manager.init_or_migrate()
+    # Make sure output was "inited"
+    assert result == u'inited'
+    # Check output
+    assert printer.combined_string == "-> Initializing __main__... done.\n"
+    # Check version in database
+    assert migration_manager.latest_migration == 0
+    assert migration_manager.database_current_migration == 0
 
     # Install the initial set
+    _insert_migration1_objects(Session())
+    # Try to "re-migrate" with same manager settings... nothing should happen
+    migration_manager = MigrationManager(
+        '__main__', SET1_MODELS, SET1_MIGRATIONS, Session(),
+        printer)
+    assert migration_manager.init_or_migrate() == None
+
     # Check version in database
-    # Sanity check a few things in the database
+    assert migration_manager.latest_migration == 0
+    assert migration_manager.database_current_migration == 0
+
+    # Sanity check a few things in the database...
+    metadata = MetaData(bind=db_conn.engine)
+
+    # Check the structure of the creature table
+    creature_table = Table(
+        'creature', metadata,
+        autoload=True, autoload_with=db_conn.engine)
+    assert set(creature_table.c.keys()) == set(
+        ['id', 'name', 'num_legs', 'is_demon'])
+    assert_col_type(creature_table.c.id, Integer)
+    assert_col_type(creature_table.c.name, Unicode)
+    assert creature_table.c.name.nullable is False
+    assert creature_table.c.name.index is True
+    assert creature_table.c.name.unique is True
+    assert_col_type(creature_table.c.num_legs, Integer)
+    assert creature_table.c.num_legs.nullable is False
+    assert_col_type(creature_table.c.is_demon, Boolean)
+
+    # Check the structure of the level table
+    level_table = Table(
+        'level', metadata,
+        autoload=True, autoload_with=db_conn.engine)
+    assert set(level_table.c.keys()) == set(
+        ['id', 'name', 'description', 'exits'])
+    assert_col_type(level_table.c.id, Integer)
+    assert_col_type(level_table.c.name, Unicode)
+    assert level_table.c.name.nullable is False
+    assert level_table.c.name.index is True
+    assert level_table.c.name.unique is True
+    assert_col_type(level_table.c.description, Unicode)
+    # Skipping exits... Not sure if we can detect pickletype, not a
+    # big deal regardless.
+
+    # Now check to see if stuff seems to be in there.
 
     # Migrate
+    # Make sure result was "migrated"
+    # Check output to user
     # Make sure version matches expected
     # Check all things in database match expected
     pass
