@@ -18,14 +18,10 @@ import Image
 import os
 
 from mediagoblin import mg_globals as mgg
-
 from mediagoblin.processing import BadMediaFail, \
     create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE
-
-################################
-# Media processing initial steps
-################################
-
+from mediagoblin.tools.exif import exif_fix_image_orientation, \
+    extract_exif, clean_exif, get_gps_data, get_useful
 
 def process_image(entry):
     """
@@ -46,20 +42,29 @@ def process_image(entry):
     basename = os.path.split(filename_bits[0])[1]
     extension = filename_bits[1].lower()
 
+    # EXIF extraction
+    exif_tags = extract_exif(queued_filename)
+    gps_data = get_gps_data(exif_tags)
+
     try:
         thumb = Image.open(queued_filename)
     except IOError:
         raise BadMediaFail()
+
+    thumb = exif_fix_image_orientation(thumb, exif_tags)
 
     thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
 
     # Copy the thumb to the conversion subdir, then remotely.
     thumb_filename = 'thumbnail' + extension
     thumb_filepath = create_pub_filepath(entry, thumb_filename)
+
     tmp_thumb_filename = os.path.join(
         conversions_subdir, thumb_filename)
+
     with file(tmp_thumb_filename, 'w') as thumb_file:
         thumb.save(thumb_file)
+
     mgg.public_store.copy_local_to_storage(
         tmp_thumb_filename, thumb_filepath)
 
@@ -67,23 +72,24 @@ def process_image(entry):
     # file, a `medium.jpg` files is created and later associated with the media
     # entry.
     medium = Image.open(queued_filename)
-    medium_processed = False
+
+    # Fix orientation
+    medium = exif_fix_image_orientation(medium, exif_tags)
 
     if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1]:
         medium.thumbnail(MEDIUM_SIZE, Image.ANTIALIAS)
 
-        medium_filename = 'medium' + extension
-        medium_filepath = create_pub_filepath(entry, medium_filename)
-        tmp_medium_filename = os.path.join(
-            conversions_subdir, medium_filename)
+    medium_filename = 'medium' + extension
+    medium_filepath = create_pub_filepath(entry, medium_filename)
 
-        with file(tmp_medium_filename, 'w') as medium_file:
-            medium.save(medium_file)
+    tmp_medium_filename = os.path.join(
+        conversions_subdir, medium_filename)
 
-        mgg.public_store.copy_local_to_storage(
-            tmp_medium_filename, medium_filepath)
+    with file(tmp_medium_filename, 'w') as medium_file:
+        medium.save(medium_file)
 
-        medium_processed = True
+    mgg.public_store.copy_local_to_storage(
+        tmp_medium_filename, medium_filepath)
 
     # we have to re-read because unlike PIL, not everything reads
     # things in string representation :)
@@ -97,13 +103,37 @@ def process_image(entry):
             as original_file:
             original_file.write(queued_file.read())
 
+    # Remove queued media file from storage and database
     mgg.queue_store.delete_file(queued_filepath)
     entry.queued_media_file = []
+
+    # Insert media file information into database
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict['thumb'] = thumb_filepath
     media_files_dict['original'] = original_filepath
-    if medium_processed:
-        media_files_dict['medium'] = medium_filepath
+    media_files_dict['medium'] = medium_filepath
+
+    # Insert exif data into database
+    media_data = entry.setdefault('media_data', {})
+    media_data['exif'] = {
+        'clean': clean_exif(exif_tags)}
+    media_data['exif']['useful'] = get_useful(
+        media_data['exif']['clean'])
+    media_data['gps'] = gps_data
 
     # clean up workbench
     workbench.destroy_self()
+
+if __name__ == '__main__':
+    import sys
+    import pprint
+
+    pp = pprint.PrettyPrinter()
+
+    result = extract_exif(sys.argv[1])
+    gps = get_gps_data(result)
+    clean = clean_exif(result)
+    useful = get_useful(clean)
+
+    print pp.pprint(
+        clean)

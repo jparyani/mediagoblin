@@ -1,0 +1,42 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% block geolocation_map %}
+  {% if media.media_data.has_key('gps')
+        and app_config['geolocation_map_visible']
+        and media.media_data.gps %}
+    <h4>Map</h4>
+    <div>
+      {% set gps = media.media_data.gps %}
+        <div id="tile-map" style="width: 100%; height: 196px;">
+	  <input type="hidden" id="gps-longitude"
+		 value="{{ gps.longitude }}" />
+	  <input type="hidden" id="gps-latitude"
+		 value="{{ gps.latitude }}" />
+	</div>
+        <p>
+	  <small>
+	    View on 
+	    <a href="http://openstreetmap.org/?mlat={{ gps.latitude }}&mlon={{ gps.longitude }}">
+	      OpenStreetMap
+	    </a>
+	  </small>
+	</p>
+    </div>
+  {% endif %}
+{% endblock %}
