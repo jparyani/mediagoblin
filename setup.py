@@ -57,7 +57,6 @@ setup(
         'sphinx',
         'PIL',
         'Babel',
-        'translitcodec',
         'argparse',
         'webtest',
         'ConfigObj',
