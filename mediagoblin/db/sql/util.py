@@ -50,10 +50,10 @@ class MigrationManager(object):
         self.printer = printer
 
         # For convenience
-        from mediagoblin.db.sql.models import MigrationRecord
+        from mediagoblin.db.sql.models import MigrationData
 
-        self.migration_model = MigrationRecord
-        self.migration_table = MigrationRecord.__table__
+        self.migration_model = MigrationData
+        self.migration_table = MigrationData.__table__
 
     @property
     def sorted_migrations(self):
