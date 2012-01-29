@@ -640,7 +640,7 @@ def test_set1_to_set3():
         '__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
         printer)
 
-    assert migration_manager.latest_migration == 3
+    assert migration_manager.latest_migration == 7
     assert migration_manager.database_current_migration == 0
 
     # Migrate
@@ -660,8 +660,8 @@ def test_set1_to_set3():
     migration_manager = MigrationManager(
         '__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
         printer)
-    assert migration_manager.latest_migration == 3
-    assert migration_manager.database_current_migration == 3
+    assert migration_manager.latest_migration == 7
+    assert migration_manager.database_current_migration == 7
 
     # Check all things in database match expected
 
