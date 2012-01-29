@@ -33,18 +33,18 @@ class MigrationManager(object):
     to the latest migrations, etc.
     """
 
-    def __init__(self, name, models, migration_registry, database,
+    def __init__(self, name, models, migration_registry, session,
                  printer=_simple_printer):
         """
         Args:
          - name: identifier of this section of the database
-         - database: database we're going to migrate
+         - session: session we're going to migrate
          - migration_registry: where we should find all migrations to
            run
         """
         self.name = name
         self.models = models
-        self.database = database
+        self.session = session
         self.migration_registry = migration_registry
         self._sorted_migrations = None
         self.printer = printer
@@ -73,7 +73,7 @@ class MigrationManager(object):
         """
         Get the migration row associated with this object, if any.
         """
-        return self.database.query(
+        return self.session.query(
             self.migration_model).filter_by(name=self.name).first()
 
     @property
@@ -94,7 +94,7 @@ class MigrationManager(object):
         Return the current migration in the database.
         """
         # If the table doesn't even exist, return None.
-        if not self.migration_table.exists(self.database.bind):
+        if not self.migration_table.exists(self.session.bind):
             return None
 
         # Also return None if self.migration_data is None.
@@ -108,7 +108,7 @@ class MigrationManager(object):
         Set the migration in the database to migration_number
         """
         self.migration_data = migration_number
-        self.database.commit()
+        self.session.commit()
 
     def migrations_to_run(self):
         """
@@ -134,10 +134,10 @@ class MigrationManager(object):
         # sanity check before we proceed, none of these should be created
         for model in self.models:
             # Maybe in the future just print out a "Yikes!" or something?
-            assert not model.__table__.exists(self.database.bind)
+            assert not model.__table__.exists(self.session.bind)
 
         self.migration_model.metadata.create_all(
-            self.database.bind,
+            self.session.bind,
             tables=[model.__table__ for model in self.models])
 
     def create_new_migration_record(self):
@@ -147,8 +147,8 @@ class MigrationManager(object):
         migration_record = self.migration_model(
             name=self.name,
             version=self.latest_migration())
-        self.database.add(migration_record)
-        self.database.commit()
+        self.session.add(migration_record)
+        self.session.commit()
 
     def dry_run(self):
         """
@@ -185,7 +185,7 @@ class MigrationManager(object):
         Returns information about whether or not we initialized
         ('inited'), migrated ('migrated'), or did nothing (None)
         """
-        assure_migrations_table_setup(self.database)
+        assure_migrations_table_setup(self.session)
 
         # Find out what migration number, if any, this database data is at,
         # and what the latest is.
@@ -217,7 +217,7 @@ class MigrationManager(object):
                 self.printer(
                     u'   + Running migration %s, "%s"... ' % (
                         migration_number, migration_func.func_name))
-                migration_func(self.database)
+                migration_func(self.session)
                 self.printer('done.')
 
             return u'migrated'
