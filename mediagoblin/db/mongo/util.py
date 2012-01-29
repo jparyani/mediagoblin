@@ -290,3 +290,14 @@ class MigrationManager(object):
             self.set_current_migration(migration_number)
             if post_callback:
                 post_callback(migration_number, migration_func)
+
+
+##########################
+# Random utility functions
+##########################
+
+
+def atomic_update(table, query_dict, update_values):
+    table.collection.update(
+        query_dict,
+        {"$set": update_values})

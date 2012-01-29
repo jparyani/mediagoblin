@@ -22,4 +22,5 @@ except ImportError:
 if use_sql:
     from mediagoblin.db.sql.fake import ObjectId, InvalidId, DESCENDING
 else:
-    from mediagoblin.db.mongo.util import ObjectId, InvalidId, DESCENDING
+    from mediagoblin.db.mongo.util import \
+        ObjectId, InvalidId, DESCENDING, atomic_update

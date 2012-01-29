@@ -18,7 +18,7 @@ import logging
 
 from celery.task import Task
 
-from mediagoblin.db.util import ObjectId
+from mediagoblin.db.util import ObjectId, atomic_update
 from mediagoblin import mg_globals as mgg
 
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
@@ -108,22 +108,22 @@ def mark_entry_failed(entry_id, exc):
     if isinstance(exc, BaseProcessingFail):
         # Looks like yes, so record information about that failure and any
         # metadata the user might have supplied.
-        mgg.database['media_entries'].update(
+        atomic_update(mgg.database.MediaEntry,
             {'_id': entry_id},
-            {'$set': {u'state': u'failed',
-                      u'fail_error': exc.exception_path,
-                      u'fail_metadata': exc.metadata}})
+            {u'state': u'failed',
+             u'fail_error': exc.exception_path,
+             u'fail_metadata': exc.metadata})
     else:
         _log.warn("No idea what happened here, but it failed: %r", exc)
         # Looks like no, so just mark it as failed and don't record a
         # failure_error (we'll assume it wasn't handled) and don't record
         # metadata (in fact overwrite it if somehow it had previous info
         # here)
-        mgg.database['media_entries'].update(
+        atomic_update(mgg.database.MediaEntry,
             {'_id': entry_id},
-            {'$set': {u'state': u'failed',
-                      u'fail_error': None,
-                      u'fail_metadata': {}}})
+            {u'state': u'failed',
+             u'fail_error': None,
+             u'fail_metadata': {}})
 
 
 class BaseProcessingFail(Exception):
