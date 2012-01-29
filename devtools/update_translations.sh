@@ -49,3 +49,5 @@ echo "==> Committing to git"
 git add mediagoblin/i18n/
 
 git commit -m "Committing extracted and compiled translations" || true
+
+echo "... done.  Now consider pushing up those commits!"
