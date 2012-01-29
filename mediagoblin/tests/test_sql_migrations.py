@@ -57,7 +57,7 @@ class Level1(Base1):
 
 SET1_MODELS = [Creature1, Level1]
 
-SET1_MIGRATIONS = []
+SET1_MIGRATIONS = {}
 
 #######################################################
 # Migration set 2: A few migrations and new model
