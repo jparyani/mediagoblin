@@ -88,6 +88,7 @@ class MigrationManager(object):
             # If no migrations have been set, we start at 0.
             return 0
 
+    @property
     def database_current_migration(self):
         """
         Return the current migration in the database.
@@ -110,7 +111,7 @@ class MigrationManager(object):
         """
         assert self.database_current_migration is not None
 
-        db_current_migration = self.database_current_migration()
+        db_current_migration = self.database_current_migration
         
         return [
             (migration_number, migration_func)
@@ -145,7 +146,7 @@ class MigrationManager(object):
         """
         Print out a dry run of what we would have upgraded.
         """
-        if self.database_current_migration() is None:
+        if self.database_current_migration is None:
             self.printer(
                     u'~> Woulda initialized: %s\n' % self.name_for_printing())
             return u'inited'
@@ -180,7 +181,7 @@ class MigrationManager(object):
 
         # Find out what migration number, if any, this database data is at,
         # and what the latest is.
-        migration_number = self.database_current_migration()
+        migration_number = self.database_current_migration
 
         # Is this our first time?  Is there even a table entry for
         # this identifier?
