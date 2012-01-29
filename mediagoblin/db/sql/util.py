@@ -213,7 +213,7 @@ class MigrationManager(object):
         if migrations_to_run:
             self.printer(
                 u'~> Updating %s:\n' % self.name_for_printing())
-            for migration_number, migration_func in migrations_to_run():
+            for migration_number, migration_func in migrations_to_run:
                 self.printer(
                     u'   + Running migration %s, "%s"... ' % (
                         migration_number, migration_func.func_name))
