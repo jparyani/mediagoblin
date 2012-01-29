@@ -134,7 +134,7 @@ class MigrationManager(object):
         # sanity check before we proceed, none of these should be created
         for model in self.models:
             # Maybe in the future just print out a "Yikes!" or something?
-            assert not model.__table__.exists(self.database)
+            assert not model.__table__.exists(self.database.bind)
 
         self.migration_model.metadata.create_all(
             self.database.bind,
