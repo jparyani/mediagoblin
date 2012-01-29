@@ -201,6 +201,7 @@ class Creature3(Base3):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode, unique=True, nullable=False, index=True)
     num_limbs= Column(Integer, nullable=False)
+    magical_powers = relationship("CreaturePower3")
 
 class CreaturePower3(Base3):
     __tablename__ = "creature_power"
@@ -211,7 +212,6 @@ class CreaturePower3(Base3):
     name = Column(Unicode)
     description = Column(Unicode)
     hitpower = Column(Float, nullable=False)
-    magical_powers = relationship("CreaturePower3")
 
 class Level3(Base3):
     __tablename__ = "level"
