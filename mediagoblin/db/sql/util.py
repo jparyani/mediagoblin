@@ -76,6 +76,7 @@ class MigrationManager(object):
         return self.database.query(
             self.migration_model).filter_by(name=self.name).first()
 
+    @property
     def latest_migration(self):
         """
         Return a migration number for the latest migration, or 0 if
