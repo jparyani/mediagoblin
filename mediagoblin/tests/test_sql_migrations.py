@@ -660,7 +660,7 @@ def test_set1_to_set3():
         'creature', metadata,
         autoload=True, autoload_with=db_conn.engine)
     assert set(creature_table.c.keys()) == set(
-        ['id', 'name', 'num_legs'])
+        ['id', 'name', 'num_limbs'])
     assert_col_type(creature_table.c.id, Integer)
     assert_col_type(creature_table.c.name, Unicode)
     assert creature_table.c.name.nullable is False
@@ -680,7 +680,7 @@ def test_set1_to_set3():
     assert creature_power_table.c.creature.nullable is False
     assert_col_type(creature_power_table.c.name, Unicode)
     assert_col_type(creature_power_table.c.description, Unicode)
-    assert_col_type(creature_power_table.c.hitpower, Integer)
+    assert_col_type(creature_power_table.c.hitpower, Float)
     assert creature_power_table.c.hitpower.nullable is False
 
     # Check the structure of the level table
@@ -704,10 +704,26 @@ def test_set1_to_set3():
     assert_col_type(level_exit_table.c.name, Unicode)
     assert_col_type(level_exit_table.c.from_level, Unicode)
     assert level_exit_table.c.from_level.nullable is False
+    assert level_exit_table.c.from_level.indexed is True
     assert_col_type(level_exit_table.c.to_level, Unicode)
     assert level_exit_table.c.to_level.nullable is False
+    assert level_exit_table.c.to_level.indexed is True
 
     # Now check to see if stuff seems to be in there.
+    creature = session.query(Creature1).filter_by(
+        name=u'centipede').one()
+    assert creature.num_legs == 100.0
+    assert creature.creature_powers == []
+
+    creature = session.query(Creature1).filter_by(
+        name=u'wolf').one()
+    assert creature.num_legs == 4.0
+    assert creature.creature_powers == []
+
+    creature = session.query(Creature1).filter_by(
+        name=u'wizardsnake').one()
+    assert creature.num_legs == 0.0
+    assert creature.creature_powers == []
 
     pass
 
@@ -741,4 +757,56 @@ def test_set1_to_set2_to_set3():
     # Migrate again
     # Make sure version matches expected again
     # Check all things in database match expected again
+
+    ##### Set2
+    # creature_table = Table(
+    #     'creature', metadata,
+    #     autoload=True, autoload_with=db_conn.engine)
+    # assert set(creature_table.c.keys()) == set(
+    #     ['id', 'name', 'num_legs'])
+    # assert_col_type(creature_table.c.id, Integer)
+    # assert_col_type(creature_table.c.name, Unicode)
+    # assert creature_table.c.name.nullable is False
+    # assert creature_table.c.name.index is True
+    # assert creature_table.c.name.unique is True
+    # assert_col_type(creature_table.c.num_legs, Integer)
+    # assert creature_table.c.num_legs.nullable is False
+
+    # # Check the CreaturePower table
+    # creature_power_table = Table(
+    #     'creature_power', metadata,
+    #     autoload=True, autoload_with=db_conn.engine)
+    # assert set(creature_power_table.c.keys()) == set(
+    #     ['id', 'creature', 'name', 'description', 'hitpower'])
+    # assert_col_type(creature_power_table.c.id, Integer)
+    # assert_col_type(creature_power_table.c.creature, Integer)
+    # assert creature_power_table.c.creature.nullable is False
+    # assert_col_type(creature_power_table.c.name, Unicode)
+    # assert_col_type(creature_power_table.c.description, Unicode)
+    # assert_col_type(creature_power_table.c.hitpower, Integer)
+    # assert creature_power_table.c.hitpower.nullable is False
+
+    # # Check the structure of the level table
+    # level_table = Table(
+    #     'level', metadata,
+    #     autoload=True, autoload_with=db_conn.engine)
+    # assert set(level_table.c.keys()) == set(
+    #     ['id', 'name', 'description'])
+    # assert_col_type(level_table.c.id, Unicode)
+    # assert level_table.c.id.primary_key is True
+    # assert_col_type(level_table.c.name, Unicode)
+    # assert_col_type(level_table.c.description, Unicode)
+
+    # # Check the structure of the level_exits table
+    # level_exit_table = Table(
+    #     'level_exit', metadata,
+    #     autoload=True, autoload_with=db_conn.engine)
+    # assert set(level_exit_table.c.keys()) == set(
+    #     ['id', 'name', 'from_level', 'to_level'])
+    # assert_col_type(level_exit_table.c.id, Integer)
+    # assert_col_type(level_exit_table.c.name, Unicode)
+    # assert_col_type(level_exit_table.c.from_level, Unicode)
+    # assert level_exit_table.c.from_level.nullable is False
+    # assert_col_type(level_exit_table.c.to_level, Unicode)
+
     pass
