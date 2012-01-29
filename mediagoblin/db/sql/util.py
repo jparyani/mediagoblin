@@ -146,7 +146,7 @@ class MigrationManager(object):
         """
         migration_record = self.migration_model(
             name=self.name,
-            version=self.latest_migration())
+            version=self.latest_migration)
         self.session.add(migration_record)
         self.session.commit()
 
