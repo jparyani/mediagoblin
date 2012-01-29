@@ -50,7 +50,7 @@ class Level1(Base1):
     __tablename__ = "level"
 
     id = Column(Unicode, primary_key=True)
-    name = Column(Unicode, unique=True, nullable=False, index=True)
+    name = Column(Unicode)x
     description = Column(Unicode)
     exits = Column(PickleType)
 
@@ -244,7 +244,7 @@ def creature_num_legs_to_num_limbs(db_conn):
     creature_table = Table(
         'creature', metadata,
         autoload=True, autoload_with=db_conn.engine)
-    creature_table.c.num_legs.alter(name="num_limbs")
+    creature_table.c.num_legs.alter(name=u"num_limbs")
 
 
 @RegisterMigration(5, FULL_MIGRATIONS)
@@ -294,32 +294,32 @@ def _insert_migration1_objects(session):
     """
     # Insert creatures
     session.add_all(
-        [Creature1(name='centipede',
+        [Creature1(name=u'centipede',
                    num_legs=100,
                    is_demon=False),
-         Creature1(name='wolf',
+         Creature1(name=u'wolf',
                    num_legs=4,
                    is_demon=False),
          # don't ask me what a wizardsnake is.
-         Creature1(name='wizardsnake',
+         Creature1(name=u'wizardsnake',
                    num_legs=0,
                    is_demon=True)])
 
     # Insert levels
     session.add_all(
-        [Level1(id='necroplex',
-                name='The Necroplex',
-                description='A complex full of pure deathzone.',
+        [Level1(id=u'necroplex',
+                name=u'The Necroplex',
+                description=u'A complex full of pure deathzone.',
                 exits={
                     'deathwell': 'evilstorm',
                     'portal': 'central_park'}),
-         Level1(id='evilstorm',
-                name='Evil Storm',
-                description='A storm full of pure evil.',
+         Level1(id=u'evilstorm',
+                name=u'Evil Storm',
+                description=u'A storm full of pure evil.',
                 exits={}), # you can't escape the evilstorm
-         Level1(id='central_park'
-                name='Central Park, NY, NY',
-                description="New York's friendly Central Park.",
+         Level1(id=u'central_park'
+                name=u'Central Park, NY, NY',
+                description=u"New York's friendly Central Park.",
                 exits={
                     'portal': 'necroplex'})])
 
@@ -333,71 +333,71 @@ def _insert_migration2_objects(session):
     # Insert creatures
     session.add_all(
         [Creature2(
-                name='centipede',
+                name=u'centipede',
                 num_legs=100),
          Creature2(
-                name='wolf',
+                name=u'wolf',
                 num_legs=4,
                 magical_powers = [
                     CreaturePower2(
-                        name="ice breath",
-                        description="A blast of icy breath!",
+                        name=u"ice breath",
+                        description=u"A blast of icy breath!",
                         hitpower=20),
                     CreaturePower2(
-                        name="death stare",
-                        description="A frightening stare, for sure!",
+                        name=u"death stare",
+                        description=u"A frightening stare, for sure!",
                         hitpower=45)]),
          Creature2(
-                name='wizardsnake',
+                name=u'wizardsnake',
                 num_legs=0,
                 magical_powers=[
                     CreaturePower2(
-                        name='death_rattle',
-                        description='A rattle... of DEATH!',
+                        name=u'death_rattle',
+                        description=u'A rattle... of DEATH!',
                         hitpower=1000),
                     CreaturePower2(
-                        name='sneaky_stare',
-                        description="The sneakiest stare you've ever seen!"
+                        name=u'sneaky_stare',
+                        description=u"The sneakiest stare you've ever seen!"
                         hitpower=300),
                     CreaturePower2(
-                        name='slithery_smoke',
-                        description="A blast of slithery, slithery smoke.",
+                        name=u'slithery_smoke',
+                        description=u"A blast of slithery, slithery smoke.",
                         hitpower=10),
                     CreaturePower2(
-                        name='treacherous_tremors',
-                        description="The ground shakes beneath footed animals!",
+                        name=u'treacherous_tremors',
+                        description=u"The ground shakes beneath footed animals!",
                         hitpower=0)])])
 
     # Insert levels
     session.add_all(
-        [Level2(id='necroplex',
-                name='The Necroplex',
-                description='A complex full of pure deathzone.'),
-         Level2(id='evilstorm',
-                name='Evil Storm',
-                description='A storm full of pure evil.',
+        [Level2(id=u'necroplex',
+                name=u'The Necroplex',
+                description=u'A complex full of pure deathzone.'),
+         Level2(id=u'evilstorm',
+                name=u'Evil Storm',
+                description=u'A storm full of pure evil.',
                 exits=[]), # you can't escape the evilstorm
-         Level2(id='central_park'
-                name='Central Park, NY, NY',
-                description="New York's friendly Central Park.")])
+         Level2(id=u'central_park'
+                name=u'Central Park, NY, NY',
+                description=u"New York's friendly Central Park.")])
 
     # necroplex exits
     session.add_all(
-        [LevelExit2(name='deathwell',
-                    from_level='necroplex',
-                    to_level='evilstorm'),
-         LevelExit2(name='portal',
-                    from_level='necroplex',
-                    to_level='central_park')])
+        [LevelExit2(name=u'deathwell',
+                    from_level=u'necroplex',
+                    to_level=u'evilstorm'),
+         LevelExit2(name=u'portal',
+                    from_level=u'necroplex',
+                    to_level=u'central_park')])
 
     # there are no evilstorm exits because there is no exit from the
     # evilstorm
       
     # central park exits
     session.add_all(
-        [LevelExit2(name='portal',
-                    from_level='central_park',
-                    to_level='necroplex')])
+        [LevelExit2(name=u'portal',
+                    from_level=u'central_park',
+                    to_level=u'necroplex')])
 
     session.commit()
 
@@ -409,80 +409,80 @@ def _insert_migration3_objects(session):
     # Insert creatures
     session.add_all(
         [Creature3(
-                name='centipede',
+                name=u'centipede',
                 num_limbs=100),
          Creature3(
-                name='wolf',
+                name=u'wolf',
                 num_limbs=4,
                 magical_powers = [
                     CreaturePower3(
-                        name="ice breath",
-                        description="A blast of icy breath!",
+                        name=u"ice breath",
+                        description=u"A blast of icy breath!",
                         hitpower=20.0),
                     CreaturePower3(
-                        name="death stare",
-                        description="A frightening stare, for sure!",
+                        name=u"death stare",
+                        description=u"A frightening stare, for sure!",
                         hitpower=45.0)]),
          Creature3(
-                name='wizardsnake',
+                name=u'wizardsnake',
                 num_limbs=0,
                 magical_powers=[
                     CreaturePower3(
-                        name='death_rattle',
-                        description='A rattle... of DEATH!',
+                        name=u'death_rattle',
+                        description=u'A rattle... of DEATH!',
                         hitpower=1000.0),
                     CreaturePower3(
-                        name='sneaky_stare',
-                        description="The sneakiest stare you've ever seen!"
+                        name=u'sneaky_stare',
+                        description=u"The sneakiest stare you've ever seen!"
                         hitpower=300.0),
                     CreaturePower3(
-                        name='slithery_smoke',
-                        description="A blast of slithery, slithery smoke.",
+                        name=u'slithery_smoke',
+                        description=u"A blast of slithery, slithery smoke.",
                         hitpower=10.0),
                     CreaturePower3(
-                        name='treacherous_tremors',
-                        description="The ground shakes beneath footed animals!",
+                        name=u'treacherous_tremors',
+                        description=u"The ground shakes beneath footed animals!",
                         hitpower=0.0)])],
         # annnnnd one more to test a floating point hitpower
         Creature3(
-                name='deity',
+                name=u'deity',
                 numb_limbs=30,
                 magical_powers[
                     CreaturePower3(
-                        name='smite',
-                        description='Smitten by holy wrath!',
+                        name=u'smite',
+                        description=u'Smitten by holy wrath!',
                         hitpower=9999.9))))
 
     # Insert levels
     session.add_all(
-        [Level3(id='necroplex',
-                name='The Necroplex',
-                description='A complex full of pure deathzone.'),
-         Level3(id='evilstorm',
-                name='Evil Storm',
-                description='A storm full of pure evil.',
+        [Level3(id=u'necroplex',
+                name=u'The Necroplex',
+                description=u'A complex full of pure deathzone.'),
+         Level3(id=u'evilstorm',
+                name=u'Evil Storm',
+                description=u'A storm full of pure evil.',
                 exits=[]), # you can't escape the evilstorm
-         Level3(id='central_park'
-                name='Central Park, NY, NY',
-                description="New York's friendly Central Park.")])
+         Level3(id=u'central_park'
+                name=u'Central Park, NY, NY',
+                description=u"New York's friendly Central Park.")])
 
     # necroplex exits
     session.add_all(
-        [LevelExit3(name='deathwell',
-                    from_level='necroplex',
-                    to_level='evilstorm'),
-         LevelExit3(name='portal',
-                    from_level='necroplex',
-                    to_level='central_park')])
+        [LevelExit3(name=u'deathwell',
+                    from_level=u'necroplex',
+                    to_level=u'evilstorm'),
+         LevelExit3(name=u'portal',
+                    from_level=u'necroplex',
+                    to_level=u'central_park')])
 
     # there are no evilstorm exits because there is no exit from the
     # evilstorm
       
     # central park exits
     session.add_all(
-        [LevelExit3(name='portal',
-                    from_level='central_park',
-                    to_level='necroplex')])
+        [LevelExit3(name=u'portal',
+                    from_level=u'central_park',
+                    to_level=u'necroplex')])
 
     session.commit()
 
@@ -513,27 +513,38 @@ def assert_col_type(column, class):
 
 def test_set1_to_set3():
     # Create / connect to database
+    # ----------------------------
+
     engine, Session = create_test_engine()
+
     # Create tables by migrating on empty initial set
+    # -----------------------------------------------
+
     printer = CollectingPrinter
     migration_manager = MigrationManager(
         '__main__', SET1_MODELS, SET1_MIGRATIONS, Session(),
         printer)
+
     # Check latest migration and database current migration
     assert migration_manager.latest_migration == 0
     assert migration_manager.database_current_migration == None
 
     result = migration_manager.init_or_migrate()
+
     # Make sure output was "inited"
     assert result == u'inited'
     # Check output
-    assert printer.combined_string == "-> Initializing __main__... done.\n"
+    assert printer.combined_string == (
+        "-> Initializing main mediagoblin tables... done.\n")
     # Check version in database
     assert migration_manager.latest_migration == 0
     assert migration_manager.database_current_migration == 0
 
     # Install the initial set
+    # -----------------------
+
     _insert_migration1_objects(Session())
+
     # Try to "re-migrate" with same manager settings... nothing should happen
     migration_manager = MigrationManager(
         '__main__', SET1_MODELS, SET1_MIGRATIONS, Session(),
@@ -568,22 +579,136 @@ def test_set1_to_set3():
         autoload=True, autoload_with=db_conn.engine)
     assert set(level_table.c.keys()) == set(
         ['id', 'name', 'description', 'exits'])
-    assert_col_type(level_table.c.id, Integer)
+    assert_col_type(level_table.c.id, Unicode)
+    assert level_table.c.id.primary_key is True
     assert_col_type(level_table.c.name, Unicode)
-    assert level_table.c.name.nullable is False
-    assert level_table.c.name.index is True
-    assert level_table.c.name.unique is True
     assert_col_type(level_table.c.description, Unicode)
     # Skipping exits... Not sure if we can detect pickletype, not a
     # big deal regardless.
 
     # Now check to see if stuff seems to be in there.
+    creature = session.query(Creature1).filter_by(
+        name=u'centipede').one()
+    assert creature.num_legs == 100
+    assert creature.is_demon == False
+
+    creature = session.query(Creature1).filter_by(
+        name=u'wolf').one()
+    assert creature.num_legs == 4
+    assert creature.is_demon == False
+
+    creature = session.query(Creature1).filter_by(
+        name=u'wizardsnake').one()
+    assert creature.num_legs == 0
+    assert creature.is_demon == True
+
+    level = session.query(Level1).filter_by(
+        id=u'necroplex')
+    assert level.name == u'The Necroplex'
+    assert level.description == u'A complex of pure deathzone.'
+    assert level.exits == {
+        'deathwell': 'evilstorm',
+        'portal': 'central_park'}
+
+    level = session.query(Level1).filter_by(
+        id=u'evilstorm')
+    assert level.name == u'Evil Storm'
+    assert level.description == u'A storm full of pure evil.'
+    assert level.exits == {}  # You still can't escape the evilstorm!
+
+    level = session.query(Level1).filter_by(
+        id=u'central_park')
+    assert level.name == u'Central Park, NY, NY'
+    assert level.description == u"New York's friendly Central Park."
+    assert level.exits == {
+        'portal': 'necroplex'}
+
+    # Create new migration manager, but make sure the db migration
+    # isn't said to be updated yet
+    printer = CollectingPrinter
+    migration_manager = MigrationManager(
+        '__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
+        printer)
+
+    assert migration_manager.latest_migration == 3
+    assert migration_manager.database_current_migration == 0
 
     # Migrate
+    result = migration_manager.init_or_migrate()
+
     # Make sure result was "migrated"
-    # Check output to user
+    assert result == u'migrated'
+
+    # TODO: Check output to user
+    assert printer.combined_string == """\
+-> Updating main mediagoblin tables...
+   + Running migration 1, "creature_remove_is_demon"... done.
+   + Running migration 2, "creature_powers_new_table"... done.
+   + Running migration 3, "level_exits_new_table"... done."""
+    
     # Make sure version matches expected
+    migration_manager = MigrationManager(
+        '__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
+        printer)
+    assert migration_manager.latest_migration == 3
+    assert migration_manager.database_current_migration == 3
+
     # Check all things in database match expected
+
+    # Check the creature table
+    creature_table = Table(
+        'creature', metadata,
+        autoload=True, autoload_with=db_conn.engine)
+    assert set(creature_table.c.keys()) == set(
+        ['id', 'name', 'num_legs'])
+    assert_col_type(creature_table.c.id, Integer)
+    assert_col_type(creature_table.c.name, Unicode)
+    assert creature_table.c.name.nullable is False
+    assert creature_table.c.name.index is True
+    assert creature_table.c.name.unique is True
+    assert_col_type(creature_table.c.num_legs, Integer)
+    assert creature_table.c.num_legs.nullable is False
+
+    # Check the CreaturePower table
+    creature_power_table = Table(
+        'creature_power', metadata,
+        autoload=True, autoload_with=db_conn.engine)
+    assert set(creature_power_table.c.keys()) == set(
+        ['id', 'creature', 'name', 'description', 'hitpower'])
+    assert_col_type(creature_power_table.c.id, Integer)
+    assert_col_type(creature_power_table.c.creature, Integer)
+    assert creature_power_table.c.creature.nullable is False
+    assert_col_type(creature_power_table.c.name, Unicode)
+    assert_col_type(creature_power_table.c.description, Unicode)
+    assert_col_type(creature_power_table.c.hitpower, Integer)
+    assert creature_power_table.c.hitpower.nullable is False
+
+    # Check the structure of the level table
+    level_table = Table(
+        'level', metadata,
+        autoload=True, autoload_with=db_conn.engine)
+    assert set(level_table.c.keys()) == set(
+        ['id', 'name', 'description'])
+    assert_col_type(level_table.c.id, Unicode)
+    assert level_table.c.id.primary_key is True
+    assert_col_type(level_table.c.name, Unicode)
+    assert_col_type(level_table.c.description, Unicode)
+
+    # Check the structure of the level_exits table
+    level_exit_table = Table(
+        'level_exit', metadata,
+        autoload=True, autoload_with=db_conn.engine)
+    assert set(level_exit_table.c.keys()) == set(
+        ['id', 'name', 'from_level', 'to_level'])
+    assert_col_type(level_exit_table.c.id, Integer)
+    assert_col_type(level_exit_table.c.name, Unicode)
+    assert_col_type(level_exit_table.c.from_level, Unicode)
+    assert level_exit_table.c.from_level.nullable is False
+    assert_col_type(level_exit_table.c.to_level, Unicode)
+    assert level_exit_table.c.to_level.nullable is False
+
+    # Now check to see if stuff seems to be in there.
+
     pass
 
 
