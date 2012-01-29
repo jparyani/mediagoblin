@@ -97,6 +97,10 @@ class MigrationManager(object):
         if not self.migration_table.exists(self.database.bind):
             return None
 
+        # Also return None if self.migration_data is None.
+        if self.migration_data is None:
+            return None
+
         return self.migration_data.version
 
     def set_current_migration(self, migration_number):
