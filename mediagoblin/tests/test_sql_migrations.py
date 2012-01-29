@@ -23,6 +23,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import select, insert
+from sqlalchemy.sql.util import MigrationManager
 from migrate import changeset
 
 from mediagoblin.db.sql.base import GMGTableBase
@@ -50,7 +51,7 @@ class Level1(Base1):
     __tablename__ = "level"
 
     id = Column(Unicode, primary_key=True)
-    name = Column(Unicode)x
+    name = Column(Unicode)
     description = Column(Unicode)
     exits = Column(PickleType)
 
@@ -231,6 +232,7 @@ class LevelExit3(Base3):
 
 
 SET3_MODELS = [Creature3, CreaturePower3, Level3, LevelExit3]
+SET3_MIGRATIONS = FULL_MIGRATIONS
 
 
 @RegisterMigration(4, FULL_MIGRATIONS)
@@ -256,8 +258,8 @@ def level_exit_index_from_and_to_level(db_conn):
     level_exit = Table(
         'level_exit', metadata,
         autoload=True, autoload_with=db_conn.engine)
-    Index('ix_from_level', level_exit.c.from_level).create(engine)
-    Index('ix_to_exit', level_exit.c.to_exit).create(engine)
+    Index('ix_from_level', level_exit.c.from_level).create(db_conn.engine)
+    Index('ix_to_exit', level_exit.c.to_exit).create(db_conn.engine)
 
 
 @RegisterMigration(6, FULL_MIGRATIONS)
@@ -269,7 +271,7 @@ def creature_power_index_creature(db_conn):
     creature_power = Table(
         'creature_power', metadata,
         autoload=True, autoload_with=db_conn.engine)
-    Index('ix_creature', creature_power.c.creature).create(engine)
+    Index('ix_creature', creature_power.c.creature).create(db_conn.engine)
 
 
 @RegisterMigration(7, FULL_MIGRATIONS)
@@ -317,7 +319,7 @@ def _insert_migration1_objects(session):
                 name=u'Evil Storm',
                 description=u'A storm full of pure evil.',
                 exits={}), # you can't escape the evilstorm
-         Level1(id=u'central_park'
+         Level1(id=u'central_park',
                 name=u'Central Park, NY, NY',
                 description=u"New York's friendly Central Park.",
                 exits={
@@ -357,7 +359,7 @@ def _insert_migration2_objects(session):
                         hitpower=1000),
                     CreaturePower2(
                         name=u'sneaky_stare',
-                        description=u"The sneakiest stare you've ever seen!"
+                        description=u"The sneakiest stare you've ever seen!",
                         hitpower=300),
                     CreaturePower2(
                         name=u'slithery_smoke',
@@ -377,7 +379,7 @@ def _insert_migration2_objects(session):
                 name=u'Evil Storm',
                 description=u'A storm full of pure evil.',
                 exits=[]), # you can't escape the evilstorm
-         Level2(id=u'central_park'
+         Level2(id=u'central_park',
                 name=u'Central Park, NY, NY',
                 description=u"New York's friendly Central Park.")])
 
@@ -433,7 +435,7 @@ def _insert_migration3_objects(session):
                         hitpower=1000.0),
                     CreaturePower3(
                         name=u'sneaky_stare',
-                        description=u"The sneakiest stare you've ever seen!"
+                        description=u"The sneakiest stare you've ever seen!",
                         hitpower=300.0),
                     CreaturePower3(
                         name=u'slithery_smoke',
@@ -447,11 +449,11 @@ def _insert_migration3_objects(session):
         Creature3(
                 name=u'deity',
                 numb_limbs=30,
-                magical_powers[
+                magical_powers=[
                     CreaturePower3(
                         name=u'smite',
                         description=u'Smitten by holy wrath!',
-                        hitpower=9999.9))))
+                        hitpower=9999.9)]))
 
     # Insert levels
     session.add_all(
@@ -462,7 +464,7 @@ def _insert_migration3_objects(session):
                 name=u'Evil Storm',
                 description=u'A storm full of pure evil.',
                 exits=[]), # you can't escape the evilstorm
-         Level3(id=u'central_park'
+         Level3(id=u'central_park',
                 name=u'Central Park, NY, NY',
                 description=u"New York's friendly Central Park.")])
 
@@ -502,13 +504,12 @@ def CollectingPrinter(object):
 def create_test_engine():
     from sqlalchemy import create_engine
     engine = create_engine('sqlite:///:memory:', echo=False)
-    sqlalchemy.orm import sessionmaker
     Session = sessionmaker(bind=engine)
     return engine, Session
 
 
-def assert_col_type(column, class):
-    assert isinstance(column.type, class)
+def assert_col_type(column, this_class):
+    assert isinstance(column.type, this_class)
 
 
 def test_set1_to_set3():
@@ -556,12 +557,12 @@ def test_set1_to_set3():
     assert migration_manager.database_current_migration == 0
 
     # Sanity check a few things in the database...
-    metadata = MetaData(bind=db_conn.engine)
+    metadata = MetaData(bind=engine)
 
     # Check the structure of the creature table
     creature_table = Table(
         'creature', metadata,
-        autoload=True, autoload_with=db_conn.engine)
+        autoload=True, autoload_with=engine)
     assert set(creature_table.c.keys()) == set(
         ['id', 'name', 'num_legs', 'is_demon'])
     assert_col_type(creature_table.c.id, Integer)
@@ -576,7 +577,7 @@ def test_set1_to_set3():
     # Check the structure of the level table
     level_table = Table(
         'level', metadata,
-        autoload=True, autoload_with=db_conn.engine)
+        autoload=True, autoload_with=engine)
     assert set(level_table.c.keys()) == set(
         ['id', 'name', 'description', 'exits'])
     assert_col_type(level_table.c.id, Unicode)
@@ -587,6 +588,8 @@ def test_set1_to_set3():
     # big deal regardless.
 
     # Now check to see if stuff seems to be in there.
+    session = Session()
+
     creature = session.query(Creature1).filter_by(
         name=u'centipede').one()
     assert creature.num_legs == 100
@@ -658,7 +661,7 @@ def test_set1_to_set3():
     # Check the creature table
     creature_table = Table(
         'creature', metadata,
-        autoload=True, autoload_with=db_conn.engine)
+        autoload=True, autoload_with=engine)
     assert set(creature_table.c.keys()) == set(
         ['id', 'name', 'num_limbs'])
     assert_col_type(creature_table.c.id, Integer)
@@ -672,7 +675,7 @@ def test_set1_to_set3():
     # Check the CreaturePower table
     creature_power_table = Table(
         'creature_power', metadata,
-        autoload=True, autoload_with=db_conn.engine)
+        autoload=True, autoload_with=engine)
     assert set(creature_power_table.c.keys()) == set(
         ['id', 'creature', 'name', 'description', 'hitpower'])
     assert_col_type(creature_power_table.c.id, Integer)
@@ -686,7 +689,7 @@ def test_set1_to_set3():
     # Check the structure of the level table
     level_table = Table(
         'level', metadata,
-        autoload=True, autoload_with=db_conn.engine)
+        autoload=True, autoload_with=engine)
     assert set(level_table.c.keys()) == set(
         ['id', 'name', 'description'])
     assert_col_type(level_table.c.id, Unicode)
@@ -697,7 +700,7 @@ def test_set1_to_set3():
     # Check the structure of the level_exits table
     level_exit_table = Table(
         'level_exit', metadata,
-        autoload=True, autoload_with=db_conn.engine)
+        autoload=True, autoload_with=engine)
     assert set(level_exit_table.c.keys()) == set(
         ['id', 'name', 'from_level', 'to_level'])
     assert_col_type(level_exit_table.c.id, Integer)
@@ -710,6 +713,7 @@ def test_set1_to_set3():
     assert level_exit_table.c.to_level.indexed is True
 
     # Now check to see if stuff seems to be in there.
+    session = Session()
     creature = session.query(Creature1).filter_by(
         name=u'centipede').one()
     assert creature.num_limbs == 100.0
