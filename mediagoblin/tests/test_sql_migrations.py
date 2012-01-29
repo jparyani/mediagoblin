@@ -489,7 +489,7 @@ def _insert_migration3_objects(session):
     session.commit()
 
 
-def CollectingPrinter(object):
+class CollectingPrinter(object):
     def __init__(self):
         self.collection = []
     
