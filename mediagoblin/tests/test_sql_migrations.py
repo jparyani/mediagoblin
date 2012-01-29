@@ -17,7 +17,7 @@
 import copy
 
 from sqlalchemy import (
-    Table, Column, MetaData, Index
+    Table, Column, MetaData, Index,
     Integer, Float, Unicode, UnicodeText, DateTime, Boolean,
     ForeignKey, UniqueConstraint, PickleType)
 from sqlalchemy.orm import sessionmaker, relationship
@@ -712,17 +712,17 @@ def test_set1_to_set3():
     # Now check to see if stuff seems to be in there.
     creature = session.query(Creature1).filter_by(
         name=u'centipede').one()
-    assert creature.num_legs == 100.0
+    assert creature.num_limbs == 100.0
     assert creature.creature_powers == []
 
     creature = session.query(Creature1).filter_by(
         name=u'wolf').one()
-    assert creature.num_legs == 4.0
+    assert creature.num_limbs == 4.0
     assert creature.creature_powers == []
 
     creature = session.query(Creature1).filter_by(
         name=u'wizardsnake').one()
-    assert creature.num_legs == 0.0
+    assert creature.num_limbs == 0.0
     assert creature.creature_powers == []
 
     pass
