@@ -528,7 +528,7 @@ def test_set1_to_set3():
     # Create tables by migrating on empty initial set
     # -----------------------------------------------
 
-    printer = CollectingPrinter
+    printer = CollectingPrinter()
     migration_manager = MigrationManager(
         '__main__', SET1_MODELS, SET1_MIGRATIONS, Session(),
         printer)
@@ -635,7 +635,7 @@ def test_set1_to_set3():
 
     # Create new migration manager, but make sure the db migration
     # isn't said to be updated yet
-    printer = CollectingPrinter
+    printer = CollectingPrinter()
     migration_manager = MigrationManager(
         '__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
         printer)
