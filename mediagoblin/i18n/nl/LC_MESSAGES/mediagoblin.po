@@ -1,5 +1,5 @@
 # Translations template for PROJECT.
-# Copyright (C) 2011 ORGANIZATION
+# Copyright (C) 2012 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2011-12-04 10:24-0600\n"
-"PO-Revision-Date: 2012-01-04 18:42+0000\n"
-"Last-Translator: schendje <mail@jefvanschendel.nl>\n"
+"POT-Creation-Date: 2012-01-29 13:31-0600\n"
+"PO-Revision-Date: 2012-01-29 19:29+0000\n"
+"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,27 +23,15 @@ msgstr ""
 msgid "Invalid file given for media type."
 msgstr "Verkeerd bestandsformaat voor mediatype opgegeven."
 
-#: mediagoblin/auth/forms.py:25 mediagoblin/auth/forms.py:49
+#: mediagoblin/auth/forms.py:25 mediagoblin/auth/forms.py:41
 msgid "Username"
 msgstr "Gebruikersnaam"
 
-#: mediagoblin/auth/forms.py:30 mediagoblin/auth/forms.py:53
+#: mediagoblin/auth/forms.py:30 mediagoblin/auth/forms.py:45
 msgid "Password"
 msgstr "Wachtwoord"
 
-#: mediagoblin/auth/forms.py:35
-msgid "Passwords must match."
-msgstr "Wachtwoorden moeten overeenkomen."
-
-#: mediagoblin/auth/forms.py:37
-msgid "Confirm password"
-msgstr "Bevestig wachtwoord"
-
-#: mediagoblin/auth/forms.py:39
-msgid "Type it again here to make sure there are no spelling mistakes."
-msgstr "Typ het hier nog een keer om spelfouten te voorkomen."
-
-#: mediagoblin/auth/forms.py:42
+#: mediagoblin/auth/forms.py:34
 msgid "Email address"
 msgstr "E-mail adres"
 
@@ -59,7 +47,7 @@ msgstr "Sorry, er bestaat al een gebruiker met die naam."
 msgid "Sorry, a user with that email address already exists."
 msgstr "Sorry, een gebruiker met dat e-mailadres bestaat al."
 
-#: mediagoblin/auth/views.py:179
+#: mediagoblin/auth/views.py:180
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
@@ -67,25 +55,31 @@ msgstr ""
 "Uw e-mailadres is geverifieerd. U kunt nu inloggen, uw profiel bewerken, en "
 "afbeeldingen toevoegen!"
 
-#: mediagoblin/auth/views.py:185
+#: mediagoblin/auth/views.py:186
 msgid "The verification key or user id is incorrect"
 msgstr "De verificatie sleutel of gebruikers-ID is onjuist"
 
-#: mediagoblin/auth/views.py:203
+#: mediagoblin/auth/views.py:204
 msgid "You must be logged in so we know who to send the email to!"
 msgstr ""
 "Je moet ingelogd zijn, anders weten we niet waar we de e-mail naartoe moeten"
 " sturen!"
 
-#: mediagoblin/auth/views.py:211
+#: mediagoblin/auth/views.py:212
 msgid "You've already verified your email address!"
 msgstr "Je hebt je e-mailadres al geverifieerd!"
 
-#: mediagoblin/auth/views.py:224
+#: mediagoblin/auth/views.py:225
 msgid "Resent your verification email."
 msgstr "Verificatie e-mail opnieuw opgestuurd."
 
-#: mediagoblin/auth/views.py:265
+#: mediagoblin/auth/views.py:260
+msgid ""
+"An email has been sent with instructions on how to change your password."
+msgstr ""
+"Een e-mail met instructies om je wachtwoord te veranderen is verstuurd."
+
+#: mediagoblin/auth/views.py:270
 msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
@@ -93,97 +87,133 @@ msgstr ""
 "Email kon niet verstuurd worden omdat je gebruikersnaam inactief is of omdat"
 " je e-mailadres nog niet geverifieerd is."
 
-#: mediagoblin/edit/forms.py:24 mediagoblin/submit/forms.py:27
+#: mediagoblin/auth/views.py:282
+msgid "Couldn't find someone with that username or email."
+msgstr "Kon niemand vinden met die gebruikersnaam of dat e-mailadres."
+
+#: mediagoblin/auth/views.py:330
+msgid "You can now log in using your new password."
+msgstr "Je kunt nu inloggen met je nieuwe wachtwoord."
+
+#: mediagoblin/edit/forms.py:25 mediagoblin/submit/forms.py:28
 msgid "Title"
 msgstr "Titel"
 
-#: mediagoblin/edit/forms.py:28 mediagoblin/submit/forms.py:32
+#: mediagoblin/edit/forms.py:28 mediagoblin/submit/forms.py:31
+msgid "Description of this work"
+msgstr "Beschrijving van dit werk"
+
+#: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:52
+#: mediagoblin/submit/forms.py:32
+msgid ""
+"You can use\n"
+"                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
+"                      Markdown</a> for formatting."
+msgstr ""
+"Voor opmaak kun je <a "
+"href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> "
+"gebruiken."
+
+#: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:36
 msgid "Tags"
 msgstr "Etiket"
 
-#: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:34
-msgid "Seperate tags by commas."
-msgstr "Scheidt labels met komma's."
+#: mediagoblin/edit/forms.py:35 mediagoblin/submit/forms.py:38
+msgid "Separate tags by commas."
+msgstr "Hou labels gescheiden met komma's."
 
-#: mediagoblin/edit/forms.py:33
+#: mediagoblin/edit/forms.py:38
 msgid "Slug"
 msgstr "Slug"
 
-#: mediagoblin/edit/forms.py:34
+#: mediagoblin/edit/forms.py:39
 msgid "The slug can't be empty"
 msgstr "De slug kan niet leeg zijn"
 
-#: mediagoblin/edit/forms.py:35
+#: mediagoblin/edit/forms.py:40
 msgid ""
-"The title part of this media's URL. You usually don't need to change this."
+"The title part of this media's address. You usually don't need to change "
+"this."
 msgstr ""
-"Het titeldeel van het adres van deze media. Meestal hoef je dit niet aan te "
-"passen."
+"Het titelgedeelte van het adres van deze media. Normaal gesproken hoef je "
+"deze niet te veranderen."
 
-#: mediagoblin/edit/forms.py:42
+#: mediagoblin/edit/forms.py:44 mediagoblin/submit/forms.py:41
+msgid "License"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:50
 msgid "Bio"
 msgstr "Bio"
 
-#: mediagoblin/edit/forms.py:45
+#: mediagoblin/edit/forms.py:56
 msgid "Website"
 msgstr "Website"
 
-#: mediagoblin/edit/forms.py:49
+#: mediagoblin/edit/forms.py:63
 msgid "Old password"
 msgstr "Oud wachtwoord"
 
-#: mediagoblin/edit/forms.py:52
-msgid "New Password"
+#: mediagoblin/edit/forms.py:65
+msgid "Enter your old password to prove you own this account."
+msgstr "Vul je oude wachtwoord in om te bewijzen dat dit jouw account is"
+
+#: mediagoblin/edit/forms.py:68
+msgid "New password"
 msgstr "Nieuw wachtwoord"
 
-#: mediagoblin/edit/views.py:65
+#: mediagoblin/edit/views.py:68
 msgid "An entry with that slug already exists for this user."
 msgstr "Er bestaat al een met die slug voor deze gebruiker."
 
-#: mediagoblin/edit/views.py:86
+#: mediagoblin/edit/views.py:92
 msgid "You are editing another user's media. Proceed with caution."
 msgstr ""
 "U bent de media van een andere gebruiker aan het aanpassen. Ga voorzichtig "
 "te werk."
 
-#: mediagoblin/edit/views.py:156
+#: mediagoblin/edit/views.py:162
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr ""
 "U bent een gebruikersprofiel aan het aanpassen. Ga voorzichtig te werk."
 
-#: mediagoblin/edit/views.py:171
+#: mediagoblin/edit/views.py:180
+msgid "Profile changes saved"
+msgstr "Profielaanpassingen opgeslagen"
+
+#: mediagoblin/edit/views.py:206
 msgid "Wrong password"
 msgstr "Verkeerd wachtwoord"
 
-#: mediagoblin/edit/views.py:192
-msgid "Profile edited!"
-msgstr "Profiel aangepast!"
+#: mediagoblin/edit/views.py:222
+msgid "Account settings saved"
+msgstr "Accountinstellingen opgeslagen"
 
-#: mediagoblin/media_types/__init__.py:65
-msgid "Could not find any file extension in \"{filename}\""
-msgstr "Kon geen bestandsformaat voor \"{filename}\" vinden"
+#: mediagoblin/media_types/__init__.py:77
+msgid "Could not extract any file extension from \"{filename}\""
+msgstr "Kon geen bestandsextensie uit \"{filename}\" halen"
 
-#: mediagoblin/submit/forms.py:25
+#: mediagoblin/media_types/__init__.py:88
+msgid "Sorry, I don't support that file type :("
+msgstr "Sorry, dat bestandstype wordt niet ondersteunt."
+
+#: mediagoblin/submit/forms.py:26
 msgid "File"
 msgstr "Bestand"
 
-#: mediagoblin/submit/forms.py:30
-msgid "Description of this work"
-msgstr "Beschrijving van dit werk"
-
-#: mediagoblin/submit/views.py:49
+#: mediagoblin/submit/views.py:54
 msgid "You must provide a file."
 msgstr "U moet een bestand aangeven."
 
-#: mediagoblin/submit/views.py:127
+#: mediagoblin/submit/views.py:158
 msgid "Woohoo! Submitted!"
 msgstr "Mooizo! Toegevoegd!"
 
-#: mediagoblin/submit/views.py:133
-msgid "Invalid file type."
-msgstr "Ongeldig bestandstype"
+#: mediagoblin/templates/mediagoblin/404.html:22
+msgid "Image of 404 goblin stressing out"
+msgstr "Afbeelding van de 404 goblin onder stress"
 
-#: mediagoblin/templates/mediagoblin/404.html:21
+#: mediagoblin/templates/mediagoblin/404.html:23
 msgid "Oops!"
 msgstr "Oeps!"
 
@@ -199,33 +229,30 @@ msgstr ""
 "Als je zeker weet dat het adres klopt is de pagina misschien verplaatst of "
 "verwijderd."
 
-#: mediagoblin/templates/mediagoblin/404.html:32
-msgid "Image of 404 goblin stressing out"
-msgstr "Afbeelding van de 404 goblin onder stress"
-
-#: mediagoblin/templates/mediagoblin/base.html:49
+#: mediagoblin/templates/mediagoblin/base.html:46
 msgid "MediaGoblin logo"
 msgstr "MediaGoblin logo"
 
-#: mediagoblin/templates/mediagoblin/base.html:54
-msgid "Submit media"
+#: mediagoblin/templates/mediagoblin/base.html:51
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:157
+msgid "Add media"
 msgstr "Voeg media toe"
 
-#: mediagoblin/templates/mediagoblin/base.html:65
+#: mediagoblin/templates/mediagoblin/base.html:62
 msgid "Verify your email!"
 msgstr "Verifieer je e-mailadres!"
 
-#: mediagoblin/templates/mediagoblin/base.html:72
+#: mediagoblin/templates/mediagoblin/base.html:69
 msgid "log out"
 msgstr "uitloggen"
 
-#: mediagoblin/templates/mediagoblin/base.html:75
+#: mediagoblin/templates/mediagoblin/base.html:72
 #: mediagoblin/templates/mediagoblin/auth/login.html:27
 #: mediagoblin/templates/mediagoblin/auth/login.html:45
 msgid "Log in"
 msgstr "Inloggen"
 
-#: mediagoblin/templates/mediagoblin/base.html:91
+#: mediagoblin/templates/mediagoblin/base.html:84
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project"
@@ -238,7 +265,7 @@ msgstr ""
 msgid "Explore"
 msgstr "Verkennen"
 
-#: mediagoblin/templates/mediagoblin/root.html:27
+#: mediagoblin/templates/mediagoblin/root.html:26
 msgid "Hi there, welcome to this MediaGoblin site!"
 msgstr "Hoi, welkom op deze MediaGoblin website!"
 
@@ -266,25 +293,24 @@ msgstr "Heb je er nog geen? Het is heel eenvoudig!"
 #, python-format
 msgid ""
 "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
-"          or\n"
-"          <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
+"        or\n"
+"        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr ""
-"<a class=\"button_action_highlight\" href=\"%(register_url)s\">Creëer een account op deze website</a>\n"
+"&lt;a class=\"button_action_highlight\" href=\"%(register_url)s\"&gt;Creëer een account op deze website&lt;/a&gt;\n"
 "          of\n"
-"          <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Gebruik MediaGoblin op je eigen server</a>"
+"          &lt;a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\"&gt;Gebruik MediaGoblin op je eigen server&lt;/a&gt;"
 
-#: mediagoblin/templates/mediagoblin/root.html:44
+#: mediagoblin/templates/mediagoblin/root.html:40
 msgid "Most recent media"
 msgstr "Nieuwste media"
 
-#: mediagoblin/templates/mediagoblin/auth/change_fp.html:29
-msgid "Enter your new password"
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:32
+msgid "Set your new password"
 msgstr "Voer je nieuwe wachtwoord in"
 
-#: mediagoblin/templates/mediagoblin/auth/change_fp.html:33
-#: mediagoblin/templates/mediagoblin/submit/start.html:30
-msgid "Submit"
-msgstr "Voeg toe"
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:35
+msgid "Set password"
+msgstr "Wachtwoord opslaan"
 
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
 msgid "Recover password"
@@ -293,17 +319,6 @@ msgstr "Wachtwoord herstellen"
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:30
 msgid "Send instructions"
 msgstr "Stuur instructies"
-
-#: mediagoblin/templates/mediagoblin/auth/fp_changed_success.html:22
-msgid "Your password has been changed. Try to log in now."
-msgstr "Je wachtwoord is veranderd. Probeer om opnieuw in te loggen."
-
-#: mediagoblin/templates/mediagoblin/auth/fp_email_sent.html:22
-msgid ""
-"Check your inbox. We sent an email with a URL for changing your password."
-msgstr ""
-"Check je inbox. Er is een e-mail verstuurd waarmee je je wachtwoord kunt "
-"veranderen."
 
 #: mediagoblin/templates/mediagoblin/auth/fp_verification_email.txt:19
 #, python-format
@@ -342,11 +357,11 @@ msgstr "Maak er hier een!"
 msgid "Forgot your password?"
 msgstr "Wachtwoord vergeten?"
 
-#: mediagoblin/templates/mediagoblin/auth/register.html:27
+#: mediagoblin/templates/mediagoblin/auth/register.html:32
 msgid "Create an account!"
 msgstr "Maak een account aan!"
 
-#: mediagoblin/templates/mediagoblin/auth/register.html:31
+#: mediagoblin/templates/mediagoblin/auth/register.html:36
 msgid "Create"
 msgstr "Creëer"
 
@@ -374,9 +389,15 @@ msgid "Cancel"
 msgstr "Annuleren"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:40
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
 msgid "Save changes"
 msgstr "Wijzigingen opslaan"
+
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:34
+#, python-format
+msgid "Changing %(username)s's account settings"
+msgstr "%(username)ss accountinstellingen aanpassen"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:29
 #, python-format
@@ -389,13 +410,36 @@ msgstr "Het profiel aanpassen van %(username)s"
 msgid "Media tagged with: %(tag_name)s"
 msgstr "Media met het label: %(tag_name)s"
 
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:19
+#: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:46
 msgid "Original"
 msgstr "Origineel"
 
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:33
+msgid ""
+"Sorry, this video will not work because \n"
+"\t    your web browser does not support HTML5 \n"
+"\t    video."
+msgstr ""
+"Sorry, deze video werkt niet omdat je webbrowser geen HTML5 video "
+"ondersteunt."
+
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:36
+msgid ""
+"You can get a modern web browser that \n"
+"\t    can play this video at <a href=\"http://getfirefox.com\">\n"
+"\t    http://getfirefox.com</a>!"
+msgstr ""
+"Je kunt een moderne webbrowser die deze video af kan spelen krijgen op <a "
+"href=\"http://getfirefox.com\">http://getfirefox.com</a>!"
+
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
-msgid "Submit yer media"
+msgid "Add your media"
 msgstr "Voeg media toe"
+
+#: mediagoblin/templates/mediagoblin/submit/start.html:30
+msgid "Add"
+msgstr "Voeg toe"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
 #, python-format
@@ -407,30 +451,58 @@ msgstr "Media van %(username)s"
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
 msgstr "Media van <a href=\"%(user_url)s\"> %(username)s </a>"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:57
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:72
 #, python-format
-msgid "By <a href=\"%(user_url)s\">%(username)s</a> on %(date)s"
-msgstr "Door <a href=\"%(user_url)s\">%(username)s</a> op %(date)s"
+msgid "Added on %(date)s."
+msgstr "Toegevoegd op %(date)s."
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:67
-msgid "Post a comment"
-msgstr "Plaats een bericht"
-
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:85
-msgid "at"
-msgstr "op"
-
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:102
-msgid "Post comment!"
-msgstr "Plaats bericht!"
-
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:124
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:81
 msgid "Edit"
 msgstr "Pas aan"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:130
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:85
 msgid "Delete"
 msgstr "Verwijderen"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:91
+#, python-format
+msgid "%(comment_count)s comment"
+msgstr "%(comment_count)s bericht"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:93
+#, python-format
+msgid "%(comment_count)s comments"
+msgstr "%(comment_count)s berichten"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:95
+msgid "No comments yet."
+msgstr "Er zijn nog geen berichten."
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:103
+msgid "Add one"
+msgstr "Voeg er een toe"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:112
+msgid ""
+"You can use <a "
+"href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
+" formatting."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:116
+msgid "Add this comment"
+msgstr "Voeg dit bericht toe"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:138
+msgid "at"
+msgstr "op"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:153
+#, python-format
+msgid "<p>❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a></p>"
+msgstr ""
+"<p>❖ Media aan het bekijken van <a "
+"href=\"%(user_url)s\">%(username)s</a></p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -518,20 +590,24 @@ msgid "Here's a spot to tell others about yourself."
 msgstr "Hier is een plekje om anderen over jezelf te vertellen."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:101
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:119
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:118
 msgid "Edit profile"
 msgstr "Profiel aanpassen."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:107
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:106
 msgid "This user hasn't filled in their profile (yet)."
 msgstr "Deze gebruiker heeft zijn of haar profiel (nog) niet ingevuld."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:133
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:125
+msgid "Change account settings"
+msgstr "Accountinstellingen aanpassen"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:138
 #, python-format
 msgid "View all of %(username)s's media"
 msgstr "Bekijk alle media van %(username)s"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:146
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:151
 msgid ""
 "This is where your media will appear, but you don't seem to have added "
 "anything yet."
@@ -539,11 +615,8 @@ msgstr ""
 "Dit is waar je nieuwe media zal verschijnen, maar het lijkt erop dat je nog "
 "niets heb toegevoegd."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:152
-msgid "Add media"
-msgstr "Voeg media toe"
-
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:158
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:163
+#: mediagoblin/templates/mediagoblin/utils/object_gallery.html:72
 msgid "There doesn't seem to be any media here yet..."
 msgstr "Het lijkt erop dat er nog geen media is."
 
@@ -555,29 +628,47 @@ msgstr "feed icoon"
 msgid "Atom feed"
 msgstr "Atom feed"
 
-#: mediagoblin/templates/mediagoblin/utils/pagination.html:40
-msgid "Newer"
-msgstr "Nieuwer"
+#: mediagoblin/templates/mediagoblin/utils/license.html:21
+msgid "License:"
+msgstr ""
 
-#: mediagoblin/templates/mediagoblin/utils/pagination.html:46
-msgid "Older"
-msgstr "Ouder"
+#: mediagoblin/templates/mediagoblin/utils/license.html:25
+msgid "All rights reserved"
+msgstr ""
 
-#: mediagoblin/templates/mediagoblin/utils/pagination.html:50
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:39
+msgid "← Newer"
+msgstr "← Nieuwer"
+
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:45
+msgid "Older →"
+msgstr "Ouder →"
+
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:48
 msgid "Go to page:"
 msgstr "Ga naar pagina:"
 
+#: mediagoblin/templates/mediagoblin/utils/prev_next.html:27
+#: mediagoblin/templates/mediagoblin/utils/prev_next.html:32
+msgid "newer"
+msgstr "nieuwer"
+
+#: mediagoblin/templates/mediagoblin/utils/prev_next.html:38
+#: mediagoblin/templates/mediagoblin/utils/prev_next.html:43
+msgid "older"
+msgstr "ouder"
+
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
-msgid "Tagged with"
-msgstr "Gelabeld met"
+msgid "View more media tagged with"
+msgstr "Bekijk meer media gelabeld met"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:25
-msgid "and"
-msgstr "en"
+msgid "or"
+msgstr "of"
 
-#: mediagoblin/user_pages/forms.py:24
-msgid "Comment"
-msgstr "Commentaar"
+#: mediagoblin/tools/exif.py:68
+msgid "Could not read the image file."
+msgstr ""
 
 #: mediagoblin/user_pages/forms.py:30
 msgid "I am sure I want to delete this"
