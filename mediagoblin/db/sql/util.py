@@ -261,4 +261,4 @@ def assure_migrations_table_setup(db):
 
     if not MigrationData.__table__.exists(db.bind):
         MigrationData.metadata.create_all(
-            db, tables=[MigrationData.__table__])
+            db.bind, tables=[MigrationData.__table__])
