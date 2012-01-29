@@ -615,7 +615,7 @@ def test_set1_to_set3():
     level = session.query(Level1).filter_by(
         id=u'necroplex').one()
     assert level.name == u'The Necroplex'
-    assert level.description == u'A complex of pure deathzone.'
+    assert level.description == u'A complex full of pure deathzone.'
     assert level.exits == {
         'deathwell': 'evilstorm',
         'portal': 'central_park'}
@@ -739,7 +739,7 @@ def test_set1_to_set3():
     level = session.query(Level3).filter_by(
         id=u'necroplex').one()
     assert level.name == u'The Necroplex'
-    assert level.description == u'A complex of pure deathzone.'
+    assert level.description == u'A complex full of pure deathzone.'
     level_exits = _get_level3_exits(session, level)
     assert level_exits == {
         u'deathwell': u'evilstorm',
