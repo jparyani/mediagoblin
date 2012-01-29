@@ -109,10 +109,10 @@ def creature_remove_is_demon(db_conn):
     Remove the is_demon field from the creature model.  We don't need
     it!
     """
-    metadata = MetaData(bind=db_conn.engine)
+    metadata = MetaData(bind=db_conn.bind)
     creature_table = Table(
         'creature', metadata,
-        autoload=True, autoload_with=db_conn.engine)
+        autoload=True, autoload_with=db_conn.bind)
     creature_table.drop_column('is_demon')
     
 
@@ -123,7 +123,7 @@ def creature_powers_new_table(db_conn):
     yet though as there wasn't anything that previously held this
     information
     """
-    metadata = MetaData(bind=db_conn.engine)
+    metadata = MetaData(bind=db_conn.bind)
     creature_powers = Table(
         'creature_power', metadata,
         Column('id', Integer, primary_key=True),
@@ -132,7 +132,7 @@ def creature_powers_new_table(db_conn):
         Column('name', Unicode),
         Column('description', Unicode),
         Column('hitpower', Integer, nullable=False))
-    metadata.create_all(db_conn.engine)
+    metadata.create_all(db_conn.bind)
 
 
 @RegisterMigration(3, FULL_MIGRATIONS)
@@ -143,7 +143,7 @@ def level_exits_new_table(db_conn):
     """
     # First, create the table
     # -----------------------
-    metadata = MetaData(bind=db_conn.engine)
+    metadata = MetaData(bind=db_conn.bind)
     level_exits = Table(
         'level_exit', metadata,
         Column('id', Integer, primary_key=True),
@@ -152,7 +152,7 @@ def level_exits_new_table(db_conn):
                Integer, ForeignKey('level.id'), nullable=False),
         Column('to_level',
                Integer, ForeignKey('level.id'), nullable=False))
-    metadata.create_all(db_conn.engine)
+    metadata.create_all(db_conn.bind)
 
     # And now, convert all the old exit pickles to new level exits
     # ------------------------------------------------------------
@@ -242,10 +242,10 @@ def creature_num_legs_to_num_limbs(db_conn):
     specifically.  Humans would be 4 here, for instance.  So we
     renamed the column.
     """
-    metadata = MetaData(bind=db_conn.engine)
+    metadata = MetaData(bind=db_conn.bind)
     creature_table = Table(
         'creature', metadata,
-        autoload=True, autoload_with=db_conn.engine)
+        autoload=True, autoload_with=db_conn.bind)
     creature_table.c.num_legs.alter(name=u"num_limbs")
 
 
@@ -254,12 +254,12 @@ def level_exit_index_from_and_to_level(db_conn):
     """
     Index the from and to levels of the level exit table.
     """
-    metadata = MetaData(bind=db_conn.engine)
+    metadata = MetaData(bind=db_conn.bind)
     level_exit = Table(
         'level_exit', metadata,
-        autoload=True, autoload_with=db_conn.engine)
-    Index('ix_from_level', level_exit.c.from_level).create(db_conn.engine)
-    Index('ix_to_exit', level_exit.c.to_exit).create(db_conn.engine)
+        autoload=True, autoload_with=db_conn.bind)
+    Index('ix_from_level', level_exit.c.from_level).create(db_conn.bind)
+    Index('ix_to_exit', level_exit.c.to_exit).create(db_conn.bind)
 
 
 @RegisterMigration(6, FULL_MIGRATIONS)
@@ -267,11 +267,11 @@ def creature_power_index_creature(db_conn):
     """
     Index our foreign key relationship to the creatures
     """
-    metadata = MetaData(bind=db_conn.engine)
+    metadata = MetaData(bind=db_conn.bind)
     creature_power = Table(
         'creature_power', metadata,
-        autoload=True, autoload_with=db_conn.engine)
-    Index('ix_creature', creature_power.c.creature).create(db_conn.engine)
+        autoload=True, autoload_with=db_conn.bind)
+    Index('ix_creature', creature_power.c.creature).create(db_conn.bind)
 
 
 @RegisterMigration(7, FULL_MIGRATIONS)
@@ -283,10 +283,10 @@ def creature_power_hitpower_to_float(db_conn):
     Turns out we want super precise values of how much hitpower there
     really is.
     """
-    metadata = MetaData(bind=db_conn.engine)
+    metadata = MetaData(bind=db_conn.bind)
     creature_power = Table(
         'creature_power', metadata,
-        autoload=True, autoload_with=db_conn.engine)
+        autoload=True, autoload_with=db_conn.bind)
     creature_power.c.hitpower.alter(type=Float)
 
 
@@ -794,7 +794,7 @@ def test_set1_to_set2_to_set3():
     ##### Set2
     # creature_table = Table(
     #     'creature', metadata,
-    #     autoload=True, autoload_with=db_conn.engine)
+    #     autoload=True, autoload_with=db_conn.bind)
     # assert set(creature_table.c.keys()) == set(
     #     ['id', 'name', 'num_legs'])
     # assert_col_type(creature_table.c.id, Integer)
@@ -808,7 +808,7 @@ def test_set1_to_set2_to_set3():
     # # Check the CreaturePower table
     # creature_power_table = Table(
     #     'creature_power', metadata,
-    #     autoload=True, autoload_with=db_conn.engine)
+    #     autoload=True, autoload_with=db_conn.bind)
     # assert set(creature_power_table.c.keys()) == set(
     #     ['id', 'creature', 'name', 'description', 'hitpower'])
     # assert_col_type(creature_power_table.c.id, Integer)
@@ -822,7 +822,7 @@ def test_set1_to_set2_to_set3():
     # # Check the structure of the level table
     # level_table = Table(
     #     'level', metadata,
-    #     autoload=True, autoload_with=db_conn.engine)
+    #     autoload=True, autoload_with=db_conn.bind)
     # assert set(level_table.c.keys()) == set(
     #     ['id', 'name', 'description'])
     # assert_col_type(level_table.c.id, VARCHAR)
@@ -833,7 +833,7 @@ def test_set1_to_set2_to_set3():
     # # Check the structure of the level_exits table
     # level_exit_table = Table(
     #     'level_exit', metadata,
-    #     autoload=True, autoload_with=db_conn.engine)
+    #     autoload=True, autoload_with=db_conn.bind)
     # assert set(level_exit_table.c.keys()) == set(
     #     ['id', 'name', 'from_level', 'to_level'])
     # assert_col_type(level_exit_table.c.id, Integer)
