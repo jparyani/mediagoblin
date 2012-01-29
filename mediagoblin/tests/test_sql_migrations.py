@@ -23,10 +23,10 @@ from sqlalchemy import (
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import select, insert
-from sqlalchemy.sql.util import MigrationManager
 from migrate import changeset
 
 from mediagoblin.db.sql.base import GMGTableBase
+from mediagoblin.db.sql.util import MigrationManager, RegisterMigration
 
 
 # This one will get filled with local migrations
@@ -512,6 +512,13 @@ def assert_col_type(column, this_class):
     assert isinstance(column.type, this_class)
 
 
+def _get_level3_exits(session, level):
+    return dict(
+        [(level_exit.name, level_exit.to_level)
+         for level_exit in
+         session.query(LevelExit3).filter_by(from_level=level.id)])
+
+
 def test_set1_to_set3():
     # Create / connect to database
     # ----------------------------
@@ -606,7 +613,7 @@ def test_set1_to_set3():
     assert creature.is_demon == True
 
     level = session.query(Level1).filter_by(
-        id=u'necroplex')
+        id=u'necroplex').one()
     assert level.name == u'The Necroplex'
     assert level.description == u'A complex of pure deathzone.'
     assert level.exits == {
@@ -614,13 +621,13 @@ def test_set1_to_set3():
         'portal': 'central_park'}
 
     level = session.query(Level1).filter_by(
-        id=u'evilstorm')
+        id=u'evilstorm').one()
     assert level.name == u'Evil Storm'
     assert level.description == u'A storm full of pure evil.'
     assert level.exits == {}  # You still can't escape the evilstorm!
 
     level = session.query(Level1).filter_by(
-        id=u'central_park')
+        id=u'central_park').one()
     assert level.name == u'Central Park, NY, NY'
     assert level.description == u"New York's friendly Central Park."
     assert level.exits == {
@@ -714,22 +721,44 @@ def test_set1_to_set3():
 
     # Now check to see if stuff seems to be in there.
     session = Session()
-    creature = session.query(Creature1).filter_by(
+    creature = session.query(Creature3).filter_by(
         name=u'centipede').one()
     assert creature.num_limbs == 100.0
     assert creature.creature_powers == []
 
-    creature = session.query(Creature1).filter_by(
+    creature = session.query(Creature3).filter_by(
         name=u'wolf').one()
     assert creature.num_limbs == 4.0
     assert creature.creature_powers == []
 
-    creature = session.query(Creature1).filter_by(
+    creature = session.query(Creature3).filter_by(
         name=u'wizardsnake').one()
     assert creature.num_limbs == 0.0
     assert creature.creature_powers == []
 
-    pass
+    level = session.query(Level3).filter_by(
+        id=u'necroplex').one()
+    assert level.name == u'The Necroplex'
+    assert level.description == u'A complex of pure deathzone.'
+    level_exits = _get_level3_exits(session, level)
+    assert level_exits == {
+        u'deathwell': u'evilstorm',
+        u'portal': u'central_park'}
+
+    level = session.query(Level3).filter_by(
+        id=u'evilstorm').one()
+    assert level.name == u'Evil Storm'
+    assert level.description == u'A storm full of pure evil.'
+    level_exits = _get_level3_exits(session, level)
+    assert level_exits == {}  # You still can't escape the evilstorm!
+
+    level = session.query(Level3).filter_by(
+        id=u'central_park').one()
+    assert level.name == u'Central Park, NY, NY'
+    assert level.description == u"New York's friendly Central Park."
+    level_exits = _get_level3_exits(session, level)
+    assert level_exits == {
+        'portal': 'necroplex'}
 
 
 def test_set2_to_set3():
