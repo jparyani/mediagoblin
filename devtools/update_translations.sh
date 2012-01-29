@@ -27,8 +27,9 @@ git pull
 
 echo "==> pulling present translations"
 ./bin/tx pull -a
-git add mediagoblin/i18n/
-git commit -m "Committing present MediaGoblin translations before pushing extracted messages"
+if git add mediagoblin/i18n/; then
+    git commit -m "Committing present MediaGoblin translations before pushing extracted messages";
+fi    
 
 echo "==> Extracting translations"
 ./bin/pybabel extract -F babel.ini -o mediagoblin/i18n/en/LC_MESSAGES/mediagoblin.po .
@@ -44,5 +45,6 @@ echo "==> Compiling .mo files"
 ./bin/pybabel compile -D mediagoblin -d mediagoblin/i18n/
 
 echo "==> Committing to git"
-git add mediagoblin/i18n/
-git commit -m "Committing extracted and compiled translations"
+if git add mediagoblin/i18n/; then
+    git commit -m "Committing extracted and compiled translations";
+fi
