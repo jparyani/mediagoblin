@@ -93,6 +93,10 @@ class MigrationManager(object):
         """
         Return the current migration in the database.
         """
+        # If the table doesn't even exist, return None.
+        if not self.migration_table.exists(self.database.bind):
+            return None
+
         return self.migration_data.version
 
     def set_current_migration(self, migration_number):
@@ -129,7 +133,7 @@ class MigrationManager(object):
             assert not model.__table__.exists(self.database)
 
         self.migration_model.metadata.create_all(
-            self.database.engine,
+            self.database.bind,
             tables=[model.__table__ for model in self.models])
 
     def create_new_migration_record(self):
@@ -253,8 +257,8 @@ def assure_migrations_table_setup(db):
     """
     Make sure the migrations table is set up in the database.
     """
-    from mediagoblin.db.sql.models import MigrationRecord
+    from mediagoblin.db.sql.models import MigrationData
 
-    if not MigrationRecord.__table__.exists(db.engine):
-        MigrationRecord.metadata.create_all(
-            db, tables=[MigrationRecord.__table__])
+    if not MigrationData.__table__.exists(db.bind):
+        MigrationData.metadata.create_all(
+            db, tables=[MigrationData.__table__])
