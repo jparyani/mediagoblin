@@ -212,13 +212,13 @@ class MigrationManager(object):
         migrations_to_run = self.migrations_to_run()
         if migrations_to_run:
             self.printer(
-                u'~> Updating %s:\n' % self.name_for_printing())
+                u'-> Updating %s:\n' % self.name_for_printing())
             for migration_number, migration_func in migrations_to_run:
                 self.printer(
                     u'   + Running migration %s, "%s"... ' % (
                         migration_number, migration_func.func_name))
                 migration_func(self.session)
-                self.printer('done.')
+                self.printer('done.\n')
 
             return u'migrated'
 
