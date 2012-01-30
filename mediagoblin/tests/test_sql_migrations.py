@@ -109,6 +109,9 @@ def creature_remove_is_demon(db_conn):
     Remove the is_demon field from the creature model.  We don't need
     it!
     """
+    # :( Commented out 'cuz of:
+    # http://code.google.com/p/sqlalchemy-migrate/issues/detail?id=143&thanks=143&ts=1327882242
+
     # metadata = MetaData(bind=db_conn.bind)
     # creature_table = Table(
     #     'creature', metadata,
