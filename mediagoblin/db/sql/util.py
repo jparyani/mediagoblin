@@ -103,11 +103,12 @@ class MigrationManager(object):
 
         return self.migration_data.version
 
-    def set_current_migration(self, migration_number):
+    def set_current_migration(self, migration_number=None):
         """
         Set the migration in the database to migration_number
+        (or, the latest available)
         """
-        self.migration_data = migration_number
+        self.migration_data.version = migration_number or self.latest_migration
         self.session.commit()
 
     def migrations_to_run(self):
@@ -206,6 +207,7 @@ class MigrationManager(object):
             self.create_new_migration_record()  
             
             self.printer(u"done.\n")
+            self.set_current_migration()
             return u'inited'
 
         # Run migrations, if appropriate.
@@ -220,6 +222,7 @@ class MigrationManager(object):
                 migration_func(self.session)
                 self.printer('done.\n')
 
+            self.set_current_migration()
             return u'migrated'
 
         # Otherwise return None.  Well it would do this anyway, but

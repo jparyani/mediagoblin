@@ -109,12 +109,13 @@ def creature_remove_is_demon(db_conn):
     Remove the is_demon field from the creature model.  We don't need
     it!
     """
-    metadata = MetaData(bind=db_conn.bind)
-    creature_table = Table(
-        'creature', metadata,
-        autoload=True, autoload_with=db_conn.bind)
-    creature_table.drop_column('is_demon')
-    
+    # metadata = MetaData(bind=db_conn.bind)
+    # creature_table = Table(
+    #     'creature', metadata,
+    #     autoload=True, autoload_with=db_conn.bind)
+    # creature_table.drop_column('is_demon')
+    pass
+
 
 @RegisterMigration(2, FULL_MIGRATIONS)
 def creature_powers_new_table(db_conn):
@@ -124,6 +125,13 @@ def creature_powers_new_table(db_conn):
     information
     """
     metadata = MetaData(bind=db_conn.bind)
+
+    # We have to access the creature table so sqlalchemy can make the
+    # foreign key relationship
+    creature_table = Table(
+        'creature', metadata,
+        autoload=True, autoload_with=db_conn.bind)
+
     creature_powers = Table(
         'creature_power', metadata,
         Column('id', Integer, primary_key=True),
@@ -144,40 +152,43 @@ def level_exits_new_table(db_conn):
     # First, create the table
     # -----------------------
     metadata = MetaData(bind=db_conn.bind)
-    level_exits = Table(
-        'level_exit', metadata,
-        Column('id', Integer, primary_key=True),
-        Column('name', Unicode),
-        Column('from_level',
-               Integer, ForeignKey('level.id'), nullable=False),
-        Column('to_level',
-               Integer, ForeignKey('level.id'), nullable=False))
-    metadata.create_all(db_conn.bind)
-
-    # And now, convert all the old exit pickles to new level exits
-    # ------------------------------------------------------------
 
     # Minimal representation of level table.
     # Not auto-introspecting here because of pickle table.  I'm not
     # sure sqlalchemy can auto-introspect pickle columns.
     levels = Table(
         'level', metadata,
-        Column('id', Integer, primary_key=True),
+        Column('id', Unicode, primary_key=True),
+        Column('name', Unicode),
+        Column('description', Unicode),
         Column('exits', PickleType))
+
+    level_exits = Table(
+        'level_exit', metadata,
+        Column('id', Integer, primary_key=True),
+        Column('name', Unicode),
+        Column('from_level',
+               Unicode, ForeignKey('level.id'), nullable=False),
+        Column('to_level',
+               Unicode, ForeignKey('level.id'), nullable=False))
+    metadata.create_all(db_conn.bind)
+
+    # And now, convert all the old exit pickles to new level exits
+    # ------------------------------------------------------------
 
     # query over and insert
     result = db_conn.execute(
         select([levels], levels.c.exits!=None))
 
     for level in result:
-        this_exit = level['exits']
-        
-        # Insert the level exit
-        db_conn.execute(
-            level_exits.insert().values(
-                name=this_exit['name'],
-                from_level=this_exit['from_level'],
-                to_level=this_exit['to_level']))
+
+        for exit_name, to_level in level['exits'].iteritems():
+            # Insert the level exit
+            db_conn.execute(
+                level_exits.insert().values(
+                    name=exit_name,
+                    from_level=level.id,
+                    to_level=to_level))
 
     # Finally, drop the old level exits pickle table
     # ----------------------------------------------
@@ -258,8 +269,10 @@ def level_exit_index_from_and_to_level(db_conn):
     level_exit = Table(
         'level_exit', metadata,
         autoload=True, autoload_with=db_conn.bind)
-    Index('ix_from_level', level_exit.c.from_level).create(db_conn.bind)
-    Index('ix_to_exit', level_exit.c.to_exit).create(db_conn.bind)
+    Index('ix_level_exit_from_level',
+          level_exit.c.from_level).create(db_conn.bind)
+    Index('ix_level_exit_to_level',
+          level_exit.c.to_level).create(db_conn.bind)
 
 
 @RegisterMigration(6, FULL_MIGRATIONS)
@@ -271,7 +284,8 @@ def creature_power_index_creature(db_conn):
     creature_power = Table(
         'creature_power', metadata,
         autoload=True, autoload_with=db_conn.bind)
-    Index('ix_creature', creature_power.c.creature).create(db_conn.bind)
+    Index('ix_creature_power_creature',
+          creature_power.c.creature).create(db_conn.bind)
 
 
 @RegisterMigration(7, FULL_MIGRATIONS)
@@ -284,9 +298,23 @@ def creature_power_hitpower_to_float(db_conn):
     really is.
     """
     metadata = MetaData(bind=db_conn.bind)
+
+    # We have to access the creature table so sqlalchemy can make the
+    # foreign key relationship
+    creature_table = Table(
+        'creature', metadata,
+        autoload=True, autoload_with=db_conn.bind)
+
     creature_power = Table(
         'creature_power', metadata,
-        autoload=True, autoload_with=db_conn.bind)
+        Column('id', Integer, primary_key=True),
+        Column('creature', Integer,
+               ForeignKey('creature.id'), nullable=False,
+               index=True),
+        Column('name', Unicode),
+        Column('description', Unicode),
+        Column('hitpower', Integer, nullable=False))
+
     creature_power.c.hitpower.alter(type=Float)
 
 
@@ -651,10 +679,15 @@ def test_set1_to_set3():
 
     # TODO: Check output to user
     assert printer.combined_string == """\
--> Updating main mediagoblin tables...
+-> Updating main mediagoblin tables:
    + Running migration 1, "creature_remove_is_demon"... done.
    + Running migration 2, "creature_powers_new_table"... done.
-   + Running migration 3, "level_exits_new_table"... done."""
+   + Running migration 3, "level_exits_new_table"... done.
+   + Running migration 4, "creature_num_legs_to_num_limbs"... done.
+   + Running migration 5, "level_exit_index_from_and_to_level"... done.
+   + Running migration 6, "creature_power_index_creature"... done.
+   + Running migration 7, "creature_power_hitpower_to_float"... done.
+"""
     
     # Make sure version matches expected
     migration_manager = MigrationManager(
@@ -666,18 +699,21 @@ def test_set1_to_set3():
     # Check all things in database match expected
 
     # Check the creature table
+    metadata = MetaData(bind=engine)
     creature_table = Table(
         'creature', metadata,
         autoload=True, autoload_with=engine)
+    # assert set(creature_table.c.keys()) == set(
+    #     ['id', 'name', 'num_limbs'])
     assert set(creature_table.c.keys()) == set(
-        ['id', 'name', 'num_limbs'])
+        [u'id', 'name', u'num_limbs', u'is_demon'])
     assert_col_type(creature_table.c.id, Integer)
     assert_col_type(creature_table.c.name, VARCHAR)
     assert creature_table.c.name.nullable is False
     #assert creature_table.c.name.index is True
     #assert creature_table.c.name.unique is True
-    assert_col_type(creature_table.c.num_legs, Integer)
-    assert creature_table.c.num_legs.nullable is False
+    assert_col_type(creature_table.c.num_limbs, Integer)
+    assert creature_table.c.num_limbs.nullable is False
 
     # Check the CreaturePower table
     creature_power_table = Table(
@@ -724,17 +760,17 @@ def test_set1_to_set3():
     creature = session.query(Creature3).filter_by(
         name=u'centipede').one()
     assert creature.num_limbs == 100.0
-    assert creature.creature_powers == []
+    assert creature.magical_powers == []
 
     creature = session.query(Creature3).filter_by(
         name=u'wolf').one()
     assert creature.num_limbs == 4.0
-    assert creature.creature_powers == []
+    assert creature.magical_powers == []
 
     creature = session.query(Creature3).filter_by(
         name=u'wizardsnake').one()
     assert creature.num_limbs == 0.0
-    assert creature.creature_powers == []
+    assert creature.magical_powers == []
 
     level = session.query(Level3).filter_by(
         id=u'necroplex').one()
