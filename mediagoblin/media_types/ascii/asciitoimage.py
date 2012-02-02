@@ -65,7 +65,8 @@ class AsciiToImage(object):
 
         self._if = ImageFont.truetype(
             self._font,
-            self._font_size)
+            self._font_size,
+            encoding='unic')
 
         #      ,-,-^-'-^'^-^'^-'^-.
         #     ( I am a wall socket )Oo,  ___
@@ -91,6 +92,9 @@ class AsciiToImage(object):
         - Character set detection and decoding,
           http://pypi.python.org/pypi/chardet
         '''
+        # Convert the input from str to unicode
+        text = text.decode('utf-8')
+
         # TODO: Account for alternative line endings
         lines = text.split('\n')
 
@@ -123,7 +127,7 @@ class AsciiToImage(object):
 
                 px_pos = self._px_pos(char_pos)
 
-                _log.debug('Writing character "{0}" at {1} (px pos {2}'.format(
+                _log.debug('Writing character "{0}" at {1} (px pos {2})'.format(
                         char,
                         char_pos,
                         px_pos))
@@ -152,21 +156,3 @@ class AsciiToImage(object):
                 px_pos[index] = char_pos[index] * self._if_dims[index]
 
         return px_pos
-
-
-if __name__ == "__main__":
-    import urllib
-    txt = urllib.urlopen('file:///home/joar/Dropbox/ascii/install-all-the-dependencies.txt')
-
-    _log.setLevel(logging.DEBUG)
-    logging.basicConfig()
-
-    converter = AsciiToImage()
-
-    converter.convert(txt.read(), '/tmp/test.png')
-
-    '''
-    im, x, y, duration = renderImage(h, 10)
-    print "Rendered image in %.5f seconds" % duration
-    im.save('tldr.png', "PNG")
-    '''

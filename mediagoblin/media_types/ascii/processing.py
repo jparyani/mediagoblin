@@ -17,10 +17,12 @@ import asciitoimage
 import chardet
 import os
 import Image
+import logging
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import create_pub_filepath, THUMB_SIZE
 
+_log = logging.getLogger(__name__)
 
 def process_ascii(entry):
     '''
@@ -41,6 +43,17 @@ def process_ascii(entry):
 
     with queued_file:
         queued_file_charset = chardet.detect(queued_file.read())
+
+        # Only select a non-utf-8 charset if chardet is *really* sure
+        # Tested with "Feli\x0109an superjaron", which was detecte
+        if queued_file_charset['confidence'] < 0.9:
+            interpreted_charset = 'utf-8'
+        else:
+            interpreted_charset = queued_file_charset['encoding']
+
+        _log.info('Charset detected: {0}\nWill interpret as: {1}'.format(
+                queued_file_charset,
+                interpreted_charset))
 
         queued_file.seek(0)  # Rewind the queued file
 
@@ -73,13 +86,16 @@ def process_ascii(entry):
 
         queued_file.seek(0)  # Rewind *again*
 
-        unicode_filepath = create_pub_filepath(entry, 'unicode.txt')
+        unicode_filepath = create_pub_filepath(entry, 'ascii-portable.txt')
 
         with mgg.public_store.get_file(unicode_filepath, 'wb') \
                 as unicode_file:
+            # Decode the original file from its detected charset (or UTF8)
+            # Encode the unicode instance to ASCII and replace any non-ASCII
+            # with an HTML entity (&#
             unicode_file.write(
-                    unicode(queued_file.read().decode(
-                        queued_file_charset['encoding'])).encode(
+                unicode(queued_file.read().decode(
+                        interpreted_charset)).encode(
                     'ascii',
                     'xmlcharrefreplace'))
 
