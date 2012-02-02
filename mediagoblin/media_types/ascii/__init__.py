@@ -24,4 +24,4 @@ MEDIA_MANAGER = {
     "display_template": "mediagoblin/media_displays/ascii.html",
     "default_thumb": "images/media_thumbs/ascii.jpg",
     "accepted_extensions": [
-        "txt"]}
+        "txt", "asc", "nfo"]}
