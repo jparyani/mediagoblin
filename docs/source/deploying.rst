@@ -118,7 +118,7 @@ Clone the MediaGoblin repository::
 And setup the in-package virtualenv::
 
     cd mediagoblin
-    virtualenv . && ./bin/python setup.py develop
+    (virtualenv --system-site-packages . || virtualenv .) && ./bin/python setup.py develop
 
 .. note::
 
