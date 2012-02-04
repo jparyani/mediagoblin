@@ -21,6 +21,11 @@ import Image
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful
 
+
+def assert_in(a, b):
+    assert a in b, "%r not in %r" % (a, b)
+
+
 GOOD_JPG = pkg_resources.resource_filename(
     'mediagoblin.tests',
     os.path.join(
@@ -41,6 +46,7 @@ GPS_JPG = pkg_resources.resource_filename(
     os.path.join(
         'test_exif',
         'has-gps.jpg'))
+
 
 def test_exif_extraction():
     '''
@@ -130,6 +136,7 @@ def test_exif_extraction():
                 32, 32, 32],
             'field_length': 44}}
 
+
 def test_exif_image_orientation():
     '''
     Test image reorientation based on EXIF data
@@ -144,7 +151,10 @@ def test_exif_image_orientation():
     assert image.size == (428, 640)
 
     # If this pixel looks right, the rest of the image probably will too.
-    assert image.getdata()[10000] == (41, 28, 11)
+    assert_in(image.getdata()[10000],
+              ((41, 28, 11), (43, 27, 11))
+              )
+
 
 def test_exif_no_exif():
     '''
@@ -160,6 +170,7 @@ def test_exif_no_exif():
     assert gps == {}
     assert useful == {}
 
+
 def test_exif_bad_image():
     '''
     Test EXIF extraction from a faithful, but bad image
@@ -174,6 +185,7 @@ def test_exif_bad_image():
     assert gps == {}
     assert useful == {}
 
+
 def test_exif_gps_data():
     '''
     Test extractiion of GPS data
@@ -186,4 +198,3 @@ def test_exif_gps_data():
         'direction': 25.674046740467404,
         'altitude': 37.64365671641791,
         'longitude': 18.016166666666667}
-    
