@@ -72,6 +72,7 @@ def process_ascii(entry):
             thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
             thumb.save(thumb_file)
 
+        _log.debug('Copying local file to public storage')
         mgg.public_store.copy_local_to_storage(
             tmp_thumb_filename, thumb_filepath)
 

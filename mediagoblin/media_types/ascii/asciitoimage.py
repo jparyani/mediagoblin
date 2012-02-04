@@ -59,14 +59,14 @@ class AsciiToImage(object):
         if kw.get('font_size'):
             self._font_size = kw.get('font_size')
 
-        _log.info('Setting font to {0}, size {1}'.format(
-                self._font,
-                self._font_size))
-
         self._if = ImageFont.truetype(
             self._font,
             self._font_size,
             encoding='unic')
+
+        _log.info('Font set to {0}, size {1}'.format(
+                self._font,
+                self._font_size))
 
         #      ,-,-^-'-^'^-^'^-'^-.
         #     ( I am a wall socket )Oo,  ___
@@ -92,6 +92,7 @@ class AsciiToImage(object):
         - Character set detection and decoding,
           http://pypi.python.org/pypi/chardet
         '''
+        _log.debug('Drawing image')
         # Convert the input from str to unicode
         text = text.decode('utf-8')
 
@@ -128,7 +129,7 @@ class AsciiToImage(object):
                 px_pos = self._px_pos(char_pos)
 
                 _log.debug('Writing character "{0}" at {1} (px pos {2})'.format(
-                        char,
+                        char.encode('ascii', 'replace'),
                         char_pos,
                         px_pos))
 

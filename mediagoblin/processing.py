@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 from celery.task import Task
 
 from mediagoblin.db.util import ObjectId
@@ -23,6 +25,7 @@ from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 from mediagoblin.media_types import get_media_manager
 
+_log = logging.getLogger(__name__)
 
 THUMB_SIZE = 180, 180
 MEDIUM_SIZE = 640, 640
@@ -57,12 +60,19 @@ class ProcessMedia(Task):
         try:
             #__import__(entry.media_type)
             manager = get_media_manager(entry.media_type)
+            _log.debug('Processing {0}'.format(entry))
             manager['processor'](entry)
         except BaseProcessingFail, exc:
             mark_entry_failed(entry._id, exc)
             return
         except ImportError, exc:
-            mark_entry_failed(entry[u'_id'], exc)
+            _log.error(
+                'Entry {0} failed to process due to an import error: {1}'\
+                    .format(
+                    entry.title,
+                    exc))
+
+            mark_entry_failed(entry._id, exc)
 
         entry.state = u'processed'
         entry.save()
