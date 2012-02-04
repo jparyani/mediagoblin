@@ -59,7 +59,6 @@ class User(Document, UserMixin):
      - is_admin: Whether or not this user is an administrator or not.
      - url: this user's personal webpage/website, if appropriate.
      - bio: biography of this user (plaintext, in markdown)
-     - bio_html: biography of the user converted to proper HTML.
     """
     __collection__ = 'users'
     use_dot_notation = True
@@ -76,7 +75,6 @@ class User(Document, UserMixin):
         'is_admin': bool,
         'url': unicode,
         'bio': unicode,      # May contain markdown
-        'bio_html': unicode,  # May contain plaintext, or HTML
         'fp_verification_key': unicode,  # forgotten password verification key
         'fp_token_expire': datetime.datetime,
         }

@@ -64,7 +64,6 @@ class User(Base, UserMixin):
     is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
     bio = Column(UnicodeText)  # ??
-    bio_html = Column(UnicodeText)  # ??
     fp_verification_key = Column(Unicode)
     fp_token_expire = Column(DateTime)
 

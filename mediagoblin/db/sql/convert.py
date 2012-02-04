@@ -56,7 +56,7 @@ def convert_users(mk_db):
         copy_attrs(entry, new_entry,
             ('username', 'email', 'created', 'pw_hash', 'email_verified',
              'status', 'verification_key', 'is_admin', 'url',
-             'bio', 'bio_html',
+             'bio',
              'fp_verification_key', 'fp_token_expire',))
         # new_entry.fp_verification_expire = entry.fp_token_expire
 

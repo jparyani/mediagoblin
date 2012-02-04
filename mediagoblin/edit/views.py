@@ -171,8 +171,6 @@ def edit_profile(request):
         user.url = unicode(request.POST['url'])
         user.bio = unicode(request.POST['bio'])
 
-        user.bio_html = cleaned_markdown_conversion(user.bio)
-
         user.save()
 
         messages.add_message(request,

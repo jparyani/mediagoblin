@@ -115,3 +115,14 @@ def mediaentry_add_license(database):
     Add the 'license' field for entries that don't have it.
     """
     add_table_field(database, 'media_entries', 'license', None)
+
+
+@RegisterMigration(9)
+def user_remove_bio_html(database):
+    """
+    Drop bio_html again and calculate things on the fly (and cache)
+    """
+    database['users'].update(
+        {'bio_html': {'$exists': True}},
+        {'$unset': {'bio_html': 1}},
+        multi=True)

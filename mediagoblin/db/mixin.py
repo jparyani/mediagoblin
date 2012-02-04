@@ -29,6 +29,7 @@ real objects.
 
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.tools import common, licenses
+from mediagoblin.tools.text import cleaned_markdown_conversion
 
 
 class UserMixin(object):
@@ -38,6 +39,10 @@ class UserMixin(object):
         """
         return auth_lib.bcrypt_check_password(
             password, self.pw_hash)
+
+    @property
+    def bio_html(self):
+        return cleaned_markdown_conversion(self.bio)
 
 
 class MediaEntryMixin(object):
