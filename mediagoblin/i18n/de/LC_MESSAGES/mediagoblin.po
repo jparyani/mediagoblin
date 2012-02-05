@@ -8,7 +8,7 @@
 #  Elrond <elrond+mediagoblin.org@samba-tng.org>, 2011, 2012.
 #   <jakob.kramer@gmx.de>, 2011, 2012.
 # Jan-Christoph Borchardt <JanCBorchardt@fsfe.org>, 2011.
-# Jan-Christoph Borchardt <jan@unhosted.org>, 2011.
+# Jan-Christoph Borchardt <jan@unhosted.org>, 2011, 2012.
 #   <kyoo@kyoo.ch>, 2011.
 #   <mediagoblin.org@samba-tng.org>, 2011.
 # Rafael Maguiña <rafael.maguina@gmail.com>, 2011.
@@ -16,10 +16,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
-"Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2012-01-29 13:31-0600\n"
-"PO-Revision-Date: 2012-01-29 19:44+0000\n"
-"Last-Translator: Elrond <elrond+mediagoblin.org@samba-tng.org>\n"
+"Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
+"POT-Creation-Date: 2012-01-29 13:47-0600\n"
+"PO-Revision-Date: 2012-02-05 20:23+0000\n"
+"Last-Translator: Jan-Christoph Borchardt <jan@unhosted.org>\n"
 "Language-Team: German (http://www.transifex.net/projects/p/mediagoblin/team/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -84,6 +84,8 @@ msgstr "Bestätigungs-E-Mail wurde erneut versandt."
 msgid ""
 "An email has been sent with instructions on how to change your password."
 msgstr ""
+"Es wurde eine Email mit Anweisungen für die Änderung des Passwortes an dich "
+"gesendet."
 
 #: mediagoblin/auth/views.py:270
 msgid ""
@@ -96,11 +98,11 @@ msgstr ""
 
 #: mediagoblin/auth/views.py:282
 msgid "Couldn't find someone with that username or email."
-msgstr ""
+msgstr "Es konnte niemand mit diesem Nutzernamen oder Email gefunden werden."
 
 #: mediagoblin/auth/views.py:330
 msgid "You can now log in using your new password."
-msgstr ""
+msgstr "Du kannst dich jetzt mit deinem neuen Passwort anmelden."
 
 #: mediagoblin/edit/forms.py:25 mediagoblin/submit/forms.py:28
 msgid "Title"
@@ -117,10 +119,13 @@ msgid ""
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
 msgstr ""
+"Für Formatierung kannst du\n"
+"                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
+"                      Markdown</a> benutzen."
 
 #: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:36
 msgid "Tags"
-msgstr "Markierungen"
+msgstr "Schlagworte"
 
 #: mediagoblin/edit/forms.py:35 mediagoblin/submit/forms.py:38
 msgid "Separate tags by commas."
@@ -161,6 +166,7 @@ msgstr "Altes Passwort"
 #: mediagoblin/edit/forms.py:65
 msgid "Enter your old password to prove you own this account."
 msgstr ""
+"Gib dein altes Passwort ein, um zu bestätigen dass du dieses Konto besitzt."
 
 #: mediagoblin/edit/forms.py:68
 msgid "New password"
@@ -188,15 +194,15 @@ msgstr "Falsches Passwort"
 
 #: mediagoblin/edit/views.py:222
 msgid "Account settings saved"
-msgstr ""
+msgstr "Kontoeinstellungen gespeichert"
 
 #: mediagoblin/media_types/__init__.py:77
 msgid "Could not extract any file extension from \"{filename}\""
-msgstr ""
+msgstr "Es konnten keine Dateierweiterungen von »{filename}« gelesen werden."
 
 #: mediagoblin/media_types/__init__.py:88
 msgid "Sorry, I don't support that file type :("
-msgstr ""
+msgstr "Entschuldigung, dieser Dateityp wird nicht unterstützt."
 
 #: mediagoblin/submit/forms.py:26
 msgid "File"
@@ -306,11 +312,11 @@ msgstr "Neuste Medien"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:32
 msgid "Set your new password"
-msgstr ""
+msgstr "Dein neues Passwort"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:35
 msgid "Set password"
-msgstr ""
+msgstr "Passwort setzen"
 
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
 msgid "Recover password"
@@ -400,7 +406,7 @@ msgstr "Änderungen speichern"
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:34
 #, python-format
 msgid "Changing %(username)s's account settings"
-msgstr ""
+msgstr "%(username)s's Kontoeinstellungen werden geändert"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:29
 #, python-format
@@ -411,7 +417,7 @@ msgstr "%(username)ss Profil bearbeiten"
 #: mediagoblin/templates/mediagoblin/listings/tag.html:35
 #, python-format
 msgid "Media tagged with: %(tag_name)s"
-msgstr "Medien markiert mit: %(tag_name)s"
+msgstr "Medien mit Schlagwort: %(tag_name)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:46
@@ -424,6 +430,9 @@ msgid ""
 "\t    your web browser does not support HTML5 \n"
 "\t    video."
 msgstr ""
+"Entschuldige, dieses Video wird nicht funktionieren weil \n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span>    dein Webbrowser kein HTML5 \n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span>    Video unterstützt."
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:36
 msgid ""
@@ -431,14 +440,17 @@ msgid ""
 "\t    can play this video at <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
 msgstr ""
+"Hol dir einen modernen Webbrowser, der \n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span>    dieses Video abspielen kann, <a href=\"http://getfirefox.com\">\n"
+"<span class=\"whitespace other\" title=\"Tab\">»</span>    Firefox</a>!"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Add your media"
-msgstr ""
+msgstr "Deine Medien"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:30
 msgid "Add"
-msgstr ""
+msgstr "Hinzufügen"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
 #, python-format
@@ -453,7 +465,7 @@ msgstr "<a href=\"%(user_url)s\">%(username)s</a>s Medien"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:72
 #, python-format
 msgid "Added on %(date)s."
-msgstr ""
+msgstr "Hinzugefügt am %(date)s."
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:81
 msgid "Edit"
@@ -475,11 +487,11 @@ msgstr "%(comment_count)s Kommentare"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:95
 msgid "No comments yet."
-msgstr ""
+msgstr "Bisher keine Kommentare."
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:103
 msgid "Add one"
-msgstr ""
+msgstr "Kommentiere etwas"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:112
 msgid ""
@@ -487,10 +499,13 @@ msgid ""
 "href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
 " formatting."
 msgstr ""
+"Für Formatierung kannst du <a "
+"href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> "
+"benutzen."
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:116
 msgid "Add this comment"
-msgstr ""
+msgstr "Kommentar absenden"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:138
 msgid "at"
@@ -499,7 +514,7 @@ msgstr "bei"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:153
 #, python-format
 msgid "<p>❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a></p>"
-msgstr ""
+msgstr "<p>❖ Medien von <a href=\"%(user_url)s\">%(username)s</a></p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -600,7 +615,7 @@ msgstr "Dieser Benutzer hat (noch) keine Daten in seinem Profil."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:125
 msgid "Change account settings"
-msgstr ""
+msgstr "Kontoeinstellungen ändern"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:138
 #, python-format
@@ -628,11 +643,11 @@ msgstr "Atom-Feed"
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:21
 msgid "License:"
-msgstr ""
+msgstr "Lizenz:"
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:25
 msgid "All rights reserved"
-msgstr ""
+msgstr "Alle Rechte vorbehalten"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:39
 msgid "← Newer"
@@ -649,16 +664,16 @@ msgstr "Zu Seite:"
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:27
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:32
 msgid "newer"
-msgstr ""
+msgstr "neuer"
 
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:38
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:43
 msgid "older"
-msgstr ""
+msgstr "älter"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "View more media tagged with"
-msgstr ""
+msgstr "Mehr Medien anschauen mit dem Schlagwort"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:25
 msgid "or"
@@ -666,7 +681,7 @@ msgstr "oder"
 
 #: mediagoblin/tools/exif.py:68
 msgid "Could not read the image file."
-msgstr ""
+msgstr "Die Bilddatei konnte nicht gelesen werden."
 
 #: mediagoblin/user_pages/forms.py:30
 msgid "I am sure I want to delete this"
