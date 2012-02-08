@@ -20,6 +20,7 @@ Configuring MediaGoblin
 So!  You've got MediaGoblin up and running, but you need to adjust
 some configuration parameters.  Well you've come to the right place!
 
+
 MediaGoblin's config files
 ==========================
 
@@ -84,16 +85,20 @@ Common changes
 Enabling email notifications
 ----------------------------
 
-You'll almost certainly want to enable sending emails.  By default,
+You'll almost certainly want to enable sending email.  By default,
 MediaGoblin doesn't really do this... for the sake of developer
-convenience, it runs in "email debug mode".  Change this::
+convenience, it runs in "email debug mode".
+
+To make MediaGoblin send email, you need a mailer daemon.
+
+Change this in your ``mediagoblin.ini`` file::
 
     email_debug_mode = false
 
-You can (and should) change the "from" email address by setting
-``email_sender_address``.
+You should also change the "from" email address by setting
+``email_sender_address``. For example::
 
-Note that you need a mailer daemon running for this to work.
+    email_sender_address = "foo@example.com"
 
 If you have more custom SMTP settings, you also have the following
 options at your disposal, which are all optional, and do exactly what
@@ -104,16 +109,18 @@ they sound like.
 - email_smtp_user
 - email_smtp_pass
 
+
 All other configuration changes
 -------------------------------
 
 To be perfectly honest, there are quite a few options and we haven't had
-time to document them all
+time to document them all.
 
 So here's a cop-out section saying that if you get into trouble, hop
 onto IRC and we'll help you out::
 
     #mediagoblin on irc.freenode.net
+
 
 Celery
 ======
