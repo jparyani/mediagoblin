@@ -13,7 +13,6 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import asciitoimage
 import chardet
 import os
 import Image
@@ -21,6 +20,7 @@ import logging
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import create_pub_filepath, THUMB_SIZE
+from mediagoblin.media_types.ascii import asciitoimage
 
 _log = logging.getLogger(__name__)
 
