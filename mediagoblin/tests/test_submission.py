@@ -1,4 +1,3 @@
-
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
