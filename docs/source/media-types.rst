@@ -45,3 +45,22 @@ Note that you almost certainly want to separate Celery from the normal
 paste process or your users will probably find that their connections
 time out as the video transcodes.  To set that up, check out the
 ":doc:`production-deployments`" section of this manual.
+
+
+Ascii art
+=========
+
+To enable ascii art support, first install the
+`chardet <http://pypi.python.org/pypi/chardet>`_
+library, which is necessary for creating thumbnails of ascii art::
+
+    ./bin/easy_install chardet
+
+
+Next, modify (and possibly copy over from ``mediagoblin.ini``) your
+``mediagoblin_local.ini``.  Uncomment or add to the media_types line
+'mediagoblin.media_types.ascii' like so::
+
+    media_types = mediagoblin.media_types.image, mediagoblin.media_types.ascii
+
+Now any .txt file you uploaded will be processed as ascii art!
