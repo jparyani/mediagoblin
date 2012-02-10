@@ -14,6 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+TODO: indexes on foreignkeys, where useful.
+"""
+
 
 import datetime
 
@@ -43,6 +47,10 @@ class SimpleFieldAlias(object):
 
 
 class User(Base, UserMixin):
+    """
+    TODO: We should consider moving some rarely used fields
+    into some sort of "shadow" table.
+    """
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
@@ -67,6 +75,9 @@ class User(Base, UserMixin):
 
 
 class MediaEntry(Base, MediaEntryMixin):
+    """
+    TODO: Consider fetching the media_files using join
+    """
     __tablename__ = "media_entries"
 
     id = Column(Integer, primary_key=True)
@@ -145,6 +156,10 @@ class MediaEntry(Base, MediaEntryMixin):
 
 
 class MediaFile(Base):
+    """
+    TODO: Highly consider moving "name" into a new table.
+    TODO: Consider preloading said table in software
+    """
     __tablename__ = "mediafiles"
 
     media_entry = Column(
@@ -221,12 +236,20 @@ class MediaComment(Base):
     _id = SimpleFieldAlias("id")
 
 
-def show_table_init():
+def show_table_init(engine_uri):
+    if engine_uri is None:
+        engine_uri = 'sqlite:///:memory:'
     from sqlalchemy import create_engine
-    engine = create_engine('sqlite:///:memory:', echo=True)
+    engine = create_engine(engine_uri, echo=True)
 
     Base.metadata.create_all(engine)
 
 
 if __name__ == '__main__':
-    show_table_init()
+    from sys import argv
+    print repr(argv)
+    if len(argv) == 2:
+        uri = argv[1]
+    else:
+        uri = None
+    show_table_init(uri)
