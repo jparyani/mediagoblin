@@ -109,7 +109,7 @@ input, textarea {
 .container {
   margin: auto;
   width: 96%;
-  max-width: 940px;
+  max-width: 820px;
 }
 
 header {
@@ -150,11 +150,17 @@ footer {
   clear: both;
 }
 
+/* TEMP removal -> permanent removal should also be done in html!
 .media_pane {
   width: 640px;
   margin-left: 0px;
   margin-right: 10px;
   float: left;  
+}
+*/
+
+img.media_image {
+  width: 100%;
 }
 
 .media_sidebar {
@@ -382,6 +388,11 @@ h2.media_title {
   margin-bottom: 0px;
 }
 
+p.context {
+  display: inline-block;
+  padding-top: 4px;
+}
+
 p.media_specs {
   font-size: 0.9em;
   border-top: 1px solid #222;
@@ -406,19 +417,21 @@ img.media_icon {
 
 /* navigation */
 
+.navigation {
+  float: right;
+}
+
 .navigation_button {
   width: 135px;
-  display: block;
-  float: left;
+  display: inline-block;
   text-align: center;
   background-color: #1d1d1d;
   border: 1px solid;
   border-color: #2c2c2c #232323 #1a1a1a;
   border-radius: 4px;
   text-decoration: none;
-  padding: 12px 0 16px;
-  font-size: 1.4em;
-  margin: 0 0 20px
+  padding: 4px 0 8px;
+  margin: 0 0 6px
 }
 
 .navigation_left {

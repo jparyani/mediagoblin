@@ -41,6 +41,13 @@
 
 {% block mediagoblin_content %}
   <div class="media_pane">
+    {% trans user_url=request.urlgen(
+                'mediagoblin.user_pages.user_home',
+                user=media.get_uploader.username),
+                username=media.get_uploader.username -%}
+      <p class="context">❖ Browsing media by <a href="{{ user_url }}">{{ username }}</a></p>
+    {%- endtrans %}
+    {% include "mediagoblin/utils/prev_next.html" %}
     <div class="media_image_container">
       {% block mediagoblin_media %}
         {% set display_media = request.app.public_store.file_url(
@@ -148,15 +155,6 @@
       {{ render_pagination(request, pagination,
                  media.url_for_self(request.urlgen)) }}
     {% endif %}
-  </div>
-  <div class="media_sidebar">
-    {% trans user_url=request.urlgen(
-                'mediagoblin.user_pages.user_home',
-                user=media.get_uploader.username),
-                username=media.get_uploader.username -%}
-      <p>❖ Browsing media by <a href="{{ user_url }}">{{ username }}</a></p>
-    {%- endtrans %}  
-    {% include "mediagoblin/utils/prev_next.html" %}
     {% if media.attachment_files|count %}
       <h3>Attachments</h3>
       <ul>
