@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -16,6 +16,8 @@
 
 
 import sys
+from mediagoblin.db.sql.base import Session
+
 
 def _simple_printer(string):
     """
@@ -269,3 +271,14 @@ def assure_migrations_table_setup(db):
     if not MigrationData.__table__.exists(db.bind):
         MigrationData.metadata.create_all(
             db.bind, tables=[MigrationData.__table__])
+
+
+##########################
+# Random utility functions
+##########################
+
+
+def atomic_update(table, query_dict, update_values):
+    table.find(query_dict).update(update_values,
+    	synchronize_session=False)
+    Session.commit()
