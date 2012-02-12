@@ -29,7 +29,7 @@ from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
 
-from mediagoblin.db.sql.extratypes import PathTupleWithSlashes
+from mediagoblin.db.sql.extratypes import PathTupleWithSlashes, JSONEncoded
 from mediagoblin.db.sql.base import Base, DictReadAttrProxy
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
 
@@ -91,7 +91,7 @@ class MediaEntry(Base, MediaEntryMixin):
     license = Column(Unicode)
 
     fail_error = Column(Unicode)
-    fail_metadata = Column(UnicodeText)
+    fail_metadata = Column(JSONEncoded)
 
     queued_media_file = Column(PathTupleWithSlashes)
 
