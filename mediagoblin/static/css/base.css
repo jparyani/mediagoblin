@@ -255,15 +255,6 @@ text-align: center;
   float: right;
 }
 
-textarea#comment_content {
-  resize: vertical;
-  width: 634px;
-  height: 90px;
-  border: none;
-  background-color: #f1f1f1;
-  padding: 3px;
-}
-
 .clear {
   clear: both;
   display: block;
@@ -364,11 +355,16 @@ textarea#description, textarea#bio {
 }
 
 textarea#comment_content {
-  width: 634px;
+  resize: vertical;
+  width: 100%;
   height: 90px;
   border: none;
   background-color: #f1f1f1;
   padding: 3px;
+}
+
+#form_comment .form_field_input {
+  padding-right: 6px;
 }
 
 /* media galleries */
@@ -393,6 +389,7 @@ textarea#comment_content {
 
 h2.media_title {
   margin-bottom: 0px;
+  display: inline-block;
 }
 
 p.context {

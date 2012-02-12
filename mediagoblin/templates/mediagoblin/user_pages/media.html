@@ -72,6 +72,18 @@
     <h2 class="media_title">
       {{ media.title }}
     </h2>
+    {% if request.user and
+          (media.uploader == request.user._id or 
+           request.user.is_admin) %}
+      {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
+                                 user= media.get_uploader.username,
+                                 media= media._id) %}
+      <a class="button_action" href="{{ edit_url }}">{% trans %}Edit{% endtrans %}</a>
+      {% set delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
+                                 user= media.get_uploader.username,
+                                 media= media._id) %}
+      <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
+    {% endif %}
     {% autoescape False %}
       <p>{{ media.description_html }}</p>
     {% endautoescape %}
@@ -97,36 +109,15 @@
                       media=media._id) }}">Add attachment</a>
       </p>
     {% endif %}
-    <p class="media_specs">
-      {% if request.user and
-            (media.uploader == request.user._id or 
-             request.user.is_admin) %}
-        {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
-                                   user= media.get_uploader.username,
-                                   media= media._id) %}
-        <a class="button_action" href="{{ edit_url }}">{% trans %}Edit{% endtrans %}</a>
-        {% set delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
-                                   user= media.get_uploader.username,
-                                   media= media._id) %}
-        <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
-      {% endif %}
-    </p>
     {% if comments %}
       <h3>
-        {% if comments.count()==1 %}
-          {% trans comment_count=comments.count() -%}{{ comment_count }} comment{%- endtrans %}
-        {% elif comments.count()>1 %}
-          {% trans comment_count=comments.count() -%}{{ comment_count }} comments{%- endtrans %}
-        {% else %}
-          {% trans %}No comments yet.{% endtrans %}
-        {% endif %}
         <div class="right_align">
           <a
             {% if not request.user %}
               href="{{ request.urlgen('mediagoblin.auth.login') }}"
             {% endif %}
             class="button_action" id="button_addcomment" title="Add a comment">
-            {% trans %}Add one{% endtrans %}
+            {% trans %}Add a comment{% endtrans %}
           </a>
         </div>
       </h3>
