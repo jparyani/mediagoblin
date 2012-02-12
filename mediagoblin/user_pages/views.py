@@ -142,11 +142,11 @@ def media_post_comment(request, media):
     assert request.method == 'POST'
 
     comment = request.db.MediaComment()
-    comment['media_entry'] = media._id
-    comment['author'] = request.user._id
-    comment['content'] = unicode(request.POST['comment_content'])
+    comment.media_entry = media.id
+    comment.author = request.user.id
+    comment.content = unicode(request.POST['comment_content'])
 
-    if not comment['content'].strip():
+    if not comment.content.strip():
         messages.add_message(
             request,
             messages.ERROR,

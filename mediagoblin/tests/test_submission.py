@@ -140,7 +140,7 @@ class TestSubmission:
         context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/user_pages/user.html']
         request = context['request']
         media = request.db.MediaEntry.find({'title': 'Balanced Goblin'})[0]
-        assert_equal(media['tags'],
+        assert_equal(media.tags,
                      [{'name': u'yin', 'slug': u'yin'},
                                             {'name': u'yang', 'slug': u'yang'}])
 
@@ -255,7 +255,7 @@ class TestSubmission:
             {'title': 'Malicious Upload 2'})
         assert_equal(entry.state, 'failed')
         assert_equal(
-            entry['fail_error'],
+            entry.fail_error,
             u'mediagoblin.processing:BadMediaFail')
 
         # Test non-supported file with .png extension
@@ -275,5 +275,5 @@ class TestSubmission:
             {'title': 'Malicious Upload 3'})
         assert_equal(entry.state, 'failed')
         assert_equal(
-            entry['fail_error'],
+            entry.fail_error,
             u'mediagoblin.processing:BadMediaFail')
