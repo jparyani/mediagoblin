@@ -150,21 +150,19 @@ footer {
   clear: both;
 }
 
-/* TEMP removal -> permanent removal should also be done in html!
 .media_pane {
-  width: 640px;
+  width: 560px;
   margin-left: 0px;
   margin-right: 10px;
   float: left;  
 }
-*/
 
 img.media_image {
   width: 100%;
 }
 
 .media_sidebar {
-  width: 280px;
+  width: 240px;
   margin-left: 10px;
   margin-right: 0px;
   float: left;

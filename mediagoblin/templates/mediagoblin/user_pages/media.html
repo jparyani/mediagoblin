@@ -40,35 +40,35 @@
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_content %}
-  <div class="media_pane">
-    {% trans user_url=request.urlgen(
-                'mediagoblin.user_pages.user_home',
-                user=media.get_uploader.username),
-                username=media.get_uploader.username -%}
-      <p class="context">❖ Browsing media by <a href="{{ user_url }}">{{ username }}</a></p>
-    {%- endtrans %}
-    {% include "mediagoblin/utils/prev_next.html" %}
-    <div class="media_image_container">
-      {% block mediagoblin_media %}
-        {% set display_media = request.app.public_store.file_url(
-                 media.get_display_media(media.media_files)) %}
-        {# if there's a medium file size, that means the medium size
-         #  isn't the original... so link to the original!
-         #}
-        {% if media.media_files.has_key('medium') %}
-          <a href="{{ request.app.public_store.file_url(
-                        media.media_files['original']) }}">
-            <img class="media_image"
-                 src="{{ display_media }}"
-                 alt="Image for {{ media.title }}" />
-          </a>
-        {% else %}
+  {% trans user_url=request.urlgen(
+              'mediagoblin.user_pages.user_home',
+              user=media.get_uploader.username),
+              username=media.get_uploader.username -%}
+    <p class="context">❖ Browsing media by <a href="{{ user_url }}">{{ username }}</a></p>
+  {%- endtrans %}
+  {% include "mediagoblin/utils/prev_next.html" %}
+  <div class="media_image_container">
+    {% block mediagoblin_media %}
+      {% set display_media = request.app.public_store.file_url(
+               media.get_display_media(media.media_files)) %}
+      {# if there's a medium file size, that means the medium size
+       #  isn't the original... so link to the original!
+       #}
+      {% if media.media_files.has_key('medium') %}
+        <a href="{{ request.app.public_store.file_url(
+                      media.media_files['original']) }}">
           <img class="media_image"
                src="{{ display_media }}"
                alt="Image for {{ media.title }}" />
-        {% endif %}
-      {% endblock %}
-    </div>
+        </a>
+      {% else %}
+        <img class="media_image"
+             src="{{ display_media }}"
+             alt="Image for {{ media.title }}" />
+      {% endif %}
+    {% endblock %}
+  </div>
+  <div class="media_pane">
     <h2 class="media_title">
       {{ media.title }}
     </h2>
@@ -155,6 +155,8 @@
       {{ render_pagination(request, pagination,
                  media.url_for_self(request.urlgen)) }}
     {% endif %}
+  </div>
+  <div class="media_sidebar">
     {% if media.attachment_files|count %}
       <h3>Attachments</h3>
       <ul>
