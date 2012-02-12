@@ -98,9 +98,6 @@
       </p>
     {% endif %}
     <p class="media_specs">
-      {% trans date=media.created.strftime("%Y-%m-%d") -%}
-        Added on {{ date }}.
-      {%- endtrans %}
       {% if request.user and
             (media.uploader == request.user._id or 
              request.user.is_admin) %}
@@ -179,6 +176,11 @@
     {% endif %}
   </div>
   <div class="media_sidebar">
+    {% trans date=media.created.strftime("%Y-%m-%d") -%}
+      <h3 class="sidedata">Added on</h3>
+      <p>{{ date }}</p>
+    {%- endtrans %}
+
     {% if media.tags %}
       {% include "mediagoblin/utils/tags.html" %}
     {% endif %}
