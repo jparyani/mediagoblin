@@ -163,7 +163,7 @@ img.media_image {
 
 .media_sidebar {
   width: 240px;
-  margin: 20px 0 0 10px;
+  margin-left: 10px;
   float: left;
 }
 
@@ -271,6 +271,15 @@ textarea#comment_content {
   visibility: hidden;
   width: 0;
   height: 0;
+}
+
+h3.sidedata {
+  border: none;
+  background-color: #212121;
+  border-radius: 4px 4px 0 0;
+  padding: 3px 8px;
+  margin: 20px 0 5px 0;
+  font-size: 1em;
 }
 
 /* forms */
