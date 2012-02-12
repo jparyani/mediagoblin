@@ -163,8 +163,7 @@ img.media_image {
 
 .media_sidebar {
   width: 240px;
-  margin-left: 10px;
-  margin-right: 0px;
+  margin: 20px 0 0 10px;
   float: left;
 }
 
