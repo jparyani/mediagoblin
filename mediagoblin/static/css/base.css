@@ -381,6 +381,7 @@ textarea#comment_content {
   margin: 0px 4px 10px 4px;
   text-align: center;
   font-size: 0.875em;
+  list-style: none;
 }
 
 .media_thumbnail a {
