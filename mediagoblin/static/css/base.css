@@ -545,4 +545,16 @@ table.media_panel th {
     width: 100%;
     margin: 0px;
   }
+  
+  .navigation {
+    float: none;
+  }
+  
+  .navigation_button {
+    width: 49%;
+  }
+  
+  .navigation_left {
+    margin-right: 0;
+  }
 }
