@@ -46,6 +46,14 @@ class UserMixin(object):
 
 
 class MediaEntryMixin(object):
+    @property
+    def description_html(self):
+        """
+        Rendered version of the description, run through
+        Markdown and cleaned with our cleaning tool.
+        """
+        return cleaned_markdown_conversion(self.description)
+
     def get_display_media(self, media_map,
                           fetch_order=common.DISPLAY_IMAGE_FETCHING_ORDER):
         """

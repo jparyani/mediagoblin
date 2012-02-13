@@ -110,9 +110,6 @@ class MediaEntry(Document, MediaEntryMixin):
        up with MarkDown for slight fanciness (links, boldness, italics,
        paragraphs...)
 
-     - description_html: Rendered version of the description, run through
-       Markdown and cleaned with our cleaning tool.
-
      - media_type: What type of media is this?  Currently we only support
        'image' ;)
 
@@ -177,7 +174,6 @@ class MediaEntry(Document, MediaEntryMixin):
         'slug': unicode,
         'created': datetime.datetime,
         'description': unicode,  # May contain markdown/up
-        'description_html': unicode,  # May contain plaintext, or HTML
         'media_type': unicode,
         'media_data': dict,  # extra data relevant to this media_type
         'plugin_data': dict,  # plugins can dump stuff here.

@@ -91,7 +91,7 @@ def tag_atom_feed(request):
             'type': 'text/html'}])
     for entry in cursor:
         feed.add(entry.get('title'),
-            entry.get('description_html'),
+            entry.description_html,
             id=entry.url_for_self(request.urlgen,qualified=True),
             content_type='html',
             author={'name': entry.get_uploader.username,

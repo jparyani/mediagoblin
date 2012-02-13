@@ -34,7 +34,7 @@ from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.text import (
     clean_html, convert_to_tag_list_of_dicts,
-    media_tags_as_string, cleaned_markdown_conversion)
+    media_tags_as_string)
 from mediagoblin.tools.licenses import SUPPORTED_LICENSES
 
 
@@ -71,9 +71,6 @@ def edit_media(request, media):
             media.description = unicode(request.POST.get('description'))
             media.tags = convert_to_tag_list_of_dicts(
                                    request.POST.get('tags'))
-
-            media.description_html = cleaned_markdown_conversion(
-                media.description)
 
             media.license = unicode(request.POST.get('license', '')) or None
 

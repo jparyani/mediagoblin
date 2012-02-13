@@ -250,7 +250,7 @@ def atom_feed(request):
 
     for entry in cursor:
         feed.add(entry.get('title'),
-            entry.get('description_html'),
+            entry.description_html,
             id=entry.url_for_self(request.urlgen,qualified=True),
             content_type='html',
             author={

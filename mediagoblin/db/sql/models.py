@@ -85,7 +85,6 @@ class MediaEntry(Base, MediaEntryMixin):
     slug = Column(Unicode)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     description = Column(UnicodeText) # ??
-    description_html = Column(UnicodeText) # ??
     media_type = Column(Unicode, nullable=False)
     state = Column(Unicode, default=u'unprocessed', nullable=False)
         # or use sqlalchemy.types.Enum?

@@ -29,6 +29,16 @@ def add_table_field(db, table_name, field_name, default_value):
         multi=True)
 
 
+def drop_table_field(db, table_name, field_name):
+    """
+    Drop an old field from a table/collection
+    """
+    db[table_name].update(
+        {field_name: {'$exists': True}},
+        {'$unset': {field_name: 1}},
+        multi=True)
+
+
 # Please see mediagoblin/tests/test_migrations.py for some examples of
 # basic migrations.
 
@@ -118,11 +128,9 @@ def mediaentry_add_license(database):
 
 
 @RegisterMigration(9)
-def user_remove_bio_html(database):
+def remove_calculated_html(database):
     """
-    Drop bio_html again and calculate things on the fly (and cache)
+    Drop bio_html, description_html again and calculate things on the fly (and cache)
     """
-    database['users'].update(
-        {'bio_html': {'$exists': True}},
-        {'$unset': {'bio_html': 1}},
-        multi=True)
+    drop_table_field(database, 'users', 'bio_html')
+    drop_table_field(database, 'media_entries', 'description_html')
