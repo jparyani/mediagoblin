@@ -34,12 +34,12 @@
   {% endif %}
   {# Likewise, this could be the very last media entry #}
   {% if next_entry_url %}
-    <a class="navigation_button" href="{{ next_entry_url }}">
+    <a class="navigation_button navigation_right" href="{{ next_entry_url }}">
       {% trans %}older{% endtrans %} &rarr;
     </a>
   {% else %}
     {# This is the last entry. display greyed-out 'next' image #}
-    <p class="navigation_button">
+    <p class="navigation_button navigation_right">
       {% trans %}older{% endtrans %} &rarr;
     </p>
   {% endif %}
