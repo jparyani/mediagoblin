@@ -277,8 +277,7 @@ h3.sidedata {
 
 .form_box,.form_box_xl {
   background-color: #222;
-  background-image: url("../images/background_lines.png");
-  background-repeat: repeat-x;
+  border-top: 6px solid #D49086;
   padding: 3% 5%;
   display: block;
   float: none;
@@ -293,7 +292,7 @@ h3.sidedata {
 }
 
 .edit_box {
-  background-image: url("../images/background_edit.png");
+  border-top: 6px dashed #D49086
 }
 
 .form_field_input input, .form_field_input textarea {
@@ -370,10 +369,10 @@ textarea#comment_content {
 /* media galleries */
 
 .media_thumbnail {
+  display: inline-block;
   padding: 0px;
   width: 180px;
   overflow: hidden;
-  float: left;
   margin: 0px 4px 10px 4px;
   text-align: center;
   font-size: 0.875em;
