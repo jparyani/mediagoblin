@@ -17,8 +17,8 @@
 #}
 
 {% block license_content -%}
-  <h3 class="sidedata">{% trans %}License{% endtrans %}</h3>
   <p>
+    {% trans %}License:{% endtrans %}
     {% if media.license %}
       <a href="{{ media.license }}">{{ media.get_license_data().abbreviation }}</a>
     {% else %}
