@@ -38,17 +38,16 @@ try:
         pass
 except ImportError:
     _log.warning('Could not import multiprocessing, defaulting to 2 CPU cores')
-    pass
 
 try:
     import gtk
-except:
+except ImportError:
     raise Exception('Could not find pygtk')
 
 try:
     import gobject
     gobject.threads_init()
-except:
+except ImportError:
     raise Exception('gobject could not be found')
 
 try:
@@ -56,7 +55,7 @@ try:
     pygst.require('0.10')
     import gst
     from gst.extend import discoverer
-except:
+except ImportError:
     raise Exception('gst/pygst 0.10 could not be found')
 
 

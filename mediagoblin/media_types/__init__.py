@@ -28,6 +28,14 @@ class InvalidFileType(Exception):
     pass
 
 
+def sniff_media(media):
+    '''
+    Iterate through the enabled media types and find those suited
+    for a certain file.
+    '''
+    pass
+
+
 def get_media_types():
     """
     Generator, yields the available media types

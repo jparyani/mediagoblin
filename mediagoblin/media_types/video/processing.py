@@ -31,15 +31,8 @@ _log.setLevel(logging.DEBUG)
 
 def process_video(entry):
     """
-    Code to process a video
-
-    Much of this code is derived from the arista-transcoder script in
-    the arista PyPI package and changed to match the needs of
-    MediaGoblin
-
-    This function sets up the arista video encoder in some kind of new thread
-    and attaches callbacks to that child process, hopefully, the
-    entry-complete callback will be called when the video is done.
+    Process a video entry, transcode the queued media files (originals) and
+    create a thumbnail for the entry.
     """
     video_config = mgg.global_config['media_type:mediagoblin.media_types.video']
 
@@ -54,7 +47,7 @@ def process_video(entry):
         entry,
         '{original}-640p.webm'.format(
             original=os.path.splitext(
-                queued_filepath[-1])[0]  # Select the 
+                queued_filepath[-1])[0] # Select the file name without .ext
             ))
 
     thumbnail_filepath = create_pub_filepath(
