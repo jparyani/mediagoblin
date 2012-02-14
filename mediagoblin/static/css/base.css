@@ -158,7 +158,9 @@ footer {
 }
 
 img.media_image {
-  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 
 .media_sidebar {
@@ -533,6 +535,7 @@ table.media_panel th {
 
   img.media_image {
     width: 100%;
+    display: inline;
   }
 
   .profile_sidebar {
