@@ -529,6 +529,7 @@ table.media_panel th {
   .navigation_button {
     width: 49%;
     float: right;
+    padding: 10px 0 14px;
   }
   
   .navigation_left {
