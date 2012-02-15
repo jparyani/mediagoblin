@@ -62,8 +62,10 @@ class AudioTranscoder(object):
 
         # Instantiate MainLoop
         self._loop = gobject.MainLoop()
+        self._failed = None
 
     def discover(self, src):
+        self._src_path = src
         _log.info('Discovering {0}'.format(src))
         self._discovery_path = src
 
@@ -74,14 +76,17 @@ class AudioTranscoder(object):
 
         self._loop.run()  # Run MainLoop
 
+        if self._failed:
+            raise self._failed
+
         # Once MainLoop has returned, return discovery data
-        return self._discovery_data
+        return getattr(self, '_discovery_data', False)
 
     def __on_discovered(self, data, is_media):
         if not is_media:
-            self.halt()
+            self._failed = BadMediaFail()
             _log.error('Could not discover {0}'.format(self._src_path))
-            raise BadMediaFail()
+            self.halt()
 
         _log.debug('Discovered: {0}'.format(data.__dict__))
 
@@ -91,6 +96,7 @@ class AudioTranscoder(object):
         self.halt()
 
     def transcode(self, src, dst, **kw):
+        _log.info('Transcoding {0} into {1}'.format(src, dst))
         self._discovery_data = kw.get('data', self.discover(src))
 
         self.__on_progress = kw.get('progress_callback')

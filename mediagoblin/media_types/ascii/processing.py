@@ -24,6 +24,9 @@ from mediagoblin.media_types.ascii import asciitoimage
 
 _log = logging.getLogger(__name__)
 
+def sniff_handler(media_file, **kw):
+    return False
+
 def process_ascii(entry):
     '''
     Code to process a txt file

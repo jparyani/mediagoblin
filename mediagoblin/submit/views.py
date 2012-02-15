@@ -35,7 +35,7 @@ from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
 from mediagoblin.processing import mark_entry_failed, ProcessMedia
 from mediagoblin.messages import add_message, SUCCESS
-from mediagoblin.media_types import get_media_type_and_manager, \
+from mediagoblin.media_types import sniff_media, \
     InvalidFileType, FileTypeNotSupported
 
 
@@ -55,7 +55,11 @@ def submit_start(request):
         else:
             try:
                 filename = request.POST['file'].filename
-                media_type, media_manager = get_media_type_and_manager(filename)
+
+                # Sniff the submitted media to determine which
+                # media plugin should handle processing
+                media_type, media_manager = sniff_media(
+                    request.POST['file'])
 
                 # create entry and save in database
                 entry = request.db.MediaEntry()
@@ -164,7 +168,6 @@ def submit_start(request):
                 This section is intended to catch exceptions raised in 
                 mediagobling.media_types
                 '''
-
                 if isinstance(e, InvalidFileType) or \
                         isinstance(e, FileTypeNotSupported):
                     submit_form.file.errors.append(

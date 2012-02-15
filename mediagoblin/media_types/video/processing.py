@@ -28,6 +28,8 @@ logging.basicConfig()
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
 
+def sniff_handler(media_file, **kw):
+    return False
 
 def process_video(entry):
     """

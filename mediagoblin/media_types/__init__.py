@@ -16,10 +16,13 @@
 
 import os
 import sys
+import logging
+import tempfile
 
 from mediagoblin import mg_globals
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
+_log = logging.getLogger(__name__)
 
 class FileTypeNotSupported(Exception):
     pass
@@ -33,7 +36,17 @@ def sniff_media(media):
     Iterate through the enabled media types and find those suited
     for a certain file.
     '''
-    pass
+    media_file = tempfile.NamedTemporaryFile()
+    media_file.write(media.file.read())
+    media.file.seek(0)
+    for media_type, manager in get_media_managers():
+        _log.info('Sniffing {0}'.format(media_type))
+        if manager['sniff_handler'](media_file, media=media):
+            return media_type, manager
+
+    raise FileTypeNotSupported(
+        # TODO: Provide information on which file types are supported
+        _(u'Sorry, I don\'t support that file type :('))
 
 
 def get_media_types():

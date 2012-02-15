@@ -25,8 +25,15 @@ from mediagoblin.media_types.audio.transcoders import AudioTranscoder
 
 _log = logging.getLogger()
 
-def sniff_handler(media):
-    return True
+def sniff_handler(media_file, **kw):
+    transcoder = AudioTranscoder()
+    try:
+        data = transcoder.discover(media_file.name)
+
+        if data.is_audio == True and data.is_video == False:
+            return True
+    except:
+        return False
 
 def process_audio(entry):
     audio_config = mgg.global_config['media_type:mediagoblin.media_types.audio']

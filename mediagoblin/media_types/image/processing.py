@@ -23,6 +23,9 @@ from mediagoblin.processing import BadMediaFail, \
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful
 
+def sniff_handler(media_file, **kw):
+    return False
+
 def process_image(entry):
     """
     Code to process an image
