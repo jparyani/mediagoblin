@@ -16,6 +16,7 @@
 
 import Image
 import os
+import logging
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import BadMediaFail, \
@@ -23,7 +24,30 @@ from mediagoblin.processing import BadMediaFail, \
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful
 
+_log = logging.getLogger(__name__)
+
+SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg']
+
 def sniff_handler(media_file, **kw):
+    if not kw.get('media') == None:  # That's a double negative!
+        name, ext = os.path.splitext(kw['media'].filename)
+        clean_ext = ext[1:].lower()  # Strip the . from ext and make lowercase
+
+        _log.debug('name: {0}\next: {1}\nlower_ext: {2}'.format(
+                name,
+                ext,
+                clean_ext))
+
+        if clean_ext in SUPPORTED_FILETYPES:
+            _log.info('Found file extension in supported filetypes')
+            return True
+        else:
+            _log.debug('Media present, extension not found in {1}'.format(
+                    SUPPORTED_FILETYPES))
+    else:
+        _log.warning('Need additional information (keyword argument \'media\')'
+                     ' to be able to handle sniffing')
+
     return False
 
 def process_image(entry):
