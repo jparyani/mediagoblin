@@ -57,6 +57,10 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.dbupdate:dbupdate_parse_setup',
         'func': 'mediagoblin.gmg_commands.dbupdate:dbupdate',
         'help': 'Set up or update the SQL database'},
+    'convert_mongo_to_sql': {
+        'setup': 'mediagoblin.gmg_commands.mongosql:mongosql_parser_setup',
+        'func': 'mediagoblin.gmg_commands.mongosql:mongosql',
+        'help': 'Convert Mongo DB data to SQL DB data'},
     }
 
 

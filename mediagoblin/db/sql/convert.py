@@ -145,8 +145,8 @@ def convert_media_comments(mk_db):
     session.close()
 
 
-def main():
-    global_config, app_config = setup_global_and_app_config("mediagoblin.ini")
+def run_conversion(config_name):
+    global_config, app_config = setup_global_and_app_config(config_name)
 
     sql_conn, sql_db = sql_connect(app_config)
     mk_conn, mk_db = mongo_connect(app_config)
@@ -164,4 +164,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    run_conversion("mediagoblin.ini")
