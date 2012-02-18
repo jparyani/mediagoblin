@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -59,13 +59,14 @@ class AsciiToImage(object):
         if kw.get('font_size'):
             self._font_size = kw.get('font_size')
 
-        _log.info('Setting font to {0}, size {1}'.format(
-                self._font,
-                self._font_size))
-
         self._if = ImageFont.truetype(
             self._font,
-            self._font_size)
+            self._font_size,
+            encoding='unic')
+
+        _log.info('Font set to {0}, size {1}'.format(
+                self._font,
+                self._font_size))
 
         #      ,-,-^-'-^'^-^'^-'^-.
         #     ( I am a wall socket )Oo,  ___
@@ -91,6 +92,10 @@ class AsciiToImage(object):
         - Character set detection and decoding,
           http://pypi.python.org/pypi/chardet
         '''
+        _log.debug('Drawing image')
+        # Convert the input from str to unicode
+        text = text.decode('utf-8')
+
         # TODO: Account for alternative line endings
         lines = text.split('\n')
 
@@ -123,8 +128,8 @@ class AsciiToImage(object):
 
                 px_pos = self._px_pos(char_pos)
 
-                _log.debug('Writing character "{0}" at {1} (px pos {2}'.format(
-                        char,
+                _log.debug('Writing character "{0}" at {1} (px pos {2})'.format(
+                        char.encode('ascii', 'replace'),
                         char_pos,
                         px_pos))
 
@@ -152,21 +157,3 @@ class AsciiToImage(object):
                 px_pos[index] = char_pos[index] * self._if_dims[index]
 
         return px_pos
-
-
-if __name__ == "__main__":
-    import urllib
-    txt = urllib.urlopen('file:///home/joar/Dropbox/ascii/install-all-the-dependencies.txt')
-
-    _log.setLevel(logging.DEBUG)
-    logging.basicConfig()
-
-    converter = AsciiToImage()
-
-    converter.convert(txt.read(), '/tmp/test.png')
-
-    '''
-    im, x, y, duration = renderImage(h, 10)
-    print "Rendered image in %.5f seconds" % duration
-    im.save('tldr.png', "PNG")
-    '''

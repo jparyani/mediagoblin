@@ -79,6 +79,22 @@ a.highlight {
   color: #fff;
 }
 
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
+ul {
+  list-style: disc inside;
+}
+
+ol {
+  list-style: decimal inside;
+}
+
 label {
   font-weight: normal;
 }

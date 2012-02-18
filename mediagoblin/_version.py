@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -23,4 +23,4 @@
 
 # see http://www.python.org/dev/peps/pep-0386/
 
-__version__ = "0.3.0.dev"
+__version__ = "0.3.0-dev"

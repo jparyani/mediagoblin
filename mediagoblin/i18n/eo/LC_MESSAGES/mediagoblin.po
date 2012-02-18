@@ -9,10 +9,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
-"Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2012-01-29 13:31-0600\n"
-"PO-Revision-Date: 2012-01-29 19:29+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
+"POT-Creation-Date: 2012-01-29 13:47-0600\n"
+"PO-Revision-Date: 2012-02-05 21:07+0000\n"
+"Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -109,6 +109,9 @@ msgid ""
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
 msgstr ""
+"Vi povas uzi por markado la lingvon\n"
+"                      «<a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
+"                      Markdown</a>»."
 
 #: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:36
 msgid "Tags"
@@ -136,7 +139,7 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:44 mediagoblin/submit/forms.py:41
 msgid "License"
-msgstr ""
+msgstr "Permesilo"
 
 #: mediagoblin/edit/forms.py:50
 msgid "Bio"
@@ -184,7 +187,7 @@ msgstr "Kontagordoj estis konservitaj"
 
 #: mediagoblin/media_types/__init__.py:77
 msgid "Could not extract any file extension from \"{filename}\""
-msgstr ""
+msgstr "Ne eblis eltrovi finaĵon de la dosiernomo «{filename}»"
 
 #: mediagoblin/media_types/__init__.py:88
 msgid "Sorry, I don't support that file type :("
@@ -289,6 +292,9 @@ msgid ""
 "        or\n"
 "        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr ""
+"<a class=\"button_action_highlight\" href=\"%(register_url)s\">Kreu konton en ĉi tiu retejo</a>\n"
+"        aŭ\n"
+"        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">ekfunkciigu MediaGoblin’on en via propra servilo</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:40
 msgid "Most recent media"
@@ -296,11 +302,11 @@ msgstr "Laste aldonitaj dosieroj"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:32
 msgid "Set your new password"
-msgstr ""
+msgstr "Enigu vian novan pasvorton"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:35
 msgid "Set password"
-msgstr ""
+msgstr "Difini pasvorton"
 
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
 msgid "Recover password"
@@ -475,7 +481,7 @@ msgstr "Estas neniom da komentoj."
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:103
 msgid "Add one"
-msgstr "Aldoni sian."
+msgstr "Komenti"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:112
 msgid ""
@@ -483,6 +489,8 @@ msgid ""
 "href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
 " formatting."
 msgstr ""
+"Vi povas uzi por markado la lingvon «&lt;a "
+"href=\"http://daringfireball.net/projects/markdown/basics\"&gt;Markdown&lt;/a&gt;»."
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:116
 msgid "Add this comment"
@@ -496,6 +504,7 @@ msgstr "je"
 #, python-format
 msgid "<p>❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a></p>"
 msgstr ""
+"<p>❖ Foliumado de dosieraro de <a href=\"%(user_url)s\">%(username)s</a></p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -623,19 +632,19 @@ msgstr "Atom-a informfluo"
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:21
 msgid "License:"
-msgstr ""
+msgstr "Permesilo:"
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:25
 msgid "All rights reserved"
-msgstr ""
+msgstr "Ĉiuj rajtoj estas rezervitaj"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:39
 msgid "← Newer"
-msgstr ""
+msgstr "← Pli novaj"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:45
 msgid "Older →"
-msgstr ""
+msgstr "Malpli novaj →"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:48
 msgid "Go to page:"
@@ -644,12 +653,12 @@ msgstr "Iri al paĝo:"
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:27
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:32
 msgid "newer"
-msgstr ""
+msgstr "pli nova"
 
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:38
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:43
 msgid "older"
-msgstr ""
+msgstr "malpli nova"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "View more media tagged with"
@@ -661,7 +670,7 @@ msgstr "aŭ"
 
 #: mediagoblin/tools/exif.py:68
 msgid "Could not read the image file."
-msgstr ""
+msgstr "Malsukcesis lego de la bildodosiero"
 
 #: mediagoblin/user_pages/forms.py:30
 msgid "I am sure I want to delete this"

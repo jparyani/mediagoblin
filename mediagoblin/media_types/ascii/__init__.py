@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -24,4 +24,4 @@ MEDIA_MANAGER = {
     "display_template": "mediagoblin/media_displays/ascii.html",
     "default_thumb": "images/media_thumbs/ascii.jpg",
     "accepted_extensions": [
-        "txt"]}
+        "txt", "asc", "nfo"]}

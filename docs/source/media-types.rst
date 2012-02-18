@@ -1,3 +1,16 @@
+.. MediaGoblin Documentation
+
+   Written in 2011, 2012 by MediaGoblin contributors
+
+   To the extent possible under law, the author(s) have dedicated all
+   copyright and related and neighboring rights to this software to
+   the public domain worldwide. This software is distributed without
+   any warranty.
+
+   You should have received a copy of the CC0 Public Domain
+   Dedication along with this software. If not, see
+   <http://creativecommons.org/publicdomain/zero/1.0/>.
+
 .. _media-types-chapter:
 
 ====================
@@ -32,3 +45,22 @@ Note that you almost certainly want to separate Celery from the normal
 paste process or your users will probably find that their connections
 time out as the video transcodes.  To set that up, check out the
 ":doc:`production-deployments`" section of this manual.
+
+
+Ascii art
+=========
+
+To enable ascii art support, first install the
+`chardet <http://pypi.python.org/pypi/chardet>`_
+library, which is necessary for creating thumbnails of ascii art::
+
+    ./bin/easy_install chardet
+
+
+Next, modify (and possibly copy over from ``mediagoblin.ini``) your
+``mediagoblin_local.ini``.  Uncomment or add to the media_types line
+'mediagoblin.media_types.ascii' like so::
+
+    media_types = mediagoblin.media_types.image, mediagoblin.media_types.ascii
+
+Now any .txt file you uploaded will be processed as ascii art!

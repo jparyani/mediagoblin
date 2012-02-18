@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -91,7 +91,7 @@ def tag_atom_feed(request):
             'type': 'text/html'}])
     for entry in cursor:
         feed.add(entry.get('title'),
-            entry.get('description_html'),
+            entry.description_html,
             id=entry.url_for_self(request.urlgen,qualified=True),
             content_type='html',
             author={'name': entry.get_uploader.username,

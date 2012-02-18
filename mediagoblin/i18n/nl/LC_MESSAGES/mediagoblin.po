@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
-"Report-Msgid-Bugs-To: http://bugs.foocorp.net/projects/mediagoblin/issues\n"
-"POT-Creation-Date: 2012-01-29 13:31-0600\n"
-"PO-Revision-Date: 2012-01-29 19:29+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
+"POT-Creation-Date: 2012-01-29 13:47-0600\n"
+"PO-Revision-Date: 2012-02-05 20:14+0000\n"
+"Last-Translator: schendje <mail@jefvanschendel.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -140,7 +140,7 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:44 mediagoblin/submit/forms.py:41
 msgid "License"
-msgstr ""
+msgstr "Licentie"
 
 #: mediagoblin/edit/forms.py:50
 msgid "Bio"
@@ -488,6 +488,9 @@ msgid ""
 "href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
 " formatting."
 msgstr ""
+"Voor opmaak kun je &lt;a "
+"href=\"http://daringfireball.net/projects/markdown/basics\"&gt;Markdown&lt;/a&gt;"
+" gebruiken."
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:116
 msgid "Add this comment"
@@ -630,11 +633,11 @@ msgstr "Atom feed"
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:21
 msgid "License:"
-msgstr ""
+msgstr "Licentie:"
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:25
 msgid "All rights reserved"
-msgstr ""
+msgstr "Alle rechten voorbehouden"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:39
 msgid "← Newer"
@@ -668,7 +671,7 @@ msgstr "of"
 
 #: mediagoblin/tools/exif.py:68
 msgid "Could not read the image file."
-msgstr ""
+msgstr "Kon het afbeeldingsbestand niet lezen."
 
 #: mediagoblin/user_pages/forms.py:30
 msgid "I am sure I want to delete this"

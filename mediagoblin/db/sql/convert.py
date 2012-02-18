@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011,2012 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -56,7 +56,7 @@ def convert_users(mk_db):
         copy_attrs(entry, new_entry,
             ('username', 'email', 'created', 'pw_hash', 'email_verified',
              'status', 'verification_key', 'is_admin', 'url',
-             'bio', 'bio_html',
+             'bio',
              'fp_verification_key', 'fp_token_expire',))
         # new_entry.fp_verification_expire = entry.fp_token_expire
 
@@ -77,7 +77,7 @@ def convert_media_entries(mk_db):
         new_entry = MediaEntry()
         copy_attrs(entry, new_entry,
             ('title', 'slug', 'created',
-             'description', 'description_html',
+             'description',
              'media_type', 'state', 'license',
              'fail_error',
              'queued_task_id',))
@@ -133,7 +133,7 @@ def convert_media_comments(mk_db):
         new_entry = MediaComment()
         copy_attrs(entry, new_entry,
             ('created',
-             'content', 'content_html',))
+             'content',))
         copy_reference_attr(entry, new_entry, "media_entry")
         copy_reference_attr(entry, new_entry, "author")
 

@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -26,6 +26,16 @@ def add_table_field(db, table_name, field_name, default_value):
     db[table_name].update(
         {field_name: {'$exists': False}},
         {'$set': {field_name: default_value}},
+        multi=True)
+
+
+def drop_table_field(db, table_name, field_name):
+    """
+    Drop an old field from a table/collection
+    """
+    db[table_name].update(
+        {field_name: {'$exists': True}},
+        {'$unset': {field_name: 1}},
         multi=True)
 
 
@@ -115,3 +125,17 @@ def mediaentry_add_license(database):
     Add the 'license' field for entries that don't have it.
     """
     add_table_field(database, 'media_entries', 'license', None)
+
+
+@RegisterMigration(9)
+def remove_calculated_html(database):
+    """
+    Drop pre-rendered html again and calculate things
+    on the fly (and cache):
+    - User.bio_html
+    - MediaEntry.description_html
+    - MediaComment.content_html
+    """
+    drop_table_field(database, 'users', 'bio_html')
+    drop_table_field(database, 'media_entries', 'description_html')
+    drop_table_field(database, 'media_comments', 'content_html')

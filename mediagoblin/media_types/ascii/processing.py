@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -13,14 +13,16 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import asciitoimage
 import chardet
 import os
 import Image
+import logging
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import create_pub_filepath, THUMB_SIZE
+from mediagoblin.media_types.ascii import asciitoimage
 
+_log = logging.getLogger(__name__)
 
 def process_ascii(entry):
     '''
@@ -42,6 +44,17 @@ def process_ascii(entry):
     with queued_file:
         queued_file_charset = chardet.detect(queued_file.read())
 
+        # Only select a non-utf-8 charset if chardet is *really* sure
+        # Tested with "Feli\x0109an superjaron", which was detecte
+        if queued_file_charset['confidence'] < 0.9:
+            interpreted_charset = 'utf-8'
+        else:
+            interpreted_charset = queued_file_charset['encoding']
+
+        _log.info('Charset detected: {0}\nWill interpret as: {1}'.format(
+                queued_file_charset,
+                interpreted_charset))
+
         queued_file.seek(0)  # Rewind the queued file
 
         thumb_filepath = create_pub_filepath(
@@ -59,6 +72,7 @@ def process_ascii(entry):
             thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
             thumb.save(thumb_file)
 
+        _log.debug('Copying local file to public storage')
         mgg.public_store.copy_local_to_storage(
             tmp_thumb_filename, thumb_filepath)
 
@@ -73,13 +87,16 @@ def process_ascii(entry):
 
         queued_file.seek(0)  # Rewind *again*
 
-        unicode_filepath = create_pub_filepath(entry, 'unicode.txt')
+        unicode_filepath = create_pub_filepath(entry, 'ascii-portable.txt')
 
         with mgg.public_store.get_file(unicode_filepath, 'wb') \
                 as unicode_file:
+            # Decode the original file from its detected charset (or UTF8)
+            # Encode the unicode instance to ASCII and replace any non-ASCII
+            # with an HTML entity (&#
             unicode_file.write(
-                    unicode(queued_file.read().decode(
-                        queued_file_charset['encoding'])).encode(
+                unicode(queued_file.read().decode(
+                        interpreted_charset)).encode(
                     'ascii',
                     'xmlcharrefreplace'))
 

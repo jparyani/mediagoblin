@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -60,7 +60,9 @@ def register(request):
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
         username = unicode(request.POST['username'].lower())
-        email = unicode(request.POST['email'].lower())
+        em_user, em_dom = unicode(request.POST['email']).split("@", 1)
+        em_dom = em_dom.lower()
+        email = em_user + "@" + em_dom
         users_with_username = request.db.User.find(
             {'username': username}).count()
         users_with_email = request.db.User.find(

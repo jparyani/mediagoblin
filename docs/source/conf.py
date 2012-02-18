@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ["mgext.youcanhelp"]
+extensions = []
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['source/_templates']
@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'GNU MediaGoblin'
-copyright = u'2011, Free Software Foundation, Inc and contributors'
+copyright = u'2011, 2012 GNU MediaGoblin contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

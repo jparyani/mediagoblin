@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011,2012 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -14,6 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+TODO: indexes on foreignkeys, where useful.
+"""
+
 
 import datetime
 
@@ -27,7 +31,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 
 from mediagoblin.db.sql.extratypes import PathTupleWithSlashes
 from mediagoblin.db.sql.base import Base, DictReadAttrProxy
-from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
+from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
 
 # It's actually kind of annoying how sqlalchemy-migrate does this, if
 # I understand it right, but whatever.  Anyway, don't remove this :P
@@ -50,6 +54,10 @@ class SimpleFieldAlias(object):
 
 
 class User(Base, UserMixin):
+    """
+    TODO: We should consider moving some rarely used fields
+    into some sort of "shadow" table.
+    """
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
@@ -57,13 +65,12 @@ class User(Base, UserMixin):
     email = Column(Unicode, nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     pw_hash = Column(Unicode, nullable=False)
-    email_verified = Column(Boolean)
+    email_verified = Column(Boolean, default=False)
     status = Column(Unicode, default=u"needs_email_verification", nullable=False)
     verification_key = Column(Unicode)
     is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
     bio = Column(UnicodeText)  # ??
-    bio_html = Column(UnicodeText)  # ??
     fp_verification_key = Column(Unicode)
     fp_token_expire = Column(DateTime)
 
@@ -74,6 +81,9 @@ class User(Base, UserMixin):
 
 
 class MediaEntry(Base, MediaEntryMixin):
+    """
+    TODO: Consider fetching the media_files using join
+    """
     __tablename__ = "media_entries"
 
     id = Column(Integer, primary_key=True)
@@ -82,9 +92,9 @@ class MediaEntry(Base, MediaEntryMixin):
     slug = Column(Unicode)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     description = Column(UnicodeText) # ??
-    description_html = Column(UnicodeText) # ??
     media_type = Column(Unicode, nullable=False)
-    state = Column(Unicode, nullable=False) # or use sqlalchemy.types.Enum?
+    state = Column(Unicode, default=u'unprocessed', nullable=False)
+        # or use sqlalchemy.types.Enum?
     license = Column(Unicode)
 
     fail_error = Column(Unicode)
@@ -120,6 +130,8 @@ class MediaEntry(Base, MediaEntryMixin):
     # attachment_files
     # fail_error
 
+    _id = SimpleFieldAlias("id")
+
     def get_comments(self, ascending=False):
         order_col = MediaComment.created
         if not ascending:
@@ -149,6 +161,10 @@ class MediaEntry(Base, MediaEntryMixin):
 
 
 class MediaFile(Base):
+    """
+    TODO: Highly consider moving "name" into a new table.
+    TODO: Consider preloading said table in software
+    """
     __tablename__ = "mediafiles"
 
     media_entry = Column(
@@ -209,7 +225,7 @@ class MediaTag(Base):
         return DictReadAttrProxy(self)
 
 
-class MediaComment(Base):
+class MediaComment(Base, MediaCommentMixin):
     __tablename__ = "media_comments"
 
     id = Column(Integer, primary_key=True)
@@ -218,9 +234,10 @@ class MediaComment(Base):
     author = Column(Integer, ForeignKey('users.id'), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     content = Column(UnicodeText, nullable=False)
-    content_html = Column(UnicodeText)
 
     get_author = relationship(User)
+
+    _id = SimpleFieldAlias("id")
 
 
 MODELS = [
@@ -243,12 +260,20 @@ class MigrationData(Base):
 ######################################################
 
 
-def show_table_init():
+def show_table_init(engine_uri):
+    if engine_uri is None:
+        engine_uri = 'sqlite:///:memory:'
     from sqlalchemy import create_engine
-    engine = create_engine('sqlite:///:memory:', echo=True)
+    engine = create_engine(engine_uri, echo=True)
 
     Base.metadata.create_all(engine)
 
 
 if __name__ == '__main__':
-    show_table_init()
+    from sys import argv
+    print repr(argv)
+    if len(argv) == 2:
+        uri = argv[1]
+    else:
+        uri = None
+    show_table_init(uri)
