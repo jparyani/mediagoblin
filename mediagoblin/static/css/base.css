@@ -349,7 +349,7 @@ textarea#comment_content {
   padding: 0px;
   width: 180px;
   overflow: hidden;
-  margin: 0px 4px 10px 4px;
+  margin: 0px 5px 10px 5px;
   text-align: center;
   font-size: 0.875em;
   list-style: none;
@@ -512,6 +512,10 @@ table.media_panel th {
     display: inline;
   }
 
+  .media_thumbnail {
+    width: 21%;
+  }
+
   .profile_sidebar {
     width: 100%;
     margin: 0px;
@@ -539,5 +543,17 @@ table.media_panel th {
   
   .button_action, .button_action_highlight, .button_form { 
     padding: 9px 14px;
+  }
+}
+
+@media screen and (max-width: 570px) {
+  .media_thumbnail {
+    width: 29%;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .media_thumbnail {
+    width: 46%;
   }
 }
