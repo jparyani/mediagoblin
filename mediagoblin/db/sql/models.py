@@ -167,6 +167,11 @@ class MediaEntry(Base, MediaEntryMixin):
         if media is not None:
             return media.url_for_self(urlgen)
 
+    @property
+    def media_data(self):
+        # TODO: Replace with proper code to read the correct table
+        return {}
+
 
 class MediaFile(Base):
     """
