@@ -29,7 +29,7 @@ from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
 
-from mediagoblin.db.sql.extratypes import PathTupleWithSlashes
+from mediagoblin.db.sql.extratypes import PathTupleWithSlashes, JSONEncoded
 from mediagoblin.db.sql.base import Base, DictReadAttrProxy
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
 
@@ -98,7 +98,7 @@ class MediaEntry(Base, MediaEntryMixin):
     license = Column(Unicode)
 
     fail_error = Column(Unicode)
-    fail_metadata = Column(UnicodeText)
+    fail_metadata = Column(JSONEncoded)
 
     queued_media_file = Column(PathTupleWithSlashes)
 
@@ -214,10 +214,12 @@ class MediaTag(Base):
         creator=Tag.find_or_new
         )
 
-    def __init__(self, name, slug):
+    def __init__(self, name=None, slug=None):
         Base.__init__(self)
-        self.name = name
-        self.tag_helper = Tag.find_or_new(slug)
+        if name is not None:
+            self.name = name
+        if slug is not None:
+            self.tag_helper = Tag.find_or_new(slug)
 
     @property
     def dict_view(self):
