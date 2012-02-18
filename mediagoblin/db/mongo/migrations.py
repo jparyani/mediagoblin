@@ -130,7 +130,12 @@ def mediaentry_add_license(database):
 @RegisterMigration(9)
 def remove_calculated_html(database):
     """
-    Drop bio_html, description_html again and calculate things on the fly (and cache)
+    Drop pre-rendered html again and calculate things
+    on the fly (and cache):
+    - User.bio_html
+    - MediaEntry.description_html
+    - MediaComment.content_html
     """
     drop_table_field(database, 'users', 'bio_html')
     drop_table_field(database, 'media_entries', 'description_html')
+    drop_table_field(database, 'media_comments', 'content_html')

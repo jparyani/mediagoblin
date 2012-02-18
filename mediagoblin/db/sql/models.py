@@ -31,7 +31,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 
 from mediagoblin.db.sql.extratypes import PathTupleWithSlashes
 from mediagoblin.db.sql.base import Base, DictReadAttrProxy
-from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
+from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
 
 
 class SimpleFieldAlias(object):
@@ -218,7 +218,7 @@ class MediaTag(Base):
         return DictReadAttrProxy(self)
 
 
-class MediaComment(Base):
+class MediaComment(Base, MediaCommentMixin):
     __tablename__ = "media_comments"
 
     id = Column(Integer, primary_key=True)
@@ -227,7 +227,6 @@ class MediaComment(Base):
     author = Column(Integer, ForeignKey('users.id'), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     content = Column(UnicodeText, nullable=False)
-    content_html = Column(UnicodeText)
 
     get_author = relationship(User)
 

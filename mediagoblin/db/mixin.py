@@ -104,3 +104,13 @@ class MediaEntryMixin(object):
     def get_license_data(self):
         """Return license dict for requested license"""
         return licenses.SUPPORTED_LICENSES[self.license or ""]
+
+
+class MediaCommentMixin(object):
+    @property
+    def content_html(self):
+        """
+        the actual html-rendered version of the comment displayed.
+        Run through Markdown and the HTML cleaner.
+        """
+        return cleaned_markdown_conversion(self.content)

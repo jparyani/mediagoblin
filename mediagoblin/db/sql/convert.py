@@ -133,7 +133,7 @@ def convert_media_comments(mk_db):
         new_entry = MediaComment()
         copy_attrs(entry, new_entry,
             ('created',
-             'content', 'content_html',))
+             'content',))
         copy_reference_attr(entry, new_entry, "media_entry")
         copy_reference_attr(entry, new_entry, "author")
 

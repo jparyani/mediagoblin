@@ -23,7 +23,7 @@ from mediagoblin.db.mongo import migrations
 from mediagoblin.db.mongo.util import ASCENDING, DESCENDING, ObjectId
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools import url
-from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
+from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
 
 ###################
 # Custom validators
@@ -251,7 +251,7 @@ class MediaEntry(Document, MediaEntryMixin):
         return self.db.User.find_one({'_id': self.uploader})
 
 
-class MediaComment(Document):
+class MediaComment(Document, MediaCommentMixin):
     """
     A comment on a MediaEntry.
 
@@ -260,8 +260,6 @@ class MediaComment(Document):
      - author: user who posted this comment
      - created: when the comment was created
      - content: plaintext (but markdown'able) version of the comment's content.
-     - content_html: the actual html-rendered version of the comment displayed.
-       Run through Markdown and the HTML cleaner.
     """
 
     __collection__ = 'media_comments'
@@ -272,7 +270,7 @@ class MediaComment(Document):
         'author': ObjectId,
         'created': datetime.datetime,
         'content': unicode,
-        'content_html': unicode}
+        }
 
     required_fields = [
         'media_entry', 'author', 'created', 'content']

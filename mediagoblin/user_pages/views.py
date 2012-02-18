@@ -18,7 +18,6 @@ from webob import exc
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.util import DESCENDING, ObjectId
-from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.response import render_to_response, render_404, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
@@ -146,7 +145,6 @@ def media_post_comment(request, media):
     comment['media_entry'] = media._id
     comment['author'] = request.user._id
     comment['content'] = unicode(request.POST['comment_content'])
-    comment['content_html'] = cleaned_markdown_conversion(comment['content'])
 
     if not comment['content'].strip():
         messages.add_message(
