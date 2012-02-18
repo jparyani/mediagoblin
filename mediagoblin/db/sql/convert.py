@@ -148,8 +148,7 @@ def convert_media_comments(mk_db):
 def main():
     global_config, app_config = setup_global_and_app_config("mediagoblin.ini")
 
-    sql_conn, sql_db = sql_connect({'sql_engine': 'sqlite:///mediagoblin.db'})
-
+    sql_conn, sql_db = sql_connect(app_config)
     mk_conn, mk_db = mongo_connect(app_config)
 
     Base.metadata.create_all(sql_db.engine)

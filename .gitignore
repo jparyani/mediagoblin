@@ -15,6 +15,7 @@
 /user_dev/
 /paste_local.ini
 /mediagoblin_local.ini
+/mediagoblin.db
 /server-log.txt
 
 # Tests
