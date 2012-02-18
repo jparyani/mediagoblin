@@ -207,10 +207,12 @@ class MediaTag(Base):
         creator=Tag.find_or_new
         )
 
-    def __init__(self, name, slug):
+    def __init__(self, name=None, slug=None):
         Base.__init__(self)
-        self.name = name
-        self.tag_helper = Tag.find_or_new(slug)
+        if name is not None:
+            self.name = name
+        if slug is not None:
+            self.tag_helper = Tag.find_or_new(slug)
 
     @property
     def dict_view(self):
