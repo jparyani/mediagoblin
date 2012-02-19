@@ -67,12 +67,22 @@ class GMGTableBase(object):
     def get(self, key):
         return getattr(self, key)
 
+    def setdefault(self, key, defaultvalue):
+        # The key *has* to exist on sql.
+        return getattr(self, key)
+
     def save(self, validate=True):
         assert validate
         sess = object_session(self)
         if sess is None:
             sess = Session()
         sess.add(self)
+        sess.commit()
+
+    def delete(self):
+        sess = object_session(self)
+        assert sess is not None, "Not going to delete detached %r" % self
+        sess.delete(self)
         sess.commit()
 
 
