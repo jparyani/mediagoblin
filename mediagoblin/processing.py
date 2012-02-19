@@ -114,6 +114,7 @@ def mark_entry_failed(entry_id, exc):
                       u'fail_error': exc.exception_path,
                       u'fail_metadata': exc.metadata}})
     else:
+        _log.warn("No idea what happened here, but it failed: %r", exc)
         # Looks like no, so just mark it as failed and don't record a
         # failure_error (we'll assume it wasn't handled) and don't record
         # metadata (in fact overwrite it if somehow it had previous info
