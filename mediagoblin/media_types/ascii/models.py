@@ -22,13 +22,13 @@ from sqlalchemy import (
     UniqueConstraint)
 
 
-class VideoData(Base):
-    __tablename__ = "video_data"
+class AsciiData(Base):
+    __tablename__ = "ascii_data"
 
     id = Column(Integer, primary_key=True)
     media_entry = Column(
         Integer, ForeignKey('media_entries.id'), nullable=False)
 
 
-DATA_MODEL = VideoData
-MODELS = [VideoData]
+DATA_MODEL = AsciiData
+MODELS = [AsciiData]

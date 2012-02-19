@@ -53,6 +53,10 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.import_export:import_export_parse_setup',
         'func': 'mediagoblin.gmg_commands.import_export:env_import',
         'help': 'Exports the data for this MediaGoblin instance'},
+    'dbupdate': {
+        'setup': 'mediagoblin.gmg_commands.dbupdate:dbupdate_parse_setup',
+        'func': 'mediagoblin.gmg_commands.dbupdate:dbupdate',
+        'help': 'Set up or update the SQL database'},
     }
 
 

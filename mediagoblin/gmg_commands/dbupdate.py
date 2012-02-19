@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -14,11 +14,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from sqlalchemy.orm import sessionmaker
+
 from mediagoblin.db.sql.open import setup_connection_and_db_from_config
 from mediagoblin.db.sql.util import (
     MigrationManager, assure_migrations_table_setup)
 from mediagoblin.init import setup_global_and_app_config
 from mediagoblin.tools.common import import_component
+
+
+def dbupdate_parse_setup(subparser):
+    pass
 
 
 class DatabaseData(object):
@@ -27,9 +33,9 @@ class DatabaseData(object):
         self.models = models
         self.migrations = migrations
 
-    def make_migration_manager(self, db):
+    def make_migration_manager(self, session):
         return MigrationManager(
-            self.name, self.models, self.migrations, db)
+            self.name, self.models, self.migrations, session)
 
 
 def gather_database_data(media_types):
@@ -74,11 +80,10 @@ def dbupdate(args):
     # Set up the database
     connection, db = setup_connection_and_db_from_config(app_config)
 
-    # If migrations table not made, make it!
-    assure_migrations_table_setup(db)
+    Session = sessionmaker(bind=db.engine)
 
     # Setup media managers for all dbdata, run init/migrate and print info
     # For each component, create/migrate tables
     for dbdata in dbdatas:
-        migration_manager = dbdata.make_migration_manager(db)
+        migration_manager = dbdata.make_migration_manager(Session())
         migration_manager.init_or_migrate()

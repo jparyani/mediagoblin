@@ -6,11 +6,13 @@ from sqlalchemy import (
 
 
 class ImageData(Base):
-    __tablename__ = "image__data"
+    __tablename__ = "image_data"
 
     id = Column(Integer, primary_key=True)
     width = Column(Integer)
     height = Column(Integer)
+    media_entry = Column(
+        Integer, ForeignKey('media_entries.id'), nullable=False)
 
 
 DATA_MODEL = ImageData
