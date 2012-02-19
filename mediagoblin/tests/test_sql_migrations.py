@@ -800,7 +800,7 @@ def test_set1_to_set3():
         'portal': 'necroplex'}
 
 
-def test_set2_to_set3():
+#def test_set2_to_set3():
     # Create / connect to database
     # Create tables by migrating on empty initial set
 
@@ -811,10 +811,10 @@ def test_set2_to_set3():
     # Migrate
     # Make sure version matches expected
     # Check all things in database match expected
-    pass
+    # pass
 
 
-def test_set1_to_set2_to_set3():
+#def test_set1_to_set2_to_set3():
     # Create / connect to database
     # Create tables by migrating on empty initial set
 
@@ -881,4 +881,4 @@ def test_set1_to_set2_to_set3():
     # assert level_exit_table.c.from_level.nullable is False
     # assert_col_type(level_exit_table.c.to_level, VARCHAR)
 
-    pass
+    # pass
