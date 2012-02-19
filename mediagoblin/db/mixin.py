@@ -27,9 +27,11 @@ These functions now live here and get "mixed in" into the
 real objects.
 """
 
+from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.tools import common, licenses
 from mediagoblin.tools.text import cleaned_markdown_conversion
+from mediagoblin.tools.url import slugify
 
 
 class UserMixin(object):
@@ -46,6 +48,22 @@ class UserMixin(object):
 
 
 class MediaEntryMixin(object):
+    def generate_slug(self):
+        # import this here due to a cyclic import issue
+        # (db.models -> db.mixin -> db.util -> db.models)
+        from mediagoblin.db.util import check_media_slug_used
+
+        self.slug = slugify(self.title)
+
+        duplicate = check_media_slug_used(mg_globals.database,
+            self.uploader, self.slug, self.id)
+
+        if duplicate:
+            if self.id is not None:
+                self.slug = "%s-%s" % (self.id, self.slug)
+            else:
+                self.slug = None
+
     @property
     def description_html(self):
         """

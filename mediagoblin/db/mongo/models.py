@@ -18,11 +18,9 @@ import datetime
 
 from mongokit import Document
 
-from mediagoblin import mg_globals
 from mediagoblin.db.mongo import migrations
 from mediagoblin.db.mongo.util import ASCENDING, DESCENDING, ObjectId
 from mediagoblin.tools.pagination import Pagination
-from mediagoblin.tools import url
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
 
 
@@ -231,15 +229,6 @@ class MediaEntry(Document, MediaEntryMixin):
             
         return self.db.MediaComment.find({
                 'media_entry': self._id}).sort('created', order)
-
-    def generate_slug(self):
-        self.slug = url.slugify(self.title)
-
-        duplicate = mg_globals.database.media_entries.find_one(
-            {'slug': self.slug})
-
-        if duplicate:
-            self.slug = "%s-%s" % (self._id, self.slug)
 
     def url_to_prev(self, urlgen):
         """
