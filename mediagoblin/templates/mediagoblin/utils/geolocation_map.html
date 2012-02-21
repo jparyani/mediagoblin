@@ -20,7 +20,7 @@
   {% if media.media_data.has_key('gps')
         and app_config['geolocation_map_visible']
         and media.media_data.gps %}
-    <h3 class="sidedata">Location</h3>
+    <h4>Map</h4>
     <div>
       {% set gps = media.media_data.gps %}
         <div id="tile-map" style="width: 100%; height: 196px;">

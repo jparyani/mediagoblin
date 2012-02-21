@@ -29,6 +29,7 @@ real objects.
 
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.tools import common, licenses
+from mediagoblin.tools.text import cleaned_markdown_conversion
 
 
 class UserMixin(object):
@@ -39,8 +40,20 @@ class UserMixin(object):
         return auth_lib.bcrypt_check_password(
             password, self.pw_hash)
 
+    @property
+    def bio_html(self):
+        return cleaned_markdown_conversion(self.bio)
+
 
 class MediaEntryMixin(object):
+    @property
+    def description_html(self):
+        """
+        Rendered version of the description, run through
+        Markdown and cleaned with our cleaning tool.
+        """
+        return cleaned_markdown_conversion(self.description)
+
     def get_display_media(self, media_map,
                           fetch_order=common.DISPLAY_IMAGE_FETCHING_ORDER):
         """
@@ -91,3 +104,13 @@ class MediaEntryMixin(object):
     def get_license_data(self):
         """Return license dict for requested license"""
         return licenses.SUPPORTED_LICENSES[self.license or ""]
+
+
+class MediaCommentMixin(object):
+    @property
+    def content_html(self):
+        """
+        the actual html-rendered version of the comment displayed.
+        Run through Markdown and the HTML cleaner.
+        """
+        return cleaned_markdown_conversion(self.content)

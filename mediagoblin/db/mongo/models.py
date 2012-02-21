@@ -23,7 +23,7 @@ from mediagoblin.db.mongo import migrations
 from mediagoblin.db.mongo.util import ASCENDING, DESCENDING, ObjectId
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools import url
-from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
+from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
 
 ###################
 # Custom validators
@@ -59,7 +59,6 @@ class User(Document, UserMixin):
      - is_admin: Whether or not this user is an administrator or not.
      - url: this user's personal webpage/website, if appropriate.
      - bio: biography of this user (plaintext, in markdown)
-     - bio_html: biography of the user converted to proper HTML.
     """
     __collection__ = 'users'
     use_dot_notation = True
@@ -76,7 +75,6 @@ class User(Document, UserMixin):
         'is_admin': bool,
         'url': unicode,
         'bio': unicode,      # May contain markdown
-        'bio_html': unicode,  # May contain plaintext, or HTML
         'fp_verification_key': unicode,  # forgotten password verification key
         'fp_token_expire': datetime.datetime,
         }
@@ -111,9 +109,6 @@ class MediaEntry(Document, MediaEntryMixin):
      - description: Uploader-set description of this work.  This can be marked
        up with MarkDown for slight fanciness (links, boldness, italics,
        paragraphs...)
-
-     - description_html: Rendered version of the description, run through
-       Markdown and cleaned with our cleaning tool.
 
      - media_type: What type of media is this?  Currently we only support
        'image' ;)
@@ -179,7 +174,6 @@ class MediaEntry(Document, MediaEntryMixin):
         'slug': unicode,
         'created': datetime.datetime,
         'description': unicode,  # May contain markdown/up
-        'description_html': unicode,  # May contain plaintext, or HTML
         'media_type': unicode,
         'media_data': dict,  # extra data relevant to this media_type
         'plugin_data': dict,  # plugins can dump stuff here.
@@ -257,7 +251,7 @@ class MediaEntry(Document, MediaEntryMixin):
         return self.db.User.find_one({'_id': self.uploader})
 
 
-class MediaComment(Document):
+class MediaComment(Document, MediaCommentMixin):
     """
     A comment on a MediaEntry.
 
@@ -266,8 +260,6 @@ class MediaComment(Document):
      - author: user who posted this comment
      - created: when the comment was created
      - content: plaintext (but markdown'able) version of the comment's content.
-     - content_html: the actual html-rendered version of the comment displayed.
-       Run through Markdown and the HTML cleaner.
     """
 
     __collection__ = 'media_comments'
@@ -278,7 +270,7 @@ class MediaComment(Document):
         'author': ObjectId,
         'created': datetime.datetime,
         'content': unicode,
-        'content_html': unicode}
+        }
 
     required_fields = [
         'media_entry', 'author', 'created', 'content']

@@ -28,7 +28,7 @@ _log = logging.getLogger(__name__)
 from werkzeug.utils import secure_filename
 
 from mediagoblin.db.util import ObjectId
-from mediagoblin.tools.text import cleaned_markdown_conversion, convert_to_tag_list_of_dicts
+from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login
@@ -66,8 +66,6 @@ def submit_start(request):
                     or unicode(splitext(filename)[0]))
 
                 entry.description = unicode(request.POST.get('description'))
-                entry.description_html = cleaned_markdown_conversion(
-                    entry.description)
 
                 entry.license = unicode(request.POST.get('license', "")) or None
 

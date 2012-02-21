@@ -1,4 +1,3 @@
-{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -14,20 +13,22 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
 
-{% block exif_content %}
-  {% if media.media_data.has_key('exif')
-        and app_config['exif_visible']
-        and media.media_data.exif.has_key('useful') %}
-    <h4>EXIF</h4>
-    <table>
-      {% for key, tag in media.media_data.exif.useful.items() %}
-        <tr>
-          <td>{{ key }}</td>
-          <td>{{ tag.printable }}</td>
-        </tr>
-      {% endfor %}
-    </table>
-  {% endif %}
-{% endblock %}
+
+from mediagoblin.db.sql.models import Base
+
+from sqlalchemy import (
+    Column, Integer, Unicode, UnicodeText, DateTime, Boolean, ForeignKey,
+    UniqueConstraint)
+
+
+class VideoData(Base):
+    __tablename__ = "video_data"
+
+    id = Column(Integer, primary_key=True)
+    media_entry = Column(
+        Integer, ForeignKey('media_entries.id'), nullable=False)
+
+
+DATA_MODEL = VideoData
+MODELS = [VideoData]

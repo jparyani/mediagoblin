@@ -62,6 +62,8 @@ setup(
         'webtest',
         'ConfigObj',
         'Markdown',
+        'sqlalchemy',
+        'sqlalchemy-migrate',
         ## For now we're expecting that users will install this from
         ## their package managers.
         # 'lxml',

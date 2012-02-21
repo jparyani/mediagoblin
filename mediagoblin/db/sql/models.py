@@ -29,9 +29,16 @@ from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
 
-from mediagoblin.db.sql.extratypes import PathTupleWithSlashes
+from mediagoblin.db.sql.extratypes import PathTupleWithSlashes, JSONEncoded
 from mediagoblin.db.sql.base import Base, DictReadAttrProxy
-from mediagoblin.db.mixin import UserMixin, MediaEntryMixin
+from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
+
+# It's actually kind of annoying how sqlalchemy-migrate does this, if
+# I understand it right, but whatever.  Anyway, don't remove this :P
+# 
+# We could do migration calls more manually instead of relying on
+# this import-based meddling...
+from migrate import changeset
 
 
 class SimpleFieldAlias(object):
@@ -64,7 +71,6 @@ class User(Base, UserMixin):
     is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
     bio = Column(UnicodeText)  # ??
-    bio_html = Column(UnicodeText)  # ??
     fp_verification_key = Column(Unicode)
     fp_token_expire = Column(DateTime)
 
@@ -86,14 +92,13 @@ class MediaEntry(Base, MediaEntryMixin):
     slug = Column(Unicode)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     description = Column(UnicodeText) # ??
-    description_html = Column(UnicodeText) # ??
     media_type = Column(Unicode, nullable=False)
     state = Column(Unicode, default=u'unprocessed', nullable=False)
         # or use sqlalchemy.types.Enum?
     license = Column(Unicode)
 
     fail_error = Column(Unicode)
-    fail_metadata = Column(UnicodeText)
+    fail_metadata = Column(JSONEncoded)
 
     queued_media_file = Column(PathTupleWithSlashes)
 
@@ -209,10 +214,12 @@ class MediaTag(Base):
         creator=Tag.find_or_new
         )
 
-    def __init__(self, name, slug):
+    def __init__(self, name=None, slug=None):
         Base.__init__(self)
-        self.name = name
-        self.tag_helper = Tag.find_or_new(slug)
+        if name is not None:
+            self.name = name
+        if slug is not None:
+            self.tag_helper = Tag.find_or_new(slug)
 
     @property
     def dict_view(self):
@@ -220,7 +227,7 @@ class MediaTag(Base):
         return DictReadAttrProxy(self)
 
 
-class MediaComment(Base):
+class MediaComment(Base, MediaCommentMixin):
     __tablename__ = "media_comments"
 
     id = Column(Integer, primary_key=True)
@@ -229,11 +236,30 @@ class MediaComment(Base):
     author = Column(Integer, ForeignKey('users.id'), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     content = Column(UnicodeText, nullable=False)
-    content_html = Column(UnicodeText)
 
     get_author = relationship(User)
 
     _id = SimpleFieldAlias("id")
+
+
+MODELS = [
+    User, MediaEntry, Tag, MediaTag, MediaComment]
+
+
+######################################################
+# Special, migrations-tracking table
+#
+# Not listed in MODELS because this is special and not
+# really migrated, but used for migrations (for now)
+######################################################
+
+class MigrationData(Base):
+    __tablename__ = "migrations"
+
+    name = Column(Unicode, primary_key=True)
+    version = Column(Integer, nullable=False, default=0)
+
+######################################################
 
 
 def show_table_init(engine_uri):

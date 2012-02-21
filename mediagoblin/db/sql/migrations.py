@@ -1,6 +1,5 @@
-{#
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -14,20 +13,5 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
 
-{% block exif_content %}
-  {% if media.media_data.has_key('exif')
-        and app_config['exif_visible']
-        and media.media_data.exif.has_key('useful') %}
-    <h4>EXIF</h4>
-    <table>
-      {% for key, tag in media.media_data.exif.useful.items() %}
-        <tr>
-          <td>{{ key }}</td>
-          <td>{{ tag.printable }}</td>
-        </tr>
-      {% endfor %}
-    </table>
-  {% endif %}
-{% endblock %}
+MIGRATIONS = {}
