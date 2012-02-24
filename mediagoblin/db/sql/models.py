@@ -23,7 +23,7 @@ import datetime
 
 from sqlalchemy import (
     Column, Integer, Unicode, UnicodeText, DateTime, Boolean, ForeignKey,
-    UniqueConstraint)
+    UniqueConstraint, PrimaryKeyConstraint, SmallInteger)
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
@@ -177,6 +177,26 @@ class MediaEntry(Base, MediaEntryMixin):
         pass
 
 
+class FileKeynames(Base):
+    """
+    keywords for various places.
+    currently the MediaFile keys
+    """
+    __tablename__ = "core__file_keynames"
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode, unique=True)
+
+    def __repr__(self):
+        return "<FileKeyname %r: %r>" % (self.id, self.name)
+
+    @classmethod
+    def find_or_new(cls, name):
+        t = cls.query.filter_by(name=name).first()
+        if t is not None:
+            return t
+        return cls(name=name)
+
+
 class MediaFile(Base):
     """
     TODO: Highly consider moving "name" into a new table.
@@ -186,12 +206,21 @@ class MediaFile(Base):
 
     media_entry = Column(
         Integer, ForeignKey(MediaEntry.id),
-        nullable=False, primary_key=True)
-    name = Column(Unicode, primary_key=True)
+        nullable=False)
+    name_id = Column(SmallInteger, ForeignKey(FileKeynames.id), nullable=False)
     file_path = Column(PathTupleWithSlashes)
+
+    __table_args__ = (
+        PrimaryKeyConstraint('media_entry', 'name_id'),
+        {})
 
     def __repr__(self):
         return "<MediaFile %s: %r>" % (self.name, self.file_path)
+
+    name_helper = relationship(FileKeynames, lazy="joined", innerjoin=True)
+    name = association_proxy('name_helper', 'name',
+        creator=FileKeynames.find_or_new
+        )
 
 
 class MediaAttachmentFile(Base):
