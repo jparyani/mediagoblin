@@ -19,7 +19,7 @@ from mediagoblin.init import setup_global_and_app_config, setup_database
 from mediagoblin.db.mongo.util import ObjectId
 
 from mediagoblin.db.sql.models import (Base, User, MediaEntry, MediaComment,
-    Tag, MediaTag, MediaFile)
+    Tag, MediaTag, MediaFile, MediaAttachmentFile)
 from mediagoblin.db.sql.open import setup_connection_and_db_from_config as \
     sql_connect
 from mediagoblin.db.mongo.open import setup_connection_and_db_from_config as \
@@ -91,6 +91,15 @@ def convert_media_entries(mk_db):
             new_file = MediaFile(name=key, file_path=value)
             new_file.media_entry = new_entry.id
             Session.add(new_file)
+
+        for attachment in entry.attachment_files:
+            new_attach = MediaAttachmentFile(
+                name=attachment["name"],
+                filepath=attachment["filepath"],
+                created=attachment["created"]
+                )
+            new_attach.media_entry = new_entry.id
+            Session.add(new_attach)
 
     session.commit()
     session.close()

@@ -118,6 +118,15 @@ class MediaEntry(Base, MediaEntryMixin):
         creator=lambda k, v: MediaFile(name=k, file_path=v)
         )
 
+    attachment_files_helper = relationship("MediaAttachmentFile",
+        cascade="all, delete-orphan",
+        order_by="MediaAttachmentFile.created"
+        )
+    attachment_files = association_proxy("attachment_files_helper", "dict_view",
+        creator=lambda v: MediaAttachmentFile(
+            name=v["name"], filepath=v["filepath"])
+        )
+
     tags_helper = relationship("MediaTag",
         cascade="all, delete-orphan"
         )
@@ -127,7 +136,6 @@ class MediaEntry(Base, MediaEntryMixin):
 
     ## TODO
     # media_data
-    # attachment_files
     # fail_error
 
     _id = SimpleFieldAlias("id")
@@ -175,6 +183,23 @@ class MediaFile(Base):
 
     def __repr__(self):
         return "<MediaFile %s: %r>" % (self.name, self.file_path)
+
+
+class MediaAttachmentFile(Base):
+    __tablename__ = "core__attachment_files"
+
+    id = Column(Integer, primary_key=True)
+    media_entry = Column(
+        Integer, ForeignKey(MediaEntry.id),
+        nullable=False)
+    name = Column(Unicode, nullable=False)
+    filepath = Column(PathTupleWithSlashes)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    @property
+    def dict_view(self):
+        """A dict like view on this object"""
+        return DictReadAttrProxy(self)
 
 
 class Tag(Base):

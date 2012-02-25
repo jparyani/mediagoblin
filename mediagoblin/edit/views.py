@@ -120,7 +120,7 @@ def edit_attachments(request, media):
             finally:
                 request.POST['attachment_file'].file.close()
 
-            media['attachment_files'].append(dict(
+            media.attachment_files.append(dict(
                     name=request.POST['attachment_name'] \
                         or request.POST['attachment_file'].filename,
                     filepath=attachment_public_filepath,

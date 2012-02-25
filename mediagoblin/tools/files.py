@@ -27,6 +27,6 @@ def delete_media_files(media):
         mg_globals.public_store.delete_file(
             listpath)
 
-    for attachment in media['attachment_files']:
+    for attachment in media.attachment_files:
         mg_globals.public_store.delete_file(
             attachment['filepath'])
