@@ -47,29 +47,12 @@ def setup_celery_from_config(app_config, global_config,
 
     celery_settings = {}
 
-    # set up mongodb stuff
-    celery_settings['CELERY_RESULT_BACKEND'] = 'mongodb'
-    if 'BROKER_BACKEND' not in celery_settings:
-        celery_settings['BROKER_BACKEND'] = 'mongodb'
-
-    celery_mongo_settings = {}
-
-    if 'db_host' in app_config:
-        celery_mongo_settings['host'] = app_config['db_host']
-        if celery_settings['BROKER_BACKEND'] == 'mongodb':
-            celery_settings['BROKER_HOST'] = app_config['db_host']
-    if 'db_port' in app_config:
-        celery_mongo_settings['port'] = app_config['db_port']
-        if celery_settings['BROKER_BACKEND'] == 'mongodb':
-            celery_settings['BROKER_PORT'] = app_config['db_port']
-    celery_mongo_settings['database'] = app_config['db_name']
-
-    celery_settings['CELERY_MONGODB_BACKEND_SETTINGS'] = celery_mongo_settings
-
-    # Add anything else
+    # Add all celery settings from config
     for key, value in celery_conf.iteritems():
         key = key.upper()
         celery_settings[key] = value
+
+    # TODO: use default result stuff here if it exists
 
     # add mandatory celery imports
     celery_imports = celery_settings.setdefault('CELERY_IMPORTS', [])
