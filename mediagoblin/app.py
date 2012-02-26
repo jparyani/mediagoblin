@@ -16,11 +16,12 @@
 
 import os
 import urllib
+import logging
 
 import routes
 from webob import Request, exc
 
-from mediagoblin import routing, meddleware
+from mediagoblin import routing, meddleware, __version__
 from mediagoblin.tools import common, translate, template
 from mediagoblin.tools.response import render_404
 from mediagoblin.tools import request as mg_request
@@ -29,6 +30,9 @@ from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init import (get_jinja_loader, get_staticdirector,
     setup_global_and_app_config, setup_workbench, setup_database,
     setup_storage, setup_beaker_cache)
+
+
+_log = logging.getLogger(__name__)
 
 
 class MediaGoblinApp(object):
@@ -47,6 +51,7 @@ class MediaGoblinApp(object):
            (Note: setting 'celery_setup_elsewhere' also disables
            setting up celery.)
         """
+        _log.info("GNU MediaGoblin %s main server starting", __version__)
         ##############
         # Setup config
         ##############
