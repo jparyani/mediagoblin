@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-01-29 13:47-0600\n"
-"PO-Revision-Date: 2012-02-05 21:07+0000\n"
+"POT-Creation-Date: 2012-02-09 09:30-0600\n"
+"PO-Revision-Date: 2012-02-26 19:34+0000\n"
 "Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Language: eo\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: mediagoblin/processing.py:143
+#: mediagoblin/processing.py:153
 msgid "Invalid file given for media type."
 msgstr "La provizita dosiero ne konformas al la informtipo."
 
@@ -53,9 +53,7 @@ msgstr "Ni bedaŭras, sed konto kun tiu retpoŝtadreso jam ekzistas."
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
-msgstr ""
-"Via retpoŝtadreso estas konfirmita. Vi povas nun ensaluti, redakti vian "
-"profilon, kaj alŝuti bildojn!"
+msgstr "Via retpoŝtadreso estas konfirmita. Vi povas nun ensaluti, redakti vian profilon, kaj alŝuti bildojn!"
 
 #: mediagoblin/auth/views.py:186
 msgid "The verification key or user id is incorrect"
@@ -82,9 +80,7 @@ msgstr "Senditas retletero kun instrukcio pri kiel ŝanĝi vian pasvorton."
 msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
-msgstr ""
-"Ni ne povas sendi pasvortsavan retleteron, ĉar aŭ via konto estas neaktiva, "
-"aŭ ĝia retpoŝtadreso ne estis konfirmita."
+msgstr "Ni ne povas sendi pasvortsavan retleteron, ĉar aŭ via konto estas neaktiva, aŭ ĝia retpoŝtadreso ne estis konfirmita."
 
 #: mediagoblin/auth/views.py:282
 msgid "Couldn't find someone with that username or email."
@@ -108,10 +104,7 @@ msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
-msgstr ""
-"Vi povas uzi por markado la lingvon\n"
-"                      «<a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
-"                      Markdown</a>»."
+msgstr "Vi povas uzi por markado la lingvon\n                      «<a href=\"http://daringfireball.net/projects/markdown/basics\">\n                      Markdown</a>»."
 
 #: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:36
 msgid "Tags"
@@ -133,9 +126,7 @@ msgstr "La distingiga adresparto ne povas esti malplena"
 msgid ""
 "The title part of this media's address. You usually don't need to change "
 "this."
-msgstr ""
-"La dosiertitol-bazita parto de la dosieradreso. Ordinare ne necesas ĝin "
-"ŝanĝi."
+msgstr "La dosiertitol-bazita parto de la dosieradreso. Ordinare ne necesas ĝin ŝanĝi."
 
 #: mediagoblin/edit/forms.py:44 mediagoblin/submit/forms.py:41
 msgid "License"
@@ -221,9 +212,7 @@ msgstr "Verŝajne ĉe ĉi tiu adreso ne estas paĝo. Ni bedaŭras!"
 msgid ""
 "If you're sure the address is correct, maybe the page you're looking for has"
 " been moved or deleted."
-msgstr ""
-"Se vi estas certa, ke la adreso estas ĝusta, eble la serĉata de vi paĝo "
-"estis movita aŭ forigita."
+msgstr "Se vi estas certa, ke la adreso estas ĝusta, eble la serĉata de vi paĝo estis movita aŭ forigita."
 
 #: mediagoblin/templates/mediagoblin/base.html:46
 msgid "MediaGoblin logo"
@@ -252,9 +241,7 @@ msgstr "Ensaluti"
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project"
-msgstr ""
-"Funkcias per <a href=\"http://mediagoblin.org\">MediaGoblin</a>, unu el la "
-"<a href=\"http://gnu.org/\">projektoj de GNU</a>"
+msgstr "Funkcias per <a href=\"http://mediagoblin.org\">MediaGoblin</a>, unu el la <a href=\"http://gnu.org/\">projektoj de GNU</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:24
 msgid "Explore"
@@ -268,18 +255,13 @@ msgstr "Saluton, kaj bonvenon al ĉi tiu MediaGoblina retpaĝaro!"
 msgid ""
 "This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
 "extraordinarily great piece of media hosting software."
-msgstr ""
-"Ĉi tiu retpaĝaro funkcias per <a "
-"href=\"http://mediagoblin.org\">MediaGoblin</a>, eksterordinare bonega "
-"programaro por gastigado de aŭd‐vid‐dosieroj."
+msgstr "Ĉi tiu retpaĝaro funkcias per <a href=\"http://mediagoblin.org\">MediaGoblin</a>, eksterordinare bonega programaro por gastigado de aŭd‐vid‐dosieroj."
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid ""
 "To add your own media, place comments, save your favourites and more, you "
 "can log in with your MediaGoblin account."
-msgstr ""
-"Por aldoni viajn proprajn dosierojn, fari al vi liston de la plej plaĉaj, "
-"ks, vi povas ensaluti je via MediaGoblina konto."
+msgstr "Por aldoni viajn proprajn dosierojn, fari al vi liston de la plej plaĉaj, ks, vi povas ensaluti je via MediaGoblina konto."
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid "Don't have one yet? It's easy!"
@@ -291,10 +273,7 @@ msgid ""
 "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
 "        or\n"
 "        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
-msgstr ""
-"<a class=\"button_action_highlight\" href=\"%(register_url)s\">Kreu konton en ĉi tiu retejo</a>\n"
-"        aŭ\n"
-"        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">ekfunkciigu MediaGoblin’on en via propra servilo</a>"
+msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Kreu konton en ĉi tiu retejo</a>\n        aŭ\n        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">ekfunkciigu MediaGoblin’on en via propra servilo</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:40
 msgid "Most recent media"
@@ -328,14 +307,7 @@ msgid ""
 "\n"
 "If you think this is an error, just ignore this email and continue being\n"
 "a happy goblin!"
-msgstr ""
-"Saluton, %(username)s,\n"
-"\n"
-"por ŝanĝi vian pasvorton ĉe GNUa MediaGoblin, sekvu la jenan retadreson per via TTT-legilo:\n"
-"\n"
-"%(verification_url)s\n"
-"\n"
-"Se vi pensas, ke ĉi tiu retletero estas sendita erare, simple ignoru ĝin kaj plu restu feliĉa koboldo!"
+msgstr "Saluton, %(username)s,\n\npor ŝanĝi vian pasvorton ĉe GNUa MediaGoblin, sekvu la jenan retadreson per via TTT-legilo:\n\n%(verification_url)s\n\nSe vi pensas, ke ĉi tiu retletero estas sendita erare, simple ignoru ĝin kaj plu restu feliĉa koboldo!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:30
 msgid "Logging in failed!"
@@ -370,12 +342,7 @@ msgid ""
 "your web browser:\n"
 "\n"
 "%(verification_url)s"
-msgstr ""
-"Sal %(username)s,\n"
-"\n"
-"por aktivigi vian GNU MediaGoblin konton, malfermu la sekvantan URLon en via retumilo:\n"
-"\n"
-"%(verification_url)s"
+msgstr "Sal %(username)s,\n\npor aktivigi vian GNU MediaGoblin konton, malfermu la sekvantan URLon en via retumilo:\n\n%(verification_url)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:29
 #, python-format
@@ -419,20 +386,14 @@ msgid ""
 "Sorry, this video will not work because \n"
 "\t    your web browser does not support HTML5 \n"
 "\t    video."
-msgstr ""
-"Bedaŭrinde ĉi tiu filmo ne spekteblas, ĉar\n"
-"<span class=\"whitespace other\" title=\"Tab\">»</span>    via TTT-legilo ne subtenas montradon\n"
-"<span class=\"whitespace other\" title=\"Tab\">»</span>    de filmoj laŭ HTML5."
+msgstr "Bedaŭrinde ĉi tiu filmo ne spekteblas, ĉar\n<span class=\"whitespace other\" title=\"Tab\">»</span>    via TTT-legilo ne subtenas montradon\n<span class=\"whitespace other\" title=\"Tab\">»</span>    de filmoj laŭ HTML5."
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:36
 msgid ""
 "You can get a modern web browser that \n"
 "\t    can play this video at <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
-msgstr ""
-"Vi povas akiri modernan TTT-legilon,\n"
-"<span class=\"whitespace other\" title=\"Tab\">»</span>    kapablan montri ĉi tiun filmon, ĉe <a href=\"http://getfirefox.com\">\n"
-"<span class=\"whitespace other\" title=\"Tab\">»</span>    http://getfirefox.com</a>!"
+msgstr "Vi povas akiri modernan TTT-legilon,\n<span class=\"whitespace other\" title=\"Tab\">»</span>    kapablan montri ĉi tiun filmon, ĉe <a href=\"http://getfirefox.com\">\n<span class=\"whitespace other\" title=\"Tab\">»</span>    http://getfirefox.com</a>!"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Add your media"
@@ -488,9 +449,7 @@ msgid ""
 "You can use <a "
 "href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
 " formatting."
-msgstr ""
-"Vi povas uzi por markado la lingvon «&lt;a "
-"href=\"http://daringfireball.net/projects/markdown/basics\"&gt;Markdown&lt;/a&gt;»."
+msgstr "Vi povas uzi por markado la lingvon «<a href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a>»."
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:116
 msgid "Add this comment"
@@ -503,8 +462,7 @@ msgstr "je"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:153
 #, python-format
 msgid "<p>❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a></p>"
-msgstr ""
-"<p>❖ Foliumado de dosieraro de <a href=\"%(user_url)s\">%(username)s</a></p>"
+msgstr "<p>❖ Foliumado de dosieraro de <a href=\"%(user_url)s\">%(username)s</a></p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -522,9 +480,7 @@ msgstr "Kontrolejo pri dosierpreparado."
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:25
 msgid ""
 "You can track the state of media being processed for your gallery here."
-msgstr ""
-"Ĉi tie vi povas informiĝi pri la stato de preparado de dosieroj por via "
-"galerio."
+msgstr "Ĉi tie vi povas informiĝi pri la stato de preparado de dosieroj por via galerio."
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
 msgid "Media in-processing"
@@ -560,8 +516,7 @@ msgstr "Preskaŭ finite! Restas nur validigi vian konton."
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:58
 msgid ""
 "An email should arrive in a few moments with instructions on how to do so."
-msgstr ""
-"Post kelkaj momentoj devas veni retletero kun instrukcio pri kiel tion fari."
+msgstr "Post kelkaj momentoj devas veni retletero kun instrukcio pri kiel tion fari."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:62
 msgid "In case it doesn't:"
@@ -575,18 +530,14 @@ msgstr "Resendi kontrolmesaĝon"
 msgid ""
 "Someone has registered an account with this username, but it still has to be"
 " activated."
-msgstr ""
-"Iu registris konton kun tiu ĉi uzantonomo, sed ĝi devas ankoraŭ esti "
-"aktivigita."
+msgstr "Iu registris konton kun tiu ĉi uzantonomo, sed ĝi devas ankoraŭ esti aktivigita."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:79
 #, python-format
 msgid ""
 "If you are that person but you've lost your verification email, you can <a "
 "href=\"%(login_url)s\">log in</a> and resend it."
-msgstr ""
-"Se vi estas tiu sed vi perdis vian kontrolmesaĝon, vi povas <a "
-"href=\"%(login_url)s\">ensaluti</a> kaj resendi ĝin."
+msgstr "Se vi estas tiu sed vi perdis vian kontrolmesaĝon, vi povas <a href=\"%(login_url)s\">ensaluti</a> kaj resendi ĝin."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:96
 msgid "Here's a spot to tell others about yourself."
@@ -614,8 +565,7 @@ msgstr "Rigardi ĉiujn dosierojn de %(username)s"
 msgid ""
 "This is where your media will appear, but you don't seem to have added "
 "anything yet."
-msgstr ""
-"Ĝuste ĉi tie aperos viaj dosieroj, sed vi ŝajne ankoraŭ nenion alŝutis."
+msgstr "Ĝuste ĉi tie aperos viaj dosieroj, sed vi ŝajne ankoraŭ nenion alŝutis."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:163
 #: mediagoblin/templates/mediagoblin/utils/object_gallery.html:72
@@ -690,12 +640,8 @@ msgstr "Vi forigis la dosieron."
 
 #: mediagoblin/user_pages/views.py:190
 msgid "The media was not deleted because you didn't check that you were sure."
-msgstr ""
-"La dosiero ne estis forigita, ĉar vi ne konfirmis vian certecon per la "
-"markilo."
+msgstr "La dosiero ne estis forigita, ĉar vi ne konfirmis vian certecon per la markilo."
 
 #: mediagoblin/user_pages/views.py:198
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr "Vi estas forigonta dosieron de alia uzanto. Estu singardema."
-
-
