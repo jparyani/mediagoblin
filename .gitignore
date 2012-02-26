@@ -16,6 +16,8 @@
 /paste_local.ini
 /mediagoblin_local.ini
 /mediagoblin.db
+/celery.db
+/kombu.db
 /server-log.txt
 
 # Tests
