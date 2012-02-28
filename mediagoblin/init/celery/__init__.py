@@ -14,4 +14,58 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin._version import __version__
+import os
+import sys
+
+
+MANDATORY_CELERY_IMPORTS = ['mediagoblin.processing']
+
+DEFAULT_SETTINGS_MODULE = 'mediagoblin.init.celery.dummy_settings_module'
+
+
+def setup_celery_from_config(app_config, global_config,
+                             settings_module=DEFAULT_SETTINGS_MODULE,
+                             force_celery_always_eager=False,
+                             set_environ=True):
+    """
+    Take a mediagoblin app config and try to set up a celery settings
+    module from this.
+
+    Args:
+    - app_config: the application config section
+    - global_config: the entire ConfigObj loaded config, all sections
+    - settings_module: the module to populate, as a string
+    - force_celery_always_eager: whether or not to force celery into
+      always eager mode; good for development and small installs
+    - set_environ: if set, this will CELERY_CONFIG_MODULE to the
+      settings_module
+    """
+    if 'celery' in global_config:
+        celery_conf = global_config['celery']
+    else:
+        celery_conf = {}
+
+    celery_settings = {}
+
+    # Add all celery settings from config
+    for key, value in celery_conf.iteritems():
+        celery_settings[key] = value
+
+    # TODO: use default result stuff here if it exists
+
+    # add mandatory celery imports
+    celery_imports = celery_settings.setdefault('CELERY_IMPORTS', [])
+    celery_imports.extend(MANDATORY_CELERY_IMPORTS)
+
+    if force_celery_always_eager:
+        celery_settings['CELERY_ALWAYS_EAGER'] = True
+        celery_settings['CELERY_EAGER_PROPAGATES_EXCEPTIONS'] = True
+
+    __import__(settings_module)
+    this_module = sys.modules[settings_module]
+
+    for key, value in celery_settings.iteritems():
+        setattr(this_module, key, value)
+
+    if set_environ:
+        os.environ['CELERY_CONFIG_MODULE'] = settings_module
