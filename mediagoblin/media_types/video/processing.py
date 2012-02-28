@@ -29,6 +29,18 @@ _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
 
 def sniff_handler(media_file, **kw):
+    transcoder = transcoders.VideoTranscoder()
+    try:
+        data = transcoder.discover(media_file.name)
+
+        _log.debug('Discovered: {0}'.format(data.__dict__))
+
+        if data.is_video == True:
+            return True
+    except:
+        _log.error('Exception caught when trying to discover {0}'.format(
+                kw.get('media')))
+
     return False
 
 def process_video(entry):
@@ -61,7 +73,8 @@ def process_video(entry):
 
     with tmp_dst:
         # Transcode queued file to a VP8/vorbis file that fits in a 640x640 square
-        transcoder = transcoders.VideoTranscoder(queued_filename, tmp_dst.name)
+        transcoder = transcoders.VideoTranscoder()
+        transcoder.transcode(queued_filename, tmp_dst.name)
 
         # Push transcoded video to public storage
         _log.debug('Saving medium...')

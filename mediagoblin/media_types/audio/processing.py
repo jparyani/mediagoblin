@@ -21,9 +21,10 @@ import os
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import create_pub_filepath
 
-from mediagoblin.media_types.audio.transcoders import AudioTranscoder
+from mediagoblin.media_types.audio.transcoders import AudioTranscoder, \
+    AudioThumbnailer
 
-_log = logging.getLogger()
+_log = logging.getLogger(__name__)
 
 def sniff_handler(media_file, **kw):
     transcoder = AudioTranscoder()
@@ -33,7 +34,9 @@ def sniff_handler(media_file, **kw):
         if data.is_audio == True and data.is_video == False:
             return True
     except:
-        return False
+        pass
+
+    return False
 
 def process_audio(entry):
     audio_config = mgg.global_config['media_type:mediagoblin.media_types.audio']
@@ -51,10 +54,9 @@ def process_audio(entry):
             original=os.path.splitext(
                 queued_filepath[-1])[0]))
 
-    ogg_tmp = tempfile.NamedTemporaryFile()
+    transcoder = AudioTranscoder()
 
-    with ogg_tmp:
-        transcoder = AudioTranscoder()
+    with tempfile.NamedTemporaryFile() as ogg_tmp:
 
         transcoder.transcode(
             queued_filename,
@@ -72,11 +74,54 @@ def process_audio(entry):
         entry.media_data['audio'] = {
             u'length': int(data.audiolength)}
 
-    thumbnail_tmp = tempfile.NamedTemporaryFile()
+    if audio_config['create_spectrogram']:
+        spectrogram_filepath = create_pub_filepath(
+            entry,
+            '{original}-spectrogram.jpg'.format(
+                original=os.path.splitext(
+                    queued_filepath[-1])[0]))
 
-    with thumbnail_tmp:
+        with tempfile.NamedTemporaryFile(suffix='.wav') as wav_tmp:
+            _log.info('Creating WAV source for spectrogram')
+            transcoder.transcode(
+                queued_filename,
+                wav_tmp.name,
+                mux_string='wavenc')
+
+            thumbnailer = AudioThumbnailer()
+
+            with tempfile.NamedTemporaryFile(suffix='.jpg') as spectrogram_tmp:
+                thumbnailer.spectrogram(
+                    wav_tmp.name,
+                    spectrogram_tmp.name,
+                    width=mgg.global_config['media:medium']['max_width'])
+
+                _log.debug('Saving spectrogram...')
+                mgg.public_store.get_file(spectrogram_filepath, 'wb').write(
+                    spectrogram_tmp.read())
+
+                entry.media_files['spectrogram'] = spectrogram_filepath
+
+                with tempfile.NamedTemporaryFile(suffix='.jpg') as thumb_tmp:
+                    thumbnailer.thumbnail_spectrogram(
+                        spectrogram_tmp.name,
+                        thumb_tmp.name,
+                        (mgg.global_config['media:thumb']['max_width'],
+                         mgg.global_config['media:thumb']['max_height']))
+
+                    thumb_filepath = create_pub_filepath(
+                        entry,
+                        '{original}-thumbnail.jpg'.format(
+                            original=os.path.splitext(
+                                queued_filepath[-1])[0]))
+
+                    mgg.public_store.get_file(thumb_filepath, 'wb').write(
+                        thumb_tmp.read())
+
+                    entry.media_files['thumb'] = thumb_filepath
+    else:
         entry.media_files['thumb'] = ['fake', 'thumb', 'path.jpg']
-
+            
     mgg.queue_store.delete_file(queued_filepath)
 
     entry.save()

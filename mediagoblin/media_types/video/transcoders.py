@@ -25,8 +25,6 @@ import pdb
 import urllib
 
 _log = logging.getLogger(__name__)
-logging.basicConfig()
-_log.setLevel(logging.DEBUG)
 
 CPU_COUNT = 2
 try:
@@ -340,10 +338,15 @@ class VideoTranscoder:
        that it was refined afterwards and therefore is done more
        correctly.
     '''
-    def __init__(self, src, dst, **kwargs):
+    def __init__(self):
         _log.info('Initializing VideoTranscoder...')
 
         self.loop = gobject.MainLoop()
+
+    def transcode(self, src, dst, **kwargs):
+        '''
+        Transcode a video file into a 'medium'-sized version.
+        '''
         self.source_path = src
         self.destination_path = dst
 
@@ -357,6 +360,30 @@ class VideoTranscoder:
         self._setup()
         self._run()
 
+    def discover(self, src):
+        '''
+        Discover properties about a media file
+        '''
+        _log.info('Discovering {0}'.format(src))
+
+        self.source_path = src
+        self._setup_discover(discovered_callback=self.__on_discovered)
+
+        self.discoverer.discover()
+
+        self.loop.run()
+
+        return self._discovered_data
+
+    def __on_discovered(self, data, is_media):
+        if not is_media:
+            self.__stop()
+            raise Exception('Could not discover {0}'.format(self.source_path))
+
+        self._discovered_data = data
+
+        self.__stop_mainloop()
+
     def _setup(self):
         self._setup_discover()
         self._setup_pipeline()
@@ -369,12 +396,14 @@ class VideoTranscoder:
         _log.debug('Initializing MainLoop()')
         self.loop.run()
 
-    def _setup_discover(self):
+    def _setup_discover(self, **kw):
         _log.debug('Setting up discoverer')
         self.discoverer = discoverer.Discoverer(self.source_path)
 
         # Connect self.__discovered to the 'discovered' event
-        self.discoverer.connect('discovered', self.__discovered)
+        self.discoverer.connect(
+            'discovered',
+            kw.get('discovered_callback', self.__discovered))
 
     def __discovered(self, data, is_media):
         '''
@@ -614,14 +643,15 @@ class VideoTranscoder:
 
 if __name__ == '__main__':
     os.nice(19)
+    logging.basicConfig()
     from optparse import OptionParser
 
     parser = OptionParser(
-        usage='%prog [-v] -a [ video | thumbnail ] SRC DEST')
+        usage='%prog [-v] -a [ video | thumbnail | discover ] SRC [ DEST ]')
 
     parser.add_option('-a', '--action',
                       dest='action',
-                      help='One of "video" or "thumbnail"')
+                      help='One of "video", "discover" or "thumbnail"')
 
     parser.add_option('-v',
                       dest='verbose',
@@ -645,13 +675,18 @@ if __name__ == '__main__':
 
     _log.debug(args)
 
-    if not len(args) == 2:
+    if not len(args) == 2 and not options.action == 'discover':
         parser.print_help()
         sys.exit()
+
+    transcoder = VideoTranscoder()
 
     if options.action == 'thumbnail':
         VideoThumbnailer(*args)
     elif options.action == 'video':
         def cb(data):
             print('I\'m a callback!')
-        transcoder = VideoTranscoder(*args, progress_callback=cb)
+        transcoder.transcode(*args, progress_callback=cb)
+    elif options.action == 'discover':
+        print transcoder.discover(*args).__dict__
+    

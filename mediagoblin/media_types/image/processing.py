@@ -42,7 +42,7 @@ def sniff_handler(media_file, **kw):
             _log.info('Found file extension in supported filetypes')
             return True
         else:
-            _log.debug('Media present, extension not found in {1}'.format(
+            _log.debug('Media present, extension not found in {0}'.format(
                     SUPPORTED_FILETYPES))
     else:
         _log.warning('Need additional information (keyword argument \'media\')'

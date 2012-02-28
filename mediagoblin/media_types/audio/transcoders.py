@@ -16,8 +16,10 @@
 
 import pdb
 import logging
+from PIL import Image
 
 from mediagoblin.processing import BadMediaFail
+from mediagoblin.media_types.audio import audioprocessing
 
 
 _log = logging.getLogger(__name__)
@@ -55,6 +57,73 @@ try:
     import gst.extend.discoverer
 except ImportError:
     raise Exception('gst/pygst >= 0.10 could not be imported')
+
+import numpy
+
+class AudioThumbnailer(object):
+    def __init__(self):
+        _log.info('Initializing {0}'.format(self.__class__.__name__))
+
+    def spectrogram(self, src, dst, **kw):
+        width = kw['width']
+        height = int(kw.get('height', float(width) * 0.3))
+        fft_size = kw.get('fft_size', 2048)
+        callback = kw.get('progress_callback')
+
+        processor = audioprocessing.AudioProcessor(
+            src,
+            fft_size,
+            numpy.hanning)
+
+        samples_per_pixel = processor.audio_file.nframes / float(width)
+
+        spectrogram = audioprocessing.SpectrogramImage(width, height, fft_size)
+
+        for x in range(width):
+            if callback and x % (width / 10) == 0:
+                callback((x * 100) / width)
+
+            seek_point = int(x * samples_per_pixel)
+
+            (spectral_centroid, db_spectrum) = processor.spectral_centroid(
+                seek_point)
+
+            spectrogram.draw_spectrum(x, db_spectrum)
+
+        if callback:
+            callback(100)
+
+        spectrogram.save(dst)
+
+    def thumbnail_spectrogram(self, src, dst, thumb_size):
+        '''
+        Takes a spectrogram and creates a thumbnail from it
+        '''
+        if not (type(thumb_size) == tuple and len(thumb_size) == 2):
+            raise Exception('size argument should be a tuple(width, height)')
+
+        im = Image.open(src)
+
+        im_w, im_h = [float(i) for i in im.size]
+        th_w, th_h = [float(i) for i in thumb_size]
+
+        wadsworth_position = im_w * 0.3
+
+        start_x = max((
+                wadsworth_position - (th_w / 2.0),
+                0.0))
+
+        stop_x = start_x + (im_h * (th_w / th_h))
+
+        th = im.crop((
+                int(start_x), 0,
+                int(stop_x), int(im_h)))
+
+        if th.size[0] > th_w or th.size[1] > th_h:
+            th.thumbnail(thumb_size, Image.ANTIALIAS)
+
+        th.save(dst)
+
 
 class AudioTranscoder(object):
     def __init__(self):
@@ -103,17 +172,21 @@ class AudioTranscoder(object):
 
         quality = kw.get('quality', 0.3)
 
+        mux_string = kw.get(
+            'mux_string',
+            'vorbisenc quality={0} ! webmmux'.format(quality))
+
         # Set up pipeline
         self.pipeline = gst.parse_launch(
             'filesrc location="{src}" ! ' 
             'decodebin2 ! queue ! audiorate tolerance={tolerance} ! '
             'audioconvert ! audio/x-raw-float,channels=2 ! '
-            'vorbisenc quality={quality} ! webmmux ! '
+            '{mux_string} ! '
             'progressreport silent=true ! '
             'filesink location="{dst}"'.format(
                 src=src,
                 tolerance=80000000,
-                quality=quality,
+                mux_string=mux_string,
                 dst=dst))
 
         self.bus = self.pipeline.get_bus()
@@ -141,6 +214,9 @@ class AudioTranscoder(object):
             self.halt()
 
     def halt(self):
+        if getattr(self, 'pipeline', False):
+            self.pipeline.set_state(gst.STATE_NULL)
+            del self.pipeline
         _log.info('Quitting MainLoop gracefully...')
         gobject.idle_add(self._loop.quit)
 
@@ -149,8 +225,12 @@ if __name__ == '__main__':
     logging.basicConfig()
     _log.setLevel(logging.INFO)
 
-    transcoder = AudioTranscoder()
-    data = transcoder.discover(sys.argv[1])
-    res = transcoder.transcode(*sys.argv[1:3])
+    #transcoder = AudioTranscoder()
+    #data = transcoder.discover(sys.argv[1])
+    #res = transcoder.transcode(*sys.argv[1:3])
+
+    thumbnailer = AudioThumbnailer()
+
+    thumbnailer.spectrogram(*sys.argv[1:], width=640)
 
     pdb.set_trace()

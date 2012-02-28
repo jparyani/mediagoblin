@@ -20,7 +20,14 @@
 
 {% block mediagoblin_media %}
   <div class="audio-media">
-    <audio controls="controls"
+    {% if 'spectrogram' in media.media_files %}
+      <div class="audio-spectrogram">
+	<img src="{{ request.app.public_store.file_url(
+		      media.media_files.spectrogram) }}"
+	     alt="Spectrogram" />
+      </div>
+    {% endif %}
+    <audio class="audio-player" controls="controls"
 	   preload="metadata">
       <source src="{{ request.app.public_store.file_url(
 		       media.media_files.ogg) }}" type="video/webm; encoding=&quot;vorbis&quot;" />

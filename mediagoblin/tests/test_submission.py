@@ -231,7 +231,8 @@ class TestSubmission:
 
         context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/submit/start.html']
         form = context['submit_form']
-        assert re.match(r'^Could not extract any file extension from ".*?"$', str(form.file.errors[0]))
+        assert 'Sorry, I don\'t support that file type :(' == \
+            str(form.file.errors[0])
         assert len(form.file.errors) == 1
 
         # NOTE: The following 2 tests will ultimately fail, but they
