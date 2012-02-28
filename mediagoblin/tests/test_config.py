@@ -37,7 +37,7 @@ def test_read_mediagoblin_config():
     assert this_conf['carrotapp']['carrotcake'] == False
     assert this_conf['carrotapp']['num_carrots'] == 1
     assert not this_conf['carrotapp'].has_key('encouragement_phrase')
-    assert this_conf['celery']['eat_celery_with_carrots'] == True
+    assert this_conf['celery']['EAT_CELERY_WITH_CARROTS'] == True
 
     # A good file
     this_conf, validation_results = config.read_mediagoblin_config(
@@ -48,7 +48,7 @@ def test_read_mediagoblin_config():
     assert this_conf['carrotapp']['encouragement_phrase'] == \
         "I'd love it if you eat your carrots!"
     assert this_conf['carrotapp']['blah_blah'] == "blah!"
-    assert this_conf['celery']['eat_celery_with_carrots'] == False
+    assert this_conf['celery']['EAT_CELERY_WITH_CARROTS'] == False
 
     # A bad file
     this_conf, validation_results = config.read_mediagoblin_config(
@@ -61,7 +61,7 @@ def test_read_mediagoblin_config():
     assert this_conf['carrotapp']['encouragement_phrase'] == \
         "586956856856"
     assert this_conf['carrotapp']['blah_blah'] == "blah!"
-    assert this_conf['celery']['eat_celery_with_carrots'] == "pants"
+    assert this_conf['celery']['EAT_CELERY_WITH_CARROTS'] == "pants"
 
 
 def test_generate_validation_report():
@@ -89,7 +89,7 @@ There were validation problems loading this config file:
     expected_warnings = [
         'carrotapp:carrotcake = the value "slobber" is of the wrong type.',
         'carrotapp:num_carrots = the value "GROSS" is of the wrong type.',
-        'celery:eat_celery_with_carrots = the value "pants" is of the wrong type.']
+        'celery:EAT_CELERY_WITH_CARROTS = the value "pants" is of the wrong type.']
     warnings = report.splitlines()[2:]
 
     assert len(warnings) == 3
