@@ -20,6 +20,7 @@ from mediagoblin.db.mongo.util import ObjectId
 
 from mediagoblin.db.sql.models import (Base, User, MediaEntry, MediaComment,
     Tag, MediaTag, MediaFile, MediaAttachmentFile)
+from mediagoblin.media_types.video.models import VideoData
 from mediagoblin.db.sql.open import setup_connection_and_db_from_config as \
     sql_connect
 from mediagoblin.db.mongo.open import setup_connection_and_db_from_config as \
