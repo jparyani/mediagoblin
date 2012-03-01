@@ -139,3 +139,17 @@ def remove_calculated_html(database):
     drop_table_field(database, 'users', 'bio_html')
     drop_table_field(database, 'media_entries', 'description_html')
     drop_table_field(database, 'media_comments', 'content_html')
+
+@RegisterMigration(10)
+def convert_video_media_data(database):
+    """
+    Move media_data["video"] directly into media_data
+    """
+    collection = database['media_entries']
+    target = collection.find(
+        {'media_data.video': {'$exists': True}})
+
+    for document in target:
+        assert len(document['media_data']) == 1
+        document['media_data'] = document['media_data']['video']
+        collection.save(document)

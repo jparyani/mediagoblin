@@ -77,9 +77,9 @@ def process_video(entry):
         entry.media_files['webm_640'] = medium_filepath
 
         # Save the width and height of the transcoded video
-        entry.media_data['video'] = {
-            u'width': transcoder.dst_data.videowidth,
-            u'height': transcoder.dst_data.videoheight}
+        entry.media_data_init(
+            width=transcoder.dst_data.videowidth,
+            height=transcoder.dst_data.videoheight)
 
     # Create a temporary file for the video thumbnail
     tmp_thumb = tempfile.NamedTemporaryFile()
