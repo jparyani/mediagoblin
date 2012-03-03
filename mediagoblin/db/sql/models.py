@@ -172,6 +172,10 @@ class MediaEntry(Base, MediaEntryMixin):
         # TODO: Replace with proper code to read the correct table
         return {}
 
+    def media_data_init(self, **kwargs):
+        # TODO: Implement this
+        pass
+
 
 class MediaFile(Base):
     """
