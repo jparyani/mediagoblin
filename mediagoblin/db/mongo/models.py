@@ -220,6 +220,9 @@ class MediaEntry(Document, MediaEntryMixin):
 
     id = MongoPK()
 
+    def media_data_init(self, **kwargs):
+        self.media_data.update(kwargs)
+
     def get_comments(self, ascending=False):
         if ascending:
             order = ASCENDING
