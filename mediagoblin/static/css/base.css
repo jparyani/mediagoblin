@@ -109,7 +109,7 @@ input, textarea {
 .container {
   margin: auto;
   width: 96%;
-  max-width: 820px;
+  max-width: 940px;
 }
 
 header {
@@ -151,18 +151,14 @@ footer {
 }
 
 .media_pane {
-  width: 560px;
+  width: 640px;
   margin-left: 0px;
   margin-right: 10px;
   float: left;  
 }
 
-img.media_image {
-  width: 100%;
-}
-
 .media_sidebar {
-  width: 240px;
+  width: 280px;
   margin-left: 10px;
   float: left;
 }
@@ -493,7 +489,7 @@ table.media_panel th {
 }
 
 /* Media queries and other responsivisivity */
-@media screen and (max-width: 820px) {
+@media screen and (max-width: 940px) {
   .media_pane {
     width: 100%;
     margin: 0px;
