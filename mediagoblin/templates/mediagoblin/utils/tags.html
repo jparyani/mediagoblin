@@ -17,16 +17,17 @@
 #}
 
 {% block tags_content -%}
-  <p>{% trans %}View more media tagged with{% endtrans %}
+  <h3 class="sidedata">Tagged with</h3>
+  <p>
     {% for tag in media.tags %}
       {% if loop.last %}
         {# the 'and' should only appear if there is more than one tag #}
         {% if media.tags|length > 1 %}
-          {% trans %}or{% endtrans %}
+          &middot;
         {% endif %}
         <a href="{{ request.urlgen(
                           'mediagoblin.listings.tags_listing',
-                          tag=tag['slug']) }}">{{ tag['name'] }}</a>.
+                          tag=tag['slug']) }}">{{ tag['name'] }}</a>
       {% elif loop.revindex == 2 %}
         <a href="{{ request.urlgen(
                           'mediagoblin.listings.tags_listing',
@@ -34,7 +35,7 @@
       {% else %}
         <a href="{{ request.urlgen(
                           'mediagoblin.listings.tags_listing',
-                          tag=tag['slug']) }}">{{ tag['name'] }}</a>, 
+                          tag=tag['slug']) }}">{{ tag['name'] }}</a> &middot;
       {% endif %}
     {% endfor %}
   </p>
