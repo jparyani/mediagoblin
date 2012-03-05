@@ -19,12 +19,16 @@
 /celery.db
 /kombu.db
 /server-log.txt
+/mediagoblin/db/sql_switch.py
 
 # Tests
 /mediagoblin/tests/user_dev/
 
-.installed.cfg
+# File extensions
 *.pyc
 *.pyo
 *~
 *.swp
+
+# The legacy of buildout
+.installed.cfg
