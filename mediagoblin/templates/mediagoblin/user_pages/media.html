@@ -27,6 +27,8 @@
     href="{{ request.staticdirect('/extlib/leaflet/leaflet.ie.css') }}" /><![endif]-->
   <script type="text/javascript"
           src="{{ request.staticdirect('/js/comment_show.js') }}"></script>
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/js/keyboard_navigation.js') }}"></script>
 
   {% if app_config['geolocation_map_visible'] %}
     <link rel="stylesheet"
