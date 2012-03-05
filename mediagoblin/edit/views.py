@@ -36,6 +36,7 @@ from mediagoblin.tools.text import (
     clean_html, convert_to_tag_list_of_dicts,
     media_tags_as_string)
 from mediagoblin.tools.licenses import SUPPORTED_LICENSES
+from mediagoblin.db.util import check_media_slug_used
 
 
 @get_user_media_entry
@@ -58,12 +59,10 @@ def edit_media(request, media):
     if request.method == 'POST' and form.validate():
         # Make sure there isn't already a MediaEntry with such a slug
         # and userid.
-        existing_user_slug_entries = request.db.MediaEntry.find(
-            {'slug': request.POST['slug'],
-             'uploader': media.uploader,
-             '_id': {'$ne': media._id}}).count()
+        slug_used = check_media_slug_used(request.db, media.uploader,
+                request.POST['slug'], media.id)
 
-        if existing_user_slug_entries:
+        if slug_used:
             form.slug.errors.append(
                 _(u'An entry with that slug already exists for this user.'))
         else:

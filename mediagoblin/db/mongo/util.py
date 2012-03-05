@@ -301,3 +301,12 @@ def atomic_update(table, query_dict, update_values):
     table.collection.update(
         query_dict,
         {"$set": update_values})
+
+
+def check_media_slug_used(db, uploader_id, slug, ignore_m_id):
+    query_dict = {'uploader': uploader_id, 'slug': slug}
+    if ignore_m_id is not None:
+        query_dict['_id'] = {'$ne': ignore_m_id}
+    existing_user_slug_entries = db.MediaEntry.find(
+        query_dict).count()
+    return existing_user_slug_entries
