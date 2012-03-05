@@ -19,10 +19,14 @@
 $(document).keydown(function(event){
   switch(event.which){
     case 37:
-      window.location = $('.navigation_left').attr('href');
+      if($('a.navigation_left').length) {
+        window.location = $('a.navigation_left').attr('href');
+      }
       break;
     case 39:
-      window.location = $('.navigation_right').attr('href');
+      if($('a.navigation_right').length) {
+      window.location = $('a.navigation_right').attr('href');
+      }
       break;
   }
 });
