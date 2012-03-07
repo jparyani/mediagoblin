@@ -373,9 +373,13 @@ class VideoTranscoder:
 
         self.loop.run()
 
-        return self._discovered_data
+        if hasattr(self, '_discovered_data'):
+            return self._discovered_data.__dict__
+        else:
+            return None
 
     def __on_discovered(self, data, is_media):
+        _log.debug('Discovered: {0}'.format(data))
         if not is_media:
             self.__stop()
             raise Exception('Could not discover {0}'.format(self.source_path))
@@ -624,8 +628,9 @@ class VideoTranscoder:
     def __stop(self):
         _log.debug(self.loop)
 
-        # Stop executing the pipeline
-        self.pipeline.set_state(gst.STATE_NULL)
+        if hasattr(self, 'pipeline'):
+            # Stop executing the pipeline
+            self.pipeline.set_state(gst.STATE_NULL)
 
         # This kills the loop, mercifully
         gobject.idle_add(self.__stop_mainloop)

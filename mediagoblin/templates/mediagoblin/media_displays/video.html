@@ -24,7 +24,7 @@
 	   width="{{ media.media_data.video.width }}"
 	   height="{{ media.media_data.video.height }}"
 	   controls="controls"
-	   preload="auto"
+	   preload="metadata"
 	   data-setup="">
       <source src="{{ request.app.public_store.file_url(
 		   media.media_files['webm_640']) }}" 

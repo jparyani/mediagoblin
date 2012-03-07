@@ -42,7 +42,10 @@ def sniff_media(media):
     for media_type, manager in get_media_managers():
         _log.info('Sniffing {0}'.format(media_type))
         if manager['sniff_handler'](media_file, media=media):
+            _log.info('{0} accepts the file'.format(media_type))
             return media_type, manager
+        else:
+            _log.debug('{0} did not accept the file'.format(media_type))
 
     raise FileTypeNotSupported(
         # TODO: Provide information on which file types are supported

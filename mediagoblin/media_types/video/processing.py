@@ -30,16 +30,17 @@ _log.setLevel(logging.DEBUG)
 
 def sniff_handler(media_file, **kw):
     transcoder = transcoders.VideoTranscoder()
-    try:
-        data = transcoder.discover(media_file.name)
+    data = transcoder.discover(media_file.name)
 
-        _log.debug('Discovered: {0}'.format(data.__dict__))
+    _log.debug('Discovered: {0}'.format(data))
 
-        if data.is_video == True:
-            return True
-    except:
-        _log.error('Exception caught when trying to discover {0}'.format(
+    if not data:
+        _log.error('Could not discover {0}'.format(
                 kw.get('media')))
+        return False
+
+    if data['is_video'] == True:
+        return True
 
     return False
 

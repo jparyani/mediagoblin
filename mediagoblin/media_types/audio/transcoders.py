@@ -100,7 +100,7 @@ class AudioThumbnailer(object):
         Takes a spectrogram and creates a thumbnail from it
         '''
         if not (type(thumb_size) == tuple and len(thumb_size) == 2):
-            raise Exception('size argument should be a tuple(width, height)')
+            raise Exception('thumb_size argument should be a tuple(width, height)')
 
         im = Image.open(src)
 
@@ -110,7 +110,7 @@ class AudioThumbnailer(object):
         wadsworth_position = im_w * 0.3
 
         start_x = max((
-                wadsworth_position - (th_w / 2.0),
+                wadsworth_position - ((im_h * (th_w / th_h)) / 2.0),
                 0.0))
 
         stop_x = start_x + (im_h * (th_w / th_h))

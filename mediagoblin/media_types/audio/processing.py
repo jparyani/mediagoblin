@@ -19,7 +19,7 @@ import tempfile
 import os
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.processing import create_pub_filepath
+from mediagoblin.processing import create_pub_filepath, BadMediaFail
 
 from mediagoblin.media_types.audio.transcoders import AudioTranscoder, \
     AudioThumbnailer
@@ -27,14 +27,15 @@ from mediagoblin.media_types.audio.transcoders import AudioTranscoder, \
 _log = logging.getLogger(__name__)
 
 def sniff_handler(media_file, **kw):
-    transcoder = AudioTranscoder()
-    try:
+    try: 
+        transcoder = AudioTranscoder()
         data = transcoder.discover(media_file.name)
+    except BadMediaFail:
+        _log.debug('Audio discovery raised BadMediaFail')
+        return False
 
-        if data.is_audio == True and data.is_video == False:
-            return True
-    except:
-        pass
+    if data.is_audio == True and data.is_video == False:
+        return True
 
     return False
 
