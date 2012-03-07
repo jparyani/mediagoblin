@@ -121,12 +121,13 @@ header {
 
 .header_right {
   float: right;
+  margin: 8px 0px 8px 8px;
 }
 
 a.logo {
   color: #fff;
   font-weight: bold;
-  margin-right: 8px;
+  margin: 8px 8px 8px 0;
 }
 
 .logo img {
@@ -552,6 +553,15 @@ table.media_panel th {
   
   .button_action, .button_action_highlight, .button_form { 
     padding: 9px 14px;
+  }
+  
+  .header_right {
+    float: none;
+    display: inline-block;
+  }
+  
+  header {
+    text-align: center;
   }
 }
 
