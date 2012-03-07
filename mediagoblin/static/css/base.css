@@ -353,6 +353,10 @@ textarea#comment_content {
   text-decoration: none;
 }
 
+.media_thumbnail img {
+  width: 100%;
+}
+
 /* media detail */
 
 h2.media_title {
