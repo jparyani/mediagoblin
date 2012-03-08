@@ -29,7 +29,7 @@ _log = logging.getLogger(__name__)
 SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg']
 
 def sniff_handler(media_file, **kw):
-    if not kw.get('media') == None:  # That's a double negative!
+    if kw.get('media') is not None:  # That's a double negative!
         name, ext = os.path.splitext(kw['media'].filename)
         clean_ext = ext[1:].lower()  # Strip the . from ext and make lowercase
 
