@@ -174,7 +174,7 @@ def edit_profile(request):
                              _("Profile changes saved"))
         return redirect(request,
                        'mediagoblin.user_pages.user_home',
-                        user=user['username'])
+                        user=user.username)
 
     return render_to_response(
         request,
