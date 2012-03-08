@@ -126,3 +126,6 @@ def process_audio(entry):
     mgg.queue_store.delete_file(queued_filepath)
 
     entry.save()
+
+    # clean up workbench
+    workbench.destroy_self()
