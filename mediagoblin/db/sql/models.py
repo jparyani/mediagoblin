@@ -277,7 +277,8 @@ class MediaComment(Base, MediaCommentMixin):
 
 
 MODELS = [
-    User, MediaEntry, Tag, MediaTag, MediaComment]
+    User, MediaEntry, Tag, MediaTag, MediaComment, MediaFile,
+    MediaAttachmentFile]
 
 
 ######################################################
