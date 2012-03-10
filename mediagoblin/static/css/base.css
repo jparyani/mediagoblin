@@ -342,11 +342,14 @@ textarea#comment_content {
   float: left;
   padding: 0px;
   width: 180px;
-  height: 210px;
+  height: 156px;
   overflow: hidden;
   margin: 0px 4px 10px;
   text-align: center;
   font-size: 0.875em;
+  background-color: #222;
+  border-radius: 0 0 5px 5px;
+  padding: 0 0 6px;
 }
 
 .media_thumbnail a {
@@ -355,8 +358,7 @@ textarea#comment_content {
 }
 
 .media_thumbnail img {
-  max-width: 100%;
-  max-height: 100%;
+  max-height: 135px;
 }
 
 /* media detail */
