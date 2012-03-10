@@ -16,6 +16,7 @@
 
 
 from sqlalchemy import create_engine
+import logging
 
 from mediagoblin.db.sql.base import Session
 from mediagoblin.db.sql.models import Base
@@ -41,7 +42,8 @@ class DatabaseMaster(object):
 
 
 def setup_connection_and_db_from_config(app_config):
-    engine = create_engine(app_config['sql_engine'], echo=True)
+    engine = create_engine(app_config['sql_engine'])
+    logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
     Session.configure(bind=engine)
 
     return "dummy conn", DatabaseMaster(engine)
