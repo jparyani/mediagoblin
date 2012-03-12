@@ -14,7 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 from mediagoblin.db.util import ObjectId, InvalidId
+
+_log = logging.getLogger(__name__)
+
 
 def setup_user_in_request(request):
     """
@@ -30,12 +34,12 @@ def setup_user_in_request(request):
     except InvalidId:
         user = None
     else:
-        user = request.db.User.one({'_id': oid})
+        user = request.db.User.find_one({'_id': oid})
 
     if not user:
         # Something's wrong... this user doesn't exist?  Invalidate
         # this session.
-        print "Killing session for %r" % request.session['user_id']
+        _log.warn("Killing session for user id %r", request.session['user_id'])
         request.session.invalidate()
 
     request.user = user
