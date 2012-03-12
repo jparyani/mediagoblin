@@ -42,7 +42,7 @@ def bcrypt_check_password(raw_pass, stored_hash, extra_salt=None):
     if extra_salt:
         raw_pass = u"%s:%s" % (extra_salt, raw_pass)
 
-    hashed_pass = bcrypt.hashpw(raw_pass, stored_hash)
+    hashed_pass = bcrypt.hashpw(raw_pass.encode('utf-8'), stored_hash)
 
     # Reduce risk of timing attacks by hashing again with a random
     # number (thx to zooko on this advice, which I hopefully
@@ -68,7 +68,8 @@ def bcrypt_gen_password_hash(raw_pass, extra_salt=None):
     if extra_salt:
         raw_pass = u"%s:%s" % (extra_salt, raw_pass)
 
-    return unicode(bcrypt.hashpw(raw_pass, bcrypt.gensalt()))
+    return unicode(
+        bcrypt.hashpw(raw_pass.encode('utf-8'), bcrypt.gensalt()))
 
 
 def fake_login_attempt():
