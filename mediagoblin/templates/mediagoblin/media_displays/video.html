@@ -18,6 +18,13 @@
 
 {% extends 'mediagoblin/user_pages/media.html' %}
 
+{% block mediagoblin_head %}
+  {{ super() }}
+  <script type="text/javascript"
+  	src="{{ request.staticdirect('/js/extlib/video-js/video.js') }}"></script>
+  <link href="{{ request.staticdirect('/js/extlib/video-js/video-js.css') }}" rel="stylesheet">
+{% endblock %}
+
 {% block mediagoblin_media %}
   <div class="video-player" style="position: relative;">
     <video class="video-js vjs-default-skin"
