@@ -1,0 +1,6 @@
+========
+ README
+========
+
+This directory holds the MediaGoblin core plugins. These plugins are not
+enabled by default. See documentation for enabling plugins.

@@ -1,0 +1,158 @@
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import sys
+from configobj import ConfigObj
+from mediagoblin import mg_globals
+from mediagoblin.init.plugins import setup_plugins
+from mediagoblin.tools import pluginapi
+from nose.tools import eq_
+
+
+def with_cleanup(*modules_to_delete):
+    def _with_cleanup(fun):
+        """Wrapper that saves and restores mg_globals"""
+        def _with_cleanup_inner(*args, **kwargs):
+            old_app_config = mg_globals.app_config
+            old_global_config = mg_globals.global_config
+            # Need to delete icky modules before and after so as to make
+            # sure things work correctly.
+            for module in modules_to_delete:
+                try:
+                    del sys.modules[module]
+                except KeyError:
+                    pass
+            # The plugin cache gets populated as a side-effect of
+            # importing, so it's best to clear it before and after a test.
+            pcache = pluginapi.PluginCache()
+            pcache.clear()
+            try:
+                return fun(*args, **kwargs)
+            finally:
+                mg_globals.app_config = old_app_config
+                mg_globals.global_config = old_global_config
+                # Need to delete icky modules before and after so as to make
+                # sure things work correctly.
+                for module in modules_to_delete:
+                    try:
+                        del sys.modules[module]
+                    except KeyError:
+                        pass
+                pcache.clear()
+
+        _with_cleanup_inner.__name__ = fun.__name__
+        return _with_cleanup_inner
+    return _with_cleanup
+
+
+def build_config(sections):
+    """Builds a ConfigObj object with specified data
+
+    :arg sections: list of ``(section_name, section_data,
+        subsection_list)`` tuples where section_data is a dict and
+        subsection_list is a list of ``(section_name, section_data,
+        subsection_list)``, ...
+
+    For example:
+
+    >>> build_config([
+    ...    ('mediagoblin', {'key1': 'val1'}, []),
+    ...    ('section2', {}, [
+    ...        ('subsection1', {}, [])
+    ...        ])
+    ...    ])
+    """
+    cfg = ConfigObj()
+    cfg.filename = 'foo'
+    def _iter_section(cfg, section_list):
+        for section_name, data, subsection_list in section_list:
+            cfg[section_name] = data
+            _iter_section(cfg[section_name], subsection_list)
+
+    _iter_section(cfg, sections)
+    return cfg
+
+
+@with_cleanup()
+def test_no_plugins():
+    """Run setup_plugins with no plugins in config"""
+    cfg = build_config([('mediagoblin', {}, [])])
+    mg_globals.app_config = cfg['mediagoblin']
+    mg_globals.global_config = cfg
+
+    pcache = pluginapi.PluginCache()
+    setup_plugins()
+
+    # Make sure we didn't load anything.
+    eq_(len(pcache.plugin_classes), 0)
+    eq_(len(pcache.plugin_objects), 0)
+
+
+@with_cleanup('mediagoblin.plugins.sampleplugin',
+              'mediagoblin.plugins.sampleplugin.main')
+def test_one_plugin():
+    """Run setup_plugins with a single working plugin"""
+    cfg = build_config([
+            ('mediagoblin', {}, []),
+            ('plugins', {}, [
+                    ('mediagoblin.plugins.sampleplugin', {}, [])
+                    ])
+            ])
+
+    mg_globals.app_config = cfg['mediagoblin']
+    mg_globals.global_config = cfg
+
+    pcache = pluginapi.PluginCache()
+    setup_plugins()
+
+    # Make sure we only found one plugin class
+    eq_(len(pcache.plugin_classes), 1)
+    # Make sure the class is the one we think it is.
+    eq_(pcache.plugin_classes[0].__name__, 'SamplePlugin')
+
+    # Make sure there was one plugin created
+    eq_(len(pcache.plugin_objects), 1)
+    # Make sure we called setup_plugin on SamplePlugin
+    eq_(pcache.plugin_objects[0]._setup_plugin_called, 1)
+
+
+@with_cleanup('mediagoblin.plugins.sampleplugin',
+              'mediagoblin.plugins.sampleplugin.main')
+def test_same_plugin_twice():
+    """Run setup_plugins with a single working plugin twice"""
+    cfg = build_config([
+            ('mediagoblin', {}, []),
+            ('plugins', {}, [
+                    ('mediagoblin.plugins.sampleplugin', {}, []),
+                    ('mediagoblin.plugins.sampleplugin', {}, []),
+                    ])
+            ])
+
+    mg_globals.app_config = cfg['mediagoblin']
+    mg_globals.global_config = cfg
+
+    pcache = pluginapi.PluginCache()
+    setup_plugins()
+
+    # Make sure we only found one plugin class
+    eq_(len(pcache.plugin_classes), 1)
+    # Make sure the class is the one we think it is.
+    eq_(pcache.plugin_classes[0].__name__, 'SamplePlugin')
+
+    # Make sure there was one plugin created
+    eq_(len(pcache.plugin_objects), 1)
+    # Make sure we called setup_plugin on SamplePlugin
+    eq_(pcache.plugin_objects[0]._setup_plugin_called, 1)

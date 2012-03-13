@@ -27,6 +27,7 @@ from mediagoblin.tools.response import render_404
 from mediagoblin.tools import request as mg_request
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
+from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.init import (get_jinja_loader, get_staticdirector,
     setup_global_and_app_config, setup_workbench, setup_database,
     setup_storage, setup_beaker_cache)
@@ -63,6 +64,11 @@ class MediaGoblinApp(object):
         ##########################################
         # Setup other connections / useful objects
         ##########################################
+
+        # Set up plugins -- need to do this early so that plugins can
+        # affect startup.
+        _log.info("Setting up plugins.")
+        setup_plugins()
 
         # Set up the database
         self.connection, self.db = setup_database()
