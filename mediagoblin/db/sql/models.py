@@ -20,6 +20,7 @@ TODO: indexes on foreignkeys, where useful.
 
 
 import datetime
+import sys
 
 from sqlalchemy import (
     Column, Integer, Unicode, UnicodeText, DateTime, Boolean, ForeignKey,
@@ -28,10 +29,12 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.util import memoized_property
 
 from mediagoblin.db.sql.extratypes import PathTupleWithSlashes, JSONEncoded
 from mediagoblin.db.sql.base import Base, DictReadAttrProxy
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
+from mediagoblin.db.sql.base import Session
 
 # It's actually kind of annoying how sqlalchemy-migrate does this, if
 # I understand it right, but whatever.  Anyway, don't remove this :P
@@ -167,14 +170,39 @@ class MediaEntry(Base, MediaEntryMixin):
         if media is not None:
             return media.url_for_self(urlgen)
 
+    #@memoized_property
     @property
     def media_data(self):
-        # TODO: Replace with proper code to read the correct table
-        return {}
+        session = Session()
+
+        return session.query(self.media_data_table).filter_by(
+            media_entry=self.id).one()
 
     def media_data_init(self, **kwargs):
-        # TODO: Implement this
-        pass
+        """
+        Initialize or update the contents of a media entry's media_data row
+        """
+        session = Session()
+
+        media_data = session.query(self.media_data_table).filter_by(
+            media_entry=self.id).first()
+
+        # No media data, so actually add a new one
+        if not media_data:
+            media_data = self.media_data_table(
+                **kwargs)
+            session.add(media_data)
+        # Update old media data
+        else:
+            for field, value in kwargs.iteritems():
+                setattr(media_data, field, value)
+
+    @memoized_property
+    def media_data_table(self):
+        # TODO: memoize this
+        models_module = self.media_type + '.models'
+        __import__(models_module)
+        return sys.modules[models_module].DATA_MODEL
 
 
 class FileKeynames(Base):
