@@ -111,7 +111,7 @@ def convert_video(mk_db):
 
     for media in mk_db.MediaEntry.find(
             {'media_type': 'mediagoblin.media_types.video'}).sort('created'):
-        media_data_row = VideoData(*media.media_data)
+        media_data_row = VideoData(**media.media_data)
         media_data_row.media_entry = obj_id_table[media._id]
         session.add(media_data_row)
 
