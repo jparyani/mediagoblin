@@ -66,7 +66,6 @@ def shell(args):
     either a normal Python shell
     or an IPython one
     """
-
     user_namespace = {
         'mg_globals': mg_globals,
         'mgoblin_app': commands_util.setup_app(args),
