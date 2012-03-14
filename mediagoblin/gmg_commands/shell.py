@@ -22,7 +22,9 @@ from mediagoblin.gmg_commands import util as commands_util
 
 
 def shell_parser_setup(subparser):
-    pass
+    subparser.add_argument(
+        '--ipython', help='Use ipython',
+        action="store_true")
 
 
 SHELL_BANNER = """\
@@ -34,16 +36,43 @@ Available vars:
  - db: database instance
 """
 
+def py_shell(**user_namespace):
+    """
+    Run a shell using normal python shell.
+    """
+    code.interact(
+        banner=SHELL_BANNER,
+        local=user_namespace)
+
+
+def ipython_shell(**user_namespace):
+    """
+    Run a shell for the user using ipython.
+    """
+    try:
+        from IPython import embed
+    except:
+        print "IPython not available... exiting!"
+        return
+    
+    embed(
+        banner1=SHELL_BANNER,
+        user_ns=user_namespace)
+
 
 def shell(args):
     """
     Setup a shell for the user
+    either a normal Python shell
+    or an IPython one
     """
-    mgoblin_app = commands_util.setup_app(args)
 
-    code.interact(
-        banner=SHELL_BANNER,
-        local={
-            'mgoblin_app': mgoblin_app,
-            'mg_globals': mg_globals,
-            'db': mg_globals.database})
+    user_namespace = {
+        'mg_globals': mg_globals,
+        'mgoblin_app': commands_util.setup_app(args),
+        'db': mg_globals.database}
+
+    if args.ipython:
+        ipython_shell(**user_namespace)
+    else:
+        py_shell(**user_namespace)
