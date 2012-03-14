@@ -119,7 +119,11 @@ def process_image(entry):
         'clean': clean_exif(exif_tags)}
     media_data['exif']['useful'] = get_useful(
         media_data['exif']['clean'])
-    media_data['gps'] = gps_data
+
+    if len(gps_data):
+        for key in list(gps_data.keys()):
+            gps_data['gps_' + key] = gps_data.pop(key)
+        entry.media_data_init(**gps_data)
 
     # clean up workbench
     workbench.destroy_self()
