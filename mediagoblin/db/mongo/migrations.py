@@ -153,3 +153,21 @@ def convert_video_media_data(database):
         assert len(document['media_data']) == 1
         document['media_data'] = document['media_data']['video']
         collection.save(document)
+
+@RegisterMigration(11)
+def convert_gps_media_data(database):
+    """
+    Move media_data["gps"]["*"] to media_data["gps_*"].
+    In preparation for media_data.gps_*
+    """
+    collection = database['media_entries']
+    target = collection.find(
+        {'media_data.gps': {'$exists': True}})
+
+    for document in target:
+        print document['_id'], "old:", document['media_data']
+        for key, value in document['media_data']['gps'].iteritems():
+            document['media_data']['gps_' + key] = value
+        del document['media_data']['gps']
+        print document['_id'], "new:", document['media_data']
+        collection.save(document)
