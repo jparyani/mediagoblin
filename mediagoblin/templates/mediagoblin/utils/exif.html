@@ -17,8 +17,8 @@
 #}
 
 {% block exif_content %}
-  {% if media.media_data.has_key('exif')
-        and app_config['exif_visible']
+  {% if app_config['exif_visible']
+        and media.media_data.exif is defined
         and media.media_data.exif.has_key('useful') %}
     <h3 class="sidedata">EXIF</h3>
     <table>

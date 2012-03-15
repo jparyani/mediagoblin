@@ -176,7 +176,7 @@ class MediaEntry(Base, MediaEntryMixin):
         session = Session()
 
         return session.query(self.media_data_table).filter_by(
-            media_entry=self.id).one()
+            media_entry=self.id).first()
 
     def media_data_init(self, **kwargs):
         """
