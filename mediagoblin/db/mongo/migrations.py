@@ -153,3 +153,10 @@ def convert_video_media_data(database):
         assert len(document['media_data']) == 1
         document['media_data'] = document['media_data']['video']
         collection.save(document)
+
+@RegisterMigration(11)
+def user_add_wants_comment_notification(database):
+    """
+    Add wants_comment_notification to user model
+    """
+    add_table_field(database, 'users', 'wants_comment_notification', True)

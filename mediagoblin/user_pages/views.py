@@ -23,6 +23,7 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.files import delete_media_files
 from mediagoblin.user_pages import forms as user_forms
+from mediagoblin.user_pages.lib import send_comment_email
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
     require_active_login, user_may_delete_media)
@@ -157,6 +158,12 @@ def media_post_comment(request, media):
         messages.add_message(
             request, messages.SUCCESS,
             _('Your comment has been posted!'))
+
+        media_uploader = media.get_uploader
+        #don't send email if you comment on your own post
+        if (comment.author != media_uploader and
+            media_uploader['wants_comment_notification']):
+            send_comment_email(media_uploader, comment, media, request)
 
     return exc.HTTPFound(
         location=media.url_for_self(request.urlgen))

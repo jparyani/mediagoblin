@@ -188,28 +188,38 @@ def edit_account(request):
     edit_username = request.GET.get('username')
     user = request.user
 
-    form = forms.EditAccountForm(request.POST)
+    form = forms.EditAccountForm(request.POST,
+        wants_comment_notification=user.wants_comment_notification)
 
-    if request.method == 'POST' and form.validate():
-        password_matches = auth_lib.bcrypt_check_password(
-            request.POST['old_password'],
-            user.pw_hash)
-
-        if (request.POST['old_password'] or request.POST['new_password']) and not \
-                password_matches:
-            form.old_password.errors.append(_('Wrong password'))
-
-            return render_to_response(
-                request,
-                'mediagoblin/edit/edit_account.html',
-                {'user': user,
-                 'form': form})
-
-        if password_matches:
-            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-                request.POST['new_password'])
+    if request.method == 'POST':
+        #save status of comment checkbox first, so user does not need to 
+        #change their password as well.
+        user.wants_comment_notification = request.POST.get(
+            'wants_comment_notification', False) == u'y'
 
         user.save()
+
+        #check remaining fields for validation
+        if form.validate():
+            password_matches = auth_lib.bcrypt_check_password(
+                request.POST['old_password'],
+                user.pw_hash)
+
+            if (request.POST['old_password'] or \
+                request.POST['new_password']) and not \
+                    password_matches:
+                form.old_password.errors.append(_('Wrong password'))
+
+                return render_to_response(
+                    request,
+                    'mediagoblin/edit/edit_account.html',
+                    {'user': user,
+                     'form': form})
+
+            if password_matches:
+                user.pw_hash = auth_lib.bcrypt_gen_password_hash(
+                    request.POST['new_password'])
+            user.save()
 
         messages.add_message(request,
                              messages.SUCCESS,
