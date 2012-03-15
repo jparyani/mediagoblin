@@ -32,6 +32,13 @@ USEFUL_TAGS = [
     'EXIF UserComment',
     ]
 
+def exif_image_needs_rotation(exif_tags):
+    """
+    Returns True if EXIF orientation requires rotation
+    """
+    return 'Image Orientation' in exif_tags \
+        and exif_tags['Image Orientation'].values[0] != 1
+
 def exif_fix_image_orientation(im, exif_tags):
     """
     Translate any EXIF orientation to raw orientation

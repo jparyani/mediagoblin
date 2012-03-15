@@ -21,7 +21,8 @@ from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import BadMediaFail, \
     create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
-    extract_exif, clean_exif, get_gps_data, get_useful
+    extract_exif, clean_exif, get_gps_data, get_useful, \
+    exif_image_needs_rotation
 
 def process_image(entry):
     """
@@ -32,7 +33,6 @@ def process_image(entry):
     conversions_subdir = os.path.join(
         workbench.dir, 'conversions')
     os.mkdir(conversions_subdir)
-
     queued_filepath = entry.queued_media_file
     queued_filename = workbench.localized_file(
         mgg.queue_store, queued_filepath,
@@ -72,24 +72,31 @@ def process_image(entry):
     # file, a `medium.jpg` files is created and later associated with the media
     # entry.
     medium = Image.open(queued_filename)
-
-    # Fix orientation
-    medium = exif_fix_image_orientation(medium, exif_tags)
-
-    if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1]:
+    if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1] \
+        or exif_image_needs_rotation(exif_tags):
+        
         medium.thumbnail(MEDIUM_SIZE, Image.ANTIALIAS)
+            
+    
 
-    medium_filename = 'medium' + extension
-    medium_filepath = create_pub_filepath(entry, medium_filename)
+        # Fix orientation
+        medium = exif_fix_image_orientation(medium, exif_tags)
 
-    tmp_medium_filename = os.path.join(
-        conversions_subdir, medium_filename)
+    
 
-    with file(tmp_medium_filename, 'w') as medium_file:
-        medium.save(medium_file)
+        medium_filename = 'medium' + extension
+        medium_filepath = create_pub_filepath(entry, medium_filename)
 
-    mgg.public_store.copy_local_to_storage(
-        tmp_medium_filename, medium_filepath)
+        tmp_medium_filename = os.path.join(
+            conversions_subdir, medium_filename)
+
+        with file(tmp_medium_filename, 'w') as medium_file:
+            medium.save(medium_file)
+
+        mgg.public_store.copy_local_to_storage(
+            tmp_medium_filename, medium_filepath)
+    else:
+        medium_filepath = None
 
     # we have to re-read because unlike PIL, not everything reads
     # things in string representation :)
@@ -111,7 +118,8 @@ def process_image(entry):
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict['thumb'] = thumb_filepath
     media_files_dict['original'] = original_filepath
-    media_files_dict['medium'] = medium_filepath
+    if medium_filepath:
+        media_files_dict['medium'] = medium_filepath 
 
     # Insert exif data into database
     media_data = entry.setdefault('media_data', {})
