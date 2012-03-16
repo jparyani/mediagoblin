@@ -29,11 +29,13 @@ def _get_tag_name_from_entries(media_entries, tag_slug):
     """
     # ... this is slightly hacky looking :\
     tag_name = tag_slug
-    if media_entries.count():
-        for tag in media_entries[0]['tags']:
+    # if media_entries.count():
+    for entry in media_entries:
+        for tag in entry.tags:
             if tag['slug'] == tag_slug:
                 tag_name = tag['name']
                 break
+        break
 
     return tag_name
 
