@@ -294,6 +294,15 @@ def check_media_slug_used(dummy_db, uploader_id, slug, ignore_m_id):
     return does_exist
 
 
+def media_entries_for_tag_slug(dummy_db, tag_slug):
+    return MediaEntry.query \
+        .join(MediaEntry.tags_helper) \
+        .join(MediaTag.tag_helper) \
+        .filter(
+            (MediaEntry.state == u'processed')
+            & (Tag.slug == tag_slug))
+
+
 def clean_orphan_tags():
     q1 = Session.query(Tag).outerjoin(MediaTag).filter(MediaTag.id==None)
     for t in q1:

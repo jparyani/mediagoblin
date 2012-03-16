@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.db.util import DESCENDING
+from mediagoblin.db.util import media_entries_for_tag_slug, DESCENDING
 
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.response import render_to_response
@@ -48,9 +48,7 @@ def tag_listing(request, page):
     """'Gallery'/listing for this tag slug"""
     tag_slug = request.matchdict[u'tag']
 
-    cursor = request.db.MediaEntry.find(
-        {u'state': u'processed',
-         u'tags.slug': tag_slug})
+    cursor = media_entries_for_tag_slug(request.db, tag_slug)
     cursor = cursor.sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)

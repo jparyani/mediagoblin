@@ -310,3 +310,9 @@ def check_media_slug_used(db, uploader_id, slug, ignore_m_id):
     existing_user_slug_entries = db.MediaEntry.find(
         query_dict).count()
     return existing_user_slug_entries
+
+
+def media_entries_for_tag_slug(db, tag_slug):
+    return db.MediaEntry.find(
+        {u'state': u'processed',
+         u'tags.slug': tag_slug})
