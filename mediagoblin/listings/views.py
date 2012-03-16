@@ -32,7 +32,7 @@ def _get_tag_name_from_entries(media_entries, tag_slug):
     if media_entries.count():
         for tag in media_entries[0]['tags']:
             if tag['slug'] == tag_slug:
-                tag_name == tag['name']
+                tag_name = tag['name']
                 break
 
     return tag_name
