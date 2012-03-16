@@ -67,6 +67,7 @@ class User(Base, UserMixin):
     pw_hash = Column(Unicode, nullable=False)
     email_verified = Column(Boolean, default=False)
     status = Column(Unicode, default=u"needs_email_verification", nullable=False)
+    wants_comment_notification = Column(Boolean, default=True, nullable=False)
     verification_key = Column(Unicode)
     is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
