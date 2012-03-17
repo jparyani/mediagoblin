@@ -20,7 +20,7 @@ from mediagoblin.init import setup_global_and_app_config, setup_database
 from mediagoblin.db.mongo.util import ObjectId
 
 from mediagoblin.db.sql.models import (Base, User, MediaEntry, MediaComment,
-    Tag, MediaTag, MediaFile, MediaAttachmentFile)
+    Tag, MediaTag, MediaFile, MediaAttachmentFile, MigrationData)
 from mediagoblin.media_types.image.models import ImageData
 from mediagoblin.media_types.video.models import VideoData
 from mediagoblin.db.sql.open import setup_connection_and_db_from_config as \
@@ -189,6 +189,20 @@ def convert_media_comments(mk_db):
     session.close()
 
 
+def convert_add_migration_versions():
+    session = Session()
+
+    for name in ("__main__",
+                 "mediagoblin.media_types.image",
+                 "mediagoblin.media_types.video",
+                 ):
+        m = MigrationData(name=name, version=0)
+        session.add(m)
+
+    session.commit()
+    session.close()
+
+
 def run_conversion(config_name):
     global_config, app_config = setup_global_and_app_config(config_name)
 
@@ -208,6 +222,8 @@ def run_conversion(config_name):
     convert_media_tags(mk_db)
     Session.remove()
     convert_media_comments(mk_db)
+    Session.remove()
+    convert_add_migration_versions()
     Session.remove()
 
 
