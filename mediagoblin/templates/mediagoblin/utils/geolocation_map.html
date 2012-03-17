@@ -22,7 +22,7 @@
         and media.media_data.gps_latitude
         and media.media_data.gps_longitude is defined
         and media.media_data.gps_longitude %}
-    <h3 class="sidedata">{% trans %}Location{% endtrans %}</h3>
+    <h3>{% trans %}Location{% endtrans %}</h3>
     <div>
       {%- set lon = media.media_data.gps_longitude %}
       {%- set lat = media.media_data.gps_latitude %}
