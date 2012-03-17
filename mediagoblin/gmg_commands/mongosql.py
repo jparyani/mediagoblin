@@ -20,5 +20,9 @@ def mongosql_parser_setup(subparser):
 
 
 def mongosql(args):
+    # First, make sure our mongo migrations are up to date...
+    from mediagoblin.gmg_commands.migrate import run_migrate
+    run_migrate(args.conf_file)
+
     from mediagoblin.db.sql.convert import run_conversion
     run_conversion(args.conf_file)

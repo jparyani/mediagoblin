@@ -17,7 +17,7 @@
 import sys
 
 from mediagoblin.db.mongo import util as db_util
-from mediagoblin.db.open import setup_connection_and_db_from_config
+from mediagoblin.db.mongo.open import setup_connection_and_db_from_config
 from mediagoblin.init import setup_global_and_app_config
 
 # This MUST be imported so as to set up the appropriate migrations!
@@ -41,7 +41,12 @@ def _print_finished_migration(migration_number, migration_func):
 
 
 def migrate(args):
-    global_config, app_config = setup_global_and_app_config(args.conf_file)
+    run_migrate(args.conf_file)
+
+
+def run_migrate(conf_file):
+    global_config, app_config = setup_global_and_app_config(conf_file)
+
     connection, db = setup_connection_and_db_from_config(
         app_config, use_pymongo=True)
     migration_manager = db_util.MigrationManager(db)
