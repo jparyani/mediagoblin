@@ -5,10 +5,10 @@ from sqlalchemy import (
 
 
 class ImageData(Base):
-    __tablename__ = "image_data"
+    __tablename__ = "image__mediadata"
 
     # The primary key *and* reference to the main media_entry
-    media_entry = Column(Integer, ForeignKey('media_entries.id'),
+    media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
         primary_key=True)
     width = Column(Integer)
     height = Column(Integer)
