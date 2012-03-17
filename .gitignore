@@ -9,6 +9,7 @@
 /lib/
 /include/
 /parts/
+/share/
 /mediagoblin.egg-info
 /docs/_build/
 /docs/build
