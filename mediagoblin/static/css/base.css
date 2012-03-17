@@ -234,13 +234,14 @@ text-align: center;
   height: 0;
 }
 
-h3.sidedata {
-	border: none;
-	background-color: #212121;
-	border-radius: 4px 4px 0 0;
-	padding: 3px 8px;
-	margin: 20px 0 5px 0;
+.media_sidebar h3 {
 	font-size: 1em;
+	margin: 0 0 5px;
+	border: none;
+}
+
+.media_sidebar p {
+	padding-left: 8px;
 }
 
 /* forms */
