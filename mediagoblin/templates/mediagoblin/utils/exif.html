@@ -20,7 +20,7 @@
   {% if app_config['exif_visible']
         and media.media_data.exif is defined
         and media.media_data.exif.has_key('useful') %}
-    <h3 class="sidedata">EXIF</h3>
+    <h3>EXIF</h3>
     <table>
       {% for key, tag in media.media_data.exif.useful.items() %}
         <tr>
