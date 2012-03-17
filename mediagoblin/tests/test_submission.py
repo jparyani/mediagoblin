@@ -180,6 +180,18 @@ class TestSubmission:
         # Does media entry exist?
         assert_true(media)
 
+        # Add a comment, so we can test for its deletion later.
+        get_comments = lambda: list(
+            request.db.MediaComment.find({'media_entry': media._id}))
+        assert_false(get_comments())
+        response = self.test_app.post(
+            request.urlgen('mediagoblin.user_pages.media_post_comment',
+                           user=self.test_user.username,
+                           media=media._id),
+            {'comment_content': 'i love this test'})
+        response.follow()
+        assert_true(get_comments())
+
         # Do not confirm deletion
         # ---------------------------------------------------
         response = self.test_app.post(
@@ -218,6 +230,9 @@ class TestSubmission:
         assert_false(
             request.db.MediaEntry.find(
                 {'_id': media._id}).count())
+
+        # How about the comment?
+        assert_false(get_comments())
 
     def test_malicious_uploads(self):
         # Test non-suppoerted file with non-supported extension
