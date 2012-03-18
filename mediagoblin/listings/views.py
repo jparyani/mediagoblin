@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.db.util import DESCENDING
+from mediagoblin.db.util import media_entries_for_tag_slug, DESCENDING
 
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.response import render_to_response
@@ -29,11 +29,16 @@ def _get_tag_name_from_entries(media_entries, tag_slug):
     """
     # ... this is slightly hacky looking :\
     tag_name = tag_slug
-    if media_entries.count():
-        for tag in media_entries[0]['tags']:
+
+    for entry in media_entries:
+        for tag in entry.tags:
             if tag['slug'] == tag_slug:
-                tag_name == tag['name']
+                tag_name = tag['name']
                 break
+        break
+    # TODO: Remove after SQL-switch, it's mongo specific
+    if hasattr(media_entries, "rewind"):
+        media_entries.rewind()
 
     return tag_name
 
@@ -43,9 +48,7 @@ def tag_listing(request, page):
     """'Gallery'/listing for this tag slug"""
     tag_slug = request.matchdict[u'tag']
 
-    cursor = request.db.MediaEntry.find(
-        {u'state': u'processed',
-         u'tags.slug': tag_slug})
+    cursor = media_entries_for_tag_slug(request.db, tag_slug)
     cursor = cursor.sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)

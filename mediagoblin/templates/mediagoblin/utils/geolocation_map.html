@@ -17,24 +17,27 @@
 #}
 
 {% block geolocation_map %}
-  {% if media.media_data.has_key('gps')
-        and app_config['geolocation_map_visible']
-        and media.media_data.gps %}
-    <h3 class="sidedata">Location</h3>
+  {% if app_config['geolocation_map_visible']
+        and media.media_data.gps_latitude is defined
+        and media.media_data.gps_latitude
+        and media.media_data.gps_longitude is defined
+        and media.media_data.gps_longitude %}
+    <h3>{% trans %}Location{% endtrans %}</h3>
     <div>
-      {% set gps = media.media_data.gps %}
+      {%- set lon = media.media_data.gps_longitude %}
+      {%- set lat = media.media_data.gps_latitude %}
+      {%- set osm_url = "http://openstreetmap.org/?mlat={lat}&mlon={lon}".format(lat=lat, lon=lon) %}
         <div id="tile-map" style="width: 100%; height: 196px;">
 	  <input type="hidden" id="gps-longitude"
-		 value="{{ gps.longitude }}" />
+		 value="{{ lon }}" />
 	  <input type="hidden" id="gps-latitude"
-		 value="{{ gps.latitude }}" />
+		 value="{{ lat }}" />
 	</div>
         <p>
 	  <small>
-	    View on 
-	    <a href="http://openstreetmap.org/?mlat={{ gps.latitude }}&mlon={{ gps.longitude }}">
-	      OpenStreetMap
-	    </a>
+	    {% trans -%}
+	      View on <a href="{{ osm_url }}">OpenStreetMap</a>
+	    {%- endtrans %}
 	  </small>
 	</p>
     </div>

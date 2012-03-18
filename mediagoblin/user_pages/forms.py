@@ -21,7 +21,7 @@ from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 
 class MediaCommentForm(wtforms.Form):
     comment_content = wtforms.TextAreaField(
-        _(''),
+        '',
         [wtforms.validators.Required()])
 
 

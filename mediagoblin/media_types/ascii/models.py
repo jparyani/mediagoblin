@@ -23,11 +23,11 @@ from sqlalchemy import (
 
 
 class AsciiData(Base):
-    __tablename__ = "ascii_data"
+    __tablename__ = "ascii__mediadata"
 
     id = Column(Integer, primary_key=True)
     media_entry = Column(
-        Integer, ForeignKey('media_entries.id'), nullable=False)
+        Integer, ForeignKey('core__media_entries.id'), nullable=False)
 
 
 DATA_MODEL = AsciiData

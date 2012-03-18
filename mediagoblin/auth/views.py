@@ -120,7 +120,7 @@ def login(request):
     login_failed = False
 
     if request.method == 'POST' and login_form.validate():
-        user = request.db.User.one(
+        user = request.db.User.find_one(
             {'username': request.POST['username'].lower()})
 
         if user and user.check_login(request.POST['password']):

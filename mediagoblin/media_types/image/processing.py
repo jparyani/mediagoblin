@@ -115,11 +115,18 @@ def process_image(entry):
 
     # Insert exif data into database
     media_data = entry.setdefault('media_data', {})
-    media_data['exif'] = {
-        'clean': clean_exif(exif_tags)}
-    media_data['exif']['useful'] = get_useful(
-        media_data['exif']['clean'])
-    media_data['gps'] = gps_data
+
+    # TODO: Fix for sql media_data, when exif is in sql
+    if media_data is not None:
+        media_data['exif'] = {
+            'clean': clean_exif(exif_tags)}
+        media_data['exif']['useful'] = get_useful(
+            media_data['exif']['clean'])
+
+    if len(gps_data):
+        for key in list(gps_data.keys()):
+            gps_data['gps_' + key] = gps_data.pop(key)
+        entry.media_data_init(**gps_data)
 
     # clean up workbench
     workbench.destroy_self()

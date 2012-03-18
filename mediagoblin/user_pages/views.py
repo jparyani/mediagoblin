@@ -180,6 +180,10 @@ def media_confirm_delete(request, media):
         if form.confirm.data is True:
             username = media.get_uploader.username
 
+            # Delete all the associated comments
+            for comment in media.get_comments():
+                comment.delete()
+
             # Delete all files on the public storage
             delete_media_files(media)
 

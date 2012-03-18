@@ -155,6 +155,22 @@ def convert_video_media_data(database):
         collection.save(document)
 
 @RegisterMigration(11)
+def convert_gps_media_data(database):
+    """
+    Move media_data["gps"]["*"] to media_data["gps_*"].
+    In preparation for media_data.gps_*
+    """
+    collection = database['media_entries']
+    target = collection.find(
+        {'media_data.gps': {'$exists': True}})
+
+    for document in target:
+        for key, value in document['media_data']['gps'].iteritems():
+            document['media_data']['gps_' + key] = value
+        del document['media_data']['gps']
+        collection.save(document)
+
+@RegisterMigration(12)
 def user_add_wants_comment_notification(database):
     """
     Add wants_comment_notification to user model
