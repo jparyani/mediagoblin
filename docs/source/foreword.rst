@@ -28,7 +28,7 @@ We have other documentation at:
 * http://wiki.mediagoblin.org/ for our contributor/developer-focused wiki
 
 
-Improving the MediaGobiin Manual
+Improving the MediaGoblin Manual
 ================================
 
 There are a few ways---please pick whichever method is convenient for
