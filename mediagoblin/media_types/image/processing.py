@@ -26,7 +26,7 @@ from mediagoblin.tools.exif import exif_fix_image_orientation, \
 MAX_FILENAME_LENGTH = 255  # the limit in VFAT -- seems like a good baseline
 
 def resize_image(entry, filename, basename, file_tail, exif_tags, workdir,
-                 new_size, size_limits=None):
+                 new_size, size_limits=(0, 0)):
     """Store a resized version of an image and return its pathname.
 
     Arguments:
@@ -46,11 +46,11 @@ def resize_image(entry, filename, basename, file_tail, exif_tags, workdir,
         raise BadMediaFail()
     resized = exif_fix_image_orientation(resized, exif_tags)  # Fix orientation
 
-    if ((size_limits is None) or
-        (resized.size[0] > size_limits[0]) or
+    if ((resized.size[0] > size_limits[0]) or
         (resized.size[1] > size_limits[1])):
         resized.thumbnail(new_size, Image.ANTIALIAS)
 
+    # Truncate basename as needed so len(basename + file_tail) <= 255
     resized_filename = (basename[:MAX_FILENAME_LENGTH - len(file_tail)] +
                         file_tail)
     resized_filepath = create_pub_filepath(entry, resized_filename)
