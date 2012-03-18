@@ -165,9 +165,7 @@ def convert_gps_media_data(database):
         {'media_data.gps': {'$exists': True}})
 
     for document in target:
-        print document['_id'], "old:", document['media_data']
         for key, value in document['media_data']['gps'].iteritems():
             document['media_data']['gps_' + key] = value
         del document['media_data']['gps']
-        print document['_id'], "new:", document['media_data']
         collection.save(document)
