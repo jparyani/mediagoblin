@@ -21,6 +21,10 @@ from mediagoblin.db.mongo import models
 from mediagoblin.db.mongo.util import MigrationManager
 
 
+def load_models(app_config):
+    pass
+
+
 def connect_database_from_config(app_config, use_pymongo=False):
     """
     Connect to the main database, take config from app_config

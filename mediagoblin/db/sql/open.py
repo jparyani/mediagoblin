@@ -20,6 +20,8 @@ import logging
 
 from mediagoblin.db.sql.base import Base, Session
 
+_log = logging.getLogger(__name__)
+
 
 class DatabaseMaster(object):
     def __init__(self, engine):
@@ -38,6 +40,16 @@ class DatabaseMaster(object):
     def reset_after_request(self):
         Session.rollback()
         Session.remove()
+
+
+def load_models(app_config):
+    import mediagoblin.db.sql.models
+
+    # TODO/Fix: This breaks celery
+    if False:
+        for media_type in app_config['media_types']:
+            _log.debug("Loading %s.models", media_type)
+            __import__(media_type + ".models")
 
 
 def setup_connection_and_db_from_config(app_config):

@@ -21,7 +21,9 @@ except ImportError:
 
 if use_sql:
     from mediagoblin.db.sql.open import \
-        setup_connection_and_db_from_config, check_db_migrations_current
+        setup_connection_and_db_from_config, check_db_migrations_current, \
+        load_models
 else:
     from mediagoblin.db.mongo.open import \
-        setup_connection_and_db_from_config, check_db_migrations_current
+        setup_connection_and_db_from_config, check_db_migrations_current, \
+        load_models
