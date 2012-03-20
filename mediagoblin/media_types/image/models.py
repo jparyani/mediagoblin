@@ -1,4 +1,4 @@
-from mediagoblin.db.sql.models import Base
+from mediagoblin.db.sql.base import Base
 
 from sqlalchemy import (
     Column, Integer, Float, ForeignKey)

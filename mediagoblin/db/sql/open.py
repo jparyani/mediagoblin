@@ -18,8 +18,7 @@
 from sqlalchemy import create_engine
 import logging
 
-from mediagoblin.db.sql.base import Session
-from mediagoblin.db.sql.models import Base
+from mediagoblin.db.sql.base import Base, Session
 
 
 class DatabaseMaster(object):

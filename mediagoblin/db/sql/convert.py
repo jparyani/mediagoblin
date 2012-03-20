@@ -19,7 +19,8 @@ from copy import copy
 from mediagoblin.init import setup_global_and_app_config, setup_database
 from mediagoblin.db.mongo.util import ObjectId
 
-from mediagoblin.db.sql.models import (Base, User, MediaEntry, MediaComment,
+from mediagoblin.db.sql.base import Base, Session
+from mediagoblin.db.sql.models import (User, MediaEntry, MediaComment,
     Tag, MediaTag, MediaFile, MediaAttachmentFile, MigrationData)
 from mediagoblin.media_types.image.models import ImageData
 from mediagoblin.media_types.video.models import VideoData
@@ -27,7 +28,6 @@ from mediagoblin.db.sql.open import setup_connection_and_db_from_config as \
     sql_connect
 from mediagoblin.db.mongo.open import setup_connection_and_db_from_config as \
     mongo_connect
-from mediagoblin.db.sql.base import Session
 
 
 obj_id_table = dict()
