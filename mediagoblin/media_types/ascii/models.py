@@ -25,9 +25,9 @@ from sqlalchemy import (
 class AsciiData(Base):
     __tablename__ = "ascii__mediadata"
 
-    id = Column(Integer, primary_key=True)
-    media_entry = Column(
-        Integer, ForeignKey('core__media_entries.id'), nullable=False)
+    # The primary key *and* reference to the main media_entry
+    media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
+        primary_key=True)
 
 
 DATA_MODEL = AsciiData
