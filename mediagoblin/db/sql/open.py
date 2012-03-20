@@ -43,7 +43,7 @@ class DatabaseMaster(object):
 
 def setup_connection_and_db_from_config(app_config):
     engine = create_engine(app_config['sql_engine'])
-    logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+    # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
     Session.configure(bind=engine)
 
     return "dummy conn", DatabaseMaster(engine)
