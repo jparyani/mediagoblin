@@ -162,7 +162,7 @@ class TestSubmission:
                                          do_follow=True, url=delete_url)
         self.check_media(request, {'_id': media._id}, 0)
 
-    def test_malicious_uploads(self):
+    def test_evil_file(self):
         # Test non-suppoerted file with non-supported extension
         # -----------------------------------------------------
         response, form = self.do_post({'title': 'Malicious Upload 1'},
@@ -171,38 +171,23 @@ class TestSubmission:
         assert re.match(r'^Could not extract any file extension from ".*?"$', str(form.file.errors[0]))
         assert len(form.file.errors) == 1
 
-        # NOTE: The following 2 tests will ultimately fail, but they
+    def check_false_image(self, title, filename):
+        # NOTE: These images should ultimately fail, but they
         #   *will* pass the initial form submission step.  Instead,
         #   they'll be caught as failures during the processing step.
+        response, context = self.do_post({'title': title}, do_follow=True,
+                                         **self.upload_data(filename))
+        self.check_url(response, '/u/{0}/'.format(self.test_user.username))
+        entry = mg_globals.database.MediaEntry.find_one({'title': title})
+        assert_equal(entry.state, 'failed')
+        assert_equal(entry.fail_error, u'mediagoblin.processing:BadMediaFail')
 
+    def test_evil_jpg(self):
         # Test non-supported file with .jpg extension
         # -------------------------------------------
-        response, context = self.do_post({'title': 'Malicious Upload 2'},
-                                         do_follow=True,
-                                         **self.upload_data(EVIL_JPG))
-        assert_equal(
-            urlparse.urlsplit(response.location)[2],
-            '/u/chris/')
+        self.check_false_image('Malicious Upload 2', EVIL_JPG)
 
-        entry = mg_globals.database.MediaEntry.find_one(
-            {'title': 'Malicious Upload 2'})
-        assert_equal(entry.state, 'failed')
-        assert_equal(
-            entry.fail_error,
-            u'mediagoblin.processing:BadMediaFail')
-
+    def test_evil_png(self):
         # Test non-supported file with .png extension
         # -------------------------------------------
-        response, context = self.do_post({'title': 'Malicious Upload 3'},
-                                         do_follow=True,
-                                         **self.upload_data(EVIL_PNG))
-        assert_equal(
-            urlparse.urlsplit(response.location)[2],
-            '/u/chris/')
-
-        entry = mg_globals.database.MediaEntry.find_one(
-            {'title': 'Malicious Upload 3'})
-        assert_equal(entry.state, 'failed')
-        assert_equal(
-            entry.fail_error,
-            u'mediagoblin.processing:BadMediaFail')
+        self.check_false_image('Malicious Upload 3', EVIL_PNG)
