@@ -121,6 +121,14 @@ class TestSubmission:
         assert template.TEMPLATE_TEST_CONTEXT.has_key(
             'mediagoblin/user_pages/user.html')
 
+    def check_media(self, request, find_data, count=None):
+        media = request.db.MediaEntry.find(find_data)
+        if count is not None:
+            assert_equal(media.count(), count)
+            if count == 0:
+                return
+        return media[0]
+
     def test_tags(self):
         # Good tag string
         # --------
@@ -128,10 +136,10 @@ class TestSubmission:
                                           'tags': GOOD_TAG_STRING},
                                          *REQUEST_CONTEXT, do_follow=True,
                                          **self.upload_data(GOOD_JPG))
-        media = request.db.MediaEntry.find({'title': 'Balanced Goblin'})[0]
+        media = self.check_media(request, {'title': 'Balanced Goblin'}, 1)
         assert_equal(media.tags,
                      [{'name': u'yin', 'slug': u'yin'},
-                                            {'name': u'yang', 'slug': u'yang'}])
+                      {'name': u'yang', 'slug': u'yang'}])
 
         # Test tags that are too long
         # ---------------
@@ -147,10 +155,7 @@ class TestSubmission:
         response, request = self.do_post({'title': 'Balanced Goblin'},
                                          *REQUEST_CONTEXT, do_follow=True,
                                          **self.upload_data(GOOD_JPG))
-        media = request.db.MediaEntry.find({'title': 'Balanced Goblin'})[0]
-
-        # Does media entry exist?
-        assert_true(media)
+        media = self.check_media(request, {'title': 'Balanced Goblin'}, 1)
 
         # Do not confirm deletion
         # ---------------------------------------------------
@@ -159,19 +164,13 @@ class TestSubmission:
             user=self.test_user.username, media=media._id)
         # Empty data means don't confirm
         response = self.do_post({}, do_follow=True, url=delete_url)[0]
-        media = request.db.MediaEntry.find({'title': 'Balanced Goblin'})[0]
-
-        # Does media entry still exist?
-        assert_true(media)
+        media = self.check_media(request, {'title': 'Balanced Goblin'}, 1)
 
         # Confirm deletion
         # ---------------------------------------------------
         response, request = self.do_post({'confirm': 'y'}, *REQUEST_CONTEXT,
                                          do_follow=True, url=delete_url)
-        # Does media entry still exist?
-        assert_false(
-            request.db.MediaEntry.find(
-                {'_id': media._id}).count())
+        self.check_media(request, {'_id': media._id}, 0)
 
     def test_malicious_uploads(self):
         # Test non-suppoerted file with non-supported extension
