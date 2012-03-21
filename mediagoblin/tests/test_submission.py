@@ -15,26 +15,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import urlparse
-import pkg_resources
 import re
 
 from nose.tools import assert_equal, assert_true, assert_false
+from pkg_resources import resource_filename
 
 from mediagoblin.tests.tools import setup_fresh_app, get_test_app, \
     fixture_add_user
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, common
 
-GOOD_JPG = pkg_resources.resource_filename(
-  'mediagoblin.tests', 'test_submission/good.jpg')
-GOOD_PNG = pkg_resources.resource_filename(
-  'mediagoblin.tests', 'test_submission/good.png')
-EVIL_FILE = pkg_resources.resource_filename(
-  'mediagoblin.tests', 'test_submission/evil')
-EVIL_JPG = pkg_resources.resource_filename(
-  'mediagoblin.tests', 'test_submission/evil.jpg')
-EVIL_PNG = pkg_resources.resource_filename(
-  'mediagoblin.tests', 'test_submission/evil.png')
+def resource(filename):
+    return resource_filename('mediagoblin.tests', 'test_submission/' + filename)
+
+GOOD_JPG = resource('good.jpg')
+GOOD_PNG = resource('good.png')
+EVIL_FILE = resource('evil')
+EVIL_JPG = resource('evil.jpg')
+EVIL_PNG = resource('evil.png')
 
 GOOD_TAG_STRING = 'yin,yang'
 BAD_TAG_STRING = 'rage,' + 'f' * 26 + 'u' * 26
