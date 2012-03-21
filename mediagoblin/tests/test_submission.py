@@ -15,7 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import urlparse
+import os
 import re
+import time
 
 from nose.tools import assert_equal, assert_true, assert_false
 from pkg_resources import resource_filename
@@ -23,6 +25,7 @@ from pkg_resources import resource_filename
 from mediagoblin.tests.tools import setup_fresh_app, get_test_app, \
     fixture_add_user
 from mediagoblin import mg_globals
+from mediagoblin.processing import create_pub_filepath
 from mediagoblin.tools import template, common
 
 def resource(filename):
@@ -33,6 +36,7 @@ GOOD_PNG = resource('good.png')
 EVIL_FILE = resource('evil')
 EVIL_JPG = resource('evil.jpg')
 EVIL_PNG = resource('evil.png')
+BIG_BLUE = resource('bigblue.png')
 
 GOOD_TAG_STRING = 'yin,yang'
 BAD_TAG_STRING = 'rage,' + 'f' * 26 + 'u' * 26
@@ -192,3 +196,23 @@ class TestSubmission:
         # Test non-supported file with .png extension
         # -------------------------------------------
         self.check_false_image('Malicious Upload 3', EVIL_PNG)
+
+    def test_processing(self):
+        data = {'title': 'Big Blue'}
+        response, request = self.do_post(data, *REQUEST_CONTEXT, do_follow=True,
+                                         **self.upload_data(BIG_BLUE))
+        media = self.check_media(request, data, 1)
+        last_size = 1024 ** 3  # Needs to be larger than bigblue.png
+        for key, basename in (('original', 'bigblue.png'),
+                              ('medium', 'bigblue.medium.png'),
+                              ('thumb', 'bigblue.thumbnail.png')):
+            # Does the processed image have a good filename?
+            filename = resource_filename(
+                'mediagoblin.tests',
+                os.path.join('test_user_dev/media/public',
+                             *media['media_files'].get(key, [])))
+            assert_true(filename.endswith('_' + basename))
+            # Is it smaller than the last processed image we looked at?
+            size = os.stat(filename).st_size
+            assert_true(last_size > size)
+            last_size = size
