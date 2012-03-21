@@ -89,37 +89,27 @@ class TestSubmission:
         response, form = self.do_post({'title': 'test title'}, *FORM_CONTEXT)
         assert form.file.errors == [u'You must provide a file.']
 
+    def check_url(self, response, path):
+        assert_equal(urlparse.urlsplit(response.location)[2], path)
 
-    def test_normal_uploads(self):
-        # Test JPG
-        # --------
-        response, context = self.do_post({'title': 'Normal upload 1'},
-                                         do_follow=True,
-                                         **self.upload_data(GOOD_JPG))
-        assert_equal(
-            urlparse.urlsplit(response.location)[2],
-            '/u/chris/')
-        assert template.TEMPLATE_TEST_CONTEXT.has_key(
-            'mediagoblin/user_pages/user.html')
-
+    def check_normal_upload(self, title, filename):
+        response, context = self.do_post({'title': title}, do_follow=True,
+                                         **self.upload_data(filename))
+        self.check_url(response, '/u/{0}/'.format(self.test_user.username))
+        assert_true(context.has_key('mediagoblin/user_pages/user.html'))
         # Make sure the media view is at least reachable, logged in...
-        self.test_app.get('/u/chris/m/normal-upload-1/')
+        url = '/u/{0}/m/{1}/'.format(self.test_user.username,
+                                     title.lower().replace(' ', '-'))
+        self.test_app.get(url)
         # ... and logged out too.
         self.logout()
-        self.test_app.get('/u/chris/m/normal-upload-1/')
-        # Log back in for the remaining tests.
-        self.login()
+        self.test_app.get(url)
 
-        # Test PNG
-        # --------
-        response, context = self.do_post({'title': 'Normal upload 2'},
-                                         do_follow=True,
-                                         **self.upload_data(GOOD_PNG))
-        assert_equal(
-            urlparse.urlsplit(response.location)[2],
-            '/u/chris/')
-        assert template.TEMPLATE_TEST_CONTEXT.has_key(
-            'mediagoblin/user_pages/user.html')
+    def test_normal_jpg(self):
+        self.check_normal_upload('Normal upload 1', GOOD_JPG)
+
+    def test_normal_png(self):
+        self.check_normal_upload('Normal upload 2', GOOD_PNG)
 
     def check_media(self, request, find_data, count=None):
         media = request.db.MediaEntry.find(find_data)
