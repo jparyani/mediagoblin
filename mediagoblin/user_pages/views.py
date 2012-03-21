@@ -305,7 +305,7 @@ def processing_panel(request):
     # Get media entries which are in-processing
     processing_entries = request.db.MediaEntry.find(
         {'uploader': user._id,
-         'state': 'processing'}).sort('created', DESCENDING)
+         'state': 'unprocessed'}).sort('created', DESCENDING)
 
     # Get media entries which have failed to process
     failed_entries = request.db.MediaEntry.find(
