@@ -82,12 +82,12 @@ class TestSubmission:
         # Test blank form
         # ---------------
         response, form = self.do_post({}, *FORM_CONTEXT)
-        assert form.file.errors == [u'You must provide a file.']
+        assert_equal(form.file.errors, [u'You must provide a file.'])
 
         # Test blank file
         # ---------------
         response, form = self.do_post({'title': 'test title'}, *FORM_CONTEXT)
-        assert form.file.errors == [u'You must provide a file.']
+        assert_equal(form.file.errors, [u'You must provide a file.'])
 
     def check_url(self, response, path):
         assert_equal(urlparse.urlsplit(response.location)[2], path)
@@ -137,9 +137,10 @@ class TestSubmission:
                                        'tags': BAD_TAG_STRING},
                                       *FORM_CONTEXT,
                                       **self.upload_data(GOOD_JPG))
-        assert form.tags.errors == [
-            u'Tags must be shorter than 50 characters.  Tags that are too long'\
-             ': ffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuuuu']
+        assert_equal(form.tags.errors, [
+                u'Tags must be shorter than 50 characters.  ' \
+                    'Tags that are too long: ' \
+                    'ffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuuuu'])
 
     def test_delete(self):
         response, request = self.do_post({'title': 'Balanced Goblin'},
@@ -168,8 +169,10 @@ class TestSubmission:
         response, form = self.do_post({'title': 'Malicious Upload 1'},
                                       *FORM_CONTEXT,
                                       **self.upload_data(EVIL_FILE))
-        assert re.match(r'^Could not extract any file extension from ".*?"$', str(form.file.errors[0]))
-        assert len(form.file.errors) == 1
+        assert_equal(len(form.file.errors), 1)
+        assert_true(re.match(
+                r'^Could not extract any file extension from ".*?"$',
+                str(form.file.errors[0])))
 
     def check_false_image(self, title, filename):
         # NOTE: These images should ultimately fail, but they
