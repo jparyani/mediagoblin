@@ -90,10 +90,11 @@ class MediaEntry(Base, MediaEntryMixin):
     __tablename__ = "core__media_entries"
 
     id = Column(Integer, primary_key=True)
-    uploader = Column(Integer, ForeignKey('core__users.id'), nullable=False)
+    uploader = Column(Integer, ForeignKey(User.id), nullable=False, index=True)
     title = Column(Unicode, nullable=False)
     slug = Column(Unicode)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now,
+        index=True)
     description = Column(UnicodeText) # ??
     media_type = Column(Unicode, nullable=False)
     state = Column(Unicode, default=u'unprocessed', nullable=False)
@@ -291,8 +292,8 @@ class MediaTag(Base):
     id = Column(Integer, primary_key=True)
     media_entry = Column(
         Integer, ForeignKey(MediaEntry.id),
-        nullable=False)
-    tag = Column(Integer, ForeignKey('core__tags.id'), nullable=False)
+        nullable=False, index=True)
+    tag = Column(Integer, ForeignKey(Tag.id), nullable=False, index=True)
     name = Column(Unicode)
     # created = Column(DateTime, nullable=False, default=datetime.datetime.now)
 
@@ -323,8 +324,8 @@ class MediaComment(Base, MediaCommentMixin):
 
     id = Column(Integer, primary_key=True)
     media_entry = Column(
-        Integer, ForeignKey('core__media_entries.id'), nullable=False)
-    author = Column(Integer, ForeignKey('core__users.id'), nullable=False)
+        Integer, ForeignKey(MediaEntry.id), nullable=False, index=True)
+    author = Column(Integer, ForeignKey(User.id), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     content = Column(UnicodeText, nullable=False)
 
