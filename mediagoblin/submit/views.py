@@ -33,7 +33,8 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms, security
-from mediagoblin.processing import mark_entry_failed, ProcessMedia
+from mediagoblin.processing import mark_entry_failed
+from mediagoblin.processing.task import ProcessMedia
 from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.media_types import get_media_type_and_manager, \
     InvalidFileType, FileTypeNotSupported

@@ -16,14 +16,10 @@
 
 import logging
 
-from celery.task import Task
-
-from mediagoblin.db.util import ObjectId, atomic_update
+from mediagoblin.db.util import atomic_update
 from mediagoblin import mg_globals as mgg
 
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
-
-from mediagoblin.media_types import get_media_manager
 
 _log = logging.getLogger(__name__)
 
@@ -36,58 +32,6 @@ def create_pub_filepath(entry, filename):
             ['media_entries',
              unicode(entry._id),
              filename])
-
-
-################################
-# Media processing initial steps
-################################
-
-class ProcessMedia(Task):
-    """
-    DEPRECATED -- This now resides in the individual media plugins
-
-    Pass this entry off for processing.
-    """
-    def run(self, media_id):
-        """
-        Pass the media entry off to the appropriate processing function
-        (for now just process_image...)
-        """
-        entry = mgg.database.MediaEntry.one(
-            {'_id': ObjectId(media_id)})
-
-        # Try to process, and handle expected errors.
-        try:
-            #__import__(entry.media_type)
-            manager = get_media_manager(entry.media_type)
-            _log.debug('Processing {0}'.format(entry))
-            manager['processor'](entry)
-        except BaseProcessingFail, exc:
-            mark_entry_failed(entry._id, exc)
-            return
-        except ImportError, exc:
-            _log.error(
-                'Entry {0} failed to process due to an import error: {1}'\
-                    .format(
-                    entry.title,
-                    exc))
-
-            mark_entry_failed(entry._id, exc)
-
-        entry.state = u'processed'
-        entry.save()
-
-    def on_failure(self, exc, task_id, args, kwargs, einfo):
-        """
-        If the processing failed we should mark that in the database.
-
-        Assuming that the exception raised is a subclass of
-        BaseProcessingFail, we can use that to get more information
-        about the failure and store that for conveying information to
-        users about the failure, etc.
-        """
-        entry_id = args[0]
-        mark_entry_failed(entry_id, exc)
 
 
 def mark_entry_failed(entry_id, exc):
