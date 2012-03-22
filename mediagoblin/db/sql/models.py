@@ -189,8 +189,9 @@ class MediaEntry(Base, MediaEntryMixin):
             media_entry=self.id).first()
 
         # No media data, so actually add a new one
-        if not media_data:
+        if media_data is None:
             media_data = self.media_data_table(
+                media_entry=self.id,
                 **kwargs)
             session.add(media_data)
         # Update old media data
