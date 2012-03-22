@@ -18,6 +18,13 @@
 
 {% extends 'mediagoblin/user_pages/media.html' %}
 
+{% block mediagoblin_head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ request.staticdirect('/css/audio.css') }}" />
+    <script type="text/javascript" src="{{ request.staticdirect(
+        '/js/audio.js') }}"></script>
+{% endblock %}
+
 {% block mediagoblin_media %}
   <div class="audio-media">
     {% if 'spectrogram' in media.media_files %}

@@ -219,6 +219,28 @@ class TestSubmission:
             request.db.MediaEntry.find(
                 {'_id': media._id}).count())
 
+    def test_sniffing(self):
+        '''
+        Test sniffing mechanism to assert that regular uploads work as intended
+        '''
+        template.clear_test_template_context()
+        response = self.test_app.post(
+            '/submit/', {
+                'title': 'UNIQUE_TITLE_PLS_DONT_CREATE_OTHER_MEDIA_WITH_THIS_TITLE'
+                }, upload_files=[(
+                    'file', GOOD_JPG)])
+
+        response.follow()
+
+        context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/user_pages/user.html']
+
+        request = context['request']
+
+        media = request.db.MediaEntry.find_one({
+            u'title': u'UNIQUE_TITLE_PLS_DONT_CREATE_OTHER_MEDIA_WITH_THIS_TITLE'})
+
+        assert media.media_type == 'mediagoblin.media_types.image'
+
     def test_malicious_uploads(self):
         # Test non-suppoerted file with non-supported extension
         # -----------------------------------------------------

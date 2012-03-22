@@ -36,16 +36,24 @@ def sniff_media(media):
     Iterate through the enabled media types and find those suited
     for a certain file.
     '''
-    media_file = tempfile.NamedTemporaryFile()
-    media_file.write(media.file.read())
-    media.file.seek(0)
-    for media_type, manager in get_media_managers():
-        _log.info('Sniffing {0}'.format(media_type))
-        if manager['sniff_handler'](media_file, media=media):
-            _log.info('{0} accepts the file'.format(media_type))
-            return media_type, manager
-        else:
-            _log.debug('{0} did not accept the file'.format(media_type))
+
+    try:
+        return get_media_type_and_manager(media.filename)
+    except FileTypeNotSupported:
+        _log.info('No media handler found by file extension. Doing it the expensive way...')
+        # Create a temporary file for sniffers suchs as GStreamer-based
+        # Audio video
+        media_file = tempfile.NamedTemporaryFile()
+        media_file.write(media.file.read())
+        media.file.seek(0)
+
+        for media_type, manager in get_media_managers():
+            _log.info('Sniffing {0}'.format(media_type))
+            if manager['sniff_handler'](media_file, media=media):
+                _log.info('{0} accepts the file'.format(media_type))
+                return media_type, manager
+            else:
+                _log.debug('{0} did not accept the file'.format(media_type))
 
     raise FileTypeNotSupported(
         # TODO: Provide information on which file types are supported
@@ -66,7 +74,7 @@ def get_media_managers():
     '''
     for media_type in get_media_types():
         __import__(media_type)
-            
+
         yield media_type, sys.modules[media_type].MEDIA_MANAGER
 
 
@@ -91,22 +99,22 @@ def get_media_manager(_media_type):
 
 def get_media_type_and_manager(filename):
     '''
-    Get the media type and manager based on a filename
+    Try to find the media type based on the file name, extension
+    specifically. This is used as a speedup, the sniffing functionality
+    then falls back on more in-depth bitsniffing of the source file.
     '''
     if filename.find('.') > 0:
         # Get the file extension
         ext = os.path.splitext(filename)[1].lower()
-    else:
-        raise InvalidFileType(
-            _(u'Could not extract any file extension from "{filename}"').format(
-                filename=filename))
 
-    for media_type, manager in get_media_managers():
-        # Omit the dot from the extension and match it against
-        # the media manager
-        if ext[1:] in manager['accepted_extensions']:
-            return media_type, manager
+        for media_type, manager in get_media_managers():
+            # Omit the dot from the extension and match it against
+            # the media manager
+            if ext[1:] in manager['accepted_extensions']:
+                return media_type, manager
     else:
-        raise FileTypeNotSupported(
-            # TODO: Provide information on which file types are supported
-            _(u'Sorry, I don\'t support that file type :('))
+        _log.info('File {0} has no file extension, let\'s hope the sniffers get it.'.format(
+            filename))
+
+    raise FileTypeNotSupported(
+        _(u'Sorry, I don\'t support that file type :('))
