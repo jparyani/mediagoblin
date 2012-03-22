@@ -19,6 +19,7 @@ from mediagoblin.db.sql.base import Base
 
 from sqlalchemy import (
     Column, Integer, Float, ForeignKey)
+from mediagoblin.db.sql.extratypes import JSONEncoded
 
 
 class ImageData(Base):
@@ -29,6 +30,7 @@ class ImageData(Base):
         primary_key=True)
     width = Column(Integer)
     height = Column(Integer)
+    exif_all = Column(JSONEncoded)
     gps_longitude = Column(Float)
     gps_latitude = Column(Float)
     gps_altitude = Column(Float)
