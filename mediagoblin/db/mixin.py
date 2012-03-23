@@ -32,7 +32,6 @@ from mediagoblin.auth import lib as auth_lib
 from mediagoblin.tools import common, licenses
 from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.url import slugify
-from mediagoblin.tools.exif import USEFUL_TAGS
 
 
 class UserMixin(object):
@@ -125,6 +124,8 @@ class MediaEntryMixin(object):
         return licenses.SUPPORTED_LICENSES[self.license or ""]
 
     def exif_display_iter(self):
+        from mediagoblin.tools.exif import USEFUL_TAGS
+
         if not self.media_data:
             return
         exif_all = self.media_data.get("exif_all")
