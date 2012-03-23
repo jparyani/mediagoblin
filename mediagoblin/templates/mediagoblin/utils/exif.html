@@ -18,11 +18,12 @@
 
 {% block exif_content %}
   {% if app_config['exif_visible']
-        and media.media_data.exif is defined
-        and media.media_data.exif.has_key('useful') %}
+        and media.media_data
+        and media.media_data.exif_all is defined
+        and media.media_data.exif_all %}
     <h3>EXIF</h3>
     <table>
-      {% for key, tag in media.media_data.exif.useful.items() %}
+      {% for key, tag in media.exif_display_iter() %}
         <tr>
           <td>{{ key }}</td>
           <td>{{ tag.printable }}</td>
