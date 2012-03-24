@@ -188,9 +188,15 @@ def convert_exif_media_data(database):
     for document in target:
         media_data = document['media_data']
         print "old:", document['_id'], media_data
-        media_data['exif_all'] = media_data['exif'].pop('clean')
+
+        exif_all = media_data['exif'].pop('clean')
+        if len(exif_all):
+            media_data['exif_all'] = exif_all
+
         del media_data['exif']['useful']
+
         assert len(media_data['exif']) == 0
         del media_data['exif']
+
         print "new:", document['_id'], media_data
         collection.save(document)
