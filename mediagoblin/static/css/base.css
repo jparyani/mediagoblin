@@ -29,7 +29,7 @@ body {
   background-color: #111;
   background-image: url("../images/background.png");
   color: #C3C3C3;
-  padding: none;
+  padding: 0;
   margin: 0px;
   height: 100%;
   font: 16px 'Lato', 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;

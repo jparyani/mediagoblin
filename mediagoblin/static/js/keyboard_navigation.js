@@ -16,6 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* It must be wrapped into a function and you also cannot use
+ * $(':not(textarea, input)') because of some reason. */
+
+$(document).ready(function(){
+  $('textarea, input').keydown(function(event){
+    event.stopPropagation();
+  });
+});
+
 $(document).keydown(function(event){
   switch(event.which){
     case 37:
@@ -30,4 +39,3 @@ $(document).keydown(function(event){
       break;
   }
 });
-
