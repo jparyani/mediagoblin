@@ -115,12 +115,9 @@ def convert_image(mk_db):
             {'media_type': 'mediagoblin.media_types.image'}).sort('created'):
         media_data = copy(media.media_data)
 
-        # TODO: Fix after exif is migrated
-        media_data.pop('exif', None)
-
         if len(media_data):
             media_data_row = ImageData(**media_data)
-            media_data_row.media_entry = obj_id_table[media._id]
+            media_data_row.media_entry = obj_id_table[media['_id']]
             session.add(media_data_row)
 
     session.commit()
@@ -133,7 +130,7 @@ def convert_video(mk_db):
     for media in mk_db.MediaEntry.find(
             {'media_type': 'mediagoblin.media_types.video'}).sort('created'):
         media_data_row = VideoData(**media.media_data)
-        media_data_row.media_entry = obj_id_table[media._id]
+        media_data_row.media_entry = obj_id_table[media['_id']]
         session.add(media_data_row)
 
     session.commit()
