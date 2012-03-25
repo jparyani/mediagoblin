@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import os
 
 from celery.task import Task
 
@@ -41,6 +42,21 @@ def create_pub_filepath(entry, filename):
 ################################
 # Media processing initial steps
 ################################
+
+class FilenameMunger(object):
+    MAX_FILENAME_LENGTH = 255
+
+    def __init__(self, path):
+        self.dirpath, self.basename = os.path.split(path)
+        self.basename, self.ext = os.path.splitext(self.basename)
+        self.ext = self.ext.lower()
+
+    def munge(self, fmtstr):
+        basename_len = (self.MAX_FILENAME_LENGTH -
+                        len(fmtstr.format(basename='', ext=self.ext)))
+        return fmtstr.format(basename=self.basename[:basename_len],
+                             ext=self.ext)
+
 
 class ProcessMedia(Task):
     """
