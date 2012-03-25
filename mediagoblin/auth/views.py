@@ -236,7 +236,8 @@ def forgot_password(request):
 
     Sends an email with an url to renew forgotten password
     """
-    fp_form = auth_forms.ForgotPassForm(request.POST)
+    fp_form = auth_forms.ForgotPassForm(request.POST,
+                                        username=request.GET.get('username'))
 
     if request.method == 'POST' and fp_form.validate():
 
