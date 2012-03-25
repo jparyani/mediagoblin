@@ -48,14 +48,14 @@ class LoginForm(wtforms.Form):
 
 class ForgotPassForm(wtforms.Form):
     username = wtforms.TextField(
-        'Username or email',
+        _('Username or email'),
         [wtforms.validators.Required()])
 
     def validate_username(form, field):
         if not (re.match(r'^\w+$', field.data) or
                re.match(r'^.+@[^.].*\.[a-z]{2,10}$', field.data,
                         re.IGNORECASE)):
-            raise wtforms.ValidationError(u'Incorrect input')
+            raise wtforms.ValidationError(_(u'Incorrect input'))
 
 
 class ChangePassForm(wtforms.Form):

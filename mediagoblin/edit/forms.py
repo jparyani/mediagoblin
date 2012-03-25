@@ -55,7 +55,7 @@ class EditProfileForm(wtforms.Form):
     url = wtforms.TextField(
         _('Website'),
         [wtforms.validators.Optional(),
-         wtforms.validators.URL(message="""This address contains errors""")])
+         wtforms.validators.URL(message=_("This address contains errors"))])
 
 
 class EditAccountForm(wtforms.Form):
