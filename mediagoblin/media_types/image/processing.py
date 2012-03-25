@@ -114,14 +114,17 @@ def process_image(entry):
     media_files_dict['medium'] = medium_filepath
 
     # Insert exif data into database
+    exif_all = clean_exif(exif_tags)
     media_data = entry.setdefault('media_data', {})
 
     # TODO: Fix for sql media_data, when exif is in sql
     if media_data is not None:
         media_data['exif'] = {
-            'clean': clean_exif(exif_tags)}
-        media_data['exif']['useful'] = get_useful(
-            media_data['exif']['clean'])
+            'clean': exif_all}
+        media_data['exif']['useful'] = get_useful(exif_all)
+
+    if len(exif_all):
+        entry.media_data_init(exif_all=exif_all)
 
     if len(gps_data):
         for key in list(gps_data.keys()):
