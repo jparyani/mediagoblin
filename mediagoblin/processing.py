@@ -44,14 +44,29 @@ def create_pub_filepath(entry, filename):
 ################################
 
 class FilenameMunger(object):
-    MAX_FILENAME_LENGTH = 255
+    """Easily slice and dice filenames.
+
+    Initialize this class with an original filename, then use the munge()
+    method to create new filenames based on the original.
+
+    """
+    MAX_FILENAME_LENGTH = 255  # VFAT's maximum filename length
 
     def __init__(self, path):
+        """Initialize a munger with one original filename."""
         self.dirpath, self.basename = os.path.split(path)
         self.basename, self.ext = os.path.splitext(self.basename)
         self.ext = self.ext.lower()
 
     def munge(self, fmtstr):
+        """Return a new filename based on the initialized original.
+
+        The fmtstr argumentcan include {basename} and {ext}, which will
+        fill in components of the original filename.  The extension will
+        always be lowercased.  The filename will also be trunacted to this
+        class' MAX_FILENAME_LENGTH characters.
+
+        """
         basename_len = (self.MAX_FILENAME_LENGTH -
                         len(fmtstr.format(basename='', ext=self.ext)))
         return fmtstr.format(basename=self.basename[:basename_len],
