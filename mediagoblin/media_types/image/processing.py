@@ -19,21 +19,18 @@ import os
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import BadMediaFail, \
-    create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE
+    create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE, FilenameMunger
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful
 
-MAX_FILENAME_LENGTH = 255  # the limit in VFAT -- seems like a good baseline
-
-def resize_image(entry, filename, basename, file_tail, exif_tags, workdir,
-                 new_size, size_limits=(0, 0)):
+def resize_image(entry, filename, new_path, exif_tags, workdir, new_size,
+                 size_limits=(0, 0)):
     """Store a resized version of an image and return its pathname.
 
     Arguments:
     entry -- the entry for the image to resize
     filename -- the filename of the original image being resized
-    basename -- simple basename of the given filename
-    file_tail -- ending string and extension for the resized filename
+    new_path -- public file path for the new resized image
     exif_tags -- EXIF data for the original image
     workdir -- directory path for storing converted image files
     new_size -- 2-tuple size for the resized image
@@ -50,18 +47,11 @@ def resize_image(entry, filename, basename, file_tail, exif_tags, workdir,
         (resized.size[1] > size_limits[1])):
         resized.thumbnail(new_size, Image.ANTIALIAS)
 
-    # Truncate basename as needed so len(basename + file_tail) <= 255
-    resized_filename = (basename[:MAX_FILENAME_LENGTH - len(file_tail)] +
-                        file_tail)
-    resized_filepath = create_pub_filepath(entry, resized_filename)
-
     # Copy the new file to the conversion subdir, then remotely.
-    tmp_resized_filename = os.path.join(workdir, resized_filename)
+    tmp_resized_filename = os.path.join(workdir, new_path[-1])
     with file(tmp_resized_filename, 'w') as resized_file:
         resized.save(resized_file)
-    mgg.public_store.copy_local_to_storage(
-        tmp_resized_filename, resized_filepath)
-    return resized_filepath
+    mgg.public_store.copy_local_to_storage(tmp_resized_filename, new_path)
 
 def process_image(entry):
     """
@@ -77,34 +67,33 @@ def process_image(entry):
     queued_filename = workbench.localized_file(
         mgg.queue_store, queued_filepath,
         'source')
-
-    filename_bits = os.path.splitext(queued_filename)
-    basename = os.path.split(filename_bits[0])[1]
-    extension = filename_bits[1].lower()
+    name_munger = FilenameMunger(queued_filename)
 
     # EXIF extraction
     exif_tags = extract_exif(queued_filename)
     gps_data = get_gps_data(exif_tags)
 
     # Always create a small thumbnail
-    thumb_filepath = resize_image(entry, queued_filename, basename,
-                                  '.thumbnail' + extension, exif_tags,
-                                  conversions_subdir, THUMB_SIZE)
+    thumb_filepath = create_pub_filepath(
+        entry, name_munger.munge('{basename}.thumbnail{ext}'))
+    resize_image(entry, queued_filename, thumb_filepath,
+                 exif_tags, conversions_subdir, THUMB_SIZE)
 
     # If the size of the original file exceeds the specified size of a `medium`
     # file, a `.medium.jpg` files is created and later associated with the media
     # entry.
-    medium_filepath = resize_image(entry, queued_filename, basename,
-                                   '.medium' + extension, exif_tags,
-                                   conversions_subdir, MEDIUM_SIZE, MEDIUM_SIZE)
+    medium_filepath = create_pub_filepath(
+        entry, name_munger.munge('{basename}.medium{ext}'))
+    resize_image(entry, queued_filename, medium_filepath,
+                 exif_tags, conversions_subdir, MEDIUM_SIZE, MEDIUM_SIZE)
 
     # we have to re-read because unlike PIL, not everything reads
     # things in string representation :)
     queued_file = file(queued_filename, 'rb')
 
     with queued_file:
-        #create_pub_filepath(entry, queued_filepath[-1])
-        original_filepath = create_pub_filepath(entry, basename + extension) 
+        original_filepath = create_pub_filepath(
+            entry, name_munger.munge('{basename}{ext}') )
 
         with mgg.public_store.get_file(original_filepath, 'wb') \
             as original_file:
