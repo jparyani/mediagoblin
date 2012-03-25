@@ -22,6 +22,4 @@ $(document).ready(function(){
     window.location.pathname = $(this).attr('href') + '?username=' +
                                $('#username').val();
   });
-
-  $('#username').val(window.location.search.match(/username=(.*)/)[1]);
 });
