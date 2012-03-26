@@ -19,14 +19,14 @@ import logging
 import os
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.processing import mark_entry_failed, \
-    THUMB_SIZE, MEDIUM_SIZE, create_pub_filepath
+from mediagoblin.processing import create_pub_filepath
 from . import transcoders
 
 logging.basicConfig()
 
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
+
 
 def sniff_handler(media_file, **kw):
     transcoder = transcoders.VideoTranscoder()
@@ -43,6 +43,7 @@ def sniff_handler(media_file, **kw):
         return True
 
     return False
+
 
 def process_video(entry):
     """
@@ -62,12 +63,11 @@ def process_video(entry):
         entry,
         '{original}-640p.webm'.format(
             original=os.path.splitext(
-                queued_filepath[-1])[0] # Select the file name without .ext
+                queued_filepath[-1])[0]  # Select the file name without .ext
             ))
 
     thumbnail_filepath = create_pub_filepath(
         entry, 'thumbnail.jpg')
-
 
     # Create a temporary file for the video destination
     tmp_dst = tempfile.NamedTemporaryFile()

@@ -24,7 +24,7 @@ from mediagoblin.media_types.audio import audioprocessing
 
 _log = logging.getLogger(__name__)
 
-CPU_COUNT = 2 # Just assuming for now
+CPU_COUNT = 2  # Just assuming for now
 
 # IMPORT MULTIPROCESSING
 try:
@@ -59,6 +59,7 @@ except ImportError:
     raise Exception('gst/pygst >= 0.10 could not be imported')
 
 import numpy
+
 
 class AudioThumbnailer(object):
     def __init__(self):
@@ -178,7 +179,7 @@ class AudioTranscoder(object):
 
         # Set up pipeline
         self.pipeline = gst.parse_launch(
-            'filesrc location="{src}" ! ' 
+            'filesrc location="{src}" ! '
             'decodebin2 ! queue ! audiorate tolerance={tolerance} ! '
             'audioconvert ! audio/x-raw-float,channels=2 ! '
             '{mux_string} ! '

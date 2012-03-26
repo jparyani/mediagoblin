@@ -21,7 +21,6 @@ os.putenv('GST_DEBUG_DUMP_DOT_DIR', '/tmp')
 
 import sys
 import logging
-import pdb
 import urllib
 
 _log = logging.getLogger(__name__)
@@ -267,7 +266,7 @@ class VideoThumbnailer:
             return 0
 
         try:
-            return pipeline.query_duration(gst.FORMAT_TIME)[0] 
+            return pipeline.query_duration(gst.FORMAT_TIME)[0]
         except gst.QueryError:
             return self._get_duration(pipeline, retries + 1)
 
@@ -317,12 +316,11 @@ class VideoThumbnailer:
             self.bus.disconnect(self.watch_id)
             self.bus = None
 
-
     def __halt_final(self):
         _log.info('Done')
         if self.errors:
             _log.error(','.join(self.errors))
-            
+
         self.loop.quit()
 
 
@@ -454,7 +452,7 @@ class VideoTranscoder:
         self.ffmpegcolorspace = gst.element_factory_make(
             'ffmpegcolorspace', 'ffmpegcolorspace')
         self.pipeline.add(self.ffmpegcolorspace)
-        
+
         self.videoscale = gst.element_factory_make('ffvideoscale', 'videoscale')
         #self.videoscale.set_property('method', 2)  # I'm not sure this works
         #self.videoscale.set_property('add-borders', 0)
@@ -548,7 +546,6 @@ class VideoTranscoder:
         # Setup the message bus and connect _on_message to the pipeline
         self._setup_bus()
 
-
     def _on_dynamic_pad(self, dbin, pad, islast):
         '''
         Callback called when ``decodebin2`` has a pad that we can connect to
@@ -593,11 +590,11 @@ class VideoTranscoder:
 
         t = message.type
 
-        if t == gst.MESSAGE_EOS:
+        if message.type == gst.MESSAGE_EOS:
             self._discover_dst_and_stop()
             _log.info('Done')
 
-        elif t == gst.MESSAGE_ELEMENT:
+        elif message.type == gst.MESSAGE_ELEMENT:
             if message.structure.get_name() == 'progress':
                 data = dict(message.structure)
 
@@ -618,7 +615,6 @@ class VideoTranscoder:
         self.dst_discoverer.connect('discovered', self.__dst_discovered)
 
         self.dst_discoverer.discover()
-
 
     def __dst_discovered(self, data, is_media):
         self.dst_data = data
@@ -694,4 +690,3 @@ if __name__ == '__main__':
         transcoder.transcode(*args, progress_callback=cb)
     elif options.action == 'discover':
         print transcoder.discover(*args).__dict__
-    

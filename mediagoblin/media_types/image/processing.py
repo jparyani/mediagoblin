@@ -20,13 +20,14 @@ import logging
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import BadMediaFail, \
-    create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE
+    create_pub_filepath
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful
 
 _log = logging.getLogger(__name__)
 
 SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg']
+
 
 def sniff_handler(media_file, **kw):
     if kw.get('media') is not None:  # That's a double negative!
@@ -49,6 +50,7 @@ def sniff_handler(media_file, **kw):
                      ' to be able to handle sniffing')
 
     return False
+
 
 def process_image(entry):
     """
@@ -80,7 +82,10 @@ def process_image(entry):
 
     thumb = exif_fix_image_orientation(thumb, exif_tags)
 
-    thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
+    thumb.thumbnail(
+        (mgg.global_config['media:thumb']['max_width'],
+         mgg.global_config['media:thumb']['max_height']),
+        Image.ANTIALIAS)
 
     # Copy the thumb to the conversion subdir, then remotely.
     thumb_filename = 'thumbnail' + extension
@@ -103,8 +108,12 @@ def process_image(entry):
     # Fix orientation
     medium = exif_fix_image_orientation(medium, exif_tags)
 
-    if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1]:
-        medium.thumbnail(MEDIUM_SIZE, Image.ANTIALIAS)
+    if medium.size[0] > mgg.global_config['media:medium']['max_width'] \
+        or medium.size[1] > mgg.global_config['media:medium']['max_height']:
+        medium.thumbnail(
+            (mgg.global_config['media:medium']['max_width'],
+             mgg.global_config['media:medium']['max_height']),
+            Image.ANTIALIAS)
 
     medium_filename = 'medium' + extension
     medium_filepath = create_pub_filepath(entry, medium_filename)
@@ -124,7 +133,7 @@ def process_image(entry):
 
     with queued_file:
         #create_pub_filepath(entry, queued_filepath[-1])
-        original_filepath = create_pub_filepath(entry, basename + extension) 
+        original_filepath = create_pub_filepath(entry, basename + extension)
 
         with mgg.public_store.get_file(original_filepath, 'wb') \
             as original_file:

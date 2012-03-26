@@ -27,14 +27,6 @@ from mediagoblin.media_types import get_media_manager
 
 _log = logging.getLogger(__name__)
 
-# This might fail if this module is loaded before the global_config
-# is parsed although this far it has not.
-THUMB_SIZE = (mgg.global_config['media:thumb']['max_width'],
-              mgg.global_config['media:thumb']['max_height'])
-
-MEDIUM_SIZE = (mgg.global_config['media:medium']['max_width'],
-               mgg.global_config['media:medium']['max_height'])
-
 
 def create_pub_filepath(entry, filename):
     return mgg.public_store.get_unique_filepath(
