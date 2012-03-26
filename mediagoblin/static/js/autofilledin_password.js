@@ -1,6 +1,6 @@
 /**
  * GNU MediaGoblin -- federated, autonomous media hosting
- * Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+ * Copyright (C) 2012 MediaGoblin contributors.  See AUTHORS.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,26 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* It must be wrapped into a function and you also cannot use
- * $(':not(textarea, input)') because of some reason. */
-
 $(document).ready(function(){
-  $('textarea, input').keydown(function(event){
-    event.stopPropagation();
+  $('#forgot_password').click(function(event){
+    event.preventDefault();
+    window.location.pathname = $(this).attr('href') + '?username=' +
+                               $('#username').val();
   });
-});
-
-$(document).keydown(function(event){
-  switch(event.which){
-    case 37:
-      if($('a.navigation_left').length) {
-        window.location = $('a.navigation_left').attr('href');
-      }
-      break;
-    case 39:
-      if($('a.navigation_right').length) {
-      window.location = $('a.navigation_right').attr('href');
-      }
-      break;
-  }
 });

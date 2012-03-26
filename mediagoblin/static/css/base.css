@@ -29,7 +29,7 @@ body {
   background-color: #111;
   background-image: url("../images/background.png");
   color: #C3C3C3;
-  padding: none;
+  padding: 0;
   margin: 0px;
   height: 100%;
   font: 16px 'Lato', 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
@@ -113,10 +113,10 @@ input, textarea {
 }
 
 header {
-  width: 100%;
-  padding-top: 14px;
+  width: 98%;
+  padding: 6px 1% 0;
   margin-bottom: 20px;
-  border-bottom: 1px solid #333;
+  background-color: #222;
 }
 
 .header_right {
@@ -144,7 +144,7 @@ footer {
   height: 30px;
   border-top: 1px solid #333;
   bottom: 0px;
-  padding-top: 8px;
+  padding: 8px 0;
   text-align: center;
   font-size: 0.875em;
   clear: both;
@@ -234,13 +234,14 @@ text-align: center;
   height: 0;
 }
 
-h3.sidedata {
-	border: none;
-	background-color: #212121;
-	border-radius: 4px 4px 0 0;
-	padding: 3px 8px;
-	margin: 20px 0 5px 0;
+.media_sidebar h3 {
 	font-size: 1em;
+	margin: 0 0 5px;
+	border: none;
+}
+
+.media_sidebar p {
+	padding-left: 8px;
 }
 
 /* forms */
@@ -557,11 +558,6 @@ table.media_panel th {
   
   .button_action, .button_action_highlight, .button_form { 
     padding: 9px 14px;
-  }
-  
-  .header_right {
-    float: none;
-    display: inline-block;
   }
   
   header {

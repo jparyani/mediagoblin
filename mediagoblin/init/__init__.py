@@ -24,7 +24,7 @@ from mediagoblin.init.config import (
 from mediagoblin import mg_globals
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.db.open import setup_connection_and_db_from_config, \
-    check_db_migrations_current
+    check_db_migrations_current, load_models
 from mediagoblin.workbench import WorkbenchManager
 from mediagoblin.storage import storage_system_from_config
 
@@ -55,6 +55,9 @@ def setup_global_and_app_config(config_path):
 
 def setup_database():
     app_config = mg_globals.app_config
+
+    # Load all models for media types (plugins, ...)
+    load_models(app_config)
 
     # Set up the database
     connection, db = setup_connection_and_db_from_config(app_config)

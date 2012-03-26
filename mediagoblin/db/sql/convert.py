@@ -19,15 +19,15 @@ from copy import copy
 from mediagoblin.init import setup_global_and_app_config, setup_database
 from mediagoblin.db.mongo.util import ObjectId
 
-from mediagoblin.db.sql.models import (Base, User, MediaEntry, MediaComment,
-    Tag, MediaTag, MediaFile, MediaAttachmentFile)
+from mediagoblin.db.sql.base import Base, Session
+from mediagoblin.db.sql.models import (User, MediaEntry, MediaComment,
+    Tag, MediaTag, MediaFile, MediaAttachmentFile, MigrationData)
 from mediagoblin.media_types.image.models import ImageData
 from mediagoblin.media_types.video.models import VideoData
 from mediagoblin.db.sql.open import setup_connection_and_db_from_config as \
     sql_connect
 from mediagoblin.db.mongo.open import setup_connection_and_db_from_config as \
     mongo_connect
-from mediagoblin.db.sql.base import Session
 
 
 obj_id_table = dict()
@@ -115,12 +115,9 @@ def convert_image(mk_db):
             {'media_type': 'mediagoblin.media_types.image'}).sort('created'):
         media_data = copy(media.media_data)
 
-        # TODO: Fix after exif is migrated
-        media_data.pop('exif', None)
-
         if len(media_data):
             media_data_row = ImageData(**media_data)
-            media_data_row.media_entry = obj_id_table[media._id]
+            media_data_row.media_entry = obj_id_table[media['_id']]
             session.add(media_data_row)
 
     session.commit()
@@ -133,7 +130,7 @@ def convert_video(mk_db):
     for media in mk_db.MediaEntry.find(
             {'media_type': 'mediagoblin.media_types.video'}).sort('created'):
         media_data_row = VideoData(**media.media_data)
-        media_data_row.media_entry = obj_id_table[media._id]
+        media_data_row.media_entry = obj_id_table[media['_id']]
         session.add(media_data_row)
 
     session.commit()
@@ -189,6 +186,20 @@ def convert_media_comments(mk_db):
     session.close()
 
 
+def convert_add_migration_versions():
+    session = Session()
+
+    for name in ("__main__",
+                 "mediagoblin.media_types.image",
+                 "mediagoblin.media_types.video",
+                 ):
+        m = MigrationData(name=name, version=0)
+        session.add(m)
+
+    session.commit()
+    session.close()
+
+
 def run_conversion(config_name):
     global_config, app_config = setup_global_and_app_config(config_name)
 
@@ -208,6 +219,8 @@ def run_conversion(config_name):
     convert_media_tags(mk_db)
     Session.remove()
     convert_media_comments(mk_db)
+    Session.remove()
+    convert_add_migration_versions()
     Session.remove()
 
 

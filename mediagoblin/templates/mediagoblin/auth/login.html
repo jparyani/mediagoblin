@@ -19,6 +19,11 @@
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
+{% block mediagoblin_head %}
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/js/autofilledin_password.js') }}"></script>
+{% endblock %}
+
 {% block mediagoblin_content %}
   <form action="{{ request.urlgen('mediagoblin.auth.login') }}"
         method="POST" enctype="multipart/form-data">
@@ -38,7 +43,7 @@
       {% endif %}
       {{ wtforms_util.render_divs(login_form) }}
         <p>
-          <a href="{{ request.urlgen('mediagoblin.auth.forgot_password') }}">
+          <a href="{{ request.urlgen('mediagoblin.auth.forgot_password') }}" id="forgot_password">
           {% trans %}Forgot your password?{% endtrans %}</a>
         </p>
       <div class="form_submit_buttons">

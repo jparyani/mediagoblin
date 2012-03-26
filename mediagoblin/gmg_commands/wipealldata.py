@@ -20,12 +20,16 @@ import sys
 import os
 import shutil
 
+from mediagoblin.init import setup_global_and_app_config
+
 
 def wipe_parser_setup(subparser):
     pass
 
 
 def wipe(args):
+    global_config, app_config = setup_global_and_app_config(args.conf_file)
+
     print "*** WARNING! ***"
     print ""
     print "Running this will destroy your mediagoblin database,"
@@ -39,12 +43,12 @@ def wipe(args):
         'Are you **SURE** you want to destroy your environment?  '
         '(if so, type "yes")> ')
 
-    if not drop_it == 'yes':
+    if drop_it != 'yes':
         return
 
     print "nixing data in mongodb...."
     conn = pymongo.Connection()
-    conn.drop_database('mediagoblin')
+    conn.drop_database(app_config["db_name"])
 
     for directory in [os.path.join(os.getcwd(), "user_dev", "media"),
                       os.path.join(os.getcwd(), "user_dev", "beaker")]:

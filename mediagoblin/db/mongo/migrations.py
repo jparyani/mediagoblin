@@ -119,6 +119,7 @@ def media_type_image_to_multimedia_type_image(database):
         {'$set': {'media_type': 'mediagoblin.media_types.image'}},
         multi=True)
 
+
 @RegisterMigration(8)
 def mediaentry_add_license(database):
     """
@@ -140,6 +141,7 @@ def remove_calculated_html(database):
     drop_table_field(database, 'media_entries', 'description_html')
     drop_table_field(database, 'media_comments', 'content_html')
 
+
 @RegisterMigration(10)
 def convert_video_media_data(database):
     """
@@ -154,6 +156,7 @@ def convert_video_media_data(database):
         document['media_data'] = document['media_data']['video']
         collection.save(document)
 
+
 @RegisterMigration(11)
 def convert_gps_media_data(database):
     """
@@ -165,9 +168,33 @@ def convert_gps_media_data(database):
         {'media_data.gps': {'$exists': True}})
 
     for document in target:
-        print document['_id'], "old:", document['media_data']
         for key, value in document['media_data']['gps'].iteritems():
             document['media_data']['gps_' + key] = value
         del document['media_data']['gps']
-        print document['_id'], "new:", document['media_data']
+        collection.save(document)
+
+
+@RegisterMigration(12)
+def convert_exif_media_data(database):
+    """
+    Move media_data["exif"]["clean"] to media_data["exif_all"].
+    Drop media_data["exif"]["useful"]
+    In preparation for media_data.exif_all
+    """
+    collection = database['media_entries']
+    target = collection.find(
+        {'media_data.exif.clean': {'$exists': True}})
+
+    for document in target:
+        media_data = document['media_data']
+
+        exif_all = media_data['exif'].pop('clean')
+        if len(exif_all):
+            media_data['exif_all'] = exif_all
+
+        del media_data['exif']['useful']
+
+        assert len(media_data['exif']) == 0
+        del media_data['exif']
+
         collection.save(document)

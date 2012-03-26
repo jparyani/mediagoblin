@@ -123,6 +123,17 @@ class MediaEntryMixin(object):
         """Return license dict for requested license"""
         return licenses.SUPPORTED_LICENSES[self.license or ""]
 
+    def exif_display_iter(self):
+        from mediagoblin.tools.exif import USEFUL_TAGS
+
+        if not self.media_data:
+            return
+        exif_all = self.media_data.get("exif_all")
+
+        for key in USEFUL_TAGS:
+            if key in exif_all:
+                yield key, exif_all[key]
+
 
 class MediaCommentMixin(object):
     @property

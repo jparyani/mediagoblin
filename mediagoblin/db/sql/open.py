@@ -18,8 +18,9 @@
 from sqlalchemy import create_engine
 import logging
 
-from mediagoblin.db.sql.base import Session
-from mediagoblin.db.sql.models import Base
+from mediagoblin.db.sql.base import Base, Session
+
+_log = logging.getLogger(__name__)
 
 
 class DatabaseMaster(object):
@@ -41,9 +42,18 @@ class DatabaseMaster(object):
         Session.remove()
 
 
+def load_models(app_config):
+    import mediagoblin.db.sql.models
+
+    if True:
+        for media_type in app_config['media_types']:
+            _log.debug("Loading %s.models", media_type)
+            __import__(media_type + ".models")
+
+
 def setup_connection_and_db_from_config(app_config):
     engine = create_engine(app_config['sql_engine'])
-    logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+    # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
     Session.configure(bind=engine)
 
     return "dummy conn", DatabaseMaster(engine)

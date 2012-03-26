@@ -15,17 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from mediagoblin.db.sql.models import Base
+from mediagoblin.db.sql.base import Base
 
 from sqlalchemy import (
     Column, Integer, SmallInteger, ForeignKey)
 
 
 class VideoData(Base):
-    __tablename__ = "video_data"
+    __tablename__ = "video__mediadata"
 
     # The primary key *and* reference to the main media_entry
-    media_entry = Column(Integer, ForeignKey('media_entries.id'),
+    media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
         primary_key=True)
     width = Column(SmallInteger)
     height = Column(SmallInteger)

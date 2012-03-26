@@ -61,7 +61,7 @@ class User(Base, UserMixin):
     TODO: We should consider moving some rarely used fields
     into some sort of "shadow" table.
     """
-    __tablename__ = "users"
+    __tablename__ = "core__users"
 
     id = Column(Integer, primary_key=True)
     username = Column(Unicode, nullable=False, unique=True)
@@ -87,13 +87,14 @@ class MediaEntry(Base, MediaEntryMixin):
     """
     TODO: Consider fetching the media_files using join
     """
-    __tablename__ = "media_entries"
+    __tablename__ = "core__media_entries"
 
     id = Column(Integer, primary_key=True)
-    uploader = Column(Integer, ForeignKey('users.id'), nullable=False)
+    uploader = Column(Integer, ForeignKey(User.id), nullable=False, index=True)
     title = Column(Unicode, nullable=False)
     slug = Column(Unicode)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now,
+        index=True)
     description = Column(UnicodeText) # ??
     media_type = Column(Unicode, nullable=False)
     state = Column(Unicode, default=u'unprocessed', nullable=False)
@@ -188,8 +189,9 @@ class MediaEntry(Base, MediaEntryMixin):
             media_entry=self.id).first()
 
         # No media data, so actually add a new one
-        if not media_data:
+        if media_data is None:
             media_data = self.media_data_table(
+                media_entry=self.id,
                 **kwargs)
             session.add(media_data)
         # Update old media data
@@ -230,7 +232,7 @@ class MediaFile(Base):
     TODO: Highly consider moving "name" into a new table.
     TODO: Consider preloading said table in software
     """
-    __tablename__ = "mediafiles"
+    __tablename__ = "core__mediafiles"
 
     media_entry = Column(
         Integer, ForeignKey(MediaEntry.id),
@@ -269,7 +271,7 @@ class MediaAttachmentFile(Base):
 
 
 class Tag(Base):
-    __tablename__ = "tags"
+    __tablename__ = "core__tags"
 
     id = Column(Integer, primary_key=True)
     slug = Column(Unicode, nullable=False, unique=True)
@@ -286,13 +288,13 @@ class Tag(Base):
 
 
 class MediaTag(Base):
-    __tablename__ = "media_tags"
+    __tablename__ = "core__media_tags"
 
     id = Column(Integer, primary_key=True)
     media_entry = Column(
         Integer, ForeignKey(MediaEntry.id),
-        nullable=False)
-    tag = Column(Integer, ForeignKey('tags.id'), nullable=False)
+        nullable=False, index=True)
+    tag = Column(Integer, ForeignKey(Tag.id), nullable=False, index=True)
     name = Column(Unicode)
     # created = Column(DateTime, nullable=False, default=datetime.datetime.now)
 
@@ -319,12 +321,12 @@ class MediaTag(Base):
 
 
 class MediaComment(Base, MediaCommentMixin):
-    __tablename__ = "media_comments"
+    __tablename__ = "core__media_comments"
 
     id = Column(Integer, primary_key=True)
     media_entry = Column(
-        Integer, ForeignKey('media_entries.id'), nullable=False)
-    author = Column(Integer, ForeignKey('users.id'), nullable=False)
+        Integer, ForeignKey(MediaEntry.id), nullable=False, index=True)
+    author = Column(Integer, ForeignKey(User.id), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     content = Column(UnicodeText, nullable=False)
 
@@ -346,7 +348,7 @@ MODELS = [
 ######################################################
 
 class MigrationData(Base):
-    __tablename__ = "migrations"
+    __tablename__ = "core__migrations"
 
     name = Column(Unicode, primary_key=True)
     version = Column(Integer, nullable=False, default=0)

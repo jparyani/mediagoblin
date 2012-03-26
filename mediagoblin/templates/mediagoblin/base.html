@@ -36,44 +36,42 @@
   </head>
   <body>
     {% block mediagoblin_body %}
-    <div class="container">
       {% block mediagoblin_header %}
-          <header>
-            {% block mediagoblin_logo %}
-              <a class="logo"
-                 href="{{ request.urlgen('index') }}"
-                 ><img src="{{ request.staticdirect('/images/logo.png') }}"
-                     alt="{% trans %}MediaGoblin logo{% endtrans %}" /></a>
-            {% endblock mediagoblin_logo %}
-            {% if request.user and request.user.status == 'active' %}
-              <a class="button_action"
-                 href="{{ request.urlgen('mediagoblin.submit.start') }}">
-                {% trans %}Add media{% endtrans %}
-              </a>
-            {% endif %}
-            {% block mediagoblin_header_title %}{% endblock %}
-            <div class="header_right">
-              {% if request.user %}
-                {# the following link should only appear when verification is needed #}
-                {% if request.user.status == "needs_email_verification" %}
-                  <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                              user=request.user.username) }}"
-                     class="button_action_highlight">
-                    {% trans %}Verify your email!{% endtrans %}</a>
-                {% endif %}
-
+        <header>
+          {% block mediagoblin_logo %}
+            <a class="logo"
+               href="{{ request.urlgen('index') }}"
+               ><img src="{{ request.staticdirect('/images/logo.png') }}"
+                   alt="{% trans %}MediaGoblin logo{% endtrans %}" /></a>
+          {% endblock mediagoblin_logo %}
+          {% if request.user and request.user.status == 'active' %}
+            <a class="button_action"
+               href="{{ request.urlgen('mediagoblin.submit.start') }}">
+              {% trans %}Add media{% endtrans %}
+            </a>
+          {% endif %}
+          {% block mediagoblin_header_title %}{% endblock %}
+          <div class="header_right">
+            {% if request.user %}
+              {# the following link should only appear when verification is needed #}
+              {% if request.user.status == "needs_email_verification" %}
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                            user= request.user.username) }}">
-                  {{ request.user.username }}</a>
-
-                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
-              {% else %}
-                <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
-                  {% trans %}Log in{% endtrans %}</a>
+                                            user=request.user.username) }}"
+                   class="button_action_highlight">
+                  {% trans %}Verify your email!{% endtrans %}</a>
               {% endif %}
-            </div>
-          </header>
+             <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                                          user= request.user.username) }}">
+                {{ request.user.username }}</a>
+              (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
+            {% else %}
+              <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
+                {% trans %}Log in{% endtrans %}</a>
+            {% endif %}
+          </div>
+        </header>
       {% endblock %}
+    <div class="container">
       <div class="mediagoblin_content">
           {% include "mediagoblin/utils/messages.html" %}
           {% block mediagoblin_content %}

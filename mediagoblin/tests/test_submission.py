@@ -80,6 +80,10 @@ class TestSubmission:
     def upload_data(self, filename):
         return {'upload_files': [('file', filename)]}
 
+    def check_comments(self, request, media, count):
+        comments = request.db.MediaComment.find({'media_entry': media._id})
+        assert_equal(count, len(list(comments)))
+
     def test_missing_fields(self):
         # Test blank form
         # ---------------
@@ -150,6 +154,15 @@ class TestSubmission:
                                          **self.upload_data(GOOD_JPG))
         media = self.check_media(request, {'title': 'Balanced Goblin'}, 1)
 
+        # Add a comment, so we can test for its deletion later.
+        self.check_comments(request, media, 0)
+        comment_url = request.urlgen(
+            'mediagoblin.user_pages.media_post_comment',
+            user=self.test_user.username, media=media._id)
+        response = self.do_post({'comment_content': 'i love this test'},
+                                url=comment_url, do_follow=True)[0]
+        self.check_comments(request, media, 1)
+
         # Do not confirm deletion
         # ---------------------------------------------------
         delete_url = request.urlgen(
@@ -164,6 +177,7 @@ class TestSubmission:
         response, request = self.do_post({'confirm': 'y'}, *REQUEST_CONTEXT,
                                          do_follow=True, url=delete_url)
         self.check_media(request, {'_id': media._id}, 0)
+        self.check_comments(request, media, 0)
 
     def test_evil_file(self):
         # Test non-suppoerted file with non-supported extension

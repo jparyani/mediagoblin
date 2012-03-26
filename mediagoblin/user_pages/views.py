@@ -173,6 +173,10 @@ def media_confirm_delete(request, media):
         if form.confirm.data is True:
             username = media.get_uploader.username
 
+            # Delete all the associated comments
+            for comment in media.get_comments():
+                comment.delete()
+
             # Delete all files on the public storage
             delete_media_files(media)
 
@@ -301,7 +305,7 @@ def processing_panel(request):
     # Get media entries which are in-processing
     processing_entries = request.db.MediaEntry.find(
         {'uploader': user._id,
-         'state': 'processing'}).sort('created', DESCENDING)
+         'state': 'unprocessed'}).sort('created', DESCENDING)
 
     # Get media entries which have failed to process
     failed_entries = request.db.MediaEntry.find(
