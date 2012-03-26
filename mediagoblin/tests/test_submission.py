@@ -140,9 +140,11 @@ class TestSubmission:
         context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/user_pages/user.html']
         request = context['request']
         media = request.db.MediaEntry.find({'title': 'Balanced Goblin'})[0]
-        assert_equal(media.tags,
-                     [{'name': u'yin', 'slug': u'yin'},
-                                            {'name': u'yang', 'slug': u'yang'}])
+        assert media.tags[0]['name'] == u'yin'
+        assert media.tags[0]['slug'] == u'yin'
+
+        assert media.tags[1]['name'] == u'yang'
+        assert media.tags[1]['slug'] == u'yang'
 
         # Test tags that are too long
         # ---------------
