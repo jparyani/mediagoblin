@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import os
 
 from mediagoblin.db.util import atomic_update
 from mediagoblin import mg_globals as mgg
@@ -32,6 +33,37 @@ def create_pub_filepath(entry, filename):
             ['media_entries',
              unicode(entry._id),
              filename])
+
+class FilenameBuilder(object):
+    """Easily slice and dice filenames.
+
+    Initialize this class with an original file path, then use the fill()
+    method to create new filenames based on the original.
+
+    """
+    MAX_FILENAME_LENGTH = 255  # VFAT's maximum filename length
+
+    def __init__(self, path):
+        """Initialize a builder from an original file path."""
+        self.dirpath, self.basename = os.path.split(path)
+        self.basename, self.ext = os.path.splitext(self.basename)
+        self.ext = self.ext.lower()
+
+    def fill(self, fmtstr):
+        """Build a new filename based on the original.
+
+        The fmtstr argument can include the following:
+        {basename} -- the original basename, with the extension removed
+        {ext} -- the original extension, always lowercase
+
+        If necessary, {basename} will be truncated so the filename does not
+        exceed this class' MAX_FILENAME_LENGTH in length.
+
+        """
+        basename_len = (self.MAX_FILENAME_LENGTH -
+                        len(fmtstr.format(basename='', ext=self.ext)))
+        return fmtstr.format(basename=self.basename[:basename_len],
+                             ext=self.ext)
 
 
 def mark_entry_failed(entry_id, exc):

@@ -19,9 +19,39 @@ import os
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import BadMediaFail, \
-    create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE
+    create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE, FilenameBuilder
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful
+
+def resize_image(entry, filename, new_path, exif_tags, workdir, new_size,
+                 size_limits=(0, 0)):
+    """Store a resized version of an image and return its pathname.
+
+    Arguments:
+    entry -- the entry for the image to resize
+    filename -- the filename of the original image being resized
+    new_path -- public file path for the new resized image
+    exif_tags -- EXIF data for the original image
+    workdir -- directory path for storing converted image files
+    new_size -- 2-tuple size for the resized image
+    size_limits (optional) -- image is only resized if it exceeds this size
+
+    """
+    try:
+        resized = Image.open(filename)
+    except IOError:
+        raise BadMediaFail()
+    resized = exif_fix_image_orientation(resized, exif_tags)  # Fix orientation
+
+    if ((resized.size[0] > size_limits[0]) or
+        (resized.size[1] > size_limits[1])):
+        resized.thumbnail(new_size, Image.ANTIALIAS)
+
+    # Copy the new file to the conversion subdir, then remotely.
+    tmp_resized_filename = os.path.join(workdir, new_path[-1])
+    with file(tmp_resized_filename, 'w') as resized_file:
+        resized.save(resized_file)
+    mgg.public_store.copy_local_to_storage(tmp_resized_filename, new_path)
 
 def process_image(entry):
     """
@@ -37,67 +67,33 @@ def process_image(entry):
     queued_filename = workbench.localized_file(
         mgg.queue_store, queued_filepath,
         'source')
-
-    filename_bits = os.path.splitext(queued_filename)
-    basename = os.path.split(filename_bits[0])[1]
-    extension = filename_bits[1].lower()
+    name_builder = FilenameBuilder(queued_filename)
 
     # EXIF extraction
     exif_tags = extract_exif(queued_filename)
     gps_data = get_gps_data(exif_tags)
 
-    try:
-        thumb = Image.open(queued_filename)
-    except IOError:
-        raise BadMediaFail()
-
-    thumb = exif_fix_image_orientation(thumb, exif_tags)
-
-    thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
-
-    # Copy the thumb to the conversion subdir, then remotely.
-    thumb_filename = 'thumbnail' + extension
-    thumb_filepath = create_pub_filepath(entry, thumb_filename)
-
-    tmp_thumb_filename = os.path.join(
-        conversions_subdir, thumb_filename)
-
-    with file(tmp_thumb_filename, 'w') as thumb_file:
-        thumb.save(thumb_file)
-
-    mgg.public_store.copy_local_to_storage(
-        tmp_thumb_filename, thumb_filepath)
+    # Always create a small thumbnail
+    thumb_filepath = create_pub_filepath(
+        entry, name_builder.fill('{basename}.thumbnail{ext}'))
+    resize_image(entry, queued_filename, thumb_filepath,
+                 exif_tags, conversions_subdir, THUMB_SIZE)
 
     # If the size of the original file exceeds the specified size of a `medium`
-    # file, a `medium.jpg` files is created and later associated with the media
+    # file, a `.medium.jpg` files is created and later associated with the media
     # entry.
-    medium = Image.open(queued_filename)
-
-    # Fix orientation
-    medium = exif_fix_image_orientation(medium, exif_tags)
-
-    if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1]:
-        medium.thumbnail(MEDIUM_SIZE, Image.ANTIALIAS)
-
-    medium_filename = 'medium' + extension
-    medium_filepath = create_pub_filepath(entry, medium_filename)
-
-    tmp_medium_filename = os.path.join(
-        conversions_subdir, medium_filename)
-
-    with file(tmp_medium_filename, 'w') as medium_file:
-        medium.save(medium_file)
-
-    mgg.public_store.copy_local_to_storage(
-        tmp_medium_filename, medium_filepath)
+    medium_filepath = create_pub_filepath(
+        entry, name_builder.fill('{basename}.medium{ext}'))
+    resize_image(entry, queued_filename, medium_filepath,
+                 exif_tags, conversions_subdir, MEDIUM_SIZE, MEDIUM_SIZE)
 
     # we have to re-read because unlike PIL, not everything reads
     # things in string representation :)
     queued_file = file(queued_filename, 'rb')
 
     with queued_file:
-        #create_pub_filepath(entry, queued_filepath[-1])
-        original_filepath = create_pub_filepath(entry, basename + extension) 
+        original_filepath = create_pub_filepath(
+            entry, name_builder.fill('{basename}{ext}') )
 
         with mgg.public_store.get_file(original_filepath, 'wb') \
             as original_file:
