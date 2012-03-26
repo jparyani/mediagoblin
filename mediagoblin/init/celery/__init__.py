@@ -17,28 +17,18 @@
 import os
 import sys
 
+from celery import Celery
+
 
 MANDATORY_CELERY_IMPORTS = ['mediagoblin.processing.task']
 
 DEFAULT_SETTINGS_MODULE = 'mediagoblin.init.celery.dummy_settings_module'
 
 
-def setup_celery_from_config(app_config, global_config,
-                             settings_module=DEFAULT_SETTINGS_MODULE,
-                             force_celery_always_eager=False,
-                             set_environ=True):
+def get_celery_settings_dict(app_config, global_config,
+                             force_celery_always_eager=False):
     """
-    Take a mediagoblin app config and try to set up a celery settings
-    module from this.
-
-    Args:
-    - app_config: the application config section
-    - global_config: the entire ConfigObj loaded config, all sections
-    - settings_module: the module to populate, as a string
-    - force_celery_always_eager: whether or not to force celery into
-      always eager mode; good for development and small installs
-    - set_environ: if set, this will CELERY_CONFIG_MODULE to the
-      settings_module
+    Get a celery settings dictionary from reading the config
     """
     if 'celery' in global_config:
         celery_conf = global_config['celery']
@@ -60,6 +50,41 @@ def setup_celery_from_config(app_config, global_config,
     if force_celery_always_eager:
         celery_settings['CELERY_ALWAYS_EAGER'] = True
         celery_settings['CELERY_EAGER_PROPAGATES_EXCEPTIONS'] = True
+
+    return celery_settings
+
+
+def setup_celery_app(app_config, global_config,
+                     settings_module=DEFAULT_SETTINGS_MODULE,
+                     force_celery_always_eager=False):
+    """
+    Setup celery without using terrible setup-celery-module hacks.
+    """
+    celery_settings = get_celery_settings_dict(
+        app_config, global_config, force_celery_always_eager)
+    celery_app = Celery()
+    celery_app.config_from_object(celery_settings)
+
+
+def setup_celery_from_config(app_config, global_config,
+                             settings_module=DEFAULT_SETTINGS_MODULE,
+                             force_celery_always_eager=False,
+                             set_environ=True):
+    """
+    Take a mediagoblin app config and try to set up a celery settings
+    module from this.
+
+    Args:
+    - app_config: the application config section
+    - global_config: the entire ConfigObj loaded config, all sections
+    - settings_module: the module to populate, as a string
+    - force_celery_always_eager: whether or not to force celery into
+      always eager mode; good for development and small installs
+    - set_environ: if set, this will CELERY_CONFIG_MODULE to the
+      settings_module
+    """
+    celery_settings = get_celery_settings_dict(
+        app_config, global_config, force_celery_always_eager)
 
     __import__(settings_module)
     this_module = sys.modules[settings_module]

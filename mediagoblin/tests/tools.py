@@ -26,8 +26,11 @@ from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.decorators import _make_safe
 from mediagoblin.db.open import setup_connection_and_db_from_config
+from mediagoblin.db.sql.base import Session
 from mediagoblin.meddleware import BaseMeddleware
 from mediagoblin.auth.lib import bcrypt_gen_password_hash
+from mediagoblin.gmg_commands.dbupdate import run_dbupdate
+from mediagoblin.init.celery import setup_celery_app
 
 
 MEDIAGOBLIN_TEST_DB_NAME = u'__mediagoblin_tests__'
@@ -125,25 +128,18 @@ def get_test_app(dump_old_app=True):
     global_config, validation_result = read_mediagoblin_config(TEST_APP_CONFIG)
     app_config = global_config['mediagoblin']
 
-    # Wipe database
-    # @@: For now we're dropping collections, but we could also just
-    # collection.remove() ?
-    connection, db = setup_connection_and_db_from_config(app_config)
-    assert db.name == MEDIAGOBLIN_TEST_DB_NAME
-
-    collections_to_wipe = [
-        collection
-        for collection in db.collection_names()
-        if not collection.startswith('system.')]
-
-    for collection in collections_to_wipe:
-        db.drop_collection(collection)
-
-    # TODO: Drop and recreate indexes
+    # Run database setup/migrations
+    run_dbupdate(app_config)
 
     # setup app and return
     test_app = loadapp(
         'config:' + TEST_SERVER_CONFIG)
+
+    Session.rollback()
+    Session.remove()
+
+    # Re-setup celery
+    setup_celery_app(app_config, global_config)
 
     # Insert the TestingMeddleware, which can do some
     # sanity checks on every request/response.
