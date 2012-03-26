@@ -21,7 +21,8 @@ from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import BadMediaFail, \
     create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE, FilenameBuilder
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
-    extract_exif, clean_exif, get_gps_data, get_useful
+    extract_exif, clean_exif, get_gps_data, get_useful, \
+    exif_image_needs_rotation
 
 def resize_image(entry, filename, new_path, exif_tags, workdir, new_size,
                  size_limits=(0, 0)):
@@ -62,7 +63,6 @@ def process_image(entry):
     conversions_subdir = os.path.join(
         workbench.dir, 'conversions')
     os.mkdir(conversions_subdir)
-
     queued_filepath = entry.queued_media_file
     queued_filename = workbench.localized_file(
         mgg.queue_store, queued_filepath,
@@ -82,10 +82,16 @@ def process_image(entry):
     # If the size of the original file exceeds the specified size of a `medium`
     # file, a `.medium.jpg` files is created and later associated with the media
     # entry.
-    medium_filepath = create_pub_filepath(
-        entry, name_builder.fill('{basename}.medium{ext}'))
-    resize_image(entry, queued_filename, medium_filepath,
-                 exif_tags, conversions_subdir, MEDIUM_SIZE, MEDIUM_SIZE)
+    medium = Image.open(queued_filename)
+    if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1] \
+            or exif_image_needs_rotation(exif_tags):
+        medium_filepath = create_pub_filepath(
+            entry, name_builder.fill('{basename}.medium{ext}'))
+        resize_image(
+            entry, queued_filename, medium_filepath,
+            exif_tags, conversions_subdir, MEDIUM_SIZE, MEDIUM_SIZE)
+    else:
+        medium_filepath = None
 
     # we have to re-read because unlike PIL, not everything reads
     # things in string representation :)
@@ -107,7 +113,8 @@ def process_image(entry):
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict['thumb'] = thumb_filepath
     media_files_dict['original'] = original_filepath
-    media_files_dict['medium'] = medium_filepath
+    if medium_filepath:
+        media_files_dict['medium'] = medium_filepath 
 
     # Insert exif data into database
     exif_all = clean_exif(exif_tags)
