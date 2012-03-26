@@ -114,7 +114,7 @@ def process_image(entry):
     media_files_dict['thumb'] = thumb_filepath
     media_files_dict['original'] = original_filepath
     if medium_filepath:
-        media_files_dict['medium'] = medium_filepath 
+        media_files_dict['medium'] = medium_filepath
 
     # Insert exif data into database
     exif_all = clean_exif(exif_tags)
