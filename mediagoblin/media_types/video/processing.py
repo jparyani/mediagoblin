@@ -20,7 +20,7 @@ import os
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import mark_entry_failed, \
-    THUMB_SIZE, MEDIUM_SIZE, create_pub_filepath, FilenameMunger
+    THUMB_SIZE, MEDIUM_SIZE, create_pub_filepath, FilenameBuilder
 from . import transcoders
 
 logging.basicConfig()
@@ -49,13 +49,13 @@ def process_video(entry):
     queued_filename = workbench.localized_file(
         mgg.queue_store, queued_filepath,
         'source')
-    name_munger = FilenameMunger(queued_filename)
+    name_builder = FilenameBuilder(queued_filename)
 
     medium_filepath = create_pub_filepath(
-        entry, name_munger.munge('{basename}-640p.webm'))
+        entry, name_builder.fill('{basename}-640p.webm'))
 
     thumbnail_filepath = create_pub_filepath(
-        entry, name_munger.munge('{basename}.thumbnail.jpg'))
+        entry, name_builder.fill('{basename}.thumbnail.jpg'))
 
     # Create a temporary file for the video destination
     tmp_dst = tempfile.NamedTemporaryFile()

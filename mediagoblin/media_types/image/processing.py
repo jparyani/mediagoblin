@@ -19,7 +19,7 @@ import os
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import BadMediaFail, \
-    create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE, FilenameMunger
+    create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE, FilenameBuilder
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful
 
@@ -67,7 +67,7 @@ def process_image(entry):
     queued_filename = workbench.localized_file(
         mgg.queue_store, queued_filepath,
         'source')
-    name_munger = FilenameMunger(queued_filename)
+    name_builder = FilenameBuilder(queued_filename)
 
     # EXIF extraction
     exif_tags = extract_exif(queued_filename)
@@ -75,7 +75,7 @@ def process_image(entry):
 
     # Always create a small thumbnail
     thumb_filepath = create_pub_filepath(
-        entry, name_munger.munge('{basename}.thumbnail{ext}'))
+        entry, name_builder.fill('{basename}.thumbnail{ext}'))
     resize_image(entry, queued_filename, thumb_filepath,
                  exif_tags, conversions_subdir, THUMB_SIZE)
 
@@ -83,7 +83,7 @@ def process_image(entry):
     # file, a `.medium.jpg` files is created and later associated with the media
     # entry.
     medium_filepath = create_pub_filepath(
-        entry, name_munger.munge('{basename}.medium{ext}'))
+        entry, name_builder.fill('{basename}.medium{ext}'))
     resize_image(entry, queued_filename, medium_filepath,
                  exif_tags, conversions_subdir, MEDIUM_SIZE, MEDIUM_SIZE)
 
@@ -93,7 +93,7 @@ def process_image(entry):
 
     with queued_file:
         original_filepath = create_pub_filepath(
-            entry, name_munger.munge('{basename}{ext}') )
+            entry, name_builder.fill('{basename}{ext}') )
 
         with mgg.public_store.get_file(original_filepath, 'wb') \
             as original_file:
