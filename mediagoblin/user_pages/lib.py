@@ -16,6 +16,7 @@
 
 from mediagoblin.tools.mail import send_email
 from mediagoblin.tools.template import render_template
+from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin import mg_globals
 
 def send_comment_email(user, comment, media, request):
@@ -29,13 +30,12 @@ def send_comment_email(user, comment, media, request):
     - request: the request
     """
 
-    comment_url = u'http://{host}{comment_uri}'.format( 
-            host=request.host,
-            comment_uri=request.urlgen(
-                'mediagoblin.user_pages.media_home.view_comment',
-                comment = comment._id,
-                user = media.get_uploader.username,
-                media = media.slug_or_id) + '#comment')
+    comment_url = request.urlgen(
+                    'mediagoblin.user_pages.media_home.view_comment',
+                    comment = comment._id,
+                    user = media.get_uploader.username,
+                    media = media.slug_or_id,
+                    qualified = True) + '#comment'
 
     comment_author = comment.get_author['username']
 
@@ -49,6 +49,6 @@ def send_comment_email(user, comment, media, request):
     send_email(
         mg_globals.app_config['email_sender_address'],
         [user.email],
-        'GNU MediaGoblin - {comment_author} commented on your post'.format(
-            comment_author=comment_author),
+        'GNU MediaGoblin - {comment_author} '.format(
+            comment_author=comment_author) + _('commented on your post'),
         rendered_email)

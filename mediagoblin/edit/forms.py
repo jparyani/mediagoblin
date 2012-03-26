@@ -61,18 +61,14 @@ class EditProfileForm(wtforms.Form):
 class EditAccountForm(wtforms.Form):
     old_password = wtforms.PasswordField(
         _('Old password'),
-        [wtforms.validators.Required()],
         description=_(
             "Enter your old password to prove you own this account."))
     new_password = wtforms.PasswordField(
         _('New password'),
-        [wtforms.validators.Required(),
-         wtforms.validators.Length(min=6, max=30)],
+        [wtforms.validators.Length(min=6, max=30)],
         id="password")
-
     wants_comment_notification = wtforms.BooleanField(
         _('Comment notification?'),
-        [wtforms.validators.Required()],
         description=_("Check this box to be emailed when someone else comments on your media."))
 
 
