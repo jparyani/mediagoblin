@@ -17,6 +17,7 @@
  */
 
 $(document).ready(function(){
+  //Create a duplicate password field. We could change the input type dynamically, but this angers the IE gods (not just IE6).
   $("#password").after('<input type="text" value="" name="password_clear" id="password_clear" /><label><input type="checkbox" id="password_boolean" />Show password</label>');
   $('#password_clear').hide();
   $('#password_boolean').click(function(){
