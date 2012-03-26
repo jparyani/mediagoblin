@@ -14,10 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin import mg_globals
+import os
+import shutil
 
+from mediagoblin import mg_globals
 from mediagoblin.tests.tools import (
-    MEDIAGOBLIN_TEST_DB_NAME, suicide_if_bad_celery_environ)
+    TEST_USER_DEV, suicide_if_bad_celery_environ)
 
 
 def setup_package():
@@ -25,8 +27,6 @@ def setup_package():
 
 
 def teardown_package():
-    if ((mg_globals.db_connection
-         and mg_globals.database.name == MEDIAGOBLIN_TEST_DB_NAME)):
-            print "Killing db ..."
-            mg_globals.db_connection.drop_database(MEDIAGOBLIN_TEST_DB_NAME)
-            print "... done"
+    # Remove and reinstall user_dev directories
+    if os.path.exists(TEST_USER_DEV):
+        shutil.rmtree(TEST_USER_DEV)
