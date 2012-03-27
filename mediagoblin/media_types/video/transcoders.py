@@ -21,12 +21,9 @@ os.putenv('GST_DEBUG_DUMP_DOT_DIR', '/tmp')
 
 import sys
 import logging
-import pdb
 import urllib
 
 _log = logging.getLogger(__name__)
-logging.basicConfig()
-_log.setLevel(logging.DEBUG)
 
 CPU_COUNT = 2
 try:
@@ -38,17 +35,16 @@ try:
         pass
 except ImportError:
     _log.warning('Could not import multiprocessing, defaulting to 2 CPU cores')
-    pass
 
 try:
     import gtk
-except:
+except ImportError:
     raise Exception('Could not find pygtk')
 
 try:
     import gobject
     gobject.threads_init()
-except:
+except ImportError:
     raise Exception('gobject could not be found')
 
 try:
@@ -56,7 +52,7 @@ try:
     pygst.require('0.10')
     import gst
     from gst.extend import discoverer
-except:
+except ImportError:
     raise Exception('gst/pygst 0.10 could not be found')
 
 
@@ -270,7 +266,7 @@ class VideoThumbnailer:
             return 0
 
         try:
-            return pipeline.query_duration(gst.FORMAT_TIME)[0] 
+            return pipeline.query_duration(gst.FORMAT_TIME)[0]
         except gst.QueryError:
             return self._get_duration(pipeline, retries + 1)
 
@@ -320,12 +316,11 @@ class VideoThumbnailer:
             self.bus.disconnect(self.watch_id)
             self.bus = None
 
-
     def __halt_final(self):
         _log.info('Done')
         if self.errors:
             _log.error(','.join(self.errors))
-            
+
         self.loop.quit()
 
 
@@ -341,10 +336,15 @@ class VideoTranscoder:
        that it was refined afterwards and therefore is done more
        correctly.
     '''
-    def __init__(self, src, dst, **kwargs):
+    def __init__(self):
         _log.info('Initializing VideoTranscoder...')
 
         self.loop = gobject.MainLoop()
+
+    def transcode(self, src, dst, **kwargs):
+        '''
+        Transcode a video file into a 'medium'-sized version.
+        '''
         self.source_path = src
         self.destination_path = dst
 
@@ -358,6 +358,34 @@ class VideoTranscoder:
         self._setup()
         self._run()
 
+    def discover(self, src):
+        '''
+        Discover properties about a media file
+        '''
+        _log.info('Discovering {0}'.format(src))
+
+        self.source_path = src
+        self._setup_discover(discovered_callback=self.__on_discovered)
+
+        self.discoverer.discover()
+
+        self.loop.run()
+
+        if hasattr(self, '_discovered_data'):
+            return self._discovered_data.__dict__
+        else:
+            return None
+
+    def __on_discovered(self, data, is_media):
+        _log.debug('Discovered: {0}'.format(data))
+        if not is_media:
+            self.__stop()
+            raise Exception('Could not discover {0}'.format(self.source_path))
+
+        self._discovered_data = data
+
+        self.__stop_mainloop()
+
     def _setup(self):
         self._setup_discover()
         self._setup_pipeline()
@@ -370,12 +398,14 @@ class VideoTranscoder:
         _log.debug('Initializing MainLoop()')
         self.loop.run()
 
-    def _setup_discover(self):
+    def _setup_discover(self, **kw):
         _log.debug('Setting up discoverer')
         self.discoverer = discoverer.Discoverer(self.source_path)
 
         # Connect self.__discovered to the 'discovered' event
-        self.discoverer.connect('discovered', self.__discovered)
+        self.discoverer.connect(
+            'discovered',
+            kw.get('discovered_callback', self.__discovered))
 
     def __discovered(self, data, is_media):
         '''
@@ -422,7 +452,7 @@ class VideoTranscoder:
         self.ffmpegcolorspace = gst.element_factory_make(
             'ffmpegcolorspace', 'ffmpegcolorspace')
         self.pipeline.add(self.ffmpegcolorspace)
-        
+
         self.videoscale = gst.element_factory_make('ffvideoscale', 'videoscale')
         #self.videoscale.set_property('method', 2)  # I'm not sure this works
         #self.videoscale.set_property('add-borders', 0)
@@ -516,7 +546,6 @@ class VideoTranscoder:
         # Setup the message bus and connect _on_message to the pipeline
         self._setup_bus()
 
-
     def _on_dynamic_pad(self, dbin, pad, islast):
         '''
         Callback called when ``decodebin2`` has a pad that we can connect to
@@ -561,11 +590,11 @@ class VideoTranscoder:
 
         t = message.type
 
-        if t == gst.MESSAGE_EOS:
+        if message.type == gst.MESSAGE_EOS:
             self._discover_dst_and_stop()
             _log.info('Done')
 
-        elif t == gst.MESSAGE_ELEMENT:
+        elif message.type == gst.MESSAGE_ELEMENT:
             if message.structure.get_name() == 'progress':
                 data = dict(message.structure)
 
@@ -587,7 +616,6 @@ class VideoTranscoder:
 
         self.dst_discoverer.discover()
 
-
     def __dst_discovered(self, data, is_media):
         self.dst_data = data
 
@@ -596,8 +624,9 @@ class VideoTranscoder:
     def __stop(self):
         _log.debug(self.loop)
 
-        # Stop executing the pipeline
-        self.pipeline.set_state(gst.STATE_NULL)
+        if hasattr(self, 'pipeline'):
+            # Stop executing the pipeline
+            self.pipeline.set_state(gst.STATE_NULL)
 
         # This kills the loop, mercifully
         gobject.idle_add(self.__stop_mainloop)
@@ -615,14 +644,15 @@ class VideoTranscoder:
 
 if __name__ == '__main__':
     os.nice(19)
+    logging.basicConfig()
     from optparse import OptionParser
 
     parser = OptionParser(
-        usage='%prog [-v] -a [ video | thumbnail ] SRC DEST')
+        usage='%prog [-v] -a [ video | thumbnail | discover ] SRC [ DEST ]')
 
     parser.add_option('-a', '--action',
                       dest='action',
-                      help='One of "video" or "thumbnail"')
+                      help='One of "video", "discover" or "thumbnail"')
 
     parser.add_option('-v',
                       dest='verbose',
@@ -646,13 +676,17 @@ if __name__ == '__main__':
 
     _log.debug(args)
 
-    if not len(args) == 2:
+    if not len(args) == 2 and not options.action == 'discover':
         parser.print_help()
         sys.exit()
+
+    transcoder = VideoTranscoder()
 
     if options.action == 'thumbnail':
         VideoThumbnailer(*args)
     elif options.action == 'video':
         def cb(data):
             print('I\'m a callback!')
-        transcoder = VideoTranscoder(*args, progress_callback=cb)
+        transcoder.transcode(*args, progress_callback=cb)
+    elif options.action == 'discover':
+        print transcoder.discover(*args).__dict__

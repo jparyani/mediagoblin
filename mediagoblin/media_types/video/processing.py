@@ -20,7 +20,7 @@ import os
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import mark_entry_failed, \
-    THUMB_SIZE, MEDIUM_SIZE, create_pub_filepath, FilenameBuilder
+    create_pub_filepath, FilenameBuilder
 from . import transcoders
 
 logging.basicConfig()
@@ -29,17 +29,27 @@ _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
 
 
+def sniff_handler(media_file, **kw):
+    transcoder = transcoders.VideoTranscoder()
+    data = transcoder.discover(media_file.name)
+
+    _log.debug('Discovered: {0}'.format(data))
+
+    if not data:
+        _log.error('Could not discover {0}'.format(
+                kw.get('media')))
+        return False
+
+    if data['is_video'] == True:
+        return True
+
+    return False
+
+
 def process_video(entry):
     """
-    Code to process a video
-
-    Much of this code is derived from the arista-transcoder script in
-    the arista PyPI package and changed to match the needs of
-    MediaGoblin
-
-    This function sets up the arista video encoder in some kind of new thread
-    and attaches callbacks to that child process, hopefully, the
-    entry-complete callback will be called when the video is done.
+    Process a video entry, transcode the queued media files (originals) and
+    create a thumbnail for the entry.
     """
     video_config = mgg.global_config['media_type:mediagoblin.media_types.video']
 
@@ -62,7 +72,8 @@ def process_video(entry):
 
     with tmp_dst:
         # Transcode queued file to a VP8/vorbis file that fits in a 640x640 square
-        transcoder = transcoders.VideoTranscoder(queued_filename, tmp_dst.name)
+        transcoder = transcoders.VideoTranscoder()
+        transcoder.transcode(queued_filename, tmp_dst.name)
 
         # Push transcoded video to public storage
         _log.debug('Saving medium...')

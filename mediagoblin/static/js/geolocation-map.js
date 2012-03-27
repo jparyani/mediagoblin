@@ -17,6 +17,11 @@
  */
 
 $(document).ready(function () {
+    if (!$('#tile-map').length) {
+        return;
+    }
+    console.log('Initializing map');
+
     var longitude = Number(
 	$('#tile-map #gps-longitude').val());
     var latitude = Number(

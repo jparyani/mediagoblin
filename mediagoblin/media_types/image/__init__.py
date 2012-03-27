@@ -14,13 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.media_types.image.processing import process_image
+from mediagoblin.media_types.image.processing import process_image, \
+    sniff_handler
 
 
 MEDIA_MANAGER = {
     "human_readable": "Image",
     "processor": process_image, # alternately a string,
                                 # 'mediagoblin.media_types.image.processing'?
+    "sniff_handler": sniff_handler,
     "display_template": "mediagoblin/media_displays/image.html",
     "default_thumb": "images/media_thumbs/image.jpg",
     "accepted_extensions": ["jpg", "jpeg", "png", "gif", "tiff"]}

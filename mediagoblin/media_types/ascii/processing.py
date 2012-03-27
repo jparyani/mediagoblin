@@ -19,10 +19,24 @@ import Image
 import logging
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.processing import create_pub_filepath, THUMB_SIZE
+from mediagoblin.processing import create_pub_filepath
 from mediagoblin.media_types.ascii import asciitoimage
 
 _log = logging.getLogger(__name__)
+
+SUPPORTED_EXTENSIONS = ['txt', 'asc', 'nfo']
+
+
+def sniff_handler(media_file, **kw):
+    if kw.get('media') is not None:
+        name, ext = os.path.splitext(kw['media'].filename)
+        clean_ext = ext[1:].lower()
+
+        if clean_ext in SUPPORTED_EXTENSIONS:
+            return True
+
+    return False
+
 
 def process_ascii(entry):
     '''
@@ -69,7 +83,10 @@ def process_ascii(entry):
             queued_file.read())
 
         with file(tmp_thumb_filename, 'w') as thumb_file:
-            thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
+            thumb.thumbnail(
+                (mgg.global_config['media:thumb']['max_width'],
+                 mgg.global_config['media:thumb']['max_height']),
+                Image.ANTIALIAS)
             thumb.save(thumb_file)
 
         _log.debug('Copying local file to public storage')
@@ -83,7 +100,6 @@ def process_ascii(entry):
         with mgg.public_store.get_file(original_filepath, 'wb') \
             as original_file:
             original_file.write(queued_file.read())
-
 
         queued_file.seek(0)  # Rewind *again*
 

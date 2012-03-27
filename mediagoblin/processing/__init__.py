@@ -24,9 +24,6 @@ from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 _log = logging.getLogger(__name__)
 
-THUMB_SIZE = 180, 180
-MEDIUM_SIZE = 640, 640
-
 
 def create_pub_filepath(entry, filename):
     return mgg.public_store.get_unique_filepath(

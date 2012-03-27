@@ -16,13 +16,17 @@
 
 import Image
 import os
+import logging
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import BadMediaFail, \
-    create_pub_filepath, THUMB_SIZE, MEDIUM_SIZE, FilenameBuilder
+    create_pub_filepath, FilenameBuilder
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful, \
     exif_image_needs_rotation
+
+_log = logging.getLogger(__name__)
+
 
 def resize_image(entry, filename, new_path, exif_tags, workdir, new_size,
                  size_limits=(0, 0)):
@@ -35,24 +39,46 @@ def resize_image(entry, filename, new_path, exif_tags, workdir, new_size,
     exif_tags -- EXIF data for the original image
     workdir -- directory path for storing converted image files
     new_size -- 2-tuple size for the resized image
-    size_limits (optional) -- image is only resized if it exceeds this size
-
     """
     try:
         resized = Image.open(filename)
     except IOError:
         raise BadMediaFail()
     resized = exif_fix_image_orientation(resized, exif_tags)  # Fix orientation
-
-    if ((resized.size[0] > size_limits[0]) or
-        (resized.size[1] > size_limits[1])):
-        resized.thumbnail(new_size, Image.ANTIALIAS)
+    resized.thumbnail(new_size, Image.ANTIALIAS)
 
     # Copy the new file to the conversion subdir, then remotely.
     tmp_resized_filename = os.path.join(workdir, new_path[-1])
     with file(tmp_resized_filename, 'w') as resized_file:
         resized.save(resized_file)
     mgg.public_store.copy_local_to_storage(tmp_resized_filename, new_path)
+
+
+SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg']
+
+
+def sniff_handler(media_file, **kw):
+    if kw.get('media') is not None:  # That's a double negative!
+        name, ext = os.path.splitext(kw['media'].filename)
+        clean_ext = ext[1:].lower()  # Strip the . from ext and make lowercase
+
+        _log.debug('name: {0}\next: {1}\nlower_ext: {2}'.format(
+                name,
+                ext,
+                clean_ext))
+
+        if clean_ext in SUPPORTED_FILETYPES:
+            _log.info('Found file extension in supported filetypes')
+            return True
+        else:
+            _log.debug('Media present, extension not found in {0}'.format(
+                    SUPPORTED_FILETYPES))
+    else:
+        _log.warning('Need additional information (keyword argument \'media\')'
+                     ' to be able to handle sniffing')
+
+    return False
+
 
 def process_image(entry):
     """
@@ -77,19 +103,24 @@ def process_image(entry):
     thumb_filepath = create_pub_filepath(
         entry, name_builder.fill('{basename}.thumbnail{ext}'))
     resize_image(entry, queued_filename, thumb_filepath,
-                 exif_tags, conversions_subdir, THUMB_SIZE)
+                exif_tags, conversions_subdir,
+                (mgg.global_config['media:thumb']['max_width'],
+                 mgg.global_config['media:thumb']['max_height']))
 
     # If the size of the original file exceeds the specified size of a `medium`
     # file, a `.medium.jpg` files is created and later associated with the media
     # entry.
     medium = Image.open(queued_filename)
-    if medium.size[0] > MEDIUM_SIZE[0] or medium.size[1] > MEDIUM_SIZE[1] \
-            or exif_image_needs_rotation(exif_tags):
+    if medium.size[0] > mgg.global_config['media:medium']['max_width'] \
+        or medium.size[1] > mgg.global_config['media:medium']['max_height'] \
+        or exif_image_needs_rotation(exif_tags):
         medium_filepath = create_pub_filepath(
             entry, name_builder.fill('{basename}.medium{ext}'))
         resize_image(
             entry, queued_filename, medium_filepath,
-            exif_tags, conversions_subdir, MEDIUM_SIZE, MEDIUM_SIZE)
+            exif_tags, conversions_subdir,
+            (mgg.global_config['media:medium']['max_width'],
+             mgg.global_config['media:medium']['max_height']))
     else:
         medium_filepath = None
 
@@ -99,7 +130,7 @@ def process_image(entry):
 
     with queued_file:
         original_filepath = create_pub_filepath(
-            entry, name_builder.fill('{basename}{ext}') )
+            entry, name_builder.fill('{basename}{ext}'))
 
         with mgg.public_store.get_file(original_filepath, 'wb') \
             as original_file:

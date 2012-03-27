@@ -23,6 +23,7 @@ import os
 
 _log = logging.getLogger(__name__)
 
+
 class AsciiToImage(object):
     '''
     Converter of ASCII art into image files, preserving whitespace

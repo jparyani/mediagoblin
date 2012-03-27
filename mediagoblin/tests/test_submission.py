@@ -17,19 +17,19 @@
 import urlparse
 import os
 import re
-import time
 
 from nose.tools import assert_equal, assert_true, assert_false
 from pkg_resources import resource_filename
 
-from mediagoblin.tests.tools import setup_fresh_app, get_test_app, \
+from mediagoblin.tests.tools import get_test_app, \
     fixture_add_user
 from mediagoblin import mg_globals
-from mediagoblin.processing import create_pub_filepath
-from mediagoblin.tools import template, common
+from mediagoblin.tools import template
+
 
 def resource(filename):
     return resource_filename('mediagoblin.tests', 'test_submission/' + filename)
+
 
 GOOD_JPG = resource('good.jpg')
 GOOD_PNG = resource('good.png')
@@ -43,6 +43,7 @@ BAD_TAG_STRING = 'rage,' + 'f' * 26 + 'u' * 26
 
 FORM_CONTEXT = ['mediagoblin/submit/start.html', 'submit_form']
 REQUEST_CONTEXT = ['mediagoblin/user_pages/user.html', 'request']
+
 
 class TestSubmission:
     def setUp(self):
@@ -76,7 +77,7 @@ class TestSubmission:
         for key in context_keys:
             context_data = context_data[key]
         return response, context_data
-        
+
     def upload_data(self, filename):
         return {'upload_files': [('file', filename)]}
 
@@ -102,7 +103,7 @@ class TestSubmission:
         response, context = self.do_post({'title': title}, do_follow=True,
                                          **self.upload_data(filename))
         self.check_url(response, '/u/{0}/'.format(self.test_user.username))
-        assert_true(context.has_key('mediagoblin/user_pages/user.html'))
+        assert_true('mediagoblin/user_pages/user.html' in context)
         # Make sure the media view is at least reachable, logged in...
         url = '/u/{0}/m/{1}/'.format(self.test_user.username,
                                      title.lower().replace(' ', '-'))
@@ -190,8 +191,30 @@ class TestSubmission:
                 r'^Could not extract any file extension from ".*?"$',
                 str(form.file.errors[0])))
 
+    def test_sniffing(self):
+        '''
+        Test sniffing mechanism to assert that regular uploads work as intended
+        '''
+        template.clear_test_template_context()
+        response = self.test_app.post(
+            '/submit/', {
+                'title': 'UNIQUE_TITLE_PLS_DONT_CREATE_OTHER_MEDIA_WITH_THIS_TITLE'
+                }, upload_files=[(
+                    'file', GOOD_JPG)])
+
+        response.follow()
+
+        context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/user_pages/user.html']
+
+        request = context['request']
+
+        media = request.db.MediaEntry.find_one({
+            u'title': u'UNIQUE_TITLE_PLS_DONT_CREATE_OTHER_MEDIA_WITH_THIS_TITLE'})
+
+        assert media.media_type == 'mediagoblin.media_types.image'
+
     def check_false_image(self, title, filename):
-        # NOTE: These images should ultimately fail, but they
+        # NOTE: The following 2 tests will ultimately fail, but they
         #   *will* pass the initial form submission step.  Instead,
         #   they'll be caught as failures during the processing step.
         response, context = self.do_post({'title': title}, do_follow=True,

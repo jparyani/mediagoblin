@@ -14,16 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.media_types.video.processing import process_video, \
+from mediagoblin.media_types.audio.processing import process_audio, \
     sniff_handler
 
-
 MEDIA_MANAGER = {
-    "human_readable": "Video",
-    "processor": process_video,  # alternately a string,
-                                 # 'mediagoblin.media_types.image.processing'?
-    "sniff_handler": sniff_handler,
-    "display_template": "mediagoblin/media_displays/video.html",
-    "default_thumb": "images/media_thumbs/video.jpg",
-    "accepted_extensions": [
-        "mp4", "mov", "webm", "avi", "3gp", "3gpp", "mkv", "ogv", "m4v"]}
+    'human_readable': 'Audio',
+    'processor': process_audio,
+    'sniff_handler': sniff_handler,
+    'display_template': 'mediagoblin/media_displays/audio.html',
+    'accepted_extensions': ['mp3', 'flac', 'ogg', 'wav', 'm4a']}
