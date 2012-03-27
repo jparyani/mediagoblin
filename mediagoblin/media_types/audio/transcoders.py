@@ -16,7 +16,7 @@
 
 import pdb
 import logging
-from PIL import Image
+import Image
 
 from mediagoblin.processing import BadMediaFail
 from mediagoblin.media_types.audio import audioprocessing
