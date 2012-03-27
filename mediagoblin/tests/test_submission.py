@@ -187,9 +187,8 @@ class TestSubmission:
                                       *FORM_CONTEXT,
                                       **self.upload_data(EVIL_FILE))
         assert_equal(len(form.file.errors), 1)
-        assert_true(re.match(
-                r'^Could not extract any file extension from ".*?"$',
-                str(form.file.errors[0])))
+        assert 'Sorry, I don\'t support that file type :(' == \
+                str(form.file.errors[0])
 
     def test_sniffing(self):
         '''
