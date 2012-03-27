@@ -68,22 +68,26 @@ def tag_atom_feed(request):
     """
     generates the atom feed with the tag images
     """
-    tag_slug = request.matchdict[u'tag']
+    tag_slug = request.matchdict.get(u'tag')
+    feed_title = "MediaGoblin Feed"
+    if tag_slug:
+        cursor = media_entries_for_tag_slug(request.db, tag_slug)
+        link = request.urlgen('mediagoblin.listings.tags_listing',
+                              qualified=True, tag=tag_slug )
+        feed_title += "for tag '%s'" % tag_slug,
+    else: # all recent item feed
+        cursor = MediaEntry.query.filter_by(state=u'processed')
+        link = request.urlgen('index', qualified=True)
+        feed_title += "for all recent items"
 
-    cursor = media_entries_for_tag_slug(request.db, tag_slug)
     cursor = cursor.order_by(MediaEntry.created.desc())
     cursor = cursor.limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
-    """
-    ATOM feed id is a tag URI (see http://en.wikipedia.org/wiki/Tag_URI)
-    """
     feed = AtomFeed(
-        "MediaGoblin: Feed for tag '%s'" % tag_slug,
+        feed_title,
         feed_url=request.url,
-        id='tag:'+request.host+',2011:gallery.tag-%s' % tag_slug,
-        links=[{'href': request.urlgen(
-                 'mediagoblin.listings.tags_listing',
-                 qualified=True, tag=tag_slug ),
+        id=link,
+        links=[{'href': link,
             'rel': 'alternate',
             'type': 'text/html'}])
     for entry in cursor:
