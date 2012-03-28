@@ -19,6 +19,7 @@ from mediagoblin.db.sql.base import Base
 
 from sqlalchemy import (
     Column, Integer, SmallInteger, ForeignKey)
+from sqlalchemy.orm import relationship, backref
 
 
 class VideoData(Base):
@@ -27,6 +28,9 @@ class VideoData(Base):
     # The primary key *and* reference to the main media_entry
     media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
         primary_key=True)
+    get_media_entry = relationship("MediaEntry",
+        backref=backref("video__media_data", cascade="all, delete-orphan"))
+
     width = Column(SmallInteger)
     height = Column(SmallInteger)
 

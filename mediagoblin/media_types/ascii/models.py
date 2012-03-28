@@ -18,8 +18,8 @@
 from mediagoblin.db.sql.base import Base
 
 from sqlalchemy import (
-    Column, Integer, Unicode, UnicodeText, DateTime, Boolean, ForeignKey,
-    UniqueConstraint)
+    Column, Integer, ForeignKey)
+from sqlalchemy.orm import relationship, backref
 
 
 class AsciiData(Base):
@@ -28,6 +28,8 @@ class AsciiData(Base):
     # The primary key *and* reference to the main media_entry
     media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
         primary_key=True)
+    get_media_entry = relationship("MediaEntry",
+        backref=backref("ascii__media_data", cascade="all, delete-orphan"))
 
 
 DATA_MODEL = AsciiData
