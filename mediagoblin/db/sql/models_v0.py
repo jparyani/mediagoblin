@@ -32,16 +32,12 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
 
 from mediagoblin.db.sql.extratypes import PathTupleWithSlashes, JSONEncoded
-from mediagoblin.db.sql.base import Base, DictReadAttrProxy
+from mediagoblin.db.sql.base import GMGTableBase, DictReadAttrProxy
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
 from mediagoblin.db.sql.base import Session
 
-# It's actually kind of annoying how sqlalchemy-migrate does this, if
-# I understand it right, but whatever.  Anyway, don't remove this :P
-# 
-# We could do migration calls more manually instead of relying on
-# this import-based meddling...
-from migrate import changeset
+
+Base_v0 = declarative_base(cls=GMGTableBase)
 
 
 class SimpleFieldAlias(object):
@@ -56,7 +52,7 @@ class SimpleFieldAlias(object):
         setattr(instance, self.fieldname, val)
 
 
-class User(Base, UserMixin):
+class User(Base_v0, UserMixin):
     """
     TODO: We should consider moving some rarely used fields
     into some sort of "shadow" table.
@@ -83,7 +79,7 @@ class User(Base, UserMixin):
     _id = SimpleFieldAlias("id")
 
 
-class MediaEntry(Base, MediaEntryMixin):
+class MediaEntry(Base_v0, MediaEntryMixin):
     """
     TODO: Consider fetching the media_files using join
     """
@@ -207,7 +203,7 @@ class MediaEntry(Base, MediaEntryMixin):
         return sys.modules[models_module].DATA_MODEL
 
 
-class FileKeynames(Base):
+class FileKeynames(Base_v0):
     """
     keywords for various places.
     currently the MediaFile keys
@@ -227,7 +223,7 @@ class FileKeynames(Base):
         return cls(name=name)
 
 
-class MediaFile(Base):
+class MediaFile(Base_v0):
     """
     TODO: Highly consider moving "name" into a new table.
     TODO: Consider preloading said table in software
@@ -253,7 +249,7 @@ class MediaFile(Base):
         )
 
 
-class MediaAttachmentFile(Base):
+class MediaAttachmentFile(Base_v0):
     __tablename__ = "core__attachment_files"
 
     id = Column(Integer, primary_key=True)
@@ -270,7 +266,7 @@ class MediaAttachmentFile(Base):
         return DictReadAttrProxy(self)
 
 
-class Tag(Base):
+class Tag(Base_v0):
     __tablename__ = "core__tags"
 
     id = Column(Integer, primary_key=True)
@@ -287,7 +283,7 @@ class Tag(Base):
         return cls(slug=slug)
 
 
-class MediaTag(Base):
+class MediaTag(Base_v0):
     __tablename__ = "core__media_tags"
 
     id = Column(Integer, primary_key=True)
@@ -308,7 +304,7 @@ class MediaTag(Base):
         )
 
     def __init__(self, name=None, slug=None):
-        Base.__init__(self)
+        Base_v0.__init__(self)
         if name is not None:
             self.name = name
         if slug is not None:
@@ -320,7 +316,7 @@ class MediaTag(Base):
         return DictReadAttrProxy(self)
 
 
-class MediaComment(Base, MediaCommentMixin):
+class MediaComment(Base_v0, MediaCommentMixin):
     __tablename__ = "core__media_comments"
 
     id = Column(Integer, primary_key=True)
@@ -335,9 +331,35 @@ class MediaComment(Base, MediaCommentMixin):
     _id = SimpleFieldAlias("id")
 
 
-MODELS = [
-    User, MediaEntry, Tag, MediaTag, MediaComment, MediaFile, FileKeynames,
-    MediaAttachmentFile]
+class ImageData(Base_v0):
+    __tablename__ = "image__mediadata"
+
+    # The primary key *and* reference to the main media_entry
+    media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
+        primary_key=True)
+    get_media_entry = relationship("MediaEntry",
+        backref=backref("image__media_data", cascade="all, delete-orphan"))
+
+    width = Column(Integer)
+    height = Column(Integer)
+    exif_all = Column(JSONEncoded)
+    gps_longitude = Column(Float)
+    gps_latitude = Column(Float)
+    gps_altitude = Column(Float)
+    gps_direction = Column(Float)
+
+
+class VideoData(Base_v0):
+    __tablename__ = "video__mediadata"
+
+    # The primary key *and* reference to the main media_entry
+    media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
+        primary_key=True)
+    get_media_entry = relationship("MediaEntry",
+        backref=backref("video__media_data", cascade="all, delete-orphan"))
+
+    width = Column(SmallInteger)
+    height = Column(SmallInteger)
 
 
 ######################################################
@@ -347,29 +369,10 @@ MODELS = [
 # really migrated, but used for migrations (for now)
 ######################################################
 
-class MigrationData(Base):
+class MigrationData(Base_v0):
     __tablename__ = "core__migrations"
 
     name = Column(Unicode, primary_key=True)
     version = Column(Integer, nullable=False, default=0)
 
 ######################################################
-
-
-def show_table_init(engine_uri):
-    if engine_uri is None:
-        engine_uri = 'sqlite:///:memory:'
-    from sqlalchemy import create_engine
-    engine = create_engine(engine_uri, echo=True)
-
-    Base.metadata.create_all(engine)
-
-
-if __name__ == '__main__':
-    from sys import argv
-    print repr(argv)
-    if len(argv) == 2:
-        uri = argv[1]
-    else:
-        uri = None
-    show_table_init(uri)

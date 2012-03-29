@@ -16,14 +16,13 @@
 
 from copy import copy
 
-from mediagoblin.init import setup_global_and_app_config, setup_database
-from mediagoblin.db.mongo.util import ObjectId
+from mediagoblin.init import setup_global_and_app_config
 
-from mediagoblin.db.sql.base import Base, Session
-from mediagoblin.db.sql.models import (User, MediaEntry, MediaComment,
-    Tag, MediaTag, MediaFile, MediaAttachmentFile, MigrationData)
-from mediagoblin.media_types.image.models import ImageData
-from mediagoblin.media_types.video.models import VideoData
+from mediagoblin.db.sql.base import Session
+from mediagoblin.db.sql.models_0 import Base_v0
+from mediagoblin.db.sql.models_0 import (User, MediaEntry, MediaComment,
+    Tag, MediaTag, MediaFile, MediaAttachmentFile, MigrationData,
+    ImageData, VideoData)
 from mediagoblin.db.sql.open import setup_connection_and_db_from_config as \
     sql_connect
 from mediagoblin.db.mongo.open import setup_connection_and_db_from_config as \
@@ -206,7 +205,7 @@ def run_conversion(config_name):
     sql_conn, sql_db = sql_connect(app_config)
     mk_conn, mk_db = mongo_connect(app_config)
 
-    Base.metadata.create_all(sql_db.engine)
+    Base_v0.metadata.create_all(sql_db.engine)
 
     convert_users(mk_db)
     Session.remove()
