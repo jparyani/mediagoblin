@@ -19,6 +19,7 @@ from mediagoblin.db.sql.base import Base
 
 from sqlalchemy import (
     Column, Integer, Float, ForeignKey)
+from sqlalchemy.orm import relationship, backref
 from mediagoblin.db.sql.extratypes import JSONEncoded
 
 
@@ -28,6 +29,9 @@ class ImageData(Base):
     # The primary key *and* reference to the main media_entry
     media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
         primary_key=True)
+    get_media_entry = relationship("MediaEntry",
+        backref=backref("image__media_data", cascade="all, delete-orphan"))
+
     width = Column(Integer)
     height = Column(Integer)
     exif_all = Column(JSONEncoded)
