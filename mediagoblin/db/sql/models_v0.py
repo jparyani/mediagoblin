@@ -33,27 +33,14 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
 
 from mediagoblin.db.sql.extratypes import PathTupleWithSlashes, JSONEncoded
-from mediagoblin.db.sql.base import GMGTableBase, DictReadAttrProxy
-from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
+from mediagoblin.db.sql.base import GMGTableBase
 from mediagoblin.db.sql.base import Session
 
 
 Base_v0 = declarative_base(cls=GMGTableBase)
 
 
-class SimpleFieldAlias(object):
-    """An alias for any field"""
-    def __init__(self, fieldname):
-        self.fieldname = fieldname
-
-    def __get__(self, instance, cls):
-        return getattr(instance, self.fieldname)
-
-    def __set__(self, instance, val):
-        setattr(instance, self.fieldname, val)
-
-
-class User(Base_v0, UserMixin):
+class User(Base_v0):
     """
     TODO: We should consider moving some rarely used fields
     into some sort of "shadow" table.
@@ -77,10 +64,8 @@ class User(Base_v0, UserMixin):
     ## TODO
     # plugin data would be in a separate model
 
-    _id = SimpleFieldAlias("id")
 
-
-class MediaEntry(Base_v0, MediaEntryMixin):
+class MediaEntry(Base_v0):
     """
     TODO: Consider fetching the media_files using join
     """
@@ -115,31 +100,15 @@ class MediaEntry(Base_v0, MediaEntryMixin):
         collection_class=attribute_mapped_collection("name"),
         cascade="all, delete-orphan"
         )
-    media_files = association_proxy('media_files_helper', 'file_path',
-        creator=lambda k, v: MediaFile(name=k, file_path=v)
-        )
 
     attachment_files_helper = relationship("MediaAttachmentFile",
         cascade="all, delete-orphan",
         order_by="MediaAttachmentFile.created"
         )
-    attachment_files = association_proxy("attachment_files_helper", "dict_view",
-        creator=lambda v: MediaAttachmentFile(
-            name=v["name"], filepath=v["filepath"])
-        )
 
     tags_helper = relationship("MediaTag",
         cascade="all, delete-orphan"
         )
-    tags = association_proxy("tags_helper", "dict_view",
-        creator=lambda v: MediaTag(name=v["name"], slug=v["slug"])
-        )
-
-    ## TODO
-    # media_data
-    # fail_error
-
-    _id = SimpleFieldAlias("id")
 
     def get_comments(self, ascending=False):
         order_col = MediaComment.created
@@ -261,11 +230,6 @@ class MediaAttachmentFile(Base_v0):
     filepath = Column(PathTupleWithSlashes)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
 
-    @property
-    def dict_view(self):
-        """A dict like view on this object"""
-        return DictReadAttrProxy(self)
-
 
 class Tag(Base_v0):
     __tablename__ = "core__tags"
@@ -311,13 +275,8 @@ class MediaTag(Base_v0):
         if slug is not None:
             self.tag_helper = Tag.find_or_new(slug)
 
-    @property
-    def dict_view(self):
-        """A dict like view on this object"""
-        return DictReadAttrProxy(self)
 
-
-class MediaComment(Base_v0, MediaCommentMixin):
+class MediaComment(Base_v0):
     __tablename__ = "core__media_comments"
 
     id = Column(Integer, primary_key=True)
@@ -328,8 +287,6 @@ class MediaComment(Base_v0, MediaCommentMixin):
     content = Column(UnicodeText, nullable=False)
 
     get_author = relationship(User)
-
-    _id = SimpleFieldAlias("id")
 
 
 class ImageData(Base_v0):
