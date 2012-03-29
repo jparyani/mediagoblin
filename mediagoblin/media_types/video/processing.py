@@ -89,7 +89,7 @@ def process_video(entry):
             height=transcoder.dst_data.videoheight)
 
     # Create a temporary file for the video thumbnail
-    tmp_thumb = tempfile.NamedTemporaryFile()
+    tmp_thumb = tempfile.NamedTemporaryFile(suffix='.jpg')
 
     with tmp_thumb:
         # Create a thumbnail.jpg that fits in a 180x180 square

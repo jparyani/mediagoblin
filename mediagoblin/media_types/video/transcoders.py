@@ -17,43 +17,38 @@
 from __future__ import division
 
 import os
-os.putenv('GST_DEBUG_DUMP_DOT_DIR', '/tmp')
-
 import sys
 import logging
 import urllib
+import multiprocessing
+import gobject
+import gst
+import struct
+import Image
+
+from gst.extend import discoverer
+
+gobject.threads_init()
+
+CPU_COUNT = 2
+
+try:
+    CPU_COUNT = multiprocessing.cpu_count()
+except NotImplementedError:
+    _log.warning('multiprocessing.cpu_count not implemented')
 
 _log = logging.getLogger(__name__)
 
-CPU_COUNT = 2
-try:
-    import multiprocessing
-    try:
-        CPU_COUNT = multiprocessing.cpu_count()
-    except NotImplementedError:
-        _log.warning('multiprocessing.cpu_count not implemented')
-        pass
-except ImportError:
-    _log.warning('Could not import multiprocessing, defaulting to 2 CPU cores')
+os.putenv('GST_DEBUG_DUMP_DOT_DIR', '/tmp')
 
-try:
-    import gtk
-except ImportError:
-    raise Exception('Could not find pygtk')
 
-try:
-    import gobject
-    gobject.threads_init()
-except ImportError:
-    raise Exception('gobject could not be found')
+def pixbuf_to_pilbuf(buf):
+    data = list()
+    for i in range(0, len(buf), 3):
+        r, g, b = [i for i in struct.unpack('BBB', buf[i:i + 3])]
+        data.append((r, g, b))
 
-try:
-    import pygst
-    pygst.require('0.10')
-    import gst
-    from gst.extend import discoverer
-except ImportError:
-    raise Exception('gst/pygst 0.10 could not be found')
+    return data
 
 
 class VideoThumbnailer:
@@ -228,21 +223,18 @@ class VideoThumbnailer:
             width = filters["width"]
             height = filters["height"]
 
-            pixbuf = gtk.gdk.pixbuf_new_from_data(
-                buff.data, gtk.gdk.COLORSPACE_RGB, False, 8,
-                width, height, width * 3)
+            im = Image.new('RGB', (width, height))
 
-            # NOTE: 200x136 is sort of arbitrary.  it's larger than what
-            # the ui uses at the time of this writing.
-            # new_width, new_height = scaled_size((width, height), (200, 136))
+            data = pixbuf_to_pilbuf(buff.data)
 
-            #pixbuf = pixbuf.scale_simple(
-            #new_width, new_height, gtk.gdk.INTERP_BILINEAR)
+            im.putdata(data)
 
-            pixbuf.save(self.dest_path, 'jpeg')
+            im.save(self.dest_path);
+
             _log.info('Saved thumbnail')
-            del pixbuf
+
             self.shutdown()
+
         except gst.QueryError:
             pass
         return False
