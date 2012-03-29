@@ -72,8 +72,7 @@ def process_audio(entry):
 
         entry.media_files['ogg'] = ogg_filepath
 
-        entry.media_data['audio'] = {
-            u'length': int(data.audiolength)}
+        # entry.media_data_init(length=int(data.audiolength))
 
     if audio_config['create_spectrogram']:
         spectrogram_filepath = create_pub_filepath(
