@@ -10,6 +10,7 @@
     height: 100%;
     -webkit-transition: width .1s ease-out;
     -moz-transition: width .1s ease-out;
+    transition: width .1s ease-out;
 }
 .audio-control-play-pause {
     position: absolute;
@@ -23,21 +24,37 @@
 }
     .audio-control-play-pause.playing {
         color: #b71500;
+        letter-spacing: -17px;
+        margin-left: -7px;
     }
     .audio-control-play-pause.paused {
+        /* Warning: this means the the play button shows! */
         color: rgb(134, 212, 177);
     }
-.buffered {
+
+.buffered-indicators {
     position: absolute;
     bottom: 0;
     left: 0;
     height: 2px;
-    width: 0;
-    -webkit-transition: width 1s ease-out;
-    -moz-transition: width 1s ease-out;
-    background: rgba(134, 177, 212, 1);
-    cursor: pointer;
 }
+    .buffered-indicators div {
+        position: absolute;
+        height: 2px;
+        left: 0;
+        background: rgba(134, 177, 212, 1);
+
+        -webkit-transition: left 1s ease-out;
+        -moz-transition: left 1s ease-out;
+        transition: left 1s ease-out;
+
+        -webkit-transition: width 1s ease-out;
+        -moz-transition: width 1s ease-out;
+        transition: width 1s ease-out;
+
+        cursor: pointer;
+    }
+
 .seekbar {
     position: absolute;
     top: 0;
@@ -45,9 +62,23 @@
     width: 100%;
     height: 100%;
 }
+
 .audio-currentTime {
     position: absolute;
     bottom: 0;
     right: 0;
     background: rgba(0, 0, 0, 0.7);
 }
+
+.audio-volume {
+    position: absolute;
+    left: 50px;
+    bottom: 10px;
+    opacity: 0.3;
+    -moz-transition: opacity .1s ease-in-out;
+    -webkit-transition: opacity .1s ease-in-out;
+    transition: opacity .1s ease-in-out;
+}
+    .audio-spectrogram:hover .audio-volume {
+        opacity: 1;
+    }
