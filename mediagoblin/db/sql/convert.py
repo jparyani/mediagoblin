@@ -19,8 +19,8 @@ from copy import copy
 from mediagoblin.init import setup_global_and_app_config
 
 from mediagoblin.db.sql.base import Session
-from mediagoblin.db.sql.models_0 import Base_v0
-from mediagoblin.db.sql.models_0 import (User, MediaEntry, MediaComment,
+from mediagoblin.db.sql.models_v0 import Base_v0
+from mediagoblin.db.sql.models_v0 import (User, MediaEntry, MediaComment,
     Tag, MediaTag, MediaFile, MediaAttachmentFile, MigrationData,
     ImageData, VideoData)
 from mediagoblin.db.sql.open import setup_connection_and_db_from_config as \

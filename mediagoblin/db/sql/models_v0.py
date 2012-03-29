@@ -24,8 +24,9 @@ import sys
 
 from sqlalchemy import (
     Column, Integer, Unicode, UnicodeText, DateTime, Boolean, ForeignKey,
-    UniqueConstraint, PrimaryKeyConstraint, SmallInteger)
-from sqlalchemy.orm import relationship
+    UniqueConstraint, PrimaryKeyConstraint, SmallInteger, Float)
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
