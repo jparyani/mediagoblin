@@ -30,11 +30,7 @@ To enable video, first install gstreamer and the python-gstreamer
 bindings (as well as whatever gstremaer extensions you want,
 good/bad/ugly).  On Debianoid systems::
 
-    sudo apt-get install python-gst0.10
-
-Currently you need the gtk and pygtk modules::
-
-    sudo apt-get install python-gtk2
+    sudo apt-get install python-gst0.10 gstreamer0.10-plugins-{base,bad,good,ugly} gstreamer0.10-ffmpeg
 
 Next, modify (and possibly copy over from ``mediagoblin.ini``) your
 ``mediagoblin_local.ini``.  Uncomment this line in the ``[mediagoblin]``
