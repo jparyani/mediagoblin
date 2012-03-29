@@ -28,6 +28,8 @@ import Image
 
 from gst.extend import discoverer
 
+_log = logging.getLogger(__name__)
+
 gobject.threads_init()
 
 CPU_COUNT = 2
@@ -37,15 +39,13 @@ try:
 except NotImplementedError:
     _log.warning('multiprocessing.cpu_count not implemented')
 
-_log = logging.getLogger(__name__)
-
 os.putenv('GST_DEBUG_DUMP_DOT_DIR', '/tmp')
 
 
 def pixbuf_to_pilbuf(buf):
     data = list()
     for i in range(0, len(buf), 3):
-        r, g, b = [i for i in struct.unpack('BBB', buf[i:i + 3])]
+        r, g, b = struct.unpack('BBB', buf[i:i + 3])
         data.append((r, g, b))
 
     return data
@@ -229,7 +229,7 @@ class VideoThumbnailer:
 
             im.putdata(data)
 
-            im.save(self.dest_path);
+            im.save(self.dest_path)
 
             _log.info('Saved thumbnail')
 
