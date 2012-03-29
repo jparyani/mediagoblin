@@ -28,7 +28,6 @@ from sqlalchemy import (
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm.collections import attribute_mapped_collection
-from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
 
@@ -109,41 +108,6 @@ class MediaEntry(Base_v0):
     tags_helper = relationship("MediaTag",
         cascade="all, delete-orphan"
         )
-
-    def get_comments(self, ascending=False):
-        order_col = MediaComment.created
-        if not ascending:
-            order_col = desc(order_col)
-        return MediaComment.query.filter_by(
-            media_entry=self.id).order_by(order_col)
-
-    def url_to_prev(self, urlgen):
-        """get the next 'newer' entry by this user"""
-        media = MediaEntry.query.filter(
-            (MediaEntry.uploader == self.uploader)
-            & (MediaEntry.state == 'processed')
-            & (MediaEntry.id > self.id)).order_by(MediaEntry.id).first()
-
-        if media is not None:
-            return media.url_for_self(urlgen)
-
-    def url_to_next(self, urlgen):
-        """get the next 'older' entry by this user"""
-        media = MediaEntry.query.filter(
-            (MediaEntry.uploader == self.uploader)
-            & (MediaEntry.state == 'processed')
-            & (MediaEntry.id < self.id)).order_by(desc(MediaEntry.id)).first()
-
-        if media is not None:
-            return media.url_for_self(urlgen)
-
-    #@memoized_property
-    @property
-    def media_data(self):
-        session = Session()
-
-        return session.query(self.media_data_table).filter_by(
-            media_entry=self.id).first()
 
     def media_data_init(self, **kwargs):
         """
