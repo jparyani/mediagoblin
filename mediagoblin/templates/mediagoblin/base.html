@@ -28,6 +28,14 @@
     <link rel="shortcut icon"
           href="{{ request.staticdirect('/images/goblin.ico') }}" />
     <script src="{{ request.staticdirect('/js/extlib/jquery.js') }}"></script>
+    
+    <script>
+    $(document).ready(function(){
+	$(".header_right").click(function(){
+		$(".sublist").slideToggle("fast");
+	});
+});
+    </script>
     <!--[if lt IE 9]>
       <script src="{{ request.staticdirect('/js/extlib/html5shiv.js') }}"></script>
     <![endif]-->
@@ -68,6 +76,11 @@
               <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
                 {% trans %}Log in{% endtrans %}</a>
             {% endif %}
+            <ul class="sublist">
+	          	<li><a href="#">Enviornment</a></li>
+		          <li><a href="#">General Sciences</a></li>
+		          <li><a href="#">Space</a></li>
+	          </ul>
           </div>
         </header>
       {% endblock %}

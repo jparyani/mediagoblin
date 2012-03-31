@@ -126,6 +126,17 @@ header {
   margin: 8px;
 }
 
+.header_right ul {
+	display: none;
+	position: absolute;
+	top: 29px;
+	left: 0px;
+	width: 150px;
+	border: 1px solid #ccc;
+	background: white;
+	padding: 10px 0 0 0;
+}
+
 a.logo {
   color: #fff;
   font-weight: bold;
