@@ -113,21 +113,23 @@ input, textarea {
 }
 
 header {
-  width: 98%;
-  padding: 6px 1% 0;
+  width: 100%;
+  padding: 0;
   margin-bottom: 20px;
-  background-color: #222;
+  background-color: #303030;
+  height: 34px;
+  border-bottom: 1px solid #252525;
 }
 
 .header_right {
   float: right;
-  margin: 8px 0px 8px 8px;
+  margin: 8px;
 }
 
 a.logo {
   color: #fff;
   font-weight: bold;
-  margin: 8px 8px 8px 0;
+  margin: 8px;
 }
 
 .logo img {
@@ -560,8 +562,12 @@ table.media_panel th {
     padding: 9px 14px;
   }
   
-  header {
-    text-align: center;
+  .header_right {
+    margin-right: 2%;
+  }
+  
+  a.logo {
+    margin-left: 2%;
   }
 }
 
