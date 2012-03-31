@@ -13,6 +13,8 @@
 /mediagoblin.egg-info
 /docs/_build/
 /docs/build
+/api-docs/build
+/api-docs/source/mediagoblin*
 /user_dev/
 /paste_local.ini
 /mediagoblin_local.ini
