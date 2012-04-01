@@ -356,16 +356,21 @@ textarea#description, textarea#bio {
 /* comments */
 
 .comment_author {
-  margin-bottom: 40px;
   padding-top: 4px;
   font-size: 0.9em;
 }
 
 .comment_content {
-  margin-bottom: 30px;
+  margin-left: 8px;
+  margin-top: 8px;
 }
 
-.comment_content p {
+.comment_wrapper {
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+.comment_wrapper p {
   margin-bottom: 0px;
 }
 

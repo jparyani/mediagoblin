@@ -143,10 +143,7 @@
           {% else %}
             <div class="comment_wrapper" id="comment-{{ comment._id }}">
 	        {% endif %}
-          <div class="comment_content">
-            {% autoescape False %}
-              {{ comment.content_html }}
-            {% endautoescape %}
+	        <div class="comment_author">
             <img src="{{ request.staticdirect('/images/icon_comment.png') }}" />
             <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                             user = comment_author.username) }}">
@@ -158,7 +155,12 @@
                    user = media.get_uploader.username,
                    media = media.slug_or_id) }}#comment">
               {{ comment.created.strftime("%I:%M%p %Y-%m-%d") }}
-            </a>
+            </a>:
+          </div>
+          <div class="comment_content">
+            {% autoescape False %}
+              {{ comment.content_html }}
+            {% endautoescape %}
           </div>
         </div>
       {% endfor %}
