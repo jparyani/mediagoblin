@@ -28,6 +28,8 @@
     <link rel="shortcut icon"
           href="{{ request.staticdirect('/images/goblin.ico') }}" />
     <script src="{{ request.staticdirect('/js/extlib/jquery.js') }}"></script>
+    <script type="text/javascript"
+          src="{{ request.staticdirect('/js/header_dropdown.js') }}"></script>
     <!--[if lt IE 9]>
       <script src="{{ request.staticdirect('/js/extlib/html5shiv.js') }}"></script>
     <![endif]-->
@@ -44,12 +46,6 @@
                ><img src="{{ request.staticdirect('/images/logo.png') }}"
                    alt="{% trans %}MediaGoblin logo{% endtrans %}" /></a>
           {% endblock mediagoblin_logo %}
-          {% if request.user and request.user.status == 'active' %}
-            <a class="button_action"
-               href="{{ request.urlgen('mediagoblin.submit.start') }}">
-              {% trans %}Add media{% endtrans %}
-            </a>
-          {% endif %}
           {% block mediagoblin_header_title %}{% endblock %}
           <div class="header_right">
             {% if request.user %}
@@ -60,15 +56,22 @@
                    class="button_action_highlight">
                   {% trans %}Verify your email!{% endtrans %}</a>
               {% endif %}
-             <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                          user= request.user.username) }}">
-                {{ request.user.username }}</a>
-              (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
+              <div class="dropdown">
+                {{ request.user.username }} ▾
+                <div class="dropdown_items">
+                  {% if request.user and request.user.status == 'active' %}
+                    <a href="{{ request.urlgen('mediagoblin.submit.start') }}">+ Add media</a>
+                  {% endif %}
+                  <a href="{{ request.urlgen('mediagoblin.user_pages.user_home', user= request.user.username) }}">View your profile</a>
+                  <a class="button_action" href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}Log out{% endtrans %}</a>
+                </div>
+              </div>
             {% else %}
               <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
                 {% trans %}Log in{% endtrans %}</a>
             {% endif %}
           </div>
+          <div class="clear"></div>
         </header>
       {% endblock %}
     <div class="container">
