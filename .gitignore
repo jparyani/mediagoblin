@@ -20,7 +20,6 @@
 /celery.db
 /kombu.db
 /server-log.txt
-/mediagoblin/db/sql_switch.py
 
 # Tests
 /mediagoblin/tests/user_dev/

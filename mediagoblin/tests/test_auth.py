@@ -269,6 +269,7 @@ def test_register_views(test_app):
 
     ## Try using an expired token to change password, shouldn't work
     template.clear_test_template_context()
+    new_user = mg_globals.database.User.find_one({'username': 'happygirl'})
     real_token_expiration = new_user.fp_token_expire
     new_user.fp_token_expire = datetime.datetime.now()
     new_user.save()

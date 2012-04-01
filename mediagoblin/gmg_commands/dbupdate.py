@@ -65,14 +65,13 @@ def gather_database_data(media_types):
     return managed_dbdata
 
 
-def dbupdate(args):
+def run_dbupdate(app_config):
     """
     Initialize or migrate the database as specified by the config file.
 
     Will also initialize or migrate all extensions (media types, and
     in the future, plugins)
     """
-    globa_config, app_config = setup_global_and_app_config(args.conf_file)
 
     # Gather information from all media managers / projects
     dbdatas = gather_database_data(app_config['media_types'])
@@ -87,3 +86,8 @@ def dbupdate(args):
     for dbdata in dbdatas:
         migration_manager = dbdata.make_migration_manager(Session())
         migration_manager.init_or_migrate()
+
+
+def dbupdate(args):
+    global_config, app_config = setup_global_and_app_config(args.conf_file)
+    run_dbupdate(app_config)
