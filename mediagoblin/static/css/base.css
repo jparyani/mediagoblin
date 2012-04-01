@@ -355,6 +355,15 @@ textarea#description, textarea#bio {
 
 /* comments */
 
+.comment_wrapper {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.comment_wrapper p {
+  margin-bottom: 2px;
+}
+
 .comment_author {
   padding-top: 4px;
   font-size: 0.9em;
@@ -363,15 +372,6 @@ textarea#description, textarea#bio {
 .comment_content {
   margin-left: 8px;
   margin-top: 8px;
-}
-
-.comment_wrapper {
-  margin-top: 14px;
-  margin-bottom: 14px;
-}
-
-.comment_wrapper p {
-  margin-bottom: 0px;
 }
 
 textarea#comment_content {
