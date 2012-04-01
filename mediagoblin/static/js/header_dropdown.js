@@ -18,15 +18,12 @@
 
 $(document).ready(function() {
   $(".dropdown_items").hide();
-  $(".dropdown").click(function(e) {
-    e.preventDefault();
-    $(".dropdown_items").toggle();
-  });
-  $(".dropdown_items").mouseup(function() {
-    return false
-  });
   $(document).mouseup(function(e) {
-    if($(e.target).not(".dropdown_items")) {
+    if($(e.target).is(".dropdown")) {
+      $(".dropdown_items").toggle();
+    } else if($(e.target).is(".dropdown_items")) {
+      return;
+    } else {
       $(".dropdown_items").hide();
     }
   });
