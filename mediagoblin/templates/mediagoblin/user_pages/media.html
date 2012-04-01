@@ -114,8 +114,6 @@
       </p>
     {% endif %}
     {% if comments %}
-      <h3>
-        <div class="right_align">
           <a
             {% if not request.user %}
               href="{{ request.urlgen('mediagoblin.auth.login') }}"
@@ -123,8 +121,6 @@
             class="button_action" id="button_addcomment" title="Add a comment">
             {% trans %}Add a comment{% endtrans %}
           </a>
-        </div>
-      </h3>
       {% if request.user %}
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
                                          user= media.get_uploader.username,
