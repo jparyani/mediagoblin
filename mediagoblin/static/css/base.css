@@ -173,11 +173,11 @@ header {
 a.logo {
   color: #fff;
   font-weight: bold;
-  margin: 8px;
 }
 
 .logo img {
   vertical-align: middle;
+  margin: 6px 8px;
 }
 
 .mediagoblin_content {
