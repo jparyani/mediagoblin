@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from sqlalchemy.types import TypeDecorator, Unicode, VARCHAR
+from sqlalchemy.types import TypeDecorator, Unicode, TEXT
 import json
 
 
@@ -50,7 +50,7 @@ class PathTupleWithSlashes(TypeDecorator):
 class JSONEncoded(TypeDecorator):
     "Represents an immutable structure as a json-encoded string."
 
-    impl = VARCHAR
+    impl = TEXT
 
     def process_bind_param(self, value, dialect):
         if value is not None:
