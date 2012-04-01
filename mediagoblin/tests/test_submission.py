@@ -183,8 +183,9 @@ class TestSubmission:
         assert_true(media)
 
         # Add a comment, so we can test for its deletion later.
+        media_id = media.id
         get_comments = lambda: list(
-            request.db.MediaComment.find({'media_entry': media._id}))
+            request.db.MediaComment.find({'media_entry': media_id}))
         assert_false(get_comments())
         response = self.test_app.post(
             request.urlgen('mediagoblin.user_pages.media_post_comment',
@@ -200,7 +201,7 @@ class TestSubmission:
             request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                            # No work: user=media.uploader().username,
                            user=self.test_user.username,
-                           media=media._id),
+                           media=media_id),
             # no value means no confirm
             {})
 
