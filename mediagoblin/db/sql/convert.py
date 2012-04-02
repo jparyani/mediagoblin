@@ -23,7 +23,7 @@ from mediagoblin.db.sql.base import Session
 from mediagoblin.db.sql.models_v0 import Base_v0
 from mediagoblin.db.sql.models_v0 import (User, MediaEntry, MediaComment,
     Tag, MediaTag, MediaFile, MediaAttachmentFile, MigrationData,
-    ImageData, VideoData)
+    ImageData, VideoData, AsciiData, AudioData)
 from mediagoblin.db.sql.open import setup_connection_and_db_from_config as \
     sql_connect
 from mediagoblin.db.mongo.open import setup_connection_and_db_from_config as \
@@ -195,6 +195,8 @@ def convert_media_comments(mk_db):
 media_types_tables = (
     ("mediagoblin.media_types.image", (ImageData,)),
     ("mediagoblin.media_types.video", (VideoData,)),
+    ("mediagoblin.media_types.ascii", (AsciiData,)),
+    ("mediagoblin.media_types.audio", (AudioData,)),
     )
 
 

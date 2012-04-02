@@ -284,6 +284,26 @@ class VideoData(Base_v0):
     height = Column(SmallInteger)
 
 
+class AsciiData(Base_v0):
+    __tablename__ = "ascii__mediadata"
+
+    # The primary key *and* reference to the main media_entry
+    media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
+        primary_key=True)
+    get_media_entry = relationship("MediaEntry",
+        backref=backref("ascii__media_data", cascade="all, delete-orphan"))
+
+
+class AudioData(Base_v0):
+    __tablename__ = "audio__mediadata"
+
+    # The primary key *and* reference to the main media_entry
+    media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
+        primary_key=True)
+    get_media_entry = relationship("MediaEntry",
+        backref=backref("audio__media_data", cascade="all, delete-orphan"))
+
+
 ######################################################
 # Special, migrations-tracking table
 #
