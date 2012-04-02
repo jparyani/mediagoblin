@@ -67,7 +67,7 @@ def _import_media(db, args):
     for entry in db.MediaEntry.find():
         for name, path in entry.media_files.items():
             _log.info('Importing: {0} - {1}'.format(
-                    entry.title,
+                    entry.title.encode('ascii', 'replace'),
                     name))
 
             media_file = mg_globals.public_store.get_file(path, mode='wb')
