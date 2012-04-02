@@ -41,25 +41,87 @@ MediaGoblin has the following core dependencies:
 - Python 2.6 or 2.7
 - `python-lxml <http://lxml.de/>`_
 - `git <http://git-scm.com/>`_
-- `MongoDB <http://www.mongodb.org/>`_
+- `SQLite <http://www.sqlite.org/>`_/`PostgreSQL <http://www.postgresql.org/>`_
 - `Python Imaging Library <http://www.pythonware.com/products/pil/>`_  (PIL)
 - `virtualenv <http://www.virtualenv.org/>`_
 
 On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
 derivatives) issue the following command: ::
 
-    sudo apt-get install mongodb git-core python python-dev python-lxml \
+    sudo apt-get install git-core python python-dev python-lxml \
         python-imaging python-virtualenv
 
 On a RPM-based system (e.g. Fedora, RedHat, and derivatives) issue the
 following command: ::
 
-    yum install mongodb-server python-paste-deploy python-paste-script \
+    yum install python-paste-deploy python-paste-script \
         git-core python python-devel python-lxml python-imaging \
         python-virtualenv
 
+Configure PostgreSQL
+~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+
+    MediaGoblin currently supports PostgreSQL and SQLite. The default is a
+    local SQLite database. This will "just work" for small deployments. If
+    you don't want/need postgres, ignore all the postgres related parts. For
+    medium to large deployments we recommend PostgreSQL.
+
+These are the packages needed for Debian Wheezy (testing): ::
+
+    sudo apt-get install postgresql postgresql-client
+
+The installation process will create a new *system* user named ``postgres``,
+it will have privilegies sufficient to manage the database. We will create a
+new database user with restricted privilegies and a new database owned by our
+restricted database user for our MediaGoblin instance.
+
+In this example, the database user will be ``mediagoblin`` and the database
+name will be ``mediagoblin`` too.
+
+To create our new user, run: ::
+
+    sudo -u postgres createuser mediagoblin
+
+then answer NO to *all* the questions: ::
+
+    Shall the new role be a superuser? (y/n) n
+    Shall the new role be allowed to create databases? (y/n) n
+    Shall the new role be allowed to create more new roles? (y/n) n
+
+then create the database all our MediaGoblin data should be stored in: ::
+
+    sudo -u postgres createdb -E UNICODE -O mediagoblin mediagoblin
+
+where the first ``mediagoblin`` is the database owner and the second
+``mediagoblin`` is the database name.
+
+.. caution:: Where is the password?
+
+    These steps enable you to authenticate to the database in a password-less
+    manner via local UNIX authentication provided you run the MediaGoblin
+    application as a user with the same name as the user you created in
+    PostgreSQL.
+
+    More on this in :ref:`Drop Privileges for MediaGoblin <drop-privileges-for-mediagoblin>`.
+
+
 Configure MongoDB
 ~~~~~~~~~~~~~~~~~
+
+.. warning::
+
+    If this is a fresh setup and you have already set up PostgreSQL, you
+    will not need this step.
+
+First, install MongoDB. On a DEB-based system run: ::
+
+    sudo apt-get install mongodb
+
+on a RPM-based system, run: ::
+
+    yum install mongodb-server
 
 After installing MongoDB some preliminary database configuration may
 be necessary.
@@ -84,6 +146,8 @@ MongoDB can take a lot of space by default. If you're planning on
 running a smaller instance, consider the `scaling down guide
 <http://wiki.mediagoblin.org/Scaling_Down>`_ for some appropriate
 tradeoffs to conserve space.
+
+.. _drop-privileges-for-mediagoblin:
 
 Drop Privileges for MediaGoblin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -160,6 +224,27 @@ codebase, you should also run::
 
 Deploy MediaGoblin Services
 ---------------------------
+
+Configure MediaGoblin to use the PostgreSQL database
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Edit the ``[mediagoblin]`` section in your ``mediagoblin_local.ini`` and
+put in: ::
+
+    sql_engine = postgresql:///mediagoblin
+
+if you are running the MediaGoblin application as the same 'user' as the
+database owner.
+
+Update database data structures
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Before you start using the database, you need to run: ::
+
+    ./bin/gmg dbupdate
+
+to populate the database with the MediaGoblin data structures.
+
 
 Test the Server
 ~~~~~~~~~~~~~~~
