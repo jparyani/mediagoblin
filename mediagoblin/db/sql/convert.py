@@ -31,6 +31,7 @@ from mediagoblin.db.mongo.open import setup_connection_and_db_from_config as \
 
 obj_id_table = dict()
 
+
 def add_obj_ids(entry, new_entry):
     global obj_id_table
     print "%r -> %r" % (entry._id, new_entry.id)
@@ -41,6 +42,7 @@ def copy_attrs(entry, new_entry, attr_list):
     for a in attr_list:
         val = entry[a]
         setattr(new_entry, a, val)
+
 
 def copy_reference_attr(entry, new_entry, ref_attr):
     val = entry[ref_attr]
@@ -174,12 +176,16 @@ def convert_media_comments(mk_db):
         copy_attrs(entry, new_entry,
             ('created',
              'content',))
-        copy_reference_attr(entry, new_entry, "media_entry")
-        copy_reference_attr(entry, new_entry, "author")
 
-        session.add(new_entry)
-        session.flush()
-        add_obj_ids(entry, new_entry)
+        try:
+            copy_reference_attr(entry, new_entry, "media_entry")
+            copy_reference_attr(entry, new_entry, "author")
+        except KeyError as e:
+            print('KeyError in convert_media_comments(): {0}'.format(e))
+        else:
+            session.add(new_entry)
+            session.flush()
+            add_obj_ids(entry, new_entry)
 
     session.commit()
     session.close()
