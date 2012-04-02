@@ -34,7 +34,7 @@ obj_id_table = dict()
 
 def add_obj_ids(entry, new_entry):
     global obj_id_table
-    print "%r -> %r" % (entry._id, new_entry.id)
+    print "\t%r -> SQL id %r" % (entry._id, new_entry.id)
     obj_id_table[entry._id] = new_entry.id
 
 
@@ -198,12 +198,29 @@ def convert_add_migration_versions():
                  "mediagoblin.media_types.image",
                  "mediagoblin.media_types.video",
                  ):
-        m = MigrationData(name=name, version=0)
+        m = MigrationData(name=unicode(name), version=0)
         session.add(m)
 
     session.commit()
     session.close()
 
+
+def print_header(title):
+    print "\n=== %s ===" % (title,)
+
+
+convert_call_list = (
+    ("Converting Users", convert_users),
+    ("Converting Media Entries", convert_media_entries),
+    ("Converting Media Data for Images", convert_image),
+    ("Cnnverting Media Data for Videos", convert_video),
+    ("Converting Tags for Media", convert_media_tags),
+    ("Converting Media Comments", convert_media_comments),
+    )
+
+sql_call_list = (
+    ("Filling Migration Tables", convert_add_migration_versions),
+    )
 
 def run_conversion(config_name):
     global_config, app_config = setup_global_and_app_config(config_name)
@@ -213,20 +230,15 @@ def run_conversion(config_name):
 
     Base_v0.metadata.create_all(sql_db.engine)
 
-    convert_users(mk_db)
-    Session.remove()
-    convert_media_entries(mk_db)
-    Session.remove()
-    convert_image(mk_db)
-    Session.remove()
-    convert_video(mk_db)
-    Session.remove()
-    convert_media_tags(mk_db)
-    Session.remove()
-    convert_media_comments(mk_db)
-    Session.remove()
-    convert_add_migration_versions()
-    Session.remove()
+    for title, func in convert_call_list:
+        print_header(title)
+        func(mk_db)
+        Session.remove()
+    
+    for title, func in sql_call_list:
+        print_header(title)
+        func()
+        Session.remove()
 
 
 if __name__ == '__main__':
