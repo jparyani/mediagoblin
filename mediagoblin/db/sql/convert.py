@@ -220,14 +220,21 @@ def cleanup_sql_tables(sql_db):
         count = session.query(MediaEntry.media_type). \
             filter_by(media_type=unicode(mt)).count()
         print "  %s: %d entries" % (mt, count)
+
         if count == 0:
+            print "\tAnalyzing tables"
+            for tab in table_list:
+                cnt2 = session.query(tab).count()
+                print "\t  %s: %d entries" % (tab.__tablename__, cnt2)
+                assert cnt2 == 0
+
             print "\tRemoving migration info"
             mi = session.query(MigrationData).filter_by(name=unicode(mt)).one()
             session.delete(mi)
             session.commit()
             session.close()
 
-            print "\tDropping tables %r" % (table_list,)
+            print "\tDropping tables"
             tables = [model.__table__ for model in table_list]
             Base_v0.metadata.drop_all(sql_db.engine, tables=tables)
 
