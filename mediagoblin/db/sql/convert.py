@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from copy import copy
+from itertools import chain, imap
 
 from mediagoblin.init import setup_global_and_app_config
 
@@ -191,18 +192,44 @@ def convert_media_comments(mk_db):
     session.close()
 
 
-def convert_add_migration_versions():
+media_types_tables = (
+    ("mediagoblin.media_types.image", (ImageData,)),
+    ("mediagoblin.media_types.video", (VideoData,)),
+    )
+
+
+def convert_add_migration_versions(dummy_sql_db):
     session = Session()
 
-    for name in ("__main__",
-                 "mediagoblin.media_types.image",
-                 "mediagoblin.media_types.video",
-                 ):
+    for name in chain(("__main__",),
+                      imap(lambda e: e[0], media_types_tables)):
+        print "\tAdding %s" % (name,)
         m = MigrationData(name=unicode(name), version=0)
         session.add(m)
 
     session.commit()
     session.close()
+
+
+def cleanup_sql_tables(sql_db):
+    for mt, table_list in media_types_tables:
+        session = Session()
+
+        count = session.query(MediaEntry.media_type). \
+            filter_by(media_type=unicode(mt)).count()
+        print "  %s: %d entries" % (mt, count)
+        if count == 0:
+            print "\tRemoving migration info"
+            mi = session.query(MigrationData).filter_by(name=unicode(mt)).one()
+            session.delete(mi)
+            session.commit()
+            session.close()
+
+            print "\tDropping tables %r" % (table_list,)
+            tables = [model.__table__ for model in table_list]
+            Base_v0.metadata.drop_all(sql_db.engine, tables=tables)
+
+        session.close()
 
 
 def print_header(title):
@@ -220,6 +247,7 @@ convert_call_list = (
 
 sql_call_list = (
     ("Filling Migration Tables", convert_add_migration_versions),
+    ("Analyzing/Cleaning SQL Data", cleanup_sql_tables),
     )
 
 def run_conversion(config_name):
@@ -237,7 +265,7 @@ def run_conversion(config_name):
     
     for title, func in sql_call_list:
         print_header(title)
-        func()
+        func(sql_db)
         Session.remove()
 
 
