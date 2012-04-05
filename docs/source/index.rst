@@ -31,6 +31,7 @@ Table of Contents:
    configuration
    media-types
    help
+   relnotes
    theming
    codebase
 
