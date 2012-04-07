@@ -37,6 +37,12 @@ class DatabaseMaster(object):
         Session.add(obj)
         Session.flush()
 
+    def check_session_clean(self):
+        for dummy in Session():
+            _log.warn("STRANGE: There are elements in the sql session. "
+                      "Please report this and help us track this down.")
+            break
+
     def reset_after_request(self):
         Session.rollback()
         Session.remove()

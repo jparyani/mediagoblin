@@ -109,7 +109,7 @@ class MediaGoblinApp(object):
         self.meddleware = [common.import_component(m)(self)
                            for m in meddleware.ENABLED_MEDDLEWARE]
 
-    def __call__(self, environ, start_response):
+    def call_backend(self, environ, start_response):
         request = Request(environ)
 
         ## Routing / controller loading stuff
@@ -184,15 +184,18 @@ class MediaGoblinApp(object):
         for m in self.meddleware[::-1]:
             m.process_response(request, response)
 
-        # Reset the sql session, so that the next request
-        # gets a fresh session
-        try:
-            self.db.reset_after_request()
-        except TypeError:
-            # We're still on mongo
-            pass
-
         return response(environ, start_response)
+
+    def __call__(self, environ, start_response):
+        ## If more errors happen that look like unclean sessions:
+        # self.db.check_session_clean()
+
+        try:
+            return self.call_backend(environ, start_response)
+        finally:
+            # Reset the sql session, so that the next request
+            # gets a fresh session
+            self.db.reset_after_request()
 
 
 def paste_app_factory(global_config, **app_config):
