@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-03-18 15:16-0500\n"
-"PO-Revision-Date: 2012-03-18 20:14+0000\n"
+"POT-Creation-Date: 2012-04-07 16:33-0500\n"
+"PO-Revision-Date: 2012-04-07 21:31+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,10 +18,6 @@ msgstr ""
 "Generated-By: Babel 0.9.6\n"
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-
-#: mediagoblin/processing.py:154
-msgid "Invalid file given for media type."
-msgstr "Verkeerd bestandsformaat voor mediatype opgegeven."
 
 #: mediagoblin/auth/forms.py:25 mediagoblin/auth/forms.py:41
 msgid "Username"
@@ -69,22 +65,22 @@ msgstr "Je hebt je e-mailadres al geverifieerd!"
 msgid "Resent your verification email."
 msgstr "Verificatie e-mail opnieuw opgestuurd."
 
-#: mediagoblin/auth/views.py:262
+#: mediagoblin/auth/views.py:263
 msgid ""
 "An email has been sent with instructions on how to change your password."
 msgstr "Een e-mail met instructies om je wachtwoord te veranderen is verstuurd."
 
-#: mediagoblin/auth/views.py:272
+#: mediagoblin/auth/views.py:273
 msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
 msgstr "Email kon niet verstuurd worden omdat je gebruikersnaam inactief is of omdat je e-mailadres nog niet geverifieerd is."
 
-#: mediagoblin/auth/views.py:284
+#: mediagoblin/auth/views.py:285
 msgid "Couldn't find someone with that username or email."
 msgstr "Kon niemand vinden met die gebruikersnaam of dat e-mailadres."
 
-#: mediagoblin/auth/views.py:332
+#: mediagoblin/auth/views.py:333
 msgid "You can now log in using your new password."
 msgstr "Je kunt nu inloggen met je nieuwe wachtwoord."
 
@@ -175,23 +171,24 @@ msgstr "Verkeerd wachtwoord"
 msgid "Account settings saved"
 msgstr "Accountinstellingen opgeslagen"
 
-#: mediagoblin/media_types/__init__.py:77
-msgid "Could not extract any file extension from \"{filename}\""
-msgstr "Kon geen bestandsextensie uit \"{filename}\" halen"
-
-#: mediagoblin/media_types/__init__.py:88
+#: mediagoblin/media_types/__init__.py:60
+#: mediagoblin/media_types/__init__.py:120
 msgid "Sorry, I don't support that file type :("
 msgstr "Sorry, dat bestandstype wordt niet ondersteunt."
+
+#: mediagoblin/processing/__init__.py:127
+msgid "Invalid file given for media type."
+msgstr "Verkeerd bestandsformaat voor mediatype opgegeven."
 
 #: mediagoblin/submit/forms.py:26
 msgid "File"
 msgstr "Bestand"
 
-#: mediagoblin/submit/views.py:54
+#: mediagoblin/submit/views.py:56
 msgid "You must provide a file."
 msgstr "U moet een bestand aangeven."
 
-#: mediagoblin/submit/views.py:156
+#: mediagoblin/submit/views.py:163
 msgid "Woohoo! Submitted!"
 msgstr "Mooizo! Toegevoegd!"
 
@@ -213,36 +210,31 @@ msgid ""
 " been moved or deleted."
 msgstr "Als je zeker weet dat het adres klopt is de pagina misschien verplaatst of verwijderd."
 
-#: mediagoblin/templates/mediagoblin/base.html:46
+#: mediagoblin/templates/mediagoblin/base.html:47
 msgid "MediaGoblin logo"
 msgstr "MediaGoblin logo"
 
-#: mediagoblin/templates/mediagoblin/base.html:51
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:157
-msgid "Add media"
-msgstr "Voeg media toe"
-
-#: mediagoblin/templates/mediagoblin/base.html:62
+#: mediagoblin/templates/mediagoblin/base.html:57
 msgid "Verify your email!"
 msgstr "Verifieer je e-mailadres!"
 
-#: mediagoblin/templates/mediagoblin/base.html:69
-msgid "log out"
-msgstr "uitloggen"
+#: mediagoblin/templates/mediagoblin/base.html:66
+msgid "Log out"
+msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:72
-#: mediagoblin/templates/mediagoblin/auth/login.html:27
-#: mediagoblin/templates/mediagoblin/auth/login.html:45
+#: mediagoblin/templates/mediagoblin/base.html:71
+#: mediagoblin/templates/mediagoblin/auth/login.html:32
+#: mediagoblin/templates/mediagoblin/auth/login.html:50
 msgid "Log in"
 msgstr "Inloggen"
 
-#: mediagoblin/templates/mediagoblin/base.html:84
+#: mediagoblin/templates/mediagoblin/base.html:85
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:87
+#: mediagoblin/templates/mediagoblin/base.html:88
 #, python-format
 msgid ""
 "Released under the <a "
@@ -316,19 +308,19 @@ msgid ""
 "a happy goblin!"
 msgstr "Hoi %(username)s,\n\nOm je wachtwoord voor GNU MediaGoblin te veranderen, moet je dit adres in je webbrowser openen:\n\n%(verification_url)s\n\nAls je denkt dat dit niet klopt, kun je deze e-mail gewoon negeren."
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:30
+#: mediagoblin/templates/mediagoblin/auth/login.html:35
 msgid "Logging in failed!"
 msgstr "Inloggen is mislukt!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:35
+#: mediagoblin/templates/mediagoblin/auth/login.html:40
 msgid "Don't have an account yet?"
 msgstr "Heeft u nog geen account?"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:36
+#: mediagoblin/templates/mediagoblin/auth/login.html:41
 msgid "Create one here!"
 msgstr "Maak er hier een!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:42
+#: mediagoblin/templates/mediagoblin/auth/login.html:47
 msgid "Forgot your password?"
 msgstr "Wachtwoord vergeten?"
 
@@ -384,9 +376,24 @@ msgid "Media tagged with: %(tag_name)s"
 msgstr "Media met het label: %(tag_name)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:55
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:53
 msgid "Original"
 msgstr "Origineel"
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:42
+msgid ""
+"Sorry, this audio will not work because \n"
+"\tyour web browser does not support HTML5 \n"
+"\taudio."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:45
+msgid ""
+"You can get a modern web browser that \n"
+"\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
+"\t  http://getfirefox.com</a>!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
 msgid ""
@@ -433,26 +440,26 @@ msgstr "Pas aan"
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:124
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:122
 msgid "Add a comment"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:133
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:129
 msgid ""
 "You can use <a "
 "href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
 " formatting."
 msgstr "Voor opmaak kun je &lt;a href=\"http://daringfireball.net/projects/markdown/basics\"&gt;Markdown&lt;/a&gt; gebruiken."
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:137
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:133
 msgid "Add this comment"
 msgstr "Voeg dit bericht toe"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:159
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:152
 msgid "at"
 msgstr "op"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:174
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:172
 #, python-format
 msgid ""
 "<h3>Added on</h3>\n"
@@ -562,6 +569,10 @@ msgid ""
 "anything yet."
 msgstr "Dit is waar je nieuwe media zal verschijnen, maar het lijkt erop dat je nog niets heb toegevoegd."
 
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:157
+msgid "Add media"
+msgstr "Voeg media toe"
+
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:163
 #: mediagoblin/templates/mediagoblin/utils/object_gallery.html:72
 msgid "There doesn't seem to be any media here yet..."
@@ -614,7 +625,7 @@ msgstr "ouder"
 msgid "Tagged with"
 msgstr ""
 
-#: mediagoblin/tools/exif.py:68
+#: mediagoblin/tools/exif.py:75
 msgid "Could not read the image file."
 msgstr "Kon het afbeeldingsbestand niet lezen."
 
