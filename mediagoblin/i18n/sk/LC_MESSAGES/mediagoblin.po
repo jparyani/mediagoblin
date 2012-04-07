@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2012-03-18 15:16-0500\n"
-"PO-Revision-Date: 2012-03-18 20:14+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2012-04-05 10:11+0000\n"
+"Last-Translator: martin <zatroch.martin@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -241,7 +241,7 @@ msgstr "Prihlásenie"
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project."
-msgstr ""
+msgstr "Poháňa nás <a href=\"http://mediagoblin.org\">MediaGoblin</a>, súčasť projektu <a href=\"http://gnu.org/\">GNU</a>."
 
 #: mediagoblin/templates/mediagoblin/base.html:87
 #, python-format
@@ -249,7 +249,7 @@ msgid ""
 "Released under the <a "
 "href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a "
 "href=\"%(source_link)s\">Source code</a> available."
-msgstr ""
+msgstr "Vydané pod <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a href=\"%(source_link)s\">Zdrojový kód</a> dostupný."
 
 #: mediagoblin/templates/mediagoblin/root.html:24
 msgid "Explore"
@@ -424,7 +424,7 @@ msgstr "Výtvory, ktoré vlastní <a href=\"%(user_url)s\">%(username)s</a>"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:46
 #, python-format
 msgid "❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr ""
+msgstr "❖ Prezeranie výtvorov podľa <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:85
 msgid "Edit"
@@ -436,7 +436,7 @@ msgstr "Odstrániť"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:124
 msgid "Add a comment"
-msgstr ""
+msgstr "Pridaj komentár"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:133
 msgid ""
@@ -458,7 +458,7 @@ msgstr "o"
 msgid ""
 "<h3>Added on</h3>\n"
 "      <p>%(date)s</p>"
-msgstr ""
+msgstr "<h3>Pridané</h3>\n      <p>%(date)s</p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -467,7 +467,7 @@ msgstr "Skutočne odstrániť %(title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:50
 msgid "Delete permanently"
-msgstr ""
+msgstr "Odstráň permanentne"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
 msgid "Media processing panel"
@@ -578,12 +578,12 @@ msgstr "Čítačka Atom"
 
 #: mediagoblin/templates/mediagoblin/utils/geolocation_map.html:25
 msgid "Location"
-msgstr ""
+msgstr "Poloha"
 
 #: mediagoblin/templates/mediagoblin/utils/geolocation_map.html:38
 #, python-format
 msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
-msgstr ""
+msgstr "Zobraziť na <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:25
 msgid "All rights reserved"
@@ -613,7 +613,7 @@ msgstr "staršie"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
-msgstr ""
+msgstr "Označené ako"
 
 #: mediagoblin/tools/exif.py:68
 msgid "Could not read the image file."
