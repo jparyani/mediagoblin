@@ -11,6 +11,8 @@
    Dedication along with this software. If not, see
    <http://creativecommons.org/publicdomain/zero/1.0/>.
 
+.. _deploying-chapter:
+
 =====================
 Deploying MediaGoblin
 =====================

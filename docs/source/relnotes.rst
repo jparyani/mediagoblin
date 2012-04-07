@@ -20,8 +20,8 @@ If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
 
-0.3.0
-=====
+0.3.0 (not yet released)
+========================
 
 This release has one important change. You need to act when
 upgrading from a previous version!
@@ -38,14 +38,14 @@ to follow these steps:
 1. Make sure your MongoDB is still running and has your
    data, it's needed for the conversion.
 
-2. Configure the sql_engine URI in the config to represent
-   your target database (see: Deployment docs)
+2. Configure the ``sql_engine`` URI in the config to represent
+   your target database (see: :ref:`deploying-chapter`)
 
 3. You need an empty database.
 
 4. Then run the following command::
 
-    bin/gmg [-cf mediagoblin_config.ini] convert_mongo_to_sql
+       bin/gmg [-cf mediagoblin_config.ini] convert_mongo_to_sql
 
 5. Start your server and investigate.
 
