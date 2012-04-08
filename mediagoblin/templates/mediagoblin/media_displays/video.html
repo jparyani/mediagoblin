@@ -23,11 +23,12 @@
   <script type="text/javascript"
   	src="{{ request.staticdirect('/js/extlib/video-js/video.js') }}"></script>
   <link href="{{ request.staticdirect('/js/extlib/video-js/video-js.css') }}" rel="stylesheet">
+  <link href="{{ request.staticdirect('/css/vjs-mg-skin.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block mediagoblin_media %}
   <div class="video-player" style="position: relative;">
-    <video class="video-js vjs-default-skin"
+    <video class="video-js vjs-default-skin vjs-mg-skin"
 	   width="{{ media.media_data.width }}"
 	   height="{{ media.media_data.height }}"
 	   controls="controls"
