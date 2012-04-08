@@ -167,7 +167,13 @@ class MediaGoblinApp(object):
             request.matchdict = {}  # in case our template expects it
             return render_404(request)(environ, start_response)
 
-        controller = common.import_component(route_match['controller'])
+        # import the controller, or if it's already a callable, call that
+        route_controller = route_match['controller']
+        if isinstance(route_controller, unicode) \
+                or isinstance(route_controller, str):
+            controller = common.import_component(route_match['controller'])
+        else:
+            controller = route_match['controller']
 
         # pass the request through our meddleware classes
         for m in self.meddleware:
