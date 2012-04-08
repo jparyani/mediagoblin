@@ -84,7 +84,7 @@ class MediaGoblinApp(object):
 
         # Setup celery, if appropriate
         if setup_celery and not app_config.get('celery_setup_elsewhere'):
-            if os.environ.get('CELERY_ALWAYS_EAGER'):
+            if os.environ.get('CELERY_ALWAYS_EAGER', 'false').lower() == 'true':
                 setup_celery_from_config(
                     app_config, global_config,
                     force_celery_always_eager=True)
