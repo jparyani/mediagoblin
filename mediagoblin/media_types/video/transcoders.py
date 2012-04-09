@@ -214,7 +214,6 @@ class VideoThumbnailer:
                 else:
                     _log.debug('Seek successful')
                     self.thumbnail_pipeline.set_state(gst.STATE_PAUSED)
-                    #pdb.set_trace()
             else:
                 _log.debug('Won\'t seek: \t{0}\n\t{1}'.format(
                     self.state,
