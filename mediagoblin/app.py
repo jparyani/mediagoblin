@@ -52,6 +52,7 @@ class MediaGoblinApp(object):
            setting up celery.)
         """
         _log.info("GNU MediaGoblin %s main server starting", __version__)
+        _log.debug("Using config file %s", config_path)
         ##############
         # Setup config
         ##############
