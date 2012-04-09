@@ -34,31 +34,12 @@ class AsciiToImage(object):
     - font_size: Font size, ``int``
       default: 11
     '''
-
-    # Font file path
-    _font = None
-
-    _font_size = 11
-
-    # ImageFont instance
-    _if = None
-
-    # ImageFont
-    _if_dims = None
-
-    # Image instance
-    _im = None
-
     def __init__(self, **kw):
-        if kw.get('font'):
-            self._font = kw.get('font')
-        else:
-            self._font = pkg_resources.resource_filename(
+        self._font = kw.get('font', pkg_resources.resource_filename(
                 'mediagoblin.media_types.ascii',
-                os.path.join('fonts', 'Inconsolata.otf'))
+                os.path.join('fonts', 'Inconsolata.otf')))
 
-        if kw.get('font_size'):
-            self._font_size = kw.get('font_size')
+        self._font_size = kw.get('font_size', 11)
 
         self._if = ImageFont.truetype(
             self._font,

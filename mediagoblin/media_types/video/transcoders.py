@@ -72,6 +72,11 @@ class VideoThumbnailer:
         Set up playbin pipeline in order to get video properties.
 
         Initializes and runs the gobject.MainLoop()
+
+        Abstract
+        - Set up a playbin with a fake audio sink and video sink. Load the video
+          into the playbin
+        - Initialize
         '''
         self.errors = []
 
@@ -105,9 +110,10 @@ class VideoThumbnailer:
         self.loop.run()
 
     def _on_bus_message(self, bus, message):
-        _log.debug(' BUS MESSAGE: {0}'.format(message))
+        _log.debug(' thumbnail playbin: {0}'.format(message))
 
         if message.type == gst.MESSAGE_ERROR:
+            _log.error('thumbnail playbin: {0}'.format(message))
             gobject.idle_add(self._on_bus_error)
 
         elif message.type == gst.MESSAGE_STATE_CHANGED:
@@ -154,13 +160,14 @@ class VideoThumbnailer:
         return False
 
     def _on_thumbnail_bus_message(self, bus, message):
-        _log.debug('Thumbnail bus called, message: {0}'.format(message))
+        _log.debug('thumbnail: {0}'.format(message))
 
         if message.type == gst.MESSAGE_ERROR:
             _log.error(message)
             gobject.idle_add(self._on_bus_error)
 
         if message.type == gst.MESSAGE_STATE_CHANGED:
+            _log.debug('State changed')
             _prev, state, _pending = message.parse_state_changed()
 
             if (state == gst.STATE_PAUSED and
@@ -184,6 +191,7 @@ class VideoThumbnailer:
                         break
 
                 # Apply the wadsworth constant, fallback to 1 second
+                # TODO: Will break if video is shorter than 1 sec
                 seek_amount = max(self.duration / 100 * 30, 1 * gst.SECOND)
 
                 _log.debug('seek amount: {0}'.format(seek_amount))
@@ -204,14 +212,19 @@ class VideoThumbnailer:
                     _log.info(message)
                     self.shutdown()
                 else:
-                    pass
-                    #self.thumbnail_pipeline.set_state(gst.STATE_PAUSED)
+                    _log.debug('Seek successful')
+                    self.thumbnail_pipeline.set_state(gst.STATE_PAUSED)
                     #pdb.set_trace()
+            else:
+                _log.debug('Won\'t seek: \t{0}\n\t{1}'.format(
+                    self.state,
+                    message.src))
 
     def buffer_probe_handler_real(self, pad, buff, name):
         '''
         Capture buffers as gdk_pixbufs when told to.
         '''
+        _log.info('Capturing frame')
         try:
             caps = buff.caps
             if caps is None:
@@ -237,14 +250,16 @@ class VideoThumbnailer:
 
             self.shutdown()
 
-        except gst.QueryError:
-            pass
+        except gst.QueryError as e:
+            _log.error('QueryError: {0}'.format(e))
+
         return False
 
     def buffer_probe_handler(self, pad, buff, name):
         '''
         Proxy function for buffer_probe_handler_real
         '''
+        _log.debug('Attaching real buffer handler to gobject idle event')
         gobject.idle_add(
             lambda: self.buffer_probe_handler_real(pad, buff, name))
 
@@ -265,7 +280,7 @@ class VideoThumbnailer:
             return self._get_duration(pipeline, retries + 1)
 
     def _on_timeout(self):
-        _log.error('TIMEOUT! DROP EVERYTHING!')
+        _log.error('Timeout in thumbnailer!')
         self.shutdown()
 
     def _on_bus_error(self, *args):
@@ -342,8 +357,25 @@ class VideoTranscoder:
         self.source_path = src
         self.destination_path = dst
 
-        # Options
-        self.destination_dimensions = kwargs.get('dimensions') or (640, 640)
+        # vp8enc options
+        self.destination_dimensions = kwargs.get('dimensions', (640, 640))
+        self.vp8_quality = kwargs.get('vp8_quality', 8)
+        # Number of threads used by vp8enc:
+        # number of real cores - 1 as per recommendation on
+        # <http://www.webmproject.org/tools/encoder-parameters/#6-multi-threaded-encode-and-decode>
+        self.vp8_threads = kwargs.get('vp8_threads', CPU_COUNT - 1)
+
+        # 0 means auto-detect, but dict.get() only falls back to CPU_COUNT
+        # if value is None, this will correct our incompatibility with
+        # dict.get()
+        # This will also correct cases where there's only 1 CPU core, see
+        # original self.vp8_threads assignment above.
+        if self.vp8_threads == 0:
+            self.vp8_threads = CPU_COUNT
+
+        # vorbisenc options
+        self.vorbis_quality = kwargs.get('vorbis_quality', 0.3)
+
         self._progress_callback = kwargs.get('progress_callback') or None
 
         if not type(self.destination_dimensions) == tuple:
@@ -456,8 +488,9 @@ class VideoTranscoder:
         self.pipeline.add(self.capsfilter)
 
         self.vp8enc = gst.element_factory_make('vp8enc', 'vp8enc')
-        self.vp8enc.set_property('quality', 6)
-        self.vp8enc.set_property('threads', 2)
+        self.vp8enc.set_property('quality', self.vp8_quality)
+        self.vp8enc.set_property('threads', self.vp8_threads)
+        self.vp8enc.set_property('max-latency', 25)
         self.pipeline.add(self.vp8enc)
 
         # Audio elements
@@ -480,7 +513,7 @@ class VideoTranscoder:
         self.pipeline.add(self.audiocapsfilter)
 
         self.vorbisenc = gst.element_factory_make('vorbisenc', 'vorbisenc')
-        self.vorbisenc.set_property('quality', 1)
+        self.vorbisenc.set_property('quality', self.vorbis_quality)
         self.pipeline.add(self.vorbisenc)
 
         # WebMmux & filesink
