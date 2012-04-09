@@ -42,6 +42,7 @@ def process_ascii(entry):
     '''
     Code to process a txt file
     '''
+    ascii_config = mgg.global_config['media_type:mediagoblin.media_types.ascii']
     workbench = mgg.workbench_manager.create_workbench()
     # Conversions subdirectory to avoid collisions
     conversions_subdir = os.path.join(
@@ -77,7 +78,14 @@ def process_ascii(entry):
         tmp_thumb_filename = os.path.join(
             conversions_subdir, thumb_filepath[-1])
 
-        converter = asciitoimage.AsciiToImage()
+        ascii_converter_args = {}
+
+        if ascii_config['thumbnail_font']:
+            ascii_converter_args.update(
+                    {'font': ascii_config['thumbnail_font']})
+
+        converter = asciitoimage.AsciiToImage(
+               **ascii_converter_args)
 
         thumb = converter._create_image(
             queued_file.read())

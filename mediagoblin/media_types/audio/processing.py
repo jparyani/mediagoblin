@@ -27,7 +27,7 @@ from mediagoblin.media_types.audio.transcoders import AudioTranscoder, \
 _log = logging.getLogger(__name__)
 
 def sniff_handler(media_file, **kw):
-    try: 
+    try:
         transcoder = AudioTranscoder()
         data = transcoder.discover(media_file.name)
     except BadMediaFail:
@@ -94,7 +94,8 @@ def process_audio(entry):
                 thumbnailer.spectrogram(
                     wav_tmp.name,
                     spectrogram_tmp.name,
-                    width=mgg.global_config['media:medium']['max_width'])
+                    width=mgg.global_config['media:medium']['max_width'],
+                    fft_size=audio_config['spectrogram_fft_size'])
 
                 _log.debug('Saving spectrogram...')
                 mgg.public_store.get_file(spectrogram_filepath, 'wb').write(
@@ -121,7 +122,7 @@ def process_audio(entry):
                     entry.media_files['thumb'] = thumb_filepath
     else:
         entry.media_files['thumb'] = ['fake', 'thumb', 'path.jpg']
-            
+
     mgg.queue_store.delete_file(queued_filepath)
 
     entry.save()

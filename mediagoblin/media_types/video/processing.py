@@ -16,14 +16,11 @@
 
 import tempfile
 import logging
-import os
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.processing import mark_entry_failed, \
+from mediagoblin.processing import \
     create_pub_filepath, FilenameBuilder
 from . import transcoders
-
-logging.basicConfig()
 
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
@@ -73,7 +70,10 @@ def process_video(entry):
     with tmp_dst:
         # Transcode queued file to a VP8/vorbis file that fits in a 640x640 square
         transcoder = transcoders.VideoTranscoder()
-        transcoder.transcode(queued_filename, tmp_dst.name)
+        transcoder.transcode(queued_filename, tmp_dst.name,
+                vp8_quality=video_config['vp8_quality'],
+                vp8_threads=video_config['vp8_threads'],
+                vorbis_quality=video_config['vorbis_quality'])
 
         # Push transcoded video to public storage
         _log.debug('Saving medium...')
