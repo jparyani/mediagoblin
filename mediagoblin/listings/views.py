@@ -74,9 +74,7 @@ def tag_atom_feed(request):
     """
     tag_slug = request.matchdict[u'tag']
 
-    cursor = request.db.MediaEntry.find(
-        {u'state': u'processed',
-         u'tags.slug': tag_slug})
+    cursor = media_entries_for_tag_slug(request.db, tag_slug)
     cursor = cursor.sort('created', DESCENDING)
     cursor = cursor.limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
