@@ -42,6 +42,9 @@ class CloudFilesStorage(StorageInterface):
         self.param_host = kwargs.get('cloudfiles_host')
         self.param_use_servicenet = kwargs.get('cloudfiles_use_servicenet')
 
+        # the Mime Type webm doesn't exists, let's add it
+        mimetypes.add_type("video/webm", "webm")
+
         if not self.param_host:
             print('No CloudFiles host URL specified, '
                   'defaulting to Rackspace US')
@@ -92,6 +95,9 @@ class CloudFilesStorage(StorageInterface):
 
             if mimetype:
                 obj.content_type = mimetype[0]
+                # this should finally fix the bug #429
+                meta_data = {'mime-type' : mimetype}
+                obj.metadata = meta_data
 
         return CloudFilesStorageObjectWrapper(obj, *args, **kwargs)
 
