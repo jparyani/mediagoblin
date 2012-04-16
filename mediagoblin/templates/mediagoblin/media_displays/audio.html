@@ -37,7 +37,7 @@
     <audio class="audio-player" controls="controls"
 	   preload="metadata">
       <source src="{{ request.app.public_store.file_url(
-		       media.media_files.ogg) }}" type="video/webm; encoding=&quot;vorbis&quot;" />
+		       media.media_files.ogg) }}" type="audio/webm; codecs=vorbis" />
       <div class="no_html5">
 	{%- trans -%}Sorry, this audio will not work because 
 	your web browser does not support HTML5 
