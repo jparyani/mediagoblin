@@ -96,7 +96,7 @@ class CloudFilesStorage(StorageInterface):
             if mimetype:
                 obj.content_type = mimetype[0]
                 # this should finally fix the bug #429
-                meta_data = {'mime-type' : mimetype}
+                meta_data = {'mime-type' : mimetype[0]}
                 obj.metadata = meta_data
 
         return CloudFilesStorageObjectWrapper(obj, *args, **kwargs)
