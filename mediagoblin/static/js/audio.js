@@ -210,14 +210,8 @@ var audioPlayer = new Object();
         $('<div class="seekbar"></div>').appendTo(im.parent());
         $('<div class="audio-control-play-pause paused">▶</div>').appendTo(im.parent());
         $('<div class="audio-currentTime">00:00</div>').appendTo(im.parent());
-        if (navigator && /Firefox/.test(navigator.userAgent)) {
-            $('<p class="message_warning">Sorry, Firefox does not support the '
-                    + 'range input type, you won\'t be able to change the volume</p>')
-                .appendTo(im.parent().parent());
-        } else {
-            $('<input type="range" class="audio-volume"'
-                    +'value="1" min="0" max="1" step="0.001" />').appendTo(im.parent());
-        }
+        $('<input type="range" class="audio-volume"'
+                +'value="1" min="0" max="1" step="0.001" />').appendTo(im.parent());
         $('.audio-spectrogram').trigger('attachedControls');
     };
 })(audioPlayer);
