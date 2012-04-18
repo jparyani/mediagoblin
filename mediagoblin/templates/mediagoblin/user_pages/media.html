@@ -64,12 +64,14 @@
                         media.media_files['original']) }}">
             <img class="media_image"
                  src="{{ display_media }}"
-                 alt="Image for {{ media.title }}" />
+                 alt="{% trans media_title=media.title -%}
+                        Image for {{ media_title }}{% endtrans %}" />
           </a>
         {% else %}
           <img class="media_image"
                src="{{ display_media }}"
-               alt="Image for {{ media.title }}" />
+               alt="{% trans media_title=media.title -%}
+                      Image for {{ media_title }}{% endtrans %}" />
         {% endif %}
       {% endblock %}
     </div>
