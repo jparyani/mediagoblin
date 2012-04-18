@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-04-07 16:33-0500\n"
-"PO-Revision-Date: 2012-04-07 21:31+0000\n"
+"POT-Creation-Date: 2012-04-18 08:48-0500\n"
+"PO-Revision-Date: 2012-04-18 13:46+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -377,19 +377,19 @@ msgid "Media tagged with: %(tag_name)s"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:55
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:57
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:53
 msgid "Original"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:42
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:44
 msgid ""
 "Sorry, this audio will not work because \n"
 "\tyour web browser does not support HTML5 \n"
 "\taudio."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:45
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:47
 msgid ""
 "You can get a modern web browser that \n"
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
@@ -433,34 +433,40 @@ msgstr "<a href=\"%(user_url)s\">%(username)s</a>'s media"
 msgid "❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a>"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:85
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:67
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:73
+#, python-format
+msgid "Image for %(media_title)s"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:87
 msgid "Edit"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:89
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:91
 msgid "Delete"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:122
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:124
 msgid "Add a comment"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:129
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:131
 msgid ""
 "You can use <a "
 "href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
 " formatting."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:133
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:135
 msgid "Add this comment"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:152
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:154
 msgid "at"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:172
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:174
 #, python-format
 msgid ""
 "<h3>Added on</h3>\n"

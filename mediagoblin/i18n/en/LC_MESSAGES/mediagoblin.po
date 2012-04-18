@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-04-18 08:23-0500\n"
+"POT-Creation-Date: 2012-04-18 08:48-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -433,34 +433,40 @@ msgstr ""
 msgid "❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a>"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:85
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:67
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:73
+#, python-format
+msgid "Image for %(media_title)s"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:87
 msgid "Edit"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:89
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:91
 msgid "Delete"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:122
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:124
 msgid "Add a comment"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:129
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:131
 msgid ""
 "You can use <a "
 "href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> "
 "for formatting."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:133
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:135
 msgid "Add this comment"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:152
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:154
 msgid "at"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:172
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:174
 #, python-format
 msgid ""
 "<h3>Added on</h3>\n"

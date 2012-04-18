@@ -17,9 +17,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-03-18 15:16-0500\n"
-"PO-Revision-Date: 2012-03-25 17:23+0000\n"
-"Last-Translator: Elrond <elrond+mediagoblin.org@samba-tng.org>\n"
+"POT-Creation-Date: 2012-04-18 08:48-0500\n"
+"PO-Revision-Date: 2012-04-18 13:46+0000\n"
+"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: German (http://www.transifex.net/projects/p/mediagoblin/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,10 +27,6 @@ msgstr ""
 "Generated-By: Babel 0.9.6\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-
-#: mediagoblin/processing.py:154
-msgid "Invalid file given for media type."
-msgstr "Die Datei stimmt nicht mit dem gewählten Medientyp überein."
 
 #: mediagoblin/auth/forms.py:25 mediagoblin/auth/forms.py:41
 msgid "Username"
@@ -78,22 +74,22 @@ msgstr "Deine E-Mail-Adresse wurde bereits bestätigt."
 msgid "Resent your verification email."
 msgstr "Bestätigungs-E-Mail wurde erneut versandt."
 
-#: mediagoblin/auth/views.py:262
+#: mediagoblin/auth/views.py:263
 msgid ""
 "An email has been sent with instructions on how to change your password."
 msgstr "Es wurde eine Email mit Anweisungen für die Änderung des Passwortes an dich gesendet."
 
-#: mediagoblin/auth/views.py:272
+#: mediagoblin/auth/views.py:273
 msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
 msgstr "Die E-Mail zur Wiederherstellung des Passworts konnte nicht verschickt werden, weil dein Benutzername inaktiv oder deine E-Mail-Adresse noch nicht bestätigt wurde."
 
-#: mediagoblin/auth/views.py:284
+#: mediagoblin/auth/views.py:285
 msgid "Couldn't find someone with that username or email."
 msgstr "Es konnte niemand mit diesem Nutzernamen oder Email gefunden werden."
 
-#: mediagoblin/auth/views.py:332
+#: mediagoblin/auth/views.py:333
 msgid "You can now log in using your new password."
 msgstr "Du kannst dich jetzt mit deinem neuen Passwort anmelden."
 
@@ -184,23 +180,24 @@ msgstr "Falsches Passwort"
 msgid "Account settings saved"
 msgstr "Kontoeinstellungen gespeichert"
 
-#: mediagoblin/media_types/__init__.py:77
-msgid "Could not extract any file extension from \"{filename}\""
-msgstr "Es konnten keine Dateierweiterungen von »{filename}« gelesen werden."
-
-#: mediagoblin/media_types/__init__.py:88
+#: mediagoblin/media_types/__init__.py:60
+#: mediagoblin/media_types/__init__.py:120
 msgid "Sorry, I don't support that file type :("
 msgstr "Entschuldigung, dieser Dateityp wird nicht unterstützt."
+
+#: mediagoblin/processing/__init__.py:127
+msgid "Invalid file given for media type."
+msgstr "Die Datei stimmt nicht mit dem gewählten Medientyp überein."
 
 #: mediagoblin/submit/forms.py:26
 msgid "File"
 msgstr "Datei"
 
-#: mediagoblin/submit/views.py:54
+#: mediagoblin/submit/views.py:56
 msgid "You must provide a file."
 msgstr "Du musst eine Datei angeben."
 
-#: mediagoblin/submit/views.py:156
+#: mediagoblin/submit/views.py:163
 msgid "Woohoo! Submitted!"
 msgstr "Yeeeaaah! Geschafft!"
 
@@ -222,42 +219,37 @@ msgid ""
 " been moved or deleted."
 msgstr "Wenn du sicher bist, dass die Adresse stimmt, wurde die Seite eventuell verschoben oder gelöscht."
 
-#: mediagoblin/templates/mediagoblin/base.html:46
+#: mediagoblin/templates/mediagoblin/base.html:47
 msgid "MediaGoblin logo"
 msgstr "MediaGoblin-Logo"
 
-#: mediagoblin/templates/mediagoblin/base.html:51
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:157
-msgid "Add media"
-msgstr "Medien hinzufügen"
-
-#: mediagoblin/templates/mediagoblin/base.html:62
+#: mediagoblin/templates/mediagoblin/base.html:57
 msgid "Verify your email!"
 msgstr "Bitte bestätige deine E-Mail-Adresse!"
 
-#: mediagoblin/templates/mediagoblin/base.html:69
-msgid "log out"
+#: mediagoblin/templates/mediagoblin/base.html:66
+msgid "Log out"
 msgstr "Abmelden"
 
-#: mediagoblin/templates/mediagoblin/base.html:72
-#: mediagoblin/templates/mediagoblin/auth/login.html:27
-#: mediagoblin/templates/mediagoblin/auth/login.html:45
+#: mediagoblin/templates/mediagoblin/base.html:71
+#: mediagoblin/templates/mediagoblin/auth/login.html:32
+#: mediagoblin/templates/mediagoblin/auth/login.html:50
 msgid "Log in"
 msgstr "Anmelden"
 
-#: mediagoblin/templates/mediagoblin/base.html:84
+#: mediagoblin/templates/mediagoblin/base.html:85
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project."
 msgstr "Läuft mit <a href=\"http://mediagoblin.org/\">MediaGoblin</a>, einem <a href=\"http://gnu.org/\">GNU</a>-Projekt."
 
-#: mediagoblin/templates/mediagoblin/base.html:87
+#: mediagoblin/templates/mediagoblin/base.html:88
 #, python-format
 msgid ""
 "Released under the <a "
 "href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a "
 "href=\"%(source_link)s\">Source code</a> available."
-msgstr "Veröffentlicht mit <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. Der <a href=\"%(source_link)s\">Quellcode</a>."
+msgstr "Veröffentlicht unter der <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a href=\"%(source_link)s\">Quellcode</a>."
 
 #: mediagoblin/templates/mediagoblin/root.html:24
 msgid "Explore"
@@ -325,19 +317,19 @@ msgid ""
 "a happy goblin!"
 msgstr "Hi %(username)s,\n\num dein GNU MediaGoblin Passwort zu ändern, öffne folgende URL in deinem Webbrowser:\n\n%(verification_url)s\n\nWenn du denkst, dass das ein Fehler ist, ignoriere einfach diese E-Mail und bleib ein glücklicher Goblin!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:30
+#: mediagoblin/templates/mediagoblin/auth/login.html:35
 msgid "Logging in failed!"
 msgstr "Anmeldevorgang fehlgeschlagen!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:35
+#: mediagoblin/templates/mediagoblin/auth/login.html:40
 msgid "Don't have an account yet?"
 msgstr "Hast du noch kein Konto?"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:36
+#: mediagoblin/templates/mediagoblin/auth/login.html:41
 msgid "Create one here!"
 msgstr "Registriere dich hier!"
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:42
+#: mediagoblin/templates/mediagoblin/auth/login.html:47
 msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
@@ -393,23 +385,38 @@ msgid "Media tagged with: %(tag_name)s"
 msgstr "Medien mit Schlagwort: %(tag_name)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:57
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:53
 msgid "Original"
 msgstr "Original"
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:44
+msgid ""
+"Sorry, this audio will not work because \n"
+"\tyour web browser does not support HTML5 \n"
+"\taudio."
+msgstr "Entschuldige, dieses Audiostück wird nicht\n\tfunktionieren, weil dein Webbrowser\n\tkein HTML5-Audio unterstützt."
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:47
+msgid ""
+"You can get a modern web browser that \n"
+"\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
+"\t  http://getfirefox.com</a>!"
+msgstr "Hol dir einen modernen Webbrowser, der \n\tdieses Audiostück abspielen kann, auf <a href=\"http://getfirefox.com\">\n\t  http://getfirefox.com</a>!"
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
 msgid ""
 "Sorry, this video will not work because \n"
 "\t    your web browser does not support HTML5 \n"
 "\t    video."
-msgstr "Entschuldige, dieses Video wird nicht funktionieren weil \n    dein Webbrowser kein HTML5 \n    Video unterstützt."
+msgstr "Entschuldige, dieses Video wird nicht funktionieren, weil \n    dein Webbrowser kein HTML5-Video unterstützt."
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:43
 msgid ""
 "You can get a modern web browser that \n"
 "\t    can play this video at <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
-msgstr "Hol dir einen modernen Webbrowser, der \n    dieses Video abspielen kann, <a href=\"http://getfirefox.com\">\n    Firefox</a>!"
+msgstr "Hol dir einen modernen Webbrowser, der \n    dieses Video abspielen kann, auf <a href=\"http://getfirefox.com\">\n    http://getfirefox.com</a>!"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Add your media"
@@ -434,11 +441,17 @@ msgstr "<a href=\"%(user_url)s\">%(username)s</a>s Medien"
 msgid "❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a>"
 msgstr "❖ Medien von <a href=\"%(user_url)s\">%(username)s</a>"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:85
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:67
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:73
+#, python-format
+msgid "Image for %(media_title)s"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:87
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:89
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:91
 msgid "Delete"
 msgstr "Löschen"
 
@@ -446,18 +459,18 @@ msgstr "Löschen"
 msgid "Add a comment"
 msgstr "Einen Kommentar schreiben"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:133
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:131
 msgid ""
 "You can use <a "
 "href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
 " formatting."
 msgstr "Für Formatierung kannst du <a href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> benutzen."
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:137
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:135
 msgid "Add this comment"
 msgstr "Kommentar absenden"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:159
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:154
 msgid "at"
 msgstr "um"
 
@@ -466,7 +479,7 @@ msgstr "um"
 msgid ""
 "<h3>Added on</h3>\n"
 "      <p>%(date)s</p>"
-msgstr "<h3>Veröffentlich am</h3>\n      <p>%(date)s</p>"
+msgstr "<h3>Veröffentlicht am</h3>\n      <p>%(date)s</p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -571,6 +584,10 @@ msgid ""
 "anything yet."
 msgstr "Hier erscheinen deine Medien, sobald du etwas hochgeladen hast."
 
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:157
+msgid "Add media"
+msgstr "Medien hinzufügen"
+
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:163
 #: mediagoblin/templates/mediagoblin/utils/object_gallery.html:72
 msgid "There doesn't seem to be any media here yet..."
@@ -623,7 +640,7 @@ msgstr "älter"
 msgid "Tagged with"
 msgstr "Schlagworte"
 
-#: mediagoblin/tools/exif.py:68
+#: mediagoblin/tools/exif.py:75
 msgid "Could not read the image file."
 msgstr "Die Bilddatei konnte nicht gelesen werden."
 

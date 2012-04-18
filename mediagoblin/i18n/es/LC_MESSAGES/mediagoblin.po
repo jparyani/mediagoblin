@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-04-07 16:33-0500\n"
-"PO-Revision-Date: 2012-04-07 21:31+0000\n"
+"POT-Creation-Date: 2012-04-18 08:48-0500\n"
+"PO-Revision-Date: 2012-04-18 13:46+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Spanish (Castilian) (http://www.transifex.net/projects/p/mediagoblin/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -227,7 +227,7 @@ msgstr "¡Verifica tu email!"
 
 #: mediagoblin/templates/mediagoblin/base.html:66
 msgid "Log out"
-msgstr ""
+msgstr "Salir "
 
 #: mediagoblin/templates/mediagoblin/base.html:71
 #: mediagoblin/templates/mediagoblin/auth/login.html:32
@@ -239,7 +239,7 @@ msgstr "Conectarse"
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project."
-msgstr ""
+msgstr "Potenciado por <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a href=\"http://gnu.org/\">GNU</a> proyecto."
 
 #: mediagoblin/templates/mediagoblin/base.html:88
 #, python-format
@@ -247,7 +247,7 @@ msgid ""
 "Released under the <a "
 "href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a "
 "href=\"%(source_link)s\">Source code</a> available."
-msgstr ""
+msgstr "Publicado bajo la <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a href=\"%(source_link)s\"> Códifo fuent</a> pisponible."
 
 #: mediagoblin/templates/mediagoblin/root.html:24
 msgid "Explore"
@@ -383,24 +383,24 @@ msgid "Media tagged with: %(tag_name)s"
 msgstr "Contenido etiquetado con: %(tag_name)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:55
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:57
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:53
 msgid "Original"
 msgstr "Original"
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:42
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:44
 msgid ""
 "Sorry, this audio will not work because \n"
 "\tyour web browser does not support HTML5 \n"
 "\taudio."
-msgstr ""
+msgstr "Disculpa, este audio audio podría no funcionar porque \n\ttú explorador no soportar HTML5 \n\taudio."
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:45
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:47
 msgid ""
 "You can get a modern web browser that \n"
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t  http://getfirefox.com</a>!"
-msgstr ""
+msgstr "Tú puedes obtener un explorador más moderno que \n\tpueda reproducir el audio <a href=\"http://getfirefox.com\">\n\t  http://getfirefox.com</a>!"
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
 msgid ""
@@ -437,41 +437,47 @@ msgstr "Contenido de <a href=\"%(user_url)s\">%(username)s</a>'s"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:46
 #, python-format
 msgid "❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a>"
+msgstr "❖Explorando contenido de<a href=\"%(user_url)s\">%(username)s</a>"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:67
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:73
+#, python-format
+msgid "Image for %(media_title)s"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:85
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:87
 msgid "Edit"
 msgstr "Editar"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:89
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:91
 msgid "Delete"
 msgstr "Borrar"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:122
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:124
 msgid "Add a comment"
-msgstr ""
+msgstr "Añadir un comenario"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:129
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:131
 msgid ""
 "You can use <a "
 "href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
 " formatting."
 msgstr "Puedes usar <a href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> para el formato."
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:133
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:135
 msgid "Add this comment"
 msgstr "Añade un comentario "
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:152
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:154
 msgid "at"
 msgstr "en"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:172
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:174
 #, python-format
 msgid ""
 "<h3>Added on</h3>\n"
 "      <p>%(date)s</p>"
-msgstr ""
+msgstr "<h3>Añadido en</h3>\n      <p>%(date)s</p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -480,7 +486,7 @@ msgstr "¿Realmente deseas eliminar %(title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:50
 msgid "Delete permanently"
-msgstr ""
+msgstr "Eliminar permanentemente"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
 msgid "Media processing panel"
@@ -595,12 +601,12 @@ msgstr "Atom feed"
 
 #: mediagoblin/templates/mediagoblin/utils/geolocation_map.html:25
 msgid "Location"
-msgstr ""
+msgstr "Locación"
 
 #: mediagoblin/templates/mediagoblin/utils/geolocation_map.html:38
 #, python-format
 msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
-msgstr ""
+msgstr "Ver en <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:25
 msgid "All rights reserved"
@@ -630,7 +636,7 @@ msgstr "Más viejo"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
-msgstr ""
+msgstr "Marcado con"
 
 #: mediagoblin/tools/exif.py:75
 msgid "Could not read the image file."
