@@ -22,6 +22,8 @@
     {{ super() }}
     <link rel="stylesheet" type="text/css" href="{{ request.staticdirect('/css/audio.css') }}" />
     <script type="text/javascript" src="{{ request.staticdirect(
+        '/js/extlib/html5slider.js') }}"></script>
+    <script type="text/javascript" src="{{ request.staticdirect(
         '/js/audio.js') }}"></script>
 {% endblock %}
 
