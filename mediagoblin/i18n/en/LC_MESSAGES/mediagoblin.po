@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-04-07 16:33-0500\n"
+"POT-Creation-Date: 2012-04-18 08:23-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -377,19 +377,19 @@ msgid "Media tagged with: %(tag_name)s"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:55
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:57
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:53
 msgid "Original"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:42
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:44
 msgid ""
 "Sorry, this audio will not work because \n"
 "\tyour web browser does not support HTML5 \n"
 "\taudio."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:45
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:47
 msgid ""
 "You can get a modern web browser that \n"
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
