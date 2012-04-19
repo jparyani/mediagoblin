@@ -60,9 +60,9 @@
                 {{ request.user.username }} ▾
                 <div class="dropdown_items">
                   {% if request.user and request.user.status == 'active' %}
-                    <a href="{{ request.urlgen('mediagoblin.submit.start') }}">+ Add media</a>
+                    <a href="{{ request.urlgen('mediagoblin.submit.start') }}">{% trans %}+ Add media{% endtrans %}</a>
                   {% endif %}
-                  <a href="{{ request.urlgen('mediagoblin.user_pages.user_home', user= request.user.username) }}">View your profile</a>
+                  <a href="{{ request.urlgen('mediagoblin.user_pages.user_home', user= request.user.username) }}">{% trans %}View your profile{% endtrans %}</a>
                   <a class="button_action" href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}Log out{% endtrans %}</a>
                 </div>
               </div>
