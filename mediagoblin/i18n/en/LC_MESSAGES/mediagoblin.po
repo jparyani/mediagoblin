@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-04-18 08:48-0500\n"
+"POT-Creation-Date: 2012-04-21 23:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,6 +27,14 @@ msgstr ""
 
 #: mediagoblin/auth/forms.py:34
 msgid "Email address"
+msgstr ""
+
+#: mediagoblin/auth/forms.py:51
+msgid "Username or email"
+msgstr ""
+
+#: mediagoblin/auth/forms.py:58
+msgid "Incorrect input"
 msgstr ""
 
 #: mediagoblin/auth/views.py:55
@@ -133,6 +141,10 @@ msgstr ""
 msgid "Website"
 msgstr ""
 
+#: mediagoblin/edit/forms.py:58
+msgid "This address contains errors"
+msgstr ""
+
 #: mediagoblin/edit/forms.py:63
 msgid "Old password"
 msgstr ""
@@ -214,6 +226,14 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:57
 msgid "Verify your email!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:63
+msgid "+ Add media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:65
+msgid "View your profile"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:66
