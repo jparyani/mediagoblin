@@ -4,13 +4,14 @@
 # 
 # Translators:
 # Morten Juhl-Johansen Zölde-Fejér <morten@writtenandread.net>, 2012.
+# Olle Jonsson <olle.jonsson@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2012-04-18 08:48-0500\n"
-"PO-Revision-Date: 2012-04-18 13:46+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2012-04-18 14:10+0000\n"
+"Last-Translator: Olle Jonsson <olle.jonsson@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,15 +22,15 @@ msgstr ""
 
 #: mediagoblin/auth/forms.py:25 mediagoblin/auth/forms.py:41
 msgid "Username"
-msgstr ""
+msgstr "Brugernavn"
 
 #: mediagoblin/auth/forms.py:30 mediagoblin/auth/forms.py:45
 msgid "Password"
-msgstr ""
+msgstr "Kodeord"
 
 #: mediagoblin/auth/forms.py:34
 msgid "Email address"
-msgstr ""
+msgstr "Email adresse"
 
 #: mediagoblin/auth/views.py:55
 msgid "Sorry, registration is disabled on this instance."
@@ -86,7 +87,7 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:25 mediagoblin/submit/forms.py:28
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: mediagoblin/edit/forms.py:28 mediagoblin/submit/forms.py:31
 msgid "Description of this work"
@@ -133,7 +134,7 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:56
 msgid "Website"
-msgstr ""
+msgstr "Websted"
 
 #: mediagoblin/edit/forms.py:63
 msgid "Old password"
@@ -182,7 +183,7 @@ msgstr ""
 
 #: mediagoblin/submit/forms.py:26
 msgid "File"
-msgstr ""
+msgstr "Fil"
 
 #: mediagoblin/submit/views.py:56
 msgid "You must provide a file."
@@ -194,11 +195,11 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/404.html:22
 msgid "Image of 404 goblin stressing out"
-msgstr ""
+msgstr "Billede af stresset 404 goblin"
 
 #: mediagoblin/templates/mediagoblin/404.html:23
 msgid "Oops!"
-msgstr ""
+msgstr "Hovsa!"
 
 #: mediagoblin/templates/mediagoblin/404.html:24
 msgid "There doesn't seem to be a page at this address. Sorry!"
@@ -212,7 +213,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:47
 msgid "MediaGoblin logo"
-msgstr ""
+msgstr "MediaGoblin logo"
 
 #: mediagoblin/templates/mediagoblin/base.html:57
 msgid "Verify your email!"
@@ -351,13 +352,13 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/edit/edit.html:36
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
 msgid "Cancel"
-msgstr ""
+msgstr "Afbryd"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:40
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
 msgid "Save changes"
-msgstr ""
+msgstr "Gem ændringer"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:34
 #, python-format
@@ -367,7 +368,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:29
 #, python-format
 msgid "Editing %(username)s's profile"
-msgstr ""
+msgstr "Redigerer %(username)s profil"
 
 #: mediagoblin/templates/mediagoblin/listings/tag.html:30
 #: mediagoblin/templates/mediagoblin/listings/tag.html:35
@@ -510,7 +511,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:43
 msgid "Sorry, no such user found."
-msgstr ""
+msgstr "Desværre, fandt ikke den bruger."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:50
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:70
@@ -519,20 +520,20 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:53
 msgid "Almost done! Your account still needs to be activated."
-msgstr ""
+msgstr "Næsten færdig! Din konto skal stadig aktiveres."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:58
 msgid ""
 "An email should arrive in a few moments with instructions on how to do so."
-msgstr ""
+msgstr "Der skulle komme email om et par øjeblikke med instrukser om hvordan."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:62
 msgid "In case it doesn't:"
-msgstr ""
+msgstr "Hvis det ikke gør:"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:65
 msgid "Resend verification email"
-msgstr ""
+msgstr "Gensend verificeringsemail"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:73
 msgid ""
@@ -549,12 +550,12 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:96
 msgid "Here's a spot to tell others about yourself."
-msgstr ""
+msgstr "Her kan du fortælle andre om dig selv."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:101
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:118
 msgid "Edit profile"
-msgstr ""
+msgstr "Ret profil"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:106
 msgid "This user hasn't filled in their profile (yet)."
