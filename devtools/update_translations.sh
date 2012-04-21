@@ -38,6 +38,9 @@ echo "==> Extracting translations"
 echo "==> Pushing extracted translations to Transifex"
 ./bin/tx push -s
 
+echo "==> Waiting 5 seconds, so the server can process the new stuff (hopefully)"
+sleep 5
+
 # gets the new strings added to all files
 echo "==> Re-Pulling translations from Transifex"
 ./bin/tx pull -a
