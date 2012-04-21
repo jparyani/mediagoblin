@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-04-18 08:48-0500\n"
-"PO-Revision-Date: 2012-04-18 13:46+0000\n"
+"POT-Creation-Date: 2012-04-21 16:36-0500\n"
+"PO-Revision-Date: 2012-04-21 21:33+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -32,6 +32,14 @@ msgstr "كلمة السر"
 #: mediagoblin/auth/forms.py:34
 msgid "Email address"
 msgstr "عنوان البريد الإلكتروني"
+
+#: mediagoblin/auth/forms.py:51
+msgid "Username or email"
+msgstr ""
+
+#: mediagoblin/auth/forms.py:58
+msgid "Incorrect input"
+msgstr ""
 
 #: mediagoblin/auth/views.py:55
 msgid "Sorry, registration is disabled on this instance."
@@ -137,6 +145,10 @@ msgstr "السيرة"
 msgid "Website"
 msgstr "الموقع الإلكتروني"
 
+#: mediagoblin/edit/forms.py:58
+msgid "This address contains errors"
+msgstr ""
+
 #: mediagoblin/edit/forms.py:63
 msgid "Old password"
 msgstr ""
@@ -218,6 +230,14 @@ msgstr "شعار ميدياغوبلن"
 
 #: mediagoblin/templates/mediagoblin/base.html:57
 msgid "Verify your email!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:63
+msgid "+ Add media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:65
+msgid "View your profile"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:66
