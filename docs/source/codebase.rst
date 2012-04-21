@@ -55,8 +55,9 @@ Software Stack
 
 * Data storage
 
-  * `MongoDB <http://www.mongodb.org/>`_: the document database backend
-    for storage
+  * `SQLAlchemy <http://sqlalchemy.org/>`_: SQL ORM and database
+    interaction library for Python. Currently we support sqlite and
+    postgress as backends.
 
 * Web application
 
@@ -83,10 +84,6 @@ Software Stack
   * `MongoKit <http://namlook.github.com/mongokit/>`_: the lightweight
     ORM for MongoDB we're using which will make it easier to define
     structures and all that (will be swapped out soon...)
-
-  * `SQLAlchemy <http://sqlalchemy.org/>`_: SQL ORM and database
-    interaction library for Python.  We'll be moving to this in the
-    upcoming move to SQL.
 
   * `Babel <http://babel.edgewall.org>`_: Used to extract and compile
     translations.

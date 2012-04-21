@@ -48,13 +48,13 @@ MediaGoblin has the following core dependencies:
 - `virtualenv <http://www.virtualenv.org/>`_
 
 On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
-derivatives) issue the following command: ::
+derivatives) issue the following command::
 
     sudo apt-get install git-core python python-dev python-lxml \
         python-imaging python-virtualenv
 
 On a RPM-based system (e.g. Fedora, RedHat, and derivatives) issue the
-following command: ::
+following command::
 
     yum install python-paste-deploy python-paste-script \
         git-core python python-devel python-lxml python-imaging \
@@ -65,12 +65,14 @@ Configure PostgreSQL
 
 .. note::
 
-    MediaGoblin currently supports PostgreSQL and SQLite. The default is a
-    local SQLite database. This will "just work" for small deployments. If
-    you don't want/need postgres, ignore all the postgres related parts. For
-    medium to large deployments we recommend PostgreSQL.
+   MediaGoblin currently supports PostgreSQL and SQLite. The default is a
+   local SQLite database. This will "just work" for small deployments.
 
-These are the packages needed for Debian Wheezy (testing): ::
+   For medium to large deployments we recommend PostgreSQL.
+
+   If you don't want/need postgres, skip this section.
+
+These are the packages needed for Debian Wheezy (testing)::
 
     sudo apt-get install postgresql postgresql-client
 
@@ -82,17 +84,17 @@ restricted database user for our MediaGoblin instance.
 In this example, the database user will be ``mediagoblin`` and the database
 name will be ``mediagoblin`` too.
 
-To create our new user, run: ::
+To create our new user, run::
 
     sudo -u postgres createuser mediagoblin
 
-then answer NO to *all* the questions: ::
+then answer NO to *all* the questions::
 
     Shall the new role be a superuser? (y/n) n
     Shall the new role be allowed to create databases? (y/n) n
     Shall the new role be allowed to create more new roles? (y/n) n
 
-then create the database all our MediaGoblin data should be stored in: ::
+then create the database all our MediaGoblin data should be stored in::
 
     sudo -u postgres createdb -E UNICODE -O mediagoblin mediagoblin
 
@@ -117,11 +119,11 @@ Configure MongoDB
     If this is a fresh setup and you have already set up PostgreSQL, you
     will not need this step.
 
-First, install MongoDB. On a DEB-based system run: ::
+First, install MongoDB. On a DEB-based system run::
 
     sudo apt-get install mongodb
 
-on a RPM-based system, run: ::
+on a RPM-based system, run::
 
     yum install mongodb-server
 
@@ -167,7 +169,7 @@ assumes your local git repository will be located at
 Substitute your prefer ed local deployment path as needed.
 
 This document assumes that all operations are performed as this
-user. To drop privileges to this user, run the following command: ::
+user. To drop privileges to this user, run the following command::
 
       su - [mediagoblin]
 
@@ -179,7 +181,7 @@ Install MediaGoblin and Virtualenv
 
 .. note::
 
-   As of |version|, MediaGoblin has a rapid development pace. As a result
+   MediaGoblin is still developing rapidly. As a result
    the following instructions recommend installing from the ``master``
    branch of the git repository. Eventually production deployments will
    want to transition to running from more consistent releases.
@@ -194,7 +196,7 @@ Clone the MediaGoblin repository::
 
     git clone git://gitorious.org/mediagoblin/mediagoblin.git
 
-And setup the in-package virtualenv::
+And set up the in-package virtualenv::
 
     cd mediagoblin
     (virtualenv --system-site-packages . || virtualenv .) && ./bin/python setup.py develop
@@ -219,7 +221,7 @@ flup::
     ./bin/easy_install flup
 
 This concludes the initial configuration of the development
-environment. In the future, if at any point you want update your
+environment. In the future, you want update your
 codebase, you should also run::
 
     ./bin/python setup.py develop --upgrade && ./bin/gmg migrate.
@@ -230,18 +232,19 @@ Deploy MediaGoblin Services
 Configure MediaGoblin to use the PostgreSQL database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Edit the ``[mediagoblin]`` section in your ``mediagoblin_local.ini`` and
-put in: ::
+If you are using postgres, edit the ``[mediagoblin]`` section in your
+``mediagoblin_local.ini`` and put in::
 
     sql_engine = postgresql:///mediagoblin
 
 if you are running the MediaGoblin application as the same 'user' as the
 database owner.
 
+
 Update database data structures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Before you start using the database, you need to run: ::
+Before you start using the database, you need to run::
 
     ./bin/gmg dbupdate
 
