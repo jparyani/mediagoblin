@@ -24,7 +24,7 @@ OUR_MODULENAME = __name__
 
 
 def setup_self(check_environ_for_conf=True, module_name=OUR_MODULENAME,
-               default_conf_file='mediagoblin.ini'):
+               default_conf_file=None):
     """
     Transform this module into a celery config module by reading the
     mediagoblin config file.  Set the environment variable
@@ -35,6 +35,11 @@ def setup_self(check_environ_for_conf=True, module_name=OUR_MODULENAME,
     Note that if celery_setup_elsewhere is set in your config file,
     this simply won't work.
     """
+    if os.path.exists(os.path.abspath('mediagoblin_local.ini')):
+        default_conf_file = 'mediagoblin_local.ini'
+    else:
+        default_conf_file = 'mediagoblin.ini'
+
     if check_environ_for_conf:
         mgoblin_conf_file = os.path.abspath(
             os.environ.get('MEDIAGOBLIN_CONFIG', default_conf_file))
