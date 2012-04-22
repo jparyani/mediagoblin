@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-04-18 08:48-0500\n"
-"PO-Revision-Date: 2012-04-19 10:37+0000\n"
+"POT-Creation-Date: 2012-04-21 16:36-0500\n"
+"PO-Revision-Date: 2012-04-22 10:35+0000\n"
 "Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,6 +30,14 @@ msgstr "Пароль"
 #: mediagoblin/auth/forms.py:34
 msgid "Email address"
 msgstr "Адрес электронной почты"
+
+#: mediagoblin/auth/forms.py:51
+msgid "Username or email"
+msgstr "Имя пользователя или адрес электронной почты"
+
+#: mediagoblin/auth/forms.py:58
+msgid "Incorrect input"
+msgstr ""
 
 #: mediagoblin/auth/views.py:55
 msgid "Sorry, registration is disabled on this instance."
@@ -135,6 +143,10 @@ msgstr "Биография"
 msgid "Website"
 msgstr "Сайт"
 
+#: mediagoblin/edit/forms.py:58
+msgid "This address contains errors"
+msgstr "Этот адрес содержит ошибки"
+
 #: mediagoblin/edit/forms.py:63
 msgid "Old password"
 msgstr "Старый пароль"
@@ -217,6 +229,14 @@ msgstr "Символ MediaGoblin"
 #: mediagoblin/templates/mediagoblin/base.html:57
 msgid "Verify your email!"
 msgstr "Подтвердите ваш адрес электронной почты!"
+
+#: mediagoblin/templates/mediagoblin/base.html:63
+msgid "+ Add media"
+msgstr "+ Добавить файл"
+
+#: mediagoblin/templates/mediagoblin/base.html:65
+msgid "View your profile"
+msgstr "Посмотреть свой профиль"
 
 #: mediagoblin/templates/mediagoblin/base.html:66
 msgid "Log out"

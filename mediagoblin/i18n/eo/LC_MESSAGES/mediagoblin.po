@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-04-18 08:48-0500\n"
-"PO-Revision-Date: 2012-04-18 14:03+0000\n"
+"POT-Creation-Date: 2012-04-21 16:36-0500\n"
+"PO-Revision-Date: 2012-04-22 10:38+0000\n"
 "Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -32,6 +32,14 @@ msgstr "Pasvorto"
 #: mediagoblin/auth/forms.py:34
 msgid "Email address"
 msgstr "Retpoŝtadreso"
+
+#: mediagoblin/auth/forms.py:51
+msgid "Username or email"
+msgstr "Salutnomo aŭ retpoŝtadreso"
+
+#: mediagoblin/auth/forms.py:58
+msgid "Incorrect input"
+msgstr "La enigitaĵo malĝustas"
 
 #: mediagoblin/auth/views.py:55
 msgid "Sorry, registration is disabled on this instance."
@@ -137,6 +145,10 @@ msgstr "Bio"
 msgid "Website"
 msgstr "Retejo"
 
+#: mediagoblin/edit/forms.py:58
+msgid "This address contains errors"
+msgstr "Ĉi tiu adreso enhavas erarojn"
+
 #: mediagoblin/edit/forms.py:63
 msgid "Old password"
 msgstr "La malnova pasvorto"
@@ -219,6 +231,14 @@ msgstr "Emblemo de MediaGoblin"
 #: mediagoblin/templates/mediagoblin/base.html:57
 msgid "Verify your email!"
 msgstr "Konfirmu viecon de la retpoŝtadreso!"
+
+#: mediagoblin/templates/mediagoblin/base.html:63
+msgid "+ Add media"
+msgstr "+ Aldoni dosieron"
+
+#: mediagoblin/templates/mediagoblin/base.html:65
+msgid "View your profile"
+msgstr "Vidi vian profilon"
 
 #: mediagoblin/templates/mediagoblin/base.html:66
 msgid "Log out"
