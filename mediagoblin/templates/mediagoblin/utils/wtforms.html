@@ -25,7 +25,7 @@
     {{ field }}
     {%- if field.errors -%}
       {% for error in field.errors %}
-        <p class="form_field_error">{{ error }}</p>
+        <p class="form_field_error">{{ _(error) }}</p>
       {% endfor %}
     {%- endif %}
     {% if field.description -%}
