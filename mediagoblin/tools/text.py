@@ -36,7 +36,8 @@ HTML_CLEANER = Cleaner(
     forms=True,
     annoying_tags=True,
     allow_tags=[
-        'div', 'b', 'i', 'em', 'strong', 'p', 'ul', 'ol', 'li', 'a', 'br'],
+        'div', 'b', 'i', 'em', 'strong', 'p', 'ul', 'ol', 'li', 'a', 'br',
+        'pre', 'code'],
     remove_unknown_tags=False, # can't be used with allow_tags
     safe_attrs_only=True,
     add_nofollow=True, # for now

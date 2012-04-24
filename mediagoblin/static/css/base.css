@@ -544,16 +544,32 @@ table.media_panel th {
   margin-left: 10px;
 }
 
-/* ASCII art */
+/* ASCII art and code */
 
 @font-face {
   font-family: Inconsolata;
   src: local('Inconsolata'), url('../fonts/Inconsolata.otf') format('opentype')
 }
 
-.ascii-wrapper pre {
+pre, code {
   font-family: Inconsolata, monospace;
   line-height: 1em;
+}
+
+pre {
+  overflow: auto;
+  /* -10px, because it is usually preceded by <p> with margin-bottom: 20px */ 
+  margin: -10px 0 10px 0;
+}
+
+.comment_wrapper pre {
+  /* same as above, but with 2px */
+  margin: 8px 0 10px 0;
+}
+
+.ascii-wrapper pre {
+  /* but it should not affect the ASCII art */
+  margin: 0;
 }
 
 /* Media queries and other responsivisivity */
