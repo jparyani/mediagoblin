@@ -45,8 +45,6 @@ setup(
         'PasteScript',
         'beaker',
         'routes',
-        'pymongo',
-        'mongokit',
         'webob<=1.2a2',
         'wtforms',
         'py-bcrypt',
