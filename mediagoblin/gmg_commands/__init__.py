@@ -41,18 +41,6 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.users:changepw_parser_setup',
         'func': 'mediagoblin.gmg_commands.users:changepw',
         'help': 'Makes admin an user'},
-    'wipealldata': {
-        'setup': 'mediagoblin.gmg_commands.wipealldata:wipe_parser_setup',
-        'func': 'mediagoblin.gmg_commands.wipealldata:wipe',
-        'help': 'Wipes **all** the data for this MediaGoblin instance'},
-    'env_export': {
-        'setup': 'mediagoblin.gmg_commands.import_export:import_export_parse_setup',
-        'func': 'mediagoblin.gmg_commands.import_export:env_export',
-        'help': 'Exports the data for this MediaGoblin instance'},
-    'env_import': {
-        'setup': 'mediagoblin.gmg_commands.import_export:import_export_parse_setup',
-        'func': 'mediagoblin.gmg_commands.import_export:env_import',
-        'help': 'Exports the data for this MediaGoblin instance'},
     'dbupdate': {
         'setup': 'mediagoblin.gmg_commands.dbupdate:dbupdate_parse_setup',
         'func': 'mediagoblin.gmg_commands.dbupdate:dbupdate',
@@ -61,6 +49,20 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.mongosql:mongosql_parser_setup',
         'func': 'mediagoblin.gmg_commands.mongosql:mongosql',
         'help': 'Convert Mongo DB data to SQL DB data'},
+
+    ## These might be useful, mayyyybe, but don't really work anymore
+    ## due to mongo change and the "versatility" of sql options.
+    ##
+    ## For now, commenting out.  Might re-enable soonish?
+    #
+    # 'env_export': {
+    #     'setup': 'mediagoblin.gmg_commands.import_export:import_export_parse_setup',
+    #     'func': 'mediagoblin.gmg_commands.import_export:env_export',
+    #     'help': 'Exports the data for this MediaGoblin instance'},
+    # 'env_import': {
+    #     'setup': 'mediagoblin.gmg_commands.import_export:import_export_parse_setup',
+    #     'func': 'mediagoblin.gmg_commands.import_export:env_import',
+    #     'help': 'Imports the data for this MediaGoblin instance'},
     }
 
 
