@@ -81,10 +81,6 @@ Software Stack
   * `Celery <http://celeryproject.org/>`_: for task queuing (resizing
     images, encoding video, ...)
 
-  * `MongoKit <http://namlook.github.com/mongokit/>`_: the lightweight
-    ORM for MongoDB we're using which will make it easier to define
-    structures and all that (will be swapped out soon...)
-
   * `Babel <http://babel.edgewall.org>`_: Used to extract and compile
     translations.
 
@@ -148,7 +144,7 @@ Here are some interesting files and what they do:
 
 :routing.py: maps url paths to views
 :views.py:   views handle http requests
-:models.py:  holds the mongodb schemas---these are the data structures
+:models.py:  holds the sqlalchemy schemas---these are the data structures
              we're working with
 
 You'll notice that there are several sub-directories: tests,

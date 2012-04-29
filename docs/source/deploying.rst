@@ -111,46 +111,6 @@ where the first ``mediagoblin`` is the database owner and the second
     More on this in :ref:`Drop Privileges for MediaGoblin <drop-privileges-for-mediagoblin>`.
 
 
-Configure MongoDB
-~~~~~~~~~~~~~~~~~
-
-.. warning::
-
-    If this is a fresh setup and you have already set up PostgreSQL, you
-    will not need this step.
-
-First, install MongoDB. On a DEB-based system run::
-
-    sudo apt-get install mongodb
-
-on a RPM-based system, run::
-
-    yum install mongodb-server
-
-After installing MongoDB some preliminary database configuration may
-be necessary.
-
-Ensure that MongoDB `journaling
-<http://www.mongodb.org/display/DOCS/Journaling>`_ is enabled. Journaling
-is enabled by default in version 2.0 and later 64-bit MongoDB instances.
-Check your deployment, and consider enabling journaling if you're running
-32-bit systems or earlier version.
-
-.. warning::
-
-   Running MongoDB without journaling risks general data corruption
-   and raises the possibility of losing data within a 60-second
-   window when the server restarts.
-
-   MediaGoblin recommends enabling MongoDB's journaling feature by
-   adding a ``--journal`` flag to the command line or a "``journal:
-   true``" option to the configuration file.
-
-MongoDB can take a lot of space by default. If you're planning on
-running a smaller instance, consider the `scaling down guide
-<http://wiki.mediagoblin.org/Scaling_Down>`_ for some appropriate
-tradeoffs to conserve space.
-
 .. _drop-privileges-for-mediagoblin:
 
 Drop Privileges for MediaGoblin
