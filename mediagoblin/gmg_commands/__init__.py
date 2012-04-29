@@ -28,7 +28,8 @@ SUBCOMMAND_MAP = {
     'migrate': {
         'setup': 'mediagoblin.gmg_commands.migrate:migrate_parser_setup',
         'func': 'mediagoblin.gmg_commands.migrate:migrate',
-        'help': 'Apply all unapplied bulk migrations to the database'},
+        'help': ('Migrate your Mongo database. '
+                 '[DEPRECATED!] use convert_mongo_to_sql and dbupdate.')},
     'adduser': {
         'setup': 'mediagoblin.gmg_commands.users:adduser_parser_setup',
         'func': 'mediagoblin.gmg_commands.users:adduser',
