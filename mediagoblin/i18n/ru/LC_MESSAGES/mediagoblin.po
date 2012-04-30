@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2012-04-21 16:36-0500\n"
-"PO-Revision-Date: 2012-04-22 10:35+0000\n"
+"PO-Revision-Date: 2012-04-25 16:27+0000\n"
 "Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -37,7 +37,7 @@ msgstr "Имя пользователя или адрес электронной
 
 #: mediagoblin/auth/forms.py:58
 msgid "Incorrect input"
-msgstr ""
+msgstr "Введённое не похоже на имя учётной записи или адрес электронной почты."
 
 #: mediagoblin/auth/views.py:55
 msgid "Sorry, registration is disabled on this instance."
@@ -371,7 +371,7 @@ msgstr "Редактирование %(media_title)s"
 #: mediagoblin/templates/mediagoblin/edit/edit.html:36
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
 msgid "Cancel"
-msgstr "Отменить"
+msgstr "Отмена"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:37
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:40
@@ -495,7 +495,7 @@ msgstr "<h3>Добавлено</h3>\n      <p>%(date)s</p>"
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
 msgid "Really delete %(title)s?"
-msgstr "Действительно удалить %(title)s?"
+msgstr "Удалить %(title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:50
 msgid "Delete permanently"
