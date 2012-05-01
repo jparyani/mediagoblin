@@ -20,8 +20,8 @@ If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
 
-0.3.0 (not yet released)
-========================
+0.3.0
+=====
 
 This release has one important change. You need to act when
 upgrading from a previous version!
