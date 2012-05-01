@@ -32,7 +32,7 @@ follow the instructions in the deployment chapter. If on
 the other hand you want to continue to use one instance,
 read on.
 
-To convert our data from MongoDB to SQL(alchemy), you need
+To convert your data from MongoDB to SQL(alchemy), you need
 to follow these steps:
 
 1. Make sure your MongoDB is still running and has your
