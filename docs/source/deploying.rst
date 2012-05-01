@@ -74,7 +74,7 @@ Configure PostgreSQL
 
 These are the packages needed for Debian Wheezy (testing)::
 
-    sudo apt-get install postgresql postgresql-client
+    sudo apt-get install postgresql postgresql-client python-psycopg2
 
 The installation process will create a new *system* user named ``postgres``,
 it will have privilegies sufficient to manage the database. We will create a
