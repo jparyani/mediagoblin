@@ -184,7 +184,7 @@ This concludes the initial configuration of the development
 environment. In the future, you want update your
 codebase, you should also run::
 
-    ./bin/python setup.py develop --upgrade && ./bin/gmg migrate.
+    ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate
 
 Deploy MediaGoblin Services
 ---------------------------
