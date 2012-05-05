@@ -89,7 +89,7 @@ GNU MediaGoblin software is released under an AGPLv3 license.
 See the ``COPYING`` file in the root of the source for details.
 
 
-Is MedaGobilin an official GNU project?  What does that mean?
+Is MedaGoblin an official GNU project?  What does that mean?
 =============================================================
 
 MediaGoblin is an official GNU project! This status means that we the

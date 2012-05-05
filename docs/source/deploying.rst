@@ -310,7 +310,7 @@ example::
     ./lazyserver.sh --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543
 
 Visit the site you've set up in your browser by visiting
-<http://mediagobilin.example.org>. You should see MediaGoblin!
+<http://mediagoblin.example.org>. You should see MediaGoblin!
 
 .. note::
 
