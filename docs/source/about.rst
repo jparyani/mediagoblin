@@ -19,8 +19,8 @@
    :local:
 
 
-What is GNU MediaGoblin
-=======================
+What is GNU MediaGoblin?
+========================
 
 In 2008, a number of free software developers and activists gathered
 at the FSF to attempt to answer the question "What should software
@@ -43,8 +43,8 @@ support other media, like video, and provide tools to facilitate
 collaboration on media projects.
 
 
-Why Build GNU MediaGoblin
-=========================
+Why Build GNU MediaGoblin?
+==========================
 
 The Internet is designed---and works best---as a complex and endlessly
 resilient network.  When key services and media outlets are
@@ -62,8 +62,8 @@ make these kinds of services possible.  We hope you'll join us, both
 as users and as contributors.
 
 
-Who Contributes to the Project
-==============================
+Who Contributes to the Project?
+===============================
 
 You do!
 
