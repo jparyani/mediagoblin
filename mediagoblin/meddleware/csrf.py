@@ -16,12 +16,15 @@
 
 import hashlib
 import random
+import logging
 
 from webob.exc import HTTPForbidden
 from wtforms import Form, HiddenField, validators
 
 from mediagoblin import mg_globals
 from mediagoblin.meddleware import BaseMeddleware
+
+_log = logging.getLogger(__name__)
 
 # Use the system (hardware-based) random number generator if it exists.
 # -- this optimization is lifted from Django
@@ -126,6 +129,7 @@ class CsrfMeddleware(BaseMeddleware):
 
         if cookie_token is None:
             # the CSRF cookie must be present in the request
+            _log.error('CSRF cookie not present')
             return HTTPForbidden()
 
         # get the form token and confirm it matches
@@ -139,4 +143,5 @@ class CsrfMeddleware(BaseMeddleware):
 
         # either the tokens didn't match or the form token wasn't
         # present; either way, the request is denied
+        _log.error('CSRF validation failed')
         return HTTPForbidden()
