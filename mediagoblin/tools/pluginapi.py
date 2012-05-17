@@ -29,26 +29,36 @@ Two things about things in this module:
 How do plugins work?
 ====================
 
-You create a Python package. In that package, you define a high-level
-``__init__.py`` that either defines or imports modules that define
-classes that inherit from the ``Plugin`` class.
+Plugins are structured like any Python project. You create a Python package.
+In that package, you define a high-level ``__init__.py`` that either defines
+or imports modules that define classes that inherit from the ``Plugin`` class.
+
+Additionally, you want a LICENSE file that specifies the license and a
+``setup.py`` that specifies the metadata for packaging your plugin. A rough
+file structure could look like this::
+
+    myplugin/
+     |- setup.py         # plugin project packaging metadata
+     |- README           # holds plugin project information
+     |- LICENSE          # holds license information
+     |- myplugin/        # plugin package directory
+        |- __init__.py   # imports myplugin.main
+        |- main.py       # code for plugin
 
 
 Lifecycle
 =========
 
 1. All the modules listed as subsections of the ``plugins`` section in
-   the config file are imported and any ``Plugin`` subclasses are
-   loaded causing it to be registered with the ``PluginCache``.
+   the config file are imported. This causes any ``Plugin`` subclasses in
+   those modules to be defined and when the classes are defined they get
+   automatically registered with the ``PluginCache``.
 
-2. After all plugin modules are imported, registered plugins are
-   instantiated and ``setup_plugin`` is called with the configuration.
+2. After all plugin modules are imported, registered plugin classes are
+   instantiated and ``setup_plugin`` is called for each plugin object.
 
-
-How to build a plugin
-=====================
-
-See the documentation on building plugins.
+   Plugins can do any setup they need to do in their ``setup_plugin``
+   method.
 """
 
 import logging
@@ -98,6 +108,20 @@ class MetaPluginClass(type):
 
 
 class Plugin(object):
+    """Exttend this class for plugins.
+
+    Example::
+
+        from mediagoblin.tools.pluginapi import Plugin
+
+        class MyPlugin(Plugin):
+            ...
+
+            def setup_plugin(self):
+                ....
+
+    """
+
     __metaclass__ = MetaPluginClass
 
     def setup_plugin(self):
@@ -111,6 +135,11 @@ def get_config(key):
 
     >>> get_config('mediagoblin.plugins.sampleplugin')
     {'foo': 'bar'}
+    >>> get_config('myplugin')
+    {}
+    >>> get_config('flatpages')
+    {'directory': '/srv/mediagoblin/pages', 'nesting': 1}}
+
     """
 
     global_config = mg_globals.global_config

@@ -2,8 +2,8 @@
  Plugins
 =========
 
-GNU MediaGoblin supports plugins that, when installed, allow you to
-augment MediaGoblin's behavior.
+GNU MediaGoblin supports plugins that allow you to augment MediaGoblin's
+behavior.
 
 This chapter covers discovering, installing, configuring and removing
 plugins.
@@ -18,19 +18,28 @@ come with MediaGoblin, you don't have to install them, but you do have
 to add them to your config file if you're interested in using them.
 
 You can also write your own plugins and additionally find plugins
-elsewhere on the Internet. Since these plugins don't come with
-MediaGoblin, you must first install them, then add them to your
-configuration.
+elsewhere on the Internet. Once you find a plugin you like, you need
+to first install it, then add it to your configuration.
+
+.. todo:: how do you find plugins on the internet?
 
 
 Installing plugins
 ==================
 
-MediaGoblin core plugins don't need to be installed. For core plugins,
-you can skip installation!
+Core plugins
+------------
 
-If the plugin is not a core plugin and is packaged and available on
-the Python Package Index, then you can install the plugin with pip::
+MediaGoblin core plugins don't need to be installed because they come
+with MediaGoblin. Further, when you upgrade MediaGoblin, you will also
+get updates to the core plugins.
+
+
+Other plugins
+-------------
+
+If the plugin is available on the `Python Package Index
+<http://pypi.python.org/pypi>`_, then you can install the plugin with pip::
 
     pip install <plugin-name>
 
@@ -43,7 +52,8 @@ For example, if we wanted to install the plugin named
 
    If you're using a virtual environment, make sure to activate the
    virtual environment before installing with pip. Otherwise the
-   plugin may get installed in a different environment.
+   plugin may get installed in a different environment than the one
+   MediaGoblin is installed in.
 
 Once you've installed the plugin software, you need to tell
 MediaGoblin that this is a plugin you want MediaGoblin to use. To do
@@ -62,8 +72,9 @@ the ``plugins`` section as a subsection::
 Configuring plugins
 ===================
 
-Generally, configuration goes in the ``.ini`` file. Configuration for
-a specific plugin, goes in a subsection of the ``plugins`` section.
+Configuration for a plugin goes in the subsection for that plugin. Core
+plugins are documented in the administration guide. Other plugins
+should come with documentation that tells you how to configure them.
 
 Example 1: Core MediaGoblin plugin
 
@@ -75,6 +86,7 @@ to your ``.ini`` file like this::
 
     [[mediagoblin.plugins.flatpages]]
     # configuration for flatpages plugin here!
+    directory = /srv/mediagoblin/flatpages
 
 Example 2: Plugin that is not a core MediaGoblin plugin
 
@@ -103,3 +115,23 @@ To remove a plugin, use ``pip uninstall``. For example::
    If you're using a virtual environment, make sure to activate the
    virtual environment before uninstalling with pip. Otherwise the
    plugin may get installed in a different environment.
+
+
+Upgrading plugins
+=================
+
+Core plugins
+------------
+
+Core plugins get upgraded automatically when you upgrade MediaGoblin
+because they come with MediaGoblin.
+
+
+Other plugins
+-------------
+
+For plugins that you install with pip, you can upgrade them with pip::
+
+    pip install -U <plugin-name>
+
+The ``-U`` tells pip to upgrade the package.
