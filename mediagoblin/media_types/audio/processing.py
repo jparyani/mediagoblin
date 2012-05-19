@@ -19,10 +19,11 @@ import tempfile
 import os
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.processing import create_pub_filepath, BadMediaFail
+from mediagoblin.processing import (create_pub_filepath, BadMediaFail,
+    FilenameBuilder)
 
-from mediagoblin.media_types.audio.transcoders import AudioTranscoder, \
-    AudioThumbnailer
+from mediagoblin.media_types.audio.transcoders import (AudioTranscoder,
+    AudioThumbnailer)
 
 _log = logging.getLogger(__name__)
 
@@ -48,29 +49,42 @@ def process_audio(entry):
     queued_filename = workbench.localized_file(
         mgg.queue_store, queued_filepath,
         'source')
+    name_builder = FilenameBuilder(queued_filename)
 
-    ogg_filepath = create_pub_filepath(
+    webm_audio_filepath = create_pub_filepath(
         entry,
         '{original}.webm'.format(
             original=os.path.splitext(
                 queued_filepath[-1])[0]))
 
+    if audio_config['keep_original']:
+        with open(queued_filename, 'rb') as queued_file:
+            original_filepath = create_pub_filepath(
+                entry, name_builder.fill('{basename}{ext}'))
+
+            with mgg.public_store.get_file(original_filepath, 'wb') as \
+                    original_file:
+                _log.debug('Saving original...')
+                original_file.write(queued_file.read())
+
+            entry.media_files['original'] = original_filepath
+
     transcoder = AudioTranscoder()
 
-    with tempfile.NamedTemporaryFile() as ogg_tmp:
+    with tempfile.NamedTemporaryFile() as webm_audio_tmp:
 
         transcoder.transcode(
             queued_filename,
-            ogg_tmp.name,
+            webm_audio_tmp.name,
             quality=audio_config['quality'])
 
-        data = transcoder.discover(ogg_tmp.name)
+        data = transcoder.discover(webm_audio_tmp.name)
 
         _log.debug('Saving medium...')
-        mgg.public_store.get_file(ogg_filepath, 'wb').write(
-            ogg_tmp.read())
+        mgg.public_store.get_file(webm_audio_filepath, 'wb').write(
+            webm_audio_tmp.read())
 
-        entry.media_files['ogg'] = ogg_filepath
+        entry.media_files['webm_audio'] = webm_audio_filepath
 
         # entry.media_data_init(length=int(data.audiolength))
 
