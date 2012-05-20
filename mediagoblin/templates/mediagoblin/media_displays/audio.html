@@ -39,7 +39,7 @@
     <audio class="audio-player" controls="controls"
 	   preload="metadata">
       <source src="{{ request.app.public_store.file_url(
-		       media.media_files.ogg) }}" type="audio/webm; codecs=vorbis" />
+		       media.media_files.webm_audio) }}" type="audio/webm; codecs=vorbis" />
       <div class="no_html5">
 	{%- trans -%}Sorry, this audio will not work because 
 	your web browser does not support HTML5 
@@ -50,14 +50,16 @@
       </div>
     </audio>
   </div>
-  {% if 'original' in media.media_files %}
-  <p>
-    <a href="{{ request.app.public_store.file_url(
-	     media.media_files['original']) }}">
-      {%- trans -%}
-        Original
-      {%- endtrans -%}
-    </a>
-  </p>
-  {% endif %}
+{% endblock %}
+
+{% block mediagoblin_sidebar %}
+  <h3>{% trans %}Download{% endtrans %}</h3>
+  <ul>
+    {% if 'original' in media.media_files %}
+      <li><a href="{{ request.app.public_store.file_url(
+                       media.media_files.original) }}">{% trans %}original file{% endtrans %}</a>
+    {% endif %}
+    <li><a href="{{ request.app.public_store.file_url(
+                     media.media_files.webm_audio) }}">{% trans %}WebM file (Vorbis codec){% endtrans %}</a>
+  </ul>
 {% endblock %}
