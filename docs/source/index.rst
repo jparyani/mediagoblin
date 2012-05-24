@@ -47,6 +47,7 @@ This guide covers writing new GNU MediaGoblin plugins.
    :maxdepth: 1
 
    pluginwriter/foreward
+   pluginwriter/quickstart
 
 
 Indices and tables
