@@ -57,3 +57,4 @@ Indices and tables
 
 .. * :ref:`modindex`
 
+This guide was built on |today|.
