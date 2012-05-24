@@ -21,7 +21,7 @@ You can also write your own plugins and additionally find plugins
 elsewhere on the Internet. Once you find a plugin you like, you need
 to first install it, then add it to your configuration.
 
-.. todo:: how do you find plugins on the internet?
+.. todo: how do you find plugins on the internet?
 
 
 Installing plugins

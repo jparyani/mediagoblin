@@ -15,12 +15,12 @@
 Foreword
 ========
 
-About the MediaGoblin Manual
-============================
+About the Site Administrator's Guide
+====================================
 
-This is the site administrator manual for MediaGoblin.  It covers how
-to set up and configure MediaGoblin and the kind of information that
-someone running MediaGoblin would need to know.
+This is the site administrator manual for GNU MediaGoblin.  It covers
+how to set up and configure MediaGoblin and the kind of information
+that someone running MediaGoblin would need to know.
 
 We have other documentation at:
 
@@ -28,8 +28,8 @@ We have other documentation at:
 * http://wiki.mediagoblin.org/ for our contributor/developer-focused wiki
 
 
-Improving the MediaGoblin Manual
-================================
+Improving the Site Administrator's Guide
+========================================
 
 There are a few ways---please pick whichever method is convenient for
 you!
