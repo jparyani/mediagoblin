@@ -85,8 +85,22 @@ Use an Init Script
 Look in your system's ``/etc/init.d/`` or ``/etc/rc.d/`` directory for
 examples of how to build scripts that will start, stop, and restart
 MediaGoblin and Celery. These scripts will vary by
-distribution/operating system. In the future, MediaGoblin will provide
-example scripts as examples.
+distribution/operating system.
+
+These are scripts provided by the MediaGoblin community: 
+
+Debian
+  * `GNU MediaGoblin init scripts
+    <https://github.com/jwandborg/mediagoblin-init-scripts>`_
+    by `Joar Wandborg <http://wandborg.se>`_
+
+Arch Linux
+  * `MediaGoblin - ArchLinux rc.d scripts
+    <http://whird.jpope.org/2012/04/14/mediagoblin-archlinux-rcd-scripts>`_
+    by `Jeremy Pope <http://jpope.org/>`_
+  * `Mediagoblin init script on Archlinux
+    <http://chimo.chromic.org/2012/03/01/mediagoblin-init-script-on-archlinux/>`_
+    by `Chimo <http://chimo.chromic.org/>`_
 
 .. TODO insert init script here
 .. TODO are additional concerns ?
