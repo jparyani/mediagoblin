@@ -7,6 +7,7 @@
 #   <cwebber@dustycloud.org>, 2011.
 #  Elrond <elrond+mediagoblin.org@samba-tng.org>, 2011, 2012.
 #   <jakob.kramer@gmx.de>, 2011, 2012.
+# Jakob Kramer <jakob.kramer@gmx.de>, 2012.
 # Jan-Christoph Borchardt <JanCBorchardt@fsfe.org>, 2011.
 # Jan-Christoph Borchardt <jan@unhosted.org>, 2011, 2012.
 #   <kyoo@kyoo.ch>, 2011.
@@ -17,9 +18,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-04-21 16:36-0500\n"
-"PO-Revision-Date: 2012-04-22 09:37+0000\n"
-"Last-Translator: gandaro <jakob.kramer@gmx.de>\n"
+"POT-Creation-Date: 2012-04-30 10:48-0500\n"
+"PO-Revision-Date: 2012-05-20 17:28+0000\n"
+"Last-Translator: Jakob Kramer <jakob.kramer@gmx.de>\n"
 "Language-Team: German (http://www.transifex.net/projects/p/mediagoblin/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -64,7 +65,7 @@ msgstr "Leider gibt es bereits einen Benutzer mit dieser E-Mail-Adresse."
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
-msgstr "Deine E-Mail-Adresse wurde bestätigt. Du kannst dich nun anmelden, Dein Profil bearbeiten und Bilder hochladen!"
+msgstr "Deine E-Mail-Adresse wurde bestätigt. Du kannst dich nun anmelden, dein Profil bearbeiten und Bilder hochladen!"
 
 #: mediagoblin/auth/views.py:188
 msgid "The verification key or user id is incorrect"
@@ -115,11 +116,11 @@ msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
-msgstr "Für Formatierung kannst du\n                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n                      Markdown</a> benutzen."
+msgstr "Die Texte lassen sich durch <a href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> formatieren."
 
 #: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:36
 msgid "Tags"
-msgstr "Schlagworte"
+msgstr "Schlagwörter"
 
 #: mediagoblin/edit/forms.py:35 mediagoblin/submit/forms.py:38
 msgid "Separate tags by commas."
@@ -162,7 +163,7 @@ msgstr "Altes Passwort"
 
 #: mediagoblin/edit/forms.py:65
 msgid "Enter your old password to prove you own this account."
-msgstr "Gib dein altes Passwort ein, um zu bestätigen dass du dieses Konto besitzt."
+msgstr "Gib dein altes Passwort ein, um zu bestätigen, dass du dieses Konto besitzt."
 
 #: mediagoblin/edit/forms.py:68
 msgid "New password"
@@ -261,7 +262,7 @@ msgstr "Anmelden"
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project."
-msgstr "Läuft mit <a href=\"http://mediagoblin.org/\">MediaGoblin</a>, einem <a href=\"http://gnu.org/\">GNU</a>-Projekt."
+msgstr "Diese Seite setzt <a href=\"http://mediagoblin.org/\">MediaGoblin</a> ein, ein <a href=\"http://gnu.org/\">GNU</a>-Projekt."
 
 #: mediagoblin/templates/mediagoblin/base.html:88
 #, python-format
@@ -283,7 +284,7 @@ msgstr "Hallo du, willkommen auf dieser MediaGoblin-Seite!"
 msgid ""
 "This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
 "extraordinarily great piece of media hosting software."
-msgstr "Diese Seite läuft mit <a href=\"http://mediagoblin.org\">MediaGoblin</a>, einer großartigen Software für Medienhosting."
+msgstr "Diese Seite setzt <a href=\"http://mediagoblin.org\">MediaGoblin</a> ein, eine großartige Software für Medienhosting."
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid ""
@@ -301,7 +302,7 @@ msgid ""
 "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
 "        or\n"
 "        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
-msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Registriere dich auf dieser Seite</a>\n        oder\n        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Installiere MediaGoblin auf deinem eigenen Server</a>"
+msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Registriere dich auf dieser Seite</a> oder <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Installiere MediaGoblin auf deinem eigenen Server</a>"
 
 #: mediagoblin/templates/mediagoblin/root.html:40
 msgid "Most recent media"
@@ -335,7 +336,7 @@ msgid ""
 "\n"
 "If you think this is an error, just ignore this email and continue being\n"
 "a happy goblin!"
-msgstr "Hi %(username)s,\n\num dein GNU MediaGoblin Passwort zu ändern, öffne folgende URL in deinem Webbrowser:\n\n%(verification_url)s\n\nWenn du denkst, dass das ein Fehler ist, ignoriere einfach diese E-Mail und bleib ein glücklicher Goblin!"
+msgstr "Hallo %(username)s,\n\num dein GNU-MediaGoblin-Passwort zu ändern, öffne folgende URL\nin deinem Webbrowser:\n\n%(verification_url)s\n\nWenn du denkst, dass es sich hierbei um einen Fehler handelt,\nignoriere einfach diese E-Mail und bleib ein glücklicher Goblin!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:35
 msgid "Logging in failed!"
@@ -415,28 +416,28 @@ msgid ""
 "Sorry, this audio will not work because \n"
 "\tyour web browser does not support HTML5 \n"
 "\taudio."
-msgstr "Entschuldige, dieses Audiostück wird nicht\n\tfunktionieren, weil dein Webbrowser\n\tkein HTML5-Audio unterstützt."
+msgstr "Entschuldige, dieses Audiostück wird nicht funktionieren, weil dein Webbrowser kein HTML5-Audio unterstützt."
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:47
 msgid ""
 "You can get a modern web browser that \n"
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t  http://getfirefox.com</a>!"
-msgstr "Hol dir einen modernen Webbrowser, der \n\tdieses Audiostück abspielen kann, auf <a href=\"http://getfirefox.com\">\n\t  http://getfirefox.com</a>!"
+msgstr "Hol dir auf <a href=\"http://getfirefox.com\">http://getfirefox.com</a> einen modernen Webbrowser, der dieses Audiostück abspielen kann!"
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
 msgid ""
 "Sorry, this video will not work because \n"
 "\t    your web browser does not support HTML5 \n"
 "\t    video."
-msgstr "Entschuldige, dieses Video wird nicht funktionieren, weil \n    dein Webbrowser kein HTML5-Video unterstützt."
+msgstr "Entschuldige, dieses Video wird nicht funktionieren, weil dein Webbrowser kein HTML5-Video unterstützt."
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:43
 msgid ""
 "You can get a modern web browser that \n"
 "\t    can play this video at <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
-msgstr "Hol dir einen modernen Webbrowser, der \n    dieses Video abspielen kann, auf <a href=\"http://getfirefox.com\">\n    http://getfirefox.com</a>!"
+msgstr "Hol dir auf <a href=\"http://getfirefox.com\">http://getfirefox.com</a> einen modernen Webbrowser, der dieses Video abspielen kann!"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Add your media"
@@ -484,7 +485,7 @@ msgid ""
 "You can use <a "
 "href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
 " formatting."
-msgstr "Für Formatierung kannst du <a href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> benutzen."
+msgstr "Die Texte lassen sich durch <a href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> formatieren."
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:135
 msgid "Add this comment"
@@ -517,7 +518,7 @@ msgstr "Medienverarbeitung"
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:25
 msgid ""
 "You can track the state of media being processed for your gallery here."
-msgstr "Du kannst den Status der gerade in Bearbeitung befindlichen Medien hier betrachten."
+msgstr "Du kannst den Status der Medien, die sich gerade in Bearbeitung befinden, hier betrachten."
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
 msgid "Media in-processing"
@@ -658,7 +659,7 @@ msgstr "älter"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
-msgstr "Schlagworte"
+msgstr "Schlagwörter"
 
 #: mediagoblin/tools/exif.py:75
 msgid "Could not read the image file."
@@ -682,7 +683,7 @@ msgstr "Du hast das Medium gelöscht."
 
 #: mediagoblin/user_pages/views.py:192
 msgid "The media was not deleted because you didn't check that you were sure."
-msgstr "Das Medium wurde nicht gelöscht. Du musst ankreuzen, dass du es wirklich löschen möchtest."
+msgstr "Das Medium wurde nicht gelöscht, da nicht angekreuzt hast, dass du es wirklich löschen möchtest."
 
 #: mediagoblin/user_pages/views.py:200
 msgid "You are about to delete another user's media. Proceed with caution."
