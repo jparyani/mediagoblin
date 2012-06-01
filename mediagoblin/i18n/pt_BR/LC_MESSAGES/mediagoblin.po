@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-04-21 16:36-0500\n"
-"PO-Revision-Date: 2012-04-21 21:33+0000\n"
+"POT-Creation-Date: 2012-06-01 16:32-0500\n"
+"PO-Revision-Date: 2012-06-01 21:30+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.net/projects/p/mediagoblin/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -397,7 +397,6 @@ msgid "Media tagged with: %(tag_name)s"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:57
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:53
 msgid "Original"
 msgstr "Original"
@@ -414,6 +413,18 @@ msgid ""
 "You can get a modern web browser that \n"
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t  http://getfirefox.com</a>!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
+msgid "Download"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
+msgid "original file"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
+msgid "WebM file (Vorbis codec)"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
