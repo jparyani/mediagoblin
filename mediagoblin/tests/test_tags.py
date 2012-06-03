@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.tests.tools import setup_fresh_app
-from mediagoblin import mg_globals
 from mediagoblin.tools import text
 
 @setup_fresh_app

@@ -73,8 +73,7 @@ class CloudFilesStorage(StorageInterface):
 
     def file_exists(self, filepath):
         try:
-            object = self.container.get_object(
-                self._resolve_filepath(filepath))
+            self.container.get_object( self._resolve_filepath(filepath))
             return True
         except cloudfiles.errors.NoSuchObject:
             return False

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from nose.tools import assert_equal, assert_true, assert_false
+from nose.tools import assert_equal
 
 from mediagoblin import processing
 

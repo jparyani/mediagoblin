@@ -14,10 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import uuid
-
 from webob import exc
-from string import split
 from cgi import FieldStorage
 from datetime import datetime
 
@@ -33,9 +30,7 @@ from mediagoblin.decorators import require_active_login, get_user_media_entry
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.text import (
-    clean_html, convert_to_tag_list_of_dicts,
-    media_tags_as_string)
-from mediagoblin.tools.licenses import SUPPORTED_LICENSES
+    convert_to_tag_list_of_dicts, media_tags_as_string)
 from mediagoblin.db.util import check_media_slug_used
 
 
@@ -185,7 +180,6 @@ def edit_profile(request):
 
 @require_active_login
 def edit_account(request):
-    edit_username = request.GET.get('username')
     user = request.user
 
     form = forms.EditAccountForm(request.POST)

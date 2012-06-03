@@ -78,7 +78,7 @@ def process_audio(entry):
             webm_audio_tmp.name,
             quality=audio_config['quality'])
 
-        data = transcoder.discover(webm_audio_tmp.name)
+        transcoder.discover(webm_audio_tmp.name)
 
         _log.debug('Saving medium...')
         mgg.public_store.get_file(webm_audio_filepath, 'wb').write(

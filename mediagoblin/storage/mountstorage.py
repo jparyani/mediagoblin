@@ -17,6 +17,10 @@
 from mediagoblin.storage import StorageInterface, clean_listy_filepath
 
 
+class MountError(Exception):
+    pass
+
+
 class MountStorage(StorageInterface):
     """
     Experimental "Mount" virtual Storage Interface
@@ -105,7 +109,7 @@ class MountStorage(StorageInterface):
     def resolve_to_backend(self, filepath):
         backend, filepath = self._resolve_to_backend(filepath)
         if backend is None:
-            raise Error("Path not mounted")
+            raise MountError("Path not mounted")
         return backend, filepath
 
     def __repr__(self, table=None, indent=[]):

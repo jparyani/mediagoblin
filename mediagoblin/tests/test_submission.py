@@ -16,9 +16,8 @@
 
 import urlparse
 import os
-import re
 
-from nose.tools import assert_equal, assert_true, assert_false
+from nose.tools import assert_equal, assert_true
 from pkg_resources import resource_filename
 
 from mediagoblin.tests.tools import get_test_app, \

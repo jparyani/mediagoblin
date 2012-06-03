@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import hashlib
 import random
 import logging
 
@@ -81,7 +80,7 @@ class CsrfMeddleware(BaseMeddleware):
             request.environ['CSRF_TOKEN'] = \
                 request.cookies[mg_globals.app_config['csrf_cookie_name']]
 
-        except KeyError, e:
+        except KeyError:
             # if it doesn't exist, make a new one
             request.environ['CSRF_TOKEN'] = self._make_token(request)
 

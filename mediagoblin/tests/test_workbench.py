@@ -17,7 +17,6 @@
 import os
 import tempfile
 
-from nose.tools import assert_raises
 
 from mediagoblin import workbench
 from mediagoblin.tests.test_storage import get_tmp_filestorage

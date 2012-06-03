@@ -17,8 +17,7 @@
 from sqlalchemy.orm import sessionmaker
 
 from mediagoblin.db.sql.open import setup_connection_and_db_from_config
-from mediagoblin.db.sql.util import (
-    MigrationManager, assure_migrations_table_setup)
+from mediagoblin.db.sql.util import MigrationManager
 from mediagoblin.init import setup_global_and_app_config
 from mediagoblin.tools.common import import_component
 
