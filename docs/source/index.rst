@@ -16,6 +16,15 @@
 Welcome to GNU MediaGoblin's documentation!
 ===========================================
 
+GNU MediaGoblin is a platform for sharing photos, video and other media
+in an environment that respects our freedom and independence.
+
+This is a Free Software project. It is built by contributors for all
+to use and enjoy. If you're intrested in contributing, see `the wiki
+<http://wiki.mediagoblin.org/>`_ which has pages that talk about the
+ways someone can contribute.
+
+
 Part 1: Site Administrator's Guide
 ==================================
 

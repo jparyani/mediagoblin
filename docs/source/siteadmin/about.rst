@@ -36,10 +36,11 @@ freedom look like on the participatory web?" Their answer, the
 
 Identi.ca and Libre.fm address the need for micro-blogging and music
 sharing services and software that respect users' freedom and
-autonomy.  GNU MediaGoblin emerges from this milieu to create a
-platform for us to share photos in an environment that respects our
-freedom and independence.  In the future MediaGoblin will include
-support other media, like video, and provide tools to facilitate
+autonomy.
+
+GNU MediaGoblin emerges from this milieu to create a platform for us to share
+photos, video and other media in an environment that respects our freedom and
+independence.  In the future MediaGoblin will provide tools to facilitate
 collaboration on media projects.
 
 
