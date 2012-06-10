@@ -19,6 +19,7 @@ from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin import mg_globals
 
+
 def send_comment_email(user, comment, media, request):
     """
     Sends comment email to user when a comment is made on their media.
@@ -32,23 +33,25 @@ def send_comment_email(user, comment, media, request):
 
     comment_url = request.urlgen(
                     'mediagoblin.user_pages.media_home.view_comment',
-                    comment = comment._id,
-                    user = media.get_uploader.username,
-                    media = media.slug_or_id,
-                    qualified = True) + '#comment'
+                    comment=comment._id,
+                    user=media.get_uploader.username,
+                    media=media.slug_or_id,
+                    qualified=True) + '#comment'
 
-    comment_author = comment.get_author['username']
+    comment_author = comment.get_author.username
 
     rendered_email = render_template(
         request, 'mediagoblin/user_pages/comment_email.txt',
-        {'username':user.username,
-         'comment_author':comment_author,
-         'comment_content':comment.content,
-         'comment_url':comment_url})
+        {'username': user.username,
+         'comment_author': comment_author,
+         'comment_content': comment.content,
+         'comment_url': comment_url})
 
     send_email(
         mg_globals.app_config['email_sender_address'],
         [user.email],
-        'GNU MediaGoblin - {comment_author} '.format(
-            comment_author=comment_author) + _('commented on your post'),
+        '{instance_title} - {comment_author} '.format(
+            comment_author=comment_author,
+            instance_title=mg_globals.app_config['html_title']) \
+                    + _('commented on your post'),
         rendered_email)

@@ -162,7 +162,7 @@ def media_post_comment(request, media):
         media_uploader = media.get_uploader
         #don't send email if you comment on your own post
         if (comment.author != media_uploader and
-            media_uploader['wants_comment_notification']):
+            media_uploader.wants_comment_notification):
             send_comment_email(media_uploader, comment, media, request)
 
     return exc.HTTPFound(
