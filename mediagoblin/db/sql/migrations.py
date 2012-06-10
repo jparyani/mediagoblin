@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from sqlalchemy import MetaData, Table
+from sqlalchemy import MetaData, Table, Column, Boolean
 
 from mediagoblin.db.sql.util import RegisterMigration
 
@@ -30,6 +30,18 @@ def ogg_to_webm_audio(db_conn):
                           autoload_with=db_conn.bind)
 
     db_conn.execute(
-        file_keynames.update().where(file_keynames.c.name=='ogg').
+        file_keynames.update().where(file_keynames.c.name == 'ogg').
             values(name='webm_audio')
     )
+
+
+@RegisterMigration(2, MIGRATIONS)
+def add_wants_notification_column(db_conn):
+    metadata = MetaData(bind=db_conn.bind)
+
+    users = Table('core__users', metadata, autoload=True,
+            autoload_with=db_conn.bind)
+
+    col = Column('wants_comment_notification', Boolean,
+            default=True, nullable=False)
+    col.create(users, populate_defaults=True)
