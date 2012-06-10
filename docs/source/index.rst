@@ -47,7 +47,17 @@ MediaGoblin website.  It is written for site administrators.
    siteadmin/codebase
 
 
-Part 2: Plugin Writer's Guide
+Part 2: Core plugin documentation
+=================================
+
+.. toctree::
+   :maxdepth: 1
+
+   plugindocs/flatpagesfile
+   plugindocs/sampleplugin
+
+
+Part 3: Plugin Writer's Guide
 =============================
 
 This guide covers writing new GNU MediaGoblin plugins.

@@ -89,7 +89,7 @@ class MediaGoblinApp(object):
         self.public_store, self.queue_store = setup_storage()
 
         # set up routing
-        self.routing = routing.get_mapper()
+        self.routing = routing.get_mapper(PluginCache().get_routes())
 
         # set up staticdirector tool
         self.staticdirector = get_staticdirector(app_config)

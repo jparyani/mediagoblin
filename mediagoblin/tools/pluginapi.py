@@ -80,6 +80,9 @@ class PluginCache(object):
 
         # list of registered template paths
         "template_paths": set(),
+
+        # list of registered routes
+        "routes": [],
         }
 
     def clear(self):
@@ -106,6 +109,13 @@ class PluginCache(object):
         """Returns a tuple of registered template paths"""
         return tuple(self.template_paths)
 
+    def register_route(self, route):
+        """Registers a single route"""
+        self.routes.append(route)
+
+    def get_routes(self):
+        return tuple(self.routes)
+
 
 class MetaPluginClass(type):
     """Metaclass for PluginBase derivatives"""
@@ -119,7 +129,7 @@ class MetaPluginClass(type):
 
 
 class Plugin(object):
-    """Exttend this class for plugins.
+    """Extend this class for plugins.
 
     Example::
 
@@ -137,6 +147,44 @@ class Plugin(object):
 
     def setup_plugin(self):
         pass
+
+
+def register_routes(routes):
+    """Registers one or more routes
+
+    If your plugin handles requests, then you need to call this with
+    the routes your plugin handles.
+
+    A "route" is a `routes.Route` object. See `the routes.Route
+    documentation
+    <http://routes.readthedocs.org/en/latest/modules/route.html>`_ for
+    more details.
+
+    Example passing in a single route:
+
+    >>> from routes import Route
+    >>> register_routes(Route('about-view', '/about',
+    ...     controller=about_view_handler))
+
+    Example passing in a list of routes:
+
+    >>> from routes import Route
+    >>> register_routes([
+    ...     Route('contact-view', '/contact', controller=contact_handler),
+    ...     Route('about-view', '/about', controller=about_handler)
+    ... ])
+
+
+    .. Note::
+
+       Be careful when designing your route urls. If they clash with
+       core urls, then it could result in DISASTER!
+    """
+    if isinstance(routes, (tuple, list)):
+        for route in routes:
+            PluginCache().register_route(route)
+    else:
+        PluginCache().register_route(routes)
 
 
 def register_template_path(path):

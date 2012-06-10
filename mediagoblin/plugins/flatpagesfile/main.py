@@ -17,7 +17,10 @@
 import logging
 import os
 
+from routes.route import Route
+
 from mediagoblin.tools import pluginapi
+from mediagoblin.tools.response import render_to_response
 
 
 PLUGIN_DIR = os.path.dirname(__file__)
@@ -26,16 +29,45 @@ PLUGIN_DIR = os.path.dirname(__file__)
 _log = logging.getLogger(__name__)
 
 
-class FlatpagesPlugin(pluginapi.Plugin):
+def flatpage_handler(template):
+    """Flatpage view generator
+
+    Given a template, generates the controller function for handling that
+    route.
+
+    """
+    def _flatpage_handler(request, *args, **kwargs):
+        return render_to_response(
+            request, 'flatpagesfile/%s' % template,
+            {'args': args, 'kwargs': kwargs})
+    return _flatpage_handler
+
+
+class FlatpagesFilePlugin(pluginapi.Plugin):
     """
     This is the flatpages plugin class. See the README for how to use
     flatpages.
     """
-    def __init__(self):
-        self._setup_plugin_called = 0
-
     def setup_plugin(self):
         self.config = pluginapi.get_config('mediagoblin.plugins.flatpagesfile')
 
-        _log.info('Setting up flatpages....')
+        _log.info('Setting up flatpagesfile....')
+
+        # Register the template path.
         pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
+
+        # Set up and register routes.
+        pages = [(int(key.replace('page', '')), val)
+                 for key, val in self.config.items()
+                 if key.startswith('page')]
+
+        pages = [mapping for index, mapping in sorted(pages)]
+        routes = []
+        for name, url, template in pages:
+            name = 'flatpagesfile.%s' % name.strip()
+            controller = flatpage_handler(template)
+            routes.append(
+                Route(name, url, controller=controller))
+
+        pluginapi.register_routes(routes)
+        _log.info('Done setting up flatpagesfile!')

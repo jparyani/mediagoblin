@@ -26,9 +26,12 @@ from mediagoblin.webfinger.routing import webfinger_well_known_routes, \
 from mediagoblin.admin.routing import admin_routes
 
 
-def get_mapper():
+def get_mapper(plugin_routes):
     mapping = Mapper()
     mapping.minimization = False
+
+    # Plugin routes go first so they can override default routes.
+    mapping.extend(plugin_routes)
 
     mapping.connect(
         "index", "/",
