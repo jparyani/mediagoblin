@@ -62,6 +62,8 @@ class User(Document, UserMixin):
        we'll change this to a boolean with a key of 'active' and have a
        separate field for a reason the user's been disabled if that's
        appropriate... email_verified is already separate, after all.)
+     - wants_comment_notification: The user has selected that they want to be 
+       notified when comments are posted on their media.
      - verification_key: If the user is awaiting email verification, the user
        will have to provide this key (which will be encoded in the presented
        URL) in order to confirm their email as active.
@@ -80,6 +82,7 @@ class User(Document, UserMixin):
         'pw_hash': unicode,
         'email_verified': bool,
         'status': unicode,
+        'wants_comment_notification': bool,
         'verification_key': unicode,
         'is_admin': bool,
         'url': unicode,
@@ -93,6 +96,7 @@ class User(Document, UserMixin):
     default_values = {
         'created': datetime.datetime.utcnow,
         'email_verified': False,
+        'wants_comment_notification': True,
         'status': u'needs_email_verification',
         'is_admin': False}
 

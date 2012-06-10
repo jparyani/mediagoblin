@@ -37,6 +37,7 @@ def test_change_password(test_app):
         '/edit/account/', {
             'old_password': 'toast',
             'new_password': '123456',
+            'wants_comment_notification': 'y'
             })
 
     # test_user has to be fetched again in order to have the current values

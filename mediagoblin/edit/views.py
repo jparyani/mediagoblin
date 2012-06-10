@@ -181,39 +181,50 @@ def edit_profile(request):
 @require_active_login
 def edit_account(request):
     user = request.user
+    form = forms.EditAccountForm(request.POST,
+        wants_comment_notification=user.get('wants_comment_notification'))
 
-    form = forms.EditAccountForm(request.POST)
+    if request.method == 'POST':
+        form_validated = form.validate()
 
-    if request.method == 'POST' and form.validate():
-        password_matches = auth_lib.bcrypt_check_password(
-            request.POST['old_password'],
-            user.pw_hash)
+        #if the user has not filled in the new or old password fields
+        if not form.new_password.data and not form.old_password.data:
+            if form.wants_comment_notification.validate(form):
+                user.wants_comment_notification = \
+                    form.wants_comment_notification.data
+                user.save()
+                messages.add_message(request,
+                    messages.SUCCESS,
+                    _("Account settings saved"))
+                return redirect(request,
+                                'mediagoblin.user_pages.user_home',
+                                user=user.username)
 
-        if (request.POST['old_password'] or request.POST['new_password']) and not \
-                password_matches:
-            form.old_password.errors.append(_('Wrong password'))
-
-            return render_to_response(
-                request,
-                'mediagoblin/edit/edit_account.html',
-                {'user': user,
-                 'form': form})
-
-        if password_matches:
-            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-                request.POST['new_password'])
-
-        user.save()
-
-        messages.add_message(request,
-                             messages.SUCCESS,
-                             _("Account settings saved"))
-        return redirect(request,
-                       'mediagoblin.user_pages.user_home',
-                        user=user.username)
+        #so the user has filled in one or both of the password fields
+        else:
+            if form_validated:
+                password_matches = auth_lib.bcrypt_check_password(
+                    form.old_password.data,
+                    user.pw_hash)
+                if password_matches:
+                    #the entire form validates and the password matches
+                    user.pw_hash = auth_lib.bcrypt_gen_password_hash(
+                        form.new_password.data)
+                    user.wants_comment_notification = \
+                        form.wants_comment_notification.data
+                    user.save()
+                    messages.add_message(request,
+                        messages.SUCCESS,
+                        _("Account settings saved"))
+                    return redirect(request,
+                                    'mediagoblin.user_pages.user_home',
+                                    user=user.username)
+                else:
+                    form.old_password.errors.append(_('Wrong password'))
 
     return render_to_response(
         request,
         'mediagoblin/edit/edit_account.html',
         {'user': user,
          'form': form})
+

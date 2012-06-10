@@ -198,3 +198,11 @@ def convert_exif_media_data(database):
         del media_data['exif']
 
         collection.save(document)
+
+
+@RegisterMigration(13)
+def user_add_wants_comment_notification(database):
+    """
+    Add wants_comment_notification to user model
+    """
+    add_table_field(database, 'users', 'wants_comment_notification', True)
