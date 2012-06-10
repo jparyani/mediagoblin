@@ -43,5 +43,5 @@ def add_wants_notification_column(db_conn):
             autoload_with=db_conn.bind)
 
     col = Column('wants_comment_notification', Boolean,
-            default=True, nullable=False)
+            default=True, nullable=True)
     col.create(users, populate_defaults=True)

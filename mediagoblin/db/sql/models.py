@@ -38,7 +38,7 @@ from mediagoblin.db.sql.base import Session
 
 # It's actually kind of annoying how sqlalchemy-migrate does this, if
 # I understand it right, but whatever.  Anyway, don't remove this :P
-# 
+#
 # We could do migration calls more manually instead of relying on
 # this import-based meddling...
 from migrate import changeset
@@ -70,7 +70,9 @@ class User(Base, UserMixin):
     pw_hash = Column(Unicode, nullable=False)
     email_verified = Column(Boolean, default=False)
     status = Column(Unicode, default=u"needs_email_verification", nullable=False)
-    wants_comment_notification = Column(Boolean, default=True, nullable=False)
+    # Intented to be nullable=False, but migrations would not work for it
+    # set to nullable=True implicitly.
+    wants_comment_notification = Column(Boolean, default=True)
     verification_key = Column(Unicode)
     is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
