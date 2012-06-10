@@ -71,7 +71,8 @@ def setup_database():
     return connection, db
 
 
-def get_jinja_loader(user_template_path=None, current_theme=None):
+def get_jinja_loader(user_template_path=None, current_theme=None,
+                     plugin_template_paths=None):
     """
     Set up the Jinja template loaders, possibly allowing for user
     overridden templates.
@@ -79,26 +80,28 @@ def get_jinja_loader(user_template_path=None, current_theme=None):
     (In the future we may have another system for providing theming;
     for now this is good enough.)
     """
-    if user_template_path or current_theme:
-        loader_choices = []
+    path_list = []
 
-        # user template overrides
-        if user_template_path:
-            loader_choices.append(jinja2.FileSystemLoader(user_template_path))
+    # Add user path first--this takes precedence over everything.
+    if user_template_path is not None:
+        path_list.append(jinja2.FileSystemLoader(user_template_path))
 
-        # Any theme directories in the registry
-        if current_theme and current_theme.get('templates_dir'):
-            loader_choices.append(
-                jinja2.FileSystemLoader(
-                    current_theme['templates_dir']))
+    # Any theme directories in the registry
+    if current_theme and current_theme.get('templates_dir'):
+        path_list.append(
+            jinja2.FileSystemLoader(
+                current_theme['templates_dir']))
 
-        # Add the main mediagoblin templates
-        loader_choices.append(
-            jinja2.PackageLoader('mediagoblin', 'templates'))
+    # Add plugin template paths next--takes precedence over
+    # core templates.
+    if plugin_template_paths is not None:
+        path_list.extend((jinja2.FileSystemLoader(path)
+                          for path in plugin_template_paths))
 
-        return jinja2.ChoiceLoader(loader_choices)
-    else:
-        return jinja2.PackageLoader('mediagoblin', 'templates')
+    # Add core templates last.
+    path_list.append(jinja2.PackageLoader('mediagoblin', 'templates'))
+
+    return jinja2.ChoiceLoader(path_list)
 
 
 def get_staticdirector(app_config):

@@ -76,7 +76,10 @@ class PluginCache(object):
         "plugin_classes": [],
 
         # list of plugin objects
-        "plugin_objects": []
+        "plugin_objects": [],
+
+        # list of registered template paths
+        "template_paths": set(),
         }
 
     def clear(self):
@@ -94,6 +97,14 @@ class PluginCache(object):
     def register_plugin_object(self, plugin_obj):
         """Registers a plugin object"""
         self.plugin_objects.append(plugin_obj)
+
+    def register_template_path(self, path):
+        """Registers a template path"""
+        self.template_paths.add(path)
+
+    def get_template_paths(self):
+        """Returns a tuple of registered template paths"""
+        return tuple(self.template_paths)
 
 
 class MetaPluginClass(type):
@@ -126,6 +137,27 @@ class Plugin(object):
 
     def setup_plugin(self):
         pass
+
+
+def register_template_path(path):
+    """Registers a path for template loading
+
+    If your plugin has templates, then you need to call this with
+    the absolute path of the root of templates directory.
+
+    Example:
+
+    >>> my_plugin_dir = os.path.dirname(__file__)
+    >>> template_dir = os.path.join(my_plugin_dir, 'templates')
+    >>> register_template_path(template_dir)
+
+    .. Note::
+
+       You can only do this in `setup_plugins()`. Doing this after
+       that will have no effect on template loading.
+
+    """
+    PluginCache().register_template_path(path)
 
 
 def get_config(key):

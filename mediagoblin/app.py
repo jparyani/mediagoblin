@@ -32,6 +32,7 @@ from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.init import (get_jinja_loader, get_staticdirector,
     setup_global_and_app_config, setup_workbench, setup_database,
     setup_storage, setup_beaker_cache)
+from mediagoblin.tools.pluginapi import PluginCache
 
 
 _log = logging.getLogger(__name__)
@@ -80,7 +81,9 @@ class MediaGoblinApp(object):
         # Get the template environment
         self.template_loader = get_jinja_loader(
             app_config.get('local_templates'),
-            self.current_theme)
+            self.current_theme,
+            PluginCache().get_template_paths()
+            )
 
         # Set up storage systems
         self.public_store, self.queue_store = setup_storage()
