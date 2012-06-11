@@ -16,11 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#}
 
-{% trans username=username, comment_author=comment_author -%}
+{% trans username=username, comment_author=comment_author, instance_name=app_config.html_title -%}
 
 Hi {{ username }},
-{{ comment_author }} commented on your post ({{ comment_url }}) at GNU MediaGoblin:
+{{ comment_author }} commented on your post ({{ comment_url }}) at {{ instance_name }}
 {% endtrans %}
 {{ comment_content }}
 
-GNU MediaGoblin
+{{ app_config.html_title }}
