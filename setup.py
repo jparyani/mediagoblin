@@ -60,7 +60,7 @@ setup(
         'webtest',
         'ConfigObj',
         'Markdown',
-        'sqlalchemy',
+        'sqlalchemy>=0.7.0',
         'sqlalchemy-migrate',
         ## For now we're expecting that users will install this from
         ## their package managers.
