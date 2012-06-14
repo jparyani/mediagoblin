@@ -33,6 +33,7 @@ def ogg_to_webm_audio(db_conn):
         file_keynames.update().where(file_keynames.c.name == 'ogg').
             values(name='webm_audio')
     )
+    db_conn.commit()
 
 
 @RegisterMigration(2, MIGRATIONS)
@@ -45,3 +46,4 @@ def add_wants_notification_column(db_conn):
     col = Column('wants_comment_notification', Boolean,
             default=True, nullable=True)
     col.create(users, populate_defaults=True)
+    db_conn.commit()
