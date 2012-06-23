@@ -30,7 +30,8 @@ _log = logging.getLogger(__name__)
 
 def resize_image(entry, filename, new_path, exif_tags, workdir, new_size,
                  size_limits=(0, 0)):
-    """Store a resized version of an image and return its pathname.
+    """
+    Store a resized version of an image and return its pathname.
 
     Arguments:
     entry -- the entry for the image to resize

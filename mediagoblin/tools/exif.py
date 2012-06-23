@@ -32,12 +32,14 @@ USEFUL_TAGS = [
     'EXIF UserComment',
     ]
 
+
 def exif_image_needs_rotation(exif_tags):
     """
     Returns True if EXIF orientation requires rotation
     """
     return 'Image Orientation' in exif_tags \
         and exif_tags['Image Orientation'].values[0] != 1
+
 
 def exif_fix_image_orientation(im, exif_tags):
     """
@@ -47,7 +49,7 @@ def exif_fix_image_orientation(im, exif_tags):
     - REDUCES IMAGE QUALITY by recompressig it
 
     Pros:
-    - Cures my neck pain
+    - Prevents neck pain
     """
     # Rotate image
     if 'Image Orientation' in exif_tags:
@@ -62,6 +64,7 @@ def exif_fix_image_orientation(im, exif_tags):
 
     return im
 
+
 def extract_exif(filename):
     """
     Returns EXIF tags found in file at ``filename``
@@ -75,6 +78,7 @@ def extract_exif(filename):
         raise BadMediaFail(_('Could not read the image file.'))
 
     return exif_tags
+
 
 def clean_exif(exif):
     '''
@@ -95,6 +99,7 @@ def clean_exif(exif):
             clean_exif[key] = _ifd_tag_to_dict(value)
 
     return clean_exif
+
 
 def _ifd_tag_to_dict(tag):
     data = {
@@ -117,8 +122,10 @@ def _ifd_tag_to_dict(tag):
 
     return data
 
+
 def _ratio_to_list(ratio):
     return [ratio.num, ratio.den]
+
 
 def get_useful(tags):
     useful = {}
@@ -127,7 +134,7 @@ def get_useful(tags):
             useful[key] = tag
 
     return useful
-            
+
 
 def get_gps_data(tags):
     """
@@ -147,9 +154,13 @@ def get_gps_data(tags):
             gps_data[key] = (
                 lambda v:
                     float(v[0].num) / float(v[0].den) \
-                    + (float(v[1].num) / float(v[1].den) / 60 )\
+                    + (float(v[1].num) / float(v[1].den) / 60) \
                     + (float(v[2].num) / float(v[2].den) / (60 * 60))
                 )(dat.values)
+
+        if tags['GPS GPSLongitudeRef'].values == 'W':
+            gps_data['longitude'] /= -1
+
     except KeyError:
         pass
 
