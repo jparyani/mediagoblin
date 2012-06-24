@@ -33,6 +33,8 @@ from mediagoblin.tools.text import (
     convert_to_tag_list_of_dicts, media_tags_as_string)
 from mediagoblin.db.util import check_media_slug_used
 
+import mimetypes
+
 
 @get_user_media_entry
 @require_active_login
@@ -89,6 +91,13 @@ def edit_media(request, media):
          'form': form})
 
 
+# Mimetypes that browsers parse scripts in.
+# Content-sniffing isn't taken into consideration.
+UNSAFE_MIMETYPES = [
+        'text/html',
+        'text/svg+xml']
+
+
 @get_user_media_entry
 @require_active_login
 def edit_attachments(request, media):
@@ -100,10 +109,29 @@ def edit_attachments(request, media):
             and isinstance(request.POST['attachment_file'], FieldStorage)
             and request.POST['attachment_file'].file):
 
+            # Security measure to prevent attachments from being served as
+            # text/html, which will be parsed by web clients and pose an XSS
+            # threat.
+            #
+            # TODO
+            # This method isn't flawless as some browsers may perform
+            # content-sniffing.
+            # This method isn't flawless as we do the mimetype lookup on the
+            # machine parsing the upload form, and not necessarily the machine
+            # serving the attachments.
+            if mimetypes.guess_type(
+                    request.POST['attachment_file'].filename)[0] in \
+                    UNSAFE_MIMETYPES:
+                public_filename = secure_filename('{0}.notsafe'.format(
+                    request.POST['attachment_file'].filename))
+            else:
+                public_filename = secure_filename(
+                        request.POST['attachment_file'].filename)
+
             attachment_public_filepath \
                 = mg_globals.public_store.get_unique_filepath(
                 ['media_entries', unicode(media._id), 'attachment',
-                 secure_filename(request.POST['attachment_file'].filename)])
+                 public_filename])
 
             attachment_public_file = mg_globals.public_store.get_file(
                 attachment_public_filepath, 'wb')
@@ -227,4 +255,3 @@ def edit_account(request):
         'mediagoblin/edit/edit_account.html',
         {'user': user,
          'form': form})
-
