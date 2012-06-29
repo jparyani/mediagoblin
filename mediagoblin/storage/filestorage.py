@@ -64,12 +64,7 @@ class BasicFileStorage(StorageInterface):
     def delete_file(self, filepath):
         # TODO: Also delete unused directories if empty (safely, with
         # checks to avoid race conditions).
-        try:
-            os.remove(self._resolve_filepath(filepath))
-        except OSError:
-            # the file do not exists!
-            # This should fix bug #255
-            pass
+        os.remove(self._resolve_filepath(filepath))
 
     def file_url(self, filepath):
         if not self.base_url:
