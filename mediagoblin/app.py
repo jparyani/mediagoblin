@@ -24,6 +24,7 @@ from webob import Request, exc
 from mediagoblin import routing, meddleware, __version__
 from mediagoblin.tools import common, translate, template
 from mediagoblin.tools.response import render_404
+from mediagoblin.tools.theme import register_themes
 from mediagoblin.tools import request as mg_request
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
@@ -72,6 +73,9 @@ class MediaGoblinApp(object):
 
         # Set up the database
         self.connection, self.db = setup_database()
+
+        # Register themes
+        self.theme_registry = register_themes(app_config)
 
         # Get the template environment
         self.template_loader = get_jinja_loader(
