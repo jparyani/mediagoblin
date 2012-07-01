@@ -39,11 +39,12 @@ License along with this program, in the file ``licenses/LGPLv3.txt``.
 If not, see <http://www.gnu.org/licenses/>.
 
 
-Documentation files located in the ``docs/`` directory tree are released
-under a CC0 license.  To the extent possible under law, the author(s)
-have dedicated all copyright and related and neighboring rights to these
-files to the public domain worldwide.  These files are distributed
-without any warranty. 
+Documentation files located in the ``docs/`` directory tree and all
+original documentation theme CSS and assets (including image files)
+are released under a CC0 license.  To the extent possible under law,
+the author(s) have dedicated all copyright and related and neighboring
+rights to these files to the public domain worldwide.  These files are
+distributed without any warranty.
 
 You should have received a copy of the CC0 license in the file 
 ``licenses/CC0_1.0.txt``.  If not, see 
