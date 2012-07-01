@@ -45,7 +45,7 @@ setup(
         'PasteScript',
         'beaker',
         'routes',
-        'webob<=1.2a2',
+        'webob<=1.2a2,>=1.1',
         'wtforms',
         'py-bcrypt',
         'nose',
