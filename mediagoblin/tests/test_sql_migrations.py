@@ -344,8 +344,8 @@ def _insert_migration1_objects(session):
                 name=u'The Necroplex',
                 description=u'A complex full of pure deathzone.',
                 exits={
-                    'deathwell': 'evilstorm',
-                    'portal': 'central_park'}),
+                    u'deathwell': u'evilstorm',
+                    u'portal': u'central_park'}),
          Level1(id=u'evilstorm',
                 name=u'Evil Storm',
                 description=u'A storm full of pure evil.',
@@ -354,7 +354,7 @@ def _insert_migration1_objects(session):
                 name=u'Central Park, NY, NY',
                 description=u"New York's friendly Central Park.",
                 exits={
-                    'portal': 'necroplex'})])
+                    u'portal': u'necroplex'})])
 
     session.commit()
 
