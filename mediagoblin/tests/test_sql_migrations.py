@@ -561,7 +561,7 @@ def test_set1_to_set3():
 
     printer = CollectingPrinter()
     migration_manager = MigrationManager(
-        '__main__', SET1_MODELS, SET1_MIGRATIONS, Session(),
+        u'__main__', SET1_MODELS, SET1_MIGRATIONS, Session(),
         printer)
 
     # Check latest migration and database current migration
@@ -586,7 +586,7 @@ def test_set1_to_set3():
 
     # Try to "re-migrate" with same manager settings... nothing should happen
     migration_manager = MigrationManager(
-        '__main__', SET1_MODELS, SET1_MIGRATIONS, Session(),
+        u'__main__', SET1_MODELS, SET1_MIGRATIONS, Session(),
         printer)
     assert migration_manager.init_or_migrate() == None
 
@@ -668,7 +668,7 @@ def test_set1_to_set3():
     # isn't said to be updated yet
     printer = CollectingPrinter()
     migration_manager = MigrationManager(
-        '__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
+        u'__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
         printer)
 
     assert migration_manager.latest_migration == 7
@@ -694,7 +694,7 @@ def test_set1_to_set3():
     
     # Make sure version matches expected
     migration_manager = MigrationManager(
-        '__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
+        u'__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
         printer)
     assert migration_manager.latest_migration == 7
     assert migration_manager.database_current_migration == 7

@@ -52,7 +52,7 @@ def gather_database_data(media_types):
 
     managed_dbdata.append(
         DatabaseData(
-            '__main__', MAIN_MODELS, MAIN_MIGRATIONS))
+            u'__main__', MAIN_MODELS, MAIN_MIGRATIONS))
 
     # Then get all registered media managers (eventually, plugins)
     for media_type in media_types:
