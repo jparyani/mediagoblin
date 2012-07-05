@@ -76,10 +76,17 @@ class MediaGoblinApp(object):
 
         # Register themes
         self.theme_registry = register_themes(app_config)
+        self.current_theme_name = app_config.get('theme')
+        if self.current_theme_name \
+                and self.theme_registry.has_key(self.current_theme_name):
+            self.current_theme = self.theme_registry[self.current_theme_name]
+        else:
+            self.current_theme = None
 
         # Get the template environment
         self.template_loader = get_jinja_loader(
-            app_config.get('local_templates'))
+            app_config.get('local_templates'),
+            self.current_theme)
 
         # Set up storage systems
         self.public_store, self.queue_store = setup_storage()

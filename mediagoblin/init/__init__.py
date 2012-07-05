@@ -71,7 +71,7 @@ def setup_database():
     return connection, db
 
 
-def get_jinja_loader(user_template_path=None):
+def get_jinja_loader(user_template_path=None, current_theme=None):
     """
     Set up the Jinja template loaders, possibly allowing for user
     overridden templates.
@@ -79,10 +79,24 @@ def get_jinja_loader(user_template_path=None):
     (In the future we may have another system for providing theming;
     for now this is good enough.)
     """
-    if user_template_path:
-        return jinja2.ChoiceLoader(
-            [jinja2.FileSystemLoader(user_template_path),
-             jinja2.PackageLoader('mediagoblin', 'templates')])
+    if user_template_path or current_theme:
+        loader_choices = []
+
+        # user template overrides
+        if user_template_path:
+            loader_choices.append(jinja2.FileSystemLoader(user_template_path))
+
+        # Any theme directories in the registry
+        if current_theme and current_theme.get('templates_dir'):
+            loader_choices.append(
+                jinja2.FileSystemLoader(
+                    current_theme['templates_dir']))
+
+        # Add the main mediagoblin templates
+        loader_choices.append(
+            jinja2.PackageLoader('mediagoblin', 'templates'))
+
+        return jinja2.ChoiceLoader(loader_choices)
     else:
         return jinja2.PackageLoader('mediagoblin', 'templates')
 
