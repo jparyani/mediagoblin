@@ -14,15 +14,48 @@
 .. _media-types-chapter:
 
 ====================
-Enabling Media Types
+Media Types
 ====================
 
 In the future, there will be all sorts of media types you can enable,
-but in the meanwhile there are two additional media type: video and
-ascii art.
+but in the meanwhile there are three additional media types: video, audio
+and ascii art.
 
 First, you should probably read ":doc:`configuration`" to make sure
 you know how to modify the mediagoblin config file.
+
+
+Enabling Media Types
+====================
+
+Media types are enabled in your mediagoblin configuration file, typically it is
+created by copying ``mediagoblin.ini`` to ``mediagoblin_local.ini`` and then
+applying your changes to ``mediagoblin_local.ini``. If you don't already have a
+``mediagoblin_local.ini``, create one in the way described.
+
+Most media types have additional dependencies that you will have to install.
+You will find descriptions on how to satisfy the requirements of each media type
+on this page.
+
+To enable a media type, edit the ``media_types`` list in your
+``mediagoblin_local.ini``. For example, if your system supported image and
+video media types, then the list would look like this::
+
+    media_types = mediagoblin.media_types.image, mediagoblin.media_types.video
+
+How does MediaGoblin decide which media type to use for a file?
+===============================================================
+
+MediaGoblin has two methods for finding the right media type for an uploaded
+file. One is based on the file extension of the uploaded file; every media type
+maintains a list of supported file extensions. The second is based on a sniffing
+handler, where every media type may inspect the uploaded file and tell if it
+will accept it.
+
+The file-extension-based approach is used before the sniffing-based approach,
+if the file-extension-based approach finds a match, the sniffing-based approach
+will be skipped as it uses far more processing power.
+
 
 Video
 =====
@@ -34,14 +67,6 @@ good/bad/ugly).  On Debianoid systems::
     sudo apt-get install python-gst0.10 gstreamer0.10-plugins-{base,bad,good,ugly} \
         gstreamer0.10-ffmpeg
 
-Next, modify (and possibly copy over from ``mediagoblin.ini``) your
-``mediagoblin_local.ini``.  In the ``[mediagoblin]`` section, add
-``mediagoblin.media_types.video`` to the ``media_types`` list.
-
-For example, if your system supported image and video media types, then
-the list would look like this::
-
-    media_types = mediagoblin.media_types.image, mediagoblin.media_types.video
 
 Now you should be able to submit videos, and mediagoblin should
 transcode them.
@@ -52,6 +77,32 @@ transcode them.
    paste process or your users will probably find that their connections
    time out as the video transcodes.  To set that up, check out the
    ":doc:`production-deployments`" section of this manual.
+
+
+Audio
+=====
+
+To enable audio, install the gstreamer and python-gstreamer bindings (as well
+as whatever gstreamer plugins you want, good/bad/ugly), scipy and numpy are
+also needed for the audio spectrograms.
+To install these on Debianoid systems, run::
+
+    sudo apt-get install python-gst0.10 gstreamer0.10-plugins-{base,bad,good,ugly} \
+        gstreamer0.10-ffmpeg python-numpy python-scipy
+
+The ``scikits.audiolab`` package you will install in the next step depends on the
+``libsndfile1-dev`` package, so we should install it.
+On Debianoid systems, run::
+
+    sudo apt-get install libsndfile1-dev
+
+Then install ``scikits.audiolab`` for the spectrograms::
+
+    ./bin/pip install scikits.audiolab
+
+Add ``mediagoblin.media_types.audio`` to the ``media_types`` list in your
+``mediagoblin_local.ini`` and restart MediaGoblin. You should now be able to
+upload and listen to audio files!
 
 
 Ascii art
