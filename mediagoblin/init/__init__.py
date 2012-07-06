@@ -18,7 +18,7 @@ from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 import jinja2
 
-from mediagoblin import staticdirect
+from mediagoblin.tools import staticdirect
 from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
 from mediagoblin import mg_globals
