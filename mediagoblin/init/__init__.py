@@ -107,8 +107,8 @@ def get_staticdirector(app_config):
             "One of direct_remote_path or "
             "direct_remote_paths must be provided")
 
-    return staticdirect.RemoteStaticDirect(
-        app_config['direct_remote_path'].strip())
+    return staticdirect.StaticDirect(
+        {None: app_config['direct_remote_path'].strip()})
 
 
 def setup_storage():

@@ -22,37 +22,42 @@
 # This needs documentation!
 ####################################
 
-import pkg_resources
 import logging
 
 _log = logging.getLogger(__name__)
 
 
 class StaticDirect(object):
-    def __init__(self):
+    """
+    Direct to a static resource.
+
+    This StaticDirect class can take a series of "domains" to
+    staticdirect to.  In general, you should supply a None domain, as
+    that's the "default" domain.
+
+    Things work like this:
+      >>> staticdirect = StaticDirect(
+      ...     {None: "/static/",
+      ...      "theme": "http://example.org/themestatic/"})
+      >>> staticdirect("css/monkeys.css")
+      "/static/css/monkeys.css"
+      >>> staticdirect("images/lollerskate.png", "theme")
+      "http://example.org/themestatic/images/lollerskate.png"
+    """
+    def __init__(self, domains):
+        self.domains = dict(
+            [(key, value.rstrip('/'))
+             for key, value in domains.iteritems()])
         self.cache = {}
 
-    def __call__(self, filepath):
-        if filepath in self.cache:
-            return self.cache[filepath]
+    def __call__(self, filepath, domain=None):
+        if domain in self.cache and filepath in self.cache[domain]:
+            return self.cache[domain][filepath]
 
-        if not pkg_resources.resource_exists('mediagoblin',
-                'static' + filepath):
-            _log.info("StaticDirect resource %r not found locally",
-                filepath)
-        static_direction = self.cache[filepath] = self.get(filepath)
+        static_direction = self.cache.setdefault(
+            domain, {})[filepath] = self.get(filepath, domain)
         return static_direction
 
-    def get(self, filepath):
-        # should be implemented by the individual staticdirector
-        pass
-
-
-class RemoteStaticDirect(StaticDirect):
-    def __init__(self, remotepath):
-        StaticDirect.__init__(self)
-        self.remotepath = remotepath.rstrip('/')
-
-    def get(self, filepath):
+    def get(self, filepath, domain=None):
         return '%s/%s' % (
-            self.remotepath, filepath.lstrip('/'))
+            self.domains[domain], filepath.lstrip('/'))
