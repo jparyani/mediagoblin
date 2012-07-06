@@ -40,5 +40,4 @@ def delete_media_files(media):
             no_such_files.append("/".join(attachment))
 
     if no_such_files:
-        # This breaks pep8 as far as I know
-        raise OSError, ", ".join(no_such_files)
+        raise OSError(", ".join(no_such_files))
