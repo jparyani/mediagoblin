@@ -16,18 +16,6 @@
 
 from mediagoblin import mg_globals
 
-import os
-
-def _jointhat(thing):
-    if type(thing) == type(list()) or\
-            type(thing) == type(tuple()):
-        filepath = ""
-        for item in thing:
-            filepath = os.path.join(filepath, item)
-        return filepath
-    else:
-        raise TypeError, "expecting a list or tuple, {0} received".format(
-            str(type(thing)))
 
 def delete_media_files(media):
     """
@@ -42,14 +30,14 @@ def delete_media_files(media):
             mg_globals.public_store.delete_file(
                 listpath)
         except OSError:
-            no_such_files.append(_jointhat(listpath))
+            no_such_files.append("/".join(listpath))
 
     for attachment in media.attachment_files:
         try:
             mg_globals.public_store.delete_file(
                 attachment['filepath'])
         except OSError:
-            no_such_files.append(_jointhat(attachment))
+            no_such_files.append("/".join(attachment))
 
     if no_such_files:
         # This breaks pep8 as far as I know
