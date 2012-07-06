@@ -36,21 +36,21 @@ def delete_media_files(media):
     Arguments:
      - media: A MediaEntry document
     """
-    noSuchFiles = []
+    no_such_files = []
     for listpath in media.media_files.itervalues():
         try:
             mg_globals.public_store.delete_file(
                 listpath)
         except OSError:
-            noSuchFiles.append(_jointhat(listpath))
+            no_such_files.append(_jointhat(listpath))
 
     for attachment in media.attachment_files:
         try:
             mg_globals.public_store.delete_file(
                 attachment['filepath'])
         except OSError:
-            noSuchFiles.append(_jointhat(attachment))
+            no_such_files.append(_jointhat(attachment))
 
-    if noSuchFiles:
+    if no_such_files:
         # This breaks pep8 as far as I know
         raise OSError, ", ".join(noSuchFiles)
