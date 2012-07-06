@@ -102,13 +102,17 @@ def get_jinja_loader(user_template_path=None, current_theme=None):
 
 
 def get_staticdirector(app_config):
-    if not 'direct_remote_path' in app_config:
+    # At minimum, we need the direct_remote_path
+    if not 'direct_remote_path' in app_config \
+            or not 'theme_web_path' in app_config:
         raise ImproperlyConfigured(
-            "One of direct_remote_path or "
-            "direct_remote_paths must be provided")
+            "direct_remote_path and theme_web_path must be provided")
+
+    direct_domains = {None: app_config['direct_remote_path'].strip()}
+    direct_domains['theme'] = app_config['theme_web_path'].strip()
 
     return staticdirect.StaticDirect(
-        {None: app_config['direct_remote_path'].strip()})
+        direct_domains)
 
 
 def setup_storage():
