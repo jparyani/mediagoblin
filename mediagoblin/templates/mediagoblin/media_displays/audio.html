@@ -57,7 +57,7 @@
   <ul>
     {% if 'original' in media.media_files %}
       <li><a href="{{ request.app.public_store.file_url(
-                       media.media_files.original) }}">{% trans %}original file{% endtrans %}</a>
+                       media.media_files.original) }}">{% trans %}Original file{% endtrans %}</a>
     {% endif %}
     <li><a href="{{ request.app.public_store.file_url(
                      media.media_files.webm_audio) }}">{% trans %}WebM file (Vorbis codec){% endtrans %}</a>
