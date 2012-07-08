@@ -116,6 +116,9 @@ def get_test_app(dump_old_app=True):
     if MGOBLIN_APP and not dump_old_app:
         return MGOBLIN_APP
 
+    Session.rollback()
+    Session.remove()
+
     # Remove and reinstall user_dev directories
     if os.path.exists(TEST_USER_DEV):
         shutil.rmtree(TEST_USER_DEV)
@@ -134,9 +137,6 @@ def get_test_app(dump_old_app=True):
     # setup app and return
     test_app = loadapp(
         'config:' + TEST_SERVER_CONFIG)
-
-    Session.rollback()
-    Session.remove()
 
     # Re-setup celery
     setup_celery_app(app_config, global_config)
