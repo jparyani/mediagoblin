@@ -98,8 +98,9 @@ def send_email(from_addr, to_addrs, subject, message_body):
         if not mg_globals.app_config['email_smtp_host']:  # e.g. host = ''
             mhost.connect()  # We SMTP.connect explicitly
 
-    if mg_globals.app_config['email_smtp_user'] \
-            or mg_globals.app_config['email_smtp_pass']:
+    if ((not common.TESTS_ENABLED)
+        and (mg_globals.app_config['email_smtp_user']
+             or mg_globals.app_config['email_smtp_pass'])):
         mhost.login(
             mg_globals.app_config['email_smtp_user'],
             mg_globals.app_config['email_smtp_pass'])
@@ -112,7 +113,7 @@ def send_email(from_addr, to_addrs, subject, message_body):
     if common.TESTS_ENABLED:
         EMAIL_TEST_INBOX.append(message)
 
-    if mg_globals.app_config['email_debug_mode']:
+    elif mg_globals.app_config['email_debug_mode']:
         print u"===== Email ====="
         print u"From address: %s" % message['From']
         print u"To addresses: %s" % message['To']
