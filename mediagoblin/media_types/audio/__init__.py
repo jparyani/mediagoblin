@@ -22,4 +22,4 @@ MEDIA_MANAGER = {
     'processor': process_audio,
     'sniff_handler': sniff_handler,
     'display_template': 'mediagoblin/media_displays/audio.html',
-    'accepted_extensions': ['mp3', 'flac', 'ogg', 'wav', 'm4a']}
+    'accepted_extensions': ['mp3', 'flac', 'wav', 'm4a']}

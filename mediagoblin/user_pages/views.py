@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from webob import exc
+import logging
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.util import DESCENDING, ObjectId
@@ -32,6 +33,9 @@ from werkzeug.contrib.atom import AtomFeed
 
 from mediagoblin.media_types import get_media_manager
 
+
+_log = logging.getLogger(__name__)
+_log.setLevel(logging.DEBUG)
 
 @uses_pagination
 def user_home(request, page):
@@ -185,7 +189,14 @@ def media_confirm_delete(request, media):
                 comment.delete()
 
             # Delete all files on the public storage
-            delete_media_files(media)
+            try:
+                delete_media_files(media)
+            except OSError, error:
+                _log.error('No such files from the user "{1}"'
+                           ' to delete: {0}'.format(str(error), username))
+                messages.add_message(request, messages.ERROR,
+                                     _('Some of the files with this entry seem'
+                                       ' to be missing.  Deleting anyway.'))
 
             media.delete()
             messages.add_message(

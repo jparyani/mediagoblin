@@ -46,14 +46,16 @@
 	  </div>
     </video>
   </div>
-  {% if 'original' in media.media_files %}
-  <p>
-    <a href="{{ request.app.public_store.file_url(
-	     media.media_files['original']) }}">
-      {%- trans -%}
-        Original
-      {%- endtrans -%}
-    </a>
-  </p>
-  {% endif %}
+{% endblock %}
+
+{% block mediagoblin_sidebar %}
+  <h3>{% trans %}Download{% endtrans %}</h3>
+  <ul>
+    {% if 'original' in media.media_files %}
+      <li><a href="{{ request.app.public_store.file_url(
+                       media.media_files.original) }}">{% trans %}Original file{% endtrans %}</a>
+    {% endif %}
+    <li><a href="{{ request.app.public_store.file_url(
+                     media.media_files.webm_640) }}">{% trans %}WebM file (640p; VP8/Vorbis){% endtrans %}</a>
+  </ul>
 {% endblock %}

@@ -16,6 +16,7 @@
 
 from mediagoblin import mg_globals
 
+
 def delete_media_files(media):
     """
     Delete all files associated with a MediaEntry
@@ -23,10 +24,20 @@ def delete_media_files(media):
     Arguments:
      - media: A MediaEntry document
     """
+    no_such_files = []
     for listpath in media.media_files.itervalues():
-        mg_globals.public_store.delete_file(
-            listpath)
+        try:
+            mg_globals.public_store.delete_file(
+                listpath)
+        except OSError:
+            no_such_files.append("/".join(listpath))
 
     for attachment in media.attachment_files:
-        mg_globals.public_store.delete_file(
-            attachment['filepath'])
+        try:
+            mg_globals.public_store.delete_file(
+                attachment['filepath'])
+        except OSError:
+            no_such_files.append("/".join(attachment))
+
+    if no_such_files:
+        raise OSError(", ".join(no_such_files))

@@ -93,28 +93,6 @@
     {% autoescape False %}
       <p>{{ media.description_html }}</p>
     {% endautoescape %}
-    {% if media.attachment_files|count %}
-      <h3>Attachments</h3>
-      <ul>
-        {% for attachment in media.attachment_files %}
-          <li>
-            <a href="{{ request.app.public_store.file_url(attachment.filepath) }}">
-              {{ attachment.name }}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-    {% if app_config['allow_attachments']
-          and request.user
-          and (media.uploader == request.user._id
-               or request.user.is_admin) %}
-      <p>
-        <a href="{{ request.urlgen('mediagoblin.edit.attachments',
-                      user=media.get_uploader.username,
-                      media=media._id) }}">Add attachment</a>
-      </p>
-    {% endif %}
     {% if comments %}
           <a
             {% if not request.user %}
@@ -185,6 +163,32 @@
 
     {% include "mediagoblin/utils/exif.html" %}
     
+    {% if media.attachment_files|count %}
+      <h3>{% trans %}Attachments{% endtrans %}</h3>
+      <ul>
+        {% for attachment in media.attachment_files %}
+          <li>
+            <a href="{{ request.app.public_store.file_url(attachment.filepath) }}">
+              {{ attachment.name }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% if app_config['allow_attachments']
+          and request.user
+          and (media.uploader == request.user._id
+               or request.user.is_admin) %}
+      {% if not media.attachment_files|count %}
+        <h3>{% trans %}Attachments{% endtrans %}</h3>
+      {% endif %}
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.edit.attachments',
+                      user=media.get_uploader.username,
+                      media=media._id) }}">{% trans %}Add attachment{% endtrans %}</a>
+      </p>
+    {% endif %}
+
     {% block mediagoblin_sidebar %}
     {% endblock %}
   </div>

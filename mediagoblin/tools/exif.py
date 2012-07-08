@@ -102,6 +102,10 @@ def clean_exif(exif):
 
 
 def _ifd_tag_to_dict(tag):
+    '''
+    Takes an IFD tag object from the EXIF library and converts it to a dict
+    that can be stored as JSON in the database.
+    '''
     data = {
         'printable': tag.printable,
         'tag': tag.tag,
@@ -109,6 +113,11 @@ def _ifd_tag_to_dict(tag):
         'field_offset': tag.field_offset,
         'field_length': tag.field_length,
         'values': None}
+
+    if isinstance(tag.printable, str):
+        # Force it to be decoded as UTF-8 so that it'll fit into the DB
+        data['printable'] = tag.printable.decode('utf8', 'replace')
+
     if type(tag.values) == list:
         data['values'] = []
         for val in tag.values:
@@ -118,7 +127,11 @@ def _ifd_tag_to_dict(tag):
             else:
                 data['values'].append(val)
     else:
-        data['values'] = tag.values
+        if isinstance(tag.values, str):
+            # Force UTF-8, so that it fits into the DB
+            data['values'] = tag.values.decode('utf8', 'replace')
+        else:
+            data['values'] = tag.values
 
     return data
 

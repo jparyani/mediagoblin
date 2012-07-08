@@ -27,7 +27,11 @@
       {%- endautoescape -%}
     </pre>
   </div>
+{% endblock %}
+
+{% block mediagoblin_sidebar %}
   {% if 'original' in media.media_files %}
+  <h3>{% trans %}Download{% endtrans %}</h3>
   <p>
     <a href="{{ request.app.public_store.file_url(
 	     media.media_files['original']) }}">
