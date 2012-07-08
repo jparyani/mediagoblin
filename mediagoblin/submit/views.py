@@ -167,7 +167,7 @@ def submit_start(request):
             except Exception as e:
                 '''
                 This section is intended to catch exceptions raised in
-                mediagobling.media_types
+                mediagoblin.media_types
                 '''
                 if isinstance(e, InvalidFileType) or \
                         isinstance(e, FileTypeNotSupported):
