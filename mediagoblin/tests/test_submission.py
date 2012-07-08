@@ -14,6 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 import urlparse
 import os
 
@@ -229,12 +233,12 @@ class TestSubmission:
     def test_evil_jpg(self):
         # Test non-supported file with .jpg extension
         # -------------------------------------------
-        self.check_false_image('Malicious Upload 2', EVIL_JPG)
+        self.check_false_image(u'Malicious Upload 2', EVIL_JPG)
 
     def test_evil_png(self):
         # Test non-supported file with .png extension
         # -------------------------------------------
-        self.check_false_image('Malicious Upload 3', EVIL_PNG)
+        self.check_false_image(u'Malicious Upload 3', EVIL_PNG)
 
     def test_processing(self):
         data = {'title': u'Big Blue'}
