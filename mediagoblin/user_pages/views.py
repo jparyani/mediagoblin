@@ -48,7 +48,7 @@ def user_home(request, page):
 
     cursor = request.db.MediaEntry.find(
         {'uploader': user._id,
-         'state': 'processed'}).sort('created', DESCENDING)
+         'state': u'processed'}).sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)
     media_entries = pagination()
@@ -75,13 +75,13 @@ def user_gallery(request, page):
     """'Gallery' of a User()"""
     user = request.db.User.find_one({
             'username': request.matchdict['user'],
-            'status': 'active'})
+            'status': u'active'})
     if not user:
         return render_404(request)
 
     cursor = request.db.MediaEntry.find(
         {'uploader': user._id,
-         'state': 'processed'}).sort('created', DESCENDING)
+         'state': u'processed'}).sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)
     media_entries = pagination()
@@ -224,13 +224,13 @@ def atom_feed(request):
 
     user = request.db.User.find_one({
                'username': request.matchdict['user'],
-               'status': 'active'})
+               'status': u'active'})
     if not user:
         return render_404(request)
 
     cursor = request.db.MediaEntry.find({
                  'uploader': user._id,
-                 'state': 'processed'}) \
+                 'state': u'processed'}) \
                  .sort('created', DESCENDING) \
                  .limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
@@ -287,7 +287,7 @@ def processing_panel(request):
     # Get the user
     user = request.db.User.find_one(
         {'username': request.matchdict['user'],
-         'status': 'active'})
+         'status': u'active'})
 
     # Make sure the user exists and is active
     if not user:
@@ -312,12 +312,12 @@ def processing_panel(request):
     # Get media entries which are in-processing
     processing_entries = request.db.MediaEntry.find(
         {'uploader': user._id,
-         'state': 'unprocessed'}).sort('created', DESCENDING)
+         'state': u'unprocessed'}).sort('created', DESCENDING)
 
     # Get media entries which have failed to process
     failed_entries = request.db.MediaEntry.find(
         {'uploader': user._id,
-         'state': 'failed'}).sort('created', DESCENDING)
+         'state': u'failed'}).sort('created', DESCENDING)
 
     # Render to response
     return render_to_response(

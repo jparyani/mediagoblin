@@ -97,7 +97,7 @@ def get_user_media_entry(controller):
             return render_404(request)
         media = request.db.MediaEntry.find_one(
             {'slug': request.matchdict['media'],
-             'state': 'processed',
+             'state': u'processed',
              'uploader': user._id})
 
         # no media via slug?  Grab it via ObjectId
@@ -105,7 +105,7 @@ def get_user_media_entry(controller):
             try:
                 media = request.db.MediaEntry.find_one(
                     {'_id': ObjectId(request.matchdict['media']),
-                     'state': 'processed',
+                     'state': u'processed',
                      'uploader': user._id})
             except InvalidId:
                 return render_404(request)
@@ -127,7 +127,7 @@ def get_media_entry_by_id(controller):
         try:
             media = request.db.MediaEntry.find_one(
                 {'_id': ObjectId(request.matchdict['media']),
-                 'state': 'processed'})
+                 'state': u'processed'})
         except InvalidId:
             return render_404(request)
 

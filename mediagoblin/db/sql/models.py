@@ -158,7 +158,7 @@ class MediaEntry(Base, MediaEntryMixin):
         """get the next 'newer' entry by this user"""
         media = MediaEntry.query.filter(
             (MediaEntry.uploader == self.uploader)
-            & (MediaEntry.state == 'processed')
+            & (MediaEntry.state == u'processed')
             & (MediaEntry.id > self.id)).order_by(MediaEntry.id).first()
 
         if media is not None:
@@ -168,7 +168,7 @@ class MediaEntry(Base, MediaEntryMixin):
         """get the next 'older' entry by this user"""
         media = MediaEntry.query.filter(
             (MediaEntry.uploader == self.uploader)
-            & (MediaEntry.state == 'processed')
+            & (MediaEntry.state == u'processed')
             & (MediaEntry.id < self.id)).order_by(desc(MediaEntry.id)).first()
 
         if media is not None:

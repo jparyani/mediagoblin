@@ -37,8 +37,8 @@ EVIL_JPG = resource('evil.jpg')
 EVIL_PNG = resource('evil.png')
 BIG_BLUE = resource('bigblue.png')
 
-GOOD_TAG_STRING = 'yin,yang'
-BAD_TAG_STRING = 'rage,' + 'f' * 26 + 'u' * 26
+GOOD_TAG_STRING = u'yin,yang'
+BAD_TAG_STRING = unicode('rage,' + 'f' * 26 + 'u' * 26)
 
 FORM_CONTEXT = ['mediagoblin/submit/start.html', 'submit_form']
 REQUEST_CONTEXT = ['mediagoblin/user_pages/user.html', 'request']
@@ -92,7 +92,7 @@ class TestSubmission:
 
         # Test blank file
         # ---------------
-        response, form = self.do_post({'title': 'test title'}, *FORM_CONTEXT)
+        response, form = self.do_post({'title': u'test title'}, *FORM_CONTEXT)
         assert_equal(form.file.errors, [u'You must provide a file.'])
 
     def check_url(self, response, path):
@@ -112,10 +112,10 @@ class TestSubmission:
         self.test_app.get(url)
 
     def test_normal_jpg(self):
-        self.check_normal_upload('Normal upload 1', GOOD_JPG)
+        self.check_normal_upload(u'Normal upload 1', GOOD_JPG)
 
     def test_normal_png(self):
-        self.check_normal_upload('Normal upload 2', GOOD_PNG)
+        self.check_normal_upload(u'Normal upload 2', GOOD_PNG)
 
     def check_media(self, request, find_data, count=None):
         media = request.db.MediaEntry.find(find_data)
@@ -128,11 +128,11 @@ class TestSubmission:
     def test_tags(self):
         # Good tag string
         # --------
-        response, request = self.do_post({'title': 'Balanced Goblin',
+        response, request = self.do_post({'title': u'Balanced Goblin',
                                           'tags': GOOD_TAG_STRING},
                                          *REQUEST_CONTEXT, do_follow=True,
                                          **self.upload_data(GOOD_JPG))
-        media = self.check_media(request, {'title': 'Balanced Goblin'}, 1)
+        media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
         assert media.tags[0]['name'] == u'yin'
         assert media.tags[0]['slug'] == u'yin'
 
@@ -141,7 +141,7 @@ class TestSubmission:
 
         # Test tags that are too long
         # ---------------
-        response, form = self.do_post({'title': 'Balanced Goblin',
+        response, form = self.do_post({'title': u'Balanced Goblin',
                                        'tags': BAD_TAG_STRING},
                                       *FORM_CONTEXT,
                                       **self.upload_data(GOOD_JPG))
@@ -151,10 +151,10 @@ class TestSubmission:
                     'ffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuuuu'])
 
     def test_delete(self):
-        response, request = self.do_post({'title': 'Balanced Goblin'},
+        response, request = self.do_post({'title': u'Balanced Goblin'},
                                          *REQUEST_CONTEXT, do_follow=True,
                                          **self.upload_data(GOOD_JPG))
-        media = self.check_media(request, {'title': 'Balanced Goblin'}, 1)
+        media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
         media_id = media.id
 
         # Add a comment, so we can test for its deletion later.
@@ -173,7 +173,7 @@ class TestSubmission:
             user=self.test_user.username, media=media_id)
         # Empty data means don't confirm
         response = self.do_post({}, do_follow=True, url=delete_url)[0]
-        media = self.check_media(request, {'title': 'Balanced Goblin'}, 1)
+        media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
         media_id = media.id
 
         # Confirm deletion
@@ -186,7 +186,7 @@ class TestSubmission:
     def test_evil_file(self):
         # Test non-suppoerted file with non-supported extension
         # -----------------------------------------------------
-        response, form = self.do_post({'title': 'Malicious Upload 1'},
+        response, form = self.do_post({'title': u'Malicious Upload 1'},
                                       *FORM_CONTEXT,
                                       **self.upload_data(EVIL_FILE))
         assert_equal(len(form.file.errors), 1)
@@ -200,7 +200,7 @@ class TestSubmission:
         template.clear_test_template_context()
         response = self.test_app.post(
             '/submit/', {
-                'title': 'UNIQUE_TITLE_PLS_DONT_CREATE_OTHER_MEDIA_WITH_THIS_TITLE'
+                'title': u'UNIQUE_TITLE_PLS_DONT_CREATE_OTHER_MEDIA_WITH_THIS_TITLE'
                 }, upload_files=[(
                     'file', GOOD_JPG)])
 
@@ -237,7 +237,7 @@ class TestSubmission:
         self.check_false_image('Malicious Upload 3', EVIL_PNG)
 
     def test_processing(self):
-        data = {'title': 'Big Blue'}
+        data = {'title': u'Big Blue'}
         response, request = self.do_post(data, *REQUEST_CONTEXT, do_follow=True,
                                          **self.upload_data(BIG_BLUE))
         media = self.check_media(request, data, 1)

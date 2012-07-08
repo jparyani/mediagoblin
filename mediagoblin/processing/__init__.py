@@ -84,7 +84,7 @@ def mark_entry_failed(entry_id, exc):
         atomic_update(mgg.database.MediaEntry,
             {'_id': entry_id},
             {u'state': u'failed',
-             u'fail_error': exc.exception_path,
+             u'fail_error': unicode(exc.exception_path),
              u'fail_metadata': exc.metadata})
     else:
         _log.warn("No idea what happened here, but it failed: %r", exc)

@@ -143,10 +143,10 @@ def process_image(entry):
 
     # Insert media file information into database
     media_files_dict = entry.setdefault('media_files', {})
-    media_files_dict['thumb'] = thumb_filepath
-    media_files_dict['original'] = original_filepath
+    media_files_dict[u'thumb'] = thumb_filepath
+    media_files_dict[u'original'] = original_filepath
     if medium_filepath:
-        media_files_dict['medium'] = medium_filepath
+        media_files_dict[u'medium'] = medium_filepath
 
     # Insert exif data into database
     exif_all = clean_exif(exif_tags)

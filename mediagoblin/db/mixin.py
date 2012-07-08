@@ -60,7 +60,7 @@ class MediaEntryMixin(object):
 
         if duplicate:
             if self.id is not None:
-                self.slug = "%s-%s" % (self.id, self.slug)
+                self.slug = u"%s-%s" % (self.id, self.slug)
             else:
                 self.slug = None
 
