@@ -41,7 +41,7 @@ def test_change_password(test_app):
             })
 
     # test_user has to be fetched again in order to have the current values
-    test_user = mg_globals.database.User.one({'username': 'chris'})
+    test_user = mg_globals.database.User.one({'username': u'chris'})
 
     assert bcrypt_check_password('123456', test_user.pw_hash)
 
@@ -54,7 +54,7 @@ def test_change_password(test_app):
             'new_password': '098765',
             })
 
-    test_user = mg_globals.database.User.one({'username': 'chris'})
+    test_user = mg_globals.database.User.one({'username': u'chris'})
 
     assert not bcrypt_check_password('098765', test_user.pw_hash)
 
@@ -71,7 +71,7 @@ def change_bio_url(test_app):
             'bio': u'I love toast!',
             'url': u'http://dustycloud.org/'})
 
-    test_user = mg_globals.database.User.one({'username': 'chris'})
+    test_user = mg_globals.database.User.one({'username': u'chris'})
 
     assert test_user.bio == u'I love toast!'
     assert test_user.url == u'http://dustycloud.org/'
@@ -85,7 +85,7 @@ def change_bio_url(test_app):
             'bio': too_long_bio,
             'url': 'this-is-no-url'})
 
-    test_user = mg_globals.database.User.one({'username': 'chris'})
+    test_user = mg_globals.database.User.one({'username': u'chris'})
 
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/edit/edit_profile.html']
     form = context['edit_profile_form']
