@@ -248,3 +248,5 @@ def storage_system_from_config(config_section):
 
     storage_class = common.import_component(storage_class)
     return storage_class(**config_params)
+
+import filestorage
