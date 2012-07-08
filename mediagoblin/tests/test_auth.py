@@ -131,7 +131,7 @@ def test_register_views(test_app):
     template.clear_test_template_context()
     response = test_app.post(
         '/auth/register/', {
-            'username': 'happygirl',
+            'username': u'happygirl',
             'password': 'iamsohappy',
             'email': 'happygrrl@example.org'})
     response.follow()
@@ -145,7 +145,7 @@ def test_register_views(test_app):
 
     ## Make sure user is in place
     new_user = mg_globals.database.User.find_one(
-        {'username': 'happygirl'})
+        {'username': u'happygirl'})
     assert new_user
     assert new_user.status == u'needs_email_verification'
     assert new_user.email_verified == False
@@ -185,7 +185,7 @@ def test_register_views(test_app):
     # assert context['verification_successful'] == True
     # TODO: Would be good to test messages here when we can do so...
     new_user = mg_globals.database.User.find_one(
-        {'username': 'happygirl'})
+        {'username': u'happygirl'})
     assert new_user
     assert new_user.status == u'needs_email_verification'
     assert new_user.email_verified == False
@@ -199,7 +199,7 @@ def test_register_views(test_app):
     # assert context['verification_successful'] == True
     # TODO: Would be good to test messages here when we can do so...
     new_user = mg_globals.database.User.find_one(
-        {'username': 'happygirl'})
+        {'username': u'happygirl'})
     assert new_user
     assert new_user.status == u'active'
     assert new_user.email_verified == True
@@ -210,7 +210,7 @@ def test_register_views(test_app):
     template.clear_test_template_context()
     response = test_app.post(
         '/auth/register/', {
-            'username': 'happygirl',
+            'username': u'happygirl',
             'password': 'iamsohappy2',
             'email': 'happygrrl2@example.org'})
 
@@ -227,7 +227,7 @@ def test_register_views(test_app):
     template.clear_test_template_context()
     response = test_app.post(
         '/auth/forgot_password/',
-        {'username': 'happygirl'})
+        {'username': u'happygirl'})
     response.follow()
 
     ## Did we redirect to the proper page?  Use the right template?
@@ -252,7 +252,7 @@ def test_register_views(test_app):
     parsed_get_params = urlparse.parse_qs(get_params)
 
     # user should have matching parameters
-    new_user = mg_globals.database.User.find_one({'username': 'happygirl'})
+    new_user = mg_globals.database.User.find_one({'username': u'happygirl'})
     assert parsed_get_params['userid'] == [unicode(new_user._id)]
     assert parsed_get_params['token'] == [new_user.fp_verification_key]
 
@@ -269,7 +269,7 @@ def test_register_views(test_app):
 
     ## Try using an expired token to change password, shouldn't work
     template.clear_test_template_context()
-    new_user = mg_globals.database.User.find_one({'username': 'happygirl'})
+    new_user = mg_globals.database.User.find_one({'username': u'happygirl'})
     real_token_expiration = new_user.fp_token_expire
     new_user.fp_token_expire = datetime.datetime.now()
     new_user.save()
