@@ -22,7 +22,7 @@
 <h1>{% trans %}Media processing panel{% endtrans %}</h1>
 
 <p>
-  {% trans %}You can track the state of media being processed for your gallery here.{% endtrans %}
+  {% trans %}Here you can track the state of media being processed on this instance.{% endtrans %}
 </p>
     
 <h2>{% trans %}Media in-processing{% endtrans %}</h2>
@@ -31,6 +31,7 @@
   <table class="media_panel processing">
     <tr>
       <th>ID</th>
+      <th>User</th>
       <th>Title</th>
       <th>When submitted</th>
       <th>Transcoding progress</th>
@@ -38,10 +39,11 @@
     {% for media_entry in processing_entries %}
       <tr>
         <td>{{ media_entry._id }}</td>
+        <td>{{ media_entry.get_uploader.username }}</td>
         <td>{{ media_entry.title }}</td>
         <td>{{ media_entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
         {% if media_entry.transcoding_progress %}
-        <td>{{ media_entry.transcoding_progress }}%</td>
+          <td>{{ media_entry.transcoding_progress }}%</td>
         {% else %}
         <td>Unknown</td>
         {% endif %}
@@ -58,6 +60,7 @@
   <table class="media_panel failed">
     <tr>
       <th>ID</th>
+      <th>User</th>
       <th>Title</th>
       <th>When submitted</th>
       <th>Reason for failure</th>
@@ -66,6 +69,7 @@
     {% for media_entry in failed_entries %}
       <tr>
         <td>{{ media_entry._id }}</td>
+        <td>{{ media_entry.get_uploader.username }}</td>
         <td>{{ media_entry.title }}</td>
         <td>{{ media_entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
         {% if media_entry.get_fail_exception() %}
@@ -81,21 +85,22 @@
 {% else %}
   <p><em>{% trans %}No failed entries!{% endtrans %}</em></p>
 {% endif %}
-
-<h2>{% trans %}Your last 10 successful uploads{% endtrans %}</h2>
+<h2>{% trans %}Last 10 successful uploads{% endtrans %}</h2>
 {% if processed_entries.count() %}
 
   <table class="media_panel processed">
     <tr>
         <th>ID</th>
+        <th>User</th>
         <th>Title</th>
         <th>Submitted</th>
     </tr>
-    {% for entry in processed_entries %}
+    {% for media_entry in processed_entries %}
       <tr>
-        <td>{{ entry._id }}</td>
-        <td><a href="{{ entry.url_for_self(request.urlgen) }}">{{ entry.title }}</a></td>
-        <td>{{ entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
+        <td>{{ media_entry._id }}</td>
+        <td>{{ media_entry.get_uploader.username }}</td>
+        <td><a href="{{ media_entry.url_for_self(request.urlgen) }}">{{ media_entry.title }}</a></td>
+        <td>{{ media_entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
       </tr>
     {% endfor %}
   </table>
