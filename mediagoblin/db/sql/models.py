@@ -107,6 +107,8 @@ class MediaEntry(Base, MediaEntryMixin):
     fail_error = Column(Unicode)
     fail_metadata = Column(JSONEncoded)
 
+    transcoding_progress = Column(SmallInteger)
+
     queued_media_file = Column(PathTupleWithSlashes)
 
     queued_task_id = Column(Unicode)
@@ -208,6 +210,12 @@ class MediaEntry(Base, MediaEntryMixin):
         models_module = self.media_type + '.models'
         __import__(models_module)
         return sys.modules[models_module].DATA_MODEL
+
+    def __repr__(self):
+        return '<{classname} {id}: {title}>'.format(
+                classname=self.__class__.__name__,
+                id=self.id,
+                title=self.title)
 
 
 class FileKeynames(Base):

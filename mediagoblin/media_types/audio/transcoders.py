@@ -206,7 +206,7 @@ class AudioTranscoder(object):
             data = dict(message.structure)
 
             if self.__on_progress:
-                self.__on_progress(data)
+                self.__on_progress(data.get('percent'))
 
             _log.info('{0}% done...'.format(
                     data.get('percent')))

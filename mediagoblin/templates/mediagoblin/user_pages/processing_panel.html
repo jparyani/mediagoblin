@@ -33,19 +33,23 @@
       <th>ID</th>
       <th>Title</th>
       <th>When submitted</th>
-      <th>Status</th>
+      <th>Transcoding progress</th>
     </tr>
     {% for media_entry in processing_entries %}
       <tr>
         <td>{{ media_entry._id }}</td>
         <td>{{ media_entry.title }}</td>
         <td>{{ media_entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
-        <td></td>
+        {% if media_entry.transcoding_progress %}
+        <td>{{ media_entry.transcoding_progress }}%</td>
+        {% else %}
+        <td>Unknown</td>
+        {% endif %}
       </tr>
     {% endfor %}
   </table>
 {% else %}
-  <p><i>{% trans %}No media in-processing{% endtrans %}</i></p>
+  <p><em>{% trans %}No media in-processing{% endtrans %}</em></p>
 {% endif %}  
 
 {% if failed_entries.count() %}
@@ -74,5 +78,27 @@
       </tr>
     {% endfor %}
   </table>
-{% endif %}  
+{% else %}
+  <p><em>{% trans %}No failed entries!{% endtrans %}</em></p>
+{% endif %}
+{% if processed_entries.count() %}
+  <h2>{% trans %}Your last 10 successful uploads{% endtrans %}</h2>
+
+  <table class="media_panel processed">
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Submitted</th>
+    </tr>
+    {% for entry in processed_entries %}
+      <tr>
+        <td>{{ entry._id }}</td>
+        <td><a href="{{ entry.url_for_self(request.urlgen) }}">{{ entry.title }}</a></td>
+        <td>{{ entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p><em>{% trans %}No processed entries, yet!{% endtrans %}</em></p>
+{% endif %}
 {% endblock %}

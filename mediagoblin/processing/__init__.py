@@ -25,11 +25,22 @@ from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 _log = logging.getLogger(__name__)
 
 
+class ProgressCallback(object):
+    def __init__(self, entry):
+        self.entry = entry
+
+    def __call__(self, progress):
+        if progress:
+            self.entry.transcoding_progress = progress
+            self.entry.save()
+
+
 def create_pub_filepath(entry, filename):
     return mgg.public_store.get_unique_filepath(
             ['media_entries',
              unicode(entry._id),
              filename])
+
 
 class FilenameBuilder(object):
     """Easily slice and dice filenames.

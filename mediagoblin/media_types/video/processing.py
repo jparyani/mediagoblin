@@ -19,7 +19,7 @@ import logging
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import \
-    create_pub_filepath, FilenameBuilder, BaseProcessingFail
+    create_pub_filepath, FilenameBuilder, BaseProcessingFail, ProgressCallback
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 from . import transcoders
@@ -78,11 +78,13 @@ def process_video(entry):
 
     with tmp_dst:
         # Transcode queued file to a VP8/vorbis file that fits in a 640x640 square
+        progress_callback = ProgressCallback(entry)
         transcoder = transcoders.VideoTranscoder()
         transcoder.transcode(queued_filename, tmp_dst.name,
                 vp8_quality=video_config['vp8_quality'],
                 vp8_threads=video_config['vp8_threads'],
-                vorbis_quality=video_config['vorbis_quality'])
+                vorbis_quality=video_config['vorbis_quality'],
+                progress_callback=progress_callback)
 
         # Push transcoded video to public storage
         _log.debug('Saving medium...')

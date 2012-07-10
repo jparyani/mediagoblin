@@ -16,6 +16,7 @@
 
 from webob import exc
 import logging
+import datetime
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.util import DESCENDING, ObjectId
@@ -36,6 +37,7 @@ from mediagoblin.media_types import get_media_manager
 
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
+
 
 @uses_pagination
 def user_home(request, page):
@@ -251,10 +253,11 @@ def atom_feed(request):
     atomlinks = [{
            'href': request.urlgen(
                'mediagoblin.user_pages.user_home',
-               qualified=True,user=request.matchdict['user']),
+               qualified=True, user=request.matchdict['user']),
            'rel': 'alternate',
            'type': 'text/html'
-           }];
+           }]
+
     if mg_globals.app_config["push_urls"]:
         for push_url in mg_globals.app_config["push_urls"]:
             atomlinks.append({
@@ -264,14 +267,16 @@ def atom_feed(request):
     feed = AtomFeed(
                "MediaGoblin: Feed for user '%s'" % request.matchdict['user'],
                feed_url=request.url,
-               id='tag:'+request.host+',2011:gallery.user-'+request.matchdict['user'],
+               id='tag:{host},{year}:gallery.user-{user}'.format(
+                   host=request.host,
+                   year=datetime.datetime.today().strftime('%Y'),
+                   user=request.matchdict['user']),
                links=atomlinks)
-
 
     for entry in cursor:
         feed.add(entry.get('title'),
             entry.description_html,
-            id=entry.url_for_self(request.urlgen,qualified=True),
+            id=entry.url_for_self(request.urlgen, qualified=True),
             content_type='html',
             author={
                 'name': entry.get_uploader.username,
@@ -323,12 +328,16 @@ def processing_panel(request):
     # Get media entries which are in-processing
     processing_entries = request.db.MediaEntry.find(
         {'uploader': user._id,
-         'state': u'unprocessed'}).sort('created', DESCENDING)
+         'state': u'processing'}).sort('created', DESCENDING)
 
     # Get media entries which have failed to process
     failed_entries = request.db.MediaEntry.find(
         {'uploader': user._id,
          'state': u'failed'}).sort('created', DESCENDING)
+
+    processed_entries = request.db.MediaEntry.find(
+            {'uploader': user._id,
+                'state': u'processed'}).sort('created', DESCENDING).limit(10)
 
     # Render to response
     return render_to_response(
@@ -336,4 +345,5 @@ def processing_panel(request):
         'mediagoblin/user_pages/processing_panel.html',
         {'user': user,
          'processing_entries': processing_entries,
-         'failed_entries': failed_entries})
+         'failed_entries': failed_entries,
+         'processed_entries': processed_entries})

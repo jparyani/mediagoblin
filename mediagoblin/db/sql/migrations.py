@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from sqlalchemy import MetaData, Table, Column, Boolean
+from sqlalchemy import MetaData, Table, Column, Boolean, SmallInteger
 
 from mediagoblin.db.sql.util import RegisterMigration
 
@@ -46,4 +46,16 @@ def add_wants_notification_column(db_conn):
     col = Column('wants_comment_notification', Boolean,
             default=True, nullable=True)
     col.create(users, populate_defaults=True)
+    db_conn.commit()
+
+
+@RegisterMigration(3, MIGRATIONS)
+def add_transcoding_progress(db_conn):
+    metadata = MetaData(bind=db_conn.bind)
+
+    media_entry = Table('core__media_entries', metadata, autoload=True,
+            autoload_with=db_conn.bind)
+
+    col = Column('transcoding_progress', SmallInteger)
+    col.create(media_entry)
     db_conn.commit()

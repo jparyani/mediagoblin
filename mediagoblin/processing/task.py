@@ -44,20 +44,24 @@ class ProcessMedia(Task):
         entry = mgg.database.MediaEntry.one(
             {'_id': ObjectId(media_id)})
 
-        _log.info('Running task {0} on media {1}: {2}'.format(
-            self.name,
-            entry._id,
-            entry.title))
-
         # Try to process, and handle expected errors.
         try:
-            #__import__(entry.media_type)
             manager = get_media_manager(entry.media_type)
+
+            entry.state = u'processing'
+            entry.save()
+
             _log.debug('Processing {0}'.format(entry))
+
             manager['processor'](entry)
+
+            entry.state = u'processed'
+            entry.save()
+
         except BaseProcessingFail as exc:
             mark_entry_failed(entry._id, exc)
             return
+
         except ImportError as exc:
             _log.error(
                 'Entry {0} failed to process due to an import error: {1}'\
@@ -66,9 +70,6 @@ class ProcessMedia(Task):
                     exc))
 
             mark_entry_failed(entry._id, exc)
-
-        entry.state = u'processed'
-        entry.save()
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         """

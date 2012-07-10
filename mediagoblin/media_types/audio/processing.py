@@ -20,12 +20,13 @@ import os
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (create_pub_filepath, BadMediaFail,
-    FilenameBuilder)
+    FilenameBuilder, ProgressCallback)
 
 from mediagoblin.media_types.audio.transcoders import (AudioTranscoder,
     AudioThumbnailer)
 
 _log = logging.getLogger(__name__)
+
 
 def sniff_handler(media_file, **kw):
     try:
@@ -39,6 +40,7 @@ def sniff_handler(media_file, **kw):
         return True
 
     return False
+
 
 def process_audio(entry):
     audio_config = mgg.global_config['media_type:mediagoblin.media_types.audio']
@@ -72,11 +74,13 @@ def process_audio(entry):
     transcoder = AudioTranscoder()
 
     with tempfile.NamedTemporaryFile() as webm_audio_tmp:
+        progress_callback = ProgressCallback(entry)
 
         transcoder.transcode(
             queued_filename,
             webm_audio_tmp.name,
-            quality=audio_config['quality'])
+            quality=audio_config['quality'],
+            progress_callback=progress_callback)
 
         transcoder.discover(webm_audio_tmp.name)
 

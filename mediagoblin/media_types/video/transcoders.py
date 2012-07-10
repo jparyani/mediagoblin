@@ -625,7 +625,7 @@ class VideoTranscoder:
                 data = dict(message.structure)
 
                 if self._progress_callback:
-                    self._progress_callback(data)
+                    self._progress_callback(data.get('percent'))
 
                 _log.info('{percent}% done...'.format(
                         percent=data.get('percent')))
