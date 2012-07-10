@@ -19,11 +19,20 @@ import logging
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import \
-    create_pub_filepath, FilenameBuilder
+    create_pub_filepath, FilenameBuilder, BaseProcessingFail
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+
 from . import transcoders
 
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
+
+
+class VideoTranscodingFail(BaseProcessingFail):
+    '''
+    Error raised if video transcoding fails
+    '''
+    general_message = _(u'Video transcoding failed')
 
 
 def sniff_handler(media_file, **kw):

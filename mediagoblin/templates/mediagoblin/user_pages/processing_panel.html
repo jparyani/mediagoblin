@@ -30,12 +30,14 @@
 {% if processing_entries.count() %}
   <table class="media_panel processing">
     <tr>
+      <th>ID</th>
       <th>Title</th>
       <th>When submitted</th>
       <th>Status</th>
     </tr>
     {% for media_entry in processing_entries %}
       <tr>
+        <td>{{ media_entry._id }}</td>
         <td>{{ media_entry.title }}</td>
         <td>{{ media_entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
         <td></td>
@@ -51,15 +53,24 @@
 
   <table class="media_panel failed">
     <tr>
+      <th>ID</th>
       <th>Title</th>
       <th>When submitted</th>
       <th>Reason for failure</th>
+      <th>Failure metadata</th>
     </tr>
     {% for media_entry in failed_entries %}
       <tr>
+        <td>{{ media_entry._id }}</td>
         <td>{{ media_entry.title }}</td>
-        <td>{{ media_entry['created'].strftime("%m-%d-%Y %I:%M %p") }}</td>
+        <td>{{ media_entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
+        {% if media_entry.get_fail_exception() %}
         <td>{{ media_entry.get_fail_exception().general_message }}</td>
+        <td>{{ media_entry.fail_metadata }}</td>
+        {% else %}
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        {% endif %}
       </tr>
     {% endfor %}
   </table>

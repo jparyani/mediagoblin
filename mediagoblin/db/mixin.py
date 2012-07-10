@@ -116,8 +116,8 @@ class MediaEntryMixin(object):
         """
         Get the exception that's appropriate for this error
         """
-        if self['fail_error']:
-            return common.import_component(self['fail_error'])
+        if self.fail_error:
+            return common.import_component(self.fail_error)
 
     def get_license_data(self):
         """Return license dict for requested license"""
