@@ -15,8 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import os
 import pkg_resources
-import os, shutil
+import shutil
+
+from functools import wraps
 
 from paste.deploy import loadapp
 from webtest import TestApp
@@ -24,7 +27,6 @@ from webtest import TestApp
 from mediagoblin import mg_globals
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
-from mediagoblin.decorators import _make_safe
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.db.sql.base import Session
 from mediagoblin.meddleware import BaseMeddleware
@@ -159,12 +161,13 @@ def setup_fresh_app(func):
 
     Cleans out test buckets and passes in a new, fresh test_app.
     """
+    @wraps(func)
     def wrapper(*args, **kwargs):
         test_app = get_test_app()
         testing.clear_test_buckets()
         return func(test_app, *args, **kwargs)
 
-    return _make_safe(wrapper, func)
+    return wrapper
 
 
 def install_fixtures_simple(db, fixtures):
