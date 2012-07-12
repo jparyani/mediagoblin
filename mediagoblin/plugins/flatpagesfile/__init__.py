@@ -15,6 +15,65 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# This imports the main module which has the FlatPagesPlugin class
-# which does all the work.
-import mediagoblin.plugins.flatpagesfile.main
+import logging
+import os
+
+import jinja2
+from routes.route import Route
+
+from mediagoblin.tools import pluginapi
+from mediagoblin.tools.response import render_to_response
+
+
+PLUGIN_DIR = os.path.dirname(__file__)
+
+
+_log = logging.getLogger(__name__)
+
+
+@jinja2.contextfunction
+def print_context(c):
+    s = []
+    for key, val in c.items():
+        s.append('%s: %s' % (key, repr(val)))
+    return '\n'.join(s)
+
+
+def flatpage_handler_builder(template):
+    """Flatpage view generator
+
+    Given a template, generates the controller function for handling that
+    route.
+
+    """
+    def _flatpage_handler_builder(request):
+        return render_to_response(
+            request, 'flatpagesfile/%s' % template,
+            {'request': request})
+    return _flatpage_handler_builder
+
+
+class FlatpagesFilePlugin(pluginapi.Plugin):
+    """
+    This is the flatpages plugin class. See the README for how to use
+    flatpages.
+    """
+    def setup_plugin(self):
+        self.config = pluginapi.get_config('mediagoblin.plugins.flatpagesfile')
+
+        _log.info('Setting up flatpagesfile....')
+
+        # Register the template path.
+        pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
+
+        pages = self.config.items()
+
+        routes = []
+        for name, (url, template) in pages:
+            name = 'flatpagesfile.%s' % name.strip()
+            controller = flatpage_handler_builder(template)
+            routes.append(
+                Route(name, url, controller=controller))
+
+        pluginapi.register_routes(routes)
+        _log.info('Done setting up flatpagesfile!')

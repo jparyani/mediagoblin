@@ -44,27 +44,24 @@ First, let's talk about the route.
 
 A route is a key/value in your configuration file.
 
-The key starts with ``path`` and then has a number after that. For
-example: ``path1``, ``path2``, ... ``path15``, ...
+The key for the route is the route name You can use this with `url()`
+in templates to have MediaGoblin automatically build the urls for
+you. It's very handy.
 
-The value has three parts separated by commas:
+It should be "unique" and it should be alphanumeric characters and
+hyphens. I wouldn't put spaces in there.
 
-1. **route name**: You can use this with `url()` in templates to have
-   MediaGoblin automatically build the urls for you. It's very handy.
+Examples: ``flatpages-about``, ``about-view``, ``contact-view``, ...
 
-   It should be "unique" and it should be alphanumeric characters and
-   hyphens. I wouldn't put spaces in there.
+The value has two parts separated by commas:
 
-   Examples: ``flatpages-about``, ``about-view``, ``contact-view``, ...
-
-2. **route path**: This is the url that this route matches.
+1. **route path**: This is the url that this route matches.
 
    Examples: ``/about``, ``/contact``, ``/pages/about``, ...
 
-   Technically, this is a regular expression and you can do anything
-   with this that you can do with the routepath parameter of
-   `routes.Route`. For more details, see `the routes documentation
-   <http://routes.readthedocs.org/en/latest/>`_.
+   You can do anything with this that you can do with the routepath
+   parameter of `routes.Route`. For more details, see `the routes
+   documentation <http://routes.readthedocs.org/en/latest/>`_.
 
    Example: ``/siteadmin/{adminname:\w+}``
 
@@ -75,7 +72,7 @@ The value has three parts separated by commas:
 
       For example: ``'/siteadmin/{adminname:\w+}'``
 
-3. **template**: The template to use for this url. The template is in
+2. **template**: The template to use for this url. The template is in
    the flatpagesfile template directory, so you just need to specify
    the file name.
 
@@ -89,8 +86,14 @@ Here's an example configuration that adds two flat pages: one for an
 "About this site" page and one for a "Terms of service" page::
 
     [[mediagoblin.plugins.flatpagesfile]]
-    page1 = about-view, '/about', about.html
-    page2 = terms-view, '/terms', terms.html
+    about-view = '/about', about.html
+    terms-view = '/terms', terms.html
+
+
+.. Note::
+
+   The order in which you define the routes in the config file is the
+   order in which they're checked for incoming requests.
 
 
 Templates
@@ -130,3 +133,29 @@ template::
    another, take advantage of Jinja2 template extending and create a
    base template that the others extend.
 
+
+Recipes
+=======
+
+Url variables
+-------------
+
+You can handle urls like ``/about/{name}`` and access the name that's
+passed in in the template.
+
+Sample route::
+
+    about-page = '/about/{name}', about.html
+
+Sample template::
+
+   {% extends "flatpagesfile/base.html" %}
+   {% block mediagoblin_content %}
+
+   <h1>About page for {{ request.matchdict['name'] }}</h1>
+
+   {% endblock %}
+
+See the `the routes documentation
+<http://routes.readthedocs.org/en/latest/>`_ for syntax details for
+the route. Values will end up in the ``request.matchdict`` dict.
