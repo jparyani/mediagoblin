@@ -57,20 +57,39 @@ def assetlink(args):
     """
     global_config, app_config = setup_global_and_app_config(args.conf_file)
     theme_registry, current_theme = register_themes(app_config)
+    link_dir = app_config['theme_linked_assets_dir'].rstrip(os.path.sep)
+    link_parent_dir = os.path.split(link_dir.rstrip(os.path.sep))[0]
 
     if current_theme is None:
         print "Cannot link theme... no theme set"
         return
 
-    link_dir = app_config['theme_linked_assets_dir']
+    def _maybe_unlink_link_dir():
+        """unlink link directory if it exists"""
+        if os.path.lexists(link_dir) \
+                and os.path.islink(link_dir):
+            os.unlink(link_dir)
+            return True
 
-    # Remove existing symlink if it exists
-    if os.path.exists(link_dir):
-        # make sure it's a symlink though
-        assert os.path.islink(link_dir)
-        os.unlink(link_dir)
+        return False
 
-    os.symlink(current_theme['assets_dir'].rstrip('/'), link_dir.rstrip('/'))
+    if current_theme.get('assets_dir') is None:
+        print "No asset directory for this theme"
+        if _maybe_unlink_link_dir():
+            print "However, old link directory symlink found; removed."
+        return
+
+    _maybe_unlink_link_dir()
+
+    # make the link directory parent dirs if necessary
+    if not os.path.lexists(link_parent_dir):
+        os.makedirs(link_parent_dir)
+
+    os.symlink(
+        current_theme['assets_dir'].rstrip(os.path.sep),
+        link_dir)
+    print "Linked the theme's asset directory:\n  %s\nto:\n  %s" % (
+        current_theme['assets_dir'], link_dir)
 
 
 SUBCOMMANDS = {
