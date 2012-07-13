@@ -50,6 +50,11 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.mongosql:mongosql_parser_setup',
         'func': 'mediagoblin.gmg_commands.mongosql:mongosql',
         'help': 'Convert Mongo DB data to SQL DB data'},
+    'theme': {
+        'setup': 'mediagoblin.gmg_commands.theme:theme_parser_setup',
+        'func': 'mediagoblin.gmg_commands.theme:theme',
+        'help': 'Theming commands',
+        }
 
     ## These might be useful, mayyyybe, but don't really work anymore
     ## due to mongo change and the "versatility" of sql options.
@@ -93,6 +98,7 @@ def main_cli():
         subparser.set_defaults(func=exec_func)
 
     args = parser.parse_args()
+    args.orig_conf_file = args.conf_file
     if args.conf_file is None:
         if os.path.exists('mediagoblin_local.ini') \
                 and os.access('mediagoblin_local.ini', os.R_OK):
