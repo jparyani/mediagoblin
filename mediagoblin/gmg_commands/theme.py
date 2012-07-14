@@ -87,8 +87,8 @@ def link_assets(theme, link_dir, printer=simple_printer):
         theme['assets_dir'], link_dir))
 
 
-def install_theme():
-    pass
+def install_theme(install_dir, themefile):
+    pass # TODO ;)
 
 
 #############
@@ -109,6 +109,8 @@ def install_command(args):
     Handle the 'install this theme' subcommand
     """
     global_config, app_config = setup_global_and_app_config(args.conf_file)
+    install_dir = app_config['theme_install_dir']
+    install_theme(install_dir, args.themefile)
 
 
 SUBCOMMANDS = {
