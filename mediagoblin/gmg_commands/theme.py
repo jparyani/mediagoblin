@@ -18,6 +18,8 @@ import os
 
 from mediagoblin.init import setup_global_and_app_config
 from mediagoblin.tools.theme import register_themes
+from mediagoblin.tools.translate import pass_to_ugettext as _
+from mediagoblin.tools.common import simple_printer
 
 
 def theme_parser_setup(subparser):
@@ -31,19 +33,6 @@ def theme_parser_setup(subparser):
     install_parser.add_argument(
         u'themefile', help=u'The theme archive to be installed')
 
-    # # Uninstall command
-    # theme_subparsers.add_parser(
-    #     u'uninstall',
-    #     help=u'Uninstall a theme... will default to the current theme.')
-
-    # # List command
-    # theme_subparsers.add_parser(
-    #     u'list', help=u'List installed themes')
-    
-    # Set theme command
-
-    # Link theme assets command
-
     theme_subparsers.add_parser(
         u'assetlink',
         help=(
@@ -51,18 +40,23 @@ def theme_parser_setup(subparser):
             u"to the served theme asset directory"))
 
 
-def assetlink(args):
+###########
+# Utilities
+###########
+
+def link_assets(theme, link_dir, printer=simple_printer):
     """
-    Link the asset directory of the currently installed theme
+    Returns a list of string of text telling the user what we did
+    which should be printable.
     """
-    global_config, app_config = setup_global_and_app_config(args.conf_file)
-    theme_registry, current_theme = register_themes(app_config)
-    link_dir = app_config['theme_linked_assets_dir'].rstrip(os.path.sep)
+    link_dir = link_dir.rstrip(os.path.sep)
     link_parent_dir = os.path.split(link_dir.rstrip(os.path.sep))[0]
 
-    if current_theme is None:
-        print "Cannot link theme... no theme set"
-        return
+    results = []
+
+    if theme is None:
+        printer(_("Cannot link theme... no theme set\n"))
+        return results
 
     def _maybe_unlink_link_dir():
         """unlink link directory if it exists"""
@@ -71,13 +65,14 @@ def assetlink(args):
             os.unlink(link_dir)
             return True
 
-        return False
+        return results
 
-    if current_theme.get('assets_dir') is None:
-        print "No asset directory for this theme"
+    if theme.get('assets_dir') is None:
+        printer(_("No asset directory for this theme\n"))
         if _maybe_unlink_link_dir():
-            print "However, old link directory symlink found; removed."
-        return
+            printer(
+                _("However, old link directory symlink found; removed.\n"))
+        return results
 
     _maybe_unlink_link_dir()
 
@@ -86,14 +81,39 @@ def assetlink(args):
         os.makedirs(link_parent_dir)
 
     os.symlink(
-        current_theme['assets_dir'].rstrip(os.path.sep),
+        theme['assets_dir'].rstrip(os.path.sep),
         link_dir)
-    print "Linked the theme's asset directory:\n  %s\nto:\n  %s" % (
-        current_theme['assets_dir'], link_dir)
+    printer("Linked the theme's asset directory:\n  %s\nto:\n  %s\n" % (
+        theme['assets_dir'], link_dir))
+
+
+def install_theme():
+    pass
+
+
+#############
+# Subcommands
+#############
+
+def assetlink_command(args):
+    """
+    Link the asset directory of the currently installed theme
+    """
+    global_config, app_config = setup_global_and_app_config(args.conf_file)
+    theme_registry, current_theme = register_themes(app_config)
+    link_assets(current_theme, app_config['theme_linked_assets_dir'])
+
+
+def install_command(args):
+    """
+    Handle the 'install this theme' subcommand
+    """
+    global_config, app_config = setup_global_and_app_config(args.conf_file)
 
 
 SUBCOMMANDS = {
-    'assetlink': assetlink}
+    'assetlink': assetlink_command,
+    'install': install_command}
 
 
 def theme(args):
