@@ -36,3 +36,39 @@ def import_component(import_string):
     module = sys.modules[module_name]
     func = getattr(module, func_name)
     return func
+
+
+def simple_printer(string):
+    """
+    Prints a string, but without an auto \n at the end.
+
+    Useful for places where we want to dependency inject for printing.
+    """
+    sys.stdout.write(string)
+    sys.stdout.flush()
+
+
+class CollectingPrinter(object):
+    """
+    Another printer object, this one useful for capturing output for
+    examination during testing or otherwise.
+
+    Use this like:
+
+      >>> printer = CollectingPrinter()
+      >>> printer("herp derp\n")
+      >>> printer("lollerskates\n")
+      >>> printer.combined_string
+      "herp derp\nlollerskates\n"
+    """
+    def __init__(self):
+        self.collection = []
+    
+    def __call__(self, string):
+        self.collection.append(string)
+
+    @property
+    def combined_string(self):
+        return u''.join(self.collection)
+
+

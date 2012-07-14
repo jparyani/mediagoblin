@@ -27,6 +27,7 @@ from migrate import changeset
 
 from mediagoblin.db.sql.base import GMGTableBase
 from mediagoblin.db.sql.util import MigrationManager, RegisterMigration
+from mediagoblin.tools.common import CollectingPrinter
 
 
 # This one will get filled with local migrations
@@ -518,18 +519,6 @@ def _insert_migration3_objects(session):
                     to_level=u'necroplex')])
 
     session.commit()
-
-
-class CollectingPrinter(object):
-    def __init__(self):
-        self.collection = []
-    
-    def __call__(self, string):
-        self.collection.append(string)
-
-    @property
-    def combined_string(self):
-        return u''.join(self.collection)
 
 
 def create_test_engine():

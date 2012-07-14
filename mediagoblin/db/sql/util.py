@@ -19,13 +19,7 @@ import sys
 from mediagoblin.db.sql.base import Session
 from mediagoblin.db.sql.models import MediaEntry, Tag, MediaTag
 
-
-def _simple_printer(string):
-    """
-    Prints a string, but without an auto \n at the end.
-    """
-    sys.stdout.write(string)
-    sys.stdout.flush()
+from mediagoblin.tools.common import simple_printer
 
 
 class MigrationManager(object):
@@ -37,7 +31,7 @@ class MigrationManager(object):
     """
 
     def __init__(self, name, models, migration_registry, session,
-                 printer=_simple_printer):
+                 printer=simple_printer):
         """
         Args:
          - name: identifier of this section of the database
