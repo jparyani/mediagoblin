@@ -224,6 +224,30 @@ can put whatever in here, but restating the license choice clearly is
 probably a good idea.
 
 
+Simple theming by adding CSS
+============================
+
+Many themes won't require anything other than the ability to override
+some of MediaGoblin's core css.  Thankfully, doing so is easy if you
+combine the above steps!
+
+In your theme, do the following (make sure you make the necessary
+directories and cd to your theme's directory first):
+
+  $ cp /path/to/mediagoblin/mediagoblin/templates/mediagoblin/extra_head.html templates/mediagoblin/
+
+Great, now open that file and add something like this at the end:
+
+  <link rel="stylesheet" type="text/css"
+        href="{{ request.staticdirect('/css/theme.css', 'theme') }}"/>
+
+You can name the css file whatever you like.  Now make the directory
+for assets/css/ and add the file assets/css/theme.css
+
+You can now put custom CSS files in here and any CSS you add will
+override default MediaGoblin CSS.
+
+
 Packaging it up!
 ================
 
