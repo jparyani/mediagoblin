@@ -32,7 +32,7 @@ def themedata_for_theme_dir(name, theme_dir):
     Given a theme directory, extract important theme information.
     """
     # open config
-    config = ConfigObj(os.path.join(theme_dir, 'theme.ini')).get('theme')
+    config = ConfigObj(os.path.join(theme_dir, 'theme.ini')).get('theme', {})
 
     templates_dir = os.path.join(theme_dir, 'templates')
     if not os.path.exists(templates_dir):
