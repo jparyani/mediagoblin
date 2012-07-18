@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import sys
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import pluginapi
@@ -36,24 +37,21 @@ def setup_plugins():
         _log.info("No plugins to load")
         return
 
-    pcache = pluginapi.PluginCache()
+    pman = pluginapi.PluginManager()
 
     # Go through and import all the modules that are subsections of
-    # the [plugins] section.
+    # the [plugins] section and read in the hooks.
     for plugin_module, config in plugin_section.items():
         _log.info("Importing plugin module: %s" % plugin_module)
+        pman.register_plugin(plugin_module)
         # If this throws errors, that's ok--it'll halt mediagoblin
         # startup.
         __import__(plugin_module)
+        plugin = sys.modules[plugin_module]
+        if hasattr(plugin, 'hooks'):
+            pman.register_hooks(plugin.hooks)
 
-    # Note: One side-effect of importing things is that anything that
-    # subclassed pluginapi.Plugin is registered.
-
-    # Go through all the plugin classes, instantiate them, and call
-    # setup_plugin so they can figure things out.
-    for plugin_class in pcache.plugin_classes:
-        name = plugin_class.__module__ + "." + plugin_class.__name__
-        _log.info("Loading plugin: %s" % name)
-        plugin_obj = plugin_class()
-        plugin_obj.setup_plugin()
-        pcache.register_plugin_object(plugin_obj)
+    # Execute anything registered to the setup hook.
+    setup_list = pman.get_hook_callables('setup')
+    for fun in setup_list:
+        fun()

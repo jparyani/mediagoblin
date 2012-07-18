@@ -53,27 +53,27 @@ def flatpage_handler_builder(template):
     return _flatpage_handler_builder
 
 
-class FlatpagesFilePlugin(pluginapi.Plugin):
-    """
-    This is the flatpages plugin class. See the README for how to use
-    flatpages.
-    """
-    def setup_plugin(self):
-        self.config = pluginapi.get_config('mediagoblin.plugins.flatpagesfile')
+def setup_plugin():
+    config = pluginapi.get_config('mediagoblin.plugins.flatpagesfile')
 
-        _log.info('Setting up flatpagesfile....')
+    _log.info('Setting up flatpagesfile....')
 
-        # Register the template path.
-        pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
+    # Register the template path.
+    pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
 
-        pages = self.config.items()
+    pages = config.items()
 
-        routes = []
-        for name, (url, template) in pages:
-            name = 'flatpagesfile.%s' % name.strip()
-            controller = flatpage_handler_builder(template)
-            routes.append(
-                Route(name, url, controller=controller))
+    routes = []
+    for name, (url, template) in pages:
+        name = 'flatpagesfile.%s' % name.strip()
+        controller = flatpage_handler_builder(template)
+        routes.append(
+            Route(name, url, controller=controller))
 
-        pluginapi.register_routes(routes)
-        _log.info('Done setting up flatpagesfile!')
+    pluginapi.register_routes(routes)
+    _log.info('Done setting up flatpagesfile!')
+
+
+hooks = {
+    'setup': setup_plugin
+    }

@@ -37,8 +37,8 @@ def with_cleanup(*modules_to_delete):
                     pass
             # The plugin cache gets populated as a side-effect of
             # importing, so it's best to clear it before and after a test.
-            pcache = pluginapi.PluginCache()
-            pcache.clear()
+            pman = pluginapi.PluginManager()
+            pman.clear()
             try:
                 return fun(*args, **kwargs)
             finally:
@@ -51,7 +51,7 @@ def with_cleanup(*modules_to_delete):
                         del sys.modules[module]
                     except KeyError:
                         pass
-                pcache.clear()
+                pman.clear()
 
         _with_cleanup_inner.__name__ = fun.__name__
         return _with_cleanup_inner
@@ -93,16 +93,14 @@ def test_no_plugins():
     mg_globals.app_config = cfg['mediagoblin']
     mg_globals.global_config = cfg
 
-    pcache = pluginapi.PluginCache()
+    pman = pluginapi.PluginManager()
     setup_plugins()
 
     # Make sure we didn't load anything.
-    eq_(len(pcache.plugin_classes), 0)
-    eq_(len(pcache.plugin_objects), 0)
+    eq_(len(pman.plugins), 0)
 
 
-@with_cleanup('mediagoblin.plugins.sampleplugin',
-              'mediagoblin.plugins.sampleplugin.main')
+@with_cleanup('mediagoblin.plugins.sampleplugin')
 def test_one_plugin():
     """Run setup_plugins with a single working plugin"""
     cfg = build_config([
@@ -115,22 +113,21 @@ def test_one_plugin():
     mg_globals.app_config = cfg['mediagoblin']
     mg_globals.global_config = cfg
 
-    pcache = pluginapi.PluginCache()
+    pman = pluginapi.PluginManager()
     setup_plugins()
 
-    # Make sure we only found one plugin class
-    eq_(len(pcache.plugin_classes), 1)
-    # Make sure the class is the one we think it is.
-    eq_(pcache.plugin_classes[0].__name__, 'SamplePlugin')
+    # Make sure we only found one plugin
+    eq_(len(pman.plugins), 1)
+    # Make sure the plugin is the one we think it is.
+    eq_(pman.plugins[0], 'mediagoblin.plugins.sampleplugin')
+    # Make sure there was one hook registered
+    eq_(len(pman.hooks), 1)
+    # Make sure _setup_plugin_called was called once
+    import mediagoblin.plugins.sampleplugin
+    eq_(mediagoblin.plugins.sampleplugin._setup_plugin_called, 1)
 
-    # Make sure there was one plugin created
-    eq_(len(pcache.plugin_objects), 1)
-    # Make sure we called setup_plugin on SamplePlugin
-    eq_(pcache.plugin_objects[0]._setup_plugin_called, 1)
 
-
-@with_cleanup('mediagoblin.plugins.sampleplugin',
-              'mediagoblin.plugins.sampleplugin.main')
+@with_cleanup('mediagoblin.plugins.sampleplugin')
 def test_same_plugin_twice():
     """Run setup_plugins with a single working plugin twice"""
     cfg = build_config([
@@ -144,15 +141,15 @@ def test_same_plugin_twice():
     mg_globals.app_config = cfg['mediagoblin']
     mg_globals.global_config = cfg
 
-    pcache = pluginapi.PluginCache()
+    pman = pluginapi.PluginManager()
     setup_plugins()
 
-    # Make sure we only found one plugin class
-    eq_(len(pcache.plugin_classes), 1)
-    # Make sure the class is the one we think it is.
-    eq_(pcache.plugin_classes[0].__name__, 'SamplePlugin')
-
-    # Make sure there was one plugin created
-    eq_(len(pcache.plugin_objects), 1)
-    # Make sure we called setup_plugin on SamplePlugin
-    eq_(pcache.plugin_objects[0]._setup_plugin_called, 1)
+    # Make sure we only found one plugin
+    eq_(len(pman.plugins), 1)
+    # Make sure the plugin is the one we think it is.
+    eq_(pman.plugins[0], 'mediagoblin.plugins.sampleplugin')
+    # Make sure there was one hook registered
+    eq_(len(pman.hooks), 1)
+    # Make sure _setup_plugin_called was called once
+    import mediagoblin.plugins.sampleplugin
+    eq_(mediagoblin.plugins.sampleplugin._setup_plugin_called, 1)
