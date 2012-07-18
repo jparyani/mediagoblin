@@ -19,6 +19,7 @@ In some places, we need to access the database, public_store, queue_store
 
 import gettext
 import pkg_resources
+import threading
 
 
 #############################
@@ -41,8 +42,11 @@ queue_store = None
 # A WorkBenchManager
 workbench_manager = None
 
+# A thread-local scope
+thread_scope = threading.local()
+
 # gettext
-translations = gettext.find(
+thread_scope.translations = gettext.find(
     'mediagoblin',
     pkg_resources.resource_filename(
     'mediagoblin', 'translations'), ['en'])

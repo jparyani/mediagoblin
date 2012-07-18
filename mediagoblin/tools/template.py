@@ -49,8 +49,8 @@ def get_jinja_env(template_loader, locale):
         extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
 
     template_env.install_gettext_callables(
-        mg_globals.translations.ugettext,
-        mg_globals.translations.ungettext)
+        mg_globals.thread_scope.translations.ugettext,
+        mg_globals.thread_scope.translations.ungettext)
 
     # All templates will know how to ...
     # ... fetch all waiting messages and remove them from the queue
