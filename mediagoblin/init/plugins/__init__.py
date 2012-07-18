@@ -42,6 +42,13 @@ def setup_plugins():
     # Go through and import all the modules that are subsections of
     # the [plugins] section and read in the hooks.
     for plugin_module, config in plugin_section.items():
+        # Skip any modules that start with -. This makes it easier for
+        # someone to tweak their configuration so as to not load a
+        # plugin without having to remove swaths of plugin
+        # configuration.
+        if plugin_module.startswith('-'):
+            continue
+
         _log.info("Importing plugin module: %s" % plugin_module)
         pman.register_plugin(plugin_module)
         # If this throws errors, that's ok--it'll halt mediagoblin

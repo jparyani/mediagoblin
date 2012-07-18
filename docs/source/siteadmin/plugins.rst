@@ -135,3 +135,35 @@ For plugins that you install with pip, you can upgrade them with pip::
     pip install -U <plugin-name>
 
 The ``-U`` tells pip to upgrade the package.
+
+
+Troubleshooting plugins
+=======================
+
+Sometimes plugins just don't work right. When you're having problems
+with plugins, think about the following:
+
+1. Check the log files.
+
+   Some plugins will log errors to the log files and you can use that
+   to diagnose the problem.
+
+2. Try running MediaGoblin without that plugin.
+
+   It's easy to disable a plugin from MediaGoblin. Add a ``-`` to the
+   name in your config file.
+
+   For example, change::
+
+       [[mediagoblin.plugins.flatpages]]
+
+   to::
+
+       [[-mediagoblin.plugins.flatpages]]
+
+   That'll prevent the ``mediagoblin.plugins.flatpages`` plugin from
+   loading.
+
+3. If it's a core plugin that comes with MediaGoblin, ask us for help!
+
+   If it's a plugin you got from somewhere else, ask them for help!

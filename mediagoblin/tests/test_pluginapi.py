@@ -153,3 +153,23 @@ def test_same_plugin_twice():
     # Make sure _setup_plugin_called was called once
     import mediagoblin.plugins.sampleplugin
     eq_(mediagoblin.plugins.sampleplugin._setup_plugin_called, 1)
+
+
+@with_cleanup()
+def test_disabled_plugin():
+    """Run setup_plugins with a single working plugin twice"""
+    cfg = build_config([
+            ('mediagoblin', {}, []),
+            ('plugins', {}, [
+                    ('-mediagoblin.plugins.sampleplugin', {}, []),
+                    ])
+            ])
+
+    mg_globals.app_config = cfg['mediagoblin']
+    mg_globals.global_config = cfg
+
+    pman = pluginapi.PluginManager()
+    setup_plugins()
+
+    # Make sure we didn't load the plugin
+    eq_(len(pman.plugins), 0)
