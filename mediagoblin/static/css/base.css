@@ -351,6 +351,7 @@ text-align: center;
 
 textarea#description, textarea#bio {
   resize: vertical;
+  height: 100px;
 }
 
 /* comments */
