@@ -433,11 +433,17 @@ p.media_specs {
 }
 
 .no_html5 {
-    background: black;
-    color: white;
-    text-align: center;
-    height: 160px;
-    padding: 130px 10px 20px 10px;
+  background: black;
+  color: white;
+  text-align: center;
+  height: 160px;
+  padding: 130px 10px 20px 10px;
+}
+
+img.media_image {
+  cursor: -webkit-zoom-in;
+  cursor: -moz-zoom-in;
+  cursor: zoom-in;
 }
 
 /* icons */
