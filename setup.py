@@ -53,7 +53,6 @@ setup(
         'celery',
         'jinja2',
         'sphinx',
-        'PIL',
         'Babel',
         'translitcodec',
         'argparse',
@@ -65,6 +64,7 @@ setup(
         ## For now we're expecting that users will install this from
         ## their package managers.
         # 'lxml',
+        # 'PIL',
         ],
     # requires=['gst'],
     test_suite='nose.collector',
