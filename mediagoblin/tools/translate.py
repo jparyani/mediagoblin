@@ -100,7 +100,7 @@ def setup_gettext(locale):
 
     # TODO: fallback nicely on translations from pt_PT to pt if not
     # available, etc.
-    if SETUP_GETTEXTS.has_key(locale):
+    if locale in SETUP_GETTEXTS:
         this_gettext = SETUP_GETTEXTS[locale]
     else:
         this_gettext = gettext.translation(
@@ -108,8 +108,7 @@ def setup_gettext(locale):
         if exists(locale):
             SETUP_GETTEXTS[locale] = this_gettext
 
-    mg_globals.setup_globals(
-        translations=this_gettext)
+    mg_globals.thread_scope.translations = this_gettext
 
 
 # Force en to be setup before anything else so that
@@ -124,7 +123,7 @@ def pass_to_ugettext(*args, **kwargs):
     The reason we can't have a global ugettext method is because
     mg_globals gets swapped out by the application per-request.
     """
-    return mg_globals.translations.ugettext(
+    return mg_globals.thread_scope.translations.ugettext(
         *args, **kwargs)
 
 
@@ -146,7 +145,7 @@ def pass_to_ngettext(*args, **kwargs):
     The reason we can't have a global ngettext method is because
     mg_globals gets swapped out by the application per-request.
     """
-    return mg_globals.translations.ngettext(
+    return mg_globals.thread_scope.translations.ngettext(
         *args, **kwargs)
 
 
