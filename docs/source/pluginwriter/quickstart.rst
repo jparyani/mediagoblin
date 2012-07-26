@@ -50,7 +50,8 @@ The inner ``sampleplugin`` directory is the Python package that holds
 your plugin's code.
 
 The ``__init__.py`` denotes that this is a Python package. It also
-holds the plugin code.
+holds the plugin code and the ``hooks`` dict that specifies which
+hooks the sampleplugin uses.
 
 
 Step 2: README
@@ -107,43 +108,39 @@ The code for ``__init__.py`` looks like this:
 
 .. code-block:: python
    :linenos:
-   :emphasize-lines: 8,19
+   :emphasize-lines: 12,23
 
     import logging
     from mediagoblin.tools.pluginapi import Plugin, get_config
 
 
+    # This creates a logger that you can use to log information to
+    # the console or a log file.
     _log = logging.getLogger(__name__)
 
 
-    class SamplePlugin(Plugin):
-        """
-        This is a sample plugin class. It automatically registers itself
-        with MediaGoblin when this module is imported.
-
-        The setup_plugin method prints configuration for this plugin if
-        there is any.
-        """
-        def __init__(self):
-            pass
-
-        def setup_plugin(self):
-            _log.info("I've been started!")
-            config = get_config('sampleplugin')
-            if config:
-                _log.info('%r' % config)
-            else:
-                _log.info('There is no configuration set.')
+    # This is the function that gets called when the setup
+    # hook fires.
+    def setup_plugin():
+        _log.info("I've been started!")
+        config = get_config('sampleplugin')
+        if config:
+            _log.info('%r' % config)
+        else:
+            _log.info('There is no configuration set.')
 
 
-Line 8 defines a class called ``SamplePlugin`` that subclasses
-``Plugin`` from ``mediagoblin.tools.pluginapi``. When the class is
-defined, it gets registered with MediaGoblin and MediaGoblin will then
-call ``setup_plugin`` on it.
+    # This is a dict that specifies which hooks this plugin uses.
+    # This one only uses one hook: setup.
+    hooks = {
+        'setup': setup_plugin
+        }
 
-Line 19 defines ``setup_plugin``. This gets called when MediaGoblin
-starts up after it's registered all the plugins. This is where you can
-do any initialization for your plugin.
+
+Line 12 defines the ``setup_plugin`` function.
+
+Line 23 defines ``hooks``. When MediaGoblin loads this file, it sees
+``hooks`` and registers all the callables with their respective hooks.
 
 
 Step 6: Installation and configuration

@@ -15,8 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-This module implements the plugin api bits and provides the plugin
-base.
+This module implements the plugin api bits.
 
 Two things about things in this module:
 
@@ -30,8 +29,8 @@ How do plugins work?
 ====================
 
 Plugins are structured like any Python project. You create a Python package.
-In that package, you define a high-level ``__init__.py`` that either defines
-or imports modules that define classes that inherit from the ``Plugin`` class.
+In that package, you define a high-level ``__init__.py`` module that has a 
+``hooks`` dict that maps hooks to callables that implement those hooks.
 
 Additionally, you want a LICENSE file that specifies the license and a
 ``setup.py`` that specifies the metadata for packaging your plugin. A rough
@@ -42,23 +41,19 @@ file structure could look like this::
      |- README           # holds plugin project information
      |- LICENSE          # holds license information
      |- myplugin/        # plugin package directory
-        |- __init__.py   # imports myplugin.main
-        |- main.py       # code for plugin
+        |- __init__.py   # has hooks dict and code
 
 
 Lifecycle
 =========
 
 1. All the modules listed as subsections of the ``plugins`` section in
-   the config file are imported. This causes any ``Plugin`` subclasses in
-   those modules to be defined and when the classes are defined they get
-   automatically registered with the ``PluginCache``.
+   the config file are imported. MediaGoblin registers any hooks in
+   the ``hooks`` dict of those modules.
 
-2. After all plugin modules are imported, registered plugin classes are
-   instantiated and ``setup_plugin`` is called for each plugin object.
+2. After all plugin modules are imported, the ``setup`` hook is called
+   allowing plugins to do any set up they need to do.
 
-   Plugins can do any setup they need to do in their ``setup_plugin``
-   method.
 """
 
 import logging
@@ -69,14 +64,19 @@ from mediagoblin import mg_globals
 _log = logging.getLogger(__name__)
 
 
-class PluginCache(object):
-    """Cache of plugin things"""
+class PluginManager(object):
+    """Manager for plugin things
+
+    .. Note::
+
+       This is a Borg class--there is one and only one of this class.
+    """
     __state = {
         # list of plugin classes
-        "plugin_classes": [],
+        "plugins": [],
 
-        # list of plugin objects
-        "plugin_objects": [],
+        # map of hook names -> list of callables for that hook
+        "hooks": {},
 
         # list of registered template paths
         "template_paths": set(),
@@ -87,19 +87,31 @@ class PluginCache(object):
 
     def clear(self):
         """This is only useful for testing."""
-        del self.plugin_classes[:]
-        del self.plugin_objects[:]
+        # Why lists don't have a clear is not clear.
+        del self.plugins[:]
+        del self.routes[:]
+        self.hooks.clear()
+        self.template_paths.clear()
 
     def __init__(self):
         self.__dict__ = self.__state
 
-    def register_plugin_class(self, plugin_class):
+    def register_plugin(self, plugin):
         """Registers a plugin class"""
-        self.plugin_classes.append(plugin_class)
+        self.plugins.append(plugin)
 
-    def register_plugin_object(self, plugin_obj):
-        """Registers a plugin object"""
-        self.plugin_objects.append(plugin_obj)
+    def register_hooks(self, hook_mapping):
+        """Takes a hook_mapping and registers all the hooks"""
+        for hook, callables in hook_mapping.items():
+            if isinstance(callables, (list, tuple)):
+                self.hooks.setdefault(hook, []).extend(list(callables))
+            else:
+                # In this case, it's actually a single callable---not a
+                # list of callables.
+                self.hooks.setdefault(hook, []).append(callables)
+
+    def get_hook_callables(self, hook_name):
+        return self.hooks.get(hook_name, [])
 
     def register_template_path(self, path):
         """Registers a template path"""
@@ -115,38 +127,6 @@ class PluginCache(object):
 
     def get_routes(self):
         return tuple(self.routes)
-
-
-class MetaPluginClass(type):
-    """Metaclass for PluginBase derivatives"""
-    def __new__(cls, name, bases, attrs):
-        new_class = super(MetaPluginClass, cls).__new__(cls, name, bases, attrs)
-        parents = [b for b in bases if isinstance(b, MetaPluginClass)]
-        if not parents:
-            return new_class
-        PluginCache().register_plugin_class(new_class)
-        return new_class
-
-
-class Plugin(object):
-    """Extend this class for plugins.
-
-    Example::
-
-        from mediagoblin.tools.pluginapi import Plugin
-
-        class MyPlugin(Plugin):
-            ...
-
-            def setup_plugin(self):
-                ....
-
-    """
-
-    __metaclass__ = MetaPluginClass
-
-    def setup_plugin(self):
-        pass
 
 
 def register_routes(routes):
@@ -182,9 +162,9 @@ def register_routes(routes):
     """
     if isinstance(routes, (tuple, list)):
         for route in routes:
-            PluginCache().register_route(route)
+            PluginManager().register_route(route)
     else:
-        PluginCache().register_route(routes)
+        PluginManager().register_route(routes)
 
 
 def register_template_path(path):
@@ -205,7 +185,7 @@ def register_template_path(path):
        that will have no effect on template loading.
 
     """
-    PluginCache().register_template_path(path)
+    PluginManager().register_template_path(path)
 
 
 def get_config(key):

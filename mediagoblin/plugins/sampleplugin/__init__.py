@@ -15,6 +15,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# This imports the module that has the Plugin subclass in it which
-# causes that module to get imported and that class to get registered.
-import mediagoblin.plugins.sampleplugin.main
+import logging
+
+from mediagoblin.tools.pluginapi import get_config
+
+
+_log = logging.getLogger(__name__)
+
+
+_setup_plugin_called = 0
+
+def setup_plugin():
+    global _setup_plugin_called
+
+    _log.info('Sample plugin set up!')
+    config = get_config('mediagoblin.plugins.sampleplugin')
+    if config:
+        _log.info('%r' % config)
+    else:
+        _log.info('There is no configuration set.')
+    _setup_plugin_called += 1
+
+
+hooks = {
+    'setup': setup_plugin
+    }
