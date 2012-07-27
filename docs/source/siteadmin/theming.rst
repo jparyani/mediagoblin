@@ -73,8 +73,16 @@ want to install this theme!  Don't worry, it's fairly painless.
 Set up your webserver to serve theme assets
 -------------------------------------------
 
-FIXME - To be written. Ask on #mediagoblin in irc.freenode.net in the
-meanwhile ;)
+If you followed the nginx setup example in :ref:`webserver-config` you
+should already have theme asset setup.  However, if you set up your
+server config with an older version of mediagoblin and the mediagoblin
+docs, it's possible you don't have the "theme static files" alias, so
+double check to make sure that section is there if you are having
+problems.
+
+If you are simply using this for local development and serving the
+whole thing via paste/lazyserver, assuming you don't have a
+paste_local.ini, the asset serving should be done for you.
 
 
 Configuring where things go

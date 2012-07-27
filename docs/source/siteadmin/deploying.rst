@@ -222,6 +222,8 @@ test the deployment with the following command::
 You should be able to connect to the machine on port 6543 in your
 browser to confirm that the service is operable.
 
+.. _webserver-config:
+
 Connect the Webserver to MediaGoblin with FastCGI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
