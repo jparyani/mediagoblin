@@ -1,0 +1,100 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-#}
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ app_config['html_title'] }}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css"
+          href="{{ request.staticdirect('/css/extlib/reset.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{{ request.staticdirect('/css/base.css') }}"/>
+    <link rel="shortcut icon"
+          href="{{ request.staticdirect('/images/goblin.ico') }}" />
+    <script src="{{ request.staticdirect('/js/extlib/jquery.js') }}"></script>
+    <script type="text/javascript"
+          src="{{ request.staticdirect('/js/header_dropdown.js') }}"></script>
+    <!--[if lt IE 9]>
+      <script src="{{ request.staticdirect('/js/extlib/html5shiv.js') }}"></script>
+    <![endif]-->
+
+    {% include "mediagoblin/extra_head.html" %}
+
+    {% block mediagoblin_head %}
+    {% endblock mediagoblin_head %}
+  </head>
+  <body>
+    {% block mediagoblin_body %}
+      {% block mediagoblin_header %}
+        <header>
+          {% block mediagoblin_logo %}
+            <a class="logo"
+               href="{{ request.urlgen('index') }}">
+               <img src="{{ request.staticdirect('/images/logo.png', 'theme') }}"
+               alt="{% trans %}MediaGoblin logo{% endtrans %}" />
+            </a>
+          {% endblock mediagoblin_logo %}
+          {% block mediagoblin_header_title %}{% endblock %}
+          <div class="header_right">
+            {% if request.user %}
+              {# the following link should only appear when verification is needed #}
+              {% if request.user.status == "needs_email_verification" %}
+                <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                                            user=request.user.username) }}"
+                   class="button_action_highlight">
+                  {% trans %}Verify your email!{% endtrans %}</a>
+              {% endif %}
+              <div class="dropdown">
+                {{ request.user.username }} ▾
+                <div class="dropdown_items">
+                  {% if request.user and request.user.status == 'active' %}
+                    <a href="{{ request.urlgen('mediagoblin.submit.start') }}">{% trans %}+ Add media{% endtrans %}</a>
+                  {% endif %}
+                  <a href="{{ request.urlgen('mediagoblin.user_pages.user_home', user= request.user.username) }}">{% trans %}View your profile{% endtrans %}</a>
+                  <a class="button_action" href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}Log out{% endtrans %}</a>
+                </div>
+              </div>
+            {% else %}
+              <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
+                {% trans %}Log in{% endtrans %}</a>
+            {% endif %}
+          </div>
+          <div class="clear"></div>
+        </header>
+      {% endblock %}
+    <div class="container">
+      <div class="mediagoblin_content">
+          {% include "mediagoblin/utils/messages.html" %}
+          {% block mediagoblin_content %}
+          {% endblock mediagoblin_content %}
+      </div>
+      {% block mediagoblin_footer %}
+          <footer>
+            {% trans -%}
+              Powered by <a href="http://mediagoblin.org">MediaGoblin</a>, a <a href="http://gnu.org/">GNU</a> project.
+            {%- endtrans %}
+            {% trans source_link=app_config['source_link'] -%}
+              Released under the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">AGPL</a>. <a href="{{ source_link }}">Source code</a> available.
+            {%- endtrans %}
+          </footer>
+      {% endblock mediagoblin_footer %}
+    {% endblock mediagoblin_body %}
+    </div>
+  </body>
+</html>
