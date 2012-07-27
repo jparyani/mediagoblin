@@ -17,43 +17,46 @@
  Theming MediaGoblin
 =====================
 
-We try to provide a nice theme for MediaGoblin by default.  But of
+We try to provide a nice theme for MediaGoblin by default, but of
 course, you might want something different!  Maybe you want something
 more light and colorful, or maybe you want something specifically
-tailored to your organization.  Have no fear, MediaGoblin has theming
-support!  This guide should walk you through installing and making themes.
+tailored to your organization.  Have no fear---MediaGoblin has theming
+support!  This guide should walk you through installing and making
+themes.
 
 
 Installing a theme
 ==================
 
+.. _theming-installing-section:
+
 Installing the archive
 ----------------------
 
-Say you have a theme archive such as goblincities.tar.gz.  You want to
-install this theme!  Don't worry, it's fairly painless.
+Say you have a theme archive such as ``goblincities.tar.gz`` and you
+want to install this theme!  Don't worry, it's fairly painless.
 
-Simply cd to the "install directory" for themes (by default,
-``./user_dev/themes/`` relative to the mediagoblin install directory... to
-configure these things, see the next section), move the archive there,
-and decompress::
+1. ``cd ./user_dev/themes/``
 
-    $ tar xvfz goblincities.tar.gz
+2. Move the theme archive into this directory
 
-Next, open up your mediagoblin configuration file (probably
-``mediagoblin_local.ini``) and set the theme name::
+3. ``tar -xzvf <tar-archive>``
 
-    [mediagoblin]
-    # ...
-    theme = goblincities
+4. Open your configuration file (probably named
+   ``mediagoblin_local.ini``) and set the theme name::
 
-Finally, "link the assets" so that they can be served by your web
-server::
+       [mediagoblin]
+       # ...
+       theme = goblincities
 
-    $ ./bin/gmg theme assetlink
+5. Link the assets so that they can be served by your web server::
 
-Note, if you ever change the current theme in your config file, you
-should re-run the above command!
+       $ ./bin/gmg theme assetlink
+
+.. Note::
+
+   If you ever change the current theme in your config file, you
+   should re-run the above command!
 
 (In the near future this should be even easier ;))
 
@@ -70,7 +73,7 @@ should re-run the above command!
 Set up your webserver to serve theme assets
 -------------------------------------------
 
-Section to be written, ask on #mediagoblin in irc.freenode.net in the
+FIXME - To be written. Ask on #mediagoblin in irc.freenode.net in the
 meanwhile ;)
 
 
@@ -78,10 +81,11 @@ Configuring where things go
 ---------------------------
 
 By default, MediaGoblin's install directory for themes is
-./user_dev/themes/ (relative to the MediaGoblin checkout or base
-config file.)  However, you can change this location easily.  In your
-mediagoblin config file, under the section [mediagoblin] set the
-following parameter::
+``./user_dev/themes/`` (relative to the MediaGoblin checkout or base
+config file.)  However, you can change this location easily with the
+``theme_install_dir`` setting in the ``[mediagoblin]`` section.
+
+For example::
 
     [mediagoblin]
     # ... other parameters go here ...
@@ -98,8 +102,8 @@ Other variables you may consider setting:
 
 `theme_linked_assets_dir`
     Your web server needs to serve the theme files out of some directory,
-    and MediaGoblin will symlink the current theme's assets here.  (See
-    "Linking assets" in the theme install section)
+    and MediaGoblin will symlink the current theme's assets here.  See
+    the "Link the assets" setp in :ref:`theming-installing-section`.
 
 
 Making a theme
@@ -109,36 +113,38 @@ Okay, so a theme layout is pretty simple.  Let's assume we're making a
 theme for an instance about hedgehogs!  We'll call this the
 "hedgehogified" theme.
 
-Change to where your theme_install_dir is set to (by default,
-``./user_dev/themes/`` ... make those directories if necessary and
-otherwise adjust if necessary)::
+Change to where your ``theme_install_dir`` is set to (by default,
+``./user_dev/themes/`` ... make those directories or otherwise adjust
+if necessary)::
 
     hedgehogified/
-    |- theme.cfg                   # configuration file for this theme
-    |- templates/                  # override templates
+    |- theme.cfg                # configuration file for this theme
+    |- templates/               # override templates
     |  '- mediagoblin/
-    |     |- base.html             # overriding mediagoblin/base.html
-    |     '- root.html             # overriding mediagoblin/root.html
+    |     |- base.html          # overriding mediagoblin/base.html
+    |     '- root.html          # overriding mediagoblin/root.html
     '- assets/
     |  '- images/
-    |  |  |- im_a_hedgehog.png     # hedgehog-containing image used by theme
-    |  |  '- custom_logo.png       # your theme's custom logo
+    |  |  |- im_a_hedgehog.png  # hedgehog-containing image used by theme
+    |  |  '- custom_logo.png    # your theme's custom logo
     |  '- css/
-    |     '- hedgehog.css          # your site's hedgehog-specific css
-    |- README.txt                  # Optionally, a readme file (not required)
-    |- AGPLv3.txt                  # AGPL license file for your theme. (good practice)
-    '- CC0_1.0.txt                 # CC0 1.0 legalcode for the assets [if appropriate!]
+    |     '- hedgehog.css       # your site's hedgehog-specific css
+    |- README.txt               # Optionally, a readme file (not required)
+    |- AGPLv3.txt               # AGPL license file for your theme. (good practice)
+    '- CC0_1.0.txt              # CC0 1.0 legalcode for the assets [if appropriate!]
 
 
 The top level directory of your theme should be the symbolic name for
 your theme.  This is the name that users will use to refer to activate
 your theme.
 
-It's important to note that templates based on MediaGoblin's code
-should be released as AGPLv3 (or later), like MediaGoblin's code
-itself.  However, all the rest of your assets are up to you.  In this
-case, we are waiving our copyright for images and CSS into the public
-domain via CC0 (as MediaGoblin does) but do what's appropriate to you.
+.. Note::
+
+   It's important to note that templates based on MediaGoblin's code
+   should be released as AGPLv3 (or later), like MediaGoblin's code
+   itself.  However, all the rest of your assets are up to you.  In this
+   case, we are waiving our copyright for images and CSS into the public
+   domain via CC0 (as MediaGoblin does) but do what's appropriate to you.
 
 
 The config file
@@ -177,7 +183,7 @@ this matter if you wish.
 
 To fit with best licensing form, you should either preserve the
 MediaGoblin copyright header borrowing from a MediaGoblin template, or
-you may include one like the following if a new file::
+you may include one like the following::
 
     {#
     # [YOUR THEME], a MediaGoblin theme
@@ -224,7 +230,7 @@ images and css, so we also included CC0_1.0.txt
 A README.txt file
 -----------------
 
-A readme file is not strictly required, but probably a good idea.  You
+A README file is not strictly required, but probably a good idea.  You
 can put whatever in here, but restating the license choice clearly is
 probably a good idea.
 
@@ -247,7 +253,7 @@ Great, now open that file and add something like this at the end::
           href="{{ request.staticdirect('/css/theme.css', 'theme') }}"/>
 
 You can name the css file whatever you like.  Now make the directory
-for assets/css/ and add the file assets/css/theme.css
+for ``assets/css/`` and add the file ``assets/css/theme.css``.
 
 You can now put custom CSS files in here and any CSS you add will
 override default MediaGoblin CSS.
@@ -260,7 +266,7 @@ Packaging a theme is really easy.  It's just a matter of making an archive!
 
 Change to the installed themes directory and run the following::
 
-    tar cvfz yourtheme.tar.gz yourtheme
+    tar -cvfz yourtheme.tar.gz yourtheme
 
 Where "yourtheme" is replaced with your theme name.
 
