@@ -283,6 +283,11 @@ this ``nginx.conf`` file should be modeled on the following::
         alias /srv/mediagoblin.example.org/mediagoblin/user_dev/media/public/;
      }
 
+     # Theme static files (usually symlinked in)
+     location /theme_static/ {
+        alias /srv/mediagoblin.example.org/mediagoblin/user_dev/theme_static/;
+     }
+
      # Mounting MediaGoblin itself via FastCGI.
      location / {
         fastcgi_pass 127.0.0.1:26543;
