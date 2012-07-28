@@ -402,6 +402,9 @@ textarea#comment_content {
   background-color: #222;
   border-radius: 0 0 5px 5px;
   padding: 0 0 6px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .media_thumbnail a {
