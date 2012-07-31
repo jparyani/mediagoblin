@@ -71,6 +71,14 @@ class ProcessMedia(Task):
 
             mark_entry_failed(entry._id, exc)
 
+        except Exception as exc:
+            _log.error('An unhandled exception was raised while'
+                    + ' processing {0}'.format(
+                        entry))
+
+            mark_entry_failed(entry._id, exc)
+            raise
+
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         """
         If the processing failed we should mark that in the database.
