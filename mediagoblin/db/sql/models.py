@@ -212,10 +212,12 @@ class MediaEntry(Base, MediaEntryMixin):
         return sys.modules[models_module].DATA_MODEL
 
     def __repr__(self):
+        safe_title = self.title.encode('ascii', 'replace')
+
         return '<{classname} {id}: {title}>'.format(
                 classname=self.__class__.__name__,
                 id=self.id,
-                title=self.title)
+                title=safe_title)
 
 
 class FileKeynames(Base):
