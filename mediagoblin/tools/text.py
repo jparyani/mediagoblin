@@ -110,7 +110,9 @@ def tag_length_validator(form, field):
                                     ', '.join(too_long_tags)))
 
 
-MARKDOWN_INSTANCE = markdown.Markdown(safe_mode='escape')
+# Don't use the safe mode, because lxml.html.clean is better and we are using
+# it anyway
+UNSAFE_MARKDOWN_INSTANCE = markdown.Markdown()
 
 
 def cleaned_markdown_conversion(text):
@@ -122,4 +124,4 @@ def cleaned_markdown_conversion(text):
     if not text:
         return u''
 
-    return clean_html(MARKDOWN_INSTANCE.convert(text))
+    return clean_html(UNSAFE_MARKDOWN_INSTANCE.convert(text))
