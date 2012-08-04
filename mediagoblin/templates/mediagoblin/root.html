@@ -26,7 +26,7 @@
     <h1>{% trans %}Hi there, welcome to this MediaGoblin site!{% endtrans %}</h1>
     <img class="right_align" src="{{ request.staticdirect('/images/frontpage_image.png') }}" />
     <p>{% trans %}This site is running <a href="http://mediagoblin.org">MediaGoblin</a>, an extraordinarily great piece of media hosting software.{% endtrans %}</p>
-    <p>{% trans %}To add your own media, place comments, save your favourites and more, you can log in with your MediaGoblin account.{% endtrans %}</p>
+    <p>{% trans %}To add your own media, place comments, and more, you can log in with your MediaGoblin account.{% endtrans %}</p>
     {% if allow_registration %}
       <p>{% trans %}Don't have one yet? It's easy!{% endtrans %}</p>
       {% trans register_url=request.urlgen('mediagoblin.auth.register') -%}
