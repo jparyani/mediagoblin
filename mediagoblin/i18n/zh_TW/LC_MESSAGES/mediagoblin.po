@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-04-30 10:48-0500\n"
-"PO-Revision-Date: 2012-05-01 17:18+0000\n"
+"POT-Creation-Date: 2012-06-01 16:32-0500\n"
+"PO-Revision-Date: 2012-07-07 11:15+0000\n"
 "Last-Translator: Harry Chen <harryhow@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -146,7 +146,7 @@ msgstr "網站"
 
 #: mediagoblin/edit/forms.py:58
 msgid "This address contains errors"
-msgstr "此位址中有誤"
+msgstr "網址是不是打錯了? "
 
 #: mediagoblin/edit/forms.py:63
 msgid "Old password"
@@ -397,7 +397,6 @@ msgid "Media tagged with: %(tag_name)s"
 msgstr "此媒體被標識為：%(tag_name)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:57
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:53
 msgid "Original"
 msgstr "原始的"
@@ -415,6 +414,18 @@ msgid ""
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t  http://getfirefox.com</a>!"
 msgstr "你可以在此取得可以播放音樂的瀏覽器 <a href=\"http://getfirefox.com\">\n\t  http://getfirefox.com</a>!"
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
+msgid "Download"
+msgstr "下載"
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
+msgid "original file"
+msgstr "原始檔案"
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
+msgid "WebM file (Vorbis codec)"
+msgstr "WebM 檔案 (Vorbis codec)"
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
 msgid ""
@@ -549,7 +560,7 @@ msgstr "馬上會有一封電子郵件告訴你如何做."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:62
 msgid "In case it doesn't:"
-msgstr "假設它無法:"
+msgstr "如果仍然無法認證，你可以:"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:65
 msgid "Resend verification email"
@@ -570,7 +581,7 @@ msgstr "如果你就是那個人, 但是遺失了認證信, 你可以<a href=\"%
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:96
 msgid "Here's a spot to tell others about yourself."
-msgstr "這是一個地方，能讓你向他人介紹自己。"
+msgstr "這個地方能讓你向他人介紹自己。"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:101
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:118

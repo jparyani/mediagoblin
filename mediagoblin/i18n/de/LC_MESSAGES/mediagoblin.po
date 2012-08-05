@@ -18,10 +18,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-04-30 10:48-0500\n"
-"PO-Revision-Date: 2012-05-20 17:28+0000\n"
+"POT-Creation-Date: 2012-06-01 16:32-0500\n"
+"PO-Revision-Date: 2012-07-26 09:15+0000\n"
 "Last-Translator: Jakob Kramer <jakob.kramer@gmx.de>\n"
-"Language-Team: German (http://www.transifex.net/projects/p/mediagoblin/language/de/)\n"
+"Language-Team: German (http://www.transifex.com/projects/p/mediagoblin/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -262,7 +262,7 @@ msgstr "Anmelden"
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project."
-msgstr "Diese Seite setzt <a href=\"http://mediagoblin.org/\">MediaGoblin</a> ein, ein <a href=\"http://gnu.org/\">GNU</a>-Projekt."
+msgstr "Diese Seite setzt das <a href=\"http://gnu.org/\">GNU</a>-Projekt <a href=\"http://mediagoblin.org/\">MediaGoblin</a> ein."
 
 #: mediagoblin/templates/mediagoblin/base.html:88
 #, python-format
@@ -270,7 +270,7 @@ msgid ""
 "Released under the <a "
 "href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a "
 "href=\"%(source_link)s\">Source code</a> available."
-msgstr "Veröffentlicht unter der <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a href=\"%(source_link)s\">Quellcode</a>."
+msgstr "Veröffentlicht unter der <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a> (<a href=\"%(source_link)s\">Quellcode</a>)."
 
 #: mediagoblin/templates/mediagoblin/root.html:24
 msgid "Explore"
@@ -344,7 +344,7 @@ msgstr "Anmeldevorgang fehlgeschlagen!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:40
 msgid "Don't have an account yet?"
-msgstr "Hast du noch kein Konto?"
+msgstr "Hast du noch keines? Es geht ganz einfach!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:41
 msgid "Create one here!"
@@ -392,7 +392,7 @@ msgstr "Änderungen speichern"
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:34
 #, python-format
 msgid "Changing %(username)s's account settings"
-msgstr "%(username)ss Kontoeinstellungen werden geändert"
+msgstr "%(username)ss Kontoeinstellungen ändern"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:29
 #, python-format
@@ -406,7 +406,6 @@ msgid "Media tagged with: %(tag_name)s"
 msgstr "Medien mit Schlagwort: %(tag_name)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:57
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:53
 msgid "Original"
 msgstr "Original"
@@ -424,6 +423,18 @@ msgid ""
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t  http://getfirefox.com</a>!"
 msgstr "Hol dir auf <a href=\"http://getfirefox.com\">http://getfirefox.com</a> einen modernen Webbrowser, der dieses Audiostück abspielen kann!"
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
+msgid "Download"
+msgstr "Download"
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
+msgid "original file"
+msgstr "Originaldatei"
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
+msgid "WebM file (Vorbis codec)"
+msgstr "WebM-Datei (Vorbis-Codec)"
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
 msgid ""
