@@ -181,7 +181,7 @@ flup::
     ./bin/easy_install flup
 
 This concludes the initial configuration of the development
-environment. In the future, you want update your
+environment. In the future, when you update your
 codebase, you should also run::
 
     ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate
