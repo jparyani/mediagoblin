@@ -7,10 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-04-30 10:48-0500\n"
-"PO-Revision-Date: 2011-08-07 03:51+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Chinese (Taiwan) (Big5)  (http://www.transifex.net/projects/p/mediagoblin/language/zh_TW.Big5/)\n"
+"POT-Creation-Date: 2012-08-05 10:01-0500\n"
+"PO-Revision-Date: 2012-08-05 15:01+0000\n"
+"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"Language-Team: Chinese (Taiwan) (Big5)  (http://www.transifex.com/projects/p/mediagoblin/language/zh_TW.Big5/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -150,36 +150,52 @@ msgstr ""
 msgid "Old password"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:65
+#: mediagoblin/edit/forms.py:64
 msgid "Enter your old password to prove you own this account."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:68
+#: mediagoblin/edit/forms.py:67
 msgid "New password"
 msgstr ""
 
-#: mediagoblin/edit/views.py:67
+#: mediagoblin/edit/forms.py:72
+msgid "Email me when others comment on my media"
+msgstr ""
+
+#: mediagoblin/edit/views.py:64
 msgid "An entry with that slug already exists for this user."
 msgstr ""
 
-#: mediagoblin/edit/views.py:88
+#: mediagoblin/edit/views.py:85
 msgid "You are editing another user's media. Proceed with caution."
 msgstr ""
 
-#: mediagoblin/edit/views.py:158
+#: mediagoblin/edit/views.py:181
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr ""
 
-#: mediagoblin/edit/views.py:174
+#: mediagoblin/edit/views.py:197
 msgid "Profile changes saved"
 msgstr ""
 
-#: mediagoblin/edit/views.py:200
+#: mediagoblin/edit/views.py:226 mediagoblin/edit/views.py:246
+msgid "Account settings saved"
+msgstr ""
+
+#: mediagoblin/edit/views.py:251
 msgid "Wrong password"
 msgstr ""
 
-#: mediagoblin/edit/views.py:216
-msgid "Account settings saved"
+#: mediagoblin/gmg_commands/theme.py:58
+msgid "Cannot link theme... no theme set\n"
+msgstr ""
+
+#: mediagoblin/gmg_commands/theme.py:71
+msgid "No asset directory for this theme\n"
+msgstr ""
+
+#: mediagoblin/gmg_commands/theme.py:74
+msgid "However, old link directory symlink found; removed.\n"
 msgstr ""
 
 #: mediagoblin/media_types/__init__.py:60
@@ -187,7 +203,11 @@ msgstr ""
 msgid "Sorry, I don't support that file type :("
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:127
+#: mediagoblin/media_types/video/processing.py:35
+msgid "Video transcoding failed"
+msgstr ""
+
+#: mediagoblin/processing/__init__.py:138
 msgid "Invalid file given for media type."
 msgstr ""
 
@@ -221,39 +241,39 @@ msgid ""
 " been moved or deleted."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:47
+#: mediagoblin/templates/mediagoblin/base.html:50
 msgid "MediaGoblin logo"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:57
+#: mediagoblin/templates/mediagoblin/base.html:60
 msgid "Verify your email!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:63
+#: mediagoblin/templates/mediagoblin/base.html:66
 msgid "+ Add media"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:65
+#: mediagoblin/templates/mediagoblin/base.html:68
 msgid "View your profile"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:66
+#: mediagoblin/templates/mediagoblin/base.html:69
 msgid "Log out"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:71
+#: mediagoblin/templates/mediagoblin/base.html:74
 #: mediagoblin/templates/mediagoblin/auth/login.html:32
 #: mediagoblin/templates/mediagoblin/auth/login.html:50
 msgid "Log in"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:85
+#: mediagoblin/templates/mediagoblin/base.html:88
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:88
+#: mediagoblin/templates/mediagoblin/base.html:91
 #, python-format
 msgid ""
 "Released under the <a "
@@ -277,8 +297,8 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid ""
-"To add your own media, place comments, save your favourites and more, you "
-"can log in with your MediaGoblin account."
+"To add your own media, place comments, and more, you can log in with your "
+"MediaGoblin account."
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:31
@@ -295,6 +315,45 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/root.html:40
 msgid "Most recent media"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:22
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
+msgid "Media processing panel"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:25
+msgid ""
+"Here you can track the state of media being processed on this instance."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:28
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
+msgid "Media in-processing"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:54
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:52
+msgid "No media in-processing"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:57
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:55
+msgid "These uploads failed to process:"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:86
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:82
+msgid "No failed entries!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:88
+msgid "Last 10 successful uploads"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:108
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:103
+msgid "No processed entries, yet!"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:32
@@ -395,8 +454,14 @@ msgid "Media tagged with: %(tag_name)s"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:57
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:53
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
+#: mediagoblin/templates/mediagoblin/media_displays/image.html:23
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:52
+msgid "Download"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/ascii.html:38
+#: mediagoblin/templates/mediagoblin/media_displays/image.html:27
 msgid "Original"
 msgstr ""
 
@@ -414,6 +479,15 @@ msgid ""
 "\t  http://getfirefox.com</a>!"
 msgstr ""
 
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:56
+msgid "Original file"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
+msgid "WebM file (Vorbis codec)"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
 msgid ""
 "Sorry, this video will not work because \n"
@@ -428,12 +502,23 @@ msgid ""
 "\t    http://getfirefox.com</a>!"
 msgstr ""
 
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:59
+msgid "WebM file (640p; VP8/Vorbis)"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Add your media"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:30
 msgid "Add"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/comment_email.txt:19
+#, python-format
+msgid ""
+"Hi %(username)s,\n"
+"%(comment_author)s commented on your post (%(comment_url)s) at %(instance_name)s\n"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
@@ -465,30 +550,39 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:124
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:102
 msgid "Add a comment"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:131
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:109
 msgid ""
 "You can use <a "
 "href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
 " formatting."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:135
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:113
 msgid "Add this comment"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:154
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:132
 msgid "at"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:174
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:152
 #, python-format
 msgid ""
 "<h3>Added on</h3>\n"
 "      <p>%(date)s</p>"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:167
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:183
+msgid "Attachments"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:188
+msgid "Add attachment"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -500,25 +594,13 @@ msgstr ""
 msgid "Delete permanently"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
-msgid "Media processing panel"
-msgstr ""
-
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:25
 msgid ""
 "You can track the state of media being processed for your gallery here."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
-msgid "Media in-processing"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:46
-msgid "No media in-processing"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:50
-msgid "These uploads failed to process:"
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:85
+msgid "Your last 10 successful uploads"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:31
@@ -650,7 +732,7 @@ msgstr ""
 msgid "Tagged with"
 msgstr ""
 
-#: mediagoblin/tools/exif.py:75
+#: mediagoblin/tools/exif.py:78
 msgid "Could not read the image file."
 msgstr ""
 
@@ -658,22 +740,31 @@ msgstr ""
 msgid "I am sure I want to delete this"
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:153
+#: mediagoblin/user_pages/lib.py:56
+msgid "commented on your post"
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:160
 msgid "Oops, your comment was empty."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:159
+#: mediagoblin/user_pages/views.py:166
 msgid "Your comment has been posted!"
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:185
+#: mediagoblin/user_pages/views.py:200
+msgid ""
+"Some of the files with this entry seem to be missing.  Deleting anyway."
+msgstr ""
+
+#: mediagoblin/user_pages/views.py:205
 msgid "You deleted the media."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:192
+#: mediagoblin/user_pages/views.py:212
 msgid "The media was not deleted because you didn't check that you were sure."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:200
+#: mediagoblin/user_pages/views.py:220
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr ""
