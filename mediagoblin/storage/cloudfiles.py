@@ -26,6 +26,9 @@ from mediagoblin.storage import StorageInterface, clean_listy_filepath
 
 import cloudfiles
 import mimetypes
+import logging
+
+_log = logging.getLogger(__name__)
 
 
 class CloudFilesStorage(StorageInterface):
@@ -46,7 +49,7 @@ class CloudFilesStorage(StorageInterface):
         mimetypes.add_type("video/webm", "webm")
 
         if not self.param_host:
-            print('No CloudFiles host URL specified, '
+            _log.info('No CloudFiles host URL specified, '
                   'defaulting to Rackspace US')
 
         self.connection = cloudfiles.get_connection(
@@ -54,6 +57,10 @@ class CloudFilesStorage(StorageInterface):
             api_key=self.param_api_key,
             servicenet=True if self.param_use_servicenet == 'true' or \
                 self.param_use_servicenet == True else False)
+
+        _log.debug('Connected to {0} (auth: {1})'.format(
+            self.connection.connection.host,
+            self.connection.auth.host))
 
         if not self.param_container == \
                 self.connection.get_container(self.param_container):
@@ -65,6 +72,9 @@ class CloudFilesStorage(StorageInterface):
             self.container = self.connection.get_container(
                 self.param_container)
 
+        _log.debug('Container: {0}'.format(
+            self.container.name))
+
         self.container_uri = self.container.public_uri()
 
     def _resolve_filepath(self, filepath):
@@ -73,14 +83,14 @@ class CloudFilesStorage(StorageInterface):
 
     def file_exists(self, filepath):
         try:
-            self.container.get_object( self._resolve_filepath(filepath))
+            self.container.get_object(self._resolve_filepath(filepath))
             return True
         except cloudfiles.errors.NoSuchObject:
             return False
 
     def get_file(self, filepath, *args, **kwargs):
         """
-        - Doesn't care about the "mode" argument
+        - Doesn't care about the "mode" argument.
         """
         try:
             obj = self.container.get_object(
@@ -89,14 +99,15 @@ class CloudFilesStorage(StorageInterface):
             obj = self.container.create_object(
                 self._resolve_filepath(filepath))
 
+            # Detect the mimetype ourselves, since some extensions (webm)
+            # may not be universally accepted as video/webm
             mimetype = mimetypes.guess_type(
                 filepath[-1])
 
             if mimetype:
+                # Set the mimetype on the CloudFiles object
                 obj.content_type = mimetype[0]
-                # this should finally fix the bug #429
-                meta_data = {'mime-type' : mimetype[0]}
-                obj.metadata = meta_data
+                obj.metadata = {'mime-type': mimetype[0]}
 
         return CloudFilesStorageObjectWrapper(obj, *args, **kwargs)
 
@@ -110,7 +121,6 @@ class CloudFilesStorage(StorageInterface):
             pass
         finally:
             pass
-        
 
     def file_url(self, filepath):
         return '/'.join([
@@ -123,7 +133,7 @@ class CloudFilesStorageObjectWrapper():
     Wrapper for python-cloudfiles's cloudfiles.storage_object.Object
     used to circumvent the mystic `medium.jpg` corruption issue, where
     we had both python-cloudfiles and PIL doing buffering on both
-    ends and that breaking things.
+    ends and causing breakage.
 
     This wrapper currently meets mediagoblin's needs for a public_store
     file-like object.
@@ -132,6 +142,8 @@ class CloudFilesStorageObjectWrapper():
         self.storage_object = storage_object
 
     def read(self, *args, **kwargs):
+        _log.debug('Reading {0}'.format(
+            self.storage_object.name))
         return self.storage_object.read(*args, **kwargs)
 
     def write(self, data, *args, **kwargs):
@@ -146,11 +158,18 @@ class CloudFilesStorageObjectWrapper():
         However if we should need it it would be easy implement.
         """
         if self.storage_object.size and type(data) == str:
+            _log.debug('{0} is > 0 in size, appending data'.format(
+                self.storage_object.name))
             data = self.read() + data
 
+        _log.debug('Writing {0}'.format(
+            self.storage_object.name))
         self.storage_object.write(data, *args, **kwargs)
 
     def close(self):
+        """
+        Not implemented.
+        """
         pass
 
     def __enter__(self):
