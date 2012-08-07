@@ -558,13 +558,11 @@ pre, code {
 
 pre {
   overflow: auto;
-  /* -10px, because it is usually preceded by <p> with margin-bottom: 20px */ 
-  margin: -10px 0 10px 0;
+  margin-bottom: 20px;
 }
 
 .comment_wrapper pre {
-  /* same as above, but with 2px */
-  margin: 8px 0 10px 0;
+  margin-bottom: 2px;
 }
 
 .ascii-wrapper pre {
