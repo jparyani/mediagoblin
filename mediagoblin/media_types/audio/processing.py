@@ -99,12 +99,13 @@ def process_audio(entry):
                 original=os.path.splitext(
                     queued_filepath[-1])[0]))
 
-        with tempfile.NamedTemporaryFile(suffix='.wav') as wav_tmp:
-            _log.info('Creating WAV source for spectrogram')
+        with tempfile.NamedTemporaryFile(suffix='.ogg') as wav_tmp:
+            _log.info('Creating OGG source for spectrogram')
             transcoder.transcode(
                 queued_filename,
                 wav_tmp.name,
-                mux_string='wavenc')
+                mux_string='vorbisenc quality={0} ! oggmux'.format(
+                    audio_config['quality']))
 
             thumbnailer = AudioThumbnailer()
 
