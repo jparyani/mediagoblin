@@ -19,6 +19,12 @@
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
+{% block title -%}
+  {% trans media_title=media.title -%}
+    Editing {{ media_title }}
+  {%- endtrans %} &mdash; {{ super() }}
+{%- endblock %}
+
 {% block mediagoblin_content %}
 
   <form action="{{ request.urlgen('mediagoblin.edit.edit_media',

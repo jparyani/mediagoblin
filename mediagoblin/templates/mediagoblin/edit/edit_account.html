@@ -24,6 +24,13 @@
           src="{{ request.staticdirect('/js/show_password.js') }}"></script>
 {% endblock mediagoblin_head %}
 
+{% block title -%}
+  {% trans username=user.username -%}
+    Changing {{ username }}'s account settings
+  {%- endtrans %} &mdash; {{ super() }}
+{%- endblock %}
+
+
 {% block mediagoblin_content %}
 
   <form action="{{ request.urlgen('mediagoblin.edit.account') }}?username={{ 

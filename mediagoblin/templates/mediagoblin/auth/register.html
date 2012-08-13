@@ -24,6 +24,10 @@
           src="{{ request.staticdirect('/js/show_password.js') }}"></script>
 {% endblock mediagoblin_head %}
 
+{% block title -%}
+  {% trans %}Create an account!{% endtrans %} &mdash; {{ super() }}
+{%- endblock %}
+
 {% block mediagoblin_content %}
 
   <form action="{{ request.urlgen('mediagoblin.auth.register') }}"
