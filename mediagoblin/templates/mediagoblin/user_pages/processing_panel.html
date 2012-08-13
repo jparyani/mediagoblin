@@ -39,7 +39,7 @@
       <tr>
         <td>{{ media_entry._id }}</td>
         <td>{{ media_entry.title }}</td>
-        <td>{{ media_entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
+        <td>{{ media_entry.created.strftime("%F %R") }}</td>
         {% if media_entry.transcoding_progress %}
         <td>{{ media_entry.transcoding_progress }}%</td>
         {% else %}
@@ -67,7 +67,7 @@
       <tr>
         <td>{{ media_entry._id }}</td>
         <td>{{ media_entry.title }}</td>
-        <td>{{ media_entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
+        <td>{{ media_entry.created.strftime("%F %R") }}</td>
         {% if media_entry.get_fail_exception() %}
         <td>{{ media_entry.get_fail_exception().general_message }}</td>
         <td>{{ media_entry.fail_metadata }}</td>
@@ -95,7 +95,7 @@
       <tr>
         <td>{{ entry._id }}</td>
         <td><a href="{{ entry.url_for_self(request.urlgen) }}">{{ entry.title }}</a></td>
-        <td>{{ entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
+        <td>{{ entry.created.strftime("%F %R") }}</td>
       </tr>
     {% endfor %}
   </table>
