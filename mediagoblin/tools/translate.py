@@ -32,7 +32,7 @@ TRANSLATIONS_PATH = pkg_resources.resource_filename(
 
 def locale_to_lower_upper(locale):
     """
-    Take a locale, regardless of style, and format it like "en-us"
+    Take a locale, regardless of style, and format it like "en-US"
     """
     if '-' in locale:
         lang, country = locale.split('-', 1)
@@ -46,7 +46,7 @@ def locale_to_lower_upper(locale):
 
 def locale_to_lower_lower(locale):
     """
-    Take a locale, regardless of style, and format it like "en_US"
+    Take a locale, regardless of style, and format it like "en_us"
     """
     if '_' in locale:
         lang, country = locale.split('_', 1)

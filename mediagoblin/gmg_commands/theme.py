@@ -50,7 +50,7 @@ def link_assets(theme, link_dir, printer=simple_printer):
     which should be printable.
     """
     link_dir = link_dir.rstrip(os.path.sep)
-    link_parent_dir = os.path.split(link_dir)[0]
+    link_parent_dir = os.path.dirname(link_dir)
 
     results = []
 
