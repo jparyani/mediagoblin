@@ -41,3 +41,13 @@ class SubmitStartForm(wtforms.Form):
         _('License'),
         [wtforms.validators.Optional(),],
         choices=licenses_as_choices())
+
+class AddCollectionForm(wtforms.Form):
+    title = wtforms.TextField(
+        _('Title'),
+        [wtforms.validators.Length(min=0, max=500), wtforms.validators.Required()])
+    description = wtforms.TextAreaField(
+        _('Description of this collection'),
+        description=_("""You can use
+                      <a href="http://daringfireball.net/projects/markdown/basics">
+                      Markdown</a> for formatting."""))

@@ -28,12 +28,13 @@ from mediagoblin.user_pages import forms as user_forms
 from mediagoblin.user_pages.lib import send_comment_email
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
-    require_active_login, user_may_delete_media)
+    require_active_login, user_may_delete_media, user_may_alter_collection, 
+    get_user_collection, get_user_collection_item)
 
 from werkzeug.contrib.atom import AtomFeed
 
 from mediagoblin.media_types import get_media_manager
-
+from sqlalchemy.exc import IntegrityError
 
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
@@ -177,6 +178,91 @@ def media_post_comment(request, media):
 
 @get_user_media_entry
 @require_active_login
+def media_collect(request, media):
+
+    form = user_forms.MediaCollectForm(request.POST)
+    filt = (request.db.Collection.creator == request.user.id)
+    form.collection.query = request.db.Collection.query.filter(filt).order_by(request.db.Collection.title)
+
+    if request.method == 'POST':
+        if form.validate():
+
+            collection = None
+            collection_item = request.db.CollectionItem()
+
+            # If the user is adding a new collection, use that
+            if request.POST['collection_title']:
+                collection = request.db.Collection()
+                collection.id = ObjectId()
+
+                collection.title = (
+                    unicode(request.POST['collection_title'])
+                    or unicode(splitext(filename)[0]))
+
+                collection.description = unicode(request.POST.get('collection_description'))
+                collection.creator = request.user._id
+                collection.generate_slug()
+
+                # Make sure this user isn't duplicating an existing collection
+                existing_collection = request.db.Collection.find_one({
+                                        'creator': request.user._id,
+                                        'title':collection.title})
+                
+                if existing_collection:
+                    messages.add_message(
+                        request, messages.ERROR, _('You already have a collection called "%s"!' % collection.title))
+                    
+                    return redirect(request, "mediagoblin.user_pages.media_home",
+                                    user=request.user.username,
+                                    media=media.id)
+
+                collection.save(validate=True)
+
+                collection_item.collection = collection.id
+            # Otherwise, use the collection selected from the drop-down
+            else:
+                collection = request.db.Collection.find_one({'_id': request.POST.get('collection')})
+                collection_item.collection = collection.id
+
+            # Make sure the user actually selected a collection
+            if not collection:
+                messages.add_message(
+                    request, messages.ERROR, _('You have to select or add a collection'))
+            # Check whether media already exists in collection
+            elif request.db.CollectionItem.find_one({'media_entry': media.id, 'collection': collection_item.collection}):
+                messages.add_message(
+                    request, messages.ERROR, _('"%s" already in collection "%s"' % (media.title, collection.title)))
+            else:
+                collection_item.media_entry = media.id
+                collection_item.author = request.user.id
+                collection_item.note = unicode(request.POST['note'])
+                collection_item.save(validate=True)
+
+                collection.items = collection.items + 1
+                collection.save(validate=True)
+        
+                media.collected = media.collected + 1
+                media.save()
+
+                messages.add_message(
+                    request, messages.SUCCESS, _('"%s" added to collection "%s"' % (media.title, collection.title)))
+
+            return redirect(request, "mediagoblin.user_pages.media_home",
+                            user=request.user.username,
+                            media=media.id)
+        else:
+            messages.add_message(
+                request, messages.ERROR, _('Please check your entries and try again.'))      
+
+    return render_to_response(
+        request,
+        'mediagoblin/user_pages/media_collect.html',
+        {'media': media,
+         'form': form})
+
+
+@get_user_media_entry
+@require_active_login
 @user_may_delete_media
 def media_confirm_delete(request, media):
 
@@ -224,6 +310,132 @@ def media_confirm_delete(request, media):
         request,
         'mediagoblin/user_pages/media_confirm_delete.html',
         {'media': media,
+         'form': form})
+
+
+@uses_pagination
+def user_collection(request, page):
+    """A User-defined Collection"""
+    user = request.db.User.find_one({
+            'username': request.matchdict['user'],
+            'status': u'active'})
+    if not user:
+        return render_404(request)
+
+    collection = request.db.Collection.find_one(
+        {'slug': request.matchdict['collection'] })
+
+    cursor = request.db.CollectionItem.find(
+        {'collection': collection.id })
+
+    pagination = Pagination(page, cursor)
+    collection_items = pagination()
+
+    #if no data is available, return NotFound
+    if collection_items == None:
+        return render_404(request)
+
+    return render_to_response(
+        request,
+        'mediagoblin/user_pages/collection.html',
+        {'user': user,
+         'collection': collection,
+         'collection_items': collection_items,
+         'pagination': pagination})
+
+
+@get_user_collection_item
+@require_active_login
+@user_may_alter_collection
+def collection_item_confirm_remove(request, collection_item):
+
+    form = user_forms.ConfirmCollectionItemRemoveForm(request.POST)
+
+    if request.method == 'POST' and form.validate():
+        username = collection_item.in_collection.get_creator.username
+        collection = collection_item.in_collection
+
+        if form.confirm.data is True:
+            entry = collection_item.get_media_entry
+            entry.collected = entry.collected - 1
+            entry.save()
+
+            collection_item.delete()
+            collection.items = collection.items - 1;
+            collection.save()
+
+            messages.add_message(
+                request, messages.SUCCESS, _('You deleted the item from the collection.'))
+        else:
+            messages.add_message(
+                request, messages.ERROR,
+                _("The item was not removed because you didn't check that you were sure."))
+
+        return redirect(request, "mediagoblin.user_pages.user_collection",
+                        user=username,
+                        collection=collection.slug)
+
+    if ((request.user.is_admin and
+         request.user._id != collection.creator)):
+        messages.add_message(
+            request, messages.WARNING,
+            _("You are about to delete an item from another user's collection. "
+              "Proceed with caution."))
+
+    return render_to_response(
+        request,
+        'mediagoblin/user_pages/collection_item_confirm_remove.html',
+        {'collection_item': collection_item,
+         'form': form})
+
+
+@get_user_collection
+@require_active_login
+@user_may_alter_collection
+def collection_confirm_delete(request, collection):
+
+    form = user_forms.ConfirmDeleteForm(request.POST)
+
+    if request.method == 'POST' and form.validate():
+
+        username = collection.get_creator.username
+
+        if form.confirm.data is True:
+            collection_title = collection.title
+
+            # Delete all the associated collection items
+            for item in collection.get_collection_items():
+                entry = item.get_media_entry
+                entry.collected = entry.collected - 1
+                entry.save()
+                item.delete()
+
+            collection.delete()
+            messages.add_message(
+                request, messages.SUCCESS, _('You deleted the collection "%s"' % collection_title))
+
+            return redirect(request, "mediagoblin.user_pages.user_home",
+                user=username)
+        else:
+            messages.add_message(
+                request, messages.ERROR,
+                _("The collection was not deleted because you didn't check that you were sure."))
+
+            return redirect(request, "mediagoblin.user_pages.user_collection",
+                            user=username,
+                            collection=collection.slug)
+
+    if ((request.user.is_admin and
+         request.user._id != collection.creator)):
+        messages.add_message(
+            request, messages.WARNING,
+            _("You are about to delete another user's collection. "
+              "Proceed with caution."))
+
+    return render_to_response(
+        request,
+        'mediagoblin/user_pages/collection_confirm_delete.html',
+        {'collection': collection,
          'form': form})
 
 
@@ -284,6 +496,74 @@ def atom_feed(request):
                     'mediagoblin.user_pages.user_home',
                     qualified=True, user=entry.get_uploader.username)},
             updated=entry.get('created'),
+            links=[{
+                'href': entry.url_for_self(
+                    request.urlgen,
+                    qualified=True),
+                'rel': 'alternate',
+                'type': 'text/html'}])
+
+    return feed.get_response()
+
+def collection_atom_feed(request):
+    """
+    generates the atom feed with the newest images from a collection
+    """
+
+    user = request.db.User.find_one({
+               'username': request.matchdict['user'],
+               'status': u'active'})
+    if not user:
+        return render_404(request)
+
+    collection = request.db.Collection.find_one({
+               'creator': user.id,
+               'slug': request.matchdict['collection']})
+
+    cursor = request.db.CollectionItem.find({
+                 'collection': collection._id}) \
+                 .sort('added', DESCENDING) \
+                 .limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
+
+    """
+    ATOM feed id is a tag URI (see http://en.wikipedia.org/wiki/Tag_URI)
+    """
+    atomlinks = [{
+           'href': request.urlgen(
+               'mediagoblin.user_pages.user_collection',
+               qualified=True, user=request.matchdict['user'], collection=collection.slug),
+           'rel': 'alternate',
+           'type': 'text/html'
+           }]
+
+    if mg_globals.app_config["push_urls"]:
+        for push_url in mg_globals.app_config["push_urls"]:
+            atomlinks.append({
+                'rel': 'hub',
+                'href': push_url})
+
+    feed = AtomFeed(
+               "MediaGoblin: Feed for %s's collection %s" % (request.matchdict['user'], collection.title),
+               feed_url=request.url,
+               id='tag:{host},{year}:collection.user-{user}.title-{title}'.format(
+                   host=request.host,
+                   year=datetime.datetime.today().strftime('%Y'),
+                   user=request.matchdict['user'],
+                   title=collection.title),
+               links=atomlinks)
+
+    for item in cursor:
+        entry = item.get_media_entry
+        feed.add(entry.get('title'),
+            item.note_html,
+            id=entry.url_for_self(request.urlgen, qualified=True),
+            content_type='html',
+            author={
+                'name': entry.get_uploader.username,
+                'uri': request.urlgen(
+                    'mediagoblin.user_pages.user_home',
+                    qualified=True, user=entry.get_uploader.username)},
+            updated=item.get('added'),
             links=[{
                 'href': entry.url_for_self(
                     request.urlgen,

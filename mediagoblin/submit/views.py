@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin import messages
 import mediagoblin.mg_globals as mg_globals
 import uuid
 from os.path import splitext
@@ -179,5 +180,48 @@ def submit_start(request):
     return render_to_response(
         request,
         'mediagoblin/submit/start.html',
+        {'submit_form': submit_form,
+         'app_config': mg_globals.app_config})
+
+@require_active_login
+def add_collection(request, media=None):
+    """
+    View to create a new collection
+    """
+    submit_form = submit_forms.AddCollectionForm(request.POST)
+
+    if request.method == 'POST' and submit_form.validate():
+        try:
+            collection = request.db.Collection()
+            collection.id = ObjectId()
+
+            collection.title = unicode(request.POST['title'])
+
+            collection.description = unicode(request.POST.get('description'))
+            collection.creator = request.user._id
+            collection.generate_slug()
+
+            # Make sure this user isn't duplicating an existing collection
+            existing_collection = request.db.Collection.find_one({
+                    'creator': request.user._id,
+                    'title':collection.title})
+                
+            if existing_collection:
+                messages.add_message(
+                    request, messages.ERROR, _('You already have a collection called "%s"!' % collection.title))
+            else:
+                collection.save(validate=True)
+            
+                add_message(request, SUCCESS, _('Collection "%s" added!' % collection.title))
+
+            return redirect(request, "mediagoblin.user_pages.user_home",
+                            user=request.user.username)
+
+        except Exception as e:
+            raise
+
+    return render_to_response(
+        request,
+        'mediagoblin/submit/collection.html',
         {'submit_form': submit_form,
          'app_config': mg_globals.app_config})

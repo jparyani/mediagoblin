@@ -15,16 +15,32 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import wtforms
-
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from mediagoblin.tools.translate import fake_ugettext_passthrough as _
-
 
 class MediaCommentForm(wtforms.Form):
     comment_content = wtforms.TextAreaField(
         '',
         [wtforms.validators.Required()])
 
-
 class ConfirmDeleteForm(wtforms.Form):
     confirm = wtforms.BooleanField(
         _('I am sure I want to delete this'))
+
+class ConfirmCollectionItemRemoveForm(wtforms.Form):
+    confirm = wtforms.BooleanField(
+        _('I am sure I want to remove this item from the collection'))
+
+class MediaCollectForm(wtforms.Form):
+    collection = QuerySelectField(allow_blank=True, blank_text=_('-- Select --'), get_label='title',)
+    note = wtforms.TextAreaField(
+        _('Include a note'),
+        [wtforms.validators.Optional()],)
+    collection_title = wtforms.TextField(
+        _('Title'),
+        [wtforms.validators.Length(min=0, max=500)])
+    collection_description = wtforms.TextAreaField(
+        _('Description of this collection'),
+        description=_("""You can use
+                      <a href="http://daringfireball.net/projects/markdown/basics">
+                      Markdown</a> for formatting."""))

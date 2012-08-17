@@ -17,7 +17,7 @@
 
 import sys
 from mediagoblin.db.sql.base import Session
-from mediagoblin.db.sql.models import MediaEntry, Tag, MediaTag
+from mediagoblin.db.sql.models import MediaEntry, Tag, MediaTag, Collection
 
 from mediagoblin.tools.common import simple_printer
 
@@ -308,6 +308,15 @@ def clean_orphan_tags():
     # q2.delete(synchronize_session = False)
 
     Session.commit()
+
+
+def check_collection_slug_used(dummy_db, creator_id, slug, ignore_c_id):
+    filt = (Collection.creator == creator_id) \
+        & (Collection.slug == slug)
+    if ignore_c_id is not None:
+        filt = filt & (Collection.id != ignore_c_id)
+    does_exist = Session.query(Collection.id).filter(filt).first() is not None
+    return does_exist
 
 
 if __name__ == '__main__':

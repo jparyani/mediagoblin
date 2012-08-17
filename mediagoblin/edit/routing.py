@@ -22,5 +22,5 @@ edit_routes = [
     Route('mediagoblin.edit.profile', '/profile/',
         controller="mediagoblin.edit.views:edit_profile"),
     Route('mediagoblin.edit.account', '/account/',
-        controller="mediagoblin.edit.views:edit_account")
+        controller="mediagoblin.edit.views:edit_account"),
     ]

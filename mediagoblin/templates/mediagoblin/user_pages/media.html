@@ -157,6 +157,10 @@
       {% include "mediagoblin/utils/tags.html" %}
     {% endif %}
 
+    {% if media.collections %}
+      {% include "mediagoblin/utils/collections.html" %}
+    {% endif %}
+
     {% include "mediagoblin/utils/license.html" %}
 
     {% include "mediagoblin/utils/geolocation_map.html" %}
@@ -186,6 +190,15 @@
         <a href="{{ request.urlgen('mediagoblin.edit.attachments',
                       user=media.get_uploader.username,
                       media=media._id) }}">{% trans %}Add attachment{% endtrans %}</a>
+      </p>
+    {% endif %}
+
+    {% if request.user %}
+      <p>
+        <a type="submit" href="{{ request.urlgen('mediagoblin.user_pages.media_collect', 
+                                    user=media.get_uploader.username,
+                                    media=media._id) }}" class="button_action button_collect" >
+	</a>
       </p>
     {% endif %}
 

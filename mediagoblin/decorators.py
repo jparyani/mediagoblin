@@ -70,6 +70,23 @@ def user_may_delete_media(controller):
     return wrapper
 
 
+def user_may_alter_collection(controller):
+    """
+    Require user ownership of the Collection to modify.
+    """
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        creator_id = request.db.User.find_one(
+            {'username': request.matchdict['user']}).id
+        if not (request.user.is_admin or
+                request.user._id == creator_id):
+            return exc.HTTPForbidden()
+
+        return controller(request, *args, **kwargs)
+
+    return wrapper
+
+
 def uses_pagination(controller):
     """
     Check request GET 'page' key for wrong values
@@ -119,6 +136,59 @@ def get_user_media_entry(controller):
                 return render_404(request)
 
         return controller(request, media=media, *args, **kwargs)
+
+    return wrapper
+
+
+def get_user_collection(controller):
+    """
+    Pass in a Collection based off of a url component
+    """
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        user = request.db.User.find_one(
+            {'username': request.matchdict['user']})
+
+        if not user:
+            return render_404(request)
+
+        collection = request.db.Collection.find_one(
+            {'slug': request.matchdict['collection'],
+             'creator': user._id})
+
+        # Still no collection?  Okay, 404.
+        if not collection:
+            return render_404(request)
+
+        return controller(request, collection=collection, *args, **kwargs)
+
+    return wrapper
+
+
+def get_user_collection_item(controller):
+    """
+    Pass in a CollectionItem based off of a url component
+    """
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        user = request.db.User.find_one(
+            {'username': request.matchdict['user']})
+
+        if not user:
+            return render_404(request)
+
+        collection = request.db.Collection.find_one(
+            {'slug': request.matchdict['collection'],
+             'creator': user._id})
+
+        collection_item = request.db.CollectionItem.find_one(
+            {'_id': request.matchdict['collection_item'] })
+
+        # Still no collection item?  Okay, 404.
+        if not collection_item:
+            return render_404(request)
+
+        return controller(request, collection_item=collection_item, *args, **kwargs)
 
     return wrapper
 

@@ -25,13 +25,14 @@ from mediagoblin import mg_globals
 
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.edit import forms
-from mediagoblin.edit.lib import may_edit_media
-from mediagoblin.decorators import require_active_login, get_user_media_entry
+from mediagoblin.edit.lib import may_edit_media, may_edit_collection
+from mediagoblin.decorators import require_active_login, get_user_media_entry, \
+    user_may_alter_collection, get_user_collection
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.text import (
     convert_to_tag_list_of_dicts, media_tags_as_string)
-from mediagoblin.db.util import check_media_slug_used
+from mediagoblin.db.util import check_media_slug_used, check_collection_slug_used
 
 import mimetypes
 
@@ -254,4 +255,59 @@ def edit_account(request):
         request,
         'mediagoblin/edit/edit_account.html',
         {'user': user,
+         'form': form})
+
+
+@require_active_login
+@user_may_alter_collection
+@get_user_collection
+def edit_collection(request, collection):
+    defaults = dict(
+        title=collection.title,
+        slug=collection.slug,
+        description=collection.description)
+
+    form = forms.EditCollectionForm(
+        request.POST,
+        **defaults)
+
+    if request.method == 'POST' and form.validate():
+        # Make sure there isn't already a Collection with such a slug
+        # and userid.
+        slug_used = check_collection_slug_used(request.db, collection.creator,
+                request.POST['slug'], collection.id)
+        
+        # Make sure there isn't already a Collection with this title
+        existing_collection = request.db.Collection.find_one({
+                'creator': request.user._id,
+                'title':request.POST['title']})
+                
+        if existing_collection and existing_collection.id != collection.id:
+            messages.add_message(
+                request, messages.ERROR, _('You already have a collection called "%s"!' % request.POST['title']))
+        elif slug_used:
+            form.slug.errors.append(
+                _(u'A collection with that slug already exists for this user.'))
+        else:
+            collection.title = unicode(request.POST['title'])
+            collection.description = unicode(request.POST.get('description'))
+            collection.slug = unicode(request.POST['slug'])
+
+            collection.save()
+
+            return redirect(request, "mediagoblin.user_pages.user_collection",
+                            user=collection.get_creator.username,
+                            collection=collection.slug)
+
+    if request.user.is_admin \
+            and collection.creator != request.user._id \
+            and request.method != 'POST':
+        messages.add_message(
+            request, messages.WARNING,
+            _("You are editing another user's collection. Proceed with caution."))
+
+    return render_to_response(
+        request,
+        'mediagoblin/edit/edit_collection.html',
+        {'collection': collection,
          'form': form})

@@ -18,4 +18,7 @@ from routes.route import Route
 
 submit_routes = [
     Route('mediagoblin.submit.start', '/',
-          controller='mediagoblin.submit.views:submit_start')]
+          controller='mediagoblin.submit.views:submit_start'),
+    Route('mediagoblin.submit.collection', '/collection',
+          controller='mediagoblin.submit.views:add_collection'),
+    ]

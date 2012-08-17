@@ -143,3 +143,56 @@ class MediaCommentMixin(object):
         Run through Markdown and the HTML cleaner.
         """
         return cleaned_markdown_conversion(self.content)
+
+
+class CollectionMixin(object):
+    def generate_slug(self):
+        # import this here due to a cyclic import issue
+        # (db.models -> db.mixin -> db.util -> db.models)
+        from mediagoblin.db.util import check_collection_slug_used
+
+        self.slug = slugify(self.title)
+
+        duplicate = check_collection_slug_used(mg_globals.database,
+            self.creator, self.slug, self.id)
+
+        if duplicate:
+            if self.id is not None:
+                self.slug = u"%s-%s" % (self.id, self.slug)
+            else:
+                self.slug = None
+
+    @property
+    def description_html(self):
+        """
+        Rendered version of the description, run through
+        Markdown and cleaned with our cleaning tool.
+        """
+        return cleaned_markdown_conversion(self.description)
+
+    @property
+    def slug_or_id(self):
+        return (self.slug or self._id)
+
+    def url_for_self(self, urlgen, **extra_args):
+        """
+        Generate an appropriate url for ourselves
+
+        Use a slug if we have one, else use our '_id'.
+        """
+        creator = self.get_creator
+
+        return urlgen(
+            'mediagoblin.user_pages.collections_home',
+            user=creator.username,
+            collection=self.slug_or_id,
+            **extra_args)
+
+class CollectionItemMixin(object):
+    @property
+    def note_html(self):
+        """
+        the actual html-rendered version of the note displayed.
+        Run through Markdown and the HTML cleaner.
+        """
+        return cleaned_markdown_conversion(self.note)

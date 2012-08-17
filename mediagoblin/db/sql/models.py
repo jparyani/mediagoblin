@@ -33,7 +33,7 @@ from sqlalchemy.util import memoized_property
 
 from mediagoblin.db.sql.extratypes import PathTupleWithSlashes, JSONEncoded
 from mediagoblin.db.sql.base import Base, DictReadAttrProxy
-from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin
+from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin, CollectionMixin, CollectionItemMixin
 from mediagoblin.db.sql.base import Session
 
 # It's actually kind of annoying how sqlalchemy-migrate does this, if
@@ -103,6 +103,7 @@ class MediaEntry(Base, MediaEntryMixin):
     state = Column(Unicode, default=u'unprocessed', nullable=False)
         # or use sqlalchemy.types.Enum?
     license = Column(Unicode)
+    collected = Column(Integer, default=0)
 
     fail_error = Column(Unicode)
     fail_metadata = Column(JSONEncoded)
@@ -142,6 +143,11 @@ class MediaEntry(Base, MediaEntryMixin):
     tags = association_proxy("tags_helper", "dict_view",
         creator=lambda v: MediaTag(name=v["name"], slug=v["slug"])
         )
+
+    collections_helper = relationship("CollectionItem",
+        cascade="all, delete-orphan"
+        )
+    collections = association_proxy("collections_helper", "in_collection")
 
     ## TODO
     # media_data
@@ -348,8 +354,58 @@ class MediaComment(Base, MediaCommentMixin):
     _id = SimpleFieldAlias("id")
 
 
+class Collection(Base, CollectionMixin):
+    __tablename__ = "core__collections"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(Unicode, nullable=False)
+    slug = Column(Unicode)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now,
+        index=True)
+    description = Column(UnicodeText) 
+    creator = Column(Integer, ForeignKey(User.id), nullable=False)
+    items = Column(Integer, default=0)
+
+    get_creator = relationship(User)
+    
+    def get_collection_items(self, ascending=False):
+        order_col = CollectionItem.position
+        if not ascending:
+            order_col = desc(order_col)
+        return CollectionItem.query.filter_by(
+            collection=self.id).order_by(order_col)
+
+    _id = SimpleFieldAlias("id")
+
+
+class CollectionItem(Base, CollectionItemMixin):
+    __tablename__ = "core__collection_items"
+
+    id = Column(Integer, primary_key=True)
+    media_entry = Column(
+        Integer, ForeignKey(MediaEntry.id), nullable=False, index=True)
+    collection = Column(Integer, ForeignKey(Collection.id), nullable=False)
+    note = Column(UnicodeText, nullable=True)
+    added = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    position = Column(Integer)
+    in_collection = relationship("Collection")
+
+    get_media_entry = relationship(MediaEntry)
+
+    _id = SimpleFieldAlias("id")
+
+    __table_args__ = (
+        UniqueConstraint('collection', 'media_entry'),
+        {})
+
+    @property
+    def dict_view(self):
+        """A dict like view on this object"""
+        return DictReadAttrProxy(self)
+
+
 MODELS = [
-    User, MediaEntry, Tag, MediaTag, MediaComment, MediaFile, FileKeynames,
+    User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem, MediaFile, FileKeynames,
     MediaAttachmentFile]
 
 

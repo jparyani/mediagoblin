@@ -77,3 +77,19 @@ class EditAttachmentsForm(wtforms.Form):
         'Title')
     attachment_file = wtforms.FileField(
         'File')
+
+class EditCollectionForm(wtforms.Form):
+    title = wtforms.TextField(
+        _('Title'),
+        [wtforms.validators.Length(min=0, max=500), wtforms.validators.Required(message=_("The title can't be empty"))])
+    description = wtforms.TextAreaField(
+        _('Description of this collection'),
+        description=_("""You can use
+                      <a href="http://daringfireball.net/projects/markdown/basics">
+                      Markdown</a> for formatting."""))
+    slug = wtforms.TextField(
+        _('Slug'),
+        [wtforms.validators.Required(message=_("The slug can't be empty"))],
+        description=_(
+            "The title part of this collection's address. "
+            "You usually don't need to change this."))
