@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-08-05 10:01-0500\n"
+"POT-Creation-Date: 2012-08-19 14:21-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -222,19 +222,19 @@ msgstr ""
 msgid "Woohoo! Submitted!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/404.html:22
+#: mediagoblin/templates/mediagoblin/404.html:24
 msgid "Image of 404 goblin stressing out"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/404.html:23
+#: mediagoblin/templates/mediagoblin/404.html:25
 msgid "Oops!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/404.html:24
+#: mediagoblin/templates/mediagoblin/404.html:26
 msgid "There doesn't seem to be a page at this address. Sorry!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/404.html:26
+#: mediagoblin/templates/mediagoblin/404.html:28
 msgid ""
 "If you're sure the address is correct, maybe the page you're looking for "
 "has been moved or deleted."
@@ -261,8 +261,9 @@ msgid "Log out"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:74
-#: mediagoblin/templates/mediagoblin/auth/login.html:32
-#: mediagoblin/templates/mediagoblin/auth/login.html:50
+#: mediagoblin/templates/mediagoblin/auth/login.html:28
+#: mediagoblin/templates/mediagoblin/auth/login.html:36
+#: mediagoblin/templates/mediagoblin/auth/login.html:54
 msgid "Log in"
 msgstr ""
 
@@ -319,57 +320,61 @@ msgstr ""
 msgid "Most recent media"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/admin/panel.html:22
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:22
+#: mediagoblin/templates/mediagoblin/admin/panel.html:21
+#: mediagoblin/templates/mediagoblin/admin/panel.html:26
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:26
 msgid "Media processing panel"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/admin/panel.html:25
+#: mediagoblin/templates/mediagoblin/admin/panel.html:29
 msgid "Here you can track the state of media being processed on this instance."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/admin/panel.html:28
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
+#: mediagoblin/templates/mediagoblin/admin/panel.html:32
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:32
 msgid "Media in-processing"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/admin/panel.html:54
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:52
+#: mediagoblin/templates/mediagoblin/admin/panel.html:58
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
 msgid "No media in-processing"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/admin/panel.html:57
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:55
+#: mediagoblin/templates/mediagoblin/admin/panel.html:61
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:59
 msgid "These uploads failed to process:"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/admin/panel.html:86
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:82
+#: mediagoblin/templates/mediagoblin/admin/panel.html:90
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
 msgid "No failed entries!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/admin/panel.html:88
+#: mediagoblin/templates/mediagoblin/admin/panel.html:92
 msgid "Last 10 successful uploads"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/admin/panel.html:108
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:103
+#: mediagoblin/templates/mediagoblin/admin/panel.html:112
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
 msgid "No processed entries, yet!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/change_fp.html:32
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:28
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:36
 msgid "Set your new password"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/change_fp.html:35
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:39
 msgid "Set password"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:27
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:23
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:31
 msgid "Recover password"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:30
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:34
 msgid "Send instructions"
 msgstr ""
 
@@ -387,27 +392,28 @@ msgid ""
 "a happy goblin!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:35
+#: mediagoblin/templates/mediagoblin/auth/login.html:39
 msgid "Logging in failed!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:40
+#: mediagoblin/templates/mediagoblin/auth/login.html:44
 msgid "Don't have an account yet?"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:41
+#: mediagoblin/templates/mediagoblin/auth/login.html:45
 msgid "Create one here!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/login.html:47
+#: mediagoblin/templates/mediagoblin/auth/login.html:51
 msgid "Forgot your password?"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/register.html:32
+#: mediagoblin/templates/mediagoblin/auth/register.html:28
+#: mediagoblin/templates/mediagoblin/auth/register.html:36
 msgid "Create an account!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/auth/register.html:36
+#: mediagoblin/templates/mediagoblin/auth/register.html:40
 msgid "Create"
 msgstr ""
 
@@ -422,28 +428,37 @@ msgid ""
 "%(verification_url)s"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/edit/edit.html:29
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:23
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:35
+#, python-format
+msgid "Editing attachments for %(media_title)s"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/edit/edit.html:23
+#: mediagoblin/templates/mediagoblin/edit/edit.html:35
 #, python-format
 msgid "Editing %(media_title)s"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/edit/edit.html:36
+#: mediagoblin/templates/mediagoblin/edit/edit.html:42
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
 msgid "Cancel"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/edit/edit.html:37
-#: mediagoblin/templates/mediagoblin/edit/edit_account.html:40
-#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
+#: mediagoblin/templates/mediagoblin/edit/edit.html:43
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:47
+#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:41
 msgid "Save changes"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/edit/edit_account.html:34
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:28
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:41
 #, python-format
 msgid "Changing %(username)s's account settings"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:29
+#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:23
+#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
 #, python-format
 msgid "Editing %(username)s's profile"
 msgstr ""
@@ -507,11 +522,12 @@ msgstr ""
 msgid "WebM file (640p; VP8/Vorbis)"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/submit/start.html:26
+#: mediagoblin/templates/mediagoblin/submit/start.html:23
+#: mediagoblin/templates/mediagoblin/submit/start.html:30
 msgid "Add your media"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/submit/start.html:30
+#: mediagoblin/templates/mediagoblin/submit/start.html:34
 msgid "Add"
 msgstr ""
 
@@ -596,11 +612,11 @@ msgstr ""
 msgid "Delete permanently"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:25
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:29
 msgid "You can track the state of media being processed for your gallery here."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:85
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:89
 msgid "Your last 10 successful uploads"
 msgstr ""
 
