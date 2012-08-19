@@ -111,7 +111,7 @@ Other variables you may consider setting:
 `theme_linked_assets_dir`
     Your web server needs to serve the theme files out of some directory,
     and MediaGoblin will symlink the current theme's assets here.  See
-    the "Link the assets" setp in :ref:`theming-installing-section`.
+    the "Link the assets" step in :ref:`theming-installing-section`.
 
 
 Making a theme
