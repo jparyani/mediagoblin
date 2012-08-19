@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2012-08-05 10:01-0500\n"
-"PO-Revision-Date: 2012-08-05 15:00+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2012-08-05 15:42+0000\n"
+"Last-Translator: George Pop <gapop@hotmail.com>\n"
 "Language-Team: Romanian (http://www.transifex.com/projects/p/mediagoblin/language/ro/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -162,7 +162,7 @@ msgstr "Noua parolă"
 
 #: mediagoblin/edit/forms.py:72
 msgid "Email me when others comment on my media"
-msgstr ""
+msgstr "Trimite-mi un e-mail când alții comentează fișierele mele"
 
 #: mediagoblin/edit/views.py:64
 msgid "An entry with that slug already exists for this user."
@@ -190,15 +190,15 @@ msgstr "Parolă incorectă"
 
 #: mediagoblin/gmg_commands/theme.py:58
 msgid "Cannot link theme... no theme set\n"
-msgstr ""
+msgstr "Tema nu poate fi atașată... nu există o temă selectată\n"
 
 #: mediagoblin/gmg_commands/theme.py:71
 msgid "No asset directory for this theme\n"
-msgstr ""
+msgstr "Nu există un folder de elemente pentru această temă\n"
 
 #: mediagoblin/gmg_commands/theme.py:74
 msgid "However, old link directory symlink found; removed.\n"
-msgstr ""
+msgstr "A fost însă găsit un symlink către vechiul folder; s-a șters.\n"
 
 #: mediagoblin/media_types/__init__.py:60
 #: mediagoblin/media_types/__init__.py:120
@@ -207,7 +207,7 @@ msgstr "Scuze, nu recunosc acest tip de fișier :("
 
 #: mediagoblin/media_types/video/processing.py:35
 msgid "Video transcoding failed"
-msgstr ""
+msgstr "Transcodarea video a eșuat"
 
 #: mediagoblin/processing/__init__.py:138
 msgid "Invalid file given for media type."
@@ -301,7 +301,7 @@ msgstr "Acest site folosește <a href=\"http://mediagoblin.org\">MediaGoblin</a>
 msgid ""
 "To add your own media, place comments, and more, you can log in with your "
 "MediaGoblin account."
-msgstr ""
+msgstr "Pentru a adăuga fișierele tale și pentru a comenta te poți autentifica cu contul tău MediaGoblin."
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid "Don't have one yet? It's easy!"
@@ -327,7 +327,7 @@ msgstr "Panou de procesare media"
 #: mediagoblin/templates/mediagoblin/admin/panel.html:25
 msgid ""
 "Here you can track the state of media being processed on this instance."
-msgstr ""
+msgstr "Aici poți urmări starea fișierelor aflate în curs de procesare pe acest server."
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:28
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
@@ -347,16 +347,16 @@ msgstr "Aceste fișiere nu au putut fi procesate:"
 #: mediagoblin/templates/mediagoblin/admin/panel.html:86
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:82
 msgid "No failed entries!"
-msgstr ""
+msgstr "Niciun entry cu erori!"
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:88
 msgid "Last 10 successful uploads"
-msgstr ""
+msgstr "Ultimele 10 upload-uri reușite"
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:108
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:103
 msgid "No processed entries, yet!"
-msgstr ""
+msgstr "Nu există încă niciun entry procesat!"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:32
 msgid "Set your new password"
@@ -484,7 +484,7 @@ msgstr "Poți lua un browser modern \n\tcapabil să redea această înregistrare
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:56
 msgid "Original file"
-msgstr ""
+msgstr "Fișierul original"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
 msgid "WebM file (Vorbis codec)"
@@ -506,7 +506,7 @@ msgstr "Poți lua un browser modern\n<span class=\"whitespace other\" title=\"Ta
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:59
 msgid "WebM file (640p; VP8/Vorbis)"
-msgstr ""
+msgstr "Fișier WebM (640p; VP8/Vorbis)"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Add your media"
@@ -521,7 +521,7 @@ msgstr "Adaugă"
 msgid ""
 "Hi %(username)s,\n"
 "%(comment_author)s commented on your post (%(comment_url)s) at %(instance_name)s\n"
-msgstr ""
+msgstr "Bună, %(username)s,\n%(comment_author)s a făcut un comentariu la postarea ta (%(comment_url)s) de la %(instance_name)s\n"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
 #, python-format
@@ -581,11 +581,11 @@ msgstr "<h3>Adăugat la</h3>\n      <p>%(date)s</p>"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:167
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:183
 msgid "Attachments"
-msgstr ""
+msgstr "Anexe"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:188
 msgid "Add attachment"
-msgstr ""
+msgstr "Atașează"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -603,7 +603,7 @@ msgstr "Aici poți urmări stadiul procesării fișierelor media din galeria ta.
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:85
 msgid "Your last 10 successful uploads"
-msgstr ""
+msgstr "Ultimele tale 10 upload-uri reușite"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:31
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:89
@@ -744,7 +744,7 @@ msgstr "Sunt sigur că doresc să șterg"
 
 #: mediagoblin/user_pages/lib.py:56
 msgid "commented on your post"
-msgstr ""
+msgstr "a făcut un comentariu la postarea ta"
 
 #: mediagoblin/user_pages/views.py:160
 msgid "Oops, your comment was empty."
@@ -757,7 +757,7 @@ msgstr "Comentariul tău a fost trimis!"
 #: mediagoblin/user_pages/views.py:200
 msgid ""
 "Some of the files with this entry seem to be missing.  Deleting anyway."
-msgstr ""
+msgstr "Unele fișiere din acest entry par să lipsească.  Ștergem, totuși."
 
 #: mediagoblin/user_pages/views.py:205
 msgid "You deleted the media."

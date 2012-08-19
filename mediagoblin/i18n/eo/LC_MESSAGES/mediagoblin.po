@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2012-08-05 10:01-0500\n"
-"PO-Revision-Date: 2012-08-05 15:00+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2012-08-19 10:28+0000\n"
+"Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -163,7 +163,7 @@ msgstr "La nova pasvorto"
 
 #: mediagoblin/edit/forms.py:72
 msgid "Email me when others comment on my media"
-msgstr ""
+msgstr "Retpoŝtu min kiam aliaj komentas pri miaj alŝutaĵoj."
 
 #: mediagoblin/edit/views.py:64
 msgid "An entry with that slug already exists for this user."
@@ -191,7 +191,7 @@ msgstr "Malĝusta pasvorto"
 
 #: mediagoblin/gmg_commands/theme.py:58
 msgid "Cannot link theme... no theme set\n"
-msgstr ""
+msgstr "Alligo de etoso ne eblas… ne estas elektita ekzistanta etoso\n"
 
 #: mediagoblin/gmg_commands/theme.py:71
 msgid "No asset directory for this theme\n"
@@ -199,7 +199,7 @@ msgstr ""
 
 #: mediagoblin/gmg_commands/theme.py:74
 msgid "However, old link directory symlink found; removed.\n"
-msgstr ""
+msgstr "Tamen trovitas — kaj forigitas — malnova simbola ligilo al dosierujo.\n"
 
 #: mediagoblin/media_types/__init__.py:60
 #: mediagoblin/media_types/__init__.py:120
@@ -208,7 +208,7 @@ msgstr "Mi pardonpetas, mi ne subtenas tiun dosiertipon :("
 
 #: mediagoblin/media_types/video/processing.py:35
 msgid "Video transcoding failed"
-msgstr ""
+msgstr "Malsukcesis transkodado de filmo"
 
 #: mediagoblin/processing/__init__.py:138
 msgid "Invalid file given for media type."
@@ -302,7 +302,7 @@ msgstr "Ĉi tiu retpaĝaro funkcias per <a href=\"http://mediagoblin.org\">Media
 msgid ""
 "To add your own media, place comments, and more, you can log in with your "
 "MediaGoblin account."
-msgstr ""
+msgstr "Por aldoni viajn proprajn dosierojn, afiŝi komentariojn ktp, vi povas ensaluti je via MediaGoblina konto."
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid "Don't have one yet? It's easy!"
@@ -348,16 +348,16 @@ msgstr "Preparado de ĉi tiuj alŝutaĵoj malsukcesis:"
 #: mediagoblin/templates/mediagoblin/admin/panel.html:86
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:82
 msgid "No failed entries!"
-msgstr ""
+msgstr "Ne ekzistas malsukcesaj eroj!"
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:88
 msgid "Last 10 successful uploads"
-msgstr ""
+msgstr "La dek lastaj sukcesaj alŝutoj"
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:108
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:103
 msgid "No processed entries, yet!"
-msgstr ""
+msgstr "Ankoraŭ ne ekzistas eroj prilaboritaj!"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:32
 msgid "Set your new password"
@@ -485,7 +485,7 @@ msgstr "Vi povas akiri modernan TTT-legilon, kapablan \n\tsonigi la registraĵon
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:56
 msgid "Original file"
-msgstr ""
+msgstr "originalan dosieron"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
 msgid "WebM file (Vorbis codec)"
@@ -507,7 +507,7 @@ msgstr "Vi povas akiri modernan TTT-legilon,\n<span class=\"whitespace other\" t
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:59
 msgid "WebM file (640p; VP8/Vorbis)"
-msgstr ""
+msgstr "la WebM-dosieron (640p; VP8/Vorbis)"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:26
 msgid "Add your media"
@@ -522,7 +522,7 @@ msgstr "Aldoni"
 msgid ""
 "Hi %(username)s,\n"
 "%(comment_author)s commented on your post (%(comment_url)s) at %(instance_name)s\n"
-msgstr ""
+msgstr "Saluton, %(username)s.\n%(comment_author)s komentis ĉe via alŝutaĵo (%(comment_url)s) ĉe %(instance_name)s\n"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
 #, python-format
@@ -582,11 +582,11 @@ msgstr "<h3>Aldonita je</h3>\n      <p>la %(date)s</p>"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:167
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:183
 msgid "Attachments"
-msgstr ""
+msgstr "Kundosieroj"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:188
 msgid "Add attachment"
-msgstr ""
+msgstr "Aldoni kundosieron"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -604,7 +604,7 @@ msgstr "Ĉi tie vi povas informiĝi pri la stato de preparado de dosieroj por vi
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:85
 msgid "Your last 10 successful uploads"
-msgstr ""
+msgstr "Viaj 10 lastaj sukcesaj alŝutoj."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:31
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:89
@@ -745,7 +745,7 @@ msgstr "Jes, mi volas forigi ĉi tion."
 
 #: mediagoblin/user_pages/lib.py:56
 msgid "commented on your post"
-msgstr ""
+msgstr "komentis je via afiŝo"
 
 #: mediagoblin/user_pages/views.py:160
 msgid "Oops, your comment was empty."
@@ -758,7 +758,7 @@ msgstr "Via komento estis afiŝita!"
 #: mediagoblin/user_pages/views.py:200
 msgid ""
 "Some of the files with this entry seem to be missing.  Deleting anyway."
-msgstr ""
+msgstr "Iuj dosieroj de ĉi tiu ero ŝajne mankas.  Mi tamen forigas."
 
 #: mediagoblin/user_pages/views.py:205
 msgid "You deleted the media."
