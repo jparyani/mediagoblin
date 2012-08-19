@@ -45,7 +45,7 @@
         <td>{{ media_entry._id }}</td>
         <td>{{ media_entry.get_uploader.username }}</td>
         <td>{{ media_entry.title }}</td>
-        <td>{{ media_entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
+        <td>{{ media_entry.created.strftime("%F %R") }}</td>
         {% if media_entry.transcoding_progress %}
           <td>{{ media_entry.transcoding_progress }}%</td>
         {% else %}
@@ -75,7 +75,7 @@
         <td>{{ media_entry._id }}</td>
         <td>{{ media_entry.get_uploader.username }}</td>
         <td>{{ media_entry.title }}</td>
-        <td>{{ media_entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
+        <td>{{ media_entry.created.strftime("%F %R") }}</td>
         {% if media_entry.get_fail_exception() %}
         <td>{{ media_entry.get_fail_exception().general_message }}</td>
         <td>{{ media_entry.fail_metadata }}</td>
@@ -104,7 +104,7 @@
         <td>{{ media_entry._id }}</td>
         <td>{{ media_entry.get_uploader.username }}</td>
         <td><a href="{{ media_entry.url_for_self(request.urlgen) }}">{{ media_entry.title }}</a></td>
-        <td>{{ media_entry.created.strftime("%m-%d-%Y %I:%M %p") }}</td>
+        <td>{{ media_entry.created.strftime("%F %R") }}</td>
       </tr>
     {% endfor %}
   </table>
