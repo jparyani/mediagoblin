@@ -159,13 +159,13 @@ with plugins, think about the following:
 
    For example, change::
 
-       [[mediagoblin.plugins.flatpages]]
+       [[mediagoblin.plugins.flatpagesfile]]
 
    to::
 
-       [[-mediagoblin.plugins.flatpages]]
+       [[-mediagoblin.plugins.flatpagesfile]]
 
-   That'll prevent the ``mediagoblin.plugins.flatpages`` plugin from
+   That'll prevent the ``mediagoblin.plugins.flatpagesfile`` plugin from
    loading.
 
 3. If it's a core plugin that comes with MediaGoblin, ask us for help!

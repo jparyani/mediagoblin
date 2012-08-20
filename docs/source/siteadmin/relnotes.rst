@@ -20,6 +20,12 @@ If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
 
+0.3.1
+=====
+
+FIXME: Needs to be written
+
+
 0.3.0
 =====
 

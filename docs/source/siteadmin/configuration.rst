@@ -117,13 +117,15 @@ To be perfectly honest, there are quite a few options and we haven't had
 time to document them all.
 
 So here's a cop-out section saying that if you get into trouble, hop
-onto IRC and we'll help you out::
+onto IRC and we'll help you out.  Details for the IRC channel is on the
+`join page`_ of the website.
 
-    #mediagoblin on irc.freenode.net
+.. _join page: http://mediagoblin.org/join/
+
+
 
 
 Celery
 ======
 
-We should point to another celery-specific section of the document
-actually :)
+FIXME: List Celery configuration here.
