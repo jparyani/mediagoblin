@@ -1,3 +1,5 @@
+.. _flatpagesfile-chapter:
+
 ======================
  flatpagesfile plugin
 ======================

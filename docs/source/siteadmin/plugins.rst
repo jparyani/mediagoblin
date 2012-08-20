@@ -79,14 +79,18 @@ should come with documentation that tells you how to configure them.
 Example 1: Core MediaGoblin plugin
 
 If you wanted to use the core MediaGoblin flatpages plugin, the module
-for that is ``mediagoblin.plugins.flatpages`` and you would add that
-to your ``.ini`` file like this::
+for that is ``mediagoblin.plugins.flatpagesfile`` and you would add
+that to your ``.ini`` file like this::
 
     [plugins]
 
-    [[mediagoblin.plugins.flatpages]]
-    # configuration for flatpages plugin here!
-    directory = /srv/mediagoblin/flatpages
+    [[mediagoblin.plugins.flatpagesfile]]
+    # configuration for flatpagesfile plugin here!
+    about-view = '/about', about.html
+    terms-view = '/terms', terms.html
+
+(Want to know more about the flatpagesfile plugin?  See
+:ref:`flatpagesfile-chapter`)
 
 Example 2: Plugin that is not a core MediaGoblin plugin
 
