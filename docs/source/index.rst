@@ -47,6 +47,8 @@ MediaGoblin website.  It is written for site administrators.
    siteadmin/codebase
 
 
+.. _core-plugin-section:
+
 Part 2: Core plugin documentation
 =================================
 

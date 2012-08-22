@@ -23,17 +23,31 @@ carefully, or at least skim over it.
 0.3.1
 =====
 
-As usual in this release you should be sure to run `bin/gmg dbupdate`
-to upgrade the database to the latest schema.  There are not major
-changes other than this that you need to do to make your present
-MediaGoblin instance continue to work.
+**Do this to upgrade**
 
-However, MediaGoblin now also includes theming support, which you can
-read about in the section :ref:`_theming_chapter`.  If you set up your
-server config with an older version of mediagoblin and the mediagoblin
-docs, it's possible you don't have the "theme static files" alias, so
-double check to make sure that section is there if you are having
-problems.
+1. Make sure to run ``bin/gmg dbuptdate`` after upgrading.
+
+2. If you set up your server config with an older version of
+   mediagoblin and the mediagoblin docs, it's possible you don't
+   have the "theme static files" alias, so double check to make
+   sure that section is there if you are having problems.
+
+
+
+**New features**
+
+* **theming support**
+
+  MediaGoblin now also includes theming support, which you can
+  read about in the section :ref:`theming-chapter`.
+
+* **flatpages**
+
+  MediaGoblin has a flatpages plugin allowing you to add pages that
+  are aren't media-related like "About this site...", "Terms of
+  service...", etc.
+
+  See :ref:`core-plugin-section` for plugin documentation
 
 
 0.3.0
