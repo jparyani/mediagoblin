@@ -171,6 +171,9 @@ def get_gps_data(tags):
                     + (float(v[2].num) / float(v[2].den) / (60 * 60))
                 )(dat.values)
 
+        if tags['GPS GPSLatitudeRef'].values == 'S':
+            gps_data['latitude'] /= -1
+
         if tags['GPS GPSLongitudeRef'].values == 'W':
             gps_data['longitude'] /= -1
 
