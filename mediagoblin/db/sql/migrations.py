@@ -14,9 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
+
 from sqlalchemy import MetaData, Table, Column, Boolean, SmallInteger, Integer
 
 from mediagoblin.db.sql.util import RegisterMigration
+from mediagoblin.db.sql.models import MediaEntry, Collection
 
 
 MIGRATIONS = {}
@@ -60,8 +63,33 @@ def add_transcoding_progress(db_conn):
     col.create(media_entry)
     db_conn.commit()
 
-
 @RegisterMigration(4, MIGRATIONS)
+def add_collection_tables(db_conn):
+    metadata = MetaData(bind=db_conn.bind)
+
+    collection = Table('core__collections', metadata,
+                       Column('id', Integer, primary_key=True),
+                       Column('title', Unicode, nullable=False),
+                       Column('slug', Unicode),
+                       Column('created', DateTime, nullable=False, default=datetime.datetime.now, index=True),
+                       Column('description', UnicodeText),
+                       Column('creator', Integer, ForeignKey(User.id), nullable=False),
+                       Column('items', Integer, default=0))
+
+    collection_item = Table('core__collection_items', metadata,
+                            Column('id', Integer, primary_key=True),
+                            Column('media_entry', Integer, ForeignKey(MediaEntry.id), nullable=False, index=True),
+                            Column('collection', Integer, ForeignKey(Collection.id), nullable=False),
+                            Column('note', UnicodeText, nullable=True),
+                            Column('added', DateTime, nullable=False, default=datetime.datetime.now),
+                            Column('position', Integer))
+
+    collection.create()
+    collection_item.create()
+
+    db_conn.commit()
+
+@RegisterMigration(5, MIGRATIONS)
 def add_mediaentry_collected(db_conn):
     metadata = MetaData(bind=db_conn.bind)
 
@@ -71,3 +99,4 @@ def add_mediaentry_collected(db_conn):
     col = Column('collected', Integer)
     col.create(media_entry)
     db_conn.commit()
+
