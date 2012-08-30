@@ -16,10 +16,13 @@
 
 import datetime
 
-from sqlalchemy import MetaData, Table, Column, Boolean, SmallInteger, Integer
+from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger, 
+                        Integer, Unicode, UnicodeText, DateTime, ForeignKey)
+                       
+                       
 
 from mediagoblin.db.sql.util import RegisterMigration
-from mediagoblin.db.sql.models import MediaEntry, Collection
+from mediagoblin.db.sql.models import MediaEntry, Collection, User
 
 
 MIGRATIONS = {}
