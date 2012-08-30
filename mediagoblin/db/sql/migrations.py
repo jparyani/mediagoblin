@@ -99,7 +99,7 @@ def add_mediaentry_collected(db_conn):
     media_entry = Table('core__media_entries', metadata, autoload=True,
             autoload_with=db_conn.bind)
 
-    col = Column('collected', Integer)
+    col = Column('collected', Integer, default=0)
     col.create(media_entry)
     db_conn.commit()
 
