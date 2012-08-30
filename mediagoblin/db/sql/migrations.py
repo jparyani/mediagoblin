@@ -62,12 +62,12 @@ def add_transcoding_progress(db_conn):
 
 
 @RegisterMigration(4, MIGRATIONS)
-def add_mediaentry_collections(db_conn):
+def add_mediaentry_collected(db_conn):
     metadata = MetaData(bind=db_conn.bind)
 
     media_entry = Table('core__media_entries', metadata, autoload=True,
             autoload_with=db_conn.bind)
 
-    col = Column('collections', Integer)
+    col = Column('collected', Integer)
     col.create(media_entry)
     db_conn.commit()
