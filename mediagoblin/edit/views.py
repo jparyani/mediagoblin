@@ -25,7 +25,7 @@ from mediagoblin import mg_globals
 
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.edit import forms
-from mediagoblin.edit.lib import may_edit_media, may_edit_collection
+from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import require_active_login, get_user_media_entry, \
     user_may_alter_collection, get_user_collection
 from mediagoblin.tools.response import render_to_response, redirect
