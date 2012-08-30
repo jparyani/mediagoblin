@@ -376,7 +376,7 @@ def collection_item_confirm_remove(request, collection_item):
                         collection=collection.slug)
 
     if ((request.user.is_admin and
-         request.user._id != collection.creator)):
+         request.user._id != collection_item.in_collection.creator)):
         messages.add_message(
             request, messages.WARNING,
             _("You are about to delete an item from another user's collection. "
