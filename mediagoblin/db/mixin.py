@@ -183,7 +183,7 @@ class CollectionMixin(object):
         creator = self.get_creator
 
         return urlgen(
-            'mediagoblin.user_pages.collections_home',
+            'mediagoblin.user_pages.user_collection',
             user=creator.username,
             collection=self.slug_or_id,
             **extra_args)

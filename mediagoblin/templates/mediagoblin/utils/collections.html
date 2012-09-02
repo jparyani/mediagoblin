@@ -25,17 +25,11 @@
         {% if media.collections|length > 1 %}
           &middot;
         {% endif %}
-        <a href="{{ request.urlgen(
-                          'mediagoblin.user_pages.user_collection',
-                          collection=collection['slug'], user=request.user.username) }}">{{ collection['title'] }}</a>
+        <a href="{{ collection.url_for_self(request.urlgen) }}">{{ collection['title'] }}</a>
       {% elif loop.revindex == 2 %}
-        <a href="{{ request.urlgen(
-                          'mediagoblin.user_pages.user_collection',
-                          collection=collection['slug'], user=request.user.username) }}">{{ collection['title'] }}</a>
+        <a href="{{ collection.url_for_self(request.urlgen) }}">{{ collection['title'] }}</a>
       {% else %}
-        <a href="{{ request.urlgen(
-                          'mediagoblin.user_pages.user_collection',
-                          collection=collection['slug'], user=request.user.username) }}">{{ collection['title'] }}</a> &middot;
+        <a href="{{ collection.url_for_self(request.urlgen) }}">{{ collection['title'] }}</a> &middot;
       {% endif %}
     {% endfor %}
   </p>
