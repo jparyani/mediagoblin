@@ -19,6 +19,7 @@ from sqlalchemy import create_engine
 import logging
 
 from mediagoblin.db.sql.base import Base, Session
+from mediagoblin import mg_globals
 
 _log = logging.getLogger(__name__)
 
@@ -51,10 +52,18 @@ class DatabaseMaster(object):
 def load_models(app_config):
     import mediagoblin.db.sql.models
 
-    if True:
-        for media_type in app_config['media_types']:
-            _log.debug("Loading %s.models", media_type)
-            __import__(media_type + ".models")
+    for media_type in app_config['media_types']:
+        _log.debug("Loading %s.models", media_type)
+        __import__(media_type + ".models")
+
+    for plugin in mg_globals.global_config['plugins'].keys():
+        _log.debug("Loading %s.models", plugin)
+        try:
+            __import__(plugin + ".models")
+        except ImportError as exc:
+            _log.debug("Could not load {0}.models: {1}".format(
+                plugin,
+                exc))
 
 
 def setup_connection_and_db_from_config(app_config):

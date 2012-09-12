@@ -29,7 +29,7 @@ How do plugins work?
 ====================
 
 Plugins are structured like any Python project. You create a Python package.
-In that package, you define a high-level ``__init__.py`` module that has a 
+In that package, you define a high-level ``__init__.py`` module that has a
 ``hooks`` dict that maps hooks to callables that implement those hooks.
 
 Additionally, you want a LICENSE file that specifies the license and a
@@ -57,6 +57,8 @@ Lifecycle
 """
 
 import logging
+
+from functools import wraps
 
 from mediagoblin import mg_globals
 
@@ -205,3 +207,34 @@ def get_config(key):
     global_config = mg_globals.global_config
     plugin_section = global_config.get('plugins', {})
     return plugin_section.get(key, {})
+
+
+def api_auth(controller):
+    @wraps(controller)
+    def wrapper(request, *args, **kw):
+        auth_candidates = []
+
+        for auth in PluginManager().get_hook_callables('auth'):
+            _log.debug('Plugin auth: {0}'.format(auth))
+            if auth.trigger(request):
+                auth_candidates.append(auth)
+
+        # If we can't find any authentication methods, we should not let them
+        # pass.
+        if not auth_candidates:
+            from webob import exc
+            return exc.HTTPForbidden()
+
+        # For now, just select the first one in the list
+        auth = auth_candidates[0]
+
+        _log.debug('Using {0} to authorize request {1}'.format(
+            auth, request.url))
+
+        if not auth(request, *args, **kw):
+            from webob import exc
+            return exc.HTTPForbidden()
+
+        return controller(request, *args, **kw)
+
+    return wrapper

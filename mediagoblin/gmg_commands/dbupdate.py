@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 from sqlalchemy.orm import sessionmaker
 
 from mediagoblin.db.sql.open import setup_connection_and_db_from_config
@@ -21,6 +23,9 @@ from mediagoblin.db.sql.util import MigrationManager
 from mediagoblin.init import setup_global_and_app_config
 from mediagoblin.tools.common import import_component
 
+_log = logging.getLogger(__name__)
+logging.basicConfig()
+_log.setLevel(logging.DEBUG)
 
 def dbupdate_parse_setup(subparser):
     pass
@@ -37,7 +42,7 @@ class DatabaseData(object):
             self.name, self.models, self.migrations, session)
 
 
-def gather_database_data(media_types):
+def gather_database_data(media_types, plugins):
     """
     Gather all database data relevant to the extensions we have
     installed so we can do migrations and table initialization.
@@ -61,10 +66,41 @@ def gather_database_data(media_types):
         managed_dbdata.append(
             DatabaseData(media_type, models, migrations))
 
+    for plugin in plugins:
+        try:
+            models = import_component('{0}.models:MODELS'.format(plugin))
+        except ImportError as exc:
+            _log.debug('No models found for {0}: {1}'.format(
+                plugin,
+                exc))
+
+            models = []
+        except AttributeError as exc:
+            _log.warning('Could not find MODELS in {0}.models, have you \
+forgotten to add it? ({1})'.format(plugin, exc))
+
+        try:
+            migrations = import_component('{0}.migrations:MIGRATIONS'.format(
+                plugin))
+        except ImportError as exc:
+            _log.debug('No migrations found for {0}: {1}'.format(
+                plugin,
+                exc))
+
+            migrations = {}
+        except AttributeError as exc:
+            _log.debug('Cloud not find MIGRATIONS in {0}.migrations, have you \
+forgotten to add it? ({1})'.format(plugin, exc))
+
+        if models:
+            managed_dbdata.append(
+                    DatabaseData(plugin, models, migrations))
+
+
     return managed_dbdata
 
 
-def run_dbupdate(app_config):
+def run_dbupdate(app_config, global_config):
     """
     Initialize or migrate the database as specified by the config file.
 
@@ -73,7 +109,9 @@ def run_dbupdate(app_config):
     """
 
     # Gather information from all media managers / projects
-    dbdatas = gather_database_data(app_config['media_types'])
+    dbdatas = gather_database_data(
+            app_config['media_types'],
+            global_config['plugins'].keys())
 
     # Set up the database
     connection, db = setup_connection_and_db_from_config(app_config)
@@ -89,4 +127,4 @@ def run_dbupdate(app_config):
 
 def dbupdate(args):
     global_config, app_config = setup_global_and_app_config(args.conf_file)
-    run_dbupdate(app_config)
+    run_dbupdate(app_config, global_config)
