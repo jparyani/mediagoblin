@@ -209,32 +209,3 @@ def get_config(key):
     return plugin_section.get(key, {})
 
 
-def api_auth(controller):
-    @wraps(controller)
-    def wrapper(request, *args, **kw):
-        auth_candidates = []
-
-        for auth in PluginManager().get_hook_callables('auth'):
-            _log.debug('Plugin auth: {0}'.format(auth))
-            if auth.trigger(request):
-                auth_candidates.append(auth)
-
-        # If we can't find any authentication methods, we should not let them
-        # pass.
-        if not auth_candidates:
-            from webob import exc
-            return exc.HTTPForbidden()
-
-        # For now, just select the first one in the list
-        auth = auth_candidates[0]
-
-        _log.debug('Using {0} to authorize request {1}'.format(
-            auth, request.url))
-
-        if not auth(request, *args, **kw):
-            from webob import exc
-            return exc.HTTPForbidden()
-
-        return controller(request, *args, **kw)
-
-    return wrapper

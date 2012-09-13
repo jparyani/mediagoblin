@@ -38,8 +38,6 @@ def setup_plugin():
     routes = [
         Route('mediagoblin.plugins.oauth.authorize', '/oauth/authorize',
             controller='mediagoblin.plugins.oauth.views:authorize'),
-        Route('mediagoblin.plugins.oauth.test', '/api/test',
-            controller='mediagoblin.plugins.oauth.views:api_test'),
         Route('mediagoblin.plugins.oauth.access_token', '/oauth/access_token',
             controller='mediagoblin.plugins.oauth.views:access_token')]
 

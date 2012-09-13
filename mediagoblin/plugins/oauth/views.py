@@ -91,15 +91,3 @@ def access_token(request):
     error_data = {
         'error': 'Incorrect code'}
     return Response(json.dumps(error_data))
-
-
-@pluginapi.api_auth
-def api_test(request):
-    if not request.user:
-        return exc.HTTPForbidden()
-
-    user_data = {
-            'username': request.user.username,
-            'email': request.user.email}
-
-    return Response(json.dumps(user_data))
