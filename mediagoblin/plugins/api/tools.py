@@ -63,6 +63,11 @@ def json_response(serializable, *args, **kw):
     '''
     response = Response(json.dumps(serializable), *args, **kw)
     response.headers['Content-Type'] = 'application/json'
+    cors_headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With'}
+    response.headers.update(cors_headers)
     return response
 
 
