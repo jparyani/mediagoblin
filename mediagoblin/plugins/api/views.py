@@ -41,6 +41,6 @@ def get_entries(request):
     entries_serializable = []
 
     for entry in entries:
-        entries_serializable.append(get_entry_serializable(entry))
+        entries_serializable.append(get_entry_serializable(entry, request.urlgen))
 
     return json_response(entries_serializable)

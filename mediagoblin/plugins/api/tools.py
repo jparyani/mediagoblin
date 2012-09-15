@@ -51,16 +51,37 @@ class Auth(object):
         raise NotImplemented()
 
 
-def json_response(serializable):
-    response = Response(json.dumps(serializable))
+def json_response(serializable, *args, **kw):
+    '''
+    Serializes a json objects and returns a webob.Response object with the
+    serialized value as the response body and Content-Type: application/json.
+
+    :param serializable: A json-serializable object
+
+    Any extra arguments and keyword arguments are passed to the
+    webob.Response.__init__ method.
+    '''
+    response = Response(json.dumps(serializable), *args, **kw)
     response.headers['Content-Type'] = 'application/json'
     return response
 
 
-def get_entry_serializable(entry):
+def get_entry_serializable(entry, urlgen):
+    '''
+    Returns a serializable dict() of a MediaEntry instance.
+
+    :param entry: A MediaEntry instance
+    :param urlgen: An urlgen instance, can be found on the request object passed
+    to views.
+    '''
     return {
             'user': entry.get_uploader.username,
             'user_id': entry.get_uploader.id,
+            'user_bio': entry.get_uploader.bio,
+            'user_bio_html': entry.get_uploader.bio_html,
+            'user_permalink': urlgen('mediagoblin.user_pages.user_home',
+                user=entry.get_uploader.username,
+                qualified=True),
             'id': entry.id,
             'created': entry.created.isoformat(),
             'title': entry.title,
@@ -68,10 +89,18 @@ def get_entry_serializable(entry):
             'description': entry.description,
             'description_html': entry.description_html,
             'media_type': entry.media_type,
-            'media_files': get_media_file_paths(entry.media_files)}
+            'permalink': entry.url_for_self(urlgen, qualified=True),
+            'media_files': get_media_file_paths(entry.media_files, urlgen)}
 
 
-def get_media_file_paths(media_files):
+def get_media_file_paths(media_files, urlgen):
+    '''
+    Returns a dictionary of media files with `file_handle` => `qualified URL`
+
+    :param media_files: dict-like object consisting of `file_handle => `listy
+    filepath` pairs.
+    :param urlgen: An urlgen object, usually found on request.urlgen.
+    '''
     if isinstance(mg_globals.public_store, BasicFileStorage):
         pass  # TODO
 
@@ -84,6 +113,11 @@ def get_media_file_paths(media_files):
 
 
 def api_auth(controller):
+    '''
+    Decorator, allows plugins to register auth methods that will then be
+    evaluated against the request, finally a worthy authenticator object is
+    chosen and used to decide whether to grant or deny access.
+    '''
     @wraps(controller)
     def wrapper(request, *args, **kw):
         auth_candidates = []
