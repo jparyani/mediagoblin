@@ -56,7 +56,7 @@ def load_models(app_config):
         _log.debug("Loading %s.models", media_type)
         __import__(media_type + ".models")
 
-    for plugin in mg_globals.global_config['plugins'].keys():
+    for plugin in mg_globals.global_config.get('plugins', {}).keys():
         _log.debug("Loading %s.models", plugin)
         try:
             __import__(plugin + ".models")

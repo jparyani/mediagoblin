@@ -134,7 +134,7 @@ def get_test_app(dump_old_app=True):
     app_config = global_config['mediagoblin']
 
     # Run database setup/migrations
-    run_dbupdate(app_config)
+    run_dbupdate(app_config, global_config)
 
     # setup app and return
     test_app = loadapp(

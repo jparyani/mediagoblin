@@ -111,7 +111,7 @@ def run_dbupdate(app_config, global_config):
     # Gather information from all media managers / projects
     dbdatas = gather_database_data(
             app_config['media_types'],
-            global_config['plugins'].keys())
+            global_config.get('plugins', {}).keys())
 
     # Set up the database
     connection, db = setup_connection_and_db_from_config(app_config)
