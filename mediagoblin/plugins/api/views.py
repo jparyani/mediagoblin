@@ -33,6 +33,8 @@ from mediagoblin.media_types import sniff_media, InvalidFileType, \
 from mediagoblin.plugins.api.tools import api_auth, get_entry_serializable, \
         json_response
 
+from mediagoblin.plugins.api import config
+
 _log = logging.getLogger(__name__)
 
 

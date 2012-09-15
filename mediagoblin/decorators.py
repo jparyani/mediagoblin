@@ -16,6 +16,9 @@
 
 from functools import wraps
 
+from urlparse import urljoin
+from urllib import urlencode
+
 from webob import exc
 
 from mediagoblin.db.util import ObjectId, InvalidId
@@ -34,10 +37,16 @@ def require_active_login(controller):
                 request, 'mediagoblin.user_pages.user_home',
                 user=request.user.username)
         elif not request.user or request.user.get('status') != u'active':
+            next_url = urljoin(
+                    request.urlgen('mediagoblin.auth.login',
+                        qualified=True),
+                    request.url)
+
             return exc.HTTPFound(
-                location="%s?next=%s" % (
-                    request.urlgen("mediagoblin.auth.login"),
-                    request.full_path))
+                location='?'.join([
+                    request.urlgen('mediagoblin.auth.login'),
+                    urlencode({
+                        'next': next_url})]))
 
         return controller(request, *args, **kwargs)
 

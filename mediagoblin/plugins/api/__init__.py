@@ -25,11 +25,12 @@ _log = logging.getLogger(__name__)
 
 PLUGIN_DIR = os.path.dirname(__file__)
 
+config = pluginapi.get_config(__name__)
 
 def setup_plugin():
-    config = pluginapi.get_config(__name__)
-
     _log.info('Setting up API...')
+
+    _log.debug('API config: {0}'.format(config))
 
     routes = [
         Route('mediagoblin.plugins.api.test', '/api/test',
