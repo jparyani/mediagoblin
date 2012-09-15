@@ -57,7 +57,7 @@ def post_entry(request):
     entry.title = unicode(request.POST.get('title')
             or splitext(media_file.filename)[0])
 
-    entry.descriptions = unicode(request.POST.get('description'))
+    entry.description = unicode(request.POST.get('description'))
     entry.license = unicode(request.POST.get('license', ''))
 
     entry.uploader = request.user.id
