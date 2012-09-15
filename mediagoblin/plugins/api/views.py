@@ -17,7 +17,8 @@
 import json
 from webob import exc, Response
 
-from mediagoblin.plugins.api.tools import api_auth
+from mediagoblin.plugins.api.tools import api_auth, get_entry_serializable, \
+        json_response
 
 
 @api_auth
@@ -30,3 +31,16 @@ def api_test(request):
             'email': request.user.email}
 
     return Response(json.dumps(user_data))
+
+
+def get_entries(request):
+    entries = request.db.MediaEntry.query
+
+    entries = entries.filter_by(state=u'processed')
+
+    entries_serializable = []
+
+    for entry in entries:
+        entries_serializable.append(get_entry_serializable(entry))
+
+    return json_response(entries_serializable)

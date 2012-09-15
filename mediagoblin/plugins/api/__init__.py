@@ -33,7 +33,9 @@ def setup_plugin():
 
     routes = [
         Route('mediagoblin.plugins.api.test', '/api/test',
-            controller='mediagoblin.plugins.api.views:api_test')]
+            controller='mediagoblin.plugins.api.views:api_test'),
+        Route('mediagoblin.plugins.api.entries', '/api/entries',
+            controller='mediagoblin.plugins.api.views:get_entries')]
 
     pluginapi.register_routes(routes)
 

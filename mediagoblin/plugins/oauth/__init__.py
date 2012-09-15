@@ -23,6 +23,7 @@ from webob import exc
 from mediagoblin.tools import pluginapi
 from mediagoblin.tools.response import render_to_response
 from mediagoblin.plugins.oauth.models import OAuthToken
+from mediagoblin.plugins.api.tools import Auth
 
 _log = logging.getLogger(__name__)
 
@@ -45,26 +46,7 @@ def setup_plugin():
     pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
 
 
-class OAuthAuth(object):
-    '''
-    An object with two significant methods, 'trigger' and 'run'.
-
-    Using a similar object to this, plugins can register specific
-    authentication logic, for example the GET param 'access_token' for OAuth.
-
-    - trigger: Analyze the 'request' argument, return True if you think you
-      can handle the request, otherwise return False
-    - run: The authentication logic, set the request.user object to the user
-      you intend to authenticate and return True, otherwise return False.
-
-    If run() returns False, an HTTP 403 Forbidden error will be shown.
-
-    You may also display custom errors, just raise them within the run()
-    method.
-    '''
-    def __init__(self):
-        pass
-
+class OAuthAuth(Auth):
     def trigger(self, request):
         return True
 
