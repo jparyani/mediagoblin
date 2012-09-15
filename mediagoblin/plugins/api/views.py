@@ -129,7 +129,14 @@ def api_test(request):
 def get_entries(request):
     entries = request.db.MediaEntry.query
 
+    # TODO: Make it possible to fetch unprocessed media, or media in-processing
     entries = entries.filter_by(state=u'processed')
+
+    # TODO: Add sort order customization
+    entries = entries.order_by(request.db.MediaEntry.created.desc())
+
+    # TODO: Fetch default and upper limit from config
+    entries = entries.limit(int(request.GET.get('limit') or 10))
 
     entries_serializable = []
 

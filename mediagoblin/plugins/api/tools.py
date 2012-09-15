@@ -19,6 +19,7 @@ import json
 
 from functools import wraps
 from webob import exc, Response
+from urlparse import urljoin
 
 from mediagoblin import mg_globals
 from mediagoblin.tools.pluginapi import PluginManager
@@ -106,13 +107,16 @@ def get_media_file_paths(media_files, urlgen):
     filepath` pairs.
     :param urlgen: An urlgen object, usually found on request.urlgen.
     '''
-    if isinstance(mg_globals.public_store, BasicFileStorage):
-        pass  # TODO
-
     media_urls = {}
 
     for key, val in media_files.items():
-        media_urls[key] = mg_globals.public_store.file_url(val)
+        if isinstance(mg_globals.public_store, BasicFileStorage):
+            # BasicFileStorage does not provide a qualified URI
+            media_urls[key] = urljoin(
+                    urlgen('index', qualified=True),
+                    mg_globals.public_store.file_url(val))
+        else:
+            media_urls[key] = mg_globals.public_store.file_url(val)
 
     return media_urls
 
