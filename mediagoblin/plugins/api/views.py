@@ -15,10 +15,101 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
-from webob import exc, Response
+import logging
+import uuid
 
+from os.path import splitext
+from webob import exc, Response
+from werkzeug.utils import secure_filename
+from celery import registry
+
+from mediagoblin.db.util import ObjectId
+from mediagoblin.decorators import require_active_login
+from mediagoblin.processing import mark_entry_failed
+from mediagoblin.processing.task import ProcessMedia
+from mediagoblin.meddleware.csrf import csrf_exempt
+from mediagoblin.media_types import sniff_media, InvalidFileType, \
+        FileTypeNotSupported
 from mediagoblin.plugins.api.tools import api_auth, get_entry_serializable, \
         json_response
+
+_log = logging.getLogger(__name__)
+
+
+@csrf_exempt
+@api_auth
+@require_active_login
+def post_entry(request):
+    _log.debug('Posting entry')
+    if request.method != 'POST':
+        return exc.HTTPBadRequest()
+
+    if not 'file' in request.POST or not hasattr(request.POST['file'], 'file'):
+        return exc.HTTPBadRequest()
+
+    media_file = request.POST['file']
+
+    media_type, media_manager = sniff_media(media_file)
+
+    entry = request.db.MediaEntry()
+    entry.id = ObjectId()
+    entry.media_type = unicode(media_type)
+    entry.title = unicode(request.POST.get('title')
+            or splitext(media_file.filename)[0])
+
+    entry.descriptions = unicode(request.POST.get('description'))
+    entry.license = unicode(request.POST.get('license', ''))
+
+    entry.uploader = request.user.id
+
+    entry.generate_slug()
+
+    task_id = unicode(uuid.uuid4())
+
+    # Now store generate the queueing related filename
+    queue_filepath = request.app.queue_store.get_unique_filepath(
+        ['media_entries',
+            task_id,
+            secure_filename(media_file.filename)])
+
+    # queue appropriately
+    queue_file = request.app.queue_store.get_file(
+        queue_filepath, 'wb')
+
+    with queue_file:
+        queue_file.write(request.POST['file'].file.read())
+
+    # Add queued filename to the entry
+    entry.queued_media_file = queue_filepath
+
+    entry.queued_task_id = task_id
+
+    # Save now so we have this data before kicking off processing
+    entry.save(validate=True)
+
+    # Pass off to processing
+    #
+    # (... don't change entry after this point to avoid race
+    # conditions with changes to the document via processing code)
+    process_media = registry.tasks[ProcessMedia.name]
+    try:
+        process_media.apply_async(
+            [unicode(entry._id)], {},
+            task_id=task_id)
+    except BaseException as e:
+        # The purpose of this section is because when running in "lazy"
+        # or always-eager-with-exceptions-propagated celery mode that
+        # the failure handling won't happen on Celery end.  Since we
+        # expect a lot of users to run things in this way we have to
+        # capture stuff here.
+        #
+        # ... not completely the diaper pattern because the
+        # exception is re-raised :)
+        mark_entry_failed(entry._id, e)
+        # re-raise the exception
+        raise
+
+    return json_response(get_entry_serializable(entry, request.urlgen))
 
 
 @api_auth
