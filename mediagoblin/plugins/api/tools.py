@@ -95,6 +95,7 @@ def get_entry_serializable(entry, urlgen):
             'description': entry.description,
             'description_html': entry.description_html,
             'media_type': entry.media_type,
+            'state': entry.state,
             'permalink': entry.url_for_self(urlgen, qualified=True),
             'media_files': get_media_file_paths(entry.media_files, urlgen)}
 

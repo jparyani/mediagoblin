@@ -20,6 +20,7 @@ import uuid
 
 from os.path import splitext
 from webob import exc, Response
+from cgi import FieldStorage
 from werkzeug.utils import secure_filename
 from celery import registry
 
@@ -43,10 +44,18 @@ _log = logging.getLogger(__name__)
 @require_active_login
 def post_entry(request):
     _log.debug('Posting entry')
+
+    if request.method == 'OPTIONS':
+        return json_response({'status': 200})
+
     if request.method != 'POST':
+        _log.debug('Must POST against post_entry')
         return exc.HTTPBadRequest()
 
-    if not 'file' in request.POST or not hasattr(request.POST['file'], 'file'):
+    if not 'file' in request.POST \
+            or not isinstance(request.POST['file'], FieldStorage) \
+            or not request.POST['file'].file:
+        _log.debug('File field not found')
         return exc.HTTPBadRequest()
 
     media_file = request.POST['file']
