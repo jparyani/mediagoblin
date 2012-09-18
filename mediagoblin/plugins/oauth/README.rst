@@ -102,7 +102,13 @@ and here are some detailed descriptions from other OAuth 2
 providers:
 
 - https://developers.google.com/accounts/docs/OAuth2WebServer
-- https://developers.facebook.com/docs/authentication/server-side/ (
+- https://developers.facebook.com/docs/authentication/server-side/
+
+and if you're unsure about anything, there's the `OAuth v2.25 draft
+<http://tools.ietf.org/html/draft-ietf-oauth-v2-25>`_, the `OAuth plugin
+source code
+<http://gitorious.org/mediagoblin/mediagoblin/trees/master/mediagoblin/plugins/oauth>`_
+and the `#mediagoblin IRC channel <http://mediagoblin.org/pages/join.html#irc>`_.
 
 
 Capabilities
