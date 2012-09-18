@@ -188,6 +188,7 @@ class CollectionMixin(object):
             collection=self.slug_or_id,
             **extra_args)
 
+
 class CollectionItemMixin(object):
     @property
     def note_html(self):

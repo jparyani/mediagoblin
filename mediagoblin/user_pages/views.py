@@ -28,13 +28,12 @@ from mediagoblin.user_pages import forms as user_forms
 from mediagoblin.user_pages.lib import send_comment_email
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
-    require_active_login, user_may_delete_media, user_may_alter_collection, 
+    require_active_login, user_may_delete_media, user_may_alter_collection,
     get_user_collection, get_user_collection_item)
 
 from werkzeug.contrib.atom import AtomFeed
 
 from mediagoblin.media_types import get_media_manager
-from sqlalchemy.exc import IntegrityError
 
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
@@ -129,7 +128,8 @@ def media_home(request, media, page, **kwargs):
 
     comment_form = user_forms.MediaCommentForm(request.POST)
 
-    media_template_name = get_media_manager(media.media_type)['display_template']
+    media_template_name = get_media_manager(
+            media.media_type)['display_template']
 
     return render_to_response(
         request,
@@ -182,7 +182,8 @@ def media_collect(request, media):
 
     form = user_forms.MediaCollectForm(request.POST)
     filt = (request.db.Collection.creator == request.user.id)
-    form.collection.query = request.db.Collection.query.filter(filt).order_by(request.db.Collection.title)
+    form.collection.query = request.db.Collection.query.filter(
+            filt).order_by(request.db.Collection.title)
 
     if request.method == 'POST':
         if form.validate():
@@ -196,22 +197,24 @@ def media_collect(request, media):
                 collection.id = ObjectId()
 
                 collection.title = (
-                    unicode(request.POST['collection_title'])
-                    or unicode(splitext(filename)[0]))
+                    unicode(request.POST['collection_title']))
 
-                collection.description = unicode(request.POST.get('collection_description'))
+                collection.description = unicode(
+                        request.POST.get('collection_description'))
                 collection.creator = request.user._id
                 collection.generate_slug()
 
                 # Make sure this user isn't duplicating an existing collection
                 existing_collection = request.db.Collection.find_one({
                                         'creator': request.user._id,
-                                        'title':collection.title})
-                
+                                        'title': collection.title})
+
                 if existing_collection:
                     messages.add_message(
-                        request, messages.ERROR, _('You already have a collection called "%s"!' % collection.title))
-                    
+                        request, messages.ERROR,
+                        _('You already have a collection called "%s"!'
+                            % collection.title))
+
                     return redirect(request, "mediagoblin.user_pages.media_home",
                                     user=request.user.username,
                                     media=media.id)
@@ -221,17 +224,23 @@ def media_collect(request, media):
                 collection_item.collection = collection.id
             # Otherwise, use the collection selected from the drop-down
             else:
-                collection = request.db.Collection.find_one({'_id': request.POST.get('collection')})
+                collection = request.db.Collection.find_one({
+                    '_id': request.POST.get('collection')})
                 collection_item.collection = collection.id
 
             # Make sure the user actually selected a collection
             if not collection:
                 messages.add_message(
-                    request, messages.ERROR, _('You have to select or add a collection'))
+                    request, messages.ERROR,
+                    _('You have to select or add a collection'))
             # Check whether media already exists in collection
-            elif request.db.CollectionItem.find_one({'media_entry': media.id, 'collection': collection_item.collection}):
+            elif request.db.CollectionItem.find_one({
+                'media_entry': media.id,
+                'collection': collection_item.collection}):
                 messages.add_message(
-                    request, messages.ERROR, _('"%s" already in collection "%s"' % (media.title, collection.title)))
+                    request, messages.ERROR,
+                    _('"%s" already in collection "%s"'
+                        % (media.title, collection.title)))
             else:
                 collection_item.media_entry = media.id
                 collection_item.author = request.user.id
@@ -240,19 +249,21 @@ def media_collect(request, media):
 
                 collection.items = collection.items + 1
                 collection.save(validate=True)
-        
+
                 media.collected = media.collected + 1
                 media.save()
 
                 messages.add_message(
-                    request, messages.SUCCESS, _('"%s" added to collection "%s"' % (media.title, collection.title)))
+                    request, messages.SUCCESS, _('"%s" added to collection "%s"'
+                        % (media.title, collection.title)))
 
             return redirect(request, "mediagoblin.user_pages.media_home",
                             user=media.get_uploader.username,
                             media=media.id)
         else:
             messages.add_message(
-                request, messages.ERROR, _('Please check your entries and try again.'))      
+                request, messages.ERROR,
+                _('Please check your entries and try again.'))
 
     return render_to_response(
         request,
@@ -323,10 +334,10 @@ def user_collection(request, page):
         return render_404(request)
 
     collection = request.db.Collection.find_one(
-        {'slug': request.matchdict['collection'] })
+        {'slug': request.matchdict['collection']})
 
     cursor = request.db.CollectionItem.find(
-        {'collection': collection.id })
+        {'collection': collection.id})
 
     pagination = Pagination(page, cursor)
     collection_items = pagination()
@@ -361,7 +372,7 @@ def collection_item_confirm_remove(request, collection_item):
             entry.save()
 
             collection_item.delete()
-            collection.items = collection.items - 1;
+            collection.items = collection.items - 1
             collection.save()
 
             messages.add_message(
@@ -504,6 +515,7 @@ def atom_feed(request):
                 'type': 'text/html'}])
 
     return feed.get_response()
+
 
 def collection_atom_feed(request):
     """
