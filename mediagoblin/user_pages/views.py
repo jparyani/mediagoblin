@@ -248,7 +248,7 @@ def media_collect(request, media):
                     request, messages.SUCCESS, _('"%s" added to collection "%s"' % (media.title, collection.title)))
 
             return redirect(request, "mediagoblin.user_pages.media_home",
-                            user=request.user.username,
+                            user=media.get_uploader.username,
                             media=media.id)
         else:
             messages.add_message(
