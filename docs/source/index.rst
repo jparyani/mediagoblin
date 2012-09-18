@@ -57,6 +57,7 @@ Part 2: Core plugin documentation
 
    plugindocs/flatpagesfile
    plugindocs/sampleplugin
+   plugindocs/oauth
 
 
 Part 3: Plugin Writer's Guide
