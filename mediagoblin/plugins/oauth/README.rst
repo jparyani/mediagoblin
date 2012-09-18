@@ -84,7 +84,7 @@ Brief description of the procedure
 2. The *authorization server* authenticates the *resource owner* and redirects
    the *user agent* back to the *redirect uri* (covered later in this
    document).
-3. The *client* recieves the request from the *user agent*, attached is the
+3. The *client* receives the request from the *user agent*, attached is the
    *authorization code*.
 4. The *client* requests an *access token* from the *authorization server*
 5. \?\?\?\?\?
