@@ -48,7 +48,10 @@ def setup_plugin():
 
 class OAuthAuth(Auth):
     def trigger(self, request):
-        return True
+        if 'access_token' in request.GET:
+            return True
+
+        return False
 
     def __call__(self, request, *args, **kw):
         access_token = request.GET.get('access_token')
@@ -60,9 +63,9 @@ class OAuthAuth(Auth):
                 return False
 
             request.user = token.user
+            return True
 
-        return True
-
+        return False
 
 hooks = {
     'setup': setup_plugin,
