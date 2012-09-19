@@ -3,7 +3,7 @@
 ==============
 
 .. warning::
-    In it's current state. This plugin has received no security audit.
+    In its current state. This plugin has received no security audit.
     Development has been entirely focused on Making It Work(TM). Use this
     plugin with caution.
 
