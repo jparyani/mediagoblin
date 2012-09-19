@@ -2,6 +2,11 @@
  OAuth plugin
 ==============
 
+.. warning::
+    In it's current state. This plugin has received no security audit.
+    Development has been entirely focused on Making It Work(TM). Use this
+    plugin with caution.
+
 The OAuth plugin enables third party web applications to authenticate as one or
 more GNU MediaGoblin users in a safe way in order retrieve, create and update
 content stored on the GNU MediaGoblin instance.
