@@ -18,11 +18,10 @@ import os
 import logging
 
 from routes.route import Route
-from webob import exc
 
 from mediagoblin.tools import pluginapi
-from mediagoblin.tools.response import render_to_response
-from mediagoblin.plugins.oauth.models import OAuthToken
+from mediagoblin.plugins.oauth.models import OAuthToken, OAuthClient, \
+        OAuthUserClient
 from mediagoblin.plugins.api.tools import Auth
 
 _log = logging.getLogger(__name__)
@@ -39,8 +38,19 @@ def setup_plugin():
     routes = [
         Route('mediagoblin.plugins.oauth.authorize', '/oauth/authorize',
             controller='mediagoblin.plugins.oauth.views:authorize'),
+        Route('mediagoblin.plugins.oauth.authorize_client', '/oauth/client/authorize',
+            controller='mediagoblin.plugins.oauth.views:authorize_client'),
         Route('mediagoblin.plugins.oauth.access_token', '/oauth/access_token',
-            controller='mediagoblin.plugins.oauth.views:access_token')]
+            controller='mediagoblin.plugins.oauth.views:access_token'),
+        Route('mediagoblin.plugins.oauth.access_token',
+            '/oauth/client/connections',
+            controller='mediagoblin.plugins.oauth.views:list_connections'),
+        Route('mediagoblin.plugins.oauth.register_client',
+            '/oauth/client/register',
+            controller='mediagoblin.plugins.oauth.views:register_client'),
+        Route('mediagoblin.plugins.oauth.list_clients',
+            '/oauth/client/list',
+            controller='mediagoblin.plugins.oauth.views:list_clients')]
 
     pluginapi.register_routes(routes)
     pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
@@ -54,16 +64,41 @@ class OAuthAuth(Auth):
         return False
 
     def __call__(self, request, *args, **kw):
+        self.errors = []
+        # TODO: Add suport for client credentials authorization
+        client_id = request.GET.get('client_id')  # TODO: Not used
+        client_secret = request.GET.get('client_secret')  # TODO: Not used
         access_token = request.GET.get('access_token')
+
+        _log.debug('Authorizing request {0}'.format(request.url))
+
         if access_token:
             token = OAuthToken.query.filter(OAuthToken.token == access_token)\
                     .first()
 
             if not token:
+                self.errors.append('Invalid access token')
+                return False
+
+            _log.debug('Access token: {0}'.format(token))
+            _log.debug('Client: {0}'.format(token.client))
+
+            relation = OAuthUserClient.query.filter(
+                    (OAuthUserClient.user == token.user)
+                    & (OAuthUserClient.client == token.client)
+                    & (OAuthUserClient.state == u'approved')).first()
+
+            _log.debug('Relation: {0}'.format(relation))
+
+            if not relation:
+                self.errors.append(
+                        u'Client has not been approved by the resource owner')
                 return False
 
             request.user = token.user
             return True
+
+        self.errors.append(u'No access_token specified')
 
         return False
 

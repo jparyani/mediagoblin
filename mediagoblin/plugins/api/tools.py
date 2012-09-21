@@ -52,7 +52,7 @@ class Auth(object):
         raise NotImplemented()
 
 
-def json_response(serializable, *args, **kw):
+def json_response(serializable, _disable_cors=False, *args, **kw):
     '''
     Serializes a json objects and returns a webob.Response object with the
     serialized value as the response body and Content-Type: application/json.
@@ -64,11 +64,14 @@ def json_response(serializable, *args, **kw):
     '''
     response = Response(json.dumps(serializable), *args, **kw)
     response.headers['Content-Type'] = 'application/json'
-    cors_headers = {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With'}
-    response.headers.update(cors_headers)
+
+    if not _disable_cors:
+        cors_headers = {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With'}
+        response.headers.update(cors_headers)
+
     return response
 
 
@@ -149,6 +152,11 @@ def api_auth(controller):
             auth, request.url))
 
         if not auth(request, *args, **kw):
+            if getattr(auth, 'errors', []):
+                return json_response({
+                        'status': 403,
+                        'errors': auth.errors})
+
             return exc.HTTPForbidden()
 
         return controller(request, *args, **kw)

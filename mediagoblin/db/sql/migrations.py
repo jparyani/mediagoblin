@@ -16,14 +16,11 @@
 
 import datetime
 
-from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger, 
+from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         Integer, Unicode, UnicodeText, DateTime, ForeignKey)
-                       
-                       
 
 from mediagoblin.db.sql.util import RegisterMigration
 from mediagoblin.db.sql.models import MediaEntry, Collection, User
-
 
 MIGRATIONS = {}
 
@@ -66,6 +63,7 @@ def add_transcoding_progress(db_conn):
     col.create(media_entry)
     db_conn.commit()
 
+
 @RegisterMigration(4, MIGRATIONS)
 def add_collection_tables(db_conn):
     metadata = MetaData(bind=db_conn.bind)
@@ -92,6 +90,7 @@ def add_collection_tables(db_conn):
 
     db_conn.commit()
 
+
 @RegisterMigration(5, MIGRATIONS)
 def add_mediaentry_collected(db_conn):
     metadata = MetaData(bind=db_conn.bind)
@@ -102,4 +101,3 @@ def add_mediaentry_collected(db_conn):
     col = Column('collected', Integer, default=0)
     col.create(media_entry)
     db_conn.commit()
-

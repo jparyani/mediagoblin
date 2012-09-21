@@ -122,20 +122,21 @@ Capabilities
 - `Authorization endpoint`_ - Located at ``/oauth/authorize``
 - `Token endpoint`_ - Located at ``/oauth/access_token``
 - `Authorization Code Grant`_
+- `Client Registration`_
 
 .. _`Authorization endpoint`: http://tools.ietf.org/html/draft-ietf-oauth-v2-25#section-3.1
 .. _`Token endpoint`: http://tools.ietf.org/html/draft-ietf-oauth-v2-25#section-3.2
 .. _`Authorization Code Grant`: http://tools.ietf.org/html/draft-ietf-oauth-v2-25#section-4.1
+.. _`Client Registration`: http://tools.ietf.org/html/draft-ietf-oauth-v2-25#section-2
 
 Incapabilities
 ==============
 
-- `Client Registration`_ - `planned feature
-  <http://issues.mediagoblin.org/ticket/497>`_
+- Only `bearer tokens`_ are issued.
 - `Access Token Scope`_
 - `Implicit Grant`_
 - ...
 
-.. _`Client Registration`: http://tools.ietf.org/html/draft-ietf-oauth-v2-25#section-2
+.. _`bearer tokens`: http://tools.ietf.org/html/draft-ietf-oauth-v2-bearer-08
 .. _`Access Token Scope`: http://tools.ietf.org/html/draft-ietf-oauth-v2-25#section-3.3
 .. _`Implicit Grant`: http://tools.ietf.org/html/draft-ietf-oauth-v2-25#section-4.2

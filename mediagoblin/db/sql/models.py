@@ -85,6 +85,14 @@ class User(Base, UserMixin):
 
     _id = SimpleFieldAlias("id")
 
+    def __repr__(self):
+        return '<{0} #{1} {2} {3} "{4}">'.format(
+                self.__class__.__name__,
+                self.id,
+                'verified' if self.email_verified else 'non-verified',
+                'admin' if self.is_admin else 'user',
+                self.username)
+
 
 class MediaEntry(Base, MediaEntryMixin):
     """
@@ -362,12 +370,12 @@ class Collection(Base, CollectionMixin):
     slug = Column(Unicode)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now,
         index=True)
-    description = Column(UnicodeText) 
+    description = Column(UnicodeText)
     creator = Column(Integer, ForeignKey(User.id), nullable=False)
     items = Column(Integer, default=0)
 
     get_creator = relationship(User)
-    
+
     def get_collection_items(self, ascending=False):
         order_col = CollectionItem.position
         if not ascending:

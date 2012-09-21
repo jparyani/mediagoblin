@@ -21,38 +21,142 @@ from webob import exc, Response
 from urllib import urlencode
 from uuid import uuid4
 from datetime import datetime
-from functools import wraps
 
-from mediagoblin.tools import pluginapi
-from mediagoblin.tools.response import render_to_response
+from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login
 from mediagoblin.messages import add_message, SUCCESS, ERROR
 from mediagoblin.tools.translate import pass_to_ugettext as _
-from mediagoblin.plugins.oauth.models import OAuthCode, OAuthToken
+from mediagoblin.plugins.oauth.models import OAuthCode, OAuthToken, \
+        OAuthClient, OAuthUserClient
+from mediagoblin.plugins.oauth.forms import ClientRegistrationForm, \
+        AuthorizationForm
+from mediagoblin.plugins.oauth.tools import require_client_auth
+from mediagoblin.plugins.api.tools import json_response
 
 _log = logging.getLogger(__name__)
 
 
 @require_active_login
-def authorize(request):
-    # TODO: Check if allowed
+def register_client(request):
+    '''
+    Register an OAuth client
+    '''
+    form = ClientRegistrationForm(request.POST)
 
-    # Client is allowed by the user
-    if True or already_authorized:
-        # Generate a code
-        # Save the code, the client will later use it to obtain an access token
-        # Redirect the user agent to the redirect_uri with the code
+    if request.method == 'POST' and form.validate():
+        client = OAuthClient()
+        client.name = unicode(request.POST['name'])
+        client.description = unicode(request.POST['description'])
+        client.type = unicode(request.POST['type'])
+        client.owner_id = request.user.id
+        client.redirect_uri = unicode(request.POST['redirect_uri'])
 
-        if not 'redirect_uri' in request.GET:
-            add_message(request, ERROR, _('No redirect_uri found'))
+        client.generate_identifier()
+        client.generate_secret()
+
+        client.save()
+
+        add_message(request, SUCCESS, _('The client {0} has been registered!')\
+                .format(
+                    client.name))
+
+        return redirect(request, 'mediagoblin.plugins.oauth.list_clients')
+
+    return render_to_response(
+            request,
+            'oauth/client/register.html',
+            {'form': form})
+
+
+@require_active_login
+def list_clients(request):
+    clients = request.db.OAuthClient.query.filter(
+            OAuthClient.owner_id == request.user.id).all()
+    return render_to_response(request, 'oauth/client/list.html',
+            {'clients': clients})
+
+
+@require_active_login
+def list_connections(request):
+    connections = OAuthUserClient.query.filter(
+            OAuthUserClient.user == request.user).all()
+    return render_to_response(request, 'oauth/client/connections.html',
+            {'connections': connections})
+
+
+@require_active_login
+def authorize_client(request):
+    form = AuthorizationForm(request.POST)
+
+    client = OAuthClient.query.filter(OAuthClient.id ==
+        form.client_id.data).first()
+
+    if not client:
+        _log.error('''No such client id as received from client authorization
+                form.''')
+        return exc.HTTPBadRequest()
+
+    if form.validate():
+        relation = OAuthUserClient()
+        relation.user_id = request.user.id
+        relation.client_id = form.client_id.data
+        if form.allow.data:
+            relation.state = u'approved'
+        elif form.deny.data:
+            relation.state = u'rejected'
+        else:
+            return exc.HTTPBadRequest
+
+        relation.save()
+
+        return exc.HTTPFound(location=form.next.data)
+
+    return render_to_response(
+        request,
+        'oauth/authorize.html',
+        {'form': form,
+            'client': client})
+
+
+@require_client_auth
+@require_active_login
+def authorize(request, client):
+    # TODO: Get rid of the JSON responses in this view, it's called by the
+    # user-agent, not the client.
+    user_client_relation = OAuthUserClient.query.filter(
+            (OAuthUserClient.user == request.user)
+            & (OAuthUserClient.client == client))
+
+    if user_client_relation.filter(OAuthUserClient.state ==
+            u'approved').count():
+        redirect_uri = None
+
+        if client.type == u'public':
+            if not client.redirect_uri:
+                return json_response({
+                    'status': 400,
+                    'errors':
+                        [u'Public clients MUST have a redirect_uri pre-set']},
+                        _disable_cors=True)
+
+            redirect_uri = client.redirect_uri
+
+        if client.type == u'confidential':
+            redirect_uri = request.GET.get('redirect_uri', client.redirect_uri)
+            if not redirect_uri:
+                return json_response({
+                    'status': 400,
+                    'errors': [u'Can not find a redirect_uri for client: {0}'\
+                            .format(client.name)]}, _disable_cors=True)
 
         code = OAuthCode()
         code.code = unicode(uuid4())
         code.user = request.user
+        code.client = client
         code.save()
 
         redirect_uri = ''.join([
-            request.GET.get('redirect_uri'),
+            redirect_uri,
             '?',
             urlencode({'code': code.code})])
 
@@ -65,28 +169,34 @@ def authorize(request):
         # code parameter
         # - on deny: send the user agent back to the redirect uri with error
         # information
-        pass
-    return render_to_response(request, 'oauth/base.html', {})
+        form = AuthorizationForm(request.POST)
+        form.client_id.data = client.id
+        form.next.data = request.url
+        return render_to_response(
+                request,
+                'oauth/authorize.html',
+                {'form': form,
+                'client': client})
 
 
 def access_token(request):
     if request.GET.get('code'):
-        code = OAuthCode.query.filter(OAuthCode.code == request.GET.get('code'))\
-                .first()
+        code = OAuthCode.query.filter(OAuthCode.code ==
+                request.GET.get('code')).first()
 
         if code:
             token = OAuthToken()
             token.token = unicode(uuid4())
             token.user = code.user
+            token.client = code.client
             token.save()
 
             access_token_data = {
                 'access_token': token.token,
-                'token_type': 'what_do_i_use_this_for',  # TODO
+                'token_type': 'bearer',
                 'expires_in':
-                (token.expires - datetime.now()).total_seconds(),
-                'refresh_token': 'This should probably be safe'}
-            return Response(json.dumps(access_token_data))
+                (token.expires - datetime.now()).total_seconds()}
+            return json_response(access_token_data, _disable_cors=True)
 
     error_data = {
         'error': 'Incorrect code'}
