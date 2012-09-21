@@ -51,7 +51,8 @@ class OAuthClient(Base):
 
     type = Column(Enum(
         u'confidential',
-        u'public'))
+        u'public',
+        name=u'oauth__client_type'))
 
     def generate_identifier(self):
         self.identifier = unicode(uuid.uuid4())
@@ -82,7 +83,8 @@ class OAuthUserClient(Base):
 
     state = Column(Enum(
         u'approved',
-        u'rejected'))
+        u'rejected',
+        name=u'oauth__relation_state'))
 
     def __repr__(self):
         return '<{0} #{1} {2} [{3}, {4}]>'.format(
