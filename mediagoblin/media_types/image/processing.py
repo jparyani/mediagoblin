@@ -63,11 +63,6 @@ def sniff_handler(media_file, **kw):
         name, ext = os.path.splitext(kw['media'].filename)
         clean_ext = ext[1:].lower()  # Strip the . from ext and make lowercase
 
-        _log.debug('name: {0}\next: {1}\nlower_ext: {2}'.format(
-                name,
-                ext,
-                clean_ext))
-
         if clean_ext in SUPPORTED_FILETYPES:
             _log.info('Found file extension in supported filetypes')
             return True
