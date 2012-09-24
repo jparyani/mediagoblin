@@ -32,8 +32,7 @@
 
 
 {% block mediagoblin_content %}
-
-  <form action="{{ request.urlgen('mediagoblin.edit.account') }}?username={{ 
+  <form action="{{ request.urlgen('mediagoblin.edit.account') }}?username={{
                                                      user.username }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box edit_box">
@@ -42,11 +41,16 @@
           Changing {{ username }}'s account settings
         {%- endtrans %}
       </h1>
-      {{ wtforms_util.render_divs(form) }}
+      {{ wtforms_util.render_field_div(form.old_password) }}
+      {{ wtforms_util.render_field_div(form.new_password) }}
+      <div class="form_field_input">
+        <p>{{ form.wants_comment_notification }}
+           {{ form.wants_comment_notification.label }}</p>
+      </div>
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button_form" />
 	{{ csrf_token }}
       </div>
     </div>
   </form>
-{% endblock %}    
+{% endblock %}
