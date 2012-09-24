@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-09-21 15:37-0500\n"
-"PO-Revision-Date: 2012-09-24 16:33+0000\n"
+"POT-Creation-Date: 2012-09-24 11:41-0500\n"
+"PO-Revision-Date: 2012-09-24 17:10+0000\n"
 "Last-Translator: Elesa <stardustprincess17@hotmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -92,7 +92,7 @@ msgstr "Un correo electrónico ha sido enviado con instrucciones sobre cómo cam
 msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
-msgstr "No se pudo enviar un correo electrónico de recuperación de contraseñas porque su nombre de usuario está inactivo o la dirección de su cuenta de correo electrónico no ha sido verificada."
+msgstr "No se pudo enviar un correo electrónico de recuperación de contraseñas porque tu nombre de usuario está inactivo o la dirección de su cuenta de correo electrónico no ha sido verificada."
 
 #: mediagoblin/auth/views.py:285
 msgid "Couldn't find someone with that username or email."
@@ -166,7 +166,7 @@ msgstr "Vieja contraseña"
 
 #: mediagoblin/edit/forms.py:64
 msgid "Enter your old password to prove you own this account."
-msgstr "Escriba la anterior contraseña para demostrar la propiedad de la cuenta."
+msgstr "Escriba la anterior contraseña para demostrar que esta cuenta te pertenece."
 
 #: mediagoblin/edit/forms.py:67
 msgid "New password"
@@ -222,19 +222,19 @@ msgstr "Ya tienes una colección llamada \"%s\"!title"
 
 #: mediagoblin/edit/views.py:290
 msgid "A collection with that slug already exists for this user."
-msgstr ""
+msgstr "Una colección con esa ficha ya existe para este usuario/a."
 
 #: mediagoblin/edit/views.py:307
 msgid "You are editing another user's collection. Proceed with caution."
-msgstr "Estás editando la colección de otro usuario (a). Ten cuidado."
+msgstr "Estás editando la colección de otro usuario/a. Ten cuidado."
 
 #: mediagoblin/gmg_commands/theme.py:58
 msgid "Cannot link theme... no theme set\n"
-msgstr "No puedo enlazar al tema... no hay tema seleccionado\n"
+msgstr "No se puede enlazar al tema... no hay un tema seleccionado\n"
 
 #: mediagoblin/gmg_commands/theme.py:71
 msgid "No asset directory for this theme\n"
-msgstr "No hay directorio activo para este tema\n"
+msgstr "No hay directorio activo para este tema\n\n\n"
 
 #: mediagoblin/gmg_commands/theme.py:74
 msgid "However, old link directory symlink found; removed.\n"
@@ -279,9 +279,9 @@ msgstr "Descripción"
 
 #: mediagoblin/plugins/oauth/forms.py:39
 msgid ""
-"This will be visisble to users allowing your\n"
-"                appplication to authenticate as them."
-msgstr "Esto será visible a los usuarios que permitan tu ⏎ aplicación para autenticarse como ellos."
+"This will be visible to users allowing your\n"
+"                application to authenticate as them."
+msgstr "Esto será visible para los usuarios que permitan tu aplicación\n\npara que puedan autenticarse."
 
 #: mediagoblin/plugins/oauth/forms.py:41
 msgid "Type"
@@ -295,7 +295,7 @@ msgid ""
 "                <strong>Public</strong> - The client can't make confidential\n"
 "                requests to the GNU MediaGoblin instance (e.g. client-side\n"
 "                JavaScript client)."
-msgstr ""
+msgstr "<strong>Confidencial</strong> - El cliente puede hacer peticiones a la instancia GNU MediaGoblin que no pueden ser interceptadas por el agente de usuario (ejemplo: un cliente del lado del servidor).<br /><strong>Público</strong> - El cliente no puede hacer peticiones confidenciales a la instancia GNU MediaGoblin (ejemplo: un cliente JavaScript del lado del servidor)."
 
 #: mediagoblin/plugins/oauth/forms.py:53
 msgid "Redirect URI"
@@ -305,15 +305,15 @@ msgstr "Redireccionar URI"
 msgid ""
 "The redirect URI for the applications, this field\n"
 "            is <strong>required</strong> for public clients."
-msgstr ""
+msgstr "La URI para redireccionar las aplicaciones, este campo es <strong>requerido</strong> para los clientes públicos."
 
 #: mediagoblin/plugins/oauth/forms.py:67
 msgid "This field is required for public clients"
-msgstr ""
+msgstr "Este campo es requerido para los clientes públicos"
 
 #: mediagoblin/plugins/oauth/views.py:59
 msgid "The client {0} has been registered!"
-msgstr ""
+msgstr "¡El cliente {0} ha sido registrado!"
 
 #: mediagoblin/processing/__init__.py:138
 msgid "Invalid file given for media type."
@@ -334,12 +334,12 @@ msgstr "¡Yujú! ¡Enviado!"
 #: mediagoblin/submit/views.py:211 mediagoblin/user_pages/views.py:215
 #, python-format
 msgid "You already have a collection called \"%s\"!"
-msgstr ""
+msgstr "¡Ya tienes una colección llamada \"%s\"!"
 
 #: mediagoblin/submit/views.py:215
 #, python-format
 msgid "Collection \"%s\" added!"
-msgstr ""
+msgstr "¡Colección \"%s\" añadida!"
 
 #: mediagoblin/templates/mediagoblin/404.html:24
 msgid "Image of 404 goblin stressing out"
@@ -351,7 +351,7 @@ msgstr "¡Ups!"
 
 #: mediagoblin/templates/mediagoblin/404.html:26
 msgid "There doesn't seem to be a page at this address. Sorry!"
-msgstr "Parece no haber una página en esta dirección. ¡Lo siento!"
+msgstr "Parece no haber una página en esta dirección. ¡Lo sentimos!"
 
 #: mediagoblin/templates/mediagoblin/404.html:28
 msgid ""
@@ -373,7 +373,7 @@ msgstr "+Agregar contenido"
 
 #: mediagoblin/templates/mediagoblin/base.html:67
 msgid "+ Add collection"
-msgstr ""
+msgstr "+ Añadir colección"
 
 #: mediagoblin/templates/mediagoblin/base.html:69
 msgid "View your profile"
@@ -416,7 +416,7 @@ msgstr "Hola, ¡bienvenido a este sitio de MediaGoblin!"
 msgid ""
 "This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
 "extraordinarily great piece of media hosting software."
-msgstr "Este sitio está montado con <a href=\"http://mediagoblin.org\">MediaGoblin</a>, un programa libre buenísimo para gestionar contenido multimedia."
+msgstr "Este sitio está montado con <a href=\"http://mediagoblin.org\">MediaGoblin</a>, un extraordinario programa libre para alojar, gestionar y compartir contenido multimedia."
 
 #: mediagoblin/templates/mediagoblin/root.html:29
 msgid ""
@@ -450,7 +450,7 @@ msgstr "Panel de procesamiento de contenido"
 #: mediagoblin/templates/mediagoblin/admin/panel.html:29
 msgid ""
 "Here you can track the state of media being processed on this instance."
-msgstr "Aquí puede llevar un seguimiento del estado del contenido que se está procesando en esta instancia."
+msgstr "Aquí puedes llevar un seguimiento del estado del contenido que se está procesando en esta instancia."
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:32
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:32
@@ -511,11 +511,11 @@ msgid ""
 "\n"
 "If you think this is an error, just ignore this email and continue being\n"
 "a happy goblin!"
-msgstr "Hola %(username)s,\n\nPara cambiar tu contraseña de GNU MediaGoblin, abre la siguiente URL en un navegador:\n\n%(verification_url)s \n\nSi piensas que esto es un error, simplemente ignora este mensaje y sigue siendo un trasgo feliz."
+msgstr "Hola %(username)s,\n\nPara cambiar tu contraseña de GNU MediaGoblin, abre la siguiente URL en un navegador:\n\n%(verification_url)s \n\nSi piensas que esto es un error, simplemente ignora este mensaje y sigue siendo un duende feliz."
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:39
 msgid "Logging in failed!"
-msgstr "¡Falló en el inicio de sesión!"
+msgstr "¡Hubo un fallo al iniciar sesión!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:44
 msgid "Don't have an account yet?"
@@ -553,7 +553,7 @@ msgstr "Hola %(username)s,\n\npara activar tu cuenta de GNU MediaGoblin, abre la
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:35
 #, python-format
 msgid "Editing attachments for %(media_title)s"
-msgstr "Editing attachments for %(media_title)s"
+msgstr "Editando archivos adjuntos a %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:23
 #: mediagoblin/templates/mediagoblin/edit/edit.html:35
@@ -586,7 +586,7 @@ msgstr "Cambio de %(username)s la configuración de la cuenta "
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:29
 #, python-format
 msgid "Editing %(collection_title)s"
-msgstr ""
+msgstr "Editando %(collection_title)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:23
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
@@ -619,14 +619,14 @@ msgid ""
 "Sorry, this audio will not work because \n"
 "\tyour web browser does not support HTML5 \n"
 "\taudio."
-msgstr "Disculpa, este audio audio podría no funcionar porque \n\ttú explorador no soportar HTML5 \n\taudio."
+msgstr "Lo sentimos, este audio audio no funcionará porque \n\ttu navegador web no soporta audio de \n\tHTML5."
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:47
 msgid ""
 "You can get a modern web browser that \n"
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t  http://getfirefox.com</a>!"
-msgstr "Tú puedes obtener un explorador más moderno que \n\tpueda reproducir el audio <a href=\"http://getfirefox.com\">\n\t  http://getfirefox.com</a>!"
+msgstr "Tú puedes obtener un navegador más moderno que \n\tpueda reproducir el audio <a href=\"http://getfirefox.com\">\n\t  http://getfirefox.com</a>!"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:56
@@ -642,7 +642,7 @@ msgid ""
 "Sorry, this video will not work because \n"
 "\t    your web browser does not support HTML5 \n"
 "\t    video."
-msgstr "Lo sentidos,  este video no va funcionar porque\n<span class=\"whitespace other\" title=\"Tab\">»</span>   Tu explorador web no soporta HTML5\n<span class=\"whitespace other\" title=\"Tab\">»</span>    video."
+msgstr "Lo sentimos, este video no va funcionar porque\n<span class=\"whitespace other\" title=\"Tab\">»</span>   Tu navegador web no soporta HTML5\n<span class=\"whitespace other\" title=\"Tab\">»</span>    video."
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:43
 msgid ""
@@ -657,7 +657,7 @@ msgstr "Archivo WebM (640p; VP8/Vorbis)"
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
-msgstr ""
+msgstr "Añadir una colección"
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:30
 #: mediagoblin/templates/mediagoblin/submit/start.html:34
@@ -673,12 +673,12 @@ msgstr "Añade tu contenido "
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format
 msgid "%(collection_title)s (%(username)s's collection)"
-msgstr ""
+msgstr "%(collection_title)s (%(username)s's collection)"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:39
 #, python-format
 msgid "%(collection_title)s by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr ""
+msgstr "%(collection_title)s por <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:52
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:87
@@ -696,7 +696,7 @@ msgid ""
 "<p>\n"
 "    %(collection_description)s\n"
 "  </p>"
-msgstr ""
+msgstr "<p>\n%(collection_description)s\n</p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -712,18 +712,18 @@ msgstr "Eliminar permanentemente"
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:31
 #, python-format
 msgid "Really remove %(media_title)s from %(collection_title)s?"
-msgstr ""
+msgstr "¿Realmente quieres quitar %(media_title)s de %(collection_title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:54
 msgid "Remove"
-msgstr ""
+msgstr "Quitar"
 
 #: mediagoblin/templates/mediagoblin/user_pages/comment_email.txt:19
 #, python-format
 msgid ""
 "Hi %(username)s,\n"
 "%(comment_author)s commented on your post (%(comment_url)s) at %(instance_name)s\n"
-msgstr "Hola %(username)s,\n%(comment_author)s escribieron comentarios sobre tu publicación  (%(comment_url)s) en %(instance_name)s\n"
+msgstr "Hola %(username)s,\n%(comment_author)s comentó tu publicación  (%(comment_url)s) en %(instance_name)s\n"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
 #, python-format
@@ -784,15 +784,15 @@ msgstr "Agregar adjunto"
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:35
 #, python-format
 msgid "Add %(title)s to collection"
-msgstr ""
+msgstr "Añadir %(title)s a la colección"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:52
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:57
 msgid "Add a new collection"
-msgstr ""
+msgstr "Añadir una nueva colección"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:29
 msgid ""
@@ -801,7 +801,7 @@ msgstr "Puedes hacer un seguimiento del estado de tu contenido siendo procesado 
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:89
 msgid "Your last 10 successful uploads"
-msgstr "Tus últimos 10 envíos con éxito"
+msgstr "Tus últimos 10 envíos exitosos"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:31
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:89
@@ -816,7 +816,7 @@ msgstr "Lo sentimos, no se encontró ese usuario."
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:50
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:70
 msgid "Email verification needed"
-msgstr "Es necesario un correo electrónico de verificación"
+msgstr "Es necesario que verifiques tu cuenta mediante el correo de notiicación"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:53
 msgid "Almost done! Your account still needs to be activated."
@@ -839,7 +839,7 @@ msgstr "Reenviar correo electrónico de verificación"
 msgid ""
 "Someone has registered an account with this username, but it still has to be"
 " activated."
-msgstr "Alguien ya registró una cuenta con ese nombre de usuario, pero todavía no fue activada."
+msgstr "Alguien ya registró una cuenta con ese nombre de usuario, pero todavía no ha sido activada."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:79
 #, python-format
@@ -874,7 +874,7 @@ msgstr "Ver todo el contenido de %(username)s"
 msgid ""
 "This is where your media will appear, but you don't seem to have added "
 "anything yet."
-msgstr "Aquí es donde tu contenido estará, pero parece que aún no has agregado nada."
+msgstr "Aquí es donde estará ubicado tu contenido, pero parece que aún no has agregado nada."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:157
 msgid "Add media"
@@ -891,17 +891,17 @@ msgstr "Parece que aún no hay ningún contenido aquí..."
 msgid ""
 "<br />\n"
 "              <a href=\"%(entry_url)s\">%(note)s</a>"
-msgstr ""
+msgstr "<br />⏎ <a href=\"%(entry_url)s\">%(note)s</a>"
 
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:47
 #, python-format
 msgid "<br /><a href=\"%(remove_url)s\" class=\"remove\">(remove)</a>"
-msgstr ""
+msgstr "<br /><a href=\"%(remove_url)s\" class=\"remove\">(remove)</a>"
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:20
 #, python-format
 msgid "In collections (%(collected)s)"
-msgstr ""
+msgstr "En las colecciones (%(collected)s)"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 msgid "feed icon"
@@ -960,19 +960,19 @@ msgstr "Estoy seguro de que quiero borrar esto"
 
 #: mediagoblin/user_pages/forms.py:32
 msgid "I am sure I want to remove this item from the collection"
-msgstr ""
+msgstr "Estoy seguro/a de que quiero quitar este ítem de la colección"
 
 #: mediagoblin/user_pages/forms.py:35
 msgid "-- Select --"
-msgstr ""
+msgstr "-- Selecciona --"
 
 #: mediagoblin/user_pages/forms.py:37
 msgid "Include a note"
-msgstr ""
+msgstr "Incluir una nota"
 
 #: mediagoblin/user_pages/lib.py:56
 msgid "commented on your post"
-msgstr "escribieron comentarios sobre tu publicación"
+msgstr "comentó tu publicación"
 
 #: mediagoblin/user_pages/views.py:161
 msgid "Oops, your comment was empty."
@@ -984,26 +984,26 @@ msgstr "¡Tu comentario ha sido publicado!"
 
 #: mediagoblin/user_pages/views.py:235
 msgid "You have to select or add a collection"
-msgstr ""
+msgstr "Tienes que seleccionar o añadir una colección"
 
 #: mediagoblin/user_pages/views.py:243
 #, python-format
 msgid "\"%s\" already in collection \"%s\""
-msgstr ""
+msgstr "%s\" ya está en la colección \"%s\""
 
 #: mediagoblin/user_pages/views.py:258
 #, python-format
 msgid "\"%s\" added to collection \"%s\""
-msgstr ""
+msgstr "\"%s\" añadido a la colección \"%s\""
 
 #: mediagoblin/user_pages/views.py:266
 msgid "Please check your entries and try again."
-msgstr ""
+msgstr "Por favor, revisa tus entradas e inténtalo de nuevo."
 
 #: mediagoblin/user_pages/views.py:297
 msgid ""
 "Some of the files with this entry seem to be missing.  Deleting anyway."
-msgstr "Algunos de los ficheros en esta entrada parece que se han perdido. Borrando igualmente."
+msgstr "Al parecer algunos de los ficheros en esta entrada se han perdido. Borrando igualmente."
 
 #: mediagoblin/user_pages/views.py:302
 msgid "You deleted the media."
@@ -1019,29 +1019,29 @@ msgstr "Estás a punto de eliminar un contenido de otro usuario. Proceder con pr
 
 #: mediagoblin/user_pages/views.py:379
 msgid "You deleted the item from the collection."
-msgstr ""
+msgstr "Borraste el ítem de la colección."
 
 #: mediagoblin/user_pages/views.py:383
 msgid "The item was not removed because you didn't check that you were sure."
-msgstr ""
+msgstr "El ítem no fue removido porque no confirmaste que estuvieras seguro/a."
 
 #: mediagoblin/user_pages/views.py:393
 msgid ""
 "You are about to delete an item from another user's collection. Proceed with"
 " caution."
-msgstr ""
+msgstr "Estás a punto de borrar un ítem de la colección de otro usuario. Procede con cuidado."
 
 #: mediagoblin/user_pages/views.py:426
 #, python-format
 msgid "You deleted the collection \"%s\""
-msgstr ""
+msgstr "Borraste la colección \"%s\""
 
 #: mediagoblin/user_pages/views.py:433
 msgid ""
 "The collection was not deleted because you didn't check that you were sure."
-msgstr ""
+msgstr "La colección no fue borrada porque no confirmaste que estuvieras seguro/a."
 
 #: mediagoblin/user_pages/views.py:443
 msgid ""
 "You are about to delete another user's collection. Proceed with caution."
-msgstr ""
+msgstr "Estás a punto de borrar la colección de otro usuario. Procede con cuidado."

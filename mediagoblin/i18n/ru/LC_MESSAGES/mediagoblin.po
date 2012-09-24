@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
-#   <deletesoftware@yandex.ru>, 2011, 2012.
+#   <deletesoftware@yandex.ru>, 2011-2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2012-09-24 11:41-0500\n"
-"PO-Revision-Date: 2012-09-24 16:37+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2012-09-24 18:15+0000\n"
+"Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -173,13 +173,13 @@ msgstr ""
 #: mediagoblin/edit/forms.py:86 mediagoblin/submit/forms.py:50
 #: mediagoblin/user_pages/forms.py:43
 msgid "Description of this collection"
-msgstr ""
+msgstr "Описание этой коллекции"
 
 #: mediagoblin/edit/forms.py:93
 msgid ""
 "The title part of this collection's address. You usually don't need to "
 "change this."
-msgstr ""
+msgstr "Отличительная часть адреса этой коллекции, основанная на названии.  Обычно не нужно её изменять."
 
 #: mediagoblin/edit/views.py:65
 msgid "An entry with that slug already exists for this user."
@@ -208,15 +208,15 @@ msgstr "Неправильный пароль"
 #: mediagoblin/edit/views.py:287
 #, python-format
 msgid "You already have a collection called \"%s\"!title"
-msgstr ""
+msgstr "У вас уже есть коллекция «%s»!title"
 
 #: mediagoblin/edit/views.py:290
 msgid "A collection with that slug already exists for this user."
-msgstr ""
+msgstr "У этого пользователя уже есть коллекция с такой отличительной частью адреса."
 
 #: mediagoblin/edit/views.py:307
 msgid "You are editing another user's collection. Proceed with caution."
-msgstr ""
+msgstr "Вы редактируете коллекцию другого пользователя.  Будьте осторожны."
 
 #: mediagoblin/gmg_commands/theme.py:58
 msgid "Cannot link theme... no theme set\n"
@@ -324,12 +324,12 @@ msgstr "Ура! Файл загружен!"
 #: mediagoblin/submit/views.py:211 mediagoblin/user_pages/views.py:215
 #, python-format
 msgid "You already have a collection called \"%s\"!"
-msgstr ""
+msgstr "У вас уже есть коллекция с названием «%s»!"
 
 #: mediagoblin/submit/views.py:215
 #, python-format
 msgid "Collection \"%s\" added!"
-msgstr ""
+msgstr "Коллекция «%s» добавлена!"
 
 #: mediagoblin/templates/mediagoblin/404.html:24
 msgid "Image of 404 goblin stressing out"
@@ -363,7 +363,7 @@ msgstr "+ Добавить файл"
 
 #: mediagoblin/templates/mediagoblin/base.html:67
 msgid "+ Add collection"
-msgstr ""
+msgstr "+ Добавить коллекцию"
 
 #: mediagoblin/templates/mediagoblin/base.html:69
 msgid "View your profile"
@@ -576,7 +576,7 @@ msgstr "Настройка учётной записи %(username)s"
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:29
 #, python-format
 msgid "Editing %(collection_title)s"
-msgstr ""
+msgstr "Редактирование %(collection_title)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:23
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
@@ -647,7 +647,7 @@ msgstr "WebM-файл (640p; VP8/Vorbis)"
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
-msgstr ""
+msgstr "Добавление коллекции"
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:30
 #: mediagoblin/templates/mediagoblin/submit/start.html:34
@@ -663,12 +663,12 @@ msgstr "Добавление ваших файлов"
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format
 msgid "%(collection_title)s (%(username)s's collection)"
-msgstr ""
+msgstr "%(collection_title)s (коллекция пользователя %(username)s)"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:39
 #, python-format
 msgid "%(collection_title)s by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr ""
+msgstr "%(collection_title)s пользователя <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:52
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:87
@@ -702,11 +702,11 @@ msgstr "Удалить безвозвратно"
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:31
 #, python-format
 msgid "Really remove %(media_title)s from %(collection_title)s?"
-msgstr ""
+msgstr "В самом деле исключить %(media_title)s из %(collection_title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:54
 msgid "Remove"
-msgstr ""
+msgstr "Исключить"
 
 #: mediagoblin/templates/mediagoblin/user_pages/comment_email.txt:19
 #, python-format
@@ -774,7 +774,7 @@ msgstr "Добавить сопутствующий файл"
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:35
 #, python-format
 msgid "Add %(title)s to collection"
-msgstr ""
+msgstr "Добавить %(title)s в коллекцию"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:52
 msgid "+"
@@ -782,7 +782,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:57
 msgid "Add a new collection"
-msgstr ""
+msgstr "Добавление новой коллекции"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:29
 msgid ""
@@ -891,7 +891,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/utils/collections.html:20
 #, python-format
 msgid "In collections (%(collected)s)"
-msgstr ""
+msgstr "В %(collected)s коллекциях"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 msgid "feed icon"
@@ -950,15 +950,15 @@ msgstr "Я уверен, что хочу удалить это"
 
 #: mediagoblin/user_pages/forms.py:32
 msgid "I am sure I want to remove this item from the collection"
-msgstr ""
+msgstr "Я уверен, что хочу исключить этот файл из коллекции"
 
 #: mediagoblin/user_pages/forms.py:35
 msgid "-- Select --"
-msgstr ""
+msgstr "-- Выберите --"
 
 #: mediagoblin/user_pages/forms.py:37
 msgid "Include a note"
-msgstr ""
+msgstr "Примечание"
 
 #: mediagoblin/user_pages/lib.py:56
 msgid "commented on your post"
@@ -974,17 +974,17 @@ msgstr "Ваш комментарий размещён!"
 
 #: mediagoblin/user_pages/views.py:235
 msgid "You have to select or add a collection"
-msgstr ""
+msgstr "Необходимо выбрать или добавить коллекцию"
 
 #: mediagoblin/user_pages/views.py:243
 #, python-format
 msgid "\"%s\" already in collection \"%s\""
-msgstr ""
+msgstr "«%s» — уже в коллекции «%s»"
 
 #: mediagoblin/user_pages/views.py:258
 #, python-format
 msgid "\"%s\" added to collection \"%s\""
-msgstr ""
+msgstr "«%s» добавлено в коллекцию «%s»"
 
 #: mediagoblin/user_pages/views.py:266
 msgid "Please check your entries and try again."
@@ -1009,29 +1009,29 @@ msgstr "Вы на пороге удаления файла другого пол
 
 #: mediagoblin/user_pages/views.py:379
 msgid "You deleted the item from the collection."
-msgstr ""
+msgstr "Вы исключили файл из коллекции."
 
 #: mediagoblin/user_pages/views.py:383
 msgid "The item was not removed because you didn't check that you were sure."
-msgstr ""
+msgstr "Файл не исключён из коллекции, так как вы не подтвердили своё намерение отметкой."
 
 #: mediagoblin/user_pages/views.py:393
 msgid ""
 "You are about to delete an item from another user's collection. Proceed with"
 " caution."
-msgstr ""
+msgstr "Вы на пороге исключения файла из коллекции другого пользователя.  Будьте осторожны."
 
 #: mediagoblin/user_pages/views.py:426
 #, python-format
 msgid "You deleted the collection \"%s\""
-msgstr ""
+msgstr "Вы удалили коллекцию «%s»"
 
 #: mediagoblin/user_pages/views.py:433
 msgid ""
 "The collection was not deleted because you didn't check that you were sure."
-msgstr ""
+msgstr "Коллекция не удалена, так как вы не подтвердили своё намерение отметкой."
 
 #: mediagoblin/user_pages/views.py:443
 msgid ""
 "You are about to delete another user's collection. Proceed with caution."
-msgstr ""
+msgstr "Вы на пороге удаления коллекции другого пользователя.  Будьте осторожны."
