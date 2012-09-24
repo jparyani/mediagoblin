@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-09-24 11:41-0500\n"
-"PO-Revision-Date: 2012-09-24 16:37+0000\n"
+"POT-Creation-Date: 2012-09-24 14:01-0500\n"
+"PO-Revision-Date: 2012-09-24 18:57+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -206,16 +206,17 @@ msgstr "Nastavenia účtu uložené"
 msgid "Wrong password"
 msgstr "Nesprávne heslo"
 
-#: mediagoblin/edit/views.py:287
+#: mediagoblin/edit/views.py:288 mediagoblin/submit/views.py:211
+#: mediagoblin/user_pages/views.py:215
 #, python-format
-msgid "You already have a collection called \"%s\"!title"
+msgid "You already have a collection called \"%s\"!"
 msgstr ""
 
-#: mediagoblin/edit/views.py:290
+#: mediagoblin/edit/views.py:292
 msgid "A collection with that slug already exists for this user."
 msgstr ""
 
-#: mediagoblin/edit/views.py:307
+#: mediagoblin/edit/views.py:309
 msgid "You are editing another user's collection. Proceed with caution."
 msgstr ""
 
@@ -321,11 +322,6 @@ msgstr "Musíš poskytnúť súbor."
 #: mediagoblin/submit/views.py:164
 msgid "Woohoo! Submitted!"
 msgstr "Juchú! Úspešne vložené!"
-
-#: mediagoblin/submit/views.py:211 mediagoblin/user_pages/views.py:215
-#, python-format
-msgid "You already have a collection called \"%s\"!"
-msgstr ""
 
 #: mediagoblin/submit/views.py:215
 #, python-format
