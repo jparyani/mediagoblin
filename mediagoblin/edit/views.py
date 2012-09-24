@@ -284,7 +284,9 @@ def edit_collection(request, collection):
                 
         if existing_collection and existing_collection.id != collection.id:
             messages.add_message(
-                request, messages.ERROR, _('You already have a collection called "%s"!' % request.POST['title']))
+                request, messages.ERROR,
+                _('You already have a collection called "%s"!') % \
+                    request.POST['title'])
         elif slug_used:
             form.slug.errors.append(
                 _(u'A collection with that slug already exists for this user.'))
