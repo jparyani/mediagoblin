@@ -40,7 +40,7 @@
 {% block mediagoblin_content -%}
   {# If no user... #}
   {% if not user %}
-    <p>{% trans %}Sorry, no such user found.{% endtrans %}<p/>
+    <p>{% trans %}Sorry, no such user found.{% endtrans %}</p>
 
   {# User exists, but needs verification #}
   {% elif user.status == "needs_email_verification" %}

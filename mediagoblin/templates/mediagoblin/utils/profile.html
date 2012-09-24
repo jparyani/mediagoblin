@@ -19,7 +19,7 @@
 {% block profile_content -%}
   {% if user.bio %}
     {% autoescape False %}
-      <p>{{ user.bio_html }}</p>
+      {{ user.bio_html }}
     {% endautoescape %}
   {% endif %}
   {% if user.url %}
