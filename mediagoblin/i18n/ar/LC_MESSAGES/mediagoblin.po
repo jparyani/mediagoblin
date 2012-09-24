@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-09-21 15:37-0500\n"
-"PO-Revision-Date: 2012-09-21 20:33+0000\n"
+"POT-Creation-Date: 2012-09-24 11:41-0500\n"
+"PO-Revision-Date: 2012-09-24 16:37+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -271,8 +271,8 @@ msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:39
 msgid ""
-"This will be visisble to users allowing your\n"
-"                appplication to authenticate as them."
+"This will be visible to users allowing your\n"
+"                application to authenticate as them."
 msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:41
