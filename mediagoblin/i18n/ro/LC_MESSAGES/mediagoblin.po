@@ -4,14 +4,14 @@
 # 
 # Translators:
 #   <gapop@hotmail.com>, 2011.
-# George Pop <gapop@hotmail.com>, 2011, 2012.
+# George Pop <gapop@hotmail.com>, 2011-2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2012-09-21 15:37-0500\n"
-"PO-Revision-Date: 2012-09-21 20:33+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2012-09-21 22:34+0000\n"
+"Last-Translator: George Pop <gapop@hotmail.com>\n"
 "Language-Team: Romanian (http://www.transifex.com/projects/p/mediagoblin/language/ro/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -169,18 +169,18 @@ msgstr "Trimite-mi un e-mail când alții comentează fișierele mele"
 
 #: mediagoblin/edit/forms.py:84
 msgid "The title can't be empty"
-msgstr ""
+msgstr "Titlul nu poate să fie gol"
 
 #: mediagoblin/edit/forms.py:86 mediagoblin/submit/forms.py:50
 #: mediagoblin/user_pages/forms.py:43
 msgid "Description of this collection"
-msgstr ""
+msgstr "Descriere pentru această colecție"
 
 #: mediagoblin/edit/forms.py:93
 msgid ""
 "The title part of this collection's address. You usually don't need to "
 "change this."
-msgstr ""
+msgstr "Partea din adresa acestei colecții care corespunde titlului. De regulă nu e necesar să faci o modificare."
 
 #: mediagoblin/edit/views.py:65
 msgid "An entry with that slug already exists for this user."
@@ -209,15 +209,15 @@ msgstr "Parolă incorectă"
 #: mediagoblin/edit/views.py:287
 #, python-format
 msgid "You already have a collection called \"%s\"!title"
-msgstr ""
+msgstr "Ai deja o colecție intitulată \"%s\"!title"
 
 #: mediagoblin/edit/views.py:290
 msgid "A collection with that slug already exists for this user."
-msgstr ""
+msgstr "O colecție cu același slug există deja pentru acest utilizator."
 
 #: mediagoblin/edit/views.py:307
 msgid "You are editing another user's collection. Proceed with caution."
-msgstr ""
+msgstr "Lucrezi pe colecția unui alt utilizator. Se recomandă prudență."
 
 #: mediagoblin/gmg_commands/theme.py:58
 msgid "Cannot link theme... no theme set\n"
@@ -242,31 +242,31 @@ msgstr "Transcodarea video a eșuat"
 
 #: mediagoblin/plugins/oauth/forms.py:26
 msgid "Client ID"
-msgstr ""
+msgstr "ID client"
 
 #: mediagoblin/plugins/oauth/forms.py:28
 msgid "Next URL"
-msgstr ""
+msgstr "Următorul URL"
 
 #: mediagoblin/plugins/oauth/forms.py:30
 msgid "Allow"
-msgstr ""
+msgstr "Permite"
 
 #: mediagoblin/plugins/oauth/forms.py:31
 msgid "Deny"
-msgstr ""
+msgstr "Refuză"
 
 #: mediagoblin/plugins/oauth/forms.py:35
 msgid "Name"
-msgstr ""
+msgstr "Nume"
 
 #: mediagoblin/plugins/oauth/forms.py:36
 msgid "The name of the OAuth client"
-msgstr ""
+msgstr "Numele clientului OAuth"
 
 #: mediagoblin/plugins/oauth/forms.py:37
 msgid "Description"
-msgstr ""
+msgstr "Descriere"
 
 #: mediagoblin/plugins/oauth/forms.py:39
 msgid ""
@@ -276,7 +276,7 @@ msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:41
 msgid "Type"
-msgstr ""
+msgstr "Tip"
 
 #: mediagoblin/plugins/oauth/forms.py:46
 msgid ""
@@ -286,25 +286,25 @@ msgid ""
 "                <strong>Public</strong> - The client can't make confidential\n"
 "                requests to the GNU MediaGoblin instance (e.g. client-side\n"
 "                JavaScript client)."
-msgstr ""
+msgstr "<strong>Confidențial</strong> - Client poate\n                trimite cereri către instanța GNU MediaGoblin care nu pot fi\n                interceptate de către user agent (de ex., clientul de pe server).<br />\n                <strong>Public</strong> - Clientul nu poate trimite cereri confidențiale\n                către instanța GNU MediaGoblin (de ex., un client\n                JavaScript)."
 
 #: mediagoblin/plugins/oauth/forms.py:53
 msgid "Redirect URI"
-msgstr ""
+msgstr "URI redirectare"
 
 #: mediagoblin/plugins/oauth/forms.py:55
 msgid ""
 "The redirect URI for the applications, this field\n"
 "            is <strong>required</strong> for public clients."
-msgstr ""
+msgstr "URI-ul de redirectare pentru aplicații, această rubrică\n            este <strong>obligatorie</strong> pentru clienții publici."
 
 #: mediagoblin/plugins/oauth/forms.py:67
 msgid "This field is required for public clients"
-msgstr ""
+msgstr "Această rubrică este obligatorie pentru clienții publici"
 
 #: mediagoblin/plugins/oauth/views.py:59
 msgid "The client {0} has been registered!"
-msgstr ""
+msgstr "Clientul {0} a fost înregistrat!"
 
 #: mediagoblin/processing/__init__.py:138
 msgid "Invalid file given for media type."
@@ -325,12 +325,12 @@ msgstr "Ura! Trimis!"
 #: mediagoblin/submit/views.py:211 mediagoblin/user_pages/views.py:215
 #, python-format
 msgid "You already have a collection called \"%s\"!"
-msgstr ""
+msgstr "Ai deja o colecție numită \"%s\"!"
 
 #: mediagoblin/submit/views.py:215
 #, python-format
 msgid "Collection \"%s\" added!"
-msgstr ""
+msgstr "Colecția \"%s\" a fost creată!"
 
 #: mediagoblin/templates/mediagoblin/404.html:24
 msgid "Image of 404 goblin stressing out"
@@ -364,7 +364,7 @@ msgstr "+ Adaugă fișier media"
 
 #: mediagoblin/templates/mediagoblin/base.html:67
 msgid "+ Add collection"
-msgstr ""
+msgstr "+ Creează colecție"
 
 #: mediagoblin/templates/mediagoblin/base.html:69
 msgid "View your profile"
@@ -577,7 +577,7 @@ msgstr "Se modifică setările contului pentru userul %(username)s"
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:29
 #, python-format
 msgid "Editing %(collection_title)s"
-msgstr ""
+msgstr "Editare %(collection_title)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:23
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
@@ -648,7 +648,7 @@ msgstr "Fișier WebM (640p; VP8/Vorbis)"
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
-msgstr ""
+msgstr "Creează o colecție"
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:30
 #: mediagoblin/templates/mediagoblin/submit/start.html:34
@@ -664,12 +664,12 @@ msgstr "Adaugă fișierele tale media"
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format
 msgid "%(collection_title)s (%(username)s's collection)"
-msgstr ""
+msgstr "%(collection_title)s (colecție a lui %(username)s)"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:39
 #, python-format
 msgid "%(collection_title)s by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr ""
+msgstr "%(collection_title)s de <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:52
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:87
@@ -687,7 +687,7 @@ msgid ""
 "<p>\n"
 "    %(collection_description)s\n"
 "  </p>"
-msgstr ""
+msgstr "<p>\n    %(collection_description)s\n  </p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -703,11 +703,11 @@ msgstr "Șterge definitiv"
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:31
 #, python-format
 msgid "Really remove %(media_title)s from %(collection_title)s?"
-msgstr ""
+msgstr "Sigur dorești să ștergi %(media_title)s din %(collection_title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:54
 msgid "Remove"
-msgstr ""
+msgstr "Șterge"
 
 #: mediagoblin/templates/mediagoblin/user_pages/comment_email.txt:19
 #, python-format
@@ -775,15 +775,15 @@ msgstr "Atașează"
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:35
 #, python-format
 msgid "Add %(title)s to collection"
-msgstr ""
+msgstr "Adaugă %(title)s la colecție"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:52
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:57
 msgid "Add a new collection"
-msgstr ""
+msgstr "Creează o nouă colecție"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:29
 msgid ""
@@ -882,17 +882,17 @@ msgstr "Nu pare să existe niciun fișier media deocamdată..."
 msgid ""
 "<br />\n"
 "              <a href=\"%(entry_url)s\">%(note)s</a>"
-msgstr ""
+msgstr "<br />\n              <a href=\"%(entry_url)s\">%(note)s</a>"
 
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:47
 #, python-format
 msgid "<br /><a href=\"%(remove_url)s\" class=\"remove\">(remove)</a>"
-msgstr ""
+msgstr "<br /><a href=\"%(remove_url)s\" class=\"remove\">(șterge)</a>"
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:20
 #, python-format
 msgid "In collections (%(collected)s)"
-msgstr ""
+msgstr "În colecțiile (%(collected)s)"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 msgid "feed icon"
@@ -951,15 +951,15 @@ msgstr "Sunt sigur că doresc să șterg"
 
 #: mediagoblin/user_pages/forms.py:32
 msgid "I am sure I want to remove this item from the collection"
-msgstr ""
+msgstr "Sunt sigur(ă) că vreau să șterg acest articol din colecție"
 
 #: mediagoblin/user_pages/forms.py:35
 msgid "-- Select --"
-msgstr ""
+msgstr "-- Selectează --"
 
 #: mediagoblin/user_pages/forms.py:37
 msgid "Include a note"
-msgstr ""
+msgstr "Adaugă o notiță"
 
 #: mediagoblin/user_pages/lib.py:56
 msgid "commented on your post"
@@ -975,21 +975,21 @@ msgstr "Comentariul tău a fost trimis!"
 
 #: mediagoblin/user_pages/views.py:235
 msgid "You have to select or add a collection"
-msgstr ""
+msgstr "Trebuie să alegi sau să creezi o colecție"
 
 #: mediagoblin/user_pages/views.py:243
 #, python-format
 msgid "\"%s\" already in collection \"%s\""
-msgstr ""
+msgstr "\"%s\" este deja în colecția \"%s\""
 
 #: mediagoblin/user_pages/views.py:258
 #, python-format
 msgid "\"%s\" added to collection \"%s\""
-msgstr ""
+msgstr "\"%s\" a fost adăugat la colecția \"%s\""
 
 #: mediagoblin/user_pages/views.py:266
 msgid "Please check your entries and try again."
-msgstr ""
+msgstr "Verifică datele și încearcă din nou."
 
 #: mediagoblin/user_pages/views.py:297
 msgid ""
@@ -1010,29 +1010,29 @@ msgstr "Urmează să ștergi fișierele media ale unui alt utilizator. Se recoma
 
 #: mediagoblin/user_pages/views.py:379
 msgid "You deleted the item from the collection."
-msgstr ""
+msgstr "Ai șters acest articol din colecție."
 
 #: mediagoblin/user_pages/views.py:383
 msgid "The item was not removed because you didn't check that you were sure."
-msgstr ""
+msgstr "Articolul nu a fost șters pentru că nu ai confirmat că ești sigur(ă)."
 
 #: mediagoblin/user_pages/views.py:393
 msgid ""
 "You are about to delete an item from another user's collection. Proceed with"
 " caution."
-msgstr ""
+msgstr "Urmează să ștergi un articol din colecția unui alt utilizator. Se recomandă prudență."
 
 #: mediagoblin/user_pages/views.py:426
 #, python-format
 msgid "You deleted the collection \"%s\""
-msgstr ""
+msgstr "Ai șters colecția \"%s\""
 
 #: mediagoblin/user_pages/views.py:433
 msgid ""
 "The collection was not deleted because you didn't check that you were sure."
-msgstr ""
+msgstr "Colecția nu a fost ștearsă pentru că nu ai confirmat că ești sigur(ă)."
 
 #: mediagoblin/user_pages/views.py:443
 msgid ""
 "You are about to delete another user's collection. Proceed with caution."
-msgstr ""
+msgstr "Urmează să ștergi colecția unui alt utilizator. Se recomandă prudență."

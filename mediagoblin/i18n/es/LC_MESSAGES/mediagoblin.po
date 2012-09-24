@@ -13,13 +13,14 @@
 # Mario Rodriguez <msrodriguez00@gmail.com>, 2011.
 #   <mu@member.fsf.org>, 2011.
 #   <shackra@riseup.net>, 2012.
+#   <stardustprincess17@hotmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2012-09-21 15:37-0500\n"
-"PO-Revision-Date: 2012-09-21 20:33+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2012-09-24 16:33+0000\n"
+"Last-Translator: Elesa <stardustprincess17@hotmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -177,18 +178,18 @@ msgstr "Envíame un correo cuando otros escriban comentarios sobre mi contenido"
 
 #: mediagoblin/edit/forms.py:84
 msgid "The title can't be empty"
-msgstr ""
+msgstr "El título no puede estar vacío"
 
 #: mediagoblin/edit/forms.py:86 mediagoblin/submit/forms.py:50
 #: mediagoblin/user_pages/forms.py:43
 msgid "Description of this collection"
-msgstr ""
+msgstr "Descripción de esta colección"
 
 #: mediagoblin/edit/forms.py:93
 msgid ""
 "The title part of this collection's address. You usually don't need to "
 "change this."
-msgstr ""
+msgstr "El título de la dirección de esta colección. Generalmente no necesitas cambiar esto."
 
 #: mediagoblin/edit/views.py:65
 msgid "An entry with that slug already exists for this user."
@@ -217,7 +218,7 @@ msgstr "Contraseña incorrecta"
 #: mediagoblin/edit/views.py:287
 #, python-format
 msgid "You already have a collection called \"%s\"!title"
-msgstr ""
+msgstr "Ya tienes una colección llamada \"%s\"!title"
 
 #: mediagoblin/edit/views.py:290
 msgid "A collection with that slug already exists for this user."
@@ -225,7 +226,7 @@ msgstr ""
 
 #: mediagoblin/edit/views.py:307
 msgid "You are editing another user's collection. Proceed with caution."
-msgstr ""
+msgstr "Estás editando la colección de otro usuario (a). Ten cuidado."
 
 #: mediagoblin/gmg_commands/theme.py:58
 msgid "Cannot link theme... no theme set\n"
@@ -250,41 +251,41 @@ msgstr "Ha fallado la conversión de vídeo"
 
 #: mediagoblin/plugins/oauth/forms.py:26
 msgid "Client ID"
-msgstr ""
+msgstr "ID del Cliente"
 
 #: mediagoblin/plugins/oauth/forms.py:28
 msgid "Next URL"
-msgstr ""
+msgstr "Siguiente URL"
 
 #: mediagoblin/plugins/oauth/forms.py:30
 msgid "Allow"
-msgstr ""
+msgstr "Permitir"
 
 #: mediagoblin/plugins/oauth/forms.py:31
 msgid "Deny"
-msgstr ""
+msgstr "Denegar"
 
 #: mediagoblin/plugins/oauth/forms.py:35
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: mediagoblin/plugins/oauth/forms.py:36
 msgid "The name of the OAuth client"
-msgstr ""
+msgstr "El nombre del cliente OAuth"
 
 #: mediagoblin/plugins/oauth/forms.py:37
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #: mediagoblin/plugins/oauth/forms.py:39
 msgid ""
 "This will be visisble to users allowing your\n"
 "                appplication to authenticate as them."
-msgstr ""
+msgstr "Esto será visible a los usuarios que permitan tu ⏎ aplicación para autenticarse como ellos."
 
 #: mediagoblin/plugins/oauth/forms.py:41
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: mediagoblin/plugins/oauth/forms.py:46
 msgid ""
@@ -298,7 +299,7 @@ msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:53
 msgid "Redirect URI"
-msgstr ""
+msgstr "Redireccionar URI"
 
 #: mediagoblin/plugins/oauth/forms.py:55
 msgid ""
@@ -393,7 +394,7 @@ msgstr "Conectarse"
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project."
-msgstr "Potenciado por <a href=\"http://mediagoblin.org\">MediaGoblin</a>, un proyecto <a href=\"http://gnu.org/\">GNU</a>."
+msgstr "Proveído por <a href=\"http://mediagoblin.org\">MediaGoblin</a>, un proyecto <a href=\"http://gnu.org/\">GNU</a>."
 
 #: mediagoblin/templates/mediagoblin/base.html:92
 #, python-format
