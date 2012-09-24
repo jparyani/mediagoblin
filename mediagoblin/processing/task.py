@@ -96,5 +96,5 @@ class ProcessMedia(Task):
         entry_id = args[0]
         mark_entry_failed(entry_id, exc)
 
-        entry = mgg.database.MediaEntry.query.filter_by(id=entry_id)
+        entry = mgg.database.MediaEntry.query.filter_by(id=entry_id).first()
         json_processing_callback(entry)

@@ -106,5 +106,13 @@ def add_mediaentry_collected(db_conn):
 
 @RegisterMigration(6, MIGRATIONS)
 def create_processing_metadata_table(db):
-    ProcessingMetaData.__table__.create(db.bind)
+    metadata = MetaData(bind=db.bind)
+
+    metadata_table = Table('core__processing_metadata', metadata,
+            Column('id', Integer, primary_key=True),
+            Column('media_entry_id', Integer, ForeignKey(MediaEntry.id),
+                nullable=False, index=True),
+            Column('callback_url', Unicode))
+
+    metadata_table.create()
     db.commit()

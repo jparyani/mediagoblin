@@ -16,8 +16,9 @@
 
 import logging
 import json
+import traceback
 
-from urllib2 import urlopen, Request
+from urllib2 import urlopen, Request, HTTPError
 from urllib import urlencode
 
 _log = logging.getLogger(__name__)
@@ -67,7 +68,13 @@ def json_processing_callback(entry):
             headers=headers,
             data_parser=json.dumps)
 
-    urlopen(request)
-    _log.debug('Processing callback for {0} sent'.format(entry))
+    try:
+        urlopen(request)
+        _log.debug('Processing callback for {0} sent'.format(entry))
 
-    return True
+        return True
+    except HTTPError:
+        _log.error('Failed to send callback: {0}'.format(
+            traceback.format_exc()))
+
+        return False
