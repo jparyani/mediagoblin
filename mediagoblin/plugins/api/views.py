@@ -98,6 +98,12 @@ def post_entry(request):
     # Save now so we have this data before kicking off processing
     entry.save(validate=True)
 
+    if request.POST.get('callback_url'):
+        metadata = request.db.ProcessingMetaData()
+        metadata.media_entry = entry
+        metadata.callback_url = unicode(request.POST['callback_url'])
+        metadata.save()
+
     # Pass off to processing
     #
     # (... don't change entry after this point to avoid race

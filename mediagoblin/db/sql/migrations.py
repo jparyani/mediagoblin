@@ -20,7 +20,8 @@ from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         Integer, Unicode, UnicodeText, DateTime, ForeignKey)
 
 from mediagoblin.db.sql.util import RegisterMigration
-from mediagoblin.db.sql.models import MediaEntry, Collection, User
+from mediagoblin.db.sql.models import MediaEntry, Collection, User, \
+        ProcessingMetaData
 
 MIGRATIONS = {}
 
@@ -101,3 +102,9 @@ def add_mediaentry_collected(db_conn):
     col = Column('collected', Integer, default=0)
     col.create(media_entry)
     db_conn.commit()
+
+
+@RegisterMigration(6, MIGRATIONS)
+def create_processing_metadata_table(db):
+    ProcessingMetaData.__table__.create(db.bind)
+    db.commit()

@@ -22,6 +22,7 @@ from mediagoblin import mg_globals as mgg
 from mediagoblin.db.util import ObjectId
 from mediagoblin.media_types import get_media_manager
 from mediagoblin.processing import mark_entry_failed, BaseProcessingFail
+from mediagoblin.tools.processing import json_processing_callback
 
 _log = logging.getLogger(__name__)
 logging.basicConfig()
@@ -58,8 +59,10 @@ class ProcessMedia(Task):
             entry.state = u'processed'
             entry.save()
 
+            json_processing_callback(entry)
         except BaseProcessingFail as exc:
             mark_entry_failed(entry._id, exc)
+            json_processing_callback(entry)
             return
 
         except ImportError as exc:
@@ -70,6 +73,7 @@ class ProcessMedia(Task):
                     exc))
 
             mark_entry_failed(entry._id, exc)
+            json_processing_callback(entry)
 
         except Exception as exc:
             _log.error('An unhandled exception was raised while'
@@ -77,6 +81,7 @@ class ProcessMedia(Task):
                         entry))
 
             mark_entry_failed(entry._id, exc)
+            json_processing_callback(entry)
             raise
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
@@ -90,3 +95,6 @@ class ProcessMedia(Task):
         """
         entry_id = args[0]
         mark_entry_failed(entry_id, exc)
+
+        entry = mgg.database.MediaEntry.query.filter_by(id=entry_id)
+        json_processing_callback(entry)

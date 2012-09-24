@@ -412,9 +412,24 @@ class CollectionItem(Base, CollectionItemMixin):
         return DictReadAttrProxy(self)
 
 
+class ProcessingMetaData(Base):
+    __tablename__ = 'core__processing_metadata'
+
+    id = Column(Integer, primary_key=True)
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False,
+            index=True)
+    media_entry = relationship(MediaEntry, backref='processing_metadata')
+    callback_url = Column(Unicode)
+
+    @property
+    def dict_view(self):
+        """A dict like view on this object"""
+        return DictReadAttrProxy(self)
+
+
 MODELS = [
     User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem, MediaFile, FileKeynames,
-    MediaAttachmentFile]
+    MediaAttachmentFile, ProcessingMetaData]
 
 
 ######################################################
