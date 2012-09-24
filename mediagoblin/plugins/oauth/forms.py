@@ -36,7 +36,7 @@ class ClientRegistrationForm(wtforms.Form):
             description=_('The name of the OAuth client'))
     description = wtforms.TextAreaField(_('Description'),
             [wtforms.validators.Length(min=0, max=500)],
-            description=_('''This will be visble to users allowing your
+            description=_('''This will be visible to users allowing your
                 application to authenticate as them.'''))
     type = wtforms.SelectField(_('Type'),
             [wtforms.validators.Required()],
