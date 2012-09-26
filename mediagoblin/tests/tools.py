@@ -60,7 +60,7 @@ class BadCeleryEnviron(Exception): pass
 class TestingMeddleware(BaseMeddleware):
     """
     Meddleware for the Unit tests
-    
+
     It might make sense to perform some tests on all
     requests/responses. Or prepare them in a special
     manner. For example all html responses could be tested
@@ -100,7 +100,7 @@ def suicide_if_bad_celery_environ():
     if not os.environ.get('CELERY_CONFIG_MODULE') == \
             'mediagoblin.init.celery.from_tests':
         raise BadCeleryEnviron(BAD_CELERY_MESSAGE)
-    
+
 
 def get_test_app(dump_old_app=True):
     suicide_if_bad_celery_environ()
