@@ -21,7 +21,11 @@ import traceback
 from urllib2 import urlopen, Request, HTTPError
 from urllib import urlencode
 
+from mediagoblin.tools.common import TESTS_ENABLED
+
 _log = logging.getLogger(__name__)
+
+TESTS_CALLBACKS = {}
 
 
 def create_post_request(url, data, **kw):
@@ -61,6 +65,11 @@ def json_processing_callback(entry):
     data = {
             'id': entry.id,
             'state': entry.state}
+
+    # Trigger testing mode, no callback will be sent
+    if url.endswith('secrettestmediagoblinparam'):
+        TESTS_CALLBACKS.update({url: data})
+        return True
 
     request = create_post_request(
             url,

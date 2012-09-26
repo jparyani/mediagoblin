@@ -17,10 +17,8 @@
 import logging
 
 from mediagoblin import mg_globals
-from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.tools import template, pluginapi
 from mediagoblin.tests.tools import get_test_app, fixture_add_user
-from mediagoblin.tests.test_pluginapi import with_cleanup, build_config
 
 
 _log = logging.getLogger(__name__)
@@ -104,6 +102,8 @@ class TestOAuth(object):
         ''' Authorize a confidential client as a logged in user '''
         client = self.test_3_successful_confidential_client_reg()
 
+        client_identifier = client.identifier
+
         redirect_uri = 'https://foo.example'
         response = self.app.get('/oauth/authorize', {
                 'client_id': client.identifier,
@@ -130,4 +130,4 @@ class TestOAuth(object):
 
         assert authorization_response.location.startswith(redirect_uri)
 
-        return authorization_response
+        return authorization_response, client_identifier
