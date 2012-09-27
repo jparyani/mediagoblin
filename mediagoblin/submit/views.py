@@ -18,7 +18,6 @@ from mediagoblin import messages
 import mediagoblin.mg_globals as mg_globals
 import uuid
 from os.path import splitext
-from cgi import FieldStorage
 
 from celery import registry
 import urllib
@@ -28,6 +27,7 @@ import logging
 _log = logging.getLogger(__name__)
 
 from werkzeug.utils import secure_filename
+from werkzeug.datastructures import FileStorage
 
 from mediagoblin.db.util import ObjectId
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
@@ -50,19 +50,19 @@ def submit_start(request):
     submit_form = submit_forms.SubmitStartForm(request.POST)
 
     if request.method == 'POST' and submit_form.validate():
-        if not ('file' in request.POST
-                and isinstance(request.POST['file'], FieldStorage)
-                and request.POST['file'].file):
+        if not ('file' in request.files
+                and isinstance(request.files['file'], FileStorage)
+                and request.files['file'].stream):
             submit_form.file.errors.append(
                 _(u'You must provide a file.'))
         else:
             try:
-                filename = request.POST['file'].filename
+                filename = request.files['file'].filename
 
                 # Sniff the submitted media to determine which
                 # media plugin should handle processing
                 media_type, media_manager = sniff_media(
-                    request.POST['file'])
+                    request.files['file'])
 
                 # create entry and save in database
                 entry = request.db.MediaEntry()
@@ -104,7 +104,7 @@ def submit_start(request):
                     queue_filepath, 'wb')
 
                 with queue_file:
-                    queue_file.write(request.POST['file'].file.read())
+                    queue_file.write(request.files['file'].stream.read())
 
                 # Add queued filename to the entry
                 entry.queued_media_file = queue_filepath
@@ -205,13 +205,13 @@ def add_collection(request, media=None):
             existing_collection = request.db.Collection.find_one({
                     'creator': request.user._id,
                     'title':collection.title})
-                
+
             if existing_collection:
                 messages.add_message(
                     request, messages.ERROR, _('You already have a collection called "%s"!' % collection.title))
             else:
                 collection.save(validate=True)
-            
+
                 add_message(request, SUCCESS, _('Collection "%s" added!' % collection.title))
 
             return redirect(request, "mediagoblin.user_pages.user_home",

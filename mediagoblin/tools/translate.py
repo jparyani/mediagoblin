@@ -68,23 +68,14 @@ def get_locale_from_request(request):
     # Your routing can explicitly specify a target language
     matchdict = request.matchdict or {}
 
-    if matchdict.has_key('locale'):
+    if 'locale' in matchdict:
         target_lang = matchdict['locale']
-    elif request.session.has_key('target_lang'):
+    elif 'target_lang' in request.session:
         target_lang = request.session['target_lang']
     # Pull the first acceptable language or English
     else:
-        # WebOb recently changed how it handles determining best language.
-        # Here's a compromise commit that handles either/or...
-        if hasattr(request.accept_language, "best_matches"):
-            accept_lang_matches = request.accept_language.best_matches()
-            if accept_lang_matches:
-                target_lang = accept_lang_matches[0]
-            else:
-                target_lang = 'en'
-        else:
-            target_lang = request.accept.best_match(
-                request.accept_language, 'en')
+        # TODO: Internationalization broken
+        target_lang = 'en'
 
     return locale_to_lower_upper(target_lang)
 

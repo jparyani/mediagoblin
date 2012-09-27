@@ -19,7 +19,8 @@ import urllib
 import logging
 
 import routes
-from webob import Request, exc
+from webob import exc
+from werkzeug.wrappers import Request
 
 from mediagoblin import routing, meddleware, __version__
 from mediagoblin.tools import common, translate, template
@@ -127,8 +128,14 @@ class MediaGoblinApp(object):
     def call_backend(self, environ, start_response):
         request = Request(environ)
 
+        ## Compatibility webob -> werkzeug
+        request.GET = request.args
+        request.POST = request.form
+        request.accept_language = request.accept_languages
+        request.accept = request.accept_mimetypes
+
         ## Routing / controller loading stuff
-        path_info = request.path_info
+        path_info = request.path
         route_match = self.routing.match(path_info)
 
         # By using fcgi, mediagoblin can run under a base path
@@ -137,7 +144,7 @@ class MediaGoblinApp(object):
         # full path of the current page, that should include
         # the basepath.
         # Note: urlgen and routes are fine!
-        request.full_path = environ["SCRIPT_NAME"] + request.path_info
+        request.full_path = environ["SCRIPT_NAME"] + request.path
         # python-routes uses SCRIPT_NAME. So let's use that too.
         # The other option would be:
         # request.full_path = environ["SCRIPT_URL"]

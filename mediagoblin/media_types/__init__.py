@@ -44,8 +44,8 @@ def sniff_media(media):
         # Create a temporary file for sniffers suchs as GStreamer-based
         # Audio video
         media_file = tempfile.NamedTemporaryFile()
-        media_file.write(media.file.read())
-        media.file.seek(0)
+        media_file.write(media.stream.read())
+        media.stream.seek(0)
 
         for media_type, manager in get_media_managers():
             _log.info('Sniffing {0}'.format(media_type))
