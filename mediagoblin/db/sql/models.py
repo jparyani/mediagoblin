@@ -22,10 +22,10 @@ TODO: indexes on foreignkeys, where useful.
 import datetime
 import sys
 
-from sqlalchemy import (
-    Column, Integer, Unicode, UnicodeText, DateTime, Boolean, ForeignKey,
-    UniqueConstraint, PrimaryKeyConstraint, SmallInteger)
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
+        Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
+        SmallInteger
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -418,7 +418,9 @@ class ProcessingMetaData(Base):
     id = Column(Integer, primary_key=True)
     media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False,
             index=True)
-    media_entry = relationship(MediaEntry, backref='processing_metadata')
+    media_entry = relationship(MediaEntry,
+            backref=backref('processing_metadata',
+                cascade='all, delete-orphan'))
     callback_url = Column(Unicode)
 
     @property
