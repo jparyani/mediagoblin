@@ -51,27 +51,27 @@ def edit_media(request, media):
         license=media.license)
 
     form = forms.EditForm(
-        request.POST,
+        request.form,
         **defaults)
 
     if request.method == 'POST' and form.validate():
         # Make sure there isn't already a MediaEntry with such a slug
         # and userid.
         slug_used = check_media_slug_used(request.db, media.uploader,
-                request.POST['slug'], media.id)
+                request.form['slug'], media.id)
 
         if slug_used:
             form.slug.errors.append(
                 _(u'An entry with that slug already exists for this user.'))
         else:
-            media.title = unicode(request.POST['title'])
-            media.description = unicode(request.POST.get('description'))
+            media.title = unicode(request.form['title'])
+            media.description = unicode(request.form.get('description'))
             media.tags = convert_to_tag_list_of_dicts(
-                                   request.POST.get('tags'))
+                                   request.form.get('tags'))
 
-            media.license = unicode(request.POST.get('license', '')) or None
+            media.license = unicode(request.form.get('license', '')) or None
 
-            media.slug = unicode(request.POST['slug'])
+            media.slug = unicode(request.form['slug'])
 
             media.save()
 
@@ -106,9 +106,9 @@ def edit_attachments(request, media):
         form = forms.EditAttachmentsForm()
 
         # Add any attachements
-        if ('attachment_file' in request.POST
-            and isinstance(request.POST['attachment_file'], FieldStorage)
-            and request.POST['attachment_file'].file):
+        if ('attachment_file' in request.form
+            and isinstance(request.form['attachment_file'], FieldStorage)
+            and request.form['attachment_file'].file):
 
             # Security measure to prevent attachments from being served as
             # text/html, which will be parsed by web clients and pose an XSS
@@ -121,13 +121,13 @@ def edit_attachments(request, media):
             # machine parsing the upload form, and not necessarily the machine
             # serving the attachments.
             if mimetypes.guess_type(
-                    request.POST['attachment_file'].filename)[0] in \
+                    request.form['attachment_file'].filename)[0] in \
                     UNSAFE_MIMETYPES:
                 public_filename = secure_filename('{0}.notsafe'.format(
-                    request.POST['attachment_file'].filename))
+                    request.form['attachment_file'].filename))
             else:
                 public_filename = secure_filename(
-                        request.POST['attachment_file'].filename)
+                        request.form['attachment_file'].filename)
 
             attachment_public_filepath \
                 = mg_globals.public_store.get_unique_filepath(
@@ -139,13 +139,13 @@ def edit_attachments(request, media):
 
             try:
                 attachment_public_file.write(
-                    request.POST['attachment_file'].file.read())
+                    request.form['attachment_file'].file.read())
             finally:
-                request.POST['attachment_file'].file.close()
+                request.form['attachment_file'].file.close()
 
             media.attachment_files.append(dict(
-                    name=request.POST['attachment_name'] \
-                        or request.POST['attachment_file'].filename,
+                    name=request.form['attachment_name'] \
+                        or request.form['attachment_file'].filename,
                     filepath=attachment_public_filepath,
                     created=datetime.utcnow(),
                     ))
@@ -155,8 +155,8 @@ def edit_attachments(request, media):
             messages.add_message(
                 request, messages.SUCCESS,
                 "You added the attachment %s!" \
-                    % (request.POST['attachment_name']
-                       or request.POST['attachment_file'].filename))
+                    % (request.form['attachment_name']
+                       or request.form['attachment_file'].filename))
 
             return exc.HTTPFound(
                 location=media.url_for_self(request.urlgen))
@@ -183,13 +183,13 @@ def edit_profile(request):
     else:
         user = request.user
 
-    form = forms.EditProfileForm(request.POST,
+    form = forms.EditProfileForm(request.form,
         url=user.get('url'),
         bio=user.get('bio'))
 
     if request.method == 'POST' and form.validate():
-        user.url = unicode(request.POST['url'])
-        user.bio = unicode(request.POST['bio'])
+        user.url = unicode(request.form['url'])
+        user.bio = unicode(request.form['bio'])
 
         user.save()
 
@@ -210,7 +210,7 @@ def edit_profile(request):
 @require_active_login
 def edit_account(request):
     user = request.user
-    form = forms.EditAccountForm(request.POST,
+    form = forms.EditAccountForm(request.form,
         wants_comment_notification=user.get('wants_comment_notification'))
 
     if request.method == 'POST':
@@ -268,32 +268,32 @@ def edit_collection(request, collection):
         description=collection.description)
 
     form = forms.EditCollectionForm(
-        request.POST,
+        request.form,
         **defaults)
 
     if request.method == 'POST' and form.validate():
         # Make sure there isn't already a Collection with such a slug
         # and userid.
         slug_used = check_collection_slug_used(request.db, collection.creator,
-                request.POST['slug'], collection.id)
+                request.form['slug'], collection.id)
         
         # Make sure there isn't already a Collection with this title
         existing_collection = request.db.Collection.find_one({
                 'creator': request.user._id,
-                'title':request.POST['title']})
+                'title':request.form['title']})
                 
         if existing_collection and existing_collection.id != collection.id:
             messages.add_message(
                 request, messages.ERROR,
                 _('You already have a collection called "%s"!') % \
-                    request.POST['title'])
+                    request.form['title'])
         elif slug_used:
             form.slug.errors.append(
                 _(u'A collection with that slug already exists for this user.'))
         else:
-            collection.title = unicode(request.POST['title'])
-            collection.description = unicode(request.POST.get('description'))
-            collection.slug = unicode(request.POST['slug'])
+            collection.title = unicode(request.form['title'])
+            collection.description = unicode(request.form.get('description'))
+            collection.slug = unicode(request.form['slug'])
 
             collection.save()
 

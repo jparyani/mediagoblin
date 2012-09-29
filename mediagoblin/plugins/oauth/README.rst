@@ -133,10 +133,12 @@ Incapabilities
 ==============
 
 - Only `bearer tokens`_ are issued.
-- `Access Token Scope`_
 - `Implicit Grant`_
+- `Force TLS for token endpoint`_ - This one is up the the siteadmin
+- Authorization `scope`_ and `state`
 - ...
 
 .. _`bearer tokens`: http://tools.ietf.org/html/draft-ietf-oauth-v2-bearer-08
-.. _`Access Token Scope`: http://tools.ietf.org/html/draft-ietf-oauth-v2-25#section-3.3
+.. _`scope`: http://tools.ietf.org/html/draft-ietf-oauth-v2-25#section-3.3
 .. _`Implicit Grant`: http://tools.ietf.org/html/draft-ietf-oauth-v2-25#section-4.2
+.. _`Force TLS for token endpoint`: http://tools.ietf.org/html/draft-ietf-oauth-v2-25#section-3.2

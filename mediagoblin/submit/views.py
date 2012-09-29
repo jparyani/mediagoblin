@@ -47,7 +47,7 @@ def submit_start(request):
     """
     First view for submitting a file.
     """
-    submit_form = submit_forms.SubmitStartForm(request.POST)
+    submit_form = submit_forms.SubmitStartForm(request.form)
 
     if request.method == 'POST' and submit_form.validate():
         if not ('file' in request.files
@@ -69,18 +69,18 @@ def submit_start(request):
                 entry.id = ObjectId()
                 entry.media_type = unicode(media_type)
                 entry.title = (
-                    unicode(request.POST['title'])
+                    unicode(request.form['title'])
                     or unicode(splitext(filename)[0]))
 
-                entry.description = unicode(request.POST.get('description'))
+                entry.description = unicode(request.form.get('description'))
 
-                entry.license = unicode(request.POST.get('license', "")) or None
+                entry.license = unicode(request.form.get('license', "")) or None
 
                 entry.uploader = request.user._id
 
                 # Process the user's folksonomy "tags"
                 entry.tags = convert_to_tag_list_of_dicts(
-                    request.POST.get('tags'))
+                    request.form.get('tags'))
 
                 # Generate a slug from the title
                 entry.generate_slug()
@@ -188,16 +188,16 @@ def add_collection(request, media=None):
     """
     View to create a new collection
     """
-    submit_form = submit_forms.AddCollectionForm(request.POST)
+    submit_form = submit_forms.AddCollectionForm(request.form)
 
     if request.method == 'POST' and submit_form.validate():
         try:
             collection = request.db.Collection()
             collection.id = ObjectId()
 
-            collection.title = unicode(request.POST['title'])
+            collection.title = unicode(request.form['title'])
 
-            collection.description = unicode(request.POST.get('description'))
+            collection.description = unicode(request.form.get('description'))
             collection.creator = request.user._id
             collection.generate_slug()
 

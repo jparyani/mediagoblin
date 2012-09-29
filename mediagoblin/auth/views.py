@@ -55,12 +55,12 @@ def register(request):
             _('Sorry, registration is disabled on this instance.'))
         return redirect(request, "index")
 
-    register_form = auth_forms.RegistrationForm(request.POST)
+    register_form = auth_forms.RegistrationForm(request.form)
 
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
-        username = unicode(request.POST['username'].lower())
-        em_user, em_dom = unicode(request.POST['email']).split("@", 1)
+        username = unicode(request.form['username'].lower())
+        em_user, em_dom = unicode(request.form['email']).split("@", 1)
         em_dom = em_dom.lower()
         email = em_user + "@" + em_dom
         users_with_username = request.db.User.find(
@@ -85,7 +85,7 @@ def register(request):
             user.username = username
             user.email = email
             user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-                request.POST['password'])
+                request.form['password'])
             user.verification_key = unicode(uuid.uuid4())
             user.save(validate=True)
 
@@ -115,21 +115,21 @@ def login(request):
 
     If you provide the POST with 'next', it'll redirect to that view.
     """
-    login_form = auth_forms.LoginForm(request.POST)
+    login_form = auth_forms.LoginForm(request.form)
 
     login_failed = False
 
     if request.method == 'POST' and login_form.validate():
         user = request.db.User.find_one(
-            {'username': request.POST['username'].lower()})
+            {'username': request.form['username'].lower()})
 
-        if user and user.check_login(request.POST['password']):
+        if user and user.check_login(request.form['password']):
             # set up login in session
             request.session['user_id'] = unicode(user._id)
             request.session.save()
 
-            if request.POST.get('next'):
-                return exc.HTTPFound(location=request.POST['next'])
+            if request.form.get('next'):
+                return exc.HTTPFound(location=request.form['next'])
             else:
                 return redirect(request, "index")
 
@@ -143,7 +143,7 @@ def login(request):
         request,
         'mediagoblin/auth/login.html',
         {'login_form': login_form,
-         'next': request.GET.get('next') or request.POST.get('next'),
+         'next': request.GET.get('next') or request.form.get('next'),
          'login_failed': login_failed,
          'allow_registration': mg_globals.app_config["allow_registration"]})
 
@@ -236,17 +236,17 @@ def forgot_password(request):
 
     Sends an email with an url to renew forgotten password
     """
-    fp_form = auth_forms.ForgotPassForm(request.POST,
+    fp_form = auth_forms.ForgotPassForm(request.form,
                                         username=request.GET.get('username'))
 
     if request.method == 'POST' and fp_form.validate():
 
         # '$or' not available till mongodb 1.5.3
         user = request.db.User.find_one(
-            {'username': request.POST['username']})
+            {'username': request.form['username']})
         if not user:
             user = request.db.User.find_one(
-                {'email': request.POST['username']})
+                {'email': request.form['username']})
 
         if user:
             if user.email_verified and user.status == 'active':
@@ -322,7 +322,7 @@ def verify_forgot_password(request):
 
         if request.method == 'POST' and cp_form.validate():
             user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-                request.POST['password'])
+                request.form['password'])
             user.fp_verification_key = None
             user.fp_token_expire = None
             user.save()
@@ -355,7 +355,7 @@ def _process_for_token(request):
     if request.method == 'GET':
         formdata_vars = request.GET
     else:
-        formdata_vars = request.POST
+        formdata_vars = request.form
 
     formdata = {
         'vars': formdata_vars,

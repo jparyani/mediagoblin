@@ -126,7 +126,7 @@ def media_home(request, media, page, **kwargs):
 
     comments = pagination()
 
-    comment_form = user_forms.MediaCommentForm(request.POST)
+    comment_form = user_forms.MediaCommentForm(request.form)
 
     media_template_name = get_media_manager(
             media.media_type)['display_template']
@@ -152,7 +152,7 @@ def media_post_comment(request, media):
     comment = request.db.MediaComment()
     comment.media_entry = media.id
     comment.author = request.user.id
-    comment.content = unicode(request.POST['comment_content'])
+    comment.content = unicode(request.form['comment_content'])
 
     if not comment.content.strip():
         messages.add_message(
@@ -180,7 +180,7 @@ def media_post_comment(request, media):
 @require_active_login
 def media_collect(request, media):
 
-    form = user_forms.MediaCollectForm(request.POST)
+    form = user_forms.MediaCollectForm(request.form)
     filt = (request.db.Collection.creator == request.user.id)
     form.collection.query = request.db.Collection.query.filter(
             filt).order_by(request.db.Collection.title)
@@ -192,15 +192,15 @@ def media_collect(request, media):
             collection_item = request.db.CollectionItem()
 
             # If the user is adding a new collection, use that
-            if request.POST['collection_title']:
+            if request.form['collection_title']:
                 collection = request.db.Collection()
                 collection.id = ObjectId()
 
                 collection.title = (
-                    unicode(request.POST['collection_title']))
+                    unicode(request.form['collection_title']))
 
                 collection.description = unicode(
-                        request.POST.get('collection_description'))
+                        request.form.get('collection_description'))
                 collection.creator = request.user._id
                 collection.generate_slug()
 
@@ -225,7 +225,7 @@ def media_collect(request, media):
             # Otherwise, use the collection selected from the drop-down
             else:
                 collection = request.db.Collection.find_one({
-                    '_id': request.POST.get('collection')})
+                    '_id': request.form.get('collection')})
                 collection_item.collection = collection.id
 
             # Make sure the user actually selected a collection
@@ -244,7 +244,7 @@ def media_collect(request, media):
             else:
                 collection_item.media_entry = media.id
                 collection_item.author = request.user.id
-                collection_item.note = unicode(request.POST['note'])
+                collection_item.note = unicode(request.form['note'])
                 collection_item.save(validate=True)
 
                 collection.items = collection.items + 1
@@ -277,7 +277,7 @@ def media_collect(request, media):
 @user_may_delete_media
 def media_confirm_delete(request, media):
 
-    form = user_forms.ConfirmDeleteForm(request.POST)
+    form = user_forms.ConfirmDeleteForm(request.form)
 
     if request.method == 'POST' and form.validate():
         if form.confirm.data is True:
@@ -360,7 +360,7 @@ def user_collection(request, page):
 @user_may_alter_collection
 def collection_item_confirm_remove(request, collection_item):
 
-    form = user_forms.ConfirmCollectionItemRemoveForm(request.POST)
+    form = user_forms.ConfirmCollectionItemRemoveForm(request.form)
 
     if request.method == 'POST' and form.validate():
         username = collection_item.in_collection.get_creator.username
@@ -405,7 +405,7 @@ def collection_item_confirm_remove(request, collection_item):
 @user_may_alter_collection
 def collection_confirm_delete(request, collection):
 
-    form = user_forms.ConfirmDeleteForm(request.POST)
+    form = user_forms.ConfirmDeleteForm(request.form)
 
     if request.method == 'POST' and form.validate():
 

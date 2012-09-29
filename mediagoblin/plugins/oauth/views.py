@@ -41,15 +41,15 @@ def register_client(request):
     '''
     Register an OAuth client
     '''
-    form = ClientRegistrationForm(request.POST)
+    form = ClientRegistrationForm(request.form)
 
     if request.method == 'POST' and form.validate():
         client = OAuthClient()
-        client.name = unicode(request.POST['name'])
-        client.description = unicode(request.POST['description'])
-        client.type = unicode(request.POST['type'])
+        client.name = unicode(request.form['name'])
+        client.description = unicode(request.form['description'])
+        client.type = unicode(request.form['type'])
         client.owner_id = request.user.id
-        client.redirect_uri = unicode(request.POST['redirect_uri'])
+        client.redirect_uri = unicode(request.form['redirect_uri'])
 
         client.generate_identifier()
         client.generate_secret()
@@ -86,7 +86,7 @@ def list_connections(request):
 
 @require_active_login
 def authorize_client(request):
-    form = AuthorizationForm(request.POST)
+    form = AuthorizationForm(request.form)
 
     client = OAuthClient.query.filter(OAuthClient.id ==
         form.client_id.data).first()
@@ -169,7 +169,7 @@ def authorize(request, client):
         # code parameter
         # - on deny: send the user agent back to the redirect uri with error
         # information
-        form = AuthorizationForm(request.POST)
+        form = AuthorizationForm(request.form)
         form.client_id.data = client.id
         form.next.data = request.url
         return render_to_response(
@@ -185,6 +185,31 @@ def access_token(request):
                 request.GET.get('code')).first()
 
         if code:
+            if code.client.type == u'confidential':
+                client_identifier = request.GET.get('client_id')
+
+                if not client_identifier:
+                    return json_response({
+                        'error': 'invalid_request',
+                        'error_description':
+                            'Missing client_id in request'})
+
+                client_secret = request.GET.get('client_secret')
+
+                if not client_secret:
+                    return json_response({
+                        'error': 'invalid_request',
+                        'error_description':
+                            'Missing client_secret in request'})
+
+                if not client_secret == code.client.secret or \
+                        not client_identifier == code.client.identifier:
+                    return json_response({
+                        'error': 'invalid_client',
+                        'error_description':
+                            'The client_id or client_secret does not match the'
+                            ' code'})
+
             token = OAuthToken()
             token.token = unicode(uuid4())
             token.user = code.user
@@ -194,10 +219,17 @@ def access_token(request):
             access_token_data = {
                 'access_token': token.token,
                 'token_type': 'bearer',
-                'expires_in':
-                (token.expires - datetime.now()).total_seconds()}
+                'expires_in': int(
+                    round(
+                        (token.expires - datetime.now()).total_seconds()))}
             return json_response(access_token_data, _disable_cors=True)
-
-    error_data = {
-        'error': 'Incorrect code'}
-    return Response(json.dumps(error_data))
+        else:
+            return json_response({
+                'error': 'invalid_request',
+                'error_description':
+                    'Invalid code'})
+    else:
+        return json_response({
+            'error': 'invalid_request',
+            'error_descriptin':
+                'Missing `code` parameter in request'})

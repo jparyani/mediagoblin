@@ -132,7 +132,7 @@ class CsrfMeddleware(BaseMeddleware):
             return HTTPForbidden()
 
         # get the form token and confirm it matches
-        form = CsrfForm(request.POST)
+        form = CsrfForm(request.form)
         if form.validate():
             form_token = form.csrf_token.data
 

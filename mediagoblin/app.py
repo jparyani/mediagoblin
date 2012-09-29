@@ -130,7 +130,6 @@ class MediaGoblinApp(object):
 
         ## Compatibility webob -> werkzeug
         request.GET = request.args
-        request.POST = request.form
         request.accept_language = request.accept_languages
         request.accept = request.accept_mimetypes
 

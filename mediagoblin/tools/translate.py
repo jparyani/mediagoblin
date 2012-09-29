@@ -60,7 +60,7 @@ def get_locale_from_request(request):
     Figure out what target language is most appropriate based on the
     request
     """
-    request_form = request.GET or request.POST
+    request_form = request.GET or request.form
 
     if request_form.has_key('lang'):
         return locale_to_lower_upper(request_form['lang'])

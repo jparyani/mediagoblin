@@ -32,8 +32,6 @@ class TestHTTPCallback(object):
 
         self.user_password = 'secret'
         self.user = fixture_add_user('call_back', self.user_password)
-        self.oauth = oauth.TestOAuth()
-        self.oauth.setUp()
 
         self.login()
 
@@ -42,10 +40,11 @@ class TestHTTPCallback(object):
             'username': self.user.username,
             'password': self.user_password})
 
-    def get_access_token(self, client_id, code):
+    def get_access_token(self, client_id, client_secret, code):
         response = self.app.get('/oauth/access_token', {
                 'code': code,
-                'client_id': client_id})
+                'client_id': client_id,
+                'client_secret': client_secret})
 
         response_data = json.loads(response.body)
 
@@ -53,18 +52,28 @@ class TestHTTPCallback(object):
 
     def test_callback(self):
         ''' Test processing HTTP callback '''
+
+        self.oauth = oauth.TestOAuth()
+        self.oauth.setUp()
+
         redirect, client_id = self.oauth.test_4_authorize_confidential_client()
 
         code = parse_qs(urlparse(redirect.location).query)['code'][0]
 
-        access_token = self.get_access_token(client_id, code)
+        client = self.db.OAuthClient.query.filter(
+                self.db.OAuthClient.identifier == unicode(client_id)).first()
+
+        client_secret = client.secret
+
+        access_token = self.get_access_token(client_id, client_secret, code)
 
         callback_url = 'https://foo.example?secrettestmediagoblinparam'
 
-        res = self.app.post('/api/submit?client_id={0}&access_token={1}'\
-                .format(
+        res = self.app.post('/api/submit?client_id={0}&access_token={1}\
+&client_secret={2}'.format(
                     client_id,
-                    access_token), {
+                    access_token,
+                    client_secret), {
             'title': 'Test',
             'callback_url': callback_url},
             upload_files=[('file', GOOD_PNG)])

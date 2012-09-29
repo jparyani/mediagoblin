@@ -20,8 +20,8 @@ import uuid
 
 from os.path import splitext
 from webob import exc, Response
-from cgi import FieldStorage
 from werkzeug.utils import secure_filename
+from werkzeug.datastructures import FileStorage
 from celery import registry
 
 from mediagoblin.db.util import ObjectId
@@ -29,12 +29,9 @@ from mediagoblin.decorators import require_active_login
 from mediagoblin.processing import mark_entry_failed
 from mediagoblin.processing.task import ProcessMedia
 from mediagoblin.meddleware.csrf import csrf_exempt
-from mediagoblin.media_types import sniff_media, InvalidFileType, \
-        FileTypeNotSupported
+from mediagoblin.media_types import sniff_media
 from mediagoblin.plugins.api.tools import api_auth, get_entry_serializable, \
         json_response
-
-from mediagoblin.plugins.api import config
 
 _log = logging.getLogger(__name__)
 
@@ -52,24 +49,24 @@ def post_entry(request):
         _log.debug('Must POST against post_entry')
         return exc.HTTPBadRequest()
 
-    if not 'file' in request.POST \
-            or not isinstance(request.POST['file'], FieldStorage) \
-            or not request.POST['file'].file:
+    if not 'file' in request.files \
+            or not isinstance(request.files['file'], FileStorage) \
+            or not request.files['file'].stream:
         _log.debug('File field not found')
         return exc.HTTPBadRequest()
 
-    media_file = request.POST['file']
+    media_file = request.files['file']
 
     media_type, media_manager = sniff_media(media_file)
 
     entry = request.db.MediaEntry()
     entry.id = ObjectId()
     entry.media_type = unicode(media_type)
-    entry.title = unicode(request.POST.get('title')
+    entry.title = unicode(request.form.get('title')
             or splitext(media_file.filename)[0])
 
-    entry.description = unicode(request.POST.get('description'))
-    entry.license = unicode(request.POST.get('license', ''))
+    entry.description = unicode(request.form.get('description'))
+    entry.license = unicode(request.form.get('license', ''))
 
     entry.uploader = request.user.id
 
@@ -88,7 +85,7 @@ def post_entry(request):
         queue_filepath, 'wb')
 
     with queue_file:
-        queue_file.write(request.POST['file'].file.read())
+        queue_file.write(request.files['file'].stream.read())
 
     # Add queued filename to the entry
     entry.queued_media_file = queue_filepath
@@ -98,10 +95,10 @@ def post_entry(request):
     # Save now so we have this data before kicking off processing
     entry.save(validate=True)
 
-    if request.POST.get('callback_url'):
+    if request.form.get('callback_url'):
         metadata = request.db.ProcessingMetaData()
         metadata.media_entry = entry
-        metadata.callback_url = unicode(request.POST['callback_url'])
+        metadata.callback_url = unicode(request.form['callback_url'])
         metadata.save()
 
     # Pass off to processing
