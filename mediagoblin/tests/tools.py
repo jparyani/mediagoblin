@@ -202,8 +202,8 @@ def assert_db_meets_expected(db, expected):
             assert document == expected_document  # make sure it matches
 
 
-def fixture_add_user(username = u'chris', password = 'toast',
-                     active_user = True):
+def fixture_add_user(username=u'chris', password='toast',
+                     active_user=True):
     test_user = mg_globals.database.User()
     test_user.username = username
     test_user.email = username + u'@example.com'
