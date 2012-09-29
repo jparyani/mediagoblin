@@ -14,7 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
 import logging
+
+from urlparse import parse_qs, urlparse
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, pluginapi
@@ -131,3 +134,50 @@ class TestOAuth(object):
         assert authorization_response.location.startswith(redirect_uri)
 
         return authorization_response, client_identifier
+
+    def get_code_from_redirect_uri(self, uri):
+        return parse_qs(urlparse(uri).query)['code'][0]
+
+    def test_token_endpoint_successful_confidential_request(self):
+        ''' Successful request against token endpoint '''
+        code_redirect, client_id = self.test_4_authorize_confidential_client()
+
+        code = self.get_code_from_redirect_uri(code_redirect.location)
+
+        client = self.db.OAuthClient.query.filter(
+                self.db.OAuthClient.identifier == unicode(client_id)).first()
+
+        token_res = self.app.get('/oauth/access_token?client_id={0}&\
+code={1}&client_secret={2}'.format(client_id, code, client.secret))
+
+        assert token_res.status_int == 200
+
+        token_data = json.loads(token_res.body)
+
+        assert not 'error' in token_data
+        assert 'access_token' in token_data
+        assert 'token_type' in token_data
+        assert 'expires_in' in token_data
+        assert type(token_data['expires_in']) == int
+        assert token_data['expires_in'] > 0
+
+    def test_token_endpont_missing_id_confidential_request(self):
+        ''' Unsuccessful request against token endpoint, missing client_id '''
+        code_redirect, client_id = self.test_4_authorize_confidential_client()
+
+        code = self.get_code_from_redirect_uri(code_redirect.location)
+
+        client = self.db.OAuthClient.query.filter(
+                self.db.OAuthClient.identifier == unicode(client_id)).first()
+
+        token_res = self.app.get('/oauth/access_token?\
+code={0}&client_secret={1}'.format(code, client.secret))
+
+        assert token_res.status_int == 200
+
+        token_data = json.loads(token_res.body)
+
+        assert 'error' in token_data
+        assert not 'access_token' in token_data
+        assert token_data['error'] == 'invalid_request'
+        assert token_data['error_description'] == 'Missing client_id in request'
