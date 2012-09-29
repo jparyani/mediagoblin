@@ -96,6 +96,13 @@ On Debianoid systems, run::
 
     sudo apt-get install libsndfile1-dev
 
+.. note::
+    scikits.audiolab will display a warning every time it's imported if you don
+    not compile it with alsa support. Alsa support is not necessary for the GNU
+    MediaGoblin application, but if you do not wish to have the alsa warnings
+    from audiolab pop up everywhere you should also install ``libasound2-dev``
+    before you install scikits.audiolab.
+
 Then install ``scikits.audiolab`` for the spectrograms::
 
     ./bin/pip install scikits.audiolab
