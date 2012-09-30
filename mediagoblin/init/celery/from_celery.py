@@ -27,10 +27,7 @@ from mediagoblin.init.celery import setup_celery_from_config
 
 OUR_MODULENAME = __name__
 
-logging.basicConfig()
 _log = logging.getLogger(__name__)
-_log.setLevel(logging.DEBUG)
-_log.warning('Test')
 
 
 def setup_logging_from_paste_ini(loglevel, **kw):
@@ -82,11 +79,6 @@ def setup_logging_from_paste_ini(loglevel, **kw):
 
         for handler in logger.handlers:
             handler.setFormatter(formatter)
-
-        print('Logger {0} set to level {1} ({2})'.format(
-            qualname,
-            log_params['level'],
-            level))
 
 
 setup_logging.connect(setup_logging_from_paste_ini)
