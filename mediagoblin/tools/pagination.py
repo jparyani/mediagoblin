@@ -96,7 +96,7 @@ class Pagination(object):
         """
         Get a page url by adding a page= parameter to the base url
         """
-        new_get_params = copy.copy(get_params or {})
+        new_get_params = dict(get_params) or {}
         new_get_params['page'] = page_no
         return "%s?%s" % (
             base_url, urllib.urlencode(new_get_params))
