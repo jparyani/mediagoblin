@@ -18,6 +18,7 @@ import os
 import logging
 
 from configobj import ConfigObj
+from ConfigParser import RawConfigParser
 from celery.signals import setup_logging
 
 from mediagoblin import app, mg_globals
@@ -32,7 +33,7 @@ _log.setLevel(logging.DEBUG)
 _log.warning('Test')
 
 
-def setup_logging_from_paste_ini(*args, **kw):
+def setup_logging_from_paste_ini(loglevel, **kw):
     if os.path.exists(os.path.abspath('paste_local.ini')):
         logging_conf_file = 'paste_local.ini'
     else:
@@ -46,10 +47,13 @@ def setup_logging_from_paste_ini(*args, **kw):
 
     config = logging_conf
 
+    # Read raw config to avoid interpolation of formatting parameters
+    raw_config = RawConfigParser()
+    raw_config.readfp(open(logging_conf_file))
+
     # Set up formatting
     # Get the format string and circumvent configobj interpolation of the value
-    fmt = config['formatter_generic'].viewitems().__iter__()\
-            .next()[1]
+    fmt = raw_config.get('formatter_generic', 'format')
 
     # Create the formatter
     formatter = logging.Formatter(fmt)
