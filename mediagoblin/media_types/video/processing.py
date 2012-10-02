@@ -104,7 +104,10 @@ def process_video(entry):
 
     with tmp_thumb:
         # Create a thumbnail.jpg that fits in a 180x180 square
-        transcoders.VideoThumbnailer(queued_filename, tmp_thumb.name)
+        transcoders.VideoThumbnailerMarkII(
+                queued_filename,
+                tmp_thumb.name,
+                180)
 
         # Push the thumbnail to public storage
         _log.debug('Saving thumbnail...')
