@@ -59,7 +59,6 @@ class Pagination(object):
                     self.active_id = jump_to_id
                     break
 
-
     def __call__(self):
         """
         Returns slice of objects for the requested page
