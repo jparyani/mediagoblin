@@ -36,13 +36,16 @@ def setup_plugin():
     _log.debug('OAuth config: {0}'.format(config))
 
     routes = [
-       ('mediagoblin.plugins.oauth.authorize', '/oauth/authorize',
+       ('mediagoblin.plugins.oauth.authorize',
+            '/oauth/authorize',
             'mediagoblin.plugins.oauth.views:authorize'),
-        ('mediagoblin.plugins.oauth.authorize_client', '/oauth/client/authorize',
+        ('mediagoblin.plugins.oauth.authorize_client',
+            '/oauth/client/authorize',
             'mediagoblin.plugins.oauth.views:authorize_client'),
-        ('mediagoblin.plugins.oauth.access_token', '/oauth/access_token',
-            'mediagoblin.plugins.oauth.views:access_token'),
         ('mediagoblin.plugins.oauth.access_token',
+            '/oauth/access_token',
+            'mediagoblin.plugins.oauth.views:access_token'),
+        ('mediagoblin.plugins.oauth.list_connections',
             '/oauth/client/connections',
             'mediagoblin.plugins.oauth.views:list_connections'),
         ('mediagoblin.plugins.oauth.register_client',

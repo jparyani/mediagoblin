@@ -16,8 +16,6 @@
 
 
 auth_routes = [
-    ('mediagoblin.auth.logout',
-     '/logout/', 'mediagoblin.auth.views:logout'),
     ('mediagoblin.auth.register', '/register/',
      'mediagoblin.auth.views:register'),
     ('mediagoblin.auth.login', '/login/',

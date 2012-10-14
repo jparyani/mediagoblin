@@ -18,12 +18,14 @@ from werkzeug.routing import Map, Rule
 
 url_map = Map()
 
-view_functions = {'index': 'mediagoblin.views:index'}
+view_functions = {}
 
 def add_route(endpoint, url, controller):
     """
     Add a route to the url mapping
     """
+    #assert endpoint not in view_functions.keys(), 'Trying to overwrite a rule'
+
     view_functions.update({endpoint: controller})
 
     url_map.add(Rule(url, endpoint=endpoint))

@@ -33,11 +33,14 @@ def setup_plugin():
     _log.debug('API config: {0}'.format(config))
 
     routes = [
-        ('mediagoblin.plugins.api.test', '/api/test',
+        ('mediagoblin.plugins.api.test',
+            '/api/test',
             'mediagoblin.plugins.api.views:api_test'),
-        ('mediagoblin.plugins.api.entries', '/api/entries',
+        ('mediagoblin.plugins.api.entries',
+            '/api/entries',
             'mediagoblin.plugins.api.views:get_entries'),
-        ('mediagoblin.plugins.api.post_entry', '/api/submit',
+        ('mediagoblin.plugins.api.post_entry',
+            '/api/submit',
             'mediagoblin.plugins.api.views:post_entry')]
 
     pluginapi.register_routes(routes)
