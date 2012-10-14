@@ -21,15 +21,28 @@ url_map = Map()
 view_functions = {'index': 'mediagoblin.views:index'}
 
 def add_route(endpoint, url, controller):
+    """
+    Add a route to the url mapping
+    """
     view_functions.update({endpoint: controller})
 
     url_map.add(Rule(url, endpoint=endpoint))
+
+def mount(mountpoint, routes):
+    """
+    Mount a bunch of routes to this mountpoint
+    """
+    for endpoint, url, controller in routes:
+        url = "%s/%s" % (mountpoint.rstrip('/'), url.lstrip('/'))
+        add_route(endpoint, url, controller)
 
 add_route('index', '/', 'mediagoblin.views:root_view')
 
 import mediagoblin.submit.routing
 import mediagoblin.user_pages.routing
-import mediagoblin.auth.routing
 import mediagoblin.edit.routing
 import mediagoblin.webfinger.routing
 import mediagoblin.listings.routing
+
+from mediagoblin.auth.routing import auth_routes
+mount('/auth', auth_routes)

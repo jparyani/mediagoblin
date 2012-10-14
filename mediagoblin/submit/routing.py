@@ -18,4 +18,4 @@ from mediagoblin.routing import add_route
 
 add_route('mediagoblin.submit.start',
     '/submit/', 'mediagoblin.submit.views:submit_start')
-add_route('collection_home', '/submit/collection', 'mediagoblin.submit.views:add_collection')
+add_route('mediagoblin.submit.collection', '/submit/collection', 'mediagoblin.submit.views:add_collection')

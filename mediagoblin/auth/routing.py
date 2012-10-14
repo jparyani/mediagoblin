@@ -14,36 +14,22 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.routing import add_route
 
-add_route('mediagoblin.auth.logout',
-          '/auth/logout/', 'mediagoblin.auth.views:logout')
-
-
-add_route('mediagoblin.auth.register', '/register/',
-        'mediagoblin.auth.views:register')
-
-add_route('mediagoblin.auth.login', '/login/',
-        'mediagoblin.auth.views:login')
-
-add_route('mediagoblin.auth.logout', '/logout/',
-        'mediagoblin.auth.views:logout')
-
-add_route('mediagoblin.auth.verify_email', '/verify_email/',
-        'mediagoblin.auth.views:verify_email')
-
-add_route('mediagoblin.auth.resend_verification', '/resend_verification/',
-        'mediagoblin.auth.views:resend_activation')
-
-# XXX: Does this work?
-add_route('mediagoblin.auth.resend_verification_success',
-        '/resend_verification_success/',
-        # template='mediagoblin/auth/resent_verification_email.html',
-        'mediagoblin.views:simple_template_render')
-
-add_route('mediagoblin.auth.forgot_password', '/forgot_password/',
-        'mediagoblin.auth.views:forgot_password')
-
-add_route('mediagoblin.auth.verify_forgot_password',
-        '/forgot_password/verify/',
-        'mediagoblin.auth.views:verify_forgot_password')
+auth_routes = [
+    ('mediagoblin.auth.logout',
+     '/logout/', 'mediagoblin.auth.views:logout'),
+    ('mediagoblin.auth.register', '/register/',
+     'mediagoblin.auth.views:register'),
+    ('mediagoblin.auth.login', '/login/',
+     'mediagoblin.auth.views:login'),
+    ('mediagoblin.auth.logout', '/logout/',
+     'mediagoblin.auth.views:logout'),
+    ('mediagoblin.auth.verify_email', '/verify_email/',
+     'mediagoblin.auth.views:verify_email'),
+    ('mediagoblin.auth.resend_verification', '/resend_verification/',
+     'mediagoblin.auth.views:resend_activation'),
+    ('mediagoblin.auth.forgot_password', '/forgot_password/',
+     'mediagoblin.auth.views:forgot_password'),
+    ('mediagoblin.auth.verify_forgot_password',
+     '/forgot_password/verify/',
+     'mediagoblin.auth.views:verify_forgot_password')]
