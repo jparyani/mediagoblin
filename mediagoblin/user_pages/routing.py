@@ -74,7 +74,7 @@ add_route('mediagoblin.user_pages.processing_panel',
 # Stray edit routes
 add_route('mediagoblin.edit.edit_media',
           '/u/<string:user>/m/<string:media>/edit/',
-          'mediagoblin.user_pages.views:edit_media')
+          'mediagoblin.edit.views:edit_media')
 
 add_route('mediagoblin.edit.attachments',
           '/u/<string:user>/m/<string:media>/attachments/',

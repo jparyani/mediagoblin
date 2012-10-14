@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import urllib
 import logging
 
 from mediagoblin.routing import url_map, view_functions, add_route
@@ -138,7 +137,6 @@ class MediaGoblinApp(object):
         request.accept = request.accept_mimetypes
 
         ## Routing / controller loading stuff
-        path_info = request.path
         map_adapter = self.url_map.bind_to_environ(request.environ)
 
         # By using fcgi, mediagoblin can run under a base path
@@ -167,21 +165,9 @@ class MediaGoblinApp(object):
         request.db = self.db
         request.staticdirect = self.staticdirector
 
-        mg_request.setup_user_in_request(request)
-
-        try:
-            endpoint, url_values = map_adapter.match()
-            request.matchdict = url_values
-
-            request.locale = translate.get_locale_from_request(request)
-            request.template_env = template.get_jinja_env(
-                self.template_loader, request.locale)
-        except NotFound as exc:
-            return NotImplemented
-            return render_404(request)(environ, start_response)
-        except HTTPException as exc:
-            # Support legacy webob.exc responses
-            return exc(environ, start_response)
+        request.locale = translate.get_locale_from_request(request)
+        request.template_env = template.get_jinja_env(
+            self.template_loader, request.locale)
 
         def build_proxy(endpoint, **kw):
             try:
@@ -196,7 +182,22 @@ class MediaGoblinApp(object):
 
         request.urlgen = build_proxy
 
+        mg_request.setup_user_in_request(request)
+
+        try:
+            endpoint, url_values = map_adapter.match()
+            request.matchdict = url_values
+        except NotFound as exc:
+            return render_404(request)(environ, start_response)
+        except HTTPException as exc:
+            # Support legacy webob.exc responses
+            return exc(environ, start_response)
+
         view_func = view_functions[endpoint]
+
+        _log.debug('endpoint: {0} view_func: {1}'.format(
+            endpoint,
+            view_func))
 
         # import the endpoint, or if it's already a callable, call that
         if isinstance(view_func, unicode) \

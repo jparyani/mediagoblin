@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from routes.route import add_route
 from mediagoblin.routing import add_route
 
 add_route('mediagoblin.auth.logout',
@@ -36,9 +35,10 @@ add_route('mediagoblin.auth.verify_email', '/verify_email/',
 add_route('mediagoblin.auth.resend_verification', '/resend_verification/',
         'mediagoblin.auth.views:resend_activation')
 
+# XXX: Does this work?
 add_route('mediagoblin.auth.resend_verification_success',
         '/resend_verification_success/',
-        template='mediagoblin/auth/resent_verification_email.html',
+        # template='mediagoblin/auth/resent_verification_email.html',
         'mediagoblin.views:simple_template_render')
 
 add_route('mediagoblin.auth.forgot_password', '/forgot_password/',
