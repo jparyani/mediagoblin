@@ -14,48 +14,68 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from routes.route import Route
+from mediagoblin.routing import add_route
 
-user_routes = [
-    Route('mediagoblin.user_pages.user_home', "/{user}/",
-        controller="mediagoblin.user_pages.views:user_home"),
-    Route('mediagoblin.user_pages.user_gallery', "/{user}/gallery/",
-        controller="mediagoblin.user_pages.views:user_gallery"),
-    Route('mediagoblin.user_pages.media_home', '/{user}/m/{media}/',
-        requirements=dict(m_id="[0-9a-fA-F]{24}"),
-        controller="mediagoblin.user_pages.views:media_home"),
-    Route('mediagoblin.user_pages.media_home.view_comment',
-          '/{user}/m/{media}/c/{comment}/',
-          controller="mediagoblin.user_pages.views:media_home"),
-    Route('mediagoblin.edit.edit_media', "/{user}/m/{media}/edit/",
-          controller="mediagoblin.edit.views:edit_media"),
-    Route('mediagoblin.edit.attachments',
-          '/{user}/m/{media}/attachments/',
-          controller="mediagoblin.edit.views:edit_attachments"),
-    Route('mediagoblin.user_pages.media_confirm_delete',
-          "/{user}/m/{media}/confirm-delete/",
-          controller="mediagoblin.user_pages.views:media_confirm_delete"),
-    Route('mediagoblin.user_pages.atom_feed', '/{user}/atom/',
-        controller="mediagoblin.user_pages.views:atom_feed"),
-    Route('mediagoblin.user_pages.media_post_comment',
-          '/{user}/m/{media}/comment/add/',
-          controller="mediagoblin.user_pages.views:media_post_comment"),
-    Route('mediagoblin.user_pages.media_collect',
-          "/{user}/m/{media}/collect/",
-          controller="mediagoblin.user_pages.views:media_collect"),
-    Route('mediagoblin.user_pages.user_collection', "/{user}/collection/{collection}/",
-        controller="mediagoblin.user_pages.views:user_collection"),
-    Route('mediagoblin.edit.edit_collection', "/{user}/c/{collection}/edit/",
-          controller="mediagoblin.edit.views:edit_collection"),
-    Route('mediagoblin.user_pages.collection_confirm_delete',
-          "/{user}/c/{collection}/confirm-delete/",
-          controller="mediagoblin.user_pages.views:collection_confirm_delete"),
-    Route('mediagoblin.user_pages.collection_item_confirm_remove', 
-          "/{user}/collection/{collection}/{collection_item}/confirm_remove/",
-          controller="mediagoblin.user_pages.views:collection_item_confirm_remove"),
-    Route('mediagoblin.user_pages.collection_atom_feed', '/{user}/collection/{collection}/atom/',
-        controller="mediagoblin.user_pages.views:collection_atom_feed"),
-    Route('mediagoblin.user_pages.processing_panel',
-          '/{user}/panel/',
-          controller="mediagoblin.user_pages.views:processing_panel"),
-    ]
+add_route('mediagoblin.user_pages.user_home',
+          '/u/<string:user>/', 'mediagoblin.user_pages.views:user_home')
+
+add_route('mediagoblin.user_pages.media_home',
+          '/u/<string:user>/m/<string:media>/',
+          'mediagoblin.user_pages.views:media_home')
+
+add_route('mediagoblin.user_pages.media_confirm_delete',
+          '/u/<string:user>/m/<string:media>/confirm-delete/',
+          'mediagoblin.user_pages.views:media_confirm_delete')
+
+add_route('mediagoblin.user_pages.media_post_comment',
+          '/u/<string:user>/m/<string:media>/comment/add/',
+          'mediagoblin.user_pages.views:media_post_comment')
+
+add_route('mediagoblin.user_pages.user_gallery',
+          '/u/<string:user>/gallery/',
+          'mediagoblin.user_pages.views:user_gallery')
+
+add_route('mediagoblin.user_pages.media_home.view_comment',
+          '/u/<string:user>/m/<string:media>/c/<string:comment>/',
+          'mediagoblin.user_pages.views:media_home')
+
+add_route('mediagoblin.user_pages.atom_feed',
+          '/u/<string:user>/atom/',
+          'mediagoblin.user_pages.views:atom_feed')
+
+add_route('mediagoblin.user_pages.media_collect',
+          '/u/<string:user>/m/<string:media>/collect/',
+          'mediagoblin.user_pages.views:media_collect')
+
+add_route('mediagoblin.user_pages.user_collection',
+          '/u/<string:user>/collection/<string:collection>/',
+          'mediagoblin.user_pages.views:user_collection')
+
+add_route('mediagoblin.edit.edit_collection',
+          '/u/<string:user>/c/<string:collection>/edit/',
+          'mediagoblin.edit.views:edit_collection')
+
+add_route('mediagoblin.user_pages.collection_confirm_delete',
+          '/u/<string:user>/c/<string:collection>/confirm-delete/',
+          'mediagoblin.user_pages.views:collection_confirm_delete')
+
+add_route('mediagoblin.user_pages.collection_item_confirm_remove',
+          '/u/<string:user>/collection/<string:collection>/<string:collection_item>/confirm_remove/',
+          'mediagoblin.user_pages.views:collection_item_confirm_remove')
+
+add_route('mediagoblin.user_pages.collection_atom_feed',
+          '/u/<string:user>/collection/<string:collection>/atom/',
+          'mediagoblin.user_pages.views:collection_atom_feed')
+
+add_route('mediagoblin.user_pages.processing_panel',
+          '/u/<string:user>/panel/',
+          'mediagoblin.user_pages.views:processing_panel')
+
+# Stray edit routes
+add_route('mediagoblin.edit.edit_media',
+          '/u/<string:user>/m/<string:media>/edit/',
+          'mediagoblin.user_pages.views:edit_media')
+
+add_route('mediagoblin.edit.attachments',
+          '/u/<string:user>/m/<string:media>/attachments/',
+          'mediagoblin.user_pages.views:edit_attachments')

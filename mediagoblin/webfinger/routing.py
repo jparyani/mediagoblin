@@ -14,12 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from routes.route import Route
+from mediagoblin.routing import add_route
 
-webfinger_well_known_routes = [
-    Route('mediagoblin.webfinger.host_meta', '/host-meta',
-          controller='mediagoblin.webfinger.views:host_meta')]
+add_route('mediagoblin.webfinger.host_meta', '/.well-known/host-meta',
+    'mediagoblin.webfinger.views:host_meta')
 
-webfinger_routes = [
-    Route('mediagoblin.webfinger.xrd', '/xrd',
-          controller='mediagoblin.webfinger.views:xrd')]
+add_route('mediagoblin.webfinger.xrd', '/webfinger/xrd',
+        'mediagoblin.webfinger.views:xrd')

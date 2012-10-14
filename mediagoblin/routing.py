@@ -14,36 +14,22 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from routes import Mapper
+from werkzeug.routing import Map, Rule
 
-from mediagoblin.auth.routing import auth_routes
-from mediagoblin.submit.routing import submit_routes
-from mediagoblin.user_pages.routing import user_routes
-from mediagoblin.edit.routing import edit_routes
-from mediagoblin.listings.routing import tag_routes
-from mediagoblin.webfinger.routing import webfinger_well_known_routes, \
-    webfinger_routes
-from mediagoblin.admin.routing import admin_routes
+url_map = Map()
 
+view_functions = {'index': 'mediagoblin.views:index'}
 
-def get_mapper(plugin_routes):
-    mapping = Mapper()
-    mapping.minimization = False
+def add_route(endpoint, url, controller):
+    view_functions.update({endpoint: controller})
 
-    # Plugin routes go first so they can override default routes.
-    mapping.extend(plugin_routes)
+    url_map.add(Rule(url, endpoint=endpoint))
 
-    mapping.connect(
-        "index", "/",
-        controller="mediagoblin.views:root_view")
+add_route('index', '/', 'mediagoblin.views:root_view')
 
-    mapping.extend(auth_routes, '/auth')
-    mapping.extend(submit_routes, '/submit')
-    mapping.extend(user_routes, '/u')
-    mapping.extend(edit_routes, '/edit')
-    mapping.extend(tag_routes, '/tag')
-    mapping.extend(webfinger_well_known_routes, '/.well-known')
-    mapping.extend(webfinger_routes, '/api/webfinger')
-    mapping.extend(admin_routes, '/a')
-
-    return mapping
+import mediagoblin.submit.routing
+import mediagoblin.user_pages.routing
+import mediagoblin.auth.routing
+import mediagoblin.edit.routing
+import mediagoblin.webfinger.routing
+import mediagoblin.listings.routing

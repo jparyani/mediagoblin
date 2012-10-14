@@ -36,21 +36,21 @@ def setup_plugin():
     _log.debug('OAuth config: {0}'.format(config))
 
     routes = [
-        Route('mediagoblin.plugins.oauth.authorize', '/oauth/authorize',
-            controller='mediagoblin.plugins.oauth.views:authorize'),
-        Route('mediagoblin.plugins.oauth.authorize_client', '/oauth/client/authorize',
-            controller='mediagoblin.plugins.oauth.views:authorize_client'),
-        Route('mediagoblin.plugins.oauth.access_token', '/oauth/access_token',
-            controller='mediagoblin.plugins.oauth.views:access_token'),
-        Route('mediagoblin.plugins.oauth.access_token',
+       ('mediagoblin.plugins.oauth.authorize', '/oauth/authorize',
+            'mediagoblin.plugins.oauth.views:authorize'),
+        ('mediagoblin.plugins.oauth.authorize_client', '/oauth/client/authorize',
+            'mediagoblin.plugins.oauth.views:authorize_client'),
+        ('mediagoblin.plugins.oauth.access_token', '/oauth/access_token',
+            'mediagoblin.plugins.oauth.views:access_token'),
+        ('mediagoblin.plugins.oauth.access_token',
             '/oauth/client/connections',
-            controller='mediagoblin.plugins.oauth.views:list_connections'),
-        Route('mediagoblin.plugins.oauth.register_client',
+            'mediagoblin.plugins.oauth.views:list_connections'),
+        ('mediagoblin.plugins.oauth.register_client',
             '/oauth/client/register',
-            controller='mediagoblin.plugins.oauth.views:register_client'),
-        Route('mediagoblin.plugins.oauth.list_clients',
+            'mediagoblin.plugins.oauth.views:register_client'),
+        ('mediagoblin.plugins.oauth.list_clients',
             '/oauth/client/list',
-            controller='mediagoblin.plugins.oauth.views:list_clients')]
+            'mediagoblin.plugins.oauth.views:list_clients')]
 
     pluginapi.register_routes(routes)
     pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))

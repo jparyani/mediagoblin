@@ -14,11 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from routes.route import Route
+from mediagoblin.routing import add_route
 
-submit_routes = [
-    Route('mediagoblin.submit.start', '/',
-          controller='mediagoblin.submit.views:submit_start'),
-    Route('mediagoblin.submit.collection', '/collection',
-          controller='mediagoblin.submit.views:add_collection'),
-    ]
+add_route('mediagoblin.submit.start',
+    '/submit/', 'mediagoblin.submit.views:submit_start')
+add_route('collection_home', '/submit/collection', 'mediagoblin.submit.views:add_collection')

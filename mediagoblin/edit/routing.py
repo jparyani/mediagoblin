@@ -14,13 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin.routing import add_route
 
-from routes.route import Route
-
-edit_routes = [
-    # Media editing view handled in user_pages/routing.py
-    Route('mediagoblin.edit.profile', '/profile/',
-        controller="mediagoblin.edit.views:edit_profile"),
-    Route('mediagoblin.edit.account', '/account/',
-        controller="mediagoblin.edit.views:edit_account"),
-    ]
+add_route('mediagoblin.edit.profile', '/edit/profile/',
+    'mediagoblin.edit.views:edit_profile')
+add_route('mediagoblin.edit.account', '/edit/account/',
+    'mediagoblin.edit.views:edit_account')

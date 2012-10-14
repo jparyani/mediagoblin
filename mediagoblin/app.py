@@ -18,11 +18,12 @@ import os
 import urllib
 import logging
 
-import routes
-from webob import exc
-from werkzeug.wrappers import Request
+from mediagoblin.routing import url_map, view_functions, add_route
 
-from mediagoblin import routing, meddleware, __version__
+from werkzeug.wrappers import Request
+from werkzeug.exceptions import HTTPException, NotFound
+
+from mediagoblin import meddleware, __version__
 from mediagoblin.tools import common, translate, template
 from mediagoblin.tools.response import render_404
 from mediagoblin.tools.theme import register_themes
@@ -90,7 +91,10 @@ class MediaGoblinApp(object):
         self.public_store, self.queue_store = setup_storage()
 
         # set up routing
-        self.routing = routing.get_mapper(PluginManager().get_routes())
+        self.url_map = url_map
+
+        for route in PluginManager().get_routes():
+            add_route(*route)
 
         # set up staticdirector tool
         self.staticdirector = get_staticdirector(app_config)
@@ -135,7 +139,7 @@ class MediaGoblinApp(object):
 
         ## Routing / controller loading stuff
         path_info = request.path
-        route_match = self.routing.match(path_info)
+        map_adapter = self.url_map.bind_to_environ(request.environ)
 
         # By using fcgi, mediagoblin can run under a base path
         # like /mediagoblin/. request.path_info contains the
@@ -154,47 +158,52 @@ class MediaGoblinApp(object):
             environ.pop('HTTPS')
 
         ## Attach utilities to the request object
-        request.matchdict = route_match
-        request.urlgen = routes.URLGenerator(self.routing, environ)
         # Do we really want to load this via middleware?  Maybe?
         request.session = request.environ['beaker.session']
         # Attach self as request.app
         # Also attach a few utilities from request.app for convenience?
         request.app = self
-        request.locale = translate.get_locale_from_request(request)
 
-        request.template_env = template.get_jinja_env(
-            self.template_loader, request.locale)
         request.db = self.db
         request.staticdirect = self.staticdirector
 
         mg_request.setup_user_in_request(request)
 
-        # No matching page?
-        if route_match is None:
-            # Try to do see if we have a match with a trailing slash
-            # added and if so, redirect
-            if not path_info.endswith('/') \
-                    and request.method == 'GET' \
-                    and self.routing.match(path_info + '/'):
-                new_path_info = path_info + '/'
-                if request.GET:
-                    new_path_info = '%s?%s' % (
-                        new_path_info, urllib.urlencode(request.GET))
-                redirect = exc.HTTPFound(location=new_path_info)
-                return request.get_response(redirect)(environ, start_response)
+        try:
+            endpoint, url_values = map_adapter.match()
+            request.matchdict = url_values
 
-            # Okay, no matches.  404 time!
-            request.matchdict = {}  # in case our template expects it
+            request.locale = translate.get_locale_from_request(request)
+            request.template_env = template.get_jinja_env(
+                self.template_loader, request.locale)
+        except NotFound as exc:
+            return NotImplemented
             return render_404(request)(environ, start_response)
+        except HTTPException as exc:
+            # Support legacy webob.exc responses
+            return exc(environ, start_response)
 
-        # import the controller, or if it's already a callable, call that
-        route_controller = route_match['controller']
-        if isinstance(route_controller, unicode) \
-                or isinstance(route_controller, str):
-            controller = common.import_component(route_match['controller'])
+        def build_proxy(endpoint, **kw):
+            try:
+                qualified = kw.pop('qualified')
+            except KeyError:
+                qualified = False
+
+            return map_adapter.build(
+                    endpoint,
+                    values=dict(**kw),
+                    force_external=qualified)
+
+        request.urlgen = build_proxy
+
+        view_func = view_functions[endpoint]
+
+        # import the endpoint, or if it's already a callable, call that
+        if isinstance(view_func, unicode) \
+                or isinstance(view_func, str):
+            controller = common.import_component(view_func)
         else:
-            controller = route_match['controller']
+            controller = view_func
 
         # pass the request through our meddleware classes
         for m in self.meddleware:

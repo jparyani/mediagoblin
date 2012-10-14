@@ -162,7 +162,7 @@ def register_routes(routes):
        Be careful when designing your route urls. If they clash with
        core urls, then it could result in DISASTER!
     """
-    if isinstance(routes, (tuple, list)):
+    if isinstance(routes, list):
         for route in routes:
             PluginManager().register_route(route)
     else:
