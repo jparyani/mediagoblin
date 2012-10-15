@@ -33,20 +33,31 @@ test...
 
 <script>
   window.onload = function() {
-  thingiurlbase = "{{ request.staticdirect('/js/thingiview.js') }}";
-  thingiview = new Thingiview("viewer");
-  thingiview.setObjectColor('#821543');
-  thingiview.initScene();
-  thingiview.loadSTL("{{ display_media }}");
-
-  // note thingiview.setRotation(false) to turn off rotation...
+    thingiurlbase = "{{ request.staticdirect('/js/thingiview.js') }}";
+    thingiview = new Thingiview("viewer");
+    thingiview.setObjectColor('#821543');
+    thingiview.initScene();
+    thingiview.loadSTL("{{ display_media }}");
+    thingiview.setRotation(false);
   }
+  window.rotate = false;
+  window.toggle_rotate = function () {
+    rotate = ! rotate;
+    thingiview.setRotation(rotate);
+  };
 </script>
 
-<div id="viewer" style="width:640px;height:480px"></div>
-
-<a href="{{ display_media }}">stl model</a>
-
+<div id="viewer" style="width:640px;height:480px;padding-bottom:4px;"></div
+<p>
+  <a class="button_action" onclick="toggle_rotate()"
+     title="{%- trans %}Toggle Rotate{% endtrans -%}">
+    {%- trans %}Toggle Rotate{% endtrans -%}
+  </a>
+  <a class="button_action" href="{{ display_media }}"
+     title="{%- trans %}Download{% endtrans -%}">
+    {%- trans %}Download{% endtrans -%}
+  </a>
+</p>
 
 
 {% endblock %}
