@@ -1,0 +1,63 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% extends 'mediagoblin/user_pages/media.html' %}
+
+  
+{% block mediagoblin_media %}
+
+
+test...
+{% set display_media = request.app.public_store.file_url(
+   media.get_display_media(media.media_files)) %}
+
+<script src="{{ request.staticdirect('/js/thingiview.js/Three.js') }}"></script>
+<script src="{{ request.staticdirect('/js/thingiview.js/plane.js') }}"></script>
+<script src="{{ request.staticdirect('/js/thingiview.js/thingiview.js') }}"></script>
+
+
+<script>
+  window.onload = function() {
+  thingiurlbase = "{{ request.staticdirect('/js/thingiview.js') }}";
+  thingiview = new Thingiview("viewer");
+  thingiview.setObjectColor('#821543');
+  thingiview.initScene();
+  thingiview.loadSTL("{{ display_media }}");
+
+  // note thingiview.setRotation(false) to turn off rotation...
+  }
+</script>
+
+<div id="viewer" style="width:640px;height:480px"></div>
+
+<a href="{{ display_media }}">stl model</a>
+
+
+
+{% endblock %}
+
+{% block mediagoblin_sidebar %}
+{#
+ #
+ #<ul>
+ # <li>{% trans %}width:{% endtrans %} {{media.media_data.width}} mm</li>
+ # <li>{% trans %}depth:{% endtrans %} {{media.media_data.depth}} mm</li>
+ # <li>{% trans %}height:{% endtrans %} {{media.media_data.height}} mm</li>
+ #</ul>
+ #}
+{% endblock %}
