@@ -391,6 +391,13 @@ Thingiview = function(containerId) {
     return rotateTimer !== null;
   }
 
+  this.resetRotation = function () {
+      if (rotate) {
+          this.setRotation(false);
+          this.setRotation(true);
+      }
+  }
+
   this.setRotation = function(rotate) {
     rotation = rotate;
     
@@ -606,8 +613,7 @@ Thingiview = function(containerId) {
     log("loading array...");
     geometry = new STLGeometry(array);
     loadObjectGeometry();
-    scope.setRotation(false);
-    scope.setRotation(true);
+    scope.resetRotation();
     scope.centerCamera();
     log("finished loading " + geometry.faces.length + " faces.");
   }
@@ -626,8 +632,7 @@ Thingiview = function(containerId) {
         progressBar.innerHTML = '';
         progressBar.style.display = 'none';
 
-        scope.setRotation(false);
-        scope.setRotation(true);
+        scope.resetRotation();
         log("finished loading " + geometry.faces.length + " faces.");
         scope.centerCamera();
       } else if (event.data.status == "complete_points") {
@@ -657,8 +662,7 @@ Thingiview = function(containerId) {
         progressBar.innerHTML = '';
         progressBar.style.display = 'none';
 
-        scope.setRotation(false);
-        scope.setRotation(true);
+        scope.resetRotation();
         log("finished loading " + event.data.content[0].length + " points.");
         // scope.centerCamera();
       } else if (event.data.status == "progress") {
