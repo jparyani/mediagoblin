@@ -90,35 +90,14 @@ class BinaryStlModel(ThreeDee):
     http://en.wikipedia.org/wiki/STL_%28file_format%29#Binary_STL
     """
 
-    def __num(self, fileob, hint):
-        assert hint == "uint" or hint == "real" or hint == "short"
-        form = None
-        bits = 0
-        if hint == "uint":
-            form = "<I" # little-endian unsigned int
-            bits = 32
-        elif hint == "real":
-            form = "<i" # little-endian signed int
-            bits = 32
-        elif hint == "short":
-            form = "<H" # little-endian unsigned short
-            bits = 16
-        return struct.unpack(form, fileob.read(bits/8))[0]
-
-    def __vector(self, fileob):
-        return tuple([self.__num(fileob, "real") for n in range(3)])
-
     def load(self, fileob):
         fileob.seek(80) # skip the header
-        triangle_count = self.__num(fileob, "uint")
-        for i in range(triangle_count):
-            self.__vector(fileob) # skip the normal vector
+        count = struct.unpack("<I", fileob.read(4))[0]
+        for i in range(count):
+            fileob.read(12) # skip the normal vector
             for v in range(3):
-                # - FIXME - traingle_count IS reporting the correct
-                # number, but the vertex information appears to be
-                # total nonsense :(
-                self.verts.append(self.__vector(fileob))
-            self.__num(fileob, "short") # skip the attribute byte count
+                self.verts.append(struct.unpack("<3f", fileob.read(12)))
+            fileob.read(2) # skip the attribute bytes
 
 
 def auto_detect(fileob, hint):
