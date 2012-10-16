@@ -140,6 +140,8 @@ def auto_detect(fileob, hint):
             return ObjModel(fileob)
         except ThreeDeeParseError:
             pass
+        except ValueError:
+            pass
         try:
             # It is pretty important that the binary stl model loader
             # is tried second, because its possible for it to parse
