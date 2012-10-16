@@ -119,11 +119,13 @@ window.show_things = function () {
      title="{%- trans %}Side{% endtrans -%}">
     {%- trans %}Side{% endtrans -%}
   </a>
+{% if media.media_data.file_type == "stl" %}
   <a id="webgl_button" class="button_action"
      onclick="show_things();"
      title="{%- trans %}WebGL{% endtrans -%}">
     {%- trans %}WebGL{% endtrans -%}
   </a>
+{% endif %}
 
   <a class="button_action" href="{{ model_download }}"
      title="{%- trans %}Download{% endtrans -%}"
