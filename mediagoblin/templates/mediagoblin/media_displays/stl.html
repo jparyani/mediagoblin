@@ -37,15 +37,20 @@
 #top_view, #side_view, #front_view, #thingy_view {
     display: none;
 }
+.media_image {
+    cursor: inherit!important;
+}
+
 </style>
 
+{% if media.media_data.file_type == "stl" %}
 <script src="{{ request.staticdirect('/js/thingiview.js/Three.js') }}"></script>
 <script src="{{ request.staticdirect('/js/thingiview.js/plane.js') }}"></script>
 <script src="{{ request.staticdirect('/js/thingiview.js/thingiview.js') }}"></script>
+{% endif %}
 
 
 <script type="text/javascript">
-
 window.show = function (view_id) {
     ids = [
         "perspective",
