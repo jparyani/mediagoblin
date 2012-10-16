@@ -143,13 +143,8 @@ window.show_things = function () {
 {% endblock %}
 
 {% block mediagoblin_sidebar %}
-<h3>debug info</h3>
-<ul>
- <li>width: {{media.media_data.width}} mm</li>
- <li>depth: {{media.media_data.depth}} mm</li>
- <li>height: {{media.media_data.height}} mm</li>
- <li>cx: {{media.media_data.center_x}} mm</li>
- <li>cy: {{media.media_data.center_y}} mm</li>
- <li>cz: {{media.media_data.center_z}} mm</li>
-</ul>
+<h3>{% trans %}File Format{% endtrans %}</h3>
+<p>{{ media.media_data.file_type }}</p>
+<h3>{% trans %}Object Height{% endtrans %}</h3>
+<p>~{{ media.media_data.height|int }} mm</p>
 {% endblock %}
