@@ -15,7 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import json
 import logging
+import subprocess
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import create_pub_filepath, \
@@ -46,6 +48,16 @@ def sniff_handler(media_file, **kw):
     return False
 
 
+def blender_render(config):
+    """
+    Called to prerender a model.
+    """
+    arg_string = "blender -b blender_render.blend -F "
+    arg_string +="JPEG -P blender_render.py"
+    env = {"RENDER_SETUP" : json.dumps(config), "DISPLAY":":0"}
+    subprocess.call(arg_string.split(" "), env=env)
+
+
 def process_stl(entry):
     """
     Code to process an stl or obj model.
@@ -72,7 +84,55 @@ def process_stl(entry):
     with open(queued_filename, 'rb') as model_file:
         model = model_loader.auto_detect(model_file, ext)
 
-    # TODO: generate blender previews
+    # generate preview images
+    greatest = [model.width, model.height, model.depth]
+    greatest.sort()
+    greatest = greatest[-1]
+
+    def snap(name, camera, width=640, height=640, project="ORTHO"):
+        path = create_pub_filepath(entry, name_builder.fill(name))
+        render_file = mgg.public_store.get_file(path, "wb")
+        shot = {
+            "model_path" : queued_filename,
+            "model_ext" : ext,
+            "camera_coord" : camera,
+            "camera_focus" : model.average,
+            "camera_clip" : greatest*10,
+            "greatest" : greatest,
+            "projection" : project,
+            "width" : width,
+            "height" : height,
+            "out_file" : render_file.name,
+            }
+        render_file.close()
+        blender_render(shot)
+        return path
+
+    thumb_path = snap(
+        "{basename}.thumb.jpg",
+        [0, greatest*-1.5, greatest],
+        mgg.global_config['media:thumb']['max_width'],
+        mgg.global_config['media:thumb']['max_height'],
+        project="PERSP")
+
+    perspective_path = snap(
+        "{basename}.perspective.jpg",
+        [0, greatest*-1.5, greatest], project="PERSP")
+
+    topview_path = snap(
+        "{basename}.top.jpg",
+        [model.average[0], model.average[1], greatest*2])
+
+    frontview_path = snap(
+        "{basename}.front.jpg",
+        [model.average[0], greatest*-2, model.average[2]])
+
+    sideview_path = snap(
+        "{basename}.side.jpg",
+        [greatest*-2, model.average[1], model.average[2]])
+
+
+
 
     # Save the public file stuffs
     model_filepath = create_pub_filepath(
@@ -90,7 +150,11 @@ def process_stl(entry):
     # Insert media file information into database
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict[u'original'] = model_filepath
-    media_files_dict[u'thumb'] = ["mgoblin_static/images/404.png"]
+    media_files_dict[u'thumb'] = thumb_path
+    media_files_dict[u'perspective'] = perspective_path
+    media_files_dict[u'top'] = topview_path
+    media_files_dict[u'side'] = sideview_path
+    media_files_dict[u'front'] = frontview_path
 
     # Put model dimensions into the database
     dimensions = {
