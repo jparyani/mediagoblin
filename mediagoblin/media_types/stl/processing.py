@@ -164,6 +164,7 @@ def process_stl(entry):
         "width" : model.width,
         "height" : model.height,
         "depth" : model.depth,
+        "file_type" : ext,
         }
     entry.media_data_init(**dimensions)
 

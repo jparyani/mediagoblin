@@ -18,7 +18,7 @@
 from mediagoblin.db.sql.base import Base
 
 from sqlalchemy import (
-    Column, Integer, Float, ForeignKey)
+    Column, Integer, Float, String, ForeignKey)
 from sqlalchemy.orm import relationship, backref
 
 
@@ -38,6 +38,8 @@ class StlData(Base):
     width = Column(Float)
     height = Column(Float)
     depth = Column(Float)
+
+    file_type = Column(String)
 
 
 DATA_MODEL = StlData
