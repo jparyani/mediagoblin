@@ -18,7 +18,7 @@
 
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
 
-{% macro media_grid(request, media_entries, col_number=5) %}
+{% macro media_grid(request, media_entries, col_number=4) %}
   <table class="thumb_gallery">
     {% for row in gridify_cursor(media_entries, col_number) %}
       <tr class="thumb_row
@@ -34,8 +34,7 @@
                              entry.media_files['thumb']) }}" />
             </a>
             {% if entry.title %}
-              <br />
-              <a href="{{ entry_url }}">{{ entry.title }}</a>
+              <a class="thumb_entry_title" href="{{ entry_url }}">{{ entry.title }}</a>
             {% endif %}
           </td>
         {% endfor %}
@@ -56,7 +55,7 @@
    - col_number: How many columns per row (default 5)
 #}
 {% macro object_gallery(request, media_entries, pagination,
-                        pagination_base_url=None, col_number=5) %}
+                        pagination_base_url=None, col_number=4) %}
   {% if media_entries and media_entries.count() %}
     {{ media_grid(request, media_entries, col_number=col_number) }}
     <div class="clear"></div>
