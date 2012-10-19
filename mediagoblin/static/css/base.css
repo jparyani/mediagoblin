@@ -408,10 +408,10 @@ textarea#comment_content {
 .media_thumbnail {
   float: left;
   padding: 0px;
-  width: 180px;
+  width: 212px;
   height: 156px;
   overflow: hidden;
-  margin: 0px 4px 10px;
+  margin: 0px 28px 24px 0px;
   text-align: center;
   font-size: 0.875em;
   background-color: #222;
@@ -429,6 +429,10 @@ textarea#comment_content {
 
 .media_thumbnail img {
   max-height: 135px;
+}
+
+.thumb_entry_last {
+  margin-right: 0px;
 }
 
 /* collection media */
