@@ -432,7 +432,7 @@ a.thumb_entry_title {
 }
 
 .media_thumbnail img {
-  width: 212px;
+  width: auto;
   max-height: 159px;
 }
 
