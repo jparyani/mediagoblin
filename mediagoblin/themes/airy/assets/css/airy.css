@@ -86,3 +86,7 @@ input, textarea {
 .dropdown_items {
   background-color: #fff;
 }
+
+.empty_space {
+  background-image: url("../images/empty_dots.png");
+}
