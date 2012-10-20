@@ -24,7 +24,10 @@ def add_route(endpoint, url, controller):
     """
     Add a route to the url mapping
     """
-    #assert endpoint not in view_functions.keys(), 'Trying to overwrite a rule'
+    # XXX: We cannot use this, since running tests means that the plugin
+    # routes will be populated over and over over the same session.
+    #
+    # assert endpoint not in view_functions.keys(), 'Trying to overwrite a rule'
 
     view_functions.update({endpoint: controller})
 
@@ -40,11 +43,13 @@ def mount(mountpoint, routes):
 
 add_route('index', '/', 'mediagoblin.views:root_view')
 
+from mediagoblin.admin.routing import admin_routes
+from mediagoblin.auth.routing import auth_routes
+mount('/auth', auth_routes)
+mount('/a', admin_routes)
+
 import mediagoblin.submit.routing
 import mediagoblin.user_pages.routing
 import mediagoblin.edit.routing
 import mediagoblin.webfinger.routing
 import mediagoblin.listings.routing
-
-from mediagoblin.auth.routing import auth_routes
-mount('/auth', auth_routes)

@@ -17,8 +17,6 @@
 import os
 import logging
 
-from routes.route import Route
-
 from mediagoblin.tools import pluginapi
 from mediagoblin.plugins.oauth.models import OAuthToken, OAuthClient, \
         OAuthUserClient
