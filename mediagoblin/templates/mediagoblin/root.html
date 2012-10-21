@@ -21,6 +21,15 @@
 
 {% block mediagoblin_content %}
   {% if request.user %}
+    {% if request.user.status == 'active' %}
+      <h1>{% trans %}Actions{% endtrans %}</h1>
+      <p><a href="{{ request.urlgen('mediagoblin.submit.collection') }}">
+        {% trans %}Create new collection{% endtrans %}
+      </a></p>
+      <p><a href="{{ request.urlgen('mediagoblin.edit.account') }}">
+        {%- trans %}Change account settings{% endtrans -%}
+      </a></p>
+    {% endif %}
     <h1>{% trans %}Explore{% endtrans %}</h1>
   {% else %}
     <h1>{% trans %}Hi there, welcome to this MediaGoblin site!{% endtrans %}</h1>
