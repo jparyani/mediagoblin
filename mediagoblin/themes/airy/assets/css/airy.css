@@ -3,16 +3,12 @@ body {
   background-color: #F7F7F7;
 }
 
-h1,h2 {
-  color: #787878;
-}
-
-h3 {
+h1,h2,h3 {
   color: #4a4a4a;
 }
 
 a {
-  color: #37BD85;
+  color: #37AB74;
 }
 
 .navigation_button {
@@ -52,7 +48,7 @@ footer {
 
 .button_action_highlight, .button_form {
   color: #fff;
-  background-color: #37BD85;
+  background-color: #37AB74;
   border-color: #6CAA8E;
   border-width: 1px 1px 2px;
 }
@@ -85,4 +81,8 @@ input, textarea {
 
 .dropdown_items {
   background-color: #fff;
+}
+
+.empty_space {
+  background-image: url("../images/empty_dots.png");
 }

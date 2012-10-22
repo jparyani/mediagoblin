@@ -138,37 +138,6 @@ header {
   list-style: none;
 }
 
-.dropdown {
-  display: inline-block;
-  color: #c3c3c3;
-  background-color: #424242;
-  border: 1px solid;
-  border-color: #464646 #2B2B2B #252525;
-  border-radius: 4px;
-  padding: 3px 8px;
-  font-size: 16px;
-  text-decoration: none;
-  font-style: normal;
-  font-weight: bold;
-  cursor: pointer;
-  position: relative;
-}
-
-.dropdown_items {
-  position: absolute;
-  right: 0px;
-  top: 25px;
-  background-color: #424242;
-  padding: 10px;
-  width: 160px;
-  border-radius: 5px 0 5px 5px;
-  box-shadow: 0 2px 1px black;
-}
-
-.dropdown_items a {
-  display: block;
-}
-
 a.logo {
   color: #fff;
   font-weight: bold;
