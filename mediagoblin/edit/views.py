@@ -106,9 +106,8 @@ def edit_attachments(request, media):
         form = forms.EditAttachmentsForm()
 
         # Add any attachements
-        if ('attachment_file' in request.form
-            and isinstance(request.form['attachment_file'], FieldStorage)
-            and request.form['attachment_file'].file):
+        if 'attachment_file' in request.files \
+            and request.files['attachment_file']:
 
             # Security measure to prevent attachments from being served as
             # text/html, which will be parsed by web clients and pose an XSS
@@ -121,13 +120,13 @@ def edit_attachments(request, media):
             # machine parsing the upload form, and not necessarily the machine
             # serving the attachments.
             if mimetypes.guess_type(
-                    request.form['attachment_file'].filename)[0] in \
+                    request.files['attachment_file'].filename)[0] in \
                     UNSAFE_MIMETYPES:
                 public_filename = secure_filename('{0}.notsafe'.format(
-                    request.form['attachment_file'].filename))
+                    request.files['attachment_file'].filename))
             else:
                 public_filename = secure_filename(
-                        request.form['attachment_file'].filename)
+                        request.files['attachment_file'].filename)
 
             attachment_public_filepath \
                 = mg_globals.public_store.get_unique_filepath(
@@ -139,13 +138,13 @@ def edit_attachments(request, media):
 
             try:
                 attachment_public_file.write(
-                    request.form['attachment_file'].file.read())
+                    request.files['attachment_file'].stream.read())
             finally:
-                request.form['attachment_file'].file.close()
+                request.files['attachment_file'].stream.close()
 
             media.attachment_files.append(dict(
                     name=request.form['attachment_name'] \
-                        or request.form['attachment_file'].filename,
+                        or request.files['attachment_file'].filename,
                     filepath=attachment_public_filepath,
                     created=datetime.utcnow(),
                     ))
@@ -156,7 +155,7 @@ def edit_attachments(request, media):
                 request, messages.SUCCESS,
                 "You added the attachment %s!" \
                     % (request.form['attachment_name']
-                       or request.form['attachment_file'].filename))
+                       or request.files['attachment_file'].filename))
 
             return exc.HTTPFound(
                 location=media.url_for_self(request.urlgen))
@@ -276,12 +275,12 @@ def edit_collection(request, collection):
         # and userid.
         slug_used = check_collection_slug_used(request.db, collection.creator,
                 request.form['slug'], collection.id)
-        
+
         # Make sure there isn't already a Collection with this title
         existing_collection = request.db.Collection.find_one({
                 'creator': request.user._id,
                 'title':request.form['title']})
-                
+
         if existing_collection and existing_collection.id != collection.id:
             messages.add_message(
                 request, messages.ERROR,

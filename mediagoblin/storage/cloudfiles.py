@@ -104,10 +104,13 @@ class CloudFilesStorage(StorageInterface):
             mimetype = mimetypes.guess_type(
                 filepath[-1])
 
-            if mimetype:
+            if mimetype[0]:
                 # Set the mimetype on the CloudFiles object
                 obj.content_type = mimetype[0]
                 obj.metadata = {'mime-type': mimetype[0]}
+            else:
+                obj.content_type = 'application/octet-stream'
+                obj.metadata = {'mime-type': 'application/octet-stream'}
 
         return CloudFilesStorageObjectWrapper(obj, *args, **kwargs)
 
