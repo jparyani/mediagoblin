@@ -464,7 +464,7 @@ p.media_specs {
   padding: 130px 10px 20px 10px;
 }
 
-img.media_image {
+a img.media_image {
   cursor: -webkit-zoom-in;
   cursor: -moz-zoom-in;
   cursor: zoom-in;
