@@ -73,16 +73,6 @@ input, textarea {
   color: #4a4a4a;
 }
 
-.dropdown {
-  color: #4a4a4a;
-  border: 1px solid #e4e4e4;
-  background-color: #fff;
-}
-
-.dropdown_items {
-  background-color: #fff;
-}
-
 .empty_space {
   background-image: url("../images/empty_dots.png");
 }
