@@ -401,7 +401,7 @@ a.thumb_entry_title {
 }
 
 .media_thumbnail img {
-  width: auto;
+  width: 212px;
   max-height: 159px;
 }
 
