@@ -377,9 +377,10 @@ textarea#comment_content {
 .media_thumbnail {
   float: left;
   padding: 0px;
-  width: 212px;
+  width: 180px;
+  height: 156px;
   overflow: hidden;
-  margin: 0px 28px 26px 0px;
+  margin: 0px 4px 10px;
   text-align: center;
   font-size: 0.875em;
   background-color: #222;
@@ -401,8 +402,7 @@ a.thumb_entry_title {
 }
 
 .media_thumbnail img {
-  width: 212px;
-  max-height: 159px;
+  max-height: 135px;
 }
 
 .thumb_entry_last {
