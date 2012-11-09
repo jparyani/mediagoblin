@@ -31,10 +31,9 @@
                      {%- if loop.first %} thumb_entry_first
                      {%- elif loop.last %} thumb_entry_last{% endif %}">
             <a href="{{ entry_url }}">
-              <img src="{{ request.app.public_store.file_url(
-                             media_entry.media_files['thumb']) }}" />
+              <img src="{{ media_entry.thumb_url }}" />
             </a>
-            
+
             {% if item.note %}
 	      {%- trans note=item.note -%}
 	      <br />

@@ -33,14 +33,13 @@
           Really remove {{ media_title }} from {{ collection_title }}?
         {%- endtrans %}
       </h1>
-	  
+
       <div style="text-align: center;" >
-        <img src="{{ request.app.public_store.file_url(
-                         collection_item.get_media_entry.media_files['thumb']) }}" />
+        <img src="{{ collection_item.get_media_entry.thumb_url }}" />
       </div>
-	  
+
       <br />
-	  
+
       <p class="delete_checkbox_box">
 	{{ form.confirm }}
 	<label for="{{ (form.confirm.name) }}">{{ _(form.confirm.label.text) }}</label>

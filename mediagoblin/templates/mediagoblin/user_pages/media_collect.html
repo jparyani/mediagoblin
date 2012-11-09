@@ -36,12 +36,11 @@
           Add {{ title }} to collection
         {%- endtrans %}
       </h1>
-	  
+
       <div style="text-align: center;" >
-        <img src="{{ request.app.public_store.file_url(
-                         media.media_files['thumb']) }}" />
+        <img src="{{ media.thumb_url }}" />
       </div>
-	  
+
       <br />
 	  
       <p class="form_field_label">

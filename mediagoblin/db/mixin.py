@@ -27,6 +27,8 @@ These functions now live here and get "mixed in" into the
 real objects.
 """
 
+import importlib
+
 from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.tools import common, licenses
@@ -111,6 +113,23 @@ class MediaEntryMixin(object):
             user=uploader.username,
             media=self.slug_or_id,
             **extra_args)
+
+    @property
+    def thumb_url(self):
+        """Return the thumbnail URL (for usage in templates)
+        Will return either the real thumbnail or a default fallback icon."""
+        # TODO: implement generic fallback in case MEDIA_MANAGER does
+        # not specify one?
+        if u'thumb' in self.media_files:
+            thumb_url = mg_globals.app.public_store.file_url(
+                            self.media_files[u'thumb'])
+        else:
+            # no thumbnail in media available. Get the media's
+            # MEDIA_MANAGER for the fallback icon and return static URL
+            manager = importlib.import_module(self.media_type)
+            thumb_url = manager.MEDIA_MANAGER[u'default_thumb']
+            thumb_url = mg_globals.app.staticdirector(thumb_url) # use static
+        return thumb_url
 
     def get_fail_exception(self):
         """
