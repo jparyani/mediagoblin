@@ -219,45 +219,42 @@ def edit_profile(request, url_user=None):
 def edit_account(request):
     user = request.user
     form = forms.EditAccountForm(request.form,
-        wants_comment_notification=user.get('wants_comment_notification'))
+        wants_comment_notification=user.get('wants_comment_notification'),
+        license_preference=user.get('license_preference'))
 
     if request.method == 'POST':
         form_validated = form.validate()
 
-        #if the user has not filled in the new or old password fields
-        if not form.new_password.data and not form.old_password.data:
-            if form.wants_comment_notification.validate(form):
-                user.wants_comment_notification = \
-                    form.wants_comment_notification.data
-                user.save()
-                messages.add_message(request,
-                    messages.SUCCESS,
-                    _("Account settings saved"))
-                return redirect(request,
-                                'mediagoblin.user_pages.user_home',
-                                user=user.username)
+        if form_validated and \
+                form.wants_comment_notification.validate(form):
+            user.wants_comment_notification = \
+                form.wants_comment_notification.data
 
-        #so the user has filled in one or both of the password fields
-        else:
-            if form_validated:
-                password_matches = auth_lib.bcrypt_check_password(
-                    form.old_password.data,
-                    user.pw_hash)
-                if password_matches:
-                    #the entire form validates and the password matches
-                    user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-                        form.new_password.data)
-                    user.wants_comment_notification = \
-                        form.wants_comment_notification.data
-                    user.save()
-                    messages.add_message(request,
-                        messages.SUCCESS,
-                        _("Account settings saved"))
-                    return redirect(request,
-                                    'mediagoblin.user_pages.user_home',
-                                    user=user.username)
-                else:
-                    form.old_password.errors.append(_('Wrong password'))
+        if form_validated and \
+                form.new_password.data or form.old_password.data:
+            password_matches = auth_lib.bcrypt_check_password(
+                form.old_password.data,
+                user.pw_hash)
+            if password_matches:
+                #the entire form validates and the password matches
+                user.pw_hash = auth_lib.bcrypt_gen_password_hash(
+                    form.new_password.data)
+            else:
+                form.old_password.errors.append(_('Wrong password'))
+
+        if form_validated and \
+                form.license_preference.validate(form):
+            user.license_preference = \
+                form.license_preference.data
+
+        if form_validated and not form.errors:
+            user.save()
+            messages.add_message(request,
+                messages.SUCCESS,
+                _("Account settings saved"))
+            return redirect(request,
+                'mediagoblin.user_pages.user_home',
+                user=user.username)
 
     return render_to_response(
         request,

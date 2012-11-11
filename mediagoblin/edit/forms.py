@@ -65,8 +65,19 @@ class EditAccountForm(wtforms.Form):
             "Enter your old password to prove you own this account."))
     new_password = wtforms.PasswordField(
         _('New password'),
-        [wtforms.validators.Length(min=6, max=30)],
+        [
+            wtforms.validators.Optional(),
+            wtforms.validators.Length(min=6, max=30)
+        ],
         id="password")
+    license_preference = wtforms.SelectField(
+        _('License preference'),
+        [
+            wtforms.validators.Optional(),
+            wtforms.validators.AnyOf([lic[0] for lic in licenses_as_choices()]),
+        ],
+        choices=licenses_as_choices(),
+        description=_('This will be your default license on upload forms.'))
     wants_comment_notification = wtforms.BooleanField(
         label=_("Email me when others comment on my media"))
 

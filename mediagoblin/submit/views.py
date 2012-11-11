@@ -41,7 +41,8 @@ def submit_start(request):
     """
     First view for submitting a file.
     """
-    submit_form = submit_forms.SubmitStartForm(request.form)
+    submit_form = submit_forms.SubmitStartForm(request.form,
+        license=request.user.get('license_preference'))
 
     if request.method == 'POST' and submit_form.validate():
         if not ('file' in request.files
