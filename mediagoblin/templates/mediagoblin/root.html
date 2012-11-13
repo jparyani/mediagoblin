@@ -19,6 +19,13 @@
 
 {% from "mediagoblin/utils/object_gallery.html" import object_gallery %}
 
+{% set feed_url = request.urlgen('mediagoblin.listings.atom_feed') %}
+
+{% block mediagoblin_head -%}
+  {% set feed_url = request.urlgen('mediagoblin.listings.atom_feed') -%}
+  <link rel="alternate" type="application/atom+xml" href="{{ feed_url }}">
+{%- endblock mediagoblin_head %}
+
 {% block mediagoblin_content %}
   {% if request.user %}
     <h1>{% trans %}Explore{% endtrans %}</h1>
@@ -39,4 +46,8 @@
   {% endif %}
   <h2>{% trans %}Most recent media{% endtrans %}</h2>
   {{ object_gallery(request, media_entries, pagination) }}
+
+  {#- Need to set feed_url within this block so template can use it. -#}
+  {%- set feed_url = feed_url -%}
+  {%- include "mediagoblin/utils/feed_link.html" -%}
 {% endblock %}
