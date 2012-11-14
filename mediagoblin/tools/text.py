@@ -83,12 +83,10 @@ def media_tags_as_string(media_entry_tags):
 
     This is the opposite of convert_to_tag_list_of_dicts
     """
-    media_tag_string = ''
+    tags_string = ''
     if media_entry_tags:
-        media_tag_string = u', '.join(
-            [tag['name']
-             for tag in media_entry_tags])
-    return media_tag_string
+        tags_string = u', '.join([tag['name'] for tag in media_entry_tags])
+    return tags_string
 
 
 TOO_LONG_TAG_WARNING = \
