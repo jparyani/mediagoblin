@@ -17,9 +17,8 @@
 from functools import wraps
 
 from urlparse import urljoin
-from urllib import urlencode
-
-from webob import exc
+from werkzeug.exceptions import Forbidden
+from werkzeug.urls import url_quote
 
 from mediagoblin.db.util import ObjectId, InvalidId
 from mediagoblin.db.sql.models import User
@@ -43,11 +42,8 @@ def require_active_login(controller):
                         qualified=True),
                     request.url)
 
-            return exc.HTTPFound(
-                location='?'.join([
-                    request.urlgen('mediagoblin.auth.login'),
-                    urlencode({
-                        'next': next_url})]))
+            return redirect(request, 'mediagoblin.auth.login',
+                            next=url_quote(next_url))
 
         return controller(request, *args, **kwargs)
 
@@ -78,7 +74,7 @@ def user_may_delete_media(controller):
             {'id': ObjectId(request.matchdict['media'])}).uploader
         if not (request.user.is_admin or
                 request.user.id == uploader_id):
-            return exc.HTTPForbidden()
+            return Forbidden()
 
         return controller(request, *args, **kwargs)
 
@@ -95,7 +91,7 @@ def user_may_alter_collection(controller):
             {'username': request.matchdict['user']}).id
         if not (request.user.is_admin or
                 request.user.id == creator_id):
-            return exc.HTTPForbidden()
+            return Forbidden()
 
         return controller(request, *args, **kwargs)
 
