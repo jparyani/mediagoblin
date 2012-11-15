@@ -22,3 +22,5 @@ add_route('mediagoblin.edit.legacy_edit_profile', '/edit/profile/',
     'mediagoblin.edit.views:legacy_edit_profile')
 add_route('mediagoblin.edit.account', '/edit/account/',
     'mediagoblin.edit.views:edit_account')
+add_route('mediagoblin.edit.delete_account', '/edit/account/delete/',
+    'mediagoblin.edit.views:delete_account')

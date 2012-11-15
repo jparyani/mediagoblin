@@ -267,6 +267,37 @@ def edit_account(request):
 
 
 @require_active_login
+def delete_account(request):
+    """Delete a user completely"""
+    user = request.user
+    if request.method == 'POST':
+        if request.form.get(u'confirmed'):
+            # Form submitted and confirmed. Actually delete the user account
+            # Log out user and delete cookies etc.
+            # TODO: Should we be using MG.auth.views.py:logout for this?
+            request.session.delete()
+
+            # Delete user account and all related media files etc....
+            request.user.delete()
+
+            # We should send a message that the user has been deleted
+            # successfully. But we just deleted the session, so we
+            # can't...
+            return redirect(request, 'index')
+
+        else: # Did not check the confirmation box...
+            messages.add_message(
+                request, messages.WARNING,
+                _('You need to confirm the deletion of your account.'))
+
+    # No POST submission or not confirmed, just show page
+    return render_to_response(
+        request,
+        'mediagoblin/edit/delete_account.html',
+        {'user': user})
+
+
+@require_active_login
 @user_may_alter_collection
 @get_user_collection
 def edit_collection(request, collection):
