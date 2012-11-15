@@ -65,7 +65,7 @@ Software Stack
     `Paste Script <http://pythonpaste.org/script/>`_: we'll use this for
     configuring and launching the application
 
-  * `WebOb <http://pythonpaste.org/webob/>`_: nice abstraction layer
+  * `werkzeug <http://werkzeug.pocoo.org/>`_: nice abstraction layer
     from HTTP requests, responses and WSGI bits
 
   * `Beaker <http://beaker.groovie.org/>`_: for handling sessions and
