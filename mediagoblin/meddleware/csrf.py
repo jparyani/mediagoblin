@@ -17,7 +17,7 @@
 import random
 import logging
 
-from webob.exc import HTTPForbidden
+from werkzeug.exceptions import Forbidden
 from wtforms import Form, HiddenField, validators
 
 from mediagoblin import mg_globals
@@ -128,8 +128,9 @@ class CsrfMeddleware(BaseMeddleware):
 
         if cookie_token is None:
             # the CSRF cookie must be present in the request
-            _log.error('CSRF cookie not present')
-            return HTTPForbidden()
+            errstr = 'CSRF cookie not present'
+            _log.error(errstr)
+            return Forbidden(errstr)
 
         # get the form token and confirm it matches
         form = CsrfForm(request.form)
@@ -142,5 +143,6 @@ class CsrfMeddleware(BaseMeddleware):
 
         # either the tokens didn't match or the form token wasn't
         # present; either way, the request is denied
-        _log.error('CSRF validation failed')
-        return HTTPForbidden()
+        errstr = 'CSRF validation failed'
+        _log.error(errstr)
+        return Forbidden(errstr)

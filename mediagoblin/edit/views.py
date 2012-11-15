@@ -18,6 +18,7 @@ from webob import exc
 from cgi import FieldStorage
 from datetime import datetime
 
+from werkzeug.exceptions import Forbidden
 from werkzeug.utils import secure_filename
 
 from mediagoblin import messages
@@ -41,7 +42,7 @@ import mimetypes
 @require_active_login
 def edit_media(request, media):
     if not may_edit_media(request, media):
-        return exc.HTTPForbidden()
+        return Forbidden("User may not edit this media")
 
     defaults = dict(
         title=media.title,
@@ -165,7 +166,7 @@ def edit_attachments(request, media):
             {'media': media,
              'form': form})
     else:
-        return exc.HTTPForbidden()
+        return Forbidden("Attachments are disabled")
 
 
 @require_active_login

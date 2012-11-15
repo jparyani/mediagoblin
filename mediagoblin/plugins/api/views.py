@@ -19,7 +19,8 @@ import logging
 import uuid
 
 from os.path import splitext
-from webob import exc, Response
+from webob import Response
+from werkzeug.exceptions import BadRequest, Forbidden
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 from celery import registry
@@ -47,13 +48,13 @@ def post_entry(request):
 
     if request.method != 'POST':
         _log.debug('Must POST against post_entry')
-        return exc.HTTPBadRequest()
+        return BadRequest()
 
     if not 'file' in request.files \
             or not isinstance(request.files['file'], FileStorage) \
             or not request.files['file'].stream:
         _log.debug('File field not found')
-        return exc.HTTPBadRequest()
+        return BadRequest()
 
     media_file = request.files['file']
 
@@ -129,7 +130,7 @@ def post_entry(request):
 @api_auth
 def api_test(request):
     if not request.user:
-        return exc.HTTPForbidden()
+        return Forbidden()
 
     user_data = {
             'username': request.user.username,

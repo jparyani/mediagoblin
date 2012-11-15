@@ -18,8 +18,9 @@ import logging
 import json
 
 from functools import wraps
-from webob import exc, Response
+from webob import Response
 from urlparse import urljoin
+from werkzeug.exceptions import Forbidden
 
 from mediagoblin import mg_globals
 from mediagoblin.tools.pluginapi import PluginManager
@@ -143,7 +144,7 @@ def api_auth(controller):
         # If we can't find any authentication methods, we should not let them
         # pass.
         if not auth_candidates:
-            return exc.HTTPForbidden()
+            return Forbidden()
 
         # For now, just select the first one in the list
         auth = auth_candidates[0]
@@ -157,7 +158,7 @@ def api_auth(controller):
                         'status': 403,
                         'errors': auth.errors})
 
-            return exc.HTTPForbidden()
+            return Forbidden()
 
         return controller(request, *args, **kw)
 
