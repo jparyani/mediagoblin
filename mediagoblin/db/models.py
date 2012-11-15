@@ -18,7 +18,7 @@
 TODO: indexes on foreignkeys, where useful.
 """
 
-
+import logging
 import datetime
 import sys
 
@@ -34,6 +34,7 @@ from sqlalchemy.util import memoized_property
 from mediagoblin.db.extratypes import PathTupleWithSlashes, JSONEncoded
 from mediagoblin.db.base import Base, DictReadAttrProxy, Session
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin, CollectionMixin, CollectionItemMixin
+from mediagoblin.tools.files import delete_media_files
 
 # It's actually kind of annoying how sqlalchemy-migrate does this, if
 # I understand it right, but whatever.  Anyway, don't remove this :P
@@ -41,6 +42,8 @@ from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin, 
 # We could do migration calls more manually instead of relying on
 # this import-based meddling...
 from migrate import changeset
+
+_log = logging.getLogger(__name__)
 
 
 class User(Base, UserMixin):
@@ -122,7 +125,6 @@ class MediaEntry(Base, MediaEntryMixin):
         )
 
     attachment_files_helper = relationship("MediaAttachmentFile",
-        cascade="all, delete-orphan",
         order_by="MediaAttachmentFile.created"
         )
     attachment_files = association_proxy("attachment_files_helper", "dict_view",
@@ -131,7 +133,7 @@ class MediaEntry(Base, MediaEntryMixin):
         )
 
     tags_helper = relationship("MediaTag",
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan" # should be automatically deleted
         )
     tags = association_proxy("tags_helper", "dict_view",
         creator=lambda v: MediaTag(name=v["name"], slug=v["slug"])
@@ -215,6 +217,37 @@ class MediaEntry(Base, MediaEntryMixin):
                 classname=self.__class__.__name__,
                 id=self.id,
                 title=safe_title)
+
+    def delete(self, del_orphan_tags=True, **kwargs):
+        """Delete MediaEntry and all related files/attachments/comments
+
+        This will *not* automatically delete unused collections, which
+        can remain empty...
+
+        :param del_orphan_tags: True/false if we delete unused Tags too
+        :param commit: True/False if this should end the db transaction"""
+        # User's CollectionItems are automatically deleted via "cascade".
+        # Delete all the associated comments
+        for comment in self.get_comments():
+            comment.delete(commit=False)
+
+        # Delete all related files/attachments
+        try:
+            delete_media_files(self)
+        except OSError, error:
+            # Returns list of files we failed to delete
+            _log.error('No such files from the user "{1}" to delete: '
+                       '{0}'.format(str(error), self.get_uploader))
+        _log.info('Deleted Media entry id "{0}"'.format(self.id))
+        # Related MediaTag's are automatically cleaned, but we might
+        # want to clean out unused Tag's too.
+        if del_orphan_tags:
+            # TODO: Import here due to cyclic imports!!!
+            #       This cries for refactoring
+            from mediagoblin.db.util import clean_orphan_tags
+            clean_orphan_tags(commit=False)
+        # pass through commit=False/True in kwargs
+        super(MediaEntry, self).delete(**kwargs)
 
 
 class FileKeynames(Base):

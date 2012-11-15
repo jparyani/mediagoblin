@@ -23,7 +23,6 @@ from mediagoblin.db.models import (MediaEntry, Collection, CollectionItem,
 from mediagoblin.tools.response import render_to_response, render_404, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
-from mediagoblin.tools.files import delete_media_files
 from mediagoblin.user_pages import forms as user_forms
 from mediagoblin.user_pages.lib import send_comment_email
 
@@ -268,21 +267,7 @@ def media_confirm_delete(request, media):
     if request.method == 'POST' and form.validate():
         if form.confirm.data is True:
             username = media.get_uploader.username
-
-            # Delete all the associated comments
-            for comment in media.get_comments():
-                comment.delete()
-
-            # Delete all files on the public storage
-            try:
-                delete_media_files(media)
-            except OSError, error:
-                _log.error('No such files from the user "{1}"'
-                           ' to delete: {0}'.format(str(error), username))
-                messages.add_message(request, messages.ERROR,
-                                     _('Some of the files with this entry seem'
-                                       ' to be missing.  Deleting anyway.'))
-
+            # Delete MediaEntry and all related files, comments etc.
             media.delete()
             messages.add_message(
                 request, messages.SUCCESS, _('You deleted the media.'))
