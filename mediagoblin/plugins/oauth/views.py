@@ -18,7 +18,6 @@
 import logging
 import json
 
-from webob import exc, Response
 from urllib import urlencode
 from uuid import uuid4
 from datetime import datetime
@@ -95,7 +94,7 @@ def authorize_client(request):
     if not client:
         _log.error('''No such client id as received from client authorization
                 form.''')
-        return exc.HTTPBadRequest()
+        return BadRequest()
 
     if form.validate():
         relation = OAuthUserClient()
@@ -106,11 +105,11 @@ def authorize_client(request):
         elif form.deny.data:
             relation.state = u'rejected'
         else:
-            return exc.HTTPBadRequest
+            return BadRequest
 
         relation.save()
 
-        return exc.HTTPFound(location=form.next.data)
+        return redirect(request, location=form.next.data)
 
     return render_to_response(
         request,
@@ -163,7 +162,7 @@ def authorize(request, client):
 
         _log.debug('Redirecting to {0}'.format(redirect_uri))
 
-        return exc.HTTPFound(location=redirect_uri)
+        return redirect(request, location=redirect_uri)
     else:
         # Show prompt to allow client to access data
         # - on accept: send the user agent back to the redirect_uri with the
