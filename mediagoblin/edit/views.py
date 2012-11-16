@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from webob import exc
 from cgi import FieldStorage
 from datetime import datetime
 
@@ -76,8 +75,8 @@ def edit_media(request, media):
 
             media.save()
 
-            return exc.HTTPFound(
-                location=media.url_for_self(request.urlgen))
+            return redirect(request,
+                            location=media.url_for_self(request.urlgen))
 
     if request.user.is_admin \
             and media.uploader != request.user.id \
@@ -158,8 +157,8 @@ def edit_attachments(request, media):
                     % (request.form['attachment_name']
                        or request.files['attachment_file'].filename))
 
-            return exc.HTTPFound(
-                location=media.url_for_self(request.urlgen))
+            return redirect(request,
+                            location=media.url_for_self(request.urlgen))
         return render_to_response(
             request,
             'mediagoblin/edit/attachments.html',

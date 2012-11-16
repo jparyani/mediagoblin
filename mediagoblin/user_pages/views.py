@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from webob import exc
 import logging
 import datetime
 
@@ -167,8 +166,7 @@ def media_post_comment(request, media):
             media_uploader.wants_comment_notification):
             send_comment_email(media_uploader, comment, media, request)
 
-    return exc.HTTPFound(
-        location=media.url_for_self(request.urlgen))
+    return redirect(request, location=media.url_for_self(request.urlgen))
 
 
 @get_user_media_entry
@@ -302,8 +300,8 @@ def media_confirm_delete(request, media):
             messages.add_message(
                 request, messages.ERROR,
                 _("The media was not deleted because you didn't check that you were sure."))
-            return exc.HTTPFound(
-                location=media.url_for_self(request.urlgen))
+            return redirect(request,
+                            location=media.url_for_self(request.urlgen))
 
     if ((request.user.is_admin and
          request.user.id != media.uploader)):

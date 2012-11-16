@@ -17,8 +17,6 @@
 import uuid
 import datetime
 
-from webob import exc
-
 from mediagoblin import messages
 from mediagoblin import mg_globals
 from mediagoblin.tools.response import render_to_response, redirect, render_404
@@ -129,7 +127,7 @@ def login(request):
             request.session.save()
 
             if request.form.get('next'):
-                return exc.HTTPFound(location=request.form['next'])
+                return redirect(request, location=request.form['next'])
             else:
                 return redirect(request, "index")
 
