@@ -135,9 +135,8 @@ class MediaGoblinApp(object):
     def call_backend(self, environ, start_response):
         request = Request(environ)
 
-        ## Compatibility webob -> werkzeug
+        # Compatibility with django, use request.args preferrably
         request.GET = request.args
-        request.accept = request.accept_mimetypes
 
         ## Routing / controller loading stuff
         map_adapter = self.url_map.bind_to_environ(request.environ)
