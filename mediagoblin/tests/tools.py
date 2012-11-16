@@ -78,7 +78,7 @@ class TestingMeddleware(BaseMeddleware):
 
     def process_response(self, request, response):
         # All following tests should be for html only!
-        if response.content_type != "text/html":
+        if getattr(response, 'content_type', None) != "text/html":
             # Get out early
             return
 

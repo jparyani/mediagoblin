@@ -19,10 +19,10 @@ import logging
 import uuid
 
 from os.path import splitext
-from webob import Response
+from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import BadRequest, Forbidden
 from werkzeug.utils import secure_filename
-from werkzeug.datastructures import FileStorage
+from werkzeug.wrappers import Response
 from celery import registry
 
 from mediagoblin.db.util import ObjectId
@@ -136,6 +136,8 @@ def api_test(request):
             'username': request.user.username,
             'email': request.user.email}
 
+    # TODO: This is the *only* thing using Response() here, should that
+    # not simply use json_response()?
     return Response(json.dumps(user_data))
 
 
