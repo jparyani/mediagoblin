@@ -19,6 +19,15 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+WIP
+=====
+
+**New features**
+
+**Other changed**
+
+* Dependency list has been reduced not requireing the "webob" package anymore.
+
 0.3.2
 =====
 
