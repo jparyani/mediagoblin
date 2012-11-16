@@ -193,7 +193,8 @@ class MediaGoblinApp(object):
         except NotFound as exc:
             return render_404(request)(environ, start_response)
         except HTTPException as exc:
-            # Support legacy webob.exc responses
+            # exceptions that match() is documented to return:
+            # MethodNotAllowed, RequestRedirect TODO: need to handle ???
             return exc(environ, start_response)
 
         view_func = view_functions[endpoint]

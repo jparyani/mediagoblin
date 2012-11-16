@@ -15,10 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import werkzeug.utils
-from webob import Response
+from werkzeug.wrappers import Response as wz_Response
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import (lazy_pass_to_ugettext as _,
                                          pass_to_ugettext)
+
+class Response(wz_Response):
+    """Set default response mimetype to HTML, otherwise we get text/plain"""
+    default_mimetype = u'text/html'
 
 
 def render_to_response(request, template, context, status=200):
