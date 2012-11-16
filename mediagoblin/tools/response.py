@@ -14,7 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from webob import Response, exc
+import werkzeug.utils
+from webob import Response
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import (lazy_pass_to_ugettext as _,
                                          pass_to_ugettext)
@@ -57,15 +58,21 @@ def render_404(request):
                 "you're looking for has been moved or deleted.")
     return render_error(request, 404, err_msg=err_msg)
 
+
 def redirect(request, *args, **kwargs):
-    """Returns a HTTPFound(), takes a request and then urlgen params"""
+    """Redirects to an URL, using urlgen params or location string
 
-    querystring = None
-    if kwargs.get('querystring'):
-        querystring = kwargs.get('querystring')
-        del kwargs['querystring']
+    :param querystring: querystring to be appended to the URL
+    :param location: If the location keyword is given, redirect to the URL
+    """
+    querystring = kwargs.pop('querystring', None)
 
-    return exc.HTTPFound(
-        location=''.join([
-                request.urlgen(*args, **kwargs),
-                querystring if querystring else '']))
+    # Redirect to URL if given by "location=..."
+    if 'location' in kwargs:
+        location = kwargs.pop('location')
+    else:
+        location = request.urlgen(*args, **kwargs)
+
+    if querystring:
+        location += querystring
+    return werkzeug.utils.redirect(location)
