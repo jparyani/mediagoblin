@@ -73,7 +73,7 @@ def extract_exif(filename):
 
     try:
         image = open(filename)
-        exif_tags = process_file(image)
+        exif_tags = process_file(image, details=False)
     except IOError:
         raise BadMediaFail(_('Could not read the image file.'))
 
@@ -97,7 +97,6 @@ def clean_exif(exif):
     for key, value in exif.items():
         if not key in disabled_tags:
             clean_exif[key] = _ifd_tag_to_dict(value)
-
     return clean_exif
 
 

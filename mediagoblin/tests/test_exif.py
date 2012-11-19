@@ -58,10 +58,10 @@ def test_exif_extraction():
     gps = get_gps_data(result)
 
     # Do we have the result?
-    assert len(result) == 108
+    assert len(result) == 56
 
     # Do we have clean data?
-    assert len(clean) == 105
+    assert len(clean) == 53
 
     # GPS data?
     assert gps == {}
@@ -70,7 +70,7 @@ def test_exif_extraction():
     assert useful == {
         'EXIF Flash': {
             'field_type': 3,
-            'printable': 'No',
+            'printable': u'Flash did not fire',
             'field_offset': 380,
             'tag': 37385,
             'values': [0],
@@ -123,18 +123,7 @@ def test_exif_extraction():
             'field_offset': 708,
             'tag': 33437,
             'values': [[10, 1]],
-            'field_length': 8},
-        'EXIF UserComment': {
-            'field_type': 7,
-            'printable': 'Joar Wandborg                       ',
-            'field_offset': 26180,
-            'tag': 37510,
-            'values': [
-                65, 83, 67, 73, 73, 0, 0, 0, 74, 111, 97, 114, 32, 87,
-                97, 110, 100, 98, 111, 114, 103, 32, 32, 32, 32, 32, 32,
-                32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
-                32, 32, 32],
-            'field_length': 44}}
+            'field_length': 8}}
 
 
 def test_exif_image_orientation():
