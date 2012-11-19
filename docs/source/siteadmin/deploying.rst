@@ -32,6 +32,11 @@ GNU/Linux distro.
    install.  If instead you want to join in as a contributor, see our
    `Hacking HOWTO <http://wiki.mediagoblin.org/HackingHowto>`_ instead.
 
+   There are also many ways to install servers... for the sake of
+   simplicity, our instructions below describe installing with nginx.
+   For more recipes, including Apache, see
+   `our wiki <http://wiki.mediagoblin.org/Deployment>`_.
+
 Prepare System
 --------------
 
