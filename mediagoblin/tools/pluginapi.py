@@ -145,16 +145,14 @@ def register_routes(routes):
 
     Example passing in a single route:
 
-    >>> from routes import Route
-    >>> register_routes(Route('about-view', '/about',
-    ...     controller=about_view_handler))
+    >>> register_routes(('about-view', '/about',
+    ...     'mediagoblin.views:about_view_handler'))
 
     Example passing in a list of routes:
 
-    >>> from routes import Route
     >>> register_routes([
-    ...     Route('contact-view', '/contact', controller=contact_handler),
-    ...     Route('about-view', '/about', controller=about_handler)
+    ...     ('contact-view', '/contact', 'mediagoblin.views:contact_handler'),
+    ...     ('about-view', '/about', 'mediagoblin.views:about_handler')
     ... ])
 
 

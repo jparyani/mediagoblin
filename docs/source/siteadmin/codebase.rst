@@ -68,8 +68,6 @@ Software Stack
   * `WebOb <http://pythonpaste.org/webob/>`_: nice abstraction layer
     from HTTP requests, responses and WSGI bits
 
-  * `Routes <http://routes.groovie.org/>`_: for URL routing
-
   * `Beaker <http://beaker.groovie.org/>`_: for handling sessions and
     caching
 
