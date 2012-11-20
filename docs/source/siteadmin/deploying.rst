@@ -170,7 +170,7 @@ And set up the in-package virtualenv::
 
    If you have problems here, consider trying to install virtualenv
    with the ``--distribute`` or ``--no-site-packages`` options. If
-   your system's default Python is in the 3.x series you man need to
+   your system's default Python is in the 3.x series you may need to
    run ``virtualenv`` with the  ``--python=python2.7`` or
    ``--python=python2.6`` options.
 
@@ -178,7 +178,7 @@ The above provides an in-package install of ``virtualenv``. While this
 is counter to the conventional ``virtualenv`` configuration, it is
 more reliable and considerably easier to configure and illustrate. If
 you're familiar with Python packaging you may consider deploying with
-your preferred the method.
+your preferred method.
 
 Assuming you are going to deploy with FastCGI, you should also install
 flup::
