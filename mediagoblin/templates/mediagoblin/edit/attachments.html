@@ -40,7 +40,7 @@
       </div>
 
       {% if media.attachment_files|count %}
-      <h2>Attachments</h2>
+      <h2>{% trans %}Attachments{% endtrans %}</h2>
       <ul>
 	{% for attachment in media.attachment_files %}
           <li>
@@ -53,7 +53,7 @@
       </ul>
       {% endif %}
 
-      <h2>Add attachment</h2>
+      <h2>{% trans %]Add attachment{% endtrans %}</h2>
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
         <a href="{{ media.url_for_self(request.urlgen) }}">Cancel</a>
