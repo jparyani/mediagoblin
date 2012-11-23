@@ -48,7 +48,7 @@ setup(
         'wtforms',
         'py-bcrypt',
         'nose',
-        'werkzeug',
+        'werkzeug>=0.7',
         'celery==2.5.3',
         'kombu==2.1.7',
         'jinja2',
