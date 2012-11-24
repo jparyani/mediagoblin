@@ -39,7 +39,7 @@ class MigrationManager(object):
          - migration_registry: where we should find all migrations to
            run
         """
-        self.name = name
+        self.name = unicode(name)
         self.models = models
         self.session = session
         self.migration_registry = migration_registry
