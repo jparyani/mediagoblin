@@ -41,6 +41,11 @@ class ImageData(Base):
     gps_direction = Column(Float)
 
     def get_original_date(self):
+        """
+        Get the original date and time from the EXIF information. Returns
+        either a datetime object or None (if anything goes wrong)
+        """
+
         import datetime
         try:
             # Try wrapped around all since exif_all might be none,
