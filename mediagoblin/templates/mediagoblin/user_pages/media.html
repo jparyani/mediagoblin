@@ -153,13 +153,14 @@
       <h3>Added on</h3>
       <p>{{ date }}</p>
     {%- endtrans %}
-    {% if app_config['original_date_visible']
-          and media.media_data.exif_all is defined
-          and 'EXIF DateTimeOriginal' in media.media_data.exif_all %}
-      {% trans date=media.media_data.exif_all['EXIF DateTimeOriginal']['printable'][:10].replace(':','-') -%}
-        <h3>Created on</h3>
-        <p>{{ date }}</p>
-      {%- endtrans %}
+    {% if app_config['original_date_visible'] %}
+      {% set original_date = media.media_data.get_original_date() %}
+      {% if original_date -%}
+        {% trans date=original_date.strftime("%Y-%m-%d") -%}
+          <h3>Created on</h3>
+          <p>{{ date }}</p>
+        {%- endtrans %}
+      {%- endif %}
     {% endif %}
     {% if media.tags %}
       {% include "mediagoblin/utils/tags.html" %}
