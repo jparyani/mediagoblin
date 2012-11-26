@@ -14,14 +14,92 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from sqlalchemy import MetaData, Table
+from datetime import datetime, timedelta
+from sqlalchemy import (MetaData, Table, Column,
+                        Integer, Unicode, Enum, DateTime, ForeignKey)
+from sqlalchemy.ext.declarative import declarative_base
 
 from mediagoblin.db.sql.util import RegisterMigration
+from mediagoblin.db.sql.models import User
 
-from mediagoblin.plugins.oauth.models import OAuthClient, OAuthToken, \
-        OAuthUserClient, OAuthCode
 
 MIGRATIONS = {}
+
+
+class OAuthClient_v0(declarative_base()):
+    __tablename__ = 'oauth__client'
+
+    id = Column(Integer, primary_key=True)
+    created = Column(DateTime, nullable=False,
+            default=datetime.now)
+
+    name = Column(Unicode)
+    description = Column(Unicode)
+
+    identifier = Column(Unicode, unique=True, index=True)
+    secret = Column(Unicode, index=True)
+
+    owner_id = Column(Integer, ForeignKey(User.id))
+    redirect_uri = Column(Unicode)
+
+    type = Column(Enum(
+        u'confidential',
+        u'public',
+        name=u'oauth__client_type'))
+
+
+class OAuthUserClient_v0(declarative_base()):
+    __tablename__ = 'oauth__user_client'
+    id = Column(Integer, primary_key=True)
+
+    user_id = Column(Integer, ForeignKey(User.id))
+    client_id = Column(Integer, ForeignKey(OAuthClient_v0.id))
+
+    state = Column(Enum(
+        u'approved',
+        u'rejected',
+        name=u'oauth__relation_state'))
+
+
+class OAuthToken_v0(declarative_base()):
+    __tablename__ = 'oauth__tokens'
+
+    id = Column(Integer, primary_key=True)
+    created = Column(DateTime, nullable=False,
+            default=datetime.now)
+    expires = Column(DateTime, nullable=False,
+            default=lambda: datetime.now() + timedelta(days=30))
+    token = Column(Unicode, index=True)
+    refresh_token = Column(Unicode, index=True)
+
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False,
+            index=True)
+
+    client_id = Column(Integer, ForeignKey(OAuthClient_v0.id), nullable=False)
+
+    def __repr__(self):
+        return '<{0} #{1} expires {2} [{3}, {4}]>'.format(
+                self.__class__.__name__,
+                self.id,
+                self.expires.isoformat(),
+                self.user,
+                self.client)
+
+
+class OAuthCode_v0(declarative_base()):
+    __tablename__ = 'oauth__codes'
+
+    id = Column(Integer, primary_key=True)
+    created = Column(DateTime, nullable=False,
+            default=datetime.now)
+    expires = Column(DateTime, nullable=False,
+            default=lambda: datetime.now() + timedelta(minutes=5))
+    code = Column(Unicode, index=True)
+
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False,
+            index=True)
+
+    client_id = Column(Integer, ForeignKey(OAuthClient_v0.id), nullable=False)
 
 
 @RegisterMigration(1, MIGRATIONS)
@@ -38,9 +116,9 @@ def remove_and_replace_token_and_code(db):
 
     code_table.drop()
 
-    OAuthClient.__table__.create(db.bind)
-    OAuthUserClient.__table__.create(db.bind)
-    OAuthToken.__table__.create(db.bind)
-    OAuthCode.__table__.create(db.bind)
+    OAuthClient_v0.__table__.create(db.bind)
+    OAuthUserClient_v0.__table__.create(db.bind)
+    OAuthToken_v0.__table__.create(db.bind)
+    OAuthCode_v0.__table__.create(db.bind)
 
     db.commit()
