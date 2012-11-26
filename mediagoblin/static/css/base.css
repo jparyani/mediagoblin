@@ -259,6 +259,10 @@ text-align: center;
   height: 0;
 }
 
+.hidden {
+  display: none;
+}
+
 .media_sidebar h3 {
 	font-size: 1em;
 	margin: 0 0 5px;
