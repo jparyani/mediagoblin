@@ -65,7 +65,8 @@
                {% trans %}Verify your email!{% endtrans %}</a>
               {% endif %}
             {% else %}
-              <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
+              <a href="{{ request.urlgen('mediagoblin.auth.login') }}?next={{
+                                                request.base_url|urlencode }}">
                 {% trans %}Log in{% endtrans %}</a>
             {% endif %}
           </div>
