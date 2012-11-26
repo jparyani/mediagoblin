@@ -139,7 +139,7 @@ class MediaEntryMixin(object):
 
     def get_license_data(self):
         """Return license dict for requested license"""
-        return licenses.SUPPORTED_LICENSES[self.license or ""]
+        return licenses.get_license_by_url(self.license or "")
 
     def exif_display_iter(self):
         from mediagoblin.tools.exif import USEFUL_TAGS

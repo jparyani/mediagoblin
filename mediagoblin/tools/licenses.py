@@ -50,6 +50,16 @@ SORTED_LICENSES = [
 SUPPORTED_LICENSES = dict(((l.uri, l) for l in SORTED_LICENSES))
 
 
+def get_license_by_url(url):
+    """Look up a license by its url and return the License object"""
+    try:
+        return SUPPORTED_LICENSES[url]
+    except KeyError:
+        # in case of an unknown License, just display the url given
+        # rather than exploding in the user's face.
+        return License(url, url, url)
+
+
 def licenses_as_choices():
     """List of (uri, abbreviation) tuples for HTML choice field population
 
