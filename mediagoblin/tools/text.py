@@ -38,13 +38,12 @@ HTML_CLEANER = Cleaner(
     allow_tags=[
         'div', 'b', 'i', 'em', 'strong', 'p', 'ul', 'ol', 'li', 'a', 'br',
         'pre', 'code'],
-    remove_unknown_tags=False, # can't be used with allow_tags
+    remove_unknown_tags=False,  # can't be used with allow_tags
     safe_attrs_only=True,
-    add_nofollow=True, # for now
+    add_nofollow=True,  # for now
     host_whitelist=(),
     whitelist_tags=set([]))
 
-TAGS_DELIMITER=',';
 
 def clean_html(html):
     # clean_html barfs on an empty string
@@ -68,14 +67,12 @@ def convert_to_tag_list_of_dicts(tag_string):
         stripped_tag_string = u' '.join(tag_string.strip().split())
 
         # Split the tag string into a list of tags
-        for tag in stripped_tag_string.split(
-                                       TAGS_DELIMITER):
-
+        for tag in stripped_tag_string.split(','):
+            tag = tag.strip()
             # Ignore empty or duplicate tags
-            if tag.strip() and tag.strip() not in [t['name'] for t in taglist]:
-
-                taglist.append({'name': tag.strip(),
-                                'slug': url.slugify(tag.strip())})
+            if tag and tag not in [t['name'] for t in taglist]:
+                taglist.append({'name': tag,
+                                'slug': url.slugify(tag)})
     return taglist
 
 
@@ -85,11 +82,10 @@ def media_tags_as_string(media_entry_tags):
 
     This is the opposite of convert_to_tag_list_of_dicts
     """
-    media_tag_string = ''
+    tags_string = ''
     if media_entry_tags:
-        media_tag_string = (TAGS_DELIMITER+u' ').join(
-                                      [tag['name'] for tag in media_entry_tags])
-    return media_tag_string
+        tags_string = u', '.join([tag['name'] for tag in media_entry_tags])
+    return tags_string
 
 
 TOO_LONG_TAG_WARNING = \
@@ -107,7 +103,7 @@ def tag_length_validator(form, field):
 
     if too_long_tags:
         raise wtforms.ValidationError(
-            TOO_LONG_TAG_WARNING % (mg_globals.app_config['tags_max_length'], \
+            TOO_LONG_TAG_WARNING % (mg_globals.app_config['tags_max_length'],
                                     ', '.join(too_long_tags)))
 
 
