@@ -14,42 +14,46 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-SORTED_SUPPORTED_LICENSES = [
-    ("",
-     {"name": "No license specified",
-      "abbreviation": "All rights reserved"}),
-    ("http://creativecommons.org/licenses/by/3.0/",
-     {"name": "Creative Commons Attribution Unported 3.0",
-      "abbreviation": "CC BY 3.0"}),
-    ("http://creativecommons.org/licenses/by-sa/3.0/",
-     {"name": "Creative Commons Attribution-ShareAlike Unported 3.0",
-      "abbreviation": "CC BY-SA 3.0"}),
-    ("http://creativecommons.org/licenses/by-nd/3.0/",
-     {"name": "Creative Commons Attribution-NoDerivs 3.0 Unported",
-      "abbreviation": "CC BY-ND 3.0"}),
-    ("http://creativecommons.org/licenses/by-nc/3.0/",
-     {"name": "Creative Commons Attribution-NonCommercial Unported 3.0",
-      "abbreviation": "CC BY-NC 3.0"}),
-    ("http://creativecommons.org/licenses/by-nc-sa/3.0/",
-     {"name": "Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported",
-      "abbreviation": "CC BY-NC-SA 3.0"}),
-    ("http://creativecommons.org/licenses/by-nc-nd/3.0/",
-     {"name": "Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported",
-      "abbreviation": "CC BY-NC-ND 3.0"}),
-    ("http://creativecommons.org/publicdomain/zero/1.0/",
-     {"name": "Creative Commons CC0 1.0 Universal",
-      "abbreviation": "CC0 1.0"}),
-    ("http://creativecommons.org/publicdomain/mark/1.0/",
-     {"name": "Public Domain",
-      "abbreviation": "Public Domain"})]
+from collections import namedtuple
+# Give a License attribute names: uri, name, abbreviation
+License = namedtuple("License", ["abbreviation", "name", "uri"])
 
-SUPPORTED_LICENSES = dict(SORTED_SUPPORTED_LICENSES)
+SORTED_LICENSES = [
+    License("All rights reserved", "No license specified", ""),
+    License("CC BY 3.0", "Creative Commons Attribution Unported 3.0",
+           "http://creativecommons.org/licenses/by/3.0/"),
+    License("CC BY-SA 3.0",
+           "Creative Commons Attribution-ShareAlike Unported 3.0",
+           "http://creativecommons.org/licenses/by-sa/3.0/"),
+    License("CC BY-ND 3.0",
+           "Creative Commons Attribution-NoDerivs 3.0 Unported",
+           "http://creativecommons.org/licenses/by-nd/3.0/"),
+    License("CC BY-NC 3.0",
+          "Creative Commons Attribution-NonCommercial Unported 3.0",
+          "http://creativecommons.org/licenses/by-nc/3.0/"),
+    License("CC BY-NC-SA 3.0",
+           "Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported",
+           "http://creativecommons.org/licenses/by-nc-sa/3.0/"),
+    License("CC BY-NC-ND 3.0",
+           "Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported",
+           "http://creativecommons.org/licenses/by-nc-nd/3.0/"),
+    License("CC0 1.0",
+           "Creative Commons CC0 1.0 Universal",
+           "http://creativecommons.org/publicdomain/zero/1.0/"),
+    License("Public Domain","Public Domain",
+           "http://creativecommons.org/publicdomain/mark/1.0/"),
+    ]
+
+# dict {uri: License,...} to enable fast license lookup by uri. Ideally,
+# we'd want to use an OrderedDict (python 2.7+) here to avoid having the
+# same data in two structures
+SUPPORTED_LICENSES = dict(((l.uri, l) for l in SORTED_LICENSES))
 
 
 def licenses_as_choices():
-    license_list = []
+    """List of (uri, abbreviation) tuples for HTML choice field population
 
-    for uri, data in SORTED_SUPPORTED_LICENSES:
-        license_list.append((uri, data["abbreviation"]))
-
-    return license_list
+    The data seems to be consumed/deleted during usage, so hand over a
+    throwaway list, rather than just a generator.
+    """
+    return [(lic.uri, lic.abbreviation) for lic in SORTED_LICENSES]
