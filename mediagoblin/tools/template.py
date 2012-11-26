@@ -17,6 +17,8 @@
 from math import ceil
 import jinja2
 from babel.localedata import exists
+from werkzeug.urls import url_quote_plus
+
 from mediagoblin import mg_globals
 from mediagoblin import messages
 from mediagoblin.tools import common
@@ -61,6 +63,8 @@ def get_jinja_env(template_loader, locale):
     template_env.globals['gridify_cursor'] = gridify_cursor
     template_env.globals['app_config'] = mg_globals.app_config
     template_env.globals['global_config'] = mg_globals.global_config
+
+    template_env.filters['urlencode'] = url_quote_plus
 
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env
