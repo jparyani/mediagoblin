@@ -79,11 +79,13 @@ class GMGTableBase(object):
         sess.add(self)
         sess.commit()
 
-    def delete(self):
+    def delete(self, commit=True):
+        """Delete the object and commit the change immediately by default"""
         sess = object_session(self)
         assert sess is not None, "Not going to delete detached %r" % self
         sess.delete(self)
-        sess.commit()
+        if commit:
+            sess.commit()
 
 
 Base = declarative_base(cls=GMGTableBase)
