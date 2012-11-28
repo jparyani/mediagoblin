@@ -297,17 +297,17 @@ def media_entries_for_tag_slug(dummy_db, tag_slug):
             & (Tag.slug == tag_slug))
 
 
-def clean_orphan_tags():
+def clean_orphan_tags(commit=True):
+    """Search for unused MediaTags and delete them"""
     q1 = Session.query(Tag).outerjoin(MediaTag).filter(MediaTag.id==None)
     for t in q1:
         Session.delete(t)
-
     # The "let the db do all the work" version:
     # q1 = Session.query(Tag.id).outerjoin(MediaTag).filter(MediaTag.id==None)
     # q2 = Session.query(Tag).filter(Tag.id.in_(q1))
     # q2.delete(synchronize_session = False)
-
-    Session.commit()
+    if commit:
+        Session.commit()
 
 
 def check_collection_slug_used(dummy_db, creator_id, slug, ignore_c_id):
