@@ -18,8 +18,10 @@ import datetime
 
 from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         Integer, Unicode, UnicodeText, DateTime,
-                        ForeignKey, UniqueConstraint)
+                        ForeignKey)
+from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.declarative import declarative_base
+from migrate.changeset.constraint import UniqueConstraint
 
 from mediagoblin.db.sql.util import RegisterMigration
 from mediagoblin.db.sql.models import MediaEntry, Collection, User
@@ -92,14 +94,19 @@ class CollectionItem_v0(declarative_base()):
     ## This should be activated, normally.
     ## But this would change the way the next migration used to work.
     ## So it's commented for now.
-    # __table_args__ = (
-    #     UniqueConstraint('collection', 'media_entry'),
-    #     {})
+    __table_args__ = (
+        UniqueConstraint('collection', 'media_entry'),
+        {})
+
+collectionitem_unique_constraint_done = False
 
 @RegisterMigration(4, MIGRATIONS)
 def add_collection_tables(db_conn):
     Collection_v0.__table__.create(db_conn.bind)
     CollectionItem_v0.__table__.create(db_conn.bind)
+
+    global collectionitem_unique_constraint_done
+    collectionitem_unique_constraint_done = True
 
     db_conn.commit()
 
@@ -128,3 +135,34 @@ class ProcessingMetaData_v0(declarative_base()):
 def create_processing_metadata_table(db):
     ProcessingMetaData_v0.__table__.create(db.bind)
     db.commit()
+
+@RegisterMigration(7, MIGRATIONS)
+def fix_CollectionItem_v0_constraint(db_conn):
+    """Add the forgotten Constraint on CollectionItem"""
+
+    global collectionitem_unique_constraint_done
+    if collectionitem_unique_constraint_done:
+        print "Okay, already done, short circuit"
+        # Reset it. Maybe the whole thing gets run again
+        # For a different db?
+        collectionitem_unique_constraint_done = False
+        return
+
+    metadata = MetaData(bind=db_conn.bind)
+
+    CollectionItem_table = Table('core__collection_items',
+        metadata, autoload=True, autoload_with=db_conn.bind)
+
+    constraint = UniqueConstraint('collection', 'media_entry',
+        name='core__collection_items_collection_media_entry_key',
+        table=CollectionItem_table)
+
+    try:
+        constraint.create()
+    except ProgrammingError as exc:
+        print "***", repr(exc)
+        print "***", repr(exc.statement)
+        print "***", repr(exc.params)
+        print "***", repr(exc.orig)
+        print "*** Ignoring it, you probably have a fresh install from a recent git."
+    db_conn.commit()
