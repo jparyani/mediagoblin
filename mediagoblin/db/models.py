@@ -377,6 +377,10 @@ class MediaComment(Base, MediaCommentMixin):
 
 
 class Collection(Base, CollectionMixin):
+    """An 'album' or 'set' of media by a user.
+
+    On deletion, contained CollectionItems get automatically reaped via
+    SQL cascade"""
     __tablename__ = "core__collections"
 
     id = Column(Integer, primary_key=True)
@@ -386,11 +390,13 @@ class Collection(Base, CollectionMixin):
         index=True)
     description = Column(UnicodeText)
     creator = Column(Integer, ForeignKey(User.id), nullable=False)
+    # TODO: No of items in Collection. Badly named, can we migrate to num_items?
     items = Column(Integer, default=0)
 
     get_creator = relationship(User)
 
     def get_collection_items(self, ascending=False):
+        #TODO, is this still needed with self.collection_items being available?
         order_col = CollectionItem.position
         if not ascending:
             order_col = desc(order_col)
@@ -408,7 +414,10 @@ class CollectionItem(Base, CollectionItemMixin):
     note = Column(UnicodeText, nullable=True)
     added = Column(DateTime, nullable=False, default=datetime.datetime.now)
     position = Column(Integer)
-    in_collection = relationship("Collection")
+    in_collection = relationship("Collection",
+                                 backref=backref(
+                                     "collection_items",
+                                     cascade="all, delete-orphan"))
 
     get_media_entry = relationship(MediaEntry)
 
