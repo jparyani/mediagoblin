@@ -81,6 +81,27 @@ class User(Base, UserMixin):
                 'admin' if self.is_admin else 'user',
                 self.username)
 
+    def delete(self, **kwargs):
+        """Deletes a User and all related entries/comments/files/..."""
+        # Delete this user's Collections and all contained CollectionItems
+        for collection in self.collections:
+            collection.delete(commit=False)
+
+        media_entries = MediaEntry.query.filter(MediaEntry.uploader == self.id)
+        for media in media_entries:
+            # TODO: Make sure that "MediaEntry.delete()" also deletes
+            # all related files/Comments
+            media.delete(del_orphan_tags=False, commit=False)
+
+        # Delete now unused tags
+        # TODO: import here due to cyclic imports!!! This cries for refactoring
+        from mediagoblin.db.sql.util import clean_orphan_tags
+        clean_orphan_tags(commit=False)
+
+        # Delete user, pass through commit=False/True in kwargs
+        super(User, self).delete(**kwargs)
+        _log.info('Deleted user "{0}" account'.format(self.username))
+
 
 class MediaEntry(Base, MediaEntryMixin):
     """
@@ -393,7 +414,7 @@ class Collection(Base, CollectionMixin):
     # TODO: No of items in Collection. Badly named, can we migrate to num_items?
     items = Column(Integer, default=0)
 
-    get_creator = relationship(User)
+    get_creator = relationship(User, backref="collections")
 
     def get_collection_items(self, ascending=False):
         #TODO, is this still needed with self.collection_items being available?
