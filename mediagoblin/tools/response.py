@@ -32,7 +32,7 @@ def render_error(request, status=500, title=_('Oops!'),
 
     Title and description are passed through as-is to allow html. Make
     sure no user input is contained therein for security reasons. The
-    description will be wrapped in a <p> tag.
+    description will be wrapped in <p></p> tags.
     """
     return Response(render_template(request, 'mediagoblin/error.html',
         {'err_code': status, 'title': title, 'err_msg': err_msg}),
@@ -49,7 +49,7 @@ def render_403(request):
 
 def render_404(request):
     """Render a standard 404 page."""
-    err_msg = _("<p>There doesn't seem to be a page at this address. Sorry!</p>"
+    err_msg = _("There doesn't seem to be a page at this address. Sorry!</p>"
                 "<p>If you're sure the address is correct, maybe the page "
                 "you're looking for has been moved or deleted.")
     return render_error(request, 404, err_msg=err_msg)
