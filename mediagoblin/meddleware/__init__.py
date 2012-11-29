@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ENABLED_MEDDLEWARE = (
-    'mediagoblin.meddleware.noop:NoOpMeddleware',
     'mediagoblin.meddleware.csrf:CsrfMeddleware',
     )
 
