@@ -17,15 +17,12 @@
 #}
 {% extends "mediagoblin/base.html" %}
 
-{% block title %}404 &mdash; {{ super() }}{% endblock %}
+{% block title %}{{err_code}} &mdash; {{ super() }}{% endblock %}
 
 {% block mediagoblin_content %}
   <img class="right_align" src="{{ request.staticdirect('/images/404.png') }}"
-       alt="{% trans %}Image of 404 goblin stressing out{% endtrans %}" />
-  <h1>{% trans %}Oops!{% endtrans %}</h1>
-  <p>{% trans %}There doesn't seem to be a page at this address. Sorry!{% endtrans %}</p>
-  <p>
-    {%- trans %}If you're sure the address is correct, maybe the page you're looking for has been moved or deleted.{% endtrans -%}
-  </p>
+       alt="{% trans %}Image of goblin stressing out{% endtrans %}" />
+  <h1>{{ title }}</h1>
+  <p>{{ err_msg|safe }}</p>
   <div class="clear"></div>
 {% endblock %}
