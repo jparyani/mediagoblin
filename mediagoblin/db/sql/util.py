@@ -322,6 +322,6 @@ def check_collection_slug_used(dummy_db, creator_id, slug, ignore_c_id):
 if __name__ == '__main__':
     from mediagoblin.db.sql.open import setup_connection_and_db_from_config
 
-    conn,db = setup_connection_and_db_from_config({'sql_engine':'sqlite:///mediagoblin.db'})
+    db = setup_connection_and_db_from_config({'sql_engine':'sqlite:///mediagoblin.db'})
 
     clean_orphan_tags()

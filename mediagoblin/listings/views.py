@@ -36,10 +36,6 @@ def _get_tag_name_from_entries(media_entries, tag_slug):
                 tag_name = tag['name']
                 break
         break
-    # TODO: Remove after SQL-switch, it's mongo specific
-    if hasattr(media_entries, "rewind"):
-        media_entries.rewind()
-
     return tag_name
 
 

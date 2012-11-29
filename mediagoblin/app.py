@@ -78,7 +78,7 @@ class MediaGoblinApp(object):
         setup_plugins()
 
         # Set up the database
-        self.connection, self.db = setup_database()
+        self.db = setup_database()
 
         # Register themes
         self.theme_registry, self.current_theme = register_themes(app_config)

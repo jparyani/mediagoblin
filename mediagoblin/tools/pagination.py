@@ -25,7 +25,7 @@ PAGINATION_DEFAULT_PER_PAGE = 30
 
 class Pagination(object):
     """
-    Pagination class for mongodb queries.
+    Pagination class for database queries.
 
     Initialization through __init__(self, cursor, page=1, per_page=2),
     get actual data slice through __call__().

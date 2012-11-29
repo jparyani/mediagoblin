@@ -71,7 +71,7 @@ def setup_connection_and_db_from_config(app_config):
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
     Session.configure(bind=engine)
 
-    return "dummy conn", DatabaseMaster(engine)
+    return DatabaseMaster(engine)
 
 
 def check_db_migrations_current(db):

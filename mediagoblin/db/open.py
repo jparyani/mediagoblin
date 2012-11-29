@@ -14,16 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    from mediagoblin.db.sql_switch import use_sql
-except ImportError:
-    use_sql = False
-
-if use_sql:
-    from mediagoblin.db.sql.open import \
-        setup_connection_and_db_from_config, check_db_migrations_current, \
-        load_models
-else:
-    from mediagoblin.db.mongo.open import \
+from mediagoblin.db.sql.open import \
         setup_connection_and_db_from_config, check_db_migrations_current, \
         load_models

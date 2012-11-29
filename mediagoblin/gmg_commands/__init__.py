@@ -25,11 +25,6 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.shell:shell_parser_setup',
         'func': 'mediagoblin.gmg_commands.shell:shell',
         'help': 'Run a shell with some tools pre-setup'},
-    'migrate': {
-        'setup': 'mediagoblin.gmg_commands.migrate:migrate_parser_setup',
-        'func': 'mediagoblin.gmg_commands.migrate:migrate',
-        'help': ('Migrate your Mongo database. '
-                 '[DEPRECATED!] use convert_mongo_to_sql and dbupdate.')},
     'adduser': {
         'setup': 'mediagoblin.gmg_commands.users:adduser_parser_setup',
         'func': 'mediagoblin.gmg_commands.users:adduser',
@@ -46,10 +41,6 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.dbupdate:dbupdate_parse_setup',
         'func': 'mediagoblin.gmg_commands.dbupdate:dbupdate',
         'help': 'Set up or update the SQL database'},
-    'convert_mongo_to_sql': {
-        'setup': 'mediagoblin.gmg_commands.mongosql:mongosql_parser_setup',
-        'func': 'mediagoblin.gmg_commands.mongosql:mongosql',
-        'help': 'Convert Mongo DB data to SQL DB data'},
     'theme': {
         'setup': 'mediagoblin.gmg_commands.theme:theme_parser_setup',
         'func': 'mediagoblin.gmg_commands.theme:theme',

@@ -18,23 +18,20 @@ from nose.tools import assert_raises
 
 from mediagoblin import mg_globals
 
+
 class TestGlobals(object):
     def setUp(self):
-        self.old_connection = mg_globals.db_connection
         self.old_database = mg_globals.database
 
     def tearDown(self):
-        mg_globals.db_connection = self.old_connection
         mg_globals.database = self.old_database
 
     def test_setup_globals(self):
         mg_globals.setup_globals(
-            db_connection='my favorite db_connection!',
             database='my favorite database!',
             public_store='my favorite public_store!',
             queue_store='my favorite queue_store!')
 
-        assert mg_globals.db_connection == 'my favorite db_connection!'
         assert mg_globals.database == 'my favorite database!'
         assert mg_globals.public_store == 'my favorite public_store!'
         assert mg_globals.queue_store == 'my favorite queue_store!'

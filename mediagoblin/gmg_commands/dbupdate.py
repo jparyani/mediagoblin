@@ -114,7 +114,7 @@ def run_dbupdate(app_config, global_config):
             global_config.get('plugins', {}).keys())
 
     # Set up the database
-    connection, db = setup_connection_and_db_from_config(app_config)
+    db = setup_connection_and_db_from_config(app_config)
 
     Session = sessionmaker(bind=db.engine)
 

@@ -66,15 +66,13 @@ def setup_database():
     load_models(app_config)
 
     # Set up the database
-    connection, db = setup_connection_and_db_from_config(app_config)
+    db = setup_connection_and_db_from_config(app_config)
 
     check_db_migrations_current(db)
 
-    setup_globals(
-        db_connection=connection,
-        database=db)
+    setup_globals(database=db)
 
-    return connection, db
+    return db
 
 
 def get_jinja_loader(user_template_path=None, current_theme=None,

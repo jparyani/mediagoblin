@@ -26,10 +26,7 @@ import threading
 # General mediagoblin globals
 #############################
 
-# mongokit.Connection
-db_connection = None
-
-# mongokit.Connection
+# SQL database engine
 database = None
 
 # beaker's cache manager
