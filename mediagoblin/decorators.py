@@ -20,7 +20,7 @@ from urlparse import urljoin
 from werkzeug.exceptions import Forbidden
 from werkzeug.urls import url_quote
 
-from mediagoblin.db.sql.models import MediaEntry, User
+from mediagoblin.db.models import MediaEntry, User
 from mediagoblin.tools.response import redirect, render_404
 
 

@@ -20,7 +20,7 @@ import bcrypt
 from datetime import datetime, timedelta
 
 from mediagoblin.db.sql.base import Base
-from mediagoblin.db.sql.models import User
+from mediagoblin.db.models import User
 
 from sqlalchemy import (
         Column, Unicode, Integer, DateTime, ForeignKey, Enum)

@@ -21,7 +21,7 @@ from nose.tools import assert_equal
 
 from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
-from mediagoblin.db.sql.models import User
+from mediagoblin.db.models import User
 from mediagoblin.tests.tools import setup_fresh_app, fixture_add_user
 from mediagoblin.tools import template, mail
 

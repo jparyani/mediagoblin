@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import sys
 from mediagoblin.db.sql.base import Session
-from mediagoblin.db.sql.models import MediaEntry, Tag, MediaTag, Collection
+from mediagoblin.db.models import MediaEntry, Tag, MediaTag, Collection
 
 from mediagoblin.tools.common import simple_printer
 
@@ -45,7 +45,7 @@ class MigrationManager(object):
         self.printer = printer
 
         # For convenience
-        from mediagoblin.db.sql.models import MigrationData
+        from mediagoblin.db.models import MigrationData
 
         self.migration_model = MigrationData
         self.migration_table = MigrationData.__table__
@@ -259,7 +259,7 @@ def assure_migrations_table_setup(db):
     """
     Make sure the migrations table is set up in the database.
     """
-    from mediagoblin.db.sql.models import MigrationData
+    from mediagoblin.db.models import MigrationData
 
     if not MigrationData.__table__.exists(db.bind):
         MigrationData.metadata.create_all(

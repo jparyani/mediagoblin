@@ -18,7 +18,7 @@ import uuid
 import datetime
 
 from mediagoblin import messages, mg_globals
-from mediagoblin.db.sql.models import User
+from mediagoblin.db.models import User
 from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.auth import lib as auth_lib

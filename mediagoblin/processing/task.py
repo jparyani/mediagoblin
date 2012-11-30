@@ -19,7 +19,7 @@ import logging
 from celery.task import Task
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.sql.models import MediaEntry
+from mediagoblin.db.models import MediaEntry
 from mediagoblin.processing import mark_entry_failed, BaseProcessingFail
 from mediagoblin.tools.processing import json_processing_callback
 

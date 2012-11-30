@@ -50,7 +50,7 @@ class DatabaseMaster(object):
 
 
 def load_models(app_config):
-    import mediagoblin.db.sql.models
+    import mediagoblin.db.models
 
     for media_type in app_config['media_types']:
         _log.debug("Loading %s.models", media_type)

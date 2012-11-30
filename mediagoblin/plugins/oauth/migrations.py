@@ -20,7 +20,7 @@ from sqlalchemy import (MetaData, Table, Column,
 from sqlalchemy.ext.declarative import declarative_base
 
 from mediagoblin.db.util import RegisterMigration
-from mediagoblin.db.sql.models import User
+from mediagoblin.db.models import User
 
 
 MIGRATIONS = {}

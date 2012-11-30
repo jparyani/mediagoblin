@@ -26,6 +26,9 @@ WIP
 
 **Other changed**
 
+* Plugin writers: Internal restructuring led to mediagoblin.db.sql* be
+  mediagoblin.db.* starting from 0.3.3
+
 * Dependency list has been reduced not requireing the "webob" package anymore.
 
 0.3.2

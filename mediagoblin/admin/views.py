@@ -16,7 +16,7 @@
 
 from werkzeug.exceptions import Forbidden
 
-from mediagoblin.db.sql.models import MediaEntry
+from mediagoblin.db.models import MediaEntry
 from mediagoblin.decorators import require_active_login
 from mediagoblin.tools.response import render_to_response
 

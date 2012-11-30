@@ -16,7 +16,7 @@
 
 from mediagoblin import mg_globals
 from mediagoblin.tests.tools import get_test_app
-from mediagoblin.db.sql.models import User
+from mediagoblin.db.models import User
 
 
 def test_get_test_app_wipes_db():

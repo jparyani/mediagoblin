@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.db.sql.models import MediaEntry
+from mediagoblin.db.models import MediaEntry
 from mediagoblin.db.util import media_entries_for_tag_slug
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.response import render_to_response

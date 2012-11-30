@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin import mg_globals
-from mediagoblin.db.sql.models import MediaEntry
+from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.response import render_to_response
 from mediagoblin.decorators import uses_pagination
