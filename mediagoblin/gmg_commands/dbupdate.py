@@ -18,7 +18,7 @@ import logging
 
 from sqlalchemy.orm import sessionmaker
 
-from mediagoblin.db.sql.open import setup_connection_and_db_from_config
+from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.db.sql.util import MigrationManager
 from mediagoblin.init import setup_global_and_app_config
 from mediagoblin.tools.common import import_component

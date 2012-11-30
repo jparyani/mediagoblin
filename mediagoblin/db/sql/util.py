@@ -320,7 +320,7 @@ def check_collection_slug_used(dummy_db, creator_id, slug, ignore_c_id):
 
 
 if __name__ == '__main__':
-    from mediagoblin.db.sql.open import setup_connection_and_db_from_config
+    from mediagoblin.db.open import setup_connection_and_db_from_config
 
     db = setup_connection_and_db_from_config({'sql_engine':'sqlite:///mediagoblin.db'})
 
