@@ -29,6 +29,7 @@ real objects.
 
 from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
+from mediagoblin.media_types import get_media_manager
 from mediagoblin.tools import common, licenses
 from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.url import slugify
@@ -122,11 +123,11 @@ class MediaEntryMixin(object):
             thumb_url = mg_globals.app.public_store.file_url(
                             self.media_files[u'thumb'])
         else:
-            # no thumbnail in media available. Get the media's
+            # No thumbnail in media available. Get the media's
             # MEDIA_MANAGER for the fallback icon and return static URL
-            manager = __import__(self.media_type)
-            thumb_url = manager.MEDIA_MANAGER[u'default_thumb']
-            thumb_url = mg_globals.app.staticdirector(thumb_url) # use static
+            # Raise FileTypeNotSupported in case no such manager is enabled
+            manager = get_media_manager(self.media_type)
+            thumb_url = mg_globals.app.staticdirector(manager[u'default_thumb'])
         return thumb_url
 
     def get_fail_exception(self):
