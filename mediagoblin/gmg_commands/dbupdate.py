@@ -53,7 +53,7 @@ def gather_database_data(media_types, plugins):
 
     # Add main first
     from mediagoblin.db.sql.models import MODELS as MAIN_MODELS
-    from mediagoblin.db.sql.migrations import MIGRATIONS as MAIN_MIGRATIONS
+    from mediagoblin.db.migrations import MIGRATIONS as MAIN_MIGRATIONS
 
     managed_dbdata.append(
         DatabaseData(
