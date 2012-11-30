@@ -75,9 +75,9 @@ def user_may_delete_media(controller):
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
         uploader_id = request.db.MediaEntry.find_one(
-            {'_id': ObjectId(request.matchdict['media'])}).uploader
+            {'id': ObjectId(request.matchdict['media'])}).uploader
         if not (request.user.is_admin or
-                request.user._id == uploader_id):
+                request.user.id == uploader_id):
             return exc.HTTPForbidden()
 
         return controller(request, *args, **kwargs)
@@ -94,7 +94,7 @@ def user_may_alter_collection(controller):
         creator_id = request.db.User.find_one(
             {'username': request.matchdict['user']}).id
         if not (request.user.is_admin or
-                request.user._id == creator_id):
+                request.user.id == creator_id):
             return exc.HTTPForbidden()
 
         return controller(request, *args, **kwargs)
@@ -134,15 +134,15 @@ def get_user_media_entry(controller):
         media = request.db.MediaEntry.find_one(
             {'slug': request.matchdict['media'],
              'state': u'processed',
-             'uploader': user._id})
+             'uploader': user.id})
 
         # no media via slug?  Grab it via ObjectId
         if not media:
             try:
                 media = request.db.MediaEntry.find_one(
-                    {'_id': ObjectId(request.matchdict['media']),
+                    {'id': ObjectId(request.matchdict['media']),
                      'state': u'processed',
-                     'uploader': user._id})
+                     'uploader': user.id})
             except InvalidId:
                 return render_404(request)
 
@@ -169,7 +169,7 @@ def get_user_collection(controller):
 
         collection = request.db.Collection.find_one(
             {'slug': request.matchdict['collection'],
-             'creator': user._id})
+             'creator': user.id})
 
         # Still no collection?  Okay, 404.
         if not collection:
@@ -194,10 +194,10 @@ def get_user_collection_item(controller):
 
         collection = request.db.Collection.find_one(
             {'slug': request.matchdict['collection'],
-             'creator': user._id})
+             'creator': user.id})
 
         collection_item = request.db.CollectionItem.find_one(
-            {'_id': request.matchdict['collection_item'] })
+            {'id': request.matchdict['collection_item'] })
 
         # Still no collection item?  Okay, 404.
         if not collection_item:
@@ -216,7 +216,7 @@ def get_media_entry_by_id(controller):
     def wrapper(request, *args, **kwargs):
         try:
             media = request.db.MediaEntry.find_one(
-                {'_id': ObjectId(request.matchdict['media']),
+                {'id': ObjectId(request.matchdict['media']),
                  'state': u'processed'})
         except InvalidId:
             return render_404(request)

@@ -108,7 +108,7 @@ def post_entry(request):
     process_media = registry.tasks[ProcessMedia.name]
     try:
         process_media.apply_async(
-            [unicode(entry._id)], {},
+            [unicode(entry.id)], {},
             task_id=task_id)
     except BaseException as e:
         # The purpose of this section is because when running in "lazy"
@@ -119,7 +119,7 @@ def post_entry(request):
         #
         # ... not completely the diaper pattern because the
         # exception is re-raised :)
-        mark_entry_failed(entry._id, e)
+        mark_entry_failed(entry.id, e)
         # re-raise the exception
         raise
 

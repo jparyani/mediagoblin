@@ -90,7 +90,7 @@
     </h1>
 
     {% if not user.url and not user.bio %}
-      {% if request.user and (request.user._id == user._id) %}
+      {% if request.user and (request.user.id == user.id) %}
         <div class="profile_sidebar empty_space">
           <p>
             {% trans %}Here's a spot to tell others about yourself.{% endtrans %}
@@ -112,7 +112,7 @@
       <div class="profile_sidebar">
         {% include "mediagoblin/utils/profile.html" %}
         {% if request.user and
-              (request.user._id == user._id or request.user.is_admin) %}
+              (request.user.id == user.id or request.user.is_admin) %}
           <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
                           user.username }}">
             {%- trans %}Edit profile{% endtrans -%}
@@ -139,7 +139,7 @@
         {% include "mediagoblin/utils/feed_link.html" %}
       </div>
     {% else %}
-      {% if request.user and (request.user._id == user._id) %}
+      {% if request.user and (request.user.id == user.id) %}
         <div class="profile_showcase empty_space">
           <p>
             {% trans -%}

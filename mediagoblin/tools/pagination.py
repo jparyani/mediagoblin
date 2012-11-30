@@ -41,7 +41,7 @@ class Pagination(object):
          - per_page: number of objects per page
          - cursor: db cursor
          - jump_to_id: ObjectId, sets the page to the page containing the
-           object with _id == jump_to_id.
+           object with id == jump_to_id.
         """
         self.page = page
         self.per_page = per_page
@@ -53,7 +53,7 @@ class Pagination(object):
             cursor = copy.copy(self.cursor)
 
             for (doc, increment) in izip(cursor, count(0)):
-                if doc._id == jump_to_id:
+                if doc.id == jump_to_id:
                     self.page = 1 + int(floor(increment / self.per_page))
 
                     self.active_id = jump_to_id

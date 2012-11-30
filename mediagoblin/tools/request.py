@@ -34,7 +34,7 @@ def setup_user_in_request(request):
     except InvalidId:
         user = None
     else:
-        user = request.db.User.find_one({'_id': oid})
+        user = request.db.User.find_one({'id': oid})
 
     if not user:
         # Something's wrong... this user doesn't exist?  Invalidate

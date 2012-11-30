@@ -17,7 +17,7 @@
 
 def may_edit_media(request, media):
     """Check, if the request's user may edit the media details"""
-    if media.uploader == request.user._id:
+    if media.uploader == request.user.id:
         return True
     if request.user.is_admin:
         return True

@@ -109,7 +109,7 @@ def send_verification_email(user, request):
          'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
                 host=request.host,
                 uri=request.urlgen('mediagoblin.auth.verify_email'),
-                userid=unicode(user._id),
+                userid=unicode(user.id),
                 verification_key=user.verification_key)})
 
     # TODO: There is no error handling in place
@@ -144,7 +144,7 @@ def send_fp_verification_email(user, request):
          'verification_url': EMAIL_FP_VERIFICATION_TEMPLATE.format(
                 host=request.host,
                 uri=request.urlgen('mediagoblin.auth.verify_forgot_password'),
-                userid=unicode(user._id),
+                userid=unicode(user.id),
                 fp_verification_key=user.fp_verification_key)})
 
     # TODO: There is no error handling in place

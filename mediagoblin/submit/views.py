@@ -76,7 +76,7 @@ def submit_start(request):
 
                 entry.license = unicode(request.form.get('license', "")) or None
 
-                entry.uploader = request.user._id
+                entry.uploader = request.user.id
 
                 # Process the user's folksonomy "tags"
                 entry.tags = convert_to_tag_list_of_dicts(
@@ -121,7 +121,7 @@ def submit_start(request):
                 process_media = registry.tasks[ProcessMedia.name]
                 try:
                     process_media.apply_async(
-                        [unicode(entry._id)], {},
+                        [unicode(entry.id)], {},
                         task_id=task_id)
                 except BaseException as exc:
                     # The purpose of this section is because when running in "lazy"
@@ -132,7 +132,7 @@ def submit_start(request):
                     #
                     # ... not completely the diaper pattern because the
                     # exception is re-raised :)
-                    mark_entry_failed(entry._id, exc)
+                    mark_entry_failed(entry.id, exc)
                     # re-raise the exception
                     raise
 
@@ -198,12 +198,12 @@ def add_collection(request, media=None):
             collection.title = unicode(request.form['title'])
 
             collection.description = unicode(request.form.get('description'))
-            collection.creator = request.user._id
+            collection.creator = request.user.id
             collection.generate_slug()
 
             # Make sure this user isn't duplicating an existing collection
             existing_collection = request.db.Collection.find_one({
-                    'creator': request.user._id,
+                    'creator': request.user.id,
                     'title':collection.title})
 
             if existing_collection:

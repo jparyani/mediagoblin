@@ -41,7 +41,7 @@
     </tr>
     {% for media_entry in processing_entries %}
       <tr>
-        <td>{{ media_entry._id }}</td>
+        <td>{{ media_entry.id }}</td>
         <td>{{ media_entry.title }}</td>
         <td>{{ media_entry.created.strftime("%F %R") }}</td>
         {% if media_entry.transcoding_progress %}
@@ -69,7 +69,7 @@
     </tr>
     {% for media_entry in failed_entries %}
       <tr>
-        <td>{{ media_entry._id }}</td>
+        <td>{{ media_entry.id }}</td>
         <td>{{ media_entry.title }}</td>
         <td>{{ media_entry.created.strftime("%F %R") }}</td>
         {% if media_entry.get_fail_exception() %}
@@ -97,7 +97,7 @@
     </tr>
     {% for entry in processed_entries %}
       <tr>
-        <td>{{ entry._id }}</td>
+        <td>{{ entry.id }}</td>
         <td><a href="{{ entry.url_for_self(request.urlgen) }}">{{ entry.title }}</a></td>
         <td>{{ entry.created.strftime("%F %R") }}</td>
       </tr>

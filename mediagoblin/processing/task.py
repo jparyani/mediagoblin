@@ -42,7 +42,7 @@ class ProcessMedia(Task):
         (for now just process_image...)
         """
         entry = mgg.database.MediaEntry.one(
-            {'_id': ObjectId(media_id)})
+            {'id': ObjectId(media_id)})
 
         # Try to process, and handle expected errors.
         try:
@@ -61,7 +61,7 @@ class ProcessMedia(Task):
 
             json_processing_callback(entry)
         except BaseProcessingFail as exc:
-            mark_entry_failed(entry._id, exc)
+            mark_entry_failed(entry.id, exc)
             json_processing_callback(entry)
             return
 
@@ -72,7 +72,7 @@ class ProcessMedia(Task):
                     entry.title,
                     exc))
 
-            mark_entry_failed(entry._id, exc)
+            mark_entry_failed(entry.id, exc)
             json_processing_callback(entry)
 
         except Exception as exc:
@@ -80,7 +80,7 @@ class ProcessMedia(Task):
                     + ' processing {0}'.format(
                         entry))
 
-            mark_entry_failed(entry._id, exc)
+            mark_entry_failed(entry.id, exc)
             json_processing_callback(entry)
             raise
 

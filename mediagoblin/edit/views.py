@@ -79,7 +79,7 @@ def edit_media(request, media):
                 location=media.url_for_self(request.urlgen))
 
     if request.user.is_admin \
-            and media.uploader != request.user._id \
+            and media.uploader != request.user.id \
             and request.method != 'POST':
         messages.add_message(
             request, messages.WARNING,
@@ -130,7 +130,7 @@ def edit_attachments(request, media):
 
             attachment_public_filepath \
                 = mg_globals.public_store.get_unique_filepath(
-                ['media_entries', unicode(media._id), 'attachment',
+                ['media_entries', unicode(media.id), 'attachment',
                  public_filename])
 
             attachment_public_file = mg_globals.public_store.get_file(
@@ -278,7 +278,7 @@ def edit_collection(request, collection):
 
         # Make sure there isn't already a Collection with this title
         existing_collection = request.db.Collection.find_one({
-                'creator': request.user._id,
+                'creator': request.user.id,
                 'title':request.form['title']})
 
         if existing_collection and existing_collection.id != collection.id:
@@ -301,7 +301,7 @@ def edit_collection(request, collection):
                             collection=collection.slug)
 
     if request.user.is_admin \
-            and collection.creator != request.user._id \
+            and collection.creator != request.user.id \
             and request.method != 'POST':
         messages.add_message(
             request, messages.WARNING,

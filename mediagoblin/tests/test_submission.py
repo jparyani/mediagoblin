@@ -184,7 +184,7 @@ class TestSubmission:
         # ---------------------------------------------------
         response, request = self.do_post({'confirm': 'y'}, *REQUEST_CONTEXT,
                                          do_follow=True, url=delete_url)
-        self.check_media(request, {'_id': media_id}, 0)
+        self.check_media(request, {'id': media_id}, 0)
         self.check_comments(request, media_id, 0)
 
     def test_evil_file(self):

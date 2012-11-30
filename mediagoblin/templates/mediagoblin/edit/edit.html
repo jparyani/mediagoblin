@@ -29,7 +29,7 @@
 
   <form action="{{ request.urlgen('mediagoblin.edit.edit_media',
                                user= media.get_uploader.username,
-                               media= media._id) }}"
+                               media= media.id) }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box_xl edit_box">
       <h1>{% trans media_title=media.title %}Editing {{ media_title }}{% endtrans %}</h1>

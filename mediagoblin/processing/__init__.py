@@ -38,7 +38,7 @@ class ProgressCallback(object):
 def create_pub_filepath(entry, filename):
     return mgg.public_store.get_unique_filepath(
             ['media_entries',
-             unicode(entry._id),
+             unicode(entry.id),
              filename])
 
 
@@ -93,7 +93,7 @@ def mark_entry_failed(entry_id, exc):
         # Looks like yes, so record information about that failure and any
         # metadata the user might have supplied.
         atomic_update(mgg.database.MediaEntry,
-            {'_id': entry_id},
+            {'id': entry_id},
             {u'state': u'failed',
              u'fail_error': unicode(exc.exception_path),
              u'fail_metadata': exc.metadata})
@@ -104,7 +104,7 @@ def mark_entry_failed(entry_id, exc):
         # metadata (in fact overwrite it if somehow it had previous info
         # here)
         atomic_update(mgg.database.MediaEntry,
-            {'_id': entry_id},
+            {'id': entry_id},
             {u'state': u'failed',
              u'fail_error': None,
              u'fail_metadata': {}})

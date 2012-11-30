@@ -53,7 +53,7 @@ def user_home(request, page):
             {'user': user})
 
     cursor = request.db.MediaEntry.find(
-        {'uploader': user._id,
+        {'uploader': user.id,
          'state': u'processed'}).sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)
@@ -196,12 +196,12 @@ def media_collect(request, media):
 
                 collection.description = unicode(
                         request.form.get('collection_description'))
-                collection.creator = request.user._id
+                collection.creator = request.user.id
                 collection.generate_slug()
 
                 # Make sure this user isn't duplicating an existing collection
                 existing_collection = request.db.Collection.find_one({
-                                        'creator': request.user._id,
+                                        'creator': request.user.id,
                                         'title': collection.title})
 
                 if existing_collection:
@@ -220,7 +220,7 @@ def media_collect(request, media):
             # Otherwise, use the collection selected from the drop-down
             else:
                 collection = request.db.Collection.find_one({
-                    '_id': request.form.get('collection')})
+                    'id': request.form.get('collection')})
                 collection_item.collection = collection.id
 
             # Make sure the user actually selected a collection
@@ -306,7 +306,7 @@ def media_confirm_delete(request, media):
                 location=media.url_for_self(request.urlgen))
 
     if ((request.user.is_admin and
-         request.user._id != media.uploader)):
+         request.user.id != media.uploader)):
         messages.add_message(
             request, messages.WARNING,
             _("You are about to delete another user's media. "
@@ -378,7 +378,7 @@ def collection_item_confirm_remove(request, collection_item):
                         collection=collection.slug)
 
     if ((request.user.is_admin and
-         request.user._id != collection_item.in_collection.creator)):
+         request.user.id != collection_item.in_collection.creator)):
         messages.add_message(
             request, messages.WARNING,
             _("You are about to delete an item from another user's collection. "
@@ -428,7 +428,7 @@ def collection_confirm_delete(request, collection):
                             collection=collection.slug)
 
     if ((request.user.is_admin and
-         request.user._id != collection.creator)):
+         request.user.id != collection.creator)):
         messages.add_message(
             request, messages.WARNING,
             _("You are about to delete another user's collection. "
@@ -456,7 +456,7 @@ def atom_feed(request):
         return render_404(request)
 
     cursor = request.db.MediaEntry.find({
-                 'uploader': user._id,
+                 'uploader': user.id,
                  'state': u'processed'}) \
                  .sort('created', DESCENDING) \
                  .limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
@@ -524,7 +524,7 @@ def collection_atom_feed(request):
                'slug': request.matchdict['collection']})
 
     cursor = request.db.CollectionItem.find({
-                 'collection': collection._id}) \
+                 'collection': collection.id}) \
                  .sort('added', DESCENDING) \
                  .limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
@@ -601,7 +601,7 @@ def processing_panel(request):
     #
     # Make sure we have permission to access this user's panel.  Only
     # admins and this user herself should be able to do so.
-    if not (user._id == request.user._id
+    if not (user.id == request.user.id
             or request.user.is_admin):
         # No?  Let's simply redirect to this user's homepage then.
         return redirect(
@@ -610,16 +610,16 @@ def processing_panel(request):
 
     # Get media entries which are in-processing
     processing_entries = request.db.MediaEntry.find(
-        {'uploader': user._id,
+        {'uploader': user.id,
          'state': u'processing'}).sort('created', DESCENDING)
 
     # Get media entries which have failed to process
     failed_entries = request.db.MediaEntry.find(
-        {'uploader': user._id,
+        {'uploader': user.id,
          'state': u'failed'}).sort('created', DESCENDING)
 
     processed_entries = request.db.MediaEntry.find(
-            {'uploader': user._id,
+            {'uploader': user.id,
                 'state': u'processed'}).sort('created', DESCENDING).limit(10)
 
     # Render to response

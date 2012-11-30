@@ -24,7 +24,7 @@
   <form action="{{ request.urlgen('mediagoblin.user_pages.collection_item_confirm_remove',
 		                  user=collection_item.in_collection.get_creator.username,
 				  collection=collection_item.in_collection.slug,
-				  collection_item=collection_item._id) }}"
+				  collection_item=collection_item.id) }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box">
       <h1>

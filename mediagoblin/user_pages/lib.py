@@ -33,7 +33,7 @@ def send_comment_email(user, comment, media, request):
 
     comment_url = request.urlgen(
                     'mediagoblin.user_pages.media_home.view_comment',
-                    comment=comment._id,
+                    comment=comment.id,
                     user=media.get_uploader.username,
                     media=media.slug_or_id,
                     qualified=True) + '#comment'

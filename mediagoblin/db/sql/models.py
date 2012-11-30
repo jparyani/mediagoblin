@@ -83,8 +83,6 @@ class User(Base, UserMixin):
     ## TODO
     # plugin data would be in a separate model
 
-    _id = SimpleFieldAlias("id")
-
     def __repr__(self):
         return '<{0} #{1} {2} {3} "{4}">'.format(
                 self.__class__.__name__,
@@ -160,8 +158,6 @@ class MediaEntry(Base, MediaEntryMixin):
     ## TODO
     # media_data
     # fail_error
-
-    _id = SimpleFieldAlias("id")
 
     def get_comments(self, ascending=False):
         order_col = MediaComment.created
@@ -359,8 +355,6 @@ class MediaComment(Base, MediaCommentMixin):
 
     get_author = relationship(User)
 
-    _id = SimpleFieldAlias("id")
-
 
 class Collection(Base, CollectionMixin):
     __tablename__ = "core__collections"
@@ -383,8 +377,6 @@ class Collection(Base, CollectionMixin):
         return CollectionItem.query.filter_by(
             collection=self.id).order_by(order_col)
 
-    _id = SimpleFieldAlias("id")
-
 
 class CollectionItem(Base, CollectionItemMixin):
     __tablename__ = "core__collection_items"
@@ -399,8 +391,6 @@ class CollectionItem(Base, CollectionItemMixin):
     in_collection = relationship("Collection")
 
     get_media_entry = relationship(MediaEntry)
-
-    _id = SimpleFieldAlias("id")
 
     __table_args__ = (
         UniqueConstraint('collection', 'media_entry'),

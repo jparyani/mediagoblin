@@ -154,7 +154,7 @@ def test_register_views(test_app):
     ## Make sure user is logged in
     request = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/user_pages/user.html']['request']
-    assert request.session['user_id'] == unicode(new_user._id)
+    assert request.session['user_id'] == unicode(new_user.id)
 
     ## Make sure we get email confirmation, and try verifying
     assert len(mail.EMAIL_TEST_INBOX) == 1
@@ -171,7 +171,7 @@ def test_register_views(test_app):
 
     ### user should have these same parameters
     assert parsed_get_params['userid'] == [
-        unicode(new_user._id)]
+        unicode(new_user.id)]
     assert parsed_get_params['token'] == [
         new_user.verification_key]
 
@@ -179,7 +179,7 @@ def test_register_views(test_app):
     template.clear_test_template_context()
     response = test_app.get(
         "/auth/verify_email/?userid=%s&token=total_bs" % unicode(
-            new_user._id))
+            new_user.id))
     response.follow()
     context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/user_pages/user.html']
@@ -254,7 +254,7 @@ def test_register_views(test_app):
 
     # user should have matching parameters
     new_user = mg_globals.database.User.find_one({'username': u'happygirl'})
-    assert parsed_get_params['userid'] == [unicode(new_user._id)]
+    assert parsed_get_params['userid'] == [unicode(new_user.id)]
     assert parsed_get_params['token'] == [new_user.fp_verification_key]
 
     ### The forgotten password token should be set to expire in ~ 10 days
@@ -265,7 +265,7 @@ def test_register_views(test_app):
     template.clear_test_template_context()
     response = test_app.get(
         "/auth/forgot_password/verify/?userid=%s&token=total_bs" % unicode(
-            new_user._id), status=404)
+            new_user.id), status=404)
     assert_equal(response.status, '404 Not Found')
 
     ## Try using an expired token to change password, shouldn't work
@@ -393,7 +393,7 @@ def test_authentication_views(test_app):
     # Make sure user is in the session
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
     session = context['request'].session
-    assert session['user_id'] == unicode(test_user._id)
+    assert session['user_id'] == unicode(test_user.id)
 
     # Successful logout
     # -----------------

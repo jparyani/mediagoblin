@@ -90,7 +90,7 @@ def register(request):
             user.save(validate=True)
 
             # log the user in
-            request.session['user_id'] = unicode(user._id)
+            request.session['user_id'] = unicode(user.id)
             request.session.save()
 
             # send verification email
@@ -125,7 +125,7 @@ def login(request):
 
         if user and user.check_login(request.form['password']):
             # set up login in session
-            request.session['user_id'] = unicode(user._id)
+            request.session['user_id'] = unicode(user.id)
             request.session.save()
 
             if request.form.get('next'):
@@ -167,7 +167,7 @@ def verify_email(request):
         return render_404(request)
 
     user = request.db.User.find_one(
-        {'_id': ObjectId(unicode(request.GET['userid']))})
+        {'id': ObjectId(unicode(request.GET['userid']))})
 
     if user and user.verification_key == unicode(request.GET['token']):
         user.status = u'active'
@@ -308,7 +308,7 @@ def verify_forgot_password(request):
     # check if it's a valid Id
     try:
         user = request.db.User.find_one(
-            {'_id': ObjectId(unicode(formdata_userid))})
+            {'id': ObjectId(unicode(formdata_userid))})
     except InvalidId:
         return render_404(request)
 

@@ -99,14 +99,14 @@ class MediaEntryMixin(object):
 
     @property
     def slug_or_id(self):
-        return (self.slug or self._id)
+        return (self.slug or self.id)
 
 
     def url_for_self(self, urlgen, **extra_args):
         """
         Generate an appropriate url for ourselves
 
-        Use a slug if we have one, else use our '_id'.
+        Use a slug if we have one, else use our 'id'.
         """
         uploader = self.get_uploader
 
@@ -208,13 +208,13 @@ class CollectionMixin(object):
 
     @property
     def slug_or_id(self):
-        return (self.slug or self._id)
+        return (self.slug or self.id)
 
     def url_for_self(self, urlgen, **extra_args):
         """
         Generate an appropriate url for ourselves
 
-        Use a slug if we have one, else use our '_id'.
+        Use a slug if we have one, else use our 'id'.
         """
         creator = self.get_creator
 
