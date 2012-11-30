@@ -27,8 +27,6 @@ These functions now live here and get "mixed in" into the
 real objects.
 """
 
-import importlib
-
 from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.tools import common, licenses
@@ -126,7 +124,7 @@ class MediaEntryMixin(object):
         else:
             # no thumbnail in media available. Get the media's
             # MEDIA_MANAGER for the fallback icon and return static URL
-            manager = importlib.import_module(self.media_type)
+            manager = __import__(self.media_type)
             thumb_url = manager.MEDIA_MANAGER[u'default_thumb']
             thumb_url = mg_globals.app.staticdirector(thumb_url) # use static
         return thumb_url
