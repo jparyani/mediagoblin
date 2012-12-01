@@ -16,7 +16,9 @@
 
 import gettext
 import pkg_resources
-from babel.localedata import exists
+
+
+from babel import localedata
 from babel.support import LazyProxy
 
 from mediagoblin import mg_globals
@@ -28,6 +30,15 @@ from mediagoblin import mg_globals
 
 TRANSLATIONS_PATH = pkg_resources.resource_filename(
     'mediagoblin', 'i18n')
+
+
+def get_available_locales():
+    """Return a list of locales for which we have translations"""
+    locales=[]
+    for locale in localedata.list():
+        if gettext.find('mediagoblin', TRANSLATIONS_PATH, [locale]):
+            locales.append(locale)
+    return locales
 
 
 def locale_to_lower_upper(locale):
@@ -76,15 +87,15 @@ def get_locale_from_request(request):
         # TODO: We need a list of available locales, and match with the list
         # of accepted locales, and serve the best available locale rather than
         # the most preferred, or fall back to 'en' immediately.
-        target_lang = request.accept_languages.best
-
-    return locale_to_lower_upper(target_lang)
+        target_lang = request.accept_languages.best_match(
+            mg_globals.available_locales)
+        return locale_to_lower_upper(target_lang)
 
 SETUP_GETTEXTS = {}
 
-def setup_gettext(locale):
+def get_gettext_translation(locale):
     """
-    Setup the gettext instance based on this locale
+    Return the gettext instance based on this locale
     """
     # Later on when we have plugins we may want to enable the
     # multi-translations system they have so we can handle plugin
@@ -97,10 +108,9 @@ def setup_gettext(locale):
     else:
         this_gettext = gettext.translation(
             'mediagoblin', TRANSLATIONS_PATH, [locale], fallback=True)
-        if exists(locale):
+        if localedata.exists(locale):
             SETUP_GETTEXTS[locale] = this_gettext
-
-    mg_globals.thread_scope.translations = this_gettext
+    return this_gettext
 
 
 def pass_to_ugettext(*args, **kwargs):

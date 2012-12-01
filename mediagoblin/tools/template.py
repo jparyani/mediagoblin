@@ -20,7 +20,7 @@ from babel.localedata import exists
 from mediagoblin import mg_globals
 from mediagoblin import messages
 from mediagoblin.tools import common
-from mediagoblin.tools.translate import setup_gettext
+from mediagoblin.tools.translate import get_gettext_translation
 from mediagoblin.meddleware.csrf import render_csrf_form_token
 
 
@@ -34,7 +34,7 @@ def get_jinja_env(template_loader, locale):
     (In the future we may have another system for providing theming;
     for now this is good enough.)
     """
-    setup_gettext(locale)
+    mg_globals.thread_scope.translations = get_gettext_translation(locale)
 
     # If we have a jinja environment set up with this locale, just
     # return that one.

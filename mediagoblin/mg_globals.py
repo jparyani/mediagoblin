@@ -45,6 +45,8 @@ workbench_manager = None
 # A thread-local scope
 thread_scope = threading.local()
 
+# a list of translated locales
+available_locales = None
 # gettext (this will be populated on demand with gettext.Translations)
 thread_scope.translations = None
 
