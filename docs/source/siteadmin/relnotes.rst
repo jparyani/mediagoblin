@@ -49,6 +49,12 @@ carefully, or at least skim over it.
 
   See :ref:`core-plugin-section` for plugin documentation
 
+* **trim_whitespace**
+
+  We bundle the optional plugin trim_whitespace which reduces the size
+  of the delivered html output by reducing redundant whitespace.
+
+  See :ref:`core-plugin-section` for plugin documentation
 
 0.3.0
 =====
