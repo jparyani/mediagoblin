@@ -17,7 +17,7 @@
 import os
 import logging
 
-from mediagoblin.routing import url_map, view_functions, add_route
+from mediagoblin.routing import get_url_map, endpoint_to_controller
 
 from werkzeug.wrappers import Request
 from werkzeug.exceptions import HTTPException, NotFound
@@ -93,10 +93,7 @@ class MediaGoblinApp(object):
         self.public_store, self.queue_store = setup_storage()
 
         # set up routing
-        self.url_map = url_map
-
-        for route in PluginManager().get_routes():
-            add_route(*route)
+        self.url_map = get_url_map()
 
         # set up staticdirector tool
         self.staticdirector = get_staticdirector(app_config)
@@ -194,18 +191,7 @@ class MediaGoblinApp(object):
                 request, exc,
                 exc.get_description(environ))(environ, start_response)
 
-        view_func = view_functions[endpoint]
-
-        _log.debug('endpoint: {0} view_func: {1}'.format(
-            endpoint,
-            view_func))
-
-        # import the endpoint, or if it's already a callable, call that
-        if isinstance(view_func, unicode) \
-                or isinstance(view_func, str):
-            controller = common.import_component(view_func)
-        else:
-            controller = view_func
+        controller = endpoint_to_controller(endpoint)
 
         # pass the request through our meddleware classes
         try:
