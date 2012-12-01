@@ -32,7 +32,7 @@ TRANSLATIONS_PATH = pkg_resources.resource_filename(
 
 def locale_to_lower_upper(locale):
     """
-    Take a locale, regardless of style, and format it like "en-US"
+    Take a locale, regardless of style, and format it like "en_US"
     """
     if '-' in locale:
         lang, country = locale.split('-', 1)
@@ -60,17 +60,23 @@ def get_locale_from_request(request):
     Figure out what target language is most appropriate based on the
     request
     """
-    request_form = request.GET or request.form
+    request_form = request.args or request.form
 
     if request_form.has_key('lang'):
-        return locale_to_lower_upper(request_form['lang'])
+        # User explicitely demanded a language
+        target_lang = request_form['lang']
 
-    if 'target_lang' in request.session:
+    elif 'target_lang' in request.session:
+        # TODO: Uh, ohh, this is never ever set anywhere?
         target_lang = request.session['target_lang']
-    # Pull the first acceptable language or English
     else:
-        # TODO: Internationalization broken
-        target_lang = 'en'
+        # Pull the first acceptable language or English
+        # This picks your favorite browser lingo, falling back to 'en'
+
+        # TODO: We need a list of available locales, and match with the list
+        # of accepted locales, and serve the best available locale rather than
+        # the most preferred, or fall back to 'en' immediately.
+        target_lang = request.accept_languages.best
 
     return locale_to_lower_upper(target_lang)
 
@@ -95,11 +101,6 @@ def setup_gettext(locale):
             SETUP_GETTEXTS[locale] = this_gettext
 
     mg_globals.thread_scope.translations = this_gettext
-
-
-# Force en to be setup before anything else so that
-# mg_globals.translations is never None
-setup_gettext('en')
 
 
 def pass_to_ugettext(*args, **kwargs):
