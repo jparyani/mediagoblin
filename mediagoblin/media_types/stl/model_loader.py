@@ -40,7 +40,7 @@ class ThreeDee():
 
         self.load(fileob)
         if not len(self.verts):
-            raise ThreeDeeParseError("Empyt model.")
+            raise ThreeDeeParseError("Empty model.")
 
         for vector in self.verts:
             for i in range(3):
