@@ -69,7 +69,7 @@
             {% endif %}
           </div>
           <div class="clear"></div>
-          {% if request.user.status == 'active' %}
+          {% if request.user and request.user.status == 'active' %}
             <div class="header_dropdown">
               <a href="{{ request.urlgen('mediagoblin.user_pages.user_home', user= request.user.username) }}">{{ request.user.username }}</a>{% trans %}'s account{% endtrans %}
               (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
