@@ -18,6 +18,7 @@ import os
 import json
 import logging
 import subprocess
+import pkg_resources
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import create_pub_filepath, \
@@ -28,6 +29,17 @@ from mediagoblin.media_types.stl import model_loader
 
 _log = logging.getLogger(__name__)
 SUPPORTED_FILETYPES = ['stl', 'obj']
+
+BLEND_FILE = pkg_resources.resource_filename(
+    'mediagoblin.media_types.stl',
+    os.path.join(
+        'assets',
+        'blender_render.blend'))
+BLEND_SCRIPT = pkg_resources.resource_filename(
+    'mediagoblin.media_types.stl',
+    os.path.join(
+        'assets',
+        'blender_render.py'))
 
 
 def sniff_handler(media_file, **kw):
@@ -55,7 +67,12 @@ def blender_render(config):
     arg_string = "blender -b blender_render.blend -F "
     arg_string +="JPEG -P blender_render.py"
     env = {"RENDER_SETUP" : json.dumps(config), "DISPLAY":":0"}
-    subprocess.call(arg_string.split(" "), env=env)
+    subprocess.call(
+        ["blender",
+         "-b", BLEND_FILE,
+         "-F", "JPEG",
+         "-P", BLEND_SCRIPT],
+        env=env)
 
 
 def process_stl(entry):
@@ -93,16 +110,16 @@ def process_stl(entry):
         path = create_pub_filepath(entry, name_builder.fill(name))
         render_file = mgg.public_store.get_file(path, "wb")
         shot = {
-            "model_path" : queued_filename,
-            "model_ext" : ext,
-            "camera_coord" : camera,
-            "camera_focus" : model.average,
-            "camera_clip" : greatest*10,
-            "greatest" : greatest,
-            "projection" : project,
-            "width" : width,
-            "height" : height,
-            "out_file" : render_file.name,
+            "model_path": queued_filename,
+            "model_ext": ext,
+            "camera_coord": camera,
+            "camera_focus": model.average,
+            "camera_clip": greatest*10,
+            "greatest": greatest,
+            "projection": project,
+            "width": width,
+            "height": height,
+            "out_file": render_file.name,
             }
         render_file.close()
         blender_render(shot)
