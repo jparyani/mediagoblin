@@ -112,7 +112,9 @@ input, textarea {
 }
 
 header {
-  width: 100%;
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
   padding: 0;
   margin-bottom: 42px;
   background-color: #303030;

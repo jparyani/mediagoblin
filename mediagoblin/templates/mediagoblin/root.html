@@ -21,33 +21,6 @@
 
 {% block mediagoblin_content %}
   {% if request.user %}
-    {% if request.user.status == 'active' %}
-      <h1>{% trans %}Actions{% endtrans %}</h1>
-      <ul>
-        <li><a href="{{ request.urlgen('mediagoblin.submit.start') }}">
-          {%- trans %}Add media{% endtrans -%}
-        </a></li>
-        <li><a href="{{ request.urlgen('mediagoblin.submit.collection') }}">
-          {%- trans %}Create new collection{% endtrans -%}
-        </a></li>
-        <li><a href="{{ request.urlgen('mediagoblin.edit.account') }}">
-          {%- trans %}Change account settings{% endtrans -%}
-        </a></li>
-        <li><a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
-                                       user=request.user.username) }}">
-          {%- trans %}Media processing panel{% endtrans -%}
-        </a></li>
-        {% if request.user.is_admin %}
-          <li>Admin:
-            <ul>
-              <li><a href="{{ request.urlgen('mediagoblin.admin.panel') }}">
-                {%- trans %}Media processing panel{% endtrans -%}
-              </a></li>
-            </ul>
-          </li>
-        {% endif %}
-      </ul>
-    {% endif %}
     <h1>{% trans %}Explore{% endtrans %}</h1>
   {% else %}
     <h1>{% trans %}Hi there, welcome to this MediaGoblin site!{% endtrans %}</h1>
