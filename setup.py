@@ -94,7 +94,7 @@ setup(
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
-        "License :: OSI Approved :: GNU Affero General Public License",
+        "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         'Programming Language :: Python :: 2.6',
