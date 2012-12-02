@@ -79,7 +79,6 @@ def process_stl(entry):
     """
     Code to process an stl or obj model.
     """
-
     workbench = mgg.workbench_manager.create_workbench()
     queued_filepath = entry.queued_media_file
     queued_filename = workbench.localized_file(
@@ -103,8 +102,8 @@ def process_stl(entry):
     greatest = greatest[-1]
 
     def snap(name, camera, width=640, height=640, project="ORTHO"):
-        path = create_pub_filepath(entry, name_builder.fill(name))
-        render_file = mgg.public_store.get_file(path, "wb")
+        filename = name_builder.fill(name)
+        workbench_path = workbench.joinpath(filename)
         shot = {
             "model_path": queued_filename,
             "model_ext": ext,
@@ -115,11 +114,21 @@ def process_stl(entry):
             "projection": project,
             "width": width,
             "height": height,
-            "out_file": render_file.name,
+            "out_file": workbench_path,
             }
-        render_file.close()
         blender_render(shot)
-        return path
+
+        # make sure the image rendered to the workbench path
+        assert os.path.exists(workbench_path)
+
+        # copy it up!
+        with open(workbench_path, 'rb') as rendered_file:
+            public_path = create_pub_filepath(entry, filename)
+
+            with mgg.public_store.get_file(public_path, "wb") as public_file:
+                public_file.write(rendered_file.read())
+
+        return public_path
 
     thumb_path = snap(
         "{basename}.thumb.jpg",
@@ -144,17 +153,13 @@ def process_stl(entry):
         "{basename}.side.jpg",
         [greatest*-2, model.average[1], model.average[2]])
 
-
-
-
-    # Save the public file stuffs
+    ## Save the public file stuffs
     model_filepath = create_pub_filepath(
         entry, name_builder.fill('{basename}{ext}'))
 
     with mgg.public_store.get_file(model_filepath, 'wb') as model_file:
         with open(queued_filename, 'rb') as queued_file:
             model_file.write(queued_file.read())
-
 
     # Remove queued media file from storage and database
     mgg.queue_store.delete_file(queued_filepath)
