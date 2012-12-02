@@ -53,12 +53,9 @@
           {% block mediagoblin_header_title %}{% endblock %}
           <div class="header_right">
             {% if request.user %}
-              <a href="{{ request.urlgen('mediagoblin.user_pages.user_home', user= request.user.username) }}">{{ request.user.username }}</a>{% trans %}'s account{% endtrans %}
-              (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
               {% if request.user and request.user.status == 'active' %}
-                <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">{% trans %}Add media{% endtrans %}</a>
-                <div class="temp_button">&#9660;</div>
-                <div class="temp_button_2">&#9650;</div>
+                <div class="button_action temp_button">&#9660;</div>
+                <div class="button_action temp_button_2">&#9650;</div>
               {% elif request.user and request.user.status == "needs_email_verification" %}
               {# the following link should only appear when verification is needed #}
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
@@ -74,12 +71,13 @@
           <div class="clear"></div>
           {% if request.user.status == 'active' %}
             <div class="temp">
-            <h1>{% trans %}Actions{% endtrans %}</h1>
+              <a href="{{ request.urlgen('mediagoblin.user_pages.user_home', user= request.user.username) }}">{{ request.user.username }}</a>{% trans %}'s account{% endtrans %}
+              (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
             <ul>
-              <li><a href="{{ request.urlgen('mediagoblin.submit.start') }}">
+              <li><a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
                 {%- trans %}Add media{% endtrans -%}
               </a></li>
-              <li><a href="{{ request.urlgen('mediagoblin.submit.collection') }}">
+              <li><a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
                 {%- trans %}Create new collection{% endtrans -%}
               </a></li>
               <li><a href="{{ request.urlgen('mediagoblin.edit.account') }}">
