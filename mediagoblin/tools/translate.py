@@ -88,7 +88,7 @@ def get_locale_from_request(request):
         # of accepted locales, and serve the best available locale rather than
         # the most preferred, or fall back to 'en' immediately.
         target_lang = request.accept_languages.best_match(
-            mg_globals.available_locales)
+            mg_globals.available_locales) or 'en'
         return locale_to_lower_upper(target_lang)
 
 SETUP_GETTEXTS = {}
