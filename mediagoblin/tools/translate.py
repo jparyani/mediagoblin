@@ -27,18 +27,19 @@ from mediagoblin import mg_globals
 # Translation tools
 ###################
 
-
+AVAILABLE_LOCALES = None
 TRANSLATIONS_PATH = pkg_resources.resource_filename(
     'mediagoblin', 'i18n')
 
 
-def get_available_locales():
-    """Return a list of locales for which we have translations"""
-    locales=[]
+def set_available_locales():
+    """Set available locales for which we have translations"""
+    global AVAILABLE_LOCALES
+    locales=['en', 'en_US'] # these are available without translations
     for locale in localedata.list():
         if gettext.find('mediagoblin', TRANSLATIONS_PATH, [locale]):
             locales.append(locale)
-    return locales
+    AVAILABLE_LOCALES = locales
 
 
 def locale_to_lower_upper(locale):
@@ -71,6 +72,7 @@ def get_locale_from_request(request):
     Figure out what target language is most appropriate based on the
     request
     """
+    global AVAILABLE_LOCALES
     request_form = request.args or request.form
 
     if request_form.has_key('lang'):
@@ -87,8 +89,7 @@ def get_locale_from_request(request):
         # TODO: We need a list of available locales, and match with the list
         # of accepted locales, and serve the best available locale rather than
         # the most preferred, or fall back to 'en' immediately.
-        target_lang = request.accept_languages.best_match(
-            mg_globals.available_locales) or 'en'
+        target_lang = request.accept_languages.best_match(AVAILABLE_LOCALES)
 
     return locale_to_lower_upper(target_lang)
 
