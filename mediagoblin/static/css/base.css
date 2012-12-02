@@ -112,7 +112,8 @@ input, textarea {
 }
 
 header {
-  width: 940px;
+  width: 100%;
+  max-width: 940px;
   margin-left: auto;
   margin-right: auto;
   padding: 0;
@@ -663,7 +664,6 @@ pre {
   
   header {
     text-align: center;
-    width: 100%;
   }
   
   .header_right {
