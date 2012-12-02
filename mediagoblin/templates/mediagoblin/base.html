@@ -54,8 +54,8 @@
           <div class="header_right">
             {% if request.user %}
               {% if request.user and request.user.status == 'active' %}
-                <div class="button_action temp_button">&#9660;</div>
-                <div class="button_action temp_button_2">&#9650;</div>
+                <div class="button_action header_dropdown_down">&#9660;</div>
+                <div class="button_action header_dropdown_up">&#9650;</div>
               {% elif request.user and request.user.status == "needs_email_verification" %}
               {# the following link should only appear when verification is needed #}
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
@@ -70,7 +70,7 @@
           </div>
           <div class="clear"></div>
           {% if request.user.status == 'active' %}
-            <div class="temp">
+            <div class="header_dropdown">
               <a href="{{ request.urlgen('mediagoblin.user_pages.user_home', user= request.user.username) }}">{{ request.user.username }}</a>{% trans %}'s account{% endtrans %}
               (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
             <ul>
