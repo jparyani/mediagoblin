@@ -81,10 +81,6 @@ def process_stl(entry):
     """
 
     workbench = mgg.workbench_manager.create_workbench()
-    # Conversions subdirectory to avoid collisions
-    conversions_subdir = os.path.join(
-        workbench.dir, 'conversions')
-    os.mkdir(conversions_subdir)
     queued_filepath = entry.queued_media_file
     queued_filename = workbench.localized_file(
         mgg.queue_store, queued_filepath, 'source')
