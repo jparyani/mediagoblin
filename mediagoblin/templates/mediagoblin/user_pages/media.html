@@ -173,7 +173,7 @@
         {% for attachment in media.attachment_files %}
           <li>
             <a href="{{ request.app.public_store.file_url(attachment.filepath) }}">
-              {{ attachment.name }}
+              {{- attachment.name -}}
             </a>
           </li>
         {% endfor %}
