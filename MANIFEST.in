@@ -4,3 +4,4 @@ recursive-include mediagoblin/static *.js *.css *.png *.svg *.ico
 recursive-include mediagoblin/tests *.ini
 recursive-include docs *.rst *.html
 include mediagoblin/config_spec.ini
+graft extlib
