@@ -35,21 +35,21 @@
             </a>
 
             {% if item.note %}
-	      {%- trans note=item.note -%}
 	      <br />
-              <a href="{{ entry_url }}">{{ note }}</a>
-	      {%- endtrans -%}
+              <a href="{{ entry_url }}">{{ item.note }}</a>
             {% endif %}
 	    {% if request.user and
                   (item.in_collection.creator == request.user._id or 
                   request.user.is_admin) %}
-	    {%- trans remove_url=request.urlgen(
+	      {%- set remove_url=request.urlgen(
                                  'mediagoblin.user_pages.collection_item_confirm_remove',
                                  user=item.in_collection.get_creator.username,
                                  collection=item.in_collection.slug,
                                  collection_item=item.id) -%}
-	      <br /><a href="{{ remove_url }}" class="remove">(remove)</a>
-	    {%- endtrans -%}
+	      <br />
+	      <a href="{{ remove_url }}" class="remove">
+	        {%- trans %}(remove){% endtrans -%}
+	      </a>
 	    {% endif %}
           </td>
         {% endfor %}

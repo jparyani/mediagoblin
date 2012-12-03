@@ -53,7 +53,12 @@
           {% block mediagoblin_header_title %}{% endblock %}
           <div class="header_right">
             {% if request.user %}
-              <a href="{{ request.urlgen('mediagoblin.user_pages.user_home', user= request.user.username) }}">{{ request.user.username }}</a>{% trans %}'s account{% endtrans %}
+              {% trans
+                  user_url=request.urlgen('mediagoblin.user_pages.user_home',
+                                          user= request.user.username),
+                  user_name=request.user.username -%}
+                <a href="{{ user_url }}">{{ user_name }}</a>'s account
+              {%- endtrans %}
               (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
               {% if request.user and request.user.status == 'active' %}
                 <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">{% trans %}Add media{% endtrans %}</a>

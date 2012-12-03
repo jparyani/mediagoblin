@@ -153,7 +153,7 @@ def edit_attachments(request, media):
 
             messages.add_message(
                 request, messages.SUCCESS,
-                "You added the attachment %s!" \
+                _("You added the attachment %s!") \
                     % (request.form['attachment_name']
                        or request.files['attachment_file'].filename))
 
