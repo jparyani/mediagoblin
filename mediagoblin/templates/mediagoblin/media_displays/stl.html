@@ -44,9 +44,9 @@
 </style>
 
 {% if media.media_data.file_type == "stl" %}
-<script src="{{ request.staticdirect('/js/thingiview.js/Three.js') }}"></script>
-<script src="{{ request.staticdirect('/js/thingiview.js/plane.js') }}"></script>
-<script src="{{ request.staticdirect('/js/thingiview.js/thingiview.js') }}"></script>
+  <script src="{{ request.staticdirect('/js/extlib/thingiview.js/Three.js') }}"></script>
+  <script src="{{ request.staticdirect('/js/extlib/thingiview.js/plane.js') }}"></script>
+  <script src="{{ request.staticdirect('/js/extlib/thingiview.js/thingiview.js') }}"></script>
 {% endif %}
 
 
@@ -71,7 +71,7 @@ window.show_things = function () {
         show('thingy_view');
     };
     window.show("thingy_view");
-    thingiurlbase = "{{ request.staticdirect('/js/thingiview.js') }}";
+    thingiurlbase = "{{ request.staticdirect('/js/extlib/thingiview.js') }}";
     thingiview = new Thingiview("thingy_view");
     thingiview.setObjectColor('#821543');
     thingiview.initScene();
