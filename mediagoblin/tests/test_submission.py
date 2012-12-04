@@ -28,7 +28,7 @@ from mediagoblin.tests.tools import get_test_app, \
     fixture_add_user
 from mediagoblin import mg_globals
 from mediagoblin.tools import template
-
+from mediagoblin.media_types.image import MEDIA_MANAGER as img_MEDIA_MANAGER
 
 def resource(filename):
     return resource_filename('mediagoblin.tests', 'test_submission/' + filename)
@@ -196,6 +196,19 @@ class TestSubmission:
         assert_equal(len(form.file.errors), 1)
         assert 'Sorry, I don\'t support that file type :(' == \
                 str(form.file.errors[0])
+
+
+    def test_get_media_manager(self):
+        """Test if the get_media_manger function returns sensible things
+        """
+        response, request = self.do_post({'title': u'Balanced Goblin'},
+                                         *REQUEST_CONTEXT, do_follow=True,
+                                         **self.upload_data(GOOD_JPG))
+        media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
+
+        assert_equal(media.media_type, u'mediagoblin.media_types.image')
+        assert_equal(media.media_manager, img_MEDIA_MANAGER)
+
 
     def test_sniffing(self):
         '''

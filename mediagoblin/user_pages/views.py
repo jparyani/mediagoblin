@@ -33,7 +33,6 @@ from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
 
 from werkzeug.contrib.atom import AtomFeed
 
-from mediagoblin.media_types import get_media_manager
 
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
@@ -128,8 +127,7 @@ def media_home(request, media, page, **kwargs):
 
     comment_form = user_forms.MediaCommentForm(request.form)
 
-    media_template_name = get_media_manager(
-            media.media_type)['display_template']
+    media_template_name = media.media_manager['display_template']
 
     return render_to_response(
         request,

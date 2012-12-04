@@ -27,9 +27,11 @@ These functions now live here and get "mixed in" into the
 real objects.
 """
 
+from werkzeug.utils import cached_property
+
 from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
-from mediagoblin.media_types import get_media_manager
+from mediagoblin.media_types import get_media_managers, FileTypeNotSupported
 from mediagoblin.tools import common, licenses
 from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.url import slugify
@@ -99,6 +101,7 @@ class MediaEntryMixin(object):
     def slug_or_id(self):
         return (self.slug or self._id)
 
+
     def url_for_self(self, urlgen, **extra_args):
         """
         Generate an appropriate url for ourselves
@@ -125,10 +128,25 @@ class MediaEntryMixin(object):
         else:
             # No thumbnail in media available. Get the media's
             # MEDIA_MANAGER for the fallback icon and return static URL
-            # Raise FileTypeNotSupported in case no such manager is enabled
-            manager = get_media_manager(self.media_type)
+            # Raises FileTypeNotSupported in case no such manager is enabled
+            manager = self.media_manager
             thumb_url = mg_globals.app.staticdirector(manager[u'default_thumb'])
         return thumb_url
+
+    @cached_property
+    def media_manager(self):
+        """Returns the MEDIA_MANAGER of the media's media_type
+
+        Raises FileTypeNotSupported in case no such manager is enabled
+        """
+        # TODO, we should be able to make this a simple lookup rather
+        # than iterating through all media managers.
+        for media_type, manager in get_media_managers():
+            if media_type == self.media_type:
+                return manager
+        # Not found?  Then raise an error
+        raise FileTypeNotSupported(
+            "MediaManager not in enabled types.  Check media_types in config?")
 
     def get_fail_exception(self):
         """
