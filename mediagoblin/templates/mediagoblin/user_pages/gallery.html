@@ -39,11 +39,12 @@
                          'mediagoblin.user_pages.user_home',
                           user=user.username) -%}
       <a href="{{ user_url }}">{{ username }}</a>'s media
-    {%- endtrans %}
+    {%- endtrans %}{% if tag %}{% trans %} with tag '{{tag}}'{% endtrans %}
+      {%- endif %}
   </h1>
 
   {{ object_gallery(request, media_entries, pagination) }}
-    
+
   {% set feed_url = request.urlgen('mediagoblin.user_pages.atom_feed',
                                    user=user.username) %}
   {% include "mediagoblin/utils/feed_link.html" %}

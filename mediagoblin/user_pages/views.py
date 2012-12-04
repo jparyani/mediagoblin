@@ -18,8 +18,8 @@ import logging
 import datetime
 
 from mediagoblin import messages, mg_globals
-from mediagoblin.db.models import (MediaEntry, Collection, CollectionItem,
-                                       User)
+from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
+                                   CollectionItem, User)
 from mediagoblin.tools.response import render_to_response, render_404, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
@@ -81,9 +81,16 @@ def user_home(request, page):
 @uses_pagination
 def user_gallery(request, page, url_user=None):
     """'Gallery' of a User()"""
+    tag = request.matchdict.get('tag', None)
     cursor = MediaEntry.query.filter_by(
         uploader=url_user.id,
         state=u'processed').order_by(MediaEntry.created.desc())
+
+    # Filter potentially by tag too:
+    if tag:
+        cursor = cursor.filter(
+            MediaEntry.tags_helper.any(
+                MediaTag.name == request.matchdict['tag']))
 
     # Paginate gallery
     pagination = Pagination(page, cursor)
@@ -97,7 +104,7 @@ def user_gallery(request, page, url_user=None):
     return render_to_response(
         request,
         'mediagoblin/user_pages/gallery.html',
-        {'user': url_user,
+        {'user': url_user, 'tag': tag,
          'media_entries': media_entries,
          'pagination': pagination})
 
