@@ -20,7 +20,7 @@
 
 {% macro media_grid(request, collection_items, col_number=5) %}
   <table class="thumb_gallery">
-    {% for row in gridify_cursor(collection_items, col_number) %}
+    {% for row in collection_items|batch(col_number) %}
       <tr class="thumb_row
                  {%- if loop.first %} thumb_row_first
                  {%- elif loop.last %} thumb_row_last{% endif %}">

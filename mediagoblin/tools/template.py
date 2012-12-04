@@ -59,8 +59,6 @@ def get_jinja_env(template_loader, locale):
     # ... construct a grid of thumbnails or other media
     # ... have access to the global and app config
     template_env.globals['fetch_messages'] = messages.fetch_messages
-    template_env.globals['gridify_list'] = gridify_list
-    template_env.globals['gridify_cursor'] = gridify_cursor
     template_env.globals['app_config'] = mg_globals.app_config
     template_env.globals['global_config'] = mg_globals.global_config
 
@@ -100,32 +98,3 @@ def render_template(request, template_path, context):
 def clear_test_template_context():
     global TEMPLATE_TEST_CONTEXT
     TEMPLATE_TEST_CONTEXT = {}
-
-
-def gridify_list(this_list, num_cols=5):
-    """
-    Generates a list of lists where each sub-list's length depends on
-    the number of columns in the list
-    """
-    grid = []
-
-    # Figure out how many rows we should have
-    num_rows = int(ceil(float(len(this_list)) / num_cols))
-
-    for row_num in range(num_rows):
-        slice_min = row_num * num_cols
-        slice_max = (row_num + 1) * num_cols
-
-        row = this_list[slice_min:slice_max]
-
-        grid.append(row)
-
-    return grid
-
-
-def gridify_cursor(this_cursor, num_cols=5):
-    """
-    Generates a list of lists where each sub-list's length depends on
-    the number of columns in the list
-    """
-    return gridify_list(list(this_cursor), num_cols)
