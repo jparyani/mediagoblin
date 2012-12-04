@@ -69,29 +69,26 @@ def locale_to_lower_lower(locale):
 
 def get_locale_from_request(request):
     """
-    Figure out what target language is most appropriate based on the
-    request
+    Return most appropriate language based on prefs/request request
     """
-    global AVAILABLE_LOCALES
-    request_form = request.args or request.form
+    request_args = (request.args, request.form)[request.method=='POST']
 
-    if request_form.has_key('lang'):
-        # User explicitely demanded a language
-        target_lang = request_form['lang']
+    if request_args.has_key('lang'):
+        # User explicitely demanded a language, normalize lower_uppercase
+        target_lang = locale_to_lower_upper(request_args['lang'])
 
     elif 'target_lang' in request.session:
         # TODO: Uh, ohh, this is never ever set anywhere?
         target_lang = request.session['target_lang']
     else:
-        # Pull the first acceptable language or English
-        # This picks your favorite browser lingo, falling back to 'en'
+        # Pull the most acceptable language based on browser preferences
+        # This returns one of AVAILABLE_LOCALES which is aready case-normalized.
+        # Note: in our tests request.accept_languages is None, so we need
+        # to explicitely fallback to en here.
+        target_lang = request.accept_languages.best_match(AVAILABLE_LOCALES) \
+                      or "en_US"
 
-        # TODO: We need a list of available locales, and match with the list
-        # of accepted locales, and serve the best available locale rather than
-        # the most preferred, or fall back to 'en' immediately.
-        target_lang = request.accept_languages.best_match(AVAILABLE_LOCALES)
-
-    return locale_to_lower_upper(target_lang)
+    return target_lang
 
 SETUP_GETTEXTS = {}
 
