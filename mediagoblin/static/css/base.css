@@ -118,8 +118,7 @@ header {
   margin-right: auto;
   padding: 0;
   margin-bottom: 42px;
-  background-color: #303030;
-  border-bottom: 1px solid #252525;
+  border-bottom: 1px solid #333;
 }
 
 .header_right {
@@ -139,6 +138,10 @@ header {
 
 .header_right li {
   list-style: none;
+}
+
+.header_dropdown {
+  margin: 20px;
 }
 
 a.logo {
