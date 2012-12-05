@@ -22,6 +22,7 @@ from urllib import urlencode
 from webob import exc
 
 from mediagoblin.db.util import ObjectId, InvalidId
+from mediagoblin.db.sql.models import User
 from mediagoblin.tools.response import redirect, render_404
 
 
@@ -51,6 +52,20 @@ def require_active_login(controller):
         return controller(request, *args, **kwargs)
 
     return new_controller_func
+
+def active_user_from_url(controller):
+    """Retrieve User() from <user> URL pattern and pass in as url_user=...
+
+    Returns a 404 if no such active user has been found"""
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        user = User.query.filter_by(username=request.matchdict['user']).first()
+        if user is None:
+            return render_404(request)
+
+        return controller(request, *args, url_user=user, **kwargs)
+
+    return wrapper
 
 
 def user_may_delete_media(controller):
