@@ -20,6 +20,7 @@ import datetime
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.util import DESCENDING, ObjectId
+from mediagoblin.db.sql.models import MediaEntry, Collection, CollectionItem
 from mediagoblin.tools.response import render_to_response, render_404, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
@@ -29,7 +30,7 @@ from mediagoblin.user_pages.lib import send_comment_email
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
     require_active_login, user_may_delete_media, user_may_alter_collection,
-    get_user_collection, get_user_collection_item)
+    get_user_collection, get_user_collection_item, active_user_from_url)
 
 from werkzeug.contrib.atom import AtomFeed
 
@@ -75,30 +76,26 @@ def user_home(request, page):
          'pagination': pagination})
 
 
+@active_user_from_url
 @uses_pagination
-def user_gallery(request, page):
+def user_gallery(request, page, url_user=None):
     """'Gallery' of a User()"""
-    user = request.db.User.find_one({
-            'username': request.matchdict['user'],
-            'status': u'active'})
-    if not user:
-        return render_404(request)
-
-    cursor = request.db.MediaEntry.find(
-        {'uploader': user._id,
-         'state': u'processed'}).sort('created', DESCENDING)
-
+    cursor = MediaEntry.query.filter_by(
+        uploader=url_user.id,
+        state=u'processed').order_by(MediaEntry.created.desc())
+    # Paginate gallery
     pagination = Pagination(page, cursor)
     media_entries = pagination()
 
     #if no data is available, return NotFound
+    # TODO: Should we really also return 404 for empty galleries?
     if media_entries == None:
         return render_404(request)
 
     return render_to_response(
         request,
         'mediagoblin/user_pages/gallery.html',
-        {'user': user,
+        {'user': url_user,
          'media_entries': media_entries,
          'pagination': pagination})
 
