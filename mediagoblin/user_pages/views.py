@@ -319,32 +319,28 @@ def media_confirm_delete(request, media):
          'form': form})
 
 
+@active_user_from_url
 @uses_pagination
-def user_collection(request, page):
+def user_collection(request, page, url_user=None):
     """A User-defined Collection"""
-    user = request.db.User.find_one({
-            'username': request.matchdict['user'],
-            'status': u'active'})
-    if not user:
-        return render_404(request)
+    collection = Collection.query.filter_by(
+        get_creator=url_user,
+        slug=request.matchdict['collection']).first()
 
-    collection = request.db.Collection.find_one(
-        {'slug': request.matchdict['collection']})
-
-    cursor = request.db.CollectionItem.find(
-        {'collection': collection.id})
+    cursor = collection.get_collection_items()
 
     pagination = Pagination(page, cursor)
     collection_items = pagination()
 
-    #if no data is available, return NotFound
+    # if no data is available, return NotFound
+    # TODO: Should an empty collection really also return 404?
     if collection_items == None:
         return render_404(request)
 
     return render_to_response(
         request,
         'mediagoblin/user_pages/collection.html',
-        {'user': user,
+        {'user': url_user,
          'collection': collection,
          'collection_items': collection_items,
          'pagination': pagination})
