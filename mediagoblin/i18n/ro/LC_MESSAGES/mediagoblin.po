@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2012-12-03 13:23-0600\n"
-"PO-Revision-Date: 2012-12-03 19:18+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2012-12-04 04:03+0000\n"
+"Last-Translator: George Pop <gapop@hotmail.com>\n"
 "Language-Team: Romanian (http://www.transifex.com/projects/p/mediagoblin/language/ro/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -193,7 +193,7 @@ msgstr "Editezi fișierul unui alt utilizator. Se recomandă prudență."
 #: mediagoblin/edit/views.py:156
 #, python-format
 msgid "You added the attachment %s!"
-msgstr ""
+msgstr "Ai anexat %s!"
 
 #: mediagoblin/edit/views.py:181
 msgid "You are editing a user's profile. Proceed with caution."
@@ -278,7 +278,7 @@ msgstr "Descriere"
 msgid ""
 "This will be visible to users allowing your\n"
 "                application to authenticate as them."
-msgstr ""
+msgstr "Aceste informații vor fi vizibile pentru utilizatorii\n                care permit aplicației tale să se autentifice în numele lor."
 
 #: mediagoblin/plugins/oauth/forms.py:41
 msgid "Type"
@@ -340,11 +340,11 @@ msgstr "logo MediaGoblin"
 #: mediagoblin/templates/mediagoblin/base.html:56
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
-msgstr ""
+msgstr "Contul lui <a href=\"%(user_url)s\">%(user_name)s</a>"
 
 #: mediagoblin/templates/mediagoblin/base.html:62
 msgid "log out"
-msgstr ""
+msgstr "Ieșire"
 
 #: mediagoblin/templates/mediagoblin/base.html:64
 #: mediagoblin/templates/mediagoblin/root.html:28
@@ -379,15 +379,15 @@ msgstr "Publicat sub licența <a href=\"http://www.fsf.org/licensing/licenses/ag
 
 #: mediagoblin/templates/mediagoblin/error.html:24
 msgid "Image of goblin stressing out"
-msgstr ""
+msgstr "Imagine cu un goblin stresat"
 
 #: mediagoblin/templates/mediagoblin/root.html:25
 msgid "Actions"
-msgstr ""
+msgstr "Acțiuni"
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid "Create new collection"
-msgstr ""
+msgstr "Creează colecție nouă"
 
 #: mediagoblin/templates/mediagoblin/root.html:34
 msgid "Change account settings"
@@ -502,7 +502,7 @@ msgid ""
 "\n"
 "If you think this is an error, just ignore this email and continue being\n"
 "a happy goblin!"
-msgstr "Bună, %(username)s\n\nPentru a schimba parola ta la GNU MediaGoblin, accesează adresa următoare:\n\n%(verification_url)s\n\nDacă ai primit acest mesaj din greșeală, ignoră-l și fii mai departe un elf fericit!"
+msgstr "Bună, %(username)s\n\nPentru a schimba parola ta la GNU MediaGoblin, accesează adresa următoare:\n\n%(verification_url)s\n\nDacă ai primit acest mesaj din greșeală, ignoră-l și fii mai departe un goblin fericit!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:39
 msgid "Logging in failed!"
@@ -776,7 +776,7 @@ msgstr "<h3>Adăugat la</h3>\n      <p>%(date)s</p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:202
 msgid "Add media to collection"
-msgstr ""
+msgstr "Adaugă un fișier la colecție"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:35
 #, python-format
@@ -877,7 +877,7 @@ msgstr "Nu pare să existe niciun fișier media deocamdată..."
 
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:51
 msgid "(remove)"
-msgstr ""
+msgstr "(șterge)"
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:20
 #, python-format
@@ -941,25 +941,25 @@ msgstr "Hopa!"
 
 #: mediagoblin/tools/response.py:30
 msgid "An error occured"
-msgstr ""
+msgstr "S-a produs o eroare"
 
 #: mediagoblin/tools/response.py:44
 msgid "Operation not allowed"
-msgstr ""
+msgstr "Operația nu este permisă"
 
 #: mediagoblin/tools/response.py:45
 msgid ""
 "Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
 "function that you are not allowed to. Have you been trying to delete all "
 "user accounts again?"
-msgstr ""
+msgstr "Îmi pare rău, Dave, nu te pot lăsa să faci asta!</p><p>Ai încercat să faci o operație nepermisă. Ai încercat iar să ștergi toate conturile utilizatorilor?"
 
 #: mediagoblin/tools/response.py:52
 msgid ""
 "There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
 " the address is correct, maybe the page you're looking for has been moved or"
 " deleted."
-msgstr ""
+msgstr "Nu există nicio pagină la această adresă.</p><p>Dacă sunteți sigur că adresa este corectă, poate că pagina pe care o căutați a fost mutată sau ștearsă."
 
 #: mediagoblin/user_pages/forms.py:28
 msgid "I am sure I want to delete this"
