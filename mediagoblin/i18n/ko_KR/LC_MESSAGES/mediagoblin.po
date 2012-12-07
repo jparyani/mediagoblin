@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-09-24 14:01-0500\n"
-"PO-Revision-Date: 2012-11-08 05:19+0000\n"
-"Last-Translator: newvgund <newvgund@gmail.com>\n"
+"POT-Creation-Date: 2012-12-07 12:45-0600\n"
+"PO-Revision-Date: 2012-12-07 18:41+0000\n"
+"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -92,7 +92,7 @@ msgstr "사용자 이름 또는 email로 된 사용자를 찾을 수 없습니�
 msgid "You can now log in using your new password."
 msgstr "이제 새로운 비밀번호로 로그인 하실 수 있습니다."
 
-#: mediagoblin/edit/forms.py:25 mediagoblin/edit/forms.py:83
+#: mediagoblin/edit/forms.py:25 mediagoblin/edit/forms.py:82
 #: mediagoblin/submit/forms.py:28 mediagoblin/submit/forms.py:47
 #: mediagoblin/user_pages/forms.py:40
 msgid "Title"
@@ -103,7 +103,7 @@ msgid "Description of this work"
 msgstr "이 작업에 대한 설명"
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:52
-#: mediagoblin/edit/forms.py:87 mediagoblin/submit/forms.py:32
+#: mediagoblin/edit/forms.py:86 mediagoblin/submit/forms.py:32
 #: mediagoblin/submit/forms.py:51 mediagoblin/user_pages/forms.py:44
 msgid ""
 "You can use\n"
@@ -119,11 +119,11 @@ msgstr "태그"
 msgid "Separate tags by commas."
 msgstr "태그는 , 로 구분 됩니다."
 
-#: mediagoblin/edit/forms.py:38 mediagoblin/edit/forms.py:91
+#: mediagoblin/edit/forms.py:38 mediagoblin/edit/forms.py:90
 msgid "Slug"
 msgstr "'슬러그'"
 
-#: mediagoblin/edit/forms.py:39 mediagoblin/edit/forms.py:92
+#: mediagoblin/edit/forms.py:39 mediagoblin/edit/forms.py:91
 msgid "The slug can't be empty"
 msgstr "'슬러그'는 공백일 수 없습니다."
 
@@ -162,20 +162,20 @@ msgstr "계정 확인을 위해, 이전 비밀 번호를 입력해 주세요."
 msgid "New password"
 msgstr "새로운 비밀번호"
 
-#: mediagoblin/edit/forms.py:72
+#: mediagoblin/edit/forms.py:71
 msgid "Email me when others comment on my media"
 msgstr "제 미디어에 대한 컨텍을 원한다면, 메일을 보내주세요."
 
-#: mediagoblin/edit/forms.py:84
+#: mediagoblin/edit/forms.py:83
 msgid "The title can't be empty"
 msgstr "제목은 공백일 수 없습니다."
 
-#: mediagoblin/edit/forms.py:86 mediagoblin/submit/forms.py:50
+#: mediagoblin/edit/forms.py:85 mediagoblin/submit/forms.py:50
 #: mediagoblin/user_pages/forms.py:43
 msgid "Description of this collection"
 msgstr "모음집에 대한 설명"
 
-#: mediagoblin/edit/forms.py:93
+#: mediagoblin/edit/forms.py:92
 msgid ""
 "The title part of this collection's address. You usually don't need to "
 "change this."
@@ -189,33 +189,38 @@ msgstr "해당 유저에 대한 '슬러그'가 이미 존재합니다."
 msgid "You are editing another user's media. Proceed with caution."
 msgstr "다른 사용자의 미디어를 수정하고 있습니다. 조심해서 수정하세요."
 
-#: mediagoblin/edit/views.py:182
+#: mediagoblin/edit/views.py:156
+#, python-format
+msgid "You added the attachment %s!"
+msgstr ""
+
+#: mediagoblin/edit/views.py:181
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr "사용자의 계정 정보를 수정하고 있습니다. 조심해서 수정하세요."
 
-#: mediagoblin/edit/views.py:198
+#: mediagoblin/edit/views.py:197
 msgid "Profile changes saved"
 msgstr "계정 정보가 저장 되었습니다."
 
-#: mediagoblin/edit/views.py:227 mediagoblin/edit/views.py:247
+#: mediagoblin/edit/views.py:226 mediagoblin/edit/views.py:246
 msgid "Account settings saved"
 msgstr "계정 설정이 저장 되었습니다."
 
-#: mediagoblin/edit/views.py:252
+#: mediagoblin/edit/views.py:251
 msgid "Wrong password"
 msgstr "잘못된 비밀번호"
 
-#: mediagoblin/edit/views.py:288 mediagoblin/submit/views.py:211
-#: mediagoblin/user_pages/views.py:215
+#: mediagoblin/edit/views.py:287 mediagoblin/submit/views.py:211
+#: mediagoblin/user_pages/views.py:210
 #, python-format
 msgid "You already have a collection called \"%s\"!"
 msgstr "\"%s\" 모음집을 이미 가지고 있습니다!"
 
-#: mediagoblin/edit/views.py:292
+#: mediagoblin/edit/views.py:291
 msgid "A collection with that slug already exists for this user."
 msgstr ""
 
-#: mediagoblin/edit/views.py:309
+#: mediagoblin/edit/views.py:308
 msgid "You are editing another user's collection. Proceed with caution."
 msgstr "다른 유저의 모음집을 수정 중 입니다. 주의하세요."
 
@@ -232,7 +237,7 @@ msgid "However, old link directory symlink found; removed.\n"
 msgstr "그런데, 오래된 디렉토리 심볼릭 링크를 찾았습니다; 지워졌습니다.\n"
 
 #: mediagoblin/media_types/__init__.py:60
-#: mediagoblin/media_types/__init__.py:120
+#: mediagoblin/media_types/__init__.py:101
 msgid "Sorry, I don't support that file type :("
 msgstr "죄송합니다. 해당 타입의 파일은 지원하지 않아요 :("
 
@@ -327,62 +332,43 @@ msgstr "이햐!! 등록했습니다!"
 msgid "Collection \"%s\" added!"
 msgstr "\"%s\" 모음집이 추가되었습니다!"
 
-#: mediagoblin/templates/mediagoblin/404.html:24
-msgid "Image of 404 goblin stressing out"
-msgstr "404 이미지 고블린이 열받아 합니다."
-
-#: mediagoblin/templates/mediagoblin/404.html:25
-msgid "Oops!"
-msgstr "웁스!"
-
-#: mediagoblin/templates/mediagoblin/404.html:26
-msgid "There doesn't seem to be a page at this address. Sorry!"
-msgstr "해당 URL의 페이지가 존재하지 않는것 같습니다. 죄송합니다!"
-
-#: mediagoblin/templates/mediagoblin/404.html:28
-msgid ""
-"If you're sure the address is correct, maybe the page you're looking for has"
-" been moved or deleted."
-msgstr "주소가 올바르다면, 페이지가 옮겨지거나 삭제되었을거 같습니다."
-
-#: mediagoblin/templates/mediagoblin/base.html:50
+#: mediagoblin/templates/mediagoblin/base.html:48
 msgid "MediaGoblin logo"
 msgstr "MediaGoblin 로고"
 
+#: mediagoblin/templates/mediagoblin/base.html:54
+#, python-format
+msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/base.html:60
+msgid "log out"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:62
+#: mediagoblin/templates/mediagoblin/root.html:28
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:151
+msgid "Add media"
+msgstr "미디어 추가"
+
+#: mediagoblin/templates/mediagoblin/base.html:68
 msgid "Verify your email!"
 msgstr "메일을 확인하세요!"
 
-#: mediagoblin/templates/mediagoblin/base.html:66
-msgid "+ Add media"
-msgstr "+ 미디어 추가"
-
-#: mediagoblin/templates/mediagoblin/base.html:67
-msgid "+ Add collection"
-msgstr "+ 모음집 추가"
-
-#: mediagoblin/templates/mediagoblin/base.html:69
-msgid "View your profile"
-msgstr "내 계정 정보 보기"
-
-#: mediagoblin/templates/mediagoblin/base.html:70
-msgid "Log out"
-msgstr "로그 아웃"
-
-#: mediagoblin/templates/mediagoblin/base.html:75
+#: mediagoblin/templates/mediagoblin/base.html:73
 #: mediagoblin/templates/mediagoblin/auth/login.html:28
 #: mediagoblin/templates/mediagoblin/auth/login.html:36
 #: mediagoblin/templates/mediagoblin/auth/login.html:54
 msgid "Log in"
 msgstr "로그인"
 
-#: mediagoblin/templates/mediagoblin/base.html:89
+#: mediagoblin/templates/mediagoblin/base.html:87
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project."
 msgstr "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a href=\"http://gnu.org/\">GNU</a> project."
 
-#: mediagoblin/templates/mediagoblin/base.html:92
+#: mediagoblin/templates/mediagoblin/base.html:90
 #, python-format
 msgid ""
 "Released under the <a "
@@ -390,31 +376,56 @@ msgid ""
 "href=\"%(source_link)s\">Source code</a> available."
 msgstr "Released under the <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a href=\"%(source_link)s\">Source code</a> available."
 
-#: mediagoblin/templates/mediagoblin/root.html:24
+#: mediagoblin/templates/mediagoblin/error.html:24
+msgid "Image of goblin stressing out"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:25
+msgid "Actions"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:31
+msgid "Create new collection"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/root.html:34
+msgid "Change account settings"
+msgstr "계정 설정 변경"
+
+#: mediagoblin/templates/mediagoblin/root.html:38
+#: mediagoblin/templates/mediagoblin/root.html:44
+#: mediagoblin/templates/mediagoblin/admin/panel.html:21
+#: mediagoblin/templates/mediagoblin/admin/panel.html:26
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:26
+msgid "Media processing panel"
+msgstr "미디어 작업 패널"
+
+#: mediagoblin/templates/mediagoblin/root.html:51
 msgid "Explore"
 msgstr "탐색"
 
-#: mediagoblin/templates/mediagoblin/root.html:26
+#: mediagoblin/templates/mediagoblin/root.html:53
 msgid "Hi there, welcome to this MediaGoblin site!"
 msgstr "안녕하세요! 미디어 고블린 사이트에 온걸 환영 합니다!"
 
-#: mediagoblin/templates/mediagoblin/root.html:28
+#: mediagoblin/templates/mediagoblin/root.html:55
 msgid ""
 "This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
 "extraordinarily great piece of media hosting software."
 msgstr "이사이트는 <a href=\"http://mediagoblin.org\">MediaGoblin</a>으로 작동 중입니다. 이는 특이한 미디어 호스팅 소프트웨어중 하나 입니다."
 
-#: mediagoblin/templates/mediagoblin/root.html:29
+#: mediagoblin/templates/mediagoblin/root.html:56
 msgid ""
 "To add your own media, place comments, and more, you can log in with your "
 "MediaGoblin account."
 msgstr "자신의 미디어를 추가하고, 댓글을 남기세요! 미디어 고블린 계정으로 내역을 확인 하실 수 있습니다!"
 
-#: mediagoblin/templates/mediagoblin/root.html:31
+#: mediagoblin/templates/mediagoblin/root.html:58
 msgid "Don't have one yet? It's easy!"
 msgstr "아직 아무것도 없으시다구요? 매우 쉽습니다!"
 
-#: mediagoblin/templates/mediagoblin/root.html:32
+#: mediagoblin/templates/mediagoblin/root.html:59
 #, python-format
 msgid ""
 "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
@@ -422,16 +433,9 @@ msgid ""
 "        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">사용자 계정 만들기</a>\n        또는\n        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">서버를 위한 MediaGoblin 설정하기</a>"
 
-#: mediagoblin/templates/mediagoblin/root.html:40
+#: mediagoblin/templates/mediagoblin/root.html:67
 msgid "Most recent media"
 msgstr "가장 최근에 등록된 미디어"
-
-#: mediagoblin/templates/mediagoblin/admin/panel.html:21
-#: mediagoblin/templates/mediagoblin/admin/panel.html:26
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:26
-msgid "Media processing panel"
-msgstr "미디어 작업 패널"
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:29
 msgid ""
@@ -541,30 +545,43 @@ msgstr "안녕하세요 %(username)s님,\n\nGNU MediaGoblin 계정을 활성화 
 msgid "Editing attachments for %(media_title)s"
 msgstr "%(media_title)s의 첨부 수정 중..."
 
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:43
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:171
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:187
+msgid "Attachments"
+msgstr "첨부"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:56
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:192
+msgid "Add attachment"
+msgstr "첨부 추가"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:60
+#: mediagoblin/templates/mediagoblin/edit/edit.html:41
+#: mediagoblin/templates/mediagoblin/edit/edit_collection.html:32
+#: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:46
+#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:52
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:81
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:48
+msgid "Cancel"
+msgstr "취소"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:62
+#: mediagoblin/templates/mediagoblin/edit/edit.html:42
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:51
+#: mediagoblin/templates/mediagoblin/edit/edit_collection.html:33
+#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:41
+msgid "Save changes"
+msgstr "저장"
+
 #: mediagoblin/templates/mediagoblin/edit/edit.html:23
 #: mediagoblin/templates/mediagoblin/edit/edit.html:35
 #, python-format
 msgid "Editing %(media_title)s"
 msgstr "%(media_title)s 편집중..."
 
-#: mediagoblin/templates/mediagoblin/edit/edit.html:42
-#: mediagoblin/templates/mediagoblin/edit/edit_collection.html:32
-#: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:46
-#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:53
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:82
-#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
-msgid "Cancel"
-msgstr "취소"
-
-#: mediagoblin/templates/mediagoblin/edit/edit.html:43
-#: mediagoblin/templates/mediagoblin/edit/edit_account.html:47
-#: mediagoblin/templates/mediagoblin/edit/edit_collection.html:33
-#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:41
-msgid "Save changes"
-msgstr "저장"
-
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:28
-#: mediagoblin/templates/mediagoblin/edit/edit_account.html:41
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:40
 #, python-format
 msgid "Changing %(username)s's account settings"
 msgstr "%(username)s'의 계정 설정 변경중..."
@@ -590,13 +607,12 @@ msgstr "미디어는 다음으로 태그 되었습니다.: %(tag_name)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
-#: mediagoblin/templates/mediagoblin/media_displays/image.html:23
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:136
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:52
 msgid "Download"
 msgstr "다운로드"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:38
-#: mediagoblin/templates/mediagoblin/media_displays/image.html:27
 msgid "Original"
 msgstr "원본"
 
@@ -623,6 +639,56 @@ msgstr "원본 파일"
 msgid "WebM file (Vorbis codec)"
 msgstr "WebM 파일 (Vorbis 코덱)"
 
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:87
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:93
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:99
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:105
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:67
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:73
+#, python-format
+msgid "Image for %(media_title)s"
+msgstr "%(media_title)s 이미지"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
+msgid "Toggle Rotate"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:113
+msgid "Perspective"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:116
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:117
+msgid "Front"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:120
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:121
+msgid "Top"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:124
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:125
+msgid "Side"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:130
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:131
+msgid "WebGL"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:138
+msgid "Download model"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:146
+msgid "File Format"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:148
+msgid "Object Height"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
 msgid ""
 "Sorry, this video will not work because \n"
@@ -647,7 +713,7 @@ msgstr "모음집 추가"
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:30
 #: mediagoblin/templates/mediagoblin/submit/start.html:34
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:83
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:82
 msgid "Add"
 msgstr "추가"
 
@@ -691,7 +757,7 @@ msgid "Really delete %(title)s?"
 msgstr "%(title)s 을 지우시겠습니까?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:47
-#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:50
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
 msgid "Delete permanently"
 msgstr "영구적으로 삭제"
 
@@ -700,7 +766,7 @@ msgstr "영구적으로 삭제"
 msgid "Really remove %(media_title)s from %(collection_title)s?"
 msgstr "%(collection_title)s의 %(media_title)s을 삭제 하시겠습니까?"
 
-#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:54
+#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:53
 msgid "Remove"
 msgstr "지우기"
 
@@ -725,12 +791,6 @@ msgstr "<a href=\"%(user_url)s\">%(username)s</a>의 미디어"
 #, python-format
 msgid "❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a>"
 msgstr "❖ <a href=\"%(user_url)s\">%(username)s</a>의 미디어를 보고 있습니다."
-
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:67
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:73
-#, python-format
-msgid "Image for %(media_title)s"
-msgstr "%(media_title)s 이미지"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:102
 msgid "Add a comment"
@@ -758,25 +818,20 @@ msgid ""
 "      <p>%(date)s</p>"
 msgstr "<h3>부가 기능</h3>\n      <p>%(date)s</p>"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:171
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:187
-msgid "Attachments"
-msgstr "첨부"
-
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:192
-msgid "Add attachment"
-msgstr "첨부 추가"
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:202
+msgid "Add media to collection"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:35
 #, python-format
 msgid "Add %(title)s to collection"
 msgstr "%(title)s 의 모음집 추가"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:52
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:51
 msgid "+"
 msgstr "+"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:57
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:56
 msgid "Add a new collection"
 msgstr "새 모음집 추가"
 
@@ -847,42 +902,26 @@ msgstr "계정 정보 수정"
 msgid "This user hasn't filled in their profile (yet)."
 msgstr "이 사용자는 계정 정보를 입력하지 않았습니다."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:125
-msgid "Change account settings"
-msgstr "계정 설정 변경"
-
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:138
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:132
 #, python-format
 msgid "View all of %(username)s's media"
 msgstr "%(username)s의 모든 미디어 보기"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:151
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:145
 msgid ""
 "This is where your media will appear, but you don't seem to have added "
 "anything yet."
 msgstr "이곳에 등록한 미디어가 나타나게 됩니다. 하지만 아직 아무런 미디어를 등록하지 않으셨네요."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:157
-msgid "Add media"
-msgstr "미디어 추가"
-
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:163
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:87
-#: mediagoblin/templates/mediagoblin/utils/object_gallery.html:72
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:86
+#: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
 msgid "There doesn't seem to be any media here yet..."
 msgstr "아직 어떠한 미디어도 존재하지 않습니다."
 
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:39
-#, python-format
-msgid ""
-"<br />\n"
-"              <a href=\"%(entry_url)s\">%(note)s</a>"
-msgstr "<br />\n              <a href=\"%(entry_url)s\">%(note)s</a>"
-
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:47
-#, python-format
-msgid "<br /><a href=\"%(remove_url)s\" class=\"remove\">(remove)</a>"
-msgstr "<br /><a href=\"%(remove_url)s\" class=\"remove\">(지우기)</a>"
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:51
+msgid "(remove)"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:20
 #, python-format
@@ -901,7 +940,7 @@ msgstr "Atom 피드"
 msgid "Location"
 msgstr "장소"
 
-#: mediagoblin/templates/mediagoblin/utils/geolocation_map.html:38
+#: mediagoblin/templates/mediagoblin/utils/geolocation_map.html:53
 #, python-format
 msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 msgstr " <a href=\"%(osm_url)s\">OpenStreetMap</a>으로 보기"
@@ -940,6 +979,32 @@ msgstr "태그 정보"
 msgid "Could not read the image file."
 msgstr "이미지 파일을 읽을 수 없습니다."
 
+#: mediagoblin/tools/response.py:29
+msgid "Oops!"
+msgstr "웁스!"
+
+#: mediagoblin/tools/response.py:30
+msgid "An error occured"
+msgstr ""
+
+#: mediagoblin/tools/response.py:44
+msgid "Operation not allowed"
+msgstr ""
+
+#: mediagoblin/tools/response.py:45
+msgid ""
+"Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
+"function that you are not allowed to. Have you been trying to delete all "
+"user accounts again?"
+msgstr ""
+
+#: mediagoblin/tools/response.py:52
+msgid ""
+"There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
+" the address is correct, maybe the page you're looking for has been moved or"
+" deleted."
+msgstr ""
+
 #: mediagoblin/user_pages/forms.py:28
 msgid "I am sure I want to delete this"
 msgstr "이걸 지우고 싶습니다."
@@ -960,74 +1025,74 @@ msgstr "노트 추가"
 msgid "commented on your post"
 msgstr "게시물에 덧글이 달렸습니다."
 
-#: mediagoblin/user_pages/views.py:161
+#: mediagoblin/user_pages/views.py:156
 msgid "Oops, your comment was empty."
 msgstr "오우, 댓글이 비었습니다."
 
-#: mediagoblin/user_pages/views.py:167
+#: mediagoblin/user_pages/views.py:162
 msgid "Your comment has been posted!"
 msgstr "댓글이 등록 되었습니다!"
 
-#: mediagoblin/user_pages/views.py:235
+#: mediagoblin/user_pages/views.py:230
 msgid "You have to select or add a collection"
 msgstr "모음집을 추가하거나 기존 모음집을 선택하세요."
 
-#: mediagoblin/user_pages/views.py:243
+#: mediagoblin/user_pages/views.py:238
 #, python-format
 msgid "\"%s\" already in collection \"%s\""
 msgstr "\"%s\" 모음집이 이미 존재 합니다. \"%s\""
 
-#: mediagoblin/user_pages/views.py:258
+#: mediagoblin/user_pages/views.py:253
 #, python-format
 msgid "\"%s\" added to collection \"%s\""
 msgstr "\"%s\" 모음집을 추가했습니다. \"%s\""
 
-#: mediagoblin/user_pages/views.py:266
+#: mediagoblin/user_pages/views.py:261
 msgid "Please check your entries and try again."
 msgstr "확인을 하시고 다시 시도하세요."
 
-#: mediagoblin/user_pages/views.py:297
+#: mediagoblin/user_pages/views.py:292
 msgid ""
 "Some of the files with this entry seem to be missing.  Deleting anyway."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:302
+#: mediagoblin/user_pages/views.py:297
 msgid "You deleted the media."
 msgstr "미디어를 삭제 했습니다."
 
-#: mediagoblin/user_pages/views.py:309
+#: mediagoblin/user_pages/views.py:304
 msgid "The media was not deleted because you didn't check that you were sure."
 msgstr "확인 체크를 하지 않았습니다. 미디어는 삭제되지 않았습니다."
 
-#: mediagoblin/user_pages/views.py:317
+#: mediagoblin/user_pages/views.py:312
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr "다른 사람의 미디어를 삭제하려고 합니다. 다시 한번 확인하세요."
 
-#: mediagoblin/user_pages/views.py:379
+#: mediagoblin/user_pages/views.py:370
 msgid "You deleted the item from the collection."
 msgstr "모음집에 있는 항목을 삭제 했습니다."
 
-#: mediagoblin/user_pages/views.py:383
+#: mediagoblin/user_pages/views.py:374
 msgid "The item was not removed because you didn't check that you were sure."
 msgstr "확인을 하지 않았습니다. 항목은 삭제하지 않았습니다."
 
-#: mediagoblin/user_pages/views.py:393
+#: mediagoblin/user_pages/views.py:384
 msgid ""
 "You are about to delete an item from another user's collection. Proceed with"
 " caution."
 msgstr "다른 사용자의 모음집에 있는 항목을 삭제하였습니다. 주의하세요."
 
-#: mediagoblin/user_pages/views.py:426
+#: mediagoblin/user_pages/views.py:417
 #, python-format
 msgid "You deleted the collection \"%s\""
 msgstr "\"%s\" 모음집을 삭제하셨습니다."
 
-#: mediagoblin/user_pages/views.py:433
+#: mediagoblin/user_pages/views.py:424
 msgid ""
 "The collection was not deleted because you didn't check that you were sure."
 msgstr "확인을 하지 않았습니다. 모음집은 삭제하지 않았습니다."
 
-#: mediagoblin/user_pages/views.py:443
+#: mediagoblin/user_pages/views.py:434
 msgid ""
 "You are about to delete another user's collection. Proceed with caution."
 msgstr "다른 사용자의 모음집을 삭제하려고 합니다. 주의하세요."
