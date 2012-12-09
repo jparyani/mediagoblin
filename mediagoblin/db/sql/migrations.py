@@ -142,7 +142,7 @@ def create_processing_metadata_table(db):
 #  new tables. While creating the tables from scratch had
 #  the constraint enabled.
 #
-# So we have three situations that should end up at the same
+# So we have four situations that should end up at the same
 # db layout:
 #
 # 1. Fresh install.
@@ -158,14 +158,13 @@ def create_processing_metadata_table(db):
 #    And this migration is just skipped silently.
 # 4. old install, always on latest git.
 #    This one has the tables, but lacks the constraint.
-#    So this mitration adds the constraint.
+#    So this migration adds the constraint.
 @RegisterMigration(7, MIGRATIONS)
 def fix_CollectionItem_v0_constraint(db_conn):
     """Add the forgotten Constraint on CollectionItem"""
 
     global collectionitem_unique_constraint_done
     if collectionitem_unique_constraint_done:
-        print "Okay, already done, short circuit"
         # Reset it. Maybe the whole thing gets run again
         # For a different db?
         collectionitem_unique_constraint_done = False
