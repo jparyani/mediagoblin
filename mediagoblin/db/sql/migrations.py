@@ -136,6 +136,29 @@ def create_processing_metadata_table(db):
     ProcessingMetaData_v0.__table__.create(db.bind)
     db.commit()
 
+
+# Okay, problem being:
+#  Migration #4 forgot to add the uniqueconstraint for the
+#  new tables. While creating the tables from scratch had
+#  the constraint enabled.
+#
+# So we have three situations that should end up at the same
+# db layout:
+#
+# 1. Fresh install.
+#    Well, easy. Just uses the tables in models.py
+# 2. Fresh install using a git version just before this migration
+#    The tables are all there, the unique constraint is also there.
+#    This migration should do nothing.
+#    But as we can't detect the uniqueconstraint easily,
+#    this migration just adds the constraint again.
+#    And possibly fails very loud. But ignores the failure.
+# 3. old install, not using git, just releases.
+#    This one will get the new tables in #4 (now with constraint!)
+#    And this migration is just skipped silently.
+# 4. old install, always on latest git.
+#    This one has the tables, but lacks the constraint.
+#    So this mitration adds the constraint.
 @RegisterMigration(7, MIGRATIONS)
 def fix_CollectionItem_v0_constraint(db_conn):
     """Add the forgotten Constraint on CollectionItem"""
