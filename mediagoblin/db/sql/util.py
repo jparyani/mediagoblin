@@ -217,9 +217,9 @@ class MigrationManager(object):
                     u'   + Running migration %s, "%s"... ' % (
                         migration_number, migration_func.func_name))
                 migration_func(self.session)
+                self.set_current_migration()
                 self.printer('done.\n')
 
-            self.set_current_migration()
             return u'migrated'
 
         # Otherwise return None.  Well it would do this anyway, but
