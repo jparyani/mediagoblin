@@ -181,10 +181,9 @@ def fix_CollectionItem_v0_constraint(db_conn):
 
     try:
         constraint.create()
-    except ProgrammingError as exc:
-        print "***", repr(exc)
-        print "***", repr(exc.statement)
-        print "***", repr(exc.params)
-        print "***", repr(exc.orig)
-        print "*** Ignoring it, you probably have a fresh install from a recent git."
+    except ProgrammingError:
+        # User probably has an install that was run since the
+        # collection tables were added, so we don't need to run this migration.
+        pass
+
     db_conn.commit()
