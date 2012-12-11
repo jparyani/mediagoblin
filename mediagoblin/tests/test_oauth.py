@@ -34,8 +34,8 @@ class TestOAuth(object):
 
         self.pman = pluginapi.PluginManager()
 
-        self.user_password = '4cc355_70k3N'
-        self.user = fixture_add_user('joauth', self.user_password)
+        self.user_password = u'4cc355_70k3N'
+        self.user = fixture_add_user(u'joauth', self.user_password)
 
         self.login()
 
