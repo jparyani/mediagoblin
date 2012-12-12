@@ -20,6 +20,7 @@ from urlparse import urljoin
 from werkzeug.exceptions import Forbidden, NotFound
 from werkzeug.urls import url_quote
 
+from mediagoblin import mg_globals as mgg
 from mediagoblin.db.models import MediaEntry, User
 from mediagoblin.tools.response import redirect, render_404
 
@@ -222,3 +223,14 @@ def get_media_entry_by_id(controller):
         return controller(request, media=media, *args, **kwargs)
 
     return wrapper
+
+
+def get_workbench(func):
+    """Decorator, passing in a workbench as kwarg which is cleaned up afterwards"""
+
+    @wraps(func)
+    def new_func(*args, **kwargs):
+        with mgg.workbench_manager.create_workbench() as workbench:
+            return func(*args, workbench=workbench, **kwargs)
+
+    return new_func
