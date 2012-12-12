@@ -51,8 +51,11 @@ class ProcessMedia(Task):
 
             _log.debug('Processing {0}'.format(entry))
 
+            # run the processing code
             entry.media_manager['processor'](entry)
 
+            # We set the state to processed and save the entry here so there's
+            # no need to save at the end of the processing stage, probably ;)
             entry.state = u'processed'
             entry.save()
 

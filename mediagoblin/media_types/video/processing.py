@@ -135,6 +135,3 @@ def process_video(entry):
                 entry.media_files['original'] = original_filepath
 
     mgg.queue_store.delete_file(queued_filepath)
-
-    # Save the MediaEntry
-    entry.save()
