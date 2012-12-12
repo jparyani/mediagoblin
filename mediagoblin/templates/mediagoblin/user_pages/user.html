@@ -124,7 +124,7 @@
     {% if media_entries.count() %}
       <div class="profile_showcase">
         {{ object_gallery(request, media_entries, pagination,
-                          pagination_base_url=user_gallery_url, col_number=2) }}
+                          pagination_base_url=user_gallery_url, col_number=3) }}
         {% include "mediagoblin/utils/object_gallery.html" %}
         <div class="clear"></div>
         <p>
