@@ -62,9 +62,31 @@ class BasicFileStorage(StorageInterface):
         return open(self._resolve_filepath(filepath), mode)
 
     def delete_file(self, filepath):
-        # TODO: Also delete unused directories if empty (safely, with
-        # checks to avoid race conditions).
+        """Delete file at filepath
+
+        Raises OSError in case filepath is a directory."""
+        #TODO: log error
         os.remove(self._resolve_filepath(filepath))
+
+    def delete_dir(self, dirpath, recursive=False):
+        """returns True on succes, False on failure"""
+
+        dirpath = self._resolve_filepath(dirpath)
+
+        # Shortcut the default and simple case of nonempty=F, recursive=F
+        if recursive:
+            try:
+                shutil.rmtree(dirpath)
+            except OSError as e:
+                #TODO: log something here
+                return False
+        else: # recursively delete everything
+            try:
+                os.rmdir(dirpath)
+            except OSError as e:
+                #TODO: log something here
+                return False
+        return True
 
     def file_url(self, filepath):
         if not self.base_url:
