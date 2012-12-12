@@ -19,6 +19,7 @@ import os
 import logging
 
 from mediagoblin import mg_globals as mgg
+from mediagoblin.decorators import get_workbench
 from mediagoblin.processing import BadMediaFail, \
     create_pub_filepath, FilenameBuilder
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
@@ -76,11 +77,13 @@ def sniff_handler(media_file, **kw):
     return False
 
 
-def process_image(entry):
+@get_workbench
+def process_image(entry, workbench=None):
+    """Code to process an image. Will be run by celery.
+
+    A Workbench() represents a local tempory dir. It is automatically
+    cleaned up when this function exits.
     """
-    Code to process an image
-    """
-    workbench = mgg.workbench_manager.create_workbench()
     # Conversions subdirectory to avoid collisions
     conversions_subdir = os.path.join(
         workbench.dir, 'conversions')
@@ -147,8 +150,6 @@ def process_image(entry):
             gps_data['gps_' + key] = gps_data.pop(key)
         entry.media_data_init(**gps_data)
 
-    # clean up workbench
-    workbench.destroy_self()
 
 if __name__ == '__main__':
     import sys

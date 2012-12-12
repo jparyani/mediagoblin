@@ -21,6 +21,7 @@ import subprocess
 import pkg_resources
 
 from mediagoblin import mg_globals as mgg
+from mediagoblin.decorators import get_workbench
 from mediagoblin.processing import create_pub_filepath, \
     FilenameBuilder
 
@@ -75,11 +76,13 @@ def blender_render(config):
         env=env)
 
 
-def process_stl(entry):
+@get_workbench
+def process_stl(entry, workbench=None):
+    """Code to process an stl or obj model. Will be run by celery.
+
+    A Workbench() represents a local tempory dir. It is automatically
+    cleaned up when this function exits.
     """
-    Code to process an stl or obj model.
-    """
-    workbench = mgg.workbench_manager.create_workbench()
     queued_filepath = entry.queued_media_file
     queued_filename = workbench.localized_file(
         mgg.queue_store, queued_filepath, 'source')
@@ -164,7 +167,7 @@ def process_stl(entry):
     # Remove queued media file from storage and database
     mgg.queue_store.delete_file(queued_filepath)
     entry.queued_media_file = []
-        
+
     # Insert media file information into database
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict[u'original'] = model_filepath
@@ -185,6 +188,3 @@ def process_stl(entry):
         "file_type" : ext,
         }
     entry.media_data_init(**dimensions)
-
-    # clean up workbench
-    workbench.destroy_self()

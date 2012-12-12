@@ -18,6 +18,7 @@ from tempfile import NamedTemporaryFile
 import logging
 
 from mediagoblin import mg_globals as mgg
+from mediagoblin.decorators import get_workbench
 from mediagoblin.processing import \
     create_pub_filepath, FilenameBuilder, BaseProcessingFail, ProgressCallback
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
@@ -51,15 +52,16 @@ def sniff_handler(media_file, **kw):
 
     return False
 
-
-def process_video(entry):
+@get_workbench
+def process_video(entry, workbench=None):
     """
     Process a video entry, transcode the queued media files (originals) and
     create a thumbnail for the entry.
+
+    A Workbench() represents a local tempory dir. It is automatically
+    cleaned up when this function exits.
     """
     video_config = mgg.global_config['media_type:mediagoblin.media_types.video']
-
-    workbench = mgg.workbench_manager.create_workbench()
 
     queued_filepath = entry.queued_media_file
     queued_filename = workbench.localized_file(
