@@ -59,13 +59,13 @@ class TestOAuth(object):
 
     def test_1_public_client_registration_without_redirect_uri(self):
         ''' Test 'public' OAuth client registration without any redirect uri '''
-        response = self.register_client('OMGOMGOMG', 'public',
+        response = self.register_client(u'OMGOMGOMG', 'public',
                 'OMGOMG Apache License v2')
 
         ctx = self.get_context('oauth/client/register.html')
 
         client = self.db.OAuthClient.query.filter(
-                self.db.OAuthClient.name == 'OMGOMGOMG').first()
+                self.db.OAuthClient.name == u'OMGOMGOMG').first()
 
         assert response.status_int == 200
 
@@ -78,23 +78,23 @@ class TestOAuth(object):
     def test_2_successful_public_client_registration(self):
         ''' Successfully register a public client '''
         self.login()
-        self.register_client('OMGOMG', 'public', 'OMG!',
+        self.register_client(u'OMGOMG', 'public', 'OMG!',
                 'http://foo.example')
 
         client = self.db.OAuthClient.query.filter(
-                self.db.OAuthClient.name == 'OMGOMG').first()
+                self.db.OAuthClient.name == u'OMGOMG').first()
 
         # Client should have been registered
         assert client
 
     def test_3_successful_confidential_client_reg(self):
         ''' Register a confidential OAuth client '''
-        response = self.register_client('GMOGMO', 'confidential', 'NO GMO!')
+        response = self.register_client(u'GMOGMO', 'confidential', 'NO GMO!')
 
         assert response.status_int == 302
 
         client = self.db.OAuthClient.query.filter(
-                self.db.OAuthClient.name == 'GMOGMO').first()
+                self.db.OAuthClient.name == u'GMOGMO').first()
 
         # Client should have been registered
         assert client
@@ -103,6 +103,7 @@ class TestOAuth(object):
 
     def test_4_authorize_confidential_client(self):
         ''' Authorize a confidential client as a logged in user '''
+
         client = self.test_3_successful_confidential_client_reg()
 
         client_identifier = client.identifier
