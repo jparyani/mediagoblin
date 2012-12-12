@@ -19,6 +19,8 @@ import tempfile
 
 
 from mediagoblin import workbench
+from mediagoblin.mg_globals import setup_globals
+from mediagoblin.decorators import get_workbench
 from mediagoblin.tests.test_storage import get_tmp_filestorage
 
 
@@ -57,7 +59,7 @@ class TestWorkbench(object):
     def test_localized_file(self):
         tmpdir, this_storage = get_tmp_filestorage()
         this_workbench = self.workbench_manager.create()
-        
+
         # Write a brand new file
         filepath = ['dir1', 'dir2', 'ourfile.txt']
 
@@ -79,7 +81,7 @@ class TestWorkbench(object):
         filename = this_workbench.localized_file(this_storage, filepath)
         assert filename == os.path.join(
             this_workbench.dir, 'ourfile.txt')
-        
+
         # fake remote file storage, filename_if_copying set
         filename = this_workbench.localized_file(
             this_storage, filepath, 'thisfile')
@@ -92,3 +94,18 @@ class TestWorkbench(object):
             this_storage, filepath, 'thisfile.text', False)
         assert filename == os.path.join(
             this_workbench.dir, 'thisfile.text')
+
+    def test_workbench_decorator(self):
+        """Test @get_workbench decorator and automatic cleanup"""
+        # The decorator needs mg_globals.workbench_manager
+        setup_globals(workbench_manager=self.workbench_manager)
+
+        @get_workbench
+        def create_it(workbench=None):
+            # workbench dir exists?
+            assert os.path.isdir(workbench.dir)
+            return workbench.dir
+
+        benchdir = create_it()
+        # workbench dir has been cleaned up automatically?
+        assert not os.path.isdir(benchdir)
