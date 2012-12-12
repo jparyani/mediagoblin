@@ -266,7 +266,7 @@ def test_register_views(test_app):
     response = test_app.get(
         "/auth/forgot_password/verify/?userid=%s&token=total_bs" % unicode(
             new_user.id), status=404)
-    assert_equal(response.status, '404 Not Found')
+    assert_equal(response.status.split()[0], u'404') # status="404 NOT FOUND"
 
     ## Try using an expired token to change password, shouldn't work
     template.clear_test_template_context()
@@ -275,7 +275,7 @@ def test_register_views(test_app):
     new_user.fp_token_expire = datetime.datetime.now()
     new_user.save()
     response = test_app.get("%s?%s" % (path, get_params), status=404)
-    assert_equal(response.status, '404 Not Found')
+    assert_equal(response.status.split()[0], u'404') # status="404 NOT FOUND"
     new_user.fp_token_expire = real_token_expiration
     new_user.save()
 
