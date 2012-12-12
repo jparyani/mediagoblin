@@ -71,7 +71,7 @@ def json_response(serializable, _disable_cors=False, *args, **kw):
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With'}
-        response.headers.update(cors_headers)
+        (response.headers.set(key, value) for key, value in cors_headers)
 
     return response
 
