@@ -230,7 +230,7 @@ def get_workbench(func):
 
     @wraps(func)
     def new_func(*args, **kwargs):
-        with mgg.workbench_manager.create_workbench() as workbench:
+        with mgg.workbench_manager.create() as workbench:
             return func(*args, workbench=workbench, **kwargs)
 
     return new_func

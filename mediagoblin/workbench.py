@@ -119,7 +119,7 @@ class Workbench(object):
 
             return full_dest_filename
 
-    def destroy_self(self):
+    def destroy(self):
         """
         Destroy this workbench!  Deletes the directory and all its contents!
 
@@ -136,7 +136,7 @@ class Workbench(object):
 
     def  __exit__(self, *args):
         """Clean up context manager, aka ourselves, deleting the workbench"""
-        self.destroy_self()
+        self.destroy()
 
 
 class WorkbenchManager(object):
@@ -147,7 +147,7 @@ class WorkbenchManager(object):
     storage space for during the processing stage. The preferred way to
     create them is to use:
 
-        with workbenchmger.create_workbench as workbench:
+        with workbenchmger.create() as workbench:
             do stuff...
 
     This will automatically clean up all temporary directories even in
@@ -161,7 +161,7 @@ class WorkbenchManager(object):
         if not os.path.exists(self.base_workbench_dir):
             os.makedirs(self.base_workbench_dir)
 
-    def create_workbench(self):
+    def create(self):
         """
         Create and return the path to a new workbench (directory).
         """

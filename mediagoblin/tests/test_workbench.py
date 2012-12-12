@@ -28,19 +28,20 @@ class TestWorkbench(object):
             os.path.join(tempfile.gettempdir(), u'mgoblin_workbench_testing'))
 
     def test_create_workbench(self):
-        workbench = self.workbench_manager.create_workbench()
+        workbench = self.workbench_manager.create()
         assert os.path.isdir(workbench.dir)
         assert workbench.dir.startswith(self.workbench_manager.base_workbench_dir)
+        workbench.destroy()
 
     def test_joinpath(self):
-        this_workbench = self.workbench_manager.create_workbench()
+        this_workbench = self.workbench_manager.create()
         tmpname = this_workbench.joinpath('temp.txt')
         assert tmpname == os.path.join(this_workbench.dir, 'temp.txt')
-        this_workbench.destroy_self()
+        this_workbench.destroy()
 
     def test_destroy_workbench(self):
         # kill a workbench
-        this_workbench = self.workbench_manager.create_workbench()
+        this_workbench = self.workbench_manager.create()
         tmpfile_name = this_workbench.joinpath('temp.txt')
         tmpfile = file(tmpfile_name, 'w')
         with tmpfile:
@@ -49,13 +50,13 @@ class TestWorkbench(object):
         assert os.path.exists(tmpfile_name)
 
         wb_dir = this_workbench.dir
-        this_workbench.destroy_self()
+        this_workbench.destroy()
         assert not os.path.exists(tmpfile_name)
         assert not os.path.exists(wb_dir)
 
     def test_localized_file(self):
         tmpdir, this_storage = get_tmp_filestorage()
-        this_workbench = self.workbench_manager.create_workbench()
+        this_workbench = self.workbench_manager.create()
         
         # Write a brand new file
         filepath = ['dir1', 'dir2', 'ourfile.txt']
