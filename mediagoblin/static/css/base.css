@@ -371,9 +371,8 @@ textarea#comment_content {
   float: left;
   padding: 0px;
   width: 180px;
-  height: 156px;
   overflow: hidden;
-  margin: 0px 4px 10px;
+  margin: 0px 3px 10px;
   text-align: center;
   font-size: 0.875em;
   background-color: #222;
@@ -382,6 +381,9 @@ textarea#comment_content {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  border-color: #0D0D0D;
+  border-style: solid;
+  border-width: 1px 1px 2px;
 }
 
 .media_thumbnail a {
