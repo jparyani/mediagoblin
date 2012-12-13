@@ -19,7 +19,7 @@ from sqlalchemy import (MetaData, Table, Column,
                         Integer, Unicode, Enum, DateTime, ForeignKey)
 from sqlalchemy.ext.declarative import declarative_base
 
-from mediagoblin.db.util import RegisterMigration
+from mediagoblin.db.sql.migration_tools import RegisterMigration
 from mediagoblin.db.models import User
 
 
