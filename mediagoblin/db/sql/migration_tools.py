@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.tools.common import simple_printer
+from sqlalchemy import Table
 
 
 class MigrationManager(object):
@@ -261,3 +262,9 @@ def assure_migrations_table_setup(db):
     if not MigrationData.__table__.exists(db.bind):
         MigrationData.metadata.create_all(
             db.bind, tables=[MigrationData.__table__])
+
+
+def inspect_table(metadata, table_name):
+    """Simple helper to get a ref to an already existing table"""
+    return Table(table_name, metadata, autoload=True,
+                 autoload_with=metadata.bind)

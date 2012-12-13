@@ -23,7 +23,7 @@ from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.declarative import declarative_base
 from migrate.changeset.constraint import UniqueConstraint
 
-from mediagoblin.db.sql.migration_tools import RegisterMigration
+from mediagoblin.db.sql.migration_tools import RegisterMigration, inspect_table
 from mediagoblin.db.models import MediaEntry, Collection, User
 
 MIGRATIONS = {}
@@ -60,8 +60,7 @@ def add_wants_notification_column(db_conn):
 def add_transcoding_progress(db_conn):
     metadata = MetaData(bind=db_conn.bind)
 
-    media_entry = Table('core__media_entries', metadata, autoload=True,
-            autoload_with=db_conn.bind)
+    media_entry = inspect_table(metadata, 'core__media_entries')
 
     col = Column('transcoding_progress', SmallInteger)
     col.create(media_entry)
@@ -115,8 +114,7 @@ def add_collection_tables(db_conn):
 def add_mediaentry_collected(db_conn):
     metadata = MetaData(bind=db_conn.bind)
 
-    media_entry = Table('core__media_entries', metadata, autoload=True,
-            autoload_with=db_conn.bind)
+    media_entry = inspect_table(metadata, 'core__media_entries')
 
     col = Column('collected', Integer, default=0)
     col.create(media_entry)
@@ -172,8 +170,7 @@ def fix_CollectionItem_v0_constraint(db_conn):
 
     metadata = MetaData(bind=db_conn.bind)
 
-    CollectionItem_table = Table('core__collection_items',
-        metadata, autoload=True, autoload_with=db_conn.bind)
+    CollectionItem_table = inspect_table(metadata, 'core__collection_items')
 
     constraint = UniqueConstraint('collection', 'media_entry',
         name='core__collection_items_collection_media_entry_key',
