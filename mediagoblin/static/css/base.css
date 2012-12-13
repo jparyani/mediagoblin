@@ -219,17 +219,6 @@ footer {
   font-family: 'Lato', sans-serif;
 }
 
-.button_collect {
-    background-image: url("../images/icon_collect.png"); 
-    background-repeat: no-repeat;
-    background-position:top center;
-    height: 30px;
-    width: 30px;
-    margin: 0px;
-    padding: 3px 3px 2px 3px;
-    position: relative;
-}
-
 .pagination {
 text-align: center;
 }
