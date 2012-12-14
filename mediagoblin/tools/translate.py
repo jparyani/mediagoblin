@@ -129,7 +129,10 @@ def lazy_pass_to_ugettext(*args, **kwargs):
 
     This is useful if you have to define a translation on a module
     level but you need it to not translate until the time that it's
-    used as a string.
+    used as a string. For example, in:
+        def func(self, message=_('Hello boys and girls'))
+
+    you would want to use the lazy version for _.
     """
     return LazyProxy(pass_to_ugettext, *args, **kwargs)
 
