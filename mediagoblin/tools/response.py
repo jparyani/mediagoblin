@@ -16,7 +16,8 @@
 
 from webob import Response, exc
 from mediagoblin.tools.template import render_template
-from mediagoblin.tools.translate import fake_ugettext_passthrough as _
+from mediagoblin.tools.translate import (lazy_pass_to_ugettext as L_,
+                                         pass_to_ugettext as _)
 
 
 def render_to_response(request, template, context, status=200):
@@ -26,8 +27,8 @@ def render_to_response(request, template, context, status=200):
         status=status)
 
 
-def render_error(request, status=500, title=_('Oops!'),
-                 err_msg=_('An error occured')):
+def render_error(request, status=500, title=L_('Oops!'),
+                 err_msg=L_('An error occured')):
     """Render any error page with a given error code, title and text body
 
     Title and description are passed through as-is to allow html. Make
