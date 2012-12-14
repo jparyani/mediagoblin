@@ -16,8 +16,8 @@
 
 from webob import Response, exc
 from mediagoblin.tools.template import render_template
-from mediagoblin.tools.translate import (lazy_pass_to_ugettext as L_,
-                                         pass_to_ugettext as _)
+from mediagoblin.tools.translate import (lazy_pass_to_ugettext as _,
+                                         pass_to_ugettext)
 
 
 def render_to_response(request, template, context, status=200):
@@ -27,8 +27,8 @@ def render_to_response(request, template, context, status=200):
         status=status)
 
 
-def render_error(request, status=500, title=L_('Oops!'),
-                 err_msg=L_('An error occured')):
+def render_error(request, status=500, title=_('Oops!'),
+                 err_msg=_('An error occured')):
     """Render any error page with a given error code, title and text body
 
     Title and description are passed through as-is to allow html. Make
@@ -42,6 +42,7 @@ def render_error(request, status=500, title=L_('Oops!'),
 
 def render_403(request):
     """Render a standard 403 page"""
+    _ = pass_to_ugettext
     title = _('Operation not allowed')
     err_msg = _("Sorry Dave, I can't let you do that!</p><p>You have tried "
                 " to perform a function that you are not allowed to. Have you "
@@ -50,6 +51,7 @@ def render_403(request):
 
 def render_404(request):
     """Render a standard 404 page."""
+    _ = pass_to_ugettext
     err_msg = _("There doesn't seem to be a page at this address. Sorry!</p>"
                 "<p>If you're sure the address is correct, maybe the page "
                 "you're looking for has been moved or deleted.")
