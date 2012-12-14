@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+# This import *is* used; see word.encode('tranlit/long') below.
 import translitcodec
 
 
@@ -27,6 +28,7 @@ def slugify(text, delim=u'-'):
     """
     result = []
     for word in _punct_re.split(text.lower()):
+        # Uses translitcodec!
         word = word.encode('translit/long')
         if word:
             result.append(word)
