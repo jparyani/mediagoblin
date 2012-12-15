@@ -18,27 +18,25 @@ import logging
 
 from mediagoblin.tools.routing import add_route, mount, url_map
 from mediagoblin.tools.pluginapi import PluginManager
+from mediagoblin.admin.routing import admin_routes
+from mediagoblin.auth.routing import auth_routes
 
 
 _log = logging.getLogger(__name__)
 
 
 def get_url_map():
+    add_route('index', '/', 'mediagoblin.views:root_view')
+    mount('/auth', auth_routes)
+    mount('/a', admin_routes)
+
+    import mediagoblin.submit.routing
+    import mediagoblin.user_pages.routing
+    import mediagoblin.edit.routing
+    import mediagoblin.webfinger.routing
+    import mediagoblin.listings.routing
+
     for route in PluginManager().get_routes():
         add_route(*route)
 
     return url_map
-
-
-add_route('index', '/', 'mediagoblin.views:root_view')
-
-from mediagoblin.admin.routing import admin_routes
-from mediagoblin.auth.routing import auth_routes
-mount('/auth', auth_routes)
-mount('/a', admin_routes)
-
-import mediagoblin.submit.routing
-import mediagoblin.user_pages.routing
-import mediagoblin.edit.routing
-import mediagoblin.webfinger.routing
-import mediagoblin.listings.routing
