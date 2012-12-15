@@ -19,6 +19,24 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+0.3.2
+=====
+
+This will be the last release that is capable of converting from an earlier
+MongoDB-based MediaGoblin instance to the newer SQL-based system.
+
+
+**New features**
+
+* TO BE FILLED IN BEFORE RELEASE :-)
+
+* **trim_whitespace**
+
+  We bundle the optional plugin trim_whitespace which reduces the size
+  of the delivered html output by reducing redundant whitespace.
+
+  See :ref:`core-plugin-section` for plugin documentation
+
 
 0.3.1
 =====
@@ -49,12 +67,6 @@ carefully, or at least skim over it.
 
   See :ref:`core-plugin-section` for plugin documentation
 
-* **trim_whitespace**
-
-  We bundle the optional plugin trim_whitespace which reduces the size
-  of the delivered html output by reducing redundant whitespace.
-
-  See :ref:`core-plugin-section` for plugin documentation
 
 0.3.0
 =====
