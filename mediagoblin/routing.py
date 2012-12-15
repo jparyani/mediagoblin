@@ -16,52 +16,11 @@
 
 import logging
 
-from werkzeug.routing import Map, Rule
-from mediagoblin.tools.common import import_component
+from mediagoblin.tools.routing import add_route, mount, url_map
 from mediagoblin.tools.pluginapi import PluginManager
 
 
 _log = logging.getLogger(__name__)
-
-url_map = Map()
-
-view_functions = {}
-
-
-def endpoint_to_controller(endpoint):
-    view_func = view_functions[endpoint]
-
-    _log.debug('endpoint: {0} view_func: {1}'.format(endpoint, view_func))
-
-    # import the endpoint, or if it's already a callable, call that
-    if isinstance(view_func, basestring):
-        view_func = import_component(view_func)
-        view_functions[endpoint] = view_func
-
-    return view_func
-
-
-def add_route(endpoint, url, controller):
-    """
-    Add a route to the url mapping
-    """
-    # XXX: We cannot use this, since running tests means that the plugin
-    # routes will be populated over and over over the same session.
-    #
-    # assert endpoint not in view_functions.keys(), 'Trying to overwrite a rule'
-
-    view_functions.update({endpoint: controller})
-
-    url_map.add(Rule(url, endpoint=endpoint))
-
-
-def mount(mountpoint, routes):
-    """
-    Mount a bunch of routes to this mountpoint
-    """
-    for endpoint, url, controller in routes:
-        url = "%s/%s" % (mountpoint.rstrip('/'), url.lstrip('/'))
-        add_route(endpoint, url, controller)
 
 
 def get_url_map():

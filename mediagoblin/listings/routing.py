@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.routing import add_route
+from mediagoblin.tools.routing import add_route
 
 add_route('mediagoblin.listings.tags_listing',
           "/tag/<string:tag>/",

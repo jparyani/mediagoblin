@@ -17,7 +17,8 @@
 import os
 import logging
 
-from mediagoblin.routing import get_url_map, endpoint_to_controller
+from mediagoblin.routing import get_url_map
+from mediagoblin.tools.routing import endpoint_to_controller
 
 from werkzeug.wrappers import Request
 from werkzeug.exceptions import HTTPException, NotFound
