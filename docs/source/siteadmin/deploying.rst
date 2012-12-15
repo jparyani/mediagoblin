@@ -191,6 +191,12 @@ codebase, you should also run::
 
     ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate
 
+Note: If you are running an active site, depending on your server
+configuration, you may need to stop it first or the dbupdate command
+may hang (and it's certainly a good idea to restart it after the
+update)
+
+
 Deploy MediaGoblin Services
 ---------------------------
 

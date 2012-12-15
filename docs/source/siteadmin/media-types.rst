@@ -43,6 +43,15 @@ video media types, then the list would look like this::
 
     media_types = mediagoblin.media_types.image, mediagoblin.media_types.video
 
+Note that after enabling new media types, you must run dbupdate like so::
+
+    ./bin/gmg dbupdate
+
+If you are running an active site, depending on your server
+configuration, you may need to stop it first (and it's certainly a
+good idea to restart it after the update).
+
+
 How does MediaGoblin decide which media type to use for a file?
 ===============================================================
 
