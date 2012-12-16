@@ -41,13 +41,7 @@
     {% block mediagoblin_body %}
       {% block mediagoblin_header %}
         <header>
-          {% block mediagoblin_logo %}
-            <a class="logo"
-               href="{{ request.urlgen('index') }}"
-               ><img src="{{ request.staticdirect('/images/logo.png') }}"
-                   alt="{% trans %}MediaGoblin logo{% endtrans %}" />
-            </a>
-          {% endblock mediagoblin_logo %}
+          {%- include "mediagoblin/bits/logo.html" -%}
           {% block mediagoblin_header_title %}{% endblock %}
           <div class="header_right">
             {% if request.user %}
