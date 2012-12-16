@@ -392,6 +392,11 @@ textarea#comment_content {
   display: block;
 }
 
+.media_thumbnail a.remove {
+  color: #86D4B1;
+  text-decoration: underline;
+}
+
 a.thumb_entry_title {
   padding: 8px;
 }
@@ -402,34 +407,6 @@ a.thumb_entry_title {
 
 .thumb_entry_last {
   margin-right: 0px;
-}
-
-/* collection media */
-
-.collection_thumbnail {
-  float: left;
-  padding: 0px;
-  width: 180px;
-  margin: 0px 4px 10px;
-  text-align: left;
-  font-size: 0.875em;
-  background-color: #222;
-  border-radius: 0 0 5px 5px;
-  padding: 0 0 6px;
-  text-overflow: ellipsis;
-}
-
-.collection_thumbnail a {
-  color: #eee;
-  text-decoration: none;
-}
-
-.collection_thumbnail a.remove {
-  color: #86D4B1;
-}
-
-.collection_thumbnail img {
-  max-height: 135px;
 }
 
 /* media detail */

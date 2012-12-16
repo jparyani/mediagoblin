@@ -27,7 +27,7 @@
         {% for item in row %}
           {% set media_entry = item.get_media_entry %}
           {% set entry_url = media_entry.url_for_self(request.urlgen) %}
-          <td class="collection_thumbnail thumb_entry
+          <td class="media_thumbnail thumb_entry
                      {%- if loop.first %} thumb_entry_first
                      {%- elif loop.last %} thumb_entry_last{% endif %}">
             <a href="{{ entry_url }}">
@@ -35,7 +35,6 @@
             </a>
 
             {% if item.note %}
-	      <br />
               <a href="{{ entry_url }}">{{ item.note }}</a>
             {% endif %}
 	    {% if request.user and
@@ -46,7 +45,6 @@
                                  user=item.in_collection.get_creator.username,
                                  collection=item.in_collection.slug,
                                  collection_item=item.id) -%}
-	      <br />
 	      <a href="{{ remove_url }}" class="remove">
 	        {%- trans %}(remove){% endtrans -%}
 	      </a>
