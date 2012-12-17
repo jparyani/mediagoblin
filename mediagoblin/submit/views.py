@@ -19,7 +19,6 @@ import mediagoblin.mg_globals as mg_globals
 import uuid
 from os.path import splitext
 
-from celery import registry
 import logging
 
 _log = logging.getLogger(__name__)
@@ -32,12 +31,10 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms
-from mediagoblin.processing import mark_entry_failed
-from mediagoblin.processing.task import ProcessMedia
 from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.media_types import sniff_media, \
     InvalidFileType, FileTypeNotSupported
-from mediagoblin.submit.lib import handle_push_urls
+from mediagoblin.submit.lib import handle_push_urls, run_process_media
 
 
 @require_active_login
@@ -115,23 +112,7 @@ def submit_start(request):
                 #
                 # (... don't change entry after this point to avoid race
                 # conditions with changes to the document via processing code)
-                process_media = registry.tasks[ProcessMedia.name]
-                try:
-                    process_media.apply_async(
-                        [unicode(entry.id)], {},
-                        task_id=task_id)
-                except BaseException as exc:
-                    # The purpose of this section is because when running in "lazy"
-                    # or always-eager-with-exceptions-propagated celery mode that
-                    # the failure handling won't happen on Celery end.  Since we
-                    # expect a lot of users to run things in this way we have to
-                    # capture stuff here.
-                    #
-                    # ... not completely the diaper pattern because the
-                    # exception is re-raised :)
-                    mark_entry_failed(entry.id, exc)
-                    # re-raise the exception
-                    raise
+                run_process_media(entry)
 
                 handle_push_urls(request)
 

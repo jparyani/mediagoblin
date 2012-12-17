@@ -17,10 +17,34 @@
 import urllib
 import urllib2
 import logging
+from celery import registry
 
 from mediagoblin import mg_globals
+from mediagoblin.processing import mark_entry_failed
+from mediagoblin.processing.task import ProcessMedia
+
 
 _log = logging.getLogger(__name__)
+
+
+def run_process_media(entry):
+    process_media = registry.tasks[ProcessMedia.name]
+    try:
+        process_media.apply_async(
+            [unicode(entry.id)], {},
+            task_id=entry.queued_task_id)
+    except BaseException as exc:
+        # The purpose of this section is because when running in "lazy"
+        # or always-eager-with-exceptions-propagated celery mode that
+        # the failure handling won't happen on Celery end.  Since we
+        # expect a lot of users to run things in this way we have to
+        # capture stuff here.
+        #
+        # ... not completely the diaper pattern because the
+        # exception is re-raised :)
+        mark_entry_failed(entry.id, exc)
+        # re-raise the exception
+        raise
 
 
 def handle_push_urls(request):
