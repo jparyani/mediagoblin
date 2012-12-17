@@ -35,9 +35,6 @@ class GMGQuery(Query):
             key_col = desc(key_col)
         return self.order_by(key_col)
 
-    def skip(self, amount):
-        return self.offset(amount)
-
 
 Session = scoped_session(sessionmaker(query_cls=GMGQuery))
 

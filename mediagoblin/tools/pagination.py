@@ -63,8 +63,11 @@ class Pagination(object):
         """
         Returns slice of objects for the requested page
         """
-        return self.cursor.skip(
-            (self.page - 1) * self.per_page).limit(self.per_page)
+        # TODO, return None for out of index so templates can
+        # distinguish between empty galleries and out-of-bound pages???
+        return self.cursor.slice(
+            (self.page - 1) * self.per_page,
+            self.page * self.per_page)
 
     @property
     def pages(self):
