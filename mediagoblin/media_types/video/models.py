@@ -22,6 +22,9 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 
 
+BACKREF_NAME = "video__media_data"
+
+
 class VideoData(Base):
     __tablename__ = "video__mediadata"
 
@@ -29,7 +32,7 @@ class VideoData(Base):
     media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
         primary_key=True)
     get_media_entry = relationship("MediaEntry",
-        backref=backref("video__media_data", cascade="all, delete-orphan"))
+        backref=backref(BACKREF_NAME, cascade="all, delete-orphan"))
 
     width = Column(SmallInteger)
     height = Column(SmallInteger)

@@ -23,6 +23,9 @@ from sqlalchemy.orm import relationship, backref
 from mediagoblin.db.sql.extratypes import JSONEncoded
 
 
+BACKREF_NAME = "image__media_data"
+
+
 class ImageData(Base):
     __tablename__ = "image__mediadata"
 
@@ -30,7 +33,7 @@ class ImageData(Base):
     media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
         primary_key=True)
     get_media_entry = relationship("MediaEntry",
-        backref=backref("image__media_data", cascade="all, delete-orphan"))
+        backref=backref(BACKREF_NAME, cascade="all, delete-orphan"))
 
     width = Column(Integer)
     height = Column(Integer)

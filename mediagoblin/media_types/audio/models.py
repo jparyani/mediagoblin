@@ -22,6 +22,9 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 
 
+BACKREF_NAME = "audio__media_data"
+
+
 class AudioData(Base):
     __tablename__ = "audio__mediadata"
 
@@ -29,7 +32,7 @@ class AudioData(Base):
     media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
         primary_key=True)
     get_media_entry = relationship("MediaEntry",
-        backref=backref("audio__media_data", cascade="all, delete-orphan"))
+        backref=backref(BACKREF_NAME, cascade="all, delete-orphan"))
 
 
 DATA_MODEL = AudioData

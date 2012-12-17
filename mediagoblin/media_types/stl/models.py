@@ -22,6 +22,9 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 
 
+BACKREF_NAME = "stl__media_data"
+
+
 class StlData(Base):
     __tablename__ = "stl__mediadata"
 
@@ -29,7 +32,7 @@ class StlData(Base):
     media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
         primary_key=True)
     get_media_entry = relationship("MediaEntry",
-        backref=backref("stl__media_data", cascade="all, delete-orphan"))
+        backref=backref(BACKREF_NAME, cascade="all, delete-orphan"))
 
     center_x = Column(Float)
     center_y = Column(Float)

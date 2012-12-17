@@ -22,6 +22,9 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 
 
+BACKREF_NAME = "ascii__media_data"
+
+
 class AsciiData(Base):
     __tablename__ = "ascii__mediadata"
 
@@ -29,7 +32,7 @@ class AsciiData(Base):
     media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
         primary_key=True)
     get_media_entry = relationship("MediaEntry",
-        backref=backref("ascii__media_data", cascade="all, delete-orphan"))
+        backref=backref(BACKREF_NAME, cascade="all, delete-orphan"))
 
 
 DATA_MODEL = AsciiData
