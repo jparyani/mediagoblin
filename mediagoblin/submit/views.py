@@ -16,14 +16,12 @@
 
 from mediagoblin import messages
 import mediagoblin.mg_globals as mg_globals
-import uuid
 from os.path import splitext
 
 import logging
 
 _log = logging.getLogger(__name__)
 
-from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
@@ -34,7 +32,8 @@ from mediagoblin.submit import forms as submit_forms
 from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.media_types import sniff_media, \
     InvalidFileType, FileTypeNotSupported
-from mediagoblin.submit.lib import handle_push_urls, run_process_media
+from mediagoblin.submit.lib import handle_push_urls, run_process_media, \
+    prepare_entry
 
 
 @require_active_login
@@ -79,31 +78,10 @@ def submit_start(request):
                 # Generate a slug from the title
                 entry.generate_slug()
 
-                # We generate this ourselves so we know what the taks id is for
-                # retrieval later.
-
-                # (If we got it off the task's auto-generation, there'd be
-                # a risk of a race condition when we'd save after sending
-                # off the task)
-                task_id = unicode(uuid.uuid4())
-
-                # Now store generate the queueing related filename
-                queue_filepath = request.app.queue_store.get_unique_filepath(
-                    ['media_entries',
-                     task_id,
-                     secure_filename(filename)])
-
-                # queue appropriately
-                queue_file = request.app.queue_store.get_file(
-                    queue_filepath, 'wb')
+                queue_file = prepare_entry(request, entry, filename)
 
                 with queue_file:
                     queue_file.write(request.files['file'].stream.read())
-
-                # Add queued filename to the entry
-                entry.queued_media_file = queue_filepath
-
-                entry.queued_task_id = task_id
 
                 # Save now so we have this data before kicking off processing
                 entry.save()
