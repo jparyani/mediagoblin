@@ -23,15 +23,13 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import BadRequest, Forbidden
 from werkzeug.utils import secure_filename
 from werkzeug.wrappers import Response
-from celery import registry
 
 from mediagoblin.decorators import require_active_login
-from mediagoblin.processing import mark_entry_failed
-from mediagoblin.processing.task import ProcessMedia
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.media_types import sniff_media
 from mediagoblin.plugins.api.tools import api_auth, get_entry_serializable, \
         json_response
+from mediagoblin.submit.lib import run_process_media
 
 _log = logging.getLogger(__name__)
 
@@ -104,23 +102,7 @@ def post_entry(request):
     #
     # (... don't change entry after this point to avoid race
     # conditions with changes to the document via processing code)
-    process_media = registry.tasks[ProcessMedia.name]
-    try:
-        process_media.apply_async(
-            [unicode(entry.id)], {},
-            task_id=task_id)
-    except BaseException as e:
-        # The purpose of this section is because when running in "lazy"
-        # or always-eager-with-exceptions-propagated celery mode that
-        # the failure handling won't happen on Celery end.  Since we
-        # expect a lot of users to run things in this way we have to
-        # capture stuff here.
-        #
-        # ... not completely the diaper pattern because the
-        # exception is re-raised :)
-        mark_entry_failed(entry.id, e)
-        # re-raise the exception
-        raise
+    run_process_media(entry)
 
     return json_response(get_entry_serializable(entry, request.urlgen))
 
