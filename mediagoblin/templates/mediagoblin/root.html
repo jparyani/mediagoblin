@@ -27,9 +27,10 @@
         <li><a href="{{ request.urlgen('mediagoblin.submit.start') }}">
           {%- trans %}Add media{% endtrans -%}
         </a></li>
-        <li><a href="{{ request.urlgen('mediagoblin.submit.collection') }}">
-          {%- trans %}Create new collection{% endtrans -%}
-        </a></li>
+        <li><a href="{{ request.urlgen('mediagoblin.user_pages.user_collections',
+                                      user=request.user.username) }}">
+            {%- trans %}Browse collections{% endtrans -%}
+	</a></li>
         <li><a href="{{ request.urlgen('mediagoblin.edit.account') }}">
           {%- trans %}Change account settings{% endtrans -%}
         </a></li>

@@ -337,6 +337,23 @@ def user_collection(request, page, url_user=None):
          'pagination': pagination})
 
 
+@active_user_from_url
+@uses_pagination
+def user_collections(request, page, url_user=None):
+    """A User-defined Collection"""
+    collections = Collection.query.filter_by(
+        get_creator=url_user)
+
+    pagination = Pagination(page, collections)
+
+    return render_to_response(
+        request,
+        'mediagoblin/user_pages/collections.html',
+        {'user': url_user,
+         'collections': collections,
+         'pagination': pagination})
+
+
 @get_user_collection_item
 @require_active_login
 @user_may_alter_collection
