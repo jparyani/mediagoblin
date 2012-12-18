@@ -37,11 +37,11 @@ SUBCOMMAND_MAP = {
     'makeadmin': {
         'setup': 'mediagoblin.gmg_commands.users:makeadmin_parser_setup',
         'func': 'mediagoblin.gmg_commands.users:makeadmin',
-        'help': 'Changes a user\'s password'},
+        'help': 'Makes user an admin'},
     'changepw': {
         'setup': 'mediagoblin.gmg_commands.users:changepw_parser_setup',
         'func': 'mediagoblin.gmg_commands.users:changepw',
-        'help': 'Makes admin an user'},
+        'help': 'Changes a user\'s password'},
     'dbupdate': {
         'setup': 'mediagoblin.gmg_commands.dbupdate:dbupdate_parse_setup',
         'func': 'mediagoblin.gmg_commands.dbupdate:dbupdate',
