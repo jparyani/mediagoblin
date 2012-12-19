@@ -75,9 +75,8 @@ def process_video(entry, workbench=None):
     thumbnail_filepath = create_pub_filepath(
         entry, name_builder.fill('{basename}.thumbnail.jpg'))
 
-    # Create a temporary file for the video destination
-    tmp_dst = NamedTemporaryFile(dir=workbench.dir)
-
+    # Create a temporary file for the video destination (cleaned up with workbench)
+    tmp_dst = NamedTemporaryFile(dir=workbench.dir, delete=False)
     with tmp_dst:
         # Transcode queued file to a VP8/vorbis file that fits in a 640x640 square
         progress_callback = ProgressCallback(entry)
@@ -88,22 +87,20 @@ def process_video(entry, workbench=None):
                 vorbis_quality=video_config['vorbis_quality'],
                 progress_callback=progress_callback)
 
-        # Push transcoded video to public storage
-        _log.debug('Saving medium...')
-        # TODO (#419, we read everything in RAM here!)
-        mgg.public_store.get_file(medium_filepath, 'wb').write(
-            tmp_dst.read())
-        _log.debug('Saved medium')
+    # Push transcoded video to public storage
+    _log.debug('Saving medium...')
+    mgg.public_store.copy_local_to_storage(tmp_dst.name, medium_filepath)
+    _log.debug('Saved medium')
 
-        entry.media_files['webm_640'] = medium_filepath
+    entry.media_files['webm_640'] = medium_filepath
 
-        # Save the width and height of the transcoded video
-        entry.media_data_init(
-            width=transcoder.dst_data.videowidth,
-            height=transcoder.dst_data.videoheight)
+    # Save the width and height of the transcoded video
+    entry.media_data_init(
+        width=transcoder.dst_data.videowidth,
+        height=transcoder.dst_data.videoheight)
 
-    # Create a temporary file for the video thumbnail
-    tmp_thumb = NamedTemporaryFile(dir=workbench.dir, suffix='.jpg')
+    # Temporary file for the video thumbnail (cleaned up with workbench)
+    tmp_thumb = NamedTemporaryFile(dir=workbench.dir, suffix='.jpg', delete=False)
 
     with tmp_thumb:
         # Create a thumbnail.jpg that fits in a 180x180 square
@@ -112,33 +109,16 @@ def process_video(entry, workbench=None):
                 tmp_thumb.name,
                 180)
 
-        # Push the thumbnail to public storage
-        _log.debug('Saving thumbnail...')
-        mgg.public_store.get_file(thumbnail_filepath, 'wb').write(
-            tmp_thumb.read())
-        _log.debug('Saved thumbnail')
-
-        entry.media_files['thumb'] = thumbnail_filepath
+    # Push the thumbnail to public storage
+    _log.debug('Saving thumbnail...')
+    mgg.public_store.copy_local_to_storage(tmp_thumb.name, thumbnail_filepath)
+    entry.media_files['thumb'] = thumbnail_filepath
 
     if video_config['keep_original']:
         # Push original file to public storage
-        queued_file = file(queued_filename, 'rb')
-
-        with queued_file:
-            original_filepath = create_pub_filepath(
-                entry,
-                queued_filepath[-1])
-
-            with mgg.public_store.get_file(original_filepath, 'wb') as \
-                    original_file:
-                _log.debug('Saving original...')
-                # TODO (#419, we read everything in RAM here!)
-                original_file.write(queued_file.read())
-                _log.debug('Saved original')
-
-                entry.media_files['original'] = original_filepath
+        _log.debug('Saving original...')
+        original_filepath = create_pub_filepath(entry, queued_filepath[-1])
+        mgg.public_store.copy_local_to_storage(queued_filename, original_filepath)
+        entry.media_files['original'] = original_filepath
 
     mgg.queue_store.delete_file(queued_filepath)
-
-    # clean up workbench
-    workbench.destroy_self()
