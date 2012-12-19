@@ -636,7 +636,7 @@ class VideoTranscoder:
     '''
     def __init__(self):
         _log.info('Initializing VideoTranscoder...')
-
+        self.progress_percentage = None
         self.loop = gobject.MainLoop()
 
     def transcode(self, src, dst, **kwargs):
@@ -913,12 +913,14 @@ class VideoTranscoder:
         elif message.type == gst.MESSAGE_ELEMENT:
             if message.structure.get_name() == 'progress':
                 data = dict(message.structure)
+                # Update progress state if it has changed
+                if self.progress_percentage != data.get('percent'):
+                    self.progress_percentage = data.get('percent')
+                    if self._progress_callback:
+                        self._progress_callback(data.get('percent'))
 
-                if self._progress_callback:
-                    self._progress_callback(data.get('percent'))
-
-                _log.info('{percent}% done...'.format(
-                        percent=data.get('percent')))
+                    _log.info('{percent}% done...'.format(
+                            percent=data.get('percent')))
                 _log.debug(data)
 
         elif t == gst.MESSAGE_ERROR:
