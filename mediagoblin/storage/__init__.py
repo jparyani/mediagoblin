@@ -160,12 +160,13 @@ class StorageInterface(object):
         appropriate.
         """
         if self.local_storage:
-            shutil.copy(
-                self.get_local_path(filepath), dest_path)
+            # Note: this will copy in small chunks
+            shutil.copy(self.get_local_path(filepath), dest_path)
         else:
             with self.get_file(filepath, 'rb') as source_file:
                 with file(dest_path, 'wb') as dest_file:
-                    dest_file.write(source_file.read())
+                    # Copy from remote storage in 4M chunks
+                    shutil.copyfileobj(source_file, dest_file, length=4*1048576)
 
     def copy_local_to_storage(self, filename, filepath):
         """
@@ -177,7 +178,8 @@ class StorageInterface(object):
         """
         with self.get_file(filepath, 'wb') as dest_file:
             with file(filename, 'rb') as source_file:
-                dest_file.write(source_file.read())
+                # Copy to storage system in 4M chunks
+                shutil.copyfileobj(source_file, dest_file, length=4*1048576)
 
 
 ###########

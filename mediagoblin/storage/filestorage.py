@@ -87,6 +87,5 @@ class BasicFileStorage(StorageInterface):
             directory = self._resolve_filepath(filepath[:-1])
             if not os.path.exists(directory):
                 os.makedirs(directory)
-
-        shutil.copy(
-            filename, self.get_local_path(filepath))
+        # This uses chunked copying of 16kb buffers (Py2.7):
+        shutil.copy(filename, self.get_local_path(filepath))
