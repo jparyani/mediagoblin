@@ -120,17 +120,10 @@ def process_image(entry):
     else:
         medium_filepath = None
 
-    # we have to re-read because unlike PIL, not everything reads
-    # things in string representation :)
-    queued_file = file(queued_filename, 'rb')
-
-    with queued_file:
-        original_filepath = create_pub_filepath(
+    # Copy our queued local workbench to its final destination
+    original_filepath = create_pub_filepath(
             entry, name_builder.fill('{basename}{ext}'))
-
-        with mgg.public_store.get_file(original_filepath, 'wb') \
-            as original_file:
-            original_file.write(queued_file.read())
+    mgg.public_store.copy_local_to_storage(queued_filename, original_filepath)
 
     # Remove queued media file from storage and database
     mgg.queue_store.delete_file(queued_filepath)
