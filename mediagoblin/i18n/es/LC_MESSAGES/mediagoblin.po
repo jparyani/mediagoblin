@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-12-07 12:45-0600\n"
-"PO-Revision-Date: 2012-12-07 18:41+0000\n"
+"POT-Creation-Date: 2012-12-20 09:18-0600\n"
+"PO-Revision-Date: 2012-12-20 15:14+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -202,7 +202,7 @@ msgstr "Estás editando el contenido de otro usuario. Proceder con precaución."
 #: mediagoblin/edit/views.py:156
 #, python-format
 msgid "You added the attachment %s!"
-msgstr ""
+msgstr "¡Has añadido el adjunto %s!"
 
 #: mediagoblin/edit/views.py:181
 msgid "You are editing a user's profile. Proceed with caution."
@@ -317,7 +317,7 @@ msgstr "La URI para redireccionar las aplicaciones, este campo es <strong>requer
 msgid "This field is required for public clients"
 msgstr "Este campo es requerido para los clientes públicos"
 
-#: mediagoblin/plugins/oauth/views.py:59
+#: mediagoblin/plugins/oauth/views.py:60
 msgid "The client {0} has been registered!"
 msgstr "¡El cliente {0} ha sido registrado!"
 
@@ -349,11 +349,11 @@ msgstr "Logo de MediaGoblin"
 #: mediagoblin/templates/mediagoblin/base.html:54
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
-msgstr ""
+msgstr "Cuenta de <a href=\"%(user_url)s\">%(user_name)s</a>"
 
 #: mediagoblin/templates/mediagoblin/base.html:60
 msgid "log out"
-msgstr ""
+msgstr "cerrar sesión"
 
 #: mediagoblin/templates/mediagoblin/base.html:62
 #: mediagoblin/templates/mediagoblin/root.html:28
@@ -388,15 +388,15 @@ msgstr "Publicado bajo la <a href=\"http://www.fsf.org/licensing/licenses/agpl-3
 
 #: mediagoblin/templates/mediagoblin/error.html:24
 msgid "Image of goblin stressing out"
-msgstr ""
+msgstr "Imagen de un goblin estresándose"
 
 #: mediagoblin/templates/mediagoblin/root.html:25
 msgid "Actions"
-msgstr ""
+msgstr "Acciones"
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid "Create new collection"
-msgstr ""
+msgstr "Crear nueva colección"
 
 #: mediagoblin/templates/mediagoblin/root.html:34
 msgid "Change account settings"
@@ -661,43 +661,43 @@ msgstr "Imágenes para %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
 msgid "Toggle Rotate"
-msgstr ""
+msgstr "Alternar Rotar"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:113
 msgid "Perspective"
-msgstr ""
+msgstr "Perspectiva"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:116
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:117
 msgid "Front"
-msgstr ""
+msgstr "Frente"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:120
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:121
 msgid "Top"
-msgstr ""
+msgstr "Arriba"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:124
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:125
 msgid "Side"
-msgstr ""
+msgstr "Lateral"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:130
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:131
 msgid "WebGL"
-msgstr ""
+msgstr "WebGL"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:138
 msgid "Download model"
-msgstr ""
+msgstr "Descargar modelo"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:146
 msgid "File Format"
-msgstr ""
+msgstr "Formato de Archivo"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:148
 msgid "Object Height"
-msgstr ""
+msgstr "Altura del Objeto"
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
 msgid ""
@@ -751,14 +751,6 @@ msgstr "Editar"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:91
 msgid "Delete"
 msgstr "Borrar"
-
-#: mediagoblin/templates/mediagoblin/user_pages/collection.html:59
-#, python-format
-msgid ""
-"<p>\n"
-"    %(collection_description)s\n"
-"  </p>"
-msgstr "<p>\n%(collection_description)s\n</p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -830,7 +822,7 @@ msgstr "<h3>Añadido en</h3>\n      <p>%(date)s</p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:202
 msgid "Add media to collection"
-msgstr ""
+msgstr "Añadir contenido a la colección"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:35
 #, python-format
@@ -924,14 +916,14 @@ msgid ""
 msgstr "Aquí es donde estará ubicado tu contenido, pero parece que aún no has agregado nada."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:157
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:86
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:84
 #: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
 msgid "There doesn't seem to be any media here yet..."
 msgstr "Parece que aún no hay ningún contenido aquí..."
 
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:51
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
 msgid "(remove)"
-msgstr ""
+msgstr "(borrar)"
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:20
 #, python-format
@@ -989,31 +981,31 @@ msgstr "Marcado con"
 msgid "Could not read the image file."
 msgstr "No se pudo leer el archivo de imagen."
 
-#: mediagoblin/tools/response.py:29
+#: mediagoblin/tools/response.py:30
 msgid "Oops!"
 msgstr "¡Ups!"
 
-#: mediagoblin/tools/response.py:30
+#: mediagoblin/tools/response.py:31
 msgid "An error occured"
-msgstr ""
+msgstr "Ha ocurrido un error"
 
-#: mediagoblin/tools/response.py:44
+#: mediagoblin/tools/response.py:46
 msgid "Operation not allowed"
-msgstr ""
+msgstr "Operación no permitida"
 
-#: mediagoblin/tools/response.py:45
+#: mediagoblin/tools/response.py:47
 msgid ""
 "Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
 "function that you are not allowed to. Have you been trying to delete all "
 "user accounts again?"
-msgstr ""
+msgstr "¡Lo siento Dave, no puedo permitir que hagas eso!</p><p>Has intentado realizar una operación no permitida. ¿Has vuelto a intentar borrar todas las cuentas de usuario?"
 
-#: mediagoblin/tools/response.py:52
+#: mediagoblin/tools/response.py:55
 msgid ""
 "There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
 " the address is correct, maybe the page you're looking for has been moved or"
 " deleted."
-msgstr ""
+msgstr "Parece que no hay ninguna página en esta dirección. ¡Lo siento!</p><p>Si estás seguro de que la dirección es correcta, quizá han borrado o movido la página que estás buscando."
 
 #: mediagoblin/user_pages/forms.py:28
 msgid "I am sure I want to delete this"

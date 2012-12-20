@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-12-07 12:45-0600\n"
-"PO-Revision-Date: 2012-12-07 18:41+0000\n"
+"POT-Creation-Date: 2012-12-20 09:18-0600\n"
+"PO-Revision-Date: 2012-12-20 15:14+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -192,7 +192,7 @@ msgstr "Þú ert að breyta efni annars notanda. Farðu mjög varlega."
 #: mediagoblin/edit/views.py:156
 #, python-format
 msgid "You added the attachment %s!"
-msgstr ""
+msgstr "Þú bættir við viðhenginu %s!"
 
 #: mediagoblin/edit/views.py:181
 msgid "You are editing a user's profile. Proceed with caution."
@@ -307,7 +307,7 @@ msgstr "Áframsendingarvefslóðin fyrir forritin, þessi reitur\n            er
 msgid "This field is required for public clients"
 msgstr "Þessi reitur er nauðsynlegur fyrir opinbera biðlara"
 
-#: mediagoblin/plugins/oauth/views.py:59
+#: mediagoblin/plugins/oauth/views.py:60
 msgid "The client {0} has been registered!"
 msgstr "Biðlarinn {0} hefur verið skráður!"
 
@@ -339,11 +339,11 @@ msgstr "MediaGoblin einkennismerkið"
 #: mediagoblin/templates/mediagoblin/base.html:54
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
-msgstr ""
+msgstr "Notandaaðgangur <a href=\"%(user_url)s\">%(user_name)s</a>"
 
 #: mediagoblin/templates/mediagoblin/base.html:60
 msgid "log out"
-msgstr ""
+msgstr "útskrá"
 
 #: mediagoblin/templates/mediagoblin/base.html:62
 #: mediagoblin/templates/mediagoblin/root.html:28
@@ -378,15 +378,15 @@ msgstr "Gefið út undir <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.
 
 #: mediagoblin/templates/mediagoblin/error.html:24
 msgid "Image of goblin stressing out"
-msgstr ""
+msgstr "Mynd af durt í stresskasti"
 
 #: mediagoblin/templates/mediagoblin/root.html:25
 msgid "Actions"
-msgstr ""
+msgstr "Aðgerðir"
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid "Create new collection"
-msgstr ""
+msgstr "Búa til nýtt albúm"
 
 #: mediagoblin/templates/mediagoblin/root.html:34
 msgid "Change account settings"
@@ -651,43 +651,43 @@ msgstr "Mynd fyrir %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
 msgid "Toggle Rotate"
-msgstr ""
+msgstr "Stilla snúning af eða á"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:113
 msgid "Perspective"
-msgstr ""
+msgstr "Sjónhorf"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:116
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:117
 msgid "Front"
-msgstr ""
+msgstr "Framhlið"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:120
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:121
 msgid "Top"
-msgstr ""
+msgstr "Toppur"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:124
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:125
 msgid "Side"
-msgstr ""
+msgstr "Hlið"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:130
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:131
 msgid "WebGL"
-msgstr ""
+msgstr "WebGL"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:138
 msgid "Download model"
-msgstr ""
+msgstr "Hala niður líkani"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:146
 msgid "File Format"
-msgstr ""
+msgstr "Skráarsnið"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:148
 msgid "Object Height"
-msgstr ""
+msgstr "Hæð hlutar"
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
 msgid ""
@@ -741,14 +741,6 @@ msgstr "Breyta"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:91
 msgid "Delete"
 msgstr "Eyða"
-
-#: mediagoblin/templates/mediagoblin/user_pages/collection.html:59
-#, python-format
-msgid ""
-"<p>\n"
-"    %(collection_description)s\n"
-"  </p>"
-msgstr "<p>\n    %(collection_description)s\n  </p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -820,7 +812,7 @@ msgstr "<h3>Bætt við:</h3>\n      <p>%(date)s</p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:202
 msgid "Add media to collection"
-msgstr ""
+msgstr "Bæta efni við albúmið"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:35
 #, python-format
@@ -914,14 +906,14 @@ msgid ""
 msgstr "Þetta er staðurinn þar sem efnið þitt birtist en þú virðist ekki hafa sent neitt inn ennþá."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:157
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:86
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:84
 #: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
 msgid "There doesn't seem to be any media here yet..."
 msgstr "Það virðist ekki vera neitt efni hérna ennþá..."
 
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:51
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
 msgid "(remove)"
-msgstr ""
+msgstr "(fjarlægja)"
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:20
 #, python-format
@@ -979,31 +971,31 @@ msgstr "Merkt með"
 msgid "Could not read the image file."
 msgstr "Gat ekki lesið myndskrána."
 
-#: mediagoblin/tools/response.py:29
+#: mediagoblin/tools/response.py:30
 msgid "Oops!"
 msgstr "Obbosí!"
 
-#: mediagoblin/tools/response.py:30
+#: mediagoblin/tools/response.py:31
 msgid "An error occured"
-msgstr ""
+msgstr "Villa kom upp"
 
-#: mediagoblin/tools/response.py:44
+#: mediagoblin/tools/response.py:46
 msgid "Operation not allowed"
-msgstr ""
+msgstr "Aðgerð ekki leyfileg"
 
-#: mediagoblin/tools/response.py:45
+#: mediagoblin/tools/response.py:47
 msgid ""
 "Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
 "function that you are not allowed to. Have you been trying to delete all "
 "user accounts again?"
-msgstr ""
+msgstr "Fyrirgefðu Davíð. Ég get ekki leyft þér að gera þetta!</p></p>Þú hefur reynt  að framkvæma aðger sem þú hefur ekki leyfi til. Varstu að reyna að eyða öllum notendunum aftur?"
 
-#: mediagoblin/tools/response.py:52
+#: mediagoblin/tools/response.py:55
 msgid ""
 "There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
 " the address is correct, maybe the page you're looking for has been moved or"
 " deleted."
-msgstr ""
+msgstr "Því miður! Það virðist ekki vera nein síða á þessari vefslóð.</p><p>Ef þú ert viss um að vefslóðin sé rétt hefur vefsíðan sem þú ert að leita að kannski verið flutt eða fjarlægð."
 
 #: mediagoblin/user_pages/forms.py:28
 msgid "I am sure I want to delete this"

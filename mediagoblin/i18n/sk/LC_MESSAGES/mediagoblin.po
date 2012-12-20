@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-12-07 12:45-0600\n"
-"PO-Revision-Date: 2012-12-07 18:41+0000\n"
+"POT-Creation-Date: 2012-12-20 09:18-0600\n"
+"PO-Revision-Date: 2012-12-20 15:14+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -196,7 +196,7 @@ msgstr "Du er ved at ændre en anden brugers' medier. Pas på."
 #: mediagoblin/edit/views.py:156
 #, python-format
 msgid "You added the attachment %s!"
-msgstr ""
+msgstr "Príloha %s pridaná!"
 
 #: mediagoblin/edit/views.py:181
 msgid "You are editing a user's profile. Proceed with caution."
@@ -311,7 +311,7 @@ msgstr "Presmerovacie URI pre aplikácie, toto pole\nj <strong>požadované</str
 msgid "This field is required for public clients"
 msgstr "Dette felt er nødvendigt for offentlige klienter"
 
-#: mediagoblin/plugins/oauth/views.py:59
+#: mediagoblin/plugins/oauth/views.py:60
 msgid "The client {0} has been registered!"
 msgstr "Klienten {0} er blevet registreret!"
 
@@ -343,11 +343,11 @@ msgstr "MediaGoblin logo"
 #: mediagoblin/templates/mediagoblin/base.html:54
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
-msgstr ""
+msgstr "Účet používateľa <a href=\"%(user_url)s\">%(user_name)s</a>"
 
 #: mediagoblin/templates/mediagoblin/base.html:60
 msgid "log out"
-msgstr ""
+msgstr "odhlásiť sa"
 
 #: mediagoblin/templates/mediagoblin/base.html:62
 #: mediagoblin/templates/mediagoblin/root.html:28
@@ -382,15 +382,15 @@ msgstr "Vydané pod <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.htm
 
 #: mediagoblin/templates/mediagoblin/error.html:24
 msgid "Image of goblin stressing out"
-msgstr ""
+msgstr "Obrázok hysterického goblina"
 
 #: mediagoblin/templates/mediagoblin/root.html:25
 msgid "Actions"
-msgstr ""
+msgstr "Úkony"
 
 #: mediagoblin/templates/mediagoblin/root.html:31
 msgid "Create new collection"
-msgstr ""
+msgstr "Vytvoriť novú zbierku"
 
 #: mediagoblin/templates/mediagoblin/root.html:34
 msgid "Change account settings"
@@ -655,43 +655,43 @@ msgstr "Obrázok pre %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
 msgid "Toggle Rotate"
-msgstr ""
+msgstr "Zapnúť rotáciu"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:113
 msgid "Perspective"
-msgstr ""
+msgstr "Perspektíva"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:116
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:117
 msgid "Front"
-msgstr ""
+msgstr "Čelo"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:120
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:121
 msgid "Top"
-msgstr ""
+msgstr "Vrch"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:124
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:125
 msgid "Side"
-msgstr ""
+msgstr "Strana"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:130
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:131
 msgid "WebGL"
-msgstr ""
+msgstr "WebGL"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:138
 msgid "Download model"
-msgstr ""
+msgstr "Stiahnuť model"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:146
 msgid "File Format"
-msgstr ""
+msgstr "Súborový formát"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:148
 msgid "Object Height"
-msgstr ""
+msgstr "Výška objektu"
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
 msgid ""
@@ -745,14 +745,6 @@ msgstr "Upraviť"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:91
 msgid "Delete"
 msgstr "Odstrániť"
-
-#: mediagoblin/templates/mediagoblin/user_pages/collection.html:59
-#, python-format
-msgid ""
-"<p>\n"
-"    %(collection_description)s\n"
-"  </p>"
-msgstr "<p>\n%(collection_description)s </p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -824,7 +816,7 @@ msgstr "<h3>Pridané</h3>\n      <p>%(date)s</p>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:202
 msgid "Add media to collection"
-msgstr ""
+msgstr "Pridať výtvory do zbierky"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:35
 #, python-format
@@ -918,14 +910,14 @@ msgid ""
 msgstr "Všetky tvoje výtvory sa objavia práve tu, ale zatiaľ nemáš nič pridané."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:157
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:86
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:84
 #: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
 msgid "There doesn't seem to be any media here yet..."
 msgstr "Najskôr sa tu ešte nenachádzajú žiadne výtvory..."
 
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:51
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
 msgid "(remove)"
-msgstr ""
+msgstr "(odstrániť)"
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:20
 #, python-format
@@ -983,31 +975,31 @@ msgstr "Označené ako"
 msgid "Could not read the image file."
 msgstr "Nebolo možné prečítať obrazový súbor."
 
-#: mediagoblin/tools/response.py:29
+#: mediagoblin/tools/response.py:30
 msgid "Oops!"
 msgstr "Hovsa!"
 
-#: mediagoblin/tools/response.py:30
+#: mediagoblin/tools/response.py:31
 msgid "An error occured"
-msgstr ""
+msgstr "Výskyt chyby"
 
-#: mediagoblin/tools/response.py:44
+#: mediagoblin/tools/response.py:46
 msgid "Operation not allowed"
-msgstr ""
+msgstr "Nepovolená operácia"
 
-#: mediagoblin/tools/response.py:45
+#: mediagoblin/tools/response.py:47
 msgid ""
 "Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
 "function that you are not allowed to. Have you been trying to delete all "
 "user accounts again?"
-msgstr ""
+msgstr "Prepáč Hocikto, toto nesmieš!</p><p>Práve si chcel vykonať funkciu, na ktorú nemáš oprávnenie. Opäť si chcel skúsiť odstrániť všetky používateľské účty?"
 
-#: mediagoblin/tools/response.py:52
+#: mediagoblin/tools/response.py:55
 msgid ""
 "There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
 " the address is correct, maybe the page you're looking for has been moved or"
 " deleted."
-msgstr ""
+msgstr "Zdá sa, že na tejto adrese sa nič nenachádza. Prepáč!</p><p>Pokiaľ si si istý, že adresa je správna, možno sa hľadaná stránka presunula inam, prípadne zmazala."
 
 #: mediagoblin/user_pages/forms.py:28
 msgid "I am sure I want to delete this"
