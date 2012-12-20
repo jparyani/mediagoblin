@@ -77,6 +77,12 @@ good/bad/ugly).  On Debianoid systems::
         gstreamer0.10-ffmpeg
 
 
+Add ``mediagoblin.media_types.video`` to the ``media_types`` list in your
+``mediagoblin_local.ini`` and restart MediaGoblin.
+
+Run::
+    ./bin/gmg dbupdate
+
 Now you should be able to submit videos, and mediagoblin should
 transcode them.
 
@@ -117,8 +123,12 @@ Then install ``scikits.audiolab`` for the spectrograms::
     ./bin/pip install scikits.audiolab
 
 Add ``mediagoblin.media_types.audio`` to the ``media_types`` list in your
-``mediagoblin_local.ini`` and restart MediaGoblin. You should now be able to
-upload and listen to audio files!
+``mediagoblin_local.ini`` and restart MediaGoblin.
+
+Run::
+    ./bin/gmg dbupdate
+
+You should now be able to upload and listen to audio files!
 
 
 Ascii art
@@ -140,4 +150,26 @@ the list would look like this::
 
     media_types = mediagoblin.media_types.image, mediagoblin.media_types.ascii
 
+Run::
+    ./bin/gmg dbupdate
+
 Now any .txt file you uploaded will be processed as ascii art!
+
+
+STL / 3d model support
+======================
+
+To enable the "STL" 3d model support plugin, first make sure you have
+a recentish `Blender <http://blender.org>`_ installed and available on
+your execution path.  This feature has been tested with Blender 2.63.
+It may work on some earlier versions, but that is not guaranteed (and
+is surely not to work prior to Blender 2.5X).
+
+Add ``mediagoblin.media_types.stl`` to the ``media_types`` list in your
+``mediagoblin_local.ini`` and restart MediaGoblin. 
+
+Run::
+    ./bin/gmg dbupdate
+
+You should now be able to upload .obj and .stl files and MediaGoblin
+will be able to present them to your wide audience of admirers!
