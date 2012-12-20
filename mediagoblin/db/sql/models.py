@@ -44,18 +44,6 @@ from mediagoblin.db.sql.base import Session
 from migrate import changeset
 
 
-class SimpleFieldAlias(object):
-    """An alias for any field"""
-    def __init__(self, fieldname):
-        self.fieldname = fieldname
-
-    def __get__(self, instance, cls):
-        return getattr(instance, self.fieldname)
-
-    def __set__(self, instance, val):
-        setattr(instance, self.fieldname, val)
-
-
 class User(Base, UserMixin):
     """
     TODO: We should consider moving some rarely used fields
