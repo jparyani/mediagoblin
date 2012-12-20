@@ -25,10 +25,18 @@ carefully, or at least skim over it.
 This will be the last release that is capable of converting from an earlier
 MongoDB-based MediaGoblin instance to the newer SQL-based system.
 
+**Do this to upgrade**
+
+1. Make sure to run ``bin/gmg dbuptdate`` after upgrading.
+
 
 **New features**
 
-* TO BE FILLED IN BEFORE RELEASE :-)
+* **3d model support!**
+
+  You can now upload STL and OBJ files and display them in
+  MediaGoblin.  Requires a recent-ish Blender; for details see:
+  :ref:`deploying-chapter`
 
 * **trim_whitespace**
 
@@ -36,6 +44,55 @@ MongoDB-based MediaGoblin instance to the newer SQL-based system.
   of the delivered html output by reducing redundant whitespace.
 
   See :ref:`core-plugin-section` for plugin documentation
+
+* **A new API!**
+
+  It isn't well documented yet but we do have an API.  There is an
+  `android application in progress <https://gitorious.org/mediagoblin/mediagoblin-android>`_
+  which makes use of it, and there are some demo applications between
+  `automgtic <https://github.com/jwandborg/automgtic>`_, an
+  automatic media uploader for your desktop
+  and `OMGMG <https://github.com/jwandborg/omgmg>`_, an example of
+  a web application hooking up to the API.
+
+  This is a plugin, so you have to enable it in your mediagoblin
+  config file by adding a section under [plugins] like::
+
+    [plugins]
+    [[mediagoblin.plugins.api]]
+
+  Note that the API works but is not nailed down... the way it is
+  called may change in future releases.
+
+* **OAuth login support**
+
+  For applications that use OAuth to connect to the API.
+
+  This is a plugin, so you have to enable it in your mediagoblin
+  config file by adding a section under [plugins] like::
+
+    [plugins]
+    [[mediagoblin.plugins.oauth]]
+
+* **Collections**
+
+  We now have user-curated collections support.  These are arbitrary
+  galleries that are customizable by users.  You can add media to
+  these by clicking on the paperclip icon when logged in and looking
+  at a media entry.
+
+* **OpenStreetMap licensing display improvements**
+
+  More accurate display of OSM licensing, and less disruptive: you
+  click to "expand" the display of said licensing.
+
+  Geolocation is also now on by default.
+
+* **Miscelaneous visual improvements**
+
+  We've made a number of small visual improvements including newer and
+  nicer looking thumbnails and improved checkbox placement.
+
 
 
 0.3.1
