@@ -18,7 +18,7 @@
 import os
 import tempfile
 
-from nose.tools import assert_raises
+from nose.tools import assert_raises, assert_equal, assert_true
 from werkzeug.utils import secure_filename
 
 from mediagoblin import storage
@@ -78,9 +78,10 @@ def test_storage_system_from_config():
          'garbage_arg': 'garbage_arg',
          'storage_class':
              'mediagoblin.tests.test_storage:FakeStorageSystem'})
-    assert this_storage.foobie == 'eiboof'
-    assert this_storage.blech == 'hcelb'
-    assert this_storage.__class__ is FakeStorageSystem
+    assert_equal(this_storage.foobie, 'eiboof')
+    assert_equal(this_storage.blech, 'hcelb')
+    assert_equal(unicode(this_storage.__class__),
+                 u'mediagoblin.tests.test_storage.FakeStorageSystem')
 
 
 ##########################

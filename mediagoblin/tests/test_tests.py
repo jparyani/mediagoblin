@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.tests.tools import get_test_app
-
 from mediagoblin import mg_globals
+from mediagoblin.tests.tools import get_test_app
+from mediagoblin.db.sql.models import User
 
 
 def test_get_test_app_wipes_db():
@@ -24,15 +24,15 @@ def test_get_test_app_wipes_db():
     Make sure we get a fresh database on every wipe :)
     """
     get_test_app()
-    assert mg_globals.database.User.find().count() == 0
+    assert User.query.count() == 0
 
     new_user = mg_globals.database.User()
     new_user.username = u'lolcat'
     new_user.email = u'lol@cats.example.org'
     new_user.pw_hash = u'pretend_this_is_a_hash'
     new_user.save()
-    assert mg_globals.database.User.find().count() == 1
+    assert User.query.count() == 1
 
     get_test_app()
 
-    assert mg_globals.database.User.find().count() == 0
+    assert User.query.count() == 0

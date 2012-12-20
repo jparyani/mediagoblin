@@ -19,9 +19,10 @@ import datetime
 
 from nose.tools import assert_equal
 
-from mediagoblin.auth import lib as auth_lib
-from mediagoblin.tests.tools import setup_fresh_app, fixture_add_user
 from mediagoblin import mg_globals
+from mediagoblin.auth import lib as auth_lib
+from mediagoblin.db.sql.models import User
+from mediagoblin.tests.tools import setup_fresh_app, fixture_add_user
 from mediagoblin.tools import template, mail
 
 
@@ -124,7 +125,7 @@ def test_register_views(test_app):
         u'Invalid email address.']
 
     ## At this point there should be no users in the database ;)
-    assert not mg_globals.database.User.find().count()
+    assert not User.query.count()
 
     # Successful register
     # -------------------
