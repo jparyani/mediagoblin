@@ -27,7 +27,7 @@ MongoDB-based MediaGoblin instance to the newer SQL-based system.
 
 **Do this to upgrade**
 
-1. Make sure to run ``bin/gmg dbuptdate`` after upgrading.
+1. Make sure to run ``bin/gmg dbupdate`` after upgrading.
 
 
 **New features**
