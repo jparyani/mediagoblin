@@ -18,34 +18,30 @@
 
 {% extends 'mediagoblin/user_pages/media.html' %}
 
-{% block mediagoblin_head %}
+{% block mediagoblin_head -%}
   {{ super() }}
-  <script type="text/javascript"
-  	src="{{ request.staticdirect('/js/extlib/video-js/video.js') }}"></script>
-  <link href="{{ request.staticdirect('/css/vjs-mg-skin.css') }}" rel="stylesheet">
-{% endblock %}
+  <script type="text/javascript" src="{{
+     request.staticdirect('/extlib/video-js/video.min.js') }}"></script>
+  <link href="{{ request.staticdirect('/css/vjs-mg-skin.css')
+     }}" rel="stylesheet">
+{%- endblock %}
 
 {% block mediagoblin_media %}
-  <div class="video-player" style="position: relative;">
-    <video class="video-js vjs-mg-skin"
-	   width="{{ media.media_data.width }}"
-	   height="{{ media.media_data.height }}"
-	   controls="controls"
-	   preload="metadata"
-	   data-setup="">
-      <source src="{{ request.app.public_store.file_url(
-		   media.media_files['webm_640']) }}" 
-	      type="video/webm; codecs=&quot;vp8, vorbis&quot;" />
-	  <div class="no_html5">
-	    {%- trans -%}Sorry, this video will not work because 
-	    your web browser does not support HTML5 
-	    video.{%- endtrans -%}<br/>
-	    {%- trans -%}You can get a modern web browser that 
-	    can play this video at <a href="http://getfirefox.com">
-	    http://getfirefox.com</a>!{%- endtrans -%}
-	  </div>
-    </video>
-  </div>
+  <video controls autoplay preload="auto" class="video-js vjs-mg-skin"
+      data-setup='{"height": {{ media.media_data.height }},
+                 "width": {{ media.media_data.width }} }'>
+    <source src="{{ request.app.public_store.file_url(
+      	   media.media_files['webm_640']) }}"
+            type="video/webm; codecs=&quot;vp8, vorbis&quot;" />
+    <div class="no_html5">
+      {%- trans -%}Sorry, this video will not work because
+      your web browser does not support HTML5 
+      video.{%- endtrans -%}<br/>
+      {%- trans -%}You can get a modern web browser that 
+      can play this video at <a href="http://getfirefox.com">
+      http://getfirefox.com</a>!{%- endtrans -%}
+    </div>
+  </video>
 {% endblock %}
 
 {% block mediagoblin_sidebar %}
