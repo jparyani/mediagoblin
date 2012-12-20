@@ -81,6 +81,7 @@ Add ``mediagoblin.media_types.video`` to the ``media_types`` list in your
 ``mediagoblin_local.ini`` and restart MediaGoblin.
 
 Run::
+
     ./bin/gmg dbupdate
 
 Now you should be able to submit videos, and mediagoblin should
@@ -126,6 +127,7 @@ Add ``mediagoblin.media_types.audio`` to the ``media_types`` list in your
 ``mediagoblin_local.ini`` and restart MediaGoblin.
 
 Run::
+
     ./bin/gmg dbupdate
 
 You should now be able to upload and listen to audio files!
@@ -151,6 +153,7 @@ the list would look like this::
     media_types = mediagoblin.media_types.image, mediagoblin.media_types.ascii
 
 Run::
+
     ./bin/gmg dbupdate
 
 Now any .txt file you uploaded will be processed as ascii art!
@@ -169,6 +172,7 @@ Add ``mediagoblin.media_types.stl`` to the ``media_types`` list in your
 ``mediagoblin_local.ini`` and restart MediaGoblin. 
 
 Run::
+
     ./bin/gmg dbupdate
 
 You should now be able to upload .obj and .stl files and MediaGoblin
