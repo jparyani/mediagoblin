@@ -18,11 +18,13 @@ import logging
 import urllib
 import urllib2
 
-from celery import registry, task
+#TODO: newer celeries use from celery import Task. Change when we upgrade
+from celery.task import Task
+from celery.registry import tasks
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.models import MediaEntry
-from . import mark_entry_failed, BaseProcessingFail, ProcessingState
+from mediagoblin.db.sql.models import MediaEntry
+from mediagoblin.processing import mark_entry_failed, BaseProcessingFail
 from mediagoblin.tools.processing import json_processing_callback
 
 _log = logging.getLogger(__name__)
@@ -63,12 +65,10 @@ def handle_push_urls(feed_url):
 ################################
 # Media processing initial steps
 ################################
+class ProcessMedia(Task):
+    track_started=True
 
-class ProcessMedia(task.Task):
-    """
-    Pass this entry off for processing.
-    """
-    def run(self, media_id, feed_url):
+    def run(self, media_id):
         """
         Pass the media entry off to the appropriate processing function
         (for now just process_image...)
@@ -81,8 +81,8 @@ class ProcessMedia(task.Task):
         # Try to process, and handle expected errors.
         try:
             entry.state = u'processing'
+            entry.queued_task_id = self.request.id
             entry.save()
-
             _log.debug('Processing {0}'.format(entry))
 
             proc_state = ProcessingState(entry)
@@ -140,6 +140,4 @@ class ProcessMedia(task.Task):
         entry = mgg.database.MediaEntry.query.filter_by(id=entry_id).first()
         json_processing_callback(entry)
 
-# Register the task
-process_media = registry.tasks[ProcessMedia.name]
-
+tasks.register(ProcessMedia)

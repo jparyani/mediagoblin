@@ -89,7 +89,7 @@ def submit_start(request):
                 # Save now so we have this data before kicking off processing
                 entry.save()
 
-                # Pass off to processing
+                # Pass off to async processing
                 #
                 # (... don't change entry after this point to avoid race
                 # conditions with changes to the document via processing code)
@@ -97,6 +97,7 @@ def submit_start(request):
                     'mediagoblin.user_pages.atom_feed',
                     qualified=True, user=request.user.username)
                 run_process_media(entry, feed_url)
+
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
                 add_comment_subscription(request.user, entry)

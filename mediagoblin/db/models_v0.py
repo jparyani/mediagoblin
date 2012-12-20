@@ -109,7 +109,7 @@ class MediaEntry(Base_v0):
 
     queued_media_file = Column(PathTupleWithSlashes)
 
-    queued_task_id = Column(Unicode)
+    queued_task_id = Column(Unicode, default=None)
 
     __table_args__ = (
         UniqueConstraint('uploader', 'slug'),
