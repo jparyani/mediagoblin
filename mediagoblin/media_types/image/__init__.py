@@ -24,5 +24,5 @@ MEDIA_MANAGER = {
                                 # 'mediagoblin.media_types.image.processing'?
     "sniff_handler": sniff_handler,
     "display_template": "mediagoblin/media_displays/image.html",
-    "default_thumb": "images/media_thumbs/image.jpg",
+    "default_thumb": "images/media_thumbs/image.png",
     "accepted_extensions": ["jpg", "jpeg", "png", "gif", "tiff"]}

@@ -119,12 +119,6 @@
           </a>
         {% endif %}
     {% endif %}
-
-      {% if request.user and (request.user._id == user._id) %}
-        <a href="{{ request.urlgen('mediagoblin.edit.account') }}">
-          {%- trans %}Change account settings{% endtrans -%}
-        </a>
-      {% endif %}
     </div>
 
     {% if media_entries.count() %}

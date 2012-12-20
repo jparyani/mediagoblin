@@ -16,7 +16,9 @@
 
 import gettext
 import pkg_resources
-from babel.localedata import exists
+
+
+from babel import localedata
 from babel.support import LazyProxy
 
 from mediagoblin import mg_globals
@@ -25,14 +27,24 @@ from mediagoblin import mg_globals
 # Translation tools
 ###################
 
-
+AVAILABLE_LOCALES = None
 TRANSLATIONS_PATH = pkg_resources.resource_filename(
     'mediagoblin', 'i18n')
 
 
+def set_available_locales():
+    """Set available locales for which we have translations"""
+    global AVAILABLE_LOCALES
+    locales=['en', 'en_US'] # these are available without translations
+    for locale in localedata.list():
+        if gettext.find('mediagoblin', TRANSLATIONS_PATH, [locale]):
+            locales.append(locale)
+    AVAILABLE_LOCALES = locales
+
+
 def locale_to_lower_upper(locale):
     """
-    Take a locale, regardless of style, and format it like "en-US"
+    Take a locale, regardless of style, and format it like "en_US"
     """
     if '-' in locale:
         lang, country = locale.split('-', 1)
@@ -57,33 +69,32 @@ def locale_to_lower_lower(locale):
 
 def get_locale_from_request(request):
     """
-    Figure out what target language is most appropriate based on the
-    request
+    Return most appropriate language based on prefs/request request
     """
-    request_form = request.GET or request.form
+    request_args = (request.args, request.form)[request.method=='POST']
 
-    if request_form.has_key('lang'):
-        return locale_to_lower_upper(request_form['lang'])
+    if request_args.has_key('lang'):
+        # User explicitely demanded a language, normalize lower_uppercase
+        target_lang = locale_to_lower_upper(request_args['lang'])
 
-    # Your routing can explicitly specify a target language
-    matchdict = request.matchdict or {}
-
-    if 'locale' in matchdict:
-        target_lang = matchdict['locale']
     elif 'target_lang' in request.session:
+        # TODO: Uh, ohh, this is never ever set anywhere?
         target_lang = request.session['target_lang']
-    # Pull the first acceptable language or English
     else:
-        # TODO: Internationalization broken
-        target_lang = 'en'
+        # Pull the most acceptable language based on browser preferences
+        # This returns one of AVAILABLE_LOCALES which is aready case-normalized.
+        # Note: in our tests request.accept_languages is None, so we need
+        # to explicitely fallback to en here.
+        target_lang = request.accept_languages.best_match(AVAILABLE_LOCALES) \
+                      or "en_US"
 
-    return locale_to_lower_upper(target_lang)
+    return target_lang
 
 SETUP_GETTEXTS = {}
 
-def setup_gettext(locale):
+def get_gettext_translation(locale):
     """
-    Setup the gettext instance based on this locale
+    Return the gettext instance based on this locale
     """
     # Later on when we have plugins we may want to enable the
     # multi-translations system they have so we can handle plugin
@@ -96,15 +107,9 @@ def setup_gettext(locale):
     else:
         this_gettext = gettext.translation(
             'mediagoblin', TRANSLATIONS_PATH, [locale], fallback=True)
-        if exists(locale):
+        if localedata.exists(locale):
             SETUP_GETTEXTS[locale] = this_gettext
-
-    mg_globals.thread_scope.translations = this_gettext
-
-
-# Force en to be setup before anything else so that
-# mg_globals.translations is never None
-setup_gettext('en')
+    return this_gettext
 
 
 def pass_to_ugettext(*args, **kwargs):
@@ -124,7 +129,10 @@ def lazy_pass_to_ugettext(*args, **kwargs):
 
     This is useful if you have to define a translation on a module
     level but you need it to not translate until the time that it's
-    used as a string.
+    used as a string. For example, in:
+        def func(self, message=_('Hello boys and girls'))
+
+    you would want to use the lazy version for _.
     """
     return LazyProxy(pass_to_ugettext, *args, **kwargs)
 

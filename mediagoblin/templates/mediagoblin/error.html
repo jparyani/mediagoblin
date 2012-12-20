@@ -1,3 +1,4 @@
+{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -13,15 +14,15 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
 
+{% block title %}{{err_code}} &mdash; {{ super() }}{% endblock %}
 
-from mediagoblin.meddleware import BaseMeddleware
-
-
-class NoOpMeddleware(BaseMeddleware):
-
-    def process_request(self, request, controller):
-        pass
-
-    def process_response(self, request, response):
-        pass
+{% block mediagoblin_content %}
+  <img class="right_align" src="{{ request.staticdirect('/images/404.png') }}"
+       alt="{% trans %}Image of goblin stressing out{% endtrans %}" />
+  <h1>{{ title }}</h1>
+  <p>{{ err_msg|safe }}</p>
+  <div class="clear"></div>
+{% endblock %}

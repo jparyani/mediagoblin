@@ -47,24 +47,21 @@ def py_shell(**user_namespace):
 
 def ipython_shell(**user_namespace):
     """
-    Run a shell for the user using ipython.
+    Run a shell for the user using ipython. Return False if there is no IPython
     """
     try:
         from IPython import embed
     except:
-        print "IPython not available... exiting!"
-        return
-    
+        return False
+
     embed(
         banner1=SHELL_BANNER,
         user_ns=user_namespace)
-
+    return True
 
 def shell(args):
     """
-    Setup a shell for the user
-    either a normal Python shell
-    or an IPython one
+    Setup a shell for the user either a normal Python shell or an IPython one
     """
     user_namespace = {
         'mg_globals': mg_globals,
@@ -74,4 +71,6 @@ def shell(args):
     if args.ipython:
         ipython_shell(**user_namespace)
     else:
-        py_shell(**user_namespace)
+        # Try ipython_shell first and fall back if not available
+        if not ipython_shell(**user_namespace):
+            py_shell(**user_namespace)

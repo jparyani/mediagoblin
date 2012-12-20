@@ -32,6 +32,11 @@ GNU/Linux distro.
    install.  If instead you want to join in as a contributor, see our
    `Hacking HOWTO <http://wiki.mediagoblin.org/HackingHowto>`_ instead.
 
+   There are also many ways to install servers... for the sake of
+   simplicity, our instructions below describe installing with nginx.
+   For more recipes, including Apache, see
+   `our wiki <http://wiki.mediagoblin.org/Deployment>`_.
+
 Prepare System
 --------------
 
@@ -165,7 +170,7 @@ And set up the in-package virtualenv::
 
    If you have problems here, consider trying to install virtualenv
    with the ``--distribute`` or ``--no-site-packages`` options. If
-   your system's default Python is in the 3.x series you man need to
+   your system's default Python is in the 3.x series you may need to
    run ``virtualenv`` with the  ``--python=python2.7`` or
    ``--python=python2.6`` options.
 
@@ -173,7 +178,7 @@ The above provides an in-package install of ``virtualenv``. While this
 is counter to the conventional ``virtualenv`` configuration, it is
 more reliable and considerably easier to configure and illustrate. If
 you're familiar with Python packaging you may consider deploying with
-your preferred the method.
+your preferred method.
 
 Assuming you are going to deploy with FastCGI, you should also install
 flup::
@@ -185,6 +190,12 @@ environment. In the future, when you update your
 codebase, you should also run::
 
     ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate
+
+Note: If you are running an active site, depending on your server
+configuration, you may need to stop it first or the dbupdate command
+may hang (and it's certainly a good idea to restart it after the
+update)
+
 
 Deploy MediaGoblin Services
 ---------------------------

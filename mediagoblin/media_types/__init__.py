@@ -78,25 +78,6 @@ def get_media_managers():
         yield media_type, sys.modules[media_type].MEDIA_MANAGER
 
 
-def get_media_manager(_media_type):
-    '''
-    Get the MEDIA_MANAGER based on a media type string
-
-    Example::
-        get_media_type('mediagoblin.media_types.image')
-    '''
-    if not _media_type:
-        return False
-
-    for media_type, manager in get_media_managers():
-        if media_type in _media_type:
-            return manager
-
-    # Nope?  Then raise an error
-    raise FileTypeNotSupported(
-        "MediaManager not in enabled types.  Check media_types in config?")
-
-
 def get_media_type_and_manager(filename):
     '''
     Try to find the media type based on the file name, extension

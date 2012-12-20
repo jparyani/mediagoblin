@@ -1,0 +1,150 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% extends 'mediagoblin/user_pages/media.html' %}
+
+  
+{% block mediagoblin_media %}
+
+
+{% set model_download = request.app.public_store.file_url(
+   media.get_display_media(media.media_files)) %}
+{% set perspective_view = request.app.public_store.file_url(
+   media.media_files['perspective']) %}
+{% set top_view = request.app.public_store.file_url(
+   media.media_files['top']) %}
+{% set side_view = request.app.public_store.file_url(
+   media.media_files['side']) %}
+{% set front_view = request.app.public_store.file_url(
+   media.media_files['front']) %}
+
+<style type="text/css">
+#top_view, #side_view, #front_view, #thingy_view {
+    display: none;
+}
+.media_image {
+    cursor: inherit!important;
+}
+
+</style>
+
+{% if media.media_data.file_type == "stl" %}
+  <script src="{{ request.staticdirect('/js/extlib/thingiview.js/Three.js') }}"></script>
+  <script src="{{ request.staticdirect('/js/extlib/thingiview.js/plane.js') }}"></script>
+  <script src="{{ request.staticdirect('/js/extlib/thingiview.js/thingiview.js') }}"></script>
+{% endif %}
+
+
+<script type="text/javascript">
+window.show = function (view_id) {
+    ids = [
+        "perspective",
+        "top_view",
+        "side_view",
+        "front_view",
+        "thingy_view",
+    ];
+    for (var i=0; i<ids.length; i+=1) {
+        id = ids[i];
+        var view = document.getElementById(id);
+        view.style.display = id===view_id ? "block" : "none";
+    }
+};
+
+window.show_things = function () {
+    document.getElementById("webgl_button").onclick = function () {
+        show('thingy_view');
+    };
+    window.show("thingy_view");
+    thingiurlbase = "{{ request.staticdirect('/js/extlib/thingiview.js') }}";
+    thingiview = new Thingiview("thingy_view");
+    thingiview.setObjectColor('#821543');
+    thingiview.initScene();
+    thingiview.loadSTL("{{ model_download }}");
+    thingiview.setRotation(false);
+};
+</script>
+
+<img 
+   id="perspective"
+   class="media_image"
+   src="{{ perspective_view }}"
+   alt="{% trans media_title=media.title -%}
+        Image for {{ media_title }}{% endtrans %}" />
+<img 
+   id="top_view"
+   class="media_image"
+   src="{{ top_view }}"
+   alt="{% trans media_title=media.title -%}
+        Image for {{ media_title }}{% endtrans %}" />
+<img 
+   id="side_view"
+   class="media_image"
+   src="{{ side_view }}"
+   alt="{% trans media_title=media.title -%}
+        Image for {{ media_title }}{% endtrans %}" />
+<img 
+   id="front_view"
+   class="media_image"
+   src="{{ front_view }}"
+   alt="{% trans media_title=media.title -%}
+        Image for {{ media_title }}{% endtrans %}" />
+<div id="thingy_view" style="width:640px;height:640px;"></div>
+
+
+<div style="padding: 4px;">
+  <a class="button_action" onclick="show('perspective');"
+     title="{%- trans %}Toggle Rotate{% endtrans -%}">
+    {%- trans %}Perspective{% endtrans -%}
+  </a>
+  <a class="button_action" onclick="show('front_view');"
+     title="{%- trans %}Front{% endtrans -%}">
+    {%- trans %}Front{% endtrans -%}
+  </a>
+  <a class="button_action" onclick="show('top_view');"
+     title="{%- trans %}Top{% endtrans -%}">
+    {%- trans %}Top{% endtrans -%}
+  </a>
+  <a class="button_action" onclick="show('side_view');"
+     title="{%- trans %}Side{% endtrans -%}">
+    {%- trans %}Side{% endtrans -%}
+  </a>
+{% if media.media_data.file_type == "stl" %}
+  <a id="webgl_button" class="button_action"
+     onclick="show_things();"
+     title="{%- trans %}WebGL{% endtrans -%}">
+    {%- trans %}WebGL{% endtrans -%}
+  </a>
+{% endif %}
+
+  <a class="button_action" href="{{ model_download }}"
+     title="{%- trans %}Download{% endtrans -%}"
+     style="float:right;">
+    {%- trans %}Download model{% endtrans -%}
+  </a>
+</div>
+
+
+{% endblock %}
+
+{% block mediagoblin_sidebar %}
+<h3>{% trans %}File Format{% endtrans %}</h3>
+<p>{{ media.media_data.file_type }}</p>
+<h3>{% trans %}Object Height{% endtrans %}</h3>
+<p>~{{ media.media_data.height|int }} mm</p>
+{% endblock %}

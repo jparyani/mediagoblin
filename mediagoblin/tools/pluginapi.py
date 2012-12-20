@@ -125,6 +125,7 @@ class PluginManager(object):
 
     def register_route(self, route):
         """Registers a single route"""
+        _log.debug('registering route: {0}'.format(route))
         self.routes.append(route)
 
     def get_routes(self):
@@ -144,16 +145,14 @@ def register_routes(routes):
 
     Example passing in a single route:
 
-    >>> from routes import Route
-    >>> register_routes(Route('about-view', '/about',
-    ...     controller=about_view_handler))
+    >>> register_routes(('about-view', '/about',
+    ...     'mediagoblin.views:about_view_handler'))
 
     Example passing in a list of routes:
 
-    >>> from routes import Route
     >>> register_routes([
-    ...     Route('contact-view', '/contact', controller=contact_handler),
-    ...     Route('about-view', '/about', controller=about_handler)
+    ...     ('contact-view', '/contact', 'mediagoblin.views:contact_handler'),
+    ...     ('about-view', '/about', 'mediagoblin.views:about_handler')
     ... ])
 
 
@@ -162,7 +161,7 @@ def register_routes(routes):
        Be careful when designing your route urls. If they clash with
        core urls, then it could result in DISASTER!
     """
-    if isinstance(routes, (tuple, list)):
+    if isinstance(routes, list):
         for route in routes:
             PluginManager().register_route(route)
     else:

@@ -14,25 +14,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from routes.route import Route
 
 auth_routes = [
-    Route('mediagoblin.auth.register', '/register/',
-          controller='mediagoblin.auth.views:register'),
-    Route('mediagoblin.auth.login', '/login/',
-          controller='mediagoblin.auth.views:login'),
-    Route('mediagoblin.auth.logout', '/logout/',
-          controller='mediagoblin.auth.views:logout'),
-    Route('mediagoblin.auth.verify_email', '/verify_email/',
-          controller='mediagoblin.auth.views:verify_email'),
-    Route('mediagoblin.auth.resend_verification', '/resend_verification/',
-          controller='mediagoblin.auth.views:resend_activation'),
-    Route('mediagoblin.auth.resend_verification_success',
-          '/resend_verification_success/',
-          template='mediagoblin/auth/resent_verification_email.html',
-          controller='mediagoblin.views:simple_template_render'),
-    Route('mediagoblin.auth.forgot_password', '/forgot_password/',
-          controller='mediagoblin.auth.views:forgot_password'),
-    Route('mediagoblin.auth.verify_forgot_password',
-          '/forgot_password/verify/',
-          controller='mediagoblin.auth.views:verify_forgot_password')]
+    ('mediagoblin.auth.register', '/register/',
+     'mediagoblin.auth.views:register'),
+    ('mediagoblin.auth.login', '/login/',
+     'mediagoblin.auth.views:login'),
+    ('mediagoblin.auth.logout', '/logout/',
+     'mediagoblin.auth.views:logout'),
+    ('mediagoblin.auth.verify_email', '/verify_email/',
+     'mediagoblin.auth.views:verify_email'),
+    ('mediagoblin.auth.resend_verification', '/resend_verification/',
+     'mediagoblin.auth.views:resend_activation'),
+    ('mediagoblin.auth.forgot_password', '/forgot_password/',
+     'mediagoblin.auth.views:forgot_password'),
+    ('mediagoblin.auth.verify_forgot_password',
+     '/forgot_password/verify/',
+     'mediagoblin.auth.views:verify_forgot_password')]

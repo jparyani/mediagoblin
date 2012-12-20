@@ -14,14 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin.routing import add_route
 
-from routes.route import Route
-
-tag_routes = [
-    # Route('mediagoblin.listings.tags_home', "/",
-    #    controller="mediagoblin.listings.views:tags_home"),
-    Route('mediagoblin.listings.tags_listing', "/{tag}/",
-        controller="mediagoblin.listings.views:tag_listing"),
-    Route('mediagoblin.listings.tag_atom_feed', "/{tag}/atom/",
-        controller="mediagoblin.listings.views:tag_atom_feed"),
-    ]
+add_route('mediagoblin.listings.tags_listing',
+          "/tag/<string:tag>/",
+          "mediagoblin.listings.views:tag_listing")
+add_route('mediagoblin.listings.tag_atom_feed', "/tag/<string:tag>/atom/",
+    "mediagoblin.listings.views:tag_atom_feed")

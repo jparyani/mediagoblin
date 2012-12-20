@@ -1,4 +1,3 @@
-{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -14,18 +13,34 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
-{% extends "mediagoblin/base.html" %}
 
-{% block title %}404 &mdash; {{ super() }}{% endblock %}
 
-{% block mediagoblin_content %}
-  <img class="right_align" src="{{ request.staticdirect('/images/404.png') }}"
-       alt="{% trans %}Image of 404 goblin stressing out{% endtrans %}" />
-  <h1>{% trans %}Oops!{% endtrans %}</h1>
-  <p>{% trans %}There doesn't seem to be a page at this address. Sorry!{% endtrans %}</p>
-  <p>
-    {%- trans %}If you're sure the address is correct, maybe the page you're looking for has been moved or deleted.{% endtrans -%}
-  </p>
-  <div class="clear"></div>
-{% endblock %}
+from mediagoblin.db.sql.base import Base
+
+from sqlalchemy import (
+    Column, Integer, Float, String, ForeignKey)
+from sqlalchemy.orm import relationship, backref
+
+
+class StlData(Base):
+    __tablename__ = "stl__mediadata"
+
+    # The primary key *and* reference to the main media_entry
+    media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
+        primary_key=True)
+    get_media_entry = relationship("MediaEntry",
+        backref=backref("stl__media_data", cascade="all, delete-orphan"))
+
+    center_x = Column(Float)
+    center_y = Column(Float)
+    center_z = Column(Float)
+
+    width = Column(Float)
+    height = Column(Float)
+    depth = Column(Float)
+
+    file_type = Column(String)
+
+
+DATA_MODEL = StlData
+MODELS = [StlData]

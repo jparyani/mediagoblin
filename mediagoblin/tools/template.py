@@ -17,10 +17,12 @@
 from math import ceil
 import jinja2
 from babel.localedata import exists
+from werkzeug.urls import url_quote_plus
+
 from mediagoblin import mg_globals
 from mediagoblin import messages
 from mediagoblin.tools import common
-from mediagoblin.tools.translate import setup_gettext
+from mediagoblin.tools.translate import get_gettext_translation
 from mediagoblin.meddleware.csrf import render_csrf_form_token
 
 
@@ -34,7 +36,7 @@ def get_jinja_env(template_loader, locale):
     (In the future we may have another system for providing theming;
     for now this is good enough.)
     """
-    setup_gettext(locale)
+    mg_globals.thread_scope.translations = get_gettext_translation(locale)
 
     # If we have a jinja environment set up with this locale, just
     # return that one.
@@ -57,10 +59,10 @@ def get_jinja_env(template_loader, locale):
     # ... construct a grid of thumbnails or other media
     # ... have access to the global and app config
     template_env.globals['fetch_messages'] = messages.fetch_messages
-    template_env.globals['gridify_list'] = gridify_list
-    template_env.globals['gridify_cursor'] = gridify_cursor
     template_env.globals['app_config'] = mg_globals.app_config
     template_env.globals['global_config'] = mg_globals.global_config
+
+    template_env.filters['urlencode'] = url_quote_plus
 
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env
@@ -96,32 +98,3 @@ def render_template(request, template_path, context):
 def clear_test_template_context():
     global TEMPLATE_TEST_CONTEXT
     TEMPLATE_TEST_CONTEXT = {}
-
-
-def gridify_list(this_list, num_cols=5):
-    """
-    Generates a list of lists where each sub-list's length depends on
-    the number of columns in the list
-    """
-    grid = []
-
-    # Figure out how many rows we should have
-    num_rows = int(ceil(float(len(this_list)) / num_cols))
-
-    for row_num in range(num_rows):
-        slice_min = row_num * num_cols
-        slice_max = (row_num + 1) * num_cols
-
-        row = this_list[slice_min:slice_max]
-
-        grid.append(row)
-
-    return grid
-
-
-def gridify_cursor(this_cursor, num_cols=5):
-    """
-    Generates a list of lists where each sub-list's length depends on
-    the number of columns in the list
-    """
-    return gridify_list(list(this_cursor), num_cols)

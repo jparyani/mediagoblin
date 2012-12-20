@@ -173,7 +173,7 @@
         {% for attachment in media.attachment_files %}
           <li>
             <a href="{{ request.app.public_store.file_url(attachment.filepath) }}">
-              {{ attachment.name }}
+              {{- attachment.name -}}
             </a>
           </li>
         {% endfor %}
@@ -197,7 +197,11 @@
       <p>
         <a type="submit" href="{{ request.urlgen('mediagoblin.user_pages.media_collect', 
                                     user=media.get_uploader.username,
-                                    media=media._id) }}" class="button_action button_collect" >
+                                    media=media._id) }}"
+           class="button_action"
+           title="{% trans %}Add media to collection{% endtrans %}">
+          <img src="{{ request.staticdirect('/images/icon_collect.png') }}"
+               />
 	</a>
       </p>
     {% endif %}

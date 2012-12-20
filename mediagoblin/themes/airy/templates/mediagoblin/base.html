@@ -28,8 +28,6 @@
     <link rel="shortcut icon"
           href="{{ request.staticdirect('/images/goblin.ico') }}" />
     <script src="{{ request.staticdirect('/js/extlib/jquery.js') }}"></script>
-    <script type="text/javascript"
-          src="{{ request.staticdirect('/js/header_dropdown.js') }}"></script>
     <!--[if lt IE 9]>
       <script src="{{ request.staticdirect('/js/extlib/html5shiv.js') }}"></script>
     <![endif]-->
@@ -47,31 +45,31 @@
             <a class="logo"
                href="{{ request.urlgen('index') }}">
                <img src="{{ request.staticdirect('/images/logo.png', 'theme') }}"
-               alt="{% trans %}MediaGoblin logo{% endtrans %}" />
+                   alt="{% trans %}MediaGoblin logo{% endtrans %}" />
             </a>
           {% endblock mediagoblin_logo %}
           {% block mediagoblin_header_title %}{% endblock %}
           <div class="header_right">
             {% if request.user %}
+              {% trans
+                  user_url=request.urlgen('mediagoblin.user_pages.user_home',
+                                          user= request.user.username),
+                  user_name=request.user.username -%}
+                <a href="{{ user_url }}">{{ user_name }}</a>'s account
+              {%- endtrans %}
+              (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
+              {% if request.user and request.user.status == 'active' %}
+                <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">{% trans %}Add media{% endtrans %}</a>
+              {% elif request.user and request.user.status == "needs_email_verification" %}
               {# the following link should only appear when verification is needed #}
-              {% if request.user.status == "needs_email_verification" %}
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                            user=request.user.username) }}"
+                                 user=request.user.username) }}"
                    class="button_action_highlight">
-                  {% trans %}Verify your email!{% endtrans %}</a>
+               {% trans %}Verify your email!{% endtrans %}</a>
               {% endif %}
-              <div class="dropdown">
-                {{ request.user.username }} ▾
-                <div class="dropdown_items">
-                  {% if request.user and request.user.status == 'active' %}
-                    <a href="{{ request.urlgen('mediagoblin.submit.start') }}">{% trans %}+ Add media{% endtrans %}</a>
-                  {% endif %}
-                  <a href="{{ request.urlgen('mediagoblin.user_pages.user_home', user= request.user.username) }}">{% trans %}View your profile{% endtrans %}</a>
-                  <a class="button_action" href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}Log out{% endtrans %}</a>
-                </div>
-              </div>
             {% else %}
-              <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
+              <a href="{{ request.urlgen('mediagoblin.auth.login') }}?next={{
+                                                request.base_url|urlencode }}">
                 {% trans %}Log in{% endtrans %}</a>
             {% endif %}
           </div>

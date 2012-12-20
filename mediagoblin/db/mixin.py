@@ -27,8 +27,11 @@ These functions now live here and get "mixed in" into the
 real objects.
 """
 
+from werkzeug.utils import cached_property
+
 from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
+from mediagoblin.media_types import get_media_managers, FileTypeNotSupported
 from mediagoblin.tools import common, licenses
 from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.url import slugify
@@ -98,6 +101,7 @@ class MediaEntryMixin(object):
     def slug_or_id(self):
         return (self.slug or self._id)
 
+
     def url_for_self(self, urlgen, **extra_args):
         """
         Generate an appropriate url for ourselves
@@ -112,6 +116,38 @@ class MediaEntryMixin(object):
             media=self.slug_or_id,
             **extra_args)
 
+    @property
+    def thumb_url(self):
+        """Return the thumbnail URL (for usage in templates)
+        Will return either the real thumbnail or a default fallback icon."""
+        # TODO: implement generic fallback in case MEDIA_MANAGER does
+        # not specify one?
+        if u'thumb' in self.media_files:
+            thumb_url = mg_globals.app.public_store.file_url(
+                            self.media_files[u'thumb'])
+        else:
+            # No thumbnail in media available. Get the media's
+            # MEDIA_MANAGER for the fallback icon and return static URL
+            # Raises FileTypeNotSupported in case no such manager is enabled
+            manager = self.media_manager
+            thumb_url = mg_globals.app.staticdirector(manager[u'default_thumb'])
+        return thumb_url
+
+    @cached_property
+    def media_manager(self):
+        """Returns the MEDIA_MANAGER of the media's media_type
+
+        Raises FileTypeNotSupported in case no such manager is enabled
+        """
+        # TODO, we should be able to make this a simple lookup rather
+        # than iterating through all media managers.
+        for media_type, manager in get_media_managers():
+            if media_type == self.media_type:
+                return manager
+        # Not found?  Then raise an error
+        raise FileTypeNotSupported(
+            "MediaManager not in enabled types.  Check media_types in config?")
+
     def get_fail_exception(self):
         """
         Get the exception that's appropriate for this error
@@ -121,7 +157,7 @@ class MediaEntryMixin(object):
 
     def get_license_data(self):
         """Return license dict for requested license"""
-        return licenses.SUPPORTED_LICENSES[self.license or ""]
+        return licenses.get_license_by_url(self.license or "")
 
     def exif_display_iter(self):
         from mediagoblin.tools.exif import USEFUL_TAGS

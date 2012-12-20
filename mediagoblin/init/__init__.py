@@ -19,6 +19,7 @@ from beaker.util import parse_cache_config_options
 import jinja2
 
 from mediagoblin.tools import staticdirect
+from mediagoblin.tools.translate import set_available_locales
 from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
 from mediagoblin import mg_globals
@@ -35,6 +36,11 @@ class Error(Exception):
 
 class ImproperlyConfigured(Error):
     pass
+
+
+def setup_locales():
+    """Checks which language translations are available and sets them"""
+    set_available_locales()
 
 
 def setup_global_and_app_config(config_path):

@@ -45,11 +45,8 @@ workbench_manager = None
 # A thread-local scope
 thread_scope = threading.local()
 
-# gettext
-thread_scope.translations = gettext.find(
-    'mediagoblin',
-    pkg_resources.resource_filename(
-    'mediagoblin', 'translations'), ['en'])
+# gettext (this will be populated on demand with gettext.Translations)
+thread_scope.translations = None
 
 # app and global config objects
 app_config = None

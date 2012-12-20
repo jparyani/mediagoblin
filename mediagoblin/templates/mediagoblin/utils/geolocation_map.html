@@ -33,6 +33,21 @@
 	  <input type="hidden" id="gps-latitude"
 		 value="{{ lat }}" />
 	</div>
+        <script> <!-- pop up full OSM license when clicked -->
+          $(document).ready(function(){
+            $("#osm_license_link").click(function () {
+              $("#osm_attrib").slideToggle("slow");
+              });
+          });
+        </script>
+        <div id="osm_attrib" class="hidden"><ul><li>
+          Data &copy;<a
+            href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>
+          contributors
+          </li><li>Imaging &copy;<a
+          href="http://mapquest.com">MapQuest</a></li><li>Maps powered by
+          <a href="http://leafletjs.com/"> Leaflet</a></li></ul>
+        </div>
         <p>
 	  <small>
 	    {% trans -%}

@@ -20,7 +20,6 @@ from celery.task import Task
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.db.util import ObjectId
-from mediagoblin.media_types import get_media_manager
 from mediagoblin.processing import mark_entry_failed, BaseProcessingFail
 from mediagoblin.tools.processing import json_processing_callback
 
@@ -47,15 +46,16 @@ class ProcessMedia(Task):
 
         # Try to process, and handle expected errors.
         try:
-            manager = get_media_manager(entry.media_type)
-
             entry.state = u'processing'
             entry.save()
 
             _log.debug('Processing {0}'.format(entry))
 
-            manager['processor'](entry)
+            # run the processing code
+            entry.media_manager['processor'](entry)
 
+            # We set the state to processed and save the entry here so there's
+            # no need to save at the end of the processing stage, probably ;)
             entry.state = u'processed'
             entry.save()
 

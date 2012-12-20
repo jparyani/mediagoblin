@@ -4,13 +4,14 @@
 # 
 # Translators:
 #   <chc@citi.sinica.edu.tw>, 2011.
-# Harry Chen <harryhow@gmail.com>, 2011, 2012.
+# Harry Chen <harryhow@gmail.com>, 2011-2012.
+#   <medicalwei@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-09-24 14:01-0500\n"
-"PO-Revision-Date: 2012-09-24 18:57+0000\n"
+"POT-Creation-Date: 2012-12-20 09:18-0600\n"
+"PO-Revision-Date: 2012-12-20 15:14+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,11 +31,11 @@ msgstr "密碼"
 
 #: mediagoblin/auth/forms.py:34
 msgid "Email address"
-msgstr "電子郵件位置"
+msgstr "Email 位址"
 
 #: mediagoblin/auth/forms.py:51
 msgid "Username or email"
-msgstr "使用者名稱或是電子郵件"
+msgstr "使用者名稱或 email"
 
 #: mediagoblin/auth/forms.py:58
 msgid "Incorrect input"
@@ -42,48 +43,48 @@ msgstr "輸入錯誤"
 
 #: mediagoblin/auth/views.py:55
 msgid "Sorry, registration is disabled on this instance."
-msgstr "抱歉, 這個項目已經被暫停註冊."
+msgstr "抱歉，本站已經暫停註冊。"
 
 #: mediagoblin/auth/views.py:75
 msgid "Sorry, a user with that name already exists."
-msgstr "抱歉, 這個使用者名稱已經存在."
+msgstr "抱歉，這個使用者名稱已經存在。"
 
 #: mediagoblin/auth/views.py:79
 msgid "Sorry, a user with that email address already exists."
-msgstr "抱歉，此電子郵件已被註冊了。"
+msgstr "抱歉，此 email 位置已經被註冊了。"
 
 #: mediagoblin/auth/views.py:182
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
-msgstr "你的電子郵件位址已被認證. 你現在就可以登入, 編輯你的個人檔案而且遞交照片!"
+msgstr "您的 email 位址已被認證。您已經可以登入，編輯您的個人檔案並上傳圖片！"
 
 #: mediagoblin/auth/views.py:188
 msgid "The verification key or user id is incorrect"
-msgstr "認證碼或是使用者帳號錯誤"
+msgstr "認證碼或是使用者 ID 錯誤"
 
 #: mediagoblin/auth/views.py:206
 msgid "You must be logged in so we know who to send the email to!"
-msgstr "你必須登入，我們才知道信要送給誰！"
+msgstr "您必須登入，我們才知道信要送給誰！"
 
 #: mediagoblin/auth/views.py:214
 msgid "You've already verified your email address!"
-msgstr "你的電子郵件已經確認了！"
+msgstr "您的電子郵件已經確認了！"
 
 #: mediagoblin/auth/views.py:227
 msgid "Resent your verification email."
-msgstr "重送認證信."
+msgstr "重送認證信。"
 
 #: mediagoblin/auth/views.py:263
 msgid ""
 "An email has been sent with instructions on how to change your password."
-msgstr "修改密碼的指示已經由電子郵件寄送到你的信箱。"
+msgstr "修改密碼的指示已經由電子郵件寄送到您的信箱。"
 
 #: mediagoblin/auth/views.py:273
 msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
-msgstr "無法傳送密碼回復信件，因為你的使用者名稱已失效或是帳號尚未認證。"
+msgstr "無法傳送密碼回復信件，因為您的使用者名稱已失效或是帳號尚未認證。"
 
 #: mediagoblin/auth/views.py:285
 msgid "Couldn't find someone with that username or email."
@@ -91,9 +92,9 @@ msgstr "找不到相關的使用者名稱或是電子郵件。"
 
 #: mediagoblin/auth/views.py:333
 msgid "You can now log in using your new password."
-msgstr "你現在可以用新的密碼登入了！"
+msgstr "您現在可以用新的密碼登入了！"
 
-#: mediagoblin/edit/forms.py:25 mediagoblin/edit/forms.py:83
+#: mediagoblin/edit/forms.py:25 mediagoblin/edit/forms.py:82
 #: mediagoblin/submit/forms.py:28 mediagoblin/submit/forms.py:47
 #: mediagoblin/user_pages/forms.py:40
 msgid "Title"
@@ -104,13 +105,13 @@ msgid "Description of this work"
 msgstr "這個作品的描述"
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:52
-#: mediagoblin/edit/forms.py:87 mediagoblin/submit/forms.py:32
+#: mediagoblin/edit/forms.py:86 mediagoblin/submit/forms.py:32
 #: mediagoblin/submit/forms.py:51 mediagoblin/user_pages/forms.py:44
 msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
-msgstr "你可以用\n                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n                      Markdown</a> 來排版."
+msgstr "您可以用 <a href=\"http://markdown.tw\">Markdown</a> 來排版。"
 
 #: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:36
 msgid "Tags"
@@ -120,19 +121,19 @@ msgstr "標籤"
 msgid "Separate tags by commas."
 msgstr "用逗號分隔標籤。"
 
-#: mediagoblin/edit/forms.py:38 mediagoblin/edit/forms.py:91
+#: mediagoblin/edit/forms.py:38 mediagoblin/edit/forms.py:90
 msgid "Slug"
-msgstr "自訂字串"
+msgstr "簡稱"
 
-#: mediagoblin/edit/forms.py:39 mediagoblin/edit/forms.py:92
+#: mediagoblin/edit/forms.py:39 mediagoblin/edit/forms.py:91
 msgid "The slug can't be empty"
-msgstr "自訂字串不能空白"
+msgstr "簡稱不能為空白"
 
 #: mediagoblin/edit/forms.py:40
 msgid ""
 "The title part of this media's address. You usually don't need to change "
 "this."
-msgstr "此媒體網址的名稱。你通常不需要變動這個的。"
+msgstr "此媒體網址的標題部份。通常不需要修改。"
 
 #: mediagoblin/edit/forms.py:44 mediagoblin/submit/forms.py:41
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
@@ -149,7 +150,7 @@ msgstr "網站"
 
 #: mediagoblin/edit/forms.py:58
 msgid "This address contains errors"
-msgstr "網址是不是打錯了? "
+msgstr "本網址出錯了"
 
 #: mediagoblin/edit/forms.py:63
 msgid "Old password"
@@ -157,127 +158,132 @@ msgstr "舊的密碼"
 
 #: mediagoblin/edit/forms.py:64
 msgid "Enter your old password to prove you own this account."
-msgstr "輸入你的舊密碼來證明你擁有這個帳號。"
+msgstr "輸入您的舊密碼來證明您擁有這個帳號。"
 
 #: mediagoblin/edit/forms.py:67
 msgid "New password"
 msgstr "新密碼"
 
-#: mediagoblin/edit/forms.py:72
+#: mediagoblin/edit/forms.py:71
 msgid "Email me when others comment on my media"
-msgstr ""
+msgstr "當有人對我的媒體評論時寄信給我"
 
-#: mediagoblin/edit/forms.py:84
+#: mediagoblin/edit/forms.py:83
 msgid "The title can't be empty"
-msgstr ""
+msgstr "標題不能是空的"
 
-#: mediagoblin/edit/forms.py:86 mediagoblin/submit/forms.py:50
+#: mediagoblin/edit/forms.py:85 mediagoblin/submit/forms.py:50
 #: mediagoblin/user_pages/forms.py:43
 msgid "Description of this collection"
-msgstr ""
+msgstr "這個蒐藏的描述"
 
-#: mediagoblin/edit/forms.py:93
+#: mediagoblin/edit/forms.py:92
 msgid ""
 "The title part of this collection's address. You usually don't need to "
 "change this."
-msgstr ""
+msgstr "此蒐藏網址的標題部份，通常不需要修改。"
 
 #: mediagoblin/edit/views.py:65
 msgid "An entry with that slug already exists for this user."
-msgstr "這個自訂字串已經被其他人用了"
+msgstr "這個簡稱已經被其他人用了"
 
 #: mediagoblin/edit/views.py:86
 msgid "You are editing another user's media. Proceed with caution."
-msgstr "你正在編輯他人的媒體檔案. 請謹慎處理."
+msgstr "您正在修改別人的媒體，請小心操作。"
 
-#: mediagoblin/edit/views.py:182
+#: mediagoblin/edit/views.py:156
+#, python-format
+msgid "You added the attachment %s!"
+msgstr "您加上了附件「%s」！"
+
+#: mediagoblin/edit/views.py:181
 msgid "You are editing a user's profile. Proceed with caution."
-msgstr "你正在編輯一位用戶的檔案. 請謹慎處理."
+msgstr "您正在修改別人的個人檔案，請小心操作。"
 
-#: mediagoblin/edit/views.py:198
+#: mediagoblin/edit/views.py:197
 msgid "Profile changes saved"
-msgstr "修改的檔案已存檔"
+msgstr "個人檔案修改已儲存"
 
-#: mediagoblin/edit/views.py:227 mediagoblin/edit/views.py:247
+#: mediagoblin/edit/views.py:226 mediagoblin/edit/views.py:246
 msgid "Account settings saved"
-msgstr "帳號設定已存檔"
+msgstr "帳號設定已儲存"
 
-#: mediagoblin/edit/views.py:252
+#: mediagoblin/edit/views.py:251
 msgid "Wrong password"
 msgstr "密碼錯誤"
 
-#: mediagoblin/edit/views.py:288 mediagoblin/submit/views.py:211
-#: mediagoblin/user_pages/views.py:215
+#: mediagoblin/edit/views.py:287 mediagoblin/submit/views.py:211
+#: mediagoblin/user_pages/views.py:210
 #, python-format
 msgid "You already have a collection called \"%s\"!"
-msgstr ""
+msgstr "您已經有一個稱做「%s」的蒐藏了！"
 
-#: mediagoblin/edit/views.py:292
+#: mediagoblin/edit/views.py:291
 msgid "A collection with that slug already exists for this user."
-msgstr ""
+msgstr "這個使用者已經有使用該簡稱的蒐藏了。"
 
-#: mediagoblin/edit/views.py:309
+#: mediagoblin/edit/views.py:308
 msgid "You are editing another user's collection. Proceed with caution."
-msgstr ""
+msgstr "您正在修改別人的蒐藏，請小心操作。"
 
 #: mediagoblin/gmg_commands/theme.py:58
 msgid "Cannot link theme... no theme set\n"
-msgstr ""
+msgstr "無法連結佈景…沒有此佈景\n"
 
 #: mediagoblin/gmg_commands/theme.py:71
 msgid "No asset directory for this theme\n"
-msgstr ""
+msgstr "此佈景沒有素材目錄\n"
 
 #: mediagoblin/gmg_commands/theme.py:74
 msgid "However, old link directory symlink found; removed.\n"
-msgstr ""
+msgstr "但是舊的目錄連結已經找到並移除。\n"
 
 #: mediagoblin/media_types/__init__.py:60
-#: mediagoblin/media_types/__init__.py:120
+#: mediagoblin/media_types/__init__.py:101
 msgid "Sorry, I don't support that file type :("
 msgstr "抱歉，我不支援這樣的檔案格式 :("
 
 #: mediagoblin/media_types/video/processing.py:35
 msgid "Video transcoding failed"
-msgstr ""
+msgstr "影像轉碼失敗"
 
 #: mediagoblin/plugins/oauth/forms.py:26
 msgid "Client ID"
-msgstr ""
+msgstr "客戶 ID"
 
 #: mediagoblin/plugins/oauth/forms.py:28
 msgid "Next URL"
-msgstr ""
+msgstr "下一個 URL"
 
 #: mediagoblin/plugins/oauth/forms.py:30
 msgid "Allow"
-msgstr ""
+msgstr "允許"
 
 #: mediagoblin/plugins/oauth/forms.py:31
 msgid "Deny"
-msgstr ""
+msgstr "拒絕"
 
 #: mediagoblin/plugins/oauth/forms.py:35
 msgid "Name"
-msgstr ""
+msgstr "名稱"
 
 #: mediagoblin/plugins/oauth/forms.py:36
 msgid "The name of the OAuth client"
-msgstr ""
+msgstr "OAuth client 的名稱"
 
 #: mediagoblin/plugins/oauth/forms.py:37
 msgid "Description"
-msgstr ""
+msgstr "描述"
 
 #: mediagoblin/plugins/oauth/forms.py:39
 msgid ""
 "This will be visible to users allowing your\n"
 "                application to authenticate as them."
-msgstr ""
+msgstr "本描述將會被進行應用程式認証的使用者看到。"
 
 #: mediagoblin/plugins/oauth/forms.py:41
 msgid "Type"
-msgstr ""
+msgstr "類型"
 
 #: mediagoblin/plugins/oauth/forms.py:46
 msgid ""
@@ -287,25 +293,25 @@ msgid ""
 "                <strong>Public</strong> - The client can't make confidential\n"
 "                requests to the GNU MediaGoblin instance (e.g. client-side\n"
 "                JavaScript client)."
-msgstr ""
+msgstr "<strong>秘密</strong> — OAuth client 可以對 GNU MediaGoblin 站台發送不被使用者代理攔截的請求 (例如伺服端的 client)。\n<strong>公開</strong> — OAuth client 無法對 GNU MediaGoblin 站台發送秘密的請求 (例如客戶端的 JavaScript client)。"
 
 #: mediagoblin/plugins/oauth/forms.py:53
 msgid "Redirect URI"
-msgstr ""
+msgstr "重定向 URI"
 
 #: mediagoblin/plugins/oauth/forms.py:55
 msgid ""
 "The redirect URI for the applications, this field\n"
 "            is <strong>required</strong> for public clients."
-msgstr ""
+msgstr "此應用程式的重定向 URI，本欄位在公開類型的 OAuth client 為必填。"
 
 #: mediagoblin/plugins/oauth/forms.py:67
 msgid "This field is required for public clients"
-msgstr ""
+msgstr "本欄位在公開類型的 OAuth client 為必填"
 
-#: mediagoblin/plugins/oauth/views.py:59
+#: mediagoblin/plugins/oauth/views.py:60
 msgid "The client {0} has been registered!"
-msgstr ""
+msgstr "OAuth client {0} 註冊完成！"
 
 #: mediagoblin/processing/__init__.py:138
 msgid "Invalid file given for media type."
@@ -317,116 +323,79 @@ msgstr "檔案"
 
 #: mediagoblin/submit/views.py:57
 msgid "You must provide a file."
-msgstr "你必須提供一個檔案"
+msgstr "您必須提供一個檔案"
 
 #: mediagoblin/submit/views.py:164
 msgid "Woohoo! Submitted!"
-msgstr "呼呼! 送出去嚕!"
+msgstr "啊哈！PO 上去啦！"
 
 #: mediagoblin/submit/views.py:215
 #, python-format
 msgid "Collection \"%s\" added!"
-msgstr ""
+msgstr "蒐藏「%s」新增完成！"
 
-#: mediagoblin/templates/mediagoblin/404.html:24
-msgid "Image of 404 goblin stressing out"
-msgstr "Image of 404 goblin stressing out"
-
-#: mediagoblin/templates/mediagoblin/404.html:25
-msgid "Oops!"
-msgstr "糟糕！"
-
-#: mediagoblin/templates/mediagoblin/404.html:26
-msgid "There doesn't seem to be a page at this address. Sorry!"
-msgstr "這個位址似乎沒有網頁。抱歉！"
-
-#: mediagoblin/templates/mediagoblin/404.html:28
-msgid ""
-"If you're sure the address is correct, maybe the page you're looking for has"
-" been moved or deleted."
-msgstr "如果你確定這個位址是正確的，或許你在找的網頁已經被移除或是刪除了。"
-
-#: mediagoblin/templates/mediagoblin/base.html:50
+#: mediagoblin/templates/mediagoblin/base.html:48
 msgid "MediaGoblin logo"
 msgstr "MediaGoblin 標誌"
 
+#: mediagoblin/templates/mediagoblin/base.html:54
+#, python-format
+msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
+msgstr "<a href=\"%(user_url)s\">%(user_name)s</a> 的帳號"
+
 #: mediagoblin/templates/mediagoblin/base.html:60
-msgid "Verify your email!"
-msgstr "確認你的電子郵件"
-
-#: mediagoblin/templates/mediagoblin/base.html:66
-msgid "+ Add media"
-msgstr "+ 加入媒體"
-
-#: mediagoblin/templates/mediagoblin/base.html:67
-msgid "+ Add collection"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/base.html:69
-msgid "View your profile"
-msgstr "檢視你個人檔案"
-
-#: mediagoblin/templates/mediagoblin/base.html:70
-msgid "Log out"
+msgid "log out"
 msgstr "登出"
 
-#: mediagoblin/templates/mediagoblin/base.html:75
+#: mediagoblin/templates/mediagoblin/base.html:62
+#: mediagoblin/templates/mediagoblin/root.html:28
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:151
+msgid "Add media"
+msgstr "新增媒體"
+
+#: mediagoblin/templates/mediagoblin/base.html:68
+msgid "Verify your email!"
+msgstr "確認您的電子郵件"
+
+#: mediagoblin/templates/mediagoblin/base.html:73
 #: mediagoblin/templates/mediagoblin/auth/login.html:28
 #: mediagoblin/templates/mediagoblin/auth/login.html:36
 #: mediagoblin/templates/mediagoblin/auth/login.html:54
 msgid "Log in"
 msgstr "登入"
 
-#: mediagoblin/templates/mediagoblin/base.html:89
+#: mediagoblin/templates/mediagoblin/base.html:87
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
 "href=\"http://gnu.org/\">GNU</a> project."
-msgstr "由 <a href=\"http://mediagoblin.org\">MediaGoblin</a>製作, 它是一個 <a href=\"http://gnu.org/\">GNU</a> 專案"
+msgstr "基於 <a href=\"http://mediagoblin.org\">MediaGoblin</a> — 一項 <a href=\"http://gnu.org/\">GNU</a> 專案。"
 
-#: mediagoblin/templates/mediagoblin/base.html:92
+#: mediagoblin/templates/mediagoblin/base.html:90
 #, python-format
 msgid ""
 "Released under the <a "
 "href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a "
 "href=\"%(source_link)s\">Source code</a> available."
-msgstr "基於<a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>授權釋出. <a href=\"%(source_link)s\">取得原始碼</a>."
+msgstr "以 <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a> 授權釋出。備有<a href=\"%(source_link)s\">原始碼</a>。"
 
-#: mediagoblin/templates/mediagoblin/root.html:24
-msgid "Explore"
-msgstr "探索"
+#: mediagoblin/templates/mediagoblin/error.html:24
+msgid "Image of goblin stressing out"
+msgstr "滿臉問號的哥布林"
 
-#: mediagoblin/templates/mediagoblin/root.html:26
-msgid "Hi there, welcome to this MediaGoblin site!"
-msgstr "嘿！歡迎來到 媒體怪獸(MediaGoblin) 網站"
-
-#: mediagoblin/templates/mediagoblin/root.html:28
-msgid ""
-"This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
-"extraordinarily great piece of media hosting software."
-msgstr "此網站正運行 <a href=\"http://mediagoblin.org\">媒體怪獸(MediaGoblin)</a>, 他是一個超讚的媒體分享架站軟體."
-
-#: mediagoblin/templates/mediagoblin/root.html:29
-msgid ""
-"To add your own media, place comments, and more, you can log in with your "
-"MediaGoblin account."
-msgstr ""
+#: mediagoblin/templates/mediagoblin/root.html:25
+msgid "Actions"
+msgstr "動作"
 
 #: mediagoblin/templates/mediagoblin/root.html:31
-msgid "Don't have one yet? It's easy!"
-msgstr "還沒有嗎？其實非常簡單！"
+msgid "Create new collection"
+msgstr "新增新的蒐藏"
 
-#: mediagoblin/templates/mediagoblin/root.html:32
-#, python-format
-msgid ""
-"<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
-"        or\n"
-"        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
-msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">在這網站建立帳號</a>\n          或是\n          <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">在你的伺服器上建立一個自己的媒體怪獸(MedaiGoblin)</a>"
+#: mediagoblin/templates/mediagoblin/root.html:34
+msgid "Change account settings"
+msgstr "更改帳號設定"
 
-#: mediagoblin/templates/mediagoblin/root.html:40
-msgid "Most recent media"
-msgstr "最新的媒體"
-
+#: mediagoblin/templates/mediagoblin/root.html:38
+#: mediagoblin/templates/mediagoblin/root.html:44
 #: mediagoblin/templates/mediagoblin/admin/panel.html:21
 #: mediagoblin/templates/mediagoblin/admin/panel.html:26
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
@@ -434,10 +403,46 @@ msgstr "最新的媒體"
 msgid "Media processing panel"
 msgstr "媒體處理面板"
 
+#: mediagoblin/templates/mediagoblin/root.html:51
+msgid "Explore"
+msgstr "探索"
+
+#: mediagoblin/templates/mediagoblin/root.html:53
+msgid "Hi there, welcome to this MediaGoblin site!"
+msgstr "嘿！歡迎來到 MediaGoblin 站台！ "
+
+#: mediagoblin/templates/mediagoblin/root.html:55
+msgid ""
+"This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
+"extraordinarily great piece of media hosting software."
+msgstr "本站使用 <a href=\"http://mediagoblin.org\">MediaGoblin</a> — 與眾不同的媒體分享網站。"
+
+#: mediagoblin/templates/mediagoblin/root.html:56
+msgid ""
+"To add your own media, place comments, and more, you can log in with your "
+"MediaGoblin account."
+msgstr "您可以登入您的 MediaGoblin 帳號以進行上傳媒體、張貼評論等等。"
+
+#: mediagoblin/templates/mediagoblin/root.html:58
+msgid "Don't have one yet? It's easy!"
+msgstr "沒有帳號嗎？開帳號很簡單！"
+
+#: mediagoblin/templates/mediagoblin/root.html:59
+#, python-format
+msgid ""
+"<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
+"        or\n"
+"        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
+msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">在這個網站上建立帳號</a>\n          或是\n          <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">在自己的伺服器上建立 MediaGoblin</a>"
+
+#: mediagoblin/templates/mediagoblin/root.html:67
+msgid "Most recent media"
+msgstr "最新的媒體"
+
 #: mediagoblin/templates/mediagoblin/admin/panel.html:29
 msgid ""
 "Here you can track the state of media being processed on this instance."
-msgstr ""
+msgstr "此處您可以追蹤本站台處理媒體的狀態。"
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:32
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:32
@@ -452,26 +457,26 @@ msgstr "沒有正在處理中的媒體"
 #: mediagoblin/templates/mediagoblin/admin/panel.html:61
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:59
 msgid "These uploads failed to process:"
-msgstr "無法處理這些更新"
+msgstr "無法處理這些上傳內容："
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:90
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
 msgid "No failed entries!"
-msgstr ""
+msgstr "沒有失敗的紀錄！"
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:92
 msgid "Last 10 successful uploads"
-msgstr ""
+msgstr "最近 10 次成功上傳的紀錄"
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:112
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
 msgid "No processed entries, yet!"
-msgstr ""
+msgstr "現在還沒有處理的紀錄！"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:28
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:36
 msgid "Set your new password"
-msgstr "設定你的新密碼"
+msgstr "設定您的新密碼"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:39
 msgid "Set password"
@@ -498,7 +503,7 @@ msgid ""
 "\n"
 "If you think this is an error, just ignore this email and continue being\n"
 "a happy goblin!"
-msgstr "嗨 %(username)s,\n\n要更改 GNU MediaGoblin的密碼，在瀏覽器中打開下面的網址:\n\n%(verification_url)s\n\n如果你認為這個是個誤會，請忽略此封信件，繼續當個快樂的goblin!"
+msgstr "%(username)s 您好：\n\n要修改 GNU MediaGoblin 的密碼，請在您的瀏覽器中打開下面的網址：\n\n%(verification_url)s\n\n如果您認為這個是個誤會，請忽略此封信件，繼續當個快樂的哥布林！"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:39
 msgid "Logging in failed!"
@@ -506,11 +511,11 @@ msgstr "登入失敗！"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:44
 msgid "Don't have an account yet?"
-msgstr "還沒有帳號嗎?"
+msgstr "還沒有帳號嗎？"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:45
 msgid "Create one here!"
-msgstr "在這裡建立一個吧!"
+msgstr "在這裡建立一個吧！"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:51
 msgid "Forgot your password?"
@@ -519,7 +524,7 @@ msgstr "忘了密碼嗎？"
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
 msgid "Create an account!"
-msgstr "建立一個帳號!"
+msgstr "建立一個帳號！"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:40
 msgid "Create"
@@ -534,52 +539,65 @@ msgid ""
 "your web browser:\n"
 "\n"
 "%(verification_url)s"
-msgstr "嗨 %(username)s,\n\n啟動 GNU MediaGoblin 帳號, 在你的瀏覽器中打開下面的網址:\n\n%(verification_url)s"
+msgstr "%(username)s 您好：\n\n要啟動 GNU MediaGoblin 帳號，請在您的瀏覽器中打開下面的網址:\n\n%(verification_url)s"
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:23
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:35
 #, python-format
 msgid "Editing attachments for %(media_title)s"
-msgstr ""
+msgstr "編輯 %(media_title)s 的附件"
 
-#: mediagoblin/templates/mediagoblin/edit/edit.html:23
-#: mediagoblin/templates/mediagoblin/edit/edit.html:35
-#, python-format
-msgid "Editing %(media_title)s"
-msgstr "編輯 %(media_title)s 中"
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:43
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:171
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:187
+msgid "Attachments"
+msgstr "附件"
 
-#: mediagoblin/templates/mediagoblin/edit/edit.html:42
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:56
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:192
+msgid "Add attachment"
+msgstr "新增附件"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:60
+#: mediagoblin/templates/mediagoblin/edit/edit.html:41
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:32
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:46
-#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:53
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:82
-#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
+#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:52
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:81
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:48
 msgid "Cancel"
 msgstr "取消"
 
-#: mediagoblin/templates/mediagoblin/edit/edit.html:43
-#: mediagoblin/templates/mediagoblin/edit/edit_account.html:47
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:62
+#: mediagoblin/templates/mediagoblin/edit/edit.html:42
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:51
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:33
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:41
 msgid "Save changes"
 msgstr "儲存變更"
 
+#: mediagoblin/templates/mediagoblin/edit/edit.html:23
+#: mediagoblin/templates/mediagoblin/edit/edit.html:35
+#, python-format
+msgid "Editing %(media_title)s"
+msgstr "編輯 %(media_title)s"
+
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:28
-#: mediagoblin/templates/mediagoblin/edit/edit_account.html:41
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:40
 #, python-format
 msgid "Changing %(username)s's account settings"
-msgstr "正在改變 %(username)s的帳號設定"
+msgstr "正在改變 %(username)s 的帳號設定"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:29
 #, python-format
 msgid "Editing %(collection_title)s"
-msgstr ""
+msgstr "編輯 %(collection_title)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:23
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
 #, python-format
 msgid "Editing %(username)s's profile"
-msgstr "編輯 %(username)s'的檔案中"
+msgstr "編輯 %(username)s 的個人檔案"
 
 #: mediagoblin/templates/mediagoblin/listings/collection.html:30
 #: mediagoblin/templates/mediagoblin/listings/collection.html:35
@@ -587,85 +605,134 @@ msgstr "編輯 %(username)s'的檔案中"
 #: mediagoblin/templates/mediagoblin/listings/tag.html:35
 #, python-format
 msgid "Media tagged with: %(tag_name)s"
-msgstr "此媒體被標識為：%(tag_name)s"
+msgstr "此媒體被 tag 成：%(tag_name)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
-#: mediagoblin/templates/mediagoblin/media_displays/image.html:23
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:136
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:52
 msgid "Download"
 msgstr "下載"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:38
-#: mediagoblin/templates/mediagoblin/media_displays/image.html:27
 msgid "Original"
-msgstr "原始的"
+msgstr "原始檔"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:44
 msgid ""
 "Sorry, this audio will not work because \n"
 "\tyour web browser does not support HTML5 \n"
 "\taudio."
-msgstr "抱歉，此聲音檔案無法播放，因為你的瀏覽器不支援HTML5音訊。"
+msgstr "抱歉，此聲音無法播放，因為您的瀏覽器不支援 HTML5 音訊。"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:47
 msgid ""
 "You can get a modern web browser that \n"
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t  http://getfirefox.com</a>!"
-msgstr "你可以在此取得可以播放音樂的瀏覽器 <a href=\"http://getfirefox.com\">\n\t  http://getfirefox.com</a>!"
+msgstr "您可以在 <a href=\"http://getfirefox.com\">http://getfirefox.com</a> 取得可以播放此聲音的瀏覽器！"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:56
 msgid "Original file"
-msgstr ""
+msgstr "原始檔案"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
 msgid "WebM file (Vorbis codec)"
-msgstr "WebM 檔案 (Vorbis codec)"
+msgstr "WebM 檔案 (Vorbis 編碼)"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:87
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:93
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:99
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:105
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:67
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:73
+#, python-format
+msgid "Image for %(media_title)s"
+msgstr " %(media_title)s 的照片"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
+msgid "Toggle Rotate"
+msgstr "切換旋轉"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:113
+msgid "Perspective"
+msgstr "視角"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:116
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:117
+msgid "Front"
+msgstr "正面"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:120
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:121
+msgid "Top"
+msgstr "頂面"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:124
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:125
+msgid "Side"
+msgstr "側面"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:130
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:131
+msgid "WebGL"
+msgstr "WebGL"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:138
+msgid "Download model"
+msgstr "下載模型"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:146
+msgid "File Format"
+msgstr "檔案格式"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:148
+msgid "Object Height"
+msgstr "物件高度"
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:40
 msgid ""
 "Sorry, this video will not work because \n"
 "\t    your web browser does not support HTML5 \n"
 "\t    video."
-msgstr "抱歉, 此影片無法使用，因為 \n<span class=\"whitespace other\" title=\"Tab\">»</span>    你的瀏覽器不支援 HTML5 \n<span class=\"whitespace other\" title=\"Tab\">»</span>    的影片."
+msgstr "抱歉，此影片無法使用，因為您的瀏覽器不支援 HTML5 的影片."
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:43
 msgid ""
 "You can get a modern web browser that \n"
 "\t    can play this video at <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
-msgstr "你可以取得\n<span class=\"whitespace other\" title=\"Tab\">»</span>    播放這樣檔案的最新瀏覽器 <a href=\"http://getfirefox.com\">\n<span class=\"whitespace other\" title=\"Tab\">»</span>    http://getfirefox.com</a>!"
+msgstr "您可以在 <a href=\"http://getfirefox.com\">http://getfirefox.com</a> 取得可以播放此影片的瀏覽器！"
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:59
 msgid "WebM file (640p; VP8/Vorbis)"
-msgstr ""
+msgstr "WebM 檔案 (640p; VP8/Vorbis)"
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
-msgstr ""
+msgstr "新增蒐藏"
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:30
 #: mediagoblin/templates/mediagoblin/submit/start.html:34
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:83
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:82
 msgid "Add"
 msgstr "增加"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:23
 #: mediagoblin/templates/mediagoblin/submit/start.html:30
 msgid "Add your media"
-msgstr "加入你的媒體"
+msgstr "加入您的媒體"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format
 msgid "%(collection_title)s (%(username)s's collection)"
-msgstr ""
+msgstr "%(collection_title)s (%(username)s 的蒐藏)"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:39
 #, python-format
 msgid "%(collection_title)s by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr ""
+msgstr "%(collection_title)s by <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:52
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:87
@@ -677,14 +744,6 @@ msgstr "編輯"
 msgid "Delete"
 msgstr "刪除"
 
-#: mediagoblin/templates/mediagoblin/user_pages/collection.html:59
-#, python-format
-msgid ""
-"<p>\n"
-"    %(collection_description)s\n"
-"  </p>"
-msgstr ""
-
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
@@ -692,25 +751,25 @@ msgid "Really delete %(title)s?"
 msgstr "真的要刪除 %(title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:47
-#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:50
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
 msgid "Delete permanently"
-msgstr "永遠刪除"
+msgstr "永久刪除"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:31
 #, python-format
 msgid "Really remove %(media_title)s from %(collection_title)s?"
-msgstr ""
+msgstr "確定要從 %(collection_title)s 移除 %(media_title)s 嗎？"
 
-#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:54
+#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:53
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #: mediagoblin/templates/mediagoblin/user_pages/comment_email.txt:19
 #, python-format
 msgid ""
 "Hi %(username)s,\n"
 "%(comment_author)s commented on your post (%(comment_url)s) at %(instance_name)s\n"
-msgstr ""
+msgstr "%(username)s 您好：\n%(comment_author)s 在 %(instance_name)s 對您的內容 (%(comment_url)s) 張貼評論\n"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
 #, python-format
@@ -720,18 +779,12 @@ msgstr "%(username)s的媒體"
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:37
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
-msgstr "<a href=\"%(user_url)s\">%(username)s</a>的媒體檔案"
+msgstr "<a href=\"%(user_url)s\">%(username)s</a> 的媒體"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:46
 #, python-format
 msgid "❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr "❖ 由 <a href=\"%(user_url)s\">%(username)s</a>瀏覽媒體檔案"
-
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:67
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:73
-#, python-format
-msgid "Image for %(media_title)s"
-msgstr " %(media_title)s的照片"
+msgstr "❖ 瀏覽 <a href=\"%(user_url)s\">%(username)s</a> 的媒體"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:102
 msgid "Add a comment"
@@ -742,11 +795,11 @@ msgid ""
 "You can use <a "
 "href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
 " formatting."
-msgstr "你可以用 <a href=\"http://daringfireball.net/projects/markdown/basics\"> Markdown</a> 來排版."
+msgstr "您可以用 <a href=\"http://markdown.tw\">Markdown</a> 來排版。"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:113
 msgid "Add this comment"
-msgstr "增加此評論"
+msgstr "增加評論"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:132
 msgid "at"
@@ -759,46 +812,41 @@ msgid ""
 "      <p>%(date)s</p>"
 msgstr "<h3>加入日期</h3>\n      <p>%(date)s</p>"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:171
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:187
-msgid "Attachments"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:192
-msgid "Add attachment"
-msgstr ""
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:202
+msgid "Add media to collection"
+msgstr "將媒體加入蒐藏"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:35
 #, python-format
 msgid "Add %(title)s to collection"
-msgstr ""
+msgstr "新增 %(title)s 到蒐藏"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:52
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:51
 msgid "+"
-msgstr ""
+msgstr "+"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:57
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:56
 msgid "Add a new collection"
-msgstr ""
+msgstr "新增新的蒐藏"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:29
 msgid ""
 "You can track the state of media being processed for your gallery here."
-msgstr "針對你的展示區，你可以在這裡追蹤媒體處理的狀態。"
+msgstr "您可以在這裡追蹤您的藝廊中媒體處理的狀態。"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:89
 msgid "Your last 10 successful uploads"
-msgstr ""
+msgstr "您的最近 10 次成功上傳的紀錄"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:31
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:89
 #, python-format
 msgid "%(username)s's profile"
-msgstr "%(username)s的個人檔案"
+msgstr "%(username)s 的個人檔案"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:43
 msgid "Sorry, no such user found."
-msgstr "抱歉，找不到這個使用者."
+msgstr "抱歉，找不到這個使用者。"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:50
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:70
@@ -807,16 +855,16 @@ msgstr "需要認證電子郵件"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:53
 msgid "Almost done! Your account still needs to be activated."
-msgstr "幾乎完成了！但你的帳號仍然需要被啟用。"
+msgstr "快完成了！但您需要啟用您的帳號。"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:58
 msgid ""
 "An email should arrive in a few moments with instructions on how to do so."
-msgstr "馬上會有一封電子郵件告訴你如何做."
+msgstr "啟用步驟的 email 將會寄到您的信箱。"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:62
 msgid "In case it doesn't:"
-msgstr "如果仍然無法認證，你可以:"
+msgstr "如果仍然無法認證，您可以："
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:65
 msgid "Resend verification email"
@@ -826,18 +874,18 @@ msgstr "重送認證信"
 msgid ""
 "Someone has registered an account with this username, but it still has to be"
 " activated."
-msgstr "有人用了這個帳號登錄了，但是這個帳號仍需要被啟用。"
+msgstr "有人用了這個帳號登錄了，但是這個帳號需要被啟用。"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:79
 #, python-format
 msgid ""
 "If you are that person but you've lost your verification email, you can <a "
 "href=\"%(login_url)s\">log in</a> and resend it."
-msgstr "如果你就是那個人, 但是遺失了認證信, 你可以<a href=\"%(login_url)s\">登入</a> 然後重送一次."
+msgstr "如果您就是本人但是掉了認證信，您可以 <a href=\"%(login_url)s\">登入</a> 然後重送一次。"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:96
 msgid "Here's a spot to tell others about yourself."
-msgstr "這個地方能讓你向他人介紹自己。"
+msgstr "這個地方能讓您向他人介紹自己。"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:101
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:118
@@ -846,53 +894,37 @@ msgstr "編輯個人檔案"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:106
 msgid "This user hasn't filled in their profile (yet)."
-msgstr "這個使用者還沒(來得及)填寫個人檔案。"
+msgstr "這個使用者(還)沒有填寫個人檔案。"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:125
-msgid "Change account settings"
-msgstr "更改帳號設定"
-
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:138
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:132
 #, python-format
 msgid "View all of %(username)s's media"
-msgstr "查看%(username)s的全部媒體檔案"
+msgstr "查看 %(username)s 的全部媒體"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:151
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:145
 msgid ""
 "This is where your media will appear, but you don't seem to have added "
 "anything yet."
-msgstr "這個地方是你的媒體檔案會出現的地方，但是你似乎還沒有加入任何東西。"
+msgstr "此處是您的媒體會出現的地方，但是似乎還沒有加入任何東西。"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:157
-msgid "Add media"
-msgstr "新增媒體檔案"
-
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:163
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:87
-#: mediagoblin/templates/mediagoblin/utils/object_gallery.html:72
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:84
+#: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
 msgid "There doesn't seem to be any media here yet..."
-msgstr "似乎還沒有任何的媒體檔案..."
+msgstr "那裡好像還沒有任何的媒體…"
 
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:39
-#, python-format
-msgid ""
-"<br />\n"
-"              <a href=\"%(entry_url)s\">%(note)s</a>"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:47
-#, python-format
-msgid "<br /><a href=\"%(remove_url)s\" class=\"remove\">(remove)</a>"
-msgstr ""
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
+msgid "(remove)"
+msgstr " (移除)"
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:20
 #, python-format
 msgid "In collections (%(collected)s)"
-msgstr ""
+msgstr "在蒐藏 (%(collected)s)"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 msgid "feed icon"
-msgstr "feed圖示"
+msgstr "feed 圖示"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
 msgid "Atom feed"
@@ -902,10 +934,10 @@ msgstr "Atom feed"
 msgid "Location"
 msgstr "位置"
 
-#: mediagoblin/templates/mediagoblin/utils/geolocation_map.html:38
+#: mediagoblin/templates/mediagoblin/utils/geolocation_map.html:53
 #, python-format
 msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
-msgstr "在 <a href=\"%(osm_url)s\">OpenStreetMap</a>上觀看"
+msgstr "在 <a href=\"%(osm_url)s\">OpenStreetMap</a> 上觀看"
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:25
 msgid "All rights reserved"
@@ -913,11 +945,11 @@ msgstr "版權所有"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:39
 msgid "← Newer"
-msgstr "← 更新"
+msgstr "← 更新的"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:45
 msgid "Older →"
-msgstr "更舊 →"
+msgstr "更舊的 →"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:48
 msgid "Go to page:"
@@ -926,109 +958,135 @@ msgstr "跳到頁數："
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:28
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:33
 msgid "newer"
-msgstr "更新"
+msgstr "更新的"
 
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:39
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:44
 msgid "older"
-msgstr "更舊"
+msgstr "更舊的"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
-msgstr "標籤為"
+msgstr "標籤"
 
 #: mediagoblin/tools/exif.py:78
 msgid "Could not read the image file."
-msgstr "無法讀取影像檔案。"
+msgstr "無法讀取圖片檔案。"
+
+#: mediagoblin/tools/response.py:30
+msgid "Oops!"
+msgstr "糟糕！"
+
+#: mediagoblin/tools/response.py:31
+msgid "An error occured"
+msgstr "發生錯誤"
+
+#: mediagoblin/tools/response.py:46
+msgid "Operation not allowed"
+msgstr "操作不允許"
+
+#: mediagoblin/tools/response.py:47
+msgid ""
+"Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
+"function that you are not allowed to. Have you been trying to delete all "
+"user accounts again?"
+msgstr "Dave 對不起，我不能讓你這樣做！</p><p>您正在試著操作不允許您使用的功能。您打算刪除所有使用者的帳號嗎？"
+
+#: mediagoblin/tools/response.py:55
+msgid ""
+"There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
+" the address is correct, maybe the page you're looking for has been moved or"
+" deleted."
+msgstr "不好意思，看起來這個網址上沒有網頁。</p><p>如果您確定這個網址是正確的，您在尋找的頁面可能已經移動或是被刪除了。"
 
 #: mediagoblin/user_pages/forms.py:28
 msgid "I am sure I want to delete this"
-msgstr "我確定我想要刪除"
+msgstr "我確定我要刪除這個媒體"
 
 #: mediagoblin/user_pages/forms.py:32
 msgid "I am sure I want to remove this item from the collection"
-msgstr ""
+msgstr "我確定我要從蒐藏中移除此項目"
 
 #: mediagoblin/user_pages/forms.py:35
 msgid "-- Select --"
-msgstr ""
+msgstr "— 請選擇 —"
 
 #: mediagoblin/user_pages/forms.py:37
 msgid "Include a note"
-msgstr ""
+msgstr "加註"
 
 #: mediagoblin/user_pages/lib.py:56
 msgid "commented on your post"
-msgstr ""
+msgstr "在您的內容張貼評論"
 
-#: mediagoblin/user_pages/views.py:161
+#: mediagoblin/user_pages/views.py:156
 msgid "Oops, your comment was empty."
-msgstr "啊，你的留言是空的。"
+msgstr "啊，您的留言是空的。"
 
-#: mediagoblin/user_pages/views.py:167
+#: mediagoblin/user_pages/views.py:162
 msgid "Your comment has been posted!"
-msgstr "你的留言已經刊登！"
+msgstr "您的留言已經張貼完成！"
 
-#: mediagoblin/user_pages/views.py:235
+#: mediagoblin/user_pages/views.py:230
 msgid "You have to select or add a collection"
-msgstr ""
+msgstr "您需要選擇或是新增一個蒐藏"
 
-#: mediagoblin/user_pages/views.py:243
+#: mediagoblin/user_pages/views.py:238
 #, python-format
 msgid "\"%s\" already in collection \"%s\""
-msgstr ""
+msgstr "「%s」已經在「%s」蒐藏"
 
-#: mediagoblin/user_pages/views.py:258
+#: mediagoblin/user_pages/views.py:253
 #, python-format
 msgid "\"%s\" added to collection \"%s\""
-msgstr ""
+msgstr "「%s」加入「%s」蒐藏"
 
-#: mediagoblin/user_pages/views.py:266
+#: mediagoblin/user_pages/views.py:261
 msgid "Please check your entries and try again."
-msgstr ""
+msgstr "請檢查項目並重試。"
 
-#: mediagoblin/user_pages/views.py:297
+#: mediagoblin/user_pages/views.py:292
 msgid ""
 "Some of the files with this entry seem to be missing.  Deleting anyway."
-msgstr ""
+msgstr "在此項目中有些檔案好像不見了，已先行刪除。"
 
-#: mediagoblin/user_pages/views.py:302
+#: mediagoblin/user_pages/views.py:297
 msgid "You deleted the media."
-msgstr "你已刪除此媒體檔案。"
+msgstr "您已經刪除此媒體。"
 
-#: mediagoblin/user_pages/views.py:309
+#: mediagoblin/user_pages/views.py:304
 msgid "The media was not deleted because you didn't check that you were sure."
-msgstr "此媒體檔案尚未被刪除因為你還沒有確認你真的要刪除。"
+msgstr "由於您沒有勾選確認，該媒體沒有被移除。"
 
-#: mediagoblin/user_pages/views.py:317
+#: mediagoblin/user_pages/views.py:312
 msgid "You are about to delete another user's media. Proceed with caution."
-msgstr "你在刪除其他人的媒體檔案。請小心處理喔。"
+msgstr "您正在刪除別人的媒體，請小心操作。"
 
-#: mediagoblin/user_pages/views.py:379
+#: mediagoblin/user_pages/views.py:370
 msgid "You deleted the item from the collection."
-msgstr ""
+msgstr "您已經從該蒐藏中刪除該項目。"
 
-#: mediagoblin/user_pages/views.py:383
+#: mediagoblin/user_pages/views.py:374
 msgid "The item was not removed because you didn't check that you were sure."
-msgstr ""
+msgstr "由於您沒有勾選確認，該項目沒有被移除。"
 
-#: mediagoblin/user_pages/views.py:393
+#: mediagoblin/user_pages/views.py:384
 msgid ""
 "You are about to delete an item from another user's collection. Proceed with"
 " caution."
-msgstr ""
+msgstr "您正在從別人的蒐藏中刪除項目，請小心操作。"
 
-#: mediagoblin/user_pages/views.py:426
+#: mediagoblin/user_pages/views.py:417
 #, python-format
 msgid "You deleted the collection \"%s\""
-msgstr ""
+msgstr "您已經刪除「%s」蒐藏。"
 
-#: mediagoblin/user_pages/views.py:433
+#: mediagoblin/user_pages/views.py:424
 msgid ""
 "The collection was not deleted because you didn't check that you were sure."
-msgstr ""
+msgstr "由於您沒有勾選確認，該蒐藏沒有被移除。"
 
-#: mediagoblin/user_pages/views.py:443
+#: mediagoblin/user_pages/views.py:434
 msgid ""
 "You are about to delete another user's collection. Proceed with caution."
-msgstr ""
+msgstr "您正在刪除別人的蒐藏，請小心操作。"

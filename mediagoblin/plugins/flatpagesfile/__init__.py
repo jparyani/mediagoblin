@@ -19,7 +19,6 @@ import logging
 import os
 
 import jinja2
-from routes.route import Route
 
 from mediagoblin.tools import pluginapi
 from mediagoblin.tools.response import render_to_response
@@ -68,7 +67,7 @@ def setup_plugin():
         name = 'flatpagesfile.%s' % name.strip()
         controller = flatpage_handler_builder(template)
         routes.append(
-            Route(name, url, controller=controller))
+            (name, url, controller))
 
     pluginapi.register_routes(routes)
     _log.info('Done setting up flatpagesfile!')

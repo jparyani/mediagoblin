@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -216,12 +217,15 @@ def access_token(request):
             token.client = code.client
             token.save()
 
+            # expire time of token in full seconds
+            # timedelta.total_seconds is python >= 2.7 or we would use that
+            td = token.expires - datetime.now()
+            exp_in = 86400*td.days + td.seconds # just ignore µsec
+
             access_token_data = {
                 'access_token': token.token,
                 'token_type': 'bearer',
-                'expires_in': int(
-                    round(
-                        (token.expires - datetime.now()).total_seconds()))}
+                'expires_in': exp_in}
             return json_response(access_token_data, _disable_cors=True)
         else:
             return json_response({

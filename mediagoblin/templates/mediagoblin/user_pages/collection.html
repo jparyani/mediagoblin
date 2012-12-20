@@ -56,11 +56,9 @@
     <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
   {% endif %}
 
-  {%- trans collection_description=collection.description -%}
   <p>
-    {{ collection_description }}
+    {{ collection.description }}
   </p>
-  {%- endtrans %}
 
   {{ collection_gallery(request, collection_items, pagination) }}
     

@@ -30,8 +30,8 @@ class TestHTTPCallback(object):
         self.app = get_test_app()
         self.db = mg_globals.database
 
-        self.user_password = 'secret'
-        self.user = fixture_add_user('call_back', self.user_password)
+        self.user_password = u'secret'
+        self.user = fixture_add_user(u'call_back', self.user_password)
 
         self.login()
 

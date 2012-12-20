@@ -44,7 +44,7 @@ def test_csrf_token_must_match(test_app):
 
     # construct a request with a cookie, but no form token
     assert test_app.post('/auth/login/',
-                         headers={'Cookie': str('%s=foo; ' %
+                         headers={'Cookie': str('%s=foo' %
                                   mg_globals.app_config['csrf_cookie_name'])},
                          extra_environ={'gmg.verify_csrf': True},
                          expect_errors=True).status_int == 403
@@ -52,7 +52,7 @@ def test_csrf_token_must_match(test_app):
     # if both the cookie and form token are provided, they must match
     assert test_app.post('/auth/login/',
                          {'csrf_token': 'blarf'},
-                         headers={'Cookie': str('%s=foo; ' %
+                         headers={'Cookie': str('%s=foo' %
                                   mg_globals.app_config['csrf_cookie_name'])},
                          extra_environ={'gmg.verify_csrf': True},
                          expect_errors=True).\
@@ -60,7 +60,7 @@ def test_csrf_token_must_match(test_app):
 
     assert test_app.post('/auth/login/',
                          {'csrf_token': 'foo'},
-                         headers={'Cookie': str('%s=foo; ' %
+                         headers={'Cookie': str('%s=foo' %
                                   mg_globals.app_config['csrf_cookie_name'])},
                          extra_environ={'gmg.verify_csrf': True}).\
                          status_int == 200

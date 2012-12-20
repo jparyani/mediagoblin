@@ -39,7 +39,7 @@ class MigrationManager(object):
          - migration_registry: where we should find all migrations to
            run
         """
-        self.name = name
+        self.name = unicode(name)
         self.models = models
         self.session = session
         self.migration_registry = migration_registry
@@ -217,9 +217,9 @@ class MigrationManager(object):
                     u'   + Running migration %s, "%s"... ' % (
                         migration_number, migration_func.func_name))
                 migration_func(self.session)
+                self.set_current_migration(migration_number)
                 self.printer('done.\n')
 
-            self.set_current_migration()
             return u'migrated'
 
         # Otherwise return None.  Well it would do this anyway, but
@@ -297,17 +297,17 @@ def media_entries_for_tag_slug(dummy_db, tag_slug):
             & (Tag.slug == tag_slug))
 
 
-def clean_orphan_tags():
+def clean_orphan_tags(commit=True):
+    """Search for unused MediaTags and delete them"""
     q1 = Session.query(Tag).outerjoin(MediaTag).filter(MediaTag.id==None)
     for t in q1:
         Session.delete(t)
-
     # The "let the db do all the work" version:
     # q1 = Session.query(Tag.id).outerjoin(MediaTag).filter(MediaTag.id==None)
     # q2 = Session.query(Tag).filter(Tag.id.in_(q1))
     # q2.delete(synchronize_session = False)
-
-    Session.commit()
+    if commit:
+        Session.commit()
 
 
 def check_collection_slug_used(dummy_db, creator_id, slug, ignore_c_id):

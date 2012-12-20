@@ -8,6 +8,7 @@ variety of different ways and this software wouldn't exist without them.
 Thank you!
 
 * Aaron Williamson
+* Aeva Ntsc
 * Alejandro Villanueva
 * Aleksandar Micovic
 * Alex Camelio
@@ -17,12 +18,15 @@ Thank you!
 * Chris Moylan
 * Christopher Allan Webber
 * Daniel Neel
+* Duncan Paterson
 * Deb Nicholson
 * Elrond of Samba TNG
+* Emily O'Leary
 * Jakob Kramer
 * Jef van Schendel
 * Joar Wandborg
 * Karen Rustad
+* Kuno Woudt
 * Mark Holmquist
 * Matt Lee
 * Nathan Yergler
@@ -36,3 +40,9 @@ Thank you!
 * Will Kahn-Greene
 
 If you think your name should be on this list, let us know!
+
+
+We also are currently borrowing an image in
+mediagoblin/static/images/media_thumbs/image.png from the wonderful
+people at http://tango.freedesktop.org/ which is in the public
+domain... thanks Tango folks!

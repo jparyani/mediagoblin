@@ -17,11 +17,14 @@
 import datetime
 
 from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
-                        Integer, Unicode, UnicodeText, DateTime, ForeignKey)
+                        Integer, Unicode, UnicodeText, DateTime,
+                        ForeignKey)
+from sqlalchemy.exc import ProgrammingError
+from sqlalchemy.ext.declarative import declarative_base
+from migrate.changeset.constraint import UniqueConstraint
 
 from mediagoblin.db.sql.util import RegisterMigration
-from mediagoblin.db.sql.models import MediaEntry, Collection, User, \
-        ProcessingMetaData
+from mediagoblin.db.sql.models import MediaEntry, Collection, User
 
 MIGRATIONS = {}
 
@@ -65,29 +68,45 @@ def add_transcoding_progress(db_conn):
     db_conn.commit()
 
 
+class Collection_v0(declarative_base()):
+    __tablename__ = "core__collections"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(Unicode, nullable=False)
+    slug = Column(Unicode)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now,
+        index=True)
+    description = Column(UnicodeText)
+    creator = Column(Integer, ForeignKey(User.id), nullable=False)
+    items = Column(Integer, default=0)
+
+class CollectionItem_v0(declarative_base()):
+    __tablename__ = "core__collection_items"
+
+    id = Column(Integer, primary_key=True)
+    media_entry = Column(
+        Integer, ForeignKey(MediaEntry.id), nullable=False, index=True)
+    collection = Column(Integer, ForeignKey(Collection.id), nullable=False)
+    note = Column(UnicodeText, nullable=True)
+    added = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    position = Column(Integer)
+
+    ## This should be activated, normally.
+    ## But this would change the way the next migration used to work.
+    ## So it's commented for now.
+    __table_args__ = (
+        UniqueConstraint('collection', 'media_entry'),
+        {})
+
+collectionitem_unique_constraint_done = False
+
 @RegisterMigration(4, MIGRATIONS)
 def add_collection_tables(db_conn):
-    metadata = MetaData(bind=db_conn.bind)
+    Collection_v0.__table__.create(db_conn.bind)
+    CollectionItem_v0.__table__.create(db_conn.bind)
 
-    collection = Table('core__collections', metadata,
-                       Column('id', Integer, primary_key=True),
-                       Column('title', Unicode, nullable=False),
-                       Column('slug', Unicode),
-                       Column('created', DateTime, nullable=False, default=datetime.datetime.now, index=True),
-                       Column('description', UnicodeText),
-                       Column('creator', Integer, ForeignKey(User.id), nullable=False),
-                       Column('items', Integer, default=0))
-
-    collection_item = Table('core__collection_items', metadata,
-                            Column('id', Integer, primary_key=True),
-                            Column('media_entry', Integer, ForeignKey(MediaEntry.id), nullable=False, index=True),
-                            Column('collection', Integer, ForeignKey(Collection.id), nullable=False),
-                            Column('note', UnicodeText, nullable=True),
-                            Column('added', DateTime, nullable=False, default=datetime.datetime.now),
-                            Column('position', Integer))
-
-    collection.create()
-    collection_item.create()
+    global collectionitem_unique_constraint_done
+    collectionitem_unique_constraint_done = True
 
     db_conn.commit()
 
@@ -104,15 +123,67 @@ def add_mediaentry_collected(db_conn):
     db_conn.commit()
 
 
+class ProcessingMetaData_v0(declarative_base()):
+    __tablename__ = 'core__processing_metadata'
+
+    id = Column(Integer, primary_key=True)
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False,
+            index=True)
+    callback_url = Column(Unicode)
+
 @RegisterMigration(6, MIGRATIONS)
 def create_processing_metadata_table(db):
-    metadata = MetaData(bind=db.bind)
-
-    metadata_table = Table('core__processing_metadata', metadata,
-            Column('id', Integer, primary_key=True),
-            Column('media_entry_id', Integer, ForeignKey(MediaEntry.id),
-                nullable=False, index=True),
-            Column('callback_url', Unicode))
-
-    metadata_table.create()
+    ProcessingMetaData_v0.__table__.create(db.bind)
     db.commit()
+
+
+# Okay, problem being:
+#  Migration #4 forgot to add the uniqueconstraint for the
+#  new tables. While creating the tables from scratch had
+#  the constraint enabled.
+#
+# So we have four situations that should end up at the same
+# db layout:
+#
+# 1. Fresh install.
+#    Well, easy. Just uses the tables in models.py
+# 2. Fresh install using a git version just before this migration
+#    The tables are all there, the unique constraint is also there.
+#    This migration should do nothing.
+#    But as we can't detect the uniqueconstraint easily,
+#    this migration just adds the constraint again.
+#    And possibly fails very loud. But ignores the failure.
+# 3. old install, not using git, just releases.
+#    This one will get the new tables in #4 (now with constraint!)
+#    And this migration is just skipped silently.
+# 4. old install, always on latest git.
+#    This one has the tables, but lacks the constraint.
+#    So this migration adds the constraint.
+@RegisterMigration(7, MIGRATIONS)
+def fix_CollectionItem_v0_constraint(db_conn):
+    """Add the forgotten Constraint on CollectionItem"""
+
+    global collectionitem_unique_constraint_done
+    if collectionitem_unique_constraint_done:
+        # Reset it. Maybe the whole thing gets run again
+        # For a different db?
+        collectionitem_unique_constraint_done = False
+        return
+
+    metadata = MetaData(bind=db_conn.bind)
+
+    CollectionItem_table = Table('core__collection_items',
+        metadata, autoload=True, autoload_with=db_conn.bind)
+
+    constraint = UniqueConstraint('collection', 'media_entry',
+        name='core__collection_items_collection_media_entry_key',
+        table=CollectionItem_table)
+
+    try:
+        constraint.create()
+    except ProgrammingError:
+        # User probably has an install that was run since the
+        # collection tables were added, so we don't need to run this migration.
+        pass
+
+    db_conn.commit()
