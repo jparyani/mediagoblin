@@ -172,99 +172,90 @@ def media_post_comment(request, media):
 @get_user_media_entry
 @require_active_login
 def media_collect(request, media):
+    """Add media to collection submission"""
 
     form = user_forms.MediaCollectForm(request.form)
-    filt = (request.db.Collection.creator == request.user.id)
-    form.collection.query = request.db.Collection.query.filter(
-            filt).order_by(request.db.Collection.title)
+    # A user's own collections:
+    form.collection.query = Collection.query.filter(
+        request.db.Collection.creator == request.user.id)\
+        .order_by(Collection.title)
 
-    if request.method == 'POST':
-        if form.validate():
-
-            collection = None
-            collection_item = request.db.CollectionItem()
-
-            # If the user is adding a new collection, use that
-            if request.form['collection_title']:
-                collection = request.db.Collection()
-                collection.id = ObjectId()
-
-                collection.title = (
-                    unicode(request.form['collection_title']))
-
-                collection.description = unicode(
-                        request.form.get('collection_description'))
-                collection.creator = request.user.id
-                collection.generate_slug()
-
-                # Make sure this user isn't duplicating an existing collection
-                existing_collection = request.db.Collection.find_one({
-                                        'creator': request.user.id,
-                                        'title': collection.title})
-
-                if existing_collection:
-                    messages.add_message(
-                        request, messages.ERROR,
-                        _('You already have a collection called "%s"!'
-                            % collection.title))
-
-                    return redirect(request, "mediagoblin.user_pages.media_home",
-                                    user=request.user.username,
-                                    media=media.id)
-
-                collection.save(validate=True)
-
-                collection_item.collection = collection.id
-            # Otherwise, use the collection selected from the drop-down
-            else:
-                collection = request.db.Collection.find_one({
-                    'id': request.form.get('collection')})
-                collection_item.collection = collection.id
-
-            # Make sure the user actually selected a collection
-            if not collection:
-                messages.add_message(
-                    request, messages.ERROR,
-                    _('You have to select or add a collection'))
-            # Check whether media already exists in collection
-            elif request.db.CollectionItem.find_one({
-                'media_entry': media.id,
-                'collection': collection_item.collection}):
-                messages.add_message(
-                    request, messages.ERROR,
-                    _('"%s" already in collection "%s"'
-                        % (media.title, collection.title)))
-            else:
-                collection_item.media_entry = media.id
-                collection_item.author = request.user.id
-                collection_item.note = unicode(request.form['note'])
-                collection_item.save(validate=True)
-
-                collection.items = collection.items + 1
-                collection.save(validate=True)
-
-                media.collected = media.collected + 1
-                media.save()
-
-                messages.add_message(
-                    request, messages.SUCCESS, _('"%s" added to collection "%s"'
-                        % (media.title, collection.title)))
-
-            return redirect(request, "mediagoblin.user_pages.media_home",
-                            user=media.get_uploader.username,
-                            media=media.id)
-        else:
-            messages.add_message(
-                request, messages.ERROR,
+    if request.method != 'POST' or not form.validate():
+        # No POST submission, or invalid form
+        if not form.validate():
+            messages.add_message(request, messages.ERROR,
                 _('Please check your entries and try again.'))
 
-    return render_to_response(
-        request,
-        'mediagoblin/user_pages/media_collect.html',
-        {'media': media,
-         'form': form})
+        return render_to_response(
+            request,
+            'mediagoblin/user_pages/media_collect.html',
+            {'media': media,
+             'form': form})
+
+    # If we are here, method=POST and the form is valid, submit things.
+    # If the user is adding a new collection, use that:
+    if request.form['collection_title']:
+        # Make sure this user isn't duplicating an existing collection
+        existing_collection = Collection.query.filter_by(
+                                creator=request.user.id,
+                                title=request.form['collection_title']).first()
+        if existing_collection:
+            messages.add_message(request, messages.ERROR,
+                _('You already have a collection called "%s"!'
+                  % collection.title))
+            return redirect(request, "mediagoblin.user_pages.media_home",
+                            user=request.user.username,
+                            media=media.id)
+
+        collection = Collection()
+        collection.title = request.form['collection_title']
+        collection.description = request.form.get('collection_description')
+        collection.creator = request.user.id
+        collection.generate_slug()
+        collection.save(validate=True)
+
+    # Otherwise, use the collection selected from the drop-down
+    else:
+        collection = Collection.query.filter_by(
+            id=request.form.get('collection')).first()
+
+    # Make sure the user actually selected a collection
+    if not collection:
+        messages.add_message(
+            request, messages.ERROR,
+            _('You have to select or add a collection'))
+
+    # Check whether media already exists in collection
+    elif CollectionItem.query.filter_by(
+        media_entry=media.id,
+        collection=collection.id).first():
+        messages.add_message(request, messages.ERROR,
+            _('"%s" already in collection "%s"'
+                % (media.title, collection.title)))
+    else: # Add item to collection
+        collection_item = request.db.CollectionItem()
+        collection_item.collection = collection.id
+        collection_item.media_entry = media.id
+        collection_item.author = request.user.id
+        collection_item.note = request.form['note']
+        collection_item.save(validate=True)
+
+        collection.items = collection.items + 1
+        collection.save(validate=True)
+
+        media.collected = media.collected + 1
+        media.save()
+
+        messages.add_message(request, messages.SUCCESS,
+                             _('"%s" added to collection "%s"'
+                               % (media.title, collection.title)))
+
+    return redirect(request, "mediagoblin.user_pages.media_home",
+                    user=media.get_uploader.username,
+                    media=media.id)
 
 
+#TODO: Why does @user_may_delete_media not implicate @require_active_login?
 @get_user_media_entry
 @require_active_login
 @user_may_delete_media
