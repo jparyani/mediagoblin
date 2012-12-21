@@ -19,7 +19,8 @@ import datetime
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.util import DESCENDING, ObjectId
-from mediagoblin.db.sql.models import MediaEntry, Collection, CollectionItem
+from mediagoblin.db.sql.models import (MediaEntry, Collection, CollectionItem,
+                                       User)
 from mediagoblin.tools.response import render_to_response, render_404, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
@@ -41,8 +42,10 @@ _log.setLevel(logging.DEBUG)
 @uses_pagination
 def user_home(request, page):
     """'Homepage' of a User()"""
-    user = request.db.User.find_one({
-            'username': request.matchdict['user']})
+    # TODO: decide if we only want homepages for active users, we can
+    # then use the @get_active_user decorator and also simplify the
+    # template html.
+    user = User.query.filter_by(username=request.matchdict['user']).first()
     if not user:
         return render_404(request)
     elif user.status != u'active':
@@ -51,9 +54,8 @@ def user_home(request, page):
             'mediagoblin/user_pages/user.html',
             {'user': user})
 
-    cursor = request.db.MediaEntry.find(
-        {'uploader': user.id,
-         'state': u'processed'}).sort('created', DESCENDING)
+    cursor = MediaEntry.query.filter_by(uploader = user.id).\
+        filter_by(state = u'processed').sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)
     media_entries = pagination()
@@ -82,6 +84,7 @@ def user_gallery(request, page, url_user=None):
     cursor = MediaEntry.query.filter_by(
         uploader=url_user.id,
         state=u'processed').order_by(MediaEntry.created.desc())
+
     # Paginate gallery
     pagination = Pagination(page, cursor)
     media_entries = pagination()
@@ -107,7 +110,7 @@ def media_home(request, media, page, **kwargs):
     """
     'Homepage' of a MediaEntry()
     """
-    if ObjectId(request.matchdict.get('comment')):
+    if request.matchdict.get('comment', None):
         pagination = Pagination(
             page, media.get_comments(
                 mg_globals.app_config['comments_ascending']),
@@ -437,18 +440,15 @@ def atom_feed(request):
     """
     generates the atom feed with the newest images
     """
-
-    user = request.db.User.find_one({
-               'username': request.matchdict['user'],
-               'status': u'active'})
+    user = User.query.filter(User.username==request.matchdict['user']).\
+        filter(User.status == u'active').first()
     if not user:
         return render_404(request)
 
-    cursor = request.db.MediaEntry.find({
-                 'uploader': user.id,
-                 'state': u'processed'}) \
-                 .sort('created', DESCENDING) \
-                 .limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
+    cursor = MediaEntry.query.filter_by(MediaEntry.uploader == user.id).\
+                 filter_by(MediaEntry.state == u'processed').\
+                 sort('created', DESCENDING).\
+                 limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
     """
     ATOM feed id is a tag URI (see http://en.wikipedia.org/wiki/Tag_URI)
@@ -501,20 +501,18 @@ def collection_atom_feed(request):
     """
     generates the atom feed with the newest images from a collection
     """
-
-    user = request.db.User.find_one({
-               'username': request.matchdict['user'],
-               'status': u'active'})
+    user = User.query.filter(User.username == request.matchdict['user']).\
+        filter_by(User.status == u'active').first()
     if not user:
         return render_404(request)
 
-    collection = request.db.Collection.find_one({
-               'creator': user.id,
-               'slug': request.matchdict['collection']})
+    collection = Collection.query.filter_by(
+               creator=user.id,
+               slug=request.matchdict['collection']).first()
 
-    cursor = request.db.CollectionItem.find({
-                 'collection': collection.id}) \
-                 .sort('added', DESCENDING) \
+    cursor = CollectionItem.query.filter_by(
+                 collection=collection.id) \
+                 .sort(CollectionItem.added.desc()) \
                  .limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
     """
@@ -572,44 +570,37 @@ def processing_panel(request):
     Show to the user what media is still in conversion/processing...
     and what failed, and why!
     """
-    # Get the user
-    user = request.db.User.find_one(
-        {'username': request.matchdict['user'],
-         'status': u'active'})
-
-    # Make sure the user exists and is active
-    if not user:
-        return render_404(request)
-    elif user.status != u'active':
-        return render_to_response(
-            request,
-            'mediagoblin/user_pages/user.html',
-            {'user': user})
-
-    # XXX: Should this be a decorator?
+    user = User.query.filter_by(username=request.matchdict['user']).first()
+    # TODO: XXX: Should this be a decorator?
     #
     # Make sure we have permission to access this user's panel.  Only
     # admins and this user herself should be able to do so.
-    if not (user.id == request.user.id
+    if not (user == request.user
             or request.user.is_admin):
-        # No?  Let's simply redirect to this user's homepage then.
+        # No?  Simply redirect to this user's homepage.
+        print user
+        print request.user
         return redirect(
             request, 'mediagoblin.user_pages.user_home',
-            user=request.matchdict['user'])
+            user=user.username)
 
     # Get media entries which are in-processing
-    processing_entries = request.db.MediaEntry.find(
-        {'uploader': user.id,
-         'state': u'processing'}).sort('created', DESCENDING)
+    processing_entries = MediaEntry.query.\
+        filter(MediaEntry.uploader == user.id).\
+        filter(MediaEntry.state == u'processing').\
+        order_by(MediaEntry.created.desc())
 
     # Get media entries which have failed to process
-    failed_entries = request.db.MediaEntry.find(
-        {'uploader': user.id,
-         'state': u'failed'}).sort('created', DESCENDING)
+    failed_entries = MediaEntry.query.\
+        filter(MediaEntry.uploader == user.id).\
+        filter(MediaEntry.state == u'failed').\
+        order_by(MediaEntry.created.desc())
 
-    processed_entries = request.db.MediaEntry.find(
-            {'uploader': user.id,
-                'state': u'processed'}).sort('created', DESCENDING).limit(10)
+    processed_entries = MediaEntry.query.\
+        filter(MediaEntry.uploader == user.id).\
+        filter(MediaEntry.state == u'processed').\
+        order_by(MediaEntry.created.desc()).\
+        limit(10)
 
     # Render to response
     return render_to_response(

@@ -27,6 +27,7 @@ add_route('mediagoblin.user_pages.media_confirm_delete',
           '/u/<string:user>/m/<string:media>/confirm-delete/',
           'mediagoblin.user_pages.views:media_confirm_delete')
 
+# Submission handling of new comments. TODO: only allow for POST methods
 add_route('mediagoblin.user_pages.media_post_comment',
           '/u/<string:user>/m/<string:media>/comment/add/',
           'mediagoblin.user_pages.views:media_post_comment')
