@@ -96,7 +96,6 @@ class MediaGoblinApp(object):
         self.url_map = url_map
 
         for route in PluginManager().get_routes():
-            _log.debug('adding plugin route: {0}'.format(route))
             add_route(*route)
 
         # set up staticdirector tool
