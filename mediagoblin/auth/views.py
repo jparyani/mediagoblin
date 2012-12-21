@@ -17,11 +17,10 @@
 import uuid
 import datetime
 
-from mediagoblin import messages
-from mediagoblin import mg_globals
+from mediagoblin import messages, mg_globals
+from mediagoblin.db.sql.models import User
 from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
-from mediagoblin.db.util import ObjectId, InvalidId
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.auth.lib import send_verification_email, \
@@ -61,10 +60,8 @@ def register(request):
         em_user, em_dom = unicode(request.form['email']).split("@", 1)
         em_dom = em_dom.lower()
         email = em_user + "@" + em_dom
-        users_with_username = request.db.User.find(
-            {'username': username}).count()
-        users_with_email = request.db.User.find(
-            {'email': email}).count()
+        users_with_username = User.query.filter_by(username=username).count()
+        users_with_email = User.query.filter_by(email=email).count()
 
         extra_validation_passes = True
 
@@ -79,7 +76,7 @@ def register(request):
 
         if extra_validation_passes:
             # Create the user
-            user = request.db.User()
+            user = User()
             user.username = username
             user.email = email
             user.pw_hash = auth_lib.bcrypt_gen_password_hash(
@@ -118,8 +115,7 @@ def login(request):
     login_failed = False
 
     if request.method == 'POST' and login_form.validate():
-        user = request.db.User.find_one(
-            {'username': request.form['username'].lower()})
+        user = User.query.filter_by(username=request.form['username'].lower()).first()
 
         if user and user.check_login(request.form['password']):
             # set up login in session
@@ -164,8 +160,7 @@ def verify_email(request):
     if not 'userid' in request.GET or not 'token' in request.GET:
         return render_404(request)
 
-    user = request.db.User.find_one(
-        {'id': ObjectId(unicode(request.GET['userid']))})
+    user = User.query.filter_by(id=request.args['userid']).first()
 
     if user and user.verification_key == unicode(request.GET['token']):
         user.status = u'active'
@@ -240,11 +235,9 @@ def forgot_password(request):
     if request.method == 'POST' and fp_form.validate():
 
         # '$or' not available till mongodb 1.5.3
-        user = request.db.User.find_one(
-            {'username': request.form['username']})
+        user = User.query.filter_by(username=request.form['username']).first()
         if not user:
-            user = request.db.User.find_one(
-                {'email': request.form['username']})
+            user = User.query.filter_by(email=request.form['username']).first()
 
         if user:
             if user.email_verified and user.status == 'active':
@@ -303,11 +296,9 @@ def verify_forgot_password(request):
     formdata_userid = formdata['vars']['userid']
     formdata_vars = formdata['vars']
 
-    # check if it's a valid Id
-    try:
-        user = request.db.User.find_one(
-            {'id': ObjectId(unicode(formdata_userid))})
-    except InvalidId:
+    # check if it's a valid user id
+    user = User.query.filter_by(id=formdata_userid).first()
+    if not user:
         return render_404(request)
 
     # check if we have a real user and correct token
@@ -336,7 +327,7 @@ def verify_forgot_password(request):
                 'mediagoblin/auth/change_fp.html',
                 {'cp_form': cp_form})
 
-    # in case there is a valid id but no user whit that id in the db
+    # in case there is a valid id but no user with that id in the db
     # or the token expired
     else:
         return render_404(request)
