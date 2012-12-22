@@ -135,8 +135,8 @@ def api_auth(controller):
         auth_candidates = []
 
         for auth in PluginManager().get_hook_callables('auth'):
-            _log.debug('Plugin auth: {0}'.format(auth))
             if auth.trigger(request):
+                _log.debug('{0} believes it is capable of authenticating this request.'.format(auth))
                 auth_candidates.append(auth)
 
         # If we can't find any authentication methods, we should not let them
