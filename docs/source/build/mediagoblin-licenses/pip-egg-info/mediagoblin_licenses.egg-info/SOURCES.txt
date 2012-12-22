@@ -1,6 +1,0 @@
-README
-mediagoblin_licenses/__init__.py
-pip-egg-info/mediagoblin_licenses.egg-info/PKG-INFO
-pip-egg-info/mediagoblin_licenses.egg-info/SOURCES.txt
-pip-egg-info/mediagoblin_licenses.egg-info/dependency_links.txt
-pip-egg-info/mediagoblin_licenses.egg-info/top_level.txt
