@@ -63,6 +63,25 @@ def render_404(request):
     return render_error(request, 404, err_msg=err_msg)
 
 
+def render_http_exception(request, exc, description):
+    """Return Response() given a werkzeug.HTTPException
+
+    :param exc: werkzeug.HTTPException or subclass thereof
+    :description: message describing the error."""
+    # If we were passed the HTTPException stock description on
+    # exceptions where we have localized ones, use those:
+    stock_desc = (description == exc.__class__.description)
+
+    if stock_desc and exc.code == 403:
+        return render_403(request)
+    elif stock_desc and exc.code == 404:
+        return render_404(request)
+
+    return render_error(request, title=exc.args[0],
+                        err_msg=description,
+                        status=exc.code)
+
+
 def redirect(request, *args, **kwargs):
     """Redirects to an URL, using urlgen params or location string
 

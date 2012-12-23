@@ -24,7 +24,7 @@ from werkzeug.exceptions import HTTPException, NotFound
 
 from mediagoblin import meddleware, __version__
 from mediagoblin.tools import common, translate, template
-from mediagoblin.tools.response import render_404
+from mediagoblin.tools.response import render_http_exception
 from mediagoblin.tools.theme import register_themes
 from mediagoblin.tools import request as mg_request
 from mediagoblin.mg_globals import setup_globals
@@ -188,12 +188,11 @@ class MediaGoblinApp(object):
         try:
             endpoint, url_values = map_adapter.match()
             request.matchdict = url_values
-        except NotFound as exc:
-            return render_404(request)(environ, start_response)
         except HTTPException as exc:
-            # exceptions that match() is documented to return:
-            # MethodNotAllowed, RequestRedirect TODO: need to handle ???
-            return exc(environ, start_response)
+            # Stop and render exception
+            return render_http_exception(
+                request, exc,
+                exc.get_description(environ))(environ, start_response)
 
         view_func = view_functions[endpoint]
 
@@ -209,19 +208,32 @@ class MediaGoblinApp(object):
             controller = view_func
 
         # pass the request through our meddleware classes
-        for m in self.meddleware:
-            response = m.process_request(request, controller)
-            if response is not None:
-                return response(environ, start_response)
+        try:
+            for m in self.meddleware:
+                response = m.process_request(request, controller)
+                if response is not None:
+                    return response(environ, start_response)
+        except HTTPException as e:
+            return render_http_exception(
+                request, e,
+                e.get_description(environ))(environ, start_response)
 
         request.start_response = start_response
 
-        # get the response from the controller
-        response = controller(request)
+        # get the Http response from the controller
+        try:
+            response = controller(request)
+        except HTTPException as e:
+            response = render_http_exception(
+                request, e, e.get_description(environ))
 
-        # pass the response through the meddleware
-        for m in self.meddleware[::-1]:
-            m.process_response(request, response)
+        # pass the response through the meddlewares
+        try:
+            for m in self.meddleware[::-1]:
+                m.process_response(request, response)
+        except HTTPException as e:
+            response = render_http_exeption(
+                request, e, e.get_description(environ))
 
         return response(environ, start_response)
 
