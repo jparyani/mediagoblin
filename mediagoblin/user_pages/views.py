@@ -54,8 +54,9 @@ def user_home(request, page):
             'mediagoblin/user_pages/user.html',
             {'user': user})
 
-    cursor = MediaEntry.query.filter_by(uploader = user.id).\
-        filter_by(state = u'processed').sort('created', DESCENDING)
+    cursor = MediaEntry.query.\
+        filter_by(uploader = user.id,
+                  state = u'processed').sort('created', DESCENDING)
 
     pagination = Pagination(page, cursor)
     media_entries = pagination()
@@ -179,9 +180,8 @@ def media_collect(request, media):
 
     form = user_forms.MediaCollectForm(request.form)
     # A user's own collections:
-    form.collection.query = Collection.query.filter(
-        request.db.Collection.creator == request.user.id)\
-        .order_by(Collection.title)
+    form.collection.query = Collection.query.filter_by(
+        creator = request.user.id).order_by(Collection.title)
 
     if request.method != 'POST' or not form.validate():
         # No POST submission, or invalid form
@@ -440,15 +440,17 @@ def atom_feed(request):
     """
     generates the atom feed with the newest images
     """
-    user = User.query.filter(User.username==request.matchdict['user']).\
-        filter(User.status == u'active').first()
+    user = User.query.filter_by(
+        username = request.matchdict['user'],
+        status = u'active').first()
     if not user:
         return render_404(request)
 
-    cursor = MediaEntry.query.filter_by(MediaEntry.uploader == user.id).\
-                 filter_by(MediaEntry.state == u'processed').\
-                 sort('created', DESCENDING).\
-                 limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
+    cursor = MediaEntry.query.filter_by(
+        uploader = user.id,
+        state = u'processed').\
+        sort('created', DESCENDING).\
+        limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
     """
     ATOM feed id is a tag URI (see http://en.wikipedia.org/wiki/Tag_URI)
@@ -501,8 +503,9 @@ def collection_atom_feed(request):
     """
     generates the atom feed with the newest images from a collection
     """
-    user = User.query.filter(User.username == request.matchdict['user']).\
-        filter_by(User.status == u'active').first()
+    user = User.query.filter_by(
+        username = request.matchdict['user'],
+        status = u'active').first()
     if not user:
         return render_404(request)
 
@@ -586,19 +589,19 @@ def processing_panel(request):
 
     # Get media entries which are in-processing
     processing_entries = MediaEntry.query.\
-        filter(MediaEntry.uploader == user.id).\
-        filter(MediaEntry.state == u'processing').\
+        filter_by(uploader = user.id,
+                  state = u'processing').\
         order_by(MediaEntry.created.desc())
 
     # Get media entries which have failed to process
     failed_entries = MediaEntry.query.\
-        filter(MediaEntry.uploader == user.id).\
-        filter(MediaEntry.state == u'failed').\
+        filter_by(uploader = user.id,
+                  state = u'failed').\
         order_by(MediaEntry.created.desc())
 
     processed_entries = MediaEntry.query.\
-        filter(MediaEntry.uploader == user.id).\
-        filter(MediaEntry.state == u'processed').\
+        filter_by(uploader = user.id,
+                  state = u'processed').\
         order_by(MediaEntry.created.desc()).\
         limit(10)
 
