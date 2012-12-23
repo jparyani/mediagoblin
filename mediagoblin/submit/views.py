@@ -29,7 +29,6 @@ _log = logging.getLogger(__name__)
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 
-from mediagoblin.db.util import ObjectId
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import render_to_response, redirect
@@ -66,7 +65,6 @@ def submit_start(request):
 
                 # create entry and save in database
                 entry = request.db.MediaEntry()
-                entry.id = ObjectId()
                 entry.media_type = unicode(media_type)
                 entry.title = (
                     unicode(request.form['title'])
@@ -193,10 +191,8 @@ def add_collection(request, media=None):
     if request.method == 'POST' and submit_form.validate():
         try:
             collection = request.db.Collection()
-            collection.id = ObjectId()
 
             collection.title = unicode(request.form['title'])
-
             collection.description = unicode(request.form.get('description'))
             collection.creator = request.user.id
             collection.generate_slug()

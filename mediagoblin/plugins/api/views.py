@@ -25,7 +25,6 @@ from werkzeug.utils import secure_filename
 from werkzeug.wrappers import Response
 from celery import registry
 
-from mediagoblin.db.util import ObjectId
 from mediagoblin.decorators import require_active_login
 from mediagoblin.processing import mark_entry_failed
 from mediagoblin.processing.task import ProcessMedia
@@ -61,7 +60,6 @@ def post_entry(request):
     media_type, media_manager = sniff_media(media_file)
 
     entry = request.db.MediaEntry()
-    entry.id = ObjectId()
     entry.media_type = unicode(media_type)
     entry.title = unicode(request.form.get('title')
             or splitext(media_file.filename)[0])
