@@ -48,13 +48,13 @@ def post_entry(request):
 
     if request.method != 'POST':
         _log.debug('Must POST against post_entry')
-        return BadRequest()
+        raise BadRequest()
 
     if not 'file' in request.files \
             or not isinstance(request.files['file'], FileStorage) \
             or not request.files['file'].stream:
         _log.debug('File field not found')
-        return BadRequest()
+        raise BadRequest()
 
     media_file = request.files['file']
 
@@ -130,7 +130,7 @@ def post_entry(request):
 @api_auth
 def api_test(request):
     if not request.user:
-        return Forbidden()
+        raise Forbidden()
 
     user_data = {
             'username': request.user.username,

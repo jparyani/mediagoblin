@@ -142,7 +142,7 @@ def api_auth(controller):
         # If we can't find any authentication methods, we should not let them
         # pass.
         if not auth_candidates:
-            return Forbidden()
+            raise Forbidden()
 
         # For now, just select the first one in the list
         auth = auth_candidates[0]
@@ -156,7 +156,7 @@ def api_auth(controller):
                         'status': 403,
                         'errors': auth.errors})
 
-            return Forbidden()
+            raise Forbidden()
 
         return controller(request, *args, **kw)
 

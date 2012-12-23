@@ -41,7 +41,7 @@ import mimetypes
 @require_active_login
 def edit_media(request, media):
     if not may_edit_media(request, media):
-        return Forbidden("User may not edit this media")
+        raise Forbidden("User may not edit this media")
 
     defaults = dict(
         title=media.title,
@@ -165,7 +165,7 @@ def edit_attachments(request, media):
             {'media': media,
              'form': form})
     else:
-        return Forbidden("Attachments are disabled")
+        raise Forbidden("Attachments are disabled")
 
 
 @require_active_login

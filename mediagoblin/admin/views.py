@@ -14,10 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from werkzeug.exceptions import Forbidden
+
 from mediagoblin.db.util import DESCENDING
 from mediagoblin.decorators import require_active_login
-from mediagoblin.tools.response import (render_to_response, render_403,
-                                        render_404)
+from mediagoblin.tools.response import render_to_response
 
 @require_active_login
 def admin_processing_panel(request):
@@ -26,7 +27,7 @@ def admin_processing_panel(request):
     '''
     # TODO: Why not a "require_admin_login" decorator throwing a 403 exception?
     if not request.user.is_admin:
-        return render_403(request)
+        raise Forbidden()
 
     processing_entries = request.db.MediaEntry.find(
         {'state': u'processing'}).sort('created', DESCENDING)

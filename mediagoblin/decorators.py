@@ -74,7 +74,7 @@ def user_may_delete_media(controller):
             {'id': ObjectId(request.matchdict['media'])}).uploader
         if not (request.user.is_admin or
                 request.user.id == uploader_id):
-            return Forbidden()
+            raise Forbidden()
 
         return controller(request, *args, **kwargs)
 
@@ -91,7 +91,7 @@ def user_may_alter_collection(controller):
             {'username': request.matchdict['user']}).id
         if not (request.user.is_admin or
                 request.user.id == creator_id):
-            return Forbidden()
+            raise Forbidden()
 
         return controller(request, *args, **kwargs)
 

@@ -130,7 +130,7 @@ class CsrfMeddleware(BaseMeddleware):
             # the CSRF cookie must be present in the request
             errstr = 'CSRF cookie not present'
             _log.error(errstr)
-            return Forbidden(errstr)
+            raise Forbidden(errstr)
 
         # get the form token and confirm it matches
         form = CsrfForm(request.form)
@@ -145,4 +145,4 @@ class CsrfMeddleware(BaseMeddleware):
         # present; either way, the request is denied
         errstr = 'CSRF validation failed'
         _log.error(errstr)
-        return Forbidden(errstr)
+        raise Forbidden(errstr)
