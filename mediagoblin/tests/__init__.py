@@ -25,6 +25,10 @@ from mediagoblin.tests.tools import (
 def setup_package():
     suicide_if_bad_celery_environ()
 
+    import warnings
+    from sqlalchemy.exc import SAWarning
+    warnings.simplefilter("error", SAWarning)
+
 
 def teardown_package():
     # Remove and reinstall user_dev directories
