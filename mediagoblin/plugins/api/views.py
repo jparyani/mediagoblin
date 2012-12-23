@@ -94,7 +94,7 @@ def post_entry(request):
     entry.queued_task_id = task_id
 
     # Save now so we have this data before kicking off processing
-    entry.save(validate=True)
+    entry.save()
 
     if request.form.get('callback_url'):
         metadata = request.db.ProcessingMetaData()

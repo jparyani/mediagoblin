@@ -82,7 +82,7 @@ def register(request):
             user.pw_hash = auth_lib.bcrypt_gen_password_hash(
                 request.form['password'])
             user.verification_key = unicode(uuid.uuid4())
-            user.save(validate=True)
+            user.save()
 
             # log the user in
             request.session['user_id'] = unicode(user.id)

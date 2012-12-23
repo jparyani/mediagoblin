@@ -112,7 +112,7 @@ def submit_start(request):
                 entry.queued_task_id = task_id
 
                 # Save now so we have this data before kicking off processing
-                entry.save(validate=True)
+                entry.save()
 
                 # Pass off to processing
                 #
@@ -210,7 +210,7 @@ def add_collection(request, media=None):
                 messages.add_message(
                     request, messages.ERROR, _('You already have a collection called "%s"!' % collection.title))
             else:
-                collection.save(validate=True)
+                collection.save()
 
                 add_message(request, SUCCESS, _('Collection "%s" added!' % collection.title))
 

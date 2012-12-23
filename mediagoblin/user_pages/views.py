@@ -215,7 +215,7 @@ def media_collect(request, media):
         collection.description = request.form.get('collection_description')
         collection.creator = request.user.id
         collection.generate_slug()
-        collection.save(validate=True)
+        collection.save()
 
     # Otherwise, use the collection selected from the drop-down
     else:
@@ -241,10 +241,10 @@ def media_collect(request, media):
         collection_item.media_entry = media.id
         collection_item.author = request.user.id
         collection_item.note = request.form['note']
-        collection_item.save(validate=True)
+        collection_item.save()
 
         collection.items = collection.items + 1
-        collection.save(validate=True)
+        collection.save()
 
         media.collected = media.collected + 1
         media.save()

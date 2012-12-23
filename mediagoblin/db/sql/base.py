@@ -61,8 +61,7 @@ class GMGTableBase(object):
         # The key *has* to exist on sql.
         return getattr(self, key)
 
-    def save(self, validate=True):
-        assert validate
+    def save(self):
         sess = object_session(self)
         if sess is None:
             sess = Session()
