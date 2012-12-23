@@ -41,7 +41,7 @@ class HTTPAuth(Auth):
             return False
 
         user = request.db.User.query.filter_by(
-                username=request.authorization['username']).first()
+                username=unicode(request.authorization['username'])).first()
 
         if user.check_login(request.authorization['password']):
             request.user = user

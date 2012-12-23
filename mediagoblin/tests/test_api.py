@@ -101,4 +101,4 @@ class TestAPI(object):
 
         assert response.status_int == 200
 
-        assert self.db.MediaEntry.query.filter_by(title='Great JPG!').first()
+        assert self.db.MediaEntry.query.filter_by(title=u'Great JPG!').first()
