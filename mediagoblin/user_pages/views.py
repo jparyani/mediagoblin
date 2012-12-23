@@ -578,11 +578,8 @@ def processing_panel(request):
     #
     # Make sure we have permission to access this user's panel.  Only
     # admins and this user herself should be able to do so.
-    if not (user == request.user
-            or request.user.is_admin):
+    if not (user.id == request.user.id or request.user.is_admin):
         # No?  Simply redirect to this user's homepage.
-        print user
-        print request.user
         return redirect(
             request, 'mediagoblin.user_pages.user_home',
             user=user.username)
