@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from mediagoblin.db.util import ObjectId, InvalidId
+from mediagoblin.db.util import ObjectId
 
 _log = logging.getLogger(__name__)
 
@@ -29,17 +29,11 @@ def setup_user_in_request(request):
         request.user = None
         return
 
-    try:
-        oid = ObjectId(request.session['user_id'])
-    except InvalidId:
-        user = None
-    else:
-        user = request.db.User.find_one({'id': oid})
+    request.user = User.query.get(request.session['user_id'])
 
-    if not user:
+    if not request.user:
         # Something's wrong... this user doesn't exist?  Invalidate
         # this session.
         _log.warn("Killing session for user id %r", request.session['user_id'])
         request.session.invalidate()
 
-    request.user = user

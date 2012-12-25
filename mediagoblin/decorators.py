@@ -20,7 +20,7 @@ from urlparse import urljoin
 from werkzeug.exceptions import Forbidden
 from werkzeug.urls import url_quote
 
-from mediagoblin.db.util import ObjectId, InvalidId
+from mediagoblin.db.util import ObjectId
 from mediagoblin.db.sql.models import User
 from mediagoblin.tools.response import redirect, render_404
 
@@ -134,14 +134,10 @@ def get_user_media_entry(controller):
 
         # no media via slug?  Grab it via ObjectId
         if not media:
-            try:
-                media = request.db.MediaEntry.find_one(
+            media = request.db.MediaEntry.find_one(
                     {'id': ObjectId(request.matchdict['media']),
                      'state': u'processed',
                      'uploader': user.id})
-            except InvalidId:
-                return render_404(request)
-
             # Still no media?  Okay, 404.
             if not media:
                 return render_404(request)
@@ -210,13 +206,9 @@ def get_media_entry_by_id(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        try:
-            media = request.db.MediaEntry.find_one(
+        media = request.db.MediaEntry.find_one(
                 {'id': ObjectId(request.matchdict['media']),
                  'state': u'processed'})
-        except InvalidId:
-            return render_404(request)
-
         # Still no media?  Okay, 404.
         if not media:
             return render_404(request)
