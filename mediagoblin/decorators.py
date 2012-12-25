@@ -20,8 +20,7 @@ from urlparse import urljoin
 from werkzeug.exceptions import Forbidden
 from werkzeug.urls import url_quote
 
-from mediagoblin.db.util import ObjectId
-from mediagoblin.db.sql.models import User
+from mediagoblin.db.sql.models import MediaEntry, User
 from mediagoblin.tools.response import redirect, render_404
 
 
@@ -70,8 +69,7 @@ def user_may_delete_media(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        uploader_id = request.db.MediaEntry.find_one(
-            {'id': ObjectId(request.matchdict['media'])}).uploader
+        uploader_id = MediaEntry.query.get(request.matchdict['media']).uploader
         if not (request.user.is_admin or
                 request.user.id == uploader_id):
             raise Forbidden()
@@ -132,12 +130,12 @@ def get_user_media_entry(controller):
              'state': u'processed',
              'uploader': user.id})
 
-        # no media via slug?  Grab it via ObjectId
+        # no media via slug?  Grab it via object id
         if not media:
-            media = request.db.MediaEntry.find_one(
-                    {'id': ObjectId(request.matchdict['media']),
-                     'state': u'processed',
-                     'uploader': user.id})
+            media = MediaEntry.query.filter_by(
+                    id=request.matchdict['media'],
+                    state=u'processed',
+                    uploader=user.id).first()
             # Still no media?  Okay, 404.
             if not media:
                 return render_404(request)
@@ -206,9 +204,9 @@ def get_media_entry_by_id(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        media = request.db.MediaEntry.find_one(
-                {'id': ObjectId(request.matchdict['media']),
-                 'state': u'processed'})
+        media = MediaEntry.query.filter_by(
+                id=request.matchdict['media'],
+                state=u'processed').first()
         # Still no media?  Okay, 404.
         if not media:
             return render_404(request)

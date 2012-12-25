@@ -15,6 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #TODO: check now after mongo removal if we can't rip out a layer of abstraction
-from mediagoblin.db.sql.fake import ObjectId, DESCENDING
+from mediagoblin.db.sql.fake import DESCENDING
 from mediagoblin.db.sql.util import atomic_update, check_media_slug_used, \
     media_entries_for_tag_slug, check_collection_slug_used

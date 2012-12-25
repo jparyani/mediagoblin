@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from mediagoblin.db.util import ObjectId
+from mediagoblin.db.sql.models import User
 
 _log = logging.getLogger(__name__)
 

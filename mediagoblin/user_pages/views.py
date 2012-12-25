@@ -18,7 +18,7 @@ import logging
 import datetime
 
 from mediagoblin import messages, mg_globals
-from mediagoblin.db.util import DESCENDING, ObjectId
+from mediagoblin.db.util import DESCENDING
 from mediagoblin.db.sql.models import (MediaEntry, Collection, CollectionItem,
                                        User)
 from mediagoblin.tools.response import render_to_response, render_404, redirect
@@ -116,7 +116,7 @@ def media_home(request, media, page, **kwargs):
             page, media.get_comments(
                 mg_globals.app_config['comments_ascending']),
             MEDIA_COMMENTS_PER_PAGE,
-            ObjectId(request.matchdict.get('comment')))
+            request.matchdict.get('comment'))
     else:
         pagination = Pagination(
             page, media.get_comments(

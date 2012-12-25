@@ -40,7 +40,7 @@ class Pagination(object):
          - page: requested page
          - per_page: number of objects per page
          - cursor: db cursor
-         - jump_to_id: ObjectId, sets the page to the page containing the
+         - jump_to_id: object id, sets the page to the page containing the
            object with id == jump_to_id.
         """
         self.page = page

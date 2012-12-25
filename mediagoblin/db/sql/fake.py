@@ -21,17 +21,8 @@ calm the rest of the code base. Or provide super minimal
 implementations.
 
 Currently:
-- ObjectId "class": It's a function mostly doing
-  int(init_arg) to convert string primary keys into
-  integer primary keys.
 - DESCENDING "constant"
 """
 
 
 DESCENDING = object()  # a unique object for this "constant"
-
-
-def ObjectId(value=None):
-    if value is None:
-        return None
-    return int(value)

@@ -19,7 +19,7 @@ import logging
 from celery.task import Task
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.util import ObjectId
+from mediagoblin.db.sql.models import MediaEntry
 from mediagoblin.processing import mark_entry_failed, BaseProcessingFail
 from mediagoblin.tools.processing import json_processing_callback
 
@@ -41,8 +41,7 @@ class ProcessMedia(Task):
         Pass the media entry off to the appropriate processing function
         (for now just process_image...)
         """
-        entry = mgg.database.MediaEntry.one(
-            {'id': ObjectId(media_id)})
+        entry = MediaEntry.query.get(media_id)
 
         # Try to process, and handle expected errors.
         try:
