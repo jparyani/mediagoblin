@@ -29,7 +29,10 @@ from mediagoblin.processing.task import ProcessMedia
 _log = logging.getLogger(__name__)
 
 
-def prepare_entry(request, entry, filename):
+def prepare_queue_task(app, entry, filename):
+    """
+    Prepare a MediaEntry for the processing queue and get a queue file
+    """
     # We generate this ourselves so we know what the taks id is for
     # retrieval later.
 
@@ -40,13 +43,13 @@ def prepare_entry(request, entry, filename):
     entry.queued_task_id = task_id
 
     # Now store generate the queueing related filename
-    queue_filepath = request.app.queue_store.get_unique_filepath(
+    queue_filepath = app.queue_store.get_unique_filepath(
         ['media_entries',
          task_id,
          secure_filename(filename)])
 
     # queue appropriately
-    queue_file = request.app.queue_store.get_file(
+    queue_file = app.queue_store.get_file(
         queue_filepath, 'wb')
 
     # Add queued filename to the entry

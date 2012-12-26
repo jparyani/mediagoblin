@@ -27,7 +27,7 @@ from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.media_types import sniff_media
 from mediagoblin.plugins.api.tools import api_auth, get_entry_serializable, \
         json_response
-from mediagoblin.submit.lib import prepare_entry, run_process_media
+from mediagoblin.submit.lib import prepare_queue_task, run_process_media
 
 _log = logging.getLogger(__name__)
 
@@ -68,7 +68,7 @@ def post_entry(request):
     entry.generate_slug()
 
     # queue appropriately
-    queue_file = prepare_entry(request, entry, media_file.filename)
+    queue_file = prepare_queue_task(request.app, entry, media_file.filename)
 
     with queue_file:
         queue_file.write(request.files['file'].stream.read())

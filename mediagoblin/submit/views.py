@@ -33,7 +33,7 @@ from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.media_types import sniff_media, \
     InvalidFileType, FileTypeNotSupported
 from mediagoblin.submit.lib import handle_push_urls, run_process_media, \
-    prepare_entry
+    prepare_queue_task
 
 
 @require_active_login
@@ -78,7 +78,7 @@ def submit_start(request):
                 # Generate a slug from the title
                 entry.generate_slug()
 
-                queue_file = prepare_entry(request, entry, filename)
+                queue_file = prepare_queue_task(request.app, entry, filename)
 
                 with queue_file:
                     queue_file.write(request.files['file'].stream.read())
