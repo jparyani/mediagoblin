@@ -92,10 +92,8 @@ def post_entry(request):
 
 
 @api_auth
+@require_active_login
 def api_test(request):
-    if not request.user:
-        raise Forbidden()
-
     user_data = {
             'username': request.user.username,
             'email': request.user.email}
