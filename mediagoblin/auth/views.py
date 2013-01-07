@@ -41,8 +41,10 @@ def email_debug_message(request):
 
 
 def register(request):
-    """
-    Your classic registration view!
+    """The registration view.
+
+    Note that usernames will always be lowercased. Email domains are lowercased while
+    the first part remains case-sensitive.
     """
     # Redirects to indexpage if registrations are disabled
     if not mg_globals.app_config["allow_registration"]:
@@ -56,12 +58,8 @@ def register(request):
 
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
-        username = unicode(request.form['username'].lower())
-        em_user, em_dom = unicode(request.form['email']).split("@", 1)
-        em_dom = em_dom.lower()
-        email = em_user + "@" + em_dom
-        users_with_username = User.query.filter_by(username=username).count()
-        users_with_email = User.query.filter_by(email=email).count()
+        users_with_username = User.query.filter_by(username=register_form.data['username']).count()
+        users_with_email = User.query.filter_by(email=register_form.data['email']).count()
 
         extra_validation_passes = True
 
@@ -77,8 +75,8 @@ def register(request):
         if extra_validation_passes:
             # Create the user
             user = User()
-            user.username = username
-            user.email = email
+            user.username = register_form.data['username']
+            user.email = register_form.data['email']
             user.pw_hash = auth_lib.bcrypt_gen_password_hash(
                 request.form['password'])
             user.verification_key = unicode(uuid.uuid4())
@@ -115,7 +113,7 @@ def login(request):
     login_failed = False
 
     if request.method == 'POST' and login_form.validate():
-        user = User.query.filter_by(username=request.form['username'].lower()).first()
+        user = User.query.filter_by(username=login_form.data['username']).first()
 
         if user and user.check_login(request.form['password']):
             # set up login in session
@@ -227,59 +225,66 @@ def forgot_password(request):
     """
     Forgot password view
 
-    Sends an email with an url to renew forgotten password
+    Sends an email with an url to renew forgotten password.
+    Use GET querystring parameter 'username' to pre-populate the input field
     """
     fp_form = auth_forms.ForgotPassForm(request.form,
-                                        username=request.GET.get('username'))
+                                        username=request.args.get('username'))
 
-    if request.method == 'POST' and fp_form.validate():
+    if not (request.method == 'POST' and fp_form.validate()):
+        # Either GET request, or invalid form submitted. Display the template
+        return render_to_response(request,
+            'mediagoblin/auth/forgot_password.html', {'fp_form': fp_form})
 
-        # '$or' not available till mongodb 1.5.3
-        user = User.query.filter_by(username=request.form['username']).first()
-        if not user:
-            user = User.query.filter_by(email=request.form['username']).first()
+    # If we are here: method == POST and form is valid. username casing
+    # has been sanitized. Store if a user was found by email. We should
+    # not reveal if the operation was successful then as we don't want to
+    # leak if an email address exists in the system.
+    found_by_email = '@' in request.form['username']
 
-        if user:
-            if user.email_verified and user.status == 'active':
-                user.fp_verification_key = unicode(uuid.uuid4())
-                user.fp_token_expire = datetime.datetime.now() + \
-                                          datetime.timedelta(days=10)
-                user.save()
+    if found_by_email:
+        user = User.query.filter_by(
+            email = request.form['username']).first()
+        # Don't reveal success in case the lookup happened by email address.
+        success_message=_("If that email address (case sensitive!) is "
+                          "registered an email has been sent with instructions "
+                          "on how to change your password.")
 
-                send_fp_verification_email(user, request)
+    else: # found by username
+        user = User.query.filter_by(
+            username = request.form['username']).first()
 
-                messages.add_message(
-                    request,
-                    messages.INFO,
-                    _("An email has been sent with instructions on how to "
-                      "change your password."))
-                email_debug_message(request)
-
-            else:
-                # special case... we can't send the email because the
-                # username is inactive / hasn't verified their email
-                messages.add_message(
-                    request,
-                    messages.WARNING,
-                    _("Could not send password recovery email as "
-                      "your username is inactive or your account's "
-                      "email address has not been verified."))
-
-                return redirect(
-                    request, 'mediagoblin.user_pages.user_home',
-                    user=user.username)
-            return redirect(request, 'mediagoblin.auth.login')
-        else:
-            messages.add_message(
-                request,
-                messages.WARNING,
-                _("Couldn't find someone with that username or email."))
+        if user is None:
+            messages.add_message(request,
+                                 messages.WARNING,
+                                 _("Couldn't find someone with that username."))
             return redirect(request, 'mediagoblin.auth.forgot_password')
 
-    return render_to_response(
-        request,
-        'mediagoblin/auth/forgot_password.html',
-        {'fp_form': fp_form})
+        success_message=_("An email has been sent with instructions "
+                          "on how to change your password.")
+
+    if user and not(user.email_verified and user.status == 'active'):
+        # Don't send reminder because user is inactive or has no verified email
+        messages.add_message(request,
+            messages.WARNING,
+            _("Could not send password recovery email as your username is in"
+              "active or your account's email address has not been verified."))
+
+        return redirect(request, 'mediagoblin.user_pages.user_home',
+                        user=user.username)
+
+    # SUCCESS. Send reminder and return to login page
+    if user:
+        user.fp_verification_key = unicode(uuid.uuid4())
+        user.fp_token_expire = datetime.datetime.now() + \
+                               datetime.timedelta(days=10)
+        user.save()
+
+        email_debug_message(request)
+        send_fp_verification_email(user, request)
+
+    messages.add_message(request, messages.INFO, success_message)
+    return redirect(request, 'mediagoblin.auth.login')
 
 
 def verify_forgot_password(request):

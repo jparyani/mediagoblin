@@ -105,10 +105,8 @@ def test_register_views(test_app):
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
     form = context['register_form']
 
-    assert form.username.errors == [
-        u'Field must be between 3 and 30 characters long.']
-    assert form.password.errors == [
-        u'Field must be between 6 and 30 characters long.']
+    assert_equal (form.username.errors, [u'Field must be between 3 and 30 characters long.'])
+    assert_equal (form.password.errors, [u'Field must be between 5 and 1024 characters long.'])
 
     ## bad form
     template.clear_test_template_context()
@@ -119,10 +117,8 @@ def test_register_views(test_app):
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
     form = context['register_form']
 
-    assert form.username.errors == [
-        u'Invalid input.']
-    assert form.email.errors == [
-        u'Invalid email address.']
+    assert_equal (form.username.errors, [u'This field does not take email addresses.'])
+    assert_equal (form.email.errors, [u'This field requires an email address.'])
 
     ## At this point there should be no users in the database ;)
     assert_equal(User.query.count(), 0)
@@ -370,7 +366,7 @@ def test_authentication_views():
     response = test_app.post(
         '/auth/login/', {
             'username': u'chris',
-            'password': 'jam'})
+            'password': 'jam_and_ham'})
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
     assert context['login_failed']
 
