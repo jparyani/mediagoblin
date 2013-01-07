@@ -19,7 +19,7 @@ import bcrypt
 
 from datetime import datetime, timedelta
 
-from mediagoblin.db.sql.base import Base
+from mediagoblin.db.base import Base
 from mediagoblin.db.models import User
 
 from sqlalchemy import (

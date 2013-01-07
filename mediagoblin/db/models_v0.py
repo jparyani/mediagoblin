@@ -32,8 +32,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
 
 from mediagoblin.db.extratypes import PathTupleWithSlashes, JSONEncoded
-from mediagoblin.db.sql.base import GMGTableBase
-from mediagoblin.db.sql.base import Session
+from mediagoblin.db.base import GMGTableBase, Session
 
 
 Base_v0 = declarative_base(cls=GMGTableBase)

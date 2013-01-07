@@ -28,7 +28,7 @@ from mediagoblin import mg_globals
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.db.open import setup_connection_and_db_from_config
-from mediagoblin.db.sql.base import Session
+from mediagoblin.db.base import Session
 from mediagoblin.meddleware import BaseMeddleware
 from mediagoblin.auth.lib import bcrypt_gen_password_hash
 from mediagoblin.gmg_commands.dbupdate import run_dbupdate
@@ -219,7 +219,6 @@ def fixture_add_user(username=u'chris', password='toast',
     test_user = mg_globals.database.User.find_one({'username': username})
 
     # ... and detach from session:
-    from mediagoblin.db.sql.base import Session
     Session.expunge(test_user)
 
     return test_user

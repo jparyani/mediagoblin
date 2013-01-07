@@ -32,9 +32,8 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
 
 from mediagoblin.db.extratypes import PathTupleWithSlashes, JSONEncoded
-from mediagoblin.db.sql.base import Base, DictReadAttrProxy
+from mediagoblin.db.base import Base, DictReadAttrProxy, Session
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin, CollectionMixin, CollectionItemMixin
-from mediagoblin.db.sql.base import Session
 
 # It's actually kind of annoying how sqlalchemy-migrate does this, if
 # I understand it right, but whatever.  Anyway, don't remove this :P

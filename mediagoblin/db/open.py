@@ -18,7 +18,7 @@
 from sqlalchemy import create_engine
 import logging
 
-from mediagoblin.db.sql.base import Base, Session
+from mediagoblin.db.base import Base, Session
 from mediagoblin import mg_globals
 
 _log = logging.getLogger(__name__)

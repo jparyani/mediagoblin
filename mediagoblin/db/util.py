@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import sys
-from mediagoblin.db.sql.base import Session
+from mediagoblin.db.base import Session
 from mediagoblin.db.models import MediaEntry, Tag, MediaTag, Collection
 
 from mediagoblin.tools.common import simple_printer

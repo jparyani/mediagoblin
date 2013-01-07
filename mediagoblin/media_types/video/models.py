@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from mediagoblin.db.sql.base import Base
+from mediagoblin.db.base import Base
 
 from sqlalchemy import (
     Column, Integer, SmallInteger, ForeignKey)
