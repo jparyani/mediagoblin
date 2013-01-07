@@ -14,8 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.db.util import media_entries_for_tag_slug, DESCENDING
-
+from mediagoblin.db.sql.models import MediaEntry
+from mediagoblin.db.util import media_entries_for_tag_slug
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.response import render_to_response
 from mediagoblin.decorators import uses_pagination
@@ -45,7 +45,7 @@ def tag_listing(request, page):
     tag_slug = request.matchdict[u'tag']
 
     cursor = media_entries_for_tag_slug(request.db, tag_slug)
-    cursor = cursor.sort('created', DESCENDING)
+    cursor = cursor.order_by(MediaEntry.created.desc())
 
     pagination = Pagination(page, cursor)
     media_entries = pagination()
@@ -71,7 +71,7 @@ def tag_atom_feed(request):
     tag_slug = request.matchdict[u'tag']
 
     cursor = media_entries_for_tag_slug(request.db, tag_slug)
-    cursor = cursor.sort('created', DESCENDING)
+    cursor = cursor.order_by(MediaEntry.created.desc())
     cursor = cursor.limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
     """

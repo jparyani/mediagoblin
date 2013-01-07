@@ -15,17 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin import mg_globals
+from mediagoblin.db.sql.models import MediaEntry
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.response import render_to_response
-from mediagoblin.db.util import DESCENDING
 from mediagoblin.decorators import uses_pagination
 
 
 
 @uses_pagination
 def root_view(request, page):
-    cursor = request.db.MediaEntry.find(
-        {u'state': u'processed'}).sort('created', DESCENDING)
+    cursor = MediaEntry.query.filter_by(state=u'processed').\
+        order_by(MediaEntry.created.desc())
 
     pagination = Pagination(page, cursor)
     media_entries = pagination()

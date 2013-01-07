@@ -18,9 +18,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker, object_session
 from sqlalchemy.orm.query import Query
-from sqlalchemy.sql.expression import desc
-from mediagoblin.db.sql.fake import DESCENDING
-
 
 def _get_query_model(query):
     cols = query.column_descriptions
@@ -29,10 +26,8 @@ def _get_query_model(query):
 
 
 class GMGQuery(Query):
-    def sort(self, key, direction):
+    def sort(self, key):
         key_col = getattr(_get_query_model(self), key)
-        if direction is DESCENDING:
-            key_col = desc(key_col)
         return self.order_by(key_col)
 
 

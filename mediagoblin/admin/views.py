@@ -16,7 +16,7 @@
 
 from werkzeug.exceptions import Forbidden
 
-from mediagoblin.db.util import DESCENDING
+from mediagoblin.db.sql.models import MediaEntry
 from mediagoblin.decorators import require_active_login
 from mediagoblin.tools.response import render_to_response
 
@@ -29,15 +29,15 @@ def admin_processing_panel(request):
     if not request.user.is_admin:
         raise Forbidden()
 
-    processing_entries = request.db.MediaEntry.find(
-        {'state': u'processing'}).sort('created', DESCENDING)
+    processing_entries = MediaEntry.query.filter_by(state = u'processing').\
+        order_by(MediaEntry.created.desc())
 
     # Get media entries which have failed to process
-    failed_entries = request.db.MediaEntry.find(
-        {'state': u'failed'}).sort('created', DESCENDING)
+    failed_entries = MediaEntry.query.filter_by(state = u'failed').\
+        order_by(MediaEntry.created.desc())
 
-    processed_entries = request.db.MediaEntry.find(
-            {'state': u'processed'}).sort('created', DESCENDING).limit(10)
+    processed_entries = MediaEntry.query.filter_by(state = u'processed').\
+        order_by(MediaEntry.created.desc()).limit(10)
 
     # Render to response
     return render_to_response(

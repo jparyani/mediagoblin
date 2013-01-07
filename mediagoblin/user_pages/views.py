@@ -18,7 +18,6 @@ import logging
 import datetime
 
 from mediagoblin import messages, mg_globals
-from mediagoblin.db.util import DESCENDING
 from mediagoblin.db.sql.models import (MediaEntry, Collection, CollectionItem,
                                        User)
 from mediagoblin.tools.response import render_to_response, render_404, redirect
@@ -56,7 +55,7 @@ def user_home(request, page):
 
     cursor = MediaEntry.query.\
         filter_by(uploader = user.id,
-                  state = u'processed').sort('created', DESCENDING)
+                  state = u'processed').order_by(MediaEntry.created.desc())
 
     pagination = Pagination(page, cursor)
     media_entries = pagination()
@@ -449,7 +448,7 @@ def atom_feed(request):
     cursor = MediaEntry.query.filter_by(
         uploader = user.id,
         state = u'processed').\
-        sort('created', DESCENDING).\
+        order_by(MediaEntry.created.desc()).\
         limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
     """
