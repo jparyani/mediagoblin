@@ -33,6 +33,12 @@ header {
   margin-right: auto;
 }
 
+@media screen and (max-width: 940px) {
+    header {
+        width: 100%;
+    }
+}
+
 footer {
   border-top: 1px solid #E4E4E4;
 }
