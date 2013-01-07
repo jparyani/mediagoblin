@@ -31,7 +31,7 @@ from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
 
-from mediagoblin.db.sql.extratypes import PathTupleWithSlashes, JSONEncoded
+from mediagoblin.db.extratypes import PathTupleWithSlashes, JSONEncoded
 from mediagoblin.db.sql.base import GMGTableBase
 from mediagoblin.db.sql.base import Session
 

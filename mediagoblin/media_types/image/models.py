@@ -20,7 +20,7 @@ from mediagoblin.db.sql.base import Base
 from sqlalchemy import (
     Column, Integer, Float, ForeignKey)
 from sqlalchemy.orm import relationship, backref
-from mediagoblin.db.sql.extratypes import JSONEncoded
+from mediagoblin.db.extratypes import JSONEncoded
 
 
 BACKREF_NAME = "image__media_data"
