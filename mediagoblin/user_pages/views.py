@@ -514,7 +514,7 @@ def collection_atom_feed(request):
 
     cursor = CollectionItem.query.filter_by(
                  collection=collection.id) \
-                 .sort(CollectionItem.added.desc()) \
+                 .order_by(CollectionItem.added.desc()) \
                  .limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
     """

@@ -17,21 +17,8 @@
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker, object_session
-from sqlalchemy.orm.query import Query
 
-def _get_query_model(query):
-    cols = query.column_descriptions
-    assert len(cols) == 1, "These functions work only on simple queries"
-    return cols[0]["type"]
-
-
-class GMGQuery(Query):
-    def sort(self, key):
-        key_col = getattr(_get_query_model(self), key)
-        return self.order_by(key_col)
-
-
-Session = scoped_session(sessionmaker(query_cls=GMGQuery))
+Session = scoped_session(sessionmaker())
 
 
 class GMGTableBase(object):
