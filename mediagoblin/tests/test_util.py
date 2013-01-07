@@ -70,13 +70,13 @@ I hope you like unit tests JUST AS MUCH AS I DO!"""
 I hope you like unit tests JUST AS MUCH AS I DO!"""
 
 def test_slugify():
-    assert url.slugify('a walk in the park') == 'a-walk-in-the-park'
-    assert url.slugify('A Walk in the Park') == 'a-walk-in-the-park'
-    assert url.slugify('a  walk in the park') == 'a-walk-in-the-park'
-    assert url.slugify('a walk in-the-park') == 'a-walk-in-the-park'
-    assert url.slugify('a w@lk in the park?') == 'a-w-lk-in-the-park'
-    assert url.slugify(u'a walk in the par\u0107') == 'a-walk-in-the-parc'
-    assert url.slugify(u'\u00E0\u0042\u00E7\u010F\u00EB\u0066') == 'abcdef'
+    assert url.slugify(u'a walk in the park') == u'a-walk-in-the-park'
+    assert url.slugify(u'A Walk in the Park') == u'a-walk-in-the-park'
+    assert url.slugify(u'a  walk in the park') == u'a-walk-in-the-park'
+    assert url.slugify(u'a walk in-the-park') == u'a-walk-in-the-park'
+    assert url.slugify(u'a w@lk in the park?') == u'a-w-lk-in-the-park'
+    assert url.slugify(u'a walk in the par\u0107') == u'a-walk-in-the-parc'
+    assert url.slugify(u'\u00E0\u0042\u00E7\u010F\u00EB\u0066') == u'abcdef'
 
 def test_locale_to_lower_upper():
     """
