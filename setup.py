@@ -53,13 +53,14 @@ setup(
         'jinja2',
         'sphinx',
         'Babel',
-        'translitcodec',
         'argparse',
         'webtest',
         'ConfigObj',
         'Markdown',
         'sqlalchemy>=0.7.0',
         'sqlalchemy-migrate',
+        ## This is optional!
+        # 'translitcodec',
         ## For now we're expecting that users will install this from
         ## their package managers.
         # 'lxml',
