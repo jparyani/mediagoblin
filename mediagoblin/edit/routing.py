@@ -16,7 +16,9 @@
 
 from mediagoblin.tools.routing import add_route
 
-add_route('mediagoblin.edit.profile', '/edit/profile/',
+add_route('mediagoblin.edit.profile', '/u/<string:user>/edit/',
     'mediagoblin.edit.views:edit_profile')
+add_route('mediagoblin.edit.legacy_edit_profile', '/edit/profile/',
+    'mediagoblin.edit.views:legacy_edit_profile')
 add_route('mediagoblin.edit.account', '/edit/account/',
     'mediagoblin.edit.views:edit_account')

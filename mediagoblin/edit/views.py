@@ -26,8 +26,8 @@ from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
-from mediagoblin.decorators import require_active_login, get_user_media_entry, \
-    user_may_alter_collection, get_user_collection
+from mediagoblin.decorators import (require_active_login, active_user_from_url,
+     get_user_media_entry,  user_may_alter_collection, get_user_collection)
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.text import (
@@ -167,20 +167,28 @@ def edit_attachments(request, media):
     else:
         raise Forbidden("Attachments are disabled")
 
+@require_active_login
+def legacy_edit_profile(request):
+    """redirect the old /edit/profile/?username=USER to /u/USER/edit/"""
+    username = request.GET.get('username') or request.user.username
+    return redirect(request, 'mediagoblin.edit.profile', user=username)
+
 
 @require_active_login
-def edit_profile(request):
-    # admins may edit any user profile given a username in the querystring
-    edit_username = request.GET.get('username')
-    if request.user.is_admin and request.user.username != edit_username:
-        user = request.db.User.find_one({'username': edit_username})
+@active_user_from_url
+def edit_profile(request, url_user=None):
+    # admins may edit any user profile
+    if request.user.username != url_user.username:
+        if not request.user.is_admin:
+            raise Forbidden(_("You can only edit your own profile."))
+
         # No need to warn again if admin just submitted an edited profile
         if request.method != 'POST':
             messages.add_message(
                 request, messages.WARNING,
                 _("You are editing a user's profile. Proceed with caution."))
-    else:
-        user = request.user
+
+    user = url_user
 
     form = forms.EditProfileForm(request.form,
         url=user.get('url'),

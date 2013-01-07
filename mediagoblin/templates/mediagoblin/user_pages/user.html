@@ -95,9 +95,8 @@
           <p>
             {% trans %}Here's a spot to tell others about yourself.{% endtrans %}
           </p>
-          <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
-                            user.username }}"
-             class="button_action">
+          <a href="{{ request.urlgen('mediagoblin.edit.profile',
+                   user=user.username) }}" class="button_action">
             {%- trans %}Edit profile{% endtrans -%}
           </a>
       {% else %}
@@ -113,8 +112,8 @@
         {% include "mediagoblin/utils/profile.html" %}
         {% if request.user and
               (request.user.id == user.id or request.user.is_admin) %}
-          <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
-                          user.username }}">
+          <a href="{{ request.urlgen('mediagoblin.edit.profile',
+                   user=user.username) }}">
             {%- trans %}Edit profile{% endtrans -%}
           </a>
         {% endif %}
