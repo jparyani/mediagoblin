@@ -14,83 +14,104 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from nose.tools import assert_equal
+
 from mediagoblin import mg_globals
-from mediagoblin.tests.tools import setup_fresh_app, fixture_add_user
+from mediagoblin.db.models import User
+from mediagoblin.tests.tools import get_test_app, fixture_add_user
 from mediagoblin.tools import template
 from mediagoblin.auth.lib import bcrypt_check_password
 
+class TestUserEdit(object):
+    def setUp(self):
+        self.app = get_test_app(dump_old_app=False)
+        # set up new user
+        self.user_password = u'toast'
+        self.user = fixture_add_user(password = self.user_password)
+        self.login()
 
-@setup_fresh_app
-def test_change_password(test_app):
-    """Test changing password correctly and incorrectly"""
-    # set up new user
-    test_user = fixture_add_user()
-
-    test_app.post(
-        '/auth/login/', {
-            'username': u'chris',
-            'password': 'toast'})
-
-    # test that the password can be changed
-    # template.clear_test_template_context()
-    test_app.post(
-        '/edit/account/', {
-            'old_password': 'toast',
-            'new_password': '123456',
-            'wants_comment_notification': 'y'
-            })
-
-    # test_user has to be fetched again in order to have the current values
-    test_user = mg_globals.database.User.one({'username': u'chris'})
-
-    assert bcrypt_check_password('123456', test_user.pw_hash)
-
-    # test that the password cannot be changed if the given old_password
-    # is wrong
-    # template.clear_test_template_context()
-    test_app.post(
-        '/edit/account/', {
-            'old_password': 'toast',
-            'new_password': '098765',
-            })
-
-    test_user = mg_globals.database.User.one({'username': u'chris'})
-
-    assert not bcrypt_check_password('098765', test_user.pw_hash)
+    def login(self):
+        self.app.post(
+            '/auth/login/', {
+                'username': self.user.username,
+                'password': self.user_password})
 
 
-@setup_fresh_app
-def change_bio_url(test_app):
-    """Test changing bio and URL"""
-    # set up new user
-    test_user = fixture_add_user()
+    def test_change_password(self):
+        """Test changing password correctly and incorrectly"""
+        # test that the password can be changed
+        # template.clear_test_template_context()
+        res = self.app.post(
+            '/edit/account/', {
+                'old_password': 'toast',
+                'new_password': '123456',
+                'wants_comment_notification': 'y'
+                })
 
-    # test changing the bio and the URL properly
-    test_app.post(
-        '/edit/profile/', {
-            'bio': u'I love toast!',
-            'url': u'http://dustycloud.org/'})
+        # Check for redirect on success
+        assert_equal(res.status_int, 302)
+        # test_user has to be fetched again in order to have the current values
+        test_user = User.query.filter_by(username=u'chris').first()
+        assert bcrypt_check_password('123456', test_user.pw_hash)
+        # Update current user passwd
+        self.user_password = '123456'
 
-    test_user = mg_globals.database.User.one({'username': u'chris'})
+        # test that the password cannot be changed if the given
+        # old_password is wrong template.clear_test_template_context()
+        self.app.post(
+            '/edit/account/', {
+                'old_password': 'toast',
+                'new_password': '098765',
+                })
 
-    assert test_user.bio == u'I love toast!'
-    assert test_user.url == u'http://dustycloud.org/'
+        test_user = User.query.filter_by(username=u'chris').first()
+        assert not bcrypt_check_password('098765', test_user.pw_hash)
 
-    # test changing the bio and the URL inproperly
-    too_long_bio = 150 * 'T' + 150 * 'o' + 150 * 'a' + 150 * 's' + 150* 't'
 
-    test_app.post(
-        '/edit/profile/', {
-            # more than 500 characters
-            'bio': too_long_bio,
-            'url': 'this-is-no-url'})
 
-    test_user = mg_globals.database.User.one({'username': u'chris'})
+    def test_change_bio_url(self):
+        """Test changing bio and URL"""
+        # Test if legacy profile editing URL redirects correctly
+        res = self.app.post(
+            '/edit/profile/', {
+                'bio': u'I love toast!',
+                'url': u'http://dustycloud.org/'}, expect_errors=True)
 
-    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/edit/edit_profile.html']
-    form = context['edit_profile_form']
+        # Should redirect to /u/chris/edit/
+        assert_equal (res.status_int, 302)
+        assert res.headers['Location'].endswith("/u/chris/edit/")
 
-    assert form.bio.errors == [u'Field must be between 0 and 500 characters long.']
-    assert form.url.errors == [u'Improperly formed URL']
+        res = self.app.post(
+            '/u/chris/edit/', {
+                'bio': u'I love toast!',
+                'url': u'http://dustycloud.org/'})
 
-    # test changing the url inproperly
+        test_user = User.query.filter_by(username=u'chris').first()
+        assert_equal(test_user.bio, u'I love toast!')
+        assert_equal(test_user.url, u'http://dustycloud.org/')
+
+        # change a different user than the logged in (should fail with 403)
+        fixture_add_user(username=u"foo")
+        res = self.app.post(
+            '/u/foo/edit/', {
+                'bio': u'I love toast!',
+                'url': u'http://dustycloud.org/'}, expect_errors=True)
+        assert_equal(res.status_int, 403)
+
+        # test changing the bio and the URL inproperly
+        too_long_bio = 150 * 'T' + 150 * 'o' + 150 * 'a' + 150 * 's' + 150* 't'
+
+        self.app.post(
+            '/u/chris/edit/', {
+                # more than 500 characters
+                'bio': too_long_bio,
+                'url': 'this-is-no-url'})
+
+        # Check form errors
+        context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/edit/edit_profile.html']
+        form = context['form']
+
+        assert_equal(form.bio.errors, [u'Field must be between 0 and 500 characters long.'])
+        assert_equal(form.url.errors, [u'This address contains errors'])
+
+# test changing the url inproperly
