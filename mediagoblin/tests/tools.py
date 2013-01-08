@@ -25,6 +25,7 @@ from paste.deploy import loadapp
 from webtest import TestApp
 
 from mediagoblin import mg_globals
+from mediagoblin.db.models import User
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.db.open import setup_connection_and_db_from_config
@@ -202,9 +203,9 @@ def assert_db_meets_expected(db, expected):
             assert document == expected_document  # make sure it matches
 
 
-def fixture_add_user(username=u'chris', password='toast',
+def fixture_add_user(username=u'chris', password=u'toast',
                      active_user=True):
-    test_user = mg_globals.database.User()
+    test_user = User.query.filter_by(username=username).first() or User()
     test_user.username = username
     test_user.email = username + u'@example.com'
     if password is not None:
@@ -216,7 +217,7 @@ def fixture_add_user(username=u'chris', password='toast',
     test_user.save()
 
     # Reload
-    test_user = mg_globals.database.User.find_one({'username': username})
+    test_user = User.query.filter_by(username=username).first()
 
     # ... and detach from session:
     Session.expunge(test_user)
