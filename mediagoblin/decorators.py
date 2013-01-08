@@ -17,7 +17,7 @@
 from functools import wraps
 
 from urlparse import urljoin
-from werkzeug.exceptions import Forbidden
+from werkzeug.exceptions import Forbidden, NotFound
 from werkzeug.urls import url_quote
 
 from mediagoblin.db.models import MediaEntry, User
@@ -120,25 +120,29 @@ def get_user_media_entry(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        user = request.db.User.find_one(
-            {'username': request.matchdict['user']})
-
+        user = User.query.filter_by(username=request.matchdict['user']).first()
         if not user:
-            return render_404(request)
-        media = request.db.MediaEntry.find_one(
-            {'slug': request.matchdict['media'],
-             'state': u'processed',
-             'uploader': user.id})
+            raise NotFound()
 
-        # no media via slug?  Grab it via object id
+        media = MediaEntry.query.filter_by(
+            slug = request.matchdict['media'],
+            state = u'processed',
+            uploader = user.id).first()
+
         if not media:
-            media = MediaEntry.query.filter_by(
-                    id=request.matchdict['media'],
-                    state=u'processed',
-                    uploader=user.id).first()
-            # Still no media?  Okay, 404.
-            if not media:
-                return render_404(request)
+            # no media via slug?  Grab it via object id
+            try:
+                media = MediaEntry.query.filter_by(
+                    id = int(request.matchdict['media']),
+                    state = u'processed',
+                    uploader = user.id).first()
+            except ValueError:
+                # media "id" was no int
+                raise NotFound()
+
+        if not media:
+            # no media by that id? Okay, 404.
+            raise NotFound()
 
         return controller(request, media=media, *args, **kwargs)
 
