@@ -50,7 +50,7 @@ REQUEST_CONTEXT = ['mediagoblin/user_pages/user.html', 'request']
 
 class TestSubmission:
     def setUp(self):
-        self.test_app = get_test_app()
+        self.test_app = get_test_app(dump_old_app=False)
 
         # TODO: Possibly abstract into a decorator like:
         # @as_authenticated_user('chris')
@@ -132,11 +132,11 @@ class TestSubmission:
     def test_tags(self):
         # Good tag string
         # --------
-        response, request = self.do_post({'title': u'Balanced Goblin',
+        response, request = self.do_post({'title': u'Balanced Goblin 2',
                                           'tags': GOOD_TAG_STRING},
                                          *REQUEST_CONTEXT, do_follow=True,
                                          **self.upload_data(GOOD_JPG))
-        media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
+        media = self.check_media(request, {'title': u'Balanced Goblin 2'}, 1)
         assert media.tags[0]['name'] == u'yin'
         assert media.tags[0]['slug'] == u'yin'
 
@@ -145,7 +145,7 @@ class TestSubmission:
 
         # Test tags that are too long
         # ---------------
-        response, form = self.do_post({'title': u'Balanced Goblin',
+        response, form = self.do_post({'title': u'Balanced Goblin 2',
                                        'tags': BAD_TAG_STRING},
                                       *FORM_CONTEXT,
                                       **self.upload_data(GOOD_JPG))

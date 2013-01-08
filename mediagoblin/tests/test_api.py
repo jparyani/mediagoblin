@@ -44,7 +44,7 @@ BIG_BLUE = resource('bigblue.png')
 
 class TestAPI(object):
     def setUp(self):
-        self.app = get_test_app()
+        self.app = get_test_app(dump_old_app=False)
         self.db = mg_globals.database
 
         self.user_password = u'4cc355_70k3N'
