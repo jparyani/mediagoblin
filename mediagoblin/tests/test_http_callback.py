@@ -27,7 +27,7 @@ from mediagoblin.tests import test_oauth as oauth
 
 class TestHTTPCallback(object):
     def setUp(self):
-        self.app = get_test_app()
+        self.app = get_test_app(dump_old_app=False)
         self.db = mg_globals.database
 
         self.user_password = u'secret'

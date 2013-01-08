@@ -22,7 +22,7 @@ from nose.tools import assert_equal
 from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.db.models import User
-from mediagoblin.tests.tools import setup_fresh_app, fixture_add_user
+from mediagoblin.tests.tools import get_test_app, fixture_add_user
 from mediagoblin.tools import template, mail
 
 
@@ -67,11 +67,11 @@ def test_bcrypt_gen_password_hash():
         'notthepassword', hashed_pw, '3><7R45417')
 
 
-@setup_fresh_app
-def test_register_views(test_app):
+def test_register_views():
     """
     Massive test function that all our registration-related views all work.
     """
+    test_app = get_test_app(dump_old_app=False)
     # Test doing a simple GET on the page
     # -----------------------------------
 
@@ -311,11 +311,11 @@ def test_register_views(test_app):
         'mediagoblin/root.html')
 
 
-@setup_fresh_app
-def test_authentication_views(test_app):
+def test_authentication_views():
     """
     Test logging in and logging out
     """
+    test_app = get_test_app(dump_old_app=False)
     # Make a new user
     test_user = fixture_add_user(active_user=False)
 
