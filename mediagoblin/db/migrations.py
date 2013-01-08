@@ -23,7 +23,7 @@ from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.declarative import declarative_base
 from migrate.changeset.constraint import UniqueConstraint
 
-from mediagoblin.db.sql.migration_tools import RegisterMigration, inspect_table
+from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
 from mediagoblin.db.models import MediaEntry, Collection, User
 
 MIGRATIONS = {}
