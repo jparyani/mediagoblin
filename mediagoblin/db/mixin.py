@@ -56,15 +56,22 @@ class MediaEntryMixin(object):
         # (db.models -> db.mixin -> db.util -> db.models)
         from mediagoblin.db.util import check_media_slug_used
 
-        self.slug = slugify(self.title)
+        #Is already a slug assigned? Check if it is valid
+        if self.slug:
+            self.slug = slugify(self.slug)
+        elif self.title:
+            #assign slug based on title
+            self.slug = slugify(self.title)
+        elif self.id:
+            # Does the object already have an ID? (after adding to the session)
+            self.slug = unicode(self.id)
+        else:
+            # Everything else failed, just use random garbage
+            self.slug = unicode(uuid4())[1:4]
 
-        duplicate = check_media_slug_used(self.uploader, self.slug, self.id)
-
-        if duplicate:
-            if self.id is not None:
-                self.slug = u"%s-%s" % (self.id, self.slug)
-            else:
-                self.slug = None
+        while check_media_slug_used(self.uploader, self.slug, self.id):
+            # add garbage till it's unique
+            self.slug = self.slug + unicode(uuid4())[1:4]
 
     @property
     def description_html(self):
