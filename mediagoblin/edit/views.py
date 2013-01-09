@@ -57,8 +57,8 @@ def edit_media(request, media):
     if request.method == 'POST' and form.validate():
         # Make sure there isn't already a MediaEntry with such a slug
         # and userid.
-        slug_used = check_media_slug_used(request.db, media.uploader,
-                request.form['slug'], media.id)
+        slug_used = check_media_slug_used(media.uploader, request.form['slug'],
+                                          media.id)
 
         if slug_used:
             form.slug.errors.append(

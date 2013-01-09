@@ -58,8 +58,7 @@ class MediaEntryMixin(object):
 
         self.slug = slugify(self.title)
 
-        duplicate = check_media_slug_used(mg_globals.database,
-            self.uploader, self.slug, self.id)
+        duplicate = check_media_slug_used(self.uploader, self.slug, self.id)
 
         if duplicate:
             if self.id is not None:

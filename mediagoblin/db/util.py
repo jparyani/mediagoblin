@@ -29,12 +29,11 @@ def atomic_update(table, query_dict, update_values):
     Session.commit()
 
 
-def check_media_slug_used(dummy_db, uploader_id, slug, ignore_m_id):
-    filt = (MediaEntry.uploader == uploader_id) \
-        & (MediaEntry.slug == slug)
+def check_media_slug_used(uploader_id, slug, ignore_m_id):
+    query = MediaEntry.query.filter_by(uploader=uploader_id, slug=slug)
     if ignore_m_id is not None:
-        filt = filt & (MediaEntry.id != ignore_m_id)
-    does_exist = Session.query(MediaEntry.id).filter(filt).first() is not None
+        query = query.filter(MediaEntry.id != ignore_m_id)
+    does_exist = query.first() is not None
     return does_exist
 
 
