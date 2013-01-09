@@ -205,7 +205,10 @@ def assert_db_meets_expected(db, expected):
 
 def fixture_add_user(username=u'chris', password=u'toast',
                      active_user=True):
-    test_user = User.query.filter_by(username=username).first() or User()
+    # Reuse existing user or create a new one
+    test_user = User.query.filter_by(username=username).first()
+    if test_user is None:
+        test_user = User()
     test_user.username = username
     test_user.email = username + u'@example.com'
     if password is not None:
