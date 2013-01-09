@@ -33,6 +33,7 @@ from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.text import (
     convert_to_tag_list_of_dicts, media_tags_as_string)
+from mediagoblin.tools.url import slugify
 from mediagoblin.db.util import check_media_slug_used, check_collection_slug_used
 
 import mimetypes
@@ -58,22 +59,20 @@ def edit_media(request, media):
     if request.method == 'POST' and form.validate():
         # Make sure there isn't already a MediaEntry with such a slug
         # and userid.
-        slug_used = check_media_slug_used(media.uploader, request.form['slug'],
-                                          media.id)
+        slug = slugify(request.form['slug'])
+        slug_used = check_media_slug_used(media.uploader, slug, media.id)
 
         if slug_used:
             form.slug.errors.append(
                 _(u'An entry with that slug already exists for this user.'))
         else:
-            media.title = unicode(request.form['title'])
-            media.description = unicode(request.form.get('description'))
+            media.title = request.form['title']
+            media.description = request.form.get('description')
             media.tags = convert_to_tag_list_of_dicts(
                                    request.form.get('tags'))
 
             media.license = unicode(request.form.get('license', '')) or None
-
-            media.slug = unicode(request.form['slug'])
-
+            media.slug = slug
             media.save()
 
             return redirect(request,
