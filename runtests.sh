@@ -28,4 +28,29 @@ else
     exit 1
 fi
 
-CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests $NOSETESTS $@
+need_arg=1
+for i in "$@"
+do
+  case "$i" in
+    -*) ;;
+    *) need_arg=0; break ;;
+  esac
+done
+
+
+CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests
+export CELERY_CONFIG_MODULE
+
+if [ "$need_arg" = 1 ]
+then
+  dir="`dirname $0`"/mediagoblin/tests
+  [ '!' -d "$dir" ] && dir=./mediagoblin/tests
+  if [ '!' -d "$dir" ]
+  then
+    echo "Cound not find tests dir"
+    exit 1
+  fi
+  $NOSETESTS "$@" "$dir"
+else
+  $NOSETESTS "$@"
+fi
