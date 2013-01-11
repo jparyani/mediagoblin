@@ -69,7 +69,7 @@ def user_may_delete_media(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        uploader_id = MediaEntry.query.get(request.matchdict['media']).uploader
+        uploader_id = kwargs['media'].uploader
         if not (request.user.is_admin or
                 request.user.id == uploader_id):
             raise Forbidden()
@@ -209,10 +209,14 @@ def get_media_entry_by_id(controller):
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
         media = MediaEntry.query.filter_by(
-                id=request.matchdict['media'],
+                id=request.matchdict['media_id'],
                 state=u'processed').first()
         # Still no media?  Okay, 404.
         if not media:
+            return render_404(request)
+
+        given_username = request.matchdict.get('user')
+        if given_username and (given_username != media.get_uploader.username):
             return render_404(request)
 
         return controller(request, media=media, *args, **kwargs)

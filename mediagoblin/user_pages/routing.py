@@ -24,12 +24,12 @@ add_route('mediagoblin.user_pages.media_home',
           'mediagoblin.user_pages.views:media_home')
 
 add_route('mediagoblin.user_pages.media_confirm_delete',
-          '/u/<string:user>/m/<string:media>/confirm-delete/',
+          '/u/<string:user>/m/<int:media_id>/confirm-delete/',
           'mediagoblin.user_pages.views:media_confirm_delete')
 
 # Submission handling of new comments. TODO: only allow for POST methods
 add_route('mediagoblin.user_pages.media_post_comment',
-          '/u/<string:user>/m/<string:media>/comment/add/',
+          '/u/<string:user>/m/<int:media_id>/comment/add/',
           'mediagoblin.user_pages.views:media_post_comment')
 
 add_route('mediagoblin.user_pages.user_gallery',
@@ -74,7 +74,7 @@ add_route('mediagoblin.user_pages.processing_panel',
 
 # Stray edit routes
 add_route('mediagoblin.edit.edit_media',
-          '/u/<string:user>/m/<string:media>/edit/',
+          '/u/<string:user>/m/<int:media_id>/edit/',
           'mediagoblin.edit.views:edit_media')
 
 add_route('mediagoblin.edit.attachments',
