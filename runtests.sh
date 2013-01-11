@@ -16,9 +16,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if [ -f ./bin/nosetests ]; then
-    echo "Using ./bin/nosetests";
-    export NOSETESTS="./bin/nosetests";
+basedir="`dirname $0`"
+# Directory to seaerch for:
+subdir="mediagoblin/tests"
+[ '!' -d "$basedir/$subdir" ] && basedir="."
+if [ '!' -d "$basedir/$subdir" ]
+then
+  echo "Could not find base directory" >&2
+  exit 1
+fi
+
+if [ -x "$basedir/bin/nosetests" ]; then
+    export NOSETESTS="$basedir/bin/nosetests";
+    echo "Using $NOSETESTS";
 elif which nosetests > /dev/null; then
     echo "Using nosetests from \$PATH";
     export NOSETESTS="nosetests";
@@ -37,20 +47,16 @@ do
   esac
 done
 
-
 CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests
 export CELERY_CONFIG_MODULE
+echo "+ CELERY_CONFIG_MODULE=$CELERY_CONFIG_MODULE"
 
 if [ "$need_arg" = 1 ]
 then
-  dir="`dirname $0`"/mediagoblin/tests
-  [ '!' -d "$dir" ] && dir=./mediagoblin/tests
-  if [ '!' -d "$dir" ]
-  then
-    echo "Cound not find tests dir"
-    exit 1
-  fi
-  $NOSETESTS "$@" "$dir"
+  testdir="$basedir/mediagoblin/tests"
+  set -x
+  exec "$NOSETESTS" "$@" "$testdir"
 else
-  $NOSETESTS "$@"
+  set -x
+  exec "$NOSETESTS" "$@"
 fi
