@@ -22,6 +22,7 @@ from wtforms import Form, HiddenField, validators
 
 from mediagoblin import mg_globals
 from mediagoblin.meddleware import BaseMeddleware
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 _log = logging.getLogger(__name__)
 
@@ -127,10 +128,13 @@ class CsrfMeddleware(BaseMeddleware):
             None)
 
         if cookie_token is None:
-            # the CSRF cookie must be present in the request
-            errstr = 'CSRF cookie not present'
-            _log.error(errstr)
-            raise Forbidden(errstr)
+            # the CSRF cookie must be present in the request, if not a
+            # cookie blocker might be in action (in the best case)
+            _log.error('CSRF cookie not present')
+            raise Forbidden(_('CSRF cookie not present. This is most likely '
+                              'the result of a cookie blocker or somesuch.<br/>'
+                              'Make sure to permit the settings of cookies for '
+                              'this domain.'))
 
         # get the form token and confirm it matches
         form = CsrfForm(request.form)
