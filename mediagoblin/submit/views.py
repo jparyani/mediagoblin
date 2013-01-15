@@ -32,8 +32,7 @@ from mediagoblin.submit import forms as submit_forms
 from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.media_types import sniff_media, \
     InvalidFileType, FileTypeNotSupported
-from mediagoblin.submit.lib import handle_push_urls, run_process_media, \
-    prepare_queue_task
+from mediagoblin.submit.lib import run_process_media, prepare_queue_task
 
 
 @require_active_login
@@ -90,10 +89,7 @@ def submit_start(request):
                 #
                 # (... don't change entry after this point to avoid race
                 # conditions with changes to the document via processing code)
-                run_process_media(entry)
-
-                handle_push_urls(request)
-
+                run_process_media(entry, request)
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
                 return redirect(request, "mediagoblin.user_pages.user_home",
