@@ -27,6 +27,8 @@ These functions now live here and get "mixed in" into the
 real objects.
 """
 
+from uuid import uuid4
+
 from werkzeug.utils import cached_property
 
 from mediagoblin import mg_globals
