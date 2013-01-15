@@ -89,7 +89,10 @@ def submit_start(request):
                 #
                 # (... don't change entry after this point to avoid race
                 # conditions with changes to the document via processing code)
-                run_process_media(entry, request)
+                feed_url = request.urlgen(
+                    'mediagoblin.user_pages.atom_feed',
+                    qualified=True, user=request.user.username)
+                run_process_media(entry, feed_url)
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
                 return redirect(request, "mediagoblin.user_pages.user_home",

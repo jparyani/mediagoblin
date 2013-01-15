@@ -54,10 +54,14 @@ def prepare_queue_task(app, entry, filename):
     return queue_file
 
 
-def run_process_media(entry, request):
-    feed_url = request.urlgen(
-        'mediagoblin.user_pages.atom_feed',
-        qualified=True, user=request.user.username)
+def run_process_media(entry, feed_url=None):
+    """Process the media asynchronously
+
+    :param entry: MediaEntry() instance to be processed.
+    :param feed_url: A string indicating the feed_url that the PuSH servers
+        should be notified of. This will be sth like: `request.urlgen(
+            'mediagoblin.user_pages.atom_feed',qualified=True,
+            user=request.user.username)`"""
     try:
         process_media.apply_async(
             [entry.id, feed_url], {},

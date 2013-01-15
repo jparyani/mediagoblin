@@ -94,7 +94,8 @@ class ProcessMedia(task.Task):
             entry.save()
 
             # Notify the PuSH servers as async task
-            handle_push_urls.subtask().delay(feed_url)
+            if mgg.app_config["push_urls"] and feed_url:
+                handle_push_urls.subtask().delay(feed_url)
 
             json_processing_callback(entry)
         except BaseProcessingFail as exc:
