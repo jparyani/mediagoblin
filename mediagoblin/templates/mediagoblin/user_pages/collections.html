@@ -17,13 +17,6 @@
 #}
 {% extends "mediagoblin/base.html" %}
 
-{% block mediagoblin_head %}
-    <link rel="alternate" type="application/atom+xml"
-          href="{{ request.urlgen(
-                       'mediagoblin.user_pages.atom_feed',
-                       user=user.username) }}">
-{% endblock mediagoblin_head %}
-
 {% block title %}
   {%- trans username=user.username -%}
     {{ username }}'s collections
