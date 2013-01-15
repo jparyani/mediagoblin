@@ -54,6 +54,26 @@ class UserMixin(object):
 
 class MediaEntryMixin(object):
     def generate_slug(self):
+        """
+        This one does not *force* slugs, but usually it will probably result
+        in a niceish one.
+
+        The end *result* of the algorithm will (presumably, I have not tested
+        it) result in these resolutions for these situations:
+         - If we have a slug, make sure it's clean and sanitized, and if it's
+           unique, we'll use that.
+         - If we have a title, slugify it, and if it's unique, we'll use that.
+         - If we can't get any sort of thing that looks like it'll be a useful
+           slug out of a title or an existing slug, bail, and don't set the
+           slug at all.  Don't try to create something just because.  Make
+           sure we have a reasonable basis for a slug first.
+         - If we have a reasonable basis for a slug (either based on existing
+           slug or slugified title) but it's not unique, first try appending
+           the entry's id, if that exists
+         - If that doesn't result in something unique, tack on some randomly
+           generated bits until it's unique.  That'll be a little bit of junk,
+           but at least it has the basis of a nice slug.
+        """
         # import this here due to a cyclic import issue
         # (db.models -> db.mixin -> db.util -> db.models)
         from mediagoblin.db.util import check_media_slug_used
@@ -61,19 +81,35 @@ class MediaEntryMixin(object):
         #Is already a slug assigned? Check if it is valid
         if self.slug:
             self.slug = slugify(self.slug)
+  
+        # otherwise, try to use the title.
         elif self.title:
-            #assign slug based on title
+            # assign slug based on title
             self.slug = slugify(self.title)
-        elif self.id:
-            # Does the object already have an ID? (after adding to the session)
-            self.slug = unicode(self.id)
-        else:
-            # Everything else failed, just use random garbage
-            self.slug = unicode(uuid4())[1:4]
-
-        while check_media_slug_used(self.uploader, self.slug, self.id):
-            # add garbage till it's unique
-            self.slug = self.slug + unicode(uuid4())[1:4]
+     
+        # Do we have anything at this point?
+        # If not, we're not going to get a slug
+        # so just return... we're not going to force one.
+        if not self.slug:
+            return  # giving up!
+  
+        # Otherwise, let's see if this is unique.
+        if check_media_slug_used(self.uploader, self.slug, self.id):
+            # It looks like it's being used... lame.
+        
+            # Can we just append the object's id to the end?
+            if self.id:
+                slug_with_id = "%s-%s" % (self.slug, self.id)
+                if not check_media_slug_used(self.uploader,
+                                             slug_with_id, self.id):
+                    self.slug = slug_with_id
+                    return  # success!
+        
+            # okay, still no success;
+            # let's whack junk on there till it's unique.
+            self.slug = self.slug + u'-'
+            while check_media_slug_used(self.uploader, self.slug, self.id):
+                self.slug = self.slug + unicode(uuid4())[1:4]      
 
     @property
     def description_html(self):
