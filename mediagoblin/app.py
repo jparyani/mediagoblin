@@ -22,6 +22,7 @@ from mediagoblin.tools.routing import endpoint_to_controller
 
 from werkzeug.wrappers import Request
 from werkzeug.exceptions import HTTPException, NotFound
+from werkzeug.routing import RequestRedirect
 
 from mediagoblin import meddleware, __version__
 from mediagoblin.tools import common, translate, template
@@ -186,6 +187,9 @@ class MediaGoblinApp(object):
         try:
             found_rule, url_values = map_adapter.match(return_rule=True)
             request.matchdict = url_values
+        except RequestRedirect as response:
+            # Deal with 301 responses eg due to missing final slash
+            return response(environ, start_response)
         except HTTPException as exc:
             # Stop and render exception
             return render_http_exception(
