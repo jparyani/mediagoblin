@@ -55,11 +55,13 @@ class UserMixin(object):
 class MediaEntryMixin(object):
     def generate_slug(self):
         """
+        Generate a unique slug for this MediaEntry.
+
         This one does not *force* slugs, but usually it will probably result
         in a niceish one.
 
-        The end *result* of the algorithm will (presumably, I have not tested
-        it) result in these resolutions for these situations:
+        The end *result* of the algorithm will result in these resolutions for
+        these situations:
          - If we have a slug, make sure it's clean and sanitized, and if it's
            unique, we'll use that.
          - If we have a title, slugify it, and if it's unique, we'll use that.
@@ -99,7 +101,7 @@ class MediaEntryMixin(object):
         
             # Can we just append the object's id to the end?
             if self.id:
-                slug_with_id = "%s-%s" % (self.slug, self.id)
+                slug_with_id = u"%s-%s" % (self.slug, self.id)
                 if not check_media_slug_used(self.uploader,
                                              slug_with_id, self.id):
                     self.slug = slug_with_id
@@ -107,9 +109,9 @@ class MediaEntryMixin(object):
         
             # okay, still no success;
             # let's whack junk on there till it's unique.
-            self.slug = self.slug + u'-'
+            self.slug += '-'
             while check_media_slug_used(self.uploader, self.slug, self.id):
-                self.slug = self.slug + unicode(uuid4())[1:4]      
+                self.slug += uuid4()[1:4]
 
     @property
     def description_html(self):
