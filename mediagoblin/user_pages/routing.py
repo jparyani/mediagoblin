@@ -48,9 +48,9 @@ add_route('mediagoblin.user_pages.media_collect',
           '/u/<string:user>/m/<string:media>/collect/',
           'mediagoblin.user_pages.views:media_collect')
 
-add_route('mediagoblin.user_pages.user_collections',
+add_route('mediagoblin.user_pages.collection_list',
           '/u/<string:user>/collections/',
-          'mediagoblin.user_pages.views:user_collections')
+          'mediagoblin.user_pages.views:collection_list')
 
 add_route('mediagoblin.user_pages.user_collection',
           '/u/<string:user>/collection/<string:collection>/',

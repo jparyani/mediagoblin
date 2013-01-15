@@ -338,14 +338,14 @@ def user_collection(request, page, url_user=None):
 
 
 @active_user_from_url
-def user_collections(request, url_user=None):
+def collection_list(request, url_user=None):
     """A User-defined Collection"""
     collections = Collection.query.filter_by(
         get_creator=url_user)
 
     return render_to_response(
         request,
-        'mediagoblin/user_pages/collections.html',
+        'mediagoblin/user_pages/collection_list.html',
         {'user': url_user,
          'collections': collections})
 
