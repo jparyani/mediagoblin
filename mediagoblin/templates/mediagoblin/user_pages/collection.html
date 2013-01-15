@@ -57,7 +57,9 @@
   {% endif %}
 
   <p>
-    {{ collection.description }}
+    {% autoescape False %}
+      {{ collection.description_html }}
+    {% endautoescape %}
   </p>
 
   {{ collection_gallery(request, collection_items, pagination) }}
