@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import tempfile
+from tempfile import NamedTemporaryFile
 import logging
 
 from mediagoblin import mg_globals as mgg
@@ -74,7 +74,7 @@ def process_video(entry):
         entry, name_builder.fill('{basename}.thumbnail.jpg'))
 
     # Create a temporary file for the video destination
-    tmp_dst = tempfile.NamedTemporaryFile()
+    tmp_dst = NamedTemporaryFile(dir=workbench.dir)
 
     with tmp_dst:
         # Transcode queued file to a VP8/vorbis file that fits in a 640x640 square
@@ -88,6 +88,7 @@ def process_video(entry):
 
         # Push transcoded video to public storage
         _log.debug('Saving medium...')
+        # TODO (#419, we read everything in RAM here!)
         mgg.public_store.get_file(medium_filepath, 'wb').write(
             tmp_dst.read())
         _log.debug('Saved medium')
@@ -100,7 +101,7 @@ def process_video(entry):
             height=transcoder.dst_data.videoheight)
 
     # Create a temporary file for the video thumbnail
-    tmp_thumb = tempfile.NamedTemporaryFile(suffix='.jpg')
+    tmp_thumb = NamedTemporaryFile(dir=workbench.dir, suffix='.jpg')
 
     with tmp_thumb:
         # Create a thumbnail.jpg that fits in a 180x180 square
@@ -129,6 +130,7 @@ def process_video(entry):
             with mgg.public_store.get_file(original_filepath, 'wb') as \
                     original_file:
                 _log.debug('Saving original...')
+                # TODO (#419, we read everything in RAM here!)
                 original_file.write(queued_file.read())
                 _log.debug('Saved original')
 

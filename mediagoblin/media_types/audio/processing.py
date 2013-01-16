@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import tempfile
+from tempfile import NamedTemporaryFile
 import os
 
 from mediagoblin import mg_globals as mgg
@@ -73,7 +73,7 @@ def process_audio(entry):
 
     transcoder = AudioTranscoder()
 
-    with tempfile.NamedTemporaryFile() as webm_audio_tmp:
+    with NamedTemporaryFile(dir=workbench.dir) as webm_audio_tmp:
         progress_callback = ProgressCallback(entry)
 
         transcoder.transcode(
@@ -99,7 +99,7 @@ def process_audio(entry):
                 original=os.path.splitext(
                     queued_filepath[-1])[0]))
 
-        with tempfile.NamedTemporaryFile(suffix='.ogg') as wav_tmp:
+        with NamedTemporaryFile(dir=workbench.dir, suffix='.ogg') as wav_tmp:
             _log.info('Creating OGG source for spectrogram')
             transcoder.transcode(
                 queued_filename,
@@ -109,7 +109,7 @@ def process_audio(entry):
 
             thumbnailer = AudioThumbnailer()
 
-            with tempfile.NamedTemporaryFile(suffix='.jpg') as spectrogram_tmp:
+            with NamedTemporaryFile(dir=workbench.dir, suffix='.jpg') as spectrogram_tmp:
                 thumbnailer.spectrogram(
                     wav_tmp.name,
                     spectrogram_tmp.name,
@@ -122,7 +122,7 @@ def process_audio(entry):
 
                 entry.media_files['spectrogram'] = spectrogram_filepath
 
-                with tempfile.NamedTemporaryFile(suffix='.jpg') as thumb_tmp:
+                with NamedTemporaryFile(dir=workbench.dir, suffix='.jpg') as thumb_tmp:
                     thumbnailer.thumbnail_spectrogram(
                         spectrogram_tmp.name,
                         thumb_tmp.name,
