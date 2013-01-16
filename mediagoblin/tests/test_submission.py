@@ -161,11 +161,17 @@ class TestSubmission:
         media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
         media_id = media.id
 
+        # At least render the edit page
+        edit_url = request.urlgen(
+            'mediagoblin.edit.edit_media',
+            user=self.test_user.username, media_id=media_id)
+        self.test_app.get(edit_url)
+
         # Add a comment, so we can test for its deletion later.
         self.check_comments(request, media_id, 0)
         comment_url = request.urlgen(
             'mediagoblin.user_pages.media_post_comment',
-            user=self.test_user.username, media=media_id)
+            user=self.test_user.username, media_id=media_id)
         response = self.do_post({'comment_content': 'i love this test'},
                                 url=comment_url, do_follow=True)[0]
         self.check_comments(request, media_id, 1)
@@ -174,7 +180,7 @@ class TestSubmission:
         # ---------------------------------------------------
         delete_url = request.urlgen(
             'mediagoblin.user_pages.media_confirm_delete',
-            user=self.test_user.username, media=media_id)
+            user=self.test_user.username, media_id=media_id)
         # Empty data means don't confirm
         response = self.do_post({}, do_follow=True, url=delete_url)[0]
         media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)

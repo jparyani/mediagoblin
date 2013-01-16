@@ -28,6 +28,7 @@ from mediagoblin.user_pages import forms as user_forms
 from mediagoblin.user_pages.lib import send_comment_email
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
+    get_media_entry_by_id,
     require_active_login, user_may_delete_media, user_may_alter_collection,
     get_user_collection, get_user_collection_item, active_user_from_url)
 
@@ -138,7 +139,7 @@ def media_home(request, media, page, **kwargs):
          'app_config': mg_globals.app_config})
 
 
-@get_user_media_entry
+@get_media_entry_by_id
 @require_active_login
 def media_post_comment(request, media):
     """
@@ -258,7 +259,7 @@ def media_collect(request, media):
 
 
 #TODO: Why does @user_may_delete_media not implicate @require_active_login?
-@get_user_media_entry
+@get_media_entry_by_id
 @require_active_login
 @user_may_delete_media
 def media_confirm_delete(request, media):

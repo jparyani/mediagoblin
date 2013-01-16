@@ -83,11 +83,11 @@
            request.user.is_admin) %}
       {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
                                  user= media.get_uploader.username,
-                                 media= media.id) %}
+                                 media_id=media.id) %}
       <a class="button_action" href="{{ edit_url }}">{% trans %}Edit{% endtrans %}</a>
       {% set delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                                  user= media.get_uploader.username,
-                                 media= media.id) %}
+                                 media_id=media.id) %}
       <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
     {% endif %}
     {% autoescape False %}
@@ -104,7 +104,7 @@
       {% if request.user %}
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
                                          user= media.get_uploader.username,
-                                         media=media.id) }}" method="POST" id="form_comment">
+                                         media_id=media.id) }}" method="POST" id="form_comment">
           <p>
             {% trans %}You can use <a href="http://daringfireball.net/projects/markdown/basics">Markdown</a> for formatting.{% endtrans %}
           </p>

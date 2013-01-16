@@ -27,6 +27,7 @@ from mediagoblin.auth import lib as auth_lib
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
+     get_media_entry_by_id, 
      get_user_media_entry,  user_may_alter_collection, get_user_collection)
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
@@ -37,7 +38,7 @@ from mediagoblin.db.util import check_media_slug_used, check_collection_slug_use
 import mimetypes
 
 
-@get_user_media_entry
+@get_media_entry_by_id
 @require_active_login
 def edit_media(request, media):
     if not may_edit_media(request, media):
