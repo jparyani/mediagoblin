@@ -24,11 +24,16 @@
   <form action="{{ request.urlgen('mediagoblin.edit.delete_account') }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box">
-      <h1>Really delete user '{{ user.username }}' and all related media/comments?
+      <h1>
+        {%- trans user_name=user.username -%}
+          Really delete user '{{ user_name }}' and all related media/comments?
+        {%- endtrans -%}
       </h1>
       <p class="delete_checkbox_box">
 	<input type="checkbox" name="confirmed"/>
-	<label for="confirmed">Yes, really delete my account</label>
+	<label for="confirmed">
+	  {%- trans %}Yes, really delete my account{% endtrans -%}
+	</label>
       </p>
 
       <div class="form_submit_buttons">

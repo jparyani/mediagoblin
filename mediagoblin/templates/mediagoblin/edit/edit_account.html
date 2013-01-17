@@ -54,7 +54,8 @@
     </div>
   </form>
   <div class="delete">
-    <a href="{{request.urlgen('mediagoblin.edit.delete_account')
-             }}">Delete my account</a>
+    <a href="{{ request.urlgen('mediagoblin.edit.delete_account') }}">
+      {%- trans %}Delete my account{% endtrans -%}
+    </a>
   </div>
 {% endblock %}
