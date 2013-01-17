@@ -37,6 +37,24 @@ class TestUserEdit(object):
                 'password': self.user_password})
 
 
+    def test_user_deletion(self):
+        """Delete user via web interface"""
+        # Make sure user exists
+        assert User.query.filter_by(username=u'chris').first()
+
+        res = self.app.post('/edit/account/delete/', {'confirmed': 'y'})
+
+        # Make sure user has been deleted
+        assert User.query.filter_by(username=u'chris').first() == None
+
+        #TODO: make sure all corresponding items comments etc have been
+        # deleted too. Perhaps in submission test?
+
+        #Restore user at end of test
+        self.user = fixture_add_user(password = self.user_password)
+        self.login()
+
+
     def test_change_password(self):
         """Test changing password correctly and incorrectly"""
         # test that the password can be changed
