@@ -331,6 +331,12 @@ textarea#description, textarea#bio {
   height: 100px;
 }
 
+.delete {
+  margin-top: 36px;
+  display: block;
+  text-align: center;
+}
+
 /* comments */
 
 .comment_wrapper {
