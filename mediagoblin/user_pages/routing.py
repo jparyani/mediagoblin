@@ -37,7 +37,7 @@ add_route('mediagoblin.user_pages.user_gallery',
           'mediagoblin.user_pages.views:user_gallery')
 
 add_route('mediagoblin.user_pages.media_home.view_comment',
-          '/u/<string:user>/m/<string:media>/c/<string:comment>/',
+          '/u/<string:user>/m/<string:media>/c/<int:comment>/',
           'mediagoblin.user_pages.views:media_home')
 
 add_route('mediagoblin.user_pages.atom_feed',

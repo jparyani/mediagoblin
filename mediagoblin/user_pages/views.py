@@ -110,12 +110,13 @@ def media_home(request, media, page, **kwargs):
     """
     'Homepage' of a MediaEntry()
     """
-    if request.matchdict.get('comment', None):
+    comment_id = request.matchdict.get('comment', None)
+    if comment_id:
         pagination = Pagination(
             page, media.get_comments(
                 mg_globals.app_config['comments_ascending']),
             MEDIA_COMMENTS_PER_PAGE,
-            request.matchdict.get('comment'))
+            comment_id)
     else:
         pagination = Pagination(
             page, media.get_comments(
