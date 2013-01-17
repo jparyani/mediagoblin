@@ -19,6 +19,8 @@ import tempfile
 
 
 from mediagoblin import workbench
+from mediagoblin.mg_globals import setup_globals
+from mediagoblin.decorators import get_workbench
 from mediagoblin.tests.test_storage import get_tmp_filestorage
 
 
@@ -28,19 +30,20 @@ class TestWorkbench(object):
             os.path.join(tempfile.gettempdir(), u'mgoblin_workbench_testing'))
 
     def test_create_workbench(self):
-        workbench = self.workbench_manager.create_workbench()
+        workbench = self.workbench_manager.create()
         assert os.path.isdir(workbench.dir)
         assert workbench.dir.startswith(self.workbench_manager.base_workbench_dir)
+        workbench.destroy()
 
     def test_joinpath(self):
-        this_workbench = self.workbench_manager.create_workbench()
+        this_workbench = self.workbench_manager.create()
         tmpname = this_workbench.joinpath('temp.txt')
         assert tmpname == os.path.join(this_workbench.dir, 'temp.txt')
-        this_workbench.destroy_self()
+        this_workbench.destroy()
 
     def test_destroy_workbench(self):
         # kill a workbench
-        this_workbench = self.workbench_manager.create_workbench()
+        this_workbench = self.workbench_manager.create()
         tmpfile_name = this_workbench.joinpath('temp.txt')
         tmpfile = file(tmpfile_name, 'w')
         with tmpfile:
@@ -49,14 +52,14 @@ class TestWorkbench(object):
         assert os.path.exists(tmpfile_name)
 
         wb_dir = this_workbench.dir
-        this_workbench.destroy_self()
+        this_workbench.destroy()
         assert not os.path.exists(tmpfile_name)
         assert not os.path.exists(wb_dir)
 
     def test_localized_file(self):
         tmpdir, this_storage = get_tmp_filestorage()
-        this_workbench = self.workbench_manager.create_workbench()
-        
+        this_workbench = self.workbench_manager.create()
+
         # Write a brand new file
         filepath = ['dir1', 'dir2', 'ourfile.txt']
 
@@ -78,7 +81,7 @@ class TestWorkbench(object):
         filename = this_workbench.localized_file(this_storage, filepath)
         assert filename == os.path.join(
             this_workbench.dir, 'ourfile.txt')
-        
+
         # fake remote file storage, filename_if_copying set
         filename = this_workbench.localized_file(
             this_storage, filepath, 'thisfile')
@@ -91,3 +94,18 @@ class TestWorkbench(object):
             this_storage, filepath, 'thisfile.text', False)
         assert filename == os.path.join(
             this_workbench.dir, 'thisfile.text')
+
+    def test_workbench_decorator(self):
+        """Test @get_workbench decorator and automatic cleanup"""
+        # The decorator needs mg_globals.workbench_manager
+        setup_globals(workbench_manager=self.workbench_manager)
+
+        @get_workbench
+        def create_it(workbench=None):
+            # workbench dir exists?
+            assert os.path.isdir(workbench.dir)
+            return workbench.dir
+
+        benchdir = create_it()
+        # workbench dir has been cleaned up automatically?
+        assert not os.path.isdir(benchdir)

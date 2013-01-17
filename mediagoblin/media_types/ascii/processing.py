@@ -19,6 +19,7 @@ import Image
 import logging
 
 from mediagoblin import mg_globals as mgg
+from mediagoblin.decorators import get_workbench
 from mediagoblin.processing import create_pub_filepath
 from mediagoblin.media_types.ascii import asciitoimage
 
@@ -38,12 +39,14 @@ def sniff_handler(media_file, **kw):
     return False
 
 
-def process_ascii(entry):
-    '''
-    Code to process a txt file
-    '''
+@get_workbench
+def process_ascii(entry, workbench=None):
+    """Code to process a txt file. Will be run by celery.
+
+    A Workbench() represents a local tempory dir. It is automatically
+    cleaned up when this function exits. 
+    """
     ascii_config = mgg.global_config['media_type:mediagoblin.media_types.ascii']
-    workbench = mgg.workbench_manager.create_workbench()
     # Conversions subdirectory to avoid collisions
     conversions_subdir = os.path.join(
         workbench.dir, 'conversions')

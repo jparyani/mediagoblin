@@ -19,6 +19,7 @@ from tempfile import NamedTemporaryFile
 import os
 
 from mediagoblin import mg_globals as mgg
+from mediagoblin.decorators import get_workbench
 from mediagoblin.processing import (create_pub_filepath, BadMediaFail,
     FilenameBuilder, ProgressCallback)
 
@@ -42,10 +43,14 @@ def sniff_handler(media_file, **kw):
     return False
 
 
-def process_audio(entry):
-    audio_config = mgg.global_config['media_type:mediagoblin.media_types.audio']
+@get_workbench
+def process_audio(entry, workbench=None):
+    """Code to process uploaded audio. Will be run by celery.
 
-    workbench = mgg.workbench_manager.create_workbench()
+    A Workbench() represents a local tempory dir. It is automatically
+    cleaned up when this function exits.
+    """
+    audio_config = mgg.global_config['media_type:mediagoblin.media_types.audio']
 
     queued_filepath = entry.queued_media_file
     queued_filename = workbench.localized_file(
@@ -143,6 +148,3 @@ def process_audio(entry):
         entry.media_files['thumb'] = ['fake', 'thumb', 'path.jpg']
 
     mgg.queue_store.delete_file(queued_filepath)
-
-    # clean up workbench
-    workbench.destroy_self()

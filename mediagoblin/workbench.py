@@ -119,7 +119,7 @@ class Workbench(object):
 
             return full_dest_filename
 
-    def destroy_self(self):
+    def destroy(self):
         """
         Destroy this workbench!  Deletes the directory and all its contents!
 
@@ -127,18 +127,33 @@ class Workbench(object):
         """
         # just in case
         workbench = os.path.abspath(self.dir)
-
         shutil.rmtree(workbench)
-
         del self.dir
+
+    def __enter__(self):
+        """Make Workbench a context manager so we can use `with Workbench() as bench:`"""
+        return self
+
+    def  __exit__(self, *args):
+        """Clean up context manager, aka ourselves, deleting the workbench"""
+        self.destroy()
 
 
 class WorkbenchManager(object):
     """
     A system for generating and destroying workbenches.
 
-    Workbenches are actually just subdirectories of a temporary storage space
-    for during the processing stage.
+    Workbenches are actually just subdirectories of a (local) temporary
+    storage space for during the processing stage. The preferred way to
+    create them is to use:
+
+        with workbenchmger.create() as workbench:
+            do stuff...
+
+    This will automatically clean up all temporary directories even in
+    case of an exceptions. Also check the
+    @mediagoblin.decorators.get_workbench decorator for a convenient
+    wrapper.
     """
 
     def __init__(self, base_workbench_dir):
@@ -146,7 +161,7 @@ class WorkbenchManager(object):
         if not os.path.exists(self.base_workbench_dir):
             os.makedirs(self.base_workbench_dir)
 
-    def create_workbench(self):
+    def create(self):
         """
         Create and return the path to a new workbench (directory).
         """
