@@ -51,7 +51,12 @@
         <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button_form" />
 	{{ csrf_token }}
       </div>
+      <ul>
+        <li>
+          <a href="{{request.urlgen('mediagoblin.edit.delete_account')
+                   }}">Delete my account and all related media</a>
+        </li>
+      </ul>
     </div>
   </form>
-  <a href="{{request.urlgen('mediagoblin.edit.delete_account')}}">Delete my account and all related media</a>
 {% endblock %}
