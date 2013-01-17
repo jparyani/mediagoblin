@@ -118,6 +118,12 @@
           </a>
         {% endif %}
     {% endif %}
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.user_pages.collection_list',
+                                           user=user.username) }}">
+          {%- trans %}Browse collections{% endtrans -%}
+        </a>
+      </p>
     </div>
 
     {% if media_entries.count() %}

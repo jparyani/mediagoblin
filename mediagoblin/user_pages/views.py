@@ -226,6 +226,10 @@ def media_collect(request, media):
         messages.add_message(
             request, messages.ERROR,
             _('You have to select or add a collection'))
+        return redirect(request, "mediagoblin.user_pages.media_collect",
+                    user=media.get_uploader.username,
+                    media=media.id)
+
 
     # Check whether media already exists in collection
     elif CollectionItem.query.filter_by(

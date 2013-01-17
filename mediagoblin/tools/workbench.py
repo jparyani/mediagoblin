@@ -19,10 +19,6 @@ import shutil
 import tempfile
 
 
-DEFAULT_WORKBENCH_DIR = os.path.join(
-    tempfile.gettempdir(), u'mgoblin_workbench')
-
-
 # Actual workbench stuff
 # ----------------------
 

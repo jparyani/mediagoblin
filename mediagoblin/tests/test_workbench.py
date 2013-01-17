@@ -18,7 +18,7 @@ import os
 import tempfile
 
 
-from mediagoblin import workbench
+from mediagoblin.tools import workbench
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.decorators import get_workbench
 from mediagoblin.tests.test_storage import get_tmp_filestorage
