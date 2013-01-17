@@ -113,10 +113,12 @@ input, textarea {
 
 header {
   width: 100%;
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
   padding: 0;
   margin-bottom: 42px;
-  background-color: #303030;
-  border-bottom: 1px solid #252525;
+  border-bottom: 1px solid #333;
 }
 
 .header_right {
@@ -125,17 +127,16 @@ header {
   float: right;
 }
 
-.header_right ul {
-	display: none;
-	position: absolute;
-	top: 42px;
-	right: 0px;
-	background: #252525;
-	padding: 20px;
+.header_dropdown {
+  margin-bottom: 20px;
 }
 
-.header_right li {
+.header_dropdown li {
   list-style: none;
+}
+
+.dropdown_title {
+  font-size: 20px;
 }
 
 a.logo {
@@ -145,7 +146,7 @@ a.logo {
 
 .logo img {
   vertical-align: middle;
-  margin: 6px 8px;
+  margin: 6px 8px 6px 0;
 }
 
 .mediagoblin_content {
