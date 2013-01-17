@@ -62,6 +62,7 @@
                                  user=request.user.username) }}"
                    class="button_action_highlight">
                {% trans %}Verify your email!{% endtrans %}</a>
+               or <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>
               {% endif %}
             {% else %}
               <a href="{{ request.urlgen('mediagoblin.auth.login') }}">
@@ -71,8 +72,9 @@
           <div class="clear"></div>
           {% if request.user and request.user.status == 'active' %}
             <div class="header_dropdown">
-              <a href="{{ request.urlgen('mediagoblin.user_pages.user_home', user= request.user.username) }}">{{ request.user.username }}</a>{% trans %}'s account{% endtrans %}
-              (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
+              <p><span class="dropdown_title">
+                <a href="{{ request.urlgen('mediagoblin.user_pages.user_home', user= request.user.username) }}">{{ request.user.username }}</a>{% trans %}'s account{% endtrans %}</span>
+                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)</p>
             <ul>
               <li><a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
                 {%- trans %}Add media{% endtrans -%}
