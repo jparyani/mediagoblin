@@ -127,20 +127,20 @@
             <img src="{{ request.staticdirect('/images/icon_comment.png') }}" />
             <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                             user = comment_author.username) }}">
-              {{ comment_author.username -}}
+              {{- comment_author.username -}}
             </a>
             {% trans %}at{% endtrans %}
             <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
                    comment = comment.id,
                    user = media.get_uploader.username,
                    media = media.slug_or_id) }}#comment">
-              {{ comment.created.strftime("%I:%M%p %Y-%m-%d") }}
+              {{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}
             </a>:
           </div>
           <div class="comment_content">
-            {% autoescape False %}
+            {% autoescape False -%}
               {{ comment.content_html }}
-            {% endautoescape %}
+            {%- endautoescape %}
           </div>
         </div>
       {% endfor %}
