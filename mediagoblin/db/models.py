@@ -95,7 +95,7 @@ class User(Base, UserMixin):
 
         # Delete now unused tags
         # TODO: import here due to cyclic imports!!! This cries for refactoring
-        from mediagoblin.db.sql.util import clean_orphan_tags
+        from mediagoblin.db.util import clean_orphan_tags
         clean_orphan_tags(commit=False)
 
         # Delete user, pass through commit=False/True in kwargs
