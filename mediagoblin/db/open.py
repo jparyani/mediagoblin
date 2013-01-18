@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 import logging
 
 from mediagoblin.db.base import Base, Session
@@ -66,9 +66,20 @@ def load_models(app_config):
                 exc))
 
 
+def _sqlite_fk_pragma_on_connect(dbapi_con, con_record):
+    """Enable foreign key checking on each new sqlite connection"""
+    dbapi_con.execute('pragma foreign_keys=on')
+
+
 def setup_connection_and_db_from_config(app_config):
     engine = create_engine(app_config['sql_engine'])
+
+    # Enable foreign key checking for sqlite
+    if app_config['sql_engine'].startswith('sqlite://'):
+        event.listen(engine, 'connect', _sqlite_fk_pragma_on_connect)
+
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+
     Session.configure(bind=engine)
 
     return DatabaseMaster(engine)
