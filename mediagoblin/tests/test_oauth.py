@@ -21,7 +21,7 @@ from urlparse import parse_qs, urlparse
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, pluginapi
-from mediagoblin.tests.tools import get_test_app, fixture_add_user
+from mediagoblin.tests.tools import get_app, fixture_add_user
 
 
 _log = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ _log = logging.getLogger(__name__)
 
 class TestOAuth(object):
     def setUp(self):
-        self.app = get_test_app()
+        self.app = get_app()
         self.db = mg_globals.database
 
         self.pman = pluginapi.PluginManager()

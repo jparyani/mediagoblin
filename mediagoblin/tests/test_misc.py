@@ -16,9 +16,9 @@
 
 from nose.tools import assert_equal
 
-from mediagoblin.tests.tools import get_test_app
+from mediagoblin.tests.tools import get_app
 
 def test_404_for_non_existent():
-    test_app = get_test_app(dump_old_app=False)
+    test_app = get_app(dump_old_app=False)
     res = test_app.get('/does-not-exist/', expect_errors=True)
     assert_equal(res.status_int, 404)

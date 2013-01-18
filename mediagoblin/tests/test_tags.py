@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.tests.tools import get_test_app
+from mediagoblin.tests.tools import get_app
 from mediagoblin.tools import text
 
 def test_list_of_dicts_conversion():
@@ -24,7 +24,7 @@ def test_list_of_dicts_conversion():
     as a dict. Each tag dict should contain the tag's name and slug. Another
     function performs the reverse operation when populating a form to edit tags.
     """
-    test_app = get_test_app(dump_old_app=False)
+    test_app = get_app(dump_old_app=False)
     # Leading, trailing, and internal whitespace should be removed and slugified
     assert text.convert_to_tag_list_of_dicts('sleep , 6    AM, chainsaw! ') == [
                               {'name': u'sleep', 'slug': u'sleep'},

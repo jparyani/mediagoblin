@@ -15,22 +15,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin import mg_globals
-from mediagoblin.tests.tools import get_test_app, fixture_add_user
+from mediagoblin.tests.tools import get_app, fixture_add_user
 from mediagoblin.db.models import User
 
 
-def test_get_test_app_wipes_db():
+def test_get_app_wipes_db():
     """
     Make sure we get a fresh database on every wipe :)
     """
-    get_test_app(dump_old_app=True)
+    get_app(dump_old_app=True)
     assert User.query.count() == 0
 
     fixture_add_user()
     assert User.query.count() == 1
 
-    get_test_app(dump_old_app=False)
+    get_app(dump_old_app=False)
     assert User.query.count() == 1
 
-    get_test_app(dump_old_app=True)
+    get_app(dump_old_app=True)
     assert User.query.count() == 0

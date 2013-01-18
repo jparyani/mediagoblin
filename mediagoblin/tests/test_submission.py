@@ -24,7 +24,7 @@ import os
 from nose.tools import assert_equal, assert_true
 from pkg_resources import resource_filename
 
-from mediagoblin.tests.tools import get_test_app, \
+from mediagoblin.tests.tools import get_app, \
     fixture_add_user
 from mediagoblin import mg_globals
 from mediagoblin.tools import template
@@ -50,7 +50,7 @@ REQUEST_CONTEXT = ['mediagoblin/user_pages/user.html', 'request']
 
 class TestSubmission:
     def setUp(self):
-        self.test_app = get_test_app(dump_old_app=False)
+        self.test_app = get_app(dump_old_app=False)
 
         # TODO: Possibly abstract into a decorator like:
         # @as_authenticated_user('chris')

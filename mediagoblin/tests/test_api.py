@@ -22,7 +22,7 @@ from pkg_resources import resource_filename
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, pluginapi
-from mediagoblin.tests.tools import get_test_app, fixture_add_user
+from mediagoblin.tests.tools import get_app, fixture_add_user
 
 
 _log = logging.getLogger(__name__)
@@ -44,7 +44,7 @@ BIG_BLUE = resource('bigblue.png')
 
 class TestAPI(object):
     def setUp(self):
-        self.app = get_test_app(dump_old_app=False)
+        self.app = get_app(dump_old_app=False)
         self.db = mg_globals.database
 
         self.user_password = u'4cc355_70k3N'

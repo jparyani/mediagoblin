@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.messages import fetch_messages, add_message
-from mediagoblin.tests.tools import get_test_app
+from mediagoblin.tests.tools import get_app
 from mediagoblin.tools import template
 
 
@@ -26,7 +26,7 @@ def test_messages():
     fetched messages should be the same as the added ones,
     and fetching should clear the message list.
     """
-    test_app = get_test_app(dump_old_app=False)
+    test_app = get_app(dump_old_app=False)
     # Aquire a request object
     test_app.get('/')
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']

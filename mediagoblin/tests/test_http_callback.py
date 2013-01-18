@@ -20,14 +20,14 @@ from urlparse import urlparse, parse_qs
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import processing
-from mediagoblin.tests.tools import get_test_app, fixture_add_user
+from mediagoblin.tests.tools import get_app, fixture_add_user
 from mediagoblin.tests.test_submission import GOOD_PNG
 from mediagoblin.tests import test_oauth as oauth
 
 
 class TestHTTPCallback(object):
     def setUp(self):
-        self.app = get_test_app(dump_old_app=False)
+        self.app = get_app(dump_old_app=False)
         self.db = mg_globals.database
 
         self.user_password = u'secret'

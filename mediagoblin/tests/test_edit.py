@@ -18,13 +18,13 @@ from nose.tools import assert_equal
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User
-from mediagoblin.tests.tools import get_test_app, fixture_add_user
+from mediagoblin.tests.tools import get_app, fixture_add_user
 from mediagoblin.tools import template
 from mediagoblin.auth.lib import bcrypt_check_password
 
 class TestUserEdit(object):
     def setUp(self):
-        self.app = get_test_app(dump_old_app=False)
+        self.app = get_app(dump_old_app=False)
         # set up new user
         self.user_password = u'toast'
         self.user = fixture_add_user(password = self.user_password)

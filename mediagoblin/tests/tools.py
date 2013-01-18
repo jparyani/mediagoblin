@@ -103,7 +103,7 @@ def suicide_if_bad_celery_environ():
         raise BadCeleryEnviron(BAD_CELERY_MESSAGE)
 
 
-def get_test_app(dump_old_app=True):
+def get_app(dump_old_app=True):
     suicide_if_bad_celery_environ()
 
     # Make sure we've turned on testing
@@ -164,7 +164,7 @@ def setup_fresh_app(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        test_app = get_test_app()
+        test_app = get_app()
         testing.clear_test_buckets()
         return func(test_app, *args, **kwargs)
 
