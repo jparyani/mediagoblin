@@ -161,11 +161,17 @@ class TestSubmission:
         media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
         media_id = media.id
 
-        # At least render the edit page
+        # render and post to the edit page.
         edit_url = request.urlgen(
             'mediagoblin.edit.edit_media',
             user=self.test_user.username, media_id=media_id)
         self.test_app.get(edit_url)
+        self.test_app.post(edit_url,
+            {'title': u'Balanced Goblin',
+             'slug': u"Balanced=Goblin",
+             'tags': u''})
+        media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
+        assert_equal(media.slug, u"balanced-goblin")
 
         # Add a comment, so we can test for its deletion later.
         self.check_comments(request, media_id, 0)
