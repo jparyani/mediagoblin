@@ -25,7 +25,7 @@ from paste.deploy import loadapp
 from webtest import TestApp
 
 from mediagoblin import mg_globals
-from mediagoblin.db.models import User
+from mediagoblin.db.models import User, Collection
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.db.open import setup_connection_and_db_from_config
@@ -226,3 +226,24 @@ def fixture_add_user(username=u'chris', password=u'toast',
     Session.expunge(test_user)
 
     return test_user
+
+
+def fixture_add_collection(name=u"My first Collection", user=None):
+    if user is None:
+        user = fixture_add_user()
+    coll = Collection.query.filter_by(creator=user.id, title=name).first()
+    if coll is not None:
+        return coll
+    coll = Collection()
+    coll.creator = user.id
+    coll.title = name
+    coll.generate_slug()
+    coll.save()
+
+    # Reload
+    Session.refresh(coll)
+
+    # ... and detach from session:
+    Session.expunge(coll)
+
+    return coll
