@@ -86,7 +86,10 @@ def post_entry(request):
     #
     # (... don't change entry after this point to avoid race
     # conditions with changes to the document via processing code)
-    run_process_media(entry)
+    feed_url = request.urlgen(
+        'mediagoblin.user_pages.atom_feed',
+        qualified=True, user=request.user.username)
+    run_process_media(entry, feed_url)
 
     return json_response(get_entry_serializable(entry, request.urlgen))
 

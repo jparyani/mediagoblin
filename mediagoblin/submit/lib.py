@@ -14,16 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import urllib
-import urllib2
 import logging
 import uuid
-from celery import registry
 from werkzeug.utils import secure_filename
 
-from mediagoblin import mg_globals
 from mediagoblin.processing import mark_entry_failed
-from mediagoblin.processing.task import ProcessMedia
+from mediagoblin.processing.task import process_media
 
 
 _log = logging.getLogger(__name__)
@@ -58,11 +54,17 @@ def prepare_queue_task(app, entry, filename):
     return queue_file
 
 
-def run_process_media(entry):
-    process_media = registry.tasks[ProcessMedia.name]
+def run_process_media(entry, feed_url=None):
+    """Process the media asynchronously
+
+    :param entry: MediaEntry() instance to be processed.
+    :param feed_url: A string indicating the feed_url that the PuSH servers
+        should be notified of. This will be sth like: `request.urlgen(
+            'mediagoblin.user_pages.atom_feed',qualified=True,
+            user=request.user.username)`"""
     try:
         process_media.apply_async(
-            [unicode(entry.id)], {},
+            [entry.id, feed_url], {},
             task_id=entry.queued_task_id)
     except BaseException as exc:
         # The purpose of this section is because when running in "lazy"
@@ -76,30 +78,3 @@ def run_process_media(entry):
         mark_entry_failed(entry.id, exc)
         # re-raise the exception
         raise
-
-
-def handle_push_urls(request):
-    if mg_globals.app_config["push_urls"]:
-        feed_url = request.urlgen(
-                           'mediagoblin.user_pages.atom_feed',
-                           qualified=True,
-                           user=request.user.username)
-        hubparameters = {
-            'hub.mode': 'publish',
-            'hub.url': feed_url}
-        hubdata = urllib.urlencode(hubparameters)
-        hubheaders = {
-            "Content-type": "application/x-www-form-urlencoded",
-            "Connection": "close"}
-        for huburl in mg_globals.app_config["push_urls"]:
-            hubrequest = urllib2.Request(huburl, hubdata, hubheaders)
-            try:
-                hubresponse = urllib2.urlopen(hubrequest)
-            except urllib2.HTTPError as exc:
-                # This is not a big issue, the item will be fetched
-                # by the PuSH server next time we hit it
-                _log.warning(
-                    "push url %r gave error %r", huburl, exc.code)
-            except urllib2.URLError as exc:
-                _log.warning(
-                    "push url %r is unreachable %r", huburl, exc.reason)
