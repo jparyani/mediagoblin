@@ -112,20 +112,21 @@ def login(request):
 
     login_failed = False
 
-    if request.method == 'POST' and login_form.validate():
-        user = User.query.filter_by(username=login_form.data['username']).first()
+    if request.method == 'POST':
+        if login_form.validate():
+            user = User.query.filter_by(username=login_form.data['username']).first()
 
-        if user and user.check_login(request.form['password']):
-            # set up login in session
-            request.session['user_id'] = unicode(user.id)
-            request.session.save()
+            if user and user.check_login(request.form['password']):
+                # set up login in session
+                request.session['user_id'] = unicode(user.id)
+                request.session.save()
 
-            if request.form.get('next'):
-                return redirect(request, location=request.form['next'])
-            else:
-                return redirect(request, "index")
+                if request.form.get('next'):
+                    return redirect(request, location=request.form['next'])
+                else:
+                    return redirect(request, "index")
 
-        else:
+            # Some failure during login occured if we are here!
             # Prevent detecting who's on this system by testing login
             # attempt timings
             auth_lib.fake_login_attempt()
