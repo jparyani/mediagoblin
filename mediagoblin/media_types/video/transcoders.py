@@ -673,6 +673,7 @@ class VideoTranscoder:
         self._setup()
         self._run()
 
+    # XXX: This could be a static method.
     def discover(self, src):
         '''
         Discover properties about a media file
@@ -793,7 +794,8 @@ class VideoTranscoder:
         self.audioconvert = gst.element_factory_make('audioconvert', 'audioconvert')
         self.pipeline.add(self.audioconvert)
 
-        self.audiocapsfilter = gst.element_factory_make('capsfilter', 'audiocapsfilter')
+        self.audiocapsfilter = gst.element_factory_make('capsfilter',
+                                                        'audiocapsfilter')
         audiocaps = ['audio/x-raw-float']
         self.audiocapsfilter.set_property(
             'caps',
