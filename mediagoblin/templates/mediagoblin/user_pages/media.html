@@ -105,9 +105,6 @@
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
                                          user= media.get_uploader.username,
                                          media_id=media.id) }}" method="POST" id="form_comment">
-          <p>
-            {% trans %}You can use <a href="http://daringfireball.net/projects/markdown/basics">Markdown</a> for formatting.{% endtrans %}
-          </p>
           {{ wtforms_util.render_divs(comment_form) }}
           <div class="form_submit_buttons">
             <input type="submit" value="{% trans %}Add this comment{% endtrans %}" class="button_action" />

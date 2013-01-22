@@ -20,8 +20,11 @@ from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 
 class MediaCommentForm(wtforms.Form):
     comment_content = wtforms.TextAreaField(
-        '',
-        [wtforms.validators.Required()])
+        _('Comment'),
+        [wtforms.validators.Required()],
+        description=_(u'You can use '
+                      u'<a href="http://daringfireball.net/projects/markdown/basics">'
+                      u'Markdown</a> for formatting.'))
 
 class ConfirmDeleteForm(wtforms.Form):
     confirm = wtforms.BooleanField(
