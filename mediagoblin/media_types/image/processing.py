@@ -28,6 +28,12 @@ from mediagoblin.tools.exif import exif_fix_image_orientation, \
 
 _log = logging.getLogger(__name__)
 
+PIL_FILTERS = {
+    'NEAREST': Image.NEAREST,
+    'BILINEAR': Image.BILINEAR,
+    'BICUBIC': Image.BICUBIC,
+    'ANTIALIAS': Image.ANTIALIAS}
+
 
 def resize_image(entry, filename, new_path, exif_tags, workdir, new_size,
                  size_limits=(0, 0)):
@@ -48,22 +54,16 @@ def resize_image(entry, filename, new_path, exif_tags, workdir, new_size,
         raise BadMediaFail()
     resized = exif_fix_image_orientation(resized, exif_tags)  # Fix orientation
 
-    pil_filters = {
-        'NEAREST': Image.NEAREST,
-        'BILINEAR': Image.BILINEAR,
-        'BICUBIC': Image.BICUBIC,
-        'ANTIALIAS': Image.ANTIALIAS}
-
     filter_config = \
             mgg.global_config['media_type:mediagoblin.media_types.image']\
                 ['resize_filter']
 
     try:
-        resize_filter = pil_filters[filter_config.upper()]
+        resize_filter = PIL_FILTERS[filter_config.upper()]
     except KeyError:
         raise Exception('Filter "{0}" not found, choose one of {1}'.format(
             unicode(filter_config),
-            u', '.join(pil_filters.keys())))
+            u', '.join(PIL_FILTERS.keys())))
 
     resized.thumbnail(new_size, resize_filter)
 
