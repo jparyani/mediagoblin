@@ -47,7 +47,25 @@ def resize_image(entry, filename, new_path, exif_tags, workdir, new_size,
     except IOError:
         raise BadMediaFail()
     resized = exif_fix_image_orientation(resized, exif_tags)  # Fix orientation
-    resized.thumbnail(new_size, Image.ANTIALIAS)
+
+    pil_filters = {
+        'NEAREST': Image.NEAREST,
+        'BILINEAR': Image.BILINEAR,
+        'BICUBIC': Image.BICUBIC,
+        'ANTIALIAS': Image.ANTIALIAS}
+
+    filter_config = \
+            mgg.global_config['media_type:mediagoblin.media_types.image']\
+                ['resize_filter']
+
+    try:
+        resize_filter = pil_filters[filter_config.upper()]
+    except KeyError:
+        raise Exception('Filter "{0}" not found, choose one of {1}'.format(
+            unicode(filter_config),
+            u', '.join(pil_filters.keys())))
+
+    resized.thumbnail(new_size, resize_filter)
 
     # Copy the new file to the conversion subdir, then remotely.
     tmp_resized_filename = os.path.join(workdir, new_path[-1])
