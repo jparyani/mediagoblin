@@ -191,8 +191,8 @@ def edit_profile(request, url_user=None):
     user = url_user
 
     form = forms.EditProfileForm(request.form,
-        url=user.get('url'),
-        bio=user.get('bio'))
+        url=user.url,
+        bio=user.bio)
 
     if request.method == 'POST' and form.validate():
         user.url = unicode(request.form['url'])
@@ -218,8 +218,8 @@ def edit_profile(request, url_user=None):
 def edit_account(request):
     user = request.user
     form = forms.EditAccountForm(request.form,
-        wants_comment_notification=user.get('wants_comment_notification'),
-        license_preference=user.get('license_preference'))
+        wants_comment_notification=user.wants_comment_notification,
+        license_preference=user.license_preference)
 
     if request.method == 'POST':
         form_validated = form.validate()

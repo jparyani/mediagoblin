@@ -32,11 +32,11 @@ def require_active_login(controller):
     @wraps(controller)
     def new_controller_func(request, *args, **kwargs):
         if request.user and \
-                request.user.get('status') == u'needs_email_verification':
+                request.user.status == u'needs_email_verification':
             return redirect(
                 request, 'mediagoblin.user_pages.user_home',
                 user=request.user.username)
-        elif not request.user or request.user.get('status') != u'active':
+        elif not request.user or request.user.status != u'active':
             next_url = urljoin(
                     request.urlgen('mediagoblin.auth.login',
                         qualified=True),
