@@ -184,3 +184,15 @@ def fix_CollectionItem_v0_constraint(db_conn):
         pass
 
     db_conn.commit()
+
+
+@RegisterMigration(8, MIGRATIONS)
+def add_license_preference(db):
+    metadata = MetaData(bind=db.bind)
+
+    user_table = Table('core__users', metadata, autoload=True,
+            autoload_with=db.bind)
+
+    col = Column('license_preference', Unicode, default=u'')
+    col.create(user_table)
+    db.commit()
