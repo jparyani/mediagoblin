@@ -84,9 +84,7 @@ class User(Base, UserMixin):
 
     def delete(self, **kwargs):
         """Deletes a User and all related entries/comments/files/..."""
-        # Delete this user's Collections and all contained CollectionItems
-        for collection in self.collections:
-            collection.delete(commit=False)
+        # Collections get deleted by relationships.
 
         media_entries = MediaEntry.query.filter(MediaEntry.uploader == self.id)
         for media in media_entries:
@@ -415,7 +413,10 @@ class Collection(Base, CollectionMixin):
     # TODO: No of items in Collection. Badly named, can we migrate to num_items?
     items = Column(Integer, default=0)
 
-    get_creator = relationship(User, backref="collections")
+    # Cascade: Collections are owned by their creator. So do the full thing.
+    get_creator = relationship(User,
+                               backref=backref("collections",
+                                               cascade="all, delete-orphan"))
 
     def get_collection_items(self, ascending=False):
         #TODO, is this still needed with self.collection_items being available?
@@ -436,7 +437,9 @@ class CollectionItem(Base, CollectionItemMixin):
     note = Column(UnicodeText, nullable=True)
     added = Column(DateTime, nullable=False, default=datetime.datetime.now)
     position = Column(Integer)
-    in_collection = relationship("Collection",
+
+    # Cascade: CollectionItems are owned by their Collection. So do the full thing.
+    in_collection = relationship(Collection,
                                  backref=backref(
                                      "collection_items",
                                      cascade="all, delete-orphan"))
