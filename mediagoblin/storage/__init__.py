@@ -102,10 +102,6 @@ class StorageInterface(object):
     def delete_file(self, filepath):
         """
         Delete or dereference the file (not directory) at filepath.
-
-        TODO: is the below comment correct? AFAIK, we won't clean up empty directories...
-        This might need to delete directories, buckets, whatever, for
-        cleanliness.  (Be sure to avoid race conditions on that though)
         """
         # Subclasses should override this method.
         self.__raise_not_implemented()
