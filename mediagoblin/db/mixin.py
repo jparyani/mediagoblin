@@ -111,7 +111,7 @@ class MediaEntryMixin(object):
             # let's whack junk on there till it's unique.
             self.slug += '-'
             while check_media_slug_used(self.uploader, self.slug, self.id):
-                self.slug += uuid4()[1:4]
+                self.slug += uuid4().hex[:4]
 
     @property
     def description_html(self):
