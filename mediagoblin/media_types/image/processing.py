@@ -19,7 +19,6 @@ import os
 import logging
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.decorators import get_workbench
 from mediagoblin.processing import BadMediaFail, \
     create_pub_filepath, FilenameBuilder
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
@@ -95,21 +94,21 @@ def sniff_handler(media_file, **kw):
     return False
 
 
-@get_workbench
-def process_image(entry, workbench=None):
+def process_image(entry):
     """Code to process an image. Will be run by celery.
 
     A Workbench() represents a local tempory dir. It is automatically
     cleaned up when this function exits.
     """
+    proc_state = entry.proc_state
+    workbench = proc_state.workbench
+
     # Conversions subdirectory to avoid collisions
     conversions_subdir = os.path.join(
         workbench.dir, 'conversions')
     os.mkdir(conversions_subdir)
-    queued_filepath = entry.queued_media_file
-    queued_filename = workbench.localized_file(
-        mgg.queue_store, queued_filepath,
-        'source')
+
+    queued_filename = proc_state.get_queued_filename()
     name_builder = FilenameBuilder(queued_filename)
 
     # EXIF extraction
@@ -147,8 +146,7 @@ def process_image(entry, workbench=None):
     mgg.public_store.copy_local_to_storage(queued_filename, original_filepath)
 
     # Remove queued media file from storage and database
-    mgg.queue_store.delete_file(queued_filepath)
-    entry.queued_media_file = []
+    proc_state.delete_queue_file()
 
     # Insert media file information into database
     media_files_dict = entry.setdefault('media_files', {})
