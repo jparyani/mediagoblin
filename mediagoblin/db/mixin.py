@@ -27,7 +27,7 @@ These functions now live here and get "mixed in" into the
 real objects.
 """
 
-from uuid import uuid4
+import uuid
 
 from werkzeug.utils import cached_property
 
@@ -113,9 +113,10 @@ class MediaEntryMixin(object):
         
             # okay, still no success;
             # let's whack junk on there till it's unique.
-            self.slug += '-'
+            self.slug += '-' + uuid.uuid4().hex[:4]
+            # keep going if necessary!
             while check_media_slug_used(self.uploader, self.slug, self.id):
-                self.slug += uuid4().hex[:4]
+                self.slug += uuid.uuid4().hex[:4]
 
     @property
     def description_html(self):
