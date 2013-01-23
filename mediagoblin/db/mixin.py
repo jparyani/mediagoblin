@@ -89,6 +89,10 @@ class MediaEntryMixin(object):
             # assign slug based on title
             self.slug = slugify(self.title)
      
+        # We don't want any empty string slugs
+        if self.slug == u"":
+            self.slug = None
+
         # Do we have anything at this point?
         # If not, we're not going to get a slug
         # so just return... we're not going to force one.
