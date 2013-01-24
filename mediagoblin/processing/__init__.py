@@ -81,6 +81,16 @@ class ProcessingState(object):
         self.queued_filename = None
 
         # Monkey patch us onto the entry
+        # This is needed to keep the current calling convention
+        # for processors:
+        #   def process_FOO(entry):
+        #     proc_state = entry.proc_state
+        #     workbench = proc_state.workbench
+        # When all processors use the new stuff, they should be
+        # rewritten:
+        #   def process_FOO(proc_state):
+        #     entry = proc_state.entry
+        #     workbench = proc_state.workbench
         entry.proc_state = self
 
     def set_workbench(self, wb):
