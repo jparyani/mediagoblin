@@ -18,5 +18,13 @@
 
 {% extends 'mediagoblin/user_pages/media.html' %}
 
+{% from "/mediagoblin/utils/templatehooks.html" import template_hook %}
+
+{% block mediagoblin_head %}
+  {{ super() }}
+  {% template_hook "image_extrahead" %}
+{% endblock mediagoblin_head %}
+
 {% block mediagoblin_sidebar %}
+  {% template_hook "image_sideinfo" %}
 {% endblock %}

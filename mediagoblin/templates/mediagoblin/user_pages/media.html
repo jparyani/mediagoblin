@@ -18,6 +18,7 @@
 {% extends "mediagoblin/base.html" %}
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+{% from "/mediagoblin/utils/templatehooks.html" import template_hook %}
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
 
 {% block title %}{{ media.title }} &mdash; {{ super() }}{% endblock %}
@@ -30,15 +31,7 @@
   <script type="text/javascript"
           src="{{ request.staticdirect('/js/keyboard_navigation.js') }}"></script>
 
-  {% if app_config['geolocation_map_visible'] %}
-    <link rel="stylesheet"
-	  href="{{ request.staticdirect('/extlib/leaflet/leaflet.css') }}" />
-
-    <script type="text/javascript"
-            src="{{ request.staticdirect('/extlib/leaflet/leaflet.js') }}"></script>
-    <script type="text/javascript"
-            src="{{ request.staticdirect('/js/geolocation-map.js') }}"></script>
-  {% endif %}
+  {% template_hook "media_extrahead" %}
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_content %}
@@ -206,8 +199,11 @@
       </p>
     {% endif %}
 
+    {% template_hook "media_sideinfo" %}
+
     {% block mediagoblin_sidebar %}
     {% endblock %}
+
   </div>
   <div class="clear"></div>
 {% endblock %}
