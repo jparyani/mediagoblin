@@ -53,9 +53,17 @@ class UserMixin(object):
 
 
 class GenerateSlugMixin(object):
+    """
+    Mixin to add a generate_slug method to objects.
+
+    Depends on:
+     - self.slug
+     - self.title
+     - self.check_slug_used(new_slug)
+    """
     def generate_slug(self):
         """
-        Generate a unique slug for this MediaEntry.
+        Generate a unique slug for this object.
 
         This one does not *force* slugs, but usually it will probably result
         in a niceish one.
