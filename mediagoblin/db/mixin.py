@@ -242,22 +242,13 @@ class MediaCommentMixin(object):
         return cleaned_markdown_conversion(self.content)
 
 
-class CollectionMixin(object):
-    def generate_slug(self):
+class CollectionMixin(GenerateSlugMixin):
+    def check_slug_used(self, slug):
         # import this here due to a cyclic import issue
         # (db.models -> db.mixin -> db.util -> db.models)
         from mediagoblin.db.util import check_collection_slug_used
 
-        self.slug = slugify(self.title)
-
-        duplicate = check_collection_slug_used(mg_globals.database,
-            self.creator, self.slug, self.id)
-
-        if duplicate:
-            if self.id is not None:
-                self.slug = u"%s-%s" % (self.id, self.slug)
-            else:
-                self.slug = None
+        return check_collection_slug_used(self.creator, slug, self.id)
 
     @property
     def description_html(self):

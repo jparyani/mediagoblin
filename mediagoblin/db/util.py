@@ -59,7 +59,7 @@ def clean_orphan_tags(commit=True):
         Session.commit()
 
 
-def check_collection_slug_used(dummy_db, creator_id, slug, ignore_c_id):
+def check_collection_slug_used(creator_id, slug, ignore_c_id):
     filt = (Collection.creator == creator_id) \
         & (Collection.slug == slug)
     if ignore_c_id is not None:

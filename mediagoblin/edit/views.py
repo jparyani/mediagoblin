@@ -308,7 +308,7 @@ def edit_collection(request, collection):
     if request.method == 'POST' and form.validate():
         # Make sure there isn't already a Collection with such a slug
         # and userid.
-        slug_used = check_collection_slug_used(request.db, collection.creator,
+        slug_used = check_collection_slug_used(collection.creator,
                 form.slug.data, collection.id)
 
         # Make sure there isn't already a Collection with this title
