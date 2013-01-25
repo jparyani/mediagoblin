@@ -52,7 +52,7 @@ class UserMixin(object):
         return cleaned_markdown_conversion(self.bio)
 
 
-class MediaEntryMixin(object):
+class GenerateSlugMixin(object):
     def generate_slug(self):
         """
         Generate a unique slug for this MediaEntry.
@@ -76,10 +76,6 @@ class MediaEntryMixin(object):
            generated bits until it's unique.  That'll be a little bit of junk,
            but at least it has the basis of a nice slug.
         """
-        # import this here due to a cyclic import issue
-        # (db.models -> db.mixin -> db.util -> db.models)
-        from mediagoblin.db.util import check_media_slug_used
-
         #Is already a slug assigned? Check if it is valid
         if self.slug:
             self.slug = slugify(self.slug)
@@ -100,14 +96,13 @@ class MediaEntryMixin(object):
             return  # giving up!
 
         # Otherwise, let's see if this is unique.
-        if check_media_slug_used(self.uploader, self.slug, self.id):
+        if self.check_slug_used(self.slug):
             # It looks like it's being used... lame.
 
             # Can we just append the object's id to the end?
             if self.id:
                 slug_with_id = u"%s-%s" % (self.slug, self.id)
-                if not check_media_slug_used(self.uploader,
-                                             slug_with_id, self.id):
+                if not self.check_slug_used(slug_with_id):
                     self.slug = slug_with_id
                     return  # success!
 
@@ -115,8 +110,17 @@ class MediaEntryMixin(object):
             # let's whack junk on there till it's unique.
             self.slug += '-' + uuid.uuid4().hex[:4]
             # keep going if necessary!
-            while check_media_slug_used(self.uploader, self.slug, self.id):
+            while self.check_slug_used(self.slug):
                 self.slug += uuid.uuid4().hex[:4]
+
+
+class MediaEntryMixin(GenerateSlugMixin):
+    def check_slug_used(self, slug):
+        # import this here due to a cyclic import issue
+        # (db.models -> db.mixin -> db.util -> db.models)
+        from mediagoblin.db.util import check_media_slug_used
+
+        return check_media_slug_used(self.uploader, slug, self.id)
 
     @property
     def description_html(self):
