@@ -20,7 +20,7 @@
 
 from mediagoblin.db.models import MediaEntry
 
-from mediagoblin.tests.tools import get_test_app, \
+from mediagoblin.tests.tools import get_app, \
     fixture_add_user
 
 import mock
@@ -34,7 +34,7 @@ UUID_MOCK = mock.Mock(return_value=FakeUUID())
 
 class TestMediaEntrySlugs(object):
     def setUp(self):
-        self.test_app = get_test_app(dump_old_app=True)
+        self.test_app = get_app(dump_old_app=True)
         self.chris_user = fixture_add_user(u'chris')
         self.emily_user = fixture_add_user(u'emily')
         self.existing_entry = self._insert_media_entry_fixture(
