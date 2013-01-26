@@ -44,7 +44,6 @@ MediaGoblin website.  It is written for site administrators.
    siteadmin/relnotes
    siteadmin/theming
    siteadmin/plugins
-   siteadmin/codebase
 
 
 .. _core-plugin-section:
@@ -72,6 +71,17 @@ This guide covers writing new GNU MediaGoblin plugins.
    pluginwriter/foreward
    pluginwriter/quickstart
    pluginwriter/api
+
+
+Part 4: Developer's Zone
+========================
+
+This chapter contains various information for developers.
+
+.. toctree::
+   :maxdepth: 1
+
+   devel/codebase
 
 
 Indices and tables
