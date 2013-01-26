@@ -52,7 +52,7 @@ def sniff_handler(media_file, **kw):
     return False
 
 
-def process_video(entry):
+def process_video(proc_state):
     """
     Process a video entry, transcode the queued media files (originals) and
     create a thumbnail for the entry.
@@ -60,7 +60,7 @@ def process_video(entry):
     A Workbench() represents a local tempory dir. It is automatically
     cleaned up when this function exits.
     """
-    proc_state = entry.proc_state
+    entry = proc_state.entry
     workbench = proc_state.workbench
     video_config = mgg.global_config['media_type:mediagoblin.media_types.video']
 

@@ -94,13 +94,13 @@ def sniff_handler(media_file, **kw):
     return False
 
 
-def process_image(entry):
+def process_image(proc_state):
     """Code to process an image. Will be run by celery.
 
     A Workbench() represents a local tempory dir. It is automatically
     cleaned up when this function exits.
     """
-    proc_state = entry.proc_state
+    entry = proc_state.entry
     workbench = proc_state.workbench
 
     # Conversions subdirectory to avoid collisions
