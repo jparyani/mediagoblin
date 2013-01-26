@@ -70,6 +70,7 @@ This guide covers writing new GNU MediaGoblin plugins.
 
    pluginwriter/foreward
    pluginwriter/quickstart
+   pluginwriter/database
    pluginwriter/api
 
 
