@@ -109,6 +109,12 @@ class ProcessingState(object):
         self.queued_filename = queued_filename
         return queued_filename
 
+    def copy_original(self, target_name, keyname=u"original"):
+        target_filepath = create_pub_filepath(self.entry, target_name)
+        mgg.public_store.copy_local_to_storage(self.get_queued_filename(),
+            target_filepath)
+        self.entry.media_files[keyname] = target_filepath
+
     def delete_queue_file(self):
         queued_filepath = self.entry.queued_media_file
         mgg.queue_store.delete_file(queued_filepath)

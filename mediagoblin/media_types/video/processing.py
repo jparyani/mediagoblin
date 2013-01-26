@@ -116,9 +116,7 @@ def process_video(entry):
     if video_config['keep_original']:
         # Push original file to public storage
         _log.debug('Saving original...')
-        original_filepath = create_pub_filepath(entry, queued_filepath[-1])
-        mgg.public_store.copy_local_to_storage(queued_filename, original_filepath)
-        entry.media_files['original'] = original_filepath
+        proc_state.copy_original(queued_filepath[-1])
 
     # Remove queued media file from storage and database
     proc_state.delete_queue_file()

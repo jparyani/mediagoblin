@@ -141,9 +141,7 @@ def process_image(entry):
         medium_filepath = None
 
     # Copy our queued local workbench to its final destination
-    original_filepath = create_pub_filepath(
-            entry, name_builder.fill('{basename}{ext}'))
-    mgg.public_store.copy_local_to_storage(queued_filename, original_filepath)
+    proc_state.copy_original(name_builder.fill('{basename}{ext}'))
 
     # Remove queued media file from storage and database
     proc_state.delete_queue_file()
@@ -151,7 +149,6 @@ def process_image(entry):
     # Insert media file information into database
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict[u'thumb'] = thumb_filepath
-    media_files_dict[u'original'] = original_filepath
     if medium_filepath:
         media_files_dict[u'medium'] = medium_filepath
 
