@@ -58,6 +58,7 @@ Part 2: Core plugin documentation
    plugindocs/flatpagesfile
    plugindocs/sampleplugin
    plugindocs/oauth
+   plugindocs/trim_whitespace
 
 
 Part 3: Plugin Writer's Guide
