@@ -18,19 +18,12 @@
 
 {% extends 'mediagoblin/user_pages/media.html' %}
 
-{% from "/mediagoblin/utils/templatehooks.html" import template_hook with context %}
-
 {% block mediagoblin_head %}
   {{ super() }}
-  {% for template in get_hook_templates("image_extrahead") %}
-    {% include template %}
-  {% endfor %}
-  {# {{ template_hook("image_extrahead") }} #}
+  {% template_hook("image_extrahead") %}
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_sidebar %}
-  {% for template in get_hook_templates("image_sideinfo") %}
-    {% include template %}
-  {% endfor %}
-  {# {{ template_hook("image_sideinfo") }} #}
+  {{ super() }}
+  {% template_hook("image_sideinfo") %}
 {% endblock %}

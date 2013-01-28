@@ -15,7 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from math import ceil
+
 import jinja2
+from jinja2.ext import Extension
+from jinja2.nodes import Include, Const
+
 from babel.localedata import exists
 from werkzeug.urls import url_quote_plus
 
@@ -49,7 +53,9 @@ def get_jinja_env(template_loader, locale):
     template_env = jinja2.Environment(
         loader=template_loader, autoescape=True,
         undefined=jinja2.StrictUndefined,
-        extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
+        extensions=[
+            'jinja2.ext.i18n', 'jinja2.ext.autoescape',
+            TemplateHookExtension])
 
     template_env.install_gettext_callables(
         mg_globals.thread_scope.translations.ugettext,
@@ -102,3 +108,33 @@ def render_template(request, template_path, context):
 def clear_test_template_context():
     global TEMPLATE_TEST_CONTEXT
     TEMPLATE_TEST_CONTEXT = {}
+
+
+class TemplateHookExtension(Extension):
+    """
+    Easily loop through a bunch of templates from a template hook.
+
+    Use:
+      {% template_hook("comment_extras") %}
+
+    ... will include all templates hooked into the comment_extras section.
+    """
+
+    tags={"template_hook"}
+
+    def __init__(self, environment):
+        super(TemplateHookExtension, self).__init__(environment)
+
+    def parse(self, parser):
+        includes = []
+        expr = parser.parse_expression()
+        lineno = expr.lineno
+        hook_name = expr.args[0].value
+
+        for template_name in get_hook_templates(hook_name):
+            includes.append(
+                parser.parse_import_context(
+                    Include(Const(template_name), True, False, lineno=lineno),
+                    True))
+
+        return includes
