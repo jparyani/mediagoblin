@@ -154,7 +154,10 @@ class PluginManager(object):
             else:
                 # In this case, it's actually a single callable---not a
                 # list of callables.
-                self.hooks.setdefault(hook, []).append(templates)
+                self.template_hooks.setdefault(hook, []).append(templates)
+
+    def get_template_hooks(self, hook_name):
+        return self.template_hooks.get(hook_name, [])
 
 
 def register_routes(routes):
@@ -235,3 +238,7 @@ def get_config(key):
 
 def register_template_hooks(template_hooks):
     PluginManager().register_template_hooks(template_hooks)
+
+
+def get_hook_templates(hook_name):
+    return PluginManager().get_template_hooks(hook_name)

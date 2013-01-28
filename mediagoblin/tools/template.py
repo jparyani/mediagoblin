@@ -23,6 +23,7 @@ from mediagoblin import mg_globals
 from mediagoblin import messages
 from mediagoblin.tools import common
 from mediagoblin.tools.translate import get_gettext_translation
+from mediagoblin.tools.pluginapi import get_hook_templates
 from mediagoblin.meddleware.csrf import render_csrf_form_token
 
 
@@ -63,6 +64,9 @@ def get_jinja_env(template_loader, locale):
     template_env.globals['global_config'] = mg_globals.global_config
 
     template_env.filters['urlencode'] = url_quote_plus
+
+    # allow for hooking up plugin templates
+    template_env.globals['get_hook_templates'] = get_hook_templates
 
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env

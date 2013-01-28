@@ -1,4 +1,3 @@
-{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -14,23 +13,23 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
 
-{% extends 'mediagoblin/user_pages/media.html' %}
+from mediagoblin.tools import pluginapi
+import os
 
-{% from "/mediagoblin/utils/templatehooks.html" import template_hook with context %}
+PLUGIN_DIR = os.path.dirname(__file__)
 
-{% block mediagoblin_head %}
-  {{ super() }}
-  {% for template in get_hook_templates("image_extrahead") %}
-    {% include template %}
-  {% endfor %}
-  {# {{ template_hook("image_extrahead") }} #}
-{% endblock mediagoblin_head %}
+def setup_plugin():
+    config = pluginapi.get_config('mediagoblin.plugins.geolocation')
+    
+    # Register the template path.
+    pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
 
-{% block mediagoblin_sidebar %}
-  {% for template in get_hook_templates("image_sideinfo") %}
-    {% include template %}
-  {% endfor %}
-  {# {{ template_hook("image_sideinfo") }} #}
-{% endblock %}
+    pluginapi.register_template_hooks(
+        {"image_sideinfo": "mediagoblin/plugins/geolocation/map.html",
+         "image_extrahead": "mediagoblin/plugins/geolocation/map_js_head.html"})
+
+
+hooks = {
+    'setup': setup_plugin
+    }

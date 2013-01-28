@@ -31,7 +31,7 @@
   <script type="text/javascript"
           src="{{ request.staticdirect('/js/keyboard_navigation.js') }}"></script>
 
-  {% template_hook "media_extrahead" %}
+  {{ template_hook("media_extrahead") }}
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_content %}
@@ -156,8 +156,6 @@
 
     {% include "mediagoblin/utils/license.html" %}
 
-    {% include "mediagoblin/utils/geolocation_map.html" %}
-
     {% include "mediagoblin/utils/exif.html" %}
     
     {% if media.attachment_files|count %}
@@ -199,7 +197,7 @@
       </p>
     {% endif %}
 
-    {% template_hook "media_sideinfo" %}
+    {{ template_hook("media_sideinfo") }}
 
     {% block mediagoblin_sidebar %}
     {% endblock %}
