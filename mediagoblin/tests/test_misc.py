@@ -16,6 +16,7 @@
 
 from nose.tools import assert_equal
 
+from mediagoblin.db.base import Session
 from mediagoblin.db.models import User, MediaEntry, MediaComment
 from mediagoblin.tests.tools import get_app, \
     fixture_add_user, fixture_media_entry
@@ -31,8 +32,11 @@ def test_user_deletes_other_comments():
     user_a = fixture_add_user(u"chris_a")
     user_b = fixture_add_user(u"chris_b")
 
-    media_a = fixture_media_entry(uploader=user_a.id)
-    media_b = fixture_media_entry(uploader=user_b.id)
+    media_a = fixture_media_entry(uploader=user_a.id, save=False)
+    media_b = fixture_media_entry(uploader=user_b.id, save=False)
+    Session.add(media_a)
+    Session.add(media_b)
+    Session.flush()
 
     # Create all 4 possible comments:
     for u_id in (user_a.id, user_b.id):
@@ -41,13 +45,15 @@ def test_user_deletes_other_comments():
             cmt.media_entry = m_id
             cmt.author = u_id
             cmt.content = u"Some Comment"
-            cmt.save()
+            Session.add(cmt)
+
+    Session.flush()
 
     usr_cnt1 = User.query.count()
     med_cnt1 = MediaEntry.query.count()
     cmt_cnt1 = MediaComment.query.count()
 
-    User.query.get(user_a.id).delete()
+    User.query.get(user_a.id).delete(commit=False)
 
     usr_cnt2 = User.query.count()
     med_cnt2 = MediaEntry.query.count()
