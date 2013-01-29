@@ -25,7 +25,7 @@ from paste.deploy import loadapp
 from webtest import TestApp
 
 from mediagoblin import mg_globals
-from mediagoblin.db.models import User, Collection
+from mediagoblin.db.models import User, MediaEntry, Collection
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.db.open import setup_connection_and_db_from_config
@@ -226,6 +226,22 @@ def fixture_add_user(username=u'chris', password=u'toast',
     Session.expunge(test_user)
 
     return test_user
+
+
+def fixture_media_entry(title=u"Some title", slug=None,
+                        uploader=None, save=True, gen_slug=True):
+    entry = MediaEntry()
+    entry.title = title
+    entry.slug = slug
+    entry.uploader = uploader or fixture_add_user().id
+    entry.media_type = u'image'
+    
+    if gen_slug:
+        entry.generate_slug()
+    if save:
+        entry.save()
+
+    return entry
 
 
 def fixture_add_collection(name=u"My first Collection", user=None):

@@ -16,9 +16,59 @@
 
 from nose.tools import assert_equal
 
-from mediagoblin.tests.tools import get_app
+from mediagoblin.db.models import User, MediaEntry, MediaComment
+from mediagoblin.tests.tools import get_app, \
+    fixture_add_user, fixture_media_entry
+
 
 def test_404_for_non_existent():
     test_app = get_app(dump_old_app=False)
     res = test_app.get('/does-not-exist/', expect_errors=True)
     assert_equal(res.status_int, 404)
+
+
+def test_user_deletes_other_comments():
+    user_a = fixture_add_user(u"chris_a")
+    user_b = fixture_add_user(u"chris_b")
+
+    media_a = fixture_media_entry(uploader=user_a.id)
+    media_b = fixture_media_entry(uploader=user_b.id)
+
+    # Create all 4 possible comments:
+    for u_id in (user_a.id, user_b.id):
+        for m_id in (media_a.id, media_b.id):
+            cmt = MediaComment()
+            cmt.media_entry = m_id
+            cmt.author = u_id
+            cmt.content = u"Some Comment"
+            cmt.save()
+
+    usr_cnt1 = User.query.count()
+    med_cnt1 = MediaEntry.query.count()
+    cmt_cnt1 = MediaComment.query.count()
+
+    User.query.get(user_a.id).delete()
+
+    usr_cnt2 = User.query.count()
+    med_cnt2 = MediaEntry.query.count()
+    cmt_cnt2 = MediaComment.query.count()
+
+    # One user deleted
+    assert_equal(usr_cnt2, usr_cnt1 - 1)
+    # One media gone
+    assert_equal(med_cnt2, med_cnt1 - 1)
+    # Three of four comments gone.
+    assert_equal(cmt_cnt2, cmt_cnt1 - 3)
+
+    User.query.get(user_b.id).delete()
+
+    usr_cnt2 = User.query.count()
+    med_cnt2 = MediaEntry.query.count()
+    cmt_cnt2 = MediaComment.query.count()
+
+    # All users gone
+    assert_equal(usr_cnt2, usr_cnt1 - 2)
+    # All media gone
+    assert_equal(med_cnt2, med_cnt1 - 2)
+    # All comments gone
+    assert_equal(cmt_cnt2, cmt_cnt1 - 4)
