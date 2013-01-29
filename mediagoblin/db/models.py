@@ -393,7 +393,13 @@ class MediaComment(Base, MediaCommentMixin):
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     content = Column(UnicodeText, nullable=False)
 
-    get_author = relationship(User)
+    # Cascade: Comments are owned by their creator. So do the full thing.
+    # lazy=dynamic: People might post a *lot* of comments, so make
+    #     the "posted_comments" a query-like thing.
+    get_author = relationship(User,
+                              backref=backref("posted_comments",
+                                              lazy="dynamic",
+                                              cascade="all, delete-orphan"))
 
 
 class Collection(Base, CollectionMixin):
