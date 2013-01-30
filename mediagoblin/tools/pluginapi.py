@@ -252,8 +252,16 @@ def get_hook_templates(hook_name):
     ... which will include all templates for you, partly using this
     method.
 
+    However, this method is exposed to templates, and if you wish, you
+    can iterate over templates in a template hook manually like so:
+
+      {% for template_path in get_hook_templates("media_sidebar") %}
+        <div class="extra_structure">
+          {% include template_path %"
+        </div>
+      {% endfor %}
+
     Returns:
       A list of strings representing template paths.
-
     """
     return PluginManager().get_template_hooks(hook_name)
