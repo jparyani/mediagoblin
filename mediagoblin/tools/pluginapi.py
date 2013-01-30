@@ -135,19 +135,6 @@ class PluginManager(object):
         return tuple(self.routes)
 
     def register_template_hooks(self, template_hooks):
-        """
-        Register a dict of template hooks.
-
-        Takes template_hooks as an argument, which is a dictionary of
-        template hook names/keys to the templates they should provide.
-        (The value can either be a single template path or an iterable
-        of paths.)
-
-        Example:
-          {"media_sidebar": "/plugin/sidemess/mess_up_the_side.html",
-           "media_descriptionbox": ["/plugin/sidemess/even_more_mess.html",
-                                    "/plugin/sidemess/so_much_mess.html"]}
-        """
         for hook, templates in template_hooks.items():
             if isinstance(templates, (list, tuple)):
                 self.template_hooks.setdefault(hook, []).extend(list(templates))
@@ -237,8 +224,27 @@ def get_config(key):
 
 
 def register_template_hooks(template_hooks):
+    """
+    Register a dict of template hooks.
+
+    Takes template_hooks as an argument, which is a dictionary of
+    template hook names/keys to the templates they should provide.
+    (The value can either be a single template path or an iterable
+    of paths.)
+
+    Example:
+      {"media_sidebar": "/plugin/sidemess/mess_up_the_side.html",
+       "media_descriptionbox": ["/plugin/sidemess/even_more_mess.html",
+                                "/plugin/sidemess/so_much_mess.html"]}
+    """
     PluginManager().register_template_hooks(template_hooks)
 
 
 def get_hook_templates(hook_name):
+    """
+    Get a list of hook templates for this hook_name.
+
+    Returns:
+      A list of strings representing template paths.
+    """
     return PluginManager().get_template_hooks(hook_name)
