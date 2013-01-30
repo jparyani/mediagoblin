@@ -244,7 +244,16 @@ def get_hook_templates(hook_name):
     """
     Get a list of hook templates for this hook_name.
 
+    Note: for the most part, you access this via a template tag, not
+    this method directly, like so:
+
+      {% template_hook "media_sidebar" %}
+
+    ... which will include all templates for you, partly using this
+    method.
+
     Returns:
       A list of strings representing template paths.
+
     """
     return PluginManager().get_template_hooks(hook_name)
