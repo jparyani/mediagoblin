@@ -40,7 +40,7 @@ def get_jinja_env(template_loader, locale):
 
     # If we have a jinja environment set up with this locale, just
     # return that one.
-    if SETUP_JINJA_ENVS.has_key(locale):
+    if locale in SETUP_JINJA_ENVS:
         return SETUP_JINJA_ENVS[locale]
 
     # jinja2.StrictUndefined will give exceptions on references

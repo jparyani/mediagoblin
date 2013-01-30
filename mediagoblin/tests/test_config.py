@@ -36,7 +36,7 @@ def test_read_mediagoblin_config():
 
     assert this_conf['carrotapp']['carrotcake'] == False
     assert this_conf['carrotapp']['num_carrots'] == 1
-    assert not this_conf['carrotapp'].has_key('encouragement_phrase')
+    assert 'encouragement_phrase' not in this_conf['carrotapp']
     assert this_conf['celery']['EAT_CELERY_WITH_CARROTS'] == True
 
     # A good file

@@ -40,7 +40,6 @@ def test_bcrypt_check_password():
         'notthepassword',
         '$2a$12$PXU03zfrVCujBhVeICTwtOaHTUs5FFwsscvSSTJkqx/2RQ0Lhy/nO')
 
-
     # Same thing, but with extra fake salt.
     assert not auth_lib.bcrypt_check_password(
         'notthepassword',
@@ -57,7 +56,6 @@ def test_bcrypt_gen_password_hash():
         pw, hashed_pw)
     assert not auth_lib.bcrypt_check_password(
         'notthepassword', hashed_pw)
-
 
     # Same thing, extra salt.
     hashed_pw = auth_lib.bcrypt_gen_password_hash(pw, '3><7R45417')
@@ -77,8 +75,7 @@ def test_register_views(test_app):
 
     test_app.get('/auth/register/')
     # Make sure it rendered with the appropriate template
-    assert template.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/auth/register.html')
+    assert 'mediagoblin/auth/register.html' in template.TEMPLATE_TEST_CONTEXT
 
     # Try to register without providing anything, should error
     # --------------------------------------------------------
@@ -137,8 +134,7 @@ def test_register_views(test_app):
     assert_equal(
         urlparse.urlsplit(response.location)[2],
         '/u/happygirl/')
-    assert template.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/user_pages/user.html')
+    assert 'mediagoblin/user_pages/user.html' in template.TEMPLATE_TEST_CONTEXT
 
     ## Make sure user is in place
     new_user = mg_globals.database.User.find_one(
@@ -231,8 +227,7 @@ def test_register_views(test_app):
     assert_equal(
         urlparse.urlsplit(response.location)[2],
         '/auth/login/')
-    assert template.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/auth/login.html')
+    assert 'mediagoblin/auth/login.html' in template.TEMPLATE_TEST_CONTEXT
 
     ## Make sure link to change password is sent by email
     assert len(mail.EMAIL_TEST_INBOX) == 1
@@ -278,7 +273,7 @@ def test_register_views(test_app):
     ## Verify step 1 of password-change works -- can see form to change password
     template.clear_test_template_context()
     response = test_app.get("%s?%s" % (path, get_params))
-    assert template.TEMPLATE_TEST_CONTEXT.has_key('mediagoblin/auth/change_fp.html')
+    assert 'mediagoblin/auth/change_fp.html' in template.TEMPLATE_TEST_CONTEXT
 
     ## Verify step 2.1 of password-change works -- report success to user
     template.clear_test_template_context()
@@ -288,8 +283,7 @@ def test_register_views(test_app):
             'password': 'iamveryveryhappy',
             'token': parsed_get_params['token']})
     response.follow()
-    assert template.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/auth/login.html')
+    assert 'mediagoblin/auth/login.html' in template.TEMPLATE_TEST_CONTEXT
 
     ## Verify step 2.2 of password-change works -- login w/ new password success
     template.clear_test_template_context()
@@ -303,8 +297,7 @@ def test_register_views(test_app):
     assert_equal(
         urlparse.urlsplit(response.location)[2],
         '/')
-    assert template.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/root.html')
+    assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
 
 
 def test_authentication_views():
@@ -318,8 +311,7 @@ def test_authentication_views():
     # Get login
     # ---------
     test_app.get('/auth/login/')
-    assert template.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/auth/login.html')
+    assert 'mediagoblin/auth/login.html' in template.TEMPLATE_TEST_CONTEXT
 
     # Failed login - blank form
     # -------------------------
@@ -383,8 +375,7 @@ def test_authentication_views():
     assert_equal(
         urlparse.urlsplit(response.location)[2],
         '/')
-    assert template.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/root.html')
+    assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
 
     # Make sure user is in the session
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
@@ -401,13 +392,12 @@ def test_authentication_views():
     assert_equal(
         urlparse.urlsplit(response.location)[2],
         '/')
-    assert template.TEMPLATE_TEST_CONTEXT.has_key(
-        'mediagoblin/root.html')
+    assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
 
     # Make sure the user is not in the session
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
     session = context['request'].session
-    assert session.has_key('user_id') == False
+    assert 'user_id' not in session
 
     # User is redirected to custom URL if POST['next'] is set
     # -------------------------------------------------------
@@ -420,4 +410,3 @@ def test_authentication_views():
     assert_equal(
         urlparse.urlsplit(response.location)[2],
         '/u/chris/')
-

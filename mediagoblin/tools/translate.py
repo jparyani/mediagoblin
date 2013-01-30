@@ -73,7 +73,7 @@ def get_locale_from_request(request):
     """
     request_args = (request.args, request.form)[request.method=='POST']
 
-    if request_args.has_key('lang'):
+    if 'lang' in request_args:
         # User explicitely demanded a language, normalize lower_uppercase
         target_lang = locale_to_lower_upper(request_args['lang'])
 
