@@ -120,7 +120,7 @@ class TemplateHookExtension(Extension):
     ... will include all templates hooked into the comment_extras section.
     """
 
-    tags = {"template_hook"}
+    tags = set(["template_hook"])
 
     def parse(self, parser):
         includes = []
