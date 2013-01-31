@@ -233,6 +233,9 @@ def register_template_hooks(template_hooks):
     of paths.)
 
     Example:
+
+    .. code-block:: python
+
       {"media_sidebar": "/plugin/sidemess/mess_up_the_side.html",
        "media_descriptionbox": ["/plugin/sidemess/even_more_mess.html",
                                 "/plugin/sidemess/so_much_mess.html"]}
@@ -247,6 +250,8 @@ def get_hook_templates(hook_name):
     Note: for the most part, you access this via a template tag, not
     this method directly, like so:
 
+    .. code-block:: html+jinja
+
       {% template_hook "media_sidebar" %}
 
     ... which will include all templates for you, partly using this
@@ -255,9 +260,11 @@ def get_hook_templates(hook_name):
     However, this method is exposed to templates, and if you wish, you
     can iterate over templates in a template hook manually like so:
 
+    .. code-block:: html+jinja
+
       {% for template_path in get_hook_templates("media_sidebar") %}
         <div class="extra_structure">
-          {% include template_path %"
+          {% include template_path %}
         </div>
       {% endfor %}
 
