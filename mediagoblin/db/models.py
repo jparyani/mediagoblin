@@ -213,19 +213,16 @@ class MediaEntry(Base, MediaEntryMixin):
         media_data = self.media_data
 
         if media_data is None:
+            # Get the correct table:
+            table = import_component(self.media_type + '.models:DATA_MODEL')
             # No media data, so actually add a new one
-            media_data = self.media_data_table(
-                **kwargs)
+            media_data = table(**kwargs)
             # Get the relationship set up.
             media_data.get_media_entry = self
         else:
             # Update old media data
             for field, value in kwargs.iteritems():
                 setattr(media_data, field, value)
-
-    @memoized_property
-    def media_data_table(self):
-        return import_component(self.media_type + '.models:DATA_MODEL')
 
     @memoized_property
     def media_data_ref(self):
