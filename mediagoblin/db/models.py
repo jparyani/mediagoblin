@@ -20,7 +20,6 @@ TODO: indexes on foreignkeys, where useful.
 
 import logging
 import datetime
-from collections import Sequence
 
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
@@ -197,14 +196,7 @@ class MediaEntry(Base, MediaEntryMixin):
 
     @property
     def media_data(self):
-        r = getattr(self, self.media_data_ref, None)
-        if isinstance(r, Sequence):
-            assert len(r) < 2
-            if r:
-                return r[0]
-            else:
-                return None
-        return r
+        return getattr(self, self.media_data_ref)
 
     def media_data_init(self, **kwargs):
         """
