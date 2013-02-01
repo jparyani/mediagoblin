@@ -20,7 +20,7 @@ TODO: indexes on foreignkeys, where useful.
 
 import logging
 import datetime
-import sys
+from collections import Sequence
 
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
@@ -32,9 +32,10 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
 
 from mediagoblin.db.extratypes import PathTupleWithSlashes, JSONEncoded
-from mediagoblin.db.base import Base, DictReadAttrProxy, Session
+from mediagoblin.db.base import Base, DictReadAttrProxy
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin, CollectionMixin, CollectionItemMixin
 from mediagoblin.tools.files import delete_media_files
+from mediagoblin.tools.common import import_component
 
 # It's actually kind of annoying how sqlalchemy-migrate does this, if
 # I understand it right, but whatever.  Anyway, don't remove this :P
@@ -165,7 +166,6 @@ class MediaEntry(Base, MediaEntryMixin):
     collections = association_proxy("collections_helper", "in_collection")
 
     ## TODO
-    # media_data
     # fail_error
 
     def get_comments(self, ascending=False):
@@ -195,40 +195,41 @@ class MediaEntry(Base, MediaEntryMixin):
         if media is not None:
             return media.url_for_self(urlgen)
 
-    #@memoized_property
     @property
     def media_data(self):
-        session = Session()
-
-        return session.query(self.media_data_table).filter_by(
-            media_entry=self.id).first()
+        r = getattr(self, self.media_data_ref, None)
+        if isinstance(r, Sequence):
+            assert len(r) < 2
+            if r:
+                return r[0]
+            else:
+                return None
+        return r
 
     def media_data_init(self, **kwargs):
         """
         Initialize or update the contents of a media entry's media_data row
         """
-        session = Session()
+        media_data = self.media_data
 
-        media_data = session.query(self.media_data_table).filter_by(
-            media_entry=self.id).first()
-
-        # No media data, so actually add a new one
         if media_data is None:
+            # No media data, so actually add a new one
             media_data = self.media_data_table(
-                media_entry=self.id,
                 **kwargs)
-            session.add(media_data)
-        # Update old media data
+            # Get the relationship set up.
+            media_data.get_media_entry = self
         else:
+            # Update old media data
             for field, value in kwargs.iteritems():
                 setattr(media_data, field, value)
 
     @memoized_property
     def media_data_table(self):
-        # TODO: memoize this
-        models_module = self.media_type + '.models'
-        __import__(models_module)
-        return sys.modules[models_module].DATA_MODEL
+        return import_component(self.media_type + '.models:DATA_MODEL')
+
+    @memoized_property
+    def media_data_ref(self):
+        return import_component(self.media_type + '.models:BACKREF_NAME')
 
     def __repr__(self):
         safe_title = self.title.encode('ascii', 'replace')
