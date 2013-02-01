@@ -27,6 +27,7 @@ from pkg_resources import resource_filename
 from mediagoblin.tests.tools import get_app, \
     fixture_add_user
 from mediagoblin import mg_globals
+from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools import template
 from mediagoblin.media_types.image import MEDIA_MANAGER as img_MEDIA_MANAGER
 
@@ -40,6 +41,7 @@ EVIL_FILE = resource('evil')
 EVIL_JPG = resource('evil.jpg')
 EVIL_PNG = resource('evil.png')
 BIG_BLUE = resource('bigblue.png')
+from .test_exif import GPS_JPG
 
 GOOD_TAG_STRING = u'yin,yang'
 BAD_TAG_STRING = unicode('rage,' + 'f' * 26 + 'u' * 26)
@@ -122,7 +124,7 @@ class TestSubmission:
         self.check_normal_upload(u'Normal upload 2', GOOD_PNG)
 
     def check_media(self, request, find_data, count=None):
-        media = request.db.MediaEntry.find(find_data)
+        media = MediaEntry.find(find_data)
         if count is not None:
             assert_equal(media.count(), count)
             if count == 0:
@@ -264,6 +266,11 @@ class TestSubmission:
         # Test non-supported file with .png extension
         # -------------------------------------------
         self.check_false_image(u'Malicious Upload 3', EVIL_PNG)
+
+    def test_media_data(self):
+        self.check_normal_upload(u"With GPS data", GPS_JPG)
+        media = self.check_media(None, {"title": u"With GPS data"}, 1)
+        assert_equal(media.media_data.gps_latitude, 59.336666666666666)
 
     def test_processing(self):
         data = {'title': u'Big Blue'}

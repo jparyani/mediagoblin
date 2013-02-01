@@ -17,7 +17,9 @@
 # Maybe not every model needs a test, but some models have special
 # methods, and so it makes sense to test them here.
 
+from nose.tools import assert_equal
 
+from mediagoblin.db.base import Session
 from mediagoblin.db.models import MediaEntry
 
 from mediagoblin.tests.tools import get_app, \
@@ -128,3 +130,18 @@ class TestMediaEntrySlugs(object):
             u"@!#?@!", save=False)
         qbert_entry.generate_slug()
         assert qbert_entry.slug is None
+
+
+def test_media_data_init():
+    Session.rollback()
+    Session.remove()
+    media = MediaEntry()
+    media.media_type = u"mediagoblin.media_types.image"
+    assert media.media_data is None
+    media.media_data_init()
+    assert media.media_data is not None
+    obj_in_session = 0
+    for obj in Session():
+        obj_in_session += 1
+        print repr(obj)
+    assert_equal(obj_in_session, 0)
