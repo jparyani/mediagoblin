@@ -539,14 +539,16 @@ def collection_atom_feed(request):
                 'href': push_url})
 
     feed = AtomFeed(
-               "MediaGoblin: Feed for %s's collection %s" % (request.matchdict['user'], collection.title),
-               feed_url=request.url,
-               id='tag:{host},{year}:collection.user-{user}.title-{title}'.format(
-                   host=request.host,
-                   year=datetime.datetime.today().strftime('%Y'),
-                   user=request.matchdict['user'],
-                   title=collection.title),
-               links=atomlinks)
+                "MediaGoblin: Feed for %s's collection %s" %
+                (request.matchdict['user'], collection.title),
+                feed_url=request.url,
+                id=u'tag:{user}@{host},{year}:collection.slug-{slug}'\
+                    .format(
+                    host=request.host,
+                    year=collection.created.strftime('%Y'),
+                    user=request.matchdict['user'],
+                    slug=collection.slug),
+                links=atomlinks)
 
     for item in cursor:
         entry = item.get_media_entry
