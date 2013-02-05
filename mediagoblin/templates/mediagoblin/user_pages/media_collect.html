@@ -24,17 +24,22 @@
           src="{{ request.staticdirect('/js/collection_form_show.js') }}"></script>
 {% endblock %}
 
-{% block mediagoblin_content %}
+{% block title -%}
+  {% trans media_title=media.title -%}
+    Add “{{ media_title }}” to a collection
+  {%- endtrans %} &mdash; {{ super() }}
+{%- endblock %}
 
+{% block mediagoblin_content %}
   <form action="{{ request.urlgen('mediagoblin.user_pages.media_collect',
 		                  user=media.get_uploader.username,
 				  media=media.id) }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box">
       <h1>
-        {%- trans title=media.title -%}
-          Add “{{ title }}” to a collection
-        {%- endtrans %}
+        {%- trans media_title=media.title -%}
+          Add “{{ media_title }}” to a collection
+        {%- endtrans -%}
       </h1>
 
       <div style="text-align: center;" >
