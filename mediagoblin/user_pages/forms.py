@@ -35,7 +35,9 @@ class ConfirmCollectionItemRemoveForm(wtforms.Form):
         _('I am sure I want to remove this item from the collection'))
 
 class MediaCollectForm(wtforms.Form):
-    collection = QuerySelectField(allow_blank=True, blank_text=_('-- Select --'), get_label='title',)
+    collection = QuerySelectField(
+        _('Collection'),
+        allow_blank=True, blank_text=_('-- Select --'), get_label='title',)
     note = wtforms.TextAreaField(
         _('Include a note'),
         [wtforms.validators.Optional()],)
