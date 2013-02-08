@@ -18,7 +18,7 @@
 
 {% block collections_content -%}
   {% if media.collections %}
-    <h3>{% trans collected=media.collected %}Collected in{% endtrans %}</h3>
+    <h3>{% trans %}Collected in{% endtrans %}</h3>
     <p>
       {% for collection in media.collections %}
         {% if loop.last %}
