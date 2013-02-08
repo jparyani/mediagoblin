@@ -17,20 +17,33 @@
 #}
 
 {% block collections_content -%}
-  <h3>{% trans collected=media.collected %}Collected in{% endtrans %}</h3>
-  <p>
-    {% for collection in media.collections %}
-      {% if loop.last %}
-        {# the 'and' should only appear if there is more than one collections #}
-        {% if media.collections|length > 1 %}
-          &middot;
+  {% if media.collections %}
+    <h3>{% trans collected=media.collected %}Collected in{% endtrans %}</h3>
+    <p>
+      {% for collection in media.collections %}
+        {% if loop.last %}
+          {# the 'and' should only appear if there is more than one collections #}
+          {% if media.collections|length > 1 %}
+            &middot;
+          {% endif %}
+          <a href="{{ collection.url_for_self(request.urlgen) }}">{{ collection['title'] }}</a>
+        {% elif loop.revindex == 2 %}
+          <a href="{{ collection.url_for_self(request.urlgen) }}">{{ collection['title'] }}</a>
+        {% else %}
+          <a href="{{ collection.url_for_self(request.urlgen) }}">{{ collection['title'] }}</a> &middot;
         {% endif %}
-        <a href="{{ collection.url_for_self(request.urlgen) }}">{{ collection['title'] }}</a>
-      {% elif loop.revindex == 2 %}
-        <a href="{{ collection.url_for_self(request.urlgen) }}">{{ collection['title'] }}</a>
-      {% else %}
-        <a href="{{ collection.url_for_self(request.urlgen) }}">{{ collection['title'] }}</a> &middot;
-      {% endif %}
-    {% endfor %}
-  </p>
+      {% endfor %}
+    </p>
+  {% endif %}
+  {% if request.user %}
+    <p>
+      <a type="submit" href="{{ request.urlgen('mediagoblin.user_pages.media_collect', 
+                                  user=media.get_uploader.username,
+                                  media=media.id) }}"
+         class="button_action"
+         title="{% trans %}Add media to collection{% endtrans %}">
+        Add to a collection
+      </a>
+    </p>
+  {% endif %}
 {% endblock %}
