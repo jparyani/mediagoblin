@@ -571,15 +571,34 @@ pending: {2}'.format(
         return False
 
     def on_thumbnail_error(self, message):
-        _log.error('Thumbnailing failed.')
+        scaling_failed = False
+
+        if 'Error calculating the output scaled size - integer overflow' \
+           in message.parse_error()[1]:
+            # GStreamer videoscale sometimes fails to calculate the dimensions
+            # given only one of the destination dimensions and the source
+            # dimensions. This is a workaround in case videoscale returns an
+            # error that indicates this has happened.
+            scaling_failed = True
+            _log.error('Thumbnailing failed because of videoscale integer'
+                       ' overflow. Will retry with fallback.')
+        else:
+            _log.error('Thumbnailing failed: {0}'.format(message.parse_error()))
+
+        # Kill the current mainloop
         self.disconnect()
-        if 'Error calculating the output scaled size - integer overflow' in message.parse_error()[1]:
-            _log.error('Retrying with manually set sizes...')
+
+        if scaling_failed:
+            # Manually scale the destination dimensions
+            _log.info('Retrying with manually set sizes...')
+
             info = VideoTranscoder().discover(self.source_path)
+
             h = info['videoheight']
             w = info['videowidth']
             ratio = 180 / int(w)
             h = int(h * ratio)
+
             self.__init__(self.source_path, self.dest_path, 180, h)
 
     def disconnect(self):
