@@ -282,6 +282,9 @@ this ``nginx.conf`` file should be modeled on the following::
      # Change this to update the upload size limit for your users
      client_max_body_size 8m;
 
+     # prevent attacks (someone uploading a .txt file that the browser interprets as an HTML file, etc.)
+     add_header X-Content-Type-Options nosniff;·
+
      server_name mediagoblin.example.org www.mediagoblin.example.org;
      access_log /var/log/nginx/mediagoblin.example.access.log;
      error_log /var/log/nginx/mediagoblin.example.error.log;
