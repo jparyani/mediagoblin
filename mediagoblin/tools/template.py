@@ -25,6 +25,7 @@ from werkzeug.urls import url_quote_plus
 
 from mediagoblin import mg_globals
 from mediagoblin import messages
+from mediagoblin import _version
 from mediagoblin.tools import common
 from mediagoblin.tools.translate import get_gettext_translation
 from mediagoblin.tools.pluginapi import get_hook_templates
@@ -68,6 +69,7 @@ def get_jinja_env(template_loader, locale):
     template_env.globals['fetch_messages'] = messages.fetch_messages
     template_env.globals['app_config'] = mg_globals.app_config
     template_env.globals['global_config'] = mg_globals.global_config
+    template_env.globals['version'] = _version.__version__
 
     template_env.filters['urlencode'] = url_quote_plus
 
