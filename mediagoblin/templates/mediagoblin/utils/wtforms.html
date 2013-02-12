@@ -28,7 +28,7 @@
         <p class="form_field_error">{{ _(error) }}</p>
       {% endfor %}
     {%- endif %}
-    {% if field.description -%}
+    {%- if field.description %}
       <p class="form_field_description">{{ _(field.description)|safe }}</p>
     {%- endif %}
   </div>
