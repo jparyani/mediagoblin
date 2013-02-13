@@ -205,7 +205,7 @@ def media_collect(request, media):
         if existing_collection:
             messages.add_message(request, messages.ERROR,
                 _('You already have a collection called "%s"!'
-                  % collection.title))
+                  % existing_collection.title))
             return redirect(request, "mediagoblin.user_pages.media_home",
                             user=request.user.username,
                             media=media.id)
@@ -542,7 +542,7 @@ def collection_atom_feed(request):
                 "MediaGoblin: Feed for %s's collection %s" %
                 (request.matchdict['user'], collection.title),
                 feed_url=request.url,
-                id=u'tag:{user}@{host},{year}:collection.slug-{slug}'\
+                id=u'tag:{host},{year}:gnu-mediagoblin.{user}.collection.{slug}'\
                     .format(
                     host=request.host,
                     year=collection.created.strftime('%Y'),
