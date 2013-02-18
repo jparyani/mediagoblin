@@ -309,6 +309,9 @@ def user_collection(request, page, url_user=None):
         get_creator=url_user,
         slug=request.matchdict['collection']).first()
 
+    if not collection:
+        return render_404(request)
+
     cursor = collection.get_collection_items()
 
     pagination = Pagination(page, cursor)
@@ -515,6 +518,8 @@ def collection_atom_feed(request):
     collection = Collection.query.filter_by(
                creator=user.id,
                slug=request.matchdict['collection']).first()
+    if not collection:
+        return render_404(request)
 
     cursor = CollectionItem.query.filter_by(
                  collection=collection.id) \
