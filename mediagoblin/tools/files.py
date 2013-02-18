@@ -37,7 +37,7 @@ def delete_media_files(media):
             mg_globals.public_store.delete_file(
                 attachment['filepath'])
         except OSError:
-            no_such_files.append("/".join(attachment))
+            no_such_files.append("/".join(attachment['filepath']))
 
     if no_such_files:
         raise OSError(", ".join(no_such_files))

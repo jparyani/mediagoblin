@@ -145,6 +145,7 @@ class MediaEntry(Base, MediaEntryMixin):
         )
 
     attachment_files_helper = relationship("MediaAttachmentFile",
+        cascade="all, delete-orphan",
         order_by="MediaAttachmentFile.created"
         )
     attachment_files = association_proxy("attachment_files_helper", "dict_view",

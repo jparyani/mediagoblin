@@ -78,3 +78,18 @@ def test_user_deletes_other_comments():
     assert_equal(med_cnt2, med_cnt1 - 2)
     # All comments gone
     assert_equal(cmt_cnt2, cmt_cnt1 - 4)
+
+
+def test_media_deletes_broken_attachment():
+    user_a = fixture_add_user(u"chris_a")
+
+    media = fixture_media_entry(uploader=user_a.id, save=False)
+    media.attachment_files.append(dict(
+            name=u"some name",
+            filepath=[u"does", u"not", u"exist"],
+            ))
+    Session.add(media)
+    Session.flush()
+
+    MediaEntry.query.get(media.id).delete()
+    User.query.get(user_a.id).delete()
