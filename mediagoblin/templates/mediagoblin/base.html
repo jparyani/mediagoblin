@@ -48,7 +48,7 @@
           {%- include "mediagoblin/bits/logo.html" -%}
           {% block mediagoblin_header_title %}{% endblock %}
           <div class="header_right">
-            {% if request.user %}
+            {%- if request.user %}
               {% if request.user and request.user.status == 'active' %}
                 <div class="button_action header_dropdown_down">&#9660;</div>
                 <div class="button_action header_dropdown_up">&#9650;</div>
@@ -60,11 +60,12 @@
                {% trans %}Verify your email!{% endtrans %}</a>
                or <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>
               {% endif %}
-            {% else %}
+            {%- else %}
               <a href="{{ request.urlgen('mediagoblin.auth.login') }}?next={{
                                                 request.base_url|urlencode }}">
-                {% trans %}Log in{% endtrans %}</a>
-            {% endif %}
+                {%- trans %}Log in{% endtrans -%}
+              </a>
+            {%- endif %}
           </div>
           <div class="clear"></div>
           {% if request.user and request.user.status == 'active' %}
@@ -107,23 +108,23 @@
           {% endif %}
         </header>
       {% endblock %}
-    <div class="container">
-      <div class="mediagoblin_content">
+      <div class="container">
+        <div class="mediagoblin_content">
           {% include "mediagoblin/utils/messages.html" %}
           {% block mediagoblin_content %}
           {% endblock mediagoblin_content %}
-      </div>
-      {% block mediagoblin_footer %}
+        </div>
+        {%- block mediagoblin_footer %}
           <footer>
             {% trans -%}
-            Powered by <a href="http://mediagoblin.org" title='Version {{ version }}'>MediaGoblin</a>, a <a href="http://gnu.org/">GNU</a> project.
+              Powered by <a href="http://mediagoblin.org/" title='Version {{ version }}'>MediaGoblin</a>, a <a href="http://gnu.org/">GNU</a> project.
             {%- endtrans %}
             {% trans source_link=app_config['source_link'] -%}
               Released under the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">AGPL</a>. <a href="{{ source_link }}">Source code</a> available.
             {%- endtrans %}
           </footer>
-      {% endblock mediagoblin_footer %}
-    {% endblock mediagoblin_body %}
-    </div>
+        {%- endblock mediagoblin_footer %}
+      </div>
+    {%- endblock mediagoblin_body %}
   </body>
 </html>
