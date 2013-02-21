@@ -90,7 +90,7 @@ def user_gallery(request, page, url_user=None):
     if tag:
         cursor = cursor.filter(
             MediaEntry.tags_helper.any(
-                MediaTag.name == request.matchdict['tag']))
+                MediaTag.slug == request.matchdict['tag']))
 
     # Paginate gallery
     pagination = Pagination(page, cursor)
