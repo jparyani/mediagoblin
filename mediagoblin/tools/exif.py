@@ -131,12 +131,7 @@ def _ratio_to_list(ratio):
 
 
 def get_useful(tags):
-    useful = {}
-    for key, tag in tags.items():
-        if key in USEFUL_TAGS:
-            useful[key] = tag
-
-    return useful
+    return dict((key, tag) for (key, tag) in tags.iteritems() if key in USEFUL_TAGS)
 
 
 def get_gps_data(tags):
