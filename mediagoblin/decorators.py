@@ -187,10 +187,6 @@ def get_user_collection_item(controller):
         if not user:
             return render_404(request)
 
-        collection = request.db.Collection.find_one(
-            {'slug': request.matchdict['collection'],
-             'creator': user.id})
-
         collection_item = request.db.CollectionItem.find_one(
             {'id': request.matchdict['collection_item'] })
 
