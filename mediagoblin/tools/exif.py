@@ -92,12 +92,8 @@ def clean_exif(exif):
         'JPEGThumbnail',
         'Thumbnail JPEGInterchangeFormat']
 
-    clean_exif = {}
-
-    for key, value in exif.items():
-        if not key in disabled_tags:
-            clean_exif[key] = _ifd_tag_to_dict(value)
-    return clean_exif
+    return dict((key, _ifd_tag_to_dict(value)) for (key, value)
+            in exif.iteritems() if key not in disabled_tags)
 
 
 def _ifd_tag_to_dict(tag):
