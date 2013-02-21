@@ -153,7 +153,7 @@ def get_gps_data(tags):
             'latitude': tags['GPS GPSLatitude'],
             'longitude': tags['GPS GPSLongitude']}
 
-        for key, dat in dms_data.items():
+        for key, dat in dms_data.iteritems():
             gps_data[key] = (
                 lambda v:
                     float(v[0].num) / float(v[0].den) \
