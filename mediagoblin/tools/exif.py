@@ -114,13 +114,8 @@ def _ifd_tag_to_dict(tag):
         data['printable'] = tag.printable.decode('utf8', 'replace')
 
     if type(tag.values) == list:
-        data['values'] = []
-        for val in tag.values:
-            if isinstance(val, Ratio):
-                data['values'].append(
-                    _ratio_to_list(val))
-            else:
-                data['values'].append(val)
+        data['values'] = [_ratio_to_list(val) if isinstance(val, Ratio) else val
+                for val in tag.values]
     else:
         if isinstance(tag.values, str):
             # Force UTF-8, so that it fits into the DB
