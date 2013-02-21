@@ -73,15 +73,11 @@ def extract_exif(filename):
     """
     Returns EXIF tags found in file at ``filename``
     """
-    exif_tags = {}
-
     try:
-        image = open(filename)
-        exif_tags = process_file(image, details=False)
+        with file(filename) as image:
+            return process_file(image, details=False)
     except IOError:
         raise BadMediaFail(_('Could not read the image file.'))
-
-    return exif_tags
 
 
 def clean_exif(exif):
