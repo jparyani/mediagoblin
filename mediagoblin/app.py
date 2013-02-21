@@ -21,7 +21,7 @@ from mediagoblin.routing import get_url_map
 from mediagoblin.tools.routing import endpoint_to_controller
 
 from werkzeug.wrappers import Request
-from werkzeug.exceptions import HTTPException, NotFound
+from werkzeug.exceptions import HTTPException
 from werkzeug.routing import RequestRedirect
 
 from mediagoblin import meddleware, __version__
