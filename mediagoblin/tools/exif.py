@@ -50,7 +50,7 @@ def exif_fix_image_orientation(im, exif_tags):
     Translate any EXIF orientation to raw orientation
 
     Cons:
-    - REDUCES IMAGE QUALITY by recompressig it
+    - REDUCES IMAGE QUALITY by recompressing it
 
     Pros:
     - Prevents neck pain
