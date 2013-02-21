@@ -40,6 +40,11 @@ add_route('mediagoblin.user_pages.media_home.view_comment',
           '/u/<string:user>/m/<string:media>/c/<int:comment>/',
           'mediagoblin.user_pages.views:media_home')
 
+# User's tags gallery
+add_route('mediagoblin.user_pages.user_gallery',
+          '/u/<string:user>/tag/<string:tag>/',
+          'mediagoblin.user_pages.views:user_gallery')
+
 add_route('mediagoblin.user_pages.atom_feed',
           '/u/<string:user>/atom/',
           'mediagoblin.user_pages.views:atom_feed')
