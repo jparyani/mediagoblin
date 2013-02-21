@@ -41,7 +41,7 @@ add_route('mediagoblin.user_pages.media_home.view_comment',
           'mediagoblin.user_pages.views:media_home')
 
 # User's tags gallery
-add_route('mediagoblin.user_pages.user_gallery',
+add_route('mediagoblin.user_pages.user_tag_gallery',
           '/u/<string:user>/tag/<string:tag>/',
           'mediagoblin.user_pages.views:user_gallery')
 
