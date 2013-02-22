@@ -34,7 +34,7 @@ def setup_plugin():
     if sentry_dsn:
         _log.info('Setting up raven from plugin config: {0}'.format(
             sentry_dsn))
-        client = Client(sentry_dsn))
+        client = Client(sentry_dsn)
     elif os.environ.get('SENTRY_DSN'):
         _log.info('Setting up raven from SENTRY_DSN environment variable: {0}'\
                   .format(os.environ.get('SENTRY_DSN')))
