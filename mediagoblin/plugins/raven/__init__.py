@@ -41,11 +41,12 @@ def setup_plugin():
         _log.info('Setting up raven from SENTRY_DSN environment variable: {0}'\
                   .format(os.environ.get('SENTRY_DSN')))
         client = Client()  # Implicitly looks for SENTRY_DSN
-
-    if client:
-        register_signal(client)
     else:
         _log.error('Could not set up client, missing sentry DSN')
+        return
+
+    register_signal(client)
+
 
 hooks = {
     'setup': setup_plugin,
