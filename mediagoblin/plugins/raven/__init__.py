@@ -27,7 +27,7 @@ PLUGIN_DIR = os.path.dirname(__file__)
 
 
 def setup_plugin():
-    config = pluginapi.get_config('mediagoblin.plugins.oauth')
+    config = pluginapi.get_config('mediagoblin.plugins.raven')
 
     _log.info('Setting up raven for celery...')
 
