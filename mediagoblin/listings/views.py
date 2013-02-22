@@ -74,7 +74,7 @@ def atom_feed(request):
         cursor = media_entries_for_tag_slug(request.db, tag_slug)
         link = request.urlgen('mediagoblin.listings.tags_listing',
                               qualified=True, tag=tag_slug )
-        feed_title += "for tag '%s'" % tag_slug,
+        feed_title += "for tag '%s'" % tag_slug
     else: # all recent item feed
         cursor = MediaEntry.query.filter_by(state=u'processed')
         link = request.urlgen('index', qualified=True)
