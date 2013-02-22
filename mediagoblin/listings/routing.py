@@ -22,7 +22,8 @@ add_route('mediagoblin.listings.tags_listing',
 
 # Atom feeds:
 add_route('mediagoblin.listings.tag_atom_feed', "/tag/<string:tag>/atom/",
-    "mediagoblin.listings.views:tag_atom_feed")
+    "mediagoblin.listings.views:atom_feed")
+
 # The all new entries feed
 add_route('mediagoblin.listings.atom_feed', '/atom/',
-    "mediagoblin.listings.views:tag_atom_feed")
+    "mediagoblin.listings.views:atom_feed")

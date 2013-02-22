@@ -64,7 +64,7 @@ def tag_listing(request, page):
 ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 15
 
 
-def tag_atom_feed(request):
+def atom_feed(request):
     """
     generates the atom feed with the tag images
     """
