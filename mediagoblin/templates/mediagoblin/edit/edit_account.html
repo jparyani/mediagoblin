@@ -45,11 +45,11 @@
       {{ wtforms_util.render_field_div(form.new_password) }}
       <div class="form_field_input">
         <p>{{ form.wants_comment_notification }}
-           {{ form.wants_comment_notification.label }}</p>
+           {{ wtforms_util.render_label(form.wants_comment_notification) }}</p>
       </div>
       <div class="form_field_input">
         <p>{{ form.license_preference }}
-           {{ form.license_preference.label }}</p>
+           {{ wtforms_util.render_label(form.license_preference) }}</p>
       </div>
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button_form" />

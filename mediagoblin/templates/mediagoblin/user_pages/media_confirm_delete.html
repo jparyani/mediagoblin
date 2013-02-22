@@ -40,7 +40,7 @@
 
       <p class="delete_checkbox_box">
 	{{ form.confirm }}
-	<label for="{{ (form.confirm.name) }}">{{ _(form.confirm.label.text) }}</label>
+	{{ wtforms_util.render_label(form.confirm) }}
       </p>
 
       <div class="form_submit_buttons">
