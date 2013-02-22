@@ -58,6 +58,7 @@ Part 2: Core plugin documentation
    plugindocs/sampleplugin
    plugindocs/oauth
    plugindocs/trim_whitespace
+   plugindocs/raven
 
 
 Part 3: Plugin Writer's Guide
