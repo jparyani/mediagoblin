@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2013-02-05 15:12-0600\n"
-"PO-Revision-Date: 2013-02-05 21:12+0000\n"
+"POT-Creation-Date: 2013-02-23 10:46-0600\n"
+"PO-Revision-Date: 2013-02-23 16:46+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,31 +21,31 @@ msgstr ""
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: mediagoblin/auth/forms.py:29
+#: mediagoblin/auth/forms.py:28
 msgid "Invalid User name or email address."
 msgstr ""
 
-#: mediagoblin/auth/forms.py:30
+#: mediagoblin/auth/forms.py:29
 msgid "This field does not take email addresses."
 msgstr ""
 
-#: mediagoblin/auth/forms.py:31
+#: mediagoblin/auth/forms.py:30
 msgid "This field requires an email address."
 msgstr ""
 
-#: mediagoblin/auth/forms.py:53 mediagoblin/auth/forms.py:68
+#: mediagoblin/auth/forms.py:52 mediagoblin/auth/forms.py:67
 msgid "Username"
 msgstr "使用者名稱"
 
-#: mediagoblin/auth/forms.py:57 mediagoblin/auth/forms.py:72
+#: mediagoblin/auth/forms.py:56 mediagoblin/auth/forms.py:71
 msgid "Password"
 msgstr "密碼"
 
-#: mediagoblin/auth/forms.py:61
+#: mediagoblin/auth/forms.py:60
 msgid "Email address"
 msgstr "Email 位址"
 
-#: mediagoblin/auth/forms.py:79
+#: mediagoblin/auth/forms.py:78
 msgid "Username or email"
 msgstr "使用者名稱或 email"
 
@@ -205,54 +205,54 @@ msgid ""
 "change this."
 msgstr "此蒐藏網址的標題部份，通常不需要修改。"
 
-#: mediagoblin/edit/views.py:67
+#: mediagoblin/edit/views.py:66
 msgid "An entry with that slug already exists for this user."
 msgstr "這個簡稱已經被其他人用了"
 
-#: mediagoblin/edit/views.py:86
+#: mediagoblin/edit/views.py:85
 msgid "You are editing another user's media. Proceed with caution."
 msgstr "您正在修改別人的媒體，請小心操作。"
 
-#: mediagoblin/edit/views.py:156
+#: mediagoblin/edit/views.py:155
 #, python-format
 msgid "You added the attachment %s!"
 msgstr "您加上了附件「%s」！"
 
-#: mediagoblin/edit/views.py:183
+#: mediagoblin/edit/views.py:182
 msgid "You can only edit your own profile."
 msgstr ""
 
-#: mediagoblin/edit/views.py:189
+#: mediagoblin/edit/views.py:188
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr "您正在修改別人的個人檔案，請小心操作。"
 
-#: mediagoblin/edit/views.py:205
+#: mediagoblin/edit/views.py:204
 msgid "Profile changes saved"
 msgstr "個人檔案修改已儲存"
 
-#: mediagoblin/edit/views.py:242
+#: mediagoblin/edit/views.py:241
 msgid "Wrong password"
 msgstr "密碼錯誤"
 
-#: mediagoblin/edit/views.py:253
+#: mediagoblin/edit/views.py:252
 msgid "Account settings saved"
 msgstr "帳號設定已儲存"
 
-#: mediagoblin/edit/views.py:287
+#: mediagoblin/edit/views.py:286
 msgid "You need to confirm the deletion of your account."
 msgstr ""
 
-#: mediagoblin/edit/views.py:323 mediagoblin/submit/views.py:142
-#: mediagoblin/user_pages/views.py:207
+#: mediagoblin/edit/views.py:322 mediagoblin/submit/views.py:142
+#: mediagoblin/user_pages/views.py:214
 #, python-format
 msgid "You already have a collection called \"%s\"!"
 msgstr "您已經有一個稱做「%s」的蒐藏了！"
 
-#: mediagoblin/edit/views.py:327
+#: mediagoblin/edit/views.py:326
 msgid "A collection with that slug already exists for this user."
 msgstr "這個使用者已經有使用該簡稱的蒐藏了。"
 
-#: mediagoblin/edit/views.py:344
+#: mediagoblin/edit/views.py:343
 msgid "You are editing another user's collection. Proceed with caution."
 msgstr "您正在修改別人的蒐藏，請小心操作。"
 
@@ -280,7 +280,7 @@ msgstr ""
 msgid "Sorry, I don't support that file type :("
 msgstr "抱歉，我不支援這樣的檔案格式 :("
 
-#: mediagoblin/media_types/video/processing.py:36
+#: mediagoblin/media_types/video/processing.py:35
 msgid "Video transcoding failed"
 msgstr "影像轉碼失敗"
 
@@ -370,11 +370,11 @@ msgstr ""
 #: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
 #: mediagoblin/templates/mediagoblin/submit/collection.html:30
 #: mediagoblin/templates/mediagoblin/submit/start.html:34
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:87
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
 msgid "Add"
 msgstr "增加"
 
-#: mediagoblin/processing/__init__.py:138
+#: mediagoblin/processing/__init__.py:172
 msgid "Invalid file given for media type."
 msgstr "指定錯誤的媒體類別！"
 
@@ -395,43 +395,43 @@ msgstr "啊哈！PO 上去啦！"
 msgid "Collection \"%s\" added!"
 msgstr "蒐藏「%s」新增完成！"
 
-#: mediagoblin/templates/mediagoblin/base.html:59
+#: mediagoblin/templates/mediagoblin/base.html:61
 msgid "Verify your email!"
 msgstr "確認您的電子郵件"
 
-#: mediagoblin/templates/mediagoblin/base.html:60
-#: mediagoblin/templates/mediagoblin/base.html:79
+#: mediagoblin/templates/mediagoblin/base.html:62
+#: mediagoblin/templates/mediagoblin/base.html:82
 msgid "log out"
 msgstr "登出"
 
-#: mediagoblin/templates/mediagoblin/base.html:65
+#: mediagoblin/templates/mediagoblin/base.html:67
 #: mediagoblin/templates/mediagoblin/auth/login.html:28
 #: mediagoblin/templates/mediagoblin/auth/login.html:36
 #: mediagoblin/templates/mediagoblin/auth/login.html:54
 msgid "Log in"
 msgstr "登入"
 
-#: mediagoblin/templates/mediagoblin/base.html:73
+#: mediagoblin/templates/mediagoblin/base.html:76
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
 msgstr "<a href=\"%(user_url)s\">%(user_name)s</a> 的帳號"
 
-#: mediagoblin/templates/mediagoblin/base.html:83
+#: mediagoblin/templates/mediagoblin/base.html:86
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:156
 msgid "Add media"
 msgstr "新增媒體"
 
-#: mediagoblin/templates/mediagoblin/base.html:86
+#: mediagoblin/templates/mediagoblin/base.html:89
 #: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
 msgid "Create new collection"
 msgstr "新增新的蒐藏"
 
-#: mediagoblin/templates/mediagoblin/base.html:89
+#: mediagoblin/templates/mediagoblin/base.html:92
 msgid "Change account settings"
 msgstr "更改帳號設定"
 
-#: mediagoblin/templates/mediagoblin/base.html:93
-#: mediagoblin/templates/mediagoblin/base.html:99
+#: mediagoblin/templates/mediagoblin/base.html:96
+#: mediagoblin/templates/mediagoblin/base.html:102
 #: mediagoblin/templates/mediagoblin/admin/panel.html:21
 #: mediagoblin/templates/mediagoblin/admin/panel.html:26
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
@@ -439,13 +439,14 @@ msgstr "更改帳號設定"
 msgid "Media processing panel"
 msgstr "媒體處理面板"
 
-#: mediagoblin/templates/mediagoblin/base.html:117
+#: mediagoblin/templates/mediagoblin/base.html:121
+#, python-format
 msgid ""
-"Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
-"href=\"http://gnu.org/\">GNU</a> project."
-msgstr "基於 <a href=\"http://mediagoblin.org\">MediaGoblin</a> — 一項 <a href=\"http://gnu.org/\">GNU</a> 專案。"
+"Powered by <a href=\"http://mediagoblin.org/\" title='Version "
+"%(version)s'>MediaGoblin</a>, a <a href=\"http://gnu.org/\">GNU</a> project."
+msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:120
+#: mediagoblin/templates/mediagoblin/base.html:124
 #, python-format
 msgid ""
 "Released under the <a "
@@ -457,31 +458,31 @@ msgstr "以 <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL
 msgid "Image of goblin stressing out"
 msgstr "滿臉問號的哥布林"
 
-#: mediagoblin/templates/mediagoblin/root.html:24
+#: mediagoblin/templates/mediagoblin/root.html:31
 msgid "Explore"
 msgstr "探索"
 
-#: mediagoblin/templates/mediagoblin/root.html:26
+#: mediagoblin/templates/mediagoblin/root.html:33
 msgid "Hi there, welcome to this MediaGoblin site!"
 msgstr "嘿！歡迎來到 MediaGoblin 站台！ "
 
-#: mediagoblin/templates/mediagoblin/root.html:28
+#: mediagoblin/templates/mediagoblin/root.html:35
 msgid ""
 "This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
 "extraordinarily great piece of media hosting software."
 msgstr "本站使用 <a href=\"http://mediagoblin.org\">MediaGoblin</a> — 與眾不同的媒體分享網站。"
 
-#: mediagoblin/templates/mediagoblin/root.html:29
+#: mediagoblin/templates/mediagoblin/root.html:36
 msgid ""
 "To add your own media, place comments, and more, you can log in with your "
 "MediaGoblin account."
 msgstr "您可以登入您的 MediaGoblin 帳號以進行上傳媒體、張貼評論等等。"
 
-#: mediagoblin/templates/mediagoblin/root.html:31
+#: mediagoblin/templates/mediagoblin/root.html:38
 msgid "Don't have one yet? It's easy!"
 msgstr "沒有帳號嗎？開帳號很簡單！"
 
-#: mediagoblin/templates/mediagoblin/root.html:32
+#: mediagoblin/templates/mediagoblin/root.html:39
 #, python-format
 msgid ""
 "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
@@ -489,7 +490,7 @@ msgid ""
 "        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">在這個網站上建立帳號</a>\n          或是\n          <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">在自己的伺服器上建立 MediaGoblin</a>"
 
-#: mediagoblin/templates/mediagoblin/root.html:40
+#: mediagoblin/templates/mediagoblin/root.html:47
 msgid "Most recent media"
 msgstr "最新的媒體"
 
@@ -607,13 +608,13 @@ msgid "Editing attachments for %(media_title)s"
 msgstr "編輯 %(media_title)s 的附件"
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:43
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:161
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:177
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:159
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:175
 msgid "Attachments"
 msgstr "附件"
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:56
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:182
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:180
 msgid "Add attachment"
 msgstr "新增附件"
 
@@ -623,7 +624,7 @@ msgstr "新增附件"
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:32
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:46
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:52
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:86
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:67
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:48
 msgid "Cancel"
 msgstr "取消"
@@ -854,7 +855,14 @@ msgstr "%(username)s 您好：\n%(comment_author)s 在 %(instance_name)s 對您�
 msgid "%(username)s's media"
 msgstr "%(username)s的媒體"
 
-#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:37
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:38
+#, python-format
+msgid ""
+"<a href=\"%(user_url)s\">%(username)s</a>'s media with tag <a "
+"href=\"%(tag_url)s\">%(tag)s</a>"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:48
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
 msgstr "<a href=\"%(user_url)s\">%(username)s</a> 的媒體"
@@ -883,21 +891,17 @@ msgid ""
 "      <p>%(date)s</p>"
 msgstr "<h3>加入日期</h3>\n      <p>%(date)s</p>"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:192
-msgid "Add media to collection"
-msgstr "將媒體加入蒐藏"
-
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:28
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:40
 #, python-format
 msgid "Add “%(media_title)s” to a collection"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:56
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:54
 msgid "+"
 msgstr "+"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:61
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:58
 msgid "Add a new collection"
 msgstr "新增新的蒐藏"
 
@@ -993,10 +997,13 @@ msgstr "那裡好像還沒有任何的媒體…"
 msgid "(remove)"
 msgstr " (移除)"
 
-#: mediagoblin/templates/mediagoblin/utils/collections.html:20
-#, python-format
-msgid "In collections (%(collected)s)"
-msgstr "在蒐藏 (%(collected)s)"
+#: mediagoblin/templates/mediagoblin/utils/collections.html:21
+msgid "Collected in"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/collections.html:44
+msgid "Add to a collection"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
@@ -1038,7 +1045,7 @@ msgstr "更舊的"
 msgid "Tagged with"
 msgstr "標籤"
 
-#: mediagoblin/tools/exif.py:78
+#: mediagoblin/tools/exif.py:80
 msgid "Could not read the image file."
 msgstr "無法讀取圖片檔案。"
 
@@ -1103,69 +1110,69 @@ msgstr "加註"
 msgid "commented on your post"
 msgstr "在您的內容張貼評論"
 
-#: mediagoblin/user_pages/views.py:159
+#: mediagoblin/user_pages/views.py:166
 msgid "Oops, your comment was empty."
 msgstr "啊，您的留言是空的。"
 
-#: mediagoblin/user_pages/views.py:165
+#: mediagoblin/user_pages/views.py:172
 msgid "Your comment has been posted!"
 msgstr "您的留言已經張貼完成！"
 
-#: mediagoblin/user_pages/views.py:190
+#: mediagoblin/user_pages/views.py:197
 msgid "Please check your entries and try again."
 msgstr "請檢查項目並重試。"
 
-#: mediagoblin/user_pages/views.py:229
+#: mediagoblin/user_pages/views.py:236
 msgid "You have to select or add a collection"
 msgstr "您需要選擇或是新增一個蒐藏"
 
-#: mediagoblin/user_pages/views.py:241
+#: mediagoblin/user_pages/views.py:248
 #, python-format
 msgid "\"%s\" already in collection \"%s\""
 msgstr "「%s」已經在「%s」蒐藏"
 
-#: mediagoblin/user_pages/views.py:258
+#: mediagoblin/user_pages/views.py:265
 #, python-format
 msgid "\"%s\" added to collection \"%s\""
 msgstr "「%s」加入「%s」蒐藏"
 
-#: mediagoblin/user_pages/views.py:279
+#: mediagoblin/user_pages/views.py:286
 msgid "You deleted the media."
 msgstr "您已經刪除此媒體。"
 
-#: mediagoblin/user_pages/views.py:286
+#: mediagoblin/user_pages/views.py:293
 msgid "The media was not deleted because you didn't check that you were sure."
 msgstr "由於您沒有勾選確認，該媒體沒有被移除。"
 
-#: mediagoblin/user_pages/views.py:294
+#: mediagoblin/user_pages/views.py:301
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr "您正在刪除別人的媒體，請小心操作。"
 
-#: mediagoblin/user_pages/views.py:365
+#: mediagoblin/user_pages/views.py:375
 msgid "You deleted the item from the collection."
 msgstr "您已經從該蒐藏中刪除該項目。"
 
-#: mediagoblin/user_pages/views.py:369
+#: mediagoblin/user_pages/views.py:379
 msgid "The item was not removed because you didn't check that you were sure."
 msgstr "由於您沒有勾選確認，該項目沒有被移除。"
 
-#: mediagoblin/user_pages/views.py:379
+#: mediagoblin/user_pages/views.py:389
 msgid ""
 "You are about to delete an item from another user's collection. Proceed with"
 " caution."
 msgstr "您正在從別人的蒐藏中刪除項目，請小心操作。"
 
-#: mediagoblin/user_pages/views.py:412
+#: mediagoblin/user_pages/views.py:422
 #, python-format
 msgid "You deleted the collection \"%s\""
 msgstr "您已經刪除「%s」蒐藏。"
 
-#: mediagoblin/user_pages/views.py:419
+#: mediagoblin/user_pages/views.py:429
 msgid ""
 "The collection was not deleted because you didn't check that you were sure."
 msgstr "由於您沒有勾選確認，該蒐藏沒有被移除。"
 
-#: mediagoblin/user_pages/views.py:429
+#: mediagoblin/user_pages/views.py:439
 msgid ""
 "You are about to delete another user's collection. Proceed with caution."
 msgstr "您正在刪除別人的蒐藏，請小心操作。"
