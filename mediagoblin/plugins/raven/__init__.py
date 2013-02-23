@@ -18,13 +18,17 @@ import os
 import logging
 
 from mediagoblin.tools import pluginapi
-from raven import Client
-from raven.contrib.celery import register_signal
 
 _log = logging.getLogger(__name__)
 
 
 def setup_plugin():
+    if not os.environ.get('CELERY_CONFIG_MODULE'):
+       # Exit early if we're (seemingly) not called from the celery process
+        return
+
+    from raven import Client
+    from raven.contrib.celery import register_signal
     config = pluginapi.get_config('mediagoblin.plugins.raven')
 
     _log.info('Setting up raven for celery...')
