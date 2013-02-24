@@ -85,33 +85,26 @@
                            user_name=request.user.username -%}
                     <a href="{{ user_url }}">{{ user_name }}</a>'s account
                   {%- endtrans %}
-                </span>
-                (<a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>)
-              </p>
-            <ul>
-              <li><a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
-                {%- trans %}Add media{% endtrans -%}
-              </a></li>
-              <li><a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
-                {%- trans %}Create new collection{% endtrans -%}
-              </a></li>
-              <li><a href="{{ request.urlgen('mediagoblin.edit.account') }}">
-                {%- trans %}Change account settings{% endtrans -%}
-              </a></li>
-              <li><a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
+                </span> &middot;
+                <a href="{{ request.urlgen('mediagoblin.edit.account') }}">{%- trans %}Change account settings{% endtrans -%}</a> &middot; 
+            <a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
                                              user=request.user.username) }}">
                 {%- trans %}Media processing panel{% endtrans -%}
-              </a></li>
+              </a> &middot; <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}Log out{% endtrans %}</a>
+              </p>
+            <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
+                {%- trans %}Add media{% endtrans -%}
+              </a>
+            <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
+                {%- trans %}Create new collection{% endtrans -%}
+              </a>
+           
+              
               {% if request.user.is_admin %}
-                <li>Admin:
-                  <ul>
-                    <li><a href="{{ request.urlgen('mediagoblin.admin.panel') }}">
+                <a href="{{ request.urlgen('mediagoblin.admin.panel') }}">
                       {%- trans %}Media processing panel{% endtrans -%}
-                    </a></li>
-                  </ul>
-                </li>
+                    </a>
               {% endif %}
-            </ul>
             </div>
           {% endif %}
         </header>
