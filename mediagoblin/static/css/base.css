@@ -136,6 +136,11 @@ header {
   list-style: none;
 }
 
+.header_dropdown p {
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+
 .dropdown_title {
   font-size: 20px;
 }

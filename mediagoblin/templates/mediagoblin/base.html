@@ -85,25 +85,30 @@
                            user_name=request.user.username -%}
                     <a href="{{ user_url }}">{{ user_name }}</a>'s account
                   {%- endtrans %}
-                </span> &middot;
-                <a href="{{ request.urlgen('mediagoblin.edit.account') }}">{%- trans %}Change account settings{% endtrans -%}</a> &middot; 
-            <a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
+                </span>
+                &middot;
+                <a href="{{ request.urlgen('mediagoblin.edit.account') }}">{%- trans %}Change account settings{% endtrans -%}</a>
+                &middot;
+                <a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
                                              user=request.user.username) }}">
-                {%- trans %}Media processing panel{% endtrans -%}
-              </a> &middot; <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}Log out{% endtrans %}</a>
+                  {%- trans %}Media processing panel{% endtrans -%}
+                </a>
+                &middot;
+                <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}Log out{% endtrans %}</a>
               </p>
-            <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
+              <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
                 {%- trans %}Add media{% endtrans -%}
               </a>
-            <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
+              <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
                 {%- trans %}Create new collection{% endtrans -%}
               </a>
-           
-              
               {% if request.user.is_admin %}
-                <a href="{{ request.urlgen('mediagoblin.admin.panel') }}">
-                      {%- trans %}Media processing panel{% endtrans -%}
-                    </a>
+                <p>
+                  <span class="dropdown_title">Admin powers:</span>
+                  <a href="{{ request.urlgen('mediagoblin.admin.panel') }}">
+                    {%- trans %}Media processing panel{% endtrans -%}
+                  </a>
+                </p>
               {% endif %}
             </div>
           {% endif %}
