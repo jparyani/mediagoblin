@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "mediagoblin/base.html" %}
+{%- extends "mediagoblin/base.html" %}
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
@@ -155,31 +155,33 @@
 
     {% include "mediagoblin/utils/exif.html" %}
     
-    {% if media.attachment_files|count %}
+    {%- if media.attachment_files|count %}
       <h3>{% trans %}Attachments{% endtrans %}</h3>
       <ul>
-        {% for attachment in media.attachment_files %}
+        {%- for attachment in media.attachment_files %}
           <li>
             <a href="{{ request.app.public_store.file_url(attachment.filepath) }}">
               {{- attachment.name -}}
             </a>
           </li>
-        {% endfor %}
+        {%- endfor %}
       </ul>
-    {% endif %}
-    {% if app_config['allow_attachments']
+    {%- endif %}
+    {%- if app_config['allow_attachments']
           and request.user
           and (media.uploader == request.user.id
                or request.user.is_admin) %}
-      {% if not media.attachment_files|count %}
+      {%- if not media.attachment_files|count %}
         <h3>{% trans %}Attachments{% endtrans %}</h3>
-      {% endif %}
+      {%- endif %}
       <p>
         <a href="{{ request.urlgen('mediagoblin.edit.attachments',
                       user=media.get_uploader.username,
-                      media=media.id) }}">{% trans %}Add attachment{% endtrans %}</a>
+                      media_id=media.id) }}">
+          {%- trans %}Add attachment{% endtrans -%}
+        </a>
       </p>
-    {% endif %}
+    {%- endif %}
 
     {% template_hook("media_sideinfo") %}
 

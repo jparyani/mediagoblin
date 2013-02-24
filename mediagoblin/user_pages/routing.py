@@ -87,5 +87,5 @@ add_route('mediagoblin.edit.edit_media',
           'mediagoblin.edit.views:edit_media')
 
 add_route('mediagoblin.edit.attachments',
-          '/u/<string:user>/m/<string:media>/attachments/',
+          '/u/<string:user>/m/<int:media_id>/attachments/',
           'mediagoblin.edit.views:edit_attachments')
