@@ -27,7 +27,9 @@
 {%- endblock %}
 
 {% block mediagoblin_media %}
-  <video controls autoplay preload="auto" class="video-js vjs-mg-skin"
+  <video controls
+         {% if global_config['media_type:mediagoblin.media_types.video']['auto_play'] %}autoplay{% endif %}
+         preload="auto" class="video-js vjs-mg-skin"
       data-setup='{"height": {{ media.media_data.height }},
                  "width": {{ media.media_data.width }} }'>
     <source src="{{ request.app.public_store.file_url(
