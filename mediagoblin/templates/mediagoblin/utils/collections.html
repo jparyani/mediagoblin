@@ -20,7 +20,7 @@
   {% if media.collections %}
     <h3>{% trans %}Collected in{% endtrans %}</h3>
     <p>
-      {% for collection in media.collections %}
+      {%- for collection in media.collections %}
         {% if loop.last %}
           {# the 'and' should only appear if there is more than one collections #}
           {% if media.collections|length > 1 %}
@@ -32,17 +32,17 @@
         {% else %}
           <a href="{{ collection.url_for_self(request.urlgen) }}">{{ collection['title'] }}</a> &middot;
         {% endif %}
-      {% endfor %}
+      {%- endfor %}
     </p>
-  {% endif %}
-  {% if request.user %}
+  {%- endif %}
+  {%- if request.user %}
     <p>
       <a type="submit" href="{{ request.urlgen('mediagoblin.user_pages.media_collect', 
                                   user=media.get_uploader.username,
-                                  media=media.id) }}"
+                                  media_id=media.id) }}"
          class="button_action">
         {% trans %}Add to a collection{% endtrans %}
       </a>
     </p>
-  {% endif %}
+  {%- endif %}
 {% endblock %}

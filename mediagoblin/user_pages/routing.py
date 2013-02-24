@@ -50,7 +50,7 @@ add_route('mediagoblin.user_pages.atom_feed',
           'mediagoblin.user_pages.views:atom_feed')
 
 add_route('mediagoblin.user_pages.media_collect',
-          '/u/<string:user>/m/<string:media>/collect/',
+          '/u/<string:user>/m/<int:media_id>/collect/',
           'mediagoblin.user_pages.views:media_collect')
 
 add_route('mediagoblin.user_pages.collection_list',

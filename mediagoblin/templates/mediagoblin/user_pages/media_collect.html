@@ -33,7 +33,7 @@
 {% block mediagoblin_content %}
   <form action="{{ request.urlgen('mediagoblin.user_pages.media_collect',
 		                  user=media.get_uploader.username,
-				  media=media.id) }}"
+				  media_id=media.id) }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box">
       <h1>

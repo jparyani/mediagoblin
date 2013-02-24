@@ -180,7 +180,7 @@ def media_post_comment(request, media):
     return redirect(request, location=media.url_for_self(request.urlgen))
 
 
-@get_user_media_entry
+@get_media_entry_by_id
 @require_active_login
 def media_collect(request, media):
     """Add media to collection submission"""
