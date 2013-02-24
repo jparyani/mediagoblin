@@ -211,8 +211,8 @@ def media_collect(request, media):
                                 title=request.form['collection_title']).first()
         if existing_collection:
             messages.add_message(request, messages.ERROR,
-                _('You already have a collection called "%s"!'
-                  % existing_collection.title))
+                _('You already have a collection called "%s"!')
+                % existing_collection.title)
             return redirect(request, "mediagoblin.user_pages.media_home",
                             user=request.user.username,
                             media=media.id)
@@ -244,8 +244,8 @@ def media_collect(request, media):
         media_entry=media.id,
         collection=collection.id).first():
         messages.add_message(request, messages.ERROR,
-            _('"%s" already in collection "%s"'
-                % (media.title, collection.title)))
+                             _('"%s" already in collection "%s"')
+                             % (media.title, collection.title))
     else: # Add item to collection
         collection_item = request.db.CollectionItem()
         collection_item.collection = collection.id
@@ -261,8 +261,8 @@ def media_collect(request, media):
         media.save()
 
         messages.add_message(request, messages.SUCCESS,
-                             _('"%s" added to collection "%s"'
-                               % (media.title, collection.title)))
+                             _('"%s" added to collection "%s"')
+                             % (media.title, collection.title))
 
     return redirect(request, "mediagoblin.user_pages.media_home",
                     user=media.get_uploader.username,
