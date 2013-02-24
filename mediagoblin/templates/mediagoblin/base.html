@@ -37,13 +37,13 @@
     <![endif]-->
 
     {# For clarification, the difference between the extra_head.html template
-     # and the extra_head template hook is that the former should be used by
+     # and the head template hook is that the former should be used by
      # themes and the latter should be used by plugins.
      # The reason is that only one thing can override extra_head.html...
      # but multiple plugins can hook into the template hook.
      #}
     {% include "mediagoblin/extra_head.html" %}
-    {% template_hook("extra_head") %}
+    {% template_hook("head") %}
 
     {% block mediagoblin_head %}
     {% endblock mediagoblin_head %}

@@ -27,7 +27,7 @@ def setup_plugin():
 
     pluginapi.register_template_hooks(
         {"image_sideinfo": "mediagoblin/plugins/geolocation/map.html",
-         "image_extrahead": "mediagoblin/plugins/geolocation/map_js_head.html"})
+         "image_head": "mediagoblin/plugins/geolocation/map_js_head.html"})
 
 
 hooks = {
