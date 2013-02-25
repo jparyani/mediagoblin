@@ -35,6 +35,11 @@ def setup_logging_from_paste_ini(loglevel, **kw):
     else:
         logging_conf_file = 'paste.ini'
 
+    # allow users to set up explicitly which paste file to check via the
+    # PASTE_CONFIG environment variable
+    logging_conf_file = os.environ.get(
+        'PASTE_CONFIG', logging_conf_file)
+
     if not os.path.exists(logging_conf_file):
         raise IOError('{0} does not exist. Logging can not be set up.'.format(
             logging_conf_file))
