@@ -219,7 +219,7 @@ def mediaentry_new_slug_era(db):
         return db.execute(
             media_table.select(
                 media_table.c.uploader==uploader,
-                media_table.c.slug==slug)).first().tbl_row_count
+                media_table.c.slug==slug).count()).first().tbl_row_count
 
     def append_garbage_till_unique(row, new_slug):
         """
