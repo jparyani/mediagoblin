@@ -21,6 +21,7 @@ from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         ForeignKey)
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.sql import and_
 from migrate.changeset.constraint import UniqueConstraint
 
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
@@ -218,8 +219,8 @@ def mediaentry_new_slug_era(db):
         # that already exist
         return db.execute(
             media_table.select(
-                media_table.c.uploader==uploader,
-                media_table.c.slug==slug).count()).first().tbl_row_count
+                and_(media_table.c.uploader==uploader,
+                     media_table.c.slug==slug)).count()).first().tbl_row_count
 
     def append_garbage_till_unique(row, new_slug):
         """
