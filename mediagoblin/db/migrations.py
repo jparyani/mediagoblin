@@ -241,6 +241,7 @@ def mediaentry_new_slug_era(db):
     metadata = MetaData(bind=db.bind)
 
     media_table = inspect_table(metadata, 'core__media_entries')
+
     for row in db.execute(media_table.select()):
         # no slug, try setting to an id
         if not row.slug:
@@ -249,3 +250,5 @@ def mediaentry_new_slug_era(db):
         elif u"=" in row.slug or u":" in row.slug:
             append_garbage_till_unique(
                 row, row.slug.replace(u"=", u"-").replace(u":", u"-"))
+
+    db.commit()
