@@ -150,8 +150,10 @@ class MediaEntryMixin(object):
 
     @property
     def slug_or_id(self):
-        return (self.slug or self.id)
-
+        if self.slug:
+            return self.slug
+        else:
+            return u'id:%s' % self.id
 
     def url_for_self(self, urlgen, **extra_args):
         """
