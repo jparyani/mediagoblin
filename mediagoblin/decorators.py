@@ -130,17 +130,15 @@ def get_user_media_entry(controller):
         # might not be a slug, might be an id, but whatever
         media_slug = request.matchdict['media']
 
-        if u":" in media_slug:
-            # okay, it's not actually a slug, it's some kind of identifier,
-            # probably id:
-            if media_slug.startswith(u'id:'):
-                try:
-                    media = MediaEntry.query.filter_by(
-                        id=int(media_slug[3:]),
-                        state=u'processed',
-                        uploader=user.id).first()
-                except ValueError:
-                    raise NotFound()
+        # if it starts with id: it actually isn't a slug, it's an id.
+        if media_slug.startswith(u'id:'):
+            try:
+                media = MediaEntry.query.filter_by(
+                    id=int(media_slug[3:]),
+                    state=u'processed',
+                    uploader=user.id).first()
+            except ValueError:
+                raise NotFound()
         else:
             # no magical id: stuff?  It's a slug!
             media = MediaEntry.query.filter_by(
