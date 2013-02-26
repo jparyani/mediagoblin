@@ -130,7 +130,7 @@ def get_user_media_entry(controller):
         # might not be a slug, might be an id, but whatever
         media_slug = request.matchdict['media']
 
-        if u":" in request.matchdict['media']:
+        if u":" in media_slug:
             # okay, it's not actually a slug, it's some kind of identifier,
             # probably id:
             if media_slug.startswith(u'id:'):
@@ -144,7 +144,7 @@ def get_user_media_entry(controller):
         else:
             # no magical id: stuff?  It's a slug!
             media = MediaEntry.query.filter_by(
-                slug=request.matchdict['media'],
+                slug=media_slug,
                 state=u'processed',
                 uploader=user.id).first()
 
