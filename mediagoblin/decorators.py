@@ -126,9 +126,9 @@ def get_user_media_entry(controller):
             raise NotFound()
 
         media = MediaEntry.query.filter_by(
-            slug = request.matchdict['media'],
-            state = u'processed',
-            uploader = user.id).first()
+            slug=request.matchdict['media'],
+            state=u'processed',
+            uploader=user.id).first()
 
         if not media:
             # no media via slug?  Grab it via object id
