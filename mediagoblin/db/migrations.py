@@ -215,12 +215,10 @@ def mediaentry_new_slug_era(db):
     import uuid
 
     def slug_and_user_combo_exists(slug, uploader):
-        # Technically returns the number of entries with this slug and user
-        # that already exist
         return db.execute(
             media_table.select(
                 and_(media_table.c.uploader==uploader,
-                     media_table.c.slug==slug)).count()).first().tbl_row_count
+                     media_table.c.slug==slug))).first() is not None
 
     def append_garbage_till_unique(row, new_slug):
         """
