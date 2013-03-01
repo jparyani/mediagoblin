@@ -112,6 +112,11 @@ def get_gettext_translation(locale):
     return this_gettext
 
 
+def set_thread_locale(locale):
+    """Set the current translation for this thread"""
+    mg_globals.thread_scope.translations = get_gettext_translation(locale)
+
+
 def pass_to_ugettext(*args, **kwargs):
     """
     Pass a translation on to the appropriate ugettext method.

@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from math import ceil
 
 import jinja2
 from jinja2.ext import Extension
@@ -27,7 +26,7 @@ from mediagoblin import mg_globals
 from mediagoblin import messages
 from mediagoblin import _version
 from mediagoblin.tools import common
-from mediagoblin.tools.translate import get_gettext_translation
+from mediagoblin.tools.translate import set_thread_locale
 from mediagoblin.tools.pluginapi import get_hook_templates
 from mediagoblin.tools.timesince import timesince
 from mediagoblin.meddleware.csrf import render_csrf_form_token
@@ -44,7 +43,7 @@ def get_jinja_env(template_loader, locale):
     (In the future we may have another system for providing theming;
     for now this is good enough.)
     """
-    mg_globals.thread_scope.translations = get_gettext_translation(locale)
+    set_thread_locale(locale)
 
     # If we have a jinja environment set up with this locale, just
     # return that one.
