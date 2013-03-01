@@ -214,8 +214,8 @@ def media_collect(request, media):
                 _('You already have a collection called "%s"!')
                 % existing_collection.title)
             return redirect(request, "mediagoblin.user_pages.media_home",
-                            user=request.user.username,
-                            media=media.id)
+                            user=media.get_uploader.username,
+                            media=media.slug_or_id)
 
         collection = Collection()
         collection.title = request.form['collection_title']
@@ -266,7 +266,7 @@ def media_collect(request, media):
 
     return redirect(request, "mediagoblin.user_pages.media_home",
                     user=media.get_uploader.username,
-                    media=media.id)
+                    media=media.slug_or_id)
 
 
 #TODO: Why does @user_may_delete_media not implicate @require_active_login?
