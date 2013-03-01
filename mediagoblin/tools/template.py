@@ -15,14 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from math import ceil
+
 import jinja2
+from jinja2.ext import Extension
+from jinja2.nodes import Include, Const
+
 from babel.localedata import exists
 from werkzeug.urls import url_quote_plus
 
 from mediagoblin import mg_globals
 from mediagoblin import messages
+from mediagoblin import _version
 from mediagoblin.tools import common
 from mediagoblin.tools.translate import get_gettext_translation
+from mediagoblin.tools.pluginapi import get_hook_templates
 from mediagoblin.meddleware.csrf import render_csrf_form_token
 
 
@@ -40,7 +46,7 @@ def get_jinja_env(template_loader, locale):
 
     # If we have a jinja environment set up with this locale, just
     # return that one.
-    if SETUP_JINJA_ENVS.has_key(locale):
+    if locale in SETUP_JINJA_ENVS:
         return SETUP_JINJA_ENVS[locale]
 
     # jinja2.StrictUndefined will give exceptions on references
@@ -48,7 +54,9 @@ def get_jinja_env(template_loader, locale):
     template_env = jinja2.Environment(
         loader=template_loader, autoescape=True,
         undefined=jinja2.StrictUndefined,
-        extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
+        extensions=[
+            'jinja2.ext.i18n', 'jinja2.ext.autoescape',
+            TemplateHookExtension])
 
     template_env.install_gettext_callables(
         mg_globals.thread_scope.translations.ugettext,
@@ -61,8 +69,12 @@ def get_jinja_env(template_loader, locale):
     template_env.globals['fetch_messages'] = messages.fetch_messages
     template_env.globals['app_config'] = mg_globals.app_config
     template_env.globals['global_config'] = mg_globals.global_config
+    template_env.globals['version'] = _version.__version__
 
     template_env.filters['urlencode'] = url_quote_plus
+
+    # allow for hooking up plugin templates
+    template_env.globals['get_hook_templates'] = get_hook_templates
 
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env
@@ -98,3 +110,30 @@ def render_template(request, template_path, context):
 def clear_test_template_context():
     global TEMPLATE_TEST_CONTEXT
     TEMPLATE_TEST_CONTEXT = {}
+
+
+class TemplateHookExtension(Extension):
+    """
+    Easily loop through a bunch of templates from a template hook.
+
+    Use:
+      {% template_hook("comment_extras") %}
+
+    ... will include all templates hooked into the comment_extras section.
+    """
+
+    tags = set(["template_hook"])
+
+    def parse(self, parser):
+        includes = []
+        expr = parser.parse_expression()
+        lineno = expr.lineno
+        hook_name = expr.args[0].value
+
+        for template_name in get_hook_templates(hook_name):
+            includes.append(
+                parser.parse_import_context(
+                    Include(Const(template_name), True, False, lineno=lineno),
+                    True))
+
+        return includes

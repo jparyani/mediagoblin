@@ -42,8 +42,13 @@ workbench_manager = None
 # A thread-local scope
 thread_scope = threading.local()
 
-# gettext (this will be populated on demand with gettext.Translations)
-thread_scope.translations = None
+# gettext (this needs to default to English so it doesn't break
+#   in case we're running a script without the app like
+#   ./bin/gmg theme assetlink)
+thread_scope.translations = gettext.translation(
+    'mediagoblin',
+    pkg_resources.resource_filename(
+        'mediagoblin', 'i18n'), ['en'], fallback=True)
 
 # app and global config objects
 app_config = None

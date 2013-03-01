@@ -18,8 +18,8 @@ import logging
 import datetime
 
 from mediagoblin import messages, mg_globals
-from mediagoblin.db.models import (MediaEntry, Collection, CollectionItem,
-                                       User)
+from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
+                                   CollectionItem, User)
 from mediagoblin.tools.response import render_to_response, render_404, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
@@ -81,9 +81,16 @@ def user_home(request, page):
 @uses_pagination
 def user_gallery(request, page, url_user=None):
     """'Gallery' of a User()"""
+    tag = request.matchdict.get('tag', None)
     cursor = MediaEntry.query.filter_by(
         uploader=url_user.id,
         state=u'processed').order_by(MediaEntry.created.desc())
+
+    # Filter potentially by tag too:
+    if tag:
+        cursor = cursor.filter(
+            MediaEntry.tags_helper.any(
+                MediaTag.slug == request.matchdict['tag']))
 
     # Paginate gallery
     pagination = Pagination(page, cursor)
@@ -97,7 +104,7 @@ def user_gallery(request, page, url_user=None):
     return render_to_response(
         request,
         'mediagoblin/user_pages/gallery.html',
-        {'user': url_user,
+        {'user': url_user, 'tag': tag,
          'media_entries': media_entries,
          'pagination': pagination})
 
@@ -173,7 +180,7 @@ def media_post_comment(request, media):
     return redirect(request, location=media.url_for_self(request.urlgen))
 
 
-@get_user_media_entry
+@get_media_entry_by_id
 @require_active_login
 def media_collect(request, media):
     """Add media to collection submission"""
@@ -204,11 +211,11 @@ def media_collect(request, media):
                                 title=request.form['collection_title']).first()
         if existing_collection:
             messages.add_message(request, messages.ERROR,
-                _('You already have a collection called "%s"!'
-                  % collection.title))
+                _('You already have a collection called "%s"!')
+                % existing_collection.title)
             return redirect(request, "mediagoblin.user_pages.media_home",
-                            user=request.user.username,
-                            media=media.id)
+                            user=media.get_uploader.username,
+                            media=media.slug_or_id)
 
         collection = Collection()
         collection.title = request.form['collection_title']
@@ -237,8 +244,8 @@ def media_collect(request, media):
         media_entry=media.id,
         collection=collection.id).first():
         messages.add_message(request, messages.ERROR,
-            _('"%s" already in collection "%s"'
-                % (media.title, collection.title)))
+                             _('"%s" already in collection "%s"')
+                             % (media.title, collection.title))
     else: # Add item to collection
         collection_item = request.db.CollectionItem()
         collection_item.collection = collection.id
@@ -254,12 +261,12 @@ def media_collect(request, media):
         media.save()
 
         messages.add_message(request, messages.SUCCESS,
-                             _('"%s" added to collection "%s"'
-                               % (media.title, collection.title)))
+                             _('"%s" added to collection "%s"')
+                             % (media.title, collection.title))
 
     return redirect(request, "mediagoblin.user_pages.media_home",
                     user=media.get_uploader.username,
-                    media=media.id)
+                    media=media.slug_or_id)
 
 
 #TODO: Why does @user_may_delete_media not implicate @require_active_login?
@@ -308,6 +315,9 @@ def user_collection(request, page, url_user=None):
     collection = Collection.query.filter_by(
         get_creator=url_user,
         slug=request.matchdict['collection']).first()
+
+    if not collection:
+        return render_404(request)
 
     cursor = collection.get_collection_items()
 
@@ -515,6 +525,8 @@ def collection_atom_feed(request):
     collection = Collection.query.filter_by(
                creator=user.id,
                slug=request.matchdict['collection']).first()
+    if not collection:
+        return render_404(request)
 
     cursor = CollectionItem.query.filter_by(
                  collection=collection.id) \
@@ -539,14 +551,16 @@ def collection_atom_feed(request):
                 'href': push_url})
 
     feed = AtomFeed(
-               "MediaGoblin: Feed for %s's collection %s" % (request.matchdict['user'], collection.title),
-               feed_url=request.url,
-               id='tag:{host},{year}:collection.user-{user}.title-{title}'.format(
-                   host=request.host,
-                   year=datetime.datetime.today().strftime('%Y'),
-                   user=request.matchdict['user'],
-                   title=collection.title),
-               links=atomlinks)
+                "MediaGoblin: Feed for %s's collection %s" %
+                (request.matchdict['user'], collection.title),
+                feed_url=request.url,
+                id=u'tag:{host},{year}:gnu-mediagoblin.{user}.collection.{slug}'\
+                    .format(
+                    host=request.host,
+                    year=collection.created.strftime('%Y'),
+                    user=request.matchdict['user'],
+                    slug=collection.slug),
+                links=atomlinks)
 
     for item in cursor:
         entry = item.get_media_entry

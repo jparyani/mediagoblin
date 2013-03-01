@@ -74,6 +74,40 @@ class FilenameBuilder(object):
                              ext=self.ext)
 
 
+class ProcessingState(object):
+    def __init__(self, entry):
+        self.entry = entry
+        self.workbench = None
+        self.queued_filename = None
+
+    def set_workbench(self, wb):
+        self.workbench = wb
+
+    def get_queued_filename(self):
+        """
+        Get the a filename for the original, on local storage
+        """
+        if self.queued_filename is not None:
+            return self.queued_filename
+        queued_filepath = self.entry.queued_media_file
+        queued_filename = self.workbench.localized_file(
+            mgg.queue_store, queued_filepath,
+            'source')
+        self.queued_filename = queued_filename
+        return queued_filename
+
+    def copy_original(self, target_name, keyname=u"original"):
+        target_filepath = create_pub_filepath(self.entry, target_name)
+        mgg.public_store.copy_local_to_storage(self.get_queued_filename(),
+            target_filepath)
+        self.entry.media_files[keyname] = target_filepath
+
+    def delete_queue_file(self):
+        queued_filepath = self.entry.queued_media_file
+        mgg.queue_store.delete_file(queued_filepath)
+        self.entry.queued_media_file = []
+
+
 def mark_entry_failed(entry_id, exc):
     """
     Mark a media entry as having failed in its conversion.

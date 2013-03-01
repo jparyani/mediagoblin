@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "mediagoblin/base.html" %}
+{%- extends "mediagoblin/base.html" %}
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
@@ -28,13 +28,14 @@
 {% block mediagoblin_content %}
   <form action="{{ request.urlgen('mediagoblin.edit.attachments',
                                user= media.get_uploader.username,
-                               media= media.id) }}"
+                               media_id=media.id) }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box">
       <h1>
-        {% trans media_title=media.title -%}
+        {%- trans media_title=media.title -%}
           Editing attachments for {{ media_title }}
-        {%- endtrans %}</h1>
+        {%- endtrans -%}
+      </h1>
       <div style="text-align: center;" >
         <img src="{{ media.thumb_url }}" />
       </div>
@@ -42,19 +43,19 @@
       {% if media.attachment_files|count %}
       <h2>{% trans %}Attachments{% endtrans %}</h2>
       <ul>
-	{% for attachment in media.attachment_files %}
+	{%- for attachment in media.attachment_files %}
           <li>
 	    <a target="_blank" href="{{ request.app.public_store.file_url(
 				     attachment['filepath']) }}">
 	      {{- attachment.name -}}
 	    </a>
 	  </li>
-	{% endfor %}
+	{%- endfor %}
       </ul>
       {% endif %}
 
       <h2>{% trans %}Add attachment{% endtrans %}</h2>
-      {{ wtforms_util.render_divs(form) }}
+      {{- wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
         <a href="{{ media.url_for_self(request.urlgen) }}">
           {%- trans %}Cancel{% endtrans -%}

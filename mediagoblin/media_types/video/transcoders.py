@@ -477,8 +477,8 @@ from playbin')
         _log.debug('thumbnail message: {0}'.format(message))
 
         if message.type == gst.MESSAGE_ERROR:
-            _log.error('thumbnail error: {0}'.format(message))
-            gobject.idle_add(self.on_thumbnail_error)
+            _log.error('thumbnail error: {0}'.format(message.parse_error()))
+            gobject.idle_add(self.on_thumbnail_error, message)
 
         if message.type == gst.MESSAGE_STATE_CHANGED:
             prev_state, cur_state, pending_state = \
@@ -570,9 +570,36 @@ pending: {2}'.format(
 
         return False
 
-    def on_thumbnail_error(self):
-        _log.error('Thumbnailing failed.')
+    def on_thumbnail_error(self, message):
+        scaling_failed = False
+
+        if 'Error calculating the output scaled size - integer overflow' \
+           in message.parse_error()[1]:
+            # GStreamer videoscale sometimes fails to calculate the dimensions
+            # given only one of the destination dimensions and the source
+            # dimensions. This is a workaround in case videoscale returns an
+            # error that indicates this has happened.
+            scaling_failed = True
+            _log.error('Thumbnailing failed because of videoscale integer'
+                       ' overflow. Will retry with fallback.')
+        else:
+            _log.error('Thumbnailing failed: {0}'.format(message.parse_error()))
+
+        # Kill the current mainloop
         self.disconnect()
+
+        if scaling_failed:
+            # Manually scale the destination dimensions
+            _log.info('Retrying with manually set sizes...')
+
+            info = VideoTranscoder().discover(self.source_path)
+
+            h = info['videoheight']
+            w = info['videowidth']
+            ratio = 180 / int(w)
+            h = int(h * ratio)
+
+            self.__init__(self.source_path, self.dest_path, 180, h)
 
     def disconnect(self):
         self.state = self.STATE_HALTING
@@ -1009,4 +1036,4 @@ if __name__ == '__main__':
             print('I\'m a callback!')
         transcoder.transcode(*args, progress_callback=cb)
     elif options.action == 'discover':
-        print transcoder.discover(*args).__dict__
+        print transcoder.discover(*args)

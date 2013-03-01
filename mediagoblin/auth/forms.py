@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import wtforms
-import re
 
 from mediagoblin.tools.mail import normalize_email
 from mediagoblin.tools.translate import fake_ugettext_passthrough as _

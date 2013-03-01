@@ -71,16 +71,24 @@ Video
 
 To enable video, first install gstreamer and the python-gstreamer
 bindings (as well as whatever gstremaer extensions you want,
-good/bad/ugly).  On Debianoid systems::
+good/bad/ugly).  On Debianoid systems
 
-    sudo apt-get install python-gst0.10 gstreamer0.10-plugins-{base,bad,good,ugly} \
+.. code-block:: bash
+
+    sudo apt-get install python-gst0.10 \
+        gstreamer0.10-plugins-base \
+        gstreamer0.10-plugins-bad \
+        gstreamer0.10-plugins-good \
+        gstreamer0.10-plugins-ugly \
         gstreamer0.10-ffmpeg
 
 
 Add ``mediagoblin.media_types.video`` to the ``media_types`` list in your
 ``mediagoblin_local.ini`` and restart MediaGoblin.
 
-Run::
+Run
+
+.. code-block:: bash
 
     ./bin/gmg dbupdate
 
@@ -108,7 +116,9 @@ To install these on Debianoid systems, run::
 
 The ``scikits.audiolab`` package you will install in the next step depends on the
 ``libsndfile1-dev`` package, so we should install it.
-On Debianoid systems, run::
+On Debianoid systems, run
+
+.. code-block:: bash
 
     sudo apt-get install libsndfile1-dev
 
@@ -126,7 +136,9 @@ Then install ``scikits.audiolab`` for the spectrograms::
 Add ``mediagoblin.media_types.audio`` to the ``media_types`` list in your
 ``mediagoblin_local.ini`` and restart MediaGoblin.
 
-Run::
+Run
+
+.. code-block:: bash
 
     ./bin/gmg dbupdate
 
@@ -138,7 +150,9 @@ Ascii art
 
 To enable ascii art support, first install the
 `chardet <http://pypi.python.org/pypi/chardet>`_
-library, which is necessary for creating thumbnails of ascii art::
+library, which is necessary for creating thumbnails of ascii art
+
+.. code-block:: bash
 
     ./bin/easy_install chardet
 
@@ -152,7 +166,9 @@ the list would look like this::
 
     media_types = mediagoblin.media_types.image, mediagoblin.media_types.ascii
 
-Run::
+Run
+
+.. code-block:: bash
 
     ./bin/gmg dbupdate
 
@@ -171,7 +187,9 @@ is surely not to work prior to Blender 2.5X).
 Add ``mediagoblin.media_types.stl`` to the ``media_types`` list in your
 ``mediagoblin_local.ini`` and restart MediaGoblin. 
 
-Run::
+Run
+
+.. code-block:: bash
 
     ./bin/gmg dbupdate
 

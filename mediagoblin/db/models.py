@@ -20,7 +20,6 @@ TODO: indexes on foreignkeys, where useful.
 
 import logging
 import datetime
-import sys
 
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
@@ -32,9 +31,10 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
 
 from mediagoblin.db.extratypes import PathTupleWithSlashes, JSONEncoded
-from mediagoblin.db.base import Base, DictReadAttrProxy, Session
+from mediagoblin.db.base import Base, DictReadAttrProxy
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin, CollectionMixin, CollectionItemMixin
 from mediagoblin.tools.files import delete_media_files
+from mediagoblin.tools.common import import_component
 
 # It's actually kind of annoying how sqlalchemy-migrate does this, if
 # I understand it right, but whatever.  Anyway, don't remove this :P
@@ -84,9 +84,7 @@ class User(Base, UserMixin):
 
     def delete(self, **kwargs):
         """Deletes a User and all related entries/comments/files/..."""
-        # Delete this user's Collections and all contained CollectionItems
-        for collection in self.collections:
-            collection.delete(commit=False)
+        # Collections get deleted by relationships.
 
         media_entries = MediaEntry.query.filter(MediaEntry.uploader == self.id)
         for media in media_entries:
@@ -147,6 +145,7 @@ class MediaEntry(Base, MediaEntryMixin):
         )
 
     attachment_files_helper = relationship("MediaAttachmentFile",
+        cascade="all, delete-orphan",
         order_by="MediaAttachmentFile.created"
         )
     attachment_files = association_proxy("attachment_files_helper", "dict_view",
@@ -167,7 +166,6 @@ class MediaEntry(Base, MediaEntryMixin):
     collections = association_proxy("collections_helper", "in_collection")
 
     ## TODO
-    # media_data
     # fail_error
 
     def get_comments(self, ascending=False):
@@ -197,40 +195,31 @@ class MediaEntry(Base, MediaEntryMixin):
         if media is not None:
             return media.url_for_self(urlgen)
 
-    #@memoized_property
     @property
     def media_data(self):
-        session = Session()
-
-        return session.query(self.media_data_table).filter_by(
-            media_entry=self.id).first()
+        return getattr(self, self.media_data_ref)
 
     def media_data_init(self, **kwargs):
         """
         Initialize or update the contents of a media entry's media_data row
         """
-        session = Session()
+        media_data = self.media_data
 
-        media_data = session.query(self.media_data_table).filter_by(
-            media_entry=self.id).first()
-
-        # No media data, so actually add a new one
         if media_data is None:
-            media_data = self.media_data_table(
-                media_entry=self.id,
-                **kwargs)
-            session.add(media_data)
-        # Update old media data
+            # Get the correct table:
+            table = import_component(self.media_type + '.models:DATA_MODEL')
+            # No media data, so actually add a new one
+            media_data = table(**kwargs)
+            # Get the relationship set up.
+            media_data.get_media_entry = self
         else:
+            # Update old media data
             for field, value in kwargs.iteritems():
                 setattr(media_data, field, value)
 
     @memoized_property
-    def media_data_table(self):
-        # TODO: memoize this
-        models_module = self.media_type + '.models'
-        __import__(models_module)
-        return sys.modules[models_module].DATA_MODEL
+    def media_data_ref(self):
+        return import_component(self.media_type + '.models:BACKREF_NAME')
 
     def __repr__(self):
         safe_title = self.title.encode('ascii', 'replace')
@@ -395,7 +384,13 @@ class MediaComment(Base, MediaCommentMixin):
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     content = Column(UnicodeText, nullable=False)
 
-    get_author = relationship(User)
+    # Cascade: Comments are owned by their creator. So do the full thing.
+    # lazy=dynamic: People might post a *lot* of comments, so make
+    #     the "posted_comments" a query-like thing.
+    get_author = relationship(User,
+                              backref=backref("posted_comments",
+                                              lazy="dynamic",
+                                              cascade="all, delete-orphan"))
 
 
 class Collection(Base, CollectionMixin):
@@ -415,7 +410,10 @@ class Collection(Base, CollectionMixin):
     # TODO: No of items in Collection. Badly named, can we migrate to num_items?
     items = Column(Integer, default=0)
 
-    get_creator = relationship(User, backref="collections")
+    # Cascade: Collections are owned by their creator. So do the full thing.
+    get_creator = relationship(User,
+                               backref=backref("collections",
+                                               cascade="all, delete-orphan"))
 
     def get_collection_items(self, ascending=False):
         #TODO, is this still needed with self.collection_items being available?
@@ -436,7 +434,9 @@ class CollectionItem(Base, CollectionItemMixin):
     note = Column(UnicodeText, nullable=True)
     added = Column(DateTime, nullable=False, default=datetime.datetime.now)
     position = Column(Integer)
-    in_collection = relationship("Collection",
+
+    # Cascade: CollectionItems are owned by their Collection. So do the full thing.
+    in_collection = relationship(Collection,
                                  backref=backref(
                                      "collection_items",
                                      cascade="all, delete-orphan"))

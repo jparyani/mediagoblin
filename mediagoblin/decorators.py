@@ -125,24 +125,29 @@ def get_user_media_entry(controller):
         if not user:
             raise NotFound()
 
-        media = MediaEntry.query.filter_by(
-            slug = request.matchdict['media'],
-            state = u'processed',
-            uploader = user.id).first()
+        media = None
 
-        if not media:
-            # no media via slug?  Grab it via object id
+        # might not be a slug, might be an id, but whatever
+        media_slug = request.matchdict['media']
+
+        # if it starts with id: it actually isn't a slug, it's an id.
+        if media_slug.startswith(u'id:'):
             try:
                 media = MediaEntry.query.filter_by(
-                    id = int(request.matchdict['media']),
-                    state = u'processed',
-                    uploader = user.id).first()
+                    id=int(media_slug[3:]),
+                    state=u'processed',
+                    uploader=user.id).first()
             except ValueError:
-                # media "id" was no int
                 raise NotFound()
+        else:
+            # no magical id: stuff?  It's a slug!
+            media = MediaEntry.query.filter_by(
+                slug=media_slug,
+                state=u'processed',
+                uploader=user.id).first()
 
         if not media:
-            # no media by that id? Okay, 404.
+            # Didn't find anything?  Okay, 404.
             raise NotFound()
 
         return controller(request, media=media, *args, **kwargs)
@@ -186,10 +191,6 @@ def get_user_collection_item(controller):
 
         if not user:
             return render_404(request)
-
-        collection = request.db.Collection.find_one(
-            {'slug': request.matchdict['collection'],
-             'creator': user.id})
 
         collection_item = request.db.CollectionItem.find_one(
             {'id': request.matchdict['collection_item'] })

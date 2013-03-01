@@ -83,6 +83,9 @@ class PluginManager(object):
         # list of registered template paths
         "template_paths": set(),
 
+        # list of template hooks
+        "template_hooks": {},
+
         # list of registered routes
         "routes": [],
         }
@@ -130,6 +133,18 @@ class PluginManager(object):
 
     def get_routes(self):
         return tuple(self.routes)
+
+    def register_template_hooks(self, template_hooks):
+        for hook, templates in template_hooks.items():
+            if isinstance(templates, (list, tuple)):
+                self.template_hooks.setdefault(hook, []).extend(list(templates))
+            else:
+                # In this case, it's actually a single callable---not a
+                # list of callables.
+                self.template_hooks.setdefault(hook, []).append(templates)
+
+    def get_template_hooks(self, hook_name):
+        return self.template_hooks.get(hook_name, [])
 
 
 def register_routes(routes):
@@ -208,3 +223,52 @@ def get_config(key):
     return plugin_section.get(key, {})
 
 
+def register_template_hooks(template_hooks):
+    """
+    Register a dict of template hooks.
+
+    Takes template_hooks as an argument, which is a dictionary of
+    template hook names/keys to the templates they should provide.
+    (The value can either be a single template path or an iterable
+    of paths.)
+
+    Example:
+
+    .. code-block:: python
+
+      {"media_sidebar": "/plugin/sidemess/mess_up_the_side.html",
+       "media_descriptionbox": ["/plugin/sidemess/even_more_mess.html",
+                                "/plugin/sidemess/so_much_mess.html"]}
+    """
+    PluginManager().register_template_hooks(template_hooks)
+
+
+def get_hook_templates(hook_name):
+    """
+    Get a list of hook templates for this hook_name.
+
+    Note: for the most part, you access this via a template tag, not
+    this method directly, like so:
+
+    .. code-block:: html+jinja
+
+      {% template_hook "media_sidebar" %}
+
+    ... which will include all templates for you, partly using this
+    method.
+
+    However, this method is exposed to templates, and if you wish, you
+    can iterate over templates in a template hook manually like so:
+
+    .. code-block:: html+jinja
+
+      {% for template_path in get_hook_templates("media_sidebar") %}
+        <div class="extra_structure">
+          {% include template_path %}
+        </div>
+      {% endfor %}
+
+    Returns:
+      A list of strings representing template paths.
+    """
+    return PluginManager().get_template_hooks(hook_name)

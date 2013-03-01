@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "mediagoblin/base.html" %}
+{%- extends "mediagoblin/base.html" %}
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
@@ -30,15 +30,7 @@
   <script type="text/javascript"
           src="{{ request.staticdirect('/js/keyboard_navigation.js') }}"></script>
 
-  {% if app_config['geolocation_map_visible'] %}
-    <link rel="stylesheet"
-	  href="{{ request.staticdirect('/extlib/leaflet/leaflet.css') }}" />
-
-    <script type="text/javascript"
-            src="{{ request.staticdirect('/extlib/leaflet/leaflet.js') }}"></script>
-    <script type="text/javascript"
-            src="{{ request.staticdirect('/js/geolocation-map.js') }}"></script>
-  {% endif %}
+  {% template_hook("media_head") %}
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_content %}
@@ -125,14 +117,14 @@
           <div class="comment_author">
             <img src="{{ request.staticdirect('/images/icon_comment.png') }}" />
             <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                            user = comment_author.username) }}">
+                            user=comment_author.username) }}">
               {{- comment_author.username -}}
             </a>
             {% trans %}at{% endtrans %}
             <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
-                   comment = comment.id,
-                   user = media.get_uploader.username,
-                   media = media.slug_or_id) }}#comment">
+                            comment=comment.id,
+                            user=media.get_uploader.username,
+                            media=media.slug_or_id) }}#comment">
               {{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}
             </a>:
           </div>
@@ -157,57 +149,45 @@
       {% include "mediagoblin/utils/tags.html" %}
     {% endif %}
 
-    {% if media.collections %}
-      {% include "mediagoblin/utils/collections.html" %}
-    {% endif %}
+    {% include "mediagoblin/utils/collections.html" %}
 
     {% include "mediagoblin/utils/license.html" %}
 
-    {% include "mediagoblin/utils/geolocation_map.html" %}
-
     {% include "mediagoblin/utils/exif.html" %}
     
-    {% if media.attachment_files|count %}
+    {%- if media.attachment_files|count %}
       <h3>{% trans %}Attachments{% endtrans %}</h3>
       <ul>
-        {% for attachment in media.attachment_files %}
+        {%- for attachment in media.attachment_files %}
           <li>
             <a href="{{ request.app.public_store.file_url(attachment.filepath) }}">
               {{- attachment.name -}}
             </a>
           </li>
-        {% endfor %}
+        {%- endfor %}
       </ul>
-    {% endif %}
-    {% if app_config['allow_attachments']
+    {%- endif %}
+    {%- if app_config['allow_attachments']
           and request.user
           and (media.uploader == request.user.id
                or request.user.is_admin) %}
-      {% if not media.attachment_files|count %}
+      {%- if not media.attachment_files|count %}
         <h3>{% trans %}Attachments{% endtrans %}</h3>
-      {% endif %}
+      {%- endif %}
       <p>
         <a href="{{ request.urlgen('mediagoblin.edit.attachments',
                       user=media.get_uploader.username,
-                      media=media.id) }}">{% trans %}Add attachment{% endtrans %}</a>
+                      media_id=media.id) }}">
+          {%- trans %}Add attachment{% endtrans -%}
+        </a>
       </p>
-    {% endif %}
+    {%- endif %}
 
-    {% if request.user %}
-      <p>
-        <a type="submit" href="{{ request.urlgen('mediagoblin.user_pages.media_collect', 
-                                    user=media.get_uploader.username,
-                                    media=media.id) }}"
-           class="button_action"
-           title="{% trans %}Add media to collection{% endtrans %}">
-          <img src="{{ request.staticdirect('/images/icon_collect.png') }}"
-               />
-	</a>
-      </p>
-    {% endif %}
+    {% template_hook("media_sideinfo") %}
 
     {% block mediagoblin_sidebar %}
     {% endblock %}
+
   </div>
   <div class="clear"></div>
 {% endblock %}

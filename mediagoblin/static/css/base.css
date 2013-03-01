@@ -132,7 +132,13 @@ header {
 }
 
 .header_dropdown li {
+  margin: 4px 0;
   list-style: none;
+}
+
+.header_dropdown p {
+  margin-top: 12px;
+  margin-bottom: 10px;
 }
 
 .dropdown_title {

@@ -24,17 +24,22 @@
           src="{{ request.staticdirect('/js/collection_form_show.js') }}"></script>
 {% endblock %}
 
-{% block mediagoblin_content %}
+{% block title -%}
+  {% trans media_title=media.title -%}
+    Add “{{ media_title }}” to a collection
+  {%- endtrans %} &mdash; {{ super() }}
+{%- endblock %}
 
+{% block mediagoblin_content %}
   <form action="{{ request.urlgen('mediagoblin.user_pages.media_collect',
 		                  user=media.get_uploader.username,
-				  media=media.id) }}"
+				  media_id=media.id) }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box">
       <h1>
-        {%- trans title=media.title -%}
-          Add {{ title }} to collection
-        {%- endtrans %}
+        {%- trans media_title=media.title -%}
+          Add “{{ media_title }}” to a collection
+        {%- endtrans -%}
       </h1>
 
       <div style="text-align: center;" >
@@ -42,39 +47,20 @@
       </div>
 
       <br />
-	  
-      <p class="form_field_label">
-	<label for="{{ (form.collection.name) }}">{{ _(form.collection.label.text) }}</label>
-      </p>
+
+      {{- wtforms_util.render_label_p(form.collection) }}
       <div class="form_field_input">
 	{{ form.collection }}
 	<a class="button_action" id="button_addcollection">{% trans %}+{% endtrans %}</a>
       </div>
 
       <div id="new_collection" class="subform">
+        <h3>{% trans %}Add a new collection{% endtrans %}</h3>
 
-      <h3>{% trans %}Add a new collection{% endtrans %}</h3>
-
-      <p class="form_field_label"> 
-	<label for="{{ (form.collection_title.name) }}">{{ _(form.collection_title.label.text) }}</label>
-      </p>
-      <div class="form_field_input">
-	{{ form.collection_title }}
+        {{- wtforms_util.render_field_div(form.collection_title) }}
+        {{- wtforms_util.render_field_div(form.collection_description) }}
       </div>
-      <p class="form_field_label"> 
-	<label for="{{ (form.collection_description.name) }}">{{ _(form.collection_description.label.text) }}</label>
-      </p>
-      <div class="form_field_input">
-	{{ form.collection_description }}
-      </div>	
-
-      </div>
-      <p class="form_field_label"> 
-	<label for="{{ (form.note.name) }}">{{ _(form.note.label.text) }}</label>
-      </p>
-      <div class="form_field_input">
-	{{ form.note }}
-      </div>
+      {{- wtforms_util.render_field_div(form.note) }}
 
       <div class="form_submit_buttons">
         {# TODO: This isn't a button really... might do unexpected things :) #}

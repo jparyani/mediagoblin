@@ -16,9 +16,8 @@
 
 import os
 import logging
+import logging.config
 
-from configobj import ConfigObj
-from ConfigParser import RawConfigParser
 from celery.signals import setup_logging
 
 from mediagoblin import app, mg_globals
@@ -36,49 +35,16 @@ def setup_logging_from_paste_ini(loglevel, **kw):
     else:
         logging_conf_file = 'paste.ini'
 
+    # allow users to set up explicitly which paste file to check via the
+    # PASTE_CONFIG environment variable
+    logging_conf_file = os.environ.get(
+        'PASTE_CONFIG', logging_conf_file)
+
     if not os.path.exists(logging_conf_file):
         raise IOError('{0} does not exist. Logging can not be set up.'.format(
             logging_conf_file))
 
-    logging_conf = ConfigObj(logging_conf_file)
-
-    config = logging_conf
-
-    # Read raw config to avoid interpolation of formatting parameters
-    raw_config = RawConfigParser()
-    raw_config.readfp(open(logging_conf_file))
-
-    # Set up formatting
-    # Get the format string and circumvent configobj interpolation of the value
-    fmt = raw_config.get('formatter_generic', 'format')
-
-    # Create the formatter
-    formatter = logging.Formatter(fmt)
-
-    # Check for config values
-    if not config.get('loggers') or not config['loggers'].get('keys'):
-        print('No loggers found')
-        return
-
-    # Iterate all teh loggers.keys values
-    for name in config['loggers']['keys'].split(','):
-        if not config.get('logger_{0}'.format(name)):
-            continue
-
-        log_params = config['logger_{0}'.format(name)]
-
-        qualname = log_params['qualname'] if 'qualname' in log_params else name
-
-        if qualname == 'root':
-            qualname = None
-
-        logger = logging.getLogger(qualname)
-
-        level = getattr(logging, log_params['level'])
-        logger.setLevel(level)
-
-        for handler in logger.handlers:
-            handler.setFormatter(formatter)
+    logging.config.fileConfig(logging_conf_file)
 
 
 setup_logging.connect(setup_logging_from_paste_ini)

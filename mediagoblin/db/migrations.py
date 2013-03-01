@@ -21,6 +21,7 @@ from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         ForeignKey)
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.sql import and_
 from migrate.changeset.constraint import UniqueConstraint
 
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
@@ -190,9 +191,63 @@ def fix_CollectionItem_v0_constraint(db_conn):
 def add_license_preference(db):
     metadata = MetaData(bind=db.bind)
 
-    user_table = Table('core__users', metadata, autoload=True,
-            autoload_with=db.bind)
+    user_table = inspect_table(metadata, 'core__users')
 
-    col = Column('license_preference', Unicode, default=u'')
+    col = Column('license_preference', Unicode)
     col.create(user_table)
+    db.commit()
+
+
+@RegisterMigration(9, MIGRATIONS)
+def mediaentry_new_slug_era(db):
+    """
+    Update for the new era for media type slugs.
+
+    Entries without slugs now display differently in the url like:
+      /u/cwebber/m/id=251/
+
+    ... because of this, we should back-convert:
+     - entries without slugs should be converted to use the id, if possible, to
+       make old urls still work
+     - slugs with = (or also : which is now also not allowed) to have those
+       stripped out (small possibility of breakage here sadly)
+    """
+    import uuid
+
+    def slug_and_user_combo_exists(slug, uploader):
+        return db.execute(
+            media_table.select(
+                and_(media_table.c.uploader==uploader,
+                     media_table.c.slug==slug))).first() is not None
+
+    def append_garbage_till_unique(row, new_slug):
+        """
+        Attach junk to this row until it's unique, then save it
+        """
+        if slug_and_user_combo_exists(new_slug, row.uploader):
+            # okay, still no success;
+            # let's whack junk on there till it's unique.
+            new_slug += '-' + uuid.uuid4().hex[:4]
+            # keep going if necessary!
+            while slug_and_user_combo_exists(new_slug, row.uploader):
+                new_slug += uuid.uuid4().hex[:4]
+
+        db.execute(
+            media_table.update(). \
+            where(media_table.c.id==row.id). \
+            values(slug=new_slug))
+
+    metadata = MetaData(bind=db.bind)
+
+    media_table = inspect_table(metadata, 'core__media_entries')
+
+    for row in db.execute(media_table.select()):
+        # no slug, try setting to an id
+        if not row.slug:
+            append_garbage_till_unique(row, unicode(row.id))
+        # has "=" or ":" in it... we're getting rid of those
+        elif u"=" in row.slug or u":" in row.slug:
+            append_garbage_till_unique(
+                row, row.slug.replace(u"=", u"-").replace(u":", u"-"))
+
     db.commit()

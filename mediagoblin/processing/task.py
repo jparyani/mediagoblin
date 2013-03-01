@@ -22,7 +22,7 @@ from celery import registry, task
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.db.models import MediaEntry
-from mediagoblin.processing import mark_entry_failed, BaseProcessingFail
+from . import mark_entry_failed, BaseProcessingFail, ProcessingState
 from mediagoblin.tools.processing import json_processing_callback
 
 _log = logging.getLogger(__name__)
@@ -85,8 +85,11 @@ class ProcessMedia(task.Task):
 
             _log.debug('Processing {0}'.format(entry))
 
-            # run the processing code
-            entry.media_manager['processor'](entry)
+            proc_state = ProcessingState(entry)
+            with mgg.workbench_manager.create() as workbench:
+                proc_state.set_workbench(workbench)
+                # run the processing code
+                entry.media_manager['processor'](proc_state)
 
             # We set the state to processed and save the entry here so there's
             # no need to save at the end of the processing stage, probably ;)

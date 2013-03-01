@@ -17,8 +17,7 @@
 #}
 
 {% block geolocation_map %}
-  {% if app_config['geolocation_map_visible']
-        and media.media_data.gps_latitude is defined
+  {% if     media.media_data.gps_latitude is defined
         and media.media_data.gps_latitude
         and media.media_data.gps_longitude is defined
         and media.media_data.gps_longitude %}

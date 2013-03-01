@@ -16,11 +16,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
+{# Render the label for a field #}
+{% macro render_label(field) %}
+  {%- if field.label.text -%}
+    <label for="{{ field.label.field_id }}">{{ _(field.label.text) }}</label>
+  {%- endif -%}
+{%- endmacro %}
+
+{# Render the label in a <p> for a field #}
+{% macro render_label_p(field) %}
+  {%- if field.label.text %}
+    <p class="form_field_label">
+      {{- render_label(field) -}}
+    </p>
+  {%- endif %}
+{%- endmacro %}
+
 {# Generically render a field #}
 {% macro render_field_div(field) %}
-  {% if field.label.text -%}
-    <p class="form_field_label"><label for="{{ field.label.field_id }}">{{ _(field.label.text) }}</label></p>
-  {%- endif %}
+  {{- render_label_p(field) }}
   <div class="form_field_input">
     {{ field }}
     {%- if field.errors -%}
@@ -28,7 +42,7 @@
         <p class="form_field_error">{{ _(error) }}</p>
       {% endfor %}
     {%- endif %}
-    {% if field.description -%}
+    {%- if field.description %}
       <p class="form_field_description">{{ _(field.description)|safe }}</p>
     {%- endif %}
   </div>

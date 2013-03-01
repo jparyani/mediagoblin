@@ -25,7 +25,7 @@ def setup_user_in_request(request):
     Examine a request and tack on a request.user parameter if that's
     appropriate.
     """
-    if not request.session.has_key('user_id'):
+    if 'user_id' not in request.session:
         request.user = None
         return
 
@@ -36,4 +36,3 @@ def setup_user_in_request(request):
         # this session.
         _log.warn("Killing session for user id %r", request.session['user_id'])
         request.session.invalidate()
-

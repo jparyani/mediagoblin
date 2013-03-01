@@ -18,7 +18,6 @@ from tempfile import NamedTemporaryFile
 import logging
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.decorators import get_workbench
 from mediagoblin.processing import \
     create_pub_filepath, FilenameBuilder, BaseProcessingFail, ProgressCallback
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
@@ -54,8 +53,8 @@ def sniff_handler(media_file, **kw):
 
     return False
 
-@get_workbench
-def process_video(entry, workbench=None):
+
+def process_video(proc_state):
     """
     Process a video entry, transcode the queued media files (originals) and
     create a thumbnail for the entry.
@@ -63,12 +62,12 @@ def process_video(entry, workbench=None):
     A Workbench() represents a local tempory dir. It is automatically
     cleaned up when this function exits.
     """
+    entry = proc_state.entry
+    workbench = proc_state.workbench
     video_config = mgg.global_config['media_type:mediagoblin.media_types.video']
 
     queued_filepath = entry.queued_media_file
-    queued_filename = workbench.localized_file(
-        mgg.queue_store, queued_filepath,
-        'source')
+    queued_filename = proc_state.get_queued_filename()
     name_builder = FilenameBuilder(queued_filename)
 
     medium_filepath = create_pub_filepath(
@@ -138,8 +137,7 @@ def process_video(entry, workbench=None):
     if video_config['keep_original']:
         # Push original file to public storage
         _log.debug('Saving original...')
-        original_filepath = create_pub_filepath(entry, queued_filepath[-1])
-        mgg.public_store.copy_local_to_storage(queued_filename, original_filepath)
-        entry.media_files['original'] = original_filepath
+        proc_state.copy_original(queued_filepath[-1])
 
-    mgg.queue_store.delete_file(queued_filepath)
+    # Remove queued media file from storage and database
+    proc_state.delete_queue_file()
