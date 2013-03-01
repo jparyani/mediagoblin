@@ -94,6 +94,12 @@ def process_video(proc_state):
             open(tmp_dst.name, 'wb').write(open(queued_filename, 'rb').read())
 
             dst_dimensions = metadata['videowidth'], metadata['videoheight']
+
+            # Push original file to public storage
+            _log.debug('Saving original...')
+            proc_state.copy_original(queued_filepath[-1])
+
+            did_transcode = False
         else:
             transcoder = transcoders.VideoTranscoder()
 
@@ -107,12 +113,14 @@ def process_video(proc_state):
             dst_dimensions = transcoder.dst_data.videowidth,\
                     transcoder.dst_data.videoheight
 
-        # Push transcoded video to public storage
-        _log.debug('Saving medium...')
-        mgg.public_store.copy_local_to_storage(tmp_dst.name, medium_filepath)
-        _log.debug('Saved medium')
+            # Push transcoded video to public storage
+            _log.debug('Saving medium...')
+            mgg.public_store.copy_local_to_storage(tmp_dst.name, medium_filepath)
+            _log.debug('Saved medium')
 
-        entry.media_files['webm_640'] = medium_filepath
+            entry.media_files['webm_640'] = medium_filepath
+
+            did_transcode = True
 
         # Save the width and height of the transcoded video
         entry.media_data_init(
@@ -134,7 +142,10 @@ def process_video(proc_state):
         mgg.public_store.copy_local_to_storage(tmp_thumb.name, thumbnail_filepath)
         entry.media_files['thumb'] = thumbnail_filepath
 
-    if video_config['keep_original']:
+    # save the original... but only if we did a transcoding
+    # (if we skipped transcoding and just kept the original anyway as the main
+    #  media, then why would we save the original twice?)
+    if video_config['keep_original'] and did_transcode:
         # Push original file to public storage
         _log.debug('Saving original...')
         proc_state.copy_original(queued_filepath[-1])
