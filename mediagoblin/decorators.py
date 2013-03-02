@@ -43,7 +43,7 @@ def require_active_login(controller):
                     request.url)
 
             return redirect(request, 'mediagoblin.auth.login',
-                            next=url_quote(next_url))
+                            next=next_url)
 
         return controller(request, *args, **kwargs)
 
