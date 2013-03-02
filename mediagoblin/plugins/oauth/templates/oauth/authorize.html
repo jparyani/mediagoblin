@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#}
 {% extends "mediagoblin/base.html" %}
-{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+{% import "mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {% block mediagoblin_content %}
 <form action="{{ request.urlgen('mediagoblin.plugins.oauth.authorize_client') }}"

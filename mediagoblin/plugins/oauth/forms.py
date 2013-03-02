@@ -23,10 +23,9 @@ from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 
 
 class AuthorizationForm(wtforms.Form):
-    client_id = wtforms.HiddenField(_(u'Client ID'),
-            [wtforms.validators.Required()])
-    next = wtforms.HiddenField(_(u'Next URL'),
-            [wtforms.validators.Required()])
+    client_id = wtforms.HiddenField(u'',
+                                    validators=[wtforms.validators.Required()])
+    next = wtforms.HiddenField(u'', validators=[wtforms.validators.Required()])
     allow = wtforms.SubmitField(_(u'Allow'))
     deny = wtforms.SubmitField(_(u'Deny'))
 
