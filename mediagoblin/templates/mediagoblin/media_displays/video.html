@@ -35,7 +35,11 @@
          data-setup='{"height": {{ media.media_data.height }},
                       "width": {{ media.media_data.width }} }'>
     <source src="{{ request.app.public_store.file_url(display_path) }}"
-            type="video/webm; codecs=&quot;vp8, vorbis&quot;" />
+            {% if media.media_data %}
+              type="{{ media.media_data.source_type() }}"
+            {% else %}
+              type="video/webm; codecs=&quot;vp8, vorbis&quot;"
+            {% endif %} />
     <div class="no_html5">
       {%- trans -%}Sorry, this video will not work because
       your web browser does not support HTML5 

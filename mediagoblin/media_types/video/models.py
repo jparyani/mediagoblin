@@ -26,6 +26,8 @@ from mediagoblin.db.extratypes import JSONEncoded
 BACKREF_NAME = "video__media_data"
 
 
+DEFAULT_WEBM_TYPE = 'video/webm; codecs="vp8, vorbis"'
+
 class VideoData(Base):
     """
     Attributes:
@@ -56,6 +58,33 @@ class VideoData(Base):
     height = Column(SmallInteger)
 
     orig_metadata = Column(JSONEncoded)
+
+    def source_type(self):
+        """
+        Construct a useful type=... that is to say, used like:
+          <video><source type="{{ entry.media_data.source_type() }}" /></video>
+
+        Try to construct it out of self.orig_metadata... if we fail we
+        just dope'ily fall back on DEFAULT_WEBM_TYPE
+        """
+        orig_metadata = self.orig_metadata or {}
+
+        if "webm_640" not in self.get_media_entry.media_files \
+           and "mimetype" in orig_metadata \
+           and "tags" in orig_metadata \
+           and "audio-codec" in orig_metadata["tags"] \
+           and "video-codec" in orig_metadata["tags"]:
+            if orig_metadata['mimetype'] == 'application/ogg':
+                # stupid ambiguous .ogg extension
+                mimetype = "video/ogg"
+            else:
+                mimetype = orig_metadata['mimetype']
+            return '%s; codecs="%s, %s"' % (
+                mimetype,
+                orig_metadata["tags"]["video-codec"].lower(),
+                orig_metadata["tags"]["audio-codec"].lower())
+        else:
+            return DEFAULT_WEBM_TYPE
 
 
 DATA_MODEL = VideoData

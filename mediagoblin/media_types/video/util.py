@@ -57,4 +57,3 @@ def skip_transcode(metadata):
             return False
 
     return True
-
