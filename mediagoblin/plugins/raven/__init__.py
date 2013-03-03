@@ -22,18 +22,13 @@ from mediagoblin.tools import pluginapi
 _log = logging.getLogger(__name__)
 
 
-def setup_plugin():
-    if not os.environ.get('CELERY_CONFIG_MODULE'):
-       # Exit early if we're (seemingly) not called from the celery process
-        return
-
+def get_client():
     from raven import Client
-    from raven.contrib.celery import register_signal
     config = pluginapi.get_config('mediagoblin.plugins.raven')
 
-    _log.info('Setting up raven for celery...')
-
     sentry_dsn = config.get('sentry_dsn')
+
+    client = None
 
     if sentry_dsn:
         _log.info('Setting up raven from plugin config: {0}'.format(
@@ -43,13 +38,55 @@ def setup_plugin():
         _log.info('Setting up raven from SENTRY_DSN environment variable: {0}'\
                   .format(os.environ.get('SENTRY_DSN')))
         client = Client()  # Implicitly looks for SENTRY_DSN
-    else:
+
+    if not client:
         _log.error('Could not set up client, missing sentry DSN')
-        return
+        return None
+
+    return client
+
+
+def setup_celery():
+    from raven.contrib.celery import register_signal
+
+    client = get_client()
 
     register_signal(client)
 
 
+def setup_logging():
+    config = pluginapi.get_config('mediagoblin.plugins.raven')
+
+    conf_setup_logging = False
+    if config.get('setup_logging'):
+        conf_setup_logging = bool(int(config.get('setup_logging')))
+
+    if not conf_setup_logging:
+        return
+
+    from raven.handlers.logging import SentryHandler
+    from raven.conf import setup_logging
+
+    client = get_client()
+
+    _log.info('Setting up raven logging handler')
+
+    setup_logging(SentryHandler(client))
+
+
+def wrap_wsgi(app):
+    from raven.middleware import Sentry
+
+    client = get_client()
+
+    _log.info('Attaching raven middleware...')
+
+    return Sentry(app, client)
+
+
 hooks = {
-    'setup': setup_plugin,
+    'setup': setup_logging,
+    'wrap_wsgi': wrap_wsgi,
+    'celery_logging_setup': setup_logging,
+    'celery_setup': setup_celery,
     }

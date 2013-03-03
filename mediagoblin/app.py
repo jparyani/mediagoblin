@@ -253,4 +253,7 @@ def paste_app_factory(global_config, **app_config):
 
     mgoblin_app = MediaGoblinApp(mediagoblin_config)
 
+    for callable_hook in PluginManager().get_hook_callables('wrap_wsgi'):
+        mgoblin_app = callable_hook(mgoblin_app)
+
     return mgoblin_app

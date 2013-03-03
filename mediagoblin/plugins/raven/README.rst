@@ -2,10 +2,7 @@
  raven plugin
 ==============
 
-.. warning::
-    The raven plugin only sets up raven for celery. To enable raven for paster,
-    see the deployment docs section on setting up exception monitoring.
-
+.. _raven-setup:
 
 Set up the raven plugin
 =======================
@@ -14,3 +11,5 @@ Set up the raven plugin
 
     [[mediagoblin.plugins.raven]]
     sentry_dsn = <YOUR SENTRY DSN>
+    # Logging is very high-volume, set to 0 if you want to turn off logging
+    setup_logging = 1

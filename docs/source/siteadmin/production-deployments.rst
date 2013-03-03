@@ -77,51 +77,16 @@ Modify your existing MediaGoblin and application init scripts, if
 necessary, to prevent them from starting their own ``celeryd``
 processes.
 
-Monitor exceptions
-------------------
+.. _sentry:
 
-This is an example config using raven_ to report exceptions and
-:py:mod:`logging` messages to a sentry_ instance
+Set up sentry to monitor exceptions
+-----------------------------------
 
-.. _raven: http://raven.readthedocs.org/
-.. _sentry: https://github.com/getsentry
+We have a plugin for `raven`_ integration, see the ":doc:`/plugindocs/raven`"
+documentation.
 
-.. code-block:: ini
+.. _`raven`: http://raven.readthedocs.org
 
-    [pipeline:main]
-    pipeline =
-        errors
-        raven
-        routing
-
-    [loggers]
-    keys = root, sentry
-
-    [handlers]
-    keys = console, sentry
-
-    [formatters]
-    keys = generic
-
-    [logger_root]
-    level = INFO
-    handlers = console, sentry
-
-    [logger_sentry]
-    level = WARN
-    handlers = console
-    qualname = sentry.errors
-    propagate = 0
-
-    [handler_sentry]
-    class = raven.handlers.logging.SentryHandler
-    args = ('http://public:secret@example.com/1',)
-    level = WARNING
-    formatter = generic
-
-    [filter:raven]
-    use = egg:raven#raven
-    dsn = http://71727ea2c69043e4bbcd793bb0115cd4:e9cedccb32d9482d81f99eeca8b1ad30@sentry.talka.tv/3
 
 .. _init-script:
 
