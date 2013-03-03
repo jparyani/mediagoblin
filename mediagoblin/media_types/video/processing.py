@@ -178,5 +178,7 @@ def store_metadata(media_entry, metadata):
         videorate = metadata["videorate"]
         stored_metadata["videorate"] = [videorate.num, videorate.denom]
 
-    media_entry.media_data_init(
-        orig_metadata=stored_metadata)
+    # Only save this field if there's something to save
+    if len(stored_metadata):
+        media_entry.media_data_init(
+            orig_metadata=stored_metadata)
