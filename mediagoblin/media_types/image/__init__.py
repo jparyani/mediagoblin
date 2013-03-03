@@ -25,4 +25,8 @@ MEDIA_MANAGER = {
     "sniff_handler": sniff_handler,
     "display_template": "mediagoblin/media_displays/image.html",
     "default_thumb": "images/media_thumbs/image.png",
-    "accepted_extensions": ["jpg", "jpeg", "png", "gif", "tiff"]}
+    "accepted_extensions": ["jpg", "jpeg", "png", "gif", "tiff"],
+
+    # Used by the media_entry.get_display_media method
+    "media_fetch_order": [u'medium', u'original', u'thumb'],
+}

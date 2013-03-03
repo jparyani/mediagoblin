@@ -126,24 +126,30 @@ class MediaEntryMixin(object):
         """
         return cleaned_markdown_conversion(self.description)
 
-    def get_display_media(self, media_map,
-                          fetch_order=common.DISPLAY_IMAGE_FETCHING_ORDER):
+    def get_display_media(self, fetch_order=None):
         """
         Find the best media for display.
 
         Args:
-        - media_map: a dict like
-          {u'image_size': [u'dir1', u'dir2', u'image.jpg']}
-        - fetch_order: the order we should try fetching images in
+        - fetch_order: the order we should try fetching images in.
+            If this isn't supplied, we try checking
+            self.media_data.fetching_order if it exists.
 
         Returns:
-        (media_size, media_path)
+          (media_size, media_path)
+          or, if not found, None.
         """
-        media_sizes = media_map.keys()
+        fetch_order = self.media_manager.get("media_fetch_order")
 
-        for media_size in common.DISPLAY_IMAGE_FETCHING_ORDER:
+        # No fetching order found?  well, give up!
+        if not fetch_order:
+            return None
+
+        media_sizes = self.media_files.keys()
+
+        for media_size in fetch_order:
             if media_size in media_sizes:
-                return media_map[media_size]
+                return media_size, self.media_files[media_size]
 
     def main_mediafile(self):
         pass

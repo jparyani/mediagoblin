@@ -26,4 +26,8 @@ MEDIA_MANAGER = {
     "display_template": "mediagoblin/media_displays/video.html",
     "default_thumb": "images/media_thumbs/video.jpg",
     "accepted_extensions": [
-        "mp4", "mov", "webm", "avi", "3gp", "3gpp", "mkv", "ogv", "m4v"]}
+        "mp4", "mov", "webm", "avi", "3gp", "3gpp", "mkv", "ogv", "m4v"],
+
+    # Used by the media_entry.get_display_media method
+    "media_fetch_order": [u'webm_640', u'original'],
+}

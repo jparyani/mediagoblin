@@ -33,7 +33,7 @@
       data-setup='{"height": {{ media.media_data.height }},
                  "width": {{ media.media_data.width }} }'>
     <source src="{{ request.app.public_store.file_url(
-      	   media.media_files['webm_640']) }}"
+                        media.get_display_media()[1]) }}"
             type="video/webm; codecs=&quot;vp8, vorbis&quot;" />
     <div class="no_html5">
       {%- trans -%}Sorry, this video will not work because
@@ -53,7 +53,9 @@
       <li><a href="{{ request.app.public_store.file_url(
                        media.media_files.original) }}">{% trans %}Original file{% endtrans %}</a>
     {% endif %}
-    <li><a href="{{ request.app.public_store.file_url(
-                     media.media_files.webm_640) }}">{% trans %}WebM file (640p; VP8/Vorbis){% endtrans %}</a>
+    {% if 'webm_640' in media.media_files %}
+      <li><a href="{{ request.app.public_store.file_url(
+                       media.media_files.webm_640) }}">{% trans %}WebM file (640p; VP8/Vorbis){% endtrans %}</a>
+    {% endif %}
   </ul>
 {% endblock %}
