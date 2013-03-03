@@ -30,4 +30,5 @@ MEDIA_MANAGER = {
 
     # Used by the media_entry.get_display_media method
     "media_fetch_order": [u'webm_640', u'original'],
+    "default_webm_type": 'video/webm; codecs="vp8, vorbis"',
 }

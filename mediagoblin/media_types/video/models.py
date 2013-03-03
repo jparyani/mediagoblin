@@ -21,12 +21,11 @@ from sqlalchemy import (
     Column, Integer, SmallInteger, ForeignKey)
 from sqlalchemy.orm import relationship, backref
 from mediagoblin.db.extratypes import JSONEncoded
+from mediagoblin.media_types import video
 
 
 BACKREF_NAME = "video__media_data"
 
-
-DEFAULT_WEBM_TYPE = 'video/webm; codecs="vp8, vorbis"'
 
 class VideoData(Base):
     """
@@ -84,7 +83,7 @@ class VideoData(Base):
                 orig_metadata["tags"]["video-codec"].lower(),
                 orig_metadata["tags"]["audio-codec"].lower())
         else:
-            return DEFAULT_WEBM_TYPE
+            return video.MEDIA_MANAGER["default_webm_type"]
 
 
 DATA_MODEL = VideoData
