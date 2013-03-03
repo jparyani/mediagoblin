@@ -86,8 +86,12 @@ def process_video(proc_state):
             mgg.global_config['media:medium']['max_width'],
             mgg.global_config['media:medium']['max_height'])
 
+        # Extract metadata and keep a record of it
         metadata = transcoders.VideoTranscoder().discover(queued_filename)
+        store_metadata(entry, metadata)
 
+        # Figure out whether or not we need to transcode this video or
+        # if we can skip it
         if skip_transcode(metadata):
             _log.debug('Skipping transcoding')
             # Just push the submitted file to the tmp_dst
@@ -152,3 +156,27 @@ def process_video(proc_state):
 
     # Remove queued media file from storage and database
     proc_state.delete_queue_file()
+
+
+def store_metadata(media_entry, metadata):
+    """
+    Store metadata from this video for this media entry.
+    """
+    # Let's pull out the easy, not having to be converted ones first
+    stored_metadata = dict(
+        [(key, metadata[key])
+         for key in [
+                 "videoheight", "videolength", "videowidth",
+                 "audiorate", "audiolength", "audiochannels", "audiowidth",
+                 "mimetype", "tags"]
+         if key in metadata])
+
+    # We have to convert videorate into a sequence because it's a
+    # special type normally..
+
+    if "videorate" in metadata:
+        videorate = metadata["videorate"]
+        stored_metadata["videorate"] = [videorate.num, videorate.denom]
+
+    media_entry.media_data_init(
+        orig_metadata=stored_metadata)

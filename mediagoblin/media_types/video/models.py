@@ -20,12 +20,29 @@ from mediagoblin.db.base import Base
 from sqlalchemy import (
     Column, Integer, SmallInteger, ForeignKey)
 from sqlalchemy.orm import relationship, backref
+from mediagoblin.db.extratypes import JSONEncoded
 
 
 BACKREF_NAME = "video__media_data"
 
 
 class VideoData(Base):
+    """
+    Attributes:
+     - media_data: the originating media entry (of course)
+     - width: width of the transcoded video
+     - height: height of the transcoded video
+     - orig_metadata: A loose json structure containing metadata gstreamer
+         pulled from the original video.
+         This field is NOT GUARANTEED to exist!
+    
+         Likely metadata extracted:
+           "videoheight", "videolength", "videowidth",
+           "audiorate", "audiolength", "audiochannels", "audiowidth",
+           "mimetype", "tags"
+     
+         TODO: document the above better.
+    """
     __tablename__ = "video__mediadata"
 
     # The primary key *and* reference to the main media_entry
@@ -37,6 +54,8 @@ class VideoData(Base):
 
     width = Column(SmallInteger)
     height = Column(SmallInteger)
+
+    orig_metadata = Column(JSONEncoded)
 
 
 DATA_MODEL = VideoData

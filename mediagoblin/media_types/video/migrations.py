@@ -14,4 +14,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
+
+from sqlalchemy import MetaData, Column, Unicode
+
 MIGRATIONS = {}
+
+@RegisterMigration(1, MIGRATIONS)
+def add_orig_metadata_column(db_conn):
+    metadata = MetaData(bind=db_conn.bind)
+
+    vid_data = inspect_table(metadata, "video__mediadata")
+
+    col = Column('orig_metadata', Unicode,
+                 default=None, nullable=True)
+    col.create(vid_data)
+    db_conn.commit()
