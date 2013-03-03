@@ -129,7 +129,7 @@ class MediaEntryMixin(object):
     def get_display_media(self):
         """Find the best media for display.
 
-        We try checking self.media_data.fetching_order if it exists to
+        We try checking self.media_manager.fetching_order if it exists to
         pull down the order.
 
         Returns:
