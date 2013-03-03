@@ -22,8 +22,8 @@
   {{ super() }}
   <script type="text/javascript" src="{{
      request.staticdirect('/extlib/video-js/video.min.js') }}"></script>
-  <link href="{{ request.staticdirect('/css/vjs-mg-skin.css')
-     }}" rel="stylesheet">
+  <link href="{{ request.staticdirect('/css/vjs-mg-skin.css') }}"
+        rel="stylesheet">
 {%- endblock %}
 
 {% block mediagoblin_media %}
@@ -32,8 +32,8 @@
   <video controls
          {% if global_config['media_type:mediagoblin.media_types.video']['auto_play'] %}autoplay{% endif %}
          preload="auto" class="video-js vjs-mg-skin"
-      data-setup='{"height": {{ media.media_data.height }},
-                 "width": {{ media.media_data.width }} }'>
+         data-setup='{"height": {{ media.media_data.height }},
+                      "width": {{ media.media_data.width }} }'>
     <source src="{{ request.app.public_store.file_url(display_path) }}"
             type="video/webm; codecs=&quot;vp8, vorbis&quot;" />
     <div class="no_html5">
@@ -51,12 +51,20 @@
   <h3>{% trans %}Download{% endtrans %}</h3>
   <ul>
     {% if 'original' in media.media_files %}
-      <li><a href="{{ request.app.public_store.file_url(
-                       media.media_files.original) }}">{% trans %}Original file{% endtrans %}</a>
+      <li>
+        <a href="{{ request.app.public_store.file_url(
+                       media.media_files.original) }}">
+          {%- trans %}Original file{% endtrans -%}
+        </a>
+      </li>
     {% endif %}
     {% if 'webm_640' in media.media_files %}
-      <li><a href="{{ request.app.public_store.file_url(
-                       media.media_files.webm_640) }}">{% trans %}WebM file (640p; VP8/Vorbis){% endtrans %}</a>
+      <li>
+        <a href="{{ request.app.public_store.file_url(
+                       media.media_files.webm_640) }}">
+          {%- trans %}WebM file (640p; VP8/Vorbis){% endtrans -%}
+        </a>
+      </li>
     {% endif %}
   </ul>
 {% endblock %}
