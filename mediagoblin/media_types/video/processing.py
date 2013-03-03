@@ -60,7 +60,6 @@ def process_video(proc_state):
     A Workbench() represents a local tempory dir. It is automatically
     cleaned up when this function exits.
     """
-    raise Exception('Testing celery and raven')
     entry = proc_state.entry
     workbench = proc_state.workbench
     video_config = mgg.global_config['media_type:mediagoblin.media_types.video']
