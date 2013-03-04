@@ -17,6 +17,9 @@
 from mediagoblin.tools.common import simple_printer
 from sqlalchemy import Table
 
+class TableAlreadyExists(Exception):
+    pass
+
 
 class MigrationManager(object):
     """
@@ -128,7 +131,10 @@ class MigrationManager(object):
         # sanity check before we proceed, none of these should be created
         for model in self.models:
             # Maybe in the future just print out a "Yikes!" or something?
-            assert not model.__table__.exists(self.session.bind)
+            if model.__table__.exists(self.session.bind):
+                raise TableAlreadyExists(
+                    u"Intended to create table '%s' but it already exists" %
+                    model.__table__.name)
 
         self.migration_model.metadata.create_all(
             self.session.bind,
