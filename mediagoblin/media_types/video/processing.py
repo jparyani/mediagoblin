@@ -25,7 +25,6 @@ from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from . import transcoders
 from .util import skip_transcode
 
-
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
 
@@ -94,8 +93,6 @@ def process_video(proc_state):
         # if we can skip it
         if skip_transcode(metadata):
             _log.debug('Skipping transcoding')
-            # Just push the submitted file to the tmp_dst
-            open(tmp_dst.name, 'wb').write(open(queued_filename, 'rb').read())
 
             dst_dimensions = metadata['videowidth'], metadata['videoheight']
 
