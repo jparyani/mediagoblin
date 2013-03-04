@@ -23,7 +23,7 @@
 
 
 {% set model_download = request.app.public_store.file_url(
-   media.get_display_media(media.media_files)) %}
+   media.media_files['original']) %}
 {% set perspective_view = request.app.public_store.file_url(
    media.media_files['perspective']) %}
 {% set top_view = request.app.public_store.file_url(
