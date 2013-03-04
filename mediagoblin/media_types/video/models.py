@@ -20,12 +20,30 @@ from mediagoblin.db.base import Base
 from sqlalchemy import (
     Column, Integer, SmallInteger, ForeignKey)
 from sqlalchemy.orm import relationship, backref
+from mediagoblin.db.extratypes import JSONEncoded
+from mediagoblin.media_types import video
 
 
 BACKREF_NAME = "video__media_data"
 
 
 class VideoData(Base):
+    """
+    Attributes:
+     - media_data: the originating media entry (of course)
+     - width: width of the transcoded video
+     - height: height of the transcoded video
+     - orig_metadata: A loose json structure containing metadata gstreamer
+         pulled from the original video.
+         This field is NOT GUARANTEED to exist!
+    
+         Likely metadata extracted:
+           "videoheight", "videolength", "videowidth",
+           "audiorate", "audiolength", "audiochannels", "audiowidth",
+           "mimetype", "tags"
+     
+         TODO: document the above better.
+    """
     __tablename__ = "video__mediadata"
 
     # The primary key *and* reference to the main media_entry
@@ -37,6 +55,35 @@ class VideoData(Base):
 
     width = Column(SmallInteger)
     height = Column(SmallInteger)
+
+    orig_metadata = Column(JSONEncoded)
+
+    def source_type(self):
+        """
+        Construct a useful type=... that is to say, used like:
+          <video><source type="{{ entry.media_data.source_type() }}" /></video>
+
+        Try to construct it out of self.orig_metadata... if we fail we
+        just dope'ily fall back on DEFAULT_WEBM_TYPE
+        """
+        orig_metadata = self.orig_metadata or {}
+
+        if "webm_640" not in self.get_media_entry.media_files \
+           and "mimetype" in orig_metadata \
+           and "tags" in orig_metadata \
+           and "audio-codec" in orig_metadata["tags"] \
+           and "video-codec" in orig_metadata["tags"]:
+            if orig_metadata['mimetype'] == 'application/ogg':
+                # stupid ambiguous .ogg extension
+                mimetype = "video/ogg"
+            else:
+                mimetype = orig_metadata['mimetype']
+            return '%s; codecs="%s, %s"' % (
+                mimetype,
+                orig_metadata["tags"]["video-codec"].lower(),
+                orig_metadata["tags"]["audio-codec"].lower())
+        else:
+            return video.MEDIA_MANAGER["default_webm_type"]
 
 
 DATA_MODEL = VideoData

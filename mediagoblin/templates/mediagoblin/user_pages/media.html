@@ -47,7 +47,7 @@
     <div class="media_image_container">
       {% block mediagoblin_media %}
         {% set display_media = request.app.public_store.file_url(
-                 media.get_display_media(media.media_files)) %}
+                 media.get_display_media()[1]) %}
         {# if there's a medium file size, that means the medium size
          #  isn't the original... so link to the original!
          #}

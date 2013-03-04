@@ -23,6 +23,8 @@ from mediagoblin.processing import \
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 from . import transcoders
+from .util import skip_transcode
+
 
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
@@ -79,24 +81,55 @@ def process_video(proc_state):
     with tmp_dst:
         # Transcode queued file to a VP8/vorbis file that fits in a 640x640 square
         progress_callback = ProgressCallback(entry)
-        transcoder = transcoders.VideoTranscoder()
-        transcoder.transcode(queued_filename, tmp_dst.name,
-                vp8_quality=video_config['vp8_quality'],
-                vp8_threads=video_config['vp8_threads'],
-                vorbis_quality=video_config['vorbis_quality'],
-                progress_callback=progress_callback)
 
-    # Push transcoded video to public storage
-    _log.debug('Saving medium...')
-    mgg.public_store.copy_local_to_storage(tmp_dst.name, medium_filepath)
-    _log.debug('Saved medium')
+        dimensions = (
+            mgg.global_config['media:medium']['max_width'],
+            mgg.global_config['media:medium']['max_height'])
 
-    entry.media_files['webm_640'] = medium_filepath
+        # Extract metadata and keep a record of it
+        metadata = transcoders.VideoTranscoder().discover(queued_filename)
+        store_metadata(entry, metadata)
 
-    # Save the width and height of the transcoded video
-    entry.media_data_init(
-        width=transcoder.dst_data.videowidth,
-        height=transcoder.dst_data.videoheight)
+        # Figure out whether or not we need to transcode this video or
+        # if we can skip it
+        if skip_transcode(metadata):
+            _log.debug('Skipping transcoding')
+            # Just push the submitted file to the tmp_dst
+            open(tmp_dst.name, 'wb').write(open(queued_filename, 'rb').read())
+
+            dst_dimensions = metadata['videowidth'], metadata['videoheight']
+
+            # Push original file to public storage
+            _log.debug('Saving original...')
+            proc_state.copy_original(queued_filepath[-1])
+
+            did_transcode = False
+        else:
+            transcoder = transcoders.VideoTranscoder()
+
+            transcoder.transcode(queued_filename, tmp_dst.name,
+                    vp8_quality=video_config['vp8_quality'],
+                    vp8_threads=video_config['vp8_threads'],
+                    vorbis_quality=video_config['vorbis_quality'],
+                    progress_callback=progress_callback,
+                    dimensions=dimensions)
+
+            dst_dimensions = transcoder.dst_data.videowidth,\
+                    transcoder.dst_data.videoheight
+
+            # Push transcoded video to public storage
+            _log.debug('Saving medium...')
+            mgg.public_store.copy_local_to_storage(tmp_dst.name, medium_filepath)
+            _log.debug('Saved medium')
+
+            entry.media_files['webm_640'] = medium_filepath
+
+            did_transcode = True
+
+        # Save the width and height of the transcoded video
+        entry.media_data_init(
+            width=dst_dimensions[0],
+            height=dst_dimensions[1])
 
     # Temporary file for the video thumbnail (cleaned up with workbench)
     tmp_thumb = NamedTemporaryFile(dir=workbench.dir, suffix='.jpg', delete=False)
@@ -108,15 +141,44 @@ def process_video(proc_state):
                 tmp_thumb.name,
                 180)
 
-    # Push the thumbnail to public storage
-    _log.debug('Saving thumbnail...')
-    mgg.public_store.copy_local_to_storage(tmp_thumb.name, thumbnail_filepath)
-    entry.media_files['thumb'] = thumbnail_filepath
+        # Push the thumbnail to public storage
+        _log.debug('Saving thumbnail...')
+        mgg.public_store.copy_local_to_storage(tmp_thumb.name, thumbnail_filepath)
+        entry.media_files['thumb'] = thumbnail_filepath
 
-    if video_config['keep_original']:
+    # save the original... but only if we did a transcoding
+    # (if we skipped transcoding and just kept the original anyway as the main
+    #  media, then why would we save the original twice?)
+    if video_config['keep_original'] and did_transcode:
         # Push original file to public storage
         _log.debug('Saving original...')
         proc_state.copy_original(queued_filepath[-1])
 
     # Remove queued media file from storage and database
     proc_state.delete_queue_file()
+
+
+def store_metadata(media_entry, metadata):
+    """
+    Store metadata from this video for this media entry.
+    """
+    # Let's pull out the easy, not having to be converted ones first
+    stored_metadata = dict(
+        [(key, metadata[key])
+         for key in [
+                 "videoheight", "videolength", "videowidth",
+                 "audiorate", "audiolength", "audiochannels", "audiowidth",
+                 "mimetype", "tags"]
+         if key in metadata])
+
+    # We have to convert videorate into a sequence because it's a
+    # special type normally..
+
+    if "videorate" in metadata:
+        videorate = metadata["videorate"]
+        stored_metadata["videorate"] = [videorate.num, videorate.denom]
+
+    # Only save this field if there's something to save
+    if len(stored_metadata):
+        media_entry.media_data_init(
+            orig_metadata=stored_metadata)
