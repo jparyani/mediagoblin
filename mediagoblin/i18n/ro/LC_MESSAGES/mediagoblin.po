@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2013-02-23 10:46-0600\n"
-"PO-Revision-Date: 2013-02-23 16:46+0000\n"
+"POT-Creation-Date: 2013-03-04 18:04-0600\n"
+"PO-Revision-Date: 2013-03-05 00:04+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Romanian (http://www.transifex.com/projects/p/mediagoblin/language/ro/)\n"
 "MIME-Version: 1.0\n"
@@ -128,11 +128,11 @@ msgstr "Poți folosi\n                      <a href=\"http://daringfireball.net/
 
 #: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:36
 msgid "Tags"
-msgstr "Tag-uri"
+msgstr "Cuvinte-cheie"
 
 #: mediagoblin/edit/forms.py:35 mediagoblin/submit/forms.py:38
 msgid "Separate tags by commas."
-msgstr "Desparte tag-urile prin virgulă."
+msgstr "Desparte cuvintele-cheie prin virgulă."
 
 #: mediagoblin/edit/forms.py:38 mediagoblin/edit/forms.py:101
 msgid "Slug"
@@ -274,12 +274,12 @@ msgid ""
 "domain."
 msgstr "Lipsește cookie-ul CSRF. Probabil că blocați cookie-urile.<br/>Asigurați-vă că există permisiunea setării cookie-urilor pentru acest domeniu."
 
-#: mediagoblin/media_types/__init__.py:60
-#: mediagoblin/media_types/__init__.py:101
+#: mediagoblin/media_types/__init__.py:61
+#: mediagoblin/media_types/__init__.py:102
 msgid "Sorry, I don't support that file type :("
 msgstr "Scuze, nu recunosc acest tip de fișier :("
 
-#: mediagoblin/media_types/video/processing.py:35
+#: mediagoblin/media_types/video/processing.py:36
 msgid "Video transcoding failed"
 msgstr "Transcodarea video a eșuat"
 
@@ -292,45 +292,37 @@ msgstr "Locul"
 msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 msgstr "Vezi pe <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
-#: mediagoblin/plugins/oauth/forms.py:26
-msgid "Client ID"
-msgstr "ID client"
-
-#: mediagoblin/plugins/oauth/forms.py:28
-msgid "Next URL"
-msgstr "Următorul URL"
-
-#: mediagoblin/plugins/oauth/forms.py:30
+#: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
 msgstr "Permite"
 
-#: mediagoblin/plugins/oauth/forms.py:31
+#: mediagoblin/plugins/oauth/forms.py:30
 msgid "Deny"
 msgstr "Refuză"
 
-#: mediagoblin/plugins/oauth/forms.py:35
+#: mediagoblin/plugins/oauth/forms.py:34
 msgid "Name"
 msgstr "Nume"
 
-#: mediagoblin/plugins/oauth/forms.py:36
+#: mediagoblin/plugins/oauth/forms.py:35
 msgid "The name of the OAuth client"
 msgstr "Numele clientului OAuth"
 
-#: mediagoblin/plugins/oauth/forms.py:37
+#: mediagoblin/plugins/oauth/forms.py:36
 msgid "Description"
 msgstr "Descriere"
 
-#: mediagoblin/plugins/oauth/forms.py:39
+#: mediagoblin/plugins/oauth/forms.py:38
 msgid ""
 "This will be visible to users allowing your\n"
 "                application to authenticate as them."
 msgstr "Aceste informații vor fi vizibile pentru utilizatorii\n                care permit aplicației tale să se autentifice în numele lor."
 
-#: mediagoblin/plugins/oauth/forms.py:41
+#: mediagoblin/plugins/oauth/forms.py:40
 msgid "Type"
 msgstr "Tip"
 
-#: mediagoblin/plugins/oauth/forms.py:46
+#: mediagoblin/plugins/oauth/forms.py:45
 msgid ""
 "<strong>Confidential</strong> - The client can\n"
 "                make requests to the GNU MediaGoblin instance that can not be\n"
@@ -340,17 +332,17 @@ msgid ""
 "                JavaScript client)."
 msgstr "<strong>Confidențial</strong> - Client poate\n                trimite cereri către instanța GNU MediaGoblin care nu pot fi\n                interceptate de către user agent (de ex., clientul de pe server).<br />\n                <strong>Public</strong> - Clientul nu poate trimite cereri confidențiale\n                către instanța GNU MediaGoblin (de ex., un client\n                JavaScript)."
 
-#: mediagoblin/plugins/oauth/forms.py:53
+#: mediagoblin/plugins/oauth/forms.py:52
 msgid "Redirect URI"
 msgstr "URI redirectare"
 
-#: mediagoblin/plugins/oauth/forms.py:55
+#: mediagoblin/plugins/oauth/forms.py:54
 msgid ""
 "The redirect URI for the applications, this field\n"
 "            is <strong>required</strong> for public clients."
 msgstr "URI-ul de redirectare pentru aplicații, această rubrică\n            este <strong>obligatorie</strong> pentru clienții publici."
 
-#: mediagoblin/plugins/oauth/forms.py:67
+#: mediagoblin/plugins/oauth/forms.py:66
 msgid "This field is required for public clients"
 msgstr "Această rubrică este obligatorie pentru clienții publici"
 
@@ -394,43 +386,32 @@ msgstr "Ura! Trimis!"
 msgid "Collection \"%s\" added!"
 msgstr "Colecția \"%s\" a fost creată!"
 
-#: mediagoblin/templates/mediagoblin/base.html:61
+#: mediagoblin/templates/mediagoblin/base.html:64
 msgid "Verify your email!"
 msgstr "Verifică adresa de e-mail!"
 
-#: mediagoblin/templates/mediagoblin/base.html:62
-#: mediagoblin/templates/mediagoblin/base.html:82
+#: mediagoblin/templates/mediagoblin/base.html:65
 msgid "log out"
 msgstr "Ieșire"
 
-#: mediagoblin/templates/mediagoblin/base.html:67
+#: mediagoblin/templates/mediagoblin/base.html:70
 #: mediagoblin/templates/mediagoblin/auth/login.html:28
 #: mediagoblin/templates/mediagoblin/auth/login.html:36
 #: mediagoblin/templates/mediagoblin/auth/login.html:54
 msgid "Log in"
 msgstr "Autentificare"
 
-#: mediagoblin/templates/mediagoblin/base.html:76
+#: mediagoblin/templates/mediagoblin/base.html:79
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
 msgstr "Contul lui <a href=\"%(user_url)s\">%(user_name)s</a>"
 
 #: mediagoblin/templates/mediagoblin/base.html:86
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:156
-msgid "Add media"
-msgstr "Trimite fișier"
-
-#: mediagoblin/templates/mediagoblin/base.html:89
-#: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
-msgid "Create new collection"
-msgstr "Creează colecție nouă"
-
-#: mediagoblin/templates/mediagoblin/base.html:92
 msgid "Change account settings"
 msgstr "Modifică setările contului"
 
-#: mediagoblin/templates/mediagoblin/base.html:96
-#: mediagoblin/templates/mediagoblin/base.html:102
+#: mediagoblin/templates/mediagoblin/base.html:90
+#: mediagoblin/templates/mediagoblin/base.html:105
 #: mediagoblin/templates/mediagoblin/admin/panel.html:21
 #: mediagoblin/templates/mediagoblin/admin/panel.html:26
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
@@ -438,14 +419,28 @@ msgstr "Modifică setările contului"
 msgid "Media processing panel"
 msgstr "Panou de procesare media"
 
-#: mediagoblin/templates/mediagoblin/base.html:121
+#: mediagoblin/templates/mediagoblin/base.html:93
+msgid "Log out"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:96
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:156
+msgid "Add media"
+msgstr "Trimite fișier"
+
+#: mediagoblin/templates/mediagoblin/base.html:99
+#: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
+msgid "Create new collection"
+msgstr "Creează colecție nouă"
+
+#: mediagoblin/templates/mediagoblin/base.html:122
 #, python-format
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org/\" title='Version "
 "%(version)s'>MediaGoblin</a>, a <a href=\"http://gnu.org/\">GNU</a> project."
-msgstr ""
+msgstr "Construit cu <a href=\"http://mediagoblin.org/\" title='Versiunea %(version)s'>MediaGoblin</a>, un proiect <a href=\"http://gnu.org/\">GNU</a>."
 
-#: mediagoblin/templates/mediagoblin/base.html:124
+#: mediagoblin/templates/mediagoblin/base.html:125
 #, python-format
 msgid ""
 "Released under the <a "
@@ -606,18 +601,18 @@ msgstr "logo MediaGoblin"
 msgid "Editing attachments for %(media_title)s"
 msgstr "Editare anexe la %(media_title)s"
 
-#: mediagoblin/templates/mediagoblin/edit/attachments.html:43
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:44
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:159
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:175
 msgid "Attachments"
 msgstr "Anexe"
 
-#: mediagoblin/templates/mediagoblin/edit/attachments.html:56
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:180
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:57
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:181
 msgid "Add attachment"
 msgstr "Atașează"
 
-#: mediagoblin/templates/mediagoblin/edit/attachments.html:60
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:61
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:42
 #: mediagoblin/templates/mediagoblin/edit/edit.html:41
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:32
@@ -628,9 +623,9 @@ msgstr "Atașează"
 msgid "Cancel"
 msgstr "Anulare"
 
-#: mediagoblin/templates/mediagoblin/edit/attachments.html:62
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:63
 #: mediagoblin/templates/mediagoblin/edit/edit.html:42
-#: mediagoblin/templates/mediagoblin/edit/edit_account.html:55
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:52
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:33
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:40
 msgid "Save changes"
@@ -663,7 +658,7 @@ msgstr "Editare %(media_title)s"
 msgid "Changing %(username)s's account settings"
 msgstr "Se modifică setările contului pentru userul %(username)s"
 
-#: mediagoblin/templates/mediagoblin/edit/edit_account.html:62
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:59
 msgid "Delete my account"
 msgstr "Șterge contul meu"
 
@@ -684,12 +679,12 @@ msgstr "Editare profil %(username)s"
 #: mediagoblin/templates/mediagoblin/listings/tag.html:35
 #, python-format
 msgid "Media tagged with: %(tag_name)s"
-msgstr "Fișier etichetat cu tag-urile: %(tag_name)s"
+msgstr "Fișier etichetat cu cuvintele-cheie: %(tag_name)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:136
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:48
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:55
 msgid "Download"
 msgstr "Download"
 
@@ -712,7 +707,7 @@ msgid ""
 msgstr "Poți lua un browser modern \n\tcapabil să redea această înregistrare de la <a href=\"http://getfirefox.com\">\n\t  http://getfirefox.com</a>!"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:52
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:61
 msgid "Original file"
 msgstr "Fișierul original"
 
@@ -770,21 +765,21 @@ msgstr "Formatul fișierului"
 msgid "Object Height"
 msgstr "Înălțimea obiectului"
 
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:37
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:44
 msgid ""
 "Sorry, this video will not work because\n"
 "      your web browser does not support HTML5 \n"
 "      video."
 msgstr "Ne pare rău, dar această înregistrare video nu va funcționa deoarece browser-ul dvs. nu este compatibil cu HTML5 video."
 
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:40
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:47
 msgid ""
 "You can get a modern web browser that \n"
 "      can play this video at <a href=\"http://getfirefox.com\">\n"
 "      http://getfirefox.com</a>!"
 msgstr "Puteți obține un browser Web modern care poate reda această înregistrare de la <a href=\"http://getfirefox.com\">http://getfirefox.com</a>!"
 
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:55
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:69
 msgid "WebM file (640p; VP8/Vorbis)"
 msgstr "Fișier WebM (640p; VP8/Vorbis)"
 
@@ -859,7 +854,7 @@ msgstr "Fișierele lui %(username)s"
 msgid ""
 "<a href=\"%(user_url)s\">%(username)s</a>'s media with tag <a "
 "href=\"%(tag_url)s\">%(tag)s</a>"
-msgstr ""
+msgstr "Fișierele lui <a href=\"%(user_url)s\">%(username)s</a> cu cuvântul-cheie <a href=\"%(tag_url)s\">%(tag)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:48
 #, python-format
@@ -998,11 +993,11 @@ msgstr "(șterge)"
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:21
 msgid "Collected in"
-msgstr ""
+msgstr "Din colecția"
 
-#: mediagoblin/templates/mediagoblin/utils/collections.html:44
+#: mediagoblin/templates/mediagoblin/utils/collections.html:40
 msgid "Add to a collection"
-msgstr ""
+msgstr "Adaugă la o colecție"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
@@ -1042,7 +1037,7 @@ msgstr "mai vechi"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
-msgstr "Etichete"
+msgstr "Etichetat cu cuvintele-cheie"
 
 #: mediagoblin/tools/exif.py:80
 msgid "Could not read the image file."
@@ -1121,7 +1116,7 @@ msgstr "Comentariul tău a fost trimis!"
 msgid "Please check your entries and try again."
 msgstr "Verifică datele și încearcă din nou."
 
-#: mediagoblin/user_pages/views.py:236
+#: mediagoblin/user_pages/views.py:237
 msgid "You have to select or add a collection"
 msgstr "Trebuie să alegi sau să creezi o colecție"
 
@@ -1130,7 +1125,7 @@ msgstr "Trebuie să alegi sau să creezi o colecție"
 msgid "\"%s\" already in collection \"%s\""
 msgstr "\"%s\" este deja în colecția \"%s\""
 
-#: mediagoblin/user_pages/views.py:265
+#: mediagoblin/user_pages/views.py:264
 #, python-format
 msgid "\"%s\" added to collection \"%s\""
 msgstr "\"%s\" a fost adăugat la colecția \"%s\""

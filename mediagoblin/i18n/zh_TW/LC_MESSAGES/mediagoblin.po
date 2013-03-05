@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2013-02-23 10:46-0600\n"
-"PO-Revision-Date: 2013-02-23 16:46+0000\n"
+"POT-Creation-Date: 2013-03-04 18:04-0600\n"
+"PO-Revision-Date: 2013-03-05 00:04+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -275,12 +275,12 @@ msgid ""
 "domain."
 msgstr ""
 
-#: mediagoblin/media_types/__init__.py:60
-#: mediagoblin/media_types/__init__.py:101
+#: mediagoblin/media_types/__init__.py:61
+#: mediagoblin/media_types/__init__.py:102
 msgid "Sorry, I don't support that file type :("
 msgstr "抱歉，我不支援這樣的檔案格式 :("
 
-#: mediagoblin/media_types/video/processing.py:35
+#: mediagoblin/media_types/video/processing.py:36
 msgid "Video transcoding failed"
 msgstr "影像轉碼失敗"
 
@@ -293,45 +293,37 @@ msgstr "位置"
 msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 msgstr "在 <a href=\"%(osm_url)s\">OpenStreetMap</a> 上觀看"
 
-#: mediagoblin/plugins/oauth/forms.py:26
-msgid "Client ID"
-msgstr "客戶 ID"
-
-#: mediagoblin/plugins/oauth/forms.py:28
-msgid "Next URL"
-msgstr "下一個 URL"
-
-#: mediagoblin/plugins/oauth/forms.py:30
+#: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
 msgstr "允許"
 
-#: mediagoblin/plugins/oauth/forms.py:31
+#: mediagoblin/plugins/oauth/forms.py:30
 msgid "Deny"
 msgstr "拒絕"
 
-#: mediagoblin/plugins/oauth/forms.py:35
+#: mediagoblin/plugins/oauth/forms.py:34
 msgid "Name"
 msgstr "名稱"
 
-#: mediagoblin/plugins/oauth/forms.py:36
+#: mediagoblin/plugins/oauth/forms.py:35
 msgid "The name of the OAuth client"
 msgstr "OAuth client 的名稱"
 
-#: mediagoblin/plugins/oauth/forms.py:37
+#: mediagoblin/plugins/oauth/forms.py:36
 msgid "Description"
 msgstr "描述"
 
-#: mediagoblin/plugins/oauth/forms.py:39
+#: mediagoblin/plugins/oauth/forms.py:38
 msgid ""
 "This will be visible to users allowing your\n"
 "                application to authenticate as them."
 msgstr "本描述將會被進行應用程式認証的使用者看到。"
 
-#: mediagoblin/plugins/oauth/forms.py:41
+#: mediagoblin/plugins/oauth/forms.py:40
 msgid "Type"
 msgstr "類型"
 
-#: mediagoblin/plugins/oauth/forms.py:46
+#: mediagoblin/plugins/oauth/forms.py:45
 msgid ""
 "<strong>Confidential</strong> - The client can\n"
 "                make requests to the GNU MediaGoblin instance that can not be\n"
@@ -341,17 +333,17 @@ msgid ""
 "                JavaScript client)."
 msgstr "<strong>秘密</strong> — OAuth client 可以對 GNU MediaGoblin 站台發送不被使用者代理攔截的請求 (例如伺服端的 client)。\n<strong>公開</strong> — OAuth client 無法對 GNU MediaGoblin 站台發送秘密的請求 (例如客戶端的 JavaScript client)。"
 
-#: mediagoblin/plugins/oauth/forms.py:53
+#: mediagoblin/plugins/oauth/forms.py:52
 msgid "Redirect URI"
 msgstr "重定向 URI"
 
-#: mediagoblin/plugins/oauth/forms.py:55
+#: mediagoblin/plugins/oauth/forms.py:54
 msgid ""
 "The redirect URI for the applications, this field\n"
 "            is <strong>required</strong> for public clients."
 msgstr "此應用程式的重定向 URI，本欄位在公開類型的 OAuth client 為必填。"
 
-#: mediagoblin/plugins/oauth/forms.py:67
+#: mediagoblin/plugins/oauth/forms.py:66
 msgid "This field is required for public clients"
 msgstr "本欄位在公開類型的 OAuth client 為必填"
 
@@ -395,43 +387,32 @@ msgstr "啊哈！PO 上去啦！"
 msgid "Collection \"%s\" added!"
 msgstr "蒐藏「%s」新增完成！"
 
-#: mediagoblin/templates/mediagoblin/base.html:61
+#: mediagoblin/templates/mediagoblin/base.html:64
 msgid "Verify your email!"
 msgstr "確認您的電子郵件"
 
-#: mediagoblin/templates/mediagoblin/base.html:62
-#: mediagoblin/templates/mediagoblin/base.html:82
+#: mediagoblin/templates/mediagoblin/base.html:65
 msgid "log out"
 msgstr "登出"
 
-#: mediagoblin/templates/mediagoblin/base.html:67
+#: mediagoblin/templates/mediagoblin/base.html:70
 #: mediagoblin/templates/mediagoblin/auth/login.html:28
 #: mediagoblin/templates/mediagoblin/auth/login.html:36
 #: mediagoblin/templates/mediagoblin/auth/login.html:54
 msgid "Log in"
 msgstr "登入"
 
-#: mediagoblin/templates/mediagoblin/base.html:76
+#: mediagoblin/templates/mediagoblin/base.html:79
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
 msgstr "<a href=\"%(user_url)s\">%(user_name)s</a> 的帳號"
 
 #: mediagoblin/templates/mediagoblin/base.html:86
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:156
-msgid "Add media"
-msgstr "新增媒體"
-
-#: mediagoblin/templates/mediagoblin/base.html:89
-#: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
-msgid "Create new collection"
-msgstr "新增新的蒐藏"
-
-#: mediagoblin/templates/mediagoblin/base.html:92
 msgid "Change account settings"
 msgstr "更改帳號設定"
 
-#: mediagoblin/templates/mediagoblin/base.html:96
-#: mediagoblin/templates/mediagoblin/base.html:102
+#: mediagoblin/templates/mediagoblin/base.html:90
+#: mediagoblin/templates/mediagoblin/base.html:105
 #: mediagoblin/templates/mediagoblin/admin/panel.html:21
 #: mediagoblin/templates/mediagoblin/admin/panel.html:26
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
@@ -439,14 +420,28 @@ msgstr "更改帳號設定"
 msgid "Media processing panel"
 msgstr "媒體處理面板"
 
-#: mediagoblin/templates/mediagoblin/base.html:121
+#: mediagoblin/templates/mediagoblin/base.html:93
+msgid "Log out"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:96
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:156
+msgid "Add media"
+msgstr "新增媒體"
+
+#: mediagoblin/templates/mediagoblin/base.html:99
+#: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
+msgid "Create new collection"
+msgstr "新增新的蒐藏"
+
+#: mediagoblin/templates/mediagoblin/base.html:122
 #, python-format
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org/\" title='Version "
 "%(version)s'>MediaGoblin</a>, a <a href=\"http://gnu.org/\">GNU</a> project."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:124
+#: mediagoblin/templates/mediagoblin/base.html:125
 #, python-format
 msgid ""
 "Released under the <a "
@@ -607,18 +602,18 @@ msgstr "MediaGoblin 標誌"
 msgid "Editing attachments for %(media_title)s"
 msgstr "編輯 %(media_title)s 的附件"
 
-#: mediagoblin/templates/mediagoblin/edit/attachments.html:43
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:44
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:159
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:175
 msgid "Attachments"
 msgstr "附件"
 
-#: mediagoblin/templates/mediagoblin/edit/attachments.html:56
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:180
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:57
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:181
 msgid "Add attachment"
 msgstr "新增附件"
 
-#: mediagoblin/templates/mediagoblin/edit/attachments.html:60
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:61
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:42
 #: mediagoblin/templates/mediagoblin/edit/edit.html:41
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:32
@@ -629,9 +624,9 @@ msgstr "新增附件"
 msgid "Cancel"
 msgstr "取消"
 
-#: mediagoblin/templates/mediagoblin/edit/attachments.html:62
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:63
 #: mediagoblin/templates/mediagoblin/edit/edit.html:42
-#: mediagoblin/templates/mediagoblin/edit/edit_account.html:55
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:52
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:33
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:40
 msgid "Save changes"
@@ -664,7 +659,7 @@ msgstr "編輯 %(media_title)s"
 msgid "Changing %(username)s's account settings"
 msgstr "正在改變 %(username)s 的帳號設定"
 
-#: mediagoblin/templates/mediagoblin/edit/edit_account.html:62
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:59
 msgid "Delete my account"
 msgstr ""
 
@@ -690,7 +685,7 @@ msgstr "此媒體被 tag 成：%(tag_name)s"
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:136
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:48
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:55
 msgid "Download"
 msgstr "下載"
 
@@ -713,7 +708,7 @@ msgid ""
 msgstr "您可以在 <a href=\"http://getfirefox.com\">http://getfirefox.com</a> 取得可以播放此聲音的瀏覽器！"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:52
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:61
 msgid "Original file"
 msgstr "原始檔案"
 
@@ -771,21 +766,21 @@ msgstr "檔案格式"
 msgid "Object Height"
 msgstr "物件高度"
 
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:37
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:44
 msgid ""
 "Sorry, this video will not work because\n"
 "      your web browser does not support HTML5 \n"
 "      video."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:40
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:47
 msgid ""
 "You can get a modern web browser that \n"
 "      can play this video at <a href=\"http://getfirefox.com\">\n"
 "      http://getfirefox.com</a>!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:55
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:69
 msgid "WebM file (640p; VP8/Vorbis)"
 msgstr "WebM 檔案 (640p; VP8/Vorbis)"
 
@@ -1001,7 +996,7 @@ msgstr " (移除)"
 msgid "Collected in"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/utils/collections.html:44
+#: mediagoblin/templates/mediagoblin/utils/collections.html:40
 msgid "Add to a collection"
 msgstr ""
 
@@ -1122,7 +1117,7 @@ msgstr "您的留言已經張貼完成！"
 msgid "Please check your entries and try again."
 msgstr "請檢查項目並重試。"
 
-#: mediagoblin/user_pages/views.py:236
+#: mediagoblin/user_pages/views.py:237
 msgid "You have to select or add a collection"
 msgstr "您需要選擇或是新增一個蒐藏"
 
@@ -1131,7 +1126,7 @@ msgstr "您需要選擇或是新增一個蒐藏"
 msgid "\"%s\" already in collection \"%s\""
 msgstr "「%s」已經在「%s」蒐藏"
 
-#: mediagoblin/user_pages/views.py:265
+#: mediagoblin/user_pages/views.py:264
 #, python-format
 msgid "\"%s\" added to collection \"%s\""
 msgstr "「%s」加入「%s」蒐藏"
