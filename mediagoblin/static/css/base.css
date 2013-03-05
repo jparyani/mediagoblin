@@ -481,6 +481,38 @@ img.media_icon {
   vertical-align: sub;
 }
 
+/* EXIF information */
+
+#exif_content h3 {
+   border-bottom: 1px solid #333;
+}
+
+#exif_camera_information {
+   margin-bottom: 20px;
+}
+
+#exif_additional_info {
+   display: none;
+}
+
+#exif_additional_info table {
+   font-size: 11px;
+   margin-top: 10px;
+}
+
+#exif_additional_info td {
+   vertical-align: top;
+   padding-bottom: 5px;
+}
+
+#exif_content .col1 {
+   padding-right: 20px;
+}
+
+#exif_additional_info table tr {
+   margin-bottom: 10px;
+}
+
 /* navigation */
 
 .navigation {

@@ -17,18 +17,95 @@
 #}
 
 {% block exif_content %}
+<style type="text/css">
+#exif_content h3 {
+   border-bottom: 1px solid #333;
+}
+#exif_camera_information {
+   margin-bottom: 20px;
+}
+
+#exif_additional_info {
+   display: none;
+}
+#exif_additional_info table {
+   font-size: 11px;
+   margin-top: 10px;
+}
+#exif_additional_info td {
+   vertical-align: top;
+   padding-bottom: 5px;
+}
+#exif_content .col1 {
+   padding-right: 20px;
+}
+#exif_additional_info table tr {
+   margin-bottom: 10px;
+}
+</style>
+<noscript>
+  <style type="text/css">
+    #exif_additional_info {
+       display: block;
+    }
+  </style>
+</noscript>
+<div id="exif_content">
   {% if app_config['exif_visible']
         and media.media_data
         and media.media_data.exif_all is defined
         and media.media_data.exif_all %}
-    <h3>EXIF</h3>
-    <table>
+    <h3>Camera Information</h3>
+    <table id="exif_camera_information">
+      <tbody>
+      <tr>
+        <td class="col1">Taken on</td>
+        <td>{{ media.exif_display_data_short()['Date Taken'] }}</td>
+      </tr>
+      <tr>
+        <td class="col1">Camera</td>
+        <td>{{ media.exif_display_data_short()['Camera'] }}</td>
+      </tr>
+      <tr>
+        <td class="col1">Exposure</td>
+        <td>{{ media.exif_display_data_short()['Exposure'] }}</td>
+      </tr>
+      <tr>
+        <td class="col1">Aperture</td>
+        <td>{{ media.exif_display_data_short()['Aperture'] }}</td>
+      </tr>
+      <tr>
+        <td class="col1">ISO</td>
+        <td>{{ media.exif_display_data_short()['ISO'] }}</td>
+      </tr>
+      <tr>
+        <td class="col1">Focal Length</td>
+        <td>{{ media.exif_display_data_short()['Focal Length'] }}</td>
+      </tr>
+      </tbody>
+    </table>
+    <h3 id="exif_additional_info_button" class="button_action">
+      Additional Information
+    </h3>
+    <div id="exif_additional_info">
+    <table class="exif_info">
       {% for key, tag in media.exif_display_iter() %}
         <tr>
-          <td>{{ key }}</td>
+          <td class="col1">{{ key }}</td>
           <td>{{ tag.printable }}</td>
         </tr>
       {% endfor %}
     </table>
+    </div>
   {% endif %}
+<script type="text/javascript">
+$(document).ready(function(){
+
+$("#exif_additional_info_button").click(function(){
+   $("#exif_additional_info").slideToggle("slow");
+});
+
+});
+</script>
+</div> <!-- end exif_content div -->
 {% endblock %}
