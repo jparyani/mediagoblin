@@ -78,10 +78,17 @@ class VideoData(Base):
                 mimetype = "video/ogg"
             else:
                 mimetype = orig_metadata['mimetype']
+
+            video_codec = orig_metadata["tags"]["video-codec"].lower()
+            audio_codec = orig_metadata["tags"]["audio-codec"].lower()
+
+            # We don't want the "video" at the end of vp8...
+            # not sure of a nicer way to be cleaning this stuff
+            if video_codec == "vp8 video":
+                video_codec = "vp8"
+
             return '%s; codecs="%s, %s"' % (
-                mimetype,
-                orig_metadata["tags"]["video-codec"].lower(),
-                orig_metadata["tags"]["audio-codec"].lower())
+                mimetype, video_codec, audio_codec)
         else:
             return video.MEDIA_MANAGER["default_webm_type"]
 
