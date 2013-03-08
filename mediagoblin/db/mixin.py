@@ -212,7 +212,7 @@ class MediaEntryMixin(GenerateSlugMixin):
         # than iterating through all media managers.
         for media_type, manager in get_media_managers():
             if media_type == self.media_type:
-                return manager
+                return manager(self)
         # Not found?  Then raise an error
         raise FileTypeNotSupported(
             "MediaManager not in enabled types.  Check media_types in config?")

@@ -20,6 +20,7 @@ import logging
 import tempfile
 
 from mediagoblin import mg_globals
+from mediagoblin.tools.common import import_component
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 _log = logging.getLogger(__name__)
@@ -29,6 +30,29 @@ class FileTypeNotSupported(Exception):
 
 class InvalidFileType(Exception):
     pass
+
+
+class CompatMediaManager(object):
+    def __init__(self, mm_dict, entry=None):
+        self.mm_dict = mm_dict
+        self.entry = entry
+	
+    def __call__(self, entry):
+        "So this object can look like a class too, somehow"
+        assert self.entry is None
+        return self.__class__(self.mm_dict, entry)
+
+    def __getitem__(self, i):
+        return self.mm_dict[i]
+
+    def __contains__(self, i):
+        return (i in self.mm_dict)
+
+    def get(self, *args, **kwargs):
+        return self.mm_dict.get(*args, **kwargs)
+
+    def __getattr__(self, i):
+        return self.mm_dict[i]
 
 
 def sniff_media(media):
@@ -74,9 +98,12 @@ def get_media_managers():
     Generator, yields all enabled media managers
     '''
     for media_type in get_media_types():
-        __import__(media_type)
+        mm = import_component(media_type + ":MEDIA_MANAGER")
 
-        yield media_type, sys.modules[media_type].MEDIA_MANAGER
+        if isinstance(mm, dict):
+            mm = CompatMediaManager(mm)
+
+        yield media_type, mm
 
 
 def get_media_type_and_manager(filename):

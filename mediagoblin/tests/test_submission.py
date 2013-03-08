@@ -231,7 +231,8 @@ class TestSubmission:
         media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
 
         assert media.media_type == u'mediagoblin.media_types.image'
-        assert media.media_manager == img_MEDIA_MANAGER
+        assert media.media_manager.mm_dict == img_MEDIA_MANAGER
+        assert media.media_manager.entry == media
 
 
     def test_sniffing(self, test_app):
