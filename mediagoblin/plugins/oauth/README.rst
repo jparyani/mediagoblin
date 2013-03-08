@@ -7,6 +7,10 @@
     Development has been entirely focused on Making It Work(TM). Use this
     plugin with caution.
 
+    Additionally, this and the API may break... consider it pre-alpha.
+    There's also a known issue that the OAuth client doesn't do
+    refresh tokens so this might result in issues for users.
+
 The OAuth plugin enables third party web applications to authenticate as one or
 more GNU MediaGoblin users in a safe way in order retrieve, create and update
 content stored on the GNU MediaGoblin instance.
