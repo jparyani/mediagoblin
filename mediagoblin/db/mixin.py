@@ -149,7 +149,7 @@ class MediaEntryMixin(GenerateSlugMixin):
           or, if not found, None.
 
         """
-        fetch_order = self.media_manager.get("media_fetch_order")
+        fetch_order = self.media_manager.media_fetch_order
 
         # No fetching order found?  well, give up!
         if not fetch_order:

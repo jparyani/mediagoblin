@@ -48,8 +48,9 @@ class CompatMediaManager(object):
     def __contains__(self, i):
         return (i in self.mm_dict)
 
-    def get(self, *args, **kwargs):
-        return self.mm_dict.get(*args, **kwargs)
+    @property
+    def media_fetch_order(self):
+        return self.mm_dict.get('media_fetch_order')
 
     def __getattr__(self, i):
         return self.mm_dict[i]
@@ -74,7 +75,7 @@ def sniff_media(media):
         for media_type, manager in get_media_managers():
             _log.info('Sniffing {0}'.format(media_type))
             if 'sniff_handler' in manager and \
-               manager['sniff_handler'](media_file, media=media):
+               manager.sniff_handler(media_file, media=media):
                 _log.info('{0} accepts the file'.format(media_type))
                 return media_type, manager
             else:
@@ -119,7 +120,7 @@ def get_media_type_and_manager(filename):
         for media_type, manager in get_media_managers():
             # Omit the dot from the extension and match it against
             # the media manager
-            if ext[1:] in manager['accepted_extensions']:
+            if ext[1:] in manager.accepted_extensions:
                 return media_type, manager
     else:
         _log.info('File {0} has no file extension, let\'s hope the sniffers get it.'.format(
