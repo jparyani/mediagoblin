@@ -1,8 +1,8 @@
-.. _design-decisions-chapter:
+.. _original-design-decisions-chapter:
 
-==================
- Design Decisions
-==================
+===========================
+ Original Design Decisions
+===========================
 
 .. contents:: Sections
    :local:
@@ -31,13 +31,13 @@ Chris and Will on "Why GNU MediaGoblin":
     really.  So what kind of goblin are we thinking about?  We're
     thinking about these goblins:
 
-    .. figure:: goblin.png
+    .. figure:: ../_static/goblin.png
        :alt: Cute goblin with a beret.
 
        *Figure 1: Cute goblin with a beret.  llustrated by Chris
        Webber*
 
-    .. figure:: snugglygoblin.png
+    .. figure:: ../_static/snugglygoblin.png
        :scale: 50%
        :alt: Snuggly goblin with a beret.
 
@@ -324,6 +324,6 @@ Chris Webber on "Why copyright assignment?":
     even incentivized: significant contributors who do a copyright
     assignment to the FSF are eligible to have a unique goblin drawing
     produced for them by the project's main founder, Christopher Allan
-    Webber.  See :ref:`contributing-howto-chapter` for details.
+    Webber.  See `the wiki <http://wiki.mediagoblin.org/>`_ for details.
 
 
