@@ -84,6 +84,7 @@ This chapter contains various information for developers.
    :maxdepth: 1
 
    devel/codebase
+   devel/originaldesigndecisions
 
 
 Indices and tables
