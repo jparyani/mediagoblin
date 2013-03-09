@@ -52,7 +52,7 @@ as the basis for your script: ::
 Separate Celery
 ---------------
 
-While the ``./lazyserer.sh`` configuration provides an efficient way to
+While the ``./lazyserver.sh`` configuration provides an efficient way to
 start using a MediaGoblin instance, it is not suitable for production
 deployments for several reasons:
 
