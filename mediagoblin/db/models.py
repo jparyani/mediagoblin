@@ -172,8 +172,7 @@ class MediaEntry(Base, MediaEntryMixin):
         order_col = MediaComment.created
         if not ascending:
             order_col = desc(order_col)
-        return MediaComment.query.filter_by(
-            media_entry=self.id).order_by(order_col)
+        return self.all_comments.order_by(order_col)
 
     def url_to_prev(self, urlgen):
         """get the next 'newer' entry by this user"""
@@ -238,9 +237,7 @@ class MediaEntry(Base, MediaEntryMixin):
         :param del_orphan_tags: True/false if we delete unused Tags too
         :param commit: True/False if this should end the db transaction"""
         # User's CollectionItems are automatically deleted via "cascade".
-        # Delete all the associated comments
-        for comment in self.get_comments():
-            comment.delete(commit=False)
+        # Comments on this Media are deleted by cascade, hopefully.
 
         # Delete all related files/attachments
         try:
@@ -385,12 +382,21 @@ class MediaComment(Base, MediaCommentMixin):
     content = Column(UnicodeText, nullable=False)
 
     # Cascade: Comments are owned by their creator. So do the full thing.
-    # lazy=dynamic: People might post a *lot* of comments, so make
-    #     the "posted_comments" a query-like thing.
+    # lazy=dynamic: People might post a *lot* of comments,
+    #     so make the "posted_comments" a query-like thing.
     get_author = relationship(User,
                               backref=backref("posted_comments",
                                               lazy="dynamic",
                                               cascade="all, delete-orphan"))
+
+    # Cascade: Comments are somewhat owned by their MediaEntry.
+    #     So do the full thing.
+    # lazy=dynamic: MediaEntries might have many comments,
+    #     so make the "all_comments" a query-like thing.
+    get_media_entry = relationship(MediaEntry,
+                                   backref=backref("all_comments",
+                                                   lazy="dynamic",
+                                                   cascade="all, delete-orphan"))
 
 
 class Collection(Base, CollectionMixin):
