@@ -71,7 +71,7 @@ class TestOAuth(object):
         assert response.status_int == 200
 
         # Should display an error
-        assert ctx['form'].redirect_uri.errors
+        assert len(ctx['form'].redirect_uri.errors)
 
         # Should not pass through
         assert not client
@@ -79,11 +79,15 @@ class TestOAuth(object):
     def test_2_successful_public_client_registration(self, test_app):
         ''' Successfully register a public client '''
         self._setup(test_app)
+        uri = 'http://foo.example'
         self.register_client(test_app, u'OMGOMG', 'public', 'OMG!',
-                'http://foo.example')
+                uri)
 
         client = self.db.OAuthClient.query.filter(
                 self.db.OAuthClient.name == u'OMGOMG').first()
+
+        # redirect_uri should be set
+        assert client.redirect_uri == uri
 
         # Client should have been registered
         assert client
@@ -116,7 +120,7 @@ class TestOAuth(object):
         redirect_uri = 'https://foo.example'
         response = test_app.get('/oauth/authorize', {
                 'client_id': client.identifier,
-                'scope': 'admin',
+                'scope': 'all',
                 'redirect_uri': redirect_uri})
 
         # User-agent should NOT be redirected
@@ -142,6 +146,7 @@ class TestOAuth(object):
         return authorization_response, client_identifier
 
     def get_code_from_redirect_uri(self, uri):
+        ''' Get the value of ?code= from an URI '''
         return parse_qs(urlparse(uri).query)['code'][0]
 
     def test_token_endpoint_successful_confidential_request(self, test_app):
@@ -170,6 +175,11 @@ code={1}&client_secret={2}'.format(client_id, code, client.secret))
         assert type(token_data['expires_in']) == int
         assert token_data['expires_in'] > 0
 
+        # There should be a refresh token provided in the token data
+        assert len(token_data['refresh_token'])
+
+        return client_id, token_data
+
     def test_token_endpont_missing_id_confidential_request(self, test_app):
         ''' Unsuccessful request against token endpoint, missing client_id '''
         self._setup(test_app)
@@ -192,4 +202,30 @@ code={0}&client_secret={1}'.format(code, client.secret))
         assert 'error' in token_data
         assert not 'access_token' in token_data
         assert token_data['error'] == 'invalid_request'
-        assert token_data['error_description'] == 'Missing client_id in request'
+        assert len(token_data['error_description'])
+
+    def test_refresh_token(self, test_app):
+        ''' Try to get a new access token using the refresh token '''
+        # Get an access token and a refresh token
+        client_id, token_data =\
+            self.test_token_endpoint_successful_confidential_request(test_app)
+
+        client = self.db.OAuthClient.query.filter(
+            self.db.OAuthClient.identifier == client_id).first()
+
+        token_res = test_app.get('/oauth/access_token',
+                     {'refresh_token': token_data['refresh_token'],
+                      'client_id': client_id,
+                      'client_secret': client.secret
+                      })
+
+        assert token_res.status_int == 200
+
+        new_token_data = json.loads(token_res.body)
+
+        assert not 'error' in new_token_data
+        assert 'access_token' in new_token_data
+        assert 'token_type' in new_token_data
+        assert 'expires_in' in new_token_data
+        assert type(new_token_data['expires_in']) == int
+        assert new_token_data['expires_in'] > 0
