@@ -226,9 +226,9 @@ def media_collect(request, media):
 
     # Otherwise, use the collection selected from the drop-down
     else:
-        collection = Collection.query.filter_by(
-            id=form.collection.data,
-            creator=request.user.id).first()
+        collection = form.collection.data
+        if collection and collection.creator != request.user.id:
+            collection = None
 
     # Make sure the user actually selected a collection
     if not collection:
