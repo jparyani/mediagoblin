@@ -19,17 +19,72 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
-WIP
+0.3.3
 =====
 
+**Do this to upgrade**
+
+1. Make sure to run ``bin/gmg dbupdate`` after upgrading.
+2. OpenStreetMap is now a plugin, so if you want to use it, add the
+   following to your config file::
+
+  [plugins]
+  [[mediagoblin.plugins.geolocation]]
+
+If you have your own theme, you may need to make some adjustments to
+it as some theme related things may have changed in this releae.  If
+you run into problems, don't hesitate to join #mediagoblin on
+irc.freenode.net and we'll try to help.
+
 **New features**
+
+* New dropdown menu for accessing various features.
+
+* Significantly improved URL generation.  Now mediagoblin won't give
+  up on making a slug if it looks like there will be a duplicate;
+  it'll try extra hard to generate a meaningful one instead.
+
+  Similarly, linking to an id no longer can possibly conflict with
+  linking to a slug; /u/username/m/id:35/ is the kind of reference we
+  now use to linking to entries with ids.  However, old links with
+  entries that linked to ids should work just fine with our migration.
+  The only urls that might break in this release are ones using colons
+  or equal signs.
+
+* New template hooks for plugin authoring.
+
+* As a demonstration of new template hooks for plugin authoring,
+  openstreetmap support now moved to a plugin!
+
+* Method to add icon to collections switched from icon of paperclip to
+  button with "add to collection" text.
+
+* Bug where videos often failed to produce a proper thumbnail fixed!
+
+* Copying around files in mediagoblin now much more efficient, doesn't
+  waste gobs of memory.
+
+* Video transcoding now optional for videos that meet certain
+  criteria.  By default, MediaGoblin will now now transcode webm
+  videos that are smaller in resolution than the mediagoblin defaults,
+  and mediagoblin can also be configured to allow theora files to not
+  be transcoded as well.
+
+* Per-user license preference option; always want your uploads to be
+  BY-SA and tired of changing that field?  You can now set your
+  license preference in your user settings.
+
+* Video player now responsive; better for mobile!
 
 **Other changed**
 
 * Plugin writers: Internal restructuring led to mediagoblin.db.sql* be
   mediagoblin.db.* starting from 0.3.3
 
-* Dependency list has been reduced not requireing the "webob" package anymore.
+* Dependency list has been reduced not requiring the "webob" package anymore.
+
+* And many small fixes/improvements, too numerous to list!
+
 
 0.3.2
 =====
