@@ -77,6 +77,9 @@ you run into problems, don't hesitate to
 
 * Video player now responsive; better for mobile!
 
+* You can now delete your account from the user preferences page if
+  you so wish.
+
 **Other changes**
 
 * Plugin writers: Internal restructuring led to mediagoblin.db.sql* be
