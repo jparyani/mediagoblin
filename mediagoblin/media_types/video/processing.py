@@ -16,6 +16,7 @@
 
 from tempfile import NamedTemporaryFile
 import logging
+import datetime
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import \
@@ -165,7 +166,7 @@ def store_metadata(media_entry, metadata):
          for key in [
                  "videoheight", "videolength", "videowidth",
                  "audiorate", "audiolength", "audiochannels", "audiowidth",
-                 "mimetype", "tags"]
+                 "mimetype"]
          if key in metadata])
 
     # We have to convert videorate into a sequence because it's a
@@ -174,6 +175,36 @@ def store_metadata(media_entry, metadata):
     if "videorate" in metadata:
         videorate = metadata["videorate"]
         stored_metadata["videorate"] = [videorate.num, videorate.denom]
+
+    # Also make a whitelist conversion of the tags.
+    if "tags" in metadata:
+        tags_metadata = metadata['tags']
+
+        # we don't use *all* of these, but we know these ones are
+        # safe...
+        tags = dict(
+            [(key, tags_metadata[key])
+             for key in [
+                     "application-name", "artist", "audio-codec", "bitrate",
+                     "container-format", "copyright", "encoder", 
+                     "encoder-version", "license", "nominal-bitrate", "title",
+                     "video-codec"]
+             if key in tags_metadata])
+        if 'date' in tags_metadata:
+            date = tags_metadata['date']
+            tags['date'] = "%s-%s-%s" % (
+                date.year, date.month, date.day)
+
+        # TODO: handle timezone info; gst.get_time_zone_offset +
+        #   python's tzinfo should help
+        if 'datetime' in tags_metadata:
+            dt = tags_metadata['datetime']
+            tags['datetime'] = datetime.datetime(
+                dt.get_year(), dt.get_month(), dt.get_day(), dt.get_hour(),
+                dt.get_minute(), dt.get_second(),
+                dt.get_microsecond()).isoformat()
+    
+        metadata['tags'] = tags
 
     # Only save this field if there's something to save
     if len(stored_metadata):
