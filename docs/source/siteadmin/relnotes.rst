@@ -32,9 +32,10 @@ carefully, or at least skim over it.
   [[mediagoblin.plugins.geolocation]]
 
 If you have your own theme, you may need to make some adjustments to
-it as some theme related things may have changed in this releae.  If
-you run into problems, don't hesitate to join #mediagoblin on
-irc.freenode.net and we'll try to help.
+it as some theme related things may have changed in this release.  If
+you run into problems, don't hesitate to
+`contact us <http://mediagoblin.org/pages/join.html>`_
+(IRC is often best).
 
 **New features**
 
@@ -56,8 +57,8 @@ irc.freenode.net and we'll try to help.
 * As a demonstration of new template hooks for plugin authoring,
   openstreetmap support now moved to a plugin!
 
-* Method to add icon to collections switched from icon of paperclip to
-  button with "add to collection" text.
+* Method to add media to collections switched from icon of paperclip
+  to button with "add to collection" text.
 
 * Bug where videos often failed to produce a proper thumbnail fixed!
 
@@ -65,10 +66,10 @@ irc.freenode.net and we'll try to help.
   waste gobs of memory.
 
 * Video transcoding now optional for videos that meet certain
-  criteria.  By default, MediaGoblin will now now transcode webm
-  videos that are smaller in resolution than the mediagoblin defaults,
-  and mediagoblin can also be configured to allow theora files to not
-  be transcoded as well.
+  criteria.  By default, MediaGoblin will now transcode webm videos
+  that are smaller in resolution than the mediagoblin defaults, and
+  mediagoblin can also be configured to allow theora files to not be
+  transcoded as well.
 
 * Per-user license preference option; always want your uploads to be
   BY-SA and tired of changing that field?  You can now set your
@@ -76,7 +77,7 @@ irc.freenode.net and we'll try to help.
 
 * Video player now responsive; better for mobile!
 
-**Other changed**
+**Other changes**
 
 * Plugin writers: Internal restructuring led to mediagoblin.db.sql* be
   mediagoblin.db.* starting from 0.3.3
