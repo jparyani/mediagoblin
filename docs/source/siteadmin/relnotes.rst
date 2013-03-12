@@ -62,13 +62,13 @@ you run into problems, don't hesitate to
 
 * Bug where videos often failed to produce a proper thumbnail fixed!
 
-* Copying around files in mediagoblin now much more efficient, doesn't
+* Copying around files in MediaGoblin now much more efficient, doesn't
   waste gobs of memory.
 
 * Video transcoding now optional for videos that meet certain
-  criteria.  By default, MediaGoblin will now transcode webm videos
-  that are smaller in resolution than the mediagoblin defaults, and
-  mediagoblin can also be configured to allow theora files to not be
+  criteria.  By default, MediaGoblin will not transcode webm videos
+  that are smaller in resolution than the MediaGoblin defaults, and
+  MediaGoblin can also be configured to allow theora files to not be
   transcoded as well.
 
 * Per-user license preference option; always want your uploads to be
