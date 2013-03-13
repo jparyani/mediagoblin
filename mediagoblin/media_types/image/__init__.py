@@ -14,19 +14,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.image.processing import process_image, \
     sniff_handler
 
 
-MEDIA_MANAGER = {
-    "human_readable": "Image",
-    "processor": process_image, # alternately a string,
-                                # 'mediagoblin.media_types.image.processing'?
-    "sniff_handler": sniff_handler,
-    "display_template": "mediagoblin/media_displays/image.html",
-    "default_thumb": "images/media_thumbs/image.png",
-    "accepted_extensions": ["jpg", "jpeg", "png", "gif", "tiff"],
+class ImageMediaManager(MediaManagerBase):
+    human_readable = "Image"
+    processor = staticmethod(process_image)
+    sniff_handler = staticmethod(sniff_handler)
+    display_template = "mediagoblin/media_displays/image.html"
+    default_thumb = "images/media_thumbs/image.png"
+    accepted_extensions = ["jpg", "jpeg", "png", "gif", "tiff"]
+    media_fetch_order = [u'medium', u'original', u'thumb']
+    
 
-    # Used by the media_entry.get_display_media method
-    "media_fetch_order": [u'medium', u'original', u'thumb'],
-}
+MEDIA_MANAGER = ImageMediaManager
