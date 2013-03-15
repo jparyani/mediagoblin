@@ -50,7 +50,10 @@ def exif_fix_image_orientation(im, exif_tags):
     Translate any EXIF orientation to raw orientation
 
     Cons:
-    - REDUCES IMAGE QUALITY by recompressing it
+    - Well, it changes the image, which means we'll recompress
+      it... not a problem if scaling it down already anyway.  We might
+      lose some quality in recompressing if it's at the same-size
+      though
 
     Pros:
     - Prevents neck pain
