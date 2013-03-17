@@ -10,6 +10,10 @@
 
 This chapter talks a bit about design decisions.
 
+Note: This is an outdated document.  It's more or less the historical
+reasons for a lot of things.  That doesn't mean these decisions have
+stayed the same or we haven't changed our minds on some things!
+
 
 Why GNU MediaGoblin?
 ====================
@@ -156,6 +160,9 @@ Chris Webber on "Why WSGI Minimalism":
 
 Why MongoDB
 ===========
+
+(Note: We don't use MongoDB anymore.  This is the original rationale,
+however.)
 
 Chris Webber on "Why MongoDB":
 
