@@ -18,6 +18,7 @@ import logging
 
 import lxml.etree as ET
 from werkzeug.exceptions import MethodNotAllowed
+from werkzeug.wrappers import BaseResponse
 
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.tools.response import Response, render_404
@@ -26,9 +27,26 @@ from mediagoblin.tools.response import Response, render_404
 _log = logging.getLogger(__name__)
 
 
+class PwgNamedArray(list):
+    def __init__(self, l, item_name, as_attrib=()):
+        self.item_name = item_name
+        self.as_attrib = as_attrib
+        list.__init__(self, l)
+
+    def fill_element_xml(self, el):
+        for it in self:
+            n = ET.SubElement(el, self.item_name)
+            if isinstance(it, dict):
+                _fill_element_dict(n, it, self.as_attrib)
+            else:
+                _fill_element(n, it)
+
+
 def _fill_element_dict(el, data, as_attr=()):
     for k,v in data.iteritems():
         if k in as_attr:
+            if not isinstance(v, basestring):
+                v = str(v)
             el.set(k, v)
         else:
             n = ET.SubElement(el, k)
@@ -43,18 +61,22 @@ def _fill_element(el, data):
             el.text = "0"
     elif isinstance(data, basestring):
         el.text = data
+    elif isinstance(data, int):
+        el.text = str(data)
     elif isinstance(data, dict):
         _fill_element_dict(el, data)
+    elif isinstance(data, PwgNamedArray):
+        data.fill_element_xml(el)
     else:
         _log.warn("Can't convert to xml: %r", data)
 
 
-def as_xml(result):
+def response_xml(result):
     r = ET.Element("rsp")
     r.set("stat", "ok")
     _fill_element(r, result)
     return Response(ET.tostring(r, encoding="utf-8", xml_declaration=True),
-                    content_type='text/xml')
+                    mimetype='text/xml')
 
 
 class CmdTable(object):
@@ -86,13 +108,6 @@ class CmdTable(object):
         return func
         
 
-@CmdTable("gmg.test")
-def gmg_test(request):
-    _log.info("Test...")
-    r = {"abc": "def", "subdict": {"name": "Foo", "True": True}}
-    return as_xml(r)
-
-
 @CmdTable("pwg.session.login", True)
 def pwg_login(request):
     username = request.form.get("username")
@@ -100,19 +115,39 @@ def pwg_login(request):
     _log.info("Login for %r/%r...", username, password)
     _log.warn("login: %s %r %r", request.method,
                   request.args, request.form)
-    return as_xml(True)
+    return True
 
 
 @CmdTable("pwg.session.logout")
 def pwg_logout(request):
     _log.info("Logout")
-    return as_xml(True)
+    return True
 
 
 @CmdTable("pwg.getVersion")
 def pwg_getversion(request):
     _log.info("getversion")
-    return as_xml("piwigo 2.5.0")
+    return "piwigo 2.5.0"
+
+
+@CmdTable("pwg.categories.getList")
+def pwg_categories_getList(request):
+    catlist = ({'id': -29711},)
+    return {
+          'categories': PwgNamedArray(
+            catlist,
+            'category',
+            (
+              'id',
+              'url',
+              'nb_images',
+              'total_nb_images',
+              'nb_categories',
+              'date_last',
+              'max_date_last',
+            )
+          )
+        }
 
 
 @csrf_exempt
@@ -129,4 +164,7 @@ def ws_php(request):
 
     result = func(request)
 
-    return result
+    if isinstance(result, BaseResponse):
+        return result
+
+    return response_xml(result)
