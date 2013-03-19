@@ -38,6 +38,10 @@ class MediaManagerBase(object):
     # Please override in actual media managers
     media_fetch_order = None
 
+    @staticmethod
+    def sniff_handler(*args, **kwargs):
+        return False
+
     def __init__(self, entry):
         self.entry = entry
 
@@ -68,6 +72,12 @@ class CompatMediaManager(object):
     def media_fetch_order(self):
         return self.mm_dict.get('media_fetch_order')
 
+    def sniff_handler(self, *args, **kwargs):
+        func = self.mm_dict.get("sniff_handler", None)
+        if func is not None:
+            return func(*args, **kwargs)
+        return False
+
     def __getattr__(self, i):
         return self.mm_dict[i]
 
@@ -90,8 +100,7 @@ def sniff_media(media):
 
         for media_type, manager in get_media_managers():
             _log.info('Sniffing {0}'.format(media_type))
-            if 'sniff_handler' in manager and \
-               manager.sniff_handler(media_file, media=media):
+            if manager.sniff_handler(media_file, media=media):
                 _log.info('{0} accepts the file'.format(media_type))
                 return media_type, manager
             else:
