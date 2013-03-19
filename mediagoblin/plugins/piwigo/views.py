@@ -16,97 +16,16 @@
 
 import logging
 
-import lxml.etree as ET
 from werkzeug.exceptions import MethodNotAllowed
 from werkzeug.wrappers import BaseResponse
 
 from mediagoblin.meddleware.csrf import csrf_exempt
-from mediagoblin.tools.response import Response, render_404
+from mediagoblin.tools.response import render_404
+from .tools import CmdTable, PwgNamedArray, response_xml
 
 
 _log = logging.getLogger(__name__)
 
-
-class PwgNamedArray(list):
-    def __init__(self, l, item_name, as_attrib=()):
-        self.item_name = item_name
-        self.as_attrib = as_attrib
-        list.__init__(self, l)
-
-    def fill_element_xml(self, el):
-        for it in self:
-            n = ET.SubElement(el, self.item_name)
-            if isinstance(it, dict):
-                _fill_element_dict(n, it, self.as_attrib)
-            else:
-                _fill_element(n, it)
-
-
-def _fill_element_dict(el, data, as_attr=()):
-    for k,v in data.iteritems():
-        if k in as_attr:
-            if not isinstance(v, basestring):
-                v = str(v)
-            el.set(k, v)
-        else:
-            n = ET.SubElement(el, k)
-            _fill_element(n, v)
-
-
-def _fill_element(el, data):
-    if isinstance(data, bool):
-        if data:
-            el.text = "1"
-        else:
-            el.text = "0"
-    elif isinstance(data, basestring):
-        el.text = data
-    elif isinstance(data, int):
-        el.text = str(data)
-    elif isinstance(data, dict):
-        _fill_element_dict(el, data)
-    elif isinstance(data, PwgNamedArray):
-        data.fill_element_xml(el)
-    else:
-        _log.warn("Can't convert to xml: %r", data)
-
-
-def response_xml(result):
-    r = ET.Element("rsp")
-    r.set("stat", "ok")
-    _fill_element(r, result)
-    return Response(ET.tostring(r, encoding="utf-8", xml_declaration=True),
-                    mimetype='text/xml')
-
-
-class CmdTable(object):
-    _cmd_table = {}
-
-    def __init__(self, cmd_name, only_post=False):
-        assert not cmd_name in self._cmd_table
-        self.cmd_name = cmd_name
-        self.only_post = only_post
-
-    def __call__(self, to_be_wrapped):
-        assert not self.cmd_name in self._cmd_table
-        self._cmd_table[self.cmd_name] = (to_be_wrapped, self.only_post)
-        return to_be_wrapped
-
-    @classmethod
-    def find_func(cls, request):
-        if request.method == "GET":
-            cmd_name = request.args.get("method")
-        else:
-            cmd_name = request.form.get("method")
-        entry = cls._cmd_table.get(cmd_name)
-        if not entry:
-            return entry
-        func, only_post = entry
-        if only_post and request.method != "POST":
-            _log.warn("Method %s only allowed for POST", cmd_name)
-            raise MethodNotAllowed()
-        return func
-        
 
 @CmdTable("pwg.session.login", True)
 def pwg_login(request):
