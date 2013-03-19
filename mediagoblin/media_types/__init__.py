@@ -32,6 +32,22 @@ class InvalidFileType(Exception):
     pass
 
 
+class MediaManagerBase(object):
+    "Base class for all media managers"
+
+    # Please override in actual media managers
+    media_fetch_order = None
+
+    def __init__(self, entry):
+        self.entry = entry
+
+    def __getitem__(self, i):
+        return getattr(self, i)
+
+    def __contains__(self, i):
+        return hasattr(self, i)
+
+
 class CompatMediaManager(object):
     def __init__(self, mm_dict, entry=None):
         self.mm_dict = mm_dict
