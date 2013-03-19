@@ -26,10 +26,12 @@ carefully, or at least skim over it.
 
 1. Make sure to run ``bin/gmg dbupdate`` after upgrading.
 2. OpenStreetMap is now a plugin, so if you want to use it, add the
-   following to your config file::
+   following to your config file:
 
-  [plugins]
-  [[mediagoblin.plugins.geolocation]]
+   .. code-block:: ini
+
+      [plugins]
+      [[mediagoblin.plugins.geolocation]]
 
 If you have your own theme, you may need to make some adjustments to
 it as some theme related things may have changed in this release.  If
