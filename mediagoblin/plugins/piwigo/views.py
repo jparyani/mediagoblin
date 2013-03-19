@@ -16,13 +16,45 @@
 
 import logging
 
+import lxml.etree as ET
 from werkzeug.exceptions import MethodNotAllowed
 
 from mediagoblin.meddleware.csrf import csrf_exempt
-from mediagoblin.tools.response import render_404
+from mediagoblin.tools.response import Response, render_404
 
 
 _log = logging.getLogger(__name__)
+
+
+def _fill_element_dict(el, data, as_attr=()):
+    for k,v in data.iteritems():
+        if k in as_attr:
+            el.set(k, v)
+        else:
+            n = ET.SubElement(el, k)
+            _fill_element(n, v)
+
+
+def _fill_element(el, data):
+    if isinstance(data, bool):
+        if data:
+            el.text = "1"
+        else:
+            el.text = "0"
+    elif isinstance(data, basestring):
+        el.text = data
+    elif isinstance(data, dict):
+        _fill_element_dict(el, data)
+    else:
+        _log.warn("Can't convert to xml: %r", data)
+
+
+def as_xml(result):
+    r = ET.Element("rsp")
+    r.set("stat", "ok")
+    _fill_element(r, result)
+    return Response(ET.tostring(r, encoding="utf-8", xml_declaration=True),
+                    content_type='text/xml')
 
 
 class CmdTable(object):
@@ -54,12 +86,33 @@ class CmdTable(object):
         return func
         
 
+@CmdTable("gmg.test")
+def gmg_test(request):
+    _log.info("Test...")
+    r = {"abc": "def", "subdict": {"name": "Foo", "True": True}}
+    return as_xml(r)
+
+
 @CmdTable("pwg.session.login", True)
 def pwg_login(request):
     username = request.form.get("username")
     password = request.form.get("password")
     _log.info("Login for %r/%r...", username, password)
-    return render_404(request)
+    _log.warn("login: %s %r %r", request.method,
+                  request.args, request.form)
+    return as_xml(True)
+
+
+@CmdTable("pwg.session.logout")
+def pwg_logout(request):
+    _log.info("Logout")
+    return as_xml(True)
+
+
+@CmdTable("pwg.getVersion")
+def pwg_getversion(request):
+    _log.info("getversion")
+    return as_xml("piwigo 2.5.0")
 
 
 @csrf_exempt
