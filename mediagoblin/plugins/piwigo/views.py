@@ -15,10 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import re
 
-from werkzeug.exceptions import MethodNotAllowed
+from werkzeug.exceptions import MethodNotAllowed, BadRequest
 from werkzeug.wrappers import BaseResponse
 
+from mediagoblin import mg_globals
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.tools.response import render_404
 from .tools import CmdTable, PwgNamedArray, response_xml
@@ -71,6 +73,46 @@ def pwg_categories_getList(request):
             )
           )
         }
+
+
+@CmdTable("pwg.images.exist")
+def pwg_images_exist(request):
+    return {}
+
+
+md5sum_matcher = re.compile(r"^[0-9a-fA-F]{32}$")
+
+def fetch_md5(request, parm_name, optional_parm=False):
+    val = request.form.get(parm_name)
+    if (val is None) and (not optional_parm):
+        _log.error("Parameter %s missing", parm_name)
+        raise BadRequest("Parameter %s missing" % parm_name)
+    if not md5sum_matcher.match(val):
+        _log.error("Parameter %s=%r has no valid md5 value", parm_name, val)
+        raise BadRequest("Parameter %s is not md5" % parm_name)
+    return val
+
+
+@CmdTable("pwg.images.addChunk", True)
+def pwg_images_addChunk(request):
+    o_sum = fetch_md5(request, 'original_sum')
+    typ = request.form.get('type')
+    pos = request.form.get('position')
+    data = request.form.get('data')
+
+    # Validate params:
+    pos = int(pos)
+    if not typ in ("file", "thumb"):
+        _log.error("type %r not allowed for now", typ)
+        return False
+
+    _log.info("addChunk for %r, type %r, position %d, len: %d",
+              o_sum, typ, pos, len(data))
+    if typ == "thumb":
+        _log.info("addChunk: Ignoring thumb, because we create our own")
+        return True
+
+    return True
 
 
 def possibly_add_cookie(request, response):
