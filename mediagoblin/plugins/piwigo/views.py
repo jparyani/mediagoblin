@@ -69,6 +69,19 @@ def pwg_categories_getList(request):
         }
 
 
+def possibly_add_cookie(request, response):
+    # TODO: We should only add a *real* cookie, if
+    # authenticated. And if there is no cookie already.
+    if True:
+        response.set_cookie(
+            'pwg_id',
+            "some_fake_for_now",
+            path=request.environ['SCRIPT_NAME'],
+            domain=mg_globals.app_config.get('csrf_cookie_domain'),
+            secure=(request.scheme.lower() == 'https'),
+            httponly=True)
+
+
 @csrf_exempt
 def ws_php(request):
     if request.method not in ("GET", "POST"):
@@ -86,4 +99,8 @@ def ws_php(request):
     if isinstance(result, BaseResponse):
         return result
 
-    return response_xml(result)
+    response = response_xml(result)
+
+    possibly_add_cookie(request, response)
+
+    return response
