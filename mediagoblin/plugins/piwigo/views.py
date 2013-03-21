@@ -32,8 +32,6 @@ def pwg_login(request):
     username = request.form.get("username")
     password = request.form.get("password")
     _log.info("Login for %r/%r...", username, password)
-    _log.warn("login: %s %r %r", request.method,
-                  request.args, request.form)
     return True
 
 
@@ -45,13 +43,19 @@ def pwg_logout(request):
 
 @CmdTable("pwg.getVersion")
 def pwg_getversion(request):
-    _log.info("getversion")
-    return "piwigo 2.5.0"
+    return "piwigo 2.5.0 (MediaGoblin)"
+
+
+@CmdTable("pwg.session.getStatus")
+def pwg_session_getStatus(request):
+    return {'username': "fake_user"}
 
 
 @CmdTable("pwg.categories.getList")
 def pwg_categories_getList(request):
-    catlist = ({'id': -29711},)
+    catlist = ({'id': -29711,
+                'uppercats': "-29711",
+                'name': "All my images"},)
     return {
           'categories': PwgNamedArray(
             catlist,

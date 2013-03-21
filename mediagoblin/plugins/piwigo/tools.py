@@ -99,6 +99,7 @@ class CmdTable(object):
         entry = cls._cmd_table.get(cmd_name)
         if not entry:
             return entry
+        _log.debug("Found method %s", cmd_name)
         func, only_post = entry
         if only_post and request.method != "POST":
             _log.warn("Method %s only allowed for POST", cmd_name)
