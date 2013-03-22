@@ -36,6 +36,7 @@ from mediagoblin.init import (get_jinja_loader, get_staticdirector,
     setup_global_and_app_config, setup_locales, setup_workbench, setup_database,
     setup_storage, setup_beaker_cache)
 from mediagoblin.tools.pluginapi import PluginManager
+from mediagoblin.tools.crypto import setup_crypto
 
 
 _log = logging.getLogger(__name__)
@@ -65,6 +66,8 @@ class MediaGoblinApp(object):
 
         # Open and setup the config
         global_config, app_config = setup_global_and_app_config(config_path)
+
+        setup_crypto()
 
         ##########################################
         # Setup other connections / useful objects
