@@ -50,6 +50,32 @@ def setup_crypto():
 
 
 def get_timed_signer_url(namespace):
+    """
+    This gives a basic signing/verifying object.
+
+    The namespace makes sure signed tokens can't be used in
+    a different area. Like using a forgot-password-token as
+    a session cookie.
+
+    Basic usage:
+
+    .. code-block:: python
+
+       _signer = None
+       TOKEN_VALID_DAYS = 10
+       def setup():
+           global _signer
+           _signer = get_timed_signer_url("session cookie")
+       def create_token(obj):
+           return _signer.dumps(obj)
+       def parse_token(token):
+           # This might raise an exception in case
+           # of an invalid token, or an expired token.
+           return _signer.loads(token, max_age=TOKEN_VALID_DAYS*24*3600)
+
+    For more details see
+    http://pythonhosted.org/itsdangerous/#itsdangerous.URLSafeTimedSerializer
+    """
     assert __itsda_secret is not None
     return itsdangerous.URLSafeTimedSerializer(__itsda_secret,
          salt=namespace)
