@@ -23,6 +23,7 @@ from werkzeug.wrappers import BaseResponse
 from mediagoblin import mg_globals
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.tools.response import render_404
+from mediagoblin.submit.lib import check_file_field
 from .tools import CmdTable, PwgNamedArray, response_xml
 from .forms import AddSimpleForm
 
@@ -91,6 +92,9 @@ def pwg_images_addSimple(request):
     for f in form:
         dump.append("%s=%r" % (f.name, f.data))
     _log.info("addimple: %r %s %r", request.form, " ".join(dump), request.files)
+
+    if not check_file_field(request, 'image'):
+        raise BadRequest()
 
     return {'image_id': 123456, 'url': ''}
 
