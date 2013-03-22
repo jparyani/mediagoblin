@@ -38,14 +38,18 @@ def setup_crypto():
     global __itsda_secret
     dir = mg_globals.app_config["crypto_path"]
     if not os.path.isdir(dir):
-        _log.info("Creating %s", dir)
         os.makedirs(dir)
+        os.chmod(dir, 0700)
+        _log.info("Created %s", dir)
     name = os.path.join(dir, "itsdangeroussecret.bin")
     if os.path.exists(name):
         __itsda_secret = file(name, "r").read()
     else:
         __itsda_secret = str(getrandbits(192))
-        file(name, "w").write(__itsda_secret)
+        f = file(name, "w")
+        f.write(__itsda_secret)
+        f.close()
+        os.chmod(name, 0600)
         _log.info("Created %s", name)
 
 
