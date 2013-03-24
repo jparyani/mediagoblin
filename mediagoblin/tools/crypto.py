@@ -14,10 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os.path
-import logging
-import random
+import errno
 import itsdangerous
+import logging
+import os.path
+import random
+import tempfile
 from mediagoblin import mg_globals
 
 _log = logging.getLogger(__name__)
@@ -25,33 +27,56 @@ _log = logging.getLogger(__name__)
 
 # Use the system (hardware-based) random number generator if it exists.
 # -- this optimization is lifted from Django
-if hasattr(random, 'SystemRandom'):
+try:
     getrandbits = random.SystemRandom().getrandbits
-else:
+except AttributeError:
     getrandbits = random.getrandbits
 
 
 __itsda_secret = None
 
 
+def load_key(filename):
+    global __itsda_secret
+    key_file = open(filename)
+    try:
+        __itsda_secret = key_file.read()
+    finally:
+        key_file.close()
+
+def create_key(key_dir, key_filepath):
+    global __itsda_secret
+    old_umask = os.umask(077)
+    key_file = None
+    try:
+        if not os.path.isdir(key_dir):
+            os.makedirs(key_dir)
+            _log.info("Created %s", dirname)
+        key = str(getrandbits(192))
+        key_file = tempfile.NamedTemporaryFile(dir=key_dir, suffix='.bin',
+                                               delete=False)
+        key_file.write(key)
+        key_file.flush()
+        os.rename(key_file.name, key_filepath)
+        key_file.close()
+    finally:
+        os.umask(old_umask)
+        if (key_file is not None) and (not key_file.closed):
+            key_file.close()
+            os.unlink(key_file.name)
+    __itsda_secret = key
+    _log.info("Saved new key for It's Dangerous")
+
 def setup_crypto():
     global __itsda_secret
-    dir = mg_globals.app_config["crypto_path"]
-    if not os.path.isdir(dir):
-        os.makedirs(dir)
-        os.chmod(dir, 0700)
-        _log.info("Created %s", dir)
-    name = os.path.join(dir, "itsdangeroussecret.bin")
-    if os.path.exists(name):
-        __itsda_secret = file(name, "r").read()
-    else:
-        __itsda_secret = str(getrandbits(192))
-        f = file(name, "w")
-        f.write(__itsda_secret)
-        f.close()
-        os.chmod(name, 0600)
-        _log.info("Created %s", name)
-
+    key_dir = mg_globals.app_config["crypto_path"]
+    key_filepath = os.path.join(key_dir, 'itsdangeroussecret.bin')
+    try:
+        load_key(key_filepath)
+    except IOError, error:
+        if error.errno != errno.ENOENT:
+            raise
+        create_key(key_dir, key_filepath)
 
 def get_timed_signer_url(namespace):
     """
