@@ -46,7 +46,7 @@ def pwg_logout(request):
 
 @CmdTable("pwg.getVersion")
 def pwg_getversion(request):
-    return "piwigo 2.5.0 (MediaGoblin)"
+    return "2.5.0 (MediaGoblin)"
 
 
 @CmdTable("pwg.session.getStatus")
