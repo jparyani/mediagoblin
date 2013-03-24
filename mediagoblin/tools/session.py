@@ -22,11 +22,15 @@ import crypto
 _log = logging.getLogger(__name__)
 
 class Session(dict):
+    def __init__(self, *args, **kwargs):
+        self.send_new_cookie = False
+        dict.__init__(self, *args, **kwargs)
+
     def save(self):
         self.send_new_cookie = True
 
     def is_updated(self):
-        return getattr(self, 'send_new_cookie')
+        return self.send_new_cookie
 
     def delete(self):
         self.clear()
