@@ -38,6 +38,16 @@ else
     exit 1
 fi
 
+
+CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests
+export CELERY_CONFIG_MODULE
+echo "+ CELERY_CONFIG_MODULE=$CELERY_CONFIG_MODULE"
+
+# Look to see if the user has specified a specific directory/file to
+# run tests out of.  If not we'll need to pass along
+# mediagoblin/tests/ later very specifically.  Otherwise nosetests
+# will try to read all directories, and this turns into a mess!
+
 need_arg=1
 for i in "$@"
 do
@@ -46,10 +56,6 @@ do
     *) need_arg=0; break ;;
   esac
 done
-
-CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests
-export CELERY_CONFIG_MODULE
-echo "+ CELERY_CONFIG_MODULE=$CELERY_CONFIG_MODULE"
 
 if [ "$need_arg" = 1 ]
 then
