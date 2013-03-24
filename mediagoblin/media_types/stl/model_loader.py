@@ -121,6 +121,8 @@ def auto_detect(fileob, hint):
             pass
         except ValueError:
             pass
+        except IndexError:
+            pass
         try:
             # It is pretty important that the binary stl model loader
             # is tried second, because its possible for it to parse
