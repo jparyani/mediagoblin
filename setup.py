@@ -54,7 +54,7 @@ setup(
         'sphinx',
         'Babel',
         'argparse',
-        'webtest',
+        'webtest<2',
         'ConfigObj',
         'Markdown',
         'sqlalchemy>=0.7.0',
