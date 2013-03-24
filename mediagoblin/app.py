@@ -34,7 +34,7 @@ from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.init import (get_jinja_loader, get_staticdirector,
     setup_global_and_app_config, setup_locales, setup_workbench, setup_database,
-    setup_storage, setup_beaker_cache)
+    setup_storage)
 from mediagoblin.tools.pluginapi import PluginManager
 from mediagoblin.tools.crypto import setup_crypto
 
@@ -102,9 +102,6 @@ class MediaGoblinApp(object):
 
         # set up staticdirector tool
         self.staticdirector = get_staticdirector(app_config)
-
-        # set up caching
-        self.cache = setup_beaker_cache()
 
         # Setup celery, if appropriate
         if setup_celery and not app_config.get('celery_setup_elsewhere'):

@@ -43,7 +43,6 @@ setup(
     install_requires=[
         'setuptools',
         'PasteScript',
-        'beaker',
         'wtforms',
         'py-bcrypt',
         'nose',

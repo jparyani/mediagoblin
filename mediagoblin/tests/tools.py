@@ -45,9 +45,7 @@ TEST_USER_DEV = pkg_resources.resource_filename(
     'mediagoblin.tests', 'test_user_dev')
 MGOBLIN_APP = None
 
-USER_DEV_DIRECTORIES_TO_SETUP = [
-    'media/public', 'media/queue',
-    'beaker/sessions/data', 'beaker/sessions/lock']
+USER_DEV_DIRECTORIES_TO_SETUP = ['media/public', 'media/queue']
 
 BAD_CELERY_MESSAGE = """\
 Sorry, you *absolutely* must run nosetests with the
