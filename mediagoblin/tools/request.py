@@ -35,4 +35,4 @@ def setup_user_in_request(request):
         # Something's wrong... this user doesn't exist?  Invalidate
         # this session.
         _log.warn("Killing session for user id %r", request.session['user_id'])
-        request.session.invalidate()
+        request.session.delete()

@@ -60,6 +60,7 @@ setup(
         'sqlalchemy>=0.7.0',
         'sqlalchemy-migrate',
         'mock',
+        'itsdangerous',
         ## This is optional!
         # 'translitcodec',
         ## For now we're expecting that users will install this from

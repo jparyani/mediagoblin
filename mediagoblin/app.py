@@ -25,7 +25,7 @@ from werkzeug.exceptions import HTTPException
 from werkzeug.routing import RequestRedirect
 
 from mediagoblin import meddleware, __version__
-from mediagoblin.tools import common, translate, template
+from mediagoblin.tools import common, session, translate, template
 from mediagoblin.tools.response import render_http_exception
 from mediagoblin.tools.theme import register_themes
 from mediagoblin.tools import request as mg_request
@@ -160,7 +160,8 @@ class MediaGoblinApp(object):
 
         ## Attach utilities to the request object
         # Do we really want to load this via middleware?  Maybe?
-        request.session = request.environ['beaker.session']
+        session_manager = session.SessionManager()
+        request.session = session_manager.load_session_from_cookie(request)
         # Attach self as request.app
         # Also attach a few utilities from request.app for convenience?
         request.app = self
@@ -228,6 +229,8 @@ class MediaGoblinApp(object):
         except HTTPException as e:
             response = render_http_exeption(
                 request, e, e.get_description(environ))
+
+        session_manager.save_session_to_cookie(request.session, response)
 
         return response(environ, start_response)
 
