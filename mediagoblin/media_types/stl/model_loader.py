@@ -80,6 +80,7 @@ class ObjModel(ThreeDee):
     
     def load(self, fileob):
         for line in fileob:
+            line = line.strip()
             if line[0] == "v":
                 self.verts.append(self.__vector(line))
             
@@ -120,6 +121,8 @@ def auto_detect(fileob, hint):
         except ThreeDeeParseError:
             pass
         except ValueError:
+            pass
+        except IndexError:
             pass
         try:
             # It is pretty important that the binary stl model loader
