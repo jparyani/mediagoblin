@@ -59,7 +59,7 @@ class SessionManager(object):
             return Session()
 
     def save_session_to_cookie(self, session, response):
-        if not session.is_updated:
+        if not session.is_updated():
             return
         elif not session:
             response.delete_cookie(self.cookie_name)
