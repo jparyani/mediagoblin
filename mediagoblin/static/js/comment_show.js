@@ -22,7 +22,7 @@ function previewComment(){
 		content = $('#comment_content').val();
 		$.getJSON($('#previewURL').val(),JSON.stringify($('#comment_content').val()),
 		function(data){
-			$('#comment_preview').replaceWith("<div id=comment_preview><h3>Comment Preview</h3><br />" + decodeURIComponent(data) + 
+			$('#comment_preview').replaceWith("<div id=comment_preview><h3>{% trans -%}Comment Preview{%- endtrans %}</h3><br />" + decodeURIComponent(data) + 
 			"<hr style='border: 1px solid #333;' /></div>");
 		});
 	}
