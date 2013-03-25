@@ -23,8 +23,8 @@ from werkzeug.wrappers import BaseResponse
 from mediagoblin import mg_globals
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.submit.lib import check_file_field
-from .tools import CmdTable, PwgNamedArray, response_xml
-from .forms import AddSimpleForm
+from .tools import CmdTable, PwgNamedArray, response_xml, check_form
+from .forms import AddSimpleForm, AddForm
 
 
 _log = logging.getLogger(__name__)
@@ -131,6 +131,15 @@ def pwg_images_addChunk(request):
         return True
 
     return True
+
+
+@CmdTable("pwg.images.add", True)
+def pwg_images_add(request):
+    _log.info("add: %r", request.form)
+    form = AddForm(request.form)
+    check_form(form)
+
+    return {'image_id': 123456, 'url': ''}
 
 
 @csrf_exempt

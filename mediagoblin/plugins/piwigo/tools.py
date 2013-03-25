@@ -18,7 +18,7 @@ import logging
 
 import six
 import lxml.etree as ET
-from werkzeug.exceptions import MethodNotAllowed
+from werkzeug.exceptions import MethodNotAllowed, BadRequest
 
 from mediagoblin.tools.response import Response
 
@@ -106,3 +106,16 @@ class CmdTable(object):
             _log.warn("Method %s only allowed for POST", cmd_name)
             raise MethodNotAllowed()
         return func
+
+
+def check_form(form):
+    if not form.validate():
+        _log.error("form validation failed for form %r", form)
+        for f in form:
+            if len(f.error):
+                _log.error("Errors for %s: %r", f.name, f.errors)
+        raise BadRequest()
+    dump = []
+    for f in form:
+        dump.append("%s=%r" % (f.name, f.data))
+    _log.debug("form: %s", " ".join(dump))
