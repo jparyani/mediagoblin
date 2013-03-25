@@ -23,7 +23,7 @@ class MediaCommentForm(wtforms.Form):
         _('Comment'),
         [wtforms.validators.Required()],
         description=_(u'You can use '
-                      u'<a href="http://daringfireball.net/projects/markdown/basics">'
+                      u'<a href="http://daringfireball.net/projects/markdown/basics" target=new>'
                       u'Markdown</a> for formatting.'))
 
 class ConfirmDeleteForm(wtforms.Form):

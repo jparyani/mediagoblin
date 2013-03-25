@@ -16,19 +16,21 @@
 
 import logging
 import datetime
+import json
+import urllib
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
                                    CollectionItem, User)
 from mediagoblin.tools.response import render_to_response, render_404, \
     redirect, redirect_obj
+from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.user_pages import forms as user_forms
 from mediagoblin.user_pages.lib import add_media_to_collection
 from mediagoblin.notifications import trigger_notification, \
     add_comment_subscription, mark_comment_notification_seen
-
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
     get_media_entry_by_id,
     require_active_login, user_may_delete_media, user_may_alter_collection,
@@ -36,6 +38,7 @@ from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
 
 from werkzeug.contrib.atom import AtomFeed
 from werkzeug.exceptions import MethodNotAllowed
+from werkzeug.wrappers import Response
 
 
 _log = logging.getLogger(__name__)
@@ -166,6 +169,7 @@ def media_post_comment(request, media):
     comment = request.db.MediaComment()
     comment.media_entry = media.id
     comment.author = request.user.id
+    print request.form['comment_content']
     comment.content = unicode(request.form['comment_content'])
 
     # Show error message if commenting is disabled.
@@ -192,6 +196,18 @@ def media_post_comment(request, media):
 
     return redirect_obj(request, media)
 
+
+
+def media_preview_comment(request):
+
+    comment = unicode(urllib.unquote(request.query_string).decode('string_escape'))
+    if comment.startswith('"') and comment.endswith('"'):
+        comment = comment[1:-1]
+    print comment
+    #decoderRing = json.JSONDecoder()
+   #comment = decoderRing.decode(request.query_string)
+
+    return Response(json.dumps(cleaned_markdown_conversion(comment)))
 
 @get_media_entry_by_id
 @require_active_login

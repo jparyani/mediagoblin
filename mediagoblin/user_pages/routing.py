@@ -32,6 +32,10 @@ add_route('mediagoblin.user_pages.media_post_comment',
           '/u/<string:user>/m/<int:media_id>/comment/add/',
           'mediagoblin.user_pages.views:media_post_comment')
 
+add_route('mediagoblin.user_pages.media_preview_comment',
+          '/ajax/comment/preview/',
+          'mediagoblin.user_pages.views:media_preview_comment')
+
 add_route('mediagoblin.user_pages.user_gallery',
           '/u/<string:user>/gallery/',
           'mediagoblin.user_pages.views:user_gallery')

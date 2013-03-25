@@ -15,12 +15,24 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+var content="";
 
+function previewComment(){
+	if ($('#comment_content').val() && (content != $('#comment_content').val())) {
+		content = $('#comment_content').val();
+		$.getJSON($('#previewURL').val(),JSON.stringify($('#comment_content').val()),
+		function(data){
+			$('#comment_preview').replaceWith("<div id=comment_preview><h3>Comment Preview</h3><br />" + decodeURIComponent(data) + 
+			"<hr style='border: 1px solid #333;' /></div>");
+		});
+	}
+}
 $(document).ready(function(){
   $('#form_comment').hide();
   $('#button_addcomment').click(function(){
     $(this).fadeOut('fast');
     $('#form_comment').slideDown(function(){
+	setInterval("previewComment()",500);
         $('#comment_content').focus();
     });
   });
