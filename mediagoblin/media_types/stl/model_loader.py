@@ -80,6 +80,7 @@ class ObjModel(ThreeDee):
     
     def load(self, fileob):
         for line in fileob:
+            line = line.strip()
             if line[0] == "v":
                 self.verts.append(self.__vector(line))
             
