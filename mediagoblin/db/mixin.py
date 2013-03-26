@@ -83,12 +83,12 @@ class MediaEntryMixin(object):
         #Is already a slug assigned? Check if it is valid
         if self.slug:
             self.slug = slugify(self.slug)
-  
+
         # otherwise, try to use the title.
         elif self.title:
             # assign slug based on title
             self.slug = slugify(self.title)
-     
+
         # We don't want any empty string slugs
         if self.slug == u"":
             self.slug = None
@@ -98,11 +98,11 @@ class MediaEntryMixin(object):
         # so just return... we're not going to force one.
         if not self.slug:
             return  # giving up!
-  
+
         # Otherwise, let's see if this is unique.
         if check_media_slug_used(self.uploader, self.slug, self.id):
             # It looks like it's being used... lame.
-        
+
             # Can we just append the object's id to the end?
             if self.id:
                 slug_with_id = u"%s-%s" % (self.slug, self.id)
@@ -110,7 +110,7 @@ class MediaEntryMixin(object):
                                              slug_with_id, self.id):
                     self.slug = slug_with_id
                     return  # success!
-        
+
             # okay, still no success;
             # let's whack junk on there till it's unique.
             self.slug += '-' + uuid.uuid4().hex[:4]
