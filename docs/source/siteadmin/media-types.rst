@@ -195,3 +195,40 @@ Run
 
 You should now be able to upload .obj and .stl files and MediaGoblin
 will be able to present them to your wide audience of admirers!
+
+PDF and Document
+================
+
+To enable the "PDF and Document" support plugin, you need pdftocairo, pdfinfo,
+unoconv with headless support.  All executables must be on your execution path.
+
+To install this on Fedora:
+
+.. code-block:: bash
+
+    sudo yum install -y ppoppler-utils unoconv libreoffice-headless
+
+pdf.js relies on git submodules, so be sure you have fetched them:
+
+.. code-block:: bash
+
+    git submodule init
+    git submodule update
+
+This feature has been tested on Fedora with:
+ poppler-utils-0.20.2-9.fc18.x86_64
+ unoconv-0.5-2.fc18.noarch
+ libreoffice-headless-3.6.5.2-8.fc18.x86_64
+
+It may work on some earlier versions, but that is not guaranteed.
+
+Add ``mediagoblin.media_types.pdf`` to the ``media_types`` list in your
+``mediagoblin_local.ini`` and restart MediaGoblin. 
+
+Run
+
+.. code-block:: bash
+
+    ./bin/gmg dbupdate
+
+

@@ -28,6 +28,7 @@ from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools import template
 from mediagoblin.media_types.image import MEDIA_MANAGER as img_MEDIA_MANAGER
+from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
 
 def resource(filename):
     return resource_filename('mediagoblin.tests', 'test_submission/' + filename)
@@ -39,6 +40,8 @@ EVIL_FILE = resource('evil')
 EVIL_JPG = resource('evil.jpg')
 EVIL_PNG = resource('evil.png')
 BIG_BLUE = resource('bigblue.png')
+GOOD_PDF = resource('good.pdf')
+
 from .test_exif import GPS_JPG
 
 GOOD_TAG_STRING = u'yin,yang'
@@ -124,6 +127,16 @@ class TestSubmission:
     def test_normal_png(self, test_app):
         self._setup(test_app)
         self.check_normal_upload(u'Normal upload 2', GOOD_PNG)
+
+    def test_normal_pdf(self, test_app):
+        if not pdf_check_prerequisites():
+            return
+        self._setup(test_app)
+        response, context = self.do_post({'title': u'Normal upload 3 (pdf)'},
+                                         do_follow=True,
+                                         **self.upload_data(GOOD_PDF))
+        self.check_url(response, '/u/{0}/'.format(self.test_user.username))
+        assert 'mediagoblin/user_pages/user.html' in context
 
     def check_media(self, request, find_data, count=None):
         media = MediaEntry.find(find_data)
