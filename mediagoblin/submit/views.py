@@ -62,18 +62,18 @@ def submit_start(request):
                 entry = request.db.MediaEntry()
                 entry.media_type = unicode(media_type)
                 entry.title = (
-                    unicode(request.form['title'])
+                    unicode(submit_form.title.data)
                     or unicode(splitext(filename)[0]))
 
-                entry.description = unicode(request.form.get('description'))
+                entry.description = unicode(submit_form.description.data)
 
-                entry.license = unicode(request.form.get('license', "")) or None
+                entry.license = unicode(submit_form.license.data) or None
 
                 entry.uploader = request.user.id
 
                 # Process the user's folksonomy "tags"
                 entry.tags = convert_to_tag_list_of_dicts(
-                    request.form.get('tags'))
+                    submit_form.tags.data)
 
                 # Generate a slug from the title
                 entry.generate_slug()
@@ -127,8 +127,8 @@ def add_collection(request, media=None):
         try:
             collection = request.db.Collection()
 
-            collection.title = unicode(request.form['title'])
-            collection.description = unicode(request.form.get('description'))
+            collection.title = unicode(submit_form.title.data)
+            collection.description = unicode(submit_form.description.data)
             collection.creator = request.user.id
             collection.generate_slug()
 
