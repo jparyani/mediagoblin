@@ -26,7 +26,7 @@ from mediagoblin.auth import lib as auth_lib
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
-     get_media_entry_by_id, 
+     get_media_entry_by_id,
      user_may_alter_collection, get_user_collection)
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
@@ -58,19 +58,19 @@ def edit_media(request, media):
     if request.method == 'POST' and form.validate():
         # Make sure there isn't already a MediaEntry with such a slug
         # and userid.
-        slug = slugify(request.form['slug'])
+        slug = slugify(form.slug.data)
         slug_used = check_media_slug_used(media.uploader, slug, media.id)
 
         if slug_used:
             form.slug.errors.append(
                 _(u'An entry with that slug already exists for this user.'))
         else:
-            media.title = request.form['title']
-            media.description = request.form.get('description')
+            media.title = form.title.data
+            media.description = form.description.data
             media.tags = convert_to_tag_list_of_dicts(
-                                   request.form.get('tags'))
+                                   form.tags.data)
 
-            media.license = unicode(request.form.get('license', '')) or None
+            media.license = unicode(form.license.data) or None
             media.slug = slug
             media.save()
 
@@ -142,7 +142,7 @@ def edit_attachments(request, media):
                 request.files['attachment_file'].stream.close()
 
             media.attachment_files.append(dict(
-                    name=request.form['attachment_name'] \
+                    name=form.attachment_name.data \
                         or request.files['attachment_file'].filename,
                     filepath=attachment_public_filepath,
                     created=datetime.utcnow(),
@@ -153,7 +153,7 @@ def edit_attachments(request, media):
             messages.add_message(
                 request, messages.SUCCESS,
                 _("You added the attachment %s!") \
-                    % (request.form['attachment_name']
+                    % (form.attachment_name.data
                        or request.files['attachment_file'].filename))
 
             return redirect(request,
@@ -194,8 +194,8 @@ def edit_profile(request, url_user=None):
         bio=user.bio)
 
     if request.method == 'POST' and form.validate():
-        user.url = unicode(request.form['url'])
-        user.bio = unicode(request.form['bio'])
+        user.url = unicode(form.url.data)
+        user.bio = unicode(form.bio.data)
 
         user.save()
 
@@ -309,25 +309,25 @@ def edit_collection(request, collection):
         # Make sure there isn't already a Collection with such a slug
         # and userid.
         slug_used = check_collection_slug_used(request.db, collection.creator,
-                request.form['slug'], collection.id)
+                form.slug.data, collection.id)
 
         # Make sure there isn't already a Collection with this title
         existing_collection = request.db.Collection.find_one({
                 'creator': request.user.id,
-                'title':request.form['title']})
+                'title':form.title.data})
 
         if existing_collection and existing_collection.id != collection.id:
             messages.add_message(
                 request, messages.ERROR,
                 _('You already have a collection called "%s"!') % \
-                    request.form['title'])
+                    form.title.data)
         elif slug_used:
             form.slug.errors.append(
                 _(u'A collection with that slug already exists for this user.'))
         else:
-            collection.title = unicode(request.form['title'])
-            collection.description = unicode(request.form.get('description'))
-            collection.slug = unicode(request.form['slug'])
+            collection.title = unicode(form.title.data)
+            collection.description = unicode(form.description.data)
+            collection.slug = unicode(form.slug.data)
 
             collection.save()
 
