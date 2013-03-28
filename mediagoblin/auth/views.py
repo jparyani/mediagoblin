@@ -196,7 +196,7 @@ def resend_activation(request):
             request,
             messages.ERROR,
             _('You must be logged in so we know who to send the email to!'))
-        
+
         return redirect(request, 'mediagoblin.auth.login')
 
     if request.user.email_verified:
@@ -204,12 +204,12 @@ def resend_activation(request):
             request,
             messages.ERROR,
             _("You've already verified your email address!"))
-        
+
         return redirect(request, "mediagoblin.user_pages.user_home", user=request.user['username'])
 
     request.user.verification_key = unicode(uuid.uuid4())
     request.user.save()
-    
+
     email_debug_message(request)
     send_verification_email(request.user, request)
 
