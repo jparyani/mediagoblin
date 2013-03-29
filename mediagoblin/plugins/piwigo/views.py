@@ -20,10 +20,11 @@ import re
 from werkzeug.exceptions import MethodNotAllowed, BadRequest, NotImplemented
 from werkzeug.wrappers import BaseResponse
 
-from mediagoblin import mg_globals
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.submit.lib import check_file_field
-from .tools import CmdTable, PwgNamedArray, response_xml, check_form
+from mediagoblin.auth.lib import fake_login_attempt
+from .tools import CmdTable, PwgNamedArray, response_xml, check_form, \
+    PWGSession
 from .forms import AddSimpleForm, AddForm
 
 
@@ -35,12 +36,21 @@ def pwg_login(request):
     username = request.form.get("username")
     password = request.form.get("password")
     _log.info("Login for %r/%r...", username, password)
+    user = request.db.User.query.filter_by(username=username).first()
+    if not user:
+        fake_login_attempt()
+        return False
+    if not user.check_login(password):
+        return False
+    request.session["user_id"] = user.id
+    request.session.save()
     return True
 
 
 @CmdTable("pwg.session.logout")
 def pwg_logout(request):
     _log.info("Logout")
+    request.session.delete()
     return True
 
 
@@ -154,11 +164,13 @@ def ws_php(request):
                   request.args, request.form)
         raise NotImplemented()
 
-    result = func(request)
+    with PWGSession(request) as session:
+        result = func(request)
 
-    if isinstance(result, BaseResponse):
-        return result
+        if isinstance(result, BaseResponse):
+            return result
 
-    response = response_xml(result)
+        response = response_xml(result)
+        session.save_to_cookie(response)
 
-    return response
+        return response

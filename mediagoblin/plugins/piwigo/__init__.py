@@ -17,6 +17,8 @@
 import logging
 
 from mediagoblin.tools import pluginapi
+from mediagoblin.tools.session import SessionManager
+from .tools import PWGSession
 
 _log = logging.getLogger(__name__)
 
@@ -31,6 +33,9 @@ def setup_plugin():
         ]
 
     pluginapi.register_routes(routes)
+
+    PWGSession.session_manager = SessionManager("pwg_id", "plugins.piwigo")
+
 
 hooks = {
     'setup': setup_plugin
