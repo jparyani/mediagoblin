@@ -18,7 +18,6 @@ import json
 import logging
 
 from os.path import splitext
-from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import BadRequest, Forbidden
 from werkzeug.wrappers import Response
 
@@ -27,7 +26,8 @@ from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.media_types import sniff_media
 from mediagoblin.plugins.api.tools import api_auth, get_entry_serializable, \
         json_response
-from mediagoblin.submit.lib import prepare_queue_task, run_process_media
+from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
+    run_process_media
 
 _log = logging.getLogger(__name__)
 
@@ -45,9 +45,7 @@ def post_entry(request):
         _log.debug('Must POST against post_entry')
         raise BadRequest()
 
-    if not 'file' in request.files \
-            or not isinstance(request.files['file'], FileStorage) \
-            or not request.files['file'].stream:
+    if not check_file_field(request, 'file'):
         _log.debug('File field not found')
         raise BadRequest()
 

@@ -22,7 +22,6 @@ import logging
 
 _log = logging.getLogger(__name__)
 
-from werkzeug.datastructures import FileStorage
 
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 from mediagoblin.tools.translate import pass_to_ugettext as _
@@ -32,7 +31,8 @@ from mediagoblin.submit import forms as submit_forms
 from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.media_types import sniff_media, \
     InvalidFileType, FileTypeNotSupported
-from mediagoblin.submit.lib import run_process_media, prepare_queue_task
+from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
+    run_process_media
 
 
 @require_active_login
@@ -44,9 +44,7 @@ def submit_start(request):
         license=request.user.license_preference)
 
     if request.method == 'POST' and submit_form.validate():
-        if not ('file' in request.files
-                and isinstance(request.files['file'], FileStorage)
-                and request.files['file'].stream):
+        if not check_file_field(request, 'file'):
             submit_form.file.errors.append(
                 _(u'You must provide a file.'))
         else:

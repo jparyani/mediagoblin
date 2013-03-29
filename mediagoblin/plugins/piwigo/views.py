@@ -24,6 +24,7 @@ from mediagoblin import mg_globals
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.tools.response import render_404
 from .tools import CmdTable, PwgNamedArray, response_xml
+from .forms import AddSimpleForm
 
 
 _log = logging.getLogger(__name__)
@@ -45,7 +46,7 @@ def pwg_logout(request):
 
 @CmdTable("pwg.getVersion")
 def pwg_getversion(request):
-    return "piwigo 2.5.0 (MediaGoblin)"
+    return "2.5.0 (MediaGoblin)"
 
 
 @CmdTable("pwg.session.getStatus")
@@ -80,6 +81,20 @@ def pwg_images_exist(request):
     return {}
 
 
+@CmdTable("pwg.images.addSimple", True)
+def pwg_images_addSimple(request):
+    form = AddSimpleForm(request.form)
+    if not form.validate():
+        _log.error("addSimple: form failed")
+        raise BadRequest()
+    dump = []
+    for f in form:
+        dump.append("%s=%r" % (f.name, f.data))
+    _log.info("addimple: %r %s %r", request.form, " ".join(dump), request.files)
+
+    return {'image_id': 123456, 'url': ''}
+
+                
 md5sum_matcher = re.compile(r"^[0-9a-fA-F]{32}$")
 
 def fetch_md5(request, parm_name, optional_parm=False):

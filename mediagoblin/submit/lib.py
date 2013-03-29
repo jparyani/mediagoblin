@@ -17,12 +17,23 @@
 import logging
 import uuid
 from werkzeug.utils import secure_filename
+from werkzeug.datastructures import FileStorage
 
 from mediagoblin.processing import mark_entry_failed
 from mediagoblin.processing.task import process_media
 
 
 _log = logging.getLogger(__name__)
+
+
+def check_file_field(request, field_name):
+    """Check if a file field meets minimal criteria"""
+    retval = (field_name in request.files
+              and isinstance(request.files[field_name], FileStorage)
+              and request.files[field_name].stream)
+    if not retval:
+        _log.debug("Form did not contain proper file field %s", field_name)
+    return retval
 
 
 def prepare_queue_task(app, entry, filename):
