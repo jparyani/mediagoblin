@@ -4,6 +4,8 @@
 
 .. _raven-setup:
 
+Warning: this plugin is somewhat experimental.
+
 Set up the raven plugin
 =======================
 
