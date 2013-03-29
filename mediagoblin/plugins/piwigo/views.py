@@ -61,7 +61,11 @@ def pwg_getversion(request):
 
 @CmdTable("pwg.session.getStatus")
 def pwg_session_getStatus(request):
-    return {'username': "fake_user"}
+    if request.user:
+        username = request.user.username
+    else:
+        username = "guest"
+    return {'username': username}
 
 
 @CmdTable("pwg.categories.getList")
