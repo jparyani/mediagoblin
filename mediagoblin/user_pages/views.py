@@ -204,7 +204,7 @@ def media_collect(request, media):
 
     # If we are here, method=POST and the form is valid, submit things.
     # If the user is adding a new collection, use that:
-    if request.form['collection_title']:
+    if form.collection_title.data:
         # Make sure this user isn't duplicating an existing collection
         existing_collection = Collection.query.filter_by(
                                 creator=request.user.id,

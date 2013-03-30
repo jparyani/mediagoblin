@@ -78,7 +78,7 @@ def register(request):
             user.username = register_form.data['username']
             user.email = register_form.data['email']
             user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-                request.form['password'])
+                register_form.password.data)
             user.verification_key = unicode(uuid.uuid4())
             user.save()
 
@@ -116,7 +116,7 @@ def login(request):
         if login_form.validate():
             user = User.query.filter_by(username=login_form.data['username']).first()
 
-            if user and user.check_login(request.form['password']):
+            if user and user.check_login(login_form.password.data):
                 # set up login in session
                 request.session['user_id'] = unicode(user.id)
                 request.session.save()
@@ -196,7 +196,7 @@ def resend_activation(request):
             request,
             messages.ERROR,
             _('You must be logged in so we know who to send the email to!'))
-        
+
         return redirect(request, 'mediagoblin.auth.login')
 
     if request.user.email_verified:
@@ -204,12 +204,12 @@ def resend_activation(request):
             request,
             messages.ERROR,
             _("You've already verified your email address!"))
-        
+
         return redirect(request, "mediagoblin.user_pages.user_home", user=request.user['username'])
 
     request.user.verification_key = unicode(uuid.uuid4())
     request.user.save()
-    
+
     email_debug_message(request)
     send_verification_email(request.user, request)
 
@@ -241,11 +241,11 @@ def forgot_password(request):
     # has been sanitized. Store if a user was found by email. We should
     # not reveal if the operation was successful then as we don't want to
     # leak if an email address exists in the system.
-    found_by_email = '@' in request.form['username']
+    found_by_email = '@' in fp_form.username.data
 
     if found_by_email:
         user = User.query.filter_by(
-            email = request.form['username']).first()
+            email = fp_form.username.data).first()
         # Don't reveal success in case the lookup happened by email address.
         success_message=_("If that email address (case sensitive!) is "
                           "registered an email has been sent with instructions "
@@ -253,7 +253,7 @@ def forgot_password(request):
 
     else: # found by username
         user = User.query.filter_by(
-            username = request.form['username']).first()
+            username = fp_form.username.data).first()
 
         if user is None:
             messages.add_message(request,
@@ -317,7 +317,7 @@ def verify_forgot_password(request):
 
         if request.method == 'POST' and cp_form.validate():
             user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-                request.form['password'])
+                cp_form.password.data)
             user.fp_verification_key = None
             user.fp_token_expire = None
             user.save()

@@ -45,11 +45,11 @@ def register_client(request):
 
     if request.method == 'POST' and form.validate():
         client = OAuthClient()
-        client.name = unicode(request.form['name'])
-        client.description = unicode(request.form['description'])
-        client.type = unicode(request.form['type'])
+        client.name = unicode(form.name.data)
+        client.description = unicode(form.description.data)
+        client.type = unicode(form.type.data)
         client.owner_id = request.user.id
-        client.redirect_uri = unicode(request.form['redirect_uri'])
+        client.redirect_uri = unicode(form.redirect_uri.data)
 
         client.generate_identifier()
         client.generate_secret()
