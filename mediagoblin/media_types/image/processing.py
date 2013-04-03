@@ -122,6 +122,7 @@ def process_image(proc_state):
                 exif_tags, conversions_subdir,
                 (mgg.global_config['media:thumb']['max_width'],
                  mgg.global_config['media:thumb']['max_height']))
+    entry.media_files[u'thumb'] = thumb_filepath
 
     # If the size of the original file exceeds the specified size of a `medium`
     # file, a `.medium.jpg` files is created and later associated with the media
@@ -137,20 +138,13 @@ def process_image(proc_state):
             exif_tags, conversions_subdir,
             (mgg.global_config['media:medium']['max_width'],
              mgg.global_config['media:medium']['max_height']))
-    else:
-        medium_filepath = None
+        entry.media_files[u'medium'] = medium_filepath
 
     # Copy our queued local workbench to its final destination
     proc_state.copy_original(name_builder.fill('{basename}{ext}'))
 
     # Remove queued media file from storage and database
     proc_state.delete_queue_file()
-
-    # Insert media file information into database
-    media_files_dict = entry.setdefault('media_files', {})
-    media_files_dict[u'thumb'] = thumb_filepath
-    if medium_filepath:
-        media_files_dict[u'medium'] = medium_filepath
 
     # Insert exif data into database
     exif_all = clean_exif(exif_tags)
