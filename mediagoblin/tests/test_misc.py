@@ -29,6 +29,7 @@ def test_404_for_non_existent():
 
 
 def test_user_deletes_other_comments():
+    get_app()   # gotta init the db and etc
     user_a = fixture_add_user(u"chris_a")
     user_b = fixture_add_user(u"chris_b")
 
@@ -81,6 +82,7 @@ def test_user_deletes_other_comments():
 
 
 def test_media_deletes_broken_attachment():
+    get_app()   # gotta init the db and etc
     user_a = fixture_add_user(u"chris_a")
 
     media = fixture_media_entry(uploader=user_a.id, save=False)

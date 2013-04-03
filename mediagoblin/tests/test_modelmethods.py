@@ -133,6 +133,7 @@ class TestMediaEntrySlugs(object):
 
 
 def test_media_data_init():
+    get_app()   # gotta init the db and etc
     Session.rollback()
     Session.remove()
     media = MediaEntry()
