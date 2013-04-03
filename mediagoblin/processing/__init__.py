@@ -97,9 +97,17 @@ class ProcessingState(object):
         return queued_filename
 
     def copy_original(self, target_name, keyname=u"original"):
+        self.store_public(keyname, self.get_queued_filename(), target_name)
+
+    def store_public(self, keyname, local_file, target_name=None):
+        if target_name is None:
+            target_name = os.path.basename(local_file)
         target_filepath = create_pub_filepath(self.entry, target_name)
-        mgg.public_store.copy_local_to_storage(self.get_queued_filename(),
-            target_filepath)
+        if keyname in self.entry.media_files:
+            _log.warn("store_public: keyname %r already used for file %r, "
+                      "replacing with %r", keyname,
+                      self.entry.media_files[keyname], target_filepath)
+        mgg.public_store.copy_local_to_storage(local_file, target_filepath)
         self.entry.media_files[keyname] = target_filepath
 
     def delete_queue_file(self):
