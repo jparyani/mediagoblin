@@ -46,7 +46,7 @@ setup(
         'beaker',
         'wtforms',
         'py-bcrypt',
-        'nose',
+        'pytest',
         'werkzeug>=0.7',
         'celery==2.5.3',
         'kombu==2.1.7',

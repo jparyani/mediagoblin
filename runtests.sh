@@ -26,14 +26,14 @@ then
   exit 1
 fi
 
-if [ -x "$basedir/bin/nosetests" ]; then
-    export NOSETESTS="$basedir/bin/nosetests";
-    echo "Using $NOSETESTS";
-elif which nosetests > /dev/null; then
-    echo "Using nosetests from \$PATH";
-    export NOSETESTS="nosetests";
+if [ -x "$basedir/bin/py.test" ]; then
+    export PYTEST="$basedir/bin/py.test";
+    echo "Using $PYTEST";
+elif which py.test > /dev/null; then
+    echo "Using py.test from \$PATH";
+    export PYTEST="py.test";
 else
-    echo "nosetests not found.  X_X";
+    echo "py.test not found.  X_X";
     echo "Please install 'nose'.  Exiting.";
     exit 1
 fi
@@ -45,7 +45,7 @@ echo "+ CELERY_CONFIG_MODULE=$CELERY_CONFIG_MODULE"
 
 # Look to see if the user has specified a specific directory/file to
 # run tests out of.  If not we'll need to pass along
-# mediagoblin/tests/ later very specifically.  Otherwise nosetests
+# mediagoblin/tests/ later very specifically.  Otherwise py.test
 # will try to read all directories, and this turns into a mess!
 
 need_arg=1
@@ -61,8 +61,8 @@ if [ "$need_arg" = 1 ]
 then
   testdir="$basedir/mediagoblin/tests"
   set -x
-  exec "$NOSETESTS" "$@" "$testdir"
+  exec "$PYTEST" "$@" "$testdir" --boxed
 else
   set -x
-  exec "$NOSETESTS" "$@"
+  exec "$PYTEST" "$@" --boxed
 fi
