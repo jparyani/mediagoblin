@@ -23,7 +23,7 @@ from mediagoblin.tools import template
 from mediagoblin.auth.lib import bcrypt_check_password
 
 class TestUserEdit(object):
-    def setUp(self):
+    def setup(self):
         self.app = get_app(dump_old_app=False)
         # set up new user
         self.user_password = u'toast'

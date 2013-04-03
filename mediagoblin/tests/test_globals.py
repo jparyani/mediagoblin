@@ -20,10 +20,10 @@ from mediagoblin import mg_globals
 
 
 class TestGlobals(object):
-    def setUp(self):
+    def setup(self):
         self.old_database = mg_globals.database
 
-    def tearDown(self):
+    def teardown(self):
         mg_globals.database = self.old_database
 
     def test_setup_globals(self):

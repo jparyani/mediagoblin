@@ -43,7 +43,7 @@ BIG_BLUE = resource('bigblue.png')
 
 
 class TestAPI(object):
-    def setUp(self):
+    def setup(self):
         self.app = get_app(dump_old_app=False)
         self.db = mg_globals.database
 

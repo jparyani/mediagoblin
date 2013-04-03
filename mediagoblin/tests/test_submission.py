@@ -51,7 +51,7 @@ REQUEST_CONTEXT = ['mediagoblin/user_pages/user.html', 'request']
 
 
 class TestSubmission:
-    def setUp(self):
+    def setup(self):
         self.test_app = get_app(dump_old_app=False)
 
         # TODO: Possibly abstract into a decorator like:

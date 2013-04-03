@@ -26,7 +26,7 @@ from mediagoblin.tests import test_oauth as oauth
 
 
 class TestHTTPCallback(object):
-    def setUp(self):
+    def setup(self):
         self.app = get_app(dump_old_app=False)
         self.db = mg_globals.database
 
@@ -54,7 +54,7 @@ class TestHTTPCallback(object):
         ''' Test processing HTTP callback '''
 
         self.oauth = oauth.TestOAuth()
-        self.oauth.setUp()
+        self.oauth.setup()
 
         redirect, client_id = self.oauth.test_4_authorize_confidential_client()
 

@@ -25,7 +25,7 @@ from mediagoblin.tests.test_storage import get_tmp_filestorage
 
 
 class TestWorkbench(object):
-    def setUp(self):
+    def setup(self):
         self.workbench_manager = workbench.WorkbenchManager(
             os.path.join(tempfile.gettempdir(), u'mgoblin_workbench_testing'))
 

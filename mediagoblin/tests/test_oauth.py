@@ -28,7 +28,7 @@ _log = logging.getLogger(__name__)
 
 
 class TestOAuth(object):
-    def setUp(self):
+    def setup(self):
         self.app = get_app()
         self.db = mg_globals.database
 
