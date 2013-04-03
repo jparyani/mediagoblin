@@ -47,6 +47,7 @@ setup(
         'wtforms',
         'py-bcrypt',
         'pytest',
+        'pytest-xdist',
         'werkzeug>=0.7',
         'celery==2.5.3',
         'kombu==2.1.7',
