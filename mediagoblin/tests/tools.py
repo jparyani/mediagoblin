@@ -171,19 +171,29 @@ def get_app(paste_config=None, mgoblin_config=None, dump_old_app=True):
     return app
 
 
-def setup_fresh_app(func):
+class SetupFreshApp(object):
     """
     Decorator to setup a fresh test application for this function.
 
     Cleans out test buckets and passes in a new, fresh test_app.
     """
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        test_app = get_app()
-        testing.clear_test_buckets()
-        return func(test_app, *args, **kwargs)
+    def __init__(self, paste_config, mgoblin_config, dump_old_app=True):
+        self.paste_config = paste_config
+        self.mgoblin_config = mgoblin_config
 
-    return wrapper
+    def __call__(self, func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            test_app = get_app(
+                paste_config=self.paste_config,
+                mgoblin_config=self.mgoblin_config,
+                dump_old_app=self.dump_old_app)
+            testing.clear_test_buckets()
+            return func(test_app, *args, **kwargs)
+
+        return wrapper
+
+setup_fresh_app = SetupFreshApp(TEST_SERVER_CONFIG, TEST_APP_CONFIG)
 
 
 def install_fixtures_simple(db, fixtures):
