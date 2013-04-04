@@ -180,6 +180,7 @@ class SetupFreshApp(object):
     def __init__(self, paste_config, mgoblin_config, dump_old_app=True):
         self.paste_config = paste_config
         self.mgoblin_config = mgoblin_config
+        self.dump_old_app = dump_old_app
 
     def __call__(self, func):
         @wraps(func)
