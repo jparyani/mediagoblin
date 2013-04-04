@@ -44,6 +44,8 @@ TEST_APP_CONFIG = pkg_resources.resource_filename(
 TEST_USER_DEV = pkg_resources.resource_filename(
     'mediagoblin.tests', 'test_user_dev')
 MGOBLIN_APP = None
+OLD_MGOBLIN_APP_CONFIGS = (None, None)
+
 
 USER_DEV_DIRECTORIES_TO_SETUP = [
     'media/public', 'media/queue',
@@ -103,7 +105,10 @@ def suicide_if_bad_celery_environ():
         raise BadCeleryEnviron(BAD_CELERY_MESSAGE)
 
 
-def get_app(dump_old_app=True):
+def get_app(paste_config=None, mgoblin_config=None, dump_old_app=True):
+    paste_config = paste_config or TEST_SERVER_CONFIG
+    mgoblin_config = mgoblin_config or TEST_APP_CONFIG
+
     suicide_if_bad_celery_environ()
 
     # Make sure we've turned on testing
@@ -116,7 +121,13 @@ def get_app(dump_old_app=True):
 
     # Just return the old app if that exists and it's okay to set up
     # and return
-    if MGOBLIN_APP and not dump_old_app:
+    #
+    # ...Man I can't wait till we get rid of paste configs in tests.
+    global OLD_MGOBLIN_APP_CONFIGS
+    old_paste, old_mgoblin = OLD_MGOBLIN_APP_CONFIGS
+
+    if MGOBLIN_APP and not dump_old_app \
+       and old_paste == paste_config and old_mgoblin == mgoblin_config:
         return MGOBLIN_APP
 
     Session.rollback()
@@ -152,6 +163,10 @@ def get_app(dump_old_app=True):
 
     app = TestApp(test_app)
     MGOBLIN_APP = app
+
+    # Make sure we can see if this app matches the next app if not
+    # re-setting-up
+    OLD_MGOBLIN_APP_CONFIGS = (paste_config, mgoblin_config)
 
     return app
 
