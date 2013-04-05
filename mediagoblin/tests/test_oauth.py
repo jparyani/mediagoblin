@@ -21,15 +21,14 @@ from urlparse import parse_qs, urlparse
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, pluginapi
-from mediagoblin.tests.tools import get_app, fixture_add_user
+from mediagoblin.tests.tools import fixture_add_user
 
 
 _log = logging.getLogger(__name__)
 
 
 class TestOAuth(object):
-    def setup(self):
-        self.app = get_app()
+    def _setup(self, test_app):
         self.db = mg_globals.database
 
         self.pman = pluginapi.PluginManager()
@@ -37,17 +36,17 @@ class TestOAuth(object):
         self.user_password = u'4cc355_70k3N'
         self.user = fixture_add_user(u'joauth', self.user_password)
 
-        self.login()
+        self.login(test_app)
 
-    def login(self):
-        self.app.post(
+    def login(self, test_app):
+        test_app.post(
                 '/auth/login/', {
                     'username': self.user.username,
                     'password': self.user_password})
 
-    def register_client(self, name, client_type, description=None,
+    def register_client(self, test_app, name, client_type, description=None,
             redirect_uri=''):
-        return self.app.post(
+        return test_app.post(
                 '/oauth/client/register', {
                     'name': name,
                     'description': description,
@@ -57,9 +56,11 @@ class TestOAuth(object):
     def get_context(self, template_name):
         return template.TEMPLATE_TEST_CONTEXT[template_name]
 
-    def test_1_public_client_registration_without_redirect_uri(self):
+    def test_1_public_client_registration_without_redirect_uri(self, test_app):
         ''' Test 'public' OAuth client registration without any redirect uri '''
-        response = self.register_client(u'OMGOMGOMG', 'public',
+        self._setup(test_app)
+
+        response = self.register_client(test_app, u'OMGOMGOMG', 'public',
                 'OMGOMG Apache License v2')
 
         ctx = self.get_context('oauth/client/register.html')
@@ -75,10 +76,10 @@ class TestOAuth(object):
         # Should not pass through
         assert not client
 
-    def test_2_successful_public_client_registration(self):
+    def test_2_successful_public_client_registration(self, test_app):
         ''' Successfully register a public client '''
-        self.login()
-        self.register_client(u'OMGOMG', 'public', 'OMG!',
+        self._setup(test_app)
+        self.register_client(test_app, u'OMGOMG', 'public', 'OMG!',
                 'http://foo.example')
 
         client = self.db.OAuthClient.query.filter(
@@ -87,9 +88,12 @@ class TestOAuth(object):
         # Client should have been registered
         assert client
 
-    def test_3_successful_confidential_client_reg(self):
+    def test_3_successful_confidential_client_reg(self, test_app):
         ''' Register a confidential OAuth client '''
-        response = self.register_client(u'GMOGMO', 'confidential', 'NO GMO!')
+        self._setup(test_app)
+
+        response = self.register_client(
+            test_app, u'GMOGMO', 'confidential', 'NO GMO!')
 
         assert response.status_int == 302
 
@@ -101,15 +105,16 @@ class TestOAuth(object):
 
         return client
 
-    def test_4_authorize_confidential_client(self):
+    def test_4_authorize_confidential_client(self, test_app):
         ''' Authorize a confidential client as a logged in user '''
+        self._setup(test_app)
 
-        client = self.test_3_successful_confidential_client_reg()
+        client = self.test_3_successful_confidential_client_reg(test_app)
 
         client_identifier = client.identifier
 
         redirect_uri = 'https://foo.example'
-        response = self.app.get('/oauth/authorize', {
+        response = test_app.get('/oauth/authorize', {
                 'client_id': client.identifier,
                 'scope': 'admin',
                 'redirect_uri': redirect_uri})
@@ -122,7 +127,7 @@ class TestOAuth(object):
         form = ctx['form']
 
         # Short for client authorization post reponse
-        capr = self.app.post(
+        capr = test_app.post(
                 '/oauth/client/authorize', {
                     'client_id': form.client_id.data,
                     'allow': 'Allow',
@@ -139,16 +144,19 @@ class TestOAuth(object):
     def get_code_from_redirect_uri(self, uri):
         return parse_qs(urlparse(uri).query)['code'][0]
 
-    def test_token_endpoint_successful_confidential_request(self):
+    def test_token_endpoint_successful_confidential_request(self, test_app):
         ''' Successful request against token endpoint '''
-        code_redirect, client_id = self.test_4_authorize_confidential_client()
+        self._setup(test_app)
+
+        code_redirect, client_id = self.test_4_authorize_confidential_client(
+            test_app)
 
         code = self.get_code_from_redirect_uri(code_redirect.location)
 
         client = self.db.OAuthClient.query.filter(
                 self.db.OAuthClient.identifier == unicode(client_id)).first()
 
-        token_res = self.app.get('/oauth/access_token?client_id={0}&\
+        token_res = test_app.get('/oauth/access_token?client_id={0}&\
 code={1}&client_secret={2}'.format(client_id, code, client.secret))
 
         assert token_res.status_int == 200
@@ -162,16 +170,19 @@ code={1}&client_secret={2}'.format(client_id, code, client.secret))
         assert type(token_data['expires_in']) == int
         assert token_data['expires_in'] > 0
 
-    def test_token_endpont_missing_id_confidential_request(self):
+    def test_token_endpont_missing_id_confidential_request(self, test_app):
         ''' Unsuccessful request against token endpoint, missing client_id '''
-        code_redirect, client_id = self.test_4_authorize_confidential_client()
+        self._setup(test_app)
+
+        code_redirect, client_id = self.test_4_authorize_confidential_client(
+            test_app)
 
         code = self.get_code_from_redirect_uri(code_redirect.location)
 
         client = self.db.OAuthClient.query.filter(
                 self.db.OAuthClient.identifier == unicode(client_id)).first()
 
-        token_res = self.app.get('/oauth/access_token?\
+        token_res = test_app.get('/oauth/access_token?\
 code={0}&client_secret={1}'.format(code, client.secret))
 
         assert token_res.status_int == 200

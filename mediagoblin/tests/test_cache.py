@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from mediagoblin.tests.tools import setup_fresh_app
 from mediagoblin import mg_globals
 
 
@@ -37,7 +36,6 @@ def _get_some_data(key):
     return value
 
 
-@setup_fresh_app
 def test_cache_working(test_app):
     some_data_cache = mg_globals.cache.get_cache('sum_data')
     assert not some_data_cache.has_key('herp')

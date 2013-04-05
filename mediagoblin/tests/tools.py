@@ -43,7 +43,7 @@ TEST_APP_CONFIG = pkg_resources.resource_filename(
     'mediagoblin.tests', 'test_mgoblin_app.ini')
 TEST_USER_DEV = pkg_resources.resource_filename(
     'mediagoblin.tests', 'test_user_dev')
-MGOBLIN_APP = None
+
 
 USER_DEV_DIRECTORIES_TO_SETUP = [
     'media/public', 'media/queue',
@@ -103,7 +103,30 @@ def suicide_if_bad_celery_environ():
         raise BadCeleryEnviron(BAD_CELERY_MESSAGE)
 
 
-def get_app(dump_old_app=True):
+def get_app(request, paste_config=None, mgoblin_config=None):
+    """Create a MediaGoblin app for testing.
+
+    Args:
+     - request: Not an http request, but a pytest fixture request.  We
+       use this to make temporary directories that pytest
+       automatically cleans up as needed.
+     - paste_config: particular paste config used by this application.
+     - mgoblin_config: particular mediagoblin config used by this
+       application.
+    """
+    paste_config = paste_config or TEST_SERVER_CONFIG
+    mgoblin_config = mgoblin_config or TEST_APP_CONFIG
+
+    # This is the directory we're copying the paste/mgoblin config stuff into
+    run_dir = request.config._tmpdirhandler.mktemp(
+        'mgoblin_app', numbered=True)
+    user_dev_dir = run_dir.mkdir('test_user_dev').strpath
+
+    new_paste_config = run_dir.join('paste.ini').strpath
+    new_mgoblin_config = run_dir.join('mediagoblin.ini').strpath
+    shutil.copyfile(paste_config, new_paste_config)
+    shutil.copyfile(mgoblin_config, new_mgoblin_config)
+
     suicide_if_bad_celery_environ()
 
     # Make sure we've turned on testing
@@ -112,26 +135,16 @@ def get_app(dump_old_app=True):
     # Leave this imported as it sets up celery.
     from mediagoblin.init.celery import from_tests
 
-    global MGOBLIN_APP
-
-    # Just return the old app if that exists and it's okay to set up
-    # and return
-    if MGOBLIN_APP and not dump_old_app:
-        return MGOBLIN_APP
-
     Session.rollback()
     Session.remove()
 
-    # Remove and reinstall user_dev directories
-    if os.path.exists(TEST_USER_DEV):
-        shutil.rmtree(TEST_USER_DEV)
-
+    # install user_dev directories
     for directory in USER_DEV_DIRECTORIES_TO_SETUP:
-        full_dir = os.path.join(TEST_USER_DEV, directory)
+        full_dir = os.path.join(user_dev_dir, directory)
         os.makedirs(full_dir)
 
     # Get app config
-    global_config, validation_result = read_mediagoblin_config(TEST_APP_CONFIG)
+    global_config, validation_result = read_mediagoblin_config(new_mgoblin_config)
     app_config = global_config['mediagoblin']
 
     # Run database setup/migrations
@@ -139,7 +152,7 @@ def get_app(dump_old_app=True):
 
     # setup app and return
     test_app = loadapp(
-        'config:' + TEST_SERVER_CONFIG)
+        'config:' + new_paste_config)
 
     # Re-setup celery
     setup_celery_app(app_config, global_config)
@@ -151,24 +164,8 @@ def get_app(dump_old_app=True):
     mg_globals.app.meddleware.insert(0, TestingMeddleware(mg_globals.app))
 
     app = TestApp(test_app)
-    MGOBLIN_APP = app
 
     return app
-
-
-def setup_fresh_app(func):
-    """
-    Decorator to setup a fresh test application for this function.
-
-    Cleans out test buckets and passes in a new, fresh test_app.
-    """
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        test_app = get_app()
-        testing.clear_test_buckets()
-        return func(test_app, *args, **kwargs)
-
-    return wrapper
 
 
 def install_fixtures_simple(db, fixtures):

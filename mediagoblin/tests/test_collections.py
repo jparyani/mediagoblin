@@ -14,17 +14,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.tests.tools import fixture_add_collection, fixture_add_user, \
-    get_app
+from mediagoblin.tests.tools import fixture_add_collection, fixture_add_user
 from mediagoblin.db.models import Collection, User
-from mediagoblin.db.base import Session
 from nose.tools import assert_equal
 
 
-def test_user_deletes_collection():
+def test_user_deletes_collection(test_app):
     # Setup db.
-    get_app(dump_old_app=False)
-
     user = fixture_add_user()
     coll = fixture_add_collection(user=user)
     # Reload into session:
