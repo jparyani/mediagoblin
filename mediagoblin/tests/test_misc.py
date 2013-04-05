@@ -18,18 +18,15 @@ from nose.tools import assert_equal
 
 from mediagoblin.db.base import Session
 from mediagoblin.db.models import User, MediaEntry, MediaComment
-from mediagoblin.tests.tools import get_app, \
-    fixture_add_user, fixture_media_entry
+from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
 
 
-def test_404_for_non_existent():
-    test_app = get_app(dump_old_app=False)
+def test_404_for_non_existent(test_app):
     res = test_app.get('/does-not-exist/', expect_errors=True)
     assert_equal(res.status_int, 404)
 
 
-def test_user_deletes_other_comments():
-    get_app()   # gotta init the db and etc
+def test_user_deletes_other_comments(test_app):
     user_a = fixture_add_user(u"chris_a")
     user_b = fixture_add_user(u"chris_b")
 
@@ -81,8 +78,7 @@ def test_user_deletes_other_comments():
     assert_equal(cmt_cnt2, cmt_cnt1 - 4)
 
 
-def test_media_deletes_broken_attachment():
-    get_app()   # gotta init the db and etc
+def test_media_deletes_broken_attachment(test_app):
     user_a = fixture_add_user(u"chris_a")
 
     media = fixture_media_entry(uploader=user_a.id, save=False)

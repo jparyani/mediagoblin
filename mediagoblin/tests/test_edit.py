@@ -18,31 +18,31 @@ from nose.tools import assert_equal
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User
-from mediagoblin.tests.tools import get_app, fixture_add_user
+from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin.tools import template
 from mediagoblin.auth.lib import bcrypt_check_password
 
 class TestUserEdit(object):
     def setup(self):
-        self.app = get_app(dump_old_app=False)
         # set up new user
         self.user_password = u'toast'
         self.user = fixture_add_user(password = self.user_password)
-        self.login()
 
-    def login(self):
-        self.app.post(
+    def login(self, test_app):
+        test_app.post(
             '/auth/login/', {
                 'username': self.user.username,
                 'password': self.user_password})
 
 
-    def test_user_deletion(self):
+    def test_user_deletion(self, test_app):
         """Delete user via web interface"""
+        self.login(test_app)
+
         # Make sure user exists
         assert User.query.filter_by(username=u'chris').first()
 
-        res = self.app.post('/edit/account/delete/', {'confirmed': 'y'})
+        res = test_app.post('/edit/account/delete/', {'confirmed': 'y'})
 
         # Make sure user has been deleted
         assert User.query.filter_by(username=u'chris').first() == None
@@ -52,14 +52,16 @@ class TestUserEdit(object):
 
         #Restore user at end of test
         self.user = fixture_add_user(password = self.user_password)
-        self.login()
+        self.login(test_app)
 
 
-    def test_change_password(self):
+    def test_change_password(self, test_app):
         """Test changing password correctly and incorrectly"""
+        self.login(test_app)
+
         # test that the password can be changed
         # template.clear_test_template_context()
-        res = self.app.post(
+        res = test_app.post(
             '/edit/account/', {
                 'old_password': 'toast',
                 'new_password': '123456',
@@ -76,7 +78,7 @@ class TestUserEdit(object):
 
         # test that the password cannot be changed if the given
         # old_password is wrong template.clear_test_template_context()
-        self.app.post(
+        test_app.post(
             '/edit/account/', {
                 'old_password': 'toast',
                 'new_password': '098765',
@@ -86,11 +88,12 @@ class TestUserEdit(object):
         assert not bcrypt_check_password('098765', test_user.pw_hash)
 
 
-
-    def test_change_bio_url(self):
+    def test_change_bio_url(self, test_app):
         """Test changing bio and URL"""
+        self.login(test_app)
+
         # Test if legacy profile editing URL redirects correctly
-        res = self.app.post(
+        res = test_app.post(
             '/edit/profile/', {
                 'bio': u'I love toast!',
                 'url': u'http://dustycloud.org/'}, expect_errors=True)
@@ -99,7 +102,7 @@ class TestUserEdit(object):
         assert_equal (res.status_int, 302)
         assert res.headers['Location'].endswith("/u/chris/edit/")
 
-        res = self.app.post(
+        res = test_app.post(
             '/u/chris/edit/', {
                 'bio': u'I love toast!',
                 'url': u'http://dustycloud.org/'})
@@ -110,7 +113,7 @@ class TestUserEdit(object):
 
         # change a different user than the logged in (should fail with 403)
         fixture_add_user(username=u"foo")
-        res = self.app.post(
+        res = test_app.post(
             '/u/foo/edit/', {
                 'bio': u'I love toast!',
                 'url': u'http://dustycloud.org/'}, expect_errors=True)
@@ -119,7 +122,7 @@ class TestUserEdit(object):
         # test changing the bio and the URL inproperly
         too_long_bio = 150 * 'T' + 150 * 'o' + 150 * 'a' + 150 * 's' + 150* 't'
 
-        self.app.post(
+        test_app.post(
             '/u/chris/edit/', {
                 # more than 500 characters
                 'bio': too_long_bio,

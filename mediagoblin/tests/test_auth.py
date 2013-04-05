@@ -22,7 +22,7 @@ from nose.tools import assert_equal
 from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.db.models import User
-from mediagoblin.tests.tools import setup_fresh_app, get_app, fixture_add_user
+from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin.tools import template, mail
 
 
@@ -65,7 +65,6 @@ def test_bcrypt_gen_password_hash():
         'notthepassword', hashed_pw, '3><7R45417')
 
 
-@setup_fresh_app
 def test_register_views(test_app):
     """
     Massive test function that all our registration-related views all work.
@@ -300,11 +299,10 @@ def test_register_views(test_app):
     assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
 
 
-def test_authentication_views():
+def test_authentication_views(test_app):
     """
     Test logging in and logging out
     """
-    test_app = get_app(dump_old_app=False)
     # Make a new user
     test_user = fixture_add_user(active_user=False)
 

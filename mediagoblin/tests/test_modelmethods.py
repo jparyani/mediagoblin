@@ -22,8 +22,7 @@ from nose.tools import assert_equal
 from mediagoblin.db.base import Session
 from mediagoblin.db.models import MediaEntry
 
-from mediagoblin.tests.tools import get_app, \
-    fixture_add_user
+from mediagoblin.tests.tools import fixture_add_user
 
 import mock
 
@@ -35,8 +34,7 @@ UUID_MOCK = mock.Mock(return_value=FakeUUID())
 
 
 class TestMediaEntrySlugs(object):
-    def setup(self):
-        self.test_app = get_app(dump_old_app=True)
+    def _setup(self):
         self.chris_user = fixture_add_user(u'chris')
         self.emily_user = fixture_add_user(u'emily')
         self.existing_entry = self._insert_media_entry_fixture(
@@ -57,56 +55,78 @@ class TestMediaEntrySlugs(object):
 
         return entry
 
-    def test_unique_slug_from_title(self):
+    def test_unique_slug_from_title(self, test_app):
+        self._setup()
+
         entry = self._insert_media_entry_fixture(u"Totally unique slug!", save=False)
         entry.generate_slug()
         assert entry.slug == u'totally-unique-slug'
 
-    def test_old_good_unique_slug(self):
+    def test_old_good_unique_slug(self, test_app):
+        self._setup()
+
         entry = self._insert_media_entry_fixture(
             u"A title here", u"a-different-slug-there", save=False)
         entry.generate_slug()
         assert entry.slug == u"a-different-slug-there"
 
-    def test_old_weird_slug(self):
+    def test_old_weird_slug(self, test_app):
+        self._setup()
+
         entry = self._insert_media_entry_fixture(
             slug=u"wowee!!!!!", save=False)
         entry.generate_slug()
         assert entry.slug == u"wowee"
 
-    def test_existing_slug_use_id(self):
+    def test_existing_slug_use_id(self, test_app):
+        self._setup()
+
         entry = self._insert_media_entry_fixture(
             u"Beware, I exist!!", this_id=9000, save=False)
         entry.generate_slug()
         assert entry.slug == u"beware-i-exist-9000"
 
-    @mock.patch('uuid.uuid4', UUID_MOCK)
-    def test_existing_slug_cant_use_id(self):
-        # This one grabs the nine thousand slug
-        self._insert_media_entry_fixture(
-            slug=u"beware-i-exist-9000")
+    def test_existing_slug_cant_use_id(self, test_app):
+        self._setup()
 
-        entry = self._insert_media_entry_fixture(
-            u"Beware, I exist!!", this_id=9000, save=False)
-        entry.generate_slug()
-        assert entry.slug == u"beware-i-exist-test"
+        # Getting tired of dealing with test_app and this mock.patch
+        # thing conflicting, getting lazy.
+        @mock.patch('uuid.uuid4', UUID_MOCK)
+        def _real_test():
+            # This one grabs the nine thousand slug
+            self._insert_media_entry_fixture(
+                slug=u"beware-i-exist-9000")
 
-    @mock.patch('uuid.uuid4', UUID_MOCK)
-    def test_existing_slug_cant_use_id_extra_junk(self):
-        # This one grabs the nine thousand slug
-        self._insert_media_entry_fixture(
-            slug=u"beware-i-exist-9000")
+            entry = self._insert_media_entry_fixture(
+                u"Beware, I exist!!", this_id=9000, save=False)
+            entry.generate_slug()
+            assert entry.slug == u"beware-i-exist-test"
+            
+        _real_test()
 
-        # This one grabs makes sure the annoyance doesn't stop
-        self._insert_media_entry_fixture(
-            slug=u"beware-i-exist-test")
+    def test_existing_slug_cant_use_id_extra_junk(self, test_app):
+        self._setup()
 
-        entry = self._insert_media_entry_fixture(
-             u"Beware, I exist!!", this_id=9000, save=False)
-        entry.generate_slug()
-        assert entry.slug == u"beware-i-exist-testtest"
+        # Getting tired of dealing with test_app and this mock.patch
+        # thing conflicting, getting lazy.
+        @mock.patch('uuid.uuid4', UUID_MOCK)
+        def _real_test():
+            # This one grabs the nine thousand slug
+            self._insert_media_entry_fixture(
+                slug=u"beware-i-exist-9000")
 
-    def test_garbage_slug(self):
+            # This one grabs makes sure the annoyance doesn't stop
+            self._insert_media_entry_fixture(
+                slug=u"beware-i-exist-test")
+
+            entry = self._insert_media_entry_fixture(
+                 u"Beware, I exist!!", this_id=9000, save=False)
+            entry.generate_slug()
+            assert entry.slug == u"beware-i-exist-testtest"
+
+        _real_test()
+
+    def test_garbage_slug(self, test_app):
         """
         Titles that sound totally like Q*Bert shouldn't have slugs at
         all.  We'll just reference them by id.
@@ -126,14 +146,15 @@ class TestMediaEntrySlugs(object):
           | |#| |#| |#| |#|
            \|/ \|/ \|/ \|/
         """
+        self._setup()
+
         qbert_entry = self._insert_media_entry_fixture(
             u"@!#?@!", save=False)
         qbert_entry.generate_slug()
         assert qbert_entry.slug is None
 
 
-def test_media_data_init():
-    get_app()   # gotta init the db and etc
+def test_media_data_init(test_app):
     Session.rollback()
     Session.remove()
     media = MediaEntry()

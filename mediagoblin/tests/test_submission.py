@@ -24,8 +24,7 @@ import os
 from nose.tools import assert_equal, assert_true
 from pkg_resources import resource_filename
 
-from mediagoblin.tests.tools import get_app, \
-    fixture_add_user
+from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools import template
@@ -51,8 +50,8 @@ REQUEST_CONTEXT = ['mediagoblin/user_pages/user.html', 'request']
 
 
 class TestSubmission:
-    def setup(self):
-        self.test_app = get_app(dump_old_app=False)
+    def _setup(self, test_app):
+        self.test_app = test_app
 
         # TODO: Possibly abstract into a decorator like:
         # @as_authenticated_user('chris')
@@ -90,7 +89,9 @@ class TestSubmission:
         comments = request.db.MediaComment.find({'media_entry': media_id})
         assert_equal(count, len(list(comments)))
 
-    def test_missing_fields(self):
+    def test_missing_fields(self, test_app):
+        self._setup(test_app)
+
         # Test blank form
         # ---------------
         response, form = self.do_post({}, *FORM_CONTEXT)
@@ -117,10 +118,12 @@ class TestSubmission:
         self.logout()
         self.test_app.get(url)
 
-    def test_normal_jpg(self):
+    def test_normal_jpg(self, test_app):
+        self._setup(test_app)
         self.check_normal_upload(u'Normal upload 1', GOOD_JPG)
 
-    def test_normal_png(self):
+    def test_normal_png(self, test_app):
+        self._setup(test_app)
         self.check_normal_upload(u'Normal upload 2', GOOD_PNG)
 
     def check_media(self, request, find_data, count=None):
@@ -131,7 +134,9 @@ class TestSubmission:
                 return
         return media[0]
 
-    def test_tags(self):
+    def test_tags(self, test_app):
+        self._setup(test_app)
+
         # Good tag string
         # --------
         response, request = self.do_post({'title': u'Balanced Goblin 2',
@@ -156,7 +161,9 @@ class TestSubmission:
                     'Tags that are too long: ' \
                     'ffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuuuu'])
 
-    def test_delete(self):
+    def test_delete(self, test_app):
+        self._setup(test_app)
+
         response, request = self.do_post({'title': u'Balanced Goblin'},
                                          *REQUEST_CONTEXT, do_follow=True,
                                          **self.upload_data(GOOD_JPG))
@@ -201,7 +208,9 @@ class TestSubmission:
         self.check_media(request, {'id': media_id}, 0)
         self.check_comments(request, media_id, 0)
 
-    def test_evil_file(self):
+    def test_evil_file(self, test_app):
+        self._setup(test_app)
+
         # Test non-suppoerted file with non-supported extension
         # -----------------------------------------------------
         response, form = self.do_post({'title': u'Malicious Upload 1'},
@@ -212,9 +221,11 @@ class TestSubmission:
                 str(form.file.errors[0])
 
 
-    def test_get_media_manager(self):
+    def test_get_media_manager(self, test_app):
         """Test if the get_media_manger function returns sensible things
         """
+        self._setup(test_app)
+
         response, request = self.do_post({'title': u'Balanced Goblin'},
                                          *REQUEST_CONTEXT, do_follow=True,
                                          **self.upload_data(GOOD_JPG))
@@ -224,10 +235,12 @@ class TestSubmission:
         assert_equal(media.media_manager, img_MEDIA_MANAGER)
 
 
-    def test_sniffing(self):
+    def test_sniffing(self, test_app):
         '''
         Test sniffing mechanism to assert that regular uploads work as intended
         '''
+        self._setup(test_app)
+
         template.clear_test_template_context()
         response = self.test_app.post(
             '/submit/', {
@@ -257,22 +270,33 @@ class TestSubmission:
         assert_equal(entry.state, 'failed')
         assert_equal(entry.fail_error, u'mediagoblin.processing:BadMediaFail')
 
-    def test_evil_jpg(self):
+    def test_evil_jpg(self, test_app):
+        self._setup(test_app)
+
         # Test non-supported file with .jpg extension
         # -------------------------------------------
         self.check_false_image(u'Malicious Upload 2', EVIL_JPG)
 
-    def test_evil_png(self):
+    def test_evil_png(self, test_app):
+        self._setup(test_app)
+
         # Test non-supported file with .png extension
         # -------------------------------------------
         self.check_false_image(u'Malicious Upload 3', EVIL_PNG)
 
-    def test_media_data(self):
+    def test_media_data(self, test_app):
+        self._setup(test_app)
+
         self.check_normal_upload(u"With GPS data", GPS_JPG)
         media = self.check_media(None, {"title": u"With GPS data"}, 1)
         assert_equal(media.media_data.gps_latitude, 59.336666666666666)
 
-    def test_processing(self):
+    def test_processing(self, test_app):
+        self._setup(test_app)
+
+        public_store_dir = mg_globals.global_config[
+            'storage:publicstore']['base_dir']
+
         data = {'title': u'Big Blue'}
         response, request = self.do_post(data, *REQUEST_CONTEXT, do_follow=True,
                                          **self.upload_data(BIG_BLUE))
@@ -282,10 +306,9 @@ class TestSubmission:
                               ('medium', 'bigblue.medium.png'),
                               ('thumb', 'bigblue.thumbnail.png')):
             # Does the processed image have a good filename?
-            filename = resource_filename(
-                'mediagoblin.tests',
-                os.path.join('test_user_dev/media/public',
-                             *media.media_files.get(key, [])))
+            filename = os.path.join(
+                public_store_dir,
+                *media.media_files.get(key, []))
             assert_true(filename.endswith('_' + basename))
             # Is it smaller than the last processed image we looked at?
             size = os.stat(filename).st_size

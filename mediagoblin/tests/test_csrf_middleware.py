@@ -14,12 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.tests.tools import get_app
 from mediagoblin import mg_globals
 
 
-def test_csrf_cookie_set():
-    test_app = get_app(dump_old_app=False)
+def test_csrf_cookie_set(test_app):
     cookie_name = mg_globals.app_config['csrf_cookie_name']
 
     # get login page
@@ -33,11 +31,14 @@ def test_csrf_cookie_set():
     assert response.headers.get('Vary', False) == 'Cookie'
 
 
-def test_csrf_token_must_match():
-    # We need a fresh app for this test on webtest < 1.3.6.
-    # We do not understand why, but it fixes the tests.
-    # If we require webtest >= 1.3.6, we can switch to a non fresh app here.
-    test_app = get_app(dump_old_app=True)
+# We need a fresh app for this test on webtest < 1.3.6.
+# We do not understand why, but it fixes the tests.
+# If we require webtest >= 1.3.6, we can switch to a non fresh app here.
+# 
+# ... this comment might be irrelevant post-pytest-fixtures, but I'm not
+# removing it yet in case we move to module-level tests :)
+#   -- cwebber
+def test_csrf_token_must_match(test_app):
 
     # construct a request with no cookie or form token
     assert test_app.post('/auth/login/',
@@ -67,8 +68,7 @@ def test_csrf_token_must_match():
                          extra_environ={'gmg.verify_csrf': True}).\
                          status_int == 200
 
-def test_csrf_exempt():
-    test_app = get_app(dump_old_app=False)
+def test_csrf_exempt(test_app):
     # monkey with the views to decorate a known endpoint
     import mediagoblin.auth.views
     from mediagoblin.meddleware.csrf import csrf_exempt

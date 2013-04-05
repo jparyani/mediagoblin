@@ -20,9 +20,11 @@ import base64
 
 from pkg_resources import resource_filename
 
+import pytest
+
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, pluginapi
-from mediagoblin.tests.tools import get_app, fixture_add_user
+from mediagoblin.tests.tools import fixture_add_user
 
 
 _log = logging.getLogger(__name__)
@@ -42,16 +44,16 @@ EVIL_PNG = resource('evil.png')
 BIG_BLUE = resource('bigblue.png')
 
 
+@pytest.mark.usefixtures("test_app")
 class TestAPI(object):
     def setup(self):
-        self.app = get_app(dump_old_app=False)
         self.db = mg_globals.database
 
         self.user_password = u'4cc355_70k3N'
         self.user = fixture_add_user(u'joapi', self.user_password)
 
-    def login(self):
-        self.app.post(
+    def login(self, test_app):
+        test_app.post(
             '/auth/login/', {
                 'username': self.user.username,
                 'password': self.user_password})
@@ -65,14 +67,14 @@ class TestAPI(object):
                     self.user.username,
                     self.user_password])))}
 
-    def do_post(self, data, **kwargs):
+    def do_post(self, data, test_app, **kwargs):
         url = kwargs.pop('url', '/api/submit')
         do_follow = kwargs.pop('do_follow', False)
 
         if not 'headers' in kwargs.keys():
             kwargs['headers'] = self.http_auth_headers()
 
-        response = self.app.post(url, data, **kwargs)
+        response = test_app.post(url, data, **kwargs)
 
         if do_follow:
             response.follow()
@@ -82,21 +84,22 @@ class TestAPI(object):
     def upload_data(self, filename):
         return {'upload_files': [('file', filename)]}
 
-    def test_1_test_test_view(self):
-        self.login()
+    def test_1_test_test_view(self, test_app):
+        self.login(test_app)
 
-        response = self.app.get(
+        response = test_app.get(
             '/api/test',
             headers=self.http_auth_headers())
 
         assert response.body == \
                 '{"username": "joapi", "email": "joapi@example.com"}'
 
-    def test_2_test_submission(self):
-        self.login()
+    def test_2_test_submission(self, test_app):
+        self.login(test_app)
 
         response = self.do_post(
             {'title': 'Great JPG!'},
+            test_app,
             **self.upload_data(GOOD_JPG))
 
         assert response.status_int == 200
