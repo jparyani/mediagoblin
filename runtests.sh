@@ -49,9 +49,16 @@ echo "+ CELERY_CONFIG_MODULE=$CELERY_CONFIG_MODULE"
 # will try to read all directories, and this turns into a mess!
 
 need_arg=1
+ignore_next=0
 for i in "$@"
 do
+  if [ "$ignore_next" = 1 ]
+  then
+    ignore_next=0
+    continue
+  fi
   case "$i" in
+    -n) ignore_next=1;;
     -*) ;;
     *) need_arg=0; break ;;
   esac
