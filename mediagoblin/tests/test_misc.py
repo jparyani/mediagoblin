@@ -14,8 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from nose.tools import assert_equal
-
 from mediagoblin.db.base import Session
 from mediagoblin.db.models import User, MediaEntry, MediaComment
 from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
@@ -23,7 +21,7 @@ from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
 
 def test_404_for_non_existent(test_app):
     res = test_app.get('/does-not-exist/', expect_errors=True)
-    assert_equal(res.status_int, 404)
+    assert res.status_int == 404
 
 
 def test_user_deletes_other_comments(test_app):
@@ -58,11 +56,11 @@ def test_user_deletes_other_comments(test_app):
     cmt_cnt2 = MediaComment.query.count()
 
     # One user deleted
-    assert_equal(usr_cnt2, usr_cnt1 - 1)
+    assert usr_cnt2 == usr_cnt1 - 1
     # One media gone
-    assert_equal(med_cnt2, med_cnt1 - 1)
+    assert med_cnt2 == med_cnt1 - 1
     # Three of four comments gone.
-    assert_equal(cmt_cnt2, cmt_cnt1 - 3)
+    assert cmt_cnt2 == cmt_cnt1 - 3
 
     User.query.get(user_b.id).delete()
 
@@ -71,11 +69,11 @@ def test_user_deletes_other_comments(test_app):
     cmt_cnt2 = MediaComment.query.count()
 
     # All users gone
-    assert_equal(usr_cnt2, usr_cnt1 - 2)
+    assert usr_cnt2 == usr_cnt1 - 2
     # All media gone
-    assert_equal(med_cnt2, med_cnt1 - 2)
+    assert med_cnt2 == med_cnt1 - 2
     # All comments gone
-    assert_equal(cmt_cnt2, cmt_cnt1 - 4)
+    assert cmt_cnt2 == cmt_cnt1 - 4
 
 
 def test_media_deletes_broken_attachment(test_app):

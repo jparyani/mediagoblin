@@ -18,7 +18,7 @@
 import os
 import tempfile
 
-from nose.tools import assert_raises, assert_equal, assert_true
+import pytest
 from werkzeug.utils import secure_filename
 
 from mediagoblin import storage
@@ -41,10 +41,8 @@ def test_clean_listy_filepath():
     assert storage.clean_listy_filepath(
         ['../../../etc/', 'passwd']) == expected
 
-    assert_raises(
-        storage.InvalidFilepath,
-        storage.clean_listy_filepath,
-        ['../../', 'linooks.jpg'])
+    with pytest.raises(storage.InvalidFilepath):
+        storage.clean_listy_filepath(['../../', 'linooks.jpg'])
 
 
 class FakeStorageSystem():
@@ -78,10 +76,10 @@ def test_storage_system_from_config():
          'garbage_arg': 'garbage_arg',
          'storage_class':
              'mediagoblin.tests.test_storage:FakeStorageSystem'})
-    assert_equal(this_storage.foobie, 'eiboof')
-    assert_equal(this_storage.blech, 'hcelb')
-    assert_equal(unicode(this_storage.__class__),
-                 u'mediagoblin.tests.test_storage.FakeStorageSystem')
+    assert this_storage.foobie == 'eiboof'
+    assert this_storage.blech == 'hcelb'
+    assert unicode(this_storage.__class__) == \
+        u'mediagoblin.tests.test_storage.FakeStorageSystem'
 
 
 ##########################
@@ -108,7 +106,7 @@ def test_basic_storage__resolve_filepath():
     assert result == os.path.join(
         tmpdir, 'etc/passwd')
 
-    assert_raises(
+    pytest.raises(
         storage.InvalidFilepath,
         this_storage._resolve_filepath,
         ['../../', 'etc', 'passwd'])
@@ -205,7 +203,7 @@ def test_basic_storage_delete_file():
 def test_basic_storage_url_for_file():
     # Not supplying a base_url should actually just bork.
     tmpdir, this_storage = get_tmp_filestorage()
-    assert_raises(
+    pytest.raises(
         storage.NoWebServing,
         this_storage.file_url,
         ['dir1', 'dir2', 'filename.txt'])

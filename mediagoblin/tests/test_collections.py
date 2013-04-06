@@ -16,7 +16,6 @@
 
 from mediagoblin.tests.tools import fixture_add_collection, fixture_add_user
 from mediagoblin.db.models import Collection, User
-from nose.tools import assert_equal
 
 
 def test_user_deletes_collection(test_app):
@@ -30,4 +29,4 @@ def test_user_deletes_collection(test_app):
     user.delete()
     cnt2 = Collection.query.count()
 
-    assert_equal(cnt1, cnt2 + 1)
+    assert cnt1 == cnt2 + 1

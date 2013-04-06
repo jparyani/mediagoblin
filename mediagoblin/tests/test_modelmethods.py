@@ -17,8 +17,6 @@
 # Maybe not every model needs a test, but some models have special
 # methods, and so it makes sense to test them here.
 
-from nose.tools import assert_equal
-
 from mediagoblin.db.base import Session
 from mediagoblin.db.models import MediaEntry
 
@@ -166,4 +164,4 @@ def test_media_data_init(test_app):
     for obj in Session():
         obj_in_session += 1
         print repr(obj)
-    assert_equal(obj_in_session, 0)
+    assert obj_in_session == 0

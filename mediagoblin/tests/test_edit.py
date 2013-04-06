@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from nose.tools import assert_equal
+import pytest
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User
@@ -69,7 +69,7 @@ class TestUserEdit(object):
                 })
 
         # Check for redirect on success
-        assert_equal(res.status_int, 302)
+        assert res.status_int == 302
         # test_user has to be fetched again in order to have the current values
         test_user = User.query.filter_by(username=u'chris').first()
         assert bcrypt_check_password('123456', test_user.pw_hash)
@@ -99,7 +99,7 @@ class TestUserEdit(object):
                 'url': u'http://dustycloud.org/'}, expect_errors=True)
 
         # Should redirect to /u/chris/edit/
-        assert_equal (res.status_int, 302)
+        assert res.status_int == 302
         assert res.headers['Location'].endswith("/u/chris/edit/")
 
         res = test_app.post(
@@ -108,8 +108,8 @@ class TestUserEdit(object):
                 'url': u'http://dustycloud.org/'})
 
         test_user = User.query.filter_by(username=u'chris').first()
-        assert_equal(test_user.bio, u'I love toast!')
-        assert_equal(test_user.url, u'http://dustycloud.org/')
+        assert test_user.bio == u'I love toast!'
+        assert test_user.url == u'http://dustycloud.org/'
 
         # change a different user than the logged in (should fail with 403)
         fixture_add_user(username=u"foo")
@@ -117,7 +117,7 @@ class TestUserEdit(object):
             '/u/foo/edit/', {
                 'bio': u'I love toast!',
                 'url': u'http://dustycloud.org/'}, expect_errors=True)
-        assert_equal(res.status_int, 403)
+        assert res.status_int == 403
 
         # test changing the bio and the URL inproperly
         too_long_bio = 150 * 'T' + 150 * 'o' + 150 * 'a' + 150 * 's' + 150* 't'
@@ -129,10 +129,13 @@ class TestUserEdit(object):
                 'url': 'this-is-no-url'})
 
         # Check form errors
-        context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/edit/edit_profile.html']
+        context = template.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/edit/edit_profile.html']
         form = context['form']
 
-        assert_equal(form.bio.errors, [u'Field must be between 0 and 500 characters long.'])
-        assert_equal(form.url.errors, [u'This address contains errors'])
+        assert form.bio.errors == [
+            u'Field must be between 0 and 500 characters long.']
+        assert form.url.errors == [
+            u'This address contains errors']
 
 # test changing the url inproperly

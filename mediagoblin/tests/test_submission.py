@@ -21,7 +21,6 @@ sys.setdefaultencoding('utf-8')
 import urlparse
 import os
 
-from nose.tools import assert_equal, assert_true
 from pkg_resources import resource_filename
 
 from mediagoblin.tests.tools import fixture_add_user
@@ -87,7 +86,7 @@ class TestSubmission:
 
     def check_comments(self, request, media_id, count):
         comments = request.db.MediaComment.find({'media_entry': media_id})
-        assert_equal(count, len(list(comments)))
+        assert count == len(list(comments))
 
     def test_missing_fields(self, test_app):
         self._setup(test_app)
@@ -95,21 +94,21 @@ class TestSubmission:
         # Test blank form
         # ---------------
         response, form = self.do_post({}, *FORM_CONTEXT)
-        assert_equal(form.file.errors, [u'You must provide a file.'])
+        assert form.file.errors == [u'You must provide a file.']
 
         # Test blank file
         # ---------------
         response, form = self.do_post({'title': u'test title'}, *FORM_CONTEXT)
-        assert_equal(form.file.errors, [u'You must provide a file.'])
+        assert form.file.errors == [u'You must provide a file.']
 
     def check_url(self, response, path):
-        assert_equal(urlparse.urlsplit(response.location)[2], path)
+        assert urlparse.urlsplit(response.location)[2] == path
 
     def check_normal_upload(self, title, filename):
         response, context = self.do_post({'title': title}, do_follow=True,
                                          **self.upload_data(filename))
         self.check_url(response, '/u/{0}/'.format(self.test_user.username))
-        assert_true('mediagoblin/user_pages/user.html' in context)
+        assert 'mediagoblin/user_pages/user.html' in context
         # Make sure the media view is at least reachable, logged in...
         url = '/u/{0}/m/{1}/'.format(self.test_user.username,
                                      title.lower().replace(' ', '-'))
@@ -129,7 +128,7 @@ class TestSubmission:
     def check_media(self, request, find_data, count=None):
         media = MediaEntry.find(find_data)
         if count is not None:
-            assert_equal(media.count(), count)
+            assert media.count() == count
             if count == 0:
                 return
         return media[0]
@@ -156,10 +155,10 @@ class TestSubmission:
                                        'tags': BAD_TAG_STRING},
                                       *FORM_CONTEXT,
                                       **self.upload_data(GOOD_JPG))
-        assert_equal(form.tags.errors, [
+        assert form.tags.errors == [
                 u'Tags must be shorter than 50 characters.  ' \
                     'Tags that are too long: ' \
-                    'ffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuuuu'])
+                    'ffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuuuu']
 
     def test_delete(self, test_app):
         self._setup(test_app)
@@ -180,7 +179,7 @@ class TestSubmission:
              'slug': u"Balanced=Goblin",
              'tags': u''})
         media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
-        assert_equal(media.slug, u"balanced-goblin")
+        assert media.slug == u"balanced-goblin"
 
         # Add a comment, so we can test for its deletion later.
         self.check_comments(request, media_id, 0)
@@ -216,7 +215,7 @@ class TestSubmission:
         response, form = self.do_post({'title': u'Malicious Upload 1'},
                                       *FORM_CONTEXT,
                                       **self.upload_data(EVIL_FILE))
-        assert_equal(len(form.file.errors), 1)
+        assert len(form.file.errors) == 1
         assert 'Sorry, I don\'t support that file type :(' == \
                 str(form.file.errors[0])
 
@@ -231,8 +230,8 @@ class TestSubmission:
                                          **self.upload_data(GOOD_JPG))
         media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
 
-        assert_equal(media.media_type, u'mediagoblin.media_types.image')
-        assert_equal(media.media_manager, img_MEDIA_MANAGER)
+        assert media.media_type == u'mediagoblin.media_types.image'
+        assert media.media_manager == img_MEDIA_MANAGER
 
 
     def test_sniffing(self, test_app):
@@ -267,8 +266,8 @@ class TestSubmission:
                                          **self.upload_data(filename))
         self.check_url(response, '/u/{0}/'.format(self.test_user.username))
         entry = mg_globals.database.MediaEntry.find_one({'title': title})
-        assert_equal(entry.state, 'failed')
-        assert_equal(entry.fail_error, u'mediagoblin.processing:BadMediaFail')
+        assert entry.state == 'failed'
+        assert entry.fail_error == u'mediagoblin.processing:BadMediaFail'
 
     def test_evil_jpg(self, test_app):
         self._setup(test_app)
@@ -289,7 +288,7 @@ class TestSubmission:
 
         self.check_normal_upload(u"With GPS data", GPS_JPG)
         media = self.check_media(None, {"title": u"With GPS data"}, 1)
-        assert_equal(media.media_data.gps_latitude, 59.336666666666666)
+        assert media.media_data.gps_latitude == 59.336666666666666
 
     def test_processing(self, test_app):
         self._setup(test_app)
@@ -309,8 +308,8 @@ class TestSubmission:
             filename = os.path.join(
                 public_store_dir,
                 *media.media_files.get(key, []))
-            assert_true(filename.endswith('_' + basename))
+            assert filename.endswith('_' + basename)
             # Is it smaller than the last processed image we looked at?
             size = os.stat(filename).st_size
-            assert_true(last_size > size)
+            assert last_size > size
             last_size = size

@@ -50,9 +50,9 @@ USER_DEV_DIRECTORIES_TO_SETUP = [
     'beaker/sessions/data', 'beaker/sessions/lock']
 
 BAD_CELERY_MESSAGE = """\
-Sorry, you *absolutely* must run nosetests with the
+Sorry, you *absolutely* must run tests with the
 mediagoblin.init.celery.from_tests module.  Like so:
-$ CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests ./bin/nosetests"""
+$ CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests ./bin/py.test"""
 
 
 class BadCeleryEnviron(Exception): pass

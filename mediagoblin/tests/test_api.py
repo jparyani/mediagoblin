@@ -44,7 +44,6 @@ EVIL_PNG = resource('evil.png')
 BIG_BLUE = resource('bigblue.png')
 
 
-@pytest.mark.usefixtures("test_app")
 class TestAPI(object):
     def setup(self):
         self.db = mg_globals.database

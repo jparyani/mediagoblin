@@ -19,7 +19,6 @@ from configobj import ConfigObj
 from mediagoblin import mg_globals
 from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.tools import pluginapi
-from nose.tools import eq_
 
 
 def with_cleanup(*modules_to_delete):
@@ -97,7 +96,7 @@ def test_no_plugins():
     setup_plugins()
 
     # Make sure we didn't load anything.
-    eq_(len(pman.plugins), 0)
+    assert len(pman.plugins) == 0
 
 
 @with_cleanup('mediagoblin.plugins.sampleplugin')
@@ -117,14 +116,14 @@ def test_one_plugin():
     setup_plugins()
 
     # Make sure we only found one plugin
-    eq_(len(pman.plugins), 1)
+    assert len(pman.plugins) == 1
     # Make sure the plugin is the one we think it is.
-    eq_(pman.plugins[0], 'mediagoblin.plugins.sampleplugin')
+    assert pman.plugins[0] == 'mediagoblin.plugins.sampleplugin'
     # Make sure there was one hook registered
-    eq_(len(pman.hooks), 1)
+    assert len(pman.hooks) == 1
     # Make sure _setup_plugin_called was called once
     import mediagoblin.plugins.sampleplugin
-    eq_(mediagoblin.plugins.sampleplugin._setup_plugin_called, 1)
+    assert mediagoblin.plugins.sampleplugin._setup_plugin_called == 1
 
 
 @with_cleanup('mediagoblin.plugins.sampleplugin')
@@ -145,14 +144,14 @@ def test_same_plugin_twice():
     setup_plugins()
 
     # Make sure we only found one plugin
-    eq_(len(pman.plugins), 1)
+    assert len(pman.plugins) == 1
     # Make sure the plugin is the one we think it is.
-    eq_(pman.plugins[0], 'mediagoblin.plugins.sampleplugin')
+    assert pman.plugins[0] == 'mediagoblin.plugins.sampleplugin'
     # Make sure there was one hook registered
-    eq_(len(pman.hooks), 1)
+    assert len(pman.hooks) == 1
     # Make sure _setup_plugin_called was called once
     import mediagoblin.plugins.sampleplugin
-    eq_(mediagoblin.plugins.sampleplugin._setup_plugin_called, 1)
+    assert mediagoblin.plugins.sampleplugin._setup_plugin_called == 1
 
 
 @with_cleanup()
@@ -172,4 +171,4 @@ def test_disabled_plugin():
     setup_plugins()
 
     # Make sure we didn't load the plugin
-    eq_(len(pman.plugins), 0)
+    assert len(pman.plugins) == 0

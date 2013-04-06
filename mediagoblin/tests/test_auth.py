@@ -17,8 +17,6 @@
 import urlparse
 import datetime
 
-from nose.tools import assert_equal
-
 from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.db.models import User
@@ -101,8 +99,8 @@ def test_register_views(test_app):
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
     form = context['register_form']
 
-    assert_equal (form.username.errors, [u'Field must be between 3 and 30 characters long.'])
-    assert_equal (form.password.errors, [u'Field must be between 5 and 1024 characters long.'])
+    assert form.username.errors == [u'Field must be between 3 and 30 characters long.']
+    assert form.password.errors == [u'Field must be between 5 and 1024 characters long.']
 
     ## bad form
     template.clear_test_template_context()
@@ -113,11 +111,11 @@ def test_register_views(test_app):
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
     form = context['register_form']
 
-    assert_equal (form.username.errors, [u'This field does not take email addresses.'])
-    assert_equal (form.email.errors, [u'This field requires an email address.'])
+    assert form.username.errors == [u'This field does not take email addresses.']
+    assert form.email.errors == [u'This field requires an email address.']
 
     ## At this point there should be no users in the database ;)
-    assert_equal(User.query.count(), 0)
+    assert User.query.count() == 0
 
     # Successful register
     # -------------------
@@ -130,9 +128,7 @@ def test_register_views(test_app):
     response.follow()
 
     ## Did we redirect to the proper page?  Use the right template?
-    assert_equal(
-        urlparse.urlsplit(response.location)[2],
-        '/u/happygirl/')
+    assert urlparse.urlsplit(response.location)[2] == '/u/happygirl/'
     assert 'mediagoblin/user_pages/user.html' in template.TEMPLATE_TEST_CONTEXT
 
     ## Make sure user is in place
@@ -223,9 +219,7 @@ def test_register_views(test_app):
     response.follow()
 
     ## Did we redirect to the proper page?  Use the right template?
-    assert_equal(
-        urlparse.urlsplit(response.location)[2],
-        '/auth/login/')
+    assert urlparse.urlsplit(response.location)[2] == '/auth/login/'
     assert 'mediagoblin/auth/login.html' in template.TEMPLATE_TEST_CONTEXT
 
     ## Make sure link to change password is sent by email
@@ -256,7 +250,7 @@ def test_register_views(test_app):
     response = test_app.get(
         "/auth/forgot_password/verify/?userid=%s&token=total_bs" % unicode(
             new_user.id), status=404)
-    assert_equal(response.status.split()[0], u'404') # status="404 NOT FOUND"
+    assert response.status.split()[0] == u'404' # status="404 NOT FOUND"
 
     ## Try using an expired token to change password, shouldn't work
     template.clear_test_template_context()
@@ -265,7 +259,7 @@ def test_register_views(test_app):
     new_user.fp_token_expire = datetime.datetime.now()
     new_user.save()
     response = test_app.get("%s?%s" % (path, get_params), status=404)
-    assert_equal(response.status.split()[0], u'404') # status="404 NOT FOUND"
+    assert response.status.split()[0] == u'404' # status="404 NOT FOUND"
     new_user.fp_token_expire = real_token_expiration
     new_user.save()
 
@@ -293,9 +287,7 @@ def test_register_views(test_app):
 
     # User should be redirected
     response.follow()
-    assert_equal(
-        urlparse.urlsplit(response.location)[2],
-        '/')
+    assert urlparse.urlsplit(response.location)[2] == '/'
     assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
 
 
@@ -370,9 +362,7 @@ def test_authentication_views(test_app):
 
     # User should be redirected
     response.follow()
-    assert_equal(
-        urlparse.urlsplit(response.location)[2],
-        '/')
+    assert urlparse.urlsplit(response.location)[2] == '/'
     assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
 
     # Make sure user is in the session
@@ -387,9 +377,7 @@ def test_authentication_views(test_app):
 
     # Should be redirected to index page
     response.follow()
-    assert_equal(
-        urlparse.urlsplit(response.location)[2],
-        '/')
+    assert urlparse.urlsplit(response.location)[2] == '/'
     assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
 
     # Make sure the user is not in the session
@@ -405,6 +393,4 @@ def test_authentication_views(test_app):
             'username': u'chris',
             'password': 'toast',
             'next' : '/u/chris/'})
-    assert_equal(
-        urlparse.urlsplit(response.location)[2],
-        '/u/chris/')
+    assert urlparse.urlsplit(response.location)[2] == '/u/chris/'
