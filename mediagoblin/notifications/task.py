@@ -16,28 +16,31 @@
 
 import logging
 
-from mediagoblin.tools.routing import add_route, mount, url_map
-from mediagoblin.tools.pluginapi import PluginManager
-from mediagoblin.admin.routing import admin_routes
-from mediagoblin.auth.routing import auth_routes
+from celery import registry
+from celery.task import Task
+
+from mediagoblin.tools.mail import send_email
+from mediagoblin.db.models import CommentNotification
 
 
 _log = logging.getLogger(__name__)
 
 
-def get_url_map():
-    add_route('index', '/', 'mediagoblin.views:root_view')
-    mount('/auth', auth_routes)
-    mount('/a', admin_routes)
+class EmailNotificationTask(Task):
+    '''
+    Celery notification task.
 
-    import mediagoblin.submit.routing
-    import mediagoblin.user_pages.routing
-    import mediagoblin.edit.routing
-    import mediagoblin.webfinger.routing
-    import mediagoblin.listings.routing
-    import mediagoblin.notifications.routing
+    This task is executed by celeryd to offload long-running operations from
+    the web server.
+    '''
+    def run(self, notification_id, message):
+        cn = CommentNotification.query.filter_by(id=notification_id).first()
+        _log.info('Sending notification email about {0}'.format(cn))
 
-    for route in PluginManager().get_routes():
-        add_route(*route)
+        return send_email(
+            message['from'],
+            [message['to']],
+            message['subject'],
+            message['body'])
 
-    return url_map
+email_notification_task = registry.tasks[EmailNotificationTask.name]

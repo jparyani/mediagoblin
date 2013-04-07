@@ -167,6 +167,8 @@
 
     {% include "mediagoblin/utils/exif.html" %}
 
+    {% include "mediagoblin/utils/comment-subscription.html" %}
+
     {%- if media.attachment_files|count %}
       <h3>{% trans %}Attachments{% endtrans %}</h3>
       <ul>

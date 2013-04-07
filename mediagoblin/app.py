@@ -37,6 +37,7 @@ from mediagoblin.init import (get_jinja_loader, get_staticdirector,
     setup_storage)
 from mediagoblin.tools.pluginapi import PluginManager, hook_transform
 from mediagoblin.tools.crypto import setup_crypto
+from mediagoblin import notifications
 
 
 _log = logging.getLogger(__name__)
@@ -185,6 +186,8 @@ class MediaGoblinApp(object):
                     force_external=qualified)
 
         request.urlgen = build_proxy
+
+        request.notifications = notifications
 
         mg_request.setup_user_in_request(request)
 

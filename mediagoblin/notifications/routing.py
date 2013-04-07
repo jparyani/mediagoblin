@@ -14,30 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
+from mediagoblin.tools.routing import add_route
 
-from mediagoblin.tools.routing import add_route, mount, url_map
-from mediagoblin.tools.pluginapi import PluginManager
-from mediagoblin.admin.routing import admin_routes
-from mediagoblin.auth.routing import auth_routes
+add_route('mediagoblin.notifications.subscribe_comments',
+          '/u/<string:user>/m/<string:media>/notifications/subscribe/comments/',
+          'mediagoblin.notifications.views:subscribe_comments')
 
-
-_log = logging.getLogger(__name__)
-
-
-def get_url_map():
-    add_route('index', '/', 'mediagoblin.views:root_view')
-    mount('/auth', auth_routes)
-    mount('/a', admin_routes)
-
-    import mediagoblin.submit.routing
-    import mediagoblin.user_pages.routing
-    import mediagoblin.edit.routing
-    import mediagoblin.webfinger.routing
-    import mediagoblin.listings.routing
-    import mediagoblin.notifications.routing
-
-    for route in PluginManager().get_routes():
-        add_route(*route)
-
-    return url_map
+add_route('mediagoblin.notifications.silence_comments',
+          '/u/<string:user>/m/<string:media>/notifications/silence/',
+          'mediagoblin.notifications.views:silence_comments')

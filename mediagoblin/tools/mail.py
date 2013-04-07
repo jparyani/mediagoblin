@@ -90,7 +90,12 @@ def send_email(from_addr, to_addrs, subject, message_body):
     if common.TESTS_ENABLED or mg_globals.app_config['email_debug_mode']:
         mhost = FakeMhost()
     elif not mg_globals.app_config['email_debug_mode']:
-        mhost = smtplib.SMTP(
+        if mg_globals.app_config['email_smtp_use_ssl']:
+            smtp_init = smtplib.SMTP_SSL
+        else:
+            smtp_init = smtplib.SMTP
+
+        mhost = smtp_init(
             mg_globals.app_config['email_smtp_host'],
             mg_globals.app_config['email_smtp_port'])
 

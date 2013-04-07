@@ -1,0 +1,40 @@
+{% set notifications = request.notifications.get_notifications(request.user.id) %}
+{% if notifications %}
+    <div class="header_notifications">
+    <h3>{% trans %}New comments{% endtrans %}</h3>
+    <ul>
+        {% for notification in  notifications %}
+        {% set comment = notification.subject %}
+        {% set comment_author = comment.get_author %}
+        {% set media = comment.get_entry %}
+        <li class="comment_wrapper">
+            <div class="comment_author">
+                <img src="{{ request.staticdirect('/images/icon_comment.png') }}" />
+                <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                            user=comment_author.username) }}"
+                    class="comment_authorlink">
+                    {{- comment_author.username -}}
+                </a>
+                <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
+                            comment=comment.id,
+                            user=media.get_uploader.username,
+                            media=media.slug_or_id) }}#comment"
+                    class="comment_whenlink">
+                    <span title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+                    {%- trans formatted_time=timesince(comment.created) -%}
+                        {{ formatted_time }} ago
+                    {%- endtrans -%}
+                    </span>
+                </a>:
+            </div>
+            <div class="comment_content">
+                {% autoescape False -%}
+                {{ comment.content_html }}
+                {%- endautoescape %}
+            </div>
+
+        </li>
+        {% endfor %}
+    </ul>
+    </div>
+{% endif %}

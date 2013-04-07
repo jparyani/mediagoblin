@@ -16,12 +16,18 @@
 
 import os
 import sys
+import logging
 
 from celery import Celery
 from mediagoblin.tools.pluginapi import hook_runall
 
 
-MANDATORY_CELERY_IMPORTS = ['mediagoblin.processing.task']
+_log = logging.getLogger(__name__)
+
+
+MANDATORY_CELERY_IMPORTS = [
+    'mediagoblin.processing.task',
+    'mediagoblin.notifications.task']
 
 DEFAULT_SETTINGS_MODULE = 'mediagoblin.init.celery.dummy_settings_module'
 
@@ -97,3 +103,13 @@ def setup_celery_from_config(app_config, global_config,
 
     if set_environ:
         os.environ['CELERY_CONFIG_MODULE'] = settings_module
+
+    # Replace the default celery.current_app.conf if celery has already been
+    # initiated
+    from celery import current_app
+
+    _log.info('Setting celery configuration from object "{0}"'.format(
+        settings_module))
+    current_app.config_from_object(this_module)
+
+    _log.debug('Celery broker host: {0}'.format(current_app.conf['BROKER_HOST']))
