@@ -26,8 +26,13 @@ from mediagoblin.tests.test_storage import get_tmp_filestorage
 
 class TestWorkbench(object):
     def setup(self):
+        self.workbench_base = tempfile.mkdtemp(prefix='gmg_workbench_testing')
         self.workbench_manager = workbench.WorkbenchManager(
-            os.path.join(tempfile.gettempdir(), u'mgoblin_workbench_testing'))
+            self.workbench_base)
+
+    def teardown(self):
+        # If the workbench is empty, this should work.
+        os.rmdir(self.workbench_base)
 
     def test_create_workbench(self):
         workbench = self.workbench_manager.create()
@@ -70,6 +75,7 @@ class TestWorkbench(object):
         filename = this_workbench.localized_file(this_storage, filepath)
         assert filename == os.path.join(
             tmpdir, 'dir1/dir2/ourfile.txt')
+        this_storage.delete_file(filepath)
 
         # with a fake remote file storage
         tmpdir, this_storage = get_tmp_filestorage(fake_remote=True)
@@ -94,6 +100,9 @@ class TestWorkbench(object):
             this_storage, filepath, 'thisfile.text', False)
         assert filename == os.path.join(
             this_workbench.dir, 'thisfile.text')
+
+        this_storage.delete_file(filepath)
+        this_workbench.destroy()
 
     def test_workbench_decorator(self):
         """Test @get_workbench decorator and automatic cleanup"""
