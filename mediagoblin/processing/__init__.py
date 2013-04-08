@@ -111,8 +111,13 @@ class ProcessingState(object):
         self.entry.media_files[keyname] = target_filepath
 
     def delete_queue_file(self):
+        # Remove queued media file from storage and database.
+        # queued_filepath is in the task_id directory which should
+        # be removed too, but fail if the directory is not empty to be on
+        # the super-safe side.
         queued_filepath = self.entry.queued_media_file
-        mgg.queue_store.delete_file(queued_filepath)
+        mgg.queue_store.delete_file(queued_filepath)      # rm file
+        mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
         self.entry.queued_media_file = []
 
 
