@@ -14,7 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import Image
+try:
+    from PIL import Image
+except ImportError:
+    import Image
 import os
 import logging
 

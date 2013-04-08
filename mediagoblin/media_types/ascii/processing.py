@@ -15,7 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import chardet
 import os
-import Image
+try:
+    from PIL import Image
+except ImportError:
+    import Image
 import logging
 
 from mediagoblin import mg_globals as mgg
@@ -42,7 +45,7 @@ def process_ascii(proc_state):
     """Code to process a txt file. Will be run by celery.
 
     A Workbench() represents a local tempory dir. It is automatically
-    cleaned up when this function exits. 
+    cleaned up when this function exits.
     """
     entry = proc_state.entry
     workbench = proc_state.workbench

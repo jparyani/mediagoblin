@@ -19,7 +19,10 @@
 #   Bram de Jong <bram.dejong at domain.com where domain in gmail>
 #   2012, Joar Wandborg <first name at last name dot se>
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    import Image
 import math
 import numpy
 

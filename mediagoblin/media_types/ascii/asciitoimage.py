@@ -14,9 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import Image
-import ImageFont
-import ImageDraw
+try:
+    from PIL import Image
+    from PIL import ImageFont
+    from PIL import ImageDraw
+except ImportError:
+    import Image
+    import ImageFont
+    import ImageDraw
 import logging
 import pkg_resources
 import os

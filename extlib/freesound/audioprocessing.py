@@ -20,7 +20,7 @@
 #   Bram de Jong <bram.dejong at domain.com where domain in gmail>
 #   2012, Joar Wandborg <first name at last name dot se>
 
-import Image, ImageDraw, ImageColor #@UnresolvedImport
+from PIL import Image, ImageDraw, ImageColor #@UnresolvedImport
 from functools import partial
 import math
 import numpy
