@@ -101,10 +101,20 @@ class StorageInterface(object):
 
     def delete_file(self, filepath):
         """
-        Delete or dereference the file at filepath.
+        Delete or dereference the file (not directory) at filepath.
+        """
+        # Subclasses should override this method.
+        self.__raise_not_implemented()
 
-        This might need to delete directories, buckets, whatever, for
-        cleanliness.  (Be sure to avoid race conditions on that though)
+    def delete_dir(self, dirpath, recursive=False):
+        """Delete the directory at dirpath
+
+        :param recursive: Usually, a directory must not contain any
+            files for the delete to succeed. If True, containing files
+            and subdirectories within dirpath will be recursively
+            deleted.
+
+        :returns: True in case of success, False otherwise.
         """
         # Subclasses should override this method.
         self.__raise_not_implemented()

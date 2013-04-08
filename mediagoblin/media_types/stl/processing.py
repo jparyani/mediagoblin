@@ -165,8 +165,12 @@ def process_stl(proc_state):
         with open(queued_filename, 'rb') as queued_file:
             model_file.write(queued_file.read())
 
-    # Remove queued media file from storage and database
-    mgg.queue_store.delete_file(queued_filepath)
+    # Remove queued media file from storage and database.
+    # queued_filepath is in the task_id directory which should
+    # be removed too, but fail if the directory is not empty to be on
+    # the super-safe side.
+    mgg.queue_store.delete_file(queued_filepath)      # rm file
+    mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
     entry.queued_media_file = []
 
     # Insert media file information into database

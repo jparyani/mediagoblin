@@ -127,8 +127,14 @@ def process_ascii(proc_state):
                     'ascii',
                     'xmlcharrefreplace'))
 
-    mgg.queue_store.delete_file(queued_filepath)
+    # Remove queued media file from storage and database.
+    # queued_filepath is in the task_id directory which should
+    # be removed too, but fail if the directory is not empty to be on
+    # the super-safe side.
+    mgg.queue_store.delete_file(queued_filepath)      # rm file
+    mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
     entry.queued_media_file = []
+
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict['thumb'] = thumb_filepath
     media_files_dict['unicode'] = unicode_filepath
