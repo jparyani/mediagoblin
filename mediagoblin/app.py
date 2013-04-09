@@ -73,6 +73,9 @@ class MediaGoblinApp(object):
         # Setup other connections / useful objects
         ##########################################
 
+        # Setup Session Manager, not needed in celery
+        self.session_manager = session.SessionManager()
+
         # load all available locales
         setup_locales()
 
@@ -157,7 +160,7 @@ class MediaGoblinApp(object):
 
         ## Attach utilities to the request object
         # Do we really want to load this via middleware?  Maybe?
-        session_manager = session.SessionManager()
+        session_manager = self.session_manager
         request.session = session_manager.load_session_from_cookie(request)
         # Attach self as request.app
         # Also attach a few utilities from request.app for convenience?
@@ -227,7 +230,8 @@ class MediaGoblinApp(object):
             response = render_http_exeption(
                 request, e, e.get_description(environ))
 
-        session_manager.save_session_to_cookie(request.session, response)
+        session_manager.save_session_to_cookie(request.session,
+                                               request, response)
 
         return response(environ, start_response)
 

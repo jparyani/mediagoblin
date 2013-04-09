@@ -58,10 +58,13 @@ class SessionManager(object):
         except itsdangerous.BadData:
             return Session()
 
-    def save_session_to_cookie(self, session, response):
+    def save_session_to_cookie(self, session, request, response):
         if not session.is_updated():
             return
         elif not session:
-            response.delete_cookie(self.cookie_name)
+            response.delete_cookie(self.cookie_name,
+                path=request.environ['SCRIPT_NAME'])
         else:
-            response.set_cookie(self.cookie_name, self.signer.dumps(session))
+            response.set_cookie(self.cookie_name, self.signer.dumps(session),
+                path=request.environ['SCRIPT_NAME'],
+                httponly=True)
