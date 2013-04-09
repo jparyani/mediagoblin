@@ -142,8 +142,8 @@ Software Stack
   * `werkzeug <http://werkzeug.pocoo.org/>`_: nice abstraction layer
     from HTTP requests, responses and WSGI bits
 
-  * `Beaker <http://beaker.groovie.org/>`_: for handling sessions and
-    caching
+  * `itsdangerous <http://pythonhosted.org/itsdangerous/>`_:
+    for handling sessions
 
   * `Jinja2 <http://jinja.pocoo.org/docs/>`_: the templating engine
 
