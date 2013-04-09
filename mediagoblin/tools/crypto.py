@@ -44,6 +44,7 @@ def load_key(filename):
     finally:
         key_file.close()
 
+
 def create_key(key_dir, key_filepath):
     global __itsda_secret
     old_umask = os.umask(077)
@@ -51,7 +52,7 @@ def create_key(key_dir, key_filepath):
     try:
         if not os.path.isdir(key_dir):
             os.makedirs(key_dir)
-            _log.info("Created %s", dirname)
+            _log.info("Created %s", key_dir)
         key = str(getrandbits(192))
         key_file = tempfile.NamedTemporaryFile(dir=key_dir, suffix='.bin',
                                                delete=False)
@@ -67,6 +68,7 @@ def create_key(key_dir, key_filepath):
     __itsda_secret = key
     _log.info("Saved new key for It's Dangerous")
 
+
 def setup_crypto():
     global __itsda_secret
     key_dir = mg_globals.app_config["crypto_path"]
@@ -77,6 +79,7 @@ def setup_crypto():
         if error.errno != errno.ENOENT:
             raise
         create_key(key_dir, key_filepath)
+
 
 def get_timed_signer_url(namespace):
     """
