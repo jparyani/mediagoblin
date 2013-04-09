@@ -63,6 +63,19 @@ FAQ
     This is a last resort; consult with the rest of the dev group
     before taking this radical step.
 
+:Q: What about submodules?
+
+:A: pdf.js is supplied as a submodule, and other software may use that too,
+    to add a new submodule:
+     git submodule add <git-repo-of-fun-project> extlib/fun-project
+
+    Use it just like a snapshotted extlib directory. When a new clone of mediagoblin
+    is made you need to run
+
+     git submodule init
+     git submodule update
+
+    As noted in HackingHowto
 
 Thanks
 ======
