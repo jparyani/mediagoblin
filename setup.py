@@ -43,7 +43,6 @@ setup(
     install_requires=[
         'setuptools',
         'PasteScript',
-        'beaker',
         'wtforms',
         'py-bcrypt',
         'pytest',
@@ -61,6 +60,7 @@ setup(
         'sqlalchemy>=0.7.0',
         'sqlalchemy-migrate',
         'mock',
+        'itsdangerous',
         ## This is optional!
         # 'translitcodec',
         ## For now we're expecting that users will install this from

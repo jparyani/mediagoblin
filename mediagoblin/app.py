@@ -25,7 +25,7 @@ from werkzeug.exceptions import HTTPException
 from werkzeug.routing import RequestRedirect
 
 from mediagoblin import meddleware, __version__
-from mediagoblin.tools import common, translate, template
+from mediagoblin.tools import common, session, translate, template
 from mediagoblin.tools.response import render_http_exception
 from mediagoblin.tools.theme import register_themes
 from mediagoblin.tools import request as mg_request
@@ -34,8 +34,9 @@ from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.init import (get_jinja_loader, get_staticdirector,
     setup_global_and_app_config, setup_locales, setup_workbench, setup_database,
-    setup_storage, setup_beaker_cache)
+    setup_storage)
 from mediagoblin.tools.pluginapi import PluginManager
+from mediagoblin.tools.crypto import setup_crypto
 
 
 _log = logging.getLogger(__name__)
@@ -65,6 +66,8 @@ class MediaGoblinApp(object):
 
         # Open and setup the config
         global_config, app_config = setup_global_and_app_config(config_path)
+
+        setup_crypto()
 
         ##########################################
         # Setup other connections / useful objects
@@ -99,9 +102,6 @@ class MediaGoblinApp(object):
 
         # set up staticdirector tool
         self.staticdirector = get_staticdirector(app_config)
-
-        # set up caching
-        self.cache = setup_beaker_cache()
 
         # Setup celery, if appropriate
         if setup_celery and not app_config.get('celery_setup_elsewhere'):
@@ -157,7 +157,8 @@ class MediaGoblinApp(object):
 
         ## Attach utilities to the request object
         # Do we really want to load this via middleware?  Maybe?
-        request.session = request.environ['beaker.session']
+        session_manager = session.SessionManager()
+        request.session = session_manager.load_session_from_cookie(request)
         # Attach self as request.app
         # Also attach a few utilities from request.app for convenience?
         request.app = self
@@ -225,6 +226,8 @@ class MediaGoblinApp(object):
         except HTTPException as e:
             response = render_http_exeption(
                 request, e, e.get_description(environ))
+
+        session_manager.save_session_to_cookie(request.session, response)
 
         return response(environ, start_response)
 

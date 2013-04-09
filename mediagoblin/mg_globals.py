@@ -29,9 +29,6 @@ import threading
 # SQL database engine
 database = None
 
-# beaker's cache manager
-cache = None
-
 # should be the same as the 
 public_store = None
 queue_store = None

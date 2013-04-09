@@ -14,25 +14,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-from mediagoblin.db.models import User
+from mediagoblin.tools import session
 
-_log = logging.getLogger(__name__)
-
-
-def setup_user_in_request(request):
-    """
-    Examine a request and tack on a request.user parameter if that's
-    appropriate.
-    """
-    if 'user_id' not in request.session:
-        request.user = None
-        return
-
-    request.user = User.query.get(request.session['user_id'])
-
-    if not request.user:
-        # Something's wrong... this user doesn't exist?  Invalidate
-        # this session.
-        _log.warn("Killing session for user id %r", request.session['user_id'])
-        request.session.delete()
+def test_session():
+    sess = session.Session()
+    assert not sess
+    assert not sess.is_updated()
+    sess['user_id'] = 27
+    assert sess
+    assert not sess.is_updated()
+    sess.save()
+    assert sess.is_updated()
+    sess.delete()
+    assert not sess
+    assert sess.is_updated()
