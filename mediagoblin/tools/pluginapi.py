@@ -294,7 +294,7 @@ class UnhandledCallable(Exception):
     pass
 
 
-def callable_runone(hookname, unhandled_okay=False, *args, **kwargs):
+def callable_runone(hookname, *args, **kwargs):
     """
     Run the callable hook HOOKNAME... run until the first response,
     then return.
@@ -313,7 +313,7 @@ def callable_runone(hookname, unhandled_okay=False, *args, **kwargs):
         except CantHandleIt:
             continue
 
-    if unhandled_okay is False:
+    if kwargs.get("unhandled_okay", False) is False:
         raise UnhandledCallable(
             "No hooks registered capable of handling '%s'" % hookname)
 

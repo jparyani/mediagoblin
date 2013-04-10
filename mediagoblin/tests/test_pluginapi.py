@@ -218,14 +218,14 @@ def test_callable_runone():
     # Multiple provided, go with the first!
     call_log = []
     assert pluginapi.callable_runone(
-        "multi_handle", call_log) is "the first returns"
+        "multi_handle", call_log) == "the first returns"
     assert call_log == ["Hi, I'm the first"]
 
     # Multiple provided, one has CantHandleIt
     call_log = []
     assert pluginapi.callable_runone(
         "multi_handle_with_canthandle",
-        call_log) is "the second returns"
+        call_log) == "the second returns"
     assert call_log == ["Hi, I'm the second"]
 
 
@@ -251,7 +251,7 @@ def test_callable_runall():
     # Just one hook, check results
     call_log = []
     assert pluginapi.callable_runall(
-        "just_one", call_log) == ["Called just once"]
+        "just_one", call_log) == ["Called just once", None, None]
     assert call_log == ["expect this one call"]
 
     # None provided, check results
