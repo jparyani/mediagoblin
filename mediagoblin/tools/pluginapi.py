@@ -307,13 +307,15 @@ def callable_runone(hookname, *args, **kwargs):
     """
     callables = PluginManager().get_hook_callables(hookname)
 
+    unhandled_okay = kwargs.pop("unhandled_okay", False)
+
     for callable in callables:
         try:
             return callable(*args, **kwargs)
         except CantHandleIt:
             continue
 
-    if kwargs.get("unhandled_okay", False) is False:
+    if unhandled_okay is False:
         raise UnhandledCallable(
             "No hooks registered capable of handling '%s'" % hookname)
 
