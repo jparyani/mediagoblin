@@ -15,7 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+
 from configobj import ConfigObj
+import pytest
+
 from mediagoblin import mg_globals
 from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.tools import pluginapi
@@ -172,3 +175,111 @@ def test_disabled_plugin():
 
     # Make sure we didn't load the plugin
     assert len(pman.plugins) == 0
+
+
+@with_cleanup()
+def test_callable_runone():
+    """
+    Test the callable_runone method
+    """
+    cfg = build_config([
+            ('mediagoblin', {}, []),
+            ('plugins', {}, [
+                    ('mediagoblin.tests.testplugins.callables1', {}, []),
+                    ('mediagoblin.tests.testplugins.callables2', {}, []),
+                    ('mediagoblin.tests.testplugins.callables3', {}, []),
+                    ])
+            ])
+
+    mg_globals.app_config = cfg['mediagoblin']
+    mg_globals.global_config = cfg
+
+    setup_plugins()
+
+    # Just one hook provided
+    call_log = []
+    assert pluginapi.callable_runone(
+        "just_one", call_log) == "Called just once"
+    assert call_log == ["expect this one call"]
+
+    # Nothing provided and unhandled not okay
+    call_log = []
+    with pytest.raises(pluginapi.UnhandledCallable):
+        pluginapi.callable_runone(
+            "nothing_handling", call_log)
+    assert call_log == []
+
+    # Nothing provided and unhandled okay
+    call_log = []
+    assert pluginapi.callable_runone(
+        "nothing_handling", call_log, unhandled_okay=True) is None
+    assert call_log == []
+    
+    # Multiple provided, go with the first!
+    call_log = []
+    assert pluginapi.callable_runone(
+        "multi_handle", call_log) == "the first returns"
+    assert call_log == ["Hi, I'm the first"]
+
+    # Multiple provided, one has CantHandleIt
+    call_log = []
+    assert pluginapi.callable_runone(
+        "multi_handle_with_canthandle",
+        call_log) == "the second returns"
+    assert call_log == ["Hi, I'm the second"]
+
+
+@with_cleanup()
+def test_callable_runall():
+    """
+    Test the callable_runall method
+    """
+    cfg = build_config([
+            ('mediagoblin', {}, []),
+            ('plugins', {}, [
+                    ('mediagoblin.tests.testplugins.callables1', {}, []),
+                    ('mediagoblin.tests.testplugins.callables2', {}, []),
+                    ('mediagoblin.tests.testplugins.callables3', {}, []),
+                    ])
+            ])
+
+    mg_globals.app_config = cfg['mediagoblin']
+    mg_globals.global_config = cfg
+
+    setup_plugins()
+
+    # Just one hook, check results
+    call_log = []
+    assert pluginapi.callable_runall(
+        "just_one", call_log) == ["Called just once", None, None]
+    assert call_log == ["expect this one call"]
+
+    # None provided, check results
+    call_log = []
+    assert pluginapi.callable_runall(
+        "nothing_handling", call_log) == []
+    assert call_log == []
+
+    # Multiple provided, check results
+    call_log = []
+    assert pluginapi.callable_runall(
+        "multi_handle", call_log) == [
+            "the first returns",
+            "the second returns",
+            "the third returns",
+        ]
+    assert call_log == [
+        "Hi, I'm the first",
+        "Hi, I'm the second",
+        "Hi, I'm the third"]
+
+    # Multiple provided, one has CantHandleIt, check results
+    call_log = []
+    assert pluginapi.callable_runall(
+        "multi_handle_with_canthandle", call_log) == [
+            "the second returns",
+            "the third returns",
+        ]
+    assert call_log == [
+        "Hi, I'm the second",
+        "Hi, I'm the third"]

@@ -59,6 +59,4 @@ def setup_plugins():
             pman.register_hooks(plugin.hooks)
 
     # Execute anything registered to the setup hook.
-    setup_list = pman.get_hook_callables('setup')
-    for fun in setup_list:
-        fun()
+    pluginapi.callable_runall('setup')

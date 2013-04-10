@@ -272,3 +272,70 @@ def get_hook_templates(hook_name):
       A list of strings representing template paths.
     """
     return PluginManager().get_template_hooks(hook_name)
+
+
+###########################
+# Callable convenience code
+###########################
+
+class CantHandleIt(Exception):
+    """
+    A callable may call this method if they look at the relevant
+    arguments passed and decide it's not possible for them to handle
+    things.
+    """
+    pass
+
+class UnhandledCallable(Exception):
+    """
+    Raise this method if no callables were available to handle the
+    specified hook.  Only used by callable_runone.
+    """
+    pass
+
+
+def callable_runone(hookname, *args, **kwargs):
+    """
+    Run the callable hook HOOKNAME... run until the first response,
+    then return.
+
+    This function will run stop at the first hook that handles the
+    result.  Hooks raising CantHandleIt will be skipped.
+
+    Unless unhandled_okay is True, this will error out if no hooks
+    have been registered to handle this function.
+    """
+    callables = PluginManager().get_hook_callables(hookname)
+
+    unhandled_okay = kwargs.pop("unhandled_okay", False)
+
+    for callable in callables:
+        try:
+            return callable(*args, **kwargs)
+        except CantHandleIt:
+            continue
+
+    if unhandled_okay is False:
+        raise UnhandledCallable(
+            "No hooks registered capable of handling '%s'" % hookname)
+
+
+def callable_runall(hookname, *args, **kwargs):
+    """
+    Run all callables for HOOKNAME.
+
+    This method will run *all* hooks that handle this method (skipping
+    those that raise CantHandleIt), and will return a list of all
+    results.
+    """
+    callables = PluginManager().get_hook_callables(hookname)
+
+    results = []
+
+    for callable in callables:
+        try:
+            results.append(callable(*args, **kwargs))
+        except CantHandleIt:
+            continue
+
+    return results
