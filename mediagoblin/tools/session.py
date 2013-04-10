@@ -62,9 +62,7 @@ class SessionManager(object):
         if not session.is_updated():
             return
         elif not session:
-            response.delete_cookie(self.cookie_name,
-                path=request.environ['SCRIPT_NAME'])
+            response.delete_cookie(self.cookie_name)
         else:
             response.set_cookie(self.cookie_name, self.signer.dumps(session),
-                path=request.environ['SCRIPT_NAME'],
                 httponly=True)
