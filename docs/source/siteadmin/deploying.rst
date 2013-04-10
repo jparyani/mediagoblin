@@ -185,6 +185,11 @@ flup::
 
     ./bin/easy_install flup
 
+(Sometimes this breaks because flup's site is flakey.  If it does for
+you, try)::
+
+    ./bin/easy_install https://pypi.python.org/pypi/flup/1.0.3.dev-20110405
+
 This concludes the initial configuration of the development
 environment. In the future, when you update your
 codebase, you should also run::
