@@ -123,6 +123,16 @@ def pass_to_ugettext(*args, **kwargs):
         *args, **kwargs)
 
 
+def pass_to_ungettext(*args, **kwargs):
+    """
+    Pass a translation on to the appropriate ungettext method.
+
+    The reason we can't have a global ugettext method is because
+    mg_globals gets swapped out by the application per-request.
+    """
+    return mg_globals.thread_scope.translations.ungettext(
+        *args, **kwargs)
+
 def lazy_pass_to_ugettext(*args, **kwargs):
     """
     Lazily pass to ugettext.
@@ -157,6 +167,16 @@ def lazy_pass_to_ngettext(*args, **kwargs):
     used as a string.
     """
     return LazyProxy(pass_to_ngettext, *args, **kwargs)
+
+def lazy_pass_to_ungettext(*args, **kwargs):
+    """
+    Lazily pass to ungettext.
+
+    This is useful if you have to define a translation on a module
+    level but you need it to not translate until the time that it's
+    used as a string.
+    """
+    return LazyProxy(pass_to_ungettext, *args, **kwargs)
 
 
 def fake_ugettext_passthrough(string):

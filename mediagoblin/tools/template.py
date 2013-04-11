@@ -29,7 +29,9 @@ from mediagoblin import _version
 from mediagoblin.tools import common
 from mediagoblin.tools.translate import get_gettext_translation
 from mediagoblin.tools.pluginapi import get_hook_templates
+from mediagoblin.tools.timesince import timesince
 from mediagoblin.meddleware.csrf import render_csrf_form_token
+
 
 
 SETUP_JINJA_ENVS = {}
@@ -72,6 +74,9 @@ def get_jinja_env(template_loader, locale):
     template_env.globals['version'] = _version.__version__
 
     template_env.filters['urlencode'] = url_quote_plus
+
+    # add human readable fuzzy date time
+    template_env.globals['timesince'] = timesince
 
     # allow for hooking up plugin templates
     template_env.globals['get_hook_templates'] = get_hook_templates
