@@ -21,4 +21,5 @@ Plugin API
 
 .. automodule:: mediagoblin.tools.pluginapi
    :members: get_config, register_routes, register_template_path,
-             register_template_hooks, get_hook_templates
+             register_template_hooks, get_hook_templates,
+             callable_runone, callable_runall
