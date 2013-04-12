@@ -64,9 +64,9 @@ class RegistrationForm(wtforms.Form):
 
 class LoginForm(wtforms.Form):
     username = wtforms.TextField(
-        _('Username'),
+        _('Username or Email'),
         [wtforms.validators.Required(),
-         normalize_user_or_email_field(allow_email=False)])
+         normalize_user_or_email_field()])
     password = wtforms.PasswordField(
         _('Password'),
         [wtforms.validators.Required(),

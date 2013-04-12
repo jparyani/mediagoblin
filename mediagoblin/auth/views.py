@@ -25,7 +25,7 @@ from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.auth.lib import send_verification_email, \
                                  send_fp_verification_email
-
+from sqlalchemy import or_
 
 def email_debug_message(request):
     """
@@ -113,8 +113,16 @@ def login(request):
     login_failed = False
 
     if request.method == 'POST':
+        
+        username = login_form.data['username']
+
         if login_form.validate():
-            user = User.query.filter_by(username=login_form.data['username']).first()
+            user = User.query.filter(
+                or_(
+                    User.username == username,
+                    User.email == username,
+
+                )).first()
 
             if user and user.check_login(login_form.password.data):
                 # set up login in session
