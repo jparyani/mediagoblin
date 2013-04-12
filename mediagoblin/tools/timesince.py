@@ -93,10 +93,3 @@ def timesince(d, now=None, reversed=False):
         if count2 != 0:
             s += pass_to_ugettext(', %(number)d %(type)s') % {'number': count2, 'type': name2(count2)}
     return s
-
-def timeuntil(d, now=None):
-    """
-    Like timesince, but returns a string measuring the time until
-    the given time.
-    """
-    return timesince(d, now, reversed=True)
