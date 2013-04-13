@@ -360,6 +360,25 @@ textarea#description, textarea#bio {
   font-size: 0.9em;
 }
 
+a.comment_authorlink {
+  text-decoration: none;
+  padding-right: 5px;
+  font-weight: bold;
+  padding-left: 2px;
+}
+
+a.comment_authorlink:hover {
+  text-decoration: underline;
+}
+
+a.comment_whenlink {
+  text-decoration: none;
+}
+
+a.comment_whenlink:hover {
+  text-decoration: underline;
+}
+
 .comment_content {
   margin-left: 8px;
   margin-top: 8px;
