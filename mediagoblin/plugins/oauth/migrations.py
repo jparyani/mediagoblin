@@ -102,6 +102,21 @@ class OAuthCode_v0(declarative_base()):
     client_id = Column(Integer, ForeignKey(OAuthClient_v0.id), nullable=False)
 
 
+class OAuthRefreshToken_v0(declarative_base()):
+    __tablename__ = 'oauth__refresh_tokens'
+
+    id = Column(Integer, primary_key=True)
+    created = Column(DateTime, nullable=False,
+                     default=datetime.now)
+
+    token = Column(Unicode, index=True)
+
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+
+    # XXX: Is it OK to use OAuthClient_v0.id in this way?
+    client_id = Column(Integer, ForeignKey(OAuthClient_v0.id), nullable=False)
+
+
 @RegisterMigration(1, MIGRATIONS)
 def remove_and_replace_token_and_code(db):
     metadata = MetaData(bind=db.bind)
@@ -120,5 +135,24 @@ def remove_and_replace_token_and_code(db):
     OAuthUserClient_v0.__table__.create(db.bind)
     OAuthToken_v0.__table__.create(db.bind)
     OAuthCode_v0.__table__.create(db.bind)
+
+    db.commit()
+
+
+@RegisterMigration(2, MIGRATIONS)
+def remove_refresh_token_field(db):
+    metadata = MetaData(bind=db.bind)
+
+    token_table = Table('oauth__tokens', metadata, autoload=True,
+                        autoload_with=db.bind)
+
+    refresh_token = token_table.columns['refresh_token']
+
+    refresh_token.drop()
+    db.commit()
+
+@RegisterMigration(3, MIGRATIONS)
+def create_refresh_token_table(db):
+    OAuthRefreshToken_v0.__table__.create(db.bind)
 
     db.commit()

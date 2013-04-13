@@ -34,7 +34,7 @@ def setup_plugin():
     _log.debug('OAuth config: {0}'.format(config))
 
     routes = [
-       ('mediagoblin.plugins.oauth.authorize',
+        ('mediagoblin.plugins.oauth.authorize',
             '/oauth/authorize',
             'mediagoblin.plugins.oauth.views:authorize'),
         ('mediagoblin.plugins.oauth.authorize_client',
