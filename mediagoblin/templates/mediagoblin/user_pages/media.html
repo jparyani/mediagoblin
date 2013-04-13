@@ -43,7 +43,7 @@
     {%- endtrans -%}
   </p>
   {% include "mediagoblin/utils/prev_next.html" %}
-  <div class="media_pane">     
+  <div class="media_pane">
     <div class="media_image_container">
       {% block mediagoblin_media %}
         {% set display_media = request.app.public_store.file_url(
@@ -71,7 +71,7 @@
       {{ media.title }}
     </h2>
     {% if request.user and
-          (media.uploader == request.user.id or 
+          (media.uploader == request.user.id or
            request.user.is_admin) %}
       {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
                                  user= media.get_uploader.username,
@@ -90,11 +90,13 @@
             {% if not request.user %}
               href="{{ request.urlgen('mediagoblin.auth.login') }}"
             {% endif %}
-            class="button_action" id="button_addcomment" title="Add a comment">
-            {% trans %}Add a comment{% endtrans %}
+            {% if app_config['allow_comments'] %}
+              class="button_action" id="button_addcomment" title="Add a comment">
+              {% trans %}Add a comment{% endtrans %}
+            {% endif %}
           </a>
       {% if request.user %}
-        <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
+        <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment',
                                          user= media.get_uploader.username,
                                          media_id=media.id) }}" method="POST" id="form_comment">
           {{ wtforms_util.render_divs(comment_form) }}
@@ -154,7 +156,7 @@
     {% include "mediagoblin/utils/license.html" %}
 
     {% include "mediagoblin/utils/exif.html" %}
-    
+
     {%- if media.attachment_files|count %}
       <h3>{% trans %}Attachments{% endtrans %}</h3>
       <ul>
