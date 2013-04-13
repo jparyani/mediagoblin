@@ -120,15 +120,15 @@
                             user=comment_author.username) }}">
               {{- comment_author.username -}}
             </a>
-            {% trans %}at{% endtrans %}
             <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
                             comment=comment.id,
                             user=media.get_uploader.username,
                             media=media.slug_or_id) }}#comment">
               <span title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
-                {{ timesince(comment.created) }}
-              </span>
-            </a>:
+                {%- trans formatted_time=timesince(comment.created) -%}
+                  {{ formatted_time }} ago
+                {%- endtrans -%}
+              </span></a>:
           </div>
           <div class="comment_content">
             {% autoescape False -%}
@@ -143,10 +143,12 @@
     {% endif %}
   </div>
   <div class="media_sidebar">
-    {% trans date=media.created.strftime("%Y-%m-%d"), formatted_time=timesince(media.created) -%}
-      <h3>Added on</h3>
-      <p><span title="{{ date }}">{{ formatted_time }}</span></p>
-    {%- endtrans %}
+    <h3>Added</h3>
+    <p><span title="{{ media.created.strftime("%Y-%m-%d") }}">
+        {%- trans formatted_time=timesince(media.created) -%}    
+          {{ formatted_time }} ago
+        {%- endtrans -%}
+    </span></p>
     {% if media.tags %}
       {% include "mediagoblin/utils/tags.html" %}
     {% endif %}
