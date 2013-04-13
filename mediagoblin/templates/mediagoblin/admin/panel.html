@@ -104,7 +104,7 @@
         <td>{{ media_entry.id }}</td>
         <td>{{ media_entry.get_uploader.username }}</td>
         <td><a href="{{ media_entry.url_for_self(request.urlgen) }}">{{ media_entry.title }}</a></td>
-        <td>{{ media_entry.created.strftime("%F %R") }}</td>
+        <td><span title='{{ media_entry.created.strftime("%F %R") }}'>{{ timesince(media_entry.created) }}</span></td>
       </tr>
     {% endfor %}
   </table>

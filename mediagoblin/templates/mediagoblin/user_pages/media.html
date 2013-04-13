@@ -125,7 +125,9 @@
                             comment=comment.id,
                             user=media.get_uploader.username,
                             media=media.slug_or_id) }}#comment">
-              {{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}
+              <span title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+                {{ timesince(comment.created) }}
+              </span>
             </a>:
           </div>
           <div class="comment_content">
@@ -141,9 +143,9 @@
     {% endif %}
   </div>
   <div class="media_sidebar">
-    {% trans date=media.created.strftime("%Y-%m-%d") -%}
+    {% trans date=media.created.strftime("%Y-%m-%d"), formatted_time=timesince(media.created) -%}
       <h3>Added on</h3>
-      <p>{{ date }}</p>
+      <p><span title="{{ date }}">{{ formatted_time }}</span></p>
     {%- endtrans %}
     {% if media.tags %}
       {% include "mediagoblin/utils/tags.html" %}

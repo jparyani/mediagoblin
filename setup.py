@@ -61,6 +61,7 @@ setup(
         'sqlalchemy-migrate',
         'mock',
         'itsdangerous',
+        'pytz',
         ## This is optional!
         # 'translitcodec',
         ## For now we're expecting that users will install this from
