@@ -16,21 +16,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import json
 
 from urllib import urlencode
-from uuid import uuid4
-from datetime import datetime
+
+from werkzeug.exceptions import BadRequest
 
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login
-from mediagoblin.messages import add_message, SUCCESS, ERROR
+from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.tools.translate import pass_to_ugettext as _
-from mediagoblin.plugins.oauth.models import OAuthCode, OAuthToken, \
-        OAuthClient, OAuthUserClient
+from mediagoblin.plugins.oauth.models import OAuthCode, OAuthClient, \
+        OAuthUserClient, OAuthRefreshToken
 from mediagoblin.plugins.oauth.forms import ClientRegistrationForm, \
         AuthorizationForm
-from mediagoblin.plugins.oauth.tools import require_client_auth
+from mediagoblin.plugins.oauth.tools import require_client_auth, \
+        create_token
 from mediagoblin.plugins.api.tools import json_response
 
 _log = logging.getLogger(__name__)
@@ -50,9 +50,6 @@ def register_client(request):
         client.type = unicode(form.type.data)
         client.owner_id = request.user.id
         client.redirect_uri = unicode(form.redirect_uri.data)
-
-        client.generate_identifier()
-        client.generate_secret()
 
         client.save()
 
@@ -92,9 +89,9 @@ def authorize_client(request):
         form.client_id.data).first()
 
     if not client:
-        _log.error('''No such client id as received from client authorization
-                form.''')
-        return BadRequest()
+        _log.error('No such client id as received from client authorization \
+form.')
+        raise BadRequest()
 
     if form.validate():
         relation = OAuthUserClient()
@@ -105,7 +102,7 @@ def authorize_client(request):
         elif form.deny.data:
             relation.state = u'rejected'
         else:
-            return BadRequest
+            raise BadRequest()
 
         relation.save()
 
@@ -136,7 +133,7 @@ def authorize(request, client):
                 return json_response({
                     'status': 400,
                     'errors':
-                        [u'Public clients MUST have a redirect_uri pre-set']},
+                        [u'Public clients should have a redirect_uri pre-set.']},
                         _disable_cors=True)
 
             redirect_uri = client.redirect_uri
@@ -146,11 +143,10 @@ def authorize(request, client):
             if not redirect_uri:
                 return json_response({
                     'status': 400,
-                    'errors': [u'Can not find a redirect_uri for client: {0}'\
-                            .format(client.name)]}, _disable_cors=True)
+                    'errors': [u'No redirect_uri supplied!']},
+                    _disable_cors=True)
 
         code = OAuthCode()
-        code.code = unicode(uuid4())
         code.user = request.user
         code.client = client
         code.save()
@@ -180,59 +176,79 @@ def authorize(request, client):
 
 
 def access_token(request):
+    '''
+    Access token endpoint provides access tokens to any clients that have the
+    right grants/credentials
+    '''
+
+    client = None
+    user = None
+
     if request.GET.get('code'):
+        # Validate the code arg, then get the client object from the db.
         code = OAuthCode.query.filter(OAuthCode.code ==
                 request.GET.get('code')).first()
 
-        if code:
-            if code.client.type == u'confidential':
-                client_identifier = request.GET.get('client_id')
-
-                if not client_identifier:
-                    return json_response({
-                        'error': 'invalid_request',
-                        'error_description':
-                            'Missing client_id in request'})
-
-                client_secret = request.GET.get('client_secret')
-
-                if not client_secret:
-                    return json_response({
-                        'error': 'invalid_request',
-                        'error_description':
-                            'Missing client_secret in request'})
-
-                if not client_secret == code.client.secret or \
-                        not client_identifier == code.client.identifier:
-                    return json_response({
-                        'error': 'invalid_client',
-                        'error_description':
-                            'The client_id or client_secret does not match the'
-                            ' code'})
-
-            token = OAuthToken()
-            token.token = unicode(uuid4())
-            token.user = code.user
-            token.client = code.client
-            token.save()
-
-            # expire time of token in full seconds
-            # timedelta.total_seconds is python >= 2.7 or we would use that
-            td = token.expires - datetime.now()
-            exp_in = 86400*td.days + td.seconds # just ignore µsec
-
-            access_token_data = {
-                'access_token': token.token,
-                'token_type': 'bearer',
-                'expires_in': exp_in}
-            return json_response(access_token_data, _disable_cors=True)
-        else:
+        if not code:
             return json_response({
                 'error': 'invalid_request',
                 'error_description':
-                    'Invalid code'})
-    else:
-        return json_response({
-            'error': 'invalid_request',
-            'error_descriptin':
-                'Missing `code` parameter in request'})
+                    'Invalid code.'})
+
+        client = code.client
+        user = code.user
+
+    elif request.args.get('refresh_token'):
+        # Validate a refresh token, then get the client object from the db.
+        refresh_token = OAuthRefreshToken.query.filter(
+            OAuthRefreshToken.token ==
+            request.args.get('refresh_token')).first()
+
+        if not refresh_token:
+            return json_response({
+                'error': 'invalid_request',
+                'error_description':
+                    'Invalid refresh token.'})
+
+        client = refresh_token.client
+        user = refresh_token.user
+
+    if client:
+        client_identifier = request.GET.get('client_id')
+
+        if not client_identifier:
+            return json_response({
+                'error': 'invalid_request',
+                'error_description':
+                    'Missing client_id in request.'})
+
+        if not client_identifier == client.identifier:
+            return json_response({
+                'error': 'invalid_client',
+                'error_description':
+                    'Mismatching client credentials.'})
+
+        if client.type == u'confidential':
+            client_secret = request.GET.get('client_secret')
+
+            if not client_secret:
+                return json_response({
+                    'error': 'invalid_request',
+                    'error_description':
+                        'Missing client_secret in request.'})
+
+            if not client_secret == client.secret:
+                return json_response({
+                    'error': 'invalid_client',
+                    'error_description':
+                        'Mismatching client credentials.'})
+
+
+        access_token_data = create_token(client, user)
+
+        return json_response(access_token_data, _disable_cors=True)
+
+    return json_response({
+        'error': 'invalid_request',
+        'error_description':
+            'Missing `code` or `refresh_token` parameter in request.'})

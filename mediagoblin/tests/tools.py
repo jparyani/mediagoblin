@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import sys
 import os
 import pkg_resources
 import shutil
@@ -28,7 +29,6 @@ from mediagoblin import mg_globals
 from mediagoblin.db.models import User, MediaEntry, Collection
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
-from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.db.base import Session
 from mediagoblin.meddleware import BaseMeddleware
 from mediagoblin.auth.lib import bcrypt_gen_password_hash
@@ -50,7 +50,9 @@ USER_DEV_DIRECTORIES_TO_SETUP = ['media/public', 'media/queue']
 BAD_CELERY_MESSAGE = """\
 Sorry, you *absolutely* must run tests with the
 mediagoblin.init.celery.from_tests module.  Like so:
-$ CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests ./bin/py.test"""
+
+$ CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests {0}
+""".format(sys.argv[0])
 
 
 class BadCeleryEnviron(Exception): pass
@@ -230,7 +232,7 @@ def fixture_media_entry(title=u"Some title", slug=None,
     entry.slug = slug
     entry.uploader = uploader or fixture_add_user().id
     entry.media_type = u'image'
-    
+
     if gen_slug:
         entry.generate_slug()
     if save:
