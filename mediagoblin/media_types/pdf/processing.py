@@ -13,9 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import chardet
 import os
-import Image
 import logging
 import dateutil.parser
 from subprocess import STDOUT, check_output, call, CalledProcessError
@@ -235,8 +233,6 @@ def process_pdf(proc_state):
 
     queued_filename = proc_state.get_queued_filename()
     name_builder = FilenameBuilder(queued_filename)
-
-    media_files_dict = entry.setdefault('media_files', {})
 
     # Copy our queued local workbench to its final destination
     original_dest = name_builder.fill('{basename}{ext}')
