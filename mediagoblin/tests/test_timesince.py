@@ -19,7 +19,7 @@ from datetime import datetime, timedelta
 from mediagoblin.tools.timesince import is_aware, timesince
 
 
-def test_timesince(test_app):
+def test_timesince():
 	test_time = datetime.now()
 
 	# it should ignore second and microseconds
