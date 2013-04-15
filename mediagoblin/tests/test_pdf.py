@@ -17,16 +17,15 @@
 import tempfile
 import shutil
 import os
-
+import pytest
 
 from mediagoblin.media_types.pdf.processing import (
     pdf_info, check_prerequisites, create_pdf_thumb)
 
 GOOD='mediagoblin/tests/test_submission/good.pdf'
 
+@pytest.mark.skipif("not check_prerequisites()")
 def test_pdf():
-    if not check_prerequisites():
-        return
     good_dict = {'pdf_version_major': 1, 'pdf_title': '',
         'pdf_page_size_width': 612, 'pdf_author': '',
         'pdf_keywords': '', 'pdf_pages': 10,

@@ -20,6 +20,7 @@ sys.setdefaultencoding('utf-8')
 
 import urlparse
 import os
+import pytest
 
 from pkg_resources import resource_filename
 
@@ -128,9 +129,8 @@ class TestSubmission:
         self._setup(test_app)
         self.check_normal_upload(u'Normal upload 2', GOOD_PNG)
 
+    @pytest.mark.skipif("not pdf_check_prerequisites()")
     def test_normal_pdf(self, test_app):
-        if not pdf_check_prerequisites():
-            return
         self._setup(test_app)
         response, context = self.do_post({'title': u'Normal upload 3 (pdf)'},
                                          do_follow=True,
