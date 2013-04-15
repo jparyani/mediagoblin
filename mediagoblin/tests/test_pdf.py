@@ -21,8 +21,8 @@ import pytest
 
 from mediagoblin.media_types.pdf.processing import (
     pdf_info, check_prerequisites, create_pdf_thumb)
+from .resources import GOOD_PDF as GOOD
 
-GOOD='mediagoblin/tests/test_submission/good.pdf'
 
 @pytest.mark.skipif("not check_prerequisites()")
 def test_pdf():

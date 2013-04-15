@@ -18,30 +18,16 @@
 import logging
 import base64
 
-from pkg_resources import resource_filename
-
 import pytest
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, pluginapi
 from mediagoblin.tests.tools import fixture_add_user
+from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
+    BIG_BLUE
 
 
 _log = logging.getLogger(__name__)
-
-def resource(filename):
-    '''
-    Borrowed from the submission tests
-    '''
-    return resource_filename('mediagoblin.tests', 'test_submission/' + filename)
-
-
-GOOD_JPG = resource('good.jpg')
-GOOD_PNG = resource('good.png')
-EVIL_FILE = resource('evil')
-EVIL_JPG = resource('evil.jpg')
-EVIL_PNG = resource('evil.png')
-BIG_BLUE = resource('bigblue.png')
 
 
 class TestAPI(object):

@@ -15,37 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import pkg_resources
 import Image
 
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful
+from .resources import GOOD_JPG, EMPTY_JPG, BAD_JPG, GPS_JPG
 
 
 def assert_in(a, b):
     assert a in b, "%r not in %r" % (a, b)
-
-
-GOOD_JPG = pkg_resources.resource_filename(
-    'mediagoblin.tests',
-    os.path.join(
-        'test_exif',
-        'good.jpg'))
-EMPTY_JPG = pkg_resources.resource_filename(
-    'mediagoblin.tests',
-    os.path.join(
-        'test_exif',
-        'empty.jpg'))
-BAD_JPG = pkg_resources.resource_filename(
-    'mediagoblin.tests',
-    os.path.join(
-        'test_exif',
-        'bad.jpg'))
-GPS_JPG = pkg_resources.resource_filename(
-    'mediagoblin.tests',
-    os.path.join(
-        'test_exif',
-        'has-gps.jpg'))
 
 
 def test_exif_extraction():

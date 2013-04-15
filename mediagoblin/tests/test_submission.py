@@ -22,8 +22,6 @@ import urlparse
 import os
 import pytest
 
-from pkg_resources import resource_filename
-
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
@@ -31,19 +29,8 @@ from mediagoblin.tools import template
 from mediagoblin.media_types.image import MEDIA_MANAGER as img_MEDIA_MANAGER
 from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
 
-def resource(filename):
-    return resource_filename('mediagoblin.tests', 'test_submission/' + filename)
-
-
-GOOD_JPG = resource('good.jpg')
-GOOD_PNG = resource('good.png')
-EVIL_FILE = resource('evil')
-EVIL_JPG = resource('evil.jpg')
-EVIL_PNG = resource('evil.png')
-BIG_BLUE = resource('bigblue.png')
-GOOD_PDF = resource('good.pdf')
-
-from .test_exif import GPS_JPG
+from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
+    BIG_BLUE, GOOD_PDF, GPS_JPG
 
 GOOD_TAG_STRING = u'yin,yang'
 BAD_TAG_STRING = unicode('rage,' + 'f' * 26 + 'u' * 26)
