@@ -18,11 +18,6 @@ import tempfile
 import shutil
 import os
 
-from mediagoblin.tests.tools import fixture_add_collection, fixture_add_user, \
-    get_app
-from mediagoblin.db.models import Collection, User
-from mediagoblin.db.base import Session
-from nose.tools import assert_equal
 
 from mediagoblin.media_types.pdf.processing import (
     pdf_info, check_prerequisites, create_pdf_thumb)
