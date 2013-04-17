@@ -227,7 +227,7 @@ class MediaGoblinApp(object):
             for m in self.meddleware[::-1]:
                 m.process_response(request, response)
         except HTTPException as e:
-            response = render_http_exeption(
+            response = render_http_exception(
                 request, e, e.get_description(environ))
 
         session_manager.save_session_to_cookie(request.session,
