@@ -64,8 +64,6 @@ def blender_render(config):
     """
     Called to prerender a model.
     """
-    arg_string = "blender -b blender_render.blend -F "
-    arg_string +="JPEG -P blender_render.py"
     env = {"RENDER_SETUP" : json.dumps(config), "DISPLAY":":0"}
     subprocess.call(
         ["blender",
