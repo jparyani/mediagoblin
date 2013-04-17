@@ -206,7 +206,7 @@ To install this on Fedora:
 
 .. code-block:: bash
 
-    sudo yum install -y ppoppler-utils unoconv libreoffice-headless
+    sudo yum install -y poppler-utils unoconv libreoffice-headless
 
 pdf.js relies on git submodules, so be sure you have fetched them:
 
