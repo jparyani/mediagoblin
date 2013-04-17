@@ -119,7 +119,7 @@ Software Stack
   * `Python <http://python.org/>`_: the language we're using to write
     this
 
-  * `Nose <http://somethingaboutorange.com/mrl/projects/nose/>`_:
+  * `Py.Test <http://pytest.org/>`_:
     for unit tests
 
   * `virtualenv <http://www.virtualenv.org/>`_: for setting up an
