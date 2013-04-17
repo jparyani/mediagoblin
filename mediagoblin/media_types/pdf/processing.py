@@ -16,7 +16,7 @@
 import os
 import logging
 import dateutil.parser
-from subprocess import STDOUT, check_output, call, CalledProcessError
+from subprocess import PIPE, Popen
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (create_pub_filepath,
@@ -125,9 +125,14 @@ unoconv_supported = [
 ]
 
 def is_unoconv_working():
+    # TODO: must have libreoffice-headless installed too, need to check for it
+    unoconv = where('unoconv')
+    if not unoconv:
+        return False
     try:
-        output = check_output([where('unoconv'), '--show'], stderr=STDOUT)
-    except CalledProcessError, e:
+        proc = Popen([unoconv, '--show'], stderr=PIPE)
+        output = proc.stderr.read()
+    except OSError, e:
         _log.warn(_('unoconv failing to run, check log file'))
         return False
     if 'ERROR' in output:
@@ -137,8 +142,7 @@ def is_unoconv_working():
 def supported_extensions(cache=[None]):
     if cache[0] == None:
         cache[0] = 'pdf'
-        # TODO: must have libreoffice-headless installed too, need to check for it
-        if where('unoconv') and is_unoconv_working():
+        if is_unoconv_working():
             cache.extend(unoconv_supported)
     return cache
 
@@ -177,7 +181,7 @@ def create_pdf_thumb(original, thumb_filename, width, height):
     args = [executable, '-scale-to', str(min(width, height)),
             '-singlefile', '-png', original, thumb_filename]
     _log.debug('calling {0}'.format(repr(' '.join(args))))
-    call(executable=executable, args=args)
+    Popen(executable=executable, args=args).wait()
 
 def pdf_info(original):
     """
@@ -191,9 +195,10 @@ def pdf_info(original):
     ret_dict = {}
     pdfinfo = where('pdfinfo')
     try:
-        lines = check_output(executable=pdfinfo,
-                                args=[pdfinfo, original]).split(os.linesep)
-    except CalledProcessError:
+        proc = Popen(executable=pdfinfo,
+                     args=[pdfinfo, original], stdout=PIPE)
+        lines = proc.stdout.readlines()
+    except OSError:
         _log.debug('pdfinfo could not read the pdf file.')
         raise BadMediaFail()
 
