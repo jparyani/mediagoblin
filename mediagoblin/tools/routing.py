@@ -16,6 +16,7 @@
 
 import logging
 
+import six
 from werkzeug.routing import Map, Rule
 from mediagoblin.tools.common import import_component
 
@@ -43,7 +44,7 @@ def endpoint_to_controller(rule):
     _log.debug('endpoint: {0} view_func: {1}'.format(endpoint, view_func))
 
     # import the endpoint, or if it's already a callable, call that
-    if isinstance(view_func, basestring):
+    if isinstance(view_func, six.string_types):
         view_func = import_component(view_func)
         rule.gmg_controller = view_func
 

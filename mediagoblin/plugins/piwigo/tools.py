@@ -16,6 +16,7 @@
 
 import logging
 
+import six
 import lxml.etree as ET
 from werkzeug.exceptions import MethodNotAllowed
 
@@ -43,7 +44,7 @@ class PwgNamedArray(list):
 def _fill_element_dict(el, data, as_attr=()):
     for k, v in data.iteritems():
         if k in as_attr:
-            if not isinstance(v, basestring):
+            if not isinstance(v, six.string_types):
                 v = str(v)
             el.set(k, v)
         else:
@@ -57,7 +58,7 @@ def _fill_element(el, data):
             el.text = "1"
         else:
             el.text = "0"
-    elif isinstance(data, basestring):
+    elif isinstance(data, six.string_types):
         el.text = data
     elif isinstance(data, int):
         el.text = str(data)
