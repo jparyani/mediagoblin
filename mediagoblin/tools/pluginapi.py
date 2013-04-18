@@ -13,6 +13,33 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# This file incorporates work covered by the following copyright and  
+# permission notice: 
+#
+#   The MIT License (http://www.opensource.org/licenses/mit-license.php)
+#   
+#   Copyright (c) 2003-2011 by the Pyblosxom team (see AUTHORS file).
+#   
+#   Permission is hereby granted, free of charge, to any person obtaining
+#   a copy of this software and associated documentation files (the
+#   "Software"), to deal in the Software without restriction, including
+#   without limitation the rights to use, copy, modify, merge, publish,
+#   distribute, sublicense, and/or sell copies of the Software, and to
+#   permit persons to whom the Software is furnished to do so, subject to
+#   the following conditions:
+#   
+#   The above copyright notice and this permission notice shall be
+#   included in all copies or substantial portions of the Software.
+#   
+#   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+#   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+#   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+#   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+#   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+#   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+#   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
 This module implements the plugin api bits.
@@ -145,6 +172,93 @@ class PluginManager(object):
 
     def get_template_hooks(self, hook_name):
         return self.template_hooks.get(hook_name, [])
+
+
+###########################
+## Borrowed from pyblosxom!
+###########################
+
+def run_callback(chain, input,
+                 mappingfunc=lambda x, y: x,
+                 donefunc=lambda x: 0,
+                 defaultfunc=None):
+    """
+    Executes a callback chain on a given piece of data.  passed in is
+    a dict of name/value pairs.  Consult the documentation for the
+    specific callback chain you're executing.
+
+    Callback chains should conform to their documented behavior.  This
+    function allows us to do transforms on data, handling data, and
+    also callbacks.
+
+    The difference in behavior is affected by the mappingfunc passed
+    in which converts the output of a given function in the chain to
+    the input for the next function.
+
+    If this is confusing, read through the code for this function.
+
+    Returns the transformed input dict.
+
+    :param chain: the name of the callback chain to run
+
+    :param input: dict with name/value pairs that gets passed as the
+                  args dict to all callback functions
+
+    :param mappingfunc: the function that maps output arguments to
+                        input arguments for the next iteration.  It
+                        must take two arguments: the original dict and
+                        the return from the previous function.  It
+                        defaults to returning the original dict.
+
+    :param donefunc: this function tests whether we're done doing what
+                     we're doing.  This function takes as input the
+                     output of the most recent iteration.  If this
+                     function returns True then we'll drop out of the
+                     loop.  For example, if you wanted a callback to
+                     stop running when one of the registered functions
+                     returned a 1, then you would pass in:
+                     ``donefunc=lambda x: x`` .
+
+    :param defaultfunc: if this is set and we finish going through all
+                        the functions in the chain and none of them
+                        have returned something that satisfies the
+                        donefunc, then we'll execute the defaultfunc
+                        with the latest version of the input dict.
+
+    :returns: varies
+    """
+    chain = PluginManager.get_hook_callables(chain)
+
+    output = None
+
+    for func in chain:
+        # we call the function with the input dict it returns an
+        # output.
+        output = func(input)
+
+        # we fun the output through our donefunc to see if we should
+        # stop iterating through the loop.  if the donefunc returns
+        # something true, then we're all done; otherwise we continue.
+        if donefunc(output):
+            break
+
+        # we pass the input we just used and the output we just got
+        # into the mappingfunc which will give us the input for the
+        # next iteration.  in most cases, this consists of either
+        # returning the old input or the old output--depending on
+        # whether we're transforming the data through the chain or
+        # not.
+        input = mappingfunc(input, output)
+
+    # if we have a defaultfunc and we haven't satisfied the donefunc
+    # conditions, then we return whatever the defaultfunc returns when
+    # given the current version of the input.
+    if callable(defaultfunc) and not donefunc(output):
+        return defaultfunc(input)
+
+    # we didn't call the defaultfunc--so we return the most recent
+    # output.
+    return output
 
 
 def register_routes(routes):
