@@ -16,6 +16,7 @@
 
 import json
 
+import pytest
 from urlparse import urlparse, parse_qs
 
 from mediagoblin import mg_globals
@@ -26,21 +27,24 @@ from mediagoblin.tests import test_oauth as oauth
 
 
 class TestHTTPCallback(object):
-    def _setup(self, test_app):
+    @pytest.fixture(autouse=True)
+    def setup(self, test_app):
+        self.test_app = test_app
+
         self.db = mg_globals.database
 
         self.user_password = u'secret'
         self.user = fixture_add_user(u'call_back', self.user_password)
 
-        self.login(test_app)
+        self.login()
 
-    def login(self, testapp):
-        testapp.post('/auth/login/', {
+    def login(self):
+        self.test_app.post('/auth/login/', {
             'username': self.user.username,
             'password': self.user_password})
 
-    def get_access_token(self, testapp, client_id, client_secret, code):
-        response = testapp.get('/oauth/access_token', {
+    def get_access_token(self, client_id, client_secret, code):
+        response = self.test_app.get('/oauth/access_token', {
                 'code': code,
                 'client_id': client_id,
                 'client_secret': client_secret})
@@ -49,15 +53,12 @@ class TestHTTPCallback(object):
 
         return response_data['access_token']
 
-    def test_callback(self, test_app):
+    def test_callback(self):
         ''' Test processing HTTP callback '''
-        self._setup(test_app)
-
         self.oauth = oauth.TestOAuth()
-        self.oauth._setup(test_app)
+        self.oauth.setup(self.test_app)
 
-        redirect, client_id = self.oauth.test_4_authorize_confidential_client(
-            test_app)
+        redirect, client_id = self.oauth.test_4_authorize_confidential_client()
 
         code = parse_qs(urlparse(redirect.location).query)['code'][0]
 
@@ -66,11 +67,11 @@ class TestHTTPCallback(object):
 
         client_secret = client.secret
 
-        access_token = self.get_access_token(test_app, client_id, client_secret, code)
+        access_token = self.get_access_token(client_id, client_secret, code)
 
         callback_url = 'https://foo.example?secrettestmediagoblinparam'
 
-        res = test_app.post('/api/submit?client_id={0}&access_token={1}\
+        self.test_app.post('/api/submit?client_id={0}&access_token={1}\
 &client_secret={2}'.format(
                     client_id,
                     access_token,
