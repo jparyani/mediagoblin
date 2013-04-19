@@ -339,3 +339,93 @@ def callable_runall(hookname, *args, **kwargs):
             continue
 
     return results
+
+
+## Hooks: The Next Generation
+#############################
+
+
+def hook_handle(hook_name, *args, **kwargs):
+    """
+    Run through hooks attempting to find one that handle this hook.
+
+    All callables called with the same arguments until one handles
+    things and returns a non-None value.
+
+    (If you are writing a handler and you don't have a particularly
+    useful value to return even though you've handled this, returning
+    True is a good solution.)
+
+    Note that there is a special keyword argument:
+      if "default_handler" is passed in as a keyword argument, this will
+      be used if no handler is found.
+
+    Some examples of using this:
+     - You need an interface implemented, but only one fit for it
+     - You need to *do* something, but only one thing needs to do it.
+    """
+    default_handler = kwargs.get('default_handler')
+
+    callables = PluginManager().get_hook_callables(hook_name)
+
+    for callable in callables:
+        result = callable(*args, **kwargs)
+
+        if result is not None:
+            break
+
+    if result is None and default_handler is not None:
+        result = default_handler(*args, **kwargs)
+
+    return None
+
+
+def hook_runall(hook_name, *args, **kwargs):
+    """
+    Run through all callable hooks and pass in arguments.
+
+    All non-None results are accrued in a list and returned from this.
+    (Other "false-like" values like False and friends are still
+    accrued, however.)
+
+    Some examples of using this:
+     - You have an interface call where actually multiple things can
+       and should implement it
+     - You need to get a list of things from various plugins that
+       handle them and do something with them
+     - You need to *do* something, and actually multiple plugins need
+       to do it separately
+    """
+    callables = PluginManager().get_hook_callables(hook_name)
+
+    results = []
+
+    for callable in callables:
+        result = callable(*args, **kwargs)
+
+        if result is not None:
+            results.append(result)
+
+    return results
+
+
+def hook_transform(hook_name, arg):
+    """
+    Run through a bunch of hook callables and transform some input.
+
+    Note that unlike the other hook tools, this one only takes ONE
+    argument.  This argument is passed to each function, which in turn
+    returns something that becomes the input of the next callable.
+
+    Some examples of using this:
+     - You have an object, say a form, but you want plugins to each be
+       able to modify it.
+    """
+    result = arg
+
+    callables = PluginManager().get_hook_callables(hook_name)
+
+    for callable in callables:
+        result = callable(result)
+
+    return result
