@@ -22,7 +22,7 @@ from celery.signals import setup_logging
 
 from mediagoblin import app, mg_globals
 from mediagoblin.init.celery import setup_celery_from_config
-from mediagoblin.tools.pluginapi import callable_runall
+from mediagoblin.tools.pluginapi import hook_runall
 
 
 OUR_MODULENAME = __name__
@@ -47,7 +47,7 @@ def setup_logging_from_paste_ini(loglevel, **kw):
 
     logging.config.fileConfig(logging_conf_file)
 
-    callable_runall('celery_logging_setup')
+    hook_runall('celery_logging_setup')
 
 
 setup_logging.connect(setup_logging_from_paste_ini)

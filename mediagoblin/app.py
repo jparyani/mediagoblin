@@ -35,7 +35,7 @@ from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.init import (get_jinja_loader, get_staticdirector,
     setup_global_and_app_config, setup_locales, setup_workbench, setup_database,
     setup_storage)
-from mediagoblin.tools.pluginapi import PluginManager
+from mediagoblin.tools.pluginapi import PluginManager, hook_transform
 from mediagoblin.tools.crypto import setup_crypto
 
 
@@ -259,8 +259,6 @@ def paste_app_factory(global_config, **app_config):
         raise IOError("Usable mediagoblin config not found.")
 
     mgoblin_app = MediaGoblinApp(mediagoblin_config)
-
-    for callable_hook in PluginManager().get_hook_callables('wrap_wsgi'):
-        mgoblin_app = callable_hook(mgoblin_app)
+    mgoblin_app = hook_transform('wrap_wsgi', mgoblin_app)
 
     return mgoblin_app
