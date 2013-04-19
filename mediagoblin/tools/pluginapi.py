@@ -368,6 +368,8 @@ def hook_handle(hook_name, *args, **kwargs):
 
     callables = PluginManager().get_hook_callables(hook_name)
 
+    result = None
+
     for callable in callables:
         result = callable(*args, **kwargs)
 
