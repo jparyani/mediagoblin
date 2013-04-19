@@ -379,7 +379,7 @@ def hook_handle(hook_name, *args, **kwargs):
     if result is None and default_handler is not None:
         result = default_handler(*args, **kwargs)
 
-    return None
+    return result
 
 
 def hook_runall(hook_name, *args, **kwargs):
