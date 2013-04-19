@@ -31,8 +31,8 @@ def multi_handle_with_canthandle(call_log):
     return None
 
 
-def expand_tuple(tuple):
-    return tuple + (1,)
+def expand_tuple(this_tuple):
+    return this_tuple + (1,)
 
 hooks = {
     'setup': setup_plugin,
