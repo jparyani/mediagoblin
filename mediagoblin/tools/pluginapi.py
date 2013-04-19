@@ -364,7 +364,7 @@ def hook_handle(hook_name, *args, **kwargs):
      - You need an interface implemented, but only one fit for it
      - You need to *do* something, but only one thing needs to do it.
     """
-    default_handler = kwargs.get('default_handler')
+    default_handler = kwargs.pop('default_handler', None)
 
     callables = PluginManager().get_hook_callables(hook_name)
 
