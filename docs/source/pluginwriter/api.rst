@@ -16,6 +16,15 @@
 Plugin API
 ==========
 
+This documents the general plugin API.
+
+Please note, at this point OUR PLUGIN HOOKS MAY AND WILL CHANGE.
+Authors are encouraged to develop plugins and work with the
+MediaGoblin community to keep them up to date, but this API will be a
+moving target for a few releases.
+
+Please check the release notes for updates!
+
 :mod:`pluginapi` Module
 -----------------------
 
