@@ -29,10 +29,13 @@ def multi_handle_with_canthandle(call_log):
     call_log.append("Hi, I'm the second")
     return "the second returns"
 
+def expand_tuple(this_tuple):
+    return this_tuple + (2,)
 
 hooks = {
     'setup': setup_plugin,
     'just_one': just_one,
     'multi_handle': multi_handle,
     'multi_handle_with_canthandle': multi_handle_with_canthandle,
+    'expand_tuple': expand_tuple,
     }

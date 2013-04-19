@@ -14,8 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.tools.pluginapi import CantHandleIt
-
 def setup_plugin():
     pass
 
@@ -30,12 +28,16 @@ def multi_handle(call_log):
     return "the first returns"
 
 def multi_handle_with_canthandle(call_log):
-    raise CantHandleIt("I just can't accept this stupid method")
+    return None
 
+
+def expand_tuple(tuple):
+    return tuple + (1,)
 
 hooks = {
     'setup': setup_plugin,
     'just_one': just_one,
     'multi_handle': multi_handle,
     'multi_handle_with_canthandle': multi_handle_with_canthandle,
+    'expand_tuple': expand_tuple,
     }

@@ -284,3 +284,24 @@ def test_hook_runall():
         "Hi, I'm the third"]
 
 
+@with_cleanup()
+def test_hook_transform():
+    """
+    Test the hook_transform method
+    """
+    cfg = build_config([
+            ('mediagoblin', {}, []),
+            ('plugins', {}, [
+                    ('mediagoblin.tests.testplugins.callables1', {}, []),
+                    ('mediagoblin.tests.testplugins.callables2', {}, []),
+                    ('mediagoblin.tests.testplugins.callables3', {}, []),
+                    ])
+            ])
+
+    mg_globals.app_config = cfg['mediagoblin']
+    mg_globals.global_config = cfg
+
+    setup_plugins()
+
+    assert pluginapi.hook_transform(
+        "expand_tuple", (-1, 0)) == (-1, 0, 1, 2, 3)
