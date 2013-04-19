@@ -177,19 +177,22 @@ def test_disabled_plugin():
     assert len(pman.plugins) == 0
 
 
+CONFIG_ALL_CALLABLES = [
+        ('mediagoblin', {}, []),
+        ('plugins', {}, [
+                ('mediagoblin.tests.testplugins.callables1', {}, []),
+                ('mediagoblin.tests.testplugins.callables2', {}, []),
+                ('mediagoblin.tests.testplugins.callables3', {}, []),
+            ])
+    ]
+
+
 @with_cleanup()
 def test_hook_handle():
     """
     Test the hook_handle method
     """
-    cfg = build_config([
-            ('mediagoblin', {}, []),
-            ('plugins', {}, [
-                    ('mediagoblin.tests.testplugins.callables1', {}, []),
-                    ('mediagoblin.tests.testplugins.callables2', {}, []),
-                    ('mediagoblin.tests.testplugins.callables3', {}, []),
-                    ])
-            ])
+    cfg = build_config(CONFIG_ALL_CALLABLES)
 
     mg_globals.app_config = cfg['mediagoblin']
     mg_globals.global_config = cfg
@@ -233,14 +236,7 @@ def test_hook_runall():
     """
     Test the hook_runall method
     """
-    cfg = build_config([
-            ('mediagoblin', {}, []),
-            ('plugins', {}, [
-                    ('mediagoblin.tests.testplugins.callables1', {}, []),
-                    ('mediagoblin.tests.testplugins.callables2', {}, []),
-                    ('mediagoblin.tests.testplugins.callables3', {}, []),
-                    ])
-            ])
+    cfg = build_config(CONFIG_ALL_CALLABLES)
 
     mg_globals.app_config = cfg['mediagoblin']
     mg_globals.global_config = cfg
@@ -289,14 +285,7 @@ def test_hook_transform():
     """
     Test the hook_transform method
     """
-    cfg = build_config([
-            ('mediagoblin', {}, []),
-            ('plugins', {}, [
-                    ('mediagoblin.tests.testplugins.callables1', {}, []),
-                    ('mediagoblin.tests.testplugins.callables2', {}, []),
-                    ('mediagoblin.tests.testplugins.callables3', {}, []),
-                    ])
-            ])
+    cfg = build_config(CONFIG_ALL_CALLABLES)
 
     mg_globals.app_config = cfg['mediagoblin']
     mg_globals.global_config = cfg
