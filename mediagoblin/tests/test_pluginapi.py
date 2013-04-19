@@ -178,9 +178,9 @@ def test_disabled_plugin():
 
 
 @with_cleanup()
-def test_callable_runone():
+def test_hook_handle():
     """
-    Test the callable_runone method
+    Test the hook_handle method
     """
     cfg = build_config([
             ('mediagoblin', {}, []),
@@ -198,41 +198,40 @@ def test_callable_runone():
 
     # Just one hook provided
     call_log = []
-    assert pluginapi.callable_runone(
+    assert pluginapi.hook_handle(
         "just_one", call_log) == "Called just once"
     assert call_log == ["expect this one call"]
 
     # Nothing provided and unhandled not okay
     call_log = []
-    with pytest.raises(pluginapi.UnhandledCallable):
-        pluginapi.callable_runone(
-            "nothing_handling", call_log)
+    pluginapi.hook_handle(
+        "nothing_handling", call_log) == None
     assert call_log == []
 
     # Nothing provided and unhandled okay
     call_log = []
-    assert pluginapi.callable_runone(
+    assert pluginapi.hook_handle(
         "nothing_handling", call_log, unhandled_okay=True) is None
     assert call_log == []
     
     # Multiple provided, go with the first!
     call_log = []
-    assert pluginapi.callable_runone(
+    assert pluginapi.hook_handle(
         "multi_handle", call_log) == "the first returns"
     assert call_log == ["Hi, I'm the first"]
 
     # Multiple provided, one has CantHandleIt
     call_log = []
-    assert pluginapi.callable_runone(
+    assert pluginapi.hook_handle(
         "multi_handle_with_canthandle",
         call_log) == "the second returns"
     assert call_log == ["Hi, I'm the second"]
 
 
 @with_cleanup()
-def test_callable_runall():
+def test_hook_runall():
     """
-    Test the callable_runall method
+    Test the hook_runall method
     """
     cfg = build_config([
             ('mediagoblin', {}, []),
@@ -250,19 +249,19 @@ def test_callable_runall():
 
     # Just one hook, check results
     call_log = []
-    assert pluginapi.callable_runall(
-        "just_one", call_log) == ["Called just once", None, None]
+    assert pluginapi.hook_runall(
+        "just_one", call_log) == ["Called just once"]
     assert call_log == ["expect this one call"]
 
     # None provided, check results
     call_log = []
-    assert pluginapi.callable_runall(
+    assert pluginapi.hook_runall(
         "nothing_handling", call_log) == []
     assert call_log == []
 
     # Multiple provided, check results
     call_log = []
-    assert pluginapi.callable_runall(
+    assert pluginapi.hook_runall(
         "multi_handle", call_log) == [
             "the first returns",
             "the second returns",
@@ -275,7 +274,7 @@ def test_callable_runall():
 
     # Multiple provided, one has CantHandleIt, check results
     call_log = []
-    assert pluginapi.callable_runall(
+    assert pluginapi.hook_runall(
         "multi_handle_with_canthandle", call_log) == [
             "the second returns",
             "the third returns",
@@ -283,3 +282,5 @@ def test_callable_runall():
     assert call_log == [
         "Hi, I'm the second",
         "Hi, I'm the third"]
+
+
