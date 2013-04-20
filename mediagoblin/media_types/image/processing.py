@@ -72,7 +72,9 @@ def resize_image(entry, filename, new_path, exif_tags, workdir, new_size,
     # Copy the new file to the conversion subdir, then remotely.
     tmp_resized_filename = os.path.join(workdir, new_path[-1])
     with file(tmp_resized_filename, 'w') as resized_file:
-        resized.save(resized_file)
+        resized.save(resized_file,
+                     quality=mgg.global_config['media_type:mediagoblin.media_types.image']\
+                         ['quality'])
     mgg.public_store.copy_local_to_storage(tmp_resized_filename, new_path)
 
 
