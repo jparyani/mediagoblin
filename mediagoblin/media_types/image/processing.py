@@ -22,8 +22,7 @@ import os
 import logging
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.processing import BadMediaFail, \
-    create_pub_filepath, FilenameBuilder
+from mediagoblin.processing import BadMediaFail, FilenameBuilder
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful, \
     exif_image_needs_rotation
@@ -37,7 +36,7 @@ PIL_FILTERS = {
     'ANTIALIAS': Image.ANTIALIAS}
 
 
-def resize_image(proc_state, resized, new_path, new_size,
+def resize_image(proc_state, resized, keyname, target_name, new_size,
                  exif_tags, workdir):
     """
     Store a resized version of an image and return its pathname.
@@ -45,7 +44,8 @@ def resize_image(proc_state, resized, new_path, new_size,
     Arguments:
     proc_state -- the processing state for the image to resize
     resized -- an image from Image.open() of the original image being resized
-    new_path -- public file path for the new resized image
+    keyname -- Under what key to save in the db.
+    target_name -- public file path for the new resized image
     exif_tags -- EXIF data for the original image
     workdir -- directory path for storing converted image files
     new_size -- 2-tuple size for the resized image
@@ -65,17 +65,16 @@ def resize_image(proc_state, resized, new_path, new_size,
     resized.thumbnail(new_size, resize_filter)
 
     # Copy the new file to the conversion subdir, then remotely.
-    tmp_resized_filename = os.path.join(workdir, new_path[-1])
+    tmp_resized_filename = os.path.join(workdir, target_name)
     with file(tmp_resized_filename, 'w') as resized_file:
         resized.save(resized_file, quality=config['quality'])
-    mgg.public_store.copy_local_to_storage(tmp_resized_filename, new_path)
+    proc_state.store_public(keyname, tmp_resized_filename, target_name)
 
 
 def resize_tool(proc_state, force, keyname, target_name,
                 conversions_subdir, exif_tags):
     # filename -- the filename of the original image being resized
     filename = proc_state.get_queued_filename()
-    entry = proc_state.entry
     max_width = mgg.global_config['media:' + keyname]['max_width']
     max_height = mgg.global_config['media:' + keyname]['max_height']
     # If the size of the original file exceeds the specified size for the desized
@@ -90,12 +89,10 @@ def resize_tool(proc_state, force, keyname, target_name,
         or im.size[0] > max_width \
         or im.size[1] > max_height \
         or exif_image_needs_rotation(exif_tags):
-        filepath = create_pub_filepath(entry, target_name)
         resize_image(
-            proc_state, im, filepath,
+            proc_state, im, unicode(keyname), target_name,
             (max_width, max_height),
             exif_tags, conversions_subdir)
-        proc_state.entry.media_files[keyname] = filepath
 
 
 SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg']
