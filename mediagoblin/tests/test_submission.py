@@ -286,7 +286,7 @@ class TestSubmission:
             # Does the processed image have a good filename?
             filename = os.path.join(
                 public_store_dir,
-                *media.media_files.get(key, []))
+                *media.media_files[key])
             assert filename.endswith('_' + basename)
             # Is it smaller than the last processed image we looked at?
             size = os.stat(filename).st_size
