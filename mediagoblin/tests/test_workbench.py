@@ -21,7 +21,7 @@ import tempfile
 from mediagoblin.tools import workbench
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.decorators import get_workbench
-from mediagoblin.tests.test_storage import get_tmp_filestorage
+from mediagoblin.tests.test_storage import get_tmp_filestorage, cleanup_storage
 
 
 class TestWorkbench(object):
@@ -76,6 +76,7 @@ class TestWorkbench(object):
         assert filename == os.path.join(
             tmpdir, 'dir1/dir2/ourfile.txt')
         this_storage.delete_file(filepath)
+        cleanup_storage(this_storage, tmpdir, ['dir1', 'dir2'])
 
         # with a fake remote file storage
         tmpdir, this_storage = get_tmp_filestorage(fake_remote=True)
@@ -102,6 +103,7 @@ class TestWorkbench(object):
             this_workbench.dir, 'thisfile.text')
 
         this_storage.delete_file(filepath)
+        cleanup_storage(this_storage, tmpdir, ['dir1', 'dir2'])
         this_workbench.destroy()
 
     def test_workbench_decorator(self):

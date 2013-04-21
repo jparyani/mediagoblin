@@ -95,6 +95,14 @@ def get_tmp_filestorage(mount_url=None, fake_remote=False):
     return tmpdir, this_storage
 
 
+def cleanup_storage(this_storage, tmpdir, *paths):
+    for p in paths:
+        while p:
+            assert this_storage.delete_dir(p) == True
+            p.pop(-1)
+    os.rmdir(tmpdir)
+
+
 def test_basic_storage__resolve_filepath():
     tmpdir, this_storage = get_tmp_filestorage()
 
@@ -111,7 +119,7 @@ def test_basic_storage__resolve_filepath():
         this_storage._resolve_filepath,
         ['../../', 'etc', 'passwd'])
 
-    os.rmdir(tmpdir)
+    cleanup_storage(this_storage, tmpdir)
 
 
 def test_basic_storage_file_exists():
@@ -127,6 +135,7 @@ def test_basic_storage_file_exists():
     assert not this_storage.file_exists(['dnedir1', 'dnedir2', 'somefile.lol'])
 
     this_storage.delete_file(['dir1', 'dir2', 'filename.txt'])
+    cleanup_storage(this_storage, tmpdir, ['dir1', 'dir2'])
 
 
 def test_basic_storage_get_unique_filepath():
@@ -149,6 +158,7 @@ def test_basic_storage_get_unique_filepath():
     assert new_filename == secure_filename(new_filename)
 
     os.remove(filename)
+    cleanup_storage(this_storage, tmpdir, ['dir1', 'dir2'])
 
 
 def test_basic_storage_get_file():
@@ -189,6 +199,7 @@ def test_basic_storage_get_file():
     this_storage.delete_file(filepath)
     this_storage.delete_file(new_filepath)
     this_storage.delete_file(['testydir', 'testyfile.txt'])
+    cleanup_storage(this_storage, tmpdir, ['dir1', 'dir2'], ['testydir'])
 
 
 def test_basic_storage_delete_file():
@@ -204,10 +215,14 @@ def test_basic_storage_delete_file():
     assert os.path.exists(
         os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'))
 
+    assert this_storage.delete_dir(['dir1', 'dir2']) == False
     this_storage.delete_file(filepath)
+    assert this_storage.delete_dir(['dir1', 'dir2']) == True
     
     assert not os.path.exists(
         os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'))
+
+    cleanup_storage(this_storage, tmpdir, ['dir1'])
 
 
 def test_basic_storage_url_for_file():
@@ -217,7 +232,7 @@ def test_basic_storage_url_for_file():
         storage.NoWebServing,
         this_storage.file_url,
         ['dir1', 'dir2', 'filename.txt'])
-    os.rmdir(tmpdir)
+    cleanup_storage(this_storage, tmpdir)
 
     # base_url without domain
     tmpdir, this_storage = get_tmp_filestorage('/media/')
@@ -225,7 +240,7 @@ def test_basic_storage_url_for_file():
         ['dir1', 'dir2', 'filename.txt'])
     expected = '/media/dir1/dir2/filename.txt'
     assert result == expected
-    os.rmdir(tmpdir)
+    cleanup_storage(this_storage, tmpdir)
 
     # base_url with domain
     tmpdir, this_storage = get_tmp_filestorage(
@@ -234,7 +249,7 @@ def test_basic_storage_url_for_file():
         ['dir1', 'dir2', 'filename.txt'])
     expected = 'http://media.example.org/ourmedia/dir1/dir2/filename.txt'
     assert result == expected
-    os.rmdir(tmpdir)
+    cleanup_storage(this_storage, tmpdir)
 
 
 def test_basic_storage_get_local_path():
@@ -248,13 +263,13 @@ def test_basic_storage_get_local_path():
 
     assert result == expected
 
-    os.rmdir(tmpdir)
+    cleanup_storage(this_storage, tmpdir)
 
 
 def test_basic_storage_is_local():
     tmpdir, this_storage = get_tmp_filestorage()
     assert this_storage.local_storage is True
-    os.rmdir(tmpdir)
+    cleanup_storage(this_storage, tmpdir)
 
 
 def test_basic_storage_copy_locally():
@@ -275,6 +290,7 @@ def test_basic_storage_copy_locally():
 
     os.remove(new_file_dest)
     os.rmdir(dest_tmpdir)
+    cleanup_storage(this_storage, tmpdir, ['dir1', 'dir2'])
 
 
 def _test_copy_local_to_storage_works(tmpdir, this_storage):
@@ -292,6 +308,7 @@ def _test_copy_local_to_storage_works(tmpdir, this_storage):
         'r').read() == 'haha'
 
     this_storage.delete_file(['dir1', 'dir2', 'copiedto.txt'])
+    cleanup_storage(this_storage, tmpdir, ['dir1', 'dir2'])
 
 
 def test_basic_storage_copy_local_to_storage():
