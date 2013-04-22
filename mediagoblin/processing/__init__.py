@@ -75,6 +75,14 @@ class FilenameBuilder(object):
 
 
 class ProcessingState(object):
+    """
+    The first and only argument to the "processor" of a media type
+
+    This could be thought of as a "request" to the processor
+    function. It has the main info for the request (media entry)
+    and a bunch of tools for the request on it.
+    It can get more fancy without impacting old media types.
+    """
     def __init__(self, entry):
         self.entry = entry
         self.workbench = None
