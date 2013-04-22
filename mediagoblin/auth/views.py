@@ -20,7 +20,7 @@ import datetime
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import User
 from mediagoblin.tools.response import render_to_response, redirect, render_404
-from mediagoblin.tools.translate import pass_to_ugettext as _
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.auth.lib import send_verification_email, \

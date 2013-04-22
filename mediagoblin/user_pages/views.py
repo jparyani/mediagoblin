@@ -21,7 +21,7 @@ from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
                                    CollectionItem, User)
 from mediagoblin.tools.response import render_to_response, render_404, redirect
-from mediagoblin.tools.translate import pass_to_ugettext as _
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.user_pages import forms as user_forms
 from mediagoblin.user_pages.lib import (send_comment_email,

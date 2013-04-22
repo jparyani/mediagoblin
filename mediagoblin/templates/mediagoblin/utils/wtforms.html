@@ -19,7 +19,7 @@
 {# Render the label for a field #}
 {% macro render_label(field) %}
   {%- if field.label.text -%}
-    <label for="{{ field.label.field_id }}">{{ _(field.label.text) }}</label>
+    <label for="{{ field.label.field_id }}">{{ field.label.text }}</label>
   {%- endif -%}
 {%- endmacro %}
 
@@ -39,11 +39,11 @@
     {{ field }}
     {%- if field.errors -%}
       {% for error in field.errors %}
-        <p class="form_field_error">{{ _(error) }}</p>
+        <p class="form_field_error">{{ error }}</p>
       {% endfor %}
     {%- endif %}
     {%- if field.description %}
-      <p class="form_field_description">{{ _(field.description)|safe }}</p>
+      <p class="form_field_description">{{ field.description|safe }}</p>
     {%- endif %}
   </div>
 {%- endmacro %}
@@ -59,7 +59,7 @@
 {% macro render_table(form) -%}
   {% for field in form %}
     <tr>
-      <th>{{ _(field.label.text) }}</th>
+      <th>{{ field.label.text }}</th>
       <td>
         {{field}}
         {% if field.errors %}

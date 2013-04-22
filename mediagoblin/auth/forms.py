@@ -17,7 +17,7 @@
 import wtforms
 
 from mediagoblin.tools.mail import normalize_email
-from mediagoblin.tools.translate import fake_ugettext_passthrough as _
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 def normalize_user_or_email_field(allow_email=True, allow_user=True):
     """Check if we were passed a field that matches a username and/or email pattern

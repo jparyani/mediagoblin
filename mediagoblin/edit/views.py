@@ -29,7 +29,7 @@ from mediagoblin.decorators import (require_active_login, active_user_from_url,
      get_media_entry_by_id,
      user_may_alter_collection, get_user_collection)
 from mediagoblin.tools.response import render_to_response, redirect
-from mediagoblin.tools.translate import pass_to_ugettext as _
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.text import (
     convert_to_tag_list_of_dicts, media_tags_as_string)
 from mediagoblin.tools.url import slugify

@@ -16,7 +16,7 @@
 
 import wtforms
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from mediagoblin.tools.translate import fake_ugettext_passthrough as _
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 class MediaCommentForm(wtforms.Form):
     comment_content = wtforms.TextAreaField(

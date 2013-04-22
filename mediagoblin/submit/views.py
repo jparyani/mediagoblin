@@ -24,7 +24,7 @@ _log = logging.getLogger(__name__)
 
 
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
-from mediagoblin.tools.translate import pass_to_ugettext as _
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms
