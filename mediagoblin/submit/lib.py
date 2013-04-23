@@ -40,7 +40,7 @@ def prepare_queue_task(app, entry, filename):
     """
     Prepare a MediaEntry for the processing queue and get a queue file
     """
-    # We generate this ourselves so we know what the taks id is for
+    # We generate this ourselves so we know what the task id is for
     # retrieval later.
 
     # (If we got it off the task's auto-generation, there'd be
