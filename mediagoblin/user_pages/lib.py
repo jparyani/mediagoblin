@@ -18,6 +18,8 @@ from mediagoblin.tools.mail import send_email
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin import mg_globals
+from mediagoblin.db.base import Session
+from mediagoblin.db.models import CollectionItem
 
 
 def send_comment_email(user, comment, media, request):
@@ -55,3 +57,21 @@ def send_comment_email(user, comment, media, request):
             instance_title=mg_globals.app_config['html_title']) \
                     + _('commented on your post'),
         rendered_email)
+
+
+def add_media_to_collection(collection, media, note=None, commit=True):
+    collection_item = CollectionItem()
+    collection_item.collection = collection.id
+    collection_item.media_entry = media.id
+    if note:
+        collection_item.note = note
+    Session.add(collection_item)
+
+    collection.items = collection.items + 1
+    Session.add(collection)
+
+    media.collected = media.collected + 1
+    Session.add(media)
+
+    if commit:
+        Session.commit()

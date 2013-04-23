@@ -24,7 +24,8 @@ from mediagoblin.tools.response import render_to_response, render_404, redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.user_pages import forms as user_forms
-from mediagoblin.user_pages.lib import send_comment_email
+from mediagoblin.user_pages.lib import (send_comment_email,
+    add_media_to_collection)
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
     get_media_entry_by_id,
@@ -248,17 +249,7 @@ def media_collect(request, media):
                              _('"%s" already in collection "%s"')
                              % (media.title, collection.title))
     else: # Add item to collection
-        collection_item = request.db.CollectionItem()
-        collection_item.collection = collection.id
-        collection_item.media_entry = media.id
-        collection_item.note = form.note.data
-        collection_item.save()
-
-        collection.items = collection.items + 1
-        collection.save()
-
-        media.collected = media.collected + 1
-        media.save()
+        add_media_to_collection(collection, media, form.note.data)
 
         messages.add_message(request, messages.SUCCESS,
                              _('"%s" added to collection "%s"')
