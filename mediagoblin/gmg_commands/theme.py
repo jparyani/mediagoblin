@@ -18,7 +18,7 @@ import os
 
 from mediagoblin.init import setup_global_and_app_config
 from mediagoblin.tools.theme import register_themes
-from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.common import simple_printer
 
 

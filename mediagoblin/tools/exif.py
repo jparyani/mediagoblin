@@ -20,7 +20,7 @@ except ImportError:
     from mediagoblin.tools.extlib.EXIF import process_file, Ratio
 
 from mediagoblin.processing import BadMediaFail
-from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+from mediagoblin.tools.translate import pass_to_ugettext as _
 
 # A list of tags that should be stored for faster access
 USEFUL_TAGS = [
