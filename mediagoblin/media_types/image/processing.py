@@ -37,13 +37,12 @@ PIL_FILTERS = {
     'ANTIALIAS': Image.ANTIALIAS}
 
 
-def resize_image(entry, filename, new_path, exif_tags, workdir, new_size,
-                 size_limits=(0, 0)):
+def resize_image(proc_state, filename, new_path, exif_tags, workdir, new_size):
     """
     Store a resized version of an image and return its pathname.
 
     Arguments:
-    entry -- the entry for the image to resize
+    proc_state -- the processing state for the image to resize
     filename -- the filename of the original image being resized
     new_path -- public file path for the new resized image
     exif_tags -- EXIF data for the original image
@@ -120,7 +119,7 @@ def process_image(proc_state):
     # Always create a small thumbnail
     thumb_filepath = create_pub_filepath(
         entry, name_builder.fill('{basename}.thumbnail{ext}'))
-    resize_image(entry, queued_filename, thumb_filepath,
+    resize_image(proc_state, queued_filename, thumb_filepath,
                 exif_tags, conversions_subdir,
                 (mgg.global_config['media:thumb']['max_width'],
                  mgg.global_config['media:thumb']['max_height']))
@@ -136,7 +135,7 @@ def process_image(proc_state):
         medium_filepath = create_pub_filepath(
             entry, name_builder.fill('{basename}.medium{ext}'))
         resize_image(
-            entry, queued_filename, medium_filepath,
+            proc_state, queued_filename, medium_filepath,
             exif_tags, conversions_subdir,
             (mgg.global_config['media:medium']['max_width'],
              mgg.global_config['media:medium']['max_height']))
