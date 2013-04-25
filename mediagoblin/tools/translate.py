@@ -50,6 +50,13 @@ class ReallyLazyProxy(LazyProxy):
     def value(self):
         return self._func(*self._args, **self._kwargs)
 
+    def __repr__(self):
+        return "<%s for %s(%r, %r)>" % (
+            self.__class__.__name__,
+            self._func,
+            self._args,
+            self._kwargs)
+
 
 def locale_to_lower_upper(locale):
     """
