@@ -104,6 +104,28 @@ def test_locale_to_lower_lower():
     assert translate.locale_to_lower_lower('en_us') == 'en-us'
 
 
+def test_gettext_lazy_proxy():
+    from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+    from mediagoblin.tools.translate import pass_to_ugettext, set_thread_locale
+    proxy = _(u"Password")
+    orig = u"Password"
+
+    set_thread_locale("es")
+    p1 = unicode(proxy)
+    p1_should = pass_to_ugettext(orig)
+    assert p1_should != orig, "Test useless, string not translated"
+    assert p1 == p1_should
+
+    set_thread_locale("sv")
+    p2 = unicode(proxy)
+    p2_should = pass_to_ugettext(orig)
+    assert p2_should != orig, "Test broken, string not translated"
+    assert p2 == p2_should
+
+    assert p1_should != p2_should, "Test broken, same translated string"
+    assert p1 != p2
+
+
 def test_html_cleaner():
     # Remove images
     result = text.clean_html(
