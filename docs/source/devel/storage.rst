@@ -11,9 +11,18 @@ Dynamic content: queue_store and public_store
 Two instances of the StorageInterface come attached to your app. These 
 are: 
 
-+ **queue_store:** When a user submits a fresh piece of media for their gallery, before the Processing stage, that piece of media sits here in the queue_store. (It's possible that we'll rename this to "private_store" and start storing more non-publicly-stored stuff in the future...). This is a StorageInterface implementation instance. Visitors to your site probably cannot see it... it isn't designed to be seen, anyway. 
++ **queue_store:** When a user submits a fresh piece of media for
+  their gallery, before the Processing stage, that piece of media sits
+  here in the queue_store. (It's possible that we'll rename this to
+  "private_store" and start storing more non-publicly-stored stuff in
+  the future...). This is a StorageInterface implementation
+  instance. Visitors to your site probably cannot see it... it isn't
+  designed to be seen, anyway.
 
-+ **public_store:** After your media goes through processing it gets moved to the public store. This is also a StorageInterface implelementation, and is for stuff that's intended to be seen by site visitors. 
++ **public_store:** After your media goes through processing it gets
+  moved to the public store. This is also a StorageInterface
+  implelementation, and is for stuff that's intended to be seen by
+  site visitors.
 
 The workbench
 ~~~~~~~~~~~~~
