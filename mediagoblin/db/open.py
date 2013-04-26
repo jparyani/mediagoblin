@@ -71,11 +71,11 @@ def _sqlite_fk_pragma_on_connect(dbapi_con, con_record):
     dbapi_con.execute('pragma foreign_keys=on')
 
 
-def setup_connection_and_db_from_config(app_config):
+def setup_connection_and_db_from_config(app_config, sqlite_refcheck=True):
     engine = create_engine(app_config['sql_engine'])
 
     # Enable foreign key checking for sqlite
-    if app_config['sql_engine'].startswith('sqlite://'):
+    if app_config['sql_engine'].startswith('sqlite://') and sqlite_refcheck:
         event.listen(engine, 'connect', _sqlite_fk_pragma_on_connect)
 
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
