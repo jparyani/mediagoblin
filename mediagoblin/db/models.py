@@ -410,7 +410,7 @@ class Collection(Base, CollectionMixin):
     title = Column(Unicode, nullable=False)
     slug = Column(Unicode)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now,
-        index=True)
+                     index=True)
     description = Column(UnicodeText)
     creator = Column(Integer, ForeignKey(User.id), nullable=False)
     # TODO: No of items in Collection. Badly named, can we migrate to num_items?
@@ -420,6 +420,10 @@ class Collection(Base, CollectionMixin):
     get_creator = relationship(User,
                                backref=backref("collections",
                                                cascade="all, delete-orphan"))
+
+    __table_args__ = (
+        UniqueConstraint('creator', 'slug'),
+        {})
 
     def get_collection_items(self, ascending=False):
         #TODO, is this still needed with self.collection_items being available?

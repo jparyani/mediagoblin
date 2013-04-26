@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import uuid
 
 from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         Integer, Unicode, UnicodeText, DateTime,
@@ -212,7 +213,6 @@ def mediaentry_new_slug_era(db):
      - slugs with = (or also : which is now also not allowed) to have those
        stripped out (small possibility of breakage here sadly)
     """
-    import uuid
 
     def slug_and_user_combo_exists(slug, uploader):
         return db.execute(
@@ -249,5 +249,41 @@ def mediaentry_new_slug_era(db):
         elif u"=" in row.slug or u":" in row.slug:
             append_garbage_till_unique(
                 row, row.slug.replace(u"=", u"-").replace(u":", u"-"))
+
+    db.commit()
+
+
+@RegisterMigration(10, MIGRATIONS)
+def unique_collections_slug(db):
+    """Add unique constraint to collection slug"""
+    metadata = MetaData(bind=db.bind)
+    collection_table = inspect_table(metadata, "core__collections")
+    existing_slugs = {}
+    slugs_to_change = []
+
+    for row in db.execute(collection_table.select()):
+        # if duplicate slug, generate a unique slug
+        if row.creator in existing_slugs and row.slug in \
+           existing_slugs[row.creator]:
+            slugs_to_change.append(row.id)
+        else:
+            if not row.creator in existing_slugs:
+                existing_slugs[row.creator] = [row.slug]
+            else:
+                existing_slugs[row.creator].append(row.slug)
+
+    for row_id in slugs_to_change:
+        new_slug = uuid.uuid4().hex
+        db.execute(collection_table.update().
+                   where(collection_table.c.id == row_id).
+                   values(slug=new_slug))
+    # sqlite does not like to change the schema when a transaction(update) is
+    # not yet completed
+    db.commit()
+
+    constraint = UniqueConstraint('creator', 'slug',
+                                  name='core__collection_creator_slug_key',
+                                  table=collection_table)
+    constraint.create()
 
     db.commit()
