@@ -99,3 +99,10 @@ def redirect(request, *args, **kwargs):
     if querystring:
         location += querystring
     return werkzeug.utils.redirect(location)
+
+
+def redirect_obj(request, obj):
+    """Redirect to the page for the given object.
+
+    Requires obj to have a .url_for_self method."""
+    return redirect(request, location=obj.url_for_self(request.urlgen))

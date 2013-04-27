@@ -20,7 +20,8 @@ import datetime
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
                                    CollectionItem, User)
-from mediagoblin.tools.response import render_to_response, render_404, redirect
+from mediagoblin.tools.response import render_to_response, render_404, \
+    redirect, redirect_obj
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.user_pages import forms as user_forms
@@ -178,7 +179,7 @@ def media_post_comment(request, media):
             media_uploader.wants_comment_notification):
             send_comment_email(media_uploader, comment, media, request)
 
-    return redirect(request, location=media.url_for_self(request.urlgen))
+    return redirect_obj(request, media)
 
 
 @get_media_entry_by_id
@@ -255,9 +256,7 @@ def media_collect(request, media):
                              _('"%s" added to collection "%s"')
                              % (media.title, collection.title))
 
-    return redirect(request, "mediagoblin.user_pages.media_home",
-                    user=media.get_uploader.username,
-                    media=media.slug_or_id)
+    return redirect_obj(request, media)
 
 
 #TODO: Why does @user_may_delete_media not implicate @require_active_login?
@@ -282,8 +281,7 @@ def media_confirm_delete(request, media):
             messages.add_message(
                 request, messages.ERROR,
                 _("The media was not deleted because you didn't check that you were sure."))
-            return redirect(request,
-                            location=media.url_for_self(request.urlgen))
+            return redirect_obj(request, media)
 
     if ((request.user.is_admin and
          request.user.id != media.uploader)):
@@ -369,9 +367,7 @@ def collection_item_confirm_remove(request, collection_item):
                 request, messages.ERROR,
                 _("The item was not removed because you didn't check that you were sure."))
 
-        return redirect(request, "mediagoblin.user_pages.user_collection",
-                        user=username,
-                        collection=collection.slug)
+        return redirect_obj(request, collection)
 
     if ((request.user.is_admin and
          request.user.id != collection_item.in_collection.creator)):
@@ -419,9 +415,7 @@ def collection_confirm_delete(request, collection):
                 request, messages.ERROR,
                 _("The collection was not deleted because you didn't check that you were sure."))
 
-            return redirect(request, "mediagoblin.user_pages.user_collection",
-                            user=username,
-                            collection=collection.slug)
+            return redirect_obj(request, collection)
 
     if ((request.user.is_admin and
          request.user.id != collection.creator)):

@@ -28,7 +28,8 @@ from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
      get_media_entry_by_id,
      user_may_alter_collection, get_user_collection)
-from mediagoblin.tools.response import render_to_response, redirect
+from mediagoblin.tools.response import render_to_response, \
+    redirect, redirect_obj
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.text import (
     convert_to_tag_list_of_dicts, media_tags_as_string)
@@ -74,8 +75,7 @@ def edit_media(request, media):
             media.slug = slug
             media.save()
 
-            return redirect(request,
-                            location=media.url_for_self(request.urlgen))
+            return redirect_obj(request, media)
 
     if request.user.is_admin \
             and media.uploader != request.user.id \
@@ -331,9 +331,7 @@ def edit_collection(request, collection):
 
             collection.save()
 
-            return redirect(request, "mediagoblin.user_pages.user_collection",
-                            user=collection.get_creator.username,
-                            collection=collection.slug)
+            return redirect_obj(request, collection)
 
     if request.user.is_admin \
             and collection.creator != request.user.id \
