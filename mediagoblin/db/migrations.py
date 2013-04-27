@@ -273,7 +273,7 @@ def unique_collections_slug(db):
                 existing_slugs[row.creator].append(row.slug)
 
     for row_id in slugs_to_change:
-        new_slug = uuid.uuid4().hex
+        new_slug = unicode(uuid.uuid4())
         db.execute(collection_table.update().
                    where(collection_table.c.id == row_id).
                    values(slug=new_slug))
