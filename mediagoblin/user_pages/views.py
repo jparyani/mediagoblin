@@ -409,8 +409,8 @@ def collection_confirm_delete(request, collection):
                 item.delete()
 
             collection.delete()
-            messages.add_message(
-                request, messages.SUCCESS, _('You deleted the collection "%s"' % collection_title))
+            messages.add_message(request, messages.SUCCESS,
+                _('You deleted the collection "%s"') % collection_title)
 
             return redirect(request, "mediagoblin.user_pages.user_home",
                 user=username)

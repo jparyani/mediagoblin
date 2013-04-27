@@ -114,6 +114,7 @@ def submit_start(request):
         {'submit_form': submit_form,
          'app_config': mg_globals.app_config})
 
+
 @require_active_login
 def add_collection(request, media=None):
     """
@@ -122,7 +123,6 @@ def add_collection(request, media=None):
     submit_form = submit_forms.AddCollectionForm(request.form)
 
     if request.method == 'POST' and submit_form.validate():
-        try:
             collection = request.db.Collection()
 
             collection.title = unicode(submit_form.title.data)
@@ -136,18 +136,17 @@ def add_collection(request, media=None):
                     'title':collection.title})
 
             if existing_collection:
-                messages.add_message(
-                    request, messages.ERROR, _('You already have a collection called "%s"!' % collection.title))
+                add_message(request, messages.ERROR,
+                    _('You already have a collection called "%s"!') \
+                        % collection.title)
             else:
                 collection.save()
 
-                add_message(request, SUCCESS, _('Collection "%s" added!' % collection.title))
+                add_message(request, SUCCESS,
+                    _('Collection "%s" added!') % collection.title)
 
             return redirect(request, "mediagoblin.user_pages.user_home",
                             user=request.user.username)
-
-        except Exception as e:
-            raise
 
     return render_to_response(
         request,
