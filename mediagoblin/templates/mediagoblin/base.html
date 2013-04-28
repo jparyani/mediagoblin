@@ -16,11 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#}
 <!doctype html>
+
 <html
 {% block mediagoblin_html_tag %}
 {% endblock mediagoblin_html_tag %}
 >
-  <head>
+  <head {% if is_rtl %} dir="rtl" {% endif %}>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ app_config['html_title'] }}{% endblock %}</title>
@@ -48,6 +49,7 @@
     {% endblock mediagoblin_head %}
   </head>
   <body>
+    <div {% if is_rtl %} dir="rtl" {% endif %}>
     {% include 'mediagoblin/bits/body-start.html' %}
     {% block mediagoblin_body %}
       {% block mediagoblin_header %}
@@ -133,5 +135,6 @@
       </div>
     {%- endblock mediagoblin_body %}
     {% include 'mediagoblin/bits/body-end.html' %}
-  </body>
+  </div>
+ </body>
 </html>
