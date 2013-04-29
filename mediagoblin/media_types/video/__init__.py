@@ -14,21 +14,23 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.video.processing import process_video, \
     sniff_handler
 
 
-MEDIA_MANAGER = {
-    "human_readable": "Video",
-    "processor": process_video,  # alternately a string,
-                                 # 'mediagoblin.media_types.image.processing'?
-    "sniff_handler": sniff_handler,
-    "display_template": "mediagoblin/media_displays/video.html",
-    "default_thumb": "images/media_thumbs/video.jpg",
-    "accepted_extensions": [
-        "mp4", "mov", "webm", "avi", "3gp", "3gpp", "mkv", "ogv", "m4v"],
-
+class VideoMediaManager(MediaManagerBase):
+    human_readable = "Video"
+    processor = staticmethod(process_video)
+    sniff_handler = staticmethod(sniff_handler)
+    display_template = "mediagoblin/media_displays/video.html"
+    default_thumb = "images/media_thumbs/video.jpg"
+    accepted_extensions = [
+        "mp4", "mov", "webm", "avi", "3gp", "3gpp", "mkv", "ogv", "m4v"]
+        
     # Used by the media_entry.get_display_media method
-    "media_fetch_order": [u'webm_640', u'original'],
-    "default_webm_type": 'video/webm; codecs="vp8, vorbis"',
-}
+    media_fetch_order = [u'webm_640', u'original']
+    default_webm_type = 'video/webm; codecs="vp8, vorbis"'
+
+
+MEDIA_MANAGER = VideoMediaManager

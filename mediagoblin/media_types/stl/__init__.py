@@ -14,14 +14,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.stl.processing import process_stl, \
     sniff_handler
 
 
-MEDIA_MANAGER = {
-    "human_readable": "stereo lithographics",
-    "processor": process_stl,
-    "sniff_handler": sniff_handler,
-    "display_template": "mediagoblin/media_displays/stl.html",
-    "default_thumb": "images/media_thumbs/video.jpg",
-    "accepted_extensions": ["obj", "stl"]}
+class STLMediaManager(MediaManagerBase):
+    human_readable = "stereo lithographics"
+    processor = staticmethod(process_stl)
+    sniff_handler = staticmethod(sniff_handler)
+    display_template = "mediagoblin/media_displays/stl.html"
+    default_thumb = "images/media_thumbs/video.jpg"
+    accepted_extensions = ["obj", "stl"]
+
+
+MEDIA_MANGER = STLMediaManager

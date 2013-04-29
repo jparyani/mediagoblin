@@ -14,16 +14,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.pdf.processing import process_pdf, \
     sniff_handler
 
 
-MEDIA_MANAGER = {
-    "human_readable": "PDF",
-    "processor": process_pdf, # alternately a string,
-                                # 'mediagoblin.media_types.image.processing'?
-    "sniff_handler": sniff_handler,
-    "display_template": "mediagoblin/media_displays/pdf.html",
-    "default_thumb": "images/media_thumbs/pdf.jpg",
-    "accepted_extensions": [
-        "pdf"]}
+class PDFMediaManager(MediaManagerBase):
+    human_readable = "PDF"
+    processor = staticmethod(process_pdf)
+    sniff_handler = staticmethod(sniff_handler)
+    display_template = "mediagoblin/media_displays/pdf.html"
+    default_thumb = "images/media_thumbs/pdf.jpg"
+    accepted_extensions = ["pdf"]
+
+
+MEDIA_MANAGER = PDFMediaManager
