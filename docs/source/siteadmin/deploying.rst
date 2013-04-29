@@ -345,3 +345,17 @@ Visit the site you've set up in your browser by visiting
    smaller deployments. However, for larger production deployments
    with larger processing requirements, see the
    ":doc:`production-deployments`" documentation.
+
+
+Security Considerations
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. warning::
+
+   The directory ``user_dev/crypto/`` contains some very
+   sensitive files.
+   Especially the ``itsdangeroussecret.bin`` is very important
+   for session security. Make sure not to leak its contents anywhere.
+   If the contents gets leaked nevertheless, delete your file
+   and restart the server, so that it creates a new secret key.
+   All previous sessions will be invalifated then.
