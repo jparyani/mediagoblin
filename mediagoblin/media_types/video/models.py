@@ -90,7 +90,7 @@ class VideoData(Base):
             return '%s; codecs="%s, %s"' % (
                 mimetype, video_codec, audio_codec)
         else:
-            return video.MEDIA_MANAGER["default_webm_type"]
+            return video.VideoMediaManager.default_webm_type
 
 
 DATA_MODEL = VideoData
