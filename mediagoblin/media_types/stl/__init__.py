@@ -28,4 +28,4 @@ class STLMediaManager(MediaManagerBase):
     accepted_extensions = ["obj", "stl"]
 
 
-MEDIA_MANGER = STLMediaManager
+MEDIA_MANAGER = STLMediaManager
