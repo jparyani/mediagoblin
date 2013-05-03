@@ -24,9 +24,6 @@ from mediagoblin.tools import pluginapi
 from sqlalchemy import or_
 
 
-PLUGIN_DIR = os.path.dirname(__file__)
-
-
 def setup_plugin():
     config = pluginapi.get_config('mediagoblin.pluginapi.basic_auth')
 
