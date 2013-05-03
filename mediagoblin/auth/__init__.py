@@ -13,3 +13,32 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from mediagoblin.tools.pluginapi import hook_handle
+
+
+def check_login(user, login_form):
+    return hook_handle("auth_check_login", user, login_form)
+
+
+def get_user(*args):
+    return hook_handle("auth_get_user", *args)
+
+
+def create_user(*args):
+    return hook_handle("auth_create_user", *args)
+
+
+def extra_validation(register_form, *args):
+    return hook_handle("auth_extra_validation", register_form, *args)
+
+
+def get_user_metadata(user):
+    return hook_handle("auth_get_user_metadata", user)
+
+
+def get_login_form(request):
+    return hook_handle("auth_get_login_form", request)
+
+
+def get_registration_form(request):
+    return hook_handle("auth_get_registration_form", request)

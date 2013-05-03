@@ -25,6 +25,7 @@ from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.auth.lib import send_verification_email, \
                                  send_fp_verification_email
+import mediagoblin.auth as auth
 from sqlalchemy import or_
 
 def email_debug_message(request):
@@ -54,33 +55,15 @@ def register(request):
             _('Sorry, registration is disabled on this instance.'))
         return redirect(request, "index")
 
-    register_form = auth_forms.RegistrationForm(request.form)
+    register_form = auth.get_registration_form(request)
 
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
-        users_with_username = User.query.filter_by(username=register_form.data['username']).count()
-        users_with_email = User.query.filter_by(email=register_form.data['email']).count()
-
-        extra_validation_passes = True
-
-        if users_with_username:
-            register_form.username.errors.append(
-                _(u'Sorry, a user with that name already exists.'))
-            extra_validation_passes = False
-        if users_with_email:
-            register_form.email.errors.append(
-                _(u'Sorry, a user with that email address already exists.'))
-            extra_validation_passes = False
+        extra_validation_passes = auth.extra_validation(register_form)
 
         if extra_validation_passes:
             # Create the user
-            user = User()
-            user.username = register_form.data['username']
-            user.email = register_form.data['email']
-            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-                register_form.password.data)
-            user.verification_key = unicode(uuid.uuid4())
-            user.save()
+            user = auth.create_user(register_form)
 
             # log the user in
             request.session['user_id'] = unicode(user.id)
@@ -108,23 +91,15 @@ def login(request):
 
     If you provide the POST with 'next', it'll redirect to that view.
     """
-    login_form = auth_forms.LoginForm(request.form)
+    login_form = auth.get_login_form(request)
 
     login_failed = False
 
     if request.method == 'POST':
-        
-        username = login_form.data['username']
-
         if login_form.validate():
-            user = User.query.filter(
-                or_(
-                    User.username == username,
-                    User.email == username,
+            user = auth.get_user(login_form)
 
-                )).first()
-
-            if user and user.check_login(login_form.password.data):
+            if user and auth.check_login(user, login_form):
                 # set up login in session
                 request.session['user_id'] = unicode(user.id)
                 request.session.save()
