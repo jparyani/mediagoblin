@@ -41,9 +41,10 @@
 
       <div class="form_submit_buttons">
         {# TODO: This isn't a button really... might do unexpected things :) #}
-	<a class="button_action" href="{{ request.urlgen('mediagoblin.user_pages.user_collection',
-				                         collection=collection.slug,
-							 user=request.user.username) }}">{% trans %}Cancel{% endtrans %}</a>
+        <a class="button_action" href="
+            {{- collection.url_for_self(request.urlgen) }}">
+          {%- trans %}Cancel{% endtrans -%}
+        </a>
         <input type="submit" value="{% trans %}Delete permanently{% endtrans %}" class="button_form" />
 	{{ csrf_token }}
       </div>

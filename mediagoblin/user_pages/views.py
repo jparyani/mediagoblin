@@ -522,9 +522,7 @@ def collection_atom_feed(request):
     ATOM feed id is a tag URI (see http://en.wikipedia.org/wiki/Tag_URI)
     """
     atomlinks = [{
-           'href': request.urlgen(
-               'mediagoblin.user_pages.user_collection',
-               qualified=True, user=request.matchdict['user'], collection=collection.slug),
+           'href': collection.url_for_self(request.urlgen, qualified=True),
            'rel': 'alternate',
            'type': 'text/html'
            }]

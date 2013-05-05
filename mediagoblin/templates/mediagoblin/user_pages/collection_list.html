@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "mediagoblin/base.html" %}
+{%- extends "mediagoblin/base.html" %}
 
 {% block title %}
   {%- trans username=user.username -%}
@@ -39,17 +39,17 @@
         <a href="{{ request.urlgen('mediagoblin.submit.collection',
                                             user=user.username) }}">
           {%- trans %}Create new collection{% endtrans -%}
+	</a>
       </p>
     {% endif %}
   {% endif %}
 
   <ul>
     {% for coll in collections %}
-      {% set coll_url = request.urlgen(
-                          'mediagoblin.user_pages.user_collection',
-                          user=user.username,
-                          collection=coll.slug) %}
-      <li><a href="{{ coll_url }}">{{ coll.title }}</li>
+      {%- set coll_url = coll.url_for_self(request.urlgen) %}
+      <li>
+        <a href="{{ coll_url }}">{{ coll.title }}</a>
+      </li>
     {% endfor %}
   </ul>
 
