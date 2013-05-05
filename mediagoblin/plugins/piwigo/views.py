@@ -35,13 +35,16 @@ _log = logging.getLogger(__name__)
 def pwg_login(request):
     username = request.form.get("username")
     password = request.form.get("password")
-    _log.info("Login for %r/%r...", username, password)
+    _log.debug("Login for %r/%r...", username, password)
     user = request.db.User.query.filter_by(username=username).first()
     if not user:
+        _log.info("User %r not found", username)
         fake_login_attempt()
         return False
     if not user.check_login(password):
+        _log.warn("Wrong password for %r", username)
         return False
+    _log.info("Logging %r in", username)
     request.session["user_id"] = user.id
     request.session.save()
     return True
