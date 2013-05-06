@@ -205,6 +205,19 @@ update)
 Deploy MediaGoblin Services
 ---------------------------
 
+Edit site configuration
+~~~~~~~~~~~~~~~~~~~~~~~
+
+A few basic properties must be set before MediaGoblin will work. First make a copy of ``mediagoblin.ini`` for editing so the original config file isn't lost::
+
+    cp mediagoblin.ini mediagoblin_local.ini
+    
+Then:
+
+Set ``email_sender_address`` to the address you wish to be used as the sender for system-generated emails
+Edit ``direct_remote_path``, ``base_dir``, and ``base_url`` if you're mediagoblin directory is not the root directory of your vhost.
+
+
 Configure MediaGoblin to use the PostgreSQL database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -240,11 +253,11 @@ browser to confirm that the service is operable.
 
 .. _webserver-config:
 
-Connect the Webserver to MediaGoblin with FastCGI
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This section describes how to configure MediaGoblin to work via
-FastCGI. Our configuration example will use nginx, however, you may
+FastCGI and nginx
+~~~~~~~~~~~~~~~~~
+
+This configuration example will use nginx, however, you may
 use any webserver of your choice as long as it supports the FastCGI
 protocol. If you do not already have a web server, consider nginx, as
 the configuration files may be more clear than the
@@ -345,6 +358,12 @@ Visit the site you've set up in your browser by visiting
    smaller deployments. However, for larger production deployments
    with larger processing requirements, see the
    ":doc:`production-deployments`" documentation.
+   
+
+Apache
+~~~~~~
+
+Instructions and scripts for running MediaGoblin on an Apache server can be found on the `MediaGoblin wiki <http://wiki.mediagoblin.org/Deployment>`_.
 
 
 Security Considerations
