@@ -16,7 +16,6 @@
 
 import wtforms
 
-from mediagoblin.tools.mail import normalize_email
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.auth.tools import normalize_user_or_email_field
 

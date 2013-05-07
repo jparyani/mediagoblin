@@ -19,20 +19,26 @@
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
+{% block mediagoblin_head %}
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/js/show_password.js') }}"></script>
+{% endblock mediagoblin_head %}
+
 {% block title -%}
-  {% trans %}Recover password{% endtrans %} &mdash; {{ super() }}
+  {% trans %}Set your new password{% endtrans %} &mdash; {{ super() }}
 {%- endblock %}
 
 {% block mediagoblin_content %}
-  <form action="{{ request.urlgen('mediagoblin.plugins.basic_auth.forgot_password') }}"
+  <form action="{{ request.urlgen('mediagoblin.plugins.basic_auth.verify_forgot_password') }}"
         method="POST" enctype="multipart/form-data">
     {{ csrf_token }}
     <div class="form_box">
-      <h1>{% trans %}Recover password{% endtrans %}</h1>
-      {{ wtforms_util.render_divs(fp_form) }}
+      <h1>{% trans %}Set your new password{% endtrans %}</h1>
+      {{ wtforms_util.render_divs(cp_form) }}
       <div class="form_submit_buttons">
-        <input type="submit" value="{% trans %}Send instructions{% endtrans %}" class="button_form"/>
+        <input type="submit" value="{% trans %}Set password{% endtrans %}" class="button_form"/>
       </div>
     </div>
   </form>
 {% endblock %}
+

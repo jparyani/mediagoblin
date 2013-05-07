@@ -143,7 +143,7 @@ def send_fp_verification_email(user, request):
         {'username': user.username,
          'verification_url': EMAIL_FP_VERIFICATION_TEMPLATE.format(
                 host=request.host,
-                uri=request.urlgen('mediagoblin.auth.verify_forgot_password'),
+                uri=request.urlgen('mediagoblin.plugins.basic_auth.verify_forgot_password'),
                 userid=unicode(user.id),
                 fp_verification_key=user.fp_verification_key)})
 
