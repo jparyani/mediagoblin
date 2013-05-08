@@ -70,7 +70,7 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
         config_path,
         interpolation='ConfigParser')
 
-    plugins = config["plugins"].keys()
+    plugins = config.get("plugins", {}).keys()
     plugin_configs = {}
 
     for plugin in plugins:
