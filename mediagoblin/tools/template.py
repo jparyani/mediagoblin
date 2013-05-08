@@ -27,7 +27,8 @@ from mediagoblin import messages
 from mediagoblin import _version
 from mediagoblin.tools import common
 from mediagoblin.tools.translate import set_thread_locale
-from mediagoblin.tools.pluginapi import get_hook_templates
+from mediagoblin.tools.pluginapi import (
+    get_hook_templates, hook_transform)
 from mediagoblin.tools.timesince import timesince
 from mediagoblin.meddleware.csrf import render_csrf_form_token
 
@@ -103,6 +104,12 @@ def render_template(request, template_path, context):
     rendered_csrf_token = render_csrf_form_token(request)
     if rendered_csrf_token is not None:
         context['csrf_token'] = render_csrf_form_token(request)
+
+    # allow plugins to do things to the context
+    context = hook_transform(
+        (request.controller, template_path),
+        context)
+
     rendered = template.render(context)
 
     if common.TESTS_ENABLED:

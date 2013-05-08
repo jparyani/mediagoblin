@@ -201,6 +201,9 @@ class MediaGoblinApp(object):
                 exc.get_description(environ))(environ, start_response)
 
         controller = endpoint_to_controller(found_rule)
+        # Make a reference to the controller on the request...
+        # used for lazy context modification
+        request.controller = controller
 
         # pass the request through our meddleware classes
         try:

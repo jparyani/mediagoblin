@@ -25,6 +25,7 @@ from mediagoblin import mg_globals
 from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.tools import pluginapi
+from mediagoblin.tests.tools import get_app
 
 
 def with_cleanup(*modules_to_delete):
@@ -323,3 +324,14 @@ def test_plugin_config():
     # the callables thing shouldn't really have anything though.
     assert len(config['plugins'][
         'mediagoblin.tests.testplugins.callables1']) == 0
+
+
+@pytest.fixture()
+def context_modified_app(request):
+    get_app(
+        request,
+        mgoblin_config=pkg_resources.resource_filename(
+            'mediagoblin.tests', 'appconfig_context_modified.ini'))
+
+def test_modify_context(context_modified_app):
+    pytest.set_trace()
