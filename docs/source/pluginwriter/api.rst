@@ -32,3 +32,19 @@ Please check the release notes for updates!
    :members: get_config, register_routes, register_template_path,
              register_template_hooks, get_hook_templates,
              hook_handle, hook_runall, hook_transform
+
+Configuration
+-------------
+
+Your plugin may define its own configuration defaults.
+
+Simply add to the directory of your plugin a config_spec.ini file.  An
+example might look like::
+
+  [plugin_spec]
+  some_string = string(default="blork")
+  some_int = integer(default=50)
+
+This means that when people enable your plugin in their config you'll
+be able to provide defaults as well as type validation.
+
