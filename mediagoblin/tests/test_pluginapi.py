@@ -18,9 +18,12 @@ import sys
 
 from configobj import ConfigObj
 import pytest
+import pkg_resources
+from validate import VdtTypeError
 
 from mediagoblin import mg_globals
 from mediagoblin.init.plugins import setup_plugins
+from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.tools import pluginapi
 
 
@@ -294,3 +297,29 @@ def test_hook_transform():
 
     assert pluginapi.hook_transform(
         "expand_tuple", (-1, 0)) == (-1, 0, 1, 2, 3)
+
+
+def test_plugin_config():
+    """
+    Make sure plugins can set up their own config
+    """
+    config, validation_result = read_mediagoblin_config(
+        pkg_resources.resource_filename(
+            'mediagoblin.tests', 'appconfig_plugin_specs.ini'))
+
+    pluginspec_section = config['plugins'][
+        'mediagoblin.tests.testplugins.pluginspec']
+    assert pluginspec_section['some_string'] == 'not blork'
+    assert pluginspec_section['dont_change_me'] == 'still the default'
+
+    # Make sure validation works... this should be an error
+    assert isinstance(
+        validation_result[
+            'plugins'][
+                'mediagoblin.tests.testplugins.pluginspec'][
+                    'some_int'],
+        VdtTypeError)
+
+    # the callables thing shouldn't really have anything though.
+    assert len(config['plugins'][
+        'mediagoblin.tests.testplugins.callables1']) == 0
