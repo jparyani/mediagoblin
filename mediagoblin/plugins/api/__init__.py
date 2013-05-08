@@ -23,10 +23,10 @@ _log = logging.getLogger(__name__)
 
 PLUGIN_DIR = os.path.dirname(__file__)
 
-config = pluginapi.get_config(__name__)
-
 def setup_plugin():
     _log.info('Setting up API...')
+
+    config = pluginapi.get_config(__name__)
 
     _log.debug('API config: {0}'.format(config))
 
