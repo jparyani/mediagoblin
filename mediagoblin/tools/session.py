@@ -24,6 +24,7 @@ _log = logging.getLogger(__name__)
 class Session(dict):
     def __init__(self, *args, **kwargs):
         self.send_new_cookie = False
+        self.max_age = None
         dict.__init__(self, *args, **kwargs)
 
     def save(self):
@@ -65,4 +66,4 @@ class SessionManager(object):
             response.delete_cookie(self.cookie_name)
         else:
             response.set_cookie(self.cookie_name, self.signer.dumps(session),
-                httponly=True)
+                max_age=session.max_age, httponly=True)
