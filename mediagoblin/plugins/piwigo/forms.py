@@ -36,7 +36,7 @@ class AddForm(wtforms.Form):
         [_md5_validator,
          wtforms.validators.Required()])
     thumbnail_sum = wtforms.TextField(None,
-        [wtforms.validators.Optional(False),
+        [wtforms.validators.Optional(),
          _md5_validator])
     file_sum = wtforms.TextField(None, [_md5_validator])
     name = wtforms.TextField()
