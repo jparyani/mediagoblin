@@ -18,8 +18,9 @@ import logging
 
 import six
 import lxml.etree as ET
-from werkzeug.exceptions import MethodNotAllowed
+from werkzeug.exceptions import MethodNotAllowed, BadRequest
 
+from mediagoblin.tools.request import setup_user_in_request
 from mediagoblin.tools.response import Response
 
 
@@ -106,3 +107,46 @@ class CmdTable(object):
             _log.warn("Method %s only allowed for POST", cmd_name)
             raise MethodNotAllowed()
         return func
+
+
+def check_form(form):
+    if not form.validate():
+        _log.error("form validation failed for form %r", form)
+        for f in form:
+            if len(f.error):
+                _log.error("Errors for %s: %r", f.name, f.errors)
+        raise BadRequest()
+    dump = []
+    for f in form:
+        dump.append("%s=%r" % (f.name, f.data))
+    _log.debug("form: %s", " ".join(dump))
+
+
+class PWGSession(object):
+    session_manager = None
+
+    def __init__(self, request):
+        self.request = request
+        self.in_pwg_session = False
+
+    def __enter__(self):
+        # Backup old state
+        self.old_session = self.request.session
+        self.old_user = self.request.user
+        # Load piwigo session into state
+        self.request.session = self.session_manager.load_session_from_cookie(
+            self.request)
+        setup_user_in_request(self.request)
+        self.in_pwg_session = True
+        return self
+
+    def  __exit__(self, *args):
+        # Restore state
+        self.request.session = self.old_session
+        self.request.user = self.old_user
+        self.in_pwg_session = False
+
+    def save_to_cookie(self, response):
+        assert self.in_pwg_session
+        self.session_manager.save_session_to_cookie(self.request.session,
+            self.request, response)

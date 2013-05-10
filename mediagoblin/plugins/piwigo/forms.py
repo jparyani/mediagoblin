@@ -26,3 +26,19 @@ class AddSimpleForm(wtforms.Form):
     # tags = wtforms.FieldList(wtforms.TextField())
     category = wtforms.IntegerField()
     level = wtforms.IntegerField()
+
+
+_md5_validator = wtforms.validators.Regexp(r"^[0-9a-fA-F]{32}$")
+
+
+class AddForm(wtforms.Form):
+    original_sum = wtforms.TextField(None,
+        [_md5_validator,
+         wtforms.validators.Required()])
+    thumbnail_sum = wtforms.TextField(None,
+        [wtforms.validators.Optional(False),
+         _md5_validator])
+    file_sum = wtforms.TextField(None, [_md5_validator])
+    name = wtforms.TextField()
+    date_creation = wtforms.TextField()
+    categories = wtforms.TextField()
