@@ -50,6 +50,12 @@ def get_jinja_env(template_loader, locale):
     if locale in SETUP_JINJA_ENVS:
         return SETUP_JINJA_ENVS[locale]
 
+    # The default config does not require a [jinja2] block.
+    # You may create one if you wish to enable additional jinja2 extensions,
+    # see example in config_spec.ini 
+    jinja2_config = mg_globals.global_config.get('jinja2', {})
+    local_exts = jinja2_config.get('extensions', [])
+
     # jinja2.StrictUndefined will give exceptions on references
     # to undefined/unknown variables in templates.
     template_env = jinja2.Environment(
@@ -57,7 +63,7 @@ def get_jinja_env(template_loader, locale):
         undefined=jinja2.StrictUndefined,
         extensions=[
             'jinja2.ext.i18n', 'jinja2.ext.autoescape',
-            TemplateHookExtension])
+            TemplateHookExtension] + local_exts)
 
     template_env.install_gettext_callables(
         mg_globals.thread_scope.translations.ugettext,
