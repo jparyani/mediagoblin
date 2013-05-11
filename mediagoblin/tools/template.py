@@ -107,7 +107,7 @@ def render_template(request, template_path, context):
 
     # allow plugins to do things to the context
     context = hook_transform(
-        (request.controller, template_path),
+        (request.controller_name, template_path),
         context)
 
     rendered = template.render(context)
