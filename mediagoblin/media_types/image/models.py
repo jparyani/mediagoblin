@@ -44,23 +44,6 @@ class ImageData(Base):
     gps_altitude = Column(Float)
     gps_direction = Column(Float)
 
-    def get_original_date(self):
-        """
-        Get the original date and time from the EXIF information. Returns
-        either a datetime object or None (if anything goes wrong)
-        """
-
-        import datetime
-        try:
-            # Try wrapped around all since exif_all might be none,
-            # EXIF DateTimeOriginal or printable might not exist, or
-            # strptime might not be able to parse date correctly
-            exif_date = self.exif_all['EXIF DateTimeOriginal']['printable']
-            original_date = datetime.datetime.strptime(exif_date,
-                                                       '%Y:%m:%d %H:%M:%S')
-            return original_date
-        except:
-            return None
 
 DATA_MODEL = ImageData
 MODELS = [ImageData]
