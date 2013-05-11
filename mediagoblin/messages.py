@@ -14,16 +14,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin.tools import common
+
 DEBUG = 'debug'
 INFO = 'info'
 SUCCESS = 'success'
 WARNING = 'warning'
 ERROR = 'error'
 
+ADD_MESSAGE_TEST = []
+
 
 def add_message(request, level, text):
     messages = request.session.setdefault('messages', [])
     messages.append({'level': level, 'text': text})
+
+    if common.TESTS_ENABLED:
+        ADD_MESSAGE_TEST.append(messages)
+
     request.session.save()
 
 
@@ -33,4 +41,10 @@ def fetch_messages(request, clear_from_session=True):
         # Save that we removed the messages from the session
         request.session['messages'] = []
         request.session.save()
+
     return messages
+
+
+def clear_add_message():
+    global ADD_MESSAGE_TEST
+    ADD_MESSAGE_TEST = []
