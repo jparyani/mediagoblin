@@ -147,7 +147,7 @@
     {% endif %}
   </div>
   <div class="media_sidebar">
-    <h3>Added</h3>
+    <h3>{% trans %}Added{% endtrans %}</h3>
     <p><span title="{{ media.created.strftime("%I:%M%p %Y-%m-%d") }}">
         {%- trans formatted_time=timesince(media.created) -%}    
           {{ formatted_time }} ago
@@ -156,11 +156,15 @@
 
     {% if app_config['original_date_visible'] %}
       {% set original_date = media.media_data.get_original_date() %}
-      {% if original_date -%}
-        {% trans date=original_date.strftime("%Y-%m-%d") -%}
-          <h3>Created on</h3>
-          <p>{{ date }}</p>
-        {%- endtrans %}
+
+      {% if original_date %}
+        <h3>{% trans %}Created{% endtrans %}</h3>
+
+        <p><span title="{{ original_date.strftime("%I:%M%p %Y-%m-%d") }}">
+          {%- trans formatted_time=timesince(original_date) -%}
+            {{ formatted_time }} ago
+          {%- endtrans -%}
+        </span></p>
       {%- endif %}
     {% endif %}
 
