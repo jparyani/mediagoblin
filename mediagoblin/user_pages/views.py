@@ -161,7 +161,13 @@ def media_post_comment(request, media):
     comment.author = request.user.id
     comment.content = unicode(request.form['comment_content'])
 
-    if not comment.content.strip():
+    # Show error message if commenting is disabled.
+    if not mg_globals.app_config['allow_comments']:
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _("Sorry, comments are disabled."))
+    elif not comment.content.strip():
         messages.add_message(
             request,
             messages.ERROR,

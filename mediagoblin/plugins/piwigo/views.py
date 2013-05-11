@@ -20,11 +20,12 @@ import re
 from werkzeug.exceptions import MethodNotAllowed, BadRequest, NotImplemented
 from werkzeug.wrappers import BaseResponse
 
-from mediagoblin import mg_globals
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.submit.lib import check_file_field
-from .tools import CmdTable, PwgNamedArray, response_xml
-from .forms import AddSimpleForm
+from mediagoblin.auth.lib import fake_login_attempt
+from .tools import CmdTable, PwgNamedArray, response_xml, check_form, \
+    PWGSession
+from .forms import AddSimpleForm, AddForm
 
 
 _log = logging.getLogger(__name__)
@@ -34,13 +35,25 @@ _log = logging.getLogger(__name__)
 def pwg_login(request):
     username = request.form.get("username")
     password = request.form.get("password")
-    _log.info("Login for %r/%r...", username, password)
+    _log.debug("Login for %r/%r...", username, password)
+    user = request.db.User.query.filter_by(username=username).first()
+    if not user:
+        _log.info("User %r not found", username)
+        fake_login_attempt()
+        return False
+    if not user.check_login(password):
+        _log.warn("Wrong password for %r", username)
+        return False
+    _log.info("Logging %r in", username)
+    request.session["user_id"] = user.id
+    request.session.save()
     return True
 
 
 @CmdTable("pwg.session.logout")
 def pwg_logout(request):
     _log.info("Logout")
+    request.session.delete()
     return True
 
 
@@ -51,7 +64,11 @@ def pwg_getversion(request):
 
 @CmdTable("pwg.session.getStatus")
 def pwg_session_getStatus(request):
-    return {'username': "fake_user"}
+    if request.user:
+        username = request.user.username
+    else:
+        username = "guest"
+    return {'username': username}
 
 
 @CmdTable("pwg.categories.getList")
@@ -133,17 +150,13 @@ def pwg_images_addChunk(request):
     return True
 
 
-def possibly_add_cookie(request, response):
-    # TODO: We should only add a *real* cookie, if
-    # authenticated. And if there is no cookie already.
-    if True:
-        response.set_cookie(
-            'pwg_id',
-            "some_fake_for_now",
-            path=request.environ['SCRIPT_NAME'],
-            domain=mg_globals.app_config.get('csrf_cookie_domain'),
-            secure=(request.scheme.lower() == 'https'),
-            httponly=True)
+@CmdTable("pwg.images.add", True)
+def pwg_images_add(request):
+    _log.info("add: %r", request.form)
+    form = AddForm(request.form)
+    check_form(form)
+
+    return {'image_id': 123456, 'url': ''}
 
 
 @csrf_exempt
@@ -158,13 +171,13 @@ def ws_php(request):
                   request.args, request.form)
         raise NotImplemented()
 
-    result = func(request)
+    with PWGSession(request) as session:
+        result = func(request)
 
-    if isinstance(result, BaseResponse):
-        return result
+        if isinstance(result, BaseResponse):
+            return result
 
-    response = response_xml(result)
+        response = response_xml(result)
+        session.save_to_cookie(response)
 
-    possibly_add_cookie(request, response)
-
-    return response
+        return response

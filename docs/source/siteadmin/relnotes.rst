@@ -100,7 +100,19 @@ MongoDB-based MediaGoblin instance to the newer SQL-based system.
 
 **Do this to upgrade**
 
-1. Make sure to run ``bin/gmg dbupdate`` after upgrading.
+    # directory of your mediagoblin install
+    cd /srv/mediagoblin.example.org
+
+    # copy source for this release
+    git fetch
+    git checkout tags/v0.3.2
+
+    # perform any needed database updates
+    bin/gmg dbupdate
+    
+    # restart your servers however you do that, e.g.,
+    sudo service mediagoblin-paster restart
+    sudo service mediagoblin-celeryd restart
 
 
 **New features**
