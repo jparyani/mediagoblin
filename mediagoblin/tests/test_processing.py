@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-from nose.tools import assert_equal
-
 from mediagoblin import processing
 
 class TestProcessing(object):
@@ -10,7 +8,7 @@ class TestProcessing(object):
         result = builder.fill(format)
         if output is None:
             return result
-        assert_equal(output, result)
+        assert output == result
         
     def test_easy_filename_fill(self):
         self.run_fill('/home/user/foo.TXT', '{basename}bar{ext}', 'foobar.txt')
