@@ -33,7 +33,6 @@ from mediagoblin.db.base import Session
 from mediagoblin.meddleware import BaseMeddleware
 from mediagoblin.auth.lib import bcrypt_gen_password_hash
 from mediagoblin.gmg_commands.dbupdate import run_dbupdate
-from mediagoblin.init.celery import setup_celery_app
 
 
 MEDIAGOBLIN_TEST_DB_NAME = u'__mediagoblin_tests__'
@@ -46,16 +45,6 @@ TEST_USER_DEV = pkg_resources.resource_filename(
 
 
 USER_DEV_DIRECTORIES_TO_SETUP = ['media/public', 'media/queue']
-
-BAD_CELERY_MESSAGE = """\
-Sorry, you *absolutely* must run tests with the
-mediagoblin.init.celery.from_tests module.  Like so:
-
-$ CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests {0}
-""".format(sys.argv[0])
-
-
-class BadCeleryEnviron(Exception): pass
 
 
 class TestingMeddleware(BaseMeddleware):
@@ -97,12 +86,6 @@ class TestingMeddleware(BaseMeddleware):
         return
 
 
-def suicide_if_bad_celery_environ():
-    if not os.environ.get('CELERY_CONFIG_MODULE') == \
-            'mediagoblin.init.celery.from_tests':
-        raise BadCeleryEnviron(BAD_CELERY_MESSAGE)
-
-
 def get_app(request, paste_config=None, mgoblin_config=None):
     """Create a MediaGoblin app for testing.
 
@@ -127,14 +110,6 @@ def get_app(request, paste_config=None, mgoblin_config=None):
     shutil.copyfile(paste_config, new_paste_config)
     shutil.copyfile(mgoblin_config, new_mgoblin_config)
 
-    suicide_if_bad_celery_environ()
-
-    # Make sure we've turned on testing
-    testing._activate_testing()
-
-    # Leave this imported as it sets up celery.
-    from mediagoblin.init.celery import from_tests
-
     Session.rollback()
     Session.remove()
 
@@ -153,9 +128,6 @@ def get_app(request, paste_config=None, mgoblin_config=None):
     # setup app and return
     test_app = loadapp(
         'config:' + new_paste_config)
-
-    # Re-setup celery
-    setup_celery_app(app_config, global_config)
 
     # Insert the TestingMeddleware, which can do some
     # sanity checks on every request/response.

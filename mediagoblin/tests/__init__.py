@@ -18,12 +18,10 @@ import os
 import shutil
 
 from mediagoblin import mg_globals
-from mediagoblin.tests.tools import (
-    TEST_USER_DEV, suicide_if_bad_celery_environ)
+from mediagoblin.tests.tools import TEST_USER_DEV
 
 
 def setup_package():
-    suicide_if_bad_celery_environ()
 
     import warnings
     from sqlalchemy.exc import SAWarning

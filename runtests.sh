@@ -39,10 +39,6 @@ else
 fi
 
 
-CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests
-export CELERY_CONFIG_MODULE
-echo "+ CELERY_CONFIG_MODULE=$CELERY_CONFIG_MODULE"
-
 # Look to see if the user has specified a specific directory/file to
 # run tests out of.  If not we'll need to pass along
 # mediagoblin/tests/ later very specifically.  Otherwise py.test
