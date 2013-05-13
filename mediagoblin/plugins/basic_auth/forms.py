@@ -1,7 +1,7 @@
 import wtforms
 
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
-from mediagoblin.auth.forms import normalize_user_or_email_field
+from mediagoblin.auth.tools import normalize_user_or_email_field
 
 
 class RegistrationForm(wtforms.Form):
