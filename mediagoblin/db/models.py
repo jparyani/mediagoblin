@@ -61,7 +61,7 @@ class User(Base, UserMixin):
     # point.
     email = Column(Unicode, nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    pw_hash = Column(Unicode, nullable=False)
+    pw_hash = Column(Unicode)
     email_verified = Column(Boolean, default=False)
     status = Column(Unicode, default=u"needs_email_verification", nullable=False)
     # Intented to be nullable=False, but migrations would not work for it

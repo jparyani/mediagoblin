@@ -287,3 +287,12 @@ def unique_collections_slug(db):
     constraint.create()
 
     db.commit()
+
+
+@RegisterMigration(11, MIGRATIONS)
+def pw_hash_nullable(db):
+    """Make pw_hash column nullable"""
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
+
+    user_table.c.pw_hash.alter(nullable=True)
