@@ -86,15 +86,15 @@
       <p>{{ media.description_html }}</p>
     {% endautoescape %}
     {% if comments %}
+					{% if app_config['allow_comments'] %}
           <a
             {% if not request.user %}
               href="{{ request.urlgen('mediagoblin.auth.login') }}"
             {% endif %}
-            {% if app_config['allow_comments'] %}
               class="button_action" id="button_addcomment" title="Add a comment">
               {% trans %}Add a comment{% endtrans %}
-            {% endif %}
           </a>
+					{% endif %}
       {% if request.user %}
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment',
                                          user= media.get_uploader.username,
