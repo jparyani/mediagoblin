@@ -44,8 +44,9 @@ def register(request):
     Note that usernames will always be lowercased. Email domains are lowercased while
     the first part remains case-sensitive.
     """
-    # Redirects to indexpage if registrations are disabled
-    if not mg_globals.app_config["allow_registration"]:
+    # Redirects to indexpage if registrations are disabled or no authentication
+    # is enabled
+    if not mg_globals.app_config["allow_registration"] or not mg_globals.app.auth:
         messages.add_message(
             request,
             messages.WARNING,
@@ -88,6 +89,14 @@ def login(request):
 
     If you provide the POST with 'next', it'll redirect to that view.
     """
+    # Redirects to index page if no authentication is enabled
+    if not mg_globals.app.auth:
+        messages.add_message(
+            request,
+            messages.WARNING,
+            _('Sorry, authentication is disabled on this instance.'))
+        return redirect(request, 'index')
+
     login_form = auth.get_login_form(request)
 
     login_failed = False

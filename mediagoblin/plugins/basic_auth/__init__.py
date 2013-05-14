@@ -81,8 +81,13 @@ def get_registration_form(request):
     return auth_forms.RegistrationForm(request.form)
 
 
+def auth():
+    return True
+
+
 hooks = {
     'setup': setup_plugin,
+    'auth': auth,
     'auth_check_login': check_login,
     'auth_get_user': get_user,
     'auth_create_user': create_user,

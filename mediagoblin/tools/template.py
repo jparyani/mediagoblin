@@ -71,6 +71,7 @@ def get_jinja_env(template_loader, locale):
     template_env.globals['app_config'] = mg_globals.app_config
     template_env.globals['global_config'] = mg_globals.global_config
     template_env.globals['version'] = _version.__version__
+    template_env.globals['auth'] = mg_globals.app.auth
 
     template_env.filters['urlencode'] = url_quote_plus
 

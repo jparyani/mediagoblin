@@ -37,6 +37,7 @@ from mediagoblin.init import (get_jinja_loader, get_staticdirector,
     setup_storage)
 from mediagoblin.tools.pluginapi import PluginManager, hook_transform
 from mediagoblin.tools.crypto import setup_crypto
+from mediagoblin.auth.tools import check_auth_enabled
 
 
 _log = logging.getLogger(__name__)
@@ -96,6 +97,9 @@ class MediaGoblinApp(object):
             self.current_theme,
             PluginManager().get_template_paths()
             )
+
+        # Check if authentication plugin is enabled and respond accordingly.
+        self.auth = check_auth_enabled()
 
         # Set up storage systems
         self.public_store, self.queue_store = setup_storage()

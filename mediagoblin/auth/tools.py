@@ -14,10 +14,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+import sys
 import wtforms
 
+from mediagoblin import mg_globals
 from mediagoblin.tools.mail import normalize_email
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+from mediagoblin.tools.pluginapi import hook_handle
+
+_log = logging.getLogger(__name__)
 
 
 def normalize_user_or_email_field(allow_email=True, allow_user=True):
@@ -48,3 +54,19 @@ def normalize_user_or_email_field(allow_email=True, allow_user=True):
         if field.data is None:  # should not happen, but be cautious anyway
             raise wtforms.ValidationError(message)
     return _normalize_field
+
+
+def check_auth_enabled():
+    no_auth = mg_globals.app_config['no_auth']
+    auth_plugin = True if hook_handle('auth') is not None else False
+
+    if no_auth == 'false' and not auth_plugin:
+        print 'No authentication plugin is enabled and no_auth = false in ' \
+              'config! \n..Exiting'
+        sys.exit()
+
+    if no_auth == 'true' and not auth_plugin:
+        _log.warning('No authentication is enabled')
+        return False
+    else:
+        return True

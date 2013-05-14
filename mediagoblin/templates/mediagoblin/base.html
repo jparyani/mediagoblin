@@ -67,7 +67,7 @@
                {% trans %}Verify your email!{% endtrans %}</a>
                or <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>
               {% endif %}
-            {%- else %}
+            {%- elif auth %}
               <a href="{{ request.urlgen('mediagoblin.auth.login') }}?next={{
                                                 request.base_url|urlencode }}">
                 {%- trans %}Log in{% endtrans -%}
