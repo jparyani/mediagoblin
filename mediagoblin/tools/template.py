@@ -27,8 +27,7 @@ from mediagoblin import messages
 from mediagoblin import _version
 from mediagoblin.tools import common
 from mediagoblin.tools.translate import set_thread_locale
-from mediagoblin.tools.pluginapi import (
-    get_hook_templates, hook_transform)
+from mediagoblin.tools.pluginapi import get_hook_templates, hook_transform
 from mediagoblin.tools.timesince import timesince
 from mediagoblin.meddleware.csrf import render_csrf_form_token
 
@@ -81,6 +80,9 @@ def get_jinja_env(template_loader, locale):
     # allow for hooking up plugin templates
     template_env.globals['get_hook_templates'] = get_hook_templates
 
+    template_env.globals = hook_transform(
+        'template_global_context', template_env.globals)
+
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env
 
@@ -106,9 +108,10 @@ def render_template(request, template_path, context):
         context['csrf_token'] = render_csrf_form_token(request)
 
     # allow plugins to do things to the context
-    context = hook_transform(
-        (request.controller_name, template_path),
-        context)
+    if request.controller_name:
+        context = hook_transform(
+            (request.controller_name, template_path),
+            context)
 
     rendered = template.render(context)
 

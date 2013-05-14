@@ -328,10 +328,24 @@ def test_plugin_config():
 
 @pytest.fixture()
 def context_modified_app(request):
-    get_app(
+    return get_app(
         request,
         mgoblin_config=pkg_resources.resource_filename(
             'mediagoblin.tests', 'appconfig_context_modified.ini'))
 
+
 def test_modify_context(context_modified_app):
-    pytest.set_trace()
+    # Specific thing passed into a page
+    result = context_modified_app.get("/modify_context/specific/")
+    assert result.body.strip() == """Specific page!
+
+specific thing: in yer specificpage
+global thing: globally appended!
+something: orother"""
+
+    # General test, should have global context variable only
+    result = context_modified_app.get("/modify_context/")
+    assert result.body.strip() == """General page!
+
+global thing: globally appended!
+lol: cats"""
