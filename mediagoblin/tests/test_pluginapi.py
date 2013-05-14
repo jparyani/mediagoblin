@@ -328,6 +328,9 @@ def test_plugin_config():
 
 @pytest.fixture()
 def context_modified_app(request):
+    """
+    Get a MediaGoblin app fixture using appconfig_context_modified.ini
+    """
     return get_app(
         request,
         mgoblin_config=pkg_resources.resource_filename(
@@ -335,6 +338,10 @@ def context_modified_app(request):
 
 
 def test_modify_context(context_modified_app):
+    """
+    Test that we can modify both the view/template specific and
+    global contexts for templates.
+    """
     # Specific thing passed into a page
     result = context_modified_app.get("/modify_context/specific/")
     assert result.body.strip() == """Specific page!
