@@ -31,7 +31,7 @@ from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.db.base import Session
 from mediagoblin.meddleware import BaseMeddleware
-from mediagoblin.auth.lib import bcrypt_gen_password_hash
+from mediagoblin.auth import gen_password_hash
 from mediagoblin.gmg_commands.dbupdate import run_dbupdate
 
 
@@ -179,7 +179,7 @@ def fixture_add_user(username=u'chris', password=u'toast',
     test_user.username = username
     test_user.email = username + u'@example.com'
     if password is not None:
-        test_user.pw_hash = bcrypt_gen_password_hash(password)
+        test_user.pw_hash = gen_password_hash(password)
     if active_user:
         test_user.email_verified = True
         test_user.status = u'active'

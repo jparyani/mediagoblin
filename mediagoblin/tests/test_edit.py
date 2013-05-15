@@ -21,7 +21,8 @@ from mediagoblin import mg_globals
 from mediagoblin.db.models import User
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin.tools import template
-from mediagoblin.auth.lib import bcrypt_check_password
+from mediagoblin.plugins.basic_auth.lib import bcrypt_check_password
+
 
 class TestUserEdit(object):
     def setup(self):
