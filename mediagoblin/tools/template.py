@@ -113,6 +113,13 @@ def render_template(request, template_path, context):
             (request.controller_name, template_path),
             context)
 
+    # More evil: allow plugins to possibly do something to the context
+    # in every request ever with access to the request and other
+    # variables.  Note: this is slower than using
+    # template_global_context
+    context = hook_transform(
+        'template_context_prerender', context)
+
     rendered = template.render(context)
 
     if common.TESTS_ENABLED:
