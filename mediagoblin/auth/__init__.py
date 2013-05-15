@@ -42,3 +42,7 @@ def get_login_form(request):
 
 def get_registration_form(request):
     return hook_handle("auth_get_registration_form", request)
+
+
+def gen_password_hash(raw_pass, extra_salt=None):
+    return hook_handle("auth_gen_password_hash", raw_pass, extra_salt)

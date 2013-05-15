@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.gmg_commands import util as commands_util
-from mediagoblin.auth import lib as auth_lib
+from mediagoblin import auth
 from mediagoblin import mg_globals
 
 def adduser_parser_setup(subparser):
@@ -52,7 +52,7 @@ def adduser(args):
         entry = db.User()
         entry.username = unicode(args.username.lower())
         entry.email = unicode(args.email)
-        entry.pw_hash = auth_lib.bcrypt_gen_password_hash(args.password)
+        entry.pw_hash = auth.gen_password_hash(args.password)
         entry.status = u'active'
         entry.email_verified = True
         entry.save()
@@ -96,7 +96,7 @@ def changepw(args):
 
     user = db.User.one({'username': unicode(args.username.lower())})
     if user:
-        user.pw_hash = auth_lib.bcrypt_gen_password_hash(args.password)
+        user.pw_hash = auth.gen_password_hash(args.password)
         user.save()
         print 'Password successfully changed'
     else:

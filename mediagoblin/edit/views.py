@@ -22,7 +22,6 @@ from werkzeug.utils import secure_filename
 from mediagoblin import messages
 from mediagoblin import mg_globals
 
-from mediagoblin.auth import lib as auth_lib
 from mediagoblin import auth
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media

@@ -18,7 +18,6 @@ import uuid
 
 import forms as auth_forms
 import tools as auth_tools
-from mediagoblin.auth import lib as auth_lib
 from mediagoblin.db.models import User
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools import pluginapi
@@ -47,7 +46,7 @@ def create_user(registration_form):
     user = User()
     user.username = registration_form.data['username']
     user.email = registration_form.data['email']
-    user.pw_hash = auth_lib.bcrypt_gen_password_hash(
+    user.pw_hash = auth_tools.bcrypt_gen_password_hash(
         registration_form.password.data)
     user.verification_key = unicode(uuid.uuid4())
     user.save()
@@ -82,6 +81,10 @@ def get_registration_form(request):
     return auth_forms.RegistrationForm(request.form)
 
 
+def gen_password_hash(raw_pass, extra_salt):
+    return auth_tools.bcrypt_gen_password_hash(raw_pass, extra_salt)
+
+
 def auth():
     return True
 
@@ -95,4 +98,5 @@ hooks = {
     'auth_extra_validation': extra_validation,
     'auth_get_login_form': get_login_form,
     'auth_get_registration_form': get_registration_form,
+    'auth_gen_password_hash': gen_password_hash,
 }

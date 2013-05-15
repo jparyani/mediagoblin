@@ -23,22 +23,6 @@ from mediagoblin.tools.template import render_template
 from mediagoblin import mg_globals
 
 
-def bcrypt_gen_password_hash(raw_pass, extra_salt=None):
-    """
-    Generate a salt for this new password.
-
-    Args:
-    - raw_pass: user submitted password
-    - extra_salt: (optional) If this password is with stored with a
-      non-database extra salt
-    """
-    if extra_salt:
-        raw_pass = u"%s:%s" % (extra_salt, raw_pass)
-
-    return unicode(
-        bcrypt.hashpw(raw_pass.encode('utf-8'), bcrypt.gensalt()))
-
-
 def fake_login_attempt():
     """
     Pretend we're trying to login.
