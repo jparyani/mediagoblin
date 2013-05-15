@@ -105,7 +105,7 @@ def login(request):
         if login_form.validate():
             user = auth.get_user(login_form)
 
-            if user and auth.check_login(user, login_form):
+            if user and auth.check_login(user, login_form.password.data):
                 # set up login in session
                 request.session['user_id'] = unicode(user.id)
                 request.session.save()

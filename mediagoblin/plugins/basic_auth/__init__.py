@@ -17,6 +17,7 @@ import os
 import uuid
 
 import forms as auth_forms
+import tools as auth_tools
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.db.models import User
 from mediagoblin.tools.translate import pass_to_ugettext as _
@@ -28,8 +29,8 @@ def setup_plugin():
     config = pluginapi.get_config('mediagoblin.pluginapi.basic_auth')
 
 
-def check_login(user, login_form):
-    return user.check_login(login_form.password.data)
+def check_login(user, password):
+    return auth_tools.bcrypt_check_password(password, user.pw_hash)
 
 
 def get_user(login_form):

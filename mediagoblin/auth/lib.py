@@ -23,38 +23,6 @@ from mediagoblin.tools.template import render_template
 from mediagoblin import mg_globals
 
 
-def bcrypt_check_password(raw_pass, stored_hash, extra_salt=None):
-    """
-    Check to see if this password matches.
-
-    Args:
-    - raw_pass: user submitted password to check for authenticity.
-    - stored_hash: The hash of the raw password (and possibly extra
-      salt) to check against
-    - extra_salt: (optional) If this password is with stored with a
-      non-database extra salt (probably in the config file) for extra
-      security, factor this into the check.
-
-    Returns:
-      True or False depending on success.
-    """
-    if extra_salt:
-        raw_pass = u"%s:%s" % (extra_salt, raw_pass)
-
-    hashed_pass = bcrypt.hashpw(raw_pass.encode('utf-8'), stored_hash)
-
-    # Reduce risk of timing attacks by hashing again with a random
-    # number (thx to zooko on this advice, which I hopefully
-    # incorporated right.)
-    #
-    # See also:
-    rand_salt = bcrypt.gensalt(5)
-    randplus_stored_hash = bcrypt.hashpw(stored_hash, rand_salt)
-    randplus_hashed_pass = bcrypt.hashpw(hashed_pass, rand_salt)
-
-    return randplus_stored_hash == randplus_hashed_pass
-
-
 def bcrypt_gen_password_hash(raw_pass, extra_salt=None):
     """
     Generate a salt for this new password.

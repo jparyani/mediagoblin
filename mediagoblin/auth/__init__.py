@@ -16,8 +16,8 @@
 from mediagoblin.tools.pluginapi import hook_handle
 
 
-def check_login(user, login_form):
-    return hook_handle("auth_check_login", user, login_form)
+def check_login(user, password):
+    return hook_handle("auth_check_login", user, password)
 
 
 def get_user(*args):
