@@ -63,7 +63,7 @@ that has a key in the format of the tuple::
   (view_symbolic_name, view_template_path)
 
 Where the "view symbolic name" is the same parameter used in
-``request.urlgen()`` to look up the test.  So say we're wanting to add
+``request.urlgen()`` to look up the view.  So say we're wanting to add
 something to the context of the user's homepage.  We look in
 mediagoblin/user_pages/routing.py and see::
 
