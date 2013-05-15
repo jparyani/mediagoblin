@@ -106,8 +106,8 @@ and should return that modified object, like so::
        "mediagoblin/user_pages/user.html"): add_to_user_home_context}
 
 
-Global context hook
-+++++++++++++++++++
+Global context hooks
+++++++++++++++++++++
 
 If you need to add something to the context of *every* view, it is not
 hard; there are two hooks hook that also uses hook_transform (like the
