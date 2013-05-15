@@ -29,7 +29,10 @@ def setup_plugin():
 
 
 def check_login(user, password):
-    return auth_tools.bcrypt_check_password(password, user.pw_hash)
+    result = auth_tools.bcrypt_check_password(password, user.pw_hash)
+    if result:
+        return result
+    return None
 
 
 def get_user(login_form):
