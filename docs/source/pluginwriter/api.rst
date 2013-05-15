@@ -73,7 +73,7 @@ mediagoblin/user_pages/routing.py and see::
 
 Aha!  That means that the name is ``mediagoblin.user_pages.user_home``.
 Okay, so then we look at the view at the
-``mediagoblin.user_pages.views:user_home`` method::
+``mediagoblin.user_pages.user_home`` method::
 
   @uses_pagination
   def user_home(request, page):
@@ -90,7 +90,7 @@ Nice!  So the template appears to be
 ``mediagoblin/user_pages/user.html``.  Cool, that means that the key
 is::
 
-  ("mediagoblin.user_pages.views:user_home",
+  ("mediagoblin.user_pages.user_home",
    "mediagoblin/user_pages/user.html")
 
 The context hook uses ``hook_transform()`` so that means that if we're
@@ -102,11 +102,26 @@ and should return that modified object, like so::
       return context
   
   hooks = {
-      ("mediagoblin.user_pages.views:user_home",
+      ("mediagoblin.user_pages.user_home",
        "mediagoblin/user_pages/user.html"): add_to_user_home_context}
 
 
 Global context hook
 +++++++++++++++++++
 
+If you need to add something to the context of *every* view, it is not
+hard; there are two hooks hook that also uses hook_transform (like the
+above) but make available what you are providing to *every* view.
 
+Note that there is a slight, but critical, difference between the two.
+
+The most general one is the ``'template_global_context'`` hook.  This
+one is run only once, and is read into the global context... all views
+will get access to what are in this dict.
+
+The slightly more expensive but more powerful one is
+``'template_context_prerender'``.  This one is not added to the global
+context... it is added to the actual context of each individual
+template render right before it is run!  Because of this you also can
+do some powerful and crazy things, such as checking the request object
+or other parts of the context before passing them on.
