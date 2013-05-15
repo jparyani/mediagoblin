@@ -26,6 +26,11 @@ def append_to_global_context(context):
     context['global_append'] = 'globally appended!'
     return context
 
+def double_doubleme(context):
+    if 'doubleme' in context:
+        context['doubleme'] = context['doubleme'] * 2
+    return context
+
 
 def setup_plugin():
     routes = [
@@ -46,4 +51,5 @@ hooks = {
     'setup': setup_plugin,
     ('modify_context.specific_page',
      'contextplugin/specific.html'): append_to_specific_context,
-    'template_global_context': append_to_global_context}
+    'template_global_context': append_to_global_context,
+    'template_context_prerender': double_doubleme}

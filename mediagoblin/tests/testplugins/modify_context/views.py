@@ -21,11 +21,13 @@ def specific(request):
     return render_to_response(
         request,
         'contextplugin/specific.html',
-        {"something": "orother"})
+        {"something": "orother",
+         "doubleme": "happy"})
 
 
 def general(request):
     return render_to_response(
         request,
         'contextplugin/general.html',
-        {"lol": "cats"})
+        {"lol": "cats",
+         "doubleme": "joy"})

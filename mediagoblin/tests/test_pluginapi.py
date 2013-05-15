@@ -348,11 +348,13 @@ def test_modify_context(context_modified_app):
 
 specific thing: in yer specificpage
 global thing: globally appended!
-something: orother"""
+something: orother
+doubleme: happyhappy"""
 
     # General test, should have global context variable only
     result = context_modified_app.get("/modify_context/")
     assert result.body.strip() == """General page!
 
 global thing: globally appended!
-lol: cats"""
+lol: cats
+doubleme: joyjoy"""
