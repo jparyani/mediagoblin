@@ -188,6 +188,7 @@ class MediaGoblinApp(object):
 
         mg_request.setup_user_in_request(request)
 
+        request.controller_name = None
         try:
             found_rule, url_values = map_adapter.match(return_rule=True)
             request.matchdict = url_values
@@ -201,6 +202,9 @@ class MediaGoblinApp(object):
                 exc.get_description(environ))(environ, start_response)
 
         controller = endpoint_to_controller(found_rule)
+        # Make a reference to the controller's symbolic name on the request...
+        # used for lazy context modification
+        request.controller_name = found_rule.endpoint
 
         # pass the request through our meddleware classes
         try:

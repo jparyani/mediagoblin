@@ -25,6 +25,7 @@ from mediagoblin import mg_globals
 from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.tools import pluginapi
+from mediagoblin.tests.tools import get_app
 
 
 def with_cleanup(*modules_to_delete):
@@ -323,3 +324,37 @@ def test_plugin_config():
     # the callables thing shouldn't really have anything though.
     assert len(config['plugins'][
         'mediagoblin.tests.testplugins.callables1']) == 0
+
+
+@pytest.fixture()
+def context_modified_app(request):
+    """
+    Get a MediaGoblin app fixture using appconfig_context_modified.ini
+    """
+    return get_app(
+        request,
+        mgoblin_config=pkg_resources.resource_filename(
+            'mediagoblin.tests', 'appconfig_context_modified.ini'))
+
+
+def test_modify_context(context_modified_app):
+    """
+    Test that we can modify both the view/template specific and
+    global contexts for templates.
+    """
+    # Specific thing passed into a page
+    result = context_modified_app.get("/modify_context/specific/")
+    assert result.body.strip() == """Specific page!
+
+specific thing: in yer specificpage
+global thing: globally appended!
+something: orother
+doubleme: happyhappy"""
+
+    # General test, should have global context variable only
+    result = context_modified_app.get("/modify_context/")
+    assert result.body.strip() == """General page!
+
+global thing: globally appended!
+lol: cats
+doubleme: joyjoy"""
