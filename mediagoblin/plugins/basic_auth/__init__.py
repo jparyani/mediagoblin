@@ -94,7 +94,7 @@ def auth():
 
 hooks = {
     'setup': setup_plugin,
-    'auth': auth,
+    'authentication': auth,
     'auth_check_login': check_login,
     'auth_get_user': get_user,
     'auth_create_user': create_user,

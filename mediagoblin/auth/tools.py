@@ -58,7 +58,7 @@ def normalize_user_or_email_field(allow_email=True, allow_user=True):
 
 def check_auth_enabled():
     no_auth = mg_globals.app_config['no_auth']
-    auth_plugin = True if hook_handle('auth') is not None else False
+    auth_plugin = True if hook_handle('authentication') is not None else False
 
     if no_auth == 'false' and not auth_plugin:
         print 'No authentication plugin is enabled and no_auth = false in ' \
