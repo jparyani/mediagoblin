@@ -78,6 +78,7 @@ def gather_database_data(media_types, plugins):
         except AttributeError as exc:
             _log.warning('Could not find MODELS in {0}.models, have you \
 forgotten to add it? ({1})'.format(plugin, exc))
+            models = []
 
         try:
             migrations = import_component('{0}.migrations:MIGRATIONS'.format(
@@ -91,6 +92,7 @@ forgotten to add it? ({1})'.format(plugin, exc))
         except AttributeError as exc:
             _log.debug('Cloud not find MIGRATIONS in {0}.migrations, have you \
 forgotten to add it? ({1})'.format(plugin, exc))
+            migrations = {}
 
         if models:
             managed_dbdata.append(
