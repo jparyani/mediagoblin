@@ -61,3 +61,41 @@ class StaticDirect(object):
     def get(self, filepath, domain=None):
         return '%s/%s' % (
             self.domains[domain], filepath.lstrip('/'))
+
+
+class PluginStatic(object):
+    """Pass this into the ``'static_setup'`` hook to register your
+    plugin's static directory.
+
+    This has two mandatory attributes that you must pass in on class
+    init:
+     - name: this name will be both used for lookup in "urlgen" for
+       your plugin's static resources and for the subdirectory that
+       it'll be "mounted" to for serving via your web browser.  It
+       *MUST* be unique.  If writing a plugin bundled with MediaGoblin
+       please use the pattern 'coreplugin__foo' where 'foo' is your
+       plugin name.  All external plugins should use their modulename,
+       so if your plugin is 'mg_bettertags' you should also call this
+       name 'mg_bettertags'.
+     - file_path: the directory your plugin's static resources are
+       located in.  It's recommended that you use
+       pkg_resources.resource_filename() for this.
+
+    An example of using this::
+
+      from pkg_resources import resource_filename
+      from mediagoblin.tools.staticdirect import PluginStatic
+
+      hooks = {
+          'static_setup': lambda: PluginStatic(
+              'mg_bettertags',
+              resource_filename('mg_bettertags', 'static'))
+      }
+
+    """
+    def __init__(self, name, file_path):
+        self.name = name
+        self.file_path = file_path
+
+    def __call__(self):
+        return self

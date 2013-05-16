@@ -125,3 +125,22 @@ context... it is added to the actual context of each individual
 template render right before it is run!  Because of this you also can
 do some powerful and crazy things, such as checking the request object
 or other parts of the context before passing them on.
+
+
+Adding static resources
+-----------------------
+
+It's possible to add static resources for your plugin.  Say your
+plugin needs some special javascript and images... how to provide
+them?  Then how to access them?  MediaGoblin has a way!
+
+
+Attaching to the hook
++++++++++++++++++++++
+
+First, you need to register your plugin's resources with the hook.
+This is pretty easy actually: you just need to provide a function that
+passes back a PluginStatic object.
+
+.. automodule:: mediagoblin.tools.staticdirect
+   :members: PluginStatic

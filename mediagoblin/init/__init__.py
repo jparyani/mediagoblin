@@ -24,6 +24,7 @@ from mediagoblin import mg_globals
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.db.open import setup_connection_and_db_from_config, \
     check_db_migrations_current, load_models
+from mediagoblin.pluginapi import hook_runall
 from mediagoblin.tools.workbench import WorkbenchManager
 from mediagoblin.storage import storage_system_from_config
 
@@ -115,6 +116,12 @@ def get_staticdirector(app_config):
 
     direct_domains = {None: app_config['direct_remote_path'].strip()}
     direct_domains['theme'] = app_config['theme_web_path'].strip()
+
+    # Let plugins load additional paths
+    for plugin_static in hook_runall("static_setup"):
+        direct_domains[plugin_static['name']] = "%s/%s" % (
+            app_config['plugin_web_path'].rstrip('/'),
+            plugin_static['name'])
 
     return staticdirect.StaticDirect(
         direct_domains)
