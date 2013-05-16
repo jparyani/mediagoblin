@@ -28,9 +28,14 @@ from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools import template
 from mediagoblin.media_types.image import MEDIA_MANAGER as img_MEDIA_MANAGER
 from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
+
 
 from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
     BIG_BLUE, GOOD_PDF, GPS_JPG
+
 
 GOOD_TAG_STRING = u'yin,yang'
 BAD_TAG_STRING = unicode('rage,' + 'f' * 26 + 'u' * 26)

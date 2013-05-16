@@ -26,6 +26,9 @@ from mediagoblin.tests.tools import fixture_add_user
 from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
     BIG_BLUE
 
+from mediagoblin.tools.testing import _activate_testing
+_activate_testing()
+
 
 _log = logging.getLogger(__name__)
 

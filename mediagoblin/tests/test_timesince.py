@@ -17,6 +17,9 @@
 from datetime import datetime, timedelta
 
 from mediagoblin.tools.timesince import is_aware, timesince
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
 
 
 def test_timesince():

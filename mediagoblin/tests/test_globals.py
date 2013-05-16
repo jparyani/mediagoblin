@@ -17,6 +17,9 @@
 import pytest
 
 from mediagoblin import mg_globals
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
 
 
 class TestGlobals(object):

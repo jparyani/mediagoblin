@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
 from mediagoblin import processing
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
+
 
 class TestProcessing(object):
     def run_fill(self, input, format, output=None):

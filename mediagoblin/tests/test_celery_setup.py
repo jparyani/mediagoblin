@@ -20,6 +20,11 @@ from mediagoblin.init import celery as celery_setup
 from mediagoblin.init.config import read_mediagoblin_config
 
 
+from mediagoblin.tools.testing import _activate_testing
+_activate_testing()
+
+
+
 TEST_CELERY_CONF_NOSPECIALDB = pkg_resources.resource_filename(
     'mediagoblin.tests', 'fake_celery_conf.ini')
 

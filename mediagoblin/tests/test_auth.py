@@ -24,6 +24,10 @@ from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin.tools import template, mail
 
 
+from mediagoblin.tools.testing import _activate_testing
+_activate_testing()
+
+
 ########################
 # Test bcrypt auth funcs
 ########################

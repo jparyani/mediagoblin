@@ -23,6 +23,9 @@ except ImportError:
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful
 from .resources import GOOD_JPG, EMPTY_JPG, BAD_JPG, GPS_JPG
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
 
 
 def assert_in(a, b):

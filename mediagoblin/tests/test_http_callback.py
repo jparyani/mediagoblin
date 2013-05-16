@@ -24,6 +24,9 @@ from mediagoblin.tools import processing
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin.tests.test_submission import GOOD_PNG
 from mediagoblin.tests import test_oauth as oauth
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
 
 
 class TestHTTPCallback(object):

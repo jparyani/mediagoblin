@@ -15,6 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.tools import text
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
+
 
 def test_list_of_dicts_conversion(test_app):
     """

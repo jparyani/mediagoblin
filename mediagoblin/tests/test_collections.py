@@ -17,6 +17,9 @@
 from mediagoblin.tests.tools import fixture_add_collection, fixture_add_user
 from mediagoblin.db.models import Collection, User
 
+from mediagoblin.tools.testing import _activate_testing
+_activate_testing()
+
 
 def test_user_deletes_collection(test_app):
     # Setup db.

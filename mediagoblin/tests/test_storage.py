@@ -22,6 +22,9 @@ import pytest
 from werkzeug.utils import secure_filename
 
 from mediagoblin import storage
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
 
 
 ################

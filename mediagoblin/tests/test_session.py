@@ -15,6 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.tools import session
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
+
 
 def test_session():
     sess = session.Session()

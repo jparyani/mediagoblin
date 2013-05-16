@@ -28,6 +28,9 @@ from migrate import changeset
 from mediagoblin.db.base import GMGTableBase
 from mediagoblin.db.migration_tools import MigrationManager, RegisterMigration
 from mediagoblin.tools.common import CollectingPrinter
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
 
 
 # This one will get filled with local migrations

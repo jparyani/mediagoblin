@@ -26,6 +26,9 @@ from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.tools import pluginapi
 from mediagoblin.tests.tools import get_app
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
 
 
 def with_cleanup(*modules_to_delete):

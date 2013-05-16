@@ -17,6 +17,9 @@
 from mediagoblin.db.base import Session
 from mediagoblin.db.models import User, MediaEntry, MediaComment
 from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
 
 
 def test_404_for_non_existent(test_app):

@@ -15,6 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin import mg_globals
+from mediagoblin.tools.testing import _activate_testing
+
+_activate_testing()
 
 
 def test_csrf_cookie_set(test_app):
