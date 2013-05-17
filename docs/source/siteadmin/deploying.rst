@@ -208,14 +208,18 @@ Deploy MediaGoblin Services
 Edit site configuration
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-A few basic properties must be set before MediaGoblin will work. First make a copy of ``mediagoblin.ini`` for editing so the original config file isn't lost::
+A few basic properties must be set before MediaGoblin will work. First
+make a copy of ``mediagoblin.ini`` for editing so the original config
+file isn't lost::
 
     cp mediagoblin.ini mediagoblin_local.ini
-    
-Then:
 
-Set ``email_sender_address`` to the address you wish to be used as the sender for system-generated emails
-Edit ``direct_remote_path``, ``base_dir``, and ``base_url`` if you're mediagoblin directory is not the root directory of your vhost.
+Then:
+ - Set ``email_sender_address`` to the address you wish to be used as
+   the sender for system-generated emails
+ - Edit ``direct_remote_path``, ``base_dir``, and ``base_url`` if
+   your mediagoblin directory is not the root directory of your
+   vhost.
 
 
 Configure MediaGoblin to use the PostgreSQL database
@@ -363,7 +367,8 @@ Visit the site you've set up in your browser by visiting
 Apache
 ~~~~~~
 
-Instructions and scripts for running MediaGoblin on an Apache server can be found on the `MediaGoblin wiki <http://wiki.mediagoblin.org/Deployment>`_.
+Instructions and scripts for running MediaGoblin on an Apache server
+can be found on the `MediaGoblin wiki <http://wiki.mediagoblin.org/Deployment>`_.
 
 
 Security Considerations
