@@ -17,9 +17,6 @@
 import pkg_resources
 
 from mediagoblin.init import config
-from mediagoblin.tools.testing import _activate_testing
-
-_activate_testing()
 
 
 CARROT_CONF_GOOD = pkg_resources.resource_filename(

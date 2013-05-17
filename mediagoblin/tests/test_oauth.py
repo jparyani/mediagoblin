@@ -23,9 +23,6 @@ from urlparse import parse_qs, urlparse
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, pluginapi
 from mediagoblin.tests.tools import fixture_add_user
-from mediagoblin.tools.testing import _activate_testing
-
-_activate_testing()
 
 
 _log = logging.getLogger(__name__)

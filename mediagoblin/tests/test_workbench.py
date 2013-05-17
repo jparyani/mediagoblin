@@ -22,9 +22,6 @@ from mediagoblin.tools import workbench
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.decorators import get_workbench
 from mediagoblin.tests.test_storage import get_tmp_filestorage, cleanup_storage
-from mediagoblin.tools.testing import _activate_testing
-
-_activate_testing()
 
 
 class TestWorkbench(object):

@@ -17,16 +17,12 @@
 # Maybe not every model needs a test, but some models have special
 # methods, and so it makes sense to test them here.
 
-import mock
-
 from mediagoblin.db.base import Session
 from mediagoblin.db.models import MediaEntry
 
 from mediagoblin.tests.tools import fixture_add_user
-from mediagoblin.tools.testing import _activate_testing
 
-_activate_testing()
-
+import mock
 
 
 class FakeUUID(object):

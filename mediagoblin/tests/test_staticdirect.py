@@ -1,8 +1,4 @@
 from mediagoblin.tools import staticdirect
-from mediagoblin.tools.testing import _activate_testing
-
-_activate_testing()
-
 
 def test_staticdirect():
     sdirect = staticdirect.StaticDirect(

@@ -16,9 +16,6 @@
 
 import pytest
 from .tools import fixture_add_user
-from mediagoblin.tools.testing import _activate_testing
-
-_activate_testing()
 
 
 XML_PREFIX = "<?xml version='1.0' encoding='utf-8'?>\n"
