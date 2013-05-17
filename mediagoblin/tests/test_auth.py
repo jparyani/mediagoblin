@@ -13,13 +13,16 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+import pkg_resources
+import pytest
 import urlparse
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User
-from mediagoblin.tests.tools import fixture_add_user
+from mediagoblin.tests.tools import get_app, fixture_add_user
 from mediagoblin.tools import template, mail
+from mediagoblin.auth.tools import AuthError
+from mediagoblin import auth
 
 
 def test_register_views(test_app):
@@ -273,3 +276,52 @@ def test_authentication_views(test_app):
             'password': 'toast',
             'next' : '/u/chris/'})
     assert urlparse.urlsplit(response.location)[2] == '/u/chris/'
+
+
+# App with no_auth=false and no auth plugin enabled
+def no_auth_false_no_auth_plugin_app(request):
+    return get_app(
+        request,
+        mgoblin_config=pkg_resources.resource_filename(
+            'mediagoblin.tests.auth_configs',
+            'no_auth_false_no_auth_plugin_appconfig.ini'))
+
+
+def test_no_auth_false_no_auth_plugin_raises(request):
+    with pytest.raises(AuthError):
+        no_auth_false_no_auth_plugin_app(request)
+
+
+@pytest.fixture()
+def no_auth_true_no_auth_plugin_app(request):
+    return get_app(
+        request,
+        mgoblin_config=pkg_resources.resource_filename(
+            'mediagoblin.tests.auth_configs',
+            'no_auth_true_no_auth_plugin_appconfig.ini'))
+
+
+def test_no_auth_true_no_auth_plugin_app(no_auth_true_no_auth_plugin_app):
+    # app.auth should = false
+    assert mg_globals.app.auth is False
+
+    # Try to visit register page
+    template.clear_test_template_context()
+    response = no_auth_true_no_auth_plugin_app.get('/auth/register/')
+    response.follow()
+
+    # Correct redirect?
+    assert urlparse.urlsplit(response.location)[2] == '/'
+    assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
+
+    # Try to vist login page
+    template.clear_test_template_context()
+    response = no_auth_true_no_auth_plugin_app.get('/auth/login/')
+    response.follow()
+
+    # Correct redirect?
+    assert urlparse.urlsplit(response.location)[2] == '/'
+    assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
+
+    ## Test check_login should return False
+    assert auth.check_login('test', 'simple') is False

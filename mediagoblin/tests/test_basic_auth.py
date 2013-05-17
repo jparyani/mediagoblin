@@ -72,15 +72,15 @@ def context_modified_app(request):
     return get_app(
         request,
         mgoblin_config=pkg_resources.resource_filename(
-            'mediagoblin.tests', 'basic_auth_appconfig.ini'))
+            'mediagoblin.tests.auth_configs', 'basic_auth_appconfig.ini'))
 
 
 def test_fp_view(context_modified_app):
     ### Oops, forgot the password
-    # -------------------
     ## Register a user
     fixture_add_user(active_user=True)
 
+    # -------------------
     template.clear_test_template_context()
     response = context_modified_app.post(
         '/auth/forgot_password/',
