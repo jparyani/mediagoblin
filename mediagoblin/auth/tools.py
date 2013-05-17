@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import sys
 import wtforms
 
 from mediagoblin import mg_globals
@@ -56,14 +55,21 @@ def normalize_user_or_email_field(allow_email=True, allow_user=True):
     return _normalize_field
 
 
+class AuthError(Exception):
+    def __init__(self):
+        self.value = 'No Authentication Plugin is enabled and no_auth = false'\
+                     ' in config!'
+
+    def __str__(self):
+        return repr(self.value)
+
+
 def check_auth_enabled():
     no_auth = mg_globals.app_config['no_auth']
     auth_plugin = True if hook_handle('authentication') is not None else False
 
     if no_auth == 'false' and not auth_plugin:
-        print 'No authentication plugin is enabled and no_auth = false in ' \
-              'config! \n..Exiting'
-        sys.exit()
+        raise AuthError
 
     if no_auth == 'true' and not auth_plugin:
         _log.warning('No authentication is enabled')
