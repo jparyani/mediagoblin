@@ -102,4 +102,5 @@ hooks = {
     'auth_get_login_form': get_login_form,
     'auth_get_registration_form': get_registration_form,
     'auth_gen_password_hash': gen_password_hash,
+    'auth_fake_login_attempt': auth_lib.fake_login_attempt,
 }

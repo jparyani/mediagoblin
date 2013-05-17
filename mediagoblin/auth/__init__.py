@@ -49,3 +49,7 @@ def get_registration_form(request):
 
 def gen_password_hash(raw_pass, extra_salt=None):
     return hook_handle("auth_gen_password_hash", raw_pass, extra_salt)
+
+
+def fake_login_attempt():
+    return hook_handle("auth_fake_login_attempt")

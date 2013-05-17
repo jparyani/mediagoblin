@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import bcrypt
+import random
 
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.mail import send_email
@@ -97,3 +98,22 @@ def send_fp_verification_email(user, request):
         [user.email],
         'GNU MediaGoblin - Change forgotten password!',
         rendered_email)
+
+
+def fake_login_attempt():
+    """
+    Pretend we're trying to login.
+
+    Nothing actually happens here, we're just trying to take up some
+    time, approximately the same amount of time as
+    bcrypt_check_password, so as to avoid figuring out what users are
+    on the system by intentionally faking logins a bunch of times.
+    """
+    rand_salt = bcrypt.gensalt(5)
+
+    hashed_pass = bcrypt.hashpw(str(random.random()), rand_salt)
+
+    randplus_stored_hash = bcrypt.hashpw(str(random.random()), rand_salt)
+    randplus_hashed_pass = bcrypt.hashpw(hashed_pass, rand_salt)
+
+    randplus_stored_hash == randplus_hashed_pass

@@ -23,7 +23,6 @@ from werkzeug.exceptions import MethodNotAllowed, BadRequest, NotImplemented
 from werkzeug.wrappers import BaseResponse
 
 from mediagoblin.meddleware.csrf import csrf_exempt
-from mediagoblin.auth.lib import fake_login_attempt
 from mediagoblin.media_types import sniff_media
 from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
     run_process_media, new_upload_entry
@@ -33,6 +32,7 @@ from mediagoblin.db.models import Collection
 
 from .tools import CmdTable, response_xml, check_form, \
     PWGSession, PwgNamedArray, PwgError
+from mediagoblin.plugins.basic_auth.lib import fake_login_attempt
 from .forms import AddSimpleForm, AddForm
 
 
@@ -126,7 +126,7 @@ def pwg_images_addSimple(request):
     dump = []
     for f in form:
         dump.append("%s=%r" % (f.name, f.data))
-    _log.info("addSimple: %r %s %r", request.form, " ".join(dump), 
+    _log.info("addSimple: %r %s %r", request.form, " ".join(dump),
               request.files)
 
     if not check_file_field(request, 'image'):
