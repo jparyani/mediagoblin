@@ -55,6 +55,10 @@ class User(Base, UserMixin):
 
     id = Column(Integer, primary_key=True)
     username = Column(Unicode, nullable=False, unique=True)
+    # Note: no db uniqueness constraint on email because it's not
+    # reliable (many email systems case insensitive despite against
+    # the RFC) and because it would be a mess to implement at this
+    # point.
     email = Column(Unicode, nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     pw_hash = Column(Unicode, nullable=False)
