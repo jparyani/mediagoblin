@@ -37,7 +37,7 @@ from mediagoblin.init import (get_jinja_loader, get_staticdirector,
     setup_storage)
 from mediagoblin.tools.pluginapi import PluginManager, hook_transform
 from mediagoblin.tools.crypto import setup_crypto
-from mediagoblin.auth.tools import check_auth_enabled
+from mediagoblin.auth.tools import check_auth_enabled, no_auth_logout
 
 
 _log = logging.getLogger(__name__)
@@ -191,6 +191,9 @@ class MediaGoblinApp(object):
         request.urlgen = build_proxy
 
         mg_request.setup_user_in_request(request)
+
+        # Log user out if in no_auth mode
+        no_auth_logout(request)
 
         request.controller_name = None
         try:

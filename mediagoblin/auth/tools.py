@@ -76,3 +76,9 @@ def check_auth_enabled():
         return False
     else:
         return True
+
+
+def no_auth_logout(request):
+    """Log out the user if in no_auth mode"""
+    if not mg_globals.app.auth:
+        request.session.delete()
