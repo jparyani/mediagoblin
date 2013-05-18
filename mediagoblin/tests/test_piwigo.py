@@ -56,7 +56,7 @@ class Test_PWG(object):
 
         resp = self.do_post("pwg.session.login",
             {"username": self.username, "password": self.password})
-        assert resp.body ==  XML_PREFIX + '<rsp stat="ok">1</rsp>'
+        assert resp.body == XML_PREFIX + '<rsp stat="ok">1</rsp>'
 
         resp = self.do_get("pwg.session.getStatus")
         assert resp.body == XML_PREFIX \

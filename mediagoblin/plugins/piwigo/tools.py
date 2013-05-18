@@ -113,7 +113,7 @@ def check_form(form):
     if not form.validate():
         _log.error("form validation failed for form %r", form)
         for f in form:
-            if len(f.error):
+            if len(f.errors):
                 _log.error("Errors for %s: %r", f.name, f.errors)
         raise BadRequest()
     dump = []
@@ -140,7 +140,7 @@ class PWGSession(object):
         self.in_pwg_session = True
         return self
 
-    def  __exit__(self, *args):
+    def __exit__(self, *args):
         # Restore state
         self.request.session = self.old_session
         self.request.user = self.old_user
