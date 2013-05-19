@@ -110,9 +110,9 @@ dnl
 # Support installing to a virtualenv via the --with-virtualenv 
 # configure flag
 AC_ARG_WITH([virtualenv],
-	[AS_HELP_STRING([--with-virtualenv], [install to a Python virtualenv])],
+	[AS_HELP_STRING([--without-virtualenv], [install to a Python virtualenv])],
 	[],
-	[with_virtualenv=no])
+	[with_virtualenv=yes])
 AS_IF([test "x$with_virtualenv" != xno],
 	    AC_CHECK_PROGS([VIRTUALENV], [virtualenv virtualenv3 virtualenv2], [no])
 	    AS_IF([test "x$VIRTUALENV" = xno],
