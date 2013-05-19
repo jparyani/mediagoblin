@@ -55,6 +55,11 @@ dnl
 AC_CONFIG_MACRO_DIR([m4])
 
 
+# The default prefix should be changed from /usr/local. Set it, as in
+# the documentation, to /srv/mediagoblin.example.org/mediagoblin/
+AC_PREFIX_DEFAULT([/srv/mediagoblin.example.org/mediagoblin/])
+
+
 dnl###########################
 dnl Program/command support  #
 dnl###########################

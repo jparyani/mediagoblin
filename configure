@@ -584,6 +584,7 @@ PACKAGE_STRING='mediagoblin 0.4.0.dev'
 PACKAGE_BUGREPORT='cwebber@gnu.org'
 PACKAGE_URL=''
 
+ac_default_prefix=/srv/mediagoblin.example.org/mediagoblin/
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 pkgpyexecdir
@@ -1743,6 +1744,11 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+
+
+
+# The default prefix should be changed from /usr/local. Set it, as in
+# the documentation, to /srv/mediagoblin.example.org/mediagoblin/
 
 
 
