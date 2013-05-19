@@ -70,7 +70,11 @@ ifneq ($(VIRTUALENV),no)
 else
 	$(PYTHON) $(srcdir)/setup.py install --prefix=$(DESTDIR)$(prefix)
 endif
-	$(INSTALL_DATA) $(srcdir)/Makefile $(DESTDIR)$(prefix)/Makefile
+	if [[ $(DESTDIR)$(prefix) != $(srcdir) ]]; then
+		$(INSTALL_DATA) $(srcdir)/Makefile $(DESTDIR)$(prefix)/Makefile
+		$(INSTALL_DATA) $(srcdir)/lazycelery.sh $(DESTDIR)$(prefix)/lazycelery.sh
+		$(INSTALL_DATA) $(srcdir)/lazyserver.sh $(DESTDIR)$(prefix)/lazyserver.sh
+	fi
 
 # The same as "install", except use the "develop" setup.py target
 develop: installdirs
@@ -84,7 +88,11 @@ ifneq ($(VIRTUALENV),no)
 else
 	$(PYTHON) $(srcdir)/setup.py develop --prefix=$(DESTDIR)$(prefix)
 endif
-	$(INSTALL_DATA) $(srcdir)/Makefile $(DESTDIR)$(prefix)/Makefile
+	if [[ $(DESTDIR)$(prefix) != $(srcdir) ]]; then
+		$(INSTALL_DATA) $(srcdir)/Makefile $(DESTDIR)$(prefix)/Makefile
+		$(INSTALL_DATA) $(srcdir)/lazycelery.sh $(DESTDIR)$(prefix)/lazycelery.sh
+		$(INSTALL_DATA) $(srcdir)/lazyserver.sh $(DESTDIR)$(prefix)/lazyserver.sh
+	fi
 
 
 # setup.py doesn't (yet) support an uninstall command, so until it does, you 
