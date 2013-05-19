@@ -120,6 +120,7 @@ distclean:
 	rm -v $(srcdir)/config.log
 	rm -v $(srcdir)/config.status
 	rm -rvf $(srcdir)/autom4te.cache
+	rm -v $(srcdir)/aclocal.m4
 	rm -v $(srcdir)/Makefile
 
 # You can either use the setup.py sdist command or you can roll your own here
