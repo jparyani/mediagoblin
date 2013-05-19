@@ -25,6 +25,7 @@ PATH_SEPARATOR = @PATH_SEPARATOR@
 PYTHON = @PYTHON@
 VIRTUALENV = @VIRTUALENV@
 SPHINXBUILD = @SPHINXBUILD@
+POSTGRES = @POSTGRES@
 SHELL = @SHELL@
 MKDIR_P = @MKDIR_P@
 INSTALL = @INSTALL@
@@ -139,8 +140,8 @@ installdirs:
 
 # Set up PostgreSQL
 postgresql:
-	sudo -u postgres createuser mediagoblin
-	sudo -u postgres createdb -E UNICODE -O mediagoblin mediagoblin
+	sudo -u $(POSTGRES) createuser mediagoblin
+	sudo -u $(POSTGRES) createdb -E UNICODE -O mediagoblin mediagoblin
 
 update:
 ifneq ($(VIRTUALENV),no)
