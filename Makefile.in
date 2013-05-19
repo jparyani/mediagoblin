@@ -101,9 +101,12 @@ endif
 # triple-check it so that you don't remove something you shouldn't!
 # Be sure to remove any extra files you install, such as binaries or documentation!
 # uninstall: 
-# 	rm -rvf $(pkgpythondir)
-# 	rm -v $(pythondir)/$(PACKAGE_DISTNAME)-*.egg-info
-
+#	case $(prefix) in
+#		/usr|/usr/local )
+#			exit 1 ;;
+#		/www/*|/srv/* )
+#		 	rm -rvf $(prefix) ;;
+#	esac
 
 # Just use the usual setup.py clean command
 clean:
@@ -132,7 +135,7 @@ check:
 # setup.py might complain if a directory doesn't exist so just in case, make the directory
 # here
 installdirs:
-	$(MKDIR_P) $(DESTDIR)$(pkgpythondir)
+	$(MKDIR_P) $(DESTDIR)$(prefix)
 
 # Set up PostgreSQL
 postgresql:
