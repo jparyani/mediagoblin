@@ -20,26 +20,17 @@ sys.setdefaultencoding('utf-8')
 
 import urlparse
 import os
+import pytest
 
-from nose.tools import assert_equal, assert_true
-from pkg_resources import resource_filename
-
-from mediagoblin.tests.tools import get_test_app, \
-    fixture_add_user
+from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin import mg_globals
+from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools import template
+from mediagoblin.media_types.image import MEDIA_MANAGER as img_MEDIA_MANAGER
+from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
 
-
-def resource(filename):
-    return resource_filename('mediagoblin.tests', 'test_submission/' + filename)
-
-
-GOOD_JPG = resource('good.jpg')
-GOOD_PNG = resource('good.png')
-EVIL_FILE = resource('evil')
-EVIL_JPG = resource('evil.jpg')
-EVIL_PNG = resource('evil.png')
-BIG_BLUE = resource('bigblue.png')
+from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
+    BIG_BLUE, GOOD_PDF, GPS_JPG
 
 GOOD_TAG_STRING = u'yin,yang'
 BAD_TAG_STRING = unicode('rage,' + 'f' * 26 + 'u' * 26)
@@ -49,8 +40,9 @@ REQUEST_CONTEXT = ['mediagoblin/user_pages/user.html', 'request']
 
 
 class TestSubmission:
-    def setUp(self):
-        self.test_app = get_test_app()
+    @pytest.fixture(autouse=True)
+    def setup(self, test_app):
+        self.test_app = test_app
 
         # TODO: Possibly abstract into a decorator like:
         # @as_authenticated_user('chris')
@@ -86,27 +78,27 @@ class TestSubmission:
 
     def check_comments(self, request, media_id, count):
         comments = request.db.MediaComment.find({'media_entry': media_id})
-        assert_equal(count, len(list(comments)))
+        assert count == len(list(comments))
 
     def test_missing_fields(self):
         # Test blank form
         # ---------------
         response, form = self.do_post({}, *FORM_CONTEXT)
-        assert_equal(form.file.errors, [u'You must provide a file.'])
+        assert form.file.errors == [u'You must provide a file.']
 
         # Test blank file
         # ---------------
         response, form = self.do_post({'title': u'test title'}, *FORM_CONTEXT)
-        assert_equal(form.file.errors, [u'You must provide a file.'])
+        assert form.file.errors == [u'You must provide a file.']
 
     def check_url(self, response, path):
-        assert_equal(urlparse.urlsplit(response.location)[2], path)
+        assert urlparse.urlsplit(response.location)[2] == path
 
     def check_normal_upload(self, title, filename):
         response, context = self.do_post({'title': title}, do_follow=True,
                                          **self.upload_data(filename))
         self.check_url(response, '/u/{0}/'.format(self.test_user.username))
-        assert_true('mediagoblin/user_pages/user.html' in context)
+        assert 'mediagoblin/user_pages/user.html' in context
         # Make sure the media view is at least reachable, logged in...
         url = '/u/{0}/m/{1}/'.format(self.test_user.username,
                                      title.lower().replace(' ', '-'))
@@ -121,10 +113,18 @@ class TestSubmission:
     def test_normal_png(self):
         self.check_normal_upload(u'Normal upload 2', GOOD_PNG)
 
+    @pytest.mark.skipif("not pdf_check_prerequisites()")
+    def test_normal_pdf(self):
+        response, context = self.do_post({'title': u'Normal upload 3 (pdf)'},
+                                         do_follow=True,
+                                         **self.upload_data(GOOD_PDF))
+        self.check_url(response, '/u/{0}/'.format(self.test_user.username))
+        assert 'mediagoblin/user_pages/user.html' in context
+
     def check_media(self, request, find_data, count=None):
-        media = request.db.MediaEntry.find(find_data)
+        media = MediaEntry.find(find_data)
         if count is not None:
-            assert_equal(media.count(), count)
+            assert media.count() == count
             if count == 0:
                 return
         return media[0]
@@ -132,11 +132,11 @@ class TestSubmission:
     def test_tags(self):
         # Good tag string
         # --------
-        response, request = self.do_post({'title': u'Balanced Goblin',
+        response, request = self.do_post({'title': u'Balanced Goblin 2',
                                           'tags': GOOD_TAG_STRING},
                                          *REQUEST_CONTEXT, do_follow=True,
                                          **self.upload_data(GOOD_JPG))
-        media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
+        media = self.check_media(request, {'title': u'Balanced Goblin 2'}, 1)
         assert media.tags[0]['name'] == u'yin'
         assert media.tags[0]['slug'] == u'yin'
 
@@ -145,14 +145,14 @@ class TestSubmission:
 
         # Test tags that are too long
         # ---------------
-        response, form = self.do_post({'title': u'Balanced Goblin',
+        response, form = self.do_post({'title': u'Balanced Goblin 2',
                                        'tags': BAD_TAG_STRING},
                                       *FORM_CONTEXT,
                                       **self.upload_data(GOOD_JPG))
-        assert_equal(form.tags.errors, [
+        assert form.tags.errors == [
                 u'Tags must be shorter than 50 characters.  ' \
                     'Tags that are too long: ' \
-                    'ffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuuuu'])
+                    'ffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuuuu']
 
     def test_delete(self):
         response, request = self.do_post({'title': u'Balanced Goblin'},
@@ -161,11 +161,23 @@ class TestSubmission:
         media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
         media_id = media.id
 
+        # render and post to the edit page.
+        edit_url = request.urlgen(
+            'mediagoblin.edit.edit_media',
+            user=self.test_user.username, media_id=media_id)
+        self.test_app.get(edit_url)
+        self.test_app.post(edit_url,
+            {'title': u'Balanced Goblin',
+             'slug': u"Balanced=Goblin",
+             'tags': u''})
+        media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
+        assert media.slug == u"balanced-goblin"
+
         # Add a comment, so we can test for its deletion later.
         self.check_comments(request, media_id, 0)
         comment_url = request.urlgen(
             'mediagoblin.user_pages.media_post_comment',
-            user=self.test_user.username, media=media_id)
+            user=self.test_user.username, media_id=media_id)
         response = self.do_post({'comment_content': 'i love this test'},
                                 url=comment_url, do_follow=True)[0]
         self.check_comments(request, media_id, 1)
@@ -174,7 +186,7 @@ class TestSubmission:
         # ---------------------------------------------------
         delete_url = request.urlgen(
             'mediagoblin.user_pages.media_confirm_delete',
-            user=self.test_user.username, media=media_id)
+            user=self.test_user.username, media_id=media_id)
         # Empty data means don't confirm
         response = self.do_post({}, do_follow=True, url=delete_url)[0]
         media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
@@ -184,7 +196,7 @@ class TestSubmission:
         # ---------------------------------------------------
         response, request = self.do_post({'confirm': 'y'}, *REQUEST_CONTEXT,
                                          do_follow=True, url=delete_url)
-        self.check_media(request, {'_id': media_id}, 0)
+        self.check_media(request, {'id': media_id}, 0)
         self.check_comments(request, media_id, 0)
 
     def test_evil_file(self):
@@ -193,9 +205,23 @@ class TestSubmission:
         response, form = self.do_post({'title': u'Malicious Upload 1'},
                                       *FORM_CONTEXT,
                                       **self.upload_data(EVIL_FILE))
-        assert_equal(len(form.file.errors), 1)
+        assert len(form.file.errors) == 1
         assert 'Sorry, I don\'t support that file type :(' == \
                 str(form.file.errors[0])
+
+
+    def test_get_media_manager(self):
+        """Test if the get_media_manger function returns sensible things
+        """
+        response, request = self.do_post({'title': u'Balanced Goblin'},
+                                         *REQUEST_CONTEXT, do_follow=True,
+                                         **self.upload_data(GOOD_JPG))
+        media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
+
+        assert media.media_type == u'mediagoblin.media_types.image'
+        assert isinstance(media.media_manager, img_MEDIA_MANAGER)
+        assert media.media_manager.entry == media
+
 
     def test_sniffing(self):
         '''
@@ -227,8 +253,8 @@ class TestSubmission:
                                          **self.upload_data(filename))
         self.check_url(response, '/u/{0}/'.format(self.test_user.username))
         entry = mg_globals.database.MediaEntry.find_one({'title': title})
-        assert_equal(entry.state, 'failed')
-        assert_equal(entry.fail_error, u'mediagoblin.processing:BadMediaFail')
+        assert entry.state == 'failed'
+        assert entry.fail_error == u'mediagoblin.processing:BadMediaFail'
 
     def test_evil_jpg(self):
         # Test non-supported file with .jpg extension
@@ -240,7 +266,15 @@ class TestSubmission:
         # -------------------------------------------
         self.check_false_image(u'Malicious Upload 3', EVIL_PNG)
 
+    def test_media_data(self):
+        self.check_normal_upload(u"With GPS data", GPS_JPG)
+        media = self.check_media(None, {"title": u"With GPS data"}, 1)
+        assert media.media_data.gps_latitude == 59.336666666666666
+
     def test_processing(self):
+        public_store_dir = mg_globals.global_config[
+            'storage:publicstore']['base_dir']
+
         data = {'title': u'Big Blue'}
         response, request = self.do_post(data, *REQUEST_CONTEXT, do_follow=True,
                                          **self.upload_data(BIG_BLUE))
@@ -250,12 +284,11 @@ class TestSubmission:
                               ('medium', 'bigblue.medium.png'),
                               ('thumb', 'bigblue.thumbnail.png')):
             # Does the processed image have a good filename?
-            filename = resource_filename(
-                'mediagoblin.tests',
-                os.path.join('test_user_dev/media/public',
-                             *media.media_files.get(key, [])))
-            assert_true(filename.endswith('_' + basename))
+            filename = os.path.join(
+                public_store_dir,
+                *media.media_files[key])
+            assert filename.endswith('_' + basename)
             # Is it smaller than the last processed image we looked at?
             size = os.stat(filename).st_size
-            assert_true(last_size > size)
+            assert last_size > size
             last_size = size

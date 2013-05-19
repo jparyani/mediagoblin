@@ -44,29 +44,33 @@ If the plugin is available on the `Python Package Index
     pip install <plugin-name>
 
 For example, if we wanted to install the plugin named
-"mediagoblin-restrictfive", we would do::
+"mediagoblin-licenses" (which allows you to customize the licenses you
+offer for your media), we would do::
 
-    pip install mediagoblin-restrictfive
+    pip install mediagoblin-licenses
 
 .. Note::
 
    If you're using a virtual environment, make sure to activate the
-   virtual environment before installing with pip. Otherwise the
-   plugin may get installed in a different environment than the one
-   MediaGoblin is installed in.
+   virtual environment before installing with pip. Otherwise the plugin
+   may get installed in a different environment than the one MediaGoblin
+   is installed in. Also make sure, you use e.g. pip-2.7 if your default
+   python (and thus pip) is python 3 (e.g. in Ubuntu).
 
 Once you've installed the plugin software, you need to tell
 MediaGoblin that this is a plugin you want MediaGoblin to use. To do
 that, you edit the ``mediagoblin.ini`` file and add the plugin as a
 subsection of the plugin section.
 
-For example, say the "mediagoblin-restrictfive" plugin had the Python
-package path ``restrictfive``, then you would add ``restrictfive`` to
+For example, say the "mediagoblin-licenses" plugin has the Python
+package path ``mediagoblin_licenses``, then you would add ``mediagoblin_licenses`` to
 the ``plugins`` section as a subsection::
 
     [plugins]
 
-    [[restrictfive]]
+    [[mediagoblin_licenses]]
+    license_01=abbrev1, name1, http://url1
+    license_02=abbrev2, name1, http://url2
 
 
 Configuring plugins
@@ -112,7 +116,7 @@ Removing plugins
 
 To remove a plugin, use ``pip uninstall``. For example::
 
-    pip uninstall mediagoblin-restrictfive
+    pip uninstall mediagoblin-licenses
 
 .. Note::
 

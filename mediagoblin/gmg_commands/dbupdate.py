@@ -18,8 +18,8 @@ import logging
 
 from sqlalchemy.orm import sessionmaker
 
-from mediagoblin.db.sql.open import setup_connection_and_db_from_config
-from mediagoblin.db.sql.util import MigrationManager
+from mediagoblin.db.open import setup_connection_and_db_from_config
+from mediagoblin.db.migration_tools import MigrationManager
 from mediagoblin.init import setup_global_and_app_config
 from mediagoblin.tools.common import import_component
 
@@ -52,8 +52,8 @@ def gather_database_data(media_types, plugins):
     managed_dbdata = []
 
     # Add main first
-    from mediagoblin.db.sql.models import MODELS as MAIN_MODELS
-    from mediagoblin.db.sql.migrations import MIGRATIONS as MAIN_MIGRATIONS
+    from mediagoblin.db.models import MODELS as MAIN_MODELS
+    from mediagoblin.db.migrations import MIGRATIONS as MAIN_MIGRATIONS
 
     managed_dbdata.append(
         DatabaseData(
@@ -78,6 +78,7 @@ def gather_database_data(media_types, plugins):
         except AttributeError as exc:
             _log.warning('Could not find MODELS in {0}.models, have you \
 forgotten to add it? ({1})'.format(plugin, exc))
+            models = []
 
         try:
             migrations = import_component('{0}.migrations:MIGRATIONS'.format(
@@ -91,6 +92,7 @@ forgotten to add it? ({1})'.format(plugin, exc))
         except AttributeError as exc:
             _log.debug('Cloud not find MIGRATIONS in {0}.migrations, have you \
 forgotten to add it? ({1})'.format(plugin, exc))
+            migrations = {}
 
         if models:
             managed_dbdata.append(
@@ -114,7 +116,7 @@ def run_dbupdate(app_config, global_config):
             global_config.get('plugins', {}).keys())
 
     # Set up the database
-    connection, db = setup_connection_and_db_from_config(app_config)
+    db = setup_connection_and_db_from_config(app_config, migrations=True)
 
     Session = sessionmaker(bind=db.engine)
 

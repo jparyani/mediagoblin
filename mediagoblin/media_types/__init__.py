@@ -20,6 +20,7 @@ import logging
 import tempfile
 
 from mediagoblin import mg_globals
+from mediagoblin.tools.common import import_component
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 _log = logging.getLogger(__name__)
@@ -29,6 +30,56 @@ class FileTypeNotSupported(Exception):
 
 class InvalidFileType(Exception):
     pass
+
+
+class MediaManagerBase(object):
+    "Base class for all media managers"
+
+    # Please override in actual media managers
+    media_fetch_order = None
+
+    @staticmethod
+    def sniff_handler(*args, **kwargs):
+        return False
+
+    def __init__(self, entry):
+        self.entry = entry
+
+    def __getitem__(self, i):
+        return getattr(self, i)
+
+    def __contains__(self, i):
+        return hasattr(self, i)
+
+
+class CompatMediaManager(object):
+    def __init__(self, mm_dict, entry=None):
+        self.mm_dict = mm_dict
+        self.entry = entry
+	
+    def __call__(self, entry):
+        "So this object can look like a class too, somehow"
+        assert self.entry is None
+        return self.__class__(self.mm_dict, entry)
+
+    def __getitem__(self, i):
+        return self.mm_dict[i]
+
+    def __contains__(self, i):
+        return (i in self.mm_dict)
+
+    @property
+    def media_fetch_order(self):
+        return self.mm_dict.get('media_fetch_order')
+
+    def sniff_handler(self, *args, **kwargs):
+        func = self.mm_dict.get("sniff_handler", None)
+        if func is not None:
+            return func(*args, **kwargs)
+        return False
+
+    def __getattr__(self, i):
+        return self.mm_dict[i]
 
 
 def sniff_media(media):
@@ -49,7 +100,7 @@ def sniff_media(media):
 
         for media_type, manager in get_media_managers():
             _log.info('Sniffing {0}'.format(media_type))
-            if manager['sniff_handler'](media_file, media=media):
+            if manager.sniff_handler(media_file, media=media):
                 _log.info('{0} accepts the file'.format(media_type))
                 return media_type, manager
             else:
@@ -73,28 +124,12 @@ def get_media_managers():
     Generator, yields all enabled media managers
     '''
     for media_type in get_media_types():
-        __import__(media_type)
+        mm = import_component(media_type + ":MEDIA_MANAGER")
 
-        yield media_type, sys.modules[media_type].MEDIA_MANAGER
+        if isinstance(mm, dict):
+            mm = CompatMediaManager(mm)
 
-
-def get_media_manager(_media_type):
-    '''
-    Get the MEDIA_MANAGER based on a media type string
-
-    Example::
-        get_media_type('mediagoblin.media_types.image')
-    '''
-    if not _media_type:
-        return False
-
-    for media_type, manager in get_media_managers():
-        if media_type in _media_type:
-            return manager
-
-    # Nope?  Then raise an error
-    raise FileTypeNotSupported(
-        "MediaManager not in enabled types.  Check media_types in config?")
+        yield media_type, mm
 
 
 def get_media_type_and_manager(filename):
@@ -110,7 +145,7 @@ def get_media_type_and_manager(filename):
         for media_type, manager in get_media_managers():
             # Omit the dot from the extension and match it against
             # the media manager
-            if ext[1:] in manager['accepted_extensions']:
+            if ext[1:] in manager.accepted_extensions:
                 return media_type, manager
     else:
         _log.info('File {0} has no file extension, let\'s hope the sniffers get it.'.format(

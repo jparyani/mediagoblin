@@ -14,12 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.messages import fetch_messages, add_message
-from mediagoblin.tests.tools import setup_fresh_app
+from mediagoblin import messages
 from mediagoblin.tools import template
 
 
-@setup_fresh_app
 def test_messages(test_app):
     """
     Added messages should show up in the request.session,
@@ -30,15 +28,23 @@ def test_messages(test_app):
     test_app.get('/')
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
     request = context['request']
-    
+
     # The message queue should be empty
     assert request.session.get('messages', []) == []
-    
+
+    # First of all, we should clear the messages queue
+    messages.clear_add_message()
     # Adding a message should modify the session accordingly
-    add_message(request, 'herp_derp', 'First!')
+    messages.add_message(request, 'herp_derp', 'First!')
     test_msg_queue = [{'text': 'First!', 'level': 'herp_derp'}]
-    assert request.session['messages'] == test_msg_queue
-    
+
+    # Alternative tests to the following, test divided in two steps:
+    # assert request.session['messages'] == test_msg_queue
+    # 1. Tests if add_message worked
+    assert messages.ADD_MESSAGE_TEST[-1] == test_msg_queue
+    # 2. Tests if add_message updated session information
+    assert messages.ADD_MESSAGE_TEST[-1] == request.session['messages']
+
     # fetch_messages should return and empty the queue
-    assert fetch_messages(request) == test_msg_queue
+    assert messages.fetch_messages(request) == test_msg_queue
     assert request.session.get('messages') == []

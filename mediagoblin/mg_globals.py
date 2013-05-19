@@ -26,14 +26,8 @@ import threading
 # General mediagoblin globals
 #############################
 
-# mongokit.Connection
-db_connection = None
-
-# mongokit.Connection
+# SQL database engine
 database = None
-
-# beaker's cache manager
-cache = None
 
 # should be the same as the 
 public_store = None
@@ -45,11 +39,13 @@ workbench_manager = None
 # A thread-local scope
 thread_scope = threading.local()
 
-# gettext
-thread_scope.translations = gettext.find(
+# gettext (this needs to default to English so it doesn't break
+#   in case we're running a script without the app like
+#   ./bin/gmg theme assetlink)
+thread_scope.translations = gettext.translation(
     'mediagoblin',
     pkg_resources.resource_filename(
-    'mediagoblin', 'translations'), ['en'])
+        'mediagoblin', 'i18n'), ['en'], fallback=True)
 
 # app and global config objects
 app_config = None

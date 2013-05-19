@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "mediagoblin/base.html" %}
+{%- extends "mediagoblin/base.html" %}
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
@@ -30,15 +30,7 @@
   <script type="text/javascript"
           src="{{ request.staticdirect('/js/keyboard_navigation.js') }}"></script>
 
-  {% if app_config['geolocation_map_visible'] %}
-    <link rel="stylesheet"
-	  href="{{ request.staticdirect('/extlib/leaflet/leaflet.css') }}" />
-
-    <script type="text/javascript"
-            src="{{ request.staticdirect('/extlib/leaflet/leaflet.js') }}"></script>
-    <script type="text/javascript"
-            src="{{ request.staticdirect('/js/geolocation-map.js') }}"></script>
-  {% endif %}
+  {% template_hook("media_head") %}
 {% endblock mediagoblin_head %}
 
 {% block mediagoblin_content %}
@@ -51,11 +43,11 @@
     {%- endtrans -%}
   </p>
   {% include "mediagoblin/utils/prev_next.html" %}
-  <div class="media_pane">     
+  <div class="media_pane">
     <div class="media_image_container">
       {% block mediagoblin_media %}
         {% set display_media = request.app.public_store.file_url(
-                 media.get_display_media(media.media_files)) %}
+                 media.get_display_media()[1]) %}
         {# if there's a medium file size, that means the medium size
          #  isn't the original... so link to the original!
          #}
@@ -79,35 +71,34 @@
       {{ media.title }}
     </h2>
     {% if request.user and
-          (media.uploader == request.user._id or 
+          (media.uploader == request.user.id or
            request.user.is_admin) %}
       {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
                                  user= media.get_uploader.username,
-                                 media= media._id) %}
+                                 media_id=media.id) %}
       <a class="button_action" href="{{ edit_url }}">{% trans %}Edit{% endtrans %}</a>
       {% set delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                                  user= media.get_uploader.username,
-                                 media= media._id) %}
+                                 media_id=media.id) %}
       <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
     {% endif %}
     {% autoescape False %}
       <p>{{ media.description_html }}</p>
     {% endautoescape %}
     {% if comments %}
-          <a
-            {% if not request.user %}
-              href="{{ request.urlgen('mediagoblin.auth.login') }}"
-            {% endif %}
-            class="button_action" id="button_addcomment" title="Add a comment">
-            {% trans %}Add a comment{% endtrans %}
-          </a>
+      {% if app_config['allow_comments'] %}
+        <a
+          {% if not request.user %}
+            href="{{ request.urlgen('mediagoblin.auth.login') }}"
+          {% endif %}
+          class="button_action" id="button_addcomment" title="Add a comment">
+          {% trans %}Add a comment{% endtrans %}
+        </a>
+      {% endif %}
       {% if request.user %}
-        <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment', 
+        <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment',
                                          user= media.get_uploader.username,
-                                         media=media._id) }}" method="POST" id="form_comment">
-          <p>
-            {% trans %}You can use <a href="http://daringfireball.net/projects/markdown/basics">Markdown</a> for formatting.{% endtrans %}
-          </p>
+                                         media_id=media.id) }}" method="POST" id="form_comment">
           {{ wtforms_util.render_divs(comment_form) }}
           <div class="form_submit_buttons">
             <input type="submit" value="{% trans %}Add this comment{% endtrans %}" class="button_action" />
@@ -115,95 +106,111 @@
           </div>
         </form>
       {% endif %}
+      <ul style="list-style:none">
       {% for comment in comments %}
         {% set comment_author = comment.get_author %}
-	        {% if pagination.active_id == comment._id %}
-            <div class="comment_wrapper comment_active" id="comment-{{ comment._id }}">
-		          <a name="comment" id="comment"></a>
-          {% else %}
-            <div class="comment_wrapper" id="comment-{{ comment._id }}">
-	        {% endif %}
-	        <div class="comment_author">
+        <li id="comment-{{ comment.id }}"
+          {%- if pagination.active_id == comment.id %}
+            class="comment_wrapper comment_active">
+            <a name="comment" id="comment"></a>
+          {%- else %}
+            class="comment_wrapper">
+          {%- endif %}
+          <div class="comment_author">
             <img src="{{ request.staticdirect('/images/icon_comment.png') }}" />
             <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                            user = comment_author.username) }}">
-              {{ comment_author.username -}}
+                            user=comment_author.username) }}"
+               class="comment_authorlink">
+              {{- comment_author.username -}}
             </a>
-            {% trans %}at{% endtrans %}
             <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
-                   comment = comment._id,
-                   user = media.get_uploader.username,
-                   media = media.slug_or_id) }}#comment">
-              {{ comment.created.strftime("%I:%M%p %Y-%m-%d") }}
-            </a>:
+                            comment=comment.id,
+                            user=media.get_uploader.username,
+                            media=media.slug_or_id) }}#comment"
+               class="comment_whenlink">
+              <span title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+                {%- trans formatted_time=timesince(comment.created) -%}
+                  {{ formatted_time }} ago
+                {%- endtrans -%}
+              </span></a>:
           </div>
           <div class="comment_content">
-            {% autoescape False %}
+            {% autoescape False -%}
               {{ comment.content_html }}
-            {% endautoescape %}
+            {%- endautoescape %}
           </div>
-        </div>
+        </li>
       {% endfor %}
+      </ul>
       {{ render_pagination(request, pagination,
                  media.url_for_self(request.urlgen)) }}
     {% endif %}
   </div>
   <div class="media_sidebar">
-    {% trans date=media.created.strftime("%Y-%m-%d") -%}
-      <h3>Added on</h3>
-      <p>{{ date }}</p>
-    {%- endtrans %}
+    <h3>{% trans %}Added{% endtrans %}</h3>
+    <p><span title="{{ media.created.strftime("%I:%M%p %Y-%m-%d") }}">
+        {%- trans formatted_time=timesince(media.created) -%}    
+          {{ formatted_time }} ago
+        {%- endtrans -%}
+    </span></p>
+
+    {% if app_config['original_date_visible'] %}
+      {% set original_date = media.media_manager.get_original_date() %}
+
+      {% if original_date %}
+        <h3>{% trans %}Created{% endtrans %}</h3>
+
+        <p><span title="{{ original_date.strftime("%I:%M%p %Y-%m-%d") }}">
+          {%- trans formatted_time=timesince(original_date) -%}
+            {{ formatted_time }} ago
+          {%- endtrans -%}
+        </span></p>
+      {%- endif %}
+    {% endif %}
+
     {% if media.tags %}
       {% include "mediagoblin/utils/tags.html" %}
     {% endif %}
 
-    {% if media.collections %}
-      {% include "mediagoblin/utils/collections.html" %}
-    {% endif %}
+    {% include "mediagoblin/utils/collections.html" %}
 
     {% include "mediagoblin/utils/license.html" %}
 
-    {% include "mediagoblin/utils/geolocation_map.html" %}
-
     {% include "mediagoblin/utils/exif.html" %}
-    
-    {% if media.attachment_files|count %}
+
+    {%- if media.attachment_files|count %}
       <h3>{% trans %}Attachments{% endtrans %}</h3>
       <ul>
-        {% for attachment in media.attachment_files %}
+        {%- for attachment in media.attachment_files %}
           <li>
             <a href="{{ request.app.public_store.file_url(attachment.filepath) }}">
-              {{ attachment.name }}
+              {{- attachment.name -}}
             </a>
           </li>
-        {% endfor %}
+        {%- endfor %}
       </ul>
-    {% endif %}
-    {% if app_config['allow_attachments']
+    {%- endif %}
+    {%- if app_config['allow_attachments']
           and request.user
-          and (media.uploader == request.user._id
+          and (media.uploader == request.user.id
                or request.user.is_admin) %}
-      {% if not media.attachment_files|count %}
+      {%- if not media.attachment_files|count %}
         <h3>{% trans %}Attachments{% endtrans %}</h3>
-      {% endif %}
+      {%- endif %}
       <p>
         <a href="{{ request.urlgen('mediagoblin.edit.attachments',
                       user=media.get_uploader.username,
-                      media=media._id) }}">{% trans %}Add attachment{% endtrans %}</a>
+                      media_id=media.id) }}">
+          {%- trans %}Add attachment{% endtrans -%}
+        </a>
       </p>
-    {% endif %}
+    {%- endif %}
 
-    {% if request.user %}
-      <p>
-        <a type="submit" href="{{ request.urlgen('mediagoblin.user_pages.media_collect', 
-                                    user=media.get_uploader.username,
-                                    media=media._id) }}" class="button_action button_collect" >
-	</a>
-      </p>
-    {% endif %}
+    {% template_hook("media_sideinfo") %}
 
     {% block mediagoblin_sidebar %}
     {% endblock %}
+
   </div>
   <div class="clear"></div>
 {% endblock %}

@@ -38,7 +38,7 @@ class ProgressCallback(object):
 def create_pub_filepath(entry, filename):
     return mgg.public_store.get_unique_filepath(
             ['media_entries',
-             unicode(entry._id),
+             unicode(entry.id),
              filename])
 
 
@@ -74,6 +74,61 @@ class FilenameBuilder(object):
                              ext=self.ext)
 
 
+class ProcessingState(object):
+    """
+    The first and only argument to the "processor" of a media type
+
+    This could be thought of as a "request" to the processor
+    function. It has the main info for the request (media entry)
+    and a bunch of tools for the request on it.
+    It can get more fancy without impacting old media types.
+    """
+    def __init__(self, entry):
+        self.entry = entry
+        self.workbench = None
+        self.queued_filename = None
+
+    def set_workbench(self, wb):
+        self.workbench = wb
+
+    def get_queued_filename(self):
+        """
+        Get the a filename for the original, on local storage
+        """
+        if self.queued_filename is not None:
+            return self.queued_filename
+        queued_filepath = self.entry.queued_media_file
+        queued_filename = self.workbench.localized_file(
+            mgg.queue_store, queued_filepath,
+            'source')
+        self.queued_filename = queued_filename
+        return queued_filename
+
+    def copy_original(self, target_name, keyname=u"original"):
+        self.store_public(keyname, self.get_queued_filename(), target_name)
+
+    def store_public(self, keyname, local_file, target_name=None):
+        if target_name is None:
+            target_name = os.path.basename(local_file)
+        target_filepath = create_pub_filepath(self.entry, target_name)
+        if keyname in self.entry.media_files:
+            _log.warn("store_public: keyname %r already used for file %r, "
+                      "replacing with %r", keyname,
+                      self.entry.media_files[keyname], target_filepath)
+        mgg.public_store.copy_local_to_storage(local_file, target_filepath)
+        self.entry.media_files[keyname] = target_filepath
+
+    def delete_queue_file(self):
+        # Remove queued media file from storage and database.
+        # queued_filepath is in the task_id directory which should
+        # be removed too, but fail if the directory is not empty to be on
+        # the super-safe side.
+        queued_filepath = self.entry.queued_media_file
+        mgg.queue_store.delete_file(queued_filepath)      # rm file
+        mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
+        self.entry.queued_media_file = []
+
+
 def mark_entry_failed(entry_id, exc):
     """
     Mark a media entry as having failed in its conversion.
@@ -93,7 +148,7 @@ def mark_entry_failed(entry_id, exc):
         # Looks like yes, so record information about that failure and any
         # metadata the user might have supplied.
         atomic_update(mgg.database.MediaEntry,
-            {'_id': entry_id},
+            {'id': entry_id},
             {u'state': u'failed',
              u'fail_error': unicode(exc.exception_path),
              u'fail_metadata': exc.metadata})
@@ -104,7 +159,7 @@ def mark_entry_failed(entry_id, exc):
         # metadata (in fact overwrite it if somehow it had previous info
         # here)
         atomic_update(mgg.database.MediaEntry,
-            {'_id': entry_id},
+            {'id': entry_id},
             {u'state': u'failed',
              u'fail_error': None,
              u'fail_metadata': {}})

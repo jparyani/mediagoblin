@@ -17,23 +17,26 @@
 import os
 import logging
 
-from mediagoblin.routing import url_map, view_functions, add_route
+from mediagoblin.routing import get_url_map
+from mediagoblin.tools.routing import endpoint_to_controller
 
 from werkzeug.wrappers import Request
-from werkzeug.exceptions import HTTPException, NotFound
+from werkzeug.exceptions import HTTPException
+from werkzeug.routing import RequestRedirect
 
 from mediagoblin import meddleware, __version__
-from mediagoblin.tools import common, translate, template
-from mediagoblin.tools.response import render_404
+from mediagoblin.tools import common, session, translate, template
+from mediagoblin.tools.response import render_http_exception
 from mediagoblin.tools.theme import register_themes
 from mediagoblin.tools import request as mg_request
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.init import (get_jinja_loader, get_staticdirector,
-    setup_global_and_app_config, setup_workbench, setup_database,
-    setup_storage, setup_beaker_cache)
-from mediagoblin.tools.pluginapi import PluginManager
+    setup_global_and_app_config, setup_locales, setup_workbench, setup_database,
+    setup_storage)
+from mediagoblin.tools.pluginapi import PluginManager, hook_transform
+from mediagoblin.tools.crypto import setup_crypto
 
 
 _log = logging.getLogger(__name__)
@@ -64,9 +67,17 @@ class MediaGoblinApp(object):
         # Open and setup the config
         global_config, app_config = setup_global_and_app_config(config_path)
 
+        setup_crypto()
+
         ##########################################
         # Setup other connections / useful objects
         ##########################################
+
+        # Setup Session Manager, not needed in celery
+        self.session_manager = session.SessionManager()
+
+        # load all available locales
+        setup_locales()
 
         # Set up plugins -- need to do this early so that plugins can
         # affect startup.
@@ -74,7 +85,7 @@ class MediaGoblinApp(object):
         setup_plugins()
 
         # Set up the database
-        self.connection, self.db = setup_database()
+        self.db = setup_database()
 
         # Register themes
         self.theme_registry, self.current_theme = register_themes(app_config)
@@ -90,17 +101,10 @@ class MediaGoblinApp(object):
         self.public_store, self.queue_store = setup_storage()
 
         # set up routing
-        self.url_map = url_map
-
-        for route in PluginManager().get_routes():
-            _log.debug('adding plugin route: {0}'.format(route))
-            add_route(*route)
+        self.url_map = get_url_map()
 
         # set up staticdirector tool
         self.staticdirector = get_staticdirector(app_config)
-
-        # set up caching
-        self.cache = setup_beaker_cache()
 
         # Setup celery, if appropriate
         if setup_celery and not app_config.get('celery_setup_elsewhere'):
@@ -132,10 +136,8 @@ class MediaGoblinApp(object):
     def call_backend(self, environ, start_response):
         request = Request(environ)
 
-        ## Compatibility webob -> werkzeug
+        # Compatibility with django, use request.args preferrably
         request.GET = request.args
-        request.accept_language = request.accept_languages
-        request.accept = request.accept_mimetypes
 
         ## Routing / controller loading stuff
         map_adapter = self.url_map.bind_to_environ(request.environ)
@@ -158,7 +160,8 @@ class MediaGoblinApp(object):
 
         ## Attach utilities to the request object
         # Do we really want to load this via middleware?  Maybe?
-        request.session = request.environ['beaker.session']
+        session_manager = self.session_manager
+        request.session = session_manager.load_session_from_cookie(request)
         # Attach self as request.app
         # Also attach a few utilities from request.app for convenience?
         request.app = self
@@ -185,42 +188,54 @@ class MediaGoblinApp(object):
 
         mg_request.setup_user_in_request(request)
 
+        request.controller_name = None
         try:
-            endpoint, url_values = map_adapter.match()
+            found_rule, url_values = map_adapter.match(return_rule=True)
             request.matchdict = url_values
-        except NotFound as exc:
-            return render_404(request)(environ, start_response)
+        except RequestRedirect as response:
+            # Deal with 301 responses eg due to missing final slash
+            return response(environ, start_response)
         except HTTPException as exc:
-            # Support legacy webob.exc responses
-            return exc(environ, start_response)
+            # Stop and render exception
+            return render_http_exception(
+                request, exc,
+                exc.get_description(environ))(environ, start_response)
 
-        view_func = view_functions[endpoint]
-
-        _log.debug('endpoint: {0} view_func: {1}'.format(
-            endpoint,
-            view_func))
-
-        # import the endpoint, or if it's already a callable, call that
-        if isinstance(view_func, unicode) \
-                or isinstance(view_func, str):
-            controller = common.import_component(view_func)
-        else:
-            controller = view_func
+        controller = endpoint_to_controller(found_rule)
+        # Make a reference to the controller's symbolic name on the request...
+        # used for lazy context modification
+        request.controller_name = found_rule.endpoint
 
         # pass the request through our meddleware classes
-        for m in self.meddleware:
-            response = m.process_request(request, controller)
-            if response is not None:
-                return response(environ, start_response)
+        try:
+            for m in self.meddleware:
+                response = m.process_request(request, controller)
+                if response is not None:
+                    return response(environ, start_response)
+        except HTTPException as e:
+            return render_http_exception(
+                request, e,
+                e.get_description(environ))(environ, start_response)
 
         request.start_response = start_response
 
-        # get the response from the controller
-        response = controller(request)
+        # get the Http response from the controller
+        try:
+            response = controller(request)
+        except HTTPException as e:
+            response = render_http_exception(
+                request, e, e.get_description(environ))
 
-        # pass the response through the meddleware
-        for m in self.meddleware[::-1]:
-            m.process_response(request, response)
+        # pass the response through the meddlewares
+        try:
+            for m in self.meddleware[::-1]:
+                m.process_response(request, response)
+        except HTTPException as e:
+            response = render_http_exception(
+                request, e, e.get_description(environ))
+
+        session_manager.save_session_to_cookie(request.session,
+                                               request, response)
 
         return response(environ, start_response)
 
@@ -248,5 +263,6 @@ def paste_app_factory(global_config, **app_config):
         raise IOError("Usable mediagoblin config not found.")
 
     mgoblin_app = MediaGoblinApp(mediagoblin_config)
+    mgoblin_app = hook_transform('wrap_wsgi', mgoblin_app)
 
     return mgoblin_app

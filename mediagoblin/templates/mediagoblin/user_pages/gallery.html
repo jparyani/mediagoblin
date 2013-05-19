@@ -34,16 +34,28 @@
 
 {% block mediagoblin_content -%}
   <h1>
-    {%- trans username=user.username,
-              user_url=request.urlgen(
-                         'mediagoblin.user_pages.user_home',
-                          user=user.username) -%}
-      <a href="{{ user_url }}">{{ username }}</a>'s media
-    {%- endtrans %}
+    {% if tag %}
+      {%- trans username=user.username,
+                user_url=request.urlgen(
+                           'mediagoblin.user_pages.user_home',
+                            user=user.username),
+                tag_url=request.urlgen(
+                           'mediagoblin.listings.tags_listing',
+                           tag=tag) -%}
+        <a href="{{ user_url }}">{{ username }}</a>'s media with tag <a href="{{ tag_url }}">{{ tag }}</a>
+      {%- endtrans %}
+    {% else %}
+      {%- trans username=user.username,
+                user_url=request.urlgen(
+                           'mediagoblin.user_pages.user_home',
+                            user=user.username) -%}
+        <a href="{{ user_url }}">{{ username }}</a>'s media
+      {%- endtrans %}
+    {% endif %}
   </h1>
 
   {{ object_gallery(request, media_entries, pagination) }}
-    
+
   {% set feed_url = request.urlgen('mediagoblin.user_pages.atom_feed',
                                    user=user.username) %}
   {% include "mediagoblin/utils/feed_link.html" %}

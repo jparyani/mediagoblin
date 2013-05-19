@@ -27,8 +27,13 @@ These functions now live here and get "mixed in" into the
 real objects.
 """
 
+import uuid
+
+from werkzeug.utils import cached_property
+
 from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
+from mediagoblin.media_types import get_media_managers, FileTypeNotSupported
 from mediagoblin.tools import common, licenses
 from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.url import slugify
@@ -47,22 +52,83 @@ class UserMixin(object):
         return cleaned_markdown_conversion(self.bio)
 
 
-class MediaEntryMixin(object):
+class GenerateSlugMixin(object):
+    """
+    Mixin to add a generate_slug method to objects.
+
+    Depends on:
+     - self.slug
+     - self.title
+     - self.check_slug_used(new_slug)
+    """
     def generate_slug(self):
+        """
+        Generate a unique slug for this object.
+
+        This one does not *force* slugs, but usually it will probably result
+        in a niceish one.
+
+        The end *result* of the algorithm will result in these resolutions for
+        these situations:
+         - If we have a slug, make sure it's clean and sanitized, and if it's
+           unique, we'll use that.
+         - If we have a title, slugify it, and if it's unique, we'll use that.
+         - If we can't get any sort of thing that looks like it'll be a useful
+           slug out of a title or an existing slug, bail, and don't set the
+           slug at all.  Don't try to create something just because.  Make
+           sure we have a reasonable basis for a slug first.
+         - If we have a reasonable basis for a slug (either based on existing
+           slug or slugified title) but it's not unique, first try appending
+           the entry's id, if that exists
+         - If that doesn't result in something unique, tack on some randomly
+           generated bits until it's unique.  That'll be a little bit of junk,
+           but at least it has the basis of a nice slug.
+        """
+        #Is already a slug assigned? Check if it is valid
+        if self.slug:
+            self.slug = slugify(self.slug)
+
+        # otherwise, try to use the title.
+        elif self.title:
+            # assign slug based on title
+            self.slug = slugify(self.title)
+
+        # We don't want any empty string slugs
+        if self.slug == u"":
+            self.slug = None
+
+        # Do we have anything at this point?
+        # If not, we're not going to get a slug
+        # so just return... we're not going to force one.
+        if not self.slug:
+            return  # giving up!
+
+        # Otherwise, let's see if this is unique.
+        if self.check_slug_used(self.slug):
+            # It looks like it's being used... lame.
+
+            # Can we just append the object's id to the end?
+            if self.id:
+                slug_with_id = u"%s-%s" % (self.slug, self.id)
+                if not self.check_slug_used(slug_with_id):
+                    self.slug = slug_with_id
+                    return  # success!
+
+            # okay, still no success;
+            # let's whack junk on there till it's unique.
+            self.slug += '-' + uuid.uuid4().hex[:4]
+            # keep going if necessary!
+            while self.check_slug_used(self.slug):
+                self.slug += uuid.uuid4().hex[:4]
+
+
+class MediaEntryMixin(GenerateSlugMixin):
+    def check_slug_used(self, slug):
         # import this here due to a cyclic import issue
         # (db.models -> db.mixin -> db.util -> db.models)
         from mediagoblin.db.util import check_media_slug_used
 
-        self.slug = slugify(self.title)
-
-        duplicate = check_media_slug_used(mg_globals.database,
-            self.uploader, self.slug, self.id)
-
-        if duplicate:
-            if self.id is not None:
-                self.slug = u"%s-%s" % (self.id, self.slug)
-            else:
-                self.slug = None
+        return check_media_slug_used(self.uploader, slug, self.id)
 
     @property
     def description_html(self):
@@ -72,37 +138,44 @@ class MediaEntryMixin(object):
         """
         return cleaned_markdown_conversion(self.description)
 
-    def get_display_media(self, media_map,
-                          fetch_order=common.DISPLAY_IMAGE_FETCHING_ORDER):
-        """
-        Find the best media for display.
+    def get_display_media(self):
+        """Find the best media for display.
 
-        Args:
-        - media_map: a dict like
-          {u'image_size': [u'dir1', u'dir2', u'image.jpg']}
-        - fetch_order: the order we should try fetching images in
+        We try checking self.media_manager.fetching_order if it exists to
+        pull down the order.
 
         Returns:
-        (media_size, media_path)
-        """
-        media_sizes = media_map.keys()
+          (media_size, media_path)
+          or, if not found, None.
 
-        for media_size in common.DISPLAY_IMAGE_FETCHING_ORDER:
+        """
+        fetch_order = self.media_manager.media_fetch_order
+
+        # No fetching order found?  well, give up!
+        if not fetch_order:
+            return None
+
+        media_sizes = self.media_files.keys()
+
+        for media_size in fetch_order:
             if media_size in media_sizes:
-                return media_map[media_size]
+                return media_size, self.media_files[media_size]
 
     def main_mediafile(self):
         pass
 
     @property
     def slug_or_id(self):
-        return (self.slug or self._id)
+        if self.slug:
+            return self.slug
+        else:
+            return u'id:%s' % self.id
 
     def url_for_self(self, urlgen, **extra_args):
         """
         Generate an appropriate url for ourselves
 
-        Use a slug if we have one, else use our '_id'.
+        Use a slug if we have one, else use our 'id'.
         """
         uploader = self.get_uploader
 
@@ -111,6 +184,38 @@ class MediaEntryMixin(object):
             user=uploader.username,
             media=self.slug_or_id,
             **extra_args)
+
+    @property
+    def thumb_url(self):
+        """Return the thumbnail URL (for usage in templates)
+        Will return either the real thumbnail or a default fallback icon."""
+        # TODO: implement generic fallback in case MEDIA_MANAGER does
+        # not specify one?
+        if u'thumb' in self.media_files:
+            thumb_url = mg_globals.app.public_store.file_url(
+                            self.media_files[u'thumb'])
+        else:
+            # No thumbnail in media available. Get the media's
+            # MEDIA_MANAGER for the fallback icon and return static URL
+            # Raises FileTypeNotSupported in case no such manager is enabled
+            manager = self.media_manager
+            thumb_url = mg_globals.app.staticdirector(manager[u'default_thumb'])
+        return thumb_url
+
+    @cached_property
+    def media_manager(self):
+        """Returns the MEDIA_MANAGER of the media's media_type
+
+        Raises FileTypeNotSupported in case no such manager is enabled
+        """
+        # TODO, we should be able to make this a simple lookup rather
+        # than iterating through all media managers.
+        for media_type, manager in get_media_managers():
+            if media_type == self.media_type:
+                return manager(self)
+        # Not found?  Then raise an error
+        raise FileTypeNotSupported(
+            "MediaManager not in enabled types.  Check media_types in config?")
 
     def get_fail_exception(self):
         """
@@ -121,7 +226,7 @@ class MediaEntryMixin(object):
 
     def get_license_data(self):
         """Return license dict for requested license"""
-        return licenses.SUPPORTED_LICENSES[self.license or ""]
+        return licenses.get_license_by_url(self.license or "")
 
     def exif_display_iter(self):
         from mediagoblin.tools.exif import USEFUL_TAGS
@@ -145,22 +250,13 @@ class MediaCommentMixin(object):
         return cleaned_markdown_conversion(self.content)
 
 
-class CollectionMixin(object):
-    def generate_slug(self):
+class CollectionMixin(GenerateSlugMixin):
+    def check_slug_used(self, slug):
         # import this here due to a cyclic import issue
         # (db.models -> db.mixin -> db.util -> db.models)
         from mediagoblin.db.util import check_collection_slug_used
 
-        self.slug = slugify(self.title)
-
-        duplicate = check_collection_slug_used(mg_globals.database,
-            self.creator, self.slug, self.id)
-
-        if duplicate:
-            if self.id is not None:
-                self.slug = u"%s-%s" % (self.id, self.slug)
-            else:
-                self.slug = None
+        return check_collection_slug_used(self.creator, slug, self.id)
 
     @property
     def description_html(self):
@@ -172,13 +268,13 @@ class CollectionMixin(object):
 
     @property
     def slug_or_id(self):
-        return (self.slug or self._id)
+        return (self.slug or self.id)
 
     def url_for_self(self, urlgen, **extra_args):
         """
         Generate an appropriate url for ourselves
 
-        Use a slug if we have one, else use our '_id'.
+        Use a slug if we have one, else use our 'id'.
         """
         creator = self.get_creator
 

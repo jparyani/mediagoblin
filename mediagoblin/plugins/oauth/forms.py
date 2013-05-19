@@ -19,14 +19,13 @@ import wtforms
 from urlparse import urlparse
 
 from mediagoblin.tools.extlib.wtf_html5 import URLField
-from mediagoblin.tools.translate import fake_ugettext_passthrough as _
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 
 class AuthorizationForm(wtforms.Form):
-    client_id = wtforms.HiddenField(_(u'Client ID'),
-            [wtforms.validators.Required()])
-    next = wtforms.HiddenField(_(u'Next URL'),
-            [wtforms.validators.Required()])
+    client_id = wtforms.HiddenField(u'',
+                                    validators=[wtforms.validators.Required()])
+    next = wtforms.HiddenField(u'', validators=[wtforms.validators.Required()])
     allow = wtforms.SubmitField(_(u'Allow'))
     deny = wtforms.SubmitField(_(u'Deny'))
 

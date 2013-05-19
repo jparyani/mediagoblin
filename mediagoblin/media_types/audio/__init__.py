@@ -14,12 +14,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.audio.processing import process_audio, \
     sniff_handler
 
-MEDIA_MANAGER = {
-    'human_readable': 'Audio',
-    'processor': process_audio,
-    'sniff_handler': sniff_handler,
-    'display_template': 'mediagoblin/media_displays/audio.html',
-    'accepted_extensions': ['mp3', 'flac', 'wav', 'm4a']}
+
+class AudioMediaManager(MediaManagerBase):
+    human_readable = "Audio"
+    processor = staticmethod(process_audio)
+    sniff_handler = staticmethod(sniff_handler)
+    display_template = "mediagoblin/media_displays/audio.html"
+    accepted_extensions = ["mp3", "flac", "wav", "m4a"]
+
+
+MEDIA_MANAGER = AudioMediaManager

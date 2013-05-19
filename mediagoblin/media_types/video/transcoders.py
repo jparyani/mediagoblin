@@ -26,7 +26,10 @@ import pygst
 pygst.require('0.10')
 import gst
 import struct
-import Image
+try:
+    from PIL import Image
+except ImportError:
+    import Image
 
 from gst.extend import discoverer
 
@@ -51,283 +54,6 @@ def pixbuf_to_pilbuf(buf):
         data.append((r, g, b))
 
     return data
-
-
-class VideoThumbnailer:
-    # Declaration of thumbnailer states
-    STATE_NULL = 0
-    STATE_HALTING = 1
-    STATE_PROCESSING = 2
-
-    # The current thumbnailer state
-
-    def __init__(self, source_path, dest_path):
-        '''
-        Set up playbin pipeline in order to get video properties.
-
-        Initializes and runs the gobject.MainLoop()
-
-        Abstract
-        - Set up a playbin with a fake audio sink and video sink. Load the video
-          into the playbin
-        - Initialize
-        '''
-        # This will contain the thumbnailing pipeline
-        self.state = self.STATE_NULL
-        self.thumbnail_pipeline = None
-        self.buffer_probes = {}
-        self.errors = []
-
-        self.source_path = source_path
-        self.dest_path = dest_path
-
-        self.loop = gobject.MainLoop()
-
-        # Set up the playbin. It will be used to discover certain
-        # properties of the input file
-        self.playbin = gst.element_factory_make('playbin')
-
-        self.videosink = gst.element_factory_make('fakesink', 'videosink')
-        self.playbin.set_property('video-sink', self.videosink)
-
-        self.audiosink = gst.element_factory_make('fakesink', 'audiosink')
-        self.playbin.set_property('audio-sink', self.audiosink)
-
-        self.bus = self.playbin.get_bus()
-        self.bus.add_signal_watch()
-        self.watch_id = self.bus.connect('message', self._on_bus_message)
-
-        self.playbin.set_property('uri', 'file:{0}'.format(
-                urllib.pathname2url(self.source_path)))
-
-        self.playbin.set_state(gst.STATE_PAUSED)
-
-        self.run()
-
-    def run(self):
-        self.loop.run()
-
-    def _on_bus_message(self, bus, message):
-        _log.debug(' thumbnail playbin: {0}'.format(message))
-
-        if message.type == gst.MESSAGE_ERROR:
-            _log.error('thumbnail playbin: {0}'.format(message))
-            gobject.idle_add(self._on_bus_error)
-
-        elif message.type == gst.MESSAGE_STATE_CHANGED:
-            # The pipeline state has changed
-            # Parse state changing data
-            _prev, state, _pending = message.parse_state_changed()
-
-            _log.debug('State changed: {0}'.format(state))
-
-            if state == gst.STATE_PAUSED:
-                if message.src == self.playbin:
-                    gobject.idle_add(self._on_bus_paused)
-
-    def _on_bus_paused(self):
-        '''
-        Set up thumbnailing pipeline
-        '''
-        current_video = self.playbin.get_property('current-video')
-
-        if current_video == 0:
-            _log.debug('Found current video from playbin')
-        else:
-            _log.error('Could not get any current video from playbin!')
-
-        self.duration = self._get_duration(self.playbin)
-        _log.info('Video length: {0}'.format(self.duration / gst.SECOND))
-
-        _log.info('Setting up thumbnailing pipeline')
-        self.thumbnail_pipeline = gst.parse_launch(
-            'filesrc location="{0}" ! decodebin ! '
-            'ffmpegcolorspace ! videoscale ! '
-            'video/x-raw-rgb,depth=24,bpp=24,pixel-aspect-ratio=1/1,width=180 ! '
-            'fakesink signal-handoffs=True'.format(self.source_path))
-
-        self.thumbnail_bus = self.thumbnail_pipeline.get_bus()
-        self.thumbnail_bus.add_signal_watch()
-        self.thumbnail_watch_id = self.thumbnail_bus.connect(
-            'message', self._on_thumbnail_bus_message)
-
-        self.thumbnail_pipeline.set_state(gst.STATE_PAUSED)
-
-        #gobject.timeout_add(3000, self._on_timeout)
-
-        return False
-
-    def _on_thumbnail_bus_message(self, bus, message):
-        _log.debug('thumbnail: {0}'.format(message))
-
-        if message.type == gst.MESSAGE_ERROR:
-            _log.error(message)
-            gobject.idle_add(self._on_bus_error)
-
-        if message.type == gst.MESSAGE_STATE_CHANGED:
-            _log.debug('State changed')
-            _prev, state, _pending = message.parse_state_changed()
-
-            if (state == gst.STATE_PAUSED and
-                not self.state == self.STATE_PROCESSING and
-                message.src == self.thumbnail_pipeline):
-                _log.info('Pipeline paused, processing')
-                self.state = self.STATE_PROCESSING
-
-                for sink in self.thumbnail_pipeline.sinks():
-                    name = sink.get_name()
-                    factoryname = sink.get_factory().get_name()
-
-                    if factoryname == 'fakesink':
-                        sinkpad = sink.get_pad('sink')
-
-                        self.buffer_probes[name] = sinkpad.add_buffer_probe(
-                            self.buffer_probe_handler, name)
-
-                        _log.info('Added buffer probe')
-
-                        break
-
-                # Apply the wadsworth constant, fallback to 1 second
-                # TODO: Will break if video is shorter than 1 sec
-                seek_amount = max(self.duration / 100 * 30, 1 * gst.SECOND)
-
-                _log.debug('seek amount: {0}'.format(seek_amount))
-
-                seek_result = self.thumbnail_pipeline.seek(
-                    1.0,
-                    gst.FORMAT_TIME,
-                    gst.SEEK_FLAG_FLUSH | gst.SEEK_FLAG_ACCURATE,
-                    gst.SEEK_TYPE_SET,
-                    seek_amount,
-                    gst.SEEK_TYPE_NONE,
-                    0)
-
-                if not seek_result:
-                    self.errors.append('COULD_NOT_SEEK')
-                    _log.error('Couldn\'t seek! result: {0}'.format(
-                            seek_result))
-                    _log.info(message)
-                    self.shutdown()
-                else:
-                    _log.debug('Seek successful')
-                    self.thumbnail_pipeline.set_state(gst.STATE_PAUSED)
-            else:
-                _log.debug('Won\'t seek: \t{0}\n\t{1}'.format(
-                    self.state,
-                    message.src))
-
-    def buffer_probe_handler_real(self, pad, buff, name):
-        '''
-        Capture buffers as gdk_pixbufs when told to.
-        '''
-        _log.info('Capturing frame')
-        try:
-            caps = buff.caps
-            if caps is None:
-                _log.error('No caps passed to buffer probe handler!')
-                self.shutdown()
-                return False
-
-            _log.debug('caps: {0}'.format(caps))
-
-            filters = caps[0]
-            width = filters["width"]
-            height = filters["height"]
-
-            im = Image.new('RGB', (width, height))
-
-            data = pixbuf_to_pilbuf(buff.data)
-
-            im.putdata(data)
-
-            im.save(self.dest_path)
-
-            _log.info('Saved thumbnail')
-
-            self.shutdown()
-
-        except gst.QueryError as e:
-            _log.error('QueryError: {0}'.format(e))
-
-        return False
-
-    def buffer_probe_handler(self, pad, buff, name):
-        '''
-        Proxy function for buffer_probe_handler_real
-        '''
-        _log.debug('Attaching real buffer handler to gobject idle event')
-        gobject.idle_add(
-            lambda: self.buffer_probe_handler_real(pad, buff, name))
-
-        return True
-
-    def _get_duration(self, pipeline, retries=0):
-        '''
-        Get the duration of a pipeline.
-
-        Retries 5 times.
-        '''
-        if retries == 5:
-            return 0
-
-        try:
-            return pipeline.query_duration(gst.FORMAT_TIME)[0]
-        except gst.QueryError:
-            return self._get_duration(pipeline, retries + 1)
-
-    def _on_timeout(self):
-        _log.error('Timeout in thumbnailer!')
-        self.shutdown()
-
-    def _on_bus_error(self, *args):
-        _log.error('AHAHAHA! Error! args: {0}'.format(args))
-
-    def shutdown(self):
-        '''
-        Tell gobject to call __halt when the mainloop is idle.
-        '''
-        _log.info('Shutting down')
-        self.__halt()
-
-    def __halt(self):
-        '''
-        Halt all pipelines and shut down the main loop
-        '''
-        _log.info('Halting...')
-        self.state = self.STATE_HALTING
-
-        self.__disconnect()
-
-        gobject.idle_add(self.__halt_final)
-
-    def __disconnect(self):
-        _log.debug('Disconnecting...')
-        if not self.playbin is None:
-            self.playbin.set_state(gst.STATE_NULL)
-            for sink in self.playbin.sinks():
-                name = sink.get_name()
-                factoryname = sink.get_factory().get_name()
-
-                _log.debug('Disconnecting {0}'.format(name))
-
-                if factoryname == "fakesink":
-                    pad = sink.get_pad("sink")
-                    pad.remove_buffer_probe(self.buffer_probes[name])
-                    del self.buffer_probes[name]
-
-        self.playbin = None
-
-        if self.bus is not None:
-            self.bus.disconnect(self.watch_id)
-            self.bus = None
-
-    def __halt_final(self):
-        _log.info('Done')
-        if self.errors:
-            _log.error(','.join(self.errors))
-
-        self.loop.quit()
 
 
 class VideoThumbnailerMarkII(object):
@@ -398,8 +124,8 @@ class VideoThumbnailerMarkII(object):
             self.run()
         except Exception as exc:
             _log.critical(
-                    'Exception "{0}" caught, disconnecting and re-raising'\
-                            .format(exc))
+                'Exception "{0}" caught, shutting down mainloop and re-raising'\
+                    .format(exc))
             self.disconnect()
             raise
 
@@ -410,7 +136,8 @@ class VideoThumbnailerMarkII(object):
         self.mainloop.run()
 
     def on_playbin_message(self, message_bus, message):
-        _log.debug('playbin message: {0}'.format(message))
+        # Silenced to prevent clobbering of output
+        #_log.debug('playbin message: {0}'.format(message))
 
         if message.type == gst.MESSAGE_ERROR:
             _log.error('playbin error: {0}'.format(message))
@@ -433,17 +160,20 @@ pending: {2}'.format(
 
     def on_playbin_paused(self):
         if self.has_reached_playbin_pause:
-            _log.warn('Has already reached logic for playbin pause. Aborting \
+            _log.warn('Has already reached on_playbin_paused. Aborting \
 without doing anything this time.')
             return False
 
         self.has_reached_playbin_pause = True
 
+        # XXX: Why is this even needed at this point?
         current_video = self.playbin.get_property('current-video')
 
         if not current_video:
-            _log.critical('thumbnail could not get any video data \
+            _log.critical('Could not get any video data \
 from playbin')
+        else:
+            _log.info('Got video data from playbin')
 
         self.duration = self.get_duration(self.playbin)
         self.permission_to_take_picture = True
@@ -474,11 +204,12 @@ from playbin')
         return False
 
     def on_thumbnail_message(self, message_bus, message):
-        _log.debug('thumbnail message: {0}'.format(message))
+        # This is silenced to prevent clobbering of the terminal window
+        #_log.debug('thumbnail message: {0}'.format(message))
 
         if message.type == gst.MESSAGE_ERROR:
-            _log.error('thumbnail error: {0}'.format(message))
-            gobject.idle_add(self.on_thumbnail_error)
+            _log.error('thumbnail error: {0}'.format(message.parse_error()))
+            gobject.idle_add(self.on_thumbnail_error, message)
 
         if message.type == gst.MESSAGE_STATE_CHANGED:
             prev_state, cur_state, pending_state = \
@@ -490,29 +221,10 @@ pending: {2}'.format(
     cur_state,
     pending_state))
 
-            if cur_state == gst.STATE_PAUSED and\
-                    not self.state == self.STATE_PROCESSING_THUMBNAIL:
-                self.state = self.STATE_PROCESSING_THUMBNAIL
-
+            if cur_state == gst.STATE_PAUSED and \
+               not self.state == self.STATE_PROCESSING_THUMBNAIL:
                 # Find the fakesink sink pad and attach the on_buffer_probe
                 # handler to it.
-                for sink in self.thumbnail_pipeline.sinks():
-                    sink_name = sink.get_name()
-                    sink_factory_name = sink.get_factory().get_name()
-
-                    if sink_factory_name == 'fakesink':
-                        sink_pad = sink.get_pad('sink')
-
-                        self.buffer_probes[sink_name] = sink_pad\
-                                .add_buffer_probe(
-                                        self.on_pad_buffer_probe,
-                                        sink_name)
-
-                        _log.info('Attached buffer probes: {0}'.format(
-                            self.buffer_probes))
-
-                        break
-
                 seek_amount = self.position_callback(self.duration, gst)
 
                 seek_result = self.thumbnail_pipeline.seek(
@@ -525,10 +237,30 @@ pending: {2}'.format(
                         0)
 
                 if not seek_result:
-                    _log.critical('Could not seek.')
+                    _log.info('Could not seek.')
+                else:
+                    _log.info('Seek successful, attaching buffer probe')
+                    self.state = self.STATE_PROCESSING_THUMBNAIL
+                    for sink in self.thumbnail_pipeline.sinks():
+                        sink_name = sink.get_name()
+                        sink_factory_name = sink.get_factory().get_name()
+
+                        if sink_factory_name == 'fakesink':
+                            sink_pad = sink.get_pad('sink')
+
+                            self.buffer_probes[sink_name] = sink_pad\
+                                    .add_buffer_probe(
+                                            self.on_pad_buffer_probe,
+                                            sink_name)
+
+                            _log.info('Attached buffer probes: {0}'.format(
+                                self.buffer_probes))
+
+                            break
+
 
             elif self.state == self.STATE_PROCESSING_THUMBNAIL:
-                _log.debug('Already processing thumbnail')
+                _log.info('Already processing thumbnail')
 
     def on_pad_buffer_probe(self, *args):
         _log.debug('buffer probe handler: {0}'.format(args))
@@ -570,9 +302,36 @@ pending: {2}'.format(
 
         return False
 
-    def on_thumbnail_error(self):
-        _log.error('Thumbnailing failed.')
+    def on_thumbnail_error(self, message):
+        scaling_failed = False
+
+        if 'Error calculating the output scaled size - integer overflow' \
+           in message.parse_error()[1]:
+            # GStreamer videoscale sometimes fails to calculate the dimensions
+            # given only one of the destination dimensions and the source
+            # dimensions. This is a workaround in case videoscale returns an
+            # error that indicates this has happened.
+            scaling_failed = True
+            _log.error('Thumbnailing failed because of videoscale integer'
+                       ' overflow. Will retry with fallback.')
+        else:
+            _log.error('Thumbnailing failed: {0}'.format(message.parse_error()))
+
+        # Kill the current mainloop
         self.disconnect()
+
+        if scaling_failed:
+            # Manually scale the destination dimensions
+            _log.info('Retrying with manually set sizes...')
+
+            info = VideoTranscoder().discover(self.source_path)
+
+            h = info['videoheight']
+            w = info['videowidth']
+            ratio = 180 / int(w)
+            h = int(h * ratio)
+
+            self.__init__(self.source_path, self.dest_path, 180, h)
 
     def disconnect(self):
         self.state = self.STATE_HALTING
@@ -622,7 +381,7 @@ pending: {2}'.format(
             return self.get_duration(pipeline, attempt + 1)
 
 
-class VideoTranscoder:
+class VideoTranscoder(object):
     '''
     Video transcoder
 
@@ -636,7 +395,7 @@ class VideoTranscoder:
     '''
     def __init__(self):
         _log.info('Initializing VideoTranscoder...')
-
+        self.progress_percentage = None
         self.loop = gobject.MainLoop()
 
     def transcode(self, src, dst, **kwargs):
@@ -673,6 +432,7 @@ class VideoTranscoder:
         self._setup()
         self._run()
 
+    # XXX: This could be a static method.
     def discover(self, src):
         '''
         Discover properties about a media file
@@ -793,7 +553,8 @@ class VideoTranscoder:
         self.audioconvert = gst.element_factory_make('audioconvert', 'audioconvert')
         self.pipeline.add(self.audioconvert)
 
-        self.audiocapsfilter = gst.element_factory_make('capsfilter', 'audiocapsfilter')
+        self.audiocapsfilter = gst.element_factory_make('capsfilter',
+                                                        'audiocapsfilter')
         audiocaps = ['audio/x-raw-float']
         self.audiocapsfilter.set_property(
             'caps',
@@ -913,12 +674,14 @@ class VideoTranscoder:
         elif message.type == gst.MESSAGE_ELEMENT:
             if message.structure.get_name() == 'progress':
                 data = dict(message.structure)
+                # Update progress state if it has changed
+                if self.progress_percentage != data.get('percent'):
+                    self.progress_percentage = data.get('percent')
+                    if self._progress_callback:
+                        self._progress_callback(data.get('percent'))
 
-                if self._progress_callback:
-                    self._progress_callback(data.get('percent'))
-
-                _log.info('{percent}% done...'.format(
-                        percent=data.get('percent')))
+                    _log.info('{percent}% done...'.format(
+                            percent=data.get('percent')))
                 _log.debug(data)
 
         elif t == gst.MESSAGE_ERROR:
@@ -980,6 +743,10 @@ if __name__ == '__main__':
                       action='store_true',
                       help='Dear program, please be quiet unless *error*')
 
+    parser.add_option('-w', '--width',
+                      type=int,
+                      default=180)
+
     (options, args) = parser.parse_args()
 
     if options.verbose:
@@ -999,10 +766,11 @@ if __name__ == '__main__':
     transcoder = VideoTranscoder()
 
     if options.action == 'thumbnail':
+        args.append(options.width)
         VideoThumbnailerMarkII(*args)
     elif options.action == 'video':
         def cb(data):
             print('I\'m a callback!')
         transcoder.transcode(*args, progress_callback=cb)
     elif options.action == 'discover':
-        print transcoder.discover(*args).__dict__
+        print transcoder.discover(*args)

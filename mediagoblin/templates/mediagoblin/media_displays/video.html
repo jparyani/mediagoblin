@@ -18,44 +18,57 @@
 
 {% extends 'mediagoblin/user_pages/media.html' %}
 
-{% block mediagoblin_head %}
+{% block mediagoblin_head -%}
   {{ super() }}
-  <script type="text/javascript"
-  	src="{{ request.staticdirect('/js/extlib/video-js/video.js') }}"></script>
-  <link href="{{ request.staticdirect('/css/vjs-mg-skin.css') }}" rel="stylesheet">
-{% endblock %}
+  <script type="text/javascript" src="{{
+     request.staticdirect('/extlib/video-js/video.min.js') }}"></script>
+  <link href="{{ request.staticdirect('/css/vjs-mg-skin.css') }}"
+        rel="stylesheet">
+{%- endblock %}
 
 {% block mediagoblin_media %}
-  <div class="video-player" style="position: relative;">
-    <video class="video-js vjs-mg-skin"
-	   width="{{ media.media_data.width }}"
-	   height="{{ media.media_data.height }}"
-	   controls="controls"
-	   preload="metadata"
-	   data-setup="">
-      <source src="{{ request.app.public_store.file_url(
-		   media.media_files['webm_640']) }}" 
-	      type="video/webm; codecs=&quot;vp8, vorbis&quot;" />
-	  <div class="no_html5">
-	    {%- trans -%}Sorry, this video will not work because 
-	    your web browser does not support HTML5 
-	    video.{%- endtrans -%}<br/>
-	    {%- trans -%}You can get a modern web browser that 
-	    can play this video at <a href="http://getfirefox.com">
-	    http://getfirefox.com</a>!{%- endtrans -%}
-	  </div>
-    </video>
-  </div>
+  {% set display_type, display_path = media.get_display_media() %}
+
+  <video controls
+         {% if global_config['media_type:mediagoblin.media_types.video']['auto_play'] %}autoplay{% endif %}
+         preload="auto" class="video-js vjs-mg-skin"
+         data-setup='{"height": {{ media.media_data.height }},
+                      "width": {{ media.media_data.width }} }'>
+    <source src="{{ request.app.public_store.file_url(display_path) }}"
+            {% if media.media_data %}
+              type="{{ media.media_data.source_type() }}"
+            {% else %}
+              type="{{ media.media_manager['default_webm_type'] }}"
+            {% endif %} />
+    <div class="no_html5">
+      {%- trans -%}Sorry, this video will not work because
+      your web browser does not support HTML5 
+      video.{%- endtrans -%}<br/>
+      {%- trans -%}You can get a modern web browser that 
+      can play this video at <a href="http://getfirefox.com">
+      http://getfirefox.com</a>!{%- endtrans -%}
+    </div>
+  </video>
 {% endblock %}
 
 {% block mediagoblin_sidebar %}
   <h3>{% trans %}Download{% endtrans %}</h3>
   <ul>
     {% if 'original' in media.media_files %}
-      <li><a href="{{ request.app.public_store.file_url(
-                       media.media_files.original) }}">{% trans %}Original file{% endtrans %}</a>
+      <li>
+        <a href="{{ request.app.public_store.file_url(
+                       media.media_files.original) }}">
+          {%- trans %}Original file{% endtrans -%}
+        </a>
+      </li>
     {% endif %}
-    <li><a href="{{ request.app.public_store.file_url(
-                     media.media_files.webm_640) }}">{% trans %}WebM file (640p; VP8/Vorbis){% endtrans %}</a>
+    {% if 'webm_640' in media.media_files %}
+      <li>
+        <a href="{{ request.app.public_store.file_url(
+                       media.media_files.webm_640) }}">
+          {%- trans %}WebM file (640p; VP8/Vorbis){% endtrans -%}
+        </a>
+      </li>
+    {% endif %}
   </ul>
 {% endblock %}

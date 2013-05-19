@@ -14,10 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.tests.tools import setup_fresh_app
 from mediagoblin.tools import text
 
-@setup_fresh_app
 def test_list_of_dicts_conversion(test_app):
     """
     When the user adds tags to a media entry, the string from the form is

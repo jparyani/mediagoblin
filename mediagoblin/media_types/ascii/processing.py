@@ -15,7 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import chardet
 import os
-import Image
+try:
+    from PIL import Image
+except ImportError:
+    import Image
 import logging
 
 from mediagoblin import mg_globals as mgg
@@ -38,12 +41,15 @@ def sniff_handler(media_file, **kw):
     return False
 
 
-def process_ascii(entry):
-    '''
-    Code to process a txt file
-    '''
+def process_ascii(proc_state):
+    """Code to process a txt file. Will be run by celery.
+
+    A Workbench() represents a local tempory dir. It is automatically
+    cleaned up when this function exits.
+    """
+    entry = proc_state.entry
+    workbench = proc_state.workbench
     ascii_config = mgg.global_config['media_type:mediagoblin.media_types.ascii']
-    workbench = mgg.workbench_manager.create_workbench()
     # Conversions subdirectory to avoid collisions
     conversions_subdir = os.path.join(
         workbench.dir, 'conversions')
@@ -124,8 +130,14 @@ def process_ascii(entry):
                     'ascii',
                     'xmlcharrefreplace'))
 
-    mgg.queue_store.delete_file(queued_filepath)
+    # Remove queued media file from storage and database.
+    # queued_filepath is in the task_id directory which should
+    # be removed too, but fail if the directory is not empty to be on
+    # the super-safe side.
+    mgg.queue_store.delete_file(queued_filepath)      # rm file
+    mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
     entry.queued_media_file = []
+
     media_files_dict = entry.setdefault('media_files', {})
     media_files_dict['thumb'] = thumb_filepath
     media_files_dict['unicode'] = unicode_filepath

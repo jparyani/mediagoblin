@@ -16,12 +16,15 @@
 
 import wtforms
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from mediagoblin.tools.translate import fake_ugettext_passthrough as _
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 class MediaCommentForm(wtforms.Form):
     comment_content = wtforms.TextAreaField(
-        '',
-        [wtforms.validators.Required()])
+        _('Comment'),
+        [wtforms.validators.Required()],
+        description=_(u'You can use '
+                      u'<a href="http://daringfireball.net/projects/markdown/basics">'
+                      u'Markdown</a> for formatting.'))
 
 class ConfirmDeleteForm(wtforms.Form):
     confirm = wtforms.BooleanField(
@@ -32,7 +35,9 @@ class ConfirmCollectionItemRemoveForm(wtforms.Form):
         _('I am sure I want to remove this item from the collection'))
 
 class MediaCollectForm(wtforms.Form):
-    collection = QuerySelectField(allow_blank=True, blank_text=_('-- Select --'), get_label='title',)
+    collection = QuerySelectField(
+        _('Collection'),
+        allow_blank=True, blank_text=_('-- Select --'), get_label='title',)
     note = wtforms.TextAreaField(
         _('Include a note'),
         [wtforms.validators.Optional()],)

@@ -16,32 +16,35 @@
 
 import json
 
+import pytest
 from urlparse import urlparse, parse_qs
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import processing
-from mediagoblin.tests.tools import get_test_app, fixture_add_user
+from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin.tests.test_submission import GOOD_PNG
 from mediagoblin.tests import test_oauth as oauth
 
 
 class TestHTTPCallback(object):
-    def setUp(self):
-        self.app = get_test_app()
+    @pytest.fixture(autouse=True)
+    def setup(self, test_app):
+        self.test_app = test_app
+
         self.db = mg_globals.database
 
-        self.user_password = 'secret'
-        self.user = fixture_add_user('call_back', self.user_password)
+        self.user_password = u'secret'
+        self.user = fixture_add_user(u'call_back', self.user_password)
 
         self.login()
 
     def login(self):
-        self.app.post('/auth/login/', {
+        self.test_app.post('/auth/login/', {
             'username': self.user.username,
             'password': self.user_password})
 
     def get_access_token(self, client_id, client_secret, code):
-        response = self.app.get('/oauth/access_token', {
+        response = self.test_app.get('/oauth/access_token', {
                 'code': code,
                 'client_id': client_id,
                 'client_secret': client_secret})
@@ -52,9 +55,8 @@ class TestHTTPCallback(object):
 
     def test_callback(self):
         ''' Test processing HTTP callback '''
-
         self.oauth = oauth.TestOAuth()
-        self.oauth.setUp()
+        self.oauth.setup(self.test_app)
 
         redirect, client_id = self.oauth.test_4_authorize_confidential_client()
 
@@ -69,7 +71,7 @@ class TestHTTPCallback(object):
 
         callback_url = 'https://foo.example?secrettestmediagoblinparam'
 
-        res = self.app.post('/api/submit?client_id={0}&access_token={1}\
+        self.test_app.post('/api/submit?client_id={0}&access_token={1}\
 &client_secret={2}'.format(
                     client_id,
                     access_token,

@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import sys
 import os
 import pkg_resources
 import shutil
@@ -25,14 +26,13 @@ from paste.deploy import loadapp
 from webtest import TestApp
 
 from mediagoblin import mg_globals
+from mediagoblin.db.models import User, MediaEntry, Collection
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
-from mediagoblin.db.open import setup_connection_and_db_from_config
-from mediagoblin.db.sql.base import Session
+from mediagoblin.db.base import Session
 from mediagoblin.meddleware import BaseMeddleware
 from mediagoblin.auth.lib import bcrypt_gen_password_hash
 from mediagoblin.gmg_commands.dbupdate import run_dbupdate
-from mediagoblin.init.celery import setup_celery_app
 
 
 MEDIAGOBLIN_TEST_DB_NAME = u'__mediagoblin_tests__'
@@ -42,19 +42,9 @@ TEST_APP_CONFIG = pkg_resources.resource_filename(
     'mediagoblin.tests', 'test_mgoblin_app.ini')
 TEST_USER_DEV = pkg_resources.resource_filename(
     'mediagoblin.tests', 'test_user_dev')
-MGOBLIN_APP = None
-
-USER_DEV_DIRECTORIES_TO_SETUP = [
-    'media/public', 'media/queue',
-    'beaker/sessions/data', 'beaker/sessions/lock']
-
-BAD_CELERY_MESSAGE = """\
-Sorry, you *absolutely* must run nosetests with the
-mediagoblin.init.celery.from_tests module.  Like so:
-$ CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests ./bin/nosetests"""
 
 
-class BadCeleryEnviron(Exception): pass
+USER_DEV_DIRECTORIES_TO_SETUP = ['media/public', 'media/queue']
 
 
 class TestingMeddleware(BaseMeddleware):
@@ -78,7 +68,7 @@ class TestingMeddleware(BaseMeddleware):
 
     def process_response(self, request, response):
         # All following tests should be for html only!
-        if response.content_type != "text/html":
+        if getattr(response, 'content_type', None) != "text/html":
             # Get out early
             return
 
@@ -96,41 +86,40 @@ class TestingMeddleware(BaseMeddleware):
         return
 
 
-def suicide_if_bad_celery_environ():
-    if not os.environ.get('CELERY_CONFIG_MODULE') == \
-            'mediagoblin.init.celery.from_tests':
-        raise BadCeleryEnviron(BAD_CELERY_MESSAGE)
+def get_app(request, paste_config=None, mgoblin_config=None):
+    """Create a MediaGoblin app for testing.
 
+    Args:
+     - request: Not an http request, but a pytest fixture request.  We
+       use this to make temporary directories that pytest
+       automatically cleans up as needed.
+     - paste_config: particular paste config used by this application.
+     - mgoblin_config: particular mediagoblin config used by this
+       application.
+    """
+    paste_config = paste_config or TEST_SERVER_CONFIG
+    mgoblin_config = mgoblin_config or TEST_APP_CONFIG
 
-def get_test_app(dump_old_app=True):
-    suicide_if_bad_celery_environ()
+    # This is the directory we're copying the paste/mgoblin config stuff into
+    run_dir = request.config._tmpdirhandler.mktemp(
+        'mgoblin_app', numbered=True)
+    user_dev_dir = run_dir.mkdir('test_user_dev').strpath
 
-    # Make sure we've turned on testing
-    testing._activate_testing()
-
-    # Leave this imported as it sets up celery.
-    from mediagoblin.init.celery import from_tests
-
-    global MGOBLIN_APP
-
-    # Just return the old app if that exists and it's okay to set up
-    # and return
-    if MGOBLIN_APP and not dump_old_app:
-        return MGOBLIN_APP
+    new_paste_config = run_dir.join('paste.ini').strpath
+    new_mgoblin_config = run_dir.join('mediagoblin.ini').strpath
+    shutil.copyfile(paste_config, new_paste_config)
+    shutil.copyfile(mgoblin_config, new_mgoblin_config)
 
     Session.rollback()
     Session.remove()
 
-    # Remove and reinstall user_dev directories
-    if os.path.exists(TEST_USER_DEV):
-        shutil.rmtree(TEST_USER_DEV)
-
+    # install user_dev directories
     for directory in USER_DEV_DIRECTORIES_TO_SETUP:
-        full_dir = os.path.join(TEST_USER_DEV, directory)
+        full_dir = os.path.join(user_dev_dir, directory)
         os.makedirs(full_dir)
 
     # Get app config
-    global_config, validation_result = read_mediagoblin_config(TEST_APP_CONFIG)
+    global_config, validation_result = read_mediagoblin_config(new_mgoblin_config)
     app_config = global_config['mediagoblin']
 
     # Run database setup/migrations
@@ -138,10 +127,7 @@ def get_test_app(dump_old_app=True):
 
     # setup app and return
     test_app = loadapp(
-        'config:' + TEST_SERVER_CONFIG)
-
-    # Re-setup celery
-    setup_celery_app(app_config, global_config)
+        'config:' + new_paste_config)
 
     # Insert the TestingMeddleware, which can do some
     # sanity checks on every request/response.
@@ -150,24 +136,8 @@ def get_test_app(dump_old_app=True):
     mg_globals.app.meddleware.insert(0, TestingMeddleware(mg_globals.app))
 
     app = TestApp(test_app)
-    MGOBLIN_APP = app
 
     return app
-
-
-def setup_fresh_app(func):
-    """
-    Decorator to setup a fresh test application for this function.
-
-    Cleans out test buckets and passes in a new, fresh test_app.
-    """
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        test_app = get_test_app()
-        testing.clear_test_buckets()
-        return func(test_app, *args, **kwargs)
-
-    return wrapper
 
 
 def install_fixtures_simple(db, fixtures):
@@ -184,27 +154,30 @@ def assert_db_meets_expected(db, expected):
     """
     Assert a database contains the things we expect it to.
 
-    Objects are found via '_id', so you should make sure your document
-    has an _id.
+    Objects are found via 'id', so you should make sure your document
+    has an id.
 
     Args:
      - db: pymongo or mongokit database connection
      - expected: the data we expect.  Formatted like:
          {'collection_name': [
-             {'_id': 'foo',
+             {'id': 'foo',
               'some_field': 'some_value'},]}
     """
     for collection_name, collection_data in expected.iteritems():
         collection = db[collection_name]
         for expected_document in collection_data:
-            document = collection.find_one({'_id': expected_document['_id']})
+            document = collection.find_one({'id': expected_document['id']})
             assert document is not None  # make sure it exists
             assert document == expected_document  # make sure it matches
 
 
-def fixture_add_user(username=u'chris', password='toast',
+def fixture_add_user(username=u'chris', password=u'toast',
                      active_user=True):
-    test_user = mg_globals.database.User()
+    # Reuse existing user or create a new one
+    test_user = User.query.filter_by(username=username).first()
+    if test_user is None:
+        test_user = User()
     test_user.username = username
     test_user.email = username + u'@example.com'
     if password is not None:
@@ -216,10 +189,46 @@ def fixture_add_user(username=u'chris', password='toast',
     test_user.save()
 
     # Reload
-    test_user = mg_globals.database.User.find_one({'username': username})
+    test_user = User.query.filter_by(username=username).first()
 
     # ... and detach from session:
-    from mediagoblin.db.sql.base import Session
     Session.expunge(test_user)
 
     return test_user
+
+
+def fixture_media_entry(title=u"Some title", slug=None,
+                        uploader=None, save=True, gen_slug=True):
+    entry = MediaEntry()
+    entry.title = title
+    entry.slug = slug
+    entry.uploader = uploader or fixture_add_user().id
+    entry.media_type = u'image'
+
+    if gen_slug:
+        entry.generate_slug()
+    if save:
+        entry.save()
+
+    return entry
+
+
+def fixture_add_collection(name=u"My first Collection", user=None):
+    if user is None:
+        user = fixture_add_user()
+    coll = Collection.query.filter_by(creator=user.id, title=name).first()
+    if coll is not None:
+        return coll
+    coll = Collection()
+    coll.creator = user.id
+    coll.title = name
+    coll.generate_slug()
+    coll.save()
+
+    # Reload
+    Session.refresh(coll)
+
+    # ... and detach from session:
+    Session.expunge(coll)
+
+    return coll

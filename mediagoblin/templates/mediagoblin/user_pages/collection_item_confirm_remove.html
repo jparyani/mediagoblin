@@ -24,7 +24,7 @@
   <form action="{{ request.urlgen('mediagoblin.user_pages.collection_item_confirm_remove',
 		                  user=collection_item.in_collection.get_creator.username,
 				  collection=collection_item.in_collection.slug,
-				  collection_item=collection_item._id) }}"
+				  collection_item=collection_item.id) }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box">
       <h1>
@@ -33,24 +33,24 @@
           Really remove {{ media_title }} from {{ collection_title }}?
         {%- endtrans %}
       </h1>
-	  
+
       <div style="text-align: center;" >
-        <img src="{{ request.app.public_store.file_url(
-                         collection_item.get_media_entry.media_files['thumb']) }}" />
+        <img src="{{ collection_item.get_media_entry.thumb_url }}" />
       </div>
-	  
+
       <br />
-	  
+
       <p class="delete_checkbox_box">
 	{{ form.confirm }}
-	<label for="{{ (form.confirm.name) }}">{{ _(form.confirm.label.text) }}</label>
+	{{ wtforms_util.render_label(form.confirm) }}
       </p>
 
       <div class="form_submit_buttons">
         {# TODO: This isn't a button really... might do unexpected things :) #}
-	<a class="button_action" href="{{ request.urlgen('mediagoblin.user_pages.user_collection',
-				                         collection=collection_item.in_collection.slug,
-							 user=request.user.username) }}">{% trans %}Cancel{% endtrans %}</a>
+        <a class="button_action" href="
+            {{- collection_item.in_collection.url_for_self(request.urlgen) }}">
+          {%- trans %}Cancel{% endtrans -%}
+        </a>
         <input type="submit" value="{% trans %}Remove{% endtrans %}" class="button_form" />
 	{{ csrf_token }}
       </div>

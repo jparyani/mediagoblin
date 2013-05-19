@@ -14,8 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.db.util import media_entries_for_tag_slug, DESCENDING
-
+from mediagoblin.db.models import MediaEntry
+from mediagoblin.db.util import media_entries_for_tag_slug
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.response import render_to_response
 from mediagoblin.decorators import uses_pagination
@@ -36,10 +36,6 @@ def _get_tag_name_from_entries(media_entries, tag_slug):
                 tag_name = tag['name']
                 break
         break
-    # TODO: Remove after SQL-switch, it's mongo specific
-    if hasattr(media_entries, "rewind"):
-        media_entries.rewind()
-
     return tag_name
 
 
@@ -49,7 +45,7 @@ def tag_listing(request, page):
     tag_slug = request.matchdict[u'tag']
 
     cursor = media_entries_for_tag_slug(request.db, tag_slug)
-    cursor = cursor.sort('created', DESCENDING)
+    cursor = cursor.order_by(MediaEntry.created.desc())
 
     pagination = Pagination(page, cursor)
     media_entries = pagination()
@@ -68,26 +64,30 @@ def tag_listing(request, page):
 ATOM_DEFAULT_NR_OF_UPDATED_ITEMS = 15
 
 
-def tag_atom_feed(request):
+def atom_feed(request):
     """
     generates the atom feed with the tag images
     """
-    tag_slug = request.matchdict[u'tag']
+    tag_slug = request.matchdict.get(u'tag')
+    feed_title = "MediaGoblin Feed"
+    if tag_slug:
+        cursor = media_entries_for_tag_slug(request.db, tag_slug)
+        link = request.urlgen('mediagoblin.listings.tags_listing',
+                              qualified=True, tag=tag_slug )
+        feed_title += "for tag '%s'" % tag_slug
+    else: # all recent item feed
+        cursor = MediaEntry.query.filter_by(state=u'processed')
+        link = request.urlgen('index', qualified=True)
+        feed_title += "for all recent items"
 
-    cursor = media_entries_for_tag_slug(request.db, tag_slug)
-    cursor = cursor.sort('created', DESCENDING)
+    cursor = cursor.order_by(MediaEntry.created.desc())
     cursor = cursor.limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
-    """
-    ATOM feed id is a tag URI (see http://en.wikipedia.org/wiki/Tag_URI)
-    """
     feed = AtomFeed(
-        "MediaGoblin: Feed for tag '%s'" % tag_slug,
+        feed_title,
         feed_url=request.url,
-        id='tag:'+request.host+',2011:gallery.tag-%s' % tag_slug,
-        links=[{'href': request.urlgen(
-                 'mediagoblin.listings.tags_listing',
-                 qualified=True, tag=tag_slug ),
+        id=link,
+        links=[{'href': link,
             'rel': 'alternate',
             'type': 'text/html'}])
     for entry in cursor:

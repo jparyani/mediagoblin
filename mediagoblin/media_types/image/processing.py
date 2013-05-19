@@ -14,45 +14,85 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import Image
+try:
+    from PIL import Image
+except ImportError:
+    import Image
 import os
 import logging
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.processing import BadMediaFail, \
-    create_pub_filepath, FilenameBuilder
+from mediagoblin.processing import BadMediaFail, FilenameBuilder
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful, \
     exif_image_needs_rotation
 
 _log = logging.getLogger(__name__)
 
+PIL_FILTERS = {
+    'NEAREST': Image.NEAREST,
+    'BILINEAR': Image.BILINEAR,
+    'BICUBIC': Image.BICUBIC,
+    'ANTIALIAS': Image.ANTIALIAS}
 
-def resize_image(entry, filename, new_path, exif_tags, workdir, new_size,
-                 size_limits=(0, 0)):
+
+def resize_image(proc_state, resized, keyname, target_name, new_size,
+                 exif_tags, workdir):
     """
     Store a resized version of an image and return its pathname.
 
     Arguments:
-    entry -- the entry for the image to resize
-    filename -- the filename of the original image being resized
-    new_path -- public file path for the new resized image
+    proc_state -- the processing state for the image to resize
+    resized -- an image from Image.open() of the original image being resized
+    keyname -- Under what key to save in the db.
+    target_name -- public file path for the new resized image
     exif_tags -- EXIF data for the original image
     workdir -- directory path for storing converted image files
     new_size -- 2-tuple size for the resized image
     """
-    try:
-        resized = Image.open(filename)
-    except IOError:
-        raise BadMediaFail()
+    config = mgg.global_config['media_type:mediagoblin.media_types.image']
+
     resized = exif_fix_image_orientation(resized, exif_tags)  # Fix orientation
-    resized.thumbnail(new_size, Image.ANTIALIAS)
+
+    filter_config = config['resize_filter']
+    try:
+        resize_filter = PIL_FILTERS[filter_config.upper()]
+    except KeyError:
+        raise Exception('Filter "{0}" not found, choose one of {1}'.format(
+            unicode(filter_config),
+            u', '.join(PIL_FILTERS.keys())))
+
+    resized.thumbnail(new_size, resize_filter)
 
     # Copy the new file to the conversion subdir, then remotely.
-    tmp_resized_filename = os.path.join(workdir, new_path[-1])
+    tmp_resized_filename = os.path.join(workdir, target_name)
     with file(tmp_resized_filename, 'w') as resized_file:
-        resized.save(resized_file)
-    mgg.public_store.copy_local_to_storage(tmp_resized_filename, new_path)
+        resized.save(resized_file, quality=config['quality'])
+    proc_state.store_public(keyname, tmp_resized_filename, target_name)
+
+
+def resize_tool(proc_state, force, keyname, target_name,
+                conversions_subdir, exif_tags):
+    # filename -- the filename of the original image being resized
+    filename = proc_state.get_queued_filename()
+    max_width = mgg.global_config['media:' + keyname]['max_width']
+    max_height = mgg.global_config['media:' + keyname]['max_height']
+    # If the size of the original file exceeds the specified size for the desized
+    # file, a target_name file is created and later associated with the media
+    # entry.
+    # Also created if the file needs rotation, or if forced.
+    try:
+        im = Image.open(filename)
+    except IOError:
+        raise BadMediaFail()
+    if force \
+        or im.size[0] > max_width \
+        or im.size[1] > max_height \
+        or exif_image_needs_rotation(exif_tags):
+        resize_image(
+            proc_state, im, unicode(keyname), target_name,
+            (max_width, max_height),
+            exif_tags, conversions_subdir)
 
 
 SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg']
@@ -76,19 +116,21 @@ def sniff_handler(media_file, **kw):
     return False
 
 
-def process_image(entry):
+def process_image(proc_state):
+    """Code to process an image. Will be run by celery.
+
+    A Workbench() represents a local tempory dir. It is automatically
+    cleaned up when this function exits.
     """
-    Code to process an image
-    """
-    workbench = mgg.workbench_manager.create_workbench()
+    entry = proc_state.entry
+    workbench = proc_state.workbench
+
     # Conversions subdirectory to avoid collisions
     conversions_subdir = os.path.join(
         workbench.dir, 'conversions')
     os.mkdir(conversions_subdir)
-    queued_filepath = entry.queued_media_file
-    queued_filename = workbench.localized_file(
-        mgg.queue_store, queued_filepath,
-        'source')
+
+    queued_filename = proc_state.get_queued_filename()
     name_builder = FilenameBuilder(queued_filename)
 
     # EXIF extraction
@@ -96,52 +138,20 @@ def process_image(entry):
     gps_data = get_gps_data(exif_tags)
 
     # Always create a small thumbnail
-    thumb_filepath = create_pub_filepath(
-        entry, name_builder.fill('{basename}.thumbnail{ext}'))
-    resize_image(entry, queued_filename, thumb_filepath,
-                exif_tags, conversions_subdir,
-                (mgg.global_config['media:thumb']['max_width'],
-                 mgg.global_config['media:thumb']['max_height']))
+    resize_tool(proc_state, True, 'thumb',
+                name_builder.fill('{basename}.thumbnail{ext}'),
+                conversions_subdir, exif_tags)
 
-    # If the size of the original file exceeds the specified size of a `medium`
-    # file, a `.medium.jpg` files is created and later associated with the media
-    # entry.
-    medium = Image.open(queued_filename)
-    if medium.size[0] > mgg.global_config['media:medium']['max_width'] \
-        or medium.size[1] > mgg.global_config['media:medium']['max_height'] \
-        or exif_image_needs_rotation(exif_tags):
-        medium_filepath = create_pub_filepath(
-            entry, name_builder.fill('{basename}.medium{ext}'))
-        resize_image(
-            entry, queued_filename, medium_filepath,
-            exif_tags, conversions_subdir,
-            (mgg.global_config['media:medium']['max_width'],
-             mgg.global_config['media:medium']['max_height']))
-    else:
-        medium_filepath = None
+    # Possibly create a medium
+    resize_tool(proc_state, False, 'medium',
+                name_builder.fill('{basename}.medium{ext}'),
+                conversions_subdir, exif_tags)
 
-    # we have to re-read because unlike PIL, not everything reads
-    # things in string representation :)
-    queued_file = file(queued_filename, 'rb')
-
-    with queued_file:
-        original_filepath = create_pub_filepath(
-            entry, name_builder.fill('{basename}{ext}'))
-
-        with mgg.public_store.get_file(original_filepath, 'wb') \
-            as original_file:
-            original_file.write(queued_file.read())
+    # Copy our queued local workbench to its final destination
+    proc_state.copy_original(name_builder.fill('{basename}{ext}'))
 
     # Remove queued media file from storage and database
-    mgg.queue_store.delete_file(queued_filepath)
-    entry.queued_media_file = []
-
-    # Insert media file information into database
-    media_files_dict = entry.setdefault('media_files', {})
-    media_files_dict[u'thumb'] = thumb_filepath
-    media_files_dict[u'original'] = original_filepath
-    if medium_filepath:
-        media_files_dict[u'medium'] = medium_filepath
+    proc_state.delete_queue_file()
 
     # Insert exif data into database
     exif_all = clean_exif(exif_tags)
@@ -154,8 +164,6 @@ def process_image(entry):
             gps_data['gps_' + key] = gps_data.pop(key)
         entry.media_data_init(**gps_data)
 
-    # clean up workbench
-    workbench.destroy_self()
 
 if __name__ == '__main__':
     import sys

@@ -15,12 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from mediagoblin.db.sql.base import Base
+from mediagoblin.db.base import Base
 
 from sqlalchemy import (
     Column, Integer, Float, ForeignKey)
 from sqlalchemy.orm import relationship, backref
-from mediagoblin.db.sql.extratypes import JSONEncoded
+from mediagoblin.db.extratypes import JSONEncoded
+
+
+BACKREF_NAME = "image__media_data"
 
 
 class ImageData(Base):
@@ -30,7 +33,8 @@ class ImageData(Base):
     media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
         primary_key=True)
     get_media_entry = relationship("MediaEntry",
-        backref=backref("image__media_data", cascade="all, delete-orphan"))
+        backref=backref(BACKREF_NAME, uselist=False,
+                        cascade="all, delete-orphan"))
 
     width = Column(Integer)
     height = Column(Integer)

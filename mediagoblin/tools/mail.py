@@ -122,3 +122,16 @@ def send_email(from_addr, to_addrs, subject, message_body):
         print message.get_payload(decode=True)
 
     return mhost.sendmail(from_addr, to_addrs, message.as_string())
+
+
+def normalize_email(email):
+    """return case sensitive part, lower case domain name
+
+    :returns: None in case of broken email addresses"""
+    try:
+        em_user, em_dom = email.split('@', 1)
+    except ValueError:
+        # email contained no '@'
+        return None
+    email = "@".join((em_user, em_dom.lower()))
+    return email

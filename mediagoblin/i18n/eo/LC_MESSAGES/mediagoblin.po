@@ -1,8 +1,9 @@
 # Translations template for PROJECT.
-# Copyright (C) 2012 ORGANIZATION
+# Copyright (C) 2013 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
+#  <deletesoftware@yandex.ru>, 2013.
 #   <deletesoftware@yandex.ru>, 2011-2012.
 # Fernando Inocencio <faigos@gmail.com>, 2011.
 #   <john_w1954@fastmail.fm>, 2011.
@@ -10,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2012-09-24 11:41-0500\n"
-"PO-Revision-Date: 2012-09-24 18:27+0000\n"
+"POT-Creation-Date: 2013-03-04 18:04-0600\n"
+"PO-Revision-Date: 2013-03-10 16:50+0000\n"
 "Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,82 +22,96 @@ msgstr ""
 "Language: eo\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mediagoblin/auth/forms.py:25 mediagoblin/auth/forms.py:41
+#: mediagoblin/auth/forms.py:28
+msgid "Invalid User name or email address."
+msgstr "Nevalida ensalutnomo aŭ retpoŝtadreso."
+
+#: mediagoblin/auth/forms.py:29
+msgid "This field does not take email addresses."
+msgstr "Ĉi tiu kampo ne akceptas retpoŝtadresojn."
+
+#: mediagoblin/auth/forms.py:30
+msgid "This field requires an email address."
+msgstr "Ĉi tiu kampo postulas retpoŝtadreson."
+
+#: mediagoblin/auth/forms.py:52 mediagoblin/auth/forms.py:67
 msgid "Username"
 msgstr "Uzantnomo"
 
-#: mediagoblin/auth/forms.py:30 mediagoblin/auth/forms.py:45
+#: mediagoblin/auth/forms.py:56 mediagoblin/auth/forms.py:71
 msgid "Password"
 msgstr "Pasvorto"
 
-#: mediagoblin/auth/forms.py:34
+#: mediagoblin/auth/forms.py:60
 msgid "Email address"
 msgstr "Retpoŝtadreso"
 
-#: mediagoblin/auth/forms.py:51
+#: mediagoblin/auth/forms.py:78
 msgid "Username or email"
 msgstr "Salutnomo aŭ retpoŝtadreso"
 
-#: mediagoblin/auth/forms.py:58
-msgid "Incorrect input"
-msgstr "La enigitaĵo malĝustas"
-
-#: mediagoblin/auth/views.py:55
+#: mediagoblin/auth/views.py:54
 msgid "Sorry, registration is disabled on this instance."
 msgstr "Bedaŭrinde, registrado estas malaktivigita en tiu ĉi instalaĵo."
 
-#: mediagoblin/auth/views.py:75
+#: mediagoblin/auth/views.py:68
 msgid "Sorry, a user with that name already exists."
 msgstr "Bedaŭrinde, uzanto kun tiu nomo jam ekzistas."
 
-#: mediagoblin/auth/views.py:79
+#: mediagoblin/auth/views.py:72
 msgid "Sorry, a user with that email address already exists."
 msgstr "Ni bedaŭras, sed konto kun tiu retpoŝtadreso jam ekzistas."
 
-#: mediagoblin/auth/views.py:182
+#: mediagoblin/auth/views.py:174
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
 msgstr "Via retpoŝtadreso estas konfirmita. Vi povas nun ensaluti, redakti vian profilon, kaj alŝuti bildojn!"
 
-#: mediagoblin/auth/views.py:188
+#: mediagoblin/auth/views.py:180
 msgid "The verification key or user id is incorrect"
 msgstr "La kontrol-kodo aŭ la uzantonomo ne estas korekta"
 
-#: mediagoblin/auth/views.py:206
+#: mediagoblin/auth/views.py:198
 msgid "You must be logged in so we know who to send the email to!"
 msgstr "Vi devas esti ensalutita, por ke ni sciu, al kiu sendi la retleteron!"
 
-#: mediagoblin/auth/views.py:214
+#: mediagoblin/auth/views.py:206
 msgid "You've already verified your email address!"
 msgstr "Vi jam konfirmis vian retpoŝtadreson!"
 
-#: mediagoblin/auth/views.py:227
+#: mediagoblin/auth/views.py:219
 msgid "Resent your verification email."
 msgstr "Resendi vian kontrol-mesaĝon."
 
-#: mediagoblin/auth/views.py:263
+#: mediagoblin/auth/views.py:250
+msgid ""
+"If that email address (case sensitive!) is registered an email has been sent"
+" with instructions on how to change your password."
+msgstr "Se tiu retpoŝtadreso (majuskloj gravas!) estas registrita, tien senditas retletero kun instrukcio pri kiel ŝanĝi vian pasvorton."
+
+#: mediagoblin/auth/views.py:261
+msgid "Couldn't find someone with that username."
+msgstr "Trovitas neniu kun tiu ensalutnomo."
+
+#: mediagoblin/auth/views.py:264
 msgid ""
 "An email has been sent with instructions on how to change your password."
 msgstr "Senditas retletero kun instrukcio pri kiel ŝanĝi vian pasvorton."
 
-#: mediagoblin/auth/views.py:273
+#: mediagoblin/auth/views.py:271
 msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
 msgstr "Ni ne povas sendi pasvortsavan retleteron, ĉar aŭ via konto estas neaktiva, aŭ ĝia retpoŝtadreso ne estis konfirmita."
 
-#: mediagoblin/auth/views.py:285
-msgid "Couldn't find someone with that username or email."
-msgstr "Mi trovis neniun kun tiu salutnomo aŭ retpoŝtadreso."
-
-#: mediagoblin/auth/views.py:333
+#: mediagoblin/auth/views.py:328
 msgid "You can now log in using your new password."
 msgstr "Nun vi povas ensaluti per via nova pasvorto."
 
-#: mediagoblin/edit/forms.py:25 mediagoblin/edit/forms.py:83
+#: mediagoblin/edit/forms.py:25 mediagoblin/edit/forms.py:93
 #: mediagoblin/submit/forms.py:28 mediagoblin/submit/forms.py:47
-#: mediagoblin/user_pages/forms.py:40
+#: mediagoblin/user_pages/forms.py:45
 msgid "Title"
 msgstr "Titolo"
 
@@ -105,8 +120,8 @@ msgid "Description of this work"
 msgstr "Priskribo de ĉi tiu verko"
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:52
-#: mediagoblin/edit/forms.py:87 mediagoblin/submit/forms.py:32
-#: mediagoblin/submit/forms.py:51 mediagoblin/user_pages/forms.py:44
+#: mediagoblin/edit/forms.py:97 mediagoblin/submit/forms.py:32
+#: mediagoblin/submit/forms.py:51 mediagoblin/user_pages/forms.py:49
 msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
@@ -121,11 +136,11 @@ msgstr "Etikedoj"
 msgid "Separate tags by commas."
 msgstr "Dividu la etikedojn per komoj."
 
-#: mediagoblin/edit/forms.py:38 mediagoblin/edit/forms.py:91
+#: mediagoblin/edit/forms.py:38 mediagoblin/edit/forms.py:101
 msgid "Slug"
 msgstr "La distingiga adresparto"
 
-#: mediagoblin/edit/forms.py:39 mediagoblin/edit/forms.py:92
+#: mediagoblin/edit/forms.py:39 mediagoblin/edit/forms.py:102
 msgid "The slug can't be empty"
 msgstr "La distingiga adresparto ne povas esti malplena"
 
@@ -164,61 +179,83 @@ msgstr "Enigu vian malnovan pasvorton por pruvi, ke ĉi tiu konto estas via."
 msgid "New password"
 msgstr "La nova pasvorto"
 
-#: mediagoblin/edit/forms.py:72
+#: mediagoblin/edit/forms.py:74
+msgid "License preference"
+msgstr "Permesila prefero"
+
+#: mediagoblin/edit/forms.py:80
+msgid "This will be your default license on upload forms."
+msgstr ""
+
+#: mediagoblin/edit/forms.py:82
 msgid "Email me when others comment on my media"
 msgstr "Retpoŝtu min kiam aliaj komentas pri miaj alŝutaĵoj."
 
-#: mediagoblin/edit/forms.py:84
+#: mediagoblin/edit/forms.py:94
 msgid "The title can't be empty"
-msgstr ""
+msgstr "La titolo ne povas malpleni."
 
-#: mediagoblin/edit/forms.py:86 mediagoblin/submit/forms.py:50
-#: mediagoblin/user_pages/forms.py:43
+#: mediagoblin/edit/forms.py:96 mediagoblin/submit/forms.py:50
+#: mediagoblin/user_pages/forms.py:48
 msgid "Description of this collection"
-msgstr "Priskribo de ĉi tiu kolekto"
+msgstr "Priskribo de la kolekto"
 
-#: mediagoblin/edit/forms.py:93
+#: mediagoblin/edit/forms.py:103
 msgid ""
 "The title part of this collection's address. You usually don't need to "
 "change this."
 msgstr "La distingiga adresparto de ĉi tiu kolekto.  Ordinare ne necesas ĝin ŝanĝi."
 
-#: mediagoblin/edit/views.py:65
+#: mediagoblin/edit/views.py:66
 msgid "An entry with that slug already exists for this user."
 msgstr "Ĉi tiu uzanto jam havas dosieron kun tiu distingiga adresparto."
 
-#: mediagoblin/edit/views.py:86
+#: mediagoblin/edit/views.py:85
 msgid "You are editing another user's media. Proceed with caution."
 msgstr "Vi priredaktas dosieron de alia uzanto. Agu singardeme."
 
+#: mediagoblin/edit/views.py:155
+#, python-format
+msgid "You added the attachment %s!"
+msgstr "Vi aldonis la kundosieron %s!"
+
 #: mediagoblin/edit/views.py:182
+msgid "You can only edit your own profile."
+msgstr "Vi povas redakti nur vian propran profilon."
+
+#: mediagoblin/edit/views.py:188
 msgid "You are editing a user's profile. Proceed with caution."
 msgstr "Vi redaktas profilon de alia uzanto. Agu singardeme."
 
-#: mediagoblin/edit/views.py:198
+#: mediagoblin/edit/views.py:204
 msgid "Profile changes saved"
 msgstr "Profilŝanĝoj estis konservitaj"
 
-#: mediagoblin/edit/views.py:227 mediagoblin/edit/views.py:247
-msgid "Account settings saved"
-msgstr "Kontagordoj estis konservitaj"
-
-#: mediagoblin/edit/views.py:252
+#: mediagoblin/edit/views.py:241
 msgid "Wrong password"
 msgstr "Malĝusta pasvorto"
 
-#: mediagoblin/edit/views.py:287
-#, python-format
-msgid "You already have a collection called \"%s\"!title"
-msgstr "Vi jam havas kolekton kun la nomo «%s»!title"
+#: mediagoblin/edit/views.py:252
+msgid "Account settings saved"
+msgstr "Kontagordoj estis konservitaj"
 
-#: mediagoblin/edit/views.py:290
+#: mediagoblin/edit/views.py:286
+msgid "You need to confirm the deletion of your account."
+msgstr "Vi bezonas konfirmi la forigon de via konto."
+
+#: mediagoblin/edit/views.py:322 mediagoblin/submit/views.py:142
+#: mediagoblin/user_pages/views.py:214
+#, python-format
+msgid "You already have a collection called \"%s\"!"
+msgstr "Vi jam havas kolekton kun la nomo «%s»!"
+
+#: mediagoblin/edit/views.py:326
 msgid "A collection with that slug already exists for this user."
 msgstr "Ĉi tiu uzanto jam havas kolekton kun tiu distingiga adresparto."
 
-#: mediagoblin/edit/views.py:307
+#: mediagoblin/edit/views.py:343
 msgid "You are editing another user's collection. Proceed with caution."
-msgstr ""
+msgstr "Vi redaktas kolekton de alia uzanto.  Agu singardeme."
 
 #: mediagoblin/gmg_commands/theme.py:58
 msgid "Cannot link theme... no theme set\n"
@@ -232,54 +269,62 @@ msgstr "Mankas dosierujo kun aspektiloj por la etoso\n"
 msgid "However, old link directory symlink found; removed.\n"
 msgstr "Tamen trovitas — kaj forigitas — malnova simbola ligilo al dosierujo.\n"
 
-#: mediagoblin/media_types/__init__.py:60
-#: mediagoblin/media_types/__init__.py:120
+#: mediagoblin/meddleware/csrf.py:134
+msgid ""
+"CSRF cookie not present. This is most likely the result of a cookie blocker "
+"or somesuch.<br/>Make sure to permit the settings of cookies for this "
+"domain."
+msgstr ""
+
+#: mediagoblin/media_types/__init__.py:61
+#: mediagoblin/media_types/__init__.py:102
 msgid "Sorry, I don't support that file type :("
 msgstr "Mi pardonpetas, mi ne subtenas tiun dosiertipon :("
 
-#: mediagoblin/media_types/video/processing.py:35
+#: mediagoblin/media_types/video/processing.py:36
 msgid "Video transcoding failed"
 msgstr "Malsukcesis transkodado de filmo"
 
-#: mediagoblin/plugins/oauth/forms.py:26
-msgid "Client ID"
-msgstr ""
+#: mediagoblin/plugins/geolocation/templates/mediagoblin/plugins/geolocation/map.html:24
+msgid "Location"
+msgstr "Loko"
 
-#: mediagoblin/plugins/oauth/forms.py:28
-msgid "Next URL"
-msgstr ""
+#: mediagoblin/plugins/geolocation/templates/mediagoblin/plugins/geolocation/map.html:52
+#, python-format
+msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
+msgstr "Vidi sur <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
-#: mediagoblin/plugins/oauth/forms.py:30
+#: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
 msgstr ""
 
-#: mediagoblin/plugins/oauth/forms.py:31
+#: mediagoblin/plugins/oauth/forms.py:30
 msgid "Deny"
 msgstr ""
 
-#: mediagoblin/plugins/oauth/forms.py:35
+#: mediagoblin/plugins/oauth/forms.py:34
 msgid "Name"
-msgstr ""
+msgstr "Nomo"
+
+#: mediagoblin/plugins/oauth/forms.py:35
+msgid "The name of the OAuth client"
+msgstr "La nomo de la OAuth-kliento"
 
 #: mediagoblin/plugins/oauth/forms.py:36
-msgid "The name of the OAuth client"
-msgstr ""
-
-#: mediagoblin/plugins/oauth/forms.py:37
 msgid "Description"
-msgstr ""
+msgstr "Priskribo"
 
-#: mediagoblin/plugins/oauth/forms.py:39
+#: mediagoblin/plugins/oauth/forms.py:38
 msgid ""
 "This will be visible to users allowing your\n"
 "                application to authenticate as them."
 msgstr ""
 
-#: mediagoblin/plugins/oauth/forms.py:41
+#: mediagoblin/plugins/oauth/forms.py:40
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
-#: mediagoblin/plugins/oauth/forms.py:46
+#: mediagoblin/plugins/oauth/forms.py:45
 msgid ""
 "<strong>Confidential</strong> - The client can\n"
 "                make requests to the GNU MediaGoblin instance that can not be\n"
@@ -289,17 +334,17 @@ msgid ""
 "                JavaScript client)."
 msgstr ""
 
-#: mediagoblin/plugins/oauth/forms.py:53
+#: mediagoblin/plugins/oauth/forms.py:52
 msgid "Redirect URI"
 msgstr ""
 
-#: mediagoblin/plugins/oauth/forms.py:55
+#: mediagoblin/plugins/oauth/forms.py:54
 msgid ""
 "The redirect URI for the applications, this field\n"
 "            is <strong>required</strong> for public clients."
 msgstr ""
 
-#: mediagoblin/plugins/oauth/forms.py:67
+#: mediagoblin/plugins/oauth/forms.py:66
 msgid "This field is required for public clients"
 msgstr ""
 
@@ -307,7 +352,22 @@ msgstr ""
 msgid "The client {0} has been registered!"
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:138
+#: mediagoblin/plugins/oauth/templates/oauth/client/connections.html:22
+msgid "OAuth client connections"
+msgstr ""
+
+#: mediagoblin/plugins/oauth/templates/oauth/client/list.html:22
+msgid "Your OAuth clients"
+msgstr ""
+
+#: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
+#: mediagoblin/templates/mediagoblin/submit/collection.html:30
+#: mediagoblin/templates/mediagoblin/submit/start.html:34
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
+msgid "Add"
+msgstr "Aldoni"
+
+#: mediagoblin/processing/__init__.py:172
 msgid "Invalid file given for media type."
 msgstr "La provizita dosiero ne konformas al la informtipo."
 
@@ -315,80 +375,74 @@ msgstr "La provizita dosiero ne konformas al la informtipo."
 msgid "File"
 msgstr "Dosiero"
 
-#: mediagoblin/submit/views.py:57
+#: mediagoblin/submit/views.py:51
 msgid "You must provide a file."
 msgstr "Vi devas provizi dosieron."
 
-#: mediagoblin/submit/views.py:164
+#: mediagoblin/submit/views.py:97
 msgid "Woohoo! Submitted!"
 msgstr "Hura! Alŝutitas!"
 
-#: mediagoblin/submit/views.py:211 mediagoblin/user_pages/views.py:215
-#, python-format
-msgid "You already have a collection called \"%s\"!"
-msgstr ""
-
-#: mediagoblin/submit/views.py:215
+#: mediagoblin/submit/views.py:146
 #, python-format
 msgid "Collection \"%s\" added!"
-msgstr ""
+msgstr "Kolekto «%s» aldonitas!"
 
-#: mediagoblin/templates/mediagoblin/404.html:24
-msgid "Image of 404 goblin stressing out"
-msgstr "Bildo de 404-koboldo penŝvitanta."
-
-#: mediagoblin/templates/mediagoblin/404.html:25
-msgid "Oops!"
-msgstr "Oj!"
-
-#: mediagoblin/templates/mediagoblin/404.html:26
-msgid "There doesn't seem to be a page at this address. Sorry!"
-msgstr "Verŝajne ĉe ĉi tiu adreso ne estas paĝo. Ni bedaŭras!"
-
-#: mediagoblin/templates/mediagoblin/404.html:28
-msgid ""
-"If you're sure the address is correct, maybe the page you're looking for has"
-" been moved or deleted."
-msgstr "Se vi estas certa, ke la adreso estas ĝusta, eble la serĉata de vi paĝo estis movita aŭ forigita."
-
-#: mediagoblin/templates/mediagoblin/base.html:50
-msgid "MediaGoblin logo"
-msgstr "Emblemo de MediaGoblin"
-
-#: mediagoblin/templates/mediagoblin/base.html:60
+#: mediagoblin/templates/mediagoblin/base.html:64
 msgid "Verify your email!"
 msgstr "Konfirmu viecon de la retpoŝtadreso!"
 
-#: mediagoblin/templates/mediagoblin/base.html:66
-msgid "+ Add media"
-msgstr "+ Aldoni dosieron"
-
-#: mediagoblin/templates/mediagoblin/base.html:67
-msgid "+ Add collection"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/base.html:69
-msgid "View your profile"
-msgstr "Vidi vian profilon"
+#: mediagoblin/templates/mediagoblin/base.html:65
+msgid "log out"
+msgstr "elsaluti"
 
 #: mediagoblin/templates/mediagoblin/base.html:70
-msgid "Log out"
-msgstr "Elsaluti"
-
-#: mediagoblin/templates/mediagoblin/base.html:75
 #: mediagoblin/templates/mediagoblin/auth/login.html:28
 #: mediagoblin/templates/mediagoblin/auth/login.html:36
 #: mediagoblin/templates/mediagoblin/auth/login.html:54
 msgid "Log in"
 msgstr "Ensaluti"
 
-#: mediagoblin/templates/mediagoblin/base.html:89
-msgid ""
-"Powered by <a href=\"http://mediagoblin.org\">MediaGoblin</a>, a <a "
-"href=\"http://gnu.org/\">GNU</a> project."
-msgstr "Funkcias per <a href=\"http://mediagoblin.org\">MediaGoblin</a>, unu el la <a href=\"http://gnu.org/\">projektoj de GNU</a>."
+#: mediagoblin/templates/mediagoblin/base.html:79
+#, python-format
+msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
+msgstr "Konto de <a href=\"%(user_url)s\">%(user_name)s</a>"
 
-#: mediagoblin/templates/mediagoblin/base.html:92
+#: mediagoblin/templates/mediagoblin/base.html:86
+msgid "Change account settings"
+msgstr "Ŝanĝi kontagordojn"
+
+#: mediagoblin/templates/mediagoblin/base.html:90
+#: mediagoblin/templates/mediagoblin/base.html:105
+#: mediagoblin/templates/mediagoblin/admin/panel.html:21
+#: mediagoblin/templates/mediagoblin/admin/panel.html:26
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:26
+msgid "Media processing panel"
+msgstr "Kontrolejo pri dosierpreparado."
+
+#: mediagoblin/templates/mediagoblin/base.html:93
+msgid "Log out"
+msgstr "Elsaluti"
+
+#: mediagoblin/templates/mediagoblin/base.html:96
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:156
+msgid "Add media"
+msgstr "Aldoni dosieron"
+
+#: mediagoblin/templates/mediagoblin/base.html:99
+#: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
+msgid "Create new collection"
+msgstr "Krei novan kolekton"
+
+#: mediagoblin/templates/mediagoblin/base.html:122
+#, python-format
+msgid ""
+"Powered by <a href=\"http://mediagoblin.org/\" title='Version "
+"%(version)s'>MediaGoblin</a>, a <a href=\"http://gnu.org/\">GNU</a> project."
+msgstr "Funkcias per <a href=\"http://mediagoblin.org/\" title='Versio %(version)s'>MediaGoblin</a>, unu el la <a href=\"http://gnu.org/\">projektoj de GNU</a>."
+
+#: mediagoblin/templates/mediagoblin/base.html:125
 #, python-format
 msgid ""
 "Released under the <a "
@@ -396,31 +450,35 @@ msgid ""
 "href=\"%(source_link)s\">Source code</a> available."
 msgstr "Disponigita laŭ la permesilo <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>.  Haveblas<a href=\"%(source_link)s\">fontotekstaro</a>."
 
-#: mediagoblin/templates/mediagoblin/root.html:24
+#: mediagoblin/templates/mediagoblin/error.html:24
+msgid "Image of goblin stressing out"
+msgstr "Bildo de zorgigita koboldo"
+
+#: mediagoblin/templates/mediagoblin/root.html:31
 msgid "Explore"
 msgstr "Ĉirkaŭrigardi"
 
-#: mediagoblin/templates/mediagoblin/root.html:26
+#: mediagoblin/templates/mediagoblin/root.html:33
 msgid "Hi there, welcome to this MediaGoblin site!"
 msgstr "Saluton, kaj bonvenon al ĉi tiu MediaGoblina retpaĝaro!"
 
-#: mediagoblin/templates/mediagoblin/root.html:28
+#: mediagoblin/templates/mediagoblin/root.html:35
 msgid ""
 "This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
 "extraordinarily great piece of media hosting software."
 msgstr "Ĉi tiu retpaĝaro funkcias per <a href=\"http://mediagoblin.org\">MediaGoblin</a>, eksterordinare bonega programaro por gastigado de aŭd‐vid‐dosieroj."
 
-#: mediagoblin/templates/mediagoblin/root.html:29
+#: mediagoblin/templates/mediagoblin/root.html:36
 msgid ""
 "To add your own media, place comments, and more, you can log in with your "
 "MediaGoblin account."
 msgstr "Por aldoni viajn proprajn dosierojn, afiŝi komentariojn ktp, vi povas ensaluti je via MediaGoblina konto."
 
-#: mediagoblin/templates/mediagoblin/root.html:31
+#: mediagoblin/templates/mediagoblin/root.html:38
 msgid "Don't have one yet? It's easy!"
 msgstr "Ĉu vi ankoraŭ ne havas tian? Ne malĝoju!"
 
-#: mediagoblin/templates/mediagoblin/root.html:32
+#: mediagoblin/templates/mediagoblin/root.html:39
 #, python-format
 msgid ""
 "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
@@ -428,16 +486,9 @@ msgid ""
 "        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
 msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Kreu konton en ĉi tiu retejo</a>\n        aŭ\n        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">ekfunkciigu MediaGoblin’on en via propra servilo</a>"
 
-#: mediagoblin/templates/mediagoblin/root.html:40
+#: mediagoblin/templates/mediagoblin/root.html:47
 msgid "Most recent media"
 msgstr "Laste aldonitaj dosieroj"
-
-#: mediagoblin/templates/mediagoblin/admin/panel.html:21
-#: mediagoblin/templates/mediagoblin/admin/panel.html:26
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:26
-msgid "Media processing panel"
-msgstr "Kontrolejo pri dosierpreparado."
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:29
 msgid ""
@@ -541,11 +592,61 @@ msgid ""
 "%(verification_url)s"
 msgstr "Sal %(username)s,\n\npor aktivigi vian GNU MediaGoblin konton, malfermu la sekvantan URLon en via retumilo:\n\n%(verification_url)s"
 
+#: mediagoblin/templates/mediagoblin/bits/logo.html:23
+#: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
+msgid "MediaGoblin logo"
+msgstr "Emblemo de MediaGoblin"
+
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:23
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:35
 #, python-format
 msgid "Editing attachments for %(media_title)s"
 msgstr "Aldoni kundosierojn por %(media_title)s"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:44
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:159
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:175
+msgid "Attachments"
+msgstr "Kundosieroj"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:57
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:181
+msgid "Add attachment"
+msgstr "Aldoni kundosieron"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:61
+#: mediagoblin/templates/mediagoblin/edit/delete_account.html:42
+#: mediagoblin/templates/mediagoblin/edit/edit.html:41
+#: mediagoblin/templates/mediagoblin/edit/edit_collection.html:32
+#: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:46
+#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:52
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:67
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:48
+msgid "Cancel"
+msgstr "Nuligi"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:63
+#: mediagoblin/templates/mediagoblin/edit/edit.html:42
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:52
+#: mediagoblin/templates/mediagoblin/edit/edit_collection.html:33
+#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:40
+msgid "Save changes"
+msgstr "Konservi ŝanĝojn"
+
+#: mediagoblin/templates/mediagoblin/edit/delete_account.html:28
+#, python-format
+msgid "Really delete user '%(user_name)s' and all related media/comments?"
+msgstr "Ĉu efektive forigi la uzantokonton «%(user_name)s» kaj ĉiujn ĝiajn dosierojn/komentojn?"
+
+#: mediagoblin/templates/mediagoblin/edit/delete_account.html:35
+msgid "Yes, really delete my account"
+msgstr "Jes, efektive forigi mian konton"
+
+#: mediagoblin/templates/mediagoblin/edit/delete_account.html:44
+#: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:47
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
+msgid "Delete permanently"
+msgstr "Forigi senrevene"
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:23
 #: mediagoblin/templates/mediagoblin/edit/edit.html:35
@@ -553,35 +654,23 @@ msgstr "Aldoni kundosierojn por %(media_title)s"
 msgid "Editing %(media_title)s"
 msgstr "Priredaktado de %(media_title)s"
 
-#: mediagoblin/templates/mediagoblin/edit/edit.html:42
-#: mediagoblin/templates/mediagoblin/edit/edit_collection.html:32
-#: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:46
-#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:53
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:82
-#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
-msgid "Cancel"
-msgstr "Nuligi"
-
-#: mediagoblin/templates/mediagoblin/edit/edit.html:43
-#: mediagoblin/templates/mediagoblin/edit/edit_account.html:47
-#: mediagoblin/templates/mediagoblin/edit/edit_collection.html:33
-#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:41
-msgid "Save changes"
-msgstr "Konservi ŝanĝojn"
-
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:28
-#: mediagoblin/templates/mediagoblin/edit/edit_account.html:41
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:40
 #, python-format
 msgid "Changing %(username)s's account settings"
 msgstr "Ŝanĝado de kontagordoj de %(username)s"
 
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:59
+msgid "Delete my account"
+msgstr "Forigi mian konton."
+
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:29
 #, python-format
 msgid "Editing %(collection_title)s"
-msgstr ""
+msgstr "Redaktado de %(collection_title)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:23
-#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:35
+#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:34
 #, python-format
 msgid "Editing %(username)s's profile"
 msgstr "Redaktado de l’profilo de %(username)s'"
@@ -596,13 +685,12 @@ msgstr "Dosieroj kun etikedo: %(tag_name)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
-#: mediagoblin/templates/mediagoblin/media_displays/image.html:23
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:52
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:136
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:55
 msgid "Download"
 msgstr "Elŝuti"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:38
-#: mediagoblin/templates/mediagoblin/media_displays/image.html:27
 msgid "Original"
 msgstr "Originalo"
 
@@ -621,7 +709,7 @@ msgid ""
 msgstr "Vi povas akiri modernan TTT-legilon, kapablan \n\tsonigi la registraĵon ĉe <a href=\"http://getfirefox.com\">\n\t  http://getfirefox.com</a>!"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:56
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:61
 msgid "Original file"
 msgstr "originalan dosieron"
 
@@ -629,33 +717,77 @@ msgstr "originalan dosieron"
 msgid "WebM file (Vorbis codec)"
 msgstr "WebMan dosieron (kun Vorbisa kodaĵo)"
 
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:40
-msgid ""
-"Sorry, this video will not work because \n"
-"\t    your web browser does not support HTML5 \n"
-"\t    video."
-msgstr "Bedaŭrinde ĉi tiu filmo ne spekteblas, ĉar\n<span class=\"whitespace other\" title=\"Tab\">»</span>    via TTT-legilo ne subtenas montradon\n<span class=\"whitespace other\" title=\"Tab\">»</span>    de filmoj laŭ HTML5."
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:87
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:93
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:99
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:105
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:59
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:65
+#, python-format
+msgid "Image for %(media_title)s"
+msgstr "Bildo de «%(media_title)s»"
 
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:43
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
+msgid "Toggle Rotate"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:113
+msgid "Perspective"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:116
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:117
+msgid "Front"
+msgstr "Deantaŭe"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:120
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:121
+msgid "Top"
+msgstr "Desupre"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:124
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:125
+msgid "Side"
+msgstr "Deflanke"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:130
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:131
+msgid "WebGL"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:138
+msgid "Download model"
+msgstr "Elŝuti la modelon"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:146
+msgid "File Format"
+msgstr "Informaranĝo"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:148
+msgid "Object Height"
+msgstr "Alto de la objekto"
+
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:44
+msgid ""
+"Sorry, this video will not work because\n"
+"      your web browser does not support HTML5 \n"
+"      video."
+msgstr "Bedaŭrinde, ĉi tiu filmo ne montriĝos\n  ĉar via TTT-legilo ne subtenas sufiĉe\n  filmojn laŭ HTML5."
+
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:47
 msgid ""
 "You can get a modern web browser that \n"
-"\t    can play this video at <a href=\"http://getfirefox.com\">\n"
-"\t    http://getfirefox.com</a>!"
-msgstr "Vi povas akiri modernan TTT-legilon,\n<span class=\"whitespace other\" title=\"Tab\">»</span>    kapablan montri ĉi tiun filmon, ĉe <a href=\"http://getfirefox.com\">\n<span class=\"whitespace other\" title=\"Tab\">»</span>    http://getfirefox.com</a>!"
+"      can play this video at <a href=\"http://getfirefox.com\">\n"
+"      http://getfirefox.com</a>!"
+msgstr "Vi povas elŝuti modernan TTT-legilon, kapablan \n      montri la filmon, de <a href=\"http://getfirefox.com\">\n      http://getfirefox.com</a>!"
 
-#: mediagoblin/templates/mediagoblin/media_displays/video.html:59
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:69
 msgid "WebM file (640p; VP8/Vorbis)"
 msgstr "la WebM-dosieron (640p; VP8/Vorbis)"
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/submit/collection.html:30
-#: mediagoblin/templates/mediagoblin/submit/start.html:34
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:83
-msgid "Add"
-msgstr "Aldoni"
+msgstr "Aldonado de kolekto"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:23
 #: mediagoblin/templates/mediagoblin/submit/start.html:30
@@ -665,30 +797,22 @@ msgstr "Aldono de via dosiero"
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format
 msgid "%(collection_title)s (%(username)s's collection)"
-msgstr ""
+msgstr "%(collection_title)s (kolekto de %(username)s)"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:39
 #, python-format
 msgid "%(collection_title)s by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr ""
+msgstr "%(collection_title)s de <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:52
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:87
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:79
 msgid "Edit"
 msgstr "Ŝanĝi"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:56
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:91
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:83
 msgid "Delete"
 msgstr "Forigi"
-
-#: mediagoblin/templates/mediagoblin/user_pages/collection.html:59
-#, python-format
-msgid ""
-"<p>\n"
-"    %(collection_description)s\n"
-"  </p>"
-msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -696,19 +820,24 @@ msgstr ""
 msgid "Really delete %(title)s?"
 msgstr "Ĉu vere forigi %(title)s?"
 
-#: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:47
-#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:50
-msgid "Delete permanently"
-msgstr "Forigi senrevene"
-
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:31
 #, python-format
 msgid "Really remove %(media_title)s from %(collection_title)s?"
-msgstr ""
+msgstr "Ĉu vere forigi %(media_title)s el %(collection_title)s?"
 
-#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:54
+#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:53
 msgid "Remove"
-msgstr ""
+msgstr "Forigi"
+
+#: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:21
+#, python-format
+msgid "%(username)s's collections"
+msgstr "Kolektoj de %(username)s"
+
+#: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:28
+#, python-format
+msgid "<a href=\"%(user_url)s\">%(username)s</a>'s collections"
+msgstr "Kolektoj de <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/comment_email.txt:19
 #, python-format
@@ -722,69 +851,55 @@ msgstr "Saluton, %(username)s.\n%(comment_author)s komentis ĉe via alŝutaĵo (
 msgid "%(username)s's media"
 msgstr "Dosieroj de %(username)s"
 
-#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:37
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:38
+#, python-format
+msgid ""
+"<a href=\"%(user_url)s\">%(username)s</a>'s media with tag <a "
+"href=\"%(tag_url)s\">%(tag)s</a>"
+msgstr "Dosieroj de <a href=\"%(user_url)s\">%(username)s</a> kun la etikedo <a href=\"%(tag_url)s\">%(tag)s</a>"
+
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:48
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
 msgstr "Dosieroj de <a href=\"%(user_url)s\">%(username)s</a>"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:46
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:38
 #, python-format
 msgid "❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a>"
 msgstr "❖ Просмотр файлов пользователя <a href=\"%(user_url)s\">%(username)s</a>"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:67
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:73
-#, python-format
-msgid "Image for %(media_title)s"
-msgstr "Bildo de «%(media_title)s»"
-
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:102
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:94
 msgid "Add a comment"
 msgstr "Aldoni komenton"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:109
-msgid ""
-"You can use <a "
-"href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
-" formatting."
-msgstr "Vi povas uzi por markado la lingvon «<a href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a>»."
-
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:113
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:102
 msgid "Add this comment"
 msgstr "Aldoni ĉi tiun komenton"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:132
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:123
 msgid "at"
 msgstr "je"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:152
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:144
 #, python-format
 msgid ""
 "<h3>Added on</h3>\n"
 "      <p>%(date)s</p>"
 msgstr "<h3>Aldonita je</h3>\n      <p>la %(date)s</p>"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:171
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:187
-msgid "Attachments"
-msgstr "Kundosieroj"
-
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:192
-msgid "Add attachment"
-msgstr "Aldoni kundosieron"
-
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:35
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:28
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:40
 #, python-format
-msgid "Add %(title)s to collection"
-msgstr ""
+msgid "Add “%(media_title)s” to a collection"
+msgstr "Aldoni «%(media_title)s» al kolekto"
 
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:52
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:54
 msgid "+"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:57
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:58
 msgid "Add a new collection"
-msgstr ""
+msgstr "Aldoni novan kolekton"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:29
 msgid ""
@@ -844,73 +959,57 @@ msgstr "Se vi estas tiu sed vi perdis vian kontrolmesaĝon, vi povas <a href=\"%
 msgid "Here's a spot to tell others about yourself."
 msgstr "Jen estas spaceto por rakonti pri vi al aliaj."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:101
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:118
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:100
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:117
 msgid "Edit profile"
 msgstr "Redakti profilon"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:106
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:105
 msgid "This user hasn't filled in their profile (yet)."
 msgstr "Ĉi tiu uzanto ne jam aldonis informojn pri si."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:125
-msgid "Change account settings"
-msgstr "Ŝanĝi kontagordojn"
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:124
+msgid "Browse collections"
+msgstr "Vidi kolektojn"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:138
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:137
 #, python-format
 msgid "View all of %(username)s's media"
 msgstr "Rigardi ĉiujn dosierojn de %(username)s"
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:151
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:150
 msgid ""
 "This is where your media will appear, but you don't seem to have added "
 "anything yet."
 msgstr "Ĝuste ĉi tie aperos viaj dosieroj, sed vi ŝajne ankoraŭ nenion alŝutis."
 
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:157
-msgid "Add media"
-msgstr "Aldoni dosieron"
-
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:163
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:87
-#: mediagoblin/templates/mediagoblin/utils/object_gallery.html:72
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:162
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:84
+#: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
 msgid "There doesn't seem to be any media here yet..."
 msgstr "Ĉi tie ŝajne estas ankoraŭ neniuj dosieroj…"
 
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:39
-#, python-format
-msgid ""
-"<br />\n"
-"              <a href=\"%(entry_url)s\">%(note)s</a>"
-msgstr ""
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
+msgid "(remove)"
+msgstr "(forigi)"
 
-#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:47
-#, python-format
-msgid "<br /><a href=\"%(remove_url)s\" class=\"remove\">(remove)</a>"
-msgstr ""
+#: mediagoblin/templates/mediagoblin/utils/collections.html:21
+msgid "Collected in"
+msgstr "En kolektoj:"
 
-#: mediagoblin/templates/mediagoblin/utils/collections.html:20
-#, python-format
-msgid "In collections (%(collected)s)"
-msgstr ""
+#: mediagoblin/templates/mediagoblin/utils/collections.html:40
+msgid "Add to a collection"
+msgstr "Aldoni al kolekto"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
+#: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
 msgid "feed icon"
 msgstr "flusimbolo"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
+#: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:23
 msgid "Atom feed"
 msgstr "Atom-a informfluo"
-
-#: mediagoblin/templates/mediagoblin/utils/geolocation_map.html:25
-msgid "Location"
-msgstr "Loko"
-
-#: mediagoblin/templates/mediagoblin/utils/geolocation_map.html:38
-#, python-format
-msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
-msgstr "Vidi sur <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:25
 msgid "All rights reserved"
@@ -942,98 +1041,134 @@ msgstr "malpli nova"
 msgid "Tagged with"
 msgstr "Markita per"
 
-#: mediagoblin/tools/exif.py:78
+#: mediagoblin/tools/exif.py:80
 msgid "Could not read the image file."
 msgstr "Malsukcesis lego de la bildodosiero"
 
-#: mediagoblin/user_pages/forms.py:28
+#: mediagoblin/tools/response.py:35
+msgid "Oops!"
+msgstr "Oj!"
+
+#: mediagoblin/tools/response.py:36
+msgid "An error occured"
+msgstr "Okazis eraro"
+
+#: mediagoblin/tools/response.py:51
+msgid "Operation not allowed"
+msgstr ""
+
+#: mediagoblin/tools/response.py:52
+msgid ""
+"Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
+"function that you are not allowed to. Have you been trying to delete all "
+"user accounts again?"
+msgstr ""
+
+#: mediagoblin/tools/response.py:60
+msgid ""
+"There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
+" the address is correct, maybe the page you're looking for has been moved or"
+" deleted."
+msgstr ""
+
+#: mediagoblin/user_pages/forms.py:23
+msgid "Comment"
+msgstr "Komenti"
+
+#: mediagoblin/user_pages/forms.py:25
+msgid ""
+"You can use <a "
+"href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
+" formatting."
+msgstr "Vi povas uzi por markado la lingvon «<a href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a>»."
+
+#: mediagoblin/user_pages/forms.py:31
 msgid "I am sure I want to delete this"
 msgstr "Jes, mi volas forigi ĉi tion."
 
-#: mediagoblin/user_pages/forms.py:32
-msgid "I am sure I want to remove this item from the collection"
-msgstr ""
-
 #: mediagoblin/user_pages/forms.py:35
-msgid "-- Select --"
-msgstr ""
+msgid "I am sure I want to remove this item from the collection"
+msgstr "Jes, mi volas forigi ĉi tiun dosieron el la kolekto"
 
-#: mediagoblin/user_pages/forms.py:37
+#: mediagoblin/user_pages/forms.py:39
+msgid "Collection"
+msgstr "Kolekto"
+
+#: mediagoblin/user_pages/forms.py:40
+msgid "-- Select --"
+msgstr "-- Elektu --"
+
+#: mediagoblin/user_pages/forms.py:42
 msgid "Include a note"
-msgstr ""
+msgstr "Rimarko"
 
 #: mediagoblin/user_pages/lib.py:56
 msgid "commented on your post"
 msgstr "komentis je via afiŝo"
 
-#: mediagoblin/user_pages/views.py:161
+#: mediagoblin/user_pages/views.py:166
 msgid "Oops, your comment was empty."
 msgstr "Oj, via komento estis malplena."
 
-#: mediagoblin/user_pages/views.py:167
+#: mediagoblin/user_pages/views.py:172
 msgid "Your comment has been posted!"
 msgstr "Via komento estis afiŝita!"
 
-#: mediagoblin/user_pages/views.py:235
-msgid "You have to select or add a collection"
-msgstr ""
+#: mediagoblin/user_pages/views.py:197
+msgid "Please check your entries and try again."
+msgstr "Bonvolu kontroli vian enigitaĵon kaj reprovi."
 
-#: mediagoblin/user_pages/views.py:243
+#: mediagoblin/user_pages/views.py:237
+msgid "You have to select or add a collection"
+msgstr "Necesas elekti aŭ aldoni kolekton"
+
+#: mediagoblin/user_pages/views.py:248
 #, python-format
 msgid "\"%s\" already in collection \"%s\""
-msgstr ""
+msgstr "«%s» jam estas en la kolekto «%s»"
 
-#: mediagoblin/user_pages/views.py:258
+#: mediagoblin/user_pages/views.py:264
 #, python-format
 msgid "\"%s\" added to collection \"%s\""
-msgstr ""
+msgstr "«%s» estis aldonita al la kolekto «%s»"
 
-#: mediagoblin/user_pages/views.py:266
-msgid "Please check your entries and try again."
-msgstr ""
-
-#: mediagoblin/user_pages/views.py:297
-msgid ""
-"Some of the files with this entry seem to be missing.  Deleting anyway."
-msgstr "Iuj dosieroj de ĉi tiu ero ŝajne mankas.  Mi tamen forigas."
-
-#: mediagoblin/user_pages/views.py:302
+#: mediagoblin/user_pages/views.py:286
 msgid "You deleted the media."
 msgstr "Vi forigis la dosieron."
 
-#: mediagoblin/user_pages/views.py:309
+#: mediagoblin/user_pages/views.py:293
 msgid "The media was not deleted because you didn't check that you were sure."
 msgstr "La dosiero ne estis forigita, ĉar vi ne konfirmis vian certecon per la markilo."
 
-#: mediagoblin/user_pages/views.py:317
+#: mediagoblin/user_pages/views.py:301
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr "Vi estas forigonta dosieron de alia uzanto. Estu singardema."
 
-#: mediagoblin/user_pages/views.py:379
+#: mediagoblin/user_pages/views.py:375
 msgid "You deleted the item from the collection."
-msgstr ""
+msgstr "Vi forigis la dosieron el la kolekto."
 
-#: mediagoblin/user_pages/views.py:383
+#: mediagoblin/user_pages/views.py:379
 msgid "The item was not removed because you didn't check that you were sure."
-msgstr ""
+msgstr "La dosiero ne estis forigita, ĉar vi ne konfirmis vian certecon per la markilo."
 
-#: mediagoblin/user_pages/views.py:393
+#: mediagoblin/user_pages/views.py:389
 msgid ""
 "You are about to delete an item from another user's collection. Proceed with"
 " caution."
-msgstr ""
+msgstr "Vi estas forigonta dosieron el kolekto de alia uzanto.  Agu singardeme."
 
-#: mediagoblin/user_pages/views.py:426
+#: mediagoblin/user_pages/views.py:422
 #, python-format
 msgid "You deleted the collection \"%s\""
-msgstr ""
+msgstr "Vi forigis la kolekton «%s»"
 
-#: mediagoblin/user_pages/views.py:433
+#: mediagoblin/user_pages/views.py:429
 msgid ""
 "The collection was not deleted because you didn't check that you were sure."
-msgstr ""
+msgstr "La kolekto ne estis forigita, ĉar vi ne konfirmis vian certecon per la markilo."
 
-#: mediagoblin/user_pages/views.py:443
+#: mediagoblin/user_pages/views.py:439
 msgid ""
 "You are about to delete another user's collection. Proceed with caution."
-msgstr ""
+msgstr "Vi estas forigonta kolekton de alia uzanto.  Agu singardeme."

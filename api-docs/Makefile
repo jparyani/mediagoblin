@@ -8,7 +8,7 @@ SPHINXAPIDOC          = sphinx-apidoc
 PAPER                 =
 BUILDDIR              = build
 SOURCEDIR             = source
-MEDIAGOBLIN_SOURCEDIR = ../
+MEDIAGOBLIN_SOURCEDIR = ../mediagoblin
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4

@@ -15,11 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from mediagoblin.db.sql.base import Base
+from mediagoblin.db.base import Base
 
 from sqlalchemy import (
     Column, Integer, ForeignKey)
 from sqlalchemy.orm import relationship, backref
+
+
+BACKREF_NAME = "audio__media_data"
 
 
 class AudioData(Base):
@@ -29,7 +32,8 @@ class AudioData(Base):
     media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
         primary_key=True)
     get_media_entry = relationship("MediaEntry",
-        backref=backref("audio__media_data", cascade="all, delete-orphan"))
+        backref=backref(BACKREF_NAME, uselist=False,
+                        cascade="all, delete-orphan"))
 
 
 DATA_MODEL = AudioData

@@ -15,11 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+
 from configobj import ConfigObj
+import pytest
+import pkg_resources
+from validate import VdtTypeError
+
 from mediagoblin import mg_globals
 from mediagoblin.init.plugins import setup_plugins
+from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.tools import pluginapi
-from nose.tools import eq_
+from mediagoblin.tests.tools import get_app
 
 
 def with_cleanup(*modules_to_delete):
@@ -97,7 +103,7 @@ def test_no_plugins():
     setup_plugins()
 
     # Make sure we didn't load anything.
-    eq_(len(pman.plugins), 0)
+    assert len(pman.plugins) == 0
 
 
 @with_cleanup('mediagoblin.plugins.sampleplugin')
@@ -117,14 +123,14 @@ def test_one_plugin():
     setup_plugins()
 
     # Make sure we only found one plugin
-    eq_(len(pman.plugins), 1)
+    assert len(pman.plugins) == 1
     # Make sure the plugin is the one we think it is.
-    eq_(pman.plugins[0], 'mediagoblin.plugins.sampleplugin')
+    assert pman.plugins[0] == 'mediagoblin.plugins.sampleplugin'
     # Make sure there was one hook registered
-    eq_(len(pman.hooks), 1)
+    assert len(pman.hooks) == 1
     # Make sure _setup_plugin_called was called once
     import mediagoblin.plugins.sampleplugin
-    eq_(mediagoblin.plugins.sampleplugin._setup_plugin_called, 1)
+    assert mediagoblin.plugins.sampleplugin._setup_plugin_called == 1
 
 
 @with_cleanup('mediagoblin.plugins.sampleplugin')
@@ -145,14 +151,14 @@ def test_same_plugin_twice():
     setup_plugins()
 
     # Make sure we only found one plugin
-    eq_(len(pman.plugins), 1)
+    assert len(pman.plugins) == 1
     # Make sure the plugin is the one we think it is.
-    eq_(pman.plugins[0], 'mediagoblin.plugins.sampleplugin')
+    assert pman.plugins[0] == 'mediagoblin.plugins.sampleplugin'
     # Make sure there was one hook registered
-    eq_(len(pman.hooks), 1)
+    assert len(pman.hooks) == 1
     # Make sure _setup_plugin_called was called once
     import mediagoblin.plugins.sampleplugin
-    eq_(mediagoblin.plugins.sampleplugin._setup_plugin_called, 1)
+    assert mediagoblin.plugins.sampleplugin._setup_plugin_called == 1
 
 
 @with_cleanup()
@@ -172,4 +178,183 @@ def test_disabled_plugin():
     setup_plugins()
 
     # Make sure we didn't load the plugin
-    eq_(len(pman.plugins), 0)
+    assert len(pman.plugins) == 0
+
+
+CONFIG_ALL_CALLABLES = [
+        ('mediagoblin', {}, []),
+        ('plugins', {}, [
+                ('mediagoblin.tests.testplugins.callables1', {}, []),
+                ('mediagoblin.tests.testplugins.callables2', {}, []),
+                ('mediagoblin.tests.testplugins.callables3', {}, []),
+            ])
+    ]
+
+
+@with_cleanup()
+def test_hook_handle():
+    """
+    Test the hook_handle method
+    """
+    cfg = build_config(CONFIG_ALL_CALLABLES)
+
+    mg_globals.app_config = cfg['mediagoblin']
+    mg_globals.global_config = cfg
+
+    setup_plugins()
+
+    # Just one hook provided
+    call_log = []
+    assert pluginapi.hook_handle(
+        "just_one", call_log) == "Called just once"
+    assert call_log == ["expect this one call"]
+
+    # Nothing provided and unhandled not okay
+    call_log = []
+    pluginapi.hook_handle(
+        "nothing_handling", call_log) == None
+    assert call_log == []
+
+    # Nothing provided and unhandled okay
+    call_log = []
+    assert pluginapi.hook_handle(
+        "nothing_handling", call_log, unhandled_okay=True) is None
+    assert call_log == []
+    
+    # Multiple provided, go with the first!
+    call_log = []
+    assert pluginapi.hook_handle(
+        "multi_handle", call_log) == "the first returns"
+    assert call_log == ["Hi, I'm the first"]
+
+    # Multiple provided, one has CantHandleIt
+    call_log = []
+    assert pluginapi.hook_handle(
+        "multi_handle_with_canthandle",
+        call_log) == "the second returns"
+    assert call_log == ["Hi, I'm the second"]
+
+
+@with_cleanup()
+def test_hook_runall():
+    """
+    Test the hook_runall method
+    """
+    cfg = build_config(CONFIG_ALL_CALLABLES)
+
+    mg_globals.app_config = cfg['mediagoblin']
+    mg_globals.global_config = cfg
+
+    setup_plugins()
+
+    # Just one hook, check results
+    call_log = []
+    assert pluginapi.hook_runall(
+        "just_one", call_log) == ["Called just once"]
+    assert call_log == ["expect this one call"]
+
+    # None provided, check results
+    call_log = []
+    assert pluginapi.hook_runall(
+        "nothing_handling", call_log) == []
+    assert call_log == []
+
+    # Multiple provided, check results
+    call_log = []
+    assert pluginapi.hook_runall(
+        "multi_handle", call_log) == [
+            "the first returns",
+            "the second returns",
+            "the third returns",
+        ]
+    assert call_log == [
+        "Hi, I'm the first",
+        "Hi, I'm the second",
+        "Hi, I'm the third"]
+
+    # Multiple provided, one has CantHandleIt, check results
+    call_log = []
+    assert pluginapi.hook_runall(
+        "multi_handle_with_canthandle", call_log) == [
+            "the second returns",
+            "the third returns",
+        ]
+    assert call_log == [
+        "Hi, I'm the second",
+        "Hi, I'm the third"]
+
+
+@with_cleanup()
+def test_hook_transform():
+    """
+    Test the hook_transform method
+    """
+    cfg = build_config(CONFIG_ALL_CALLABLES)
+
+    mg_globals.app_config = cfg['mediagoblin']
+    mg_globals.global_config = cfg
+
+    setup_plugins()
+
+    assert pluginapi.hook_transform(
+        "expand_tuple", (-1, 0)) == (-1, 0, 1, 2, 3)
+
+
+def test_plugin_config():
+    """
+    Make sure plugins can set up their own config
+    """
+    config, validation_result = read_mediagoblin_config(
+        pkg_resources.resource_filename(
+            'mediagoblin.tests', 'appconfig_plugin_specs.ini'))
+
+    pluginspec_section = config['plugins'][
+        'mediagoblin.tests.testplugins.pluginspec']
+    assert pluginspec_section['some_string'] == 'not blork'
+    assert pluginspec_section['dont_change_me'] == 'still the default'
+
+    # Make sure validation works... this should be an error
+    assert isinstance(
+        validation_result[
+            'plugins'][
+                'mediagoblin.tests.testplugins.pluginspec'][
+                    'some_int'],
+        VdtTypeError)
+
+    # the callables thing shouldn't really have anything though.
+    assert len(config['plugins'][
+        'mediagoblin.tests.testplugins.callables1']) == 0
+
+
+@pytest.fixture()
+def context_modified_app(request):
+    """
+    Get a MediaGoblin app fixture using appconfig_context_modified.ini
+    """
+    return get_app(
+        request,
+        mgoblin_config=pkg_resources.resource_filename(
+            'mediagoblin.tests', 'appconfig_context_modified.ini'))
+
+
+def test_modify_context(context_modified_app):
+    """
+    Test that we can modify both the view/template specific and
+    global contexts for templates.
+    """
+    # Specific thing passed into a page
+    result = context_modified_app.get("/modify_context/specific/")
+    assert result.body.strip() == """Specific page!
+
+specific thing: in yer specificpage
+global thing: globally appended!
+something: orother
+doubleme: happyhappy"""
+
+    # General test, should have global context variable only
+    result = context_modified_app.get("/modify_context/")
+    assert result.body.strip() == """General page!
+
+global thing: globally appended!
+lol: cats
+doubleme: joyjoy"""

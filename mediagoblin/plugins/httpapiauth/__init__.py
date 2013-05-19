@@ -15,9 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import base64
 
-from werkzeug.exceptions import BadRequest, Unauthorized
+from werkzeug.exceptions import Unauthorized
 
 from mediagoblin.plugins.api.tools import Auth
 
@@ -41,7 +40,7 @@ class HTTPAuth(Auth):
             return False
 
         user = request.db.User.query.filter_by(
-                username=request.authorization['username']).first()
+                username=unicode(request.authorization['username'])).first()
 
         if user.check_login(request.authorization['password']):
             request.user = user

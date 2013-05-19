@@ -16,7 +16,6 @@
 
 import sys
 
-DISPLAY_IMAGE_FETCHING_ORDER = [u'medium', u'original', u'thumb']
 
 global TESTS_ENABLED
 TESTS_ENABLED = False

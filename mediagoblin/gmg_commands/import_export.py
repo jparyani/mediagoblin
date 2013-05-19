@@ -105,7 +105,7 @@ def env_import(args):
     setup_storage()
 
     global_config, app_config = setup_global_and_app_config(args.conf_file)
-    connection, db = setup_connection_and_db_from_config(
+    db = setup_connection_and_db_from_config(
         app_config)
 
     tf = tarfile.open(
@@ -243,8 +243,7 @@ def env_export(args):
 
     setup_storage()
 
-    connection, db = setup_connection_and_db_from_config(
-        app_config)
+    db = setup_connection_and_db_from_config(app_config)
 
     _export_database(db, args)
 

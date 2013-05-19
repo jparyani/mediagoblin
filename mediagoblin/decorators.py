@@ -17,11 +17,11 @@
 from functools import wraps
 
 from urlparse import urljoin
-from urllib import urlencode
+from werkzeug.exceptions import Forbidden, NotFound
+from werkzeug.urls import url_quote
 
-from webob import exc
-
-from mediagoblin.db.util import ObjectId, InvalidId
+from mediagoblin import mg_globals as mgg
+from mediagoblin.db.models import MediaEntry, User
 from mediagoblin.tools.response import redirect, render_404
 
 
@@ -32,25 +32,36 @@ def require_active_login(controller):
     @wraps(controller)
     def new_controller_func(request, *args, **kwargs):
         if request.user and \
-                request.user.get('status') == u'needs_email_verification':
+                request.user.status == u'needs_email_verification':
             return redirect(
                 request, 'mediagoblin.user_pages.user_home',
                 user=request.user.username)
-        elif not request.user or request.user.get('status') != u'active':
+        elif not request.user or request.user.status != u'active':
             next_url = urljoin(
                     request.urlgen('mediagoblin.auth.login',
                         qualified=True),
                     request.url)
 
-            return exc.HTTPFound(
-                location='?'.join([
-                    request.urlgen('mediagoblin.auth.login'),
-                    urlencode({
-                        'next': next_url})]))
+            return redirect(request, 'mediagoblin.auth.login',
+                            next=next_url)
 
         return controller(request, *args, **kwargs)
 
     return new_controller_func
+
+def active_user_from_url(controller):
+    """Retrieve User() from <user> URL pattern and pass in as url_user=...
+
+    Returns a 404 if no such active user has been found"""
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        user = User.query.filter_by(username=request.matchdict['user']).first()
+        if user is None:
+            return render_404(request)
+
+        return controller(request, *args, url_user=user, **kwargs)
+
+    return wrapper
 
 
 def user_may_delete_media(controller):
@@ -59,11 +70,10 @@ def user_may_delete_media(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        uploader_id = request.db.MediaEntry.find_one(
-            {'_id': ObjectId(request.matchdict['media'])}).uploader
+        uploader_id = kwargs['media'].uploader
         if not (request.user.is_admin or
-                request.user._id == uploader_id):
-            return exc.HTTPForbidden()
+                request.user.id == uploader_id):
+            raise Forbidden()
 
         return controller(request, *args, **kwargs)
 
@@ -79,8 +89,8 @@ def user_may_alter_collection(controller):
         creator_id = request.db.User.find_one(
             {'username': request.matchdict['user']}).id
         if not (request.user.is_admin or
-                request.user._id == creator_id):
-            return exc.HTTPForbidden()
+                request.user.id == creator_id):
+            raise Forbidden()
 
         return controller(request, *args, **kwargs)
 
@@ -111,29 +121,34 @@ def get_user_media_entry(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        user = request.db.User.find_one(
-            {'username': request.matchdict['user']})
-
+        user = User.query.filter_by(username=request.matchdict['user']).first()
         if not user:
-            return render_404(request)
-        media = request.db.MediaEntry.find_one(
-            {'slug': request.matchdict['media'],
-             'state': u'processed',
-             'uploader': user._id})
+            raise NotFound()
 
-        # no media via slug?  Grab it via ObjectId
-        if not media:
+        media = None
+
+        # might not be a slug, might be an id, but whatever
+        media_slug = request.matchdict['media']
+
+        # if it starts with id: it actually isn't a slug, it's an id.
+        if media_slug.startswith(u'id:'):
             try:
-                media = request.db.MediaEntry.find_one(
-                    {'_id': ObjectId(request.matchdict['media']),
-                     'state': u'processed',
-                     'uploader': user._id})
-            except InvalidId:
-                return render_404(request)
+                media = MediaEntry.query.filter_by(
+                    id=int(media_slug[3:]),
+                    state=u'processed',
+                    uploader=user.id).first()
+            except ValueError:
+                raise NotFound()
+        else:
+            # no magical id: stuff?  It's a slug!
+            media = MediaEntry.query.filter_by(
+                slug=media_slug,
+                state=u'processed',
+                uploader=user.id).first()
 
-            # Still no media?  Okay, 404.
-            if not media:
-                return render_404(request)
+        if not media:
+            # Didn't find anything?  Okay, 404.
+            raise NotFound()
 
         return controller(request, media=media, *args, **kwargs)
 
@@ -154,7 +169,7 @@ def get_user_collection(controller):
 
         collection = request.db.Collection.find_one(
             {'slug': request.matchdict['collection'],
-             'creator': user._id})
+             'creator': user.id})
 
         # Still no collection?  Okay, 404.
         if not collection:
@@ -177,12 +192,8 @@ def get_user_collection_item(controller):
         if not user:
             return render_404(request)
 
-        collection = request.db.Collection.find_one(
-            {'slug': request.matchdict['collection'],
-             'creator': user._id})
-
         collection_item = request.db.CollectionItem.find_one(
-            {'_id': request.matchdict['collection_item'] })
+            {'id': request.matchdict['collection_item'] })
 
         # Still no collection item?  Okay, 404.
         if not collection_item:
@@ -199,17 +210,28 @@ def get_media_entry_by_id(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        try:
-            media = request.db.MediaEntry.find_one(
-                {'_id': ObjectId(request.matchdict['media']),
-                 'state': u'processed'})
-        except InvalidId:
-            return render_404(request)
-
+        media = MediaEntry.query.filter_by(
+                id=request.matchdict['media_id'],
+                state=u'processed').first()
         # Still no media?  Okay, 404.
         if not media:
+            return render_404(request)
+
+        given_username = request.matchdict.get('user')
+        if given_username and (given_username != media.get_uploader.username):
             return render_404(request)
 
         return controller(request, media=media, *args, **kwargs)
 
     return wrapper
+
+
+def get_workbench(func):
+    """Decorator, passing in a workbench as kwarg which is cleaned up afterwards"""
+
+    @wraps(func)
+    def new_func(*args, **kwargs):
+        with mgg.workbench_manager.create() as workbench:
+            return func(*args, workbench=workbench, **kwargs)
+
+    return new_func

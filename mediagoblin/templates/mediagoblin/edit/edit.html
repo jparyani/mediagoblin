@@ -29,13 +29,12 @@
 
   <form action="{{ request.urlgen('mediagoblin.edit.edit_media',
                                user= media.get_uploader.username,
-                               media= media._id) }}"
+                               media_id=media.id) }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box_xl edit_box">
       <h1>{% trans media_title=media.title %}Editing {{ media_title }}{% endtrans %}</h1>
       <div style="text-align: center;" >
-        <img src="{{ request.app.public_store.file_url(
-                         media.media_files['thumb']) }}" />
+        <img src="{{ media.thumb_url }}" />
       </div>
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
@@ -46,4 +45,4 @@
     </div>
   </form>
 
-{% endblock %}    
+{% endblock %}

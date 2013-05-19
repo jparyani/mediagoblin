@@ -1,0 +1,1172 @@
+# Translations template for PROJECT.
+# Copyright (C) 2013 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# 
+# Translators:
+#   <genghiskhan@gmx.ca>, 2012.
+# Isratine Citizen <genghiskhan@gmx.ca>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: GNU MediaGoblin\n"
+"Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
+"POT-Creation-Date: 2013-03-04 18:04-0600\n"
+"PO-Revision-Date: 2013-03-05 00:04+0000\n"
+"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+"Language: he\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: mediagoblin/auth/forms.py:28
+msgid "Invalid User name or email address."
+msgstr ""
+
+#: mediagoblin/auth/forms.py:29
+msgid "This field does not take email addresses."
+msgstr ""
+
+#: mediagoblin/auth/forms.py:30
+msgid "This field requires an email address."
+msgstr ""
+
+#: mediagoblin/auth/forms.py:52 mediagoblin/auth/forms.py:67
+msgid "Username"
+msgstr "שם משתמש"
+
+#: mediagoblin/auth/forms.py:56 mediagoblin/auth/forms.py:71
+msgid "Password"
+msgstr "סיסמה"
+
+#: mediagoblin/auth/forms.py:60
+msgid "Email address"
+msgstr "כתובת דוא״ל"
+
+#: mediagoblin/auth/forms.py:78
+msgid "Username or email"
+msgstr "שם משתמש או דוא״ל"
+
+#: mediagoblin/auth/views.py:54
+msgid "Sorry, registration is disabled on this instance."
+msgstr "צר לי, רישום הינו מנוטרל על שרת זה."
+
+#: mediagoblin/auth/views.py:68
+msgid "Sorry, a user with that name already exists."
+msgstr "צר לי, משתמש עם שם זה כבר קיים."
+
+#: mediagoblin/auth/views.py:72
+msgid "Sorry, a user with that email address already exists."
+msgstr "צר לי, משתמש עם דוא״ל זה כבר קיים."
+
+#: mediagoblin/auth/views.py:174
+msgid ""
+"Your email address has been verified. You may now login, edit your profile, "
+"and submit images!"
+msgstr "כתובת הדוא״ל שלך אומתה. כעת באפשרותך להתחבר, לערוך את דיוקנך, ולשלוח תמונות!"
+
+#: mediagoblin/auth/views.py:180
+msgid "The verification key or user id is incorrect"
+msgstr "מפתח האימות או זהות משתמש הינם שגויים"
+
+#: mediagoblin/auth/views.py:198
+msgid "You must be logged in so we know who to send the email to!"
+msgstr "עליך להתחבר על מנת שנדע אל מי לשלוח את הדוא״ל!"
+
+#: mediagoblin/auth/views.py:206
+msgid "You've already verified your email address!"
+msgstr "כבר אימתת את כתובת הדוא״ל שלך!"
+
+#: mediagoblin/auth/views.py:219
+msgid "Resent your verification email."
+msgstr "שלח שוב את דוא״ל האימות שלך."
+
+#: mediagoblin/auth/views.py:250
+msgid ""
+"If that email address (case sensitive!) is registered an email has been sent"
+" with instructions on how to change your password."
+msgstr ""
+
+#: mediagoblin/auth/views.py:261
+msgid "Couldn't find someone with that username."
+msgstr ""
+
+#: mediagoblin/auth/views.py:264
+msgid ""
+"An email has been sent with instructions on how to change your password."
+msgstr "דוא״ל נשלח בצירוף הוראות בנוגע לכיצד ניתן לשנות את סיסמתך."
+
+#: mediagoblin/auth/views.py:271
+msgid ""
+"Could not send password recovery email as your username is inactive or your "
+"account's email address has not been verified."
+msgstr "לא היה ניתן לשלוח דוא״ל לשחזור סיסמה מאחר ושם המשתמש שלך אינו פעיל או שכתובת הדוא״ל של חשבונך לא אומתה."
+
+#: mediagoblin/auth/views.py:328
+msgid "You can now log in using your new password."
+msgstr "כעת ביכולתך להתחבר באמצעות סיסמתך החדשה."
+
+#: mediagoblin/edit/forms.py:25 mediagoblin/edit/forms.py:93
+#: mediagoblin/submit/forms.py:28 mediagoblin/submit/forms.py:47
+#: mediagoblin/user_pages/forms.py:45
+msgid "Title"
+msgstr "כותרת"
+
+#: mediagoblin/edit/forms.py:28 mediagoblin/submit/forms.py:31
+msgid "Description of this work"
+msgstr "תיאור של מלאכה זו"
+
+#: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:52
+#: mediagoblin/edit/forms.py:97 mediagoblin/submit/forms.py:32
+#: mediagoblin/submit/forms.py:51 mediagoblin/user_pages/forms.py:49
+msgid ""
+"You can use\n"
+"                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
+"                      Markdown</a> for formatting."
+msgstr "ביכולתך להשתמש בתחביר\n                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n                      Markdown</a> לעיצוב."
+
+#: mediagoblin/edit/forms.py:33 mediagoblin/submit/forms.py:36
+msgid "Tags"
+msgstr "תגיות"
+
+#: mediagoblin/edit/forms.py:35 mediagoblin/submit/forms.py:38
+msgid "Separate tags by commas."
+msgstr "הפרד תגיות בעזרת פסיקים."
+
+#: mediagoblin/edit/forms.py:38 mediagoblin/edit/forms.py:101
+msgid "Slug"
+msgstr "חשופית"
+
+#: mediagoblin/edit/forms.py:39 mediagoblin/edit/forms.py:102
+msgid "The slug can't be empty"
+msgstr "החשופית לא יכולה להיות ריקה"
+
+#: mediagoblin/edit/forms.py:40
+msgid ""
+"The title part of this media's address. You usually don't need to change "
+"this."
+msgstr "אזור הכותרת של כתובת מדיה זו. לרוב אין הכרח לשנות את חלק זה."
+
+#: mediagoblin/edit/forms.py:44 mediagoblin/submit/forms.py:41
+#: mediagoblin/templates/mediagoblin/utils/license.html:20
+msgid "License"
+msgstr "רשיון"
+
+#: mediagoblin/edit/forms.py:50
+msgid "Bio"
+msgstr "ביו"
+
+#: mediagoblin/edit/forms.py:56
+msgid "Website"
+msgstr "אתר רשת"
+
+#: mediagoblin/edit/forms.py:58
+msgid "This address contains errors"
+msgstr "כתובת זו מכילה שגיאות"
+
+#: mediagoblin/edit/forms.py:63
+msgid "Old password"
+msgstr "סיסמה ישנה"
+
+#: mediagoblin/edit/forms.py:64
+msgid "Enter your old password to prove you own this account."
+msgstr "הזן את סיסמתך הישנה כדי להוכיח שאתה הבעלים של חשבון זה."
+
+#: mediagoblin/edit/forms.py:67
+msgid "New password"
+msgstr "סיסמה חדשה"
+
+#: mediagoblin/edit/forms.py:74
+msgid "License preference"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:80
+msgid "This will be your default license on upload forms."
+msgstr ""
+
+#: mediagoblin/edit/forms.py:82
+msgid "Email me when others comment on my media"
+msgstr "שלח לי דוא״ל כאשר אחרים מגיבים על המדיה שלי"
+
+#: mediagoblin/edit/forms.py:94
+msgid "The title can't be empty"
+msgstr "הכותרת לא יכולה להיות ריקה"
+
+#: mediagoblin/edit/forms.py:96 mediagoblin/submit/forms.py:50
+#: mediagoblin/user_pages/forms.py:48
+msgid "Description of this collection"
+msgstr "תיאור אוסף זה"
+
+#: mediagoblin/edit/forms.py:103
+msgid ""
+"The title part of this collection's address. You usually don't need to "
+"change this."
+msgstr "אזור הכותרת של כתובת אוסף זה. לרוב אין הכרח לשנות את חלק זה."
+
+#: mediagoblin/edit/views.py:66
+msgid "An entry with that slug already exists for this user."
+msgstr "רשומה עם חשופית זו כבר קיימת עבור משתמש זה."
+
+#: mediagoblin/edit/views.py:85
+msgid "You are editing another user's media. Proceed with caution."
+msgstr "אתה עורך מדיה של משתמש אחר. המשך בזהירות."
+
+#: mediagoblin/edit/views.py:155
+#, python-format
+msgid "You added the attachment %s!"
+msgstr "הוספת את התצריף %s!"
+
+#: mediagoblin/edit/views.py:182
+msgid "You can only edit your own profile."
+msgstr ""
+
+#: mediagoblin/edit/views.py:188
+msgid "You are editing a user's profile. Proceed with caution."
+msgstr "אתה עורך דיוקן של משתמש. המשך בזהירות."
+
+#: mediagoblin/edit/views.py:204
+msgid "Profile changes saved"
+msgstr "שינויי דיוקן נשמרו"
+
+#: mediagoblin/edit/views.py:241
+msgid "Wrong password"
+msgstr "סיסמה שגויה"
+
+#: mediagoblin/edit/views.py:252
+msgid "Account settings saved"
+msgstr "הגדרות חשבון נשמרו"
+
+#: mediagoblin/edit/views.py:286
+msgid "You need to confirm the deletion of your account."
+msgstr ""
+
+#: mediagoblin/edit/views.py:322 mediagoblin/submit/views.py:142
+#: mediagoblin/user_pages/views.py:214
+#, python-format
+msgid "You already have a collection called \"%s\"!"
+msgstr "כבר יש לך אוסף שקרוי בשם \"%s\"!"
+
+#: mediagoblin/edit/views.py:326
+msgid "A collection with that slug already exists for this user."
+msgstr "אוסף עם חשופית זו כבר קיים עבור משתמש זה."
+
+#: mediagoblin/edit/views.py:343
+msgid "You are editing another user's collection. Proceed with caution."
+msgstr "אתה עורך אוסף של משתמש אחר. המשך בזהירות."
+
+#: mediagoblin/gmg_commands/theme.py:58
+msgid "Cannot link theme... no theme set\n"
+msgstr "לא ניתן לקשר אל מוטיב... לא הוגדר מוטיב\n"
+
+#: mediagoblin/gmg_commands/theme.py:71
+msgid "No asset directory for this theme\n"
+msgstr "אין מדור נכס עבור מוטיב זה\n"
+
+#: mediagoblin/gmg_commands/theme.py:74
+msgid "However, old link directory symlink found; removed.\n"
+msgstr "בכל אופן, קישור מדור symlink נמצא; הוסר.\n"
+
+#: mediagoblin/meddleware/csrf.py:134
+msgid ""
+"CSRF cookie not present. This is most likely the result of a cookie blocker "
+"or somesuch.<br/>Make sure to permit the settings of cookies for this "
+"domain."
+msgstr ""
+
+#: mediagoblin/media_types/__init__.py:61
+#: mediagoblin/media_types/__init__.py:102
+msgid "Sorry, I don't support that file type :("
+msgstr "צר לי, אינני תומך בטיפוס קובץ זה :("
+
+#: mediagoblin/media_types/video/processing.py:36
+msgid "Video transcoding failed"
+msgstr "המרת וידאו נכשלה"
+
+#: mediagoblin/plugins/geolocation/templates/mediagoblin/plugins/geolocation/map.html:24
+msgid "Location"
+msgstr "מיקום"
+
+#: mediagoblin/plugins/geolocation/templates/mediagoblin/plugins/geolocation/map.html:52
+#, python-format
+msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
+msgstr "הצגה אצל <a href=\"%(osm_url)s\">OpenStreetMap</a>"
+
+#: mediagoblin/plugins/oauth/forms.py:29
+msgid "Allow"
+msgstr "התר"
+
+#: mediagoblin/plugins/oauth/forms.py:30
+msgid "Deny"
+msgstr "אסור"
+
+#: mediagoblin/plugins/oauth/forms.py:34
+msgid "Name"
+msgstr "שם"
+
+#: mediagoblin/plugins/oauth/forms.py:35
+msgid "The name of the OAuth client"
+msgstr "השם של לקוח OAuth"
+
+#: mediagoblin/plugins/oauth/forms.py:36
+msgid "Description"
+msgstr "תיאור"
+
+#: mediagoblin/plugins/oauth/forms.py:38
+msgid ""
+"This will be visible to users allowing your\n"
+"                application to authenticate as them."
+msgstr ""
+
+#: mediagoblin/plugins/oauth/forms.py:40
+msgid "Type"
+msgstr "טיפוס"
+
+#: mediagoblin/plugins/oauth/forms.py:45
+msgid ""
+"<strong>Confidential</strong> - The client can\n"
+"                make requests to the GNU MediaGoblin instance that can not be\n"
+"                intercepted by the user agent (e.g. server-side client).<br />\n"
+"                <strong>Public</strong> - The client can't make confidential\n"
+"                requests to the GNU MediaGoblin instance (e.g. client-side\n"
+"                JavaScript client)."
+msgstr "<strong>סודי</strong> - הלקוח יכול\n                ליצור בקשות אל שרת GNU MediaGoblin שלא יכולות להיבלם\n                על ידי user agent (למשל לקוח server-side).<br />\n                <strong>פומבי</strong> - הלקוח לא יכול ליצור בקשות\n                סודיות אל של GNU MediaGoblin (למשל לקוח\n                ‫JavaScript מתופעל client-side)."
+
+#: mediagoblin/plugins/oauth/forms.py:52
+msgid "Redirect URI"
+msgstr ""
+
+#: mediagoblin/plugins/oauth/forms.py:54
+msgid ""
+"The redirect URI for the applications, this field\n"
+"            is <strong>required</strong> for public clients."
+msgstr ""
+
+#: mediagoblin/plugins/oauth/forms.py:66
+msgid "This field is required for public clients"
+msgstr "שדה זה הינו דרוש עבור לקוחות פומביים"
+
+#: mediagoblin/plugins/oauth/views.py:59
+msgid "The client {0} has been registered!"
+msgstr "הלקוח {0} נרשם!"
+
+#: mediagoblin/plugins/oauth/templates/oauth/client/connections.html:22
+msgid "OAuth client connections"
+msgstr ""
+
+#: mediagoblin/plugins/oauth/templates/oauth/client/list.html:22
+msgid "Your OAuth clients"
+msgstr ""
+
+#: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
+#: mediagoblin/templates/mediagoblin/submit/collection.html:30
+#: mediagoblin/templates/mediagoblin/submit/start.html:34
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
+msgid "Add"
+msgstr "הוסף"
+
+#: mediagoblin/processing/__init__.py:172
+msgid "Invalid file given for media type."
+msgstr "ניתן קובץ שגוי עבור טיפוס מדיה."
+
+#: mediagoblin/submit/forms.py:26
+msgid "File"
+msgstr "קובץ"
+
+#: mediagoblin/submit/views.py:51
+msgid "You must provide a file."
+msgstr "עליך לספק קובץ."
+
+#: mediagoblin/submit/views.py:97
+msgid "Woohoo! Submitted!"
+msgstr "הידד! נשלח!"
+
+#: mediagoblin/submit/views.py:146
+#, python-format
+msgid "Collection \"%s\" added!"
+msgstr "אוסף \"%s\" התווסף!"
+
+#: mediagoblin/templates/mediagoblin/base.html:64
+msgid "Verify your email!"
+msgstr "אמת את הדוא״ל שלך!"
+
+#: mediagoblin/templates/mediagoblin/base.html:65
+msgid "log out"
+msgstr "התנתקות"
+
+#: mediagoblin/templates/mediagoblin/base.html:70
+#: mediagoblin/templates/mediagoblin/auth/login.html:28
+#: mediagoblin/templates/mediagoblin/auth/login.html:36
+#: mediagoblin/templates/mediagoblin/auth/login.html:54
+msgid "Log in"
+msgstr "התחברות"
+
+#: mediagoblin/templates/mediagoblin/base.html:79
+#, python-format
+msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
+msgstr "החשבון של <a href=\"%(user_url)s\">%(user_name)s</a>"
+
+#: mediagoblin/templates/mediagoblin/base.html:86
+msgid "Change account settings"
+msgstr "שנה הגדרות חשבון"
+
+#: mediagoblin/templates/mediagoblin/base.html:90
+#: mediagoblin/templates/mediagoblin/base.html:105
+#: mediagoblin/templates/mediagoblin/admin/panel.html:21
+#: mediagoblin/templates/mediagoblin/admin/panel.html:26
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:26
+msgid "Media processing panel"
+msgstr "לוח עיבוד מדיה"
+
+#: mediagoblin/templates/mediagoblin/base.html:93
+msgid "Log out"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:96
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:156
+msgid "Add media"
+msgstr "הוספת מדיה"
+
+#: mediagoblin/templates/mediagoblin/base.html:99
+#: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
+msgid "Create new collection"
+msgstr "צור אוסף חדש"
+
+#: mediagoblin/templates/mediagoblin/base.html:122
+#, python-format
+msgid ""
+"Powered by <a href=\"http://mediagoblin.org/\" title='Version "
+"%(version)s'>MediaGoblin</a>, a <a href=\"http://gnu.org/\">GNU</a> project."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/base.html:125
+#, python-format
+msgid ""
+"Released under the <a "
+"href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a "
+"href=\"%(source_link)s\">Source code</a> available."
+msgstr "משוחרר תחת הרשיון <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a href=\"%(source_link)s\">קוד מקור</a> זמין."
+
+#: mediagoblin/templates/mediagoblin/error.html:24
+msgid "Image of goblin stressing out"
+msgstr "תמונה של גובלין מתאמץ יתר על המידה"
+
+#: mediagoblin/templates/mediagoblin/root.html:31
+msgid "Explore"
+msgstr "לחקור"
+
+#: mediagoblin/templates/mediagoblin/root.html:33
+msgid "Hi there, welcome to this MediaGoblin site!"
+msgstr "שלום לך, ברוך בואך אל אתר MediaGoblin זה!"
+
+#: mediagoblin/templates/mediagoblin/root.html:35
+msgid ""
+"This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
+"extraordinarily great piece of media hosting software."
+msgstr "אתר זה מריץ <a href=\"http://mediagoblin.org\">MediaGoblin</a>, חתיכת תוכנת אירוח מדיה יוצאת מן הכלל."
+
+#: mediagoblin/templates/mediagoblin/root.html:36
+msgid ""
+"To add your own media, place comments, and more, you can log in with your "
+"MediaGoblin account."
+msgstr "בכדי להוסיף את המדיה שלך, להשים תגובות, ועוד, ביכולתך להתחבר עם חשבון MediaGoblin."
+
+#: mediagoblin/templates/mediagoblin/root.html:38
+msgid "Don't have one yet? It's easy!"
+msgstr "אין ברשותך חשבון עדיין? זה קל!"
+
+#: mediagoblin/templates/mediagoblin/root.html:39
+#, python-format
+msgid ""
+"<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
+"        or\n"
+"        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
+msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">יצירת חשבון אצל אתר זה</a>\n        או\n        <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">להתקין את MediaGoblin על שרתך</a>"
+
+#: mediagoblin/templates/mediagoblin/root.html:47
+msgid "Most recent media"
+msgstr "המדיה האחרונה ביותר"
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:29
+msgid ""
+"Here you can track the state of media being processed on this instance."
+msgstr "כאן ביכולתך לעקוב אחר המצב של המדיה שמתעבדת בשרת זה."
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:32
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:32
+msgid "Media in-processing"
+msgstr "מדיה באמצע-עיבוד"
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:58
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
+msgid "No media in-processing"
+msgstr "אין מדיה באמצע-עיבוד"
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:61
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:59
+msgid "These uploads failed to process:"
+msgstr "העלאות אלה נכשלו להתעבד:"
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:90
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
+msgid "No failed entries!"
+msgstr "אין רשומות כושלות!"
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:92
+msgid "Last 10 successful uploads"
+msgstr "10 העלאות מוצלחות אחרונות"
+
+#: mediagoblin/templates/mediagoblin/admin/panel.html:112
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
+msgid "No processed entries, yet!"
+msgstr "אין רישומים מעובדים, עדיין!"
+
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:28
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:36
+msgid "Set your new password"
+msgstr "הגדר את סיסמתך החדשה"
+
+#: mediagoblin/templates/mediagoblin/auth/change_fp.html:39
+msgid "Set password"
+msgstr "הגדר סיסמה"
+
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:23
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:31
+msgid "Recover password"
+msgstr "שחזר סיסמה"
+
+#: mediagoblin/templates/mediagoblin/auth/forgot_password.html:34
+msgid "Send instructions"
+msgstr "שלח הוראות"
+
+#: mediagoblin/templates/mediagoblin/auth/fp_verification_email.txt:19
+#, python-format
+msgid ""
+"Hi %(username)s,\n"
+"\n"
+"to change your GNU MediaGoblin password, open the following URL in \n"
+"your web browser:\n"
+"\n"
+"%(verification_url)s\n"
+"\n"
+"If you think this is an error, just ignore this email and continue being\n"
+"a happy goblin!"
+msgstr "שלום %(username)s,\n\nבכדי לשנות את סיסמתך אצל GNU MediaGoblin, עליך לפתוח את הכתובת הבאה \nבתוך דפדפן הרשת שלך:\n\n%(verification_url)s\n\nבמידה ואתה חושב שמדובר בשגיאה, פשוט התעלם מן דוא״ל זה והמשך להיות\nגובלין מאושר!"
+
+#: mediagoblin/templates/mediagoblin/auth/login.html:39
+msgid "Logging in failed!"
+msgstr "התחברות נכשלה!"
+
+#: mediagoblin/templates/mediagoblin/auth/login.html:44
+msgid "Don't have an account yet?"
+msgstr "אין לך חשבון עדיין?"
+
+#: mediagoblin/templates/mediagoblin/auth/login.html:45
+msgid "Create one here!"
+msgstr "צור חשבון כאן!"
+
+#: mediagoblin/templates/mediagoblin/auth/login.html:51
+msgid "Forgot your password?"
+msgstr "שכחת את סיסמתך?"
+
+#: mediagoblin/templates/mediagoblin/auth/register.html:28
+#: mediagoblin/templates/mediagoblin/auth/register.html:36
+msgid "Create an account!"
+msgstr "יצירת חשבון!"
+
+#: mediagoblin/templates/mediagoblin/auth/register.html:40
+msgid "Create"
+msgstr "יצירה"
+
+#: mediagoblin/templates/mediagoblin/auth/verification_email.txt:19
+#, python-format
+msgid ""
+"Hi %(username)s,\n"
+"\n"
+"to activate your GNU MediaGoblin account, open the following URL in\n"
+"your web browser:\n"
+"\n"
+"%(verification_url)s"
+msgstr "שלום %(username)s,\n\nבכדי להפעיל את חשבונך אצל GNU MediaGoblin, עליך לפתוח את הכתובת הבאה\nבתוך דפדפן הרשת שלך:\n\n%(verification_url)s"
+
+#: mediagoblin/templates/mediagoblin/bits/logo.html:23
+#: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
+msgid "MediaGoblin logo"
+msgstr "לוגו MediaGoblin"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:23
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:35
+#, python-format
+msgid "Editing attachments for %(media_title)s"
+msgstr "עריכת תצריפים עבור %(media_title)s"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:44
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:159
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:175
+msgid "Attachments"
+msgstr "תצריפים"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:57
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:181
+msgid "Add attachment"
+msgstr "הוספת תצריף"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:61
+#: mediagoblin/templates/mediagoblin/edit/delete_account.html:42
+#: mediagoblin/templates/mediagoblin/edit/edit.html:41
+#: mediagoblin/templates/mediagoblin/edit/edit_collection.html:32
+#: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:46
+#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:52
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:67
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:48
+msgid "Cancel"
+msgstr "ביטול"
+
+#: mediagoblin/templates/mediagoblin/edit/attachments.html:63
+#: mediagoblin/templates/mediagoblin/edit/edit.html:42
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:52
+#: mediagoblin/templates/mediagoblin/edit/edit_collection.html:33
+#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:40
+msgid "Save changes"
+msgstr "שמור שינויים"
+
+#: mediagoblin/templates/mediagoblin/edit/delete_account.html:28
+#, python-format
+msgid "Really delete user '%(user_name)s' and all related media/comments?"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/edit/delete_account.html:35
+msgid "Yes, really delete my account"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/edit/delete_account.html:44
+#: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:47
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
+msgid "Delete permanently"
+msgstr "מחק לצמיתות"
+
+#: mediagoblin/templates/mediagoblin/edit/edit.html:23
+#: mediagoblin/templates/mediagoblin/edit/edit.html:35
+#, python-format
+msgid "Editing %(media_title)s"
+msgstr "ערוך %(media_title)s"
+
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:28
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:40
+#, python-format
+msgid "Changing %(username)s's account settings"
+msgstr "שינוי הגדרות חשבון עבור %(username)s"
+
+#: mediagoblin/templates/mediagoblin/edit/edit_account.html:59
+msgid "Delete my account"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/edit/edit_collection.html:29
+#, python-format
+msgid "Editing %(collection_title)s"
+msgstr "עריכת %(collection_title)s"
+
+#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:23
+#: mediagoblin/templates/mediagoblin/edit/edit_profile.html:34
+#, python-format
+msgid "Editing %(username)s's profile"
+msgstr "עריכת דיוקן עבור %(username)s"
+
+#: mediagoblin/templates/mediagoblin/listings/collection.html:30
+#: mediagoblin/templates/mediagoblin/listings/collection.html:35
+#: mediagoblin/templates/mediagoblin/listings/tag.html:30
+#: mediagoblin/templates/mediagoblin/listings/tag.html:35
+#, python-format
+msgid "Media tagged with: %(tag_name)s"
+msgstr "מדיה מתויגת עם: %(tag_name)s"
+
+#: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:136
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:55
+msgid "Download"
+msgstr "הורד"
+
+#: mediagoblin/templates/mediagoblin/media_displays/ascii.html:38
+msgid "Original"
+msgstr "מקורית"
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:44
+msgid ""
+"Sorry, this audio will not work because \n"
+"\tyour web browser does not support HTML5 \n"
+"\taudio."
+msgstr "צר לי, אודיו זה לא יעבוד מכיוון \n\tשדפדפן הרשת שלך לא תומך \n\tאודיו של HTML5."
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:47
+msgid ""
+"You can get a modern web browser that \n"
+"\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
+"\t  http://getfirefox.com</a>!"
+msgstr "ביכולתך להשיג דפדפן רשת מודרני שכן \n\tמסוגל לנגן את אודיו זה אצל <a href=\"http://getfirefox.com\">\n\t  http://getfirefox.com</a>!"
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:61
+msgid "Original file"
+msgstr "קובץ מקורי"
+
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
+msgid "WebM file (Vorbis codec)"
+msgstr "קובץ WebM (קודק Vorbis)"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:87
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:93
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:99
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:105
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:59
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:65
+#, python-format
+msgid "Image for %(media_title)s"
+msgstr "תמונה עבור %(media_title)s"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
+msgid "Toggle Rotate"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:113
+msgid "Perspective"
+msgstr "נקודת מבט"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:116
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:117
+msgid "Front"
+msgstr "לפנים"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:120
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:121
+msgid "Top"
+msgstr "ראש"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:124
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:125
+msgid "Side"
+msgstr "צד"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:130
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:131
+msgid "WebGL"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:138
+msgid "Download model"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:146
+msgid "File Format"
+msgstr "פורמט קובץ"
+
+#: mediagoblin/templates/mediagoblin/media_displays/stl.html:148
+msgid "Object Height"
+msgstr "גובה אובייקט"
+
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:44
+msgid ""
+"Sorry, this video will not work because\n"
+"      your web browser does not support HTML5 \n"
+"      video."
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:47
+msgid ""
+"You can get a modern web browser that \n"
+"      can play this video at <a href=\"http://getfirefox.com\">\n"
+"      http://getfirefox.com</a>!"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/video.html:69
+msgid "WebM file (640p; VP8/Vorbis)"
+msgstr "קובץ WebM ‫(640p; VP8/Vorbis)"
+
+#: mediagoblin/templates/mediagoblin/submit/collection.html:26
+msgid "Add a collection"
+msgstr "הוסף אוסף"
+
+#: mediagoblin/templates/mediagoblin/submit/start.html:23
+#: mediagoblin/templates/mediagoblin/submit/start.html:30
+msgid "Add your media"
+msgstr "הוספת המדיה שלך"
+
+#: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
+#, python-format
+msgid "%(collection_title)s (%(username)s's collection)"
+msgstr "%(collection_title)s (אוסף של %(username)s)"
+
+#: mediagoblin/templates/mediagoblin/user_pages/collection.html:39
+#, python-format
+msgid "%(collection_title)s by <a href=\"%(user_url)s\">%(username)s</a>"
+msgstr "%(collection_title)s מאת <a href=\"%(user_url)s\">%(username)s</a>"
+
+#: mediagoblin/templates/mediagoblin/user_pages/collection.html:52
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:79
+msgid "Edit"
+msgstr "ערוך"
+
+#: mediagoblin/templates/mediagoblin/user_pages/collection.html:56
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:83
+msgid "Delete"
+msgstr "מחק"
+
+#: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:30
+#: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
+#, python-format
+msgid "Really delete %(title)s?"
+msgstr "באמת למחוק את %(title)s?"
+
+#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:31
+#, python-format
+msgid "Really remove %(media_title)s from %(collection_title)s?"
+msgstr "באמת להסיר את %(media_title)s מן %(collection_title)s?"
+
+#: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:53
+msgid "Remove"
+msgstr "הסר"
+
+#: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:21
+#, python-format
+msgid "%(username)s's collections"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:28
+#, python-format
+msgid "<a href=\"%(user_url)s\">%(username)s</a>'s collections"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/comment_email.txt:19
+#, python-format
+msgid ""
+"Hi %(username)s,\n"
+"%(comment_author)s commented on your post (%(comment_url)s) at %(instance_name)s\n"
+msgstr "שלום %(username)s,\n%(comment_author)s הגיב/ה על פרסומך (%(comment_url)s) אצל %(instance_name)s\n"
+
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
+#, python-format
+msgid "%(username)s's media"
+msgstr "המדיה של %(username)s"
+
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:38
+#, python-format
+msgid ""
+"<a href=\"%(user_url)s\">%(username)s</a>'s media with tag <a "
+"href=\"%(tag_url)s\">%(tag)s</a>"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/gallery.html:48
+#, python-format
+msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
+msgstr "המדיה של <a href=\"%(user_url)s\">%(username)s</a>"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:38
+#, python-format
+msgid "❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a>"
+msgstr "❖ עיון במדיה מאת <a href=\"%(user_url)s\">%(username)s</a>"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:94
+msgid "Add a comment"
+msgstr "הוסף תגובה"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:102
+msgid "Add this comment"
+msgstr "הוסף את תגובה זו"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:123
+msgid "at"
+msgstr "אצל"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:144
+#, python-format
+msgid ""
+"<h3>Added on</h3>\n"
+"      <p>%(date)s</p>"
+msgstr "<h3>הוסף בתאריך</h3>\n      <p>%(date)s</p>"
+
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:28
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:40
+#, python-format
+msgid "Add “%(media_title)s” to a collection"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:54
+msgid "+"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:58
+msgid "Add a new collection"
+msgstr "הוסף אוסף חדש"
+
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:29
+msgid ""
+"You can track the state of media being processed for your gallery here."
+msgstr "ביכולתך לעקוב כאן אחר מצב של מדיה שמצויה בתהליך עיבוד עבור הגלריה שלך."
+
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:89
+msgid "Your last 10 successful uploads"
+msgstr "10 ההעלאות המוצלחות שלך"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:31
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:89
+#, python-format
+msgid "%(username)s's profile"
+msgstr "הדיוקן של %(username)s"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:43
+msgid "Sorry, no such user found."
+msgstr "צר לי, משתמש נתון לא נמצא."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:50
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:70
+msgid "Email verification needed"
+msgstr "נדרש אימות דוא״ל"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:53
+msgid "Almost done! Your account still needs to be activated."
+msgstr "כמעת סיימנו! חשבונך עדיין צריך אקטיבציה."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:58
+msgid ""
+"An email should arrive in a few moments with instructions on how to do so."
+msgstr "דוא״ל צפוי להגיע בעוד מספר רגעים בצירוף הוראות בנוגע לכיצד לעשות כך."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:62
+msgid "In case it doesn't:"
+msgstr "במידה וזה לא:"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:65
+msgid "Resend verification email"
+msgstr "שלח דוא״ל אימות"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:73
+msgid ""
+"Someone has registered an account with this username, but it still has to be"
+" activated."
+msgstr "מישהו רשם חשבון עם שם משתמש זה, אך עליו להיות מופעל."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:79
+#, python-format
+msgid ""
+"If you are that person but you've lost your verification email, you can <a "
+"href=\"%(login_url)s\">log in</a> and resend it."
+msgstr "אם אתה אכן אדם זה אולם איבדת את דוא״ל האימות שלך, ביכולתך <a href=\"%(login_url)s\">להתחבר</a> ולשלוחו מחדש."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:96
+msgid "Here's a spot to tell others about yourself."
+msgstr "הנה מקום לומר לאחרים אודותייך."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:100
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:117
+msgid "Edit profile"
+msgstr "ערוך דיוקן"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:105
+msgid "This user hasn't filled in their profile (yet)."
+msgstr "משתמש זה לא מילא דיוקן (עדיין)."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:124
+msgid "Browse collections"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:137
+#, python-format
+msgid "View all of %(username)s's media"
+msgstr "צפיה בכל המדיה של %(username)s"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:150
+msgid ""
+"This is where your media will appear, but you don't seem to have added "
+"anything yet."
+msgstr "כאן זה המקום בו המדיה שלך תופיע, אולם לא נראה שהוספת משהו עדיין."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:162
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:84
+#: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
+msgid "There doesn't seem to be any media here yet..."
+msgstr "לא נראה שיש כאן מדיה כלשהי עדיין..."
+
+#: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
+msgid "(remove)"
+msgstr "(הסר)"
+
+#: mediagoblin/templates/mediagoblin/utils/collections.html:21
+msgid "Collected in"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/collections.html:40
+msgid "Add to a collection"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
+#: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
+msgid "feed icon"
+msgstr "צלמית ערוץ"
+
+#: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
+#: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:23
+msgid "Atom feed"
+msgstr "ערוץ Atom"
+
+#: mediagoblin/templates/mediagoblin/utils/license.html:25
+msgid "All rights reserved"
+msgstr "כל הזכויות שמורות"
+
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:39
+msgid "← Newer"
+msgstr "חדש יותר ←"
+
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:45
+msgid "Older →"
+msgstr "→ ישן יותר"
+
+#: mediagoblin/templates/mediagoblin/utils/pagination.html:48
+msgid "Go to page:"
+msgstr "מעבר אל עמוד:"
+
+#: mediagoblin/templates/mediagoblin/utils/prev_next.html:28
+#: mediagoblin/templates/mediagoblin/utils/prev_next.html:33
+msgid "newer"
+msgstr "חדש יותר"
+
+#: mediagoblin/templates/mediagoblin/utils/prev_next.html:39
+#: mediagoblin/templates/mediagoblin/utils/prev_next.html:44
+msgid "older"
+msgstr "ישן יותר"
+
+#: mediagoblin/templates/mediagoblin/utils/tags.html:20
+msgid "Tagged with"
+msgstr "מתויגת עם"
+
+#: mediagoblin/tools/exif.py:80
+msgid "Could not read the image file."
+msgstr "לא היה ניתן לקרוא את קובץ התמונה."
+
+#: mediagoblin/tools/response.py:35
+msgid "Oops!"
+msgstr "אופס!"
+
+#: mediagoblin/tools/response.py:36
+msgid "An error occured"
+msgstr "אירעה שגיאה"
+
+#: mediagoblin/tools/response.py:51
+msgid "Operation not allowed"
+msgstr "פעולה לא מורשית"
+
+#: mediagoblin/tools/response.py:52
+msgid ""
+"Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
+"function that you are not allowed to. Have you been trying to delete all "
+"user accounts again?"
+msgstr "צר לי דוד, אני לא יכול להתיר לך לעשות זאת!</p><p>ניסית לבצע פעולה שאינך מורשה לעשות. האם ניסית למחוק את כל החשבונות של המשתמשים שוב?"
+
+#: mediagoblin/tools/response.py:60
+msgid ""
+"There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
+" the address is correct, maybe the page you're looking for has been moved or"
+" deleted."
+msgstr "לא נראה שקיים עמוד בכתובת זו. צר לי!</p><p>אם אתה בטוח שהכתובת הינה מדויקת, ייתכן שהעמוד שאתה מחפש כעת הועבר או נמחק."
+
+#: mediagoblin/user_pages/forms.py:23
+msgid "Comment"
+msgstr ""
+
+#: mediagoblin/user_pages/forms.py:25
+msgid ""
+"You can use <a "
+"href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> for"
+" formatting."
+msgstr "ביכולתך לעשות שימוש בתחביר <a href=\"http://daringfireball.net/projects/markdown/basics\">Markdown</a> לעיצוב."
+
+#: mediagoblin/user_pages/forms.py:31
+msgid "I am sure I want to delete this"
+msgstr "אני בטוח שברצוני למחוק זאת"
+
+#: mediagoblin/user_pages/forms.py:35
+msgid "I am sure I want to remove this item from the collection"
+msgstr "אני בטוח שברצוני להסיר את פריט זה מן האוסף"
+
+#: mediagoblin/user_pages/forms.py:39
+msgid "Collection"
+msgstr ""
+
+#: mediagoblin/user_pages/forms.py:40
+msgid "-- Select --"
+msgstr "-- בחר --"
+
+#: mediagoblin/user_pages/forms.py:42
+msgid "Include a note"
+msgstr "הכללת פתק"
+
+#: mediagoblin/user_pages/lib.py:56
+msgid "commented on your post"
+msgstr "הגיב/ה על פרסומך"
+
+#: mediagoblin/user_pages/views.py:166
+msgid "Oops, your comment was empty."
+msgstr "אופס, תגובתך היתה ריקה."
+
+#: mediagoblin/user_pages/views.py:172
+msgid "Your comment has been posted!"
+msgstr "תגובתך פורסמה!"
+
+#: mediagoblin/user_pages/views.py:197
+msgid "Please check your entries and try again."
+msgstr "אנא בדוק את רשומותיך ונסה שוב."
+
+#: mediagoblin/user_pages/views.py:237
+msgid "You have to select or add a collection"
+msgstr "עליך לבחור או להוסיף אוסף"
+
+#: mediagoblin/user_pages/views.py:248
+#, python-format
+msgid "\"%s\" already in collection \"%s\""
+msgstr "\"%s\" כבר קיים באוסף \"%s\""
+
+#: mediagoblin/user_pages/views.py:264
+#, python-format
+msgid "\"%s\" added to collection \"%s\""
+msgstr "\"%s\" התווסף אל האוסף \"%s\""
+
+#: mediagoblin/user_pages/views.py:286
+msgid "You deleted the media."
+msgstr "מחקת את מדיה זו."
+
+#: mediagoblin/user_pages/views.py:293
+msgid "The media was not deleted because you didn't check that you were sure."
+msgstr "המדיה לא נמחקה מכיוון שלא סימנת שאתה בטוח."
+
+#: mediagoblin/user_pages/views.py:301
+msgid "You are about to delete another user's media. Proceed with caution."
+msgstr "בחרת למחוק מדיה של משתמש אחר. המשך בזהירות."
+
+#: mediagoblin/user_pages/views.py:375
+msgid "You deleted the item from the collection."
+msgstr "מחקת את הפריט מן אוסף זה."
+
+#: mediagoblin/user_pages/views.py:379
+msgid "The item was not removed because you didn't check that you were sure."
+msgstr "הפריט לא הוסר מכיוון שלא סימנת שאתה בטוח."
+
+#: mediagoblin/user_pages/views.py:389
+msgid ""
+"You are about to delete an item from another user's collection. Proceed with"
+" caution."
+msgstr "בחרת למחוק פריט מן אוסף של משתמש אחר. המשך בזהירות."
+
+#: mediagoblin/user_pages/views.py:422
+#, python-format
+msgid "You deleted the collection \"%s\""
+msgstr "מחקת את האוסף \"%s\""
+
+#: mediagoblin/user_pages/views.py:429
+msgid ""
+"The collection was not deleted because you didn't check that you were sure."
+msgstr "האוסף לא הוסר מכיוון שלא סימנת שאתה בטוח."
+
+#: mediagoblin/user_pages/views.py:439
+msgid ""
+"You are about to delete another user's collection. Proceed with caution."
+msgstr "בחרת למחוק אוסף של משתמש אחר. המשך בזהירות."

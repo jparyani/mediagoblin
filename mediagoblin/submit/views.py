@@ -16,30 +16,23 @@
 
 from mediagoblin import messages
 import mediagoblin.mg_globals as mg_globals
-import uuid
 from os.path import splitext
 
-from celery import registry
-import urllib
-import urllib2
 import logging
 
 _log = logging.getLogger(__name__)
 
-from werkzeug.utils import secure_filename
-from werkzeug.datastructures import FileStorage
 
-from mediagoblin.db.util import ObjectId
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login
 from mediagoblin.submit import forms as submit_forms
-from mediagoblin.processing import mark_entry_failed
-from mediagoblin.processing.task import ProcessMedia
 from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.media_types import sniff_media, \
     InvalidFileType, FileTypeNotSupported
+from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
+    run_process_media
 
 
 @require_active_login
@@ -47,12 +40,11 @@ def submit_start(request):
     """
     First view for submitting a file.
     """
-    submit_form = submit_forms.SubmitStartForm(request.form)
+    submit_form = submit_forms.SubmitStartForm(request.form,
+        license=request.user.license_preference)
 
     if request.method == 'POST' and submit_form.validate():
-        if not ('file' in request.files
-                and isinstance(request.files['file'], FileStorage)
-                and request.files['file'].stream):
+        if not check_file_field(request, 'file'):
             submit_form.file.errors.append(
                 _(u'You must provide a file.'))
         else:
@@ -66,101 +58,40 @@ def submit_start(request):
 
                 # create entry and save in database
                 entry = request.db.MediaEntry()
-                entry.id = ObjectId()
                 entry.media_type = unicode(media_type)
                 entry.title = (
-                    unicode(request.form['title'])
+                    unicode(submit_form.title.data)
                     or unicode(splitext(filename)[0]))
 
-                entry.description = unicode(request.form.get('description'))
+                entry.description = unicode(submit_form.description.data)
 
-                entry.license = unicode(request.form.get('license', "")) or None
+                entry.license = unicode(submit_form.license.data) or None
 
-                entry.uploader = request.user._id
+                entry.uploader = request.user.id
 
                 # Process the user's folksonomy "tags"
                 entry.tags = convert_to_tag_list_of_dicts(
-                    request.form.get('tags'))
+                    submit_form.tags.data)
 
                 # Generate a slug from the title
                 entry.generate_slug()
 
-                # We generate this ourselves so we know what the taks id is for
-                # retrieval later.
-
-                # (If we got it off the task's auto-generation, there'd be
-                # a risk of a race condition when we'd save after sending
-                # off the task)
-                task_id = unicode(uuid.uuid4())
-
-                # Now store generate the queueing related filename
-                queue_filepath = request.app.queue_store.get_unique_filepath(
-                    ['media_entries',
-                     task_id,
-                     secure_filename(filename)])
-
-                # queue appropriately
-                queue_file = request.app.queue_store.get_file(
-                    queue_filepath, 'wb')
+                queue_file = prepare_queue_task(request.app, entry, filename)
 
                 with queue_file:
                     queue_file.write(request.files['file'].stream.read())
 
-                # Add queued filename to the entry
-                entry.queued_media_file = queue_filepath
-
-                entry.queued_task_id = task_id
-
                 # Save now so we have this data before kicking off processing
-                entry.save(validate=True)
+                entry.save()
 
                 # Pass off to processing
                 #
                 # (... don't change entry after this point to avoid race
                 # conditions with changes to the document via processing code)
-                process_media = registry.tasks[ProcessMedia.name]
-                try:
-                    process_media.apply_async(
-                        [unicode(entry._id)], {},
-                        task_id=task_id)
-                except BaseException as exc:
-                    # The purpose of this section is because when running in "lazy"
-                    # or always-eager-with-exceptions-propagated celery mode that
-                    # the failure handling won't happen on Celery end.  Since we
-                    # expect a lot of users to run things in this way we have to
-                    # capture stuff here.
-                    #
-                    # ... not completely the diaper pattern because the
-                    # exception is re-raised :)
-                    mark_entry_failed(entry._id, exc)
-                    # re-raise the exception
-                    raise
-
-                if mg_globals.app_config["push_urls"]:
-                    feed_url = request.urlgen(
-                                       'mediagoblin.user_pages.atom_feed',
-                                       qualified=True,
-                                       user=request.user.username)
-                    hubparameters = {
-                        'hub.mode': 'publish',
-                        'hub.url': feed_url}
-                    hubdata = urllib.urlencode(hubparameters)
-                    hubheaders = {
-                        "Content-type": "application/x-www-form-urlencoded",
-                        "Connection": "close"}
-                    for huburl in mg_globals.app_config["push_urls"]:
-                        hubrequest = urllib2.Request(huburl, hubdata, hubheaders)
-                        try:
-                            hubresponse = urllib2.urlopen(hubrequest)
-                        except urllib2.HTTPError as exc:
-                            # This is not a big issue, the item will be fetched
-                            # by the PuSH server next time we hit it
-                            _log.warning(
-                                "push url %r gave error %r", huburl, exc.code)
-                        except urllib2.URLError as exc:
-                            _log.warning(
-                                "push url %r is unreachable %r", huburl, exc.reason)
-
+                feed_url = request.urlgen(
+                    'mediagoblin.user_pages.atom_feed',
+                    qualified=True, user=request.user.username)
+                run_process_media(entry, feed_url)
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
                 return redirect(request, "mediagoblin.user_pages.user_home",
@@ -183,6 +114,7 @@ def submit_start(request):
         {'submit_form': submit_form,
          'app_config': mg_globals.app_config})
 
+
 @require_active_login
 def add_collection(request, media=None):
     """
@@ -191,34 +123,30 @@ def add_collection(request, media=None):
     submit_form = submit_forms.AddCollectionForm(request.form)
 
     if request.method == 'POST' and submit_form.validate():
-        try:
-            collection = request.db.Collection()
-            collection.id = ObjectId()
+        collection = request.db.Collection()
 
-            collection.title = unicode(request.form['title'])
+        collection.title = unicode(submit_form.title.data)
+        collection.description = unicode(submit_form.description.data)
+        collection.creator = request.user.id
+        collection.generate_slug()
 
-            collection.description = unicode(request.form.get('description'))
-            collection.creator = request.user._id
-            collection.generate_slug()
+        # Make sure this user isn't duplicating an existing collection
+        existing_collection = request.db.Collection.find_one({
+                'creator': request.user.id,
+                'title':collection.title})
 
-            # Make sure this user isn't duplicating an existing collection
-            existing_collection = request.db.Collection.find_one({
-                    'creator': request.user._id,
-                    'title':collection.title})
+        if existing_collection:
+            add_message(request, messages.ERROR,
+                _('You already have a collection called "%s"!') \
+                    % collection.title)
+        else:
+            collection.save()
 
-            if existing_collection:
-                messages.add_message(
-                    request, messages.ERROR, _('You already have a collection called "%s"!' % collection.title))
-            else:
-                collection.save(validate=True)
+            add_message(request, SUCCESS,
+                _('Collection "%s" added!') % collection.title)
 
-                add_message(request, SUCCESS, _('Collection "%s" added!' % collection.title))
-
-            return redirect(request, "mediagoblin.user_pages.user_home",
-                            user=request.user.username)
-
-        except Exception as e:
-            raise
+        return redirect(request, "mediagoblin.user_pages.user_home",
+                        user=request.user.username)
 
     return render_to_response(
         request,

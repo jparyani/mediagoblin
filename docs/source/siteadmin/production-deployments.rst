@@ -52,7 +52,7 @@ as the basis for your script: ::
 Separate Celery
 ---------------
 
-While the ``./lazyserer.sh`` configuration provides an efficient way to
+While the ``./lazyserver.sh`` configuration provides an efficient way to
 start using a MediaGoblin instance, it is not suitable for production
 deployments for several reasons:
 
@@ -76,6 +76,17 @@ command::
 Modify your existing MediaGoblin and application init scripts, if
 necessary, to prevent them from starting their own ``celeryd``
 processes.
+
+.. _sentry:
+
+Set up sentry to monitor exceptions
+-----------------------------------
+
+We have a plugin for `raven`_ integration, see the ":doc:`/plugindocs/raven`"
+documentation.
+
+.. _`raven`: http://raven.readthedocs.org
+
 
 .. _init-script:
 

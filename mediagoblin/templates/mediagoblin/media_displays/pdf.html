@@ -1,0 +1,84 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% extends 'mediagoblin/user_pages/media.html' %}
+
+{% set medium_view = request.app.public_store.file_url(
+   media.media_files['medium']) %}
+
+{% if 'pdf' in media.media_files %}
+    {% set pdf_view = request.app.public_store.file_url(
+        media.media_files['pdf']) %}
+{% else %}
+    {% set pdf_view = request.app.public_store.file_url(
+        media.media_files['original']) %}
+{% endif %}
+
+{% set pdf_js = global_config.get('media_type:mediagoblin.media_types.pdf', {}).get('pdf_js', False) %}
+
+{% if pdf_js %}
+    {% block mediagoblin_html_tag %}
+    dir="ltr" mozdisallowselectionprint moznomarginboxes
+    {% endblock mediagoblin_html_tag %}
+{% endif %}
+
+{% block mediagoblin_head -%}
+  {{ super() }}
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+{%- endblock %}
+
+{% block mediagoblin_media %}
+{% if pdf_js %}
+<iframe width=640px height=480px
+    src="{{ request.staticdirect('/extlib/pdf.js/web/viewer.html') }}?file={{ pdf_view }} ">
+</iframe>
+
+{% else %}
+  <a href="{{ pdf_view }}">
+  <img id="medium"
+  class="media_image"
+  src="{{ medium_view }}"
+  alt="{% trans media_title=media.title -%} Image for {{ media_title}}{% endtrans %}"/>
+  </a>
+{% endif %}
+{% endblock %}
+
+{% block mediagoblin_sidebar %}
+  <h3>{% trans %}Download{% endtrans %}</h3>
+  <ul>
+    {% if 'original' in media.media_files %}
+      <li>
+        <a href="{{ request.app.public_store.file_url(
+                       media.media_files.original) }}">
+          {%- trans %}Original file{% endtrans -%}
+        </a>
+      </li>
+    {% endif %}
+    {% if 'pdf' in media.media_files %}
+      <li>
+        <a href="{{ request.app.public_store.file_url(
+                       media.media_files.pdf) }}">
+          {%- trans %}PDF file{% endtrans -%}
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+{% endblock %}

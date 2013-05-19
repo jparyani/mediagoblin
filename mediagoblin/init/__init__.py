@@ -14,18 +14,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from beaker.cache import CacheManager
-from beaker.util import parse_cache_config_options
 import jinja2
 
 from mediagoblin.tools import staticdirect
+from mediagoblin.tools.translate import set_available_locales
 from mediagoblin.init.config import (
     read_mediagoblin_config, generate_validation_report)
 from mediagoblin import mg_globals
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.db.open import setup_connection_and_db_from_config, \
     check_db_migrations_current, load_models
-from mediagoblin.workbench import WorkbenchManager
+from mediagoblin.tools.workbench import WorkbenchManager
 from mediagoblin.storage import storage_system_from_config
 
 
@@ -35,6 +34,11 @@ class Error(Exception):
 
 class ImproperlyConfigured(Error):
     pass
+
+
+def setup_locales():
+    """Checks which language translations are available and sets them"""
+    set_available_locales()
 
 
 def setup_global_and_app_config(config_path):
@@ -60,15 +64,13 @@ def setup_database():
     load_models(app_config)
 
     # Set up the database
-    connection, db = setup_connection_and_db_from_config(app_config)
+    db = setup_connection_and_db_from_config(app_config)
 
     check_db_migrations_current(db)
 
-    setup_globals(
-        db_connection=connection,
-        database=db)
+    setup_globals(database=db)
 
-    return connection, db
+    return db
 
 
 def get_jinja_loader(user_template_path=None, current_theme=None,
@@ -142,16 +144,3 @@ def setup_workbench():
     workbench_manager = WorkbenchManager(app_config['workbench_path'])
 
     setup_globals(workbench_manager=workbench_manager)
-
-
-def setup_beaker_cache():
-    """
-    Setup the Beaker Cache manager.
-    """
-    cache_config = mg_globals.global_config['beaker.cache']
-    cache_config = dict(
-        [(u'cache.%s' % key, value)
-         for key, value in cache_config.iteritems()])
-    cache = CacheManager(**parse_cache_config_options(cache_config))
-    setup_globals(cache=cache)
-    return cache

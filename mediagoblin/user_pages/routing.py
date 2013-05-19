@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.routing import add_route
+from mediagoblin.tools.routing import add_route
 
 add_route('mediagoblin.user_pages.user_home',
           '/u/<string:user>/', 'mediagoblin.user_pages.views:user_home')
@@ -24,11 +24,12 @@ add_route('mediagoblin.user_pages.media_home',
           'mediagoblin.user_pages.views:media_home')
 
 add_route('mediagoblin.user_pages.media_confirm_delete',
-          '/u/<string:user>/m/<string:media>/confirm-delete/',
+          '/u/<string:user>/m/<int:media_id>/confirm-delete/',
           'mediagoblin.user_pages.views:media_confirm_delete')
 
+# Submission handling of new comments. TODO: only allow for POST methods
 add_route('mediagoblin.user_pages.media_post_comment',
-          '/u/<string:user>/m/<string:media>/comment/add/',
+          '/u/<string:user>/m/<int:media_id>/comment/add/',
           'mediagoblin.user_pages.views:media_post_comment')
 
 add_route('mediagoblin.user_pages.user_gallery',
@@ -36,16 +37,25 @@ add_route('mediagoblin.user_pages.user_gallery',
           'mediagoblin.user_pages.views:user_gallery')
 
 add_route('mediagoblin.user_pages.media_home.view_comment',
-          '/u/<string:user>/m/<string:media>/c/<string:comment>/',
+          '/u/<string:user>/m/<string:media>/c/<int:comment>/',
           'mediagoblin.user_pages.views:media_home')
+
+# User's tags gallery
+add_route('mediagoblin.user_pages.user_tag_gallery',
+          '/u/<string:user>/tag/<string:tag>/',
+          'mediagoblin.user_pages.views:user_gallery')
 
 add_route('mediagoblin.user_pages.atom_feed',
           '/u/<string:user>/atom/',
           'mediagoblin.user_pages.views:atom_feed')
 
 add_route('mediagoblin.user_pages.media_collect',
-          '/u/<string:user>/m/<string:media>/collect/',
+          '/u/<string:user>/m/<int:media_id>/collect/',
           'mediagoblin.user_pages.views:media_collect')
+
+add_route('mediagoblin.user_pages.collection_list',
+          '/u/<string:user>/collections/',
+          'mediagoblin.user_pages.views:collection_list')
 
 add_route('mediagoblin.user_pages.user_collection',
           '/u/<string:user>/collection/<string:collection>/',
@@ -73,9 +83,9 @@ add_route('mediagoblin.user_pages.processing_panel',
 
 # Stray edit routes
 add_route('mediagoblin.edit.edit_media',
-          '/u/<string:user>/m/<string:media>/edit/',
+          '/u/<string:user>/m/<int:media_id>/edit/',
           'mediagoblin.edit.views:edit_media')
 
 add_route('mediagoblin.edit.attachments',
-          '/u/<string:user>/m/<string:media>/attachments/',
+          '/u/<string:user>/m/<int:media_id>/attachments/',
           'mediagoblin.edit.views:edit_attachments')

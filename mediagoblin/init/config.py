@@ -14,11 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 import os
 import pkg_resources
 
 from configobj import ConfigObj, flatten_errors
 from validate import Validator
+
+
+_log = logging.getLogger(__name__)
 
 
 CONFIG_SPEC_PATH = pkg_resources.resource_filename(
@@ -42,6 +46,9 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
     Also provides %(__file__)s and %(here)s values of this file and
     its directory respectively similar to paste deploy.
 
+    Also reads for [plugins] section, appends all config_spec.ini
+    files from said plugins into the general config_spec specification.
+
     This function doesn't itself raise any exceptions if validation
     fails, you'll have to do something
 
@@ -57,9 +64,44 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
     """
     config_path = os.path.abspath(config_path)
 
+    # PRE-READ of config file.  This allows us to fetch the plugins so
+    # we can add their plugin specs to the general config_spec.
+    config = ConfigObj(
+        config_path,
+        interpolation='ConfigParser')
+
+    plugins = config.get("plugins", {}).keys()
+    plugin_configs = {}
+
+    for plugin in plugins:
+        try:
+            plugin_config_spec_path = pkg_resources.resource_filename(
+                plugin, "config_spec.ini")
+            if not os.path.exists(plugin_config_spec_path):
+                continue
+            
+            plugin_config_spec = ConfigObj(
+                plugin_config_spec_path,
+                encoding='UTF8', list_values=False, _inspec=True)
+            _setup_defaults(plugin_config_spec, config_path)
+
+            if not "plugin_spec" in plugin_config_spec:
+                continue
+
+            plugin_configs[plugin] = plugin_config_spec["plugin_spec"]
+
+        except ImportError:
+            _log.warning(
+                "When setting up config section, could not import '%s'" %
+                plugin)
+    
+    # Now load the main config spec
     config_spec = ConfigObj(
         config_spec,
         encoding='UTF8', list_values=False, _inspec=True)
+
+    # append the plugin specific sections of the config spec
+    config_spec['plugins'] = plugin_configs
 
     _setup_defaults(config_spec, config_path)
 

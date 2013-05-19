@@ -17,11 +17,12 @@
 import random
 import logging
 
-from webob.exc import HTTPForbidden
+from werkzeug.exceptions import Forbidden
 from wtforms import Form, HiddenField, validators
 
 from mediagoblin import mg_globals
 from mediagoblin.meddleware import BaseMeddleware
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 _log = logging.getLogger(__name__)
 
@@ -127,9 +128,13 @@ class CsrfMeddleware(BaseMeddleware):
             None)
 
         if cookie_token is None:
-            # the CSRF cookie must be present in the request
+            # the CSRF cookie must be present in the request, if not a
+            # cookie blocker might be in action (in the best case)
             _log.error('CSRF cookie not present')
-            return HTTPForbidden()
+            raise Forbidden(_('CSRF cookie not present. This is most likely '
+                              'the result of a cookie blocker or somesuch.<br/>'
+                              'Make sure to permit the settings of cookies for '
+                              'this domain.'))
 
         # get the form token and confirm it matches
         form = CsrfForm(request.form)
@@ -142,5 +147,6 @@ class CsrfMeddleware(BaseMeddleware):
 
         # either the tokens didn't match or the form token wasn't
         # present; either way, the request is denied
-        _log.error('CSRF validation failed')
-        return HTTPForbidden()
+        errstr = 'CSRF validation failed'
+        _log.error(errstr)
+        raise Forbidden(errstr)

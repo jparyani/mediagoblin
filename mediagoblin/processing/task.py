@@ -15,13 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import urllib
+import urllib2
 
-from celery.task import Task
+from celery import registry, task
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.util import ObjectId
-from mediagoblin.media_types import get_media_manager
-from mediagoblin.processing import mark_entry_failed, BaseProcessingFail
+from mediagoblin.db.models import MediaEntry
+from . import mark_entry_failed, BaseProcessingFail, ProcessingState
 from mediagoblin.tools.processing import json_processing_callback
 
 _log = logging.getLogger(__name__)
@@ -29,39 +30,79 @@ logging.basicConfig()
 _log.setLevel(logging.DEBUG)
 
 
+@task.task(default_retry_delay=2 * 60)
+def handle_push_urls(feed_url):
+    """Subtask, notifying the PuSH servers of new content
+
+    Retry 3 times every 2 minutes if run in separate process before failing."""
+    if not mgg.app_config["push_urls"]:
+        return # Nothing to do
+    _log.debug('Notifying Push servers for feed {0}'.format(feed_url))
+    hubparameters = {
+        'hub.mode': 'publish',
+        'hub.url': feed_url}
+    hubdata = urllib.urlencode(hubparameters)
+    hubheaders = {
+        "Content-type": "application/x-www-form-urlencoded",
+        "Connection": "close"}
+    for huburl in mgg.app_config["push_urls"]:
+        hubrequest = urllib2.Request(huburl, hubdata, hubheaders)
+        try:
+            hubresponse = urllib2.urlopen(hubrequest)
+        except (urllib2.HTTPError, urllib2.URLError) as exc:
+            # We retry by default 3 times before failing
+            _log.info("PuSH url %r gave error %r", huburl, exc)
+            try:
+                return handle_push_urls.retry(exc=exc, throw=False)
+            except Exception as e:
+                # All retries failed, Failure is no tragedy here, probably.
+                _log.warn('Failed to notify PuSH server for feed {0}. '
+                          'Giving up.'.format(feed_url))
+                return False
+
 ################################
 # Media processing initial steps
 ################################
 
-class ProcessMedia(Task):
+class ProcessMedia(task.Task):
     """
     Pass this entry off for processing.
     """
-    def run(self, media_id):
+    def run(self, media_id, feed_url):
         """
         Pass the media entry off to the appropriate processing function
         (for now just process_image...)
+
+        :param feed_url: The feed URL that the PuSH server needs to be
+            updated for.
         """
-        entry = mgg.database.MediaEntry.one(
-            {'_id': ObjectId(media_id)})
+        entry = MediaEntry.query.get(media_id)
 
         # Try to process, and handle expected errors.
         try:
-            manager = get_media_manager(entry.media_type)
-
             entry.state = u'processing'
             entry.save()
 
             _log.debug('Processing {0}'.format(entry))
 
-            manager['processor'](entry)
+            proc_state = ProcessingState(entry)
+            with mgg.workbench_manager.create() as workbench:
+                proc_state.set_workbench(workbench)
+                # run the processing code
+                entry.media_manager.processor(proc_state)
 
+            # We set the state to processed and save the entry here so there's
+            # no need to save at the end of the processing stage, probably ;)
             entry.state = u'processed'
             entry.save()
 
+            # Notify the PuSH servers as async task
+            if mgg.app_config["push_urls"] and feed_url:
+                handle_push_urls.subtask().delay(feed_url)
+
             json_processing_callback(entry)
         except BaseProcessingFail as exc:
-            mark_entry_failed(entry._id, exc)
+            mark_entry_failed(entry.id, exc)
             json_processing_callback(entry)
             return
 
@@ -72,7 +113,7 @@ class ProcessMedia(Task):
                     entry.title,
                     exc))
 
-            mark_entry_failed(entry._id, exc)
+            mark_entry_failed(entry.id, exc)
             json_processing_callback(entry)
 
         except Exception as exc:
@@ -80,7 +121,7 @@ class ProcessMedia(Task):
                     + ' processing {0}'.format(
                         entry))
 
-            mark_entry_failed(entry._id, exc)
+            mark_entry_failed(entry.id, exc)
             json_processing_callback(entry)
             raise
 
@@ -98,3 +139,7 @@ class ProcessMedia(Task):
 
         entry = mgg.database.MediaEntry.query.filter_by(id=entry_id).first()
         json_processing_callback(entry)
+
+# Register the task
+process_media = registry.tasks[ProcessMedia.name]
+

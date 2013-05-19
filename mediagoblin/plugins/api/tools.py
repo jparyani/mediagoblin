@@ -18,9 +18,9 @@ import logging
 import json
 
 from functools import wraps
-from webob import exc, Response
 from urlparse import urljoin
-
+from werkzeug.exceptions import Forbidden
+from werkzeug.wrappers import Response
 from mediagoblin import mg_globals
 from mediagoblin.tools.pluginapi import PluginManager
 from mediagoblin.storage.filestorage import BasicFileStorage
@@ -54,23 +54,23 @@ class Auth(object):
 
 def json_response(serializable, _disable_cors=False, *args, **kw):
     '''
-    Serializes a json objects and returns a webob.Response object with the
+    Serializes a json objects and returns a werkzeug Response object with the
     serialized value as the response body and Content-Type: application/json.
 
     :param serializable: A json-serializable object
 
     Any extra arguments and keyword arguments are passed to the
-    webob.Response.__init__ method.
+    Response.__init__ method.
     '''
-    response = Response(json.dumps(serializable), *args, **kw)
-    response.headers['Content-Type'] = 'application/json'
+    response = Response(json.dumps(serializable), *args, content_type='application/json', **kw)
 
     if not _disable_cors:
         cors_headers = {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With'}
-        response.headers.update(cors_headers)
+        for key, value in cors_headers.iteritems():
+            response.headers.set(key, value)
 
     return response
 
@@ -136,14 +136,14 @@ def api_auth(controller):
         auth_candidates = []
 
         for auth in PluginManager().get_hook_callables('auth'):
-            _log.debug('Plugin auth: {0}'.format(auth))
             if auth.trigger(request):
+                _log.debug('{0} believes it is capable of authenticating this request.'.format(auth))
                 auth_candidates.append(auth)
 
         # If we can't find any authentication methods, we should not let them
         # pass.
         if not auth_candidates:
-            return exc.HTTPForbidden()
+            raise Forbidden()
 
         # For now, just select the first one in the list
         auth = auth_candidates[0]
@@ -157,7 +157,7 @@ def api_auth(controller):
                         'status': 403,
                         'errors': auth.errors})
 
-            return exc.HTTPForbidden()
+            raise Forbidden()
 
         return controller(request, *args, **kw)
 

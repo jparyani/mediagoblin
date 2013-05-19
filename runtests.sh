@@ -16,16 +16,56 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if [ -f ./bin/nosetests ]; then
-    echo "Using ./bin/nosetests";
-    export NOSETESTS="./bin/nosetests";
-elif which nosetests > /dev/null; then
-    echo "Using nosetests from \$PATH";
-    export NOSETESTS="nosetests";
+basedir="`dirname $0`"
+# Directory to seaerch for:
+subdir="mediagoblin/tests"
+[ '!' -d "$basedir/$subdir" ] && basedir="."
+if [ '!' -d "$basedir/$subdir" ]
+then
+  echo "Could not find base directory" >&2
+  exit 1
+fi
+
+if [ -x "$basedir/bin/py.test" ]; then
+    export PYTEST="$basedir/bin/py.test";
+    echo "Using $PYTEST";
+elif which py.test > /dev/null; then
+    echo "Using py.test from \$PATH";
+    export PYTEST="py.test";
 else
-    echo "nosetests not found.  X_X";
+    echo "py.test not found.  X_X";
     echo "Please install 'nose'.  Exiting.";
     exit 1
 fi
 
-CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_tests $NOSETESTS $@
+
+# Look to see if the user has specified a specific directory/file to
+# run tests out of.  If not we'll need to pass along
+# mediagoblin/tests/ later very specifically.  Otherwise py.test
+# will try to read all directories, and this turns into a mess!
+
+need_arg=1
+ignore_next=0
+for i in "$@"
+do
+  if [ "$ignore_next" = 1 ]
+  then
+    ignore_next=0
+    continue
+  fi
+  case "$i" in
+    -n) ignore_next=1;;
+    -*) ;;
+    *) need_arg=0; break ;;
+  esac
+done
+
+if [ "$need_arg" = 1 ]
+then
+  testdir="$basedir/mediagoblin/tests"
+  set -x
+  exec "$PYTEST" "$@" "$testdir" --boxed
+else
+  set -x
+  exec "$PYTEST" "$@" --boxed
+fi

@@ -18,7 +18,7 @@
 import os
 import tempfile
 
-from nose.tools import assert_raises
+import pytest
 from werkzeug.utils import secure_filename
 
 from mediagoblin import storage
@@ -41,10 +41,8 @@ def test_clean_listy_filepath():
     assert storage.clean_listy_filepath(
         ['../../../etc/', 'passwd']) == expected
 
-    assert_raises(
-        storage.InvalidFilepath,
-        storage.clean_listy_filepath,
-        ['../../', 'linooks.jpg'])
+    with pytest.raises(storage.InvalidFilepath):
+        storage.clean_listy_filepath(['../../', 'linooks.jpg'])
 
 
 class FakeStorageSystem():
@@ -80,7 +78,8 @@ def test_storage_system_from_config():
              'mediagoblin.tests.test_storage:FakeStorageSystem'})
     assert this_storage.foobie == 'eiboof'
     assert this_storage.blech == 'hcelb'
-    assert this_storage.__class__ is FakeStorageSystem
+    assert unicode(this_storage.__class__) == \
+        u'mediagoblin.tests.test_storage.FakeStorageSystem'
 
 
 ##########################
@@ -88,12 +87,20 @@ def test_storage_system_from_config():
 ##########################
 
 def get_tmp_filestorage(mount_url=None, fake_remote=False):
-    tmpdir = tempfile.mkdtemp()
+    tmpdir = tempfile.mkdtemp(prefix="test_gmg_storage")
     if fake_remote:
         this_storage = FakeRemoteStorage(tmpdir, mount_url)
     else:
         this_storage = storage.filestorage.BasicFileStorage(tmpdir, mount_url)
     return tmpdir, this_storage
+
+
+def cleanup_storage(this_storage, tmpdir, *paths):
+    for p in paths:
+        while p:
+            assert this_storage.delete_dir(p) == True
+            p.pop(-1)
+    os.rmdir(tmpdir)
 
 
 def test_basic_storage__resolve_filepath():
@@ -107,10 +114,12 @@ def test_basic_storage__resolve_filepath():
     assert result == os.path.join(
         tmpdir, 'etc/passwd')
 
-    assert_raises(
+    pytest.raises(
         storage.InvalidFilepath,
         this_storage._resolve_filepath,
         ['../../', 'etc', 'passwd'])
+
+    cleanup_storage(this_storage, tmpdir)
 
 
 def test_basic_storage_file_exists():
@@ -124,6 +133,9 @@ def test_basic_storage_file_exists():
     assert this_storage.file_exists(['dir1', 'dir2', 'filename.txt'])
     assert not this_storage.file_exists(['dir1', 'dir2', 'thisfile.lol'])
     assert not this_storage.file_exists(['dnedir1', 'dnedir2', 'somefile.lol'])
+
+    this_storage.delete_file(['dir1', 'dir2', 'filename.txt'])
+    cleanup_storage(this_storage, tmpdir, ['dir1', 'dir2'])
 
 
 def test_basic_storage_get_unique_filepath():
@@ -144,6 +156,9 @@ def test_basic_storage_get_unique_filepath():
     assert new_filename.endswith('filename.txt')
     assert len(new_filename) > len('filename.txt')
     assert new_filename == secure_filename(new_filename)
+
+    os.remove(filename)
+    cleanup_storage(this_storage, tmpdir, ['dir1', 'dir2'])
 
 
 def test_basic_storage_get_file():
@@ -181,6 +196,11 @@ def test_basic_storage_get_file():
     with this_storage.get_file(['testydir', 'testyfile.txt']) as testyfile:
         assert testyfile.read() == 'testy file!  so testy.'
 
+    this_storage.delete_file(filepath)
+    this_storage.delete_file(new_filepath)
+    this_storage.delete_file(['testydir', 'testyfile.txt'])
+    cleanup_storage(this_storage, tmpdir, ['dir1', 'dir2'], ['testydir'])
+
 
 def test_basic_storage_delete_file():
     tmpdir, this_storage = get_tmp_filestorage()
@@ -195,19 +215,24 @@ def test_basic_storage_delete_file():
     assert os.path.exists(
         os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'))
 
+    assert this_storage.delete_dir(['dir1', 'dir2']) == False
     this_storage.delete_file(filepath)
+    assert this_storage.delete_dir(['dir1', 'dir2']) == True
     
     assert not os.path.exists(
         os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'))
+
+    cleanup_storage(this_storage, tmpdir, ['dir1'])
 
 
 def test_basic_storage_url_for_file():
     # Not supplying a base_url should actually just bork.
     tmpdir, this_storage = get_tmp_filestorage()
-    assert_raises(
+    pytest.raises(
         storage.NoWebServing,
         this_storage.file_url,
         ['dir1', 'dir2', 'filename.txt'])
+    cleanup_storage(this_storage, tmpdir)
 
     # base_url without domain
     tmpdir, this_storage = get_tmp_filestorage('/media/')
@@ -215,6 +240,7 @@ def test_basic_storage_url_for_file():
         ['dir1', 'dir2', 'filename.txt'])
     expected = '/media/dir1/dir2/filename.txt'
     assert result == expected
+    cleanup_storage(this_storage, tmpdir)
 
     # base_url with domain
     tmpdir, this_storage = get_tmp_filestorage(
@@ -223,6 +249,7 @@ def test_basic_storage_url_for_file():
         ['dir1', 'dir2', 'filename.txt'])
     expected = 'http://media.example.org/ourmedia/dir1/dir2/filename.txt'
     assert result == expected
+    cleanup_storage(this_storage, tmpdir)
 
 
 def test_basic_storage_get_local_path():
@@ -236,10 +263,13 @@ def test_basic_storage_get_local_path():
 
     assert result == expected
 
+    cleanup_storage(this_storage, tmpdir)
+
 
 def test_basic_storage_is_local():
     tmpdir, this_storage = get_tmp_filestorage()
     assert this_storage.local_storage is True
+    cleanup_storage(this_storage, tmpdir)
 
 
 def test_basic_storage_copy_locally():
@@ -254,8 +284,13 @@ def test_basic_storage_copy_locally():
     new_file_dest = os.path.join(dest_tmpdir, 'file2.txt')
 
     this_storage.copy_locally(filepath, new_file_dest)
+    this_storage.delete_file(filepath)
     
     assert file(new_file_dest).read() == 'Testing this file'
+
+    os.remove(new_file_dest)
+    os.rmdir(dest_tmpdir)
+    cleanup_storage(this_storage, tmpdir, ['dir1', 'dir2'])
 
 
 def _test_copy_local_to_storage_works(tmpdir, this_storage):
@@ -266,9 +301,14 @@ def _test_copy_local_to_storage_works(tmpdir, this_storage):
     this_storage.copy_local_to_storage(
         local_filename, ['dir1', 'dir2', 'copiedto.txt'])
 
+    os.remove(local_filename)
+
     assert file(
         os.path.join(tmpdir, 'dir1/dir2/copiedto.txt'),
         'r').read() == 'haha'
+
+    this_storage.delete_file(['dir1', 'dir2', 'copiedto.txt'])
+    cleanup_storage(this_storage, tmpdir, ['dir1', 'dir2'])
 
 
 def test_basic_storage_copy_local_to_storage():

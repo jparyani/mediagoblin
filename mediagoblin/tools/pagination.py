@@ -25,7 +25,7 @@ PAGINATION_DEFAULT_PER_PAGE = 30
 
 class Pagination(object):
     """
-    Pagination class for mongodb queries.
+    Pagination class for database queries.
 
     Initialization through __init__(self, cursor, page=1, per_page=2),
     get actual data slice through __call__().
@@ -40,8 +40,8 @@ class Pagination(object):
          - page: requested page
          - per_page: number of objects per page
          - cursor: db cursor
-         - jump_to_id: ObjectId, sets the page to the page containing the
-           object with _id == jump_to_id.
+         - jump_to_id: object id, sets the page to the page containing the
+           object with id == jump_to_id.
         """
         self.page = page
         self.per_page = per_page
@@ -53,7 +53,7 @@ class Pagination(object):
             cursor = copy.copy(self.cursor)
 
             for (doc, increment) in izip(cursor, count(0)):
-                if doc._id == jump_to_id:
+                if doc.id == jump_to_id:
                     self.page = 1 + int(floor(increment / self.per_page))
 
                     self.active_id = jump_to_id
@@ -63,8 +63,11 @@ class Pagination(object):
         """
         Returns slice of objects for the requested page
         """
-        return self.cursor.skip(
-            (self.page - 1) * self.per_page).limit(self.per_page)
+        # TODO, return None for out of index so templates can
+        # distinguish between empty galleries and out-of-bound pages???
+        return self.cursor.slice(
+            (self.page - 1) * self.per_page,
+            self.page * self.per_page)
 
     @property
     def pages(self):

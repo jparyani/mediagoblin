@@ -14,16 +14,63 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    from mediagoblin.db.sql_switch import use_sql
-except ImportError:
-    use_sql = False
+from mediagoblin.db.base import Session
+from mediagoblin.db.models import MediaEntry, Tag, MediaTag, Collection
 
-if use_sql:
-    from mediagoblin.db.sql.fake import ObjectId, InvalidId, DESCENDING
-    from mediagoblin.db.sql.util import atomic_update, check_media_slug_used, \
-        media_entries_for_tag_slug, check_collection_slug_used
-else:
-    from mediagoblin.db.mongo.util import \
-        ObjectId, InvalidId, DESCENDING, atomic_update, \
-        check_media_slug_used, media_entries_for_tag_slug
+
+##########################
+# Random utility functions
+##########################
+
+
+def atomic_update(table, query_dict, update_values):
+    table.find(query_dict).update(update_values,
+    	synchronize_session=False)
+    Session.commit()
+
+
+def check_media_slug_used(uploader_id, slug, ignore_m_id):
+    query = MediaEntry.query.filter_by(uploader=uploader_id, slug=slug)
+    if ignore_m_id is not None:
+        query = query.filter(MediaEntry.id != ignore_m_id)
+    does_exist = query.first() is not None
+    return does_exist
+
+
+def media_entries_for_tag_slug(dummy_db, tag_slug):
+    return MediaEntry.query \
+        .join(MediaEntry.tags_helper) \
+        .join(MediaTag.tag_helper) \
+        .filter(
+            (MediaEntry.state == u'processed')
+            & (Tag.slug == tag_slug))
+
+
+def clean_orphan_tags(commit=True):
+    """Search for unused MediaTags and delete them"""
+    q1 = Session.query(Tag).outerjoin(MediaTag).filter(MediaTag.id==None)
+    for t in q1:
+        Session.delete(t)
+    # The "let the db do all the work" version:
+    # q1 = Session.query(Tag.id).outerjoin(MediaTag).filter(MediaTag.id==None)
+    # q2 = Session.query(Tag).filter(Tag.id.in_(q1))
+    # q2.delete(synchronize_session = False)
+    if commit:
+        Session.commit()
+
+
+def check_collection_slug_used(creator_id, slug, ignore_c_id):
+    filt = (Collection.creator == creator_id) \
+        & (Collection.slug == slug)
+    if ignore_c_id is not None:
+        filt = filt & (Collection.id != ignore_c_id)
+    does_exist = Session.query(Collection.id).filter(filt).first() is not None
+    return does_exist
+
+
+if __name__ == '__main__':
+    from mediagoblin.db.open import setup_connection_and_db_from_config
+
+    db = setup_connection_and_db_from_config({'sql_engine':'sqlite:///mediagoblin.db'})
+
+    clean_orphan_tags()

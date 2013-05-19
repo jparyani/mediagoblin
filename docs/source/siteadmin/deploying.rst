@@ -32,6 +32,11 @@ GNU/Linux distro.
    install.  If instead you want to join in as a contributor, see our
    `Hacking HOWTO <http://wiki.mediagoblin.org/HackingHowto>`_ instead.
 
+   There are also many ways to install servers... for the sake of
+   simplicity, our instructions below describe installing with nginx.
+   For more recipes, including Apache, see
+   `our wiki <http://wiki.mediagoblin.org/Deployment>`_.
+
 Prepare System
 --------------
 
@@ -165,7 +170,7 @@ And set up the in-package virtualenv::
 
    If you have problems here, consider trying to install virtualenv
    with the ``--distribute`` or ``--no-site-packages`` options. If
-   your system's default Python is in the 3.x series you man need to
+   your system's default Python is in the 3.x series you may need to
    run ``virtualenv`` with the  ``--python=python2.7`` or
    ``--python=python2.6`` options.
 
@@ -173,12 +178,17 @@ The above provides an in-package install of ``virtualenv``. While this
 is counter to the conventional ``virtualenv`` configuration, it is
 more reliable and considerably easier to configure and illustrate. If
 you're familiar with Python packaging you may consider deploying with
-your preferred the method.
+your preferred method.
 
 Assuming you are going to deploy with FastCGI, you should also install
 flup::
 
     ./bin/easy_install flup
+
+(Sometimes this breaks because flup's site is flakey.  If it does for
+you, try)::
+
+    ./bin/easy_install https://pypi.python.org/pypi/flup/1.0.3.dev-20110405
 
 This concludes the initial configuration of the development
 environment. In the future, when you update your
@@ -186,8 +196,31 @@ codebase, you should also run::
 
     ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate
 
+Note: If you are running an active site, depending on your server
+configuration, you may need to stop it first or the dbupdate command
+may hang (and it's certainly a good idea to restart it after the
+update)
+
+
 Deploy MediaGoblin Services
 ---------------------------
+
+Edit site configuration
+~~~~~~~~~~~~~~~~~~~~~~~
+
+A few basic properties must be set before MediaGoblin will work. First
+make a copy of ``mediagoblin.ini`` for editing so the original config
+file isn't lost::
+
+    cp mediagoblin.ini mediagoblin_local.ini
+
+Then:
+ - Set ``email_sender_address`` to the address you wish to be used as
+   the sender for system-generated emails
+ - Edit ``direct_remote_path``, ``base_dir``, and ``base_url`` if
+   your mediagoblin directory is not the root directory of your
+   vhost.
+
 
 Configure MediaGoblin to use the PostgreSQL database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -224,11 +257,11 @@ browser to confirm that the service is operable.
 
 .. _webserver-config:
 
-Connect the Webserver to MediaGoblin with FastCGI
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This section describes how to configure MediaGoblin to work via
-FastCGI. Our configuration example will use nginx, however, you may
+FastCGI and nginx
+~~~~~~~~~~~~~~~~~
+
+This configuration example will use nginx, however, you may
 use any webserver of your choice as long as it supports the FastCGI
 protocol. If you do not already have a web server, consider nginx, as
 the configuration files may be more clear than the
@@ -270,6 +303,10 @@ this ``nginx.conf`` file should be modeled on the following::
 
      # Change this to update the upload size limit for your users
      client_max_body_size 8m;
+
+     # prevent attacks (someone uploading a .txt file that the browser
+     # interprets as an HTML file, etc.)
+     add_header X-Content-Type-Options nosniff;
 
      server_name mediagoblin.example.org www.mediagoblin.example.org;
      access_log /var/log/nginx/mediagoblin.example.access.log;
@@ -325,3 +362,24 @@ Visit the site you've set up in your browser by visiting
    smaller deployments. However, for larger production deployments
    with larger processing requirements, see the
    ":doc:`production-deployments`" documentation.
+   
+
+Apache
+~~~~~~
+
+Instructions and scripts for running MediaGoblin on an Apache server
+can be found on the `MediaGoblin wiki <http://wiki.mediagoblin.org/Deployment>`_.
+
+
+Security Considerations
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. warning::
+
+   The directory ``user_dev/crypto/`` contains some very
+   sensitive files.
+   Especially the ``itsdangeroussecret.bin`` is very important
+   for session security. Make sure not to leak its contents anywhere.
+   If the contents gets leaked nevertheless, delete your file
+   and restart the server, so that it creates a new secret key.
+   All previous sessions will be invalifated then.

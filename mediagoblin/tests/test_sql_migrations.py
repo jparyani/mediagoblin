@@ -25,8 +25,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import select, insert
 from migrate import changeset
 
-from mediagoblin.db.sql.base import GMGTableBase
-from mediagoblin.db.sql.util import MigrationManager, RegisterMigration
+from mediagoblin.db.base import GMGTableBase
+from mediagoblin.db.migration_tools import MigrationManager, RegisterMigration
 from mediagoblin.tools.common import CollectingPrinter
 
 
@@ -320,6 +320,28 @@ def creature_power_hitpower_to_float(db_conn):
         Column('hitpower', Integer, nullable=False))
 
     creature_power.c.hitpower.alter(type=Float)
+
+
+@RegisterMigration(8, FULL_MIGRATIONS)
+def creature_power_name_creature_unique(db_conn):
+    """
+    Add a unique constraint to name and creature on creature_power.
+
+    We don't want multiple creature powers with the same name per creature!
+    """
+    # Note: We don't actually check to see if this constraint is set
+    # up because at present there's no way to do so in sqlalchemy :\
+
+    metadata = MetaData(bind=db_conn.bind)
+
+    creature_power = Table(
+        'creature_power', metadata,
+        autoload=True, autoload_with=db_conn.bind)
+        
+    cons = changeset.constraint.UniqueConstraint(
+        'name', 'creature', table=creature_power)
+
+    cons.create()
 
 
 def _insert_migration1_objects(session):
@@ -660,7 +682,7 @@ def test_set1_to_set3():
         u'__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
         printer)
 
-    assert migration_manager.latest_migration == 7
+    assert migration_manager.latest_migration == 8
     assert migration_manager.database_current_migration == 0
 
     # Migrate
@@ -679,14 +701,15 @@ def test_set1_to_set3():
    + Running migration 5, "level_exit_index_from_and_to_level"... done.
    + Running migration 6, "creature_power_index_creature"... done.
    + Running migration 7, "creature_power_hitpower_to_float"... done.
+   + Running migration 8, "creature_power_name_creature_unique"... done.
 """
     
     # Make sure version matches expected
     migration_manager = MigrationManager(
         u'__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
         printer)
-    assert migration_manager.latest_migration == 7
-    assert migration_manager.database_current_migration == 7
+    assert migration_manager.latest_migration == 8
+    assert migration_manager.database_current_migration == 8
 
     # Check all things in database match expected
 

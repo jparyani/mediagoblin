@@ -19,6 +19,166 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+0.3.3
+=====
+
+**Do this to upgrade**
+
+1. Make sure to run ``bin/gmg dbupdate`` after upgrading.
+2. OpenStreetMap is now a plugin, so if you want to use it, add the
+   following to your config file:
+
+   .. code-block:: ini
+
+      [plugins]
+      [[mediagoblin.plugins.geolocation]]
+
+If you have your own theme, you may need to make some adjustments to
+it as some theme related things may have changed in this release.  If
+you run into problems, don't hesitate to
+`contact us <http://mediagoblin.org/pages/join.html>`_
+(IRC is often best).
+
+**New features**
+
+* New dropdown menu for accessing various features.
+
+* Significantly improved URL generation.  Now mediagoblin won't give
+  up on making a slug if it looks like there will be a duplicate;
+  it'll try extra hard to generate a meaningful one instead.
+
+  Similarly, linking to an id no longer can possibly conflict with
+  linking to a slug; /u/username/m/id:35/ is the kind of reference we
+  now use to linking to entries with ids.  However, old links with
+  entries that linked to ids should work just fine with our migration.
+  The only urls that might break in this release are ones using colons
+  or equal signs.
+
+* New template hooks for plugin authoring.
+
+* As a demonstration of new template hooks for plugin authoring,
+  openstreetmap support now moved to a plugin!
+
+* Method to add media to collections switched from icon of paperclip
+  to button with "add to collection" text.
+
+* Bug where videos often failed to produce a proper thumbnail fixed!
+
+* Copying around files in MediaGoblin now much more efficient, doesn't
+  waste gobs of memory.
+
+* Video transcoding now optional for videos that meet certain
+  criteria.  By default, MediaGoblin will not transcode webm videos
+  that are smaller in resolution than the MediaGoblin defaults, and
+  MediaGoblin can also be configured to allow theora files to not be
+  transcoded as well.
+
+* Per-user license preference option; always want your uploads to be
+  BY-SA and tired of changing that field?  You can now set your
+  license preference in your user settings.
+
+* Video player now responsive; better for mobile!
+
+* You can now delete your account from the user preferences page if
+  you so wish.
+
+**Other changes**
+
+* Plugin writers: Internal restructuring led to mediagoblin.db.sql* be
+  mediagoblin.db.* starting from 0.3.3
+
+* Dependency list has been reduced not requiring the "webob" package anymore.
+
+* And many small fixes/improvements, too numerous to list!
+
+
+0.3.2
+=====
+
+This will be the last release that is capable of converting from an earlier
+MongoDB-based MediaGoblin instance to the newer SQL-based system.
+
+**Do this to upgrade**
+
+    # directory of your mediagoblin install
+    cd /srv/mediagoblin.example.org
+
+    # copy source for this release
+    git fetch
+    git checkout tags/v0.3.2
+
+    # perform any needed database updates
+    bin/gmg dbupdate
+    
+    # restart your servers however you do that, e.g.,
+    sudo service mediagoblin-paster restart
+    sudo service mediagoblin-celeryd restart
+
+
+**New features**
+
+* **3d model support!**
+
+  You can now upload STL and OBJ files and display them in
+  MediaGoblin.  Requires a recent-ish Blender; for details see:
+  :ref:`deploying-chapter`
+
+* **trim_whitespace**
+
+  We bundle the optional plugin trim_whitespace which reduces the size
+  of the delivered html output by reducing redundant whitespace.
+
+  See :ref:`core-plugin-section` for plugin documentation
+
+* **A new API!**
+
+  It isn't well documented yet but we do have an API.  There is an
+  `android application in progress <https://gitorious.org/mediagoblin/mediagoblin-android>`_
+  which makes use of it, and there are some demo applications between
+  `automgtic <https://github.com/jwandborg/automgtic>`_, an
+  automatic media uploader for your desktop
+  and `OMGMG <https://github.com/jwandborg/omgmg>`_, an example of
+  a web application hooking up to the API.
+
+  This is a plugin, so you have to enable it in your mediagoblin
+  config file by adding a section under [plugins] like::
+
+    [plugins]
+    [[mediagoblin.plugins.api]]
+
+  Note that the API works but is not nailed down... the way it is
+  called may change in future releases.
+
+* **OAuth login support**
+
+  For applications that use OAuth to connect to the API.
+
+  This is a plugin, so you have to enable it in your mediagoblin
+  config file by adding a section under [plugins] like::
+
+    [plugins]
+    [[mediagoblin.plugins.oauth]]
+
+* **Collections**
+
+  We now have user-curated collections support.  These are arbitrary
+  galleries that are customizable by users.  You can add media to
+  these by clicking on the paperclip icon when logged in and looking
+  at a media entry.
+
+* **OpenStreetMap licensing display improvements**
+
+  More accurate display of OSM licensing, and less disruptive: you
+  click to "expand" the display of said licensing.
+
+  Geolocation is also now on by default.
+
+* **Miscelaneous visual improvements**
+
+  We've made a number of small visual improvements including newer and
+  nicer looking thumbnails and improved checkbox placement.
+
+
 
 0.3.1
 =====

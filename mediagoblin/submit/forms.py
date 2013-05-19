@@ -18,7 +18,7 @@
 import wtforms
 
 from mediagoblin.tools.text import tag_length_validator
-from mediagoblin.tools.translate import fake_ugettext_passthrough as _
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.licenses import licenses_as_choices
 
 

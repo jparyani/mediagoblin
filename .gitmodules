@@ -1,0 +1,6 @@
+[submodule "pdf.js"]
+	path = pdf.js
+	url = git://github.com/mozilla/pdf.js.git
+[submodule "extlib/pdf.js"]
+	path = extlib/pdf.js
+	url = git://github.com/mozilla/pdf.js.git

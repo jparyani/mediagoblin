@@ -14,7 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.tools.extlib.EXIF import process_file, Ratio
+try:
+    from EXIF import process_file, Ratio
+except ImportError:
+    from mediagoblin.tools.extlib.EXIF import process_file, Ratio
+
 from mediagoblin.processing import BadMediaFail
 from mediagoblin.tools.translate import pass_to_ugettext as _
 
@@ -46,7 +50,10 @@ def exif_fix_image_orientation(im, exif_tags):
     Translate any EXIF orientation to raw orientation
 
     Cons:
-    - REDUCES IMAGE QUALITY by recompressig it
+    - Well, it changes the image, which means we'll recompress
+      it... not a problem if scaling it down already anyway.  We might
+      lose some quality in recompressing if it's at the same-size
+      though
 
     Pros:
     - Prevents neck pain
@@ -58,7 +65,7 @@ def exif_fix_image_orientation(im, exif_tags):
             6: 270,
             8: 90}
         orientation = exif_tags['Image Orientation'].values[0]
-        if orientation in rotation_map.keys():
+        if orientation in rotation_map:
             im = im.rotate(
                 rotation_map[orientation])
 
@@ -69,15 +76,11 @@ def extract_exif(filename):
     """
     Returns EXIF tags found in file at ``filename``
     """
-    exif_tags = {}
-
     try:
-        image = open(filename)
-        exif_tags = process_file(image)
+        with file(filename) as image:
+            return process_file(image, details=False)
     except IOError:
         raise BadMediaFail(_('Could not read the image file.'))
-
-    return exif_tags
 
 
 def clean_exif(exif):
@@ -92,13 +95,8 @@ def clean_exif(exif):
         'JPEGThumbnail',
         'Thumbnail JPEGInterchangeFormat']
 
-    clean_exif = {}
-
-    for key, value in exif.items():
-        if not key in disabled_tags:
-            clean_exif[key] = _ifd_tag_to_dict(value)
-
-    return clean_exif
+    return dict((key, _ifd_tag_to_dict(value)) for (key, value)
+            in exif.iteritems() if key not in disabled_tags)
 
 
 def _ifd_tag_to_dict(tag):
@@ -119,13 +117,8 @@ def _ifd_tag_to_dict(tag):
         data['printable'] = tag.printable.decode('utf8', 'replace')
 
     if type(tag.values) == list:
-        data['values'] = []
-        for val in tag.values:
-            if isinstance(val, Ratio):
-                data['values'].append(
-                    _ratio_to_list(val))
-            else:
-                data['values'].append(val)
+        data['values'] = [_ratio_to_list(val) if isinstance(val, Ratio) else val
+                for val in tag.values]
     else:
         if isinstance(tag.values, str):
             # Force UTF-8, so that it fits into the DB
@@ -141,12 +134,7 @@ def _ratio_to_list(ratio):
 
 
 def get_useful(tags):
-    useful = {}
-    for key, tag in tags.items():
-        if key in USEFUL_TAGS:
-            useful[key] = tag
-
-    return useful
+    return dict((key, tag) for (key, tag) in tags.iteritems() if key in USEFUL_TAGS)
 
 
 def get_gps_data(tags):
@@ -163,7 +151,7 @@ def get_gps_data(tags):
             'latitude': tags['GPS GPSLatitude'],
             'longitude': tags['GPS GPSLongitude']}
 
-        for key, dat in dms_data.items():
+        for key, dat in dms_data.iteritems():
             gps_data[key] = (
                 lambda v:
                     float(v[0].num) / float(v[0].den) \

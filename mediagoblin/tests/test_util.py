@@ -70,13 +70,13 @@ I hope you like unit tests JUST AS MUCH AS I DO!"""
 I hope you like unit tests JUST AS MUCH AS I DO!"""
 
 def test_slugify():
-    assert url.slugify('a walk in the park') == 'a-walk-in-the-park'
-    assert url.slugify('A Walk in the Park') == 'a-walk-in-the-park'
-    assert url.slugify('a  walk in the park') == 'a-walk-in-the-park'
-    assert url.slugify('a walk in-the-park') == 'a-walk-in-the-park'
-    assert url.slugify('a w@lk in the park?') == 'a-w-lk-in-the-park'
-    assert url.slugify(u'a walk in the par\u0107') == 'a-walk-in-the-parc'
-    assert url.slugify(u'\u00E0\u0042\u00E7\u010F\u00EB\u0066') == 'abcdef'
+    assert url.slugify(u'a walk in the park') == u'a-walk-in-the-park'
+    assert url.slugify(u'A Walk in the Park') == u'a-walk-in-the-park'
+    assert url.slugify(u'a  walk in the park') == u'a-walk-in-the-park'
+    assert url.slugify(u'a walk in-the-park') == u'a-walk-in-the-park'
+    assert url.slugify(u'a w@lk in the park?') == u'a-w-lk-in-the-park'
+    assert url.slugify(u'a walk in the par\u0107') == u'a-walk-in-the-parc'
+    assert url.slugify(u'\u00E0\u0042\u00E7\u010F\u00EB\u0066') == u'abcdef'
 
 def test_locale_to_lower_upper():
     """
@@ -102,6 +102,28 @@ def test_locale_to_lower_lower():
     # crazy renditions.  Useful?
     assert translate.locale_to_lower_lower('en-US') == 'en-us'
     assert translate.locale_to_lower_lower('en_us') == 'en-us'
+
+
+def test_gettext_lazy_proxy():
+    from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+    from mediagoblin.tools.translate import pass_to_ugettext, set_thread_locale
+    proxy = _(u"Password")
+    orig = u"Password"
+
+    set_thread_locale("es")
+    p1 = unicode(proxy)
+    p1_should = pass_to_ugettext(orig)
+    assert p1_should != orig, "Test useless, string not translated"
+    assert p1 == p1_should
+
+    set_thread_locale("sv")
+    p2 = unicode(proxy)
+    p2_should = pass_to_ugettext(orig)
+    assert p2_should != orig, "Test broken, string not translated"
+    assert p2 == p2_should
+
+    assert p1_should != p2_should, "Test broken, same translated string"
+    assert p1 != p2
 
 
 def test_html_cleaner():

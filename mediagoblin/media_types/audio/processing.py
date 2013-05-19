@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import tempfile
+from tempfile import NamedTemporaryFile
 import os
 
 from mediagoblin import mg_globals as mgg
@@ -42,10 +42,15 @@ def sniff_handler(media_file, **kw):
     return False
 
 
-def process_audio(entry):
-    audio_config = mgg.global_config['media_type:mediagoblin.media_types.audio']
+def process_audio(proc_state):
+    """Code to process uploaded audio. Will be run by celery.
 
-    workbench = mgg.workbench_manager.create_workbench()
+    A Workbench() represents a local tempory dir. It is automatically
+    cleaned up when this function exits.
+    """
+    entry = proc_state.entry
+    workbench = proc_state.workbench
+    audio_config = mgg.global_config['media_type:mediagoblin.media_types.audio']
 
     queued_filepath = entry.queued_media_file
     queued_filename = workbench.localized_file(
@@ -73,7 +78,7 @@ def process_audio(entry):
 
     transcoder = AudioTranscoder()
 
-    with tempfile.NamedTemporaryFile() as webm_audio_tmp:
+    with NamedTemporaryFile(dir=workbench.dir) as webm_audio_tmp:
         progress_callback = ProgressCallback(entry)
 
         transcoder.transcode(
@@ -99,7 +104,7 @@ def process_audio(entry):
                 original=os.path.splitext(
                     queued_filepath[-1])[0]))
 
-        with tempfile.NamedTemporaryFile(suffix='.ogg') as wav_tmp:
+        with NamedTemporaryFile(dir=workbench.dir, suffix='.ogg') as wav_tmp:
             _log.info('Creating OGG source for spectrogram')
             transcoder.transcode(
                 queued_filename,
@@ -109,7 +114,7 @@ def process_audio(entry):
 
             thumbnailer = AudioThumbnailer()
 
-            with tempfile.NamedTemporaryFile(suffix='.jpg') as spectrogram_tmp:
+            with NamedTemporaryFile(dir=workbench.dir, suffix='.jpg') as spectrogram_tmp:
                 thumbnailer.spectrogram(
                     wav_tmp.name,
                     spectrogram_tmp.name,
@@ -122,7 +127,7 @@ def process_audio(entry):
 
                 entry.media_files['spectrogram'] = spectrogram_filepath
 
-                with tempfile.NamedTemporaryFile(suffix='.jpg') as thumb_tmp:
+                with NamedTemporaryFile(dir=workbench.dir, suffix='.jpg') as thumb_tmp:
                     thumbnailer.thumbnail_spectrogram(
                         spectrogram_tmp.name,
                         thumb_tmp.name,
@@ -142,9 +147,10 @@ def process_audio(entry):
     else:
         entry.media_files['thumb'] = ['fake', 'thumb', 'path.jpg']
 
-    mgg.queue_store.delete_file(queued_filepath)
-
-    entry.save()
-
-    # clean up workbench
-    workbench.destroy_self()
+    # Remove queued media file from storage and database.
+    # queued_filepath is in the task_id directory which should
+    # be removed too, but fail if the directory is not empty to be on
+    # the super-safe side.
+    mgg.queue_store.delete_file(queued_filepath)      # rm file
+    mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
+    entry.queued_media_file = []

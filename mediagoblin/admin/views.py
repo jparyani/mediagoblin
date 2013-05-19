@@ -14,28 +14,30 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.tools.response import render_to_response, render_404
-from mediagoblin.db.util import DESCENDING
-from mediagoblin.decorators import require_active_login
+from werkzeug.exceptions import Forbidden
 
+from mediagoblin.db.models import MediaEntry
+from mediagoblin.decorators import require_active_login
+from mediagoblin.tools.response import render_to_response
 
 @require_active_login
 def admin_processing_panel(request):
     '''
     Show the global processing panel for this instance
     '''
+    # TODO: Why not a "require_admin_login" decorator throwing a 403 exception?
     if not request.user.is_admin:
-        return render_404(request)
+        raise Forbidden()
 
-    processing_entries = request.db.MediaEntry.find(
-        {'state': u'processing'}).sort('created', DESCENDING)
+    processing_entries = MediaEntry.query.filter_by(state = u'processing').\
+        order_by(MediaEntry.created.desc())
 
     # Get media entries which have failed to process
-    failed_entries = request.db.MediaEntry.find(
-        {'state': u'failed'}).sort('created', DESCENDING)
+    failed_entries = MediaEntry.query.filter_by(state = u'failed').\
+        order_by(MediaEntry.created.desc())
 
-    processed_entries = request.db.MediaEntry.find(
-            {'state': u'processed'}).sort('created', DESCENDING).limit(10)
+    processed_entries = MediaEntry.query.filter_by(state = u'processed').\
+        order_by(MediaEntry.created.desc()).limit(10)
 
     # Render to response
     return render_to_response(

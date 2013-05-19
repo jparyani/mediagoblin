@@ -21,8 +21,6 @@ import traceback
 from urllib2 import urlopen, Request, HTTPError
 from urllib import urlencode
 
-from mediagoblin.tools.common import TESTS_ENABLED
-
 _log = logging.getLogger(__name__)
 
 TESTS_CALLBACKS = {}

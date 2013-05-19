@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "mediagoblin/base.html" %}
+{%- extends "mediagoblin/base.html" %}
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
@@ -32,21 +32,31 @@
 
 
 {% block mediagoblin_content %}
-
-  <form action="{{ request.urlgen('mediagoblin.edit.account') }}?username={{ 
+  <form action="{{ request.urlgen('mediagoblin.edit.account') }}?username={{
                                                      user.username }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box edit_box">
       <h1>
         {%- trans username=user.username -%}
           Changing {{ username }}'s account settings
-        {%- endtrans %}
+        {%- endtrans -%}
       </h1>
-      {{ wtforms_util.render_divs(form) }}
+      {{ wtforms_util.render_field_div(form.old_password) }}
+      {{ wtforms_util.render_field_div(form.new_password) }}
+      <div class="form_field_input">
+        <p>{{ form.wants_comment_notification }}
+           {{ wtforms_util.render_label(form.wants_comment_notification) }}</p>
+      </div>
+      {{- wtforms_util.render_field_div(form.license_preference) }}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button_form" />
 	{{ csrf_token }}
       </div>
     </div>
   </form>
-{% endblock %}    
+  <div class="delete">
+    <a href="{{ request.urlgen('mediagoblin.edit.delete_account') }}">
+      {%- trans %}Delete my account{% endtrans -%}
+    </a>
+  </div>
+{% endblock %}

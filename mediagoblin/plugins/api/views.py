@@ -16,22 +16,18 @@
 
 import json
 import logging
-import uuid
 
 from os.path import splitext
-from webob import exc, Response
-from werkzeug.utils import secure_filename
-from werkzeug.datastructures import FileStorage
-from celery import registry
+from werkzeug.exceptions import BadRequest, Forbidden
+from werkzeug.wrappers import Response
 
-from mediagoblin.db.util import ObjectId
 from mediagoblin.decorators import require_active_login
-from mediagoblin.processing import mark_entry_failed
-from mediagoblin.processing.task import ProcessMedia
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.media_types import sniff_media
 from mediagoblin.plugins.api.tools import api_auth, get_entry_serializable, \
         json_response
+from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
+    run_process_media
 
 _log = logging.getLogger(__name__)
 
@@ -47,20 +43,17 @@ def post_entry(request):
 
     if request.method != 'POST':
         _log.debug('Must POST against post_entry')
-        return exc.HTTPBadRequest()
+        raise BadRequest()
 
-    if not 'file' in request.files \
-            or not isinstance(request.files['file'], FileStorage) \
-            or not request.files['file'].stream:
+    if not check_file_field(request, 'file'):
         _log.debug('File field not found')
-        return exc.HTTPBadRequest()
+        raise BadRequest()
 
     media_file = request.files['file']
 
     media_type, media_manager = sniff_media(media_file)
 
     entry = request.db.MediaEntry()
-    entry.id = ObjectId()
     entry.media_type = unicode(media_type)
     entry.title = unicode(request.form.get('title')
             or splitext(media_file.filename)[0])
@@ -72,28 +65,14 @@ def post_entry(request):
 
     entry.generate_slug()
 
-    task_id = unicode(uuid.uuid4())
-
-    # Now store generate the queueing related filename
-    queue_filepath = request.app.queue_store.get_unique_filepath(
-        ['media_entries',
-            task_id,
-            secure_filename(media_file.filename)])
-
     # queue appropriately
-    queue_file = request.app.queue_store.get_file(
-        queue_filepath, 'wb')
+    queue_file = prepare_queue_task(request.app, entry, media_file.filename)
 
     with queue_file:
         queue_file.write(request.files['file'].stream.read())
 
-    # Add queued filename to the entry
-    entry.queued_media_file = queue_filepath
-
-    entry.queued_task_id = task_id
-
     # Save now so we have this data before kicking off processing
-    entry.save(validate=True)
+    entry.save()
 
     if request.form.get('callback_url'):
         metadata = request.db.ProcessingMetaData()
@@ -105,36 +84,23 @@ def post_entry(request):
     #
     # (... don't change entry after this point to avoid race
     # conditions with changes to the document via processing code)
-    process_media = registry.tasks[ProcessMedia.name]
-    try:
-        process_media.apply_async(
-            [unicode(entry._id)], {},
-            task_id=task_id)
-    except BaseException as e:
-        # The purpose of this section is because when running in "lazy"
-        # or always-eager-with-exceptions-propagated celery mode that
-        # the failure handling won't happen on Celery end.  Since we
-        # expect a lot of users to run things in this way we have to
-        # capture stuff here.
-        #
-        # ... not completely the diaper pattern because the
-        # exception is re-raised :)
-        mark_entry_failed(entry._id, e)
-        # re-raise the exception
-        raise
+    feed_url = request.urlgen(
+        'mediagoblin.user_pages.atom_feed',
+        qualified=True, user=request.user.username)
+    run_process_media(entry, feed_url)
 
     return json_response(get_entry_serializable(entry, request.urlgen))
 
 
 @api_auth
+@require_active_login
 def api_test(request):
-    if not request.user:
-        return exc.HTTPForbidden()
-
     user_data = {
             'username': request.user.username,
             'email': request.user.email}
 
+    # TODO: This is the *only* thing using Response() here, should that
+    # not simply use json_response()?
     return Response(json.dumps(user_data))
 
 

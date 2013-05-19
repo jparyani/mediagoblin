@@ -18,6 +18,7 @@ import os
 import sys
 
 from celery import Celery
+from mediagoblin.tools.pluginapi import hook_runall
 
 
 MANDATORY_CELERY_IMPORTS = ['mediagoblin.processing.task']
@@ -64,6 +65,8 @@ def setup_celery_app(app_config, global_config,
         app_config, global_config, force_celery_always_eager)
     celery_app = Celery()
     celery_app.config_from_object(celery_settings)
+
+    hook_runall('celery_setup', celery_app)
 
 
 def setup_celery_from_config(app_config, global_config,

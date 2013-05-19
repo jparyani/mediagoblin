@@ -14,14 +14,23 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from math import ceil
+
 import jinja2
+from jinja2.ext import Extension
+from jinja2.nodes import Include, Const
+
 from babel.localedata import exists
+from werkzeug.urls import url_quote_plus
+
 from mediagoblin import mg_globals
 from mediagoblin import messages
+from mediagoblin import _version
 from mediagoblin.tools import common
-from mediagoblin.tools.translate import setup_gettext
+from mediagoblin.tools.translate import set_thread_locale
+from mediagoblin.tools.pluginapi import get_hook_templates, hook_transform
+from mediagoblin.tools.timesince import timesince
 from mediagoblin.meddleware.csrf import render_csrf_form_token
+
 
 
 SETUP_JINJA_ENVS = {}
@@ -34,11 +43,11 @@ def get_jinja_env(template_loader, locale):
     (In the future we may have another system for providing theming;
     for now this is good enough.)
     """
-    setup_gettext(locale)
+    set_thread_locale(locale)
 
     # If we have a jinja environment set up with this locale, just
     # return that one.
-    if SETUP_JINJA_ENVS.has_key(locale):
+    if locale in SETUP_JINJA_ENVS:
         return SETUP_JINJA_ENVS[locale]
 
     # jinja2.StrictUndefined will give exceptions on references
@@ -46,7 +55,9 @@ def get_jinja_env(template_loader, locale):
     template_env = jinja2.Environment(
         loader=template_loader, autoescape=True,
         undefined=jinja2.StrictUndefined,
-        extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'])
+        extensions=[
+            'jinja2.ext.i18n', 'jinja2.ext.autoescape',
+            TemplateHookExtension])
 
     template_env.install_gettext_callables(
         mg_globals.thread_scope.translations.ugettext,
@@ -57,10 +68,20 @@ def get_jinja_env(template_loader, locale):
     # ... construct a grid of thumbnails or other media
     # ... have access to the global and app config
     template_env.globals['fetch_messages'] = messages.fetch_messages
-    template_env.globals['gridify_list'] = gridify_list
-    template_env.globals['gridify_cursor'] = gridify_cursor
     template_env.globals['app_config'] = mg_globals.app_config
     template_env.globals['global_config'] = mg_globals.global_config
+    template_env.globals['version'] = _version.__version__
+
+    template_env.filters['urlencode'] = url_quote_plus
+
+    # add human readable fuzzy date time
+    template_env.globals['timesince'] = timesince
+
+    # allow for hooking up plugin templates
+    template_env.globals['get_hook_templates'] = get_hook_templates
+
+    template_env.globals = hook_transform(
+        'template_global_context', template_env.globals)
 
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env
@@ -85,6 +106,20 @@ def render_template(request, template_path, context):
     rendered_csrf_token = render_csrf_form_token(request)
     if rendered_csrf_token is not None:
         context['csrf_token'] = render_csrf_form_token(request)
+
+    # allow plugins to do things to the context
+    if request.controller_name:
+        context = hook_transform(
+            (request.controller_name, template_path),
+            context)
+
+    # More evil: allow plugins to possibly do something to the context
+    # in every request ever with access to the request and other
+    # variables.  Note: this is slower than using
+    # template_global_context
+    context = hook_transform(
+        'template_context_prerender', context)
+
     rendered = template.render(context)
 
     if common.TESTS_ENABLED:
@@ -98,30 +133,28 @@ def clear_test_template_context():
     TEMPLATE_TEST_CONTEXT = {}
 
 
-def gridify_list(this_list, num_cols=5):
+class TemplateHookExtension(Extension):
     """
-    Generates a list of lists where each sub-list's length depends on
-    the number of columns in the list
+    Easily loop through a bunch of templates from a template hook.
+
+    Use:
+      {% template_hook("comment_extras") %}
+
+    ... will include all templates hooked into the comment_extras section.
     """
-    grid = []
 
-    # Figure out how many rows we should have
-    num_rows = int(ceil(float(len(this_list)) / num_cols))
+    tags = set(["template_hook"])
 
-    for row_num in range(num_rows):
-        slice_min = row_num * num_cols
-        slice_max = (row_num + 1) * num_cols
+    def parse(self, parser):
+        includes = []
+        expr = parser.parse_expression()
+        lineno = expr.lineno
+        hook_name = expr.args[0].value
 
-        row = this_list[slice_min:slice_max]
+        for template_name in get_hook_templates(hook_name):
+            includes.append(
+                parser.parse_import_context(
+                    Include(Const(template_name), True, False, lineno=lineno),
+                    True))
 
-        grid.append(row)
-
-    return grid
-
-
-def gridify_cursor(this_cursor, num_cols=5):
-    """
-    Generates a list of lists where each sub-list's length depends on
-    the number of columns in the list
-    """
-    return gridify_list(list(this_cursor), num_cols)
+        return includes

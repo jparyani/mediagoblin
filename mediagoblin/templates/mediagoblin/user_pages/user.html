@@ -90,14 +90,13 @@
     </h1>
 
     {% if not user.url and not user.bio %}
-      {% if request.user and (request.user._id == user._id) %}
+      {% if request.user and (request.user.id == user.id) %}
         <div class="profile_sidebar empty_space">
           <p>
             {% trans %}Here's a spot to tell others about yourself.{% endtrans %}
           </p>
-          <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
-                            user.username }}"
-             class="button_action">
+          <a href="{{ request.urlgen('mediagoblin.edit.profile',
+                   user=user.username) }}" class="button_action">
             {%- trans %}Edit profile{% endtrans -%}
           </a>
       {% else %}
@@ -112,19 +111,25 @@
       <div class="profile_sidebar">
         {% include "mediagoblin/utils/profile.html" %}
         {% if request.user and
-              (request.user._id == user._id or request.user.is_admin) %}
-          <a href="{{ request.urlgen('mediagoblin.edit.profile') }}?username={{
-                          user.username }}">
+              (request.user.id == user.id or request.user.is_admin) %}
+          <a href="{{ request.urlgen('mediagoblin.edit.profile',
+                   user=user.username) }}">
             {%- trans %}Edit profile{% endtrans -%}
           </a>
         {% endif %}
     {% endif %}
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.user_pages.collection_list',
+                                           user=user.username) }}">
+          {%- trans %}Browse collections{% endtrans -%}
+        </a>
+      </p>
     </div>
 
     {% if media_entries.count() %}
       <div class="profile_showcase">
         {{ object_gallery(request, media_entries, pagination,
-                          pagination_base_url=user_gallery_url, col_number=2) }}
+                          pagination_base_url=user_gallery_url, col_number=3) }}
         {% include "mediagoblin/utils/object_gallery.html" %}
         <div class="clear"></div>
         <p>
@@ -139,7 +144,7 @@
         {% include "mediagoblin/utils/feed_link.html" %}
       </div>
     {% else %}
-      {% if request.user and (request.user._id == user._id) %}
+      {% if request.user and (request.user.id == user.id) %}
         <div class="profile_showcase empty_space">
           <p>
             {% trans -%}

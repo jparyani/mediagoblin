@@ -14,42 +14,29 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from werkzeug.routing import Map, Rule
+import logging
 
-url_map = Map()
-
-view_functions = {}
-
-def add_route(endpoint, url, controller):
-    """
-    Add a route to the url mapping
-    """
-    # XXX: We cannot use this, since running tests means that the plugin
-    # routes will be populated over and over over the same session.
-    #
-    # assert endpoint not in view_functions.keys(), 'Trying to overwrite a rule'
-
-    view_functions.update({endpoint: controller})
-
-    url_map.add(Rule(url, endpoint=endpoint))
-
-def mount(mountpoint, routes):
-    """
-    Mount a bunch of routes to this mountpoint
-    """
-    for endpoint, url, controller in routes:
-        url = "%s/%s" % (mountpoint.rstrip('/'), url.lstrip('/'))
-        add_route(endpoint, url, controller)
-
-add_route('index', '/', 'mediagoblin.views:root_view')
-
+from mediagoblin.tools.routing import add_route, mount, url_map
+from mediagoblin.tools.pluginapi import PluginManager
 from mediagoblin.admin.routing import admin_routes
 from mediagoblin.auth.routing import auth_routes
-mount('/auth', auth_routes)
-mount('/a', admin_routes)
 
-import mediagoblin.submit.routing
-import mediagoblin.user_pages.routing
-import mediagoblin.edit.routing
-import mediagoblin.webfinger.routing
-import mediagoblin.listings.routing
+
+_log = logging.getLogger(__name__)
+
+
+def get_url_map():
+    add_route('index', '/', 'mediagoblin.views:root_view')
+    mount('/auth', auth_routes)
+    mount('/a', admin_routes)
+
+    import mediagoblin.submit.routing
+    import mediagoblin.user_pages.routing
+    import mediagoblin.edit.routing
+    import mediagoblin.webfinger.routing
+    import mediagoblin.listings.routing
+
+    for route in PluginManager().get_routes():
+        add_route(*route)
+
+    return url_map

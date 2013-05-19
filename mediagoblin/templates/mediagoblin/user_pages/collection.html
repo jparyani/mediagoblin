@@ -44,7 +44,7 @@
       {{ collection_title }} by <a href="{{ user_url }}">{{ username }}</a>
     {%- endtrans %}
   </h1>
-  {% if request.user and (collection.creator == request.user._id or 
+  {% if request.user and (collection.creator == request.user.id or 
                                                 request.user.is_admin) %}
     {% set edit_url = request.urlgen('mediagoblin.edit.edit_collection',
                                      user=collection.get_creator.username,
@@ -56,11 +56,11 @@
     <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
   {% endif %}
 
-  {%- trans collection_description=collection.description -%}
   <p>
-    {{ collection_description }}
+    {% autoescape False %}
+      {{ collection.description_html }}
+    {% endautoescape %}
   </p>
-  {%- endtrans %}
 
   {{ collection_gallery(request, collection_items, pagination) }}
     

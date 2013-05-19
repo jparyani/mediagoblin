@@ -83,6 +83,9 @@ class PluginManager(object):
         # list of registered template paths
         "template_paths": set(),
 
+        # list of template hooks
+        "template_hooks": {},
+
         # list of registered routes
         "routes": [],
         }
@@ -131,6 +134,18 @@ class PluginManager(object):
     def get_routes(self):
         return tuple(self.routes)
 
+    def register_template_hooks(self, template_hooks):
+        for hook, templates in template_hooks.items():
+            if isinstance(templates, (list, tuple)):
+                self.template_hooks.setdefault(hook, []).extend(list(templates))
+            else:
+                # In this case, it's actually a single callable---not a
+                # list of callables.
+                self.template_hooks.setdefault(hook, []).append(templates)
+
+    def get_template_hooks(self, hook_name):
+        return self.template_hooks.get(hook_name, [])
+
 
 def register_routes(routes):
     """Registers one or more routes
@@ -145,16 +160,14 @@ def register_routes(routes):
 
     Example passing in a single route:
 
-    >>> from routes import Route
-    >>> register_routes(Route('about-view', '/about',
-    ...     controller=about_view_handler))
+    >>> register_routes(('about-view', '/about',
+    ...     'mediagoblin.views:about_view_handler'))
 
     Example passing in a list of routes:
 
-    >>> from routes import Route
     >>> register_routes([
-    ...     Route('contact-view', '/contact', controller=contact_handler),
-    ...     Route('about-view', '/about', controller=about_handler)
+    ...     ('contact-view', '/contact', 'mediagoblin.views:contact_handler'),
+    ...     ('about-view', '/about', 'mediagoblin.views:about_handler')
     ... ])
 
 
@@ -210,3 +223,145 @@ def get_config(key):
     return plugin_section.get(key, {})
 
 
+def register_template_hooks(template_hooks):
+    """
+    Register a dict of template hooks.
+
+    Takes template_hooks as an argument, which is a dictionary of
+    template hook names/keys to the templates they should provide.
+    (The value can either be a single template path or an iterable
+    of paths.)
+
+    Example:
+
+    .. code-block:: python
+
+      {"media_sidebar": "/plugin/sidemess/mess_up_the_side.html",
+       "media_descriptionbox": ["/plugin/sidemess/even_more_mess.html",
+                                "/plugin/sidemess/so_much_mess.html"]}
+    """
+    PluginManager().register_template_hooks(template_hooks)
+
+
+def get_hook_templates(hook_name):
+    """
+    Get a list of hook templates for this hook_name.
+
+    Note: for the most part, you access this via a template tag, not
+    this method directly, like so:
+
+    .. code-block:: html+jinja
+
+      {% template_hook "media_sidebar" %}
+
+    ... which will include all templates for you, partly using this
+    method.
+
+    However, this method is exposed to templates, and if you wish, you
+    can iterate over templates in a template hook manually like so:
+
+    .. code-block:: html+jinja
+
+      {% for template_path in get_hook_templates("media_sidebar") %}
+        <div class="extra_structure">
+          {% include template_path %}
+        </div>
+      {% endfor %}
+
+    Returns:
+      A list of strings representing template paths.
+    """
+    return PluginManager().get_template_hooks(hook_name)
+
+
+#############################
+## Hooks: The Next Generation
+#############################
+
+
+def hook_handle(hook_name, *args, **kwargs):
+    """
+    Run through hooks attempting to find one that handle this hook.
+
+    All callables called with the same arguments until one handles
+    things and returns a non-None value.
+
+    (If you are writing a handler and you don't have a particularly
+    useful value to return even though you've handled this, returning
+    True is a good solution.)
+
+    Note that there is a special keyword argument:
+      if "default_handler" is passed in as a keyword argument, this will
+      be used if no handler is found.
+
+    Some examples of using this:
+     - You need an interface implemented, but only one fit for it
+     - You need to *do* something, but only one thing needs to do it.
+    """
+    default_handler = kwargs.pop('default_handler', None)
+
+    callables = PluginManager().get_hook_callables(hook_name)
+
+    result = None
+
+    for callable in callables:
+        result = callable(*args, **kwargs)
+
+        if result is not None:
+            break
+
+    if result is None and default_handler is not None:
+        result = default_handler(*args, **kwargs)
+
+    return result
+
+
+def hook_runall(hook_name, *args, **kwargs):
+    """
+    Run through all callable hooks and pass in arguments.
+
+    All non-None results are accrued in a list and returned from this.
+    (Other "false-like" values like False and friends are still
+    accrued, however.)
+
+    Some examples of using this:
+     - You have an interface call where actually multiple things can
+       and should implement it
+     - You need to get a list of things from various plugins that
+       handle them and do something with them
+     - You need to *do* something, and actually multiple plugins need
+       to do it separately
+    """
+    callables = PluginManager().get_hook_callables(hook_name)
+
+    results = []
+
+    for callable in callables:
+        result = callable(*args, **kwargs)
+
+        if result is not None:
+            results.append(result)
+
+    return results
+
+
+def hook_transform(hook_name, arg):
+    """
+    Run through a bunch of hook callables and transform some input.
+
+    Note that unlike the other hook tools, this one only takes ONE
+    argument.  This argument is passed to each function, which in turn
+    returns something that becomes the input of the next callable.
+
+    Some examples of using this:
+     - You have an object, say a form, but you want plugins to each be
+       able to modify it.
+    """
+    result = arg
+
+    callables = PluginManager().get_hook_callables(hook_name)
+
+    for callable in callables:
+        result = callable(result)
+
+    return result

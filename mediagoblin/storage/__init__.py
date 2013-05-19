@@ -101,10 +101,20 @@ class StorageInterface(object):
 
     def delete_file(self, filepath):
         """
-        Delete or dereference the file at filepath.
+        Delete or dereference the file (not directory) at filepath.
+        """
+        # Subclasses should override this method.
+        self.__raise_not_implemented()
 
-        This might need to delete directories, buckets, whatever, for
-        cleanliness.  (Be sure to avoid race conditions on that though)
+    def delete_dir(self, dirpath, recursive=False):
+        """Delete the directory at dirpath
+
+        :param recursive: Usually, a directory must not contain any
+            files for the delete to succeed. If True, containing files
+            and subdirectories within dirpath will be recursively
+            deleted.
+
+        :returns: True in case of success, False otherwise.
         """
         # Subclasses should override this method.
         self.__raise_not_implemented()
@@ -160,12 +170,13 @@ class StorageInterface(object):
         appropriate.
         """
         if self.local_storage:
-            shutil.copy(
-                self.get_local_path(filepath), dest_path)
+            # Note: this will copy in small chunks
+            shutil.copy(self.get_local_path(filepath), dest_path)
         else:
             with self.get_file(filepath, 'rb') as source_file:
                 with file(dest_path, 'wb') as dest_file:
-                    dest_file.write(source_file.read())
+                    # Copy from remote storage in 4M chunks
+                    shutil.copyfileobj(source_file, dest_file, length=4*1048576)
 
     def copy_local_to_storage(self, filename, filepath):
         """
@@ -177,7 +188,8 @@ class StorageInterface(object):
         """
         with self.get_file(filepath, 'wb') as dest_file:
             with file(filename, 'rb') as source_file:
-                dest_file.write(source_file.read())
+                # Copy to storage system in 4M chunks
+                shutil.copyfileobj(source_file, dest_file, length=4*1048576)
 
 
 ###########

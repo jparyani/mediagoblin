@@ -131,6 +131,43 @@ class CloudFilesStorage(StorageInterface):
                 self._resolve_filepath(filepath)])
 
 
+    def copy_locally(self, filepath, dest_path):
+        """
+        Copy this file locally.
+
+        A basic working method for this is provided that should
+        function both for local_storage systems and remote storge
+        systems, but if more efficient systems for copying locally
+        apply to your system, override this method with something more
+        appropriate.
+        """
+        # Override this method, using the "stream" iterator for efficient streaming
+        with self.get_file(filepath, 'rb') as source_file:
+            with file(dest_path, 'wb') as dest_file:
+                for data in source_file:
+                    dest_file.write(data)
+
+    def copy_local_to_storage(self, filename, filepath):
+        """
+        Copy this file from locally to the storage system.
+
+        This is kind of the opposite of copy_locally.  It's likely you
+        could override this method with something more appropriate to
+        your storage system.
+        """
+        # It seems that (our implementation of) cloudfiles.write() takes
+        # all existing data and appends write(data) to it, sending the
+        # full monty over the wire everytime. This would of course
+        # absolutely kill chunked writes with some O(1^n) performance
+        # and bandwidth usage. So, override this method and use the
+        # Cloudfile's "send" interface instead.
+        # TODO: Fixing write() still seems worthwhile though.
+        _log.debug('Sending {0} to cloudfiles...'.format(filepath))
+        with self.get_file(filepath, 'wb') as dest_file:
+            with file(filename, 'rb') as source_file:
+                # Copy to storage system in 4096 byte chunks
+                dest_file.send(source_file)
+
 class CloudFilesStorageObjectWrapper():
     """
     Wrapper for python-cloudfiles's cloudfiles.storage_object.Object
@@ -160,6 +197,10 @@ class CloudFilesStorageObjectWrapper():
         Currently this method does not support any write modes except "append".
         However if we should need it it would be easy implement.
         """
+        _log.warn(
+            '{0}.write() has bad performance! Use .send instead for now'\
+            .format(self.__class__.__name__))
+
         if self.storage_object.size and type(data) == str:
             _log.debug('{0} is > 0 in size, appending data'.format(
                 self.storage_object.name))
@@ -169,9 +210,12 @@ class CloudFilesStorageObjectWrapper():
             self.storage_object.name))
         self.storage_object.write(data, *args, **kwargs)
 
+    def send(self, *args, **kw):
+        self.storage_object.send(*args, **kw)
+
     def close(self):
         """
-        Not implemented.
+        Not sure we need anything here.
         """
         pass
 
@@ -188,3 +232,15 @@ class CloudFilesStorageObjectWrapper():
         see self.__enter__()
         """
         self.close()
+
+
+    def __iter__(self, **kwargs):
+        """Make CloudFile an iterator, yielding 8192 bytes by default
+
+        This returns a generator object that can be used to getting the
+        object's content in a memory efficient way.
+
+        Warning: The HTTP response is only complete after this generator
+        has raised a StopIteration. No other methods can be called until
+        this has occurred."""
+        return self.storage_object.stream(**kwargs)

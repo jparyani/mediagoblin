@@ -14,9 +14,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.routing import add_route
+from mediagoblin.tools.routing import add_route
 
-add_route('mediagoblin.edit.profile', '/edit/profile/',
+add_route('mediagoblin.edit.profile', '/u/<string:user>/edit/',
     'mediagoblin.edit.views:edit_profile')
+add_route('mediagoblin.edit.legacy_edit_profile', '/edit/profile/',
+    'mediagoblin.edit.views:legacy_edit_profile')
 add_route('mediagoblin.edit.account', '/edit/account/',
     'mediagoblin.edit.views:edit_account')
+add_route('mediagoblin.edit.delete_account', '/edit/account/delete/',
+    'mediagoblin.edit.views:delete_account')

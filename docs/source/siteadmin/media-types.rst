@@ -43,6 +43,15 @@ video media types, then the list would look like this::
 
     media_types = mediagoblin.media_types.image, mediagoblin.media_types.video
 
+Note that after enabling new media types, you must run dbupdate like so::
+
+    ./bin/gmg dbupdate
+
+If you are running an active site, depending on your server
+configuration, you may need to stop it first (and it's certainly a
+good idea to restart it after the update).
+
+
 How does MediaGoblin decide which media type to use for a file?
 ===============================================================
 
@@ -62,11 +71,26 @@ Video
 
 To enable video, first install gstreamer and the python-gstreamer
 bindings (as well as whatever gstremaer extensions you want,
-good/bad/ugly).  On Debianoid systems::
+good/bad/ugly).  On Debianoid systems
 
-    sudo apt-get install python-gst0.10 gstreamer0.10-plugins-{base,bad,good,ugly} \
+.. code-block:: bash
+
+    sudo apt-get install python-gst0.10 \
+        gstreamer0.10-plugins-base \
+        gstreamer0.10-plugins-bad \
+        gstreamer0.10-plugins-good \
+        gstreamer0.10-plugins-ugly \
         gstreamer0.10-ffmpeg
 
+
+Add ``mediagoblin.media_types.video`` to the ``media_types`` list in your
+``mediagoblin_local.ini`` and restart MediaGoblin.
+
+Run
+
+.. code-block:: bash
+
+    ./bin/gmg dbupdate
 
 Now you should be able to submit videos, and mediagoblin should
 transcode them.
@@ -92,7 +116,9 @@ To install these on Debianoid systems, run::
 
 The ``scikits.audiolab`` package you will install in the next step depends on the
 ``libsndfile1-dev`` package, so we should install it.
-On Debianoid systems, run::
+On Debianoid systems, run
+
+.. code-block:: bash
 
     sudo apt-get install libsndfile1-dev
 
@@ -108,8 +134,15 @@ Then install ``scikits.audiolab`` for the spectrograms::
     ./bin/pip install scikits.audiolab
 
 Add ``mediagoblin.media_types.audio`` to the ``media_types`` list in your
-``mediagoblin_local.ini`` and restart MediaGoblin. You should now be able to
-upload and listen to audio files!
+``mediagoblin_local.ini`` and restart MediaGoblin.
+
+Run
+
+.. code-block:: bash
+
+    ./bin/gmg dbupdate
+
+You should now be able to upload and listen to audio files!
 
 
 Ascii art
@@ -117,7 +150,9 @@ Ascii art
 
 To enable ascii art support, first install the
 `chardet <http://pypi.python.org/pypi/chardet>`_
-library, which is necessary for creating thumbnails of ascii art::
+library, which is necessary for creating thumbnails of ascii art
+
+.. code-block:: bash
 
     ./bin/easy_install chardet
 
@@ -131,4 +166,69 @@ the list would look like this::
 
     media_types = mediagoblin.media_types.image, mediagoblin.media_types.ascii
 
+Run
+
+.. code-block:: bash
+
+    ./bin/gmg dbupdate
+
 Now any .txt file you uploaded will be processed as ascii art!
+
+
+STL / 3d model support
+======================
+
+To enable the "STL" 3d model support plugin, first make sure you have
+a recentish `Blender <http://blender.org>`_ installed and available on
+your execution path.  This feature has been tested with Blender 2.63.
+It may work on some earlier versions, but that is not guaranteed (and
+is surely not to work prior to Blender 2.5X).
+
+Add ``mediagoblin.media_types.stl`` to the ``media_types`` list in your
+``mediagoblin_local.ini`` and restart MediaGoblin. 
+
+Run
+
+.. code-block:: bash
+
+    ./bin/gmg dbupdate
+
+You should now be able to upload .obj and .stl files and MediaGoblin
+will be able to present them to your wide audience of admirers!
+
+PDF and Document
+================
+
+To enable the "PDF and Document" support plugin, you need pdftocairo, pdfinfo,
+unoconv with headless support.  All executables must be on your execution path.
+
+To install this on Fedora:
+
+.. code-block:: bash
+
+    sudo yum install -y poppler-utils unoconv libreoffice-headless
+
+pdf.js relies on git submodules, so be sure you have fetched them:
+
+.. code-block:: bash
+
+    git submodule init
+    git submodule update
+
+This feature has been tested on Fedora with:
+ poppler-utils-0.20.2-9.fc18.x86_64
+ unoconv-0.5-2.fc18.noarch
+ libreoffice-headless-3.6.5.2-8.fc18.x86_64
+
+It may work on some earlier versions, but that is not guaranteed.
+
+Add ``mediagoblin.media_types.pdf`` to the ``media_types`` list in your
+``mediagoblin_local.ini`` and restart MediaGoblin. 
+
+Run
+
+.. code-block:: bash
+
+    ./bin/gmg dbupdate
+
+
