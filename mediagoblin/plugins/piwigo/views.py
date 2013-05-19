@@ -16,13 +16,18 @@
 
 import logging
 import re
+from os.path import splitext
+import shutil
 
 from werkzeug.exceptions import MethodNotAllowed, BadRequest, NotImplemented
 from werkzeug.wrappers import BaseResponse
 
 from mediagoblin.meddleware.csrf import csrf_exempt
-from mediagoblin.submit.lib import check_file_field
 from mediagoblin.auth.lib import fake_login_attempt
+from mediagoblin.media_types import sniff_media
+from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
+    run_process_media
+
 from .tools import CmdTable, PwgNamedArray, response_xml, check_form, \
     PWGSession
 from .forms import AddSimpleForm, AddForm
@@ -112,10 +117,60 @@ def pwg_images_addSimple(request):
     if not check_file_field(request, 'image'):
         raise BadRequest()
 
-    return {'image_id': 123456, 'url': ''}
+    filename = request.files['image'].filename
 
-                
+    # Sniff the submitted media to determine which
+    # media plugin should handle processing
+    media_type, media_manager = sniff_media(
+        request.files['image'])
+
+    # create entry and save in database
+    entry = request.db.MediaEntry()
+    entry.media_type = unicode(media_type)
+    entry.title = (
+        unicode(form.name.data)
+        or unicode(splitext(filename)[0]))
+
+    entry.description = unicode(form.comment.data)
+
+    # entry.license = unicode(form.license.data) or None
+
+    entry.uploader = request.user.id
+
+    '''
+    # Process the user's folksonomy "tags"
+    entry.tags = convert_to_tag_list_of_dicts(
+        form.tags.data)
+    '''
+
+    # Generate a slug from the title
+    entry.generate_slug()
+
+    queue_file = prepare_queue_task(request.app, entry, filename)
+
+    with queue_file:
+        shutil.copyfileobj(request.files['image'].stream,
+                           queue_file,
+                           length=4 * 1048576)
+
+    # Save now so we have this data before kicking off processing
+    entry.save()
+
+    # Pass off to processing
+    #
+    # (... don't change entry after this point to avoid race
+    # conditions with changes to the document via processing code)
+    feed_url = request.urlgen(
+        'mediagoblin.user_pages.atom_feed',
+        qualified=True, user=request.user.username)
+    run_process_media(entry, feed_url)
+
+    return {'image_id': entry.id, 'url': entry.url_for_self(request.urlgen,
+                                                            qualified=True)}
+
+
 md5sum_matcher = re.compile(r"^[0-9a-fA-F]{32}$")
+
 
 def fetch_md5(request, parm_name, optional_parm=False):
     val = request.form.get(parm_name)
