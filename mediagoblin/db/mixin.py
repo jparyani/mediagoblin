@@ -28,6 +28,8 @@ real objects.
 """
 
 import uuid
+import re
+import datetime
 
 from werkzeug.utils import cached_property
 
@@ -239,23 +241,30 @@ class MediaEntryMixin(GenerateSlugMixin):
 
     def exif_display_data_short(self):
         """Display a very short practical version of exif info"""
-        import time, datetime
         if not self.media_data:
             return
+
         exif_all = self.media_data.get("exif_all")
-        # format date taken
-        takendate = datetime.datetime.strptime(
-            exif_all['Image DateTimeOriginal']['printable'],
-            '%Y:%m:%d %H:%M:%S').date()
-        taken = takendate.strftime('%B %d %Y')
-        fnum = str(exif_all['EXIF FNumber']['printable']).split('/')
+
+        taken = None
+        if 'Image DateTimeOriginal' in exif_all:
+            # format date taken
+            takendate = datetime.datetime.strptime(
+                exif_all['Image DateTimeOriginal']['printable'],
+                '%Y:%m:%d %H:%M:%S').date()
+            taken = takendate.strftime('%B %d %Y')
+
+        fnum = None
+        if 'EXIF FNumber' in exif_all:
+            fnum = str(exif_all['EXIF FNumber']['printable']).split('/')
+
         # calculate aperture
+        aperture = None
         if len(fnum) == 2:
             aperture = "f/%.1f" % (float(fnum[0])/float(fnum[1]))
         elif fnum[0] != 'None':
             aperture = "f/%s" % (fnum[0])
-        else:
-            aperture = None
+
         return {
             "Camera" : exif_all['Image Model']['printable'],
             "Exposure" : '%s sec' % exif_all['EXIF ExposureTime']['printable'],
