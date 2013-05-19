@@ -254,16 +254,15 @@ class MediaEntryMixin(GenerateSlugMixin):
                 '%Y:%m:%d %H:%M:%S').date()
             taken = takendate.strftime('%B %d %Y')
 
-        fnum = None
+        aperture = None
         if 'EXIF FNumber' in exif_all:
             fnum = str(exif_all['EXIF FNumber']['printable']).split('/')
 
-        # calculate aperture
-        aperture = None
-        if len(fnum) == 2:
-            aperture = "f/%.1f" % (float(fnum[0])/float(fnum[1]))
-        elif fnum[0] != 'None':
-            aperture = "f/%s" % (fnum[0])
+            # calculate aperture
+            if len(fnum) == 2:
+                aperture = "f/%.1f" % (float(fnum[0])/float(fnum[1]))
+            elif fnum[0] != 'None':
+                aperture = "f/%s" % (fnum[0])
 
         return {
             "Camera" : exif_all['Image Model']['printable'],
