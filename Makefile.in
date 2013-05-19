@@ -40,6 +40,7 @@ includedir = @includedir@
 infodir = @infodir@
 prefix = @prefix@
 srcdir = @srcdir@
+abs_srcdir = @abs_srcdir@
 datadir = @datadir@
 datarootdir = @datarootdir@
 pythondir = @pythondir@
@@ -71,10 +72,10 @@ ifneq ($(VIRTUALENV),no)
 else
 	$(PYTHON) $(srcdir)/setup.py install --prefix=$(DESTDIR)$(prefix)
 endif
-	if [[ $(DESTDIR)$(prefix) != $(srcdir) ]]; then
-		$(INSTALL_DATA) $(srcdir)/Makefile $(DESTDIR)$(prefix)/Makefile
-		$(INSTALL_DATA) $(srcdir)/lazycelery.sh $(DESTDIR)$(prefix)/lazycelery.sh
-		$(INSTALL_DATA) $(srcdir)/lazyserver.sh $(DESTDIR)$(prefix)/lazyserver.sh
+	if [[ $(DESTDIR)$(prefix) != $(abs_srcdir) ]]; then \
+		$(INSTALL_DATA) $(srcdir)/Makefile $(DESTDIR)$(prefix)/Makefile; \
+		$(INSTALL_DATA) $(srcdir)/lazycelery.sh $(DESTDIR)$(prefix)/lazycelery.sh; \
+		$(INSTALL_DATA) $(srcdir)/lazyserver.sh $(DESTDIR)$(prefix)/lazyserver.sh; \
 	fi
 
 # The same as "install", except use the "develop" setup.py target
@@ -89,10 +90,10 @@ ifneq ($(VIRTUALENV),no)
 else
 	$(PYTHON) $(srcdir)/setup.py develop --prefix=$(DESTDIR)$(prefix)
 endif
-	if [[ $(DESTDIR)$(prefix) != $(srcdir) ]]; then
-		$(INSTALL_DATA) $(srcdir)/Makefile $(DESTDIR)$(prefix)/Makefile
-		$(INSTALL_DATA) $(srcdir)/lazycelery.sh $(DESTDIR)$(prefix)/lazycelery.sh
-		$(INSTALL_DATA) $(srcdir)/lazyserver.sh $(DESTDIR)$(prefix)/lazyserver.sh
+	if [ "$(DESTDIR)$(prefix)" != "$(abs_srcdir)" ]; then \
+		$(INSTALL_DATA) $(srcdir)/Makefile $(DESTDIR)$(prefix)/Makefile; \
+		$(INSTALL_DATA) $(srcdir)/lazycelery.sh $(DESTDIR)$(prefix)/lazycelery.sh; \
+		$(INSTALL_DATA) $(srcdir)/lazyserver.sh $(DESTDIR)$(prefix)/lazyserver.sh; \
 	fi
 
 
