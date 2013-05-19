@@ -143,9 +143,9 @@ AC_PROG_INSTALL
 # Check for a supported database program
 AC_PATH_PROG([SQLITE], [sqlite3])
 AC_PATH_PROG([POSTGRES], [postgres])
-if [[ "x$SQLITE" = "x" &&  "x$POSTGRES" = "x" ]]; then
-   AC_MSG_ERROR([SQLite or PostgreSQL is required])
-fi
+AS_IF([test "x$SQLITE" = x -a "x$POSTGRES" = "x"],
+   [AC_MSG_ERROR([SQLite or PostgreSQL is required])])
+
 
 dnl--PC_PYTHON_SITE_PACKAGE_DIR---------------------------------------
 dnl This uses PYTHON_SITE_DIR to construct a directory for this

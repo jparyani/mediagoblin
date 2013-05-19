@@ -2436,9 +2436,10 @@ $as_echo "no" >&6; }
 fi
 
 
-if [ "x$SQLITE" = "x" &&  "x$POSTGRES" = "x" ]; then
-   as_fn_error $? "SQLite or PostgreSQL is required" "$LINENO" 5
+if test "x$SQLITE" = x -a "x$POSTGRES" = "x"; then :
+  as_fn_error $? "SQLite or PostgreSQL is required" "$LINENO" 5
 fi
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Python prefix" >&5
 $as_echo_n "checking for Python prefix... " >&6; }
