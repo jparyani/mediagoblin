@@ -55,14 +55,18 @@ all: install
 install-pdf pdf install-dvi dvi install-ps ps clean dist check \
 installdirs postgresql update
 
-# Since installing to a virtualenv is all the rage these days, support it here. If the VIRTUALENV
-# variable is set to anything other than "no", set up a new virtualenv and install there, otherwise
-# install as usual from setup.py
+# Since installing to a virtualenv is all the rage these days, support
+# it here. If the VIRTUALENV variable is set to anything other than
+# "no", set up a new virtualenv and install there, otherwise install
+# as usual from setup.py
 install: installdirs
 	$(NORMAL_INSTALL)
 ifneq ($(VIRTUALENV),no)
-	$(VIRTUALENV) $(VIRTUALENV_FLAGS) --system-site-packages $(DESTDIR)$(prefix) || $(VIRTUALENV) $(DESTDIR)$(prefix)
-	$(DESTDIR)$(prefix)/bin/python $(srcdir)/setup.py install --prefix=$(DESTDIR)$(prefix)
+	$(VIRTUALENV) $(VIRTUALENV_FLAGS) --python=$(PYTHON) \
+		--system-site-packages $(DESTDIR)$(prefix) || \
+		$(VIRTUALENV) $(DESTDIR)$(prefix)
+	$(DESTDIR)$(prefix)/bin/python $(srcdir)/setup.py install \
+		--prefix=$(DESTDIR)$(prefix)
 else
 	$(PYTHON) $(srcdir)/setup.py install --prefix=$(DESTDIR)$(prefix)
 endif
@@ -72,8 +76,11 @@ endif
 develop: installdirs
 	$(NORMAL_INSTALL)
 ifneq ($(VIRTUALENV),no)
-	$(VIRTUALENV) $(VIRTUALENV_FLAGS) --system-site-packages $(DESTDIR)$(prefix) || $(VIRTUALENV) $(DESTDIR)$(prefix)
-	$(DESTDIR)$(prefix)/bin/python $(srcdir)/setup.py develop --prefix=$(DESTDIR)$(prefix)
+	$(VIRTUALENV) $(VIRTUALENV_FLAGS) --python=$(PYTHON) \
+		--system-site-packages $(DESTDIR)$(prefix) || \
+		$(VIRTUALENV) $(DESTDIR)$(prefix)
+	$(DESTDIR)$(prefix)/bin/python $(srcdir)/setup.py develop \
+		--prefix=$(DESTDIR)$(prefix)
 else
 	$(PYTHON) $(srcdir)/setup.py develop --prefix=$(DESTDIR)$(prefix)
 endif
@@ -85,9 +92,9 @@ endif
 # should remove a basic package installed via setup.py, but please double- and 
 # triple-check it so that you don't remove something you shouldn't!
 # Be sure to remove any extra files you install, such as binaries or documentation!
-uninstall: 
-	rm -rvf $(pkgpythondir)
-	rm -v $(pythondir)/$(PACKAGE_DISTNAME)-*.egg-info
+# uninstall: 
+# 	rm -rvf $(pkgpythondir)
+# 	rm -v $(pythondir)/$(PACKAGE_DISTNAME)-*.egg-info
 
 
 # Just use the usual setup.py clean command
@@ -126,9 +133,9 @@ postgresql:
 
 update:
 ifneq ($(VIRTUALENV),no)
-	$(prefix)/bin/python $(prefix)/setup.py develop --prefix=$(prefix) --upgrade
+	$(prefix)/bin/python $(srcdir)/setup.py develop --prefix=$(prefix) --upgrade
 else
-	$(PYTHON) $(prefix)/setup.py develop --prefix=$(DESTDIR)$(prefix) --upgrade
+	$(PYTHON) $(srcdir)/setup.py develop --prefix=$(prefix) --upgrade
 endif	
 	$(prefix)/bin/gmg dbupdate
 
