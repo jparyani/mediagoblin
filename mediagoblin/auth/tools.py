@@ -108,6 +108,39 @@ def basic_extra_validation(register_form, *args):
     return extra_validation_passes
 
 
+def register_user(request, register_form):
+    """ Handle user registration """
+    extra_validation_passes = auth.extra_validation(register_form)
+
+    if extra_validation_passes:
+        # Create the user
+        user = auth.create_user(register_form)
+
+        # log the user in
+        request.session['user_id'] = unicode(user.id)
+        request.session.save()
+
+        # send verification email
+        email_debug_message(request)
+        send_verification_email(user, request)
+        return user
+
+    return None
+
+
+def email_debug_message(request):
+    """
+    If the server is running in email debug mode (which is
+    the current default), give a debug message to the user
+    so that they have an idea where to find their email.
+    """
+    if mg_globals.app_config['email_debug_mode']:
+        # DEBUG message, no need to translate
+        messages.add_message(request, messages.DEBUG,
+            u"This instance is running in email debug mode. "
+            u"The email will be on the console of the server process.")
+
+
 EMAIL_VERIFICATION_TEMPLATE = (
     u"http://{host}{uri}?"
     u"userid={userid}&token={verification_key}")

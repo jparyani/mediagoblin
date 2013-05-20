@@ -21,21 +21,10 @@ from mediagoblin.db.models import User
 from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.auth import lib as auth_lib
-from mediagoblin.auth.lib import send_verification_email
-import mediagoblin.auth as auth
-
-
-def email_debug_message(request):
-    """
-    If the server is running in email debug mode (which is
-    the current default), give a debug message to the user
-    so that they have an idea where to find their email.
-    """
-    if mg_globals.app_config['email_debug_mode']:
-        # DEBUG message, no need to translate
-        messages.add_message(request, messages.DEBUG,
-            u"This instance is running in email debug mode. "
-            u"The email will be on the console of the server process.")
+from mediagoblin.auth import forms as auth_forms
+from mediagoblin.auth.tools import (send_verification_email,
+                                    register_user, email_debug_message)
+from mediagoblin import auth
 
 
 def register(request):
@@ -53,24 +42,17 @@ def register(request):
             _('Sorry, registration is disabled on this instance.'))
         return redirect(request, "index")
 
+    if 'pass_auth' not in request.template_env.globals:
+        if 'openid' in request.template_env.globals:
+            return redirect(request, 'mediagoblin.plugins.openid.register')
+
     register_form = auth.get_registration_form(request)
 
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
-        extra_validation_passes = auth.extra_validation(register_form)
+        user = register_user(request, register_form)
 
-        if extra_validation_passes:
-            # Create the user
-            user = auth.create_user(register_form)
-
-            # log the user in
-            request.session['user_id'] = unicode(user.id)
-            request.session.save()
-
-            # send verification email
-            email_debug_message(request)
-            send_verification_email(user, request)
-
+        if user:
             # redirect the user to their homepage... there will be a
             # message waiting for them to verify their email
             return redirect(
@@ -96,6 +78,10 @@ def login(request):
             messages.WARNING,
             _('Sorry, authentication is disabled on this instance.'))
         return redirect(request, 'index')
+
+    if 'pass_auth' not in request.template_env.globals:
+        if 'openid' in request.template_env.globals:
+            return redirect(request, 'mediagoblin.plugins.openid.login')
 
     login_form = auth.get_login_form(request)
 
