@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from collections import namedtuple
 import logging
 
 import six
@@ -25,6 +26,9 @@ from mediagoblin.tools.response import Response
 
 
 _log = logging.getLogger(__name__)
+
+
+PwgError = namedtuple("PwgError", ["code", "msg"])
 
 
 class PwgNamedArray(list):
@@ -74,9 +78,17 @@ def _fill_element(el, data):
 def response_xml(result):
     r = ET.Element("rsp")
     r.set("stat", "ok")
-    _fill_element(r, result)
+    status = None
+    if isinstance(result, PwgError):
+        r.set("stat", "fail")
+        err = ET.SubElement(r, "err")
+        err.set("code", str(result.code))
+        err.set("msg", result.msg)
+        status = result.code
+    else:
+        _fill_element(r, result)
     return Response(ET.tostring(r, encoding="utf-8", xml_declaration=True),
-                    mimetype='text/xml')
+                    mimetype='text/xml', status=status)
 
 
 class CmdTable(object):
