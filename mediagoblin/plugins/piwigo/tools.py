@@ -84,7 +84,8 @@ def response_xml(result):
         err = ET.SubElement(r, "err")
         err.set("code", str(result.code))
         err.set("msg", result.msg)
-        status = result.code
+        if result.code >= 100 and result.code < 600:
+            status = result.code
     else:
         _fill_element(r, result)
     return Response(ET.tostring(r, encoding="utf-8", xml_declaration=True),
