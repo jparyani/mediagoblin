@@ -17,10 +17,14 @@
 import logging
 import wtforms
 
-from mediagoblin import mg_globals
-from mediagoblin.tools.mail import normalize_email
+from mediagoblin import messages, mg_globals
+from mediagoblin.tools.mail import normalize_email, send_email
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+from mediagoblin.tools.template import render_template
 from mediagoblin.tools.pluginapi import hook_handle
+from mediagoblin.tools.response import redirect
+from mediagoblin import auth
+from mediagoblin.db.models import User
 
 _log = logging.getLogger(__name__)
 
@@ -66,7 +70,7 @@ class AuthError(Exception):
 
 def check_auth_enabled():
     no_auth = mg_globals.app_config['no_auth']
-    auth_plugin = True if hook_handle('authentication') is not None else False
+    auth_plugin = hook_handle('authentication')
 
     if no_auth == 'false' and not auth_plugin:
         raise AuthError
@@ -82,3 +86,58 @@ def no_auth_logout(request):
     """Log out the user if in no_auth mode"""
     if not mg_globals.app.auth:
         request.session.delete()
+
+
+def basic_extra_validation(register_form, *args):
+    users_with_username = User.query.filter_by(
+        username=register_form.data['username']).count()
+    users_with_email = User.query.filter_by(
+        email=register_form.data['email']).count()
+
+    extra_validation_passes = True
+
+    if users_with_username:
+        register_form.username.errors.append(
+            _(u'Sorry, a user with that name already exists.'))
+        extra_validation_passes = False
+    if users_with_email:
+        register_form.email.errors.append(
+            _(u'Sorry, a user with that email address already exists.'))
+        extra_validation_passes = False
+
+    return extra_validation_passes
+
+
+EMAIL_VERIFICATION_TEMPLATE = (
+    u"http://{host}{uri}?"
+    u"userid={userid}&token={verification_key}")
+
+
+def send_verification_email(user, request):
+    """
+    Send the verification email to users to activate their accounts.
+
+    Args:
+    - user: a user object
+    - request: the request
+    """
+    rendered_email = render_template(
+        request, 'mediagoblin/auth/verification_email.txt',
+        {'username': user.username,
+         'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
+                host=request.host,
+                uri=request.urlgen('mediagoblin.auth.verify_email'),
+                userid=unicode(user.id),
+                verification_key=user.verification_key)})
+
+    # TODO: There is no error handling in place
+    send_email(
+        mg_globals.app_config['email_sender_address'],
+        [user.email],
+        # TODO
+        # Due to the distributed nature of GNU MediaGoblin, we should
+        # find a way to send some additional information about the
+        # specific GNU MediaGoblin instance in the subject line. For
+        # example "GNU MediaGoblin @ Wandborg - [...]".
+        'GNU MediaGoblin - Verify your email!',
+        rendered_email)
