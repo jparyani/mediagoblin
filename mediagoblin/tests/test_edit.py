@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import urlparse
 import pytest
 
 from mediagoblin import mg_globals
@@ -60,16 +61,17 @@ class TestUserEdit(object):
         self.login(test_app)
 
         # test that the password can be changed
-        # template.clear_test_template_context()
+        template.clear_test_template_context()
         res = test_app.post(
-            '/edit/account/', {
+            '/edit/password/', {
                 'old_password': 'toast',
                 'new_password': '123456',
-                'wants_comment_notification': 'y'
                 })
+        res.follow()
 
-        # Check for redirect on success
-        assert res.status_int == 302
+        # Did we redirect to the correct page?
+        assert urlparse.urlsplit(res.location)[2] == '/edit/account/'
+
         # test_user has to be fetched again in order to have the current values
         test_user = User.query.filter_by(username=u'chris').first()
         assert bcrypt_check_password('123456', test_user.pw_hash)
@@ -77,9 +79,10 @@ class TestUserEdit(object):
         self.user_password = '123456'
 
         # test that the password cannot be changed if the given
-        # old_password is wrong template.clear_test_template_context()
+        # old_password is wrong
+        template.clear_test_template_context()
         test_app.post(
-            '/edit/account/', {
+            '/edit/password/', {
                 'old_password': 'toast',
                 'new_password': '098765',
                 })
