@@ -32,7 +32,7 @@ from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.media_types import sniff_media, \
     InvalidFileType, FileTypeNotSupported
 from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
-    run_process_media
+    run_process_media, new_upload_entry
 
 
 @require_active_login
@@ -57,7 +57,7 @@ def submit_start(request):
                     request.files['file'])
 
                 # create entry and save in database
-                entry = request.db.MediaEntry()
+                entry = new_upload_entry(request.user)
                 entry.media_type = unicode(media_type)
                 entry.title = (
                     unicode(submit_form.title.data)
@@ -66,8 +66,6 @@ def submit_start(request):
                 entry.description = unicode(submit_form.description.data)
 
                 entry.license = unicode(submit_form.license.data) or None
-
-                entry.uploader = request.user.id
 
                 # Process the user's folksonomy "tags"
                 entry.tags = convert_to_tag_list_of_dicts(

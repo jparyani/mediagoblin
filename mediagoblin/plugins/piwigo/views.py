@@ -26,7 +26,7 @@ from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.auth.lib import fake_login_attempt
 from mediagoblin.media_types import sniff_media
 from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
-    run_process_media
+    run_process_media, new_upload_entry
 
 from .tools import CmdTable, response_xml, check_form, \
     PWGSession, PwgNamedArray, PwgError
@@ -124,17 +124,13 @@ def pwg_images_addSimple(request):
         request.files['image'])
 
     # create entry and save in database
-    entry = request.db.MediaEntry()
+    entry = new_upload_entry(request.user)
     entry.media_type = unicode(media_type)
     entry.title = (
         unicode(form.name.data)
         or unicode(splitext(filename)[0]))
 
     entry.description = unicode(form.comment.data)
-
-    # entry.license = unicode(form.license.data) or None
-
-    entry.uploader = request.user.id
 
     '''
     # Process the user's folksonomy "tags"

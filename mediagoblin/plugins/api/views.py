@@ -27,7 +27,7 @@ from mediagoblin.media_types import sniff_media
 from mediagoblin.plugins.api.tools import api_auth, get_entry_serializable, \
         json_response
 from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
-    run_process_media
+    run_process_media, new_upload_entry
 
 _log = logging.getLogger(__name__)
 
@@ -53,15 +53,13 @@ def post_entry(request):
 
     media_type, media_manager = sniff_media(media_file)
 
-    entry = request.db.MediaEntry()
+    entry = new_upload_entry(request.user)
     entry.media_type = unicode(media_type)
     entry.title = unicode(request.form.get('title')
             or splitext(media_file.filename)[0])
 
     entry.description = unicode(request.form.get('description'))
     entry.license = unicode(request.form.get('license', ''))
-
-    entry.uploader = request.user.id
 
     entry.generate_slug()
 

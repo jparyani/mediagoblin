@@ -19,6 +19,7 @@ import uuid
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 
+from mediagoblin.db.models import MediaEntry
 from mediagoblin.processing import mark_entry_failed
 from mediagoblin.processing.task import process_media
 
@@ -34,6 +35,16 @@ def check_file_field(request, field_name):
     if not retval:
         _log.debug("Form did not contain proper file field %s", field_name)
     return retval
+
+
+def new_upload_entry(user):
+    """
+    Create a new MediaEntry for uploading
+    """
+    entry = MediaEntry()
+    entry.uploader = user.id
+    entry.license = user.license_preference
+    return entry
 
 
 def prepare_queue_task(app, entry, filename):
