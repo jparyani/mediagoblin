@@ -26,7 +26,7 @@ class RegistrationForm(wtforms.Form):
          normalize_user_or_email_field(allow_email=False)])
     password = wtforms.PasswordField(
         _('Password'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.Optional(),
          wtforms.validators.Length(min=5, max=1024)])
     email = wtforms.TextField(
         _('Email address'),

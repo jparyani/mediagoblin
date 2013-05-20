@@ -19,7 +19,6 @@ import uuid
 import forms as auth_forms
 import lib as auth_lib
 from mediagoblin.db.models import User
-from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools import pluginapi
 from sqlalchemy import or_
 
@@ -35,8 +34,8 @@ def check_login(user, password):
     return None
 
 
-def get_user(login_form):
-    username = login_form.data['username']
+def get_user(form):
+    username = form.data['username']
     user = User.query.filter(
         or_(
             User.username == username,
@@ -46,34 +45,16 @@ def get_user(login_form):
 
 
 def create_user(registration_form):
-    user = User()
-    user.username = registration_form.data['username']
-    user.email = registration_form.data['email']
-    user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-        registration_form.password.data)
-    user.verification_key = unicode(uuid.uuid4())
-    user.save()
+    user = get_user(registration_form)
+    if not user:
+        user = User()
+        user.username = registration_form.data['username']
+        user.email = registration_form.data['email']
+        user.pw_hash = auth_lib.bcrypt_gen_password_hash(
+            registration_form.password.data)
+        user.verification_key = unicode(uuid.uuid4())
+        user.save()
     return user
-
-
-def extra_validation(register_form, *args):
-    users_with_username = User.query.filter_by(
-        username=register_form.data['username']).count()
-    users_with_email = User.query.filter_by(
-        email=register_form.data['email']).count()
-
-    extra_validation_passes = True
-
-    if users_with_username:
-        register_form.username.errors.append(
-            _(u'Sorry, a user with that name already exists.'))
-        extra_validation_passes = False
-    if users_with_email:
-        register_form.email.errors.append(
-            _(u'Sorry, a user with that email address already exists.'))
-        extra_validation_passes = False
-
-    return extra_validation_passes
 
 
 def get_login_form(request):
@@ -92,15 +73,29 @@ def auth():
     return True
 
 
+def append_to_global_context(context):
+    context['pass_auth'] = True
+    return context
+
+
+def add_to_form_context(context):
+    context['pass_auth_link'] = True
+    return context
+
+
 hooks = {
     'setup': setup_plugin,
     'authentication': auth,
     'auth_check_login': check_login,
     'auth_get_user': get_user,
     'auth_create_user': create_user,
-    'auth_extra_validation': extra_validation,
     'auth_get_login_form': get_login_form,
     'auth_get_registration_form': get_registration_form,
     'auth_gen_password_hash': gen_password_hash,
     'auth_fake_login_attempt': auth_lib.fake_login_attempt,
+    'template_global_context': append_to_global_context,
+    ('mediagoblin.plugins.openid.register',
+    'mediagoblin/auth/register.html'): add_to_form_context,
+    ('mediagoblin.plugins.openid.login',
+     'mediagoblin/auth/login.html'): add_to_form_context,
 }
