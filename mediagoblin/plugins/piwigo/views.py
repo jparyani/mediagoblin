@@ -33,6 +33,7 @@ from mediagoblin.db.models import Collection
 from .tools import CmdTable, response_xml, check_form, \
     PWGSession, PwgNamedArray, PwgError
 from mediagoblin.plugins.basic_auth.lib import fake_login_attempt
+from mediagoblin.auth import check_login
 from .forms import AddSimpleForm, AddForm
 
 
@@ -48,7 +49,7 @@ def pwg_login(request):
         _log.info("User %r not found", username)
         fake_login_attempt()
         return PwgError(999, 'Invalid username/password')
-    if not user.check_login(password):
+    if not check_login(user, password):
         _log.warn("Wrong password for %r", username)
         return PwgError(999, 'Invalid username/password')
     _log.info("Logging %r in", username)
