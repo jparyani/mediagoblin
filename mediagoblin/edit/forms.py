@@ -16,9 +16,11 @@
 
 import wtforms
 
-from mediagoblin.tools.text import tag_length_validator, TOO_LONG_TAG_WARNING
+from mediagoblin.tools.text import tag_length_validator
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.licenses import licenses_as_choices
+from mediagoblin.auth.forms import normalize_user_or_email_field
+
 
 class EditForm(wtforms.Form):
     title = wtforms.TextField(
@@ -59,6 +61,16 @@ class EditProfileForm(wtforms.Form):
 
 
 class EditAccountForm(wtforms.Form):
+    new_email = wtforms.TextField(
+        _('New email address'),
+        [wtforms.validators.Optional(),
+         normalize_user_or_email_field(allow_user=False)])
+    password = wtforms.PasswordField(
+        _('Password'),
+        [wtforms.validators.Optional(),
+         wtforms.validators.Length(min=5, max=1024)],
+        description=_(
+            'Enter your old password to prove you own this account.'))
     license_preference = wtforms.SelectField(
         _('License preference'),
         [

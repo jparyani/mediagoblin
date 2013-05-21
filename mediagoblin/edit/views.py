@@ -23,18 +23,22 @@ from mediagoblin import messages
 from mediagoblin import mg_globals
 
 from mediagoblin.auth import lib as auth_lib
+from mediagoblin.auth.views import email_debug_message
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
-     get_media_entry_by_id,
-     user_may_alter_collection, get_user_collection)
-from mediagoblin.tools.response import render_to_response, \
-    redirect, redirect_obj
+                            get_media_entry_by_id, user_may_alter_collection,
+                            get_user_collection)
+from mediagoblin.tools.crypto import get_timed_signer_url
+from mediagoblin.tools.response import (render_to_response,
+                                        redirect, redirect_obj, render_404)
 from mediagoblin.tools.translate import pass_to_ugettext as _
+from mediagoblin.tools.template import render_template
 from mediagoblin.tools.text import (
     convert_to_tag_list_of_dicts, media_tags_as_string)
 from mediagoblin.tools.url import slugify
 from mediagoblin.db.util import check_media_slug_used, check_collection_slug_used
+from mediagoblin.db.models import User
 
 import mimetypes
 
@@ -212,6 +216,10 @@ def edit_profile(request, url_user=None):
         {'user': user,
          'form': form})
 
+EMAIL_VERIFICATION_TEMPLATE = (
+    u'{uri}?'
+    u'token={verification_key}')
+
 
 @require_active_login
 def edit_account(request):
@@ -220,27 +228,57 @@ def edit_account(request):
         wants_comment_notification=user.wants_comment_notification,
         license_preference=user.license_preference)
 
-    if request.method == 'POST':
-        form_validated = form.validate()
-
-        if form_validated and \
-                form.wants_comment_notification.validate(form):
+    if request.method == 'POST' and form.validate():
+        if form.wants_comment_notification.validate(form):
             user.wants_comment_notification = \
                 form.wants_comment_notification.data
 
-        if form_validated and \
-                form.license_preference.validate(form):
+        if form.license_preference.validate(form):
             user.license_preference = \
                 form.license_preference.data
 
-        if form_validated and not form.errors:
+        if form.new_email.data:
+            if not form.password.data:
+                form.password.errors.append(
+                    _('This field is required.'))
+            elif not auth_lib.bcrypt_check_password(
+                    form.password.data, user.pw_hash):
+                form.password.errors.append(
+                    _('Wrong password.'))
+            else:
+                new_email = form.new_email.data
+                users_with_email = User.query.filter_by(
+                    email=new_email).count()
+                if users_with_email:
+                    form.new_email.errors.append(
+                        _('Sorry, a user with that email address'
+                          ' already exists.'))
+                else:
+                    verification_key = get_timed_signer_url(
+                        'mail_verification_token').dumps({
+                            'user': user.id,
+                            'email': new_email})
+
+                    rendered_email = render_template(
+                        request, 'mediagoblin/edit/verification.txt',
+                        {'username': user.username,
+                         'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
+                            uri=request.urlgen('mediagoblin.edit.verify_email',
+                                               qualified=True),
+                            verification_key=verification_key)})
+
+                    email_debug_message(request)
+                    auth_lib.send_verification_email(user, request, new_email,
+                                                     rendered_email)
+
+        if not form.errors:
             user.save()
             messages.add_message(request,
-                messages.SUCCESS,
-                _("Account settings saved"))
+                                 messages.SUCCESS,
+                                 _("Account settings saved"))
             return redirect(request,
-                'mediagoblin.user_pages.user_home',
-                user=user.username)
+                            'mediagoblin.user_pages.user_home',
+                            user=user.username)
 
     return render_to_response(
         request,
@@ -369,3 +407,38 @@ def change_pass(request):
         'mediagoblin/edit/change_pass.html',
         {'form': form,
          'user': user})
+
+
+def verify_email(request):
+    """
+    Email verification view for changing email address
+    """
+    # If no token, we can't do anything
+    if not 'token' in request.GET:
+        return render_404(request)
+
+    # This throws an error, if the thing is faked or expired
+    # should be catched, probably.
+    token = get_timed_signer_url("mail_verification_token") \
+            .loads(request.GET['token'], max_age=10*24*3600)
+
+    user = User.query.filter_by(id=int(token['user'])).first()
+
+    if user:
+        user.email = token['email']
+        user.save()
+
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            _('Your email address has been verified.'))
+
+    else:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                _('The verification key or user id is incorrect.'))
+
+    return redirect(
+        request, 'mediagoblin.user_pages.user_home',
+        user=user.username)
