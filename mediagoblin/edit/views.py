@@ -229,18 +229,6 @@ def edit_account(request):
                 form.wants_comment_notification.data
 
         if form_validated and \
-                form.new_password.data or form.old_password.data:
-            password_matches = auth_lib.bcrypt_check_password(
-                form.old_password.data,
-                user.pw_hash)
-            if password_matches:
-                #the entire form validates and the password matches
-                user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-                    form.new_password.data)
-            else:
-                form.old_password.errors.append(_('Wrong password'))
-
-        if form_validated and \
                 form.license_preference.validate(form):
             user.license_preference = \
                 form.license_preference.data
@@ -345,3 +333,39 @@ def edit_collection(request, collection):
         'mediagoblin/edit/edit_collection.html',
         {'collection': collection,
          'form': form})
+
+
+@require_active_login
+def change_pass(request):
+    form = forms.ChangePassForm(request.form)
+    user = request.user
+
+    if request.method == 'POST' and form.validate():
+
+        if not auth_lib.bcrypt_check_password(
+                form.old_password.data, user.pw_hash):
+            form.old_password.errors.append(
+                _('Wrong password'))
+
+            return render_to_response(
+                request,
+                'mediagoblin/edit/change_pass.html',
+                {'form': form,
+                 'user': user})
+
+        # Password matches
+        user.pw_hash = auth_lib.bcrypt_gen_password_hash(
+            form.new_password.data)
+        user.save()
+
+        messages.add_message(
+            request, messages.SUCCESS,
+            _('Your password was changed successfully'))
+
+        return redirect(request, 'mediagoblin.edit.account')
+
+    return render_to_response(
+        request,
+        'mediagoblin/edit/change_pass.html',
+        {'form': form,
+         'user': user})
