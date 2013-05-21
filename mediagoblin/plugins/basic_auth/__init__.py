@@ -46,7 +46,7 @@ def get_user(form):
 
 def create_user(registration_form):
     user = get_user(registration_form)
-    if not user:
+    if not user and 'password' in registration_form:
         user = User()
         user.username = registration_form.data['username']
         user.email = registration_form.data['email']
