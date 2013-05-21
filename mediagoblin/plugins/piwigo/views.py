@@ -111,7 +111,8 @@ def pwg_images_addSimple(request):
     dump = []
     for f in form:
         dump.append("%s=%r" % (f.name, f.data))
-    _log.info("addimple: %r %s %r", request.form, " ".join(dump), request.files)
+    _log.info("addSimple: %r %s %r", request.form, " ".join(dump), 
+              request.files)
 
     if not check_file_field(request, 'image'):
         raise BadRequest()
