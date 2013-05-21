@@ -179,7 +179,8 @@ def pwg_images_addSimple(request):
     collection_id = form.category.data
     if collection_id > 0:
         collection = Collection.query.get(collection_id)
-        add_media_to_collection(collection, entry, "")
+        if collection is not None and collection.creator == request.user.id:
+            add_media_to_collection(collection, entry, "")
 
     return {'image_id': entry.id, 'url': entry.url_for_self(request.urlgen,
                                                             qualified=True)}
