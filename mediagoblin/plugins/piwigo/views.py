@@ -28,6 +28,9 @@ from mediagoblin.media_types import sniff_media
 from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
     run_process_media, new_upload_entry
 
+from mediagoblin.user_pages.lib import add_media_to_collection
+from mediagoblin.db.models import Collection
+
 from .tools import CmdTable, response_xml, check_form, \
     PWGSession, PwgNamedArray, PwgError
 from .forms import AddSimpleForm, AddForm
@@ -77,9 +80,20 @@ def pwg_session_getStatus(request):
 
 @CmdTable("pwg.categories.getList")
 def pwg_categories_getList(request):
-    catlist = ({'id': -29711,
+    collections = Collection.query.filter_by(
+        get_creator=request.user).order_by(Collection.title)
+
+    catlist = [{'id': -29711,
                 'uppercats': "-29711",
-                'name': "All my images"},)
+                'name': "All my images"}]
+
+    for c in collections:
+        catlist.append({'id': c.id,
+                        'uppercats': str(c.id),
+                        'name': c.title,
+                        'comment': c.description
+                        })
+
     return {
           'categories': PwgNamedArray(
             catlist,
@@ -160,6 +174,11 @@ def pwg_images_addSimple(request):
         'mediagoblin.user_pages.atom_feed',
         qualified=True, user=request.user.username)
     run_process_media(entry, feed_url)
+
+    collection_id = form.category.data
+    if collection_id > 0:
+        collection = Collection.query.get(collection_id)
+        add_media_to_collection(collection, entry, "")
 
     return {'image_id': entry.id, 'url': entry.url_for_self(request.urlgen,
                                                             qualified=True)}
