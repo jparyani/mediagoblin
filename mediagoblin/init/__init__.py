@@ -24,7 +24,7 @@ from mediagoblin import mg_globals
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.db.open import setup_connection_and_db_from_config, \
     check_db_migrations_current, load_models
-from mediagoblin.pluginapi import hook_runall
+from mediagoblin.tools.pluginapi import hook_runall
 from mediagoblin.tools.workbench import WorkbenchManager
 from mediagoblin.storage import storage_system_from_config
 
