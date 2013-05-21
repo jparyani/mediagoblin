@@ -87,12 +87,13 @@ def pwg_categories_getList(request):
                 'uppercats': "-29711",
                 'name': "All my images"}]
 
-    for c in collections:
-        catlist.append({'id': c.id,
-                        'uppercats': str(c.id),
-                        'name': c.title,
-                        'comment': c.description
-                        })
+    if request.user:
+        for c in collections:
+            catlist.append({'id': c.id,
+                            'uppercats': str(c.id),
+                            'name': c.title,
+                            'comment': c.description
+                            })
 
     return {
           'categories': PwgNamedArray(
