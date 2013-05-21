@@ -80,14 +80,14 @@ def pwg_session_getStatus(request):
 
 @CmdTable("pwg.categories.getList")
 def pwg_categories_getList(request):
-    collections = Collection.query.filter_by(
-        get_creator=request.user).order_by(Collection.title)
-
     catlist = [{'id': -29711,
                 'uppercats': "-29711",
                 'name': "All my images"}]
 
     if request.user:
+        collections = Collection.query.filter_by(
+            get_creator=request.user).order_by(Collection.title)
+
         for c in collections:
             catlist.append({'id': c.id,
                             'uppercats': str(c.id),
