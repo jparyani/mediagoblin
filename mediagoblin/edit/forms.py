@@ -103,4 +103,5 @@ class ChangePassForm(wtforms.Form):
     new_password = wtforms.PasswordField(
         _('New password'),
         [wtforms.validators.Required(),
-         wtforms.validators.Length(min=6, max=30)])
+         wtforms.validators.Length(min=6, max=30)],
+        id="password")

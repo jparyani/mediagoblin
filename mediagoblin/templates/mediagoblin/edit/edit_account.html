@@ -40,12 +40,12 @@
         {%- trans username=user.username -%}
           Changing {{ username }}'s account settings
         {%- endtrans -%}
-			</h1>
-			<p>{% trans %}Change your{% endtrans %}
-				<a href="{{ request.urlgen('mediagoblin.edit.pass') }}">
-					{% trans %}password.{% endtrans %}
-				</a>
-			</p>
+      </h1>
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.edit.pass') }}">
+          {% trans %}Change your password.{% endtrans %}
+        </a>
+      </p>
       <div class="form_field_input">
         <p>{{ form.wants_comment_notification }}
            {{ wtforms_util.render_label(form.wants_comment_notification) }}</p>
@@ -53,7 +53,7 @@
       {{- wtforms_util.render_field_div(form.license_preference) }}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button_form" />
-	{{ csrf_token }}
+  {{ csrf_token }}
       </div>
     </div>
   </form>
