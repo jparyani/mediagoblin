@@ -62,8 +62,8 @@ def normalize_user_or_email_field(allow_email=True, allow_user=True):
 
 
 EMAIL_VERIFICATION_TEMPLATE = (
-    u"http://{host}{uri}?"
-    u"userid={userid}&token={verification_key}")
+    u"{uri}?"
+    u"token={verification_key}")
 
 
 def send_verification_email(user, request, email=None,
@@ -79,14 +79,15 @@ def send_verification_email(user, request, email=None,
         email = user.email
 
     if not rendered_email:
+        verification_key = get_timed_signer_url('mail_verification_token') \
+                .dumps(user.id)
         rendered_email = render_template(
             request, 'mediagoblin/auth/verification_email.txt',
             {'username': user.username,
             'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
-                    host=request.host,
-                    uri=request.urlgen('mediagoblin.auth.verify_email'),
-                    userid=unicode(user.id),
-                    verification_key=user.verification_key)})
+                    uri=request.urlgen('mediagoblin.auth.verify_email',
+                                       qualified=True),
+                    verification_key=verification_key)})
 
     # TODO: There is no error handling in place
     send_email(

@@ -58,9 +58,6 @@ class ChangePassForm(wtforms.Form):
         'Password',
         [wtforms.validators.Required(),
          wtforms.validators.Length(min=5, max=1024)])
-    userid = wtforms.HiddenField(
-        '',
-        [wtforms.validators.Required()])
     token = wtforms.HiddenField(
         '',
         [wtforms.validators.Required()])
