@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
 import sys
 
 from configobj import ConfigObj
@@ -358,3 +359,36 @@ doubleme: happyhappy"""
 global thing: globally appended!
 lol: cats
 doubleme: joyjoy"""
+
+
+@pytest.fixture()
+def static_plugin_app(request):
+    """
+    Get a MediaGoblin app fixture using appconfig_static_plugin.ini
+    """
+    return get_app(
+        request,
+        mgoblin_config=pkg_resources.resource_filename(
+            'mediagoblin.tests', 'appconfig_static_plugin.ini'))
+
+
+def test_plugin_assetlink(static_plugin_app):
+    """
+    Test that the assetlink command works correctly
+    """
+    pass
+
+
+def test_plugin_staticdirect(static_plugin_app):
+    """
+    Test that the staticdirect utilities pull up the right things
+    """
+    result = json.loads(
+        static_plugin_app.get('/staticstuff/').body)
+
+    assert len(result) == 2
+
+    assert result['mgoblin_bunny_pic'] == '/test_static/images/bunny_pic.png'
+    assert result['plugin_bunny_css'] == \
+        '/plugin_static/staticstuff/css/bunnify.css'
+

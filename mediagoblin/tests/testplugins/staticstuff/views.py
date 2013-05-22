@@ -25,4 +25,4 @@ def static_demo(request):
         'mgoblin_bunny_pic': request.staticdirect(
             'images/bunny_pic.png'),
         'plugin_bunny_css': request.staticdirect(
-            'css/bunnyify.css', 'staticstuff')}))
+            'css/bunnify.css', 'staticstuff')}))
