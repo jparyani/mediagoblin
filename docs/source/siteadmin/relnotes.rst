@@ -19,6 +19,22 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+0.4.0
+=====
+
+**For theme authors**
+
+If you have your own theme or you have any "user modified templates",
+please note the following:
+
+* mediagoblin/bits/ files above-content.html, body-end.html,
+  body-start.html now are renamed... they have underscores instead of
+  dashes in the filenames now :)
+* There's a new file: ``mediagoblin/bits/frontpage_welcome.html``.
+  You can easily customize this to give a welcome page appropriate to
+  your site.
+
+
 0.3.3
 =====
 
