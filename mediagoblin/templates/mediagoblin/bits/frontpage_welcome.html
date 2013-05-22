@@ -1,0 +1,35 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% if request.user %}
+  <h1>{% trans %}Explore{% endtrans %}</h1>
+{% else %}
+  <h1>{% trans %}Hi there, welcome to this MediaGoblin site!{% endtrans %}</h1>
+  <img class="right_align" src="{{ request.staticdirect('/images/frontpage_image.png') }}" />
+  <p>{% trans %}This site is running <a href="http://mediagoblin.org">MediaGoblin</a>, an extraordinarily great piece of media hosting software.{% endtrans %}</p>
+  <p>{% trans %}To add your own media, place comments, and more, you can log in with your MediaGoblin account.{% endtrans %}</p>
+  {% if allow_registration %}
+    <p>{% trans %}Don't have one yet? It's easy!{% endtrans %}</p>
+    {% trans register_url=request.urlgen('mediagoblin.auth.register') -%}
+      <a class="button_action_highlight" href="{{ register_url }}">Create an account at this site</a>
+      or
+      <a class="button_action" href="http://wiki.mediagoblin.org/HackingHowto">Set up MediaGoblin on your own server</a>
+    {%- endtrans %}
+  {% endif %}
+  <div class="clear"></div>
+{% endif %}
