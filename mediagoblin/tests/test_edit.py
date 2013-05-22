@@ -15,13 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import urlparse
-import pytest
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User
 from mediagoblin.tests.tools import fixture_add_user
-from mediagoblin.tools import template
+from mediagoblin.tools import template, mail
 from mediagoblin.auth.lib import bcrypt_check_password
+
 
 class TestUserEdit(object):
     def setup(self):
@@ -141,4 +141,106 @@ class TestUserEdit(object):
         assert form.url.errors == [
             u'This address contains errors']
 
+    def test_email_change(self, test_app):
+        self.login(test_app)
+
+        # Test email change without password
+        template.clear_test_template_context()
+        test_app.post(
+            '/edit/account/', {
+                'new_email': 'new@example.com'})
+
+        # Check form errors
+        context = template.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/edit/edit_account.html']
+        assert context['form'].password.errors == [
+            u'This field is required.']
+
+        # Test email change with wrong password
+        template.clear_test_template_context()
+        test_app.post(
+            '/edit/account/', {
+                'new_email': 'new@example.com',
+                'password': 'wrong'})
+
+        # Check form errors
+        context = template.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/edit/edit_account.html']
+        assert context['form'].password.errors == [
+            u'Wrong password.']
+
+        # Test email already in db
+        template.clear_test_template_context()
+        test_app.post(
+            '/edit/account/', {
+                'new_email': 'chris@example.com',
+                'password': 'toast'})
+
+        # Check form errors
+        context = template.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/edit/edit_account.html']
+        assert context['form'].new_email.errors == [
+            u'Sorry, a user with that email address already exists.']
+
+        # Test password is too short
+        template.clear_test_template_context()
+        test_app.post(
+            '/edit/account/', {
+                'new_email': 'new@example.com',
+                'password': 't'})
+
+        # Check form errors
+        context = template.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/edit/edit_account.html']
+        assert context['form'].password.errors == [
+            u'Field must be between 5 and 1024 characters long.']
+
+        # Test successful email change
+        template.clear_test_template_context()
+        res = test_app.post(
+            '/edit/account/', {
+                'new_email': 'new@example.com',
+                'password': 'toast'})
+        res.follow()
+
+        # Correct redirect?
+        assert urlparse.urlsplit(res.location)[2] == '/u/chris/'
+
+        # Make sure we get email verification and try verifying
+        assert len(mail.EMAIL_TEST_INBOX) == 1
+        message = mail.EMAIL_TEST_INBOX.pop()
+        assert message['To'] == 'new@example.com'
+        email_context = template.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/edit/verification.txt']
+        assert email_context['verification_url'] in \
+            message.get_payload(decode=True)
+
+        path = urlparse.urlsplit(email_context['verification_url'])[2]
+        assert path == u'/edit/verify_email/'
+
+        ## Try verifying with bs verification key, shouldn't work
+        template.clear_test_template_context()
+        res = test_app.get(
+            "/edit/verify_email/?token=total_bs")
+        res.follow()
+
+        # Correct redirect?
+        assert urlparse.urlsplit(res.location)[2] == '/'
+
+        # Email shouldn't be saved
+        email_in_db = mg_globals.database.User.find_one(
+            {'email': 'new@example.com'})
+        email = User.query.filter_by(username='chris').first().email
+        assert email_in_db is None
+        assert email == 'chris@example.com'
+
+        # Verify email activation works
+        template.clear_test_template_context()
+        get_params = urlparse.urlsplit(email_context['verification_url'])[3]
+        res = test_app.get('%s?%s' % (path, get_params))
+        res.follow()
+
+        # New email saved?
+        email = User.query.filter_by(username='chris').first().email
+        assert email == 'new@example.com'
 # test changing the url inproperly

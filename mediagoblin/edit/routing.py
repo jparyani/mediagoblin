@@ -26,5 +26,5 @@ add_route('mediagoblin.edit.delete_account', '/edit/account/delete/',
     'mediagoblin.edit.views:delete_account')
 add_route('mediagoblin.edit.pass', '/edit/password/',
     'mediagoblin.edit.views:change_pass')
-add_route('mediagoblin.edit.verify_email', '/edit/verify_email',
+add_route('mediagoblin.edit.verify_email', '/edit/verify_email/',
     'mediagoblin.edit.views:verify_email')

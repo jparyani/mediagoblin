@@ -16,6 +16,7 @@
 
 from datetime import datetime
 
+from itsdangerous import BadSignature
 from werkzeug.exceptions import Forbidden
 from werkzeug.utils import secure_filename
 
@@ -417,10 +418,20 @@ def verify_email(request):
     if not 'token' in request.GET:
         return render_404(request)
 
-    # This throws an error, if the thing is faked or expired
-    # should be catched, probably.
-    token = get_timed_signer_url("mail_verification_token") \
-            .loads(request.GET['token'], max_age=10*24*3600)
+    # Catch error if token is faked or expired
+    token = None
+    try:
+        token = get_timed_signer_url("mail_verification_token") \
+                .loads(request.GET['token'], max_age=10*24*3600)
+    except BadSignature:
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _('The verification key or user id is incorrect.'))
+
+        return redirect(
+            request,
+            'index')
 
     user = User.query.filter_by(id=int(token['user'])).first()
 
