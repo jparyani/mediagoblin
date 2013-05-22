@@ -14,21 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import shutil
-
-from mediagoblin import mg_globals
-from mediagoblin.tests.tools import TEST_USER_DEV
-
 
 def setup_package():
 
     import warnings
     from sqlalchemy.exc import SAWarning
     warnings.simplefilter("error", SAWarning)
-
-
-def teardown_package():
-    # Remove and reinstall user_dev directories
-    if os.path.exists(TEST_USER_DEV):
-        shutil.rmtree(TEST_USER_DEV)

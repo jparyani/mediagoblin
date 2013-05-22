@@ -40,8 +40,6 @@ TEST_SERVER_CONFIG = pkg_resources.resource_filename(
     'mediagoblin.tests', 'test_paste.ini')
 TEST_APP_CONFIG = pkg_resources.resource_filename(
     'mediagoblin.tests', 'test_mgoblin_app.ini')
-TEST_USER_DEV = pkg_resources.resource_filename(
-    'mediagoblin.tests', 'test_user_dev')
 
 
 USER_DEV_DIRECTORIES_TO_SETUP = ['media/public', 'media/queue']
@@ -103,7 +101,7 @@ def get_app(request, paste_config=None, mgoblin_config=None):
     # This is the directory we're copying the paste/mgoblin config stuff into
     run_dir = request.config._tmpdirhandler.mktemp(
         'mgoblin_app', numbered=True)
-    user_dev_dir = run_dir.mkdir('test_user_dev').strpath
+    user_dev_dir = run_dir.mkdir('user_dev').strpath
 
     new_paste_config = run_dir.join('paste.ini').strpath
     new_mgoblin_config = run_dir.join('mediagoblin.ini').strpath
@@ -232,3 +230,4 @@ def fixture_add_collection(name=u"My first Collection", user=None):
     Session.expunge(coll)
 
     return coll
+
