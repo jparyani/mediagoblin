@@ -97,7 +97,7 @@ def link_plugin_assets(plugin_static, plugins_link_dir, printer=simple_printer):
     # link_dir is the final directory we'll link to, a combination of
     # the plugin assetlink directory and plugin_static.name
     link_dir = os.path.sep.join(
-        plugins_link_dir.rstrip(os.path.sep), plugin_static.name)
+        [plugins_link_dir.rstrip(os.path.sep), plugin_static.name])
 
     # make the link directory parent dirs if necessary
     if not os.path.lexists(plugins_link_dir):
@@ -107,19 +107,19 @@ def link_plugin_assets(plugin_static, plugins_link_dir, printer=simple_printer):
     if os.path.lexists(link_dir):
         # if this isn't a symlink, there's something wrong... error out.
         if not os.path.islink(link_dir):
-            printer(_('Could not link "%s": %s exists and is not a symlink') % (
-                link_dir))
+            printer(_('Could not link "%s": %s exists and is not a symlink\n') % (
+                plugin_static.name, link_dir))
             return
 
         # if this is a symlink and the path already exists, skip it.
         if os.path.realpath(link_dir) == plugin_static.file_path:
             # Is this comment helpful or not?
-            printer(_('Skipping "%s"; already set up.') % (
+            printer(_('Skipping "%s"; already set up.\n') % (
                 plugin_static.name))
             return
 
         # Otherwise, it's a link that went to something else... unlink it
-        printer(_('Old link found for "%s"; removing.') % (
+        printer(_('Old link found for "%s"; removing.\n') % (
             plugin_static.name))
         os.unlink(link_dir)
 

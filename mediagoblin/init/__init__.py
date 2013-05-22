@@ -119,9 +119,9 @@ def get_staticdirector(app_config):
 
     # Let plugins load additional paths
     for plugin_static in hook_runall("static_setup"):
-        direct_domains[plugin_static['name']] = "%s/%s" % (
+        direct_domains[plugin_static.name] = "%s/%s" % (
             app_config['plugin_web_path'].rstrip('/'),
-            plugin_static['name'])
+            plugin_static.name)
 
     return staticdirect.StaticDirect(
         direct_domains)
