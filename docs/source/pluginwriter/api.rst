@@ -144,3 +144,34 @@ passes back a PluginStatic object.
 
 .. automodule:: mediagoblin.tools.staticdirect
    :members: PluginStatic
+
+
+Running plugin assetlink
+++++++++++++++++++++++++
+
+.. TODO: Fix this command when it lands elsewhere ;)
+
+In order for your plugin assets to be properly served by MediaGoblin,
+your plugin's asset directory needs to be symlinked into the directory
+that plugin assets are served from.  To set this up, run::
+
+  ./bin/gmg theme assetlink
+
+
+Using staticdirect
+++++++++++++++++++
+
+Once you have this, you will want to be able to of course link to your
+assets!  MediaGoblin has a "staticdirect" tool; you want to use this
+like so in your templates::
+
+  staticdirect("css/monkeys.css", "mystaticname")
+
+Replace "mystaticname" with the name you passed to PluginStatic.  The
+staticdirect method is, for convenience, attached to the request
+object, so you can access this in your templates like:
+
+.. code-block:: html
+
+  <img alt="A funny bunny"
+       src="{{ request.staticdirect('images/funnybunny.png', 'mystaticname') }}" />
