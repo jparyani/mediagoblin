@@ -246,13 +246,16 @@ class MediaEntryMixin(GenerateSlugMixin):
 
         exif_all = self.media_data.get("exif_all")
 
-        taken = None
+        exif_short = {}
+
         if 'Image DateTimeOriginal' in exif_all:
             # format date taken
             takendate = datetime.datetime.strptime(
                 exif_all['Image DateTimeOriginal']['printable'],
                 '%Y:%m:%d %H:%M:%S').date()
             taken = takendate.strftime('%B %d %Y')
+
+            exif_short.update({'Date Taken': taken})
 
         aperture = None
         if 'EXIF FNumber' in exif_all:
@@ -264,14 +267,25 @@ class MediaEntryMixin(GenerateSlugMixin):
             elif fnum[0] != 'None':
                 aperture = "f/%s" % (fnum[0])
 
-        return {
-            "Camera" : exif_all['Image Model']['printable'],
-            "Exposure" : '%s sec' % exif_all['EXIF ExposureTime']['printable'],
-            "Aperture" : aperture,
-            "ISO" : exif_all['EXIF ISOSpeedRatings']['printable'],
-            "Focal Length" : '%s mm' % exif_all['EXIF FocalLength']['printable'],
-            "Date Taken" : taken,
-        }
+        if aperture:
+            exif_short.update({'Aperture': aperture})
+
+        short_keys = [
+            ('Camera', 'Image Model', None),
+            ('Exposure', 'EXIF ExposureTime', lambda x: '%s sec' % x),
+            ('ISO Speed', 'EXIF ISOSpeedRatings', None),
+            ('Focal Length', 'EXIF FocalLength', lambda x: '%s mm' % x)]
+
+        for label, key, fmt_func in short_keys:
+            try:
+                val = fmt_func(exif_all[key]['printable']) if fmt_func \
+                        else exif_all[key]['printable']
+                exif_short.update({label: val})
+            except KeyError:
+                pass
+
+        return exif_short
+
 
 class MediaCommentMixin(object):
     @property
