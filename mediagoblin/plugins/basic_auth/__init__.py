@@ -71,6 +71,10 @@ def gen_password_hash(raw_pass, extra_salt):
     return auth_lib.bcrypt_gen_password_hash(raw_pass, extra_salt)
 
 
+def check_password(raw_pass, stored_hash, extra_salt):
+    return auth_lib.bcrypt_check_password(raw_pass, stored_hash, extra_salt)
+
+
 def auth():
     return True
 
@@ -94,6 +98,7 @@ hooks = {
     'auth_get_login_form': get_login_form,
     'auth_get_registration_form': get_registration_form,
     'auth_gen_password_hash': gen_password_hash,
+    'auth_check_password': check_password,
     'auth_fake_login_attempt': auth_lib.fake_login_attempt,
     'template_global_context': append_to_global_context,
     ('mediagoblin.plugins.openid.register',

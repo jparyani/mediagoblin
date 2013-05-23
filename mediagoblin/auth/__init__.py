@@ -53,5 +53,10 @@ def gen_password_hash(raw_pass, extra_salt=None):
     return hook_handle("auth_gen_password_hash", raw_pass, extra_salt)
 
 
+def check_password(raw_pass, stored_hash, extra_salt=None):
+    return hook_handle("auth_check_password",
+                       raw_pass, stored_hash, extra_salt)
+
+
 def fake_login_attempt():
     return hook_handle("auth_fake_login_attempt")
