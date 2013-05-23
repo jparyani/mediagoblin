@@ -51,7 +51,7 @@ want to install this theme!  Don't worry, it's fairly painless.
 
 5. Link the assets so that they can be served by your web server::
 
-       $ ./bin/gmg theme assetlink
+       $ ./bin/gmg assetlink
 
 .. Note::
 

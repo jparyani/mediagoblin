@@ -149,13 +149,11 @@ passes back a PluginStatic object.
 Running plugin assetlink
 ++++++++++++++++++++++++
 
-.. TODO: Fix this command when it lands elsewhere ;)
-
 In order for your plugin assets to be properly served by MediaGoblin,
 your plugin's asset directory needs to be symlinked into the directory
 that plugin assets are served from.  To set this up, run::
 
-  ./bin/gmg theme assetlink
+  ./bin/gmg assetlink
 
 
 Using staticdirect
