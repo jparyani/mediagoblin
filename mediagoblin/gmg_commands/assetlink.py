@@ -136,7 +136,7 @@ def link_plugin_assets(plugin_static, plugins_link_dir, printer=simple_printer):
 
 def assetlink(args):
     """
-    Link the asset directory of the currently installed theme
+    Link the asset directory of the currently installed theme and plugins
     """
     mgoblin_app = commands_util.setup_app(args)
     app_config = mg_globals.app_config
