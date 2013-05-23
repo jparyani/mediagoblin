@@ -18,33 +18,7 @@ import wtforms
 
 from mediagoblin.tools.mail import normalize_email
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
-
-def normalize_user_or_email_field(allow_email=True, allow_user=True):
-    """Check if we were passed a field that matches a username and/or email pattern
-
-    This is useful for fields that can take either a username or email
-    address. Use the parameters if you want to only allow a username for
-    instance"""
-    message = _(u'Invalid User name or email address.')
-    nomail_msg = _(u"This field does not take email addresses.")
-    nouser_msg = _(u"This field requires an email address.")
-
-    def _normalize_field(form, field):
-        email = u'@' in field.data
-        if email: # normalize email address casing
-            if not allow_email:
-                raise wtforms.ValidationError(nomail_msg)
-            wtforms.validators.Email()(form, field)
-            field.data = normalize_email(field.data)
-        else: # lower case user names
-            if not allow_user:
-                raise wtforms.ValidationError(nouser_msg)
-            wtforms.validators.Length(min=3, max=30)(form, field)
-            wtforms.validators.Regexp(r'^\w+$')(form, field)
-            field.data = field.data.lower()
-        if field.data is None: # should not happen, but be cautious anyway
-            raise wtforms.ValidationError(message)
-    return _normalize_field
+from mediagoblin.auth.tools import normalize_user_or_email_field
 
 
 class RegistrationForm(wtforms.Form):
