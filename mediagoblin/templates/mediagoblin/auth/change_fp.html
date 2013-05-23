@@ -39,6 +39,7 @@
         <input type="submit" value="{% trans %}Set password{% endtrans %}" class="button_form"/>
       </div>
     </div>
-  </form>
+</form><!-- Focus the field passed in with the focus arg-->
+<script>$(document).ready(function(){$({{ focus }}).focus();});</script>
 {% endblock %}
 

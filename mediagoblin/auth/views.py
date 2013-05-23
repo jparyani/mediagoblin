@@ -62,7 +62,9 @@ def register(request):
     return render_to_response(
         request,
         'mediagoblin/auth/register.html',
-        {'register_form': register_form})
+        {'register_form': register_form,
+         'focus': 'username',
+         'post_url': request.urlgen('mediagoblin.auth.register')})
 
 
 def login(request):
@@ -113,6 +115,8 @@ def login(request):
         {'login_form': login_form,
          'next': request.GET.get('next') or request.form.get('next'),
          'login_failed': login_failed,
+         'focus': 'username',
+         'post_url': request.urlgen('mediagoblin.auth.login'),
          'allow_registration': mg_globals.app_config["allow_registration"]})
 
 
