@@ -142,8 +142,7 @@ First, you need to register your plugin's resources with the hook.
 This is pretty easy actually: you just need to provide a function that
 passes back a PluginStatic object.
 
-.. automodule:: mediagoblin.tools.staticdirect
-   :members: PluginStatic
+.. autoclass:: mediagoblin.tools.staticdirect.PluginStatic
 
 
 Running plugin assetlink
