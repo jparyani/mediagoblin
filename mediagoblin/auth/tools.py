@@ -90,9 +90,9 @@ def no_auth_logout(request):
 
 def basic_extra_validation(register_form, *args):
     users_with_username = User.query.filter_by(
-        username=register_form.data['username']).count()
+        username=register_form.username.data).count()
     users_with_email = User.query.filter_by(
-        email=register_form.data['email']).count()
+        email=register_form.email.data).count()
 
     extra_validation_passes = True
 

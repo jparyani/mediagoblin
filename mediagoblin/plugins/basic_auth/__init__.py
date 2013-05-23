@@ -35,21 +35,22 @@ def check_login(user, password):
 
 
 def get_user(form):
-    username = form.data['username']
-    user = User.query.filter(
-        or_(
-            User.username == username,
-            User.email == username,
-        )).first()
-    return user
+    if 'username' in form.data:
+        username = form.username.data
+        user = User.query.filter(
+            or_(
+                User.username == username,
+                User.email == username,
+            )).first()
+        return user
 
 
 def create_user(registration_form):
     user = get_user(registration_form)
     if not user and 'password' in registration_form:
         user = User()
-        user.username = registration_form.data['username']
-        user.email = registration_form.data['email']
+        user.username = registration_form.username.data
+        user.email = registration_form.email.data
         user.pw_hash = auth_lib.bcrypt_gen_password_hash(
             registration_form.password.data)
         user.verification_key = unicode(uuid.uuid4())
