@@ -98,8 +98,8 @@ def link_plugin_assets(plugin_static, plugins_link_dir, printer=simple_printer):
     """
     # link_dir is the final directory we'll link to, a combination of
     # the plugin assetlink directory and plugin_static.name
-    link_dir = os.path.sep.join(
-        [plugins_link_dir.rstrip(os.path.sep), plugin_static.name])
+    link_dir = os.path.join(
+        plugins_link_dir.rstrip(os.path.sep), plugin_static.name)
 
     # make the link directory parent dirs if necessary
     if not os.path.lexists(plugins_link_dir):
