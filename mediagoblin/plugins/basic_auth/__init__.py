@@ -28,9 +28,10 @@ def setup_plugin():
 
 
 def check_login(user, password):
-    result = auth_lib.bcrypt_check_password(password, user.pw_hash)
-    if result:
-        return result
+    if user.pw_hash:
+        result = auth_lib.bcrypt_check_password(password, user.pw_hash)
+        if result:
+            return result
     return None
 
 
