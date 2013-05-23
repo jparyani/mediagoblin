@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
 import json
 import sys
 
@@ -25,8 +26,10 @@ from validate import VdtTypeError
 from mediagoblin import mg_globals
 from mediagoblin.init.plugins import setup_plugins
 from mediagoblin.init.config import read_mediagoblin_config
+from mediagoblin.gmg_commands.assetlink import link_plugin_assets
 from mediagoblin.tools import pluginapi
 from mediagoblin.tests.tools import get_app
+from mediagoblin.tools.common import CollectingPrinter
 
 
 def with_cleanup(*modules_to_delete):
@@ -376,7 +379,76 @@ def test_plugin_assetlink(static_plugin_app):
     """
     Test that the assetlink command works correctly
     """
-    pass
+    linked_assets_dir = mg_globals.app_config['plugin_linked_assets_dir']
+    plugin_link_dir = os.path.join(
+        linked_assets_dir.rstrip(os.path.sep),
+        'staticstuff')
+
+    plugin_statics = pluginapi.hook_runall("static_setup")
+    assert len(plugin_statics) == 1
+    plugin_static = plugin_statics[0]
+
+    def run_assetlink():
+        printer = CollectingPrinter()
+
+        link_plugin_assets(
+            plugin_static, linked_assets_dir, printer)
+
+        return printer
+
+    # it shouldn't exist yet
+    assert not os.path.lexists(plugin_link_dir)
+
+    # link dir doesn't exist, link it
+    result = run_assetlink().collection[0]
+    assert result == \
+        'Linked asset directory for plugin "staticstuff":\n  %s\nto:\n  %s\n' % (
+            plugin_static.file_path.rstrip(os.path.sep),
+            plugin_link_dir)
+    assert os.path.lexists(plugin_link_dir)
+    assert os.path.islink(plugin_link_dir)
+    assert os.path.realpath(plugin_link_dir) == plugin_static.file_path
+
+    # link dir exists, leave it alone
+    # (and it should exist still since we just ran it..)
+    result = run_assetlink().collection[0]
+    assert result == 'Skipping "staticstuff"; already set up.\n'
+    assert os.path.lexists(plugin_link_dir)
+    assert os.path.islink(plugin_link_dir)
+    assert os.path.realpath(plugin_link_dir) == plugin_static.file_path
+
+    # link dir exists, is a symlink to somewhere else (re-link)
+    junk_file_path = os.path.join(
+        linked_assets_dir.rstrip(os.path.sep),
+        'junk.txt')
+    with file(junk_file_path, 'w') as junk_file:
+        junk_file.write('barf')
+
+    os.unlink(plugin_link_dir)
+    os.symlink(junk_file_path, plugin_link_dir)
+
+    result = run_assetlink().combined_string
+    assert result == """Old link found for "staticstuff"; removing.
+Linked asset directory for plugin "staticstuff":
+  %s
+to:
+  %s
+""" % (plugin_static.file_path.rstrip(os.path.sep), plugin_link_dir)
+    assert os.path.lexists(plugin_link_dir)
+    assert os.path.islink(plugin_link_dir)
+    assert os.path.realpath(plugin_link_dir) == plugin_static.file_path
+
+    # link dir exists, but is a non-symlink
+    os.unlink(plugin_link_dir)
+    with file(plugin_link_dir, 'w') as clobber_file:
+        clobber_file.write('clobbered!')
+
+    result = run_assetlink().collection[0]
+    assert result == 'Could not link "staticstuff": %s exists and is not a symlink\n' % (
+        plugin_link_dir)
+
+    with file(plugin_link_dir, 'r') as clobber_file:
+        assert clobber_file.read() == 'clobbered!'
 
 
 def test_plugin_staticdirect(static_plugin_app):
