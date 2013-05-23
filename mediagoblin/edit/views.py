@@ -342,7 +342,7 @@ def change_pass(request):
 
     if request.method == 'POST' and form.validate():
 
-        if not auth_lib.bcrypt_check_password(
+        if not auth.check_password(
                 form.old_password.data, user.pw_hash):
             form.old_password.errors.append(
                 _('Wrong password'))
@@ -354,7 +354,7 @@ def change_pass(request):
                  'user': user})
 
         # Password matches
-        user.pw_hash = auth_lib.bcrypt_gen_password_hash(
+        user.pw_hash = auth.gen_password_hash(
             form.new_password.data)
         user.save()
 
