@@ -41,11 +41,15 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.dbupdate:dbupdate_parse_setup',
         'func': 'mediagoblin.gmg_commands.dbupdate:dbupdate',
         'help': 'Set up or update the SQL database'},
-    'theme': {
-        'setup': 'mediagoblin.gmg_commands.theme:theme_parser_setup',
-        'func': 'mediagoblin.gmg_commands.theme:theme',
-        'help': 'Theming commands',
-        }
+    'assetlink': {
+        'setup': 'mediagoblin.gmg_commands.assetlink:assetlink_parser_setup',
+        'func': 'mediagoblin.gmg_commands.assetlink:assetlink',
+        'help': 'Link assets for themes and plugins for static serving'},
+    # 'theme': {
+    #     'setup': 'mediagoblin.gmg_commands.theme:theme_parser_setup',
+    #     'func': 'mediagoblin.gmg_commands.theme:theme',
+    #     'help': 'Theming commands',
+    #     }
 
     ## These might be useful, mayyyybe, but don't really work anymore
     ## due to mongo change and the "versatility" of sql options.

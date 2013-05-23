@@ -16,6 +16,7 @@
 
 import os
 
+from mediagoblin import mg_globals
 from mediagoblin.init import setup_global_and_app_config
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.tools.theme import register_themes
@@ -24,22 +25,23 @@ from mediagoblin.tools.common import simple_printer
 from mediagoblin.tools import pluginapi
 
 
-def theme_parser_setup(subparser):
-    theme_subparsers = subparser.add_subparsers(
-        dest=u"subcommand",
-        help=u'Theme sub-commands')
+def assetlink_parser_setup(subparser):
+    # theme_subparsers = subparser.add_subparsers(
+    #     dest=u"subcommand",
+    #     help=u'Assetlink options')
 
-    # Install command
-    install_parser = theme_subparsers.add_parser(
-        u'install', help=u'Install a theme to this mediagoblin instance')
-    install_parser.add_argument(
-        u'themefile', help=u'The theme archive to be installed')
+    # # Install command
+    # install_parser = theme_subparsers.add_parser(
+    #     u'install', help=u'Install a theme to this mediagoblin instance')
+    # install_parser.add_argument(
+    #     u'themefile', help=u'The theme archive to be installed')
 
-    theme_subparsers.add_parser(
-        u'assetlink',
-        help=(
-            u"Link the currently installed theme's assets "
-            u"to the served theme asset directory"))
+    # theme_subparsers.add_parser(
+    #     u'assetlink',
+    #     help=(
+    #         u"Link the currently installed theme's assets "
+    #         u"to the served theme asset directory"))
+    pass
 
 
 ###########
@@ -132,47 +134,18 @@ def link_plugin_assets(plugin_static, plugins_link_dir, printer=simple_printer):
         link_dir))
 
 
-def install_theme(install_dir, themefile):
-    pass # TODO ;)
-
-
-#############
-# Subcommands
-#############
-
-def assetlink_command(args):
+def assetlink(args):
     """
     Link the asset directory of the currently installed theme
     """
-    global_config, app_config = setup_global_and_app_config(args.conf_file)
-    theme_registry, current_theme = register_themes(app_config)
+    mgoblin_app = commands_util.setup_app(args)
+    app_config = mg_globals.app_config
 
     # link theme
-    link_theme_assets(current_theme, app_config['theme_linked_assets_dir'])
-
-    # Set up the app specifically so we can access the plugin infrastructure
-    commands_util.setup_app(args)
+    link_theme_assets(mgoblin_app.current_theme, app_config['theme_linked_assets_dir'])
 
     # link plugin assets
     ## ... probably for this we need the whole application initialized
     for plugin_static in pluginapi.hook_runall("static_setup"):
         link_plugin_assets(
             plugin_static, app_config['plugin_linked_assets_dir'])
-
-
-def install_command(args):
-    """
-    Handle the 'install this theme' subcommand
-    """
-    global_config, app_config = setup_global_and_app_config(args.conf_file)
-    install_dir = app_config['theme_install_dir']
-    install_theme(install_dir, args.themefile)
-
-
-SUBCOMMANDS = {
-    'assetlink': assetlink_command,
-    'install': install_command}
-
-
-def theme(args):
-    SUBCOMMANDS[args.subcommand](args)
