@@ -25,7 +25,7 @@ from mediagoblin.tools.mail import email_debug_message
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.auth.lib import send_fp_verification_email
-from mediagoblin.auth.tools import send_verification_email
+from mediagoblin.auth.tools import send_verification_email, register_user
 from sqlalchemy import or_
 
 
@@ -47,38 +47,9 @@ def register(request):
 
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
-        users_with_username = User.query.filter_by(username=register_form.data['username']).count()
-        users_with_email = User.query.filter_by(email=register_form.data['email']).count()
+        user = register_user(request, register_form)
 
-        extra_validation_passes = True
-
-        if users_with_username:
-            register_form.username.errors.append(
-                _(u'Sorry, a user with that name already exists.'))
-            extra_validation_passes = False
-        if users_with_email:
-            register_form.email.errors.append(
-                _(u'Sorry, a user with that email address already exists.'))
-            extra_validation_passes = False
-
-        if extra_validation_passes:
-            # Create the user
-            user = User()
-            user.username = register_form.data['username']
-            user.email = register_form.data['email']
-            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-                register_form.password.data)
-            user.verification_key = unicode(uuid.uuid4())
-            user.save()
-
-            # log the user in
-            request.session['user_id'] = unicode(user.id)
-            request.session.save()
-
-            # send verification email
-            email_debug_message(request)
-            send_verification_email(user, request)
-
+        if user:
             # redirect the user to their homepage... there will be a
             # message waiting for them to verify their email
             return redirect(

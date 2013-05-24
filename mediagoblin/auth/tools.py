@@ -14,10 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import uuid
 import wtforms
 
 from mediagoblin import mg_globals
-from mediagoblin.tools.mail import normalize_email, send_email
+from mediagoblin.auth import lib as auth_lib
+from mediagoblin.db.models import User
+from mediagoblin.tools.mail import (normalize_email, send_email,
+                                    email_debug_message)
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
@@ -85,3 +89,50 @@ def send_verification_email(user, request):
         # example "GNU MediaGoblin @ Wandborg - [...]".
         'GNU MediaGoblin - Verify your email!',
         rendered_email)
+
+
+def basic_extra_validation(register_form, *args):
+    users_with_username = User.query.filter_by(
+        username=register_form.data['username']).count()
+    users_with_email = User.query.filter_by(
+        email=register_form.data['email']).count()
+
+    extra_validation_passes = True
+
+    if users_with_username:
+        register_form.username.errors.append(
+            _(u'Sorry, a user with that name already exists.'))
+        extra_validation_passes = False
+    if users_with_email:
+        register_form.email.errors.append(
+            _(u'Sorry, a user with that email address already exists.'))
+        extra_validation_passes = False
+
+    return extra_validation_passes
+
+
+def register_user(request, register_form):
+    """ Handle user registration """
+    extra_validation_passes = basic_extra_validation(register_form)
+
+    if extra_validation_passes:
+        # Create the user
+        user = User()
+        user.username = register_form.data['username']
+        user.email = register_form.data['email']
+        user.pw_hash = auth_lib.bcrypt_gen_password_hash(
+            register_form.password.data)
+        user.verification_key = unicode(uuid.uuid4())
+        user.save()
+
+        # log the user in
+        request.session['user_id'] = unicode(user.id)
+        request.session.save()
+
+        # send verification email
+        email_debug_message(request)
+        send_verification_email(user, request)
+
+        return user
+
+    return None
