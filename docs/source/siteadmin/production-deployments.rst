@@ -22,12 +22,14 @@ MediaGoblin in actual production environments. Consider
 Deploy with Paste
 -----------------
 
-The instance configured with ``./lazyserver.sh`` is not ideal for a
-production MediaGoblin deployment. Ideally, you should be able to use
-an "init" or "control" script to launch and restart the MediaGoblin
+The MediaGoblin WSGI application instance you get with ``./lazyserver.sh`` is
+not ideal for a production MediaGoblin deployment. Ideally, you should be able
+to use an "init" or "control" script to launch and restart the MediaGoblin
 process.
 
-Use the following command as the basis for such a script: ::
+Use the following command as the basis for such a script:
+
+.. code-block:: bash
 
     CELERY_ALWAYS_EAGER=true \
      /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
@@ -41,7 +43,9 @@ synchronously, and the user will advance to the next page only after
 processing is complete. If we take Celery out of "always eager mode,"
 the user will be able to immediately return to the MediaGoblin site
 while processing is ongoing. In these cases, use the following command
-as the basis for your script: ::
+as the basis for your script:
+
+.. code-block:: bash
 
     CELERY_ALWAYS_EAGER=false \
      /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
@@ -52,30 +56,40 @@ as the basis for your script: ::
 Separate Celery
 ---------------
 
-While the ``./lazyserver.sh`` configuration provides an efficient way to
-start using a MediaGoblin instance, it is not suitable for production
-deployments for several reasons:
+MediaGoblin uses `Celery`_ to handle heavy and long-running tasks. Celery can
+be launched in two ways:
 
-In nearly every scenario, work on the Celery queue will need to
-balance with the demands of other processes, and cannot proceed
-synchronously. This is a particularly relevant problem if you use
-MediaGoblin to host video content. Processing with Celery ought to be
-operationally separate from the MediaGoblin application itself, this
-simplifies management and support better workload distribution.
+1.  Embedded in the MediaGoblin WSGI application [#f-mediagoblin-wsgi-app]_.
+    This is the way ``./lazyserver.sh`` does it for you. It's simple as you
+    only have to run one process. The only bad thing with this is that the
+    heavy and long-running tasks will run *in* the webserver, keeping the user
+    waiting each time some heavy lifting is needed as in for example processing
+    a video. This could lead to problems as an aborted connection will halt any
+    processing and since most front-end web servers *will* terminate your
+    connection if it doesn't get any response from the MediaGoblin WSGI
+    application in a while.
 
-Basically, if you're doing anything beyond a trivial workload, such as
-image hosting for a small set of users, or have limited media types
-such as "ASCII art" or icon sharing, you will need to run ``celeryd``
-as a separate process.
+2.  As a separate process communicating with the MediaGoblin WSGI application
+    via a `broker`_. This offloads the heavy lifting from the MediaGoblin WSGI
+    application and users will be able to continue to browse the site while the
+    media is being processed in the background.
 
-Build an :ref:`init script <init-script>` around the following
-command::
+.. _`broker`: http://docs.celeryproject.org/en/latest/getting-started/brokers/
+.. _`celery`: http://www.celeryproject.org/
 
-    CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery ./bin/celeryd
 
-Modify your existing MediaGoblin and application init scripts, if
-necessary, to prevent them from starting their own ``celeryd``
-processes.
+.. [#f-mediagoblin-wsgi-app] The MediaGoblin WSGI application is the part that
+    of MediaGoblin that processes HTTP requests.
+
+To launch Celery separately from the MediaGoblin WSGI application:
+
+1.  Make sure that the ``CELERY_ALWAYS_EAGER`` environment variable is unset or
+    set to ``false`` when launching the MediaGoblin WSGI application.
+2.  Start the ``celeryd`` main process with
+
+    .. code-block:: bash
+
+        CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery ./bin/celeryd
 
 .. _sentry:
 
@@ -102,7 +116,7 @@ These are scripts provided by the MediaGoblin community:
 
 Debian
   * `GNU MediaGoblin init scripts
-    <https://github.com/jwandborg/mediagoblin-init-scripts>`_
+    <https://github.com/joar/mediagoblin-init-scripts>`_
     by `Joar Wandborg <http://wandborg.se>`_
 
 Arch Linux
