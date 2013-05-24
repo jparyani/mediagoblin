@@ -16,7 +16,9 @@
 
 import wtforms
 
-from mediagoblin.tools.mail import normalize_email
+from mediagoblin import mg_globals
+from mediagoblin.tools.mail import normalize_email, send_email
+from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 
@@ -48,3 +50,38 @@ def normalize_user_or_email_field(allow_email=True, allow_user=True):
         if field.data is None:  # should not happen, but be cautious anyway
             raise wtforms.ValidationError(message)
     return _normalize_field
+
+
+EMAIL_VERIFICATION_TEMPLATE = (
+    u"http://{host}{uri}?"
+    u"userid={userid}&token={verification_key}")
+
+
+def send_verification_email(user, request):
+    """
+    Send the verification email to users to activate their accounts.
+
+    Args:
+    - user: a user object
+    - request: the request
+    """
+    rendered_email = render_template(
+        request, 'mediagoblin/auth/verification_email.txt',
+        {'username': user.username,
+         'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
+                host=request.host,
+                uri=request.urlgen('mediagoblin.auth.verify_email'),
+                userid=unicode(user.id),
+                verification_key=user.verification_key)})
+
+    # TODO: There is no error handling in place
+    send_email(
+        mg_globals.app_config['email_sender_address'],
+        [user.email],
+        # TODO
+        # Due to the distributed nature of GNU MediaGoblin, we should
+        # find a way to send some additional information about the
+        # specific GNU MediaGoblin instance in the subject line. For
+        # example "GNU MediaGoblin @ Wandborg - [...]".
+        'GNU MediaGoblin - Verify your email!',
+        rendered_email)

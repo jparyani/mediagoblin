@@ -23,8 +23,8 @@ from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
-from mediagoblin.auth.lib import send_verification_email, \
-                                 send_fp_verification_email
+from mediagoblin.auth.lib import send_fp_verification_email
+from mediagoblin.auth.tools import send_verification_email
 from sqlalchemy import or_
 
 def email_debug_message(request):
@@ -113,7 +113,7 @@ def login(request):
     login_failed = False
 
     if request.method == 'POST':
-        
+
         username = login_form.data['username']
 
         if login_form.validate():
