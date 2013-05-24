@@ -21,23 +21,12 @@ from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import User
 from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
+from mediagoblin.tools.mail import email_debug_message
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.auth.lib import send_fp_verification_email
 from mediagoblin.auth.tools import send_verification_email
 from sqlalchemy import or_
-
-def email_debug_message(request):
-    """
-    If the server is running in email debug mode (which is
-    the current default), give a debug message to the user
-    so that they have an idea where to find their email.
-    """
-    if mg_globals.app_config['email_debug_mode']:
-        # DEBUG message, no need to translate
-        messages.add_message(request, messages.DEBUG,
-            u"This instance is running in email debug mode. "
-            u"The email will be on the console of the server process.")
 
 
 def register(request):
