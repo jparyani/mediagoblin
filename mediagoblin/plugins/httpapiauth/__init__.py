@@ -18,6 +18,7 @@ import logging
 
 from werkzeug.exceptions import Unauthorized
 
+from mediagoblin.auth.tools import check_login_simple
 from mediagoblin.plugins.api.tools import Auth
 
 _log = logging.getLogger(__name__)
@@ -39,10 +40,10 @@ class HTTPAuth(Auth):
         if not request.authorization:
             return False
 
-        user = request.db.User.query.filter_by(
-                username=unicode(request.authorization['username'])).first()
+        user = check_login_simple(unicode(request.authorization['username']),
+                                  request.authorization['password'])
 
-        if user.check_login(request.authorization['password']):
+        if user:
             request.user = user
             return True
         else:

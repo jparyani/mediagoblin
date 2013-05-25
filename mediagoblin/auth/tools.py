@@ -14,12 +14,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 import wtforms
+from sqlalchemy import or_
 
 from mediagoblin import mg_globals
+from mediagoblin.auth import lib as auth_lib
+from mediagoblin.db.models import User
 from mediagoblin.tools.mail import normalize_email, send_email
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+
+_log = logging.getLogger(__name__)
 
 
 def normalize_user_or_email_field(allow_email=True, allow_user=True):
@@ -85,3 +92,19 @@ def send_verification_email(user, request):
         # example "GNU MediaGoblin @ Wandborg - [...]".
         'GNU MediaGoblin - Verify your email!',
         rendered_email)
+
+
+def check_login_simple(username, password, username_might_be_email=False):
+    search = (User.username == username)
+    if username_might_be_email and ('@' in username):
+        search = or_(search, User.email == username)
+    user = User.query.filter(search).first()
+    if not user:
+        _log.info("User %r not found", username)
+        auth_lib.fake_login_attempt()
+        return None
+    if not auth_lib.bcrypt_check_password(password, user.pw_hash):
+        _log.warn("Wrong password for %r", username)
+        return None
+    _log.info("Logging %r in", username)
+    return user
