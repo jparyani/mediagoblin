@@ -13,11 +13,10 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import os
 import uuid
 
-import forms as auth_forms
-import lib as auth_lib
+from mediagoblin.plugins.basic_auth import forms as auth_forms
+from mediagoblin.plugins.basic_auth import lib as auth_lib
 from mediagoblin.db.models import User
 from mediagoblin.tools import pluginapi
 from sqlalchemy import or_

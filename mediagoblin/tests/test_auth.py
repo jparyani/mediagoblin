@@ -13,9 +13,10 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import urlparse
+import datetime
 import pkg_resources
 import pytest
-import urlparse
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User
@@ -172,6 +173,86 @@ def test_register_views(test_app):
 
     ## TODO: Also check for double instances of an email address?
 
+    ### Oops, forgot the password
+    # -------------------
+    template.clear_test_template_context()
+    response = test_app.post(
+        '/auth/forgot_password/',
+        {'username': u'happygirl'})
+    response.follow()
+
+    ## Did we redirect to the proper page?  Use the right template?
+    assert urlparse.urlsplit(response.location)[2] == '/auth/login/'
+    assert 'mediagoblin/auth/login.html' in template.TEMPLATE_TEST_CONTEXT
+
+    ## Make sure link to change password is sent by email
+    assert len(mail.EMAIL_TEST_INBOX) == 1
+    message = mail.EMAIL_TEST_INBOX.pop()
+    assert message['To'] == 'happygrrl@example.org'
+    email_context = template.TEMPLATE_TEST_CONTEXT[
+        'mediagoblin/auth/fp_verification_email.txt']
+    #TODO - change the name of verification_url to something forgot-password-ish
+    assert email_context['verification_url'] in message.get_payload(decode=True)
+
+    path = urlparse.urlsplit(email_context['verification_url'])[2]
+    get_params = urlparse.urlsplit(email_context['verification_url'])[3]
+    assert path == u'/auth/forgot_password/verify/'
+    parsed_get_params = urlparse.parse_qs(get_params)
+
+    # user should have matching parameters
+    new_user = mg_globals.database.User.find_one({'username': u'happygirl'})
+    assert parsed_get_params['userid'] == [unicode(new_user.id)]
+    assert parsed_get_params['token'] == [new_user.fp_verification_key]
+
+    ### The forgotten password token should be set to expire in ~ 10 days
+    # A few ticks have expired so there are only 9 full days left...
+    assert (new_user.fp_token_expire - datetime.datetime.now()).days == 9
+
+    ## Try using a bs password-changing verification key, shouldn't work
+    template.clear_test_template_context()
+    response = test_app.get(
+        "/auth/forgot_password/verify/?userid=%s&token=total_bs" % unicode(
+            new_user.id), status=404)
+    assert response.status.split()[0] == u'404' # status="404 NOT FOUND"
+
+    ## Try using an expired token to change password, shouldn't work
+    template.clear_test_template_context()
+    new_user = mg_globals.database.User.find_one({'username': u'happygirl'})
+    real_token_expiration = new_user.fp_token_expire
+    new_user.fp_token_expire = datetime.datetime.now()
+    new_user.save()
+    response = test_app.get("%s?%s" % (path, get_params), status=404)
+    assert response.status.split()[0] == u'404' # status="404 NOT FOUND"
+    new_user.fp_token_expire = real_token_expiration
+    new_user.save()
+
+    ## Verify step 1 of password-change works -- can see form to change password
+    template.clear_test_template_context()
+    response = test_app.get("%s?%s" % (path, get_params))
+    assert 'mediagoblin/auth/change_fp.html' in template.TEMPLATE_TEST_CONTEXT
+
+    ## Verify step 2.1 of password-change works -- report success to user
+    template.clear_test_template_context()
+    response = test_app.post(
+        '/auth/forgot_password/verify/', {
+            'userid': parsed_get_params['userid'],
+            'password': 'iamveryveryhappy',
+            'token': parsed_get_params['token']})
+    response.follow()
+    assert 'mediagoblin/auth/login.html' in template.TEMPLATE_TEST_CONTEXT
+
+    ## Verify step 2.2 of password-change works -- login w/ new password success
+    template.clear_test_template_context()
+    response = test_app.post(
+        '/auth/login/', {
+            'username': u'happygirl',
+            'password': 'iamveryveryhappy'})
+
+    # User should be redirected
+    response.follow()
+    assert urlparse.urlsplit(response.location)[2] == '/'
+    assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
+
 
 def test_authentication_views(test_app):
     """
@@ -325,3 +406,12 @@ def test_no_auth_true_no_auth_plugin_app(no_auth_true_no_auth_plugin_app):
 
     ## Test check_login should return False
     assert auth.check_login('test', 'simple') is False
+
+    # Try to visit the forgot password page
+    template.clear_test_template_context()
+    response = no_auth_true_no_auth_plugin_app.get('/auth/register/')
+    response.follow()
+
+    # Correct redirect?
+    assert urlparse.urlsplit(response.location)[2] == '/'
+    assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT

@@ -16,10 +16,6 @@
 import bcrypt
 import random
 
-from mediagoblin.tools.template import render_template
-from mediagoblin.tools.mail import send_email
-from mediagoblin import mg_globals
-
 
 def bcrypt_check_password(raw_pass, stored_hash, extra_salt=None):
     """
@@ -67,37 +63,6 @@ def bcrypt_gen_password_hash(raw_pass, extra_salt=None):
 
     return unicode(
         bcrypt.hashpw(raw_pass.encode('utf-8'), bcrypt.gensalt()))
-
-
-EMAIL_FP_VERIFICATION_TEMPLATE = (
-    u"http://{host}{uri}?"
-    u"userid={userid}&token={fp_verification_key}")
-
-
-def send_fp_verification_email(user, request):
-    """
-    Send the verification email to users to change their password.
-
-    Args:
-    - user: a user object
-    - request: the request
-    """
-    rendered_email = render_template(
-        request, 'mediagoblin/auth/fp_verification_email.txt',
-        {'username': user.username,
-         'verification_url': EMAIL_FP_VERIFICATION_TEMPLATE.format(
-                host=request.host,
-                uri=request.urlgen('mediagoblin.plugins.' +
-                                   'basic_auth.verify_forgot_password'),
-                userid=unicode(user.id),
-                fp_verification_key=user.fp_verification_key)})
-
-    # TODO: There is no error handling in place
-    send_email(
-        mg_globals.app_config['email_sender_address'],
-        [user.email],
-        'GNU MediaGoblin - Change forgotten password!',
-        rendered_email)
 
 
 def fake_login_attempt():

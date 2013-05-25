@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import uuid
+import datetime
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import User
@@ -23,7 +24,8 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.auth.tools import (send_verification_email,
-                                    register_user, email_debug_message)
+                                    register_user, email_debug_message,
+                                    send_fp_verification_email)
 from mediagoblin import auth
 
 
@@ -208,13 +210,17 @@ def forgot_password(request):
     Sends an email with an url to renew forgotten password.
     Use GET querystring parameter 'username' to pre-populate the input field
     """
+    if not 'pass_auth' in request.template_env.globals:
+        return redirect(request, 'index')
+
     fp_form = auth_forms.ForgotPassForm(request.form,
                                         username=request.args.get('username'))
 
     if not (request.method == 'POST' and fp_form.validate()):
         # Either GET request, or invalid form submitted. Display the template
         return render_to_response(request,
-            'mediagoblin/auth/forgot_password.html', {'fp_form': fp_form})
+            'mediagoblin/auth/forgot_password.html', {'fp_form': fp_form,
+                                                      'focus': 'username'})
 
     # If we are here: method == POST and form is valid. username casing
     # has been sanitized. Store if a user was found by email. We should
@@ -310,7 +316,8 @@ def verify_forgot_password(request):
             return render_to_response(
                 request,
                 'mediagoblin/auth/change_fp.html',
-                {'cp_form': cp_form})
+                {'cp_form': cp_form,
+                 'focus': 'password'})
 
     # in case there is a valid id but no user with that id in the db
     # or the token expired
@@ -334,6 +341,6 @@ def _process_for_token(request):
     formdata = {
         'vars': formdata_vars,
         'has_userid_and_token':
-        'userid' in formdata_vars and 'token' in formdata_vars}
+            'userid' in formdata_vars and 'token' in formdata_vars}
 
     return formdata

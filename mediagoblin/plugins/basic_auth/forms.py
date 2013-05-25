@@ -26,7 +26,7 @@ class RegistrationForm(wtforms.Form):
          normalize_user_or_email_field(allow_email=False)])
     password = wtforms.PasswordField(
         _('Password'),
-        [wtforms.validators.Optional(),
+        [wtforms.validators.Required(),
          wtforms.validators.Length(min=5, max=1024)])
     email = wtforms.TextField(
         _('Email address'),
@@ -43,23 +43,3 @@ class LoginForm(wtforms.Form):
         _('Password'),
         [wtforms.validators.Required(),
          wtforms.validators.Length(min=5, max=1024)])
-
-
-class ForgotPassForm(wtforms.Form):
-    username = wtforms.TextField(
-        _('Username or email'),
-        [wtforms.validators.Required(),
-         normalize_user_or_email_field()])
-
-
-class ChangePassForm(wtforms.Form):
-    password = wtforms.PasswordField(
-        'Password',
-        [wtforms.validators.Required(),
-         wtforms.validators.Length(min=5, max=1024)])
-    userid = wtforms.HiddenField(
-        '',
-        [wtforms.validators.Required()])
-    token = wtforms.HiddenField(
-        '',
-        [wtforms.validators.Required()])
