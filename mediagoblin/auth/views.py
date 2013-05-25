@@ -25,8 +25,8 @@ from mediagoblin.tools.mail import email_debug_message
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.auth.lib import send_fp_verification_email
-from mediagoblin.auth.tools import send_verification_email, register_user
-from sqlalchemy import or_
+from mediagoblin.auth.tools import (send_verification_email, register_user,
+                                    check_login_simple)
 
 
 def register(request):
@@ -77,14 +77,9 @@ def login(request):
         username = login_form.data['username']
 
         if login_form.validate():
-            user = User.query.filter(
-                or_(
-                    User.username == username,
-                    User.email == username,
+            user = check_login_simple(username, login_form.password.data, True)
 
-                )).first()
-
-            if user and user.check_login(login_form.password.data):
+            if user:
                 # set up login in session
                 request.session['user_id'] = unicode(user.id)
                 request.session.save()
@@ -94,10 +89,6 @@ def login(request):
                 else:
                     return redirect(request, "index")
 
-            # Some failure during login occured if we are here!
-            # Prevent detecting who's on this system by testing login
-            # attempt timings
-            auth_lib.fake_login_attempt()
             login_failed = True
 
     return render_to_response(
