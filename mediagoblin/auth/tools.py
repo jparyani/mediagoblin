@@ -96,6 +96,36 @@ def send_verification_email(user, request):
         rendered_email)
 
 
+EMAIL_FP_VERIFICATION_TEMPLATE = (
+    u"http://{host}{uri}?"
+    u"userid={userid}&token={fp_verification_key}")
+
+
+def send_fp_verification_email(user, request):
+    """
+    Send the verification email to users to change their password.
+
+    Args:
+    - user: a user object
+    - request: the request
+    """
+    rendered_email = render_template(
+        request, 'mediagoblin/auth/fp_verification_email.txt',
+        {'username': user.username,
+         'verification_url': EMAIL_FP_VERIFICATION_TEMPLATE.format(
+                host=request.host,
+                uri=request.urlgen('mediagoblin.auth.verify_forgot_password'),
+                userid=unicode(user.id),
+                fp_verification_key=user.fp_verification_key)})
+
+    # TODO: There is no error handling in place
+    send_email(
+        mg_globals.app_config['email_sender_address'],
+        [user.email],
+        'GNU MediaGoblin - Change forgotten password!',
+        rendered_email)
+
+
 def basic_extra_validation(register_form, *args):
     users_with_username = User.query.filter_by(
         username=register_form.data['username']).count()
