@@ -199,15 +199,12 @@ def send_fp_verification_email(user, request):
 
 
 def check_login_simple(username, password, username_might_be_email=False):
-    search = (User.username == username)
-    if username_might_be_email and ('@' in username):
-        search = or_(search, User.email == username)
-    user = User.query.filter(search).first()
+    user = auth.get_user(username)
     if not user:
         _log.info("User %r not found", username)
-        auth_lib.fake_login_attempt()
+        auth.fake_login_attempt()
         return None
-    if not auth_lib.bcrypt_check_password(password, user.pw_hash):
+    if not auth.check_password(password, user.pw_hash):
         _log.warn("Wrong password for %r", username)
         return None
     _log.info("Logging %r in", username)

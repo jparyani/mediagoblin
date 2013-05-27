@@ -22,7 +22,6 @@ from mediagoblin.db.models import User
 from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.mail import email_debug_message
-from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.auth.tools import (send_verification_email,
                                     register_user,
@@ -301,7 +300,7 @@ def verify_forgot_password(request):
         cp_form = auth_forms.ChangePassForm(formdata_vars)
 
         if request.method == 'POST' and cp_form.validate():
-            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
+            user.pw_hash = auth.gen_password_hash(
                 cp_form.password.data)
             user.fp_verification_key = None
             user.fp_token_expire = None

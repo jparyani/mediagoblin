@@ -23,8 +23,8 @@ def check_login(user, password):
     return False
 
 
-def get_user(form):
-    return hook_handle("auth_get_user", form)
+def get_user(username):
+    return hook_handle("auth_get_user", username)
 
 
 def create_user(register_form):

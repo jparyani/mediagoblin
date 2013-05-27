@@ -34,19 +34,17 @@ def check_login(user, password):
     return None
 
 
-def get_user(form):
-    if 'username' in form.data:
-        username = form.username.data
-        user = User.query.filter(
-            or_(
-                User.username == username,
-                User.email == username,
-            )).first()
-        return user
+def get_user(username):
+    user = User.query.filter(
+        or_(
+            User.username == username,
+            User.email == username,
+        )).first()
+    return user
 
 
 def create_user(registration_form):
-    user = get_user(registration_form)
+    user = get_user(registration_form.username.data)
     if not user and 'password' in registration_form:
         user = User()
         user.username = registration_form.username.data
