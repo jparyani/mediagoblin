@@ -20,7 +20,6 @@ import wtforms
 from sqlalchemy import or_
 
 from mediagoblin import mg_globals
-from mediagoblin.auth import lib as auth_lib
 from mediagoblin.db.models import User
 from mediagoblin.tools.mail import (normalize_email, send_email,
                                     email_debug_message)

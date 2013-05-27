@@ -16,7 +16,7 @@
 import uuid
 
 from mediagoblin.plugins.basic_auth import forms as auth_forms
-from mediagoblin.plugins.basic_auth import lib as auth_lib
+from mediagoblin.plugins.basic_auth import tools as auth_tools
 from mediagoblin.db.models import User
 from mediagoblin.tools import pluginapi
 from sqlalchemy import or_
@@ -28,7 +28,7 @@ def setup_plugin():
 
 def check_login(user, password):
     if user.pw_hash:
-        result = auth_lib.bcrypt_check_password(password, user.pw_hash)
+        result = check_password(password, user.pw_hash)
         if result:
             return result
     return None
@@ -49,7 +49,7 @@ def create_user(registration_form):
         user = User()
         user.username = registration_form.username.data
         user.email = registration_form.email.data
-        user.pw_hash = auth_lib.bcrypt_gen_password_hash(
+        user.pw_hash = igen_password_hash(
             registration_form.password.data)
         user.verification_key = unicode(uuid.uuid4())
         user.save()
@@ -65,11 +65,11 @@ def get_registration_form(request):
 
 
 def gen_password_hash(raw_pass, extra_salt):
-    return auth_lib.bcrypt_gen_password_hash(raw_pass, extra_salt)
+    return auth_tools.bcrypt_gen_password_hash(raw_pass, extra_salt)
 
 
 def check_password(raw_pass, stored_hash, extra_salt):
-    return auth_lib.bcrypt_check_password(raw_pass, stored_hash, extra_salt)
+    return auth_tools.bcrypt_check_password(raw_pass, stored_hash, extra_salt)
 
 
 def auth():
@@ -96,7 +96,7 @@ hooks = {
     'auth_get_registration_form': get_registration_form,
     'auth_gen_password_hash': gen_password_hash,
     'auth_check_password': check_password,
-    'auth_fake_login_attempt': auth_lib.fake_login_attempt,
+    'auth_fake_login_attempt': auth_tools.fake_login_attempt,
     'template_global_context': append_to_global_context,
     ('mediagoblin.plugins.openid.register',
     'mediagoblin/auth/register.html'): add_to_form_context,
