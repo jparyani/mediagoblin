@@ -26,17 +26,19 @@ def setup_plugin():
     config = pluginapi.get_config('mediagoblin.pluginapi.basic_auth')
 
 
-def get_user(username):
-    user = User.query.filter(
-        or_(
-            User.username == username,
-            User.email == username,
-        )).first()
-    return user
+def get_user(**kwargs):
+    username = kwargs.pop('username', None)
+    if username:
+        user = User.query.filter(
+            or_(
+                User.username == username,
+                User.email == username,
+            )).first()
+        return user
 
 
 def create_user(registration_form):
-    user = get_user(registration_form.username.data)
+    user = get_user(username=registration_form.username.data)
     if not user and 'password' in registration_form:
         user = User()
         user.username = registration_form.username.data

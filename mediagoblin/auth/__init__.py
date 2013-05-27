@@ -16,8 +16,9 @@
 from mediagoblin.tools.pluginapi import hook_handle, hook_runall
 
 
-def get_user(username):
-    return hook_handle("auth_get_user", username)
+def get_user(**kwargs):
+    """ Takes a kwarg such as username and returns a user object """
+    return hook_handle("auth_get_user", **kwargs)
 
 
 def create_user(register_form):

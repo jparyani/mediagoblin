@@ -199,7 +199,7 @@ def register_user(request, register_form):
 
 
 def check_login_simple(username, password):
-    user = auth.get_user(username)
+    user = auth.get_user(username=username)
     if not user:
         _log.info("User %r not found", username)
         auth.fake_login_attempt()
