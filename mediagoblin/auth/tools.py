@@ -17,7 +17,6 @@
 import logging
 
 import wtforms
-from sqlalchemy import or_
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User

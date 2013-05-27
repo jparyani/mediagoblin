@@ -23,6 +23,7 @@ from mediagoblin.db.models import User
 from mediagoblin.tests.tools import get_app, fixture_add_user
 from mediagoblin.tools import template, mail
 from mediagoblin.auth.tools import AuthError
+from mediagoblin.auth import tools as auth_tools
 from mediagoblin import auth
 
 
@@ -404,8 +405,8 @@ def test_no_auth_true_no_auth_plugin_app(no_auth_true_no_auth_plugin_app):
     assert urlparse.urlsplit(response.location)[2] == '/'
     assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
 
-    ## Test check_login should return False
-    assert auth.check_login('test', 'simple') is False
+    ## Test check_login_simple should return None
+    assert auth_tools.check_login_simple('test', 'simple') is None
 
     # Try to visit the forgot password page
     template.clear_test_template_context()

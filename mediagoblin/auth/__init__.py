@@ -16,13 +16,6 @@
 from mediagoblin.tools.pluginapi import hook_handle, hook_runall
 
 
-def check_login(user, password):
-    result = hook_handle("auth_check_login", user, password)
-    if result:
-        return result
-    return False
-
-
 def get_user(username):
     return hook_handle("auth_get_user", username)
 

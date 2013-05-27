@@ -26,14 +26,6 @@ def setup_plugin():
     config = pluginapi.get_config('mediagoblin.pluginapi.basic_auth')
 
 
-def check_login(user, password):
-    if user.pw_hash:
-        result = check_password(password, user.pw_hash)
-        if result:
-            return result
-    return None
-
-
 def get_user(username):
     user = User.query.filter(
         or_(
@@ -49,7 +41,7 @@ def create_user(registration_form):
         user = User()
         user.username = registration_form.username.data
         user.email = registration_form.email.data
-        user.pw_hash = igen_password_hash(
+        user.pw_hash = gen_password_hash(
             registration_form.password.data)
         user.verification_key = unicode(uuid.uuid4())
         user.save()
@@ -64,11 +56,11 @@ def get_registration_form(request):
     return auth_forms.RegistrationForm(request.form)
 
 
-def gen_password_hash(raw_pass, extra_salt):
+def gen_password_hash(raw_pass, extra_salt=None):
     return auth_tools.bcrypt_gen_password_hash(raw_pass, extra_salt)
 
 
-def check_password(raw_pass, stored_hash, extra_salt):
+def check_password(raw_pass, stored_hash, extra_salt=None):
     return auth_tools.bcrypt_check_password(raw_pass, stored_hash, extra_salt)
 
 
@@ -89,7 +81,6 @@ def add_to_form_context(context):
 hooks = {
     'setup': setup_plugin,
     'authentication': auth,
-    'auth_check_login': check_login,
     'auth_get_user': get_user,
     'auth_create_user': create_user,
     'auth_get_login_form': get_login_form,
