@@ -296,3 +296,5 @@ def pw_hash_nullable(db):
     user_table = inspect_table(metadata, "core__users")
 
     user_table.c.pw_hash.alter(nullable=True)
+
+    db.commit()

@@ -23,6 +23,7 @@ from werkzeug.exceptions import MethodNotAllowed, BadRequest, NotImplemented
 from werkzeug.wrappers import BaseResponse
 
 from mediagoblin.meddleware.csrf import csrf_exempt
+from mediagoblin.auth.tools import check_login_simple
 from mediagoblin.media_types import sniff_media
 from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
     run_process_media, new_upload_entry
@@ -32,8 +33,6 @@ from mediagoblin.db.models import Collection
 
 from .tools import CmdTable, response_xml, check_form, \
     PWGSession, PwgNamedArray, PwgError
-from mediagoblin.plugins.basic_auth.lib import fake_login_attempt
-from mediagoblin.auth import check_login
 from .forms import AddSimpleForm, AddForm
 
 
@@ -44,15 +43,9 @@ _log = logging.getLogger(__name__)
 def pwg_login(request):
     username = request.form.get("username")
     password = request.form.get("password")
-    user = request.db.User.query.filter_by(username=username).first()
+    user = check_login_simple(username, password)
     if not user:
-        _log.info("User %r not found", username)
-        fake_login_attempt()
         return PwgError(999, 'Invalid username/password')
-    if not check_login(user, password):
-        _log.warn("Wrong password for %r", username)
-        return PwgError(999, 'Invalid username/password')
-    _log.info("Logging %r in", username)
     request.session["user_id"] = user.id
     request.session.save()
     return True

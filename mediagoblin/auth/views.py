@@ -21,11 +21,13 @@ from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import User
 from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
+from mediagoblin.tools.mail import email_debug_message
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.auth.tools import (send_verification_email,
-                                    register_user, email_debug_message,
-                                    send_fp_verification_email)
+                                    register_user,
+                                    send_fp_verification_email,
+                                    check_login_simple)
 from mediagoblin import auth
 
 
@@ -92,10 +94,12 @@ def login(request):
     login_failed = False
 
     if request.method == 'POST':
-        if login_form.validate():
-            user = auth.get_user(login_form)
+        username = login_form.username.data
 
-            if user and auth.check_login(user, login_form.password.data):
+        if login_form.validate():
+            user = check_login_simple(username, login_form.password.data, True)
+
+            if user:
                 # set up login in session
                 request.session['user_id'] = unicode(user.id)
                 request.session.save()
@@ -105,10 +109,6 @@ def login(request):
                 else:
                     return redirect(request, "index")
 
-            # Some failure during login occured if we are here!
-            # Prevent detecting who's on this system by testing login
-            # attempt timings
-            auth.fake_login_attempt()
             login_failed = True
 
     return render_to_response(
