@@ -96,7 +96,7 @@ def login(request):
         username = login_form.username.data
 
         if login_form.validate():
-            user = check_login_simple(username, login_form.password.data, True)
+            user = check_login_simple(username, login_form.password.data)
 
             if user:
                 # set up login in session

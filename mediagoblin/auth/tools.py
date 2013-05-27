@@ -198,7 +198,7 @@ def register_user(request, register_form):
     return None
 
 
-def check_login_simple(username, password, username_might_be_email=False):
+def check_login_simple(username, password):
     user = auth.get_user(username)
     if not user:
         _log.info("User %r not found", username)
