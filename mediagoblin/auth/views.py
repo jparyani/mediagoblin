@@ -21,23 +21,12 @@ from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import User
 from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
+from mediagoblin.tools.mail import email_debug_message
 from mediagoblin.auth import lib as auth_lib
 from mediagoblin.auth import forms as auth_forms
-from mediagoblin.auth.lib import send_verification_email, \
-                                 send_fp_verification_email
-from sqlalchemy import or_
-
-def email_debug_message(request):
-    """
-    If the server is running in email debug mode (which is
-    the current default), give a debug message to the user
-    so that they have an idea where to find their email.
-    """
-    if mg_globals.app_config['email_debug_mode']:
-        # DEBUG message, no need to translate
-        messages.add_message(request, messages.DEBUG,
-            u"This instance is running in email debug mode. "
-            u"The email will be on the console of the server process.")
+from mediagoblin.auth.lib import send_fp_verification_email
+from mediagoblin.auth.tools import (send_verification_email, register_user,
+                                    check_login_simple)
 
 
 def register(request):
@@ -58,38 +47,9 @@ def register(request):
 
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
-        users_with_username = User.query.filter_by(username=register_form.data['username']).count()
-        users_with_email = User.query.filter_by(email=register_form.data['email']).count()
+        user = register_user(request, register_form)
 
-        extra_validation_passes = True
-
-        if users_with_username:
-            register_form.username.errors.append(
-                _(u'Sorry, a user with that name already exists.'))
-            extra_validation_passes = False
-        if users_with_email:
-            register_form.email.errors.append(
-                _(u'Sorry, a user with that email address already exists.'))
-            extra_validation_passes = False
-
-        if extra_validation_passes:
-            # Create the user
-            user = User()
-            user.username = register_form.data['username']
-            user.email = register_form.data['email']
-            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-                register_form.password.data)
-            user.verification_key = unicode(uuid.uuid4())
-            user.save()
-
-            # log the user in
-            request.session['user_id'] = unicode(user.id)
-            request.session.save()
-
-            # send verification email
-            email_debug_message(request)
-            send_verification_email(user, request)
-
+        if user:
             # redirect the user to their homepage... there will be a
             # message waiting for them to verify their email
             return redirect(
@@ -113,18 +73,13 @@ def login(request):
     login_failed = False
 
     if request.method == 'POST':
-        
+
         username = login_form.data['username']
 
         if login_form.validate():
-            user = User.query.filter(
-                or_(
-                    User.username == username,
-                    User.email == username,
+            user = check_login_simple(username, login_form.password.data, True)
 
-                )).first()
-
-            if user and user.check_login(login_form.password.data):
+            if user:
                 # set up login in session
                 request.session['user_id'] = unicode(user.id)
                 request.session.save()
@@ -134,10 +89,6 @@ def login(request):
                 else:
                     return redirect(request, "index")
 
-            # Some failure during login occured if we are here!
-            # Prevent detecting who's on this system by testing login
-            # attempt timings
-            auth_lib.fake_login_attempt()
             login_failed = True
 
     return render_to_response(

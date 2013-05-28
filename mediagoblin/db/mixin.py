@@ -34,7 +34,6 @@ import datetime
 from werkzeug.utils import cached_property
 
 from mediagoblin import mg_globals
-from mediagoblin.auth import lib as auth_lib
 from mediagoblin.media_types import get_media_managers, FileTypeNotSupported
 from mediagoblin.tools import common, licenses
 from mediagoblin.tools.text import cleaned_markdown_conversion
@@ -42,13 +41,6 @@ from mediagoblin.tools.url import slugify
 
 
 class UserMixin(object):
-    def check_login(self, password):
-        """
-        See if a user can login with this password
-        """
-        return auth_lib.bcrypt_check_password(
-            password, self.pw_hash)
-
     @property
     def bio_html(self):
         return cleaned_markdown_conversion(self.bio)

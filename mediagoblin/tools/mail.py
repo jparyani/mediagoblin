@@ -16,7 +16,7 @@
 
 import smtplib
 from email.MIMEText import MIMEText
-from mediagoblin import mg_globals
+from mediagoblin import mg_globals, messages
 from mediagoblin.tools import common
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -135,3 +135,16 @@ def normalize_email(email):
         return None
     email = "@".join((em_user, em_dom.lower()))
     return email
+
+
+def email_debug_message(request):
+    """
+    If the server is running in email debug mode (which is
+    the current default), give a debug message to the user
+    so that they have an idea where to find their email.
+    """
+    if mg_globals.app_config['email_debug_mode']:
+        # DEBUG message, no need to translate
+        messages.add_message(request, messages.DEBUG,
+            u"This instance is running in email debug mode. "
+            u"The email will be on the console of the server process.")
