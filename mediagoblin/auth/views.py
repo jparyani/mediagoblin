@@ -22,20 +22,11 @@ from mediagoblin.db.models import User
 from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.mail import email_debug_message
-<<<<<<< HEAD
 from mediagoblin.auth import forms as auth_forms
-from mediagoblin.auth.tools import (send_verification_email,
-                                    register_user,
+from mediagoblin.auth.tools import (send_verification_email, register_user,
                                     send_fp_verification_email,
                                     check_login_simple)
 from mediagoblin import auth
-=======
-from mediagoblin.auth import lib as auth_lib
-from mediagoblin.auth import forms as auth_forms
-from mediagoblin.auth.lib import send_fp_verification_email
-from mediagoblin.auth.tools import (send_verification_email, register_user,
-                                    check_login_simple)
->>>>>>> upstream/master
 
 
 def register(request):
@@ -101,18 +92,15 @@ def login(request):
     login_failed = False
 
     if request.method == 'POST':
-<<<<<<< HEAD
         username = login_form.username.data
 
         if login_form.validate():
             user = check_login_simple(username, login_form.password.data)
-=======
 
         username = login_form.data['username']
 
         if login_form.validate():
             user = check_login_simple(username, login_form.password.data, True)
->>>>>>> upstream/master
 
             if user:
                 # set up login in session

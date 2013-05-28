@@ -59,35 +59,6 @@ def normalize_user_or_email_field(allow_email=True, allow_user=True):
     return _normalize_field
 
 
-class AuthError(Exception):
-    def __init__(self):
-        self.value = 'No Authentication Plugin is enabled and no_auth = false'\
-                     ' in config!'
-
-    def __str__(self):
-        return repr(self.value)
-
-
-def check_auth_enabled():
-    no_auth = mg_globals.app_config['no_auth']
-    auth_plugin = hook_handle('authentication')
-
-    if no_auth == 'false' and not auth_plugin:
-        raise AuthError
-
-    if no_auth == 'true' and not auth_plugin:
-        _log.warning('No authentication is enabled')
-        return False
-    else:
-        return True
-
-
-def no_auth_logout(request):
-    """Log out the user if in no_auth mode"""
-    if not mg_globals.app.auth:
-        request.session.delete()
-
-
 EMAIL_VERIFICATION_TEMPLATE = (
     u"http://{host}{uri}?"
     u"userid={userid}&token={verification_key}")
@@ -205,3 +176,32 @@ def check_login_simple(username, password):
         return None
     _log.info("Logging %r in", username)
     return user
+
+
+class AuthError(Exception):
+    def __init__(self):
+        self.value = 'No Authentication Plugin is enabled and no_auth = false'\
+                     ' in config!'
+
+    def __str__(self):
+        return repr(self.value)
+
+
+def check_auth_enabled():
+    no_auth = mg_globals.app_config['no_auth']
+    auth_plugin = hook_handle('authentication')
+
+    if no_auth == 'false' and not auth_plugin:
+        raise AuthError
+
+    if no_auth == 'true' and not auth_plugin:
+        _log.warning('No authentication is enabled')
+        return False
+    else:
+        return True
+
+
+def no_auth_logout(request):
+    """Log out the user if in no_auth mode"""
+    if not mg_globals.app.auth:
+        request.session.delete()
