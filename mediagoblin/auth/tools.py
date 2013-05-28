@@ -21,8 +21,8 @@ from mediagoblin import mg_globals
 from mediagoblin.db.models import User
 from mediagoblin.tools.mail import (normalize_email, send_email,
                                     email_debug_message)
-from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.template import render_template
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.pluginapi import hook_handle
 from mediagoblin import auth
 
