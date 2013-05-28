@@ -15,9 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-
 import wtforms
-from sqlalchemy import or_
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User
@@ -27,12 +25,6 @@ from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.pluginapi import hook_handle
 from mediagoblin import auth
-
-_log = logging.getLogger(__name__)
-
-_log = logging.getLogger(__name__)
-
-_log = logging.getLogger(__name__)
 
 _log = logging.getLogger(__name__)
 
