@@ -230,13 +230,9 @@ def edit_account(request):
         license_preference=user.license_preference)
 
     if request.method == 'POST' and form.validate():
-        if form.wants_comment_notification.validate(form):
-            user.wants_comment_notification = \
-                form.wants_comment_notification.data
+        user.wants_comment_notification = form.wants_comment_notification.data
 
-        if form.license_preference.validate(form):
-            user.license_preference = \
-                form.license_preference.data
+        user.license_preference = form.license_preference.data
 
         if form.new_email.data:
             if not form.password.data:
