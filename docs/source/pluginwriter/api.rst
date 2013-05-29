@@ -26,6 +26,26 @@ moving target for a few releases.
 
 Please check the :ref:`release-notes` for updates!
 
+
+How are hooks added?  Where do I find them?
+-------------------------------------------
+
+Much of this document talks about hooks, both as in terms of regular
+hooks and template hooks.  But where do they come from, and how can
+you find a list of them?
+
+For the moment, the best way to find available hooks is to check the
+source code itself.  (Yes, we should start a more official hook
+listing with descriptions soon.)  But many hooks you may need do not
+exist yet: what to do then?
+
+The plan at present is that we are adding hooks as people need them,
+with community discussion.  If you find that you need a hook and
+MediaGoblin at present doesn't provide it at present, please
+`http://mediagoblin.org/pages/join.html <talk to us>`_!  We'll
+evaluate what to do from there.
+
+
 :mod:`pluginapi` Module
 -----------------------
 
