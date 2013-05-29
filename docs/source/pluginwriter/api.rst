@@ -202,7 +202,7 @@ This section aims to explain some tips in regards to adding hooks to
 the MediaGoblin repository.
 
 WTForms hooks
-=============
++++++++++++++
 
 We haven't totally settled on a way to tranform wtforms form objects,
 but here's one way.  In your view::
