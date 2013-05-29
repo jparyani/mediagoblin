@@ -11,6 +11,7 @@
    Dedication along with this software. If not, see
    <http://creativecommons.org/publicdomain/zero/1.0/>.
 
+.. _plugin-api-chapter:
 
 ==========
 Plugin API
