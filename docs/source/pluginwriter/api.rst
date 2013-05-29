@@ -24,7 +24,7 @@ Authors are encouraged to develop plugins and work with the
 MediaGoblin community to keep them up to date, but this API will be a
 moving target for a few releases.
 
-Please check the release notes for updates!
+Please check the :ref:`release-notes` for updates!
 
 :mod:`pluginapi` Module
 -----------------------
