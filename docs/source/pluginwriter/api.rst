@@ -273,7 +273,9 @@ Just write the interface like so::
 
 
 It's fine to use your interface as the key instead of a string if you
-like.
+like.  (Usually this is messy, but since interfaces are public and
+since you need to import them into your plugin anyway, interfaces
+might as well be keys.)
 
 Then a plugin providing your interface can be like::
 
