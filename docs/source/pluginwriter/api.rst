@@ -226,3 +226,69 @@ Then to hook into this form, do something in your plugin like::
 
   hooks = {
       'some_form_transform': transform_some_form}
+
+
+Interfaces
+++++++++++
+
+If you want to add a pseudo-interface, it's not difficult to do so.
+Just write the interface like so::
+
+  class FrobInterface(object):
+      """
+      Interface for Frobbing.
+
+      Classes implementing this interface should provide defrob and frob.
+      They may also implement double_frob, but it is not required; if
+      not provided, we will use a general technique.
+      """
+
+      def defrob(self, frobbed_obj):
+          """
+          Take a frobbed_obj and defrob it.  Returns the defrobbed object.
+          """
+          raise NotImplementedError()
+      
+      def frob(self, normal_obj):
+          """
+          Take a normal object and frob it.  Returns the frobbed object.
+          """
+          raise NotImplementedError()
+
+      def double_frob(self, normal_obj):
+          """
+          Frob this object and return it multiplied by two.
+          """
+          return self.frob(normal_obj) * 2
+
+
+  def some_frob_using_method():
+      # something something something
+      frobber = hook_handle(FrobInterface)
+      frobber.frob(blah)
+
+      # alternately you could have a default
+      frobber = hook_handle(FrobInterface) or DefaultFrobber
+      frobber.defrob(foo)
+
+
+It's fine to use your interface as the key instead of a string if you
+like.
+
+Then a plugin providing your interface can be like::
+
+  from mediagoblin.foo.frobfrogs import FrobInterface
+  from frogfrobber import utils
+
+  class FrogFrobber(FrobInterface):
+      """
+      Takes a frogputer science approach to frobbing.
+      """
+      def defrob(self, frobbed_obj):
+          return utils.frog_defrob(frobbed_obj)
+
+      def frob(self, normal_obj):
+          return utils.frog_frob(normal_obj)
+
+   hooks = {
+       FrobInterface: lambda: return FrogFrobber}
