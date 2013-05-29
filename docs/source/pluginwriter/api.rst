@@ -193,3 +193,36 @@ object, so you can access this in your templates like:
 
   <img alt="A funny bunny"
        src="{{ request.staticdirect('images/funnybunny.png', 'mystaticname') }}" />
+
+
+Additional hook tips
+--------------------
+
+This section aims to explain some tips in regards to adding hooks to
+the MediaGoblin repository.
+
+WTForms hooks
+=============
+
+We haven't totally settled on a way to tranform wtforms form objects,
+but here's one way.  In your view::
+
+  from mediagoblin.foo.forms import SomeForm
+
+  def some_view(request)
+      form_class = hook_transform('some_form_transform', SomeForm)
+      form = form_class(request.form)
+
+Then to hook into this form, do something in your plugin like::
+
+  import wtforms
+
+  class SomeFormAdditions(wtforms.Form):
+      new_datefield = wtforms.DateField()
+
+  def transform_some_form(orig_form):
+      class ModifiedForm(orig_form, SomeFormAdditions)
+      return ModifiedForm
+
+  hooks = {
+      'some_form_transform': transform_some_form}
