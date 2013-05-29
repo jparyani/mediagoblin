@@ -24,6 +24,7 @@ from mediagoblin import messages
 from mediagoblin import mg_globals
 
 from mediagoblin.auth import lib as auth_lib
+from mediagoblin.auth import tools as auth_tools
 from mediagoblin.auth.views import email_debug_message
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
@@ -265,7 +266,7 @@ def edit_account(request):
                             verification_key=verification_key)})
 
                     email_debug_message(request)
-                    auth_lib.send_verification_email(user, request, new_email,
+                    auth_tools.send_verification_email(user, request, new_email,
                                                      rendered_email)
 
         if not form.errors:
