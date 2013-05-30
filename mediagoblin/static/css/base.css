@@ -433,9 +433,12 @@ a.thumb_entry_title {
   padding: 8px;
 }
 
-.media_thumbnail img {
-  max-height: 135px;
-}
+/* For now, this is commented out since our thumbnails are actually 180px high.
+ *
+ * .media_thumbnail img {
+ *   max-height: 135px;
+ * }
+ */
 
 .thumb_entry_last {
   margin-right: 0px;

@@ -178,8 +178,10 @@ That's it for the quick start!
 Where to go from here
 =====================
 
-See the documentation on the plugin API for code samples and other
-things you can use when building your plugin.
+See the documentation on the :ref:`plugin-api-chapter` for code
+samples and other things you can use when building your plugin.  If
+your plugin needs its own database models, see
+:ref:`plugin-database-chapter`.
 
 See `Hitchhiker's Guide to Packaging
 <http://guide.python-distribute.org/>`_ for more information on

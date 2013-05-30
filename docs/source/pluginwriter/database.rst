@@ -12,9 +12,12 @@
    <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 
-========
-Database
-========
+.. _plugin-database-chapter:
+
+
+===========================
+Database models for plugins
+===========================
 
 
 Accessing Existing Data
