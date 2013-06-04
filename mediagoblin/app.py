@@ -192,10 +192,10 @@ class MediaGoblinApp(object):
 
         request.urlgen = build_proxy
 
-        mg_request.setup_user_in_request(request)
-
         # Log user out if in no_auth mode
         no_auth_logout(request)
+
+        mg_request.setup_user_in_request(request)
 
         request.controller_name = None
         try:

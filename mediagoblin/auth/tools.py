@@ -202,6 +202,7 @@ def check_auth_enabled():
 
 
 def no_auth_logout(request):
-    """Log out the user if in no_auth mode"""
-    if not mg_globals.app.auth:
-        request.session.delete()
+    """Log out the user if in no_auth mode, but don't delete the messages"""
+    if not mg_globals.app.auth and 'user_id' in request.session:
+        del request.session['user_id']
+        request.session.save()
