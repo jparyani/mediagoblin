@@ -100,6 +100,8 @@ class MediaGoblinApp(object):
 
         # Check if authentication plugin is enabled and respond accordingly.
         self.auth = check_auth_enabled()
+        if not self.auth:
+            app_config['allow_comments'] = False
 
         # Set up storage systems
         self.public_store, self.queue_store = setup_storage()

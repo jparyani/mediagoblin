@@ -86,7 +86,7 @@
       <p>{{ media.description_html }}</p>
     {% endautoescape %}
     {% if comments %}
-      {% if app_config['allow_comments'] and auth %}
+      {% if app_config['allow_comments'] %}
         <a
           {% if not request.user %}
             href="{{ request.urlgen('mediagoblin.auth.login') }}"
