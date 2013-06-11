@@ -192,7 +192,7 @@ class MediaGoblinApp(object):
 
         request.urlgen = build_proxy
 
-        # Log user out if in no_auth mode
+        # Log user out if authentication_disabled
         no_auth_logout(request)
 
         mg_request.setup_user_in_request(request)

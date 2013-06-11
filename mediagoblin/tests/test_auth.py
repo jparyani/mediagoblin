@@ -360,36 +360,36 @@ def test_authentication_views(test_app):
     assert urlparse.urlsplit(response.location)[2] == '/u/chris/'
 
 
-# App with no_auth=false and no auth plugin enabled
-def no_auth_false_no_auth_plugin_app(request):
+# App with authentication_disabled and no auth plugin enabled
+def no_auth_plugin_app(request):
     return get_app(
         request,
         mgoblin_config=pkg_resources.resource_filename(
             'mediagoblin.tests.auth_configs',
-            'no_auth_false_no_auth_plugin_appconfig.ini'))
+            'no_auth_plugin_appconfig.ini'))
 
 
-def test_no_auth_false_no_auth_plugin_raises(request):
+def test_auth_plugin_raises(request):
     with pytest.raises(AuthError):
-        no_auth_false_no_auth_plugin_app(request)
+        no_auth_plugin_app(request)
 
 
 @pytest.fixture()
-def no_auth_true_no_auth_plugin_app(request):
+def authentication_disabled_app(request):
     return get_app(
         request,
         mgoblin_config=pkg_resources.resource_filename(
             'mediagoblin.tests.auth_configs',
-            'no_auth_true_no_auth_plugin_appconfig.ini'))
+            'authentication_disabled_appconfig.ini'))
 
 
-def test_no_auth_true_no_auth_plugin_app(no_auth_true_no_auth_plugin_app):
+def test_authentication_disabled_app(authentication_disabled_app):
     # app.auth should = false
     assert mg_globals.app.auth is False
 
     # Try to visit register page
     template.clear_test_template_context()
-    response = no_auth_true_no_auth_plugin_app.get('/auth/register/')
+    response = authentication_disabled_app.get('/auth/register/')
     response.follow()
 
     # Correct redirect?
@@ -398,7 +398,7 @@ def test_no_auth_true_no_auth_plugin_app(no_auth_true_no_auth_plugin_app):
 
     # Try to vist login page
     template.clear_test_template_context()
-    response = no_auth_true_no_auth_plugin_app.get('/auth/login/')
+    response = authentication_disabled_app.get('/auth/login/')
     response.follow()
 
     # Correct redirect?
@@ -410,7 +410,7 @@ def test_no_auth_true_no_auth_plugin_app(no_auth_true_no_auth_plugin_app):
 
     # Try to visit the forgot password page
     template.clear_test_template_context()
-    response = no_auth_true_no_auth_plugin_app.get('/auth/register/')
+    response = authentication_disabled_app.get('/auth/register/')
     response.follow()
 
     # Correct redirect?
