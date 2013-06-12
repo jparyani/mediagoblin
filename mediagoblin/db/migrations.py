@@ -425,7 +425,7 @@ class RequestToken_v0(declarative_base()):
     callback = Column(Unicode, nullable=False, default=u"oob")
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    
+
 class AccessToken_v0(declarative_base()):
     """
         Model for representing the access tokens
@@ -438,7 +438,7 @@ class AccessToken_v0(declarative_base()):
     request_token = Column(Unicode, ForeignKey(RequestToken_v0.token))
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
- 
+
 
 class NonceTimestamp_v0(declarative_base()):
     """
@@ -458,5 +458,25 @@ def create_oauth1_tables(db):
     RequestToken_v0.__table__.create(db.bind)
     AccessToken_v0.__table__.create(db.bind)
     NonceTimestamp_v0.__table__.create(db.bind)
+
+    db.commit()
+
+
+@RegisterMigration(15, MIGRATIONS)
+def upload_limits(db):
+    """Add user upload limit columns"""
+    metadata = MetaData(bind=db.bind)
+
+    user_table = inspect_table(metadata, 'core__users')
+    media_entry_table = inspect_table(metadata, 'core__media_entries')
+
+    col = Column('uploaded', Integer, default=0)
+    col.create(user_table)
+
+    col = Column('upload_limit', Integer)
+    col.create(user_table)
+
+    col = Column('file_size', Integer, default=0)
+    col.create(media_entry_table)
 
     db.commit()

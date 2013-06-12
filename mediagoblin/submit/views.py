@@ -43,6 +43,20 @@ def submit_start(request):
     """
     First view for submitting a file.
     """
+    user = request.user
+    if user.upload_limit:
+        upload_limit = user.upload_limit
+    else:
+        upload_limit = mg_globals.app_config['upload_limit']
+
+    if user.uploaded >= upload_limit:
+        messages.add_message(
+            request,
+            messages.WARNING,
+            _('Sorry, you have reached your upload limit.'))
+        return redirect(
+            request, '/u/{0}'.format(user.username))
+
     submit_form = submit_forms.SubmitStartForm(request.form,
         license=request.user.license_preference)
 
@@ -85,6 +99,26 @@ def submit_start(request):
 
                 with queue_file:
                     queue_file.write(request.files['file'].stream.read())
+
+                # Get file size an round to 2 decimal places
+                file_size = request.app.queue_store.get_file_size(
+                    entry.queued_media_file) / (1024.0 * 1024)
+                file_size = float('{0:.2f}'.format(file_size))
+
+                # Check if over upload limit
+                if (user.uploaded + file_size) >= upload_limit:
+                    messages.add_message(
+                        request,
+                        messages.WARNING,
+                        _('Sorry, uploading this file will put you over your'
+                          ' upload limit.'))
+                    return redirect(
+                        request, '/u/{0}'.format(user.username))
+
+                user.uploaded = user.uploaded + file_size
+                user.save()
+
+                entry.file_size = file_size
 
                 # Save now so we have this data before kicking off processing
                 entry.save()
