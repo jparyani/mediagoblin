@@ -44,7 +44,7 @@ def submit_start(request):
     First view for submitting a file.
     """
     user = request.user
-    if user.upload_limit:
+    if user.upload_limit >= 0:
         upload_limit = user.upload_limit
     else:
         upload_limit = mg_globals.app_config['upload_limit']
@@ -54,8 +54,8 @@ def submit_start(request):
             request,
             messages.WARNING,
             _('Sorry, you have reached your upload limit.'))
-        return redirect(
-            request, '/u/{0}'.format(user.username))
+        return redirect(request, "mediagoblin.user_pages.user_home",
+                        user=request.user.username)
 
     submit_form = submit_forms.SubmitStartForm(request.form,
         license=request.user.license_preference)
@@ -105,15 +105,15 @@ def submit_start(request):
                     entry.queued_media_file) / (1024.0 * 1024)
                 file_size = float('{0:.2f}'.format(file_size))
 
-                # Check if over upload limit
+                # Check if user is over upload limit
                 if (user.uploaded + file_size) >= upload_limit:
                     messages.add_message(
                         request,
                         messages.WARNING,
                         _('Sorry, uploading this file will put you over your'
                           ' upload limit.'))
-                    return redirect(
-                        request, '/u/{0}'.format(user.username))
+                    return redirect(request, "mediagoblin.user_pages.user_home",
+                        user=user.username)
 
                 user.uploaded = user.uploaded + file_size
                 user.save()
@@ -137,7 +137,7 @@ def submit_start(request):
                 add_comment_subscription(request.user, entry)
 
                 return redirect(request, "mediagoblin.user_pages.user_home",
-                                user=request.user.username)
+                                user=user.username)
             except Exception as e:
                 '''
                 This section is intended to catch exceptions raised in
