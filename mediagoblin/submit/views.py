@@ -112,7 +112,7 @@ def submit_start(request):
                         messages.WARNING,
                         _('Sorry, uploading this file will put you over your'
                           ' upload limit.'))
-                    return redirect(request, "mediagoblin.user_pages.user_home",
+                    return redirect(request, "mediagoblin.submit.start",
                         user=user.username)
 
                 user.uploaded = user.uploaded + file_size
