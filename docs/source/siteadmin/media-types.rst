@@ -199,14 +199,25 @@ will be able to present them to your wide audience of admirers!
 PDF and Document
 ================
 
-To enable the "PDF and Document" support plugin, you need pdftocairo, pdfinfo,
-unoconv with headless support.  All executables must be on your execution path.
+To enable the "PDF and Document" support plugin, you need:
+
+1. pdftocairo and pdfinfo for pdf only support.
+
+2. unoconv with headless support to support converting libreoffice supported
+   documents as well, such as doc/ppt/xls/odf/odg/odp and more.
+   For the full list see mediagoblin/media_types/pdf/processing.py,
+   unoconv_supported.
+
+All executables must be on your execution path.
 
 To install this on Fedora:
 
 .. code-block:: bash
 
     sudo yum install -y poppler-utils unoconv libreoffice-headless
+
+Note: You can leave out unoconv and libreoffice-headless if you want only pdf
+support. This will result in a much smaller list of dependencies.
 
 pdf.js relies on git submodules, so be sure you have fetched them:
 
