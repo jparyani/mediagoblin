@@ -47,9 +47,9 @@ def submit_start(request):
     if user.upload_limit >= 0:
         upload_limit = user.upload_limit
     else:
-        upload_limit = mg_globals.app_config['upload_limit']
+        upload_limit = mg_globals.app_config.get('upload_limit', None)
 
-    if user.uploaded >= upload_limit:
+    if upload_limit and user.uploaded >= upload_limit:
         messages.add_message(
             request,
             messages.WARNING,
@@ -106,7 +106,7 @@ def submit_start(request):
                 file_size = float('{0:.2f}'.format(file_size))
 
                 # Check if user is over upload limit
-                if (user.uploaded + file_size) >= upload_limit:
+                if upload_limit and (user.uploaded + file_size) >= upload_limit:
                     messages.add_message(
                         request,
                         messages.WARNING,
