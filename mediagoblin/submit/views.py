@@ -57,7 +57,7 @@ def submit_start(request):
         return redirect(request, "mediagoblin.user_pages.user_home",
                         user=request.user.username)
 
-    submit_form = submit_forms.SubmitStartForm(request.form,
+    submit_form = submit_forms.get_submit_start_form(request.form,
         license=request.user.license_preference)
 
     if request.method == 'POST' and submit_form.validate():
@@ -105,32 +105,40 @@ def submit_start(request):
                     entry.queued_media_file) / (1024.0 * 1024)
                 file_size = float('{0:.2f}'.format(file_size))
 
+                error = False
+
+                # Check if file size is over the limit
+                max_file_size = mg_globals.app_config.get('max_file_size', None)
+                if max_file_size and file_size >= max_file_size:
+                    submit_form.file.errors.append(
+                        _(u'Sorry, the file size is too big.'))
+                    error = True
+
                 # Check if user is over upload limit
                 if upload_limit and (user.uploaded + file_size) >= upload_limit:
                     submit_form.file.errors.append(
                         _('Sorry, uploading this file will put you over your'
                           ' upload limit.'))
-                    return redirect(request, "mediagoblin.submit.start",
-                        user=user.username)
+                    error = True
 
-                user.uploaded = user.uploaded + file_size
-                user.save()
+                if not error:
+                    user.uploaded = user.uploaded + file_size
+                    user.save()
 
-                entry.file_size = file_size
+                    entry.file_size = file_size
 
-                # Save now so we have this data before kicking off processing
-                entry.save()
+                    # Save now so we have this data before kicking off processing
+                    entry.save()
 
-                # Pass off to async processing
-                #
-                # (... don't change entry after this point to avoid race
-                # conditions with changes to the document via processing code)
-                feed_url = request.urlgen(
-                    'mediagoblin.user_pages.atom_feed',
-                    qualified=True, user=request.user.username)
-                run_process_media(entry, feed_url)
-
-                add_message(request, SUCCESS, _('Woohoo! Submitted!'))
+                    # Pass off to processing
+                    #
+                    # (... don't change entry after this point to avoid race
+                    # conditions with changes to the document via processing code)
+                    feed_url = request.urlgen(
+                        'mediagoblin.user_pages.atom_feed',
+                        qualified=True, user=request.user.username)
+                    run_process_media(entry, feed_url)
+                    add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
                 add_comment_subscription(request.user, entry)
 
