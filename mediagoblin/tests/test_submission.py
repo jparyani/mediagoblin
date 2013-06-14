@@ -212,14 +212,6 @@ class TestSubmission:
         # Shouldn't have uploaded
         assert self.test_user.uploaded == 499
 
-        # Reload user
-        self.test_user = User.query.filter_by(
-            username=self.test_user.username
-        ).first()
-
-        # Shouldn't have uploaded
-        assert self.test_user.uploaded == 499
-
     def check_media(self, request, find_data, count=None):
         media = MediaEntry.query.filter_by(**find_data)
         if count is not None:
