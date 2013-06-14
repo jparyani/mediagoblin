@@ -31,7 +31,7 @@ from mediagoblin.media_types.image import ImageMediaManager
 from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
 
 from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
-    BIG_BLUE, GOOD_PDF, GPS_JPG, MED_PNG
+    BIG_BLUE, GOOD_PDF, GPS_JPG, MED_PNG, BIG_PNG
 
 GOOD_TAG_STRING = u'yin,yang'
 BAD_TAG_STRING = unicode('rage,' + 'f' * 26 + 'u' * 26)
@@ -177,7 +177,7 @@ class TestSubmission:
         # User uploaded should be 25
         assert self.test_user.uploaded == 25
 
-        response, context = self.do_post({'title': u'Normal upload 4'},
+        response, context = self.do_post({'title': u'Normal upload 5'},
                                          do_follow=True,
                                          **self.upload_data(GOOD_JPG))
         self.check_url(response, '/u/{0}/'.format(self.test_user.username))
@@ -212,13 +212,13 @@ class TestSubmission:
         # Shouldn't have uploaded
         assert self.test_user.uploaded == 499
 
-        # Reload user
-        self.test_user = User.query.filter_by(
-            username=self.test_user.username
-        ).first()
+    def test_big_file(self):
+        response, context = self.do_post({'title': u'Normal upload 7'},
+                                         do_follow=False,
+                                         **self.upload_data(BIG_PNG))
 
-        # Shouldn't have uploaded
-        assert self.test_user.uploaded == 499
+        form = context['mediagoblin/submit/start.html']['submit_form']
+        assert form.file.errors == [u'Sorry, the file size is too big.']
 
     def check_media(self, request, find_data, count=None):
         media = MediaEntry.query.filter_by(**find_data)
