@@ -1,0 +1,5 @@
+Images located in this directory tree are released under a GPLv3 license
+and CC BY-SA 3.0 license. To the extent possible under law, the author(s)
+have dedicated all copyright and related and neighboring rights to these
+files to the public domain worldwide. These files are distributed without
+any warranty.
