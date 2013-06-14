@@ -107,9 +107,7 @@ def submit_start(request):
 
                 # Check if user is over upload limit
                 if upload_limit and (user.uploaded + file_size) >= upload_limit:
-                    messages.add_message(
-                        request,
-                        messages.WARNING,
+                    submit_form.file.errors.append(
                         _('Sorry, uploading this file will put you over your'
                           ' upload limit.'))
                     return redirect(request, "mediagoblin.submit.start",

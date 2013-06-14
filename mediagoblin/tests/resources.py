@@ -29,6 +29,7 @@ EVIL_JPG = resource('evil.jpg')
 EVIL_PNG = resource('evil.png')
 BIG_BLUE = resource('bigblue.png')
 GOOD_PDF = resource('good.pdf')
+MED_PNG = resource('medium.png')
 
 
 def resource_exif(f):
