@@ -31,7 +31,6 @@ BIG_BLUE = resource('bigblue.png')
 GOOD_PDF = resource('good.pdf')
 MED_PNG = resource('medium.png')
 BIG_PNG = resource('big.png')
-MED_PNG = resource('medium.png')
 
 
 def resource_exif(f):
