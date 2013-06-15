@@ -24,7 +24,6 @@ from mediagoblin.tests.tools import get_app, fixture_add_user
 from mediagoblin.tools import template, mail
 from mediagoblin.auth.tools import AuthError
 from mediagoblin.auth import tools as auth_tools
-from mediagoblin import auth
 
 
 def test_register_views(test_app):
