@@ -39,6 +39,13 @@ carefully, or at least skim over it.
         alias /srv/mediagoblin.example.org/mediagoblin/user_dev/plugin_static/;
      }
 
+   Similarly, if you've got a modified paste config, you may want to
+   borrow the app:plugin_static section from the default paste.ini
+   file.
+5. We now use itsdangerous for sessions; if you had any references to
+   beaker in your paste config you can remove them.  Again, see the
+   default paste.ini config
+
 **For theme authors**
 
 If you have your own theme or you have any "user modified templates",
@@ -51,7 +58,23 @@ please note the following:
   You can easily customize this to give a welcome page appropriate to
   your site.
 
+
 **New features**
+* PDF media type!
+* Improved plugin system.  More flexible, better documented, with a
+  new plugin authoring section of the docs.
+* itsdangerous based sessions.  No more beaker!
+* New, experimental Piwigo-based API.  This means you should be able
+  to use MediaGoblin with something like Shotwell.  (Again, a word of
+  caution: this is *very experimental*!)
+* Human readable timestamps, and the option to display the original
+  date of an image when available (available as the
+  "original_date_visible" variable)
+* Moved unit testing system from nosetests to py.test so we can better
+  handle issues with sqlalchemy exploding with different database
+  configurations.  Long story :)
+* You can now disable the ability to post comments.
+* Tags now can be up to length 255 characters by default.
 
 
 0.3.3
