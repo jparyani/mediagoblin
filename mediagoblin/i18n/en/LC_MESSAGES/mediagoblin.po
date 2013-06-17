@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-05-27 13:54-0500\n"
+"POT-Creation-Date: 2013-06-16 20:06-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,94 +17,94 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: mediagoblin/auth/forms.py:26
+#: mediagoblin/auth/forms.py:25
 msgid "Username"
 msgstr ""
 
-#: mediagoblin/auth/forms.py:30 mediagoblin/auth/forms.py:45
+#: mediagoblin/auth/forms.py:29 mediagoblin/auth/forms.py:44
 #: mediagoblin/tests/test_util.py:110
 msgid "Password"
 msgstr ""
 
-#: mediagoblin/auth/forms.py:34
+#: mediagoblin/auth/forms.py:33
 msgid "Email address"
 msgstr ""
 
-#: mediagoblin/auth/forms.py:41
+#: mediagoblin/auth/forms.py:40
 msgid "Username or Email"
 msgstr ""
 
-#: mediagoblin/auth/forms.py:52
+#: mediagoblin/auth/forms.py:51
 msgid "Username or email"
 msgstr ""
 
-#: mediagoblin/auth/tools.py:31
+#: mediagoblin/auth/tools.py:42
 msgid "Invalid User name or email address."
 msgstr ""
 
-#: mediagoblin/auth/tools.py:32
+#: mediagoblin/auth/tools.py:43
 msgid "This field does not take email addresses."
 msgstr ""
 
-#: mediagoblin/auth/tools.py:33
+#: mediagoblin/auth/tools.py:44
 msgid "This field requires an email address."
 msgstr ""
 
-#: mediagoblin/auth/views.py:54
-msgid "Sorry, registration is disabled on this instance."
-msgstr ""
-
-#: mediagoblin/auth/views.py:68
+#: mediagoblin/auth/tools.py:109
 msgid "Sorry, a user with that name already exists."
 msgstr ""
 
-#: mediagoblin/auth/views.py:72
+#: mediagoblin/auth/tools.py:113
 msgid "Sorry, a user with that email address already exists."
 msgstr ""
 
-#: mediagoblin/auth/views.py:182
+#: mediagoblin/auth/views.py:43
+msgid "Sorry, registration is disabled on this instance."
+msgstr ""
+
+#: mediagoblin/auth/views.py:133
 msgid ""
 "Your email address has been verified. You may now login, edit your "
 "profile, and submit images!"
 msgstr ""
 
-#: mediagoblin/auth/views.py:188
+#: mediagoblin/auth/views.py:139
 msgid "The verification key or user id is incorrect"
 msgstr ""
 
-#: mediagoblin/auth/views.py:206
+#: mediagoblin/auth/views.py:157
 msgid "You must be logged in so we know who to send the email to!"
 msgstr ""
 
-#: mediagoblin/auth/views.py:214
+#: mediagoblin/auth/views.py:165
 msgid "You've already verified your email address!"
 msgstr ""
 
-#: mediagoblin/auth/views.py:227
+#: mediagoblin/auth/views.py:178
 msgid "Resent your verification email."
 msgstr ""
 
-#: mediagoblin/auth/views.py:258
+#: mediagoblin/auth/views.py:209
 msgid ""
 "If that email address (case sensitive!) is registered an email has been "
 "sent with instructions on how to change your password."
 msgstr ""
 
-#: mediagoblin/auth/views.py:269
+#: mediagoblin/auth/views.py:220
 msgid "Couldn't find someone with that username."
 msgstr ""
 
-#: mediagoblin/auth/views.py:272
+#: mediagoblin/auth/views.py:223
 msgid "An email has been sent with instructions on how to change your password."
 msgstr ""
 
-#: mediagoblin/auth/views.py:279
+#: mediagoblin/auth/views.py:230
 msgid ""
 "Could not send password recovery email as your username is inactive or "
 "your account's email address has not been verified."
 msgstr ""
 
-#: mediagoblin/auth/views.py:336
+#: mediagoblin/auth/views.py:287
 msgid "You can now log in using your new password."
 msgstr ""
 
@@ -634,13 +634,13 @@ msgid "Editing attachments for %(media_title)s"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:44
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:182
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:198
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:171
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:187
 msgid "Attachments"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:57
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:204
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:193
 msgid "Add attachment"
 msgstr ""
 
@@ -761,6 +761,17 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
 msgid "WebM file (Vorbis codec)"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/image.html:36
+msgid "Created"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/media_displays/image.html:39
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:132
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:152
+#, python-format
+msgid "%(formatted_time)s ago"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:59
@@ -928,19 +939,8 @@ msgstr ""
 msgid "Add this comment"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:132
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:152
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:164
-#, python-format
-msgid "%(formatted_time)s ago"
-msgstr ""
-
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:150
 msgid "Added"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:161
-msgid "Created"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:28
