@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2013-05-27 13:54-0500\n"
-"PO-Revision-Date: 2013-05-27 18:54+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2013-06-01 21:16+0000\n"
+"Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: Esperanto (http://www.transifex.com/projects/p/mediagoblin/language/eo/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,7 +37,7 @@ msgstr "Retpoŝtadreso"
 
 #: mediagoblin/auth/forms.py:41
 msgid "Username or Email"
-msgstr ""
+msgstr "Uzantonomo aŭ retpoŝtadreso"
 
 #: mediagoblin/auth/forms.py:52
 msgid "Username or email"
@@ -178,7 +178,7 @@ msgstr "Permesila prefero"
 
 #: mediagoblin/edit/forms.py:69
 msgid "This will be your default license on upload forms."
-msgstr ""
+msgstr "Tiu ĉi permesilo estos antaŭelektita en la alŝutformularoj."
 
 #: mediagoblin/edit/forms.py:71
 msgid "Email me when others comment on my media"
@@ -264,7 +264,7 @@ msgstr "Malĝusta pasvorto"
 
 #: mediagoblin/edit/views.py:363
 msgid "Your password was changed successfully"
-msgstr ""
+msgstr "Via pasvorto estas sukcese ŝanĝita"
 
 #: mediagoblin/gmg_commands/assetlink.py:60
 msgid "Cannot link theme... no theme set\n"
@@ -665,11 +665,11 @@ msgstr "Konservi ŝanĝojn"
 #: mediagoblin/templates/mediagoblin/edit/change_pass.html:38
 #, python-format
 msgid "Changing %(username)s's password"
-msgstr ""
+msgstr "Ŝanĝado de pasvorto de %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/change_pass.html:45
 msgid "Save"
-msgstr ""
+msgstr "Konservi"
 
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:28
 #, python-format
@@ -700,7 +700,7 @@ msgstr "Ŝanĝado de kontagordoj de %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:46
 msgid "Change your password."
-msgstr ""
+msgstr "Ŝanĝi la pasvorton"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:62
 msgid "Delete my account"
@@ -774,7 +774,7 @@ msgstr "Bildo de «%(media_title)s»"
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:79
 msgid "PDF file"
-msgstr ""
+msgstr "PDF-dosiero"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
 msgid "Toggle Rotate"
@@ -930,15 +930,15 @@ msgstr "Aldoni ĉi tiun komenton"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:164
 #, python-format
 msgid "%(formatted_time)s ago"
-msgstr ""
+msgstr "antaŭ %(formatted_time)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:150
 msgid "Added"
-msgstr ""
+msgstr "Aldonita"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:161
 msgid "Created"
-msgstr ""
+msgstr "Kreita"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:28
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:40
@@ -1126,27 +1126,27 @@ msgstr ""
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"
-msgstr ""
+msgstr "jaro(j)"
 
 #: mediagoblin/tools/timesince.py:63
 msgid "month"
-msgstr ""
+msgstr "monato(j)"
 
 #: mediagoblin/tools/timesince.py:64
 msgid "week"
-msgstr ""
+msgstr "semajno(j)"
 
 #: mediagoblin/tools/timesince.py:65
 msgid "day"
-msgstr ""
+msgstr "tago(j)"
 
 #: mediagoblin/tools/timesince.py:66
 msgid "hour"
-msgstr ""
+msgstr "horo(j)"
 
 #: mediagoblin/tools/timesince.py:67
 msgid "minute"
-msgstr ""
+msgstr "minuto(j)"
 
 #: mediagoblin/user_pages/forms.py:23
 msgid "Comment"
@@ -1185,7 +1185,7 @@ msgstr "komentis je via afiŝo"
 
 #: mediagoblin/user_pages/views.py:169
 msgid "Sorry, comments are disabled."
-msgstr ""
+msgstr "Ve, komentado estas malebligita."
 
 #: mediagoblin/user_pages/views.py:174
 msgid "Oops, your comment was empty."

@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2013-05-27 13:54-0500\n"
-"PO-Revision-Date: 2013-05-27 18:54+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2013-05-28 07:47+0000\n"
+"Last-Translator: martin <zatroch.martin@gmail.com>\n"
 "Language-Team: Slovak (http://www.transifex.com/projects/p/mediagoblin/language/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,7 +39,7 @@ msgstr "Email adresse"
 
 #: mediagoblin/auth/forms.py:41
 msgid "Username or Email"
-msgstr ""
+msgstr "Použivateľské meno alebo e-mail"
 
 #: mediagoblin/auth/forms.py:52
 msgid "Username or email"
@@ -266,7 +266,7 @@ msgstr "Nesprávne heslo"
 
 #: mediagoblin/edit/views.py:363
 msgid "Your password was changed successfully"
-msgstr ""
+msgstr "Tvoje heslo bolo úspešne zmenené"
 
 #: mediagoblin/gmg_commands/assetlink.py:60
 msgid "Cannot link theme... no theme set\n"
@@ -283,17 +283,17 @@ msgstr "Odstránené; hoci bol pôvodný symbolický odkaz adresára nájdený.\
 #: mediagoblin/gmg_commands/assetlink.py:112
 #, python-format
 msgid "Could not link \"%s\": %s exists and is not a symlink\n"
-msgstr ""
+msgstr "Nemožno odkazovať na \"%s\": %s existuje a nie je symbolickým odkazom\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:119
 #, python-format
 msgid "Skipping \"%s\"; already set up.\n"
-msgstr ""
+msgstr "Preskakujem \"%s\"; opakovane nastavené.\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:124
 #, python-format
 msgid "Old link found for \"%s\"; removing.\n"
-msgstr ""
+msgstr "Nájdený starý odkaz pre \"%s\"; odstraňujem.\n"
 
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
@@ -309,7 +309,7 @@ msgstr "Prepáč, nepodporujem tento typ súborov =("
 
 #: mediagoblin/media_types/pdf/processing.py:136
 msgid "unoconv failing to run, check log file"
-msgstr ""
+msgstr "beh unoconv zlyhal, preskúmajte log záznam"
 
 #: mediagoblin/media_types/video/processing.py:37
 msgid "Video transcoding failed"
@@ -620,7 +620,7 @@ msgid ""
 "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
 "      or\n"
 "      <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
-msgstr ""
+msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Vytvoriť účet na tejto stránke</a>\n      alebo\n      <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Nastaviť MediaGoblin na vlastnom serveri</a>"
 
 #: mediagoblin/templates/mediagoblin/bits/logo.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
@@ -667,11 +667,11 @@ msgstr "Uložiť zmeny"
 #: mediagoblin/templates/mediagoblin/edit/change_pass.html:38
 #, python-format
 msgid "Changing %(username)s's password"
-msgstr ""
+msgstr "Mením heslo používateľa %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/change_pass.html:45
 msgid "Save"
-msgstr ""
+msgstr "Uložiť"
 
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:28
 #, python-format
@@ -702,7 +702,7 @@ msgstr "Mením nastavenia účtu používateľa %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:46
 msgid "Change your password."
-msgstr ""
+msgstr "Zmeniť svoje heslo."
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:62
 msgid "Delete my account"
@@ -776,7 +776,7 @@ msgstr "Obrázok pre %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:79
 msgid "PDF file"
-msgstr ""
+msgstr "PDF súbor"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
 msgid "Toggle Rotate"
@@ -932,15 +932,15 @@ msgstr "Pridať tento komentár"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:164
 #, python-format
 msgid "%(formatted_time)s ago"
-msgstr ""
+msgstr "pred %(formatted_time)s "
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:150
 msgid "Added"
-msgstr ""
+msgstr "Pridané"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:161
 msgid "Created"
-msgstr ""
+msgstr "Vytvorené"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:28
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:40
@@ -1128,27 +1128,27 @@ msgstr "Zdá sa, že na tejto adrese sa nič nenachádza. Prepáč!</p><p>Pokia�
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"
-msgstr ""
+msgstr "rok"
 
 #: mediagoblin/tools/timesince.py:63
 msgid "month"
-msgstr ""
+msgstr "mesiac"
 
 #: mediagoblin/tools/timesince.py:64
 msgid "week"
-msgstr ""
+msgstr "týždeň"
 
 #: mediagoblin/tools/timesince.py:65
 msgid "day"
-msgstr ""
+msgstr "deň"
 
 #: mediagoblin/tools/timesince.py:66
 msgid "hour"
-msgstr ""
+msgstr "hodina"
 
 #: mediagoblin/tools/timesince.py:67
 msgid "minute"
-msgstr ""
+msgstr "minúta"
 
 #: mediagoblin/user_pages/forms.py:23
 msgid "Comment"
@@ -1187,7 +1187,7 @@ msgstr "okmentoval tvoj príspevok"
 
 #: mediagoblin/user_pages/views.py:169
 msgid "Sorry, comments are disabled."
-msgstr ""
+msgstr "Prepáč, komentovanie je vypnuté."
 
 #: mediagoblin/user_pages/views.py:174
 msgid "Oops, your comment was empty."

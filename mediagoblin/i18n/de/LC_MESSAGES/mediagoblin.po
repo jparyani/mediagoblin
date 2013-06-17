@@ -15,15 +15,15 @@
 # Elrond <elrond+mediagoblin.org@samba-tng.org>, 2011
 # Art O. Pal <artopal@fastmail.fm>, 2011
 # spaetz <sebastian@sspaeth.de>, 2012
-# Vinzenz Vietzke <vietzke@b1-systems.de>, 2012
-# Vinzenz Vietzke <vietzke@b1-systems.de>, 2011
+# Vinzenz Vietzke <vinz@vinzv.de>, 2012
+# Vinzenz Vietzke <vinz@vinzv.de>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2013-05-27 13:54-0500\n"
-"PO-Revision-Date: 2013-05-27 18:54+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2013-05-28 10:43+0000\n"
+"Last-Translator: Elrond <elrond+mediagoblin.org@samba-tng.org>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/mediagoblin/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -47,7 +47,7 @@ msgstr "E-Mail-Adresse"
 
 #: mediagoblin/auth/forms.py:41
 msgid "Username or Email"
-msgstr ""
+msgstr "Benutzername oder E-Mail-Adresse"
 
 #: mediagoblin/auth/forms.py:52
 msgid "Username or email"
@@ -628,7 +628,7 @@ msgid ""
 "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
 "      or\n"
 "      <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
-msgstr ""
+msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Registriere dich auf dieser Seite</a> oder <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Installiere MediaGoblin auf deinem eigenen Server</a>"
 
 #: mediagoblin/templates/mediagoblin/bits/logo.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
@@ -784,7 +784,7 @@ msgstr "Bild für %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:79
 msgid "PDF file"
-msgstr ""
+msgstr "PDF-Datei"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
 msgid "Toggle Rotate"
@@ -944,11 +944,11 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:150
 msgid "Added"
-msgstr ""
+msgstr "Hinzugefügt"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:161
 msgid "Created"
-msgstr ""
+msgstr "Originaldatum"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:28
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:40
@@ -1136,27 +1136,27 @@ msgstr "Tut uns Leid, aber unter der angegebenen Adresse gibt es keine Seite!</p
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"
-msgstr ""
+msgstr "Jahr"
 
 #: mediagoblin/tools/timesince.py:63
 msgid "month"
-msgstr ""
+msgstr "Monat"
 
 #: mediagoblin/tools/timesince.py:64
 msgid "week"
-msgstr ""
+msgstr "Woche"
 
 #: mediagoblin/tools/timesince.py:65
 msgid "day"
-msgstr ""
+msgstr "Tag"
 
 #: mediagoblin/tools/timesince.py:66
 msgid "hour"
-msgstr ""
+msgstr "Stunde"
 
 #: mediagoblin/tools/timesince.py:67
 msgid "minute"
-msgstr ""
+msgstr "Minute"
 
 #: mediagoblin/user_pages/forms.py:23
 msgid "Comment"

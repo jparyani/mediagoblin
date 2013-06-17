@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2013-05-27 13:54-0500\n"
-"PO-Revision-Date: 2013-05-27 18:54+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2013-05-28 13:51+0000\n"
+"Last-Translator: Sergiusz Pawlowicz <transifex@pawlowicz.name>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/mediagoblin/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,7 +35,7 @@ msgstr "Adres e-mail"
 
 #: mediagoblin/auth/forms.py:41
 msgid "Username or Email"
-msgstr ""
+msgstr "Nazwa konta lub adres poczty elektronicznej"
 
 #: mediagoblin/auth/forms.py:52
 msgid "Username or email"
@@ -262,7 +262,7 @@ msgstr "Nieprawidłowe hasło"
 
 #: mediagoblin/edit/views.py:363
 msgid "Your password was changed successfully"
-msgstr ""
+msgstr "Twoje hasło zostało zmienione"
 
 #: mediagoblin/gmg_commands/assetlink.py:60
 msgid "Cannot link theme... no theme set\n"
@@ -279,17 +279,17 @@ msgstr "Znaleziono stary odnośnik symboliczny do katalogu; usunięto.\n"
 #: mediagoblin/gmg_commands/assetlink.py:112
 #, python-format
 msgid "Could not link \"%s\": %s exists and is not a symlink\n"
-msgstr ""
+msgstr "Nie mogę zrobić odnośnika \"%s\": %s istnieje i nie jest odnośnikiem\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:119
 #, python-format
 msgid "Skipping \"%s\"; already set up.\n"
-msgstr ""
+msgstr "Opuszczam \"%s\"; już jest gotowe.\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:124
 #, python-format
 msgid "Old link found for \"%s\"; removing.\n"
-msgstr ""
+msgstr "Znaleziono stary odnośnik dla \"%s\"; usuwam.\n"
 
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
@@ -305,7 +305,7 @@ msgstr "NIestety, nie obsługujemy tego typu plików :-("
 
 #: mediagoblin/media_types/pdf/processing.py:136
 msgid "unoconv failing to run, check log file"
-msgstr ""
+msgstr "nie dało się uruchomić unoconv, sprawdź log"
 
 #: mediagoblin/media_types/video/processing.py:37
 msgid "Video transcoding failed"
@@ -616,7 +616,7 @@ msgid ""
 "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
 "      or\n"
 "      <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
-msgstr ""
+msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Załóż konto na tym serwerze</a>\n      albo\n      <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Uruchom MediaGoblin na swoim własnym serwerze</a>"
 
 #: mediagoblin/templates/mediagoblin/bits/logo.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
@@ -663,11 +663,11 @@ msgstr "Zapisz zmiany"
 #: mediagoblin/templates/mediagoblin/edit/change_pass.html:38
 #, python-format
 msgid "Changing %(username)s's password"
-msgstr ""
+msgstr "Zmieniam hasło użytkownika %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/change_pass.html:45
 msgid "Save"
-msgstr ""
+msgstr "Zachowaj"
 
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:28
 #, python-format
@@ -698,7 +698,7 @@ msgstr "Zmiana ustawień konta %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:46
 msgid "Change your password."
-msgstr ""
+msgstr "Zmień swoje hasło."
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:62
 msgid "Delete my account"
@@ -772,7 +772,7 @@ msgstr "Grafika dla %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:79
 msgid "PDF file"
-msgstr ""
+msgstr "Plik PDF"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
 msgid "Toggle Rotate"
@@ -928,15 +928,15 @@ msgstr "Dodaj komentarz"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:164
 #, python-format
 msgid "%(formatted_time)s ago"
-msgstr ""
+msgstr "%(formatted_time)s temu"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:150
 msgid "Added"
-msgstr ""
+msgstr "Dodano"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:161
 msgid "Created"
-msgstr ""
+msgstr "Utworzono"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:28
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:40
@@ -1124,27 +1124,27 @@ msgstr "Wygląda na to, że nic tutaj nie ma!</p><p>Jeśli jesteś pewny, że ad
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"
-msgstr ""
+msgstr "rok"
 
 #: mediagoblin/tools/timesince.py:63
 msgid "month"
-msgstr ""
+msgstr "miesiąc"
 
 #: mediagoblin/tools/timesince.py:64
 msgid "week"
-msgstr ""
+msgstr "tydzień"
 
 #: mediagoblin/tools/timesince.py:65
 msgid "day"
-msgstr ""
+msgstr "dzień"
 
 #: mediagoblin/tools/timesince.py:66
 msgid "hour"
-msgstr ""
+msgstr "godzina"
 
 #: mediagoblin/tools/timesince.py:67
 msgid "minute"
-msgstr ""
+msgstr "minuta"
 
 #: mediagoblin/user_pages/forms.py:23
 msgid "Comment"
@@ -1183,7 +1183,7 @@ msgstr "komentarze do twojego wpisu"
 
 #: mediagoblin/user_pages/views.py:169
 msgid "Sorry, comments are disabled."
-msgstr ""
+msgstr "Komentowanie jest wyłączone."
 
 #: mediagoblin/user_pages/views.py:174
 msgid "Oops, your comment was empty."
