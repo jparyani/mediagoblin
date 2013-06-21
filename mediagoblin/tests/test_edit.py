@@ -144,31 +144,6 @@ class TestUserEdit(object):
     def test_email_change(self, test_app):
         self.login(test_app)
 
-        # Test email change without password
-        template.clear_test_template_context()
-        test_app.post(
-            '/edit/account/', {
-                'new_email': 'new@example.com'})
-
-        # Check form errors
-        context = template.TEMPLATE_TEST_CONTEXT[
-            'mediagoblin/edit/edit_account.html']
-        assert context['form'].password.errors == [
-            u'This field is required.']
-
-        # Test email change with wrong password
-        template.clear_test_template_context()
-        test_app.post(
-            '/edit/account/', {
-                'new_email': 'new@example.com',
-                'password': 'wrong'})
-
-        # Check form errors
-        context = template.TEMPLATE_TEST_CONTEXT[
-            'mediagoblin/edit/edit_account.html']
-        assert context['form'].password.errors == [
-            u'Wrong password.']
-
         # Test email already in db
         template.clear_test_template_context()
         test_app.post(
@@ -181,19 +156,6 @@ class TestUserEdit(object):
             'mediagoblin/edit/edit_account.html']
         assert context['form'].new_email.errors == [
             u'Sorry, a user with that email address already exists.']
-
-        # Test password is too short
-        template.clear_test_template_context()
-        test_app.post(
-            '/edit/account/', {
-                'new_email': 'new@example.com',
-                'password': 't'})
-
-        # Check form errors
-        context = template.TEMPLATE_TEST_CONTEXT[
-            'mediagoblin/edit/edit_account.html']
-        assert context['form'].password.errors == [
-            u'Field must be between 5 and 1024 characters long.']
 
         # Test successful email change
         template.clear_test_template_context()

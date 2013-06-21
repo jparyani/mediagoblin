@@ -65,12 +65,6 @@ class EditAccountForm(wtforms.Form):
         _('New email address'),
         [wtforms.validators.Optional(),
          normalize_user_or_email_field(allow_user=False)])
-    password = wtforms.PasswordField(
-        _('Password'),
-        [wtforms.validators.Optional(),
-         wtforms.validators.Length(min=5, max=1024)],
-        description=_(
-            'Enter your old password to prove you own this account.'))
     license_preference = wtforms.SelectField(
         _('License preference'),
         [

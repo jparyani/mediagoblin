@@ -236,38 +236,30 @@ def edit_account(request):
         user.license_preference = form.license_preference.data
 
         if form.new_email.data:
-            if not form.password.data:
-                form.password.errors.append(
-                    _('This field is required.'))
-            elif not auth_lib.bcrypt_check_password(
-                    form.password.data, user.pw_hash):
-                form.password.errors.append(
-                    _('Wrong password.'))
+            new_email = form.new_email.data
+            users_with_email = User.query.filter_by(
+                email=new_email).count()
+            if users_with_email:
+                form.new_email.errors.append(
+                    _('Sorry, a user with that email address'
+                      ' already exists.'))
             else:
-                new_email = form.new_email.data
-                users_with_email = User.query.filter_by(
-                    email=new_email).count()
-                if users_with_email:
-                    form.new_email.errors.append(
-                        _('Sorry, a user with that email address'
-                          ' already exists.'))
-                else:
-                    verification_key = get_timed_signer_url(
-                        'mail_verification_token').dumps({
-                            'user': user.id,
-                            'email': new_email})
+                verification_key = get_timed_signer_url(
+                    'mail_verification_token').dumps({
+                        'user': user.id,
+                        'email': new_email})
 
-                    rendered_email = render_template(
-                        request, 'mediagoblin/edit/verification.txt',
-                        {'username': user.username,
-                         'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
-                            uri=request.urlgen('mediagoblin.edit.verify_email',
-                                               qualified=True),
-                            verification_key=verification_key)})
+                rendered_email = render_template(
+                    request, 'mediagoblin/edit/verification.txt',
+                    {'username': user.username,
+                     'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
+                        uri=request.urlgen('mediagoblin.edit.verify_email',
+                                           qualified=True),
+                        verification_key=verification_key)})
 
-                    email_debug_message(request)
-                    auth_tools.send_verification_email(user, request, new_email,
-                                                     rendered_email)
+                email_debug_message(request)
+                auth_tools.send_verification_email(user, request, new_email,
+                                                 rendered_email)
 
         if not form.errors:
             user.save()
