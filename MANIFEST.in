@@ -1,0 +1,11 @@
+recursive-include mediagoblin/i18n *.mo
+recursive-include mediagoblin *.js *.css *.png *.svg *.ico
+recursive-include mediagoblin *.ini
+recursive-include mediagoblin *.html *.txt
+recursive-include docs *.rst *.html
+include mediagoblin.ini mediagoblin/config_spec.ini paste.ini
+include mediagoblin/config_spec.ini
+graft extlib
+graft licenses
+include COPYING AUTHORS
+include lazyserver.sh lazystarter.sh lazycelery.sh

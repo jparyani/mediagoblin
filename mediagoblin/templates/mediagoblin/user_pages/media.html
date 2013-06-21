@@ -1,0 +1,205 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{%- extends "mediagoblin/base.html" %}
+
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+{% from "mediagoblin/utils/pagination.html" import render_pagination %}
+
+{% block title %}{{ media.title }} &mdash; {{ super() }}{% endblock %}
+
+{% block mediagoblin_head %}
+<!--[if lte IE 8]><link rel="stylesheet"
+    href="{{ request.staticdirect('/extlib/leaflet/leaflet.ie.css') }}" /><![endif]-->
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/js/comment_show.js') }}"></script>
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/js/keyboard_navigation.js') }}"></script>
+
+  {% template_hook("media_head") %}
+{% endblock mediagoblin_head %}
+
+{% block mediagoblin_content %}
+  <p class="context">
+    {%- trans user_url=request.urlgen(
+              'mediagoblin.user_pages.user_home',
+              user=media.get_uploader.username),
+              username=media.get_uploader.username -%}
+    ❖ Browsing media by <a href="{{user_url}}">{{username}}</a>
+    {%- endtrans -%}
+  </p>
+  {% include "mediagoblin/utils/prev_next.html" %}
+  <div class="media_pane">
+    <div class="media_image_container">
+      {% block mediagoblin_media %}
+        {% set display_media = request.app.public_store.file_url(
+                 media.get_display_media()[1]) %}
+        {# if there's a medium file size, that means the medium size
+         #  isn't the original... so link to the original!
+         #}
+        {% if media.media_files.has_key('medium') %}
+          <a href="{{ request.app.public_store.file_url(
+                        media.media_files['original']) }}">
+            <img class="media_image"
+                 src="{{ display_media }}"
+                 alt="{% trans media_title=media.title -%}
+                        Image for {{ media_title }}{% endtrans %}" />
+          </a>
+        {% else %}
+          <img class="media_image"
+               src="{{ display_media }}"
+               alt="{% trans media_title=media.title -%}
+                      Image for {{ media_title }}{% endtrans %}" />
+        {% endif %}
+      {% endblock %}
+    </div>
+    <h2 class="media_title">
+      {{ media.title }}
+    </h2>
+    {% if request.user and
+          (media.uploader == request.user.id or
+           request.user.is_admin) %}
+      {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
+                                 user= media.get_uploader.username,
+                                 media_id=media.id) %}
+      <a class="button_action" href="{{ edit_url }}">{% trans %}Edit{% endtrans %}</a>
+      {% set delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
+                                 user= media.get_uploader.username,
+                                 media_id=media.id) %}
+      <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
+    {% endif %}
+    {% autoescape False %}
+      <p>{{ media.description_html }}</p>
+    {% endautoescape %}
+    {% if comments %}
+      {% if app_config['allow_comments'] %}
+        <a
+          {% if not request.user %}
+            href="{{ request.urlgen('mediagoblin.auth.login') }}"
+          {% endif %}
+          class="button_action" id="button_addcomment" title="Add a comment">
+          {% trans %}Add a comment{% endtrans %}
+        </a>
+      {% endif %}
+      {% if request.user %}
+        <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment',
+                                         user= media.get_uploader.username,
+                                         media_id=media.id) }}" method="POST" id="form_comment">
+          {{ wtforms_util.render_divs(comment_form) }}
+          <div class="form_submit_buttons">
+            <input type="submit" value="{% trans %}Add this comment{% endtrans %}" class="button_action" />
+              {{ csrf_token }}
+          </div>
+        </form>
+      {% endif %}
+      <ul style="list-style:none">
+      {% for comment in comments %}
+        {% set comment_author = comment.get_author %}
+        <li id="comment-{{ comment.id }}"
+          {%- if pagination.active_id == comment.id %}
+            class="comment_wrapper comment_active">
+            <a name="comment" id="comment"></a>
+          {%- else %}
+            class="comment_wrapper">
+          {%- endif %}
+          <div class="comment_author">
+            <img src="{{ request.staticdirect('/images/icon_comment.png') }}" />
+            <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                            user=comment_author.username) }}"
+               class="comment_authorlink">
+              {{- comment_author.username -}}
+            </a>
+            <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
+                            comment=comment.id,
+                            user=media.get_uploader.username,
+                            media=media.slug_or_id) }}#comment"
+               class="comment_whenlink">
+              <span title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+                {%- trans formatted_time=timesince(comment.created) -%}
+                  {{ formatted_time }} ago
+                {%- endtrans -%}
+              </span></a>:
+          </div>
+          <div class="comment_content">
+            {% autoescape False -%}
+              {{ comment.content_html }}
+            {%- endautoescape %}
+          </div>
+        </li>
+      {% endfor %}
+      </ul>
+      {{ render_pagination(request, pagination,
+                 media.url_for_self(request.urlgen)) }}
+    {% endif %}
+  </div>
+  <div class="media_sidebar">
+    <h3>{% trans %}Added{% endtrans %}</h3>
+    <p><span title="{{ media.created.strftime("%I:%M%p %Y-%m-%d") }}">
+        {%- trans formatted_time=timesince(media.created) -%}    
+          {{ formatted_time }} ago
+        {%- endtrans -%}
+    </span></p>
+
+    {% block mediagoblin_after_added_sidebar %}
+    {% endblock %}
+
+    {% if media.tags %}
+      {% include "mediagoblin/utils/tags.html" %}
+    {% endif %}
+
+    {% include "mediagoblin/utils/collections.html" %}
+
+    {% include "mediagoblin/utils/license.html" %}
+
+    {% include "mediagoblin/utils/exif.html" %}
+
+    {%- if media.attachment_files|count %}
+      <h3>{% trans %}Attachments{% endtrans %}</h3>
+      <ul>
+        {%- for attachment in media.attachment_files %}
+          <li>
+            <a href="{{ request.app.public_store.file_url(attachment.filepath) }}">
+              {{- attachment.name -}}
+            </a>
+          </li>
+        {%- endfor %}
+      </ul>
+    {%- endif %}
+    {%- if app_config['allow_attachments']
+          and request.user
+          and (media.uploader == request.user.id
+               or request.user.is_admin) %}
+      {%- if not media.attachment_files|count %}
+        <h3>{% trans %}Attachments{% endtrans %}</h3>
+      {%- endif %}
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.edit.attachments',
+                      user=media.get_uploader.username,
+                      media_id=media.id) }}">
+          {%- trans %}Add attachment{% endtrans -%}
+        </a>
+      </p>
+    {%- endif %}
+
+    {% template_hook("media_sideinfo") %}
+
+    {% block mediagoblin_sidebar %}
+    {% endblock %}
+
+  </div>
+  <div class="clear"></div>
+{% endblock %}

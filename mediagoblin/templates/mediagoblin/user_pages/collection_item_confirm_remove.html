@@ -1,0 +1,59 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+
+{% block mediagoblin_content %}
+
+  <form action="{{ request.urlgen('mediagoblin.user_pages.collection_item_confirm_remove',
+		                  user=collection_item.in_collection.get_creator.username,
+				  collection=collection_item.in_collection.slug,
+				  collection_item=collection_item.id) }}"
+        method="POST" enctype="multipart/form-data">
+    <div class="form_box">
+      <h1>
+        {%- trans media_title=collection_item.get_media_entry.title,
+	          collection_title=collection_item.in_collection.title -%}
+          Really remove {{ media_title }} from {{ collection_title }}?
+        {%- endtrans %}
+      </h1>
+
+      <div style="text-align: center;" >
+        <img src="{{ collection_item.get_media_entry.thumb_url }}" />
+      </div>
+
+      <br />
+
+      <p class="delete_checkbox_box">
+	{{ form.confirm }}
+	{{ wtforms_util.render_label(form.confirm) }}
+      </p>
+
+      <div class="form_submit_buttons">
+        {# TODO: This isn't a button really... might do unexpected things :) #}
+        <a class="button_action" href="
+            {{- collection_item.in_collection.url_for_self(request.urlgen) }}">
+          {%- trans %}Cancel{% endtrans -%}
+        </a>
+        <input type="submit" value="{% trans %}Remove{% endtrans %}" class="button_form" />
+	{{ csrf_token }}
+      </div>
+    </div>
+  </form>
+{% endblock %}    

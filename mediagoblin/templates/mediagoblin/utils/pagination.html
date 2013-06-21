@@ -1,0 +1,65 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% macro render_pagination(request, pagination,
+                           base_url=None, preserve_get_params=True) %}
+  {# only display if {{pagination}} is defined #}
+  {% if pagination and pagination.pages > 1 %}
+    {% if not base_url %}
+      {% set base_url = request.full_path %}
+    {% endif %}
+
+    {% if preserve_get_params %}
+      {% set get_params = request.GET %}
+    {% else %}
+      {% set get_params = {} %}
+    {% endif %}
+
+    <div class="pagination">
+      <p>
+        {% if pagination.has_prev %}
+          {% set prev_url = pagination.get_page_url_explicit(
+                   base_url, get_params,
+                   pagination.page - 1) %}
+          <a href="{{ prev_url }}">{% trans %}← Newer{% endtrans %}</a>
+        {% endif %}
+        {% if pagination.has_next %}
+          {% set next_url = pagination.get_page_url_explicit(
+                   base_url, get_params,
+                   pagination.page + 1) %}
+          <a href="{{ next_url }}">{% trans %}Older →{% endtrans %}</a>
+        {% endif %}
+        <br />
+        {% trans %}Go to page:{% endtrans %}
+        {%- for page in pagination.iter_pages() %}
+          {% if page %}
+            {% if page != pagination.page %}
+              <a href="{{ pagination.get_page_url_explicit(
+                              base_url, get_params,
+                              page) }}">{{ page }}</a>
+            {% else %}
+              {{ page }}
+            {% endif %}
+          {% else %}
+            <span class="ellipsis">…</span>
+          {% endif %}
+        {%- endfor %}
+       </p>
+     </div>
+  {% endif %}
+{% endmacro %}

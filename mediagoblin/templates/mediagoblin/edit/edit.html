@@ -1,0 +1,48 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+
+{% block title -%}
+  {% trans media_title=media.title -%}
+    Editing {{ media_title }}
+  {%- endtrans %} &mdash; {{ super() }}
+{%- endblock %}
+
+{% block mediagoblin_content %}
+
+  <form action="{{ request.urlgen('mediagoblin.edit.edit_media',
+                               user= media.get_uploader.username,
+                               media_id=media.id) }}"
+        method="POST" enctype="multipart/form-data">
+    <div class="form_box_xl edit_box">
+      <h1>{% trans media_title=media.title %}Editing {{ media_title }}{% endtrans %}</h1>
+      <div style="text-align: center;" >
+        <img src="{{ media.thumb_url }}" />
+      </div>
+      {{ wtforms_util.render_divs(form) }}
+      <div class="form_submit_buttons">
+        <a class="button_action" href="{{ media.url_for_self(request.urlgen) }}">{% trans %}Cancel{% endtrans %}</a>
+        <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button_form" />
+	{{ csrf_token }}
+      </div>
+    </div>
+  </form>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+=========
+ COPYING
+=========
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public
+License along with this program, in the file ``licenses/AGPLv3.txt``.
+If not, see <http://www.gnu.org/licenses/>.
+
+
+Translation files located under ``mediagoblin/i18n/`` directory tree 
+are free software: you can redistribute it and/or modify it under the
+terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
+
+You should have received a copy of the GNU Affero General Public
+License along with this program, in the file ``licenses/AGPLv3.txt``.
+If not, see <http://www.gnu.org/licenses/>.
+
+
+JavaScript files located in the ``mediagoblin/`` directory tree 
+are free software: you can redistribute and/or modify them under the
+terms of the GNU Affero General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this program, in the file ``licenses/LGPLv3.txt``.
+If not, see <http://www.gnu.org/licenses/>.
+
+
+Documentation files located in the ``docs/`` directory tree and all
+original documentation theme CSS and assets (including image files)
+are released under a CC0 license.  To the extent possible under law,
+the author(s) have dedicated all copyright and related and neighboring
+rights to these files to the public domain worldwide.  These files are
+distributed without any warranty.
+
+You should have received a copy of the CC0 license in the file 
+``licenses/CC0_1.0.txt``.  If not, see 
+<http://creativecommons.org/publicdomain/zero/1.0/>.
+
+
+CSS, images and video located in the ``mediagoblin/`` directory tree are
+released under a CC0 license.  To the extent possible under law, the author(s)
+have dedicated all copyright and related and neighboring rights to these
+files to the public domain worldwide.  These files are distributed without
+any warranty. 
+
+You should have received a copy of the CC0 license in the file 
+``licenses/CC0_1.0.txt``.  If not, see 
+<http://creativecommons.org/publicdomain/zero/1.0/>.
+
+
+Additional library software has been made available in the ``extlib/``
+directory.  All of it is Free Software and can be distributed under
+liberal terms, but those terms may differ in detail from the AGPL's
+particulars.  See each package's license file in the extlib directory
+for additional terms.

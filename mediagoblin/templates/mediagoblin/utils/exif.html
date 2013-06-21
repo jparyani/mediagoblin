@@ -1,0 +1,67 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% block exif_content %}
+<noscript>
+  <style type="text/css">
+    #exif_additional_info {
+       display: block;
+    }
+  </style>
+</noscript>
+<div id="exif_content">
+  {% if app_config['exif_visible']
+        and media.media_data
+        and media.media_data.exif_all is defined
+        and media.media_data.exif_all %}
+    <h3>Camera Information</h3>
+    <table id="exif_camera_information">
+      <tbody>
+      {% for label, value in media.exif_display_data_short().iteritems() %}
+      <tr>
+        <td class="col1">{{ label }}</td>
+        <td>{{ value }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <h3 id="exif_additional_info_button" class="button_action">
+      Additional Information
+    </h3>
+    <div id="exif_additional_info">
+    <table class="exif_info">
+      {% for key, tag in media.exif_display_iter() %}
+        <tr>
+          <td class="col1">{{ key }}</td>
+          <td>{{ tag.printable }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    </div>
+  {% endif %}
+<script type="text/javascript">
+$(document).ready(function(){
+
+$("#exif_additional_info_button").click(function(){
+   $("#exif_additional_info").slideToggle("slow");
+});
+
+});
+</script>
+</div> <!-- end exif_content div -->
+{% endblock %}

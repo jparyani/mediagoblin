@@ -1,0 +1,65 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% extends 'mediagoblin/user_pages/media.html' %}
+
+{% block mediagoblin_head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ request.staticdirect('/css/audio.css') }}" />
+    <script type="text/javascript" src="{{ request.staticdirect(
+        '/js/extlib/html5slider.js') }}"></script>
+    <script type="text/javascript" src="{{ request.staticdirect(
+        '/js/audio.js') }}"></script>
+{% endblock %}
+
+{% block mediagoblin_media %}
+  <div class="audio-media">
+    {% if 'spectrogram' in media.media_files %}
+      <div class="audio-spectrogram">
+	<img src="{{ request.app.public_store.file_url(
+		      media.media_files.spectrogram) }}"
+	     alt="Spectrogram" />
+      </div>
+    {% endif %}
+    <audio class="audio-player" controls="controls"
+	   preload="metadata">
+      <source src="{{ request.app.public_store.file_url(
+		       media.media_files.webm_audio) }}" type="audio/webm; codecs=vorbis" />
+      <div class="no_html5">
+	{%- trans -%}Sorry, this audio will not work because 
+	your web browser does not support HTML5 
+	audio.{%- endtrans -%}<br/>
+	{%- trans -%}You can get a modern web browser that 
+	can play the audio at <a href="http://getfirefox.com">
+	  http://getfirefox.com</a>!{%- endtrans -%}
+      </div>
+    </audio>
+  </div>
+{% endblock %}
+
+{% block mediagoblin_sidebar %}
+  <h3>{% trans %}Download{% endtrans %}</h3>
+  <ul>
+    {% if 'original' in media.media_files %}
+      <li><a href="{{ request.app.public_store.file_url(
+                       media.media_files.original) }}">{% trans %}Original file{% endtrans %}</a>
+    {% endif %}
+    <li><a href="{{ request.app.public_store.file_url(
+                     media.media_files.webm_audio) }}">{% trans %}WebM file (Vorbis codec){% endtrans %}</a>
+  </ul>
+{% endblock %}

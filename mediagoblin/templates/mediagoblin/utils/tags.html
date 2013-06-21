@@ -1,0 +1,46 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% block tags_content -%}
+  <h3>{% trans %}Tagged with{% endtrans %}</h3>
+  <p>
+    {% for tag in media.tags %}
+      {% if loop.last %}
+        {# the 'and' should only appear if there is more than one tag #}
+        {% if media.tags|length > 1 %}
+          &middot;
+        {% endif %}
+        <a href="{{ request.urlgen(
+                          'mediagoblin.user_pages.user_tag_gallery',
+                          tag=tag['slug'],
+                          user=media.get_uploader.username) }}">{{ tag['name'] }}</a>
+      {% elif loop.revindex == 2 %}
+        <a href="{{ request.urlgen(
+                          'mediagoblin.user_pages.user_tag_gallery',
+                          tag=tag['slug'],
+                          user=media.get_uploader.username) }}">{{ tag['name'] }}</a>
+      {% else %}
+        <a href="{{ request.urlgen(
+                          'mediagoblin.user_pages.user_tag_gallery',
+                          tag=tag['slug'],
+                          user=media.get_uploader.username) }}">{{ tag['name'] }}</a>
+        &middot;
+      {% endif %}
+    {% endfor %}
+  </p>
+{% endblock %}

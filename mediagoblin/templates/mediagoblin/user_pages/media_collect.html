@@ -1,0 +1,73 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+
+{% block mediagoblin_head %}
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/js/collection_form_show.js') }}"></script>
+{% endblock %}
+
+{% block title -%}
+  {% trans media_title=media.title -%}
+    Add “{{ media_title }}” to a collection
+  {%- endtrans %} &mdash; {{ super() }}
+{%- endblock %}
+
+{% block mediagoblin_content %}
+  <form action="{{ request.urlgen('mediagoblin.user_pages.media_collect',
+		                  user=media.get_uploader.username,
+				  media_id=media.id) }}"
+        method="POST" enctype="multipart/form-data">
+    <div class="form_box">
+      <h1>
+        {%- trans media_title=media.title -%}
+          Add “{{ media_title }}” to a collection
+        {%- endtrans -%}
+      </h1>
+
+      <div style="text-align: center;" >
+        <img src="{{ media.thumb_url }}" />
+      </div>
+
+      <br />
+
+      {{- wtforms_util.render_label_p(form.collection) }}
+      <div class="form_field_input">
+	{{ form.collection }}
+	<a class="button_action" id="button_addcollection">{% trans %}+{% endtrans %}</a>
+      </div>
+
+      <div id="new_collection" class="subform">
+        <h3>{% trans %}Add a new collection{% endtrans %}</h3>
+
+        {{- wtforms_util.render_field_div(form.collection_title) }}
+        {{- wtforms_util.render_field_div(form.collection_description) }}
+      </div>
+      {{- wtforms_util.render_field_div(form.note) }}
+
+      <div class="form_submit_buttons">
+        {# TODO: This isn't a button really... might do unexpected things :) #}
+	<a class="button_action" href="{{ media.url_for_self(request.urlgen) }}">{% trans %}Cancel{% endtrans %}</a>
+        <input type="submit" value="{% trans %}Add{% endtrans %}" class="button_form" />
+	{{ csrf_token }}
+      </div>
+    </div>
+  </form>
+{% endblock %}    

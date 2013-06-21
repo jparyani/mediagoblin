@@ -1,0 +1,56 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{%- extends "mediagoblin/base.html" %}
+
+{% block title %}
+  {%- trans username=user.username -%}
+    {{ username }}'s collections
+  {%- endtrans %} &mdash; {{ super() }}
+{% endblock %}
+
+{% block mediagoblin_content -%}
+  <h1>
+    {%- trans username=user.username,
+              user_url=request.urlgen(
+                         'mediagoblin.user_pages.user_home',
+                          user=user.username) -%}
+      <a href="{{ user_url }}">{{ username }}</a>'s collections
+    {%- endtrans %}
+  </h1>
+
+  {% if request.user %}
+    {% if request.user.status == 'active' %}
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.submit.collection',
+                                            user=user.username) }}">
+          {%- trans %}Create new collection{% endtrans -%}
+	</a>
+      </p>
+    {% endif %}
+  {% endif %}
+
+  <ul>
+    {% for coll in collections %}
+      {%- set coll_url = coll.url_for_self(request.urlgen) %}
+      <li>
+        <a href="{{ coll_url }}">{{ coll.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}

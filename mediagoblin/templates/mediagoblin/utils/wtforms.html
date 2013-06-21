@@ -1,0 +1,76 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{# Render the label for a field #}
+{% macro render_label(field) %}
+  {%- if field.label.text -%}
+    <label for="{{ field.label.field_id }}">{{ field.label.text }}</label>
+  {%- endif -%}
+{%- endmacro %}
+
+{# Render the label in a <p> for a field #}
+{% macro render_label_p(field) %}
+  {%- if field.label.text %}
+    <p class="form_field_label">
+      {{- render_label(field) -}}
+    </p>
+  {%- endif %}
+{%- endmacro %}
+
+{# Generically render a field #}
+{% macro render_field_div(field) %}
+  {{- render_label_p(field) }}
+  <div class="form_field_input">
+    {{ field }}
+    {%- if field.errors -%}
+      {% for error in field.errors %}
+        <p class="form_field_error">{{ error }}</p>
+      {% endfor %}
+    {%- endif %}
+    {%- if field.description %}
+      <p class="form_field_description">{{ field.description|safe }}</p>
+    {%- endif %}
+  </div>
+{%- endmacro %}
+
+{# Auto-render a form as a series of divs #}
+{% macro render_divs(form) -%}
+  {% for field in form %}
+    {{ render_field_div(field) }}
+  {% endfor %}
+{%- endmacro %}
+
+{# Auto-render a form as a table #}
+{% macro render_table(form) -%}
+  {% for field in form %}
+    <tr>
+      <th>{{ field.label.text }}</th>
+      <td>
+        {{field}}
+        {% if field.errors %}
+          <br />
+          <ul class="errors">
+            {% for error in field.errors %}
+              <li>{{error}}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+{%- endmacro %}

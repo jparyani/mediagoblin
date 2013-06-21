@@ -1,0 +1,114 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% block title -%}
+  {% trans %}Media processing panel{% endtrans %} &mdash; {{ super() }}
+{%- endblock %}
+
+{% block mediagoblin_content %}
+
+<h1>{% trans %}Media processing panel{% endtrans %}</h1>
+
+<p>
+  {% trans %}Here you can track the state of media being processed on this instance.{% endtrans %}
+</p>
+    
+<h2>{% trans %}Media in-processing{% endtrans %}</h2>
+
+{% if processing_entries.count() %}
+  <table class="media_panel processing">
+    <tr>
+      <th>ID</th>
+      <th>User</th>
+      <th>Title</th>
+      <th>When submitted</th>
+      <th>Transcoding progress</th>
+    </tr>
+    {% for media_entry in processing_entries %}
+      <tr>
+        <td>{{ media_entry.id }}</td>
+        <td>{{ media_entry.get_uploader.username }}</td>
+        <td>{{ media_entry.title }}</td>
+        <td>{{ media_entry.created.strftime("%F %R") }}</td>
+        {% if media_entry.transcoding_progress %}
+          <td>{{ media_entry.transcoding_progress }}%</td>
+        {% else %}
+        <td>Unknown</td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p><em>{% trans %}No media in-processing{% endtrans %}</em></p>
+{% endif %}  
+
+<h2>{% trans %}These uploads failed to process:{% endtrans %}</h2>
+{% if failed_entries.count() %}
+
+  <table class="media_panel failed">
+    <tr>
+      <th>ID</th>
+      <th>User</th>
+      <th>Title</th>
+      <th>When submitted</th>
+      <th>Reason for failure</th>
+      <th>Failure metadata</th>
+    </tr>
+    {% for media_entry in failed_entries %}
+      <tr>
+        <td>{{ media_entry.id }}</td>
+        <td>{{ media_entry.get_uploader.username }}</td>
+        <td>{{ media_entry.title }}</td>
+        <td>{{ media_entry.created.strftime("%F %R") }}</td>
+        {% if media_entry.get_fail_exception() %}
+        <td>{{ media_entry.get_fail_exception().general_message }}</td>
+        <td>{{ media_entry.fail_metadata }}</td>
+        {% else %}
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p><em>{% trans %}No failed entries!{% endtrans %}</em></p>
+{% endif %}
+<h2>{% trans %}Last 10 successful uploads{% endtrans %}</h2>
+{% if processed_entries.count() %}
+
+  <table class="media_panel processed">
+    <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>Title</th>
+        <th>Submitted</th>
+    </tr>
+    {% for media_entry in processed_entries %}
+      <tr>
+        <td>{{ media_entry.id }}</td>
+        <td>{{ media_entry.get_uploader.username }}</td>
+        <td><a href="{{ media_entry.url_for_self(request.urlgen) }}">{{ media_entry.title }}</a></td>
+        <td><span title='{{ media_entry.created.strftime("%F %R") }}'>{{ timesince(media_entry.created) }}</span></td>
+      </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p><em>{% trans %}No processed entries, yet!{% endtrans %}</em></p>
+{% endif %}
+{% endblock %}

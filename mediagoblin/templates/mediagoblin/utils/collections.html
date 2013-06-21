@@ -1,0 +1,44 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% block collections_content -%}
+  {% if media.collections %}
+    <h3>{% trans %}Collected in{% endtrans %}</h3>
+    <p>
+      {%- for collection in media.collections %}
+        {%- if not loop.first %}
+          &middot;
+        {%- endif %}
+        <a href="{{ collection.url_for_self(request.urlgen) }}">
+          {{- collection.title }} (
+            {{- collection.get_creator.username -}}
+          )</a>
+      {%- endfor %}
+    </p>
+  {%- endif %}
+  {%- if request.user %}
+    <p>
+      <a type="submit" href="{{ request.urlgen('mediagoblin.user_pages.media_collect', 
+                                  user=media.get_uploader.username,
+                                  media_id=media.id) }}"
+         class="button_action">
+        {% trans %}Add to a collection{% endtrans %}
+      </a>
+    </p>
+  {%- endif %}
+{% endblock %}

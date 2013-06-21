@@ -1,0 +1,128 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-#}
+<!doctype html>
+<html
+{% block mediagoblin_html_tag %}
+{% endblock mediagoblin_html_tag %}
+>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ app_config['html_title'] }}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css"
+          href="{{ request.staticdirect('/css/extlib/reset.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{{ request.staticdirect('/css/base.css') }}"/>
+    <link rel="shortcut icon"
+          href="{{ request.staticdirect('/images/goblin.ico') }}" />
+    <script type="text/javascript"
+            src="{{ request.staticdirect('/js/extlib/jquery.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ request.staticdirect('/js/header_dropdown.js') }}"></script>
+
+    {# For clarification, the difference between the extra_head.html template
+     # and the head template hook is that the former should be used by
+     # themes and the latter should be used by plugins.
+     # The reason is that only one thing can override extra_head.html...
+     # but multiple plugins can hook into the template hook.
+     #}
+    {% include "mediagoblin/extra_head.html" %}
+    {% template_hook("head") %}
+
+    {% block mediagoblin_head %}
+    {% endblock mediagoblin_head %}
+  </head>
+  <body>
+    {% include 'mediagoblin/bits/body_start.html' %}
+    {% block mediagoblin_body %}
+      {% block mediagoblin_header %}
+        <header>
+          {%- include "mediagoblin/bits/logo.html" -%}
+          {% block mediagoblin_header_title %}{% endblock %}
+          <div class="header_right">
+            {%- if request.user %}
+              {% if request.user and request.user.status == 'active' %}
+                <div class="button_action header_dropdown_down">&#9660;</div>
+                <div class="button_action header_dropdown_up">&#9650;</div>
+              {% elif request.user and request.user.status == "needs_email_verification" %}
+              {# the following link should only appear when verification is needed #}
+                <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                                 user=request.user.username) }}"
+                   class="button_action_highlight">
+               {% trans %}Verify your email!{% endtrans %}</a>
+               or <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>
+              {% endif %}
+            {%- else %}
+              <a href="{{ request.urlgen('mediagoblin.auth.login') }}?next={{
+                                                request.base_url|urlencode }}">
+                {%- trans %}Log in{% endtrans -%}
+              </a>
+            {%- endif %}
+          </div>
+          <div class="clear"></div>
+          {% if request.user and request.user.status == 'active' %}
+            <div class="header_dropdown">
+              <p>
+                <span class="dropdown_title">
+                  {% trans user_url=request.urlgen('mediagoblin.user_pages.user_home',
+                                                    user=request.user.username),
+                           user_name=request.user.username -%}
+                    <a href="{{ user_url }}">{{ user_name }}</a>'s account
+                  {%- endtrans %}
+                </span>
+                &middot;
+                <a href="{{ request.urlgen('mediagoblin.edit.account') }}">{%- trans %}Change account settings{% endtrans -%}</a>
+                &middot;
+                <a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
+                                             user=request.user.username) }}">
+                  {%- trans %}Media processing panel{% endtrans -%}
+                </a>
+                &middot;
+                <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}Log out{% endtrans %}</a>
+              </p>
+              <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
+                {%- trans %}Add media{% endtrans -%}
+              </a>
+              <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
+                {%- trans %}Create new collection{% endtrans -%}
+              </a>
+              {% if request.user.is_admin %}
+                <p>
+                  <span class="dropdown_title">Admin powers:</span>
+                  <a href="{{ request.urlgen('mediagoblin.admin.panel') }}">
+                    {%- trans %}Media processing panel{% endtrans -%}
+                  </a>
+                </p>
+              {% endif %}
+            </div>
+          {% endif %}
+        </header>
+      {% endblock %}
+      <div class="container">
+        {% include 'mediagoblin/bits/above_content.html' %}
+        <div class="mediagoblin_content">
+          {% include "mediagoblin/utils/messages.html" %}
+          {% block mediagoblin_content %}
+          {% endblock mediagoblin_content %}
+        </div>
+        {%- include "mediagoblin/bits/base_footer.html" %}
+      </div>
+    {%- endblock mediagoblin_body %}
+    {% include 'mediagoblin/bits/body_end.html' %}
+  </body>
+</html>

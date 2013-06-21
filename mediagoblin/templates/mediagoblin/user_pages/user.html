@@ -1,0 +1,171 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% from "mediagoblin/utils/object_gallery.html" import object_gallery %}
+
+{% block mediagoblin_head %}
+    <link rel="alternate" type="application/atom+xml"
+          href="{{ request.urlgen(
+                       'mediagoblin.user_pages.atom_feed',
+                       user=user.username) }}">
+{% endblock mediagoblin_head %}
+
+{% block title %}
+  {%- if user -%}
+    {%- trans username=user.username -%}
+      {{ username }}'s profile
+    {%- endtrans %} &mdash; {{ super() }}
+  {%- else -%}
+    {{ super() }}
+  {%- endif -%}
+{% endblock %}
+
+
+{% block mediagoblin_content -%}
+  {# If no user... #}
+  {% if not user %}
+    <p>{% trans %}Sorry, no such user found.{% endtrans %}</p>
+
+  {# User exists, but needs verification #}
+  {% elif user.status == "needs_email_verification" %}
+    {% if user == request.user %}
+      {# this should only be visible when you are this user #}
+      <div class="form_box">
+        <h1>{% trans %}Email verification needed{% endtrans %}</h1>
+
+        <p>
+          {% trans -%}
+            Almost done! Your account still needs to be activated.
+          {%- endtrans %}
+        </p>
+        <p>
+          {% trans -%}
+            An email should arrive in a few moments with instructions on how to do so.
+          {%- endtrans %}
+        </p>
+        <p>{% trans %}In case it doesn't:{% endtrans %}</p>
+  
+        <a href="{{ request.urlgen('mediagoblin.auth.resend_verification') }}"
+           class="button_action_highlight">{% trans %}Resend verification email{% endtrans %}</a>
+      </div>
+    {% else %}
+      {# if the user is not you, but still needs to verify their email #}
+      <div class="form_box">
+        <h1>{% trans %}Email verification needed{% endtrans %}</h1>
+
+        <p>
+          {% trans -%}
+            Someone has registered an account with this username, but it still has to be activated.
+          {%- endtrans %}
+        </p>
+  
+        <p>
+          {% trans login_url=request.urlgen('mediagoblin.auth.login') -%}
+            If you are that person but you've lost your verification email, you can <a href="{{ login_url }}">log in</a> and resend it.
+          {%- endtrans %}
+        </p>
+      </div>
+    {% endif %}
+
+  {# Active(?) (or at least verified at some point) user, horray! #}
+  {% else %}
+    <h1>
+      {%- trans username=user.username %}{{ username }}'s profile{% endtrans -%}
+    </h1>
+
+    {% if not user.url and not user.bio %}
+      {% if request.user and (request.user.id == user.id) %}
+        <div class="profile_sidebar empty_space">
+          <p>
+            {% trans %}Here's a spot to tell others about yourself.{% endtrans %}
+          </p>
+          <a href="{{ request.urlgen('mediagoblin.edit.profile',
+                   user=user.username) }}" class="button_action">
+            {%- trans %}Edit profile{% endtrans -%}
+          </a>
+      {% else %}
+        <div class="profile_sidebar empty_space">
+          <p>
+            {% trans -%}
+              This user hasn't filled in their profile (yet).
+            {%- endtrans %}
+          </p>
+      {% endif %}
+    {% else %}
+      <div class="profile_sidebar">
+        {% include "mediagoblin/utils/profile.html" %}
+        {% if request.user and
+              (request.user.id == user.id or request.user.is_admin) %}
+          <a href="{{ request.urlgen('mediagoblin.edit.profile',
+                   user=user.username) }}">
+            {%- trans %}Edit profile{% endtrans -%}
+          </a>
+        {% endif %}
+    {% endif %}
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.user_pages.collection_list',
+                                           user=user.username) }}">
+          {%- trans %}Browse collections{% endtrans -%}
+        </a>
+      </p>
+    </div>
+
+    {% if media_entries.count() %}
+      <div class="profile_showcase">
+        {{ object_gallery(request, media_entries, pagination,
+                          pagination_base_url=user_gallery_url, col_number=3) }}
+        {% include "mediagoblin/utils/object_gallery.html" %}
+        <div class="clear"></div>
+        <p>
+          <a href="{{ user_gallery_url }}">
+            {% trans username=user.username -%}
+              View all of {{ username }}'s media{% endtrans -%}
+          </a>
+        </p>
+        {% set feed_url = request.urlgen(
+                  'mediagoblin.user_pages.atom_feed',
+                  user=user.username) %}
+        {% include "mediagoblin/utils/feed_link.html" %}
+      </div>
+    {% else %}
+      {% if request.user and (request.user.id == user.id) %}
+        <div class="profile_showcase empty_space">
+          <p>
+            {% trans -%}
+            This is where your media will appear, but you don't seem to have added anything yet.
+            {%- endtrans %}
+          </p>
+          <a class="button_action"
+             href="{{ request.urlgen('mediagoblin.submit.start') }}">
+            {%- trans %}Add media{% endtrans -%}
+          </a>
+        </div>
+      {% else %}
+        <div class="profile_showcase empty_space">
+          <p>
+            {% trans -%}
+            There doesn't seem to be any media here yet...
+            {%- endtrans %}
+          </p>
+        </div>
+      {% endif %}
+    {% endif %}
+    <div class="clear"></div>
+  {% endif %}
+{% endblock %}

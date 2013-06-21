@@ -1,0 +1,46 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% extends 'mediagoblin/user_pages/media.html' %}
+
+{% block mediagoblin_head %}
+  {{ super() }}
+  {% template_hook("image_head") %}
+{% endblock mediagoblin_head %}
+
+{% block mediagoblin_sidebar %}
+  {{ super() }}
+  {% template_hook("image_sideinfo") %}
+{% endblock %}
+
+{% block mediagoblin_after_added_sidebar %}
+  {% if app_config['original_date_visible'] %}
+    {% set original_date = media.media_manager.get_original_date() %}
+
+    {% if original_date %}
+      <h3>{% trans %}Created{% endtrans %}</h3>
+
+      <p><span title="{{ original_date.strftime("%I:%M%p %Y-%m-%d") }}">
+        {%- trans formatted_time=timesince(original_date) -%}
+          {{ formatted_time }} ago
+        {%- endtrans -%}
+      </span></p>
+    {%- endif %}
+  {% endif %}
+{% endblock %}
+

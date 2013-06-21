@@ -1,0 +1,37 @@
+# / means repository root, not filesystem root
+
+# Top-level files and directories
+/dist/
+/bin/
+/develop-eggs/
+/build/
+/eggs/
+/lib/
+/local/
+/include/
+/parts/
+/share/
+/mediagoblin.egg-info
+/docs/_build/
+/docs/build
+/api-docs/build
+/api-docs/source/mediagoblin*
+/user_dev/
+/paste_local.ini
+/mediagoblin_local.ini
+/mediagoblin.db
+/celery.db
+/kombu.db
+/server-log.txt
+
+# Tests
+/mediagoblin/tests/user_dev/
+
+# File extensions
+*.pyc
+*.pyo
+*~
+*.swp
+
+# The legacy of buildout
+.installed.cfg

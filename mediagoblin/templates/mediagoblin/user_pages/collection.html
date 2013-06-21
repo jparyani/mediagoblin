@@ -1,0 +1,72 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% from "mediagoblin/utils/collection_gallery.html" import collection_gallery %}
+
+{% block mediagoblin_head %}
+    <link rel="alternate" type="application/atom+xml"
+          href="{{ request.urlgen(
+                       'mediagoblin.user_pages.atom_feed',
+                       user=user.username) }}">
+{% endblock mediagoblin_head %}
+
+{% block title %}
+  {%- trans username=user.username,
+            collection_title=collection.title
+    -%}
+    {{ collection_title }} ({{ username }}'s collection)
+  {%- endtrans %} &mdash; {{ super() }}
+{% endblock %}
+
+{% block mediagoblin_content -%}
+  <h1>
+    {%- trans username=user.username,
+              user_url=request.urlgen(
+                         'mediagoblin.user_pages.user_home',
+                          user=user.username),
+              collection_title=collection.title -%}
+      {{ collection_title }} by <a href="{{ user_url }}">{{ username }}</a>
+    {%- endtrans %}
+  </h1>
+  {% if request.user and (collection.creator == request.user.id or 
+                                                request.user.is_admin) %}
+    {% set edit_url = request.urlgen('mediagoblin.edit.edit_collection',
+                                     user=collection.get_creator.username,
+                                     collection=collection.slug) %}
+    <a class="button_action" href="{{ edit_url }}">{% trans %}Edit{% endtrans %}</a>
+    {% set delete_url = request.urlgen('mediagoblin.user_pages.collection_confirm_delete',
+                          user=collection.get_creator.username,
+                          collection=collection.slug) %}
+    <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
+  {% endif %}
+
+  <p>
+    {% autoescape False %}
+      {{ collection.description_html }}
+    {% endautoescape %}
+  </p>
+
+  {{ collection_gallery(request, collection_items, pagination) }}
+    
+  {% set feed_url = request.urlgen('mediagoblin.user_pages.collection_atom_feed',
+                                   user=user.username, 
+                                   collection=collection.slug ) %}
+  {% include "mediagoblin/utils/feed_link.html" %}
+    
+{% endblock %}    

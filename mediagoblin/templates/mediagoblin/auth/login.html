@@ -1,0 +1,62 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+
+{% block mediagoblin_head %}
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/js/autofilledin_password.js') }}"></script>
+{% endblock %}
+
+{% block title -%}
+  {% trans %}Log in{% endtrans %} &mdash; {{ super() }}
+{%- endblock %}
+
+{% block mediagoblin_content %}
+  <form action="{{ request.urlgen('mediagoblin.auth.login') }}"
+        method="POST" enctype="multipart/form-data">
+    {{ csrf_token }}
+    <div class="form_box">
+      <h1>{% trans %}Log in{% endtrans %}</h1>
+      {% if login_failed %}
+        <div class="form_field_error">
+          {% trans %}Logging in failed!{% endtrans %}
+        </div>
+      {% endif %}
+      {% if allow_registration %}
+        <p>
+          {% trans %}Don't have an account yet?{% endtrans %} <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
+            {%- trans %}Create one here!{% endtrans %}</a>
+        </p>
+      {% endif %}
+      {{ wtforms_util.render_divs(login_form) }}
+        <p>
+          <a href="{{ request.urlgen('mediagoblin.auth.forgot_password') }}" id="forgot_password">
+          {% trans %}Forgot your password?{% endtrans %}</a>
+        </p>
+      <div class="form_submit_buttons">
+        <input type="submit" value="{% trans %}Log in{% endtrans %}" class="button_form"/>
+      </div>
+      {% if next %}
+        <input type="hidden" name="next" value="{{ next }}" class="button_form"
+               style="display: none;"/>
+      {% endif %}
+    </div>
+  </form>
+{% endblock %}

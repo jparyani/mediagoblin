@@ -1,0 +1,48 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{# Provide navigation links to neighboring media entries, if possible #}
+{% set prev_entry_url = media.url_to_prev(request.urlgen) %}
+{% set next_entry_url = media.url_to_next(request.urlgen) %}
+
+{% if prev_entry_url or next_entry_url %}
+  <div class="navigation">
+   {# There are no previous entries for the very first media entry #}
+    {% if prev_entry_url %}
+      <a class="navigation_button navigation_left" href="{{ prev_entry_url }}">
+        &larr; {% trans %}newer{% endtrans %}
+      </a>
+    {% else %}
+      {# This is the first entry. display greyed-out 'previous' image #}
+      <p class="navigation_button navigation_left">
+        &larr; {% trans %}newer{% endtrans %}
+      </p>
+    {% endif %}
+    {# Likewise, this could be the very last media entry #}
+    {% if next_entry_url %}
+      <a class="navigation_button navigation_right" href="{{ next_entry_url }}">
+        {% trans %}older{% endtrans %} &rarr;
+      </a>
+    {% else %}
+      {# This is the last entry. display greyed-out 'next' image #}
+      <p class="navigation_button navigation_right">
+        {% trans %}older{% endtrans %} &rarr;
+      </p>
+    {% endif %}
+  </div>
+{% endif %}
