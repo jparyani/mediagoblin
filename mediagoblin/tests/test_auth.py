@@ -156,20 +156,15 @@ def test_register_views(test_app):
     assert path == u'/auth/verify_email/'
     parsed_get_params = urlparse.parse_qs(get_params)
 
-    ### user should have these same parameters
-    assert parsed_get_params['userid'] == [
-        unicode(new_user.id)]
-    assert parsed_get_params['token'] == [
-        new_user.verification_key]
-
     ## Try verifying with bs verification key, shouldn't work
     template.clear_test_template_context()
     response = test_app.get(
-        "/auth/verify_email/?userid=%s&token=total_bs" % unicode(
-            new_user.id))
+        "/auth/verify_email/?token=total_bs")
     response.follow()
-    context = template.TEMPLATE_TEST_CONTEXT[
-        'mediagoblin/user_pages/user.html']
+
+    # Correct redirect?
+    assert urlparse.urlsplit(response.location)[2] == '/'
+
     # assert context['verification_successful'] == True
     # TODO: Would be good to test messages here when we can do so...
     new_user = mg_globals.database.User.find_one(
@@ -233,35 +228,17 @@ def test_register_views(test_app):
 
     path = urlparse.urlsplit(email_context['verification_url'])[2]
     get_params = urlparse.urlsplit(email_context['verification_url'])[3]
-    assert path == u'/auth/forgot_password/verify/'
     parsed_get_params = urlparse.parse_qs(get_params)
-
-    # user should have matching parameters
-    new_user = mg_globals.database.User.find_one({'username': u'happygirl'})
-    assert parsed_get_params['userid'] == [unicode(new_user.id)]
-    assert parsed_get_params['token'] == [new_user.fp_verification_key]
-
-    ### The forgotten password token should be set to expire in ~ 10 days
-    # A few ticks have expired so there are only 9 full days left...
-    assert (new_user.fp_token_expire - datetime.datetime.now()).days == 9
+    assert path == u'/auth/forgot_password/verify/'
 
     ## Try using a bs password-changing verification key, shouldn't work
     template.clear_test_template_context()
     response = test_app.get(
-        "/auth/forgot_password/verify/?userid=%s&token=total_bs" % unicode(
-            new_user.id), status=404)
-    assert response.status.split()[0] == u'404' # status="404 NOT FOUND"
+        "/auth/forgot_password/verify/?token=total_bs")
+    response.follow()
 
-    ## Try using an expired token to change password, shouldn't work
-    template.clear_test_template_context()
-    new_user = mg_globals.database.User.find_one({'username': u'happygirl'})
-    real_token_expiration = new_user.fp_token_expire
-    new_user.fp_token_expire = datetime.datetime.now()
-    new_user.save()
-    response = test_app.get("%s?%s" % (path, get_params), status=404)
-    assert response.status.split()[0] == u'404' # status="404 NOT FOUND"
-    new_user.fp_token_expire = real_token_expiration
-    new_user.save()
+    # Correct redirect?
+    assert urlparse.urlsplit(response.location)[2] == '/'
 
     ## Verify step 1 of password-change works -- can see form to change password
     template.clear_test_template_context()
@@ -272,7 +249,6 @@ def test_register_views(test_app):
     template.clear_test_template_context()
     response = test_app.post(
         '/auth/forgot_password/verify/', {
-            'userid': parsed_get_params['userid'],
             'password': 'iamveryveryhappy',
             'token': parsed_get_params['token']})
     response.follow()

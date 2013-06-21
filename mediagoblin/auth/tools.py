@@ -22,6 +22,7 @@ from sqlalchemy import or_
 
 from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
+from mediagoblin.tools.crypto import get_timed_signer_url
 from mediagoblin.db.models import User
 from mediagoblin.tools.mail import (normalize_email, send_email,
                                     email_debug_message)
@@ -62,11 +63,12 @@ def normalize_user_or_email_field(allow_email=True, allow_user=True):
 
 
 EMAIL_VERIFICATION_TEMPLATE = (
-    u"http://{host}{uri}?"
-    u"userid={userid}&token={verification_key}")
+    u"{uri}?"
+    u"token={verification_key}")
 
 
-def send_verification_email(user, request):
+def send_verification_email(user, request, email=None,
+                            rendered_email=None):
     """
     Send the verification email to users to activate their accounts.
 
@@ -74,19 +76,24 @@ def send_verification_email(user, request):
     - user: a user object
     - request: the request
     """
-    rendered_email = render_template(
-        request, 'mediagoblin/auth/verification_email.txt',
-        {'username': user.username,
-         'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
-                host=request.host,
-                uri=request.urlgen('mediagoblin.auth.verify_email'),
-                userid=unicode(user.id),
-                verification_key=user.verification_key)})
+    if not email:
+        email = user.email
+
+    if not rendered_email:
+        verification_key = get_timed_signer_url('mail_verification_token') \
+                .dumps(user.id)
+        rendered_email = render_template(
+            request, 'mediagoblin/auth/verification_email.txt',
+            {'username': user.username,
+            'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
+                    uri=request.urlgen('mediagoblin.auth.verify_email',
+                                       qualified=True),
+                    verification_key=verification_key)})
 
     # TODO: There is no error handling in place
     send_email(
         mg_globals.app_config['email_sender_address'],
-        [user.email],
+        [email],
         # TODO
         # Due to the distributed nature of GNU MediaGoblin, we should
         # find a way to send some additional information about the

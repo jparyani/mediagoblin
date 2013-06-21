@@ -15,10 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import uuid
-import datetime
+from itsdangerous import BadSignature
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import User
+from mediagoblin.tools.crypto import get_timed_signer_url
 from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.mail import email_debug_message
@@ -115,16 +116,28 @@ def verify_email(request):
     you are lucky :)
     """
     # If we don't have userid and token parameters, we can't do anything; 404
-    if not 'userid' in request.GET or not 'token' in request.GET:
+    if not 'token' in request.GET:
         return render_404(request)
 
-    user = User.query.filter_by(id=request.args['userid']).first()
+    # Catch error if token is faked or expired
+    try:
+        token = get_timed_signer_url("mail_verification_token") \
+                .loads(request.GET['token'], max_age=10*24*3600)
+    except BadSignature:
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _('The verification key or user id is incorrect.'))
 
-    if user and user.verification_key == unicode(request.GET['token']):
+        return redirect(
+            request,
+            'index')
+
+    user = User.query.filter_by(id=int(token)).first()
+
+    if user and user.email_verified is False:
         user.status = u'active'
         user.email_verified = True
-        user.verification_key = None
-
         user.save()
 
         messages.add_message(
@@ -165,9 +178,6 @@ def resend_activation(request):
             _("You've already verified your email address!"))
 
         return redirect(request, "mediagoblin.user_pages.user_home", user=request.user['username'])
-
-    request.user.verification_key = unicode(uuid.uuid4())
-    request.user.save()
 
     email_debug_message(request)
     send_verification_email(request.user, request)
@@ -235,11 +245,6 @@ def forgot_password(request):
 
     # SUCCESS. Send reminder and return to login page
     if user:
-        user.fp_verification_key = unicode(uuid.uuid4())
-        user.fp_token_expire = datetime.datetime.now() + \
-                               datetime.timedelta(days=10)
-        user.save()
-
         email_debug_message(request)
         send_fp_verification_email(user, request)
 
@@ -254,31 +259,44 @@ def verify_forgot_password(request):
     """
     # get form data variables, and specifically check for presence of token
     formdata = _process_for_token(request)
-    if not formdata['has_userid_and_token']:
+    if not formdata['has_token']:
         return render_404(request)
 
-    formdata_token = formdata['vars']['token']
-    formdata_userid = formdata['vars']['userid']
     formdata_vars = formdata['vars']
 
-    # check if it's a valid user id
-    user = User.query.filter_by(id=formdata_userid).first()
-    if not user:
-        return render_404(request)
+    # Catch error if token is faked or expired
+    try:
+        token = get_timed_signer_url("mail_verification_token") \
+                .loads(formdata_vars['token'], max_age=10*24*3600)
+    except BadSignature:
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _('The verification key or user id is incorrect.'))
 
-    # check if we have a real user and correct token
-    if ((user and user.fp_verification_key and
-         user.fp_verification_key == unicode(formdata_token) and
-         datetime.datetime.now() < user.fp_token_expire
-         and user.email_verified and user.status == 'active')):
+        return redirect(
+            request,
+            'index')
+
+    # check if it's a valid user id
+    user = User.query.filter_by(id=int(token)).first()
+
+    # no user in db
+    if not user:
+        messages.add_message(
+            request, messages.ERROR,
+            _('The user id is incorrect.'))
+        return redirect(
+            request, 'index')
+
+    # check if user active and has email verified
+    if user.email_verified and user.status == 'active':
 
         cp_form = auth_forms.ChangePassForm(formdata_vars)
 
         if request.method == 'POST' and cp_form.validate():
             user.pw_hash = auth_lib.bcrypt_gen_password_hash(
                 cp_form.password.data)
-            user.fp_verification_key = None
-            user.fp_token_expire = None
             user.save()
 
             messages.add_message(
@@ -292,10 +310,20 @@ def verify_forgot_password(request):
                 'mediagoblin/auth/change_fp.html',
                 {'cp_form': cp_form})
 
-    # in case there is a valid id but no user with that id in the db
-    # or the token expired
-    else:
-        return render_404(request)
+    if not user.email_verified:
+        messages.add_message(
+            request, messages.ERROR,
+            _('You need to verify your email before you can reset your'
+              ' password.'))
+
+    if not user.status == 'active':
+        messages.add_message(
+            request, messages.ERROR,
+            _('You are no longer an active user. Please contact the system'
+              ' admin to reactivate your accoutn.'))
+
+    return redirect(
+        request, 'index')
 
 
 def _process_for_token(request):
@@ -313,7 +341,6 @@ def _process_for_token(request):
 
     formdata = {
         'vars': formdata_vars,
-        'has_userid_and_token':
-            'userid' in formdata_vars and 'token' in formdata_vars}
+        'has_token': 'token' in formdata_vars}
 
     return formdata

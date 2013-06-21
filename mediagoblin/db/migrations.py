@@ -287,3 +287,23 @@ def unique_collections_slug(db):
     constraint.create()
 
     db.commit()
+
+
+@RegisterMigration(11, MIGRATIONS)
+def drop_token_related_User_columns(db):
+    """
+    Drop unneeded columns from the User table after switching to using
+    itsdangerous tokens for email and forgot password verification.
+    """
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, 'core__users')
+
+    verification_key = user_table.columns['verification_key']
+    fp_verification_key = user_table.columns['fp_verification_key']
+    fp_token_expire = user_table.columns['fp_token_expire']
+
+    verification_key.drop()
+    fp_verification_key.drop()
+    fp_token_expire.drop()
+
+    db.commit()

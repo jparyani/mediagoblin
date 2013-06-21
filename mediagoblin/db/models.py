@@ -68,12 +68,9 @@ class User(Base, UserMixin):
     # set to nullable=True implicitly.
     wants_comment_notification = Column(Boolean, default=True)
     license_preference = Column(Unicode)
-    verification_key = Column(Unicode)
     is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
     bio = Column(UnicodeText)  # ??
-    fp_verification_key = Column(Unicode)
-    fp_token_expire = Column(DateTime)
 
     ## TODO
     # plugin data would be in a separate model
