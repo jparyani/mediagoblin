@@ -169,7 +169,7 @@ def check_login_simple(username, password):
     user = auth.get_user(username=username)
     if not user:
         _log.info("User %r not found", username)
-        auth.fake_login_attempt()
+        hook_handle("auth_fake_login_attempt")
         return None
     if not auth.check_password(password, user.pw_hash):
         _log.warn("Wrong password for %r", username)
@@ -178,23 +178,8 @@ def check_login_simple(username, password):
     return user
 
 
-class AuthError(Exception):
-    def __init__(self):
-        self.value = 'No Authentication Plugin is enabled and' \
-                     ' authentication_disabled = False in config!'
-
-    def __str__(self):
-        return repr(self.value)
-
-
 def check_auth_enabled():
-    authentication_disabled = mg_globals.app_config['authentication_disabled']
-    auth_plugin = hook_handle('authentication')
-
-    if authentication_disabled is False and not auth_plugin:
-        raise AuthError
-
-    if authentication_disabled:
+    if not hook_handle('authentication'):
         _log.warning('No authentication is enabled')
         return False
     else:

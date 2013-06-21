@@ -40,6 +40,4 @@ class LoginForm(wtforms.Form):
         [wtforms.validators.Required(),
          normalize_user_or_email_field()])
     password = wtforms.PasswordField(
-        _('Password'),
-        [wtforms.validators.Required(),
-         wtforms.validators.Length(min=5, max=1024)])
+        _('Password'))

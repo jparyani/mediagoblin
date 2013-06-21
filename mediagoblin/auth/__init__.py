@@ -35,14 +35,6 @@ def extra_validation(register_form):
     return extra_validation_passes
 
 
-def get_login_form(request):
-    return hook_handle("auth_get_login_form", request)
-
-
-def get_registration_form(request):
-    return hook_handle("auth_get_registration_form", request)
-
-
 def gen_password_hash(raw_pass, extra_salt=None):
     return hook_handle("auth_gen_password_hash", raw_pass, extra_salt)
 
@@ -50,7 +42,3 @@ def gen_password_hash(raw_pass, extra_salt=None):
 def check_password(raw_pass, stored_hash, extra_salt=None):
     return hook_handle("auth_check_password",
                        raw_pass, stored_hash, extra_salt)
-
-
-def fake_login_attempt():
-    return hook_handle("auth_fake_login_attempt")

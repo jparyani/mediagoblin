@@ -29,9 +29,7 @@ class ForgotPassForm(wtforms.Form):
 
 class ChangePassForm(wtforms.Form):
     password = wtforms.PasswordField(
-        'Password',
-        [wtforms.validators.Required(),
-         wtforms.validators.Length(min=5, max=1024)])
+        'Password')
     userid = wtforms.HiddenField(
         '',
         [wtforms.validators.Required()])

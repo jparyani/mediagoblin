@@ -22,7 +22,6 @@ from mediagoblin import mg_globals
 from mediagoblin.db.models import User
 from mediagoblin.tests.tools import get_app, fixture_add_user
 from mediagoblin.tools import template, mail
-from mediagoblin.auth.tools import AuthError
 from mediagoblin.auth import tools as auth_tools
 
 
@@ -273,7 +272,6 @@ def test_authentication_views(test_app):
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
     form = context['login_form']
     assert form.username.errors == [u'This field is required.']
-    assert form.password.errors == [u'This field is required.']
 
     # Failed login - blank user
     # -------------------------
@@ -291,9 +289,7 @@ def test_authentication_views(test_app):
     response = test_app.post(
         '/auth/login/', {
             'username': u'chris'})
-    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
-    form = context['login_form']
-    assert form.password.errors == [u'This field is required.']
+    assert 'mediagoblin/auth/login.html' in template.TEMPLATE_TEST_CONTEXT
 
     # Failed login - bad user
     # -----------------------
@@ -357,20 +353,6 @@ def test_authentication_views(test_app):
             'password': 'toast',
             'next' : '/u/chris/'})
     assert urlparse.urlsplit(response.location)[2] == '/u/chris/'
-
-
-# App with authentication_disabled and no auth plugin enabled
-def no_auth_plugin_app(request):
-    return get_app(
-        request,
-        mgoblin_config=pkg_resources.resource_filename(
-            'mediagoblin.tests.auth_configs',
-            'no_auth_plugin_appconfig.ini'))
-
-
-def test_auth_plugin_raises(request):
-    with pytest.raises(AuthError):
-        no_auth_plugin_app(request)
 
 
 @pytest.fixture()

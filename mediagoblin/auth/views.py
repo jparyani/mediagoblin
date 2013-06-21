@@ -22,6 +22,7 @@ from mediagoblin.db.models import User
 from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.mail import email_debug_message
+from mediagoblin.tools.pluginapi import hook_handle
 from mediagoblin.auth import forms as auth_forms
 from mediagoblin.auth.tools import (send_verification_email, register_user,
                                     send_fp_verification_email,
@@ -45,10 +46,11 @@ def register(request):
         return redirect(request, "index")
 
     if 'pass_auth' not in request.template_env.globals:
-        if 'openid' in request.template_env.globals:
-            return redirect(request, 'mediagoblin.plugins.openid.register')
+        redirect_name = hook_handle('auth_no_pass_redirect')
+        return redirect(request, 'mediagoblin.plugins.{0}.register'.format(
+            redirect_name))
 
-    register_form = auth.get_registration_form(request)
+    register_form = hook_handle("auth_get_registration_form", request)
 
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
@@ -65,7 +67,6 @@ def register(request):
         request,
         'mediagoblin/auth/register.html',
         {'register_form': register_form,
-         'focus': 'username',
          'post_url': request.urlgen('mediagoblin.auth.register')})
 
 
@@ -84,10 +85,11 @@ def login(request):
         return redirect(request, 'index')
 
     if 'pass_auth' not in request.template_env.globals:
-        if 'openid' in request.template_env.globals:
-            return redirect(request, 'mediagoblin.plugins.openid.login')
+        redirect_name = hook_handle('auth_no_pass_redirect')
+        return redirect(request, 'mediagoblin.plugins.{0}.login'.format(
+            redirect_name))
 
-    login_form = auth.get_login_form(request)
+    login_form = hook_handle("auth_get_login_form", request)
 
     login_failed = False
 
@@ -115,7 +117,6 @@ def login(request):
         {'login_form': login_form,
          'next': request.GET.get('next') or request.form.get('next'),
          'login_failed': login_failed,
-         'focus': 'username',
          'post_url': request.urlgen('mediagoblin.auth.login'),
          'allow_registration': mg_globals.app_config["allow_registration"]})
 
@@ -217,8 +218,7 @@ def forgot_password(request):
     if not (request.method == 'POST' and fp_form.validate()):
         # Either GET request, or invalid form submitted. Display the template
         return render_to_response(request,
-            'mediagoblin/auth/forgot_password.html', {'fp_form': fp_form,
-                                                      'focus': 'username'})
+            'mediagoblin/auth/forgot_password.html', {'fp_form': fp_form,})
 
     # If we are here: method == POST and form is valid. username casing
     # has been sanitized. Store if a user was found by email. We should
@@ -314,8 +314,7 @@ def verify_forgot_password(request):
             return render_to_response(
                 request,
                 'mediagoblin/auth/change_fp.html',
-                {'cp_form': cp_form,
-                 'focus': 'password'})
+                {'cp_form': cp_form,})
 
     # in case there is a valid id but no user with that id in the db
     # or the token expired

@@ -297,4 +297,8 @@ def pw_hash_nullable(db):
 
     user_table.c.pw_hash.alter(nullable=True)
 
+    if db.bind.url.drivername is 'sqlite':
+        constraint = UniqueConstraint('username', table=user_table)
+        constraint.create()
+
     db.commit()

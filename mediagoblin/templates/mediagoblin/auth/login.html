@@ -45,7 +45,7 @@
             {%- trans %}Create one here!{% endtrans %}</a>
         </p>
       {% endif %}
-      {{ wtforms_util.render_divs(login_form) }}
+      {{ wtforms_util.render_divs(login_form, True) }}
       {% if pass_auth %}
         <p>
           <a href="{{ request.urlgen('mediagoblin.auth.forgot_password') }}" id="forgot_password">
@@ -61,6 +61,4 @@
       {% endif %}
     </div>
   </form>
-<!-- Focus the field passed in with the focus arg-->
-<script>$(document).ready(function(){$({{ focus }}).focus();});</script>
 {% endblock %}
