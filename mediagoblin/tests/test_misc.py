@@ -29,9 +29,9 @@ def test_user_deletes_other_comments(test_app):
     user_b = fixture_add_user(u"chris_b")
 
     media_a = fixture_media_entry(uploader=user_a.id, save=False,
-                                  expunge=False)
+                                  expunge=False, fake_upload=False)
     media_b = fixture_media_entry(uploader=user_b.id, save=False,
-                                  expunge=False)
+                                  expunge=False, fake_upload=False)
     Session.add(media_a)
     Session.add(media_b)
     Session.flush()
