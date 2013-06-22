@@ -77,7 +77,7 @@ def render_http_exception(request, exc, description):
     elif stock_desc and exc.code == 404:
         return render_404(request)
 
-    return render_error(request, title=exc.args[0],
+    return render_error(request, title='{0} {1}'.format(exc.code, exc.name),
                         err_msg=description,
                         status=exc.code)
 
