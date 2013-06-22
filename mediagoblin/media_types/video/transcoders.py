@@ -22,9 +22,15 @@ import logging
 import urllib
 import multiprocessing
 import gobject
+
+old_argv = sys.argv
+sys.argv = []
+
 import pygst
 pygst.require('0.10')
 import gst
+
+sys.argv = old_argv
 import struct
 try:
     from PIL import Image

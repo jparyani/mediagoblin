@@ -31,6 +31,8 @@ import uuid
 import re
 import datetime
 
+from datetime import datetime
+
 from werkzeug.utils import cached_property
 
 from mediagoblin import mg_globals
@@ -287,6 +289,13 @@ class MediaCommentMixin(object):
         Run through Markdown and the HTML cleaner.
         """
         return cleaned_markdown_conversion(self.content)
+
+    def __repr__(self):
+        return '<{klass} #{id} {author} "{comment}">'.format(
+            klass=self.__class__.__name__,
+            id=self.id,
+            author=self.get_author,
+            comment=self.content)
 
 
 class CollectionMixin(GenerateSlugMixin):

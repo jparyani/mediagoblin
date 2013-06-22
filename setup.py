@@ -57,7 +57,7 @@ setup(
         'webtest<2',
         'ConfigObj',
         'Markdown',
-        'sqlalchemy>=0.7.0',
+        'sqlalchemy>=0.8.0',
         'sqlalchemy-migrate',
         'mock',
         'itsdangerous',

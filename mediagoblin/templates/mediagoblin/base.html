@@ -34,6 +34,8 @@
             src="{{ request.staticdirect('/js/extlib/jquery.js') }}"></script>
     <script type="text/javascript"
             src="{{ request.staticdirect('/js/header_dropdown.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ request.staticdirect('/js/notifications.js') }}"></script>
 
     {# For clarification, the difference between the extra_head.html template
      # and the head template hook is that the former should be used by
@@ -57,6 +59,12 @@
           <div class="header_right">
             {%- if request.user %}
               {% if request.user and request.user.status == 'active' %}
+
+                {% set notification_count = request.notifications.get_notification_count(request.user.id) %}
+                {% if notification_count %}
+                <a href="#notifications" class="notification-gem button_action" title="Notifications">
+                {{ notification_count }}</a>
+                {% endif %}
                 <div class="button_action header_dropdown_down">&#9660;</div>
                 <div class="button_action header_dropdown_up">&#9650;</div>
               {% elif request.user and request.user.status == "needs_email_verification" %}
@@ -109,6 +117,7 @@
                   </a>
                 </p>
               {% endif %}
+              {% include 'mediagoblin/fragments/header_notifications.html' %}
             </div>
           {% endif %}
         </header>
