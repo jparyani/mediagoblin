@@ -234,6 +234,14 @@ def fixture_media_entry(title=u"Some title", slug=None,
                         uploader=None, save=True, gen_slug=True,
                         state=u'unprocessed', fake_upload=True,
                         expunge=True):
+    """
+    Add a media entry for testing purposes.
+
+    Caution: if you're adding multiple entries with fake_upload=True,
+    make sure you save between them... otherwise you'll hit an
+    IntegrityError from multiple newly-added-MediaEntries adding
+    FileKeynames at once.  :)
+    """
     if uploader is None:
         uploader = fixture_add_user().id
 
