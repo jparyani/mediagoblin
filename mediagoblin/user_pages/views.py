@@ -19,19 +19,21 @@ import datetime
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
-                                   CollectionItem, User)
+                                   CollectionItem, User, MediaComment,
+                                   CommentReport, MediaReport)
 from mediagoblin.tools.response import render_to_response, render_404, \
     redirect, redirect_obj
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.user_pages import forms as user_forms
-from mediagoblin.user_pages.lib import (send_comment_email,
+from mediagoblin.user_pages.lib import (send_comment_email, build_report_form,
     add_media_to_collection)
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
     get_media_entry_by_id,
     require_active_login, user_may_delete_media, user_may_alter_collection,
-    get_user_collection, get_user_collection_item, active_user_from_url)
+    get_user_collection, get_user_collection_item, active_user_from_url,
+    get_media_comment_by_id)
 
 from werkzeug.contrib.atom import AtomFeed
 
@@ -616,3 +618,28 @@ def processing_panel(request):
          'processing_entries': processing_entries,
          'failed_entries': failed_entries,
          'processed_entries': processed_entries})
+
+@require_active_login
+@get_user_media_entry
+def file_a_report(request, media, comment=None):
+    if request.method == "POST":
+        report_form = build_report_form(request.form)
+        report_form.save()
+        return redirect(
+              request,
+             'index')
+    if comment is not None:
+        context = {'media': media,
+                 'comment':comment}
+    else:
+        context = {'media': media}
+    return render_to_response(
+            request,
+                'mediagoblin/user_pages/report.html',
+                context)
+
+@require_active_login
+@get_user_media_entry
+@get_media_comment_by_id
+def file_a_comment_report(request, media, comment):        
+        return file_a_report(request, comment=comment)

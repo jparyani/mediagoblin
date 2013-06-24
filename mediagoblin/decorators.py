@@ -21,7 +21,7 @@ from werkzeug.exceptions import Forbidden, NotFound
 from werkzeug.urls import url_quote
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.models import MediaEntry, User
+from mediagoblin.db.models import MediaEntry, User, MediaComment
 from mediagoblin.tools.response import redirect, render_404
 
 
@@ -224,6 +224,24 @@ def get_media_entry_by_id(controller):
         return controller(request, media=media, *args, **kwargs)
 
     return wrapper
+
+
+def get_media_comment_by_id(controller):
+    """
+    Pass in a MediaComment based off of a url component
+    """
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        comment = MediaComment.query.filter_by(
+                id=request.matchdict['comment']).first()
+        # Still no media?  Okay, 404.
+        if not comment:
+            return render_404(request)
+
+        return controller(request, comment=comment, *args, **kwargs)
+
+    return wrapper
+
 
 
 def get_workbench(func):

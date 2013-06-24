@@ -1,0 +1,54 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% block title -%}
+  {% trans %}User panel{% endtrans %} &mdash; {{ super() }}
+{%- endblock %}
+
+{% block mediagoblin_content %}
+
+<h1>{% trans %}User panel{% endtrans %}</h1>
+
+<p>
+  {% trans %}Here you can look up users in order to take punitive actions on them.{% endtrans %}
+</p>
+    
+<h2>{% trans %}Active Users{% endtrans %}</h2>
+
+{% if user_list.count() %}
+  <table class="media_panel processing">
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>When Joined</th>
+      <th># of Comments Posted</th>
+    </tr>
+    {% for user in user_list %}
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.created.strftime("%F %R") }}</td>
+        <td>{{ user.posted_comments.count() }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p><em>{% trans %}No users found.{% endtrans %}</em></p>
+{% endif %} 
+{% endblock %}

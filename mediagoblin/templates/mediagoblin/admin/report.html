@@ -1,0 +1,95 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% block title -%}
+  {% trans %}Report panel{% endtrans %} &mdash; {{ super() }}
+{%- endblock %}
+
+{% block mediagoblin_content %}
+
+<h1>{% trans %}Report panel{% endtrans %}</h1>
+
+<p>
+  {% trans %}Here you can look up users in order to take punitive actions on them.{% endtrans %}
+</p>
+    
+<h2>{% trans %}Reports Filed on Comments{% endtrans %}</h2>
+
+{% if report_list.count() %}
+  <table class="media_panel processing">
+    <tr>
+      <th>ID</th>
+      <th>Report Type</th>
+      <th>Offender</th>
+      <th>When Reported</th>
+      <th>Reported By</th>
+      <th>Reason</th>
+      <th>Reported Comment or Media Entry</th>
+    </tr>
+    {% for report in report_list %}
+      <tr>
+        {% if report.discriminator == "comment_report" %}
+            <td>{{ report.id }}</td>
+            <td>Comment Report</td>
+            <td>{{ report.comment.get_author.username }}</td>
+            <td>{{ report.created.strftime("%F %R") }}</td>
+            <td>{{ report.reporter.username }}</td>
+            <td>{{ report.report_content }}</td>
+            <td><a href="{{ report.comment.get_media_entry.url_for_self(request.urlgen) }}">{{ report.comment.get_media_entry.title }}</a></td>
+        {% elif report.discriminator == "media_report" %}
+            <td>{{ report.id }}</td>
+            <td>Media Report</td>
+            <td>{{ report.media_entry.get_uploader.username }}</td>
+            <td>{{ report.created.strftime("%F %R") }}</td>
+            <td>{{ report.reporter.username }}</td>
+            <td>{{ report.report_content[0:20] }}...</td>
+            <td><a href="{{ report.media_entry.url_for_self(request.urlgen) }}">{{ report.media_entry.title }}</a></td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p><em>{% trans %}No open reports found.{% endtrans %}</em></p>
+{% endif %}
+<h2>{% trans %}Closed Reports on Comments{% endtrans %}</h2>
+{% if closed_report_list.count() %}
+  <table class="media_panel processing">
+    <tr>
+      <th>ID</th>
+      <th>Offender</th>
+      <th>When Reported</th>
+      <th>Reported By</th>
+      <th>Reason</th>
+      <th>Comment Posted On</th>
+    </tr>
+    {% for report in closed_report_list %}
+      <tr>
+        <td>{{ report.id }}</td>
+        <td>{{ report.comment.get_author.username }}</td>
+        <td>{{ report.created.strftime("%F %R") }}</td>
+        <td>{{ report.reporter.username }}</td>
+        <td>{{ report.report_content }}</td>
+        <td><a href="{{ report.comment.get_media_entry.url_for_self(request.urlgen) }}">{{ report.comment.get_media_entry.title }}</a></td>
+      </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p><em>{% trans %}No closed reports found.{% endtrans %}</em></p>
+{% endif %} 
+{% endblock %}

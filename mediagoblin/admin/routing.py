@@ -17,4 +17,10 @@
 admin_routes = [
     ('mediagoblin.admin.panel',
         '/panel',
-        'mediagoblin.admin.views:admin_processing_panel')]
+        'mediagoblin.admin.views:admin_processing_panel'),
+    ('mediagoblin.admin.users',
+        '/users',
+        'mediagoblin.admin.views:admin_users_panel'),
+    ('mediagoblin.admin.reports',
+        '/reports',
+        'mediagoblin.admin.views:admin_reports_panel')]

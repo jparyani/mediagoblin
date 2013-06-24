@@ -26,7 +26,7 @@ from sqlalchemy.sql import and_
 from migrate.changeset.constraint import UniqueConstraint
 
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
-from mediagoblin.db.models import MediaEntry, Collection, User
+from mediagoblin.db.models import MediaEntry, Collection, User, MediaComment, Group
 
 MIGRATIONS = {}
 
@@ -287,3 +287,70 @@ def unique_collections_slug(db):
     constraint.create()
 
     db.commit()
+
+class ReportBase_v0(declarative_base()):
+    """
+
+    """
+    __tablename__ = 'core__reports'
+    id = Column(Integer, primary_key=True)
+    reporter_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    report_content = Column(UnicodeText)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now) 
+    resolved = Column(DateTime)
+    discriminator = Column('type', Unicode(50))
+    __mapper_args__ = {'polymorphic_on': discriminator}
+
+
+class CommentReport_v0(ReportBase_v0):
+    __tablename__ = 'core__reports_on_comments'
+    __mapper_args__ = {'polymorphic_identity': 'comment_report'}
+
+    id = Column('id',Integer, ForeignKey('core__reports.id'),
+                                                primary_key=True)
+    comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=False)
+
+class MediaReport_v0(ReportBase_v0):
+    __tablename__ = 'core__reports_on_media'
+    __mapper_args__ = {'polymorphic_identity': 'media_report'}
+
+    id = Column('id',Integer, ForeignKey('core__reports.id'),
+                                                primary_key=True)
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
+
+@RegisterMigration(11, MIGRATIONS)
+def create_report_tables(db):
+    ReportBase_v0.__table__.create(db.bind)
+    CommentReport_v0.__table__.create(db.bind)
+    MediaReport_v0.__table__.create(db.bind)
+    db.commit()
+
+class UserBan_v0(declarative_base()):
+    __tablename__ = 'core__user_bans'
+    user_id = Column('id',Integer, ForeignKey(User.id), nullable=False,
+                                         primary_key=True)
+    expiration_date = Column(DateTime)
+    reason = Column(UnicodeText, nullable=False)
+
+class Group_v0(declarative_base()):
+    __tablename__ = 'core__groups'
+    id = Column(Integer, nullable=False, primary_key=True)
+    group_name = Column(Unicode, nullable=False)
+
+class GroupUserAssociation_v0(declarative_base()):
+    __tablename__ = 'core__group_user_associations'
+
+    group_id = Column('core__group_id', Integer, ForeignKey(User.id), primary_key=True)
+    user_id = Column('core__user_id', Integer, ForeignKey(Group.id), primary_key=True)
+
+
+
+@RegisterMigration(12, MIGRATIONS)
+def create_banned_and_group_tables(db):
+    UserBan_v0.__table__.create(db.bind)
+    Group_v0.__table__.create(db.bind)
+    GroupUserAssociation_v0.__table__.create(db.bind)
+    db.commit()
+
+
+

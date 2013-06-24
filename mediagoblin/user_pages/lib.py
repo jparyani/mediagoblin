@@ -19,7 +19,8 @@ from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin import mg_globals
 from mediagoblin.db.base import Session
-from mediagoblin.db.models import CollectionItem
+from mediagoblin.db.models import CollectionItem, MediaReport, CommentReport
+from mediagoblin.user_pages import forms as user_forms
 
 
 def send_comment_email(user, comment, media, request):
@@ -75,3 +76,31 @@ def add_media_to_collection(collection, media, note=None, commit=True):
 
     if commit:
         Session.commit()
+
+def build_report_form(form_dict):
+    """
+    :param form_dict should be an ImmutableMultiDict object which is what is
+            returned from 'request.form.' The Object should have valid keys
+            matching the fields in either MediaReportForm or CommentReportForm
+
+    :returns either of MediaReport or a CommentReport object that has not been saved.
+            In case of an improper form_dict, returns None
+    """
+    if 'comment_id' in form_dict.keys():
+        report_form = user_forms.CommentReportForm(form_dict)
+    elif 'media_entry_id' in form_dict.keys():
+        report_form = user_forms.MediaReportForm(form_dict)
+    else:
+        return None
+    if report_form.validate() and 'comment_id' in form_dict.keys():
+        report_model = CommentReport()
+        report_model.comment_id = report_form.comment_id.data
+    elif report_form.validate() and 'media_entry_id' in form_dict.keys():
+        report_model = MediaReport()
+        report_model.media_entry_id = report_form.media_entry_id.data
+    else:
+        return None
+    report_model.report_content = report_form.report_reason.data or u''
+    report_model.reporter_id = report_form.reporter_id.data
+    return report_model
+

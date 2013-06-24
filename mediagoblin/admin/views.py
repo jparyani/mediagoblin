@@ -16,7 +16,7 @@
 
 from werkzeug.exceptions import Forbidden
 
-from mediagoblin.db.models import MediaEntry
+from mediagoblin.db.models import MediaEntry, User, MediaComment, CommentReport, ReportBase
 from mediagoblin.decorators import require_active_login
 from mediagoblin.tools.response import render_to_response
 
@@ -46,3 +46,40 @@ def admin_processing_panel(request):
         {'processing_entries': processing_entries,
          'failed_entries': failed_entries,
          'processed_entries': processed_entries})
+
+@require_active_login
+def admin_users_panel(request):
+    '''
+    Show the global processing panel for this instance
+    '''
+    # TODO: Why not a "require_admin_login" decorator throwing a 403 exception?
+    if not request.user.is_admin:
+        raise Forbidden()
+
+    user_list = User.query
+
+    # Render to response
+    return render_to_response(
+        request,
+        'mediagoblin/admin/user.html',
+        {'user_list': user_list})
+
+@require_active_login
+def admin_reports_panel(request):
+    '''
+    Show the global processing panel for this instance
+    '''
+    # TODO: Why not a "require_admin_login" decorator throwing a 403 exception?
+    if not request.user.is_admin:
+        raise Forbidden()
+
+    report_list = ReportBase.query.filter(ReportBase.resolved==None).order_by(ReportBase.created.desc()).limit(10)
+    closed_report_list = ReportBase.query.filter(ReportBase.resolved!=None).order_by(ReportBase.created.desc()).limit(10)
+
+    # Render to response
+    return render_to_response(
+        request,
+        'mediagoblin/admin/report.html',
+        {'report_list':report_list,
+         'closed_report_list':closed_report_list})
+
