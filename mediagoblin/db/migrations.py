@@ -371,6 +371,8 @@ def pw_hash_nullable(db):
 
     user_table.c.pw_hash.alter(nullable=True)
 
+    # sqlite+sqlalchemy seems to drop this constraint during the
+    # migration, so we add it back here for now a bit manually.
     if db.bind.url.drivername == 'sqlite':
         constraint = UniqueConstraint('username', table=user_table)
         constraint.create()
