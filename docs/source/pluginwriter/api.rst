@@ -69,6 +69,32 @@ example might look like::
 This means that when people enable your plugin in their config you'll
 be able to provide defaults as well as type validation.
 
+You can access this via the app_config variables in mg_globals, or you
+can use a shortcut to get your plugin's config section::
+
+  >>> from mediagoblin.tools import pluginapi
+  # Replace with the path to your plugin.
+  # (If an external package,  it won't be part of mediagoblin.plugins)
+  >>> floobie_config = pluginapi.get_config('mediagoblin.plugins.floobifier')
+  >>> floobie_dir = floobie_config['floobie_dir']
+  # This is the same as the above
+  >>> from mediagoblin import mg_globals
+  >>> config = mg_globals.global_config['plugins']['mediagoblin.plugins.floobifier']
+  >>> floobie_dir = floobie_config['floobie_dir']
+  
+A tip: you have access to the `%(here)s` variable in your config,
+which is the directory that the user's mediagoblin config is running
+out of.  So for example, your plugin may need a "floobie" directory to
+store floobs in.  You could give them a reasonable default that makes
+use of the default `user_dev` location, but allow users to override
+it, like so::
+
+  [plugin_spec]
+  floobie_dir = string(default="%(here)s/user_dev/floobs/")
+
+Note, this is relative to the user's mediagoblin config directory,
+*not* your plugin directory!
+
 
 Context Hooks
 -------------
