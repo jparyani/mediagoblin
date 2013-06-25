@@ -46,6 +46,7 @@
           {% trans %}Change your password.{% endtrans %}
         </a>
       </p>
+      {{ wtforms_util.render_field_div(form.new_email) }}
       <div class="form_field_input">
         <p>{{ form.wants_comment_notification }}
            {{ wtforms_util.render_label(form.wants_comment_notification) }}</p>

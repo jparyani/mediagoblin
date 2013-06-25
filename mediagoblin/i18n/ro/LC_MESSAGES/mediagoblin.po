@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2013-05-27 13:54-0500\n"
-"PO-Revision-Date: 2013-05-27 18:54+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2013-05-27 20:40+0000\n"
+"Last-Translator: George Pop <gapop@hotmail.com>\n"
 "Language-Team: Romanian (http://www.transifex.com/projects/p/mediagoblin/language/ro/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,7 +35,7 @@ msgstr "Adresa de e-mail"
 
 #: mediagoblin/auth/forms.py:41
 msgid "Username or Email"
-msgstr ""
+msgstr "Numele de utilizator sau adresa de e-mail"
 
 #: mediagoblin/auth/forms.py:52
 msgid "Username or email"
@@ -262,7 +262,7 @@ msgstr "Parolă incorectă"
 
 #: mediagoblin/edit/views.py:363
 msgid "Your password was changed successfully"
-msgstr ""
+msgstr "Parola a fost schimbată cu succes"
 
 #: mediagoblin/gmg_commands/assetlink.py:60
 msgid "Cannot link theme... no theme set\n"
@@ -279,17 +279,17 @@ msgstr "A fost însă găsit un symlink către vechiul folder; s-a șters.\n"
 #: mediagoblin/gmg_commands/assetlink.py:112
 #, python-format
 msgid "Could not link \"%s\": %s exists and is not a symlink\n"
-msgstr ""
+msgstr "Nu s-a putut crea link pentru \"%s\": %s există deja și nu este symlink\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:119
 #, python-format
 msgid "Skipping \"%s\"; already set up.\n"
-msgstr ""
+msgstr "S-a omis \"%s\"; configurat deja.\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:124
 #, python-format
 msgid "Old link found for \"%s\"; removing.\n"
-msgstr ""
+msgstr "Există deja un link pentru \"%s\"; va fi șters.\n"
 
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
@@ -305,7 +305,7 @@ msgstr "Scuze, nu recunosc acest tip de fișier :("
 
 #: mediagoblin/media_types/pdf/processing.py:136
 msgid "unoconv failing to run, check log file"
-msgstr ""
+msgstr "unoconv nu poate fi executat; verificați log-ul"
 
 #: mediagoblin/media_types/video/processing.py:37
 msgid "Video transcoding failed"
@@ -616,7 +616,7 @@ msgid ""
 "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Create an account at this site</a>\n"
 "      or\n"
 "      <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Set up MediaGoblin on your own server</a>"
-msgstr ""
+msgstr "<a class=\"button_action_highlight\" href=\"%(register_url)s\">Creați un cont pe acest site</a>\n      sau\n      <a class=\"button_action\" href=\"http://wiki.mediagoblin.org/HackingHowto\">Instalați MediaGoblin pe serverul dvs.</a>"
 
 #: mediagoblin/templates/mediagoblin/bits/logo.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
@@ -663,11 +663,11 @@ msgstr "Salvează modificările"
 #: mediagoblin/templates/mediagoblin/edit/change_pass.html:38
 #, python-format
 msgid "Changing %(username)s's password"
-msgstr ""
+msgstr "Se modifică parola pentru %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/change_pass.html:45
 msgid "Save"
-msgstr ""
+msgstr "Salvează"
 
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:28
 #, python-format
@@ -698,7 +698,7 @@ msgstr "Se modifică setările contului pentru userul %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:46
 msgid "Change your password."
-msgstr ""
+msgstr "Modifică parolă."
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:62
 msgid "Delete my account"
@@ -772,7 +772,7 @@ msgstr "Imagine pentru %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:79
 msgid "PDF file"
-msgstr ""
+msgstr "Fișier PDF"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
 msgid "Toggle Rotate"
@@ -928,15 +928,15 @@ msgstr "Trimite acest comentariu"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:164
 #, python-format
 msgid "%(formatted_time)s ago"
-msgstr ""
+msgstr "în urmă cu %(formatted_time)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:150
 msgid "Added"
-msgstr ""
+msgstr "Adăugat"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:161
 msgid "Created"
-msgstr ""
+msgstr "Creat"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:28
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:40
@@ -1124,27 +1124,27 @@ msgstr "Nu există nicio pagină la această adresă.</p><p>Dacă sunteți sigur
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"
-msgstr ""
+msgstr "anul"
 
 #: mediagoblin/tools/timesince.py:63
 msgid "month"
-msgstr ""
+msgstr "luna"
 
 #: mediagoblin/tools/timesince.py:64
 msgid "week"
-msgstr ""
+msgstr "săptămâna"
 
 #: mediagoblin/tools/timesince.py:65
 msgid "day"
-msgstr ""
+msgstr "ziua"
 
 #: mediagoblin/tools/timesince.py:66
 msgid "hour"
-msgstr ""
+msgstr "ora"
 
 #: mediagoblin/tools/timesince.py:67
 msgid "minute"
-msgstr ""
+msgstr "minutul"
 
 #: mediagoblin/user_pages/forms.py:23
 msgid "Comment"
@@ -1183,7 +1183,7 @@ msgstr "a făcut un comentariu la postarea ta"
 
 #: mediagoblin/user_pages/views.py:169
 msgid "Sorry, comments are disabled."
-msgstr ""
+msgstr "Comentariile sunt dezactivate."
 
 #: mediagoblin/user_pages/views.py:174
 msgid "Oops, your comment was empty."

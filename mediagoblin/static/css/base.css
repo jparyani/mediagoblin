@@ -129,6 +129,7 @@ header {
 
 .header_dropdown {
   margin-bottom: 20px;
+  padding: 0px 10px 0px 10px;
 }
 
 .header_dropdown li {
@@ -382,6 +383,12 @@ a.comment_whenlink:hover {
 .comment_content {
   margin-left: 8px;
   margin-top: 8px;
+}
+
+.comment_active {
+  box-shadow: 0px 0px 15px 15px #378566;
+  background: #378566;
+  color: #f7f7f7;
 }
 
 textarea#comment_content {

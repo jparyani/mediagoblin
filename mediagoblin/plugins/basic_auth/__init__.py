@@ -13,8 +13,6 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import uuid
-
 from mediagoblin.plugins.basic_auth import forms as auth_forms
 from mediagoblin.plugins.basic_auth import tools as auth_tools
 from mediagoblin.db.models import User
@@ -45,7 +43,6 @@ def create_user(registration_form):
         user.email = registration_form.email.data
         user.pw_hash = gen_password_hash(
             registration_form.password.data)
-        user.verification_key = unicode(uuid.uuid4())
         user.save()
     return user
 

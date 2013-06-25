@@ -35,6 +35,7 @@ def get_url_map():
     import mediagoblin.edit.routing
     import mediagoblin.webfinger.routing
     import mediagoblin.listings.routing
+    import mediagoblin.notifications.routing
 
     for route in PluginManager().get_routes():
         add_route(*route)

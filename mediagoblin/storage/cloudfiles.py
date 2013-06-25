@@ -75,7 +75,7 @@ class CloudFilesStorage(StorageInterface):
         _log.debug('Container: {0}'.format(
             self.container.name))
 
-        self.container_uri = self.container.public_uri()
+        self.container_uri = self.container.public_ssl_uri()
 
     def _resolve_filepath(self, filepath):
         return '/'.join(

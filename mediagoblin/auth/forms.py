@@ -30,9 +30,6 @@ class ForgotPassForm(wtforms.Form):
 class ChangePassForm(wtforms.Form):
     password = wtforms.PasswordField(
         'Password')
-    userid = wtforms.HiddenField(
-        '',
-        [wtforms.validators.Required()])
     token = wtforms.HiddenField(
         '',
         [wtforms.validators.Required()])
