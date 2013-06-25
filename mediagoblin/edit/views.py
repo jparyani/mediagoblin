@@ -24,6 +24,7 @@ from mediagoblin import messages
 from mediagoblin import mg_globals
 
 from mediagoblin import auth
+from mediagoblin.auth import tools as auth_tools
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import (require_active_login, active_user_from_url,

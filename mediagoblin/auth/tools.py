@@ -102,8 +102,8 @@ def send_verification_email(user, request, email=None,
 
 
 EMAIL_FP_VERIFICATION_TEMPLATE = (
-    u"http://{host}{uri}?"
-    u"userid={userid}&token={fp_verification_key}")
+    u"{uri}?"
+    u"token={fp_verification_key}")
 
 
 def send_fp_verification_email(user, request):
@@ -114,14 +114,15 @@ def send_fp_verification_email(user, request):
     - user: a user object
     - request: the request
     """
+    fp_verification_key = get_timed_signer_url('mail_verification_token') \
+            .dumps(user.id)
     rendered_email = render_template(
         request, 'mediagoblin/auth/fp_verification_email.txt',
         {'username': user.username,
          'verification_url': EMAIL_FP_VERIFICATION_TEMPLATE.format(
-                host=request.host,
-                uri=request.urlgen('mediagoblin.auth.verify_forgot_password'),
-                userid=unicode(user.id),
-                fp_verification_key=user.fp_verification_key)})
+             uri=request.urlgen('mediagoblin.auth.verify_forgot_password',
+                                qualified=True),
+             fp_verification_key=fp_verification_key)})
 
     # TODO: There is no error handling in place
     send_email(
