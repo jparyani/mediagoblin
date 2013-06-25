@@ -47,7 +47,11 @@
       {% endfor %}
     {%- endif %}
     {%- if field.description %}
-      <p class="form_field_description">{{ field.description|safe }}</p>
+      {% if field.label.text == '' %}
+        <label for="{{ field.label.field_id }}">{{ field.description|safe }}</label>
+      {% else %}
+        <p class="form_field_description">{{ field.description|safe }}</p>
+      {% endif %}
     {%- endif %}
   </div>
 {%- endmacro %}
