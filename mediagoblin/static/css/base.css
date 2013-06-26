@@ -334,8 +334,8 @@ text-align: center;
   width: 20px;
 }
 
-#boolean {
-  margin-bottom: 4px;
+.boolean {
+  margin-bottom: 8px;
   }
 
 textarea#description, textarea#bio {
