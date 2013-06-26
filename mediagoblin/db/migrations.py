@@ -26,7 +26,7 @@ from sqlalchemy.sql import and_
 from migrate.changeset.constraint import UniqueConstraint
 
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
-from mediagoblin.db.models import MediaEntry, Collection, User
+from mediagoblin.db.models import MediaEntry, Collection, User, MediaComment
 
 MIGRATIONS = {}
 
@@ -287,3 +287,95 @@ def unique_collections_slug(db):
     constraint.create()
 
     db.commit()
+
+@RegisterMigration(11, MIGRATIONS)
+def drop_token_related_User_columns(db):
+    """
+    Drop unneeded columns from the User table after switching to using
+    itsdangerous tokens for email and forgot password verification.
+    """
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, 'core__users')
+
+    verification_key = user_table.columns['verification_key']
+    fp_verification_key = user_table.columns['fp_verification_key']
+    fp_token_expire = user_table.columns['fp_token_expire']
+
+    verification_key.drop()
+    fp_verification_key.drop()
+    fp_token_expire.drop()
+
+    db.commit()
+
+class CommentSubscription_v0(declarative_base()):
+    __tablename__ = 'core__comment_subscriptions'
+    id = Column(Integer, primary_key=True)
+
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
+
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+
+    notify = Column(Boolean, nullable=False, default=True)
+    send_email = Column(Boolean, nullable=False, default=True)
+
+
+class Notification_v0(declarative_base()):
+    __tablename__ = 'core__notifications'
+    id = Column(Integer, primary_key=True)
+    type = Column(Unicode)
+
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False,
+                     index=True)
+    seen = Column(Boolean, default=lambda: False, index=True)
+
+
+class CommentNotification_v0(Notification_v0):
+    __tablename__ = 'core__comment_notifications'
+    id = Column(Integer, ForeignKey(Notification_v0.id), primary_key=True)
+
+    subject_id = Column(Integer, ForeignKey(MediaComment.id))
+
+
+class ProcessingNotification_v0(Notification_v0):
+    __tablename__ = 'core__processing_notifications'
+
+    id = Column(Integer, ForeignKey(Notification_v0.id), primary_key=True)
+
+    subject_id = Column(Integer, ForeignKey(MediaEntry.id))
+
+
+@RegisterMigration(12, MIGRATIONS)
+def add_new_notification_tables(db):
+    metadata = MetaData(bind=db.bind)
+
+    user_table = inspect_table(metadata, 'core__users')
+    mediaentry_table = inspect_table(metadata, 'core__media_entries')
+    mediacomment_table = inspect_table(metadata, 'core__media_comments')
+
+    CommentSubscription_v0.__table__.create(db.bind)
+
+    Notification_v0.__table__.create(db.bind)
+    CommentNotification_v0.__table__.create(db.bind)
+    ProcessingNotification_v0.__table__.create(db.bind)
+
+
+@RegisterMigration(13, MIGRATIONS)
+def pw_hash_nullable(db):
+    """Make pw_hash column nullable"""
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
+
+    user_table.c.pw_hash.alter(nullable=True)
+
+    # sqlite+sqlalchemy seems to drop this constraint during the
+    # migration, so we add it back here for now a bit manually.
+    if db.bind.url.drivername == 'sqlite':
+        constraint = UniqueConstraint('username', table=user_table)
+        constraint.create()
+
+    db.commit()
+

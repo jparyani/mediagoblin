@@ -48,7 +48,7 @@ def test_setup_celery_from_config():
     assert isinstance(fake_celery_module.CELERYD_ETA_SCHEDULER_PRECISION, float)
     assert fake_celery_module.CELERY_RESULT_PERSISTENT is True
     assert fake_celery_module.CELERY_IMPORTS == [
-        'foo.bar.baz', 'this.is.an.import', 'mediagoblin.processing.task']
+        'foo.bar.baz', 'this.is.an.import', 'mediagoblin.processing.task', 'mediagoblin.notifications.task']
     assert fake_celery_module.CELERY_RESULT_BACKEND == 'database'
     assert fake_celery_module.CELERY_RESULT_DBURI == (
         'sqlite:///' +

@@ -24,15 +24,17 @@ import datetime
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
         SmallInteger
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, with_polymorphic
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
 
+
 from mediagoblin.db.extratypes import PathTupleWithSlashes, JSONEncoded
 from mediagoblin.db.base import Base, DictReadAttrProxy
-from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin, CollectionMixin, CollectionItemMixin
+from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, \
+        MediaCommentMixin, CollectionMixin, CollectionItemMixin
 from mediagoblin.tools.files import delete_media_files
 from mediagoblin.tools.common import import_component
 
@@ -60,20 +62,17 @@ class User(Base, UserMixin):
     # the RFC) and because it would be a mess to implement at this
     # point.
     email = Column(Unicode, nullable=False)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    pw_hash = Column(Unicode, nullable=False)
+    pw_hash = Column(Unicode)
     email_verified = Column(Boolean, default=False)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     status = Column(Unicode, default=u"needs_email_verification", nullable=False)
     # Intented to be nullable=False, but migrations would not work for it
     # set to nullable=True implicitly.
     wants_comment_notification = Column(Boolean, default=True)
     license_preference = Column(Unicode)
-    verification_key = Column(Unicode)
     is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
     bio = Column(UnicodeText)  # ??
-    fp_verification_key = Column(Unicode)
-    fp_token_expire = Column(DateTime)
 
     ## TODO
     # plugin data would be in a separate model
@@ -392,6 +391,10 @@ class MediaComment(Base, MediaCommentMixin):
                               backref=backref("posted_comments",
                                               lazy="dynamic",
                                               cascade="all, delete-orphan"))
+    get_entry = relationship(MediaEntry,
+                             backref=backref("comments",
+                                             lazy="dynamic",
+                                             cascade="all, delete-orphan"))
 
     # Cascade: Comments are somewhat owned by their MediaEntry.
     #     So do the full thing.
@@ -484,9 +487,103 @@ class ProcessingMetaData(Base):
         return DictReadAttrProxy(self)
 
 
+class CommentSubscription(Base):
+    __tablename__ = 'core__comment_subscriptions'
+    id = Column(Integer, primary_key=True)
+
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
+    media_entry = relationship(MediaEntry,
+                        backref=backref('comment_subscriptions',
+                                        cascade='all, delete-orphan'))
+
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    user = relationship(User,
+                        backref=backref('comment_subscriptions',
+                                        cascade='all, delete-orphan'))
+
+    notify = Column(Boolean, nullable=False, default=True)
+    send_email = Column(Boolean, nullable=False, default=True)
+
+    def __repr__(self):
+        return ('<{classname} #{id}: {user} {media} notify: '
+                '{notify} email: {email}>').format(
+            id=self.id,
+            classname=self.__class__.__name__,
+            user=self.user,
+            media=self.media_entry,
+            notify=self.notify,
+            email=self.send_email)
+
+
+class Notification(Base):
+    __tablename__ = 'core__notifications'
+    id = Column(Integer, primary_key=True)
+    type = Column(Unicode)
+
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    user_id = Column(Integer, ForeignKey('core__users.id'), nullable=False,
+                     index=True)
+    seen = Column(Boolean, default=lambda: False, index=True)
+    user = relationship(
+        User,
+        backref=backref('notifications', cascade='all, delete-orphan'))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'notification',
+        'polymorphic_on': type
+    }
+
+    def __repr__(self):
+        return '<{klass} #{id}: {user}: {subject} ({seen})>'.format(
+            id=self.id,
+            klass=self.__class__.__name__,
+            user=self.user,
+            subject=getattr(self, 'subject', None),
+            seen='unseen' if not self.seen else 'seen')
+
+
+class CommentNotification(Notification):
+    __tablename__ = 'core__comment_notifications'
+    id = Column(Integer, ForeignKey(Notification.id), primary_key=True)
+
+    subject_id = Column(Integer, ForeignKey(MediaComment.id))
+    subject = relationship(
+        MediaComment,
+        backref=backref('comment_notifications', cascade='all, delete-orphan'))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'comment_notification'
+    }
+
+
+class ProcessingNotification(Notification):
+    __tablename__ = 'core__processing_notifications'
+
+    id = Column(Integer, ForeignKey(Notification.id), primary_key=True)
+
+    subject_id = Column(Integer, ForeignKey(MediaEntry.id))
+    subject = relationship(
+        MediaEntry,
+        backref=backref('processing_notifications',
+                        cascade='all, delete-orphan'))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'processing_notification'
+    }
+
+
+with_polymorphic(
+    Notification,
+    [ProcessingNotification, CommentNotification])
+
 MODELS = [
-    User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem, MediaFile, FileKeynames,
-    MediaAttachmentFile, ProcessingMetaData]
+    User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
+    MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
+    Notification, CommentNotification, ProcessingNotification,
+    CommentSubscription]
 
 
 ######################################################

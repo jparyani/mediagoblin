@@ -15,18 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import uuid
-import datetime
+from itsdangerous import BadSignature
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import User
+from mediagoblin.tools.crypto import get_timed_signer_url
 from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.mail import email_debug_message
-from mediagoblin.auth import lib as auth_lib
+from mediagoblin.tools.pluginapi import hook_handle
 from mediagoblin.auth import forms as auth_forms
-from mediagoblin.auth.lib import send_fp_verification_email
 from mediagoblin.auth.tools import (send_verification_email, register_user,
+                                    send_fp_verification_email,
                                     check_login_simple)
+from mediagoblin import auth
 
 
 def register(request):
@@ -35,15 +37,21 @@ def register(request):
     Note that usernames will always be lowercased. Email domains are lowercased while
     the first part remains case-sensitive.
     """
-    # Redirects to indexpage if registrations are disabled
-    if not mg_globals.app_config["allow_registration"]:
+    # Redirects to indexpage if registrations are disabled or no authentication
+    # is enabled
+    if not mg_globals.app_config["allow_registration"] or not mg_globals.app.auth:
         messages.add_message(
             request,
             messages.WARNING,
             _('Sorry, registration is disabled on this instance.'))
         return redirect(request, "index")
 
-    register_form = auth_forms.RegistrationForm(request.form)
+    if 'pass_auth' not in request.template_env.globals:
+        redirect_name = hook_handle('auth_no_pass_redirect')
+        return redirect(request, 'mediagoblin.plugins.{0}.register'.format(
+            redirect_name))
+
+    register_form = hook_handle("auth_get_registration_form", request)
 
     if request.method == 'POST' and register_form.validate():
         # TODO: Make sure the user doesn't exist already
@@ -59,7 +67,8 @@ def register(request):
     return render_to_response(
         request,
         'mediagoblin/auth/register.html',
-        {'register_form': register_form})
+        {'register_form': register_form,
+         'post_url': request.urlgen('mediagoblin.auth.register')})
 
 
 def login(request):
@@ -68,16 +77,28 @@ def login(request):
 
     If you provide the POST with 'next', it'll redirect to that view.
     """
-    login_form = auth_forms.LoginForm(request.form)
+    # Redirects to index page if no authentication is enabled
+    if not mg_globals.app.auth:
+        messages.add_message(
+            request,
+            messages.WARNING,
+            _('Sorry, authentication is disabled on this instance.'))
+        return redirect(request, 'index')
+
+    if 'pass_auth' not in request.template_env.globals:
+        redirect_name = hook_handle('auth_no_pass_redirect')
+        return redirect(request, 'mediagoblin.plugins.{0}.login'.format(
+            redirect_name))
+
+    login_form = hook_handle("auth_get_login_form", request)
 
     login_failed = False
 
     if request.method == 'POST':
-
-        username = login_form.data['username']
+        username = login_form.username.data
 
         if login_form.validate():
-            user = check_login_simple(username, login_form.password.data, True)
+            user = check_login_simple(username, login_form.password.data)
 
             if user:
                 # set up login in session
@@ -97,6 +118,7 @@ def login(request):
         {'login_form': login_form,
          'next': request.GET.get('next') or request.form.get('next'),
          'login_failed': login_failed,
+         'post_url': request.urlgen('mediagoblin.auth.login'),
          'allow_registration': mg_globals.app_config["allow_registration"]})
 
 
@@ -115,16 +137,28 @@ def verify_email(request):
     you are lucky :)
     """
     # If we don't have userid and token parameters, we can't do anything; 404
-    if not 'userid' in request.GET or not 'token' in request.GET:
+    if not 'token' in request.GET:
         return render_404(request)
 
-    user = User.query.filter_by(id=request.args['userid']).first()
+    # Catch error if token is faked or expired
+    try:
+        token = get_timed_signer_url("mail_verification_token") \
+                .loads(request.GET['token'], max_age=10*24*3600)
+    except BadSignature:
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _('The verification key or user id is incorrect.'))
 
-    if user and user.verification_key == unicode(request.GET['token']):
+        return redirect(
+            request,
+            'index')
+
+    user = User.query.filter_by(id=int(token)).first()
+
+    if user and user.email_verified is False:
         user.status = u'active'
         user.email_verified = True
-        user.verification_key = None
-
         user.save()
 
         messages.add_message(
@@ -166,9 +200,6 @@ def resend_activation(request):
 
         return redirect(request, "mediagoblin.user_pages.user_home", user=request.user['username'])
 
-    request.user.verification_key = unicode(uuid.uuid4())
-    request.user.save()
-
     email_debug_message(request)
     send_verification_email(request.user, request)
 
@@ -188,13 +219,16 @@ def forgot_password(request):
     Sends an email with an url to renew forgotten password.
     Use GET querystring parameter 'username' to pre-populate the input field
     """
+    if not 'pass_auth' in request.template_env.globals:
+        return redirect(request, 'index')
+
     fp_form = auth_forms.ForgotPassForm(request.form,
                                         username=request.args.get('username'))
 
     if not (request.method == 'POST' and fp_form.validate()):
         # Either GET request, or invalid form submitted. Display the template
         return render_to_response(request,
-            'mediagoblin/auth/forgot_password.html', {'fp_form': fp_form})
+            'mediagoblin/auth/forgot_password.html', {'fp_form': fp_form,})
 
     # If we are here: method == POST and form is valid. username casing
     # has been sanitized. Store if a user was found by email. We should
@@ -235,11 +269,6 @@ def forgot_password(request):
 
     # SUCCESS. Send reminder and return to login page
     if user:
-        user.fp_verification_key = unicode(uuid.uuid4())
-        user.fp_token_expire = datetime.datetime.now() + \
-                               datetime.timedelta(days=10)
-        user.save()
-
         email_debug_message(request)
         send_fp_verification_email(user, request)
 
@@ -254,31 +283,44 @@ def verify_forgot_password(request):
     """
     # get form data variables, and specifically check for presence of token
     formdata = _process_for_token(request)
-    if not formdata['has_userid_and_token']:
+    if not formdata['has_token']:
         return render_404(request)
 
-    formdata_token = formdata['vars']['token']
-    formdata_userid = formdata['vars']['userid']
     formdata_vars = formdata['vars']
 
-    # check if it's a valid user id
-    user = User.query.filter_by(id=formdata_userid).first()
-    if not user:
-        return render_404(request)
+    # Catch error if token is faked or expired
+    try:
+        token = get_timed_signer_url("mail_verification_token") \
+                .loads(formdata_vars['token'], max_age=10*24*3600)
+    except BadSignature:
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _('The verification key or user id is incorrect.'))
 
-    # check if we have a real user and correct token
-    if ((user and user.fp_verification_key and
-         user.fp_verification_key == unicode(formdata_token) and
-         datetime.datetime.now() < user.fp_token_expire
-         and user.email_verified and user.status == 'active')):
+        return redirect(
+            request,
+            'index')
+
+    # check if it's a valid user id
+    user = User.query.filter_by(id=int(token)).first()
+
+    # no user in db
+    if not user:
+        messages.add_message(
+            request, messages.ERROR,
+            _('The user id is incorrect.'))
+        return redirect(
+            request, 'index')
+
+    # check if user active and has email verified
+    if user.email_verified and user.status == 'active':
 
         cp_form = auth_forms.ChangePassForm(formdata_vars)
 
         if request.method == 'POST' and cp_form.validate():
-            user.pw_hash = auth_lib.bcrypt_gen_password_hash(
+            user.pw_hash = auth.gen_password_hash(
                 cp_form.password.data)
-            user.fp_verification_key = None
-            user.fp_token_expire = None
             user.save()
 
             messages.add_message(
@@ -290,12 +332,22 @@ def verify_forgot_password(request):
             return render_to_response(
                 request,
                 'mediagoblin/auth/change_fp.html',
-                {'cp_form': cp_form})
+                {'cp_form': cp_form,})
 
-    # in case there is a valid id but no user with that id in the db
-    # or the token expired
-    else:
-        return render_404(request)
+    if not user.email_verified:
+        messages.add_message(
+            request, messages.ERROR,
+            _('You need to verify your email before you can reset your'
+              ' password.'))
+
+    if not user.status == 'active':
+        messages.add_message(
+            request, messages.ERROR,
+            _('You are no longer an active user. Please contact the system'
+              ' admin to reactivate your accoutn.'))
+
+    return redirect(
+        request, 'index')
 
 
 def _process_for_token(request):
@@ -313,7 +365,6 @@ def _process_for_token(request):
 
     formdata = {
         'vars': formdata_vars,
-        'has_userid_and_token':
-            'userid' in formdata_vars and 'token' in formdata_vars}
+        'has_token': 'token' in formdata_vars}
 
     return formdata

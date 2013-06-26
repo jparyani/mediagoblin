@@ -1,3 +1,4 @@
+{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -13,18 +14,21 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-from mediagoblin.tools.routing import add_route
-
-add_route('mediagoblin.edit.profile', '/u/<string:user>/edit/',
-    'mediagoblin.edit.views:edit_profile')
-add_route('mediagoblin.edit.legacy_edit_profile', '/edit/profile/',
-    'mediagoblin.edit.views:legacy_edit_profile')
-add_route('mediagoblin.edit.account', '/edit/account/',
-    'mediagoblin.edit.views:edit_account')
-add_route('mediagoblin.edit.delete_account', '/edit/account/delete/',
-    'mediagoblin.edit.views:delete_account')
-add_route('mediagoblin.edit.pass', '/edit/password/',
-    'mediagoblin.edit.views:change_pass')
-add_route('mediagoblin.edit.verify_email', '/edit/verify_email/',
-    'mediagoblin.edit.views:verify_email')
+#}
+{%- if request.user %}
+    {% set subscription = request.notifications.get_comment_subscription(
+                                request.user.id, media.id) %}
+    {% if not subscription or not subscription.notify %}
+        <a type="submit" href="{{ request.urlgen('mediagoblin.notifications.subscribe_comments',
+            user=media.get_uploader.username,
+            media=media.slug)}}"
+            class="button_action">Subscribe to comments
+        </a>
+    {% else %}
+        <a type="submit" href="{{ request.urlgen('mediagoblin.notifications.silence_comments',
+            user=media.get_uploader.username,
+            media=media.slug)}}"
+            class="button_action">Silence comments
+        </a>
+    {% endif %}
+{%- endif %}

@@ -46,11 +46,7 @@
           {% trans %}Change your password.{% endtrans %}
         </a>
       </p>
-      <div class="form_field_input">
-        <p>{{ form.wants_comment_notification }}
-           {{ wtforms_util.render_label(form.wants_comment_notification) }}</p>
-      </div>
-      {{- wtforms_util.render_field_div(form.license_preference) }}
+      {{ wtforms_util.render_divs(form, True) }}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button_form" />
   {{ csrf_token }}

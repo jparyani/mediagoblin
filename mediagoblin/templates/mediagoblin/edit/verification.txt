@@ -1,3 +1,4 @@
+{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -13,18 +14,16 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-#}
 
-from mediagoblin.tools.routing import add_route
+{% trans username=username, verification_url=verification_url|safe -%}
+Hi,
 
-add_route('mediagoblin.edit.profile', '/u/<string:user>/edit/',
-    'mediagoblin.edit.views:edit_profile')
-add_route('mediagoblin.edit.legacy_edit_profile', '/edit/profile/',
-    'mediagoblin.edit.views:legacy_edit_profile')
-add_route('mediagoblin.edit.account', '/edit/account/',
-    'mediagoblin.edit.views:edit_account')
-add_route('mediagoblin.edit.delete_account', '/edit/account/delete/',
-    'mediagoblin.edit.views:delete_account')
-add_route('mediagoblin.edit.pass', '/edit/password/',
-    'mediagoblin.edit.views:change_pass')
-add_route('mediagoblin.edit.verify_email', '/edit/verify_email/',
-    'mediagoblin.edit.views:verify_email')
+We wanted to verify that you are {{ username }}. If this is the case, then 
+please follow the link below to verify your new email address.
+
+{{ verification_url }}
+
+If you are not {{ username }} or didn't request an email change, you can ignore
+this email.
+{%- endtrans %}

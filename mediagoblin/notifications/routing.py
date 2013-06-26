@@ -16,15 +16,10 @@
 
 from mediagoblin.tools.routing import add_route
 
-add_route('mediagoblin.edit.profile', '/u/<string:user>/edit/',
-    'mediagoblin.edit.views:edit_profile')
-add_route('mediagoblin.edit.legacy_edit_profile', '/edit/profile/',
-    'mediagoblin.edit.views:legacy_edit_profile')
-add_route('mediagoblin.edit.account', '/edit/account/',
-    'mediagoblin.edit.views:edit_account')
-add_route('mediagoblin.edit.delete_account', '/edit/account/delete/',
-    'mediagoblin.edit.views:delete_account')
-add_route('mediagoblin.edit.pass', '/edit/password/',
-    'mediagoblin.edit.views:change_pass')
-add_route('mediagoblin.edit.verify_email', '/edit/verify_email/',
-    'mediagoblin.edit.views:verify_email')
+add_route('mediagoblin.notifications.subscribe_comments',
+          '/u/<string:user>/m/<string:media>/notifications/subscribe/comments/',
+          'mediagoblin.notifications.views:subscribe_comments')
+
+add_route('mediagoblin.notifications.silence_comments',
+          '/u/<string:user>/m/<string:media>/notifications/silence/',
+          'mediagoblin.notifications.views:silence_comments')

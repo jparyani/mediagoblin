@@ -16,9 +16,11 @@
 
 import wtforms
 
-from mediagoblin.tools.text import tag_length_validator, TOO_LONG_TAG_WARNING
+from mediagoblin.tools.text import tag_length_validator
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.licenses import licenses_as_choices
+from mediagoblin.auth.forms import normalize_user_or_email_field
+
 
 class EditForm(wtforms.Form):
     title = wtforms.TextField(
@@ -59,6 +61,13 @@ class EditProfileForm(wtforms.Form):
 
 
 class EditAccountForm(wtforms.Form):
+    new_email = wtforms.TextField(
+        _('New email address'),
+        [wtforms.validators.Optional(),
+         normalize_user_or_email_field(allow_user=False)])
+    wants_comment_notification = wtforms.BooleanField(
+        label='',
+        description=_("Email me when others comment on my media"))
     license_preference = wtforms.SelectField(
         _('License preference'),
         [
@@ -67,8 +76,6 @@ class EditAccountForm(wtforms.Form):
         ],
         choices=licenses_as_choices(),
         description=_('This will be your default license on upload forms.'))
-    wants_comment_notification = wtforms.BooleanField(
-        label=_("Email me when others comment on my media"))
 
 
 class EditAttachmentsForm(wtforms.Form):

@@ -37,6 +37,8 @@ from mediagoblin.init import (get_jinja_loader, get_staticdirector,
     setup_storage)
 from mediagoblin.tools.pluginapi import PluginManager, hook_transform
 from mediagoblin.tools.crypto import setup_crypto
+from mediagoblin.auth.tools import check_auth_enabled, no_auth_logout
+from mediagoblin import notifications
 
 
 _log = logging.getLogger(__name__)
@@ -96,6 +98,11 @@ class MediaGoblinApp(object):
             self.current_theme,
             PluginManager().get_template_paths()
             )
+
+        # Check if authentication plugin is enabled and respond accordingly.
+        self.auth = check_auth_enabled()
+        if not self.auth:
+            app_config['allow_comments'] = False
 
         # Set up storage systems
         self.public_store, self.queue_store = setup_storage()
@@ -185,6 +192,11 @@ class MediaGoblinApp(object):
                     force_external=qualified)
 
         request.urlgen = build_proxy
+
+        # Log user out if authentication_disabled
+        no_auth_logout(request)
+
+        request.notifications = notifications
 
         mg_request.setup_user_in_request(request)
 

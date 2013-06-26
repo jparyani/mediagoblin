@@ -34,6 +34,8 @@ from mediagoblin.media_types import sniff_media, \
 from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
     run_process_media, new_upload_entry
 
+from mediagoblin.notifications import add_comment_subscription
+
 
 @require_active_login
 def submit_start(request):
@@ -91,6 +93,8 @@ def submit_start(request):
                     qualified=True, user=request.user.username)
                 run_process_media(entry, feed_url)
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
+
+                add_comment_subscription(request.user, entry)
 
                 return redirect(request, "mediagoblin.user_pages.user_home",
                                 user=request.user.username)

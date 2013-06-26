@@ -14,19 +14,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import uuid
 import logging
-
 import wtforms
-from sqlalchemy import or_
 
 from mediagoblin import mg_globals
-from mediagoblin.auth import lib as auth_lib
+from mediagoblin.tools.crypto import get_timed_signer_url
 from mediagoblin.db.models import User
 from mediagoblin.tools.mail import (normalize_email, send_email,
                                     email_debug_message)
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+from mediagoblin.tools.pluginapi import hook_handle
+from mediagoblin import auth
 
 _log = logging.getLogger(__name__)
 
@@ -62,11 +61,12 @@ def normalize_user_or_email_field(allow_email=True, allow_user=True):
 
 
 EMAIL_VERIFICATION_TEMPLATE = (
-    u"http://{host}{uri}?"
-    u"userid={userid}&token={verification_key}")
+    u"{uri}?"
+    u"token={verification_key}")
 
 
-def send_verification_email(user, request):
+def send_verification_email(user, request, email=None,
+                            rendered_email=None):
     """
     Send the verification email to users to activate their accounts.
 
@@ -74,19 +74,24 @@ def send_verification_email(user, request):
     - user: a user object
     - request: the request
     """
-    rendered_email = render_template(
-        request, 'mediagoblin/auth/verification_email.txt',
-        {'username': user.username,
-         'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
-                host=request.host,
-                uri=request.urlgen('mediagoblin.auth.verify_email'),
-                userid=unicode(user.id),
-                verification_key=user.verification_key)})
+    if not email:
+        email = user.email
+
+    if not rendered_email:
+        verification_key = get_timed_signer_url('mail_verification_token') \
+                .dumps(user.id)
+        rendered_email = render_template(
+            request, 'mediagoblin/auth/verification_email.txt',
+            {'username': user.username,
+            'verification_url': EMAIL_VERIFICATION_TEMPLATE.format(
+                    uri=request.urlgen('mediagoblin.auth.verify_email',
+                                       qualified=True),
+                    verification_key=verification_key)})
 
     # TODO: There is no error handling in place
     send_email(
         mg_globals.app_config['email_sender_address'],
-        [user.email],
+        [email],
         # TODO
         # Due to the distributed nature of GNU MediaGoblin, we should
         # find a way to send some additional information about the
@@ -96,11 +101,42 @@ def send_verification_email(user, request):
         rendered_email)
 
 
+EMAIL_FP_VERIFICATION_TEMPLATE = (
+    u"{uri}?"
+    u"token={fp_verification_key}")
+
+
+def send_fp_verification_email(user, request):
+    """
+    Send the verification email to users to change their password.
+
+    Args:
+    - user: a user object
+    - request: the request
+    """
+    fp_verification_key = get_timed_signer_url('mail_verification_token') \
+            .dumps(user.id)
+    rendered_email = render_template(
+        request, 'mediagoblin/auth/fp_verification_email.txt',
+        {'username': user.username,
+         'verification_url': EMAIL_FP_VERIFICATION_TEMPLATE.format(
+             uri=request.urlgen('mediagoblin.auth.verify_forgot_password',
+                                qualified=True),
+             fp_verification_key=fp_verification_key)})
+
+    # TODO: There is no error handling in place
+    send_email(
+        mg_globals.app_config['email_sender_address'],
+        [user.email],
+        'GNU MediaGoblin - Change forgotten password!',
+        rendered_email)
+
+
 def basic_extra_validation(register_form, *args):
     users_with_username = User.query.filter_by(
-        username=register_form.data['username']).count()
+        username=register_form.username.data).count()
     users_with_email = User.query.filter_by(
-        email=register_form.data['email']).count()
+        email=register_form.email.data).count()
 
     extra_validation_passes = True
 
@@ -118,17 +154,11 @@ def basic_extra_validation(register_form, *args):
 
 def register_user(request, register_form):
     """ Handle user registration """
-    extra_validation_passes = basic_extra_validation(register_form)
+    extra_validation_passes = auth.extra_validation(register_form)
 
     if extra_validation_passes:
         # Create the user
-        user = User()
-        user.username = register_form.data['username']
-        user.email = register_form.data['email']
-        user.pw_hash = auth_lib.bcrypt_gen_password_hash(
-            register_form.password.data)
-        user.verification_key = unicode(uuid.uuid4())
-        user.save()
+        user = auth.create_user(register_form)
 
         # log the user in
         request.session['user_id'] = unicode(user.id)
@@ -143,17 +173,29 @@ def register_user(request, register_form):
     return None
 
 
-def check_login_simple(username, password, username_might_be_email=False):
-    search = (User.username == username)
-    if username_might_be_email and ('@' in username):
-        search = or_(search, User.email == username)
-    user = User.query.filter(search).first()
+def check_login_simple(username, password):
+    user = auth.get_user(username=username)
     if not user:
         _log.info("User %r not found", username)
-        auth_lib.fake_login_attempt()
+        hook_handle("auth_fake_login_attempt")
         return None
-    if not auth_lib.bcrypt_check_password(password, user.pw_hash):
+    if not auth.check_password(password, user.pw_hash):
         _log.warn("Wrong password for %r", username)
         return None
     _log.info("Logging %r in", username)
     return user
+
+
+def check_auth_enabled():
+    if not hook_handle('authentication'):
+        _log.warning('No authentication is enabled')
+        return False
+    else:
+        return True
+
+
+def no_auth_logout(request):
+    """Log out the user if authentication_disabled, but don't delete the messages"""
+    if not mg_globals.app.auth and 'user_id' in request.session:
+        del request.session['user_id']
+        request.session.save()

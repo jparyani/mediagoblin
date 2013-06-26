@@ -15,13 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import urlparse
-import pytest
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User
 from mediagoblin.tests.tools import fixture_add_user
-from mediagoblin.tools import template
-from mediagoblin.auth.lib import bcrypt_check_password
+from mediagoblin import auth
+from mediagoblin.tools import template, mail
+
 
 class TestUserEdit(object):
     def setup(self):
@@ -74,7 +74,7 @@ class TestUserEdit(object):
 
         # test_user has to be fetched again in order to have the current values
         test_user = User.query.filter_by(username=u'chris').first()
-        assert bcrypt_check_password('123456', test_user.pw_hash)
+        assert auth.check_password('123456', test_user.pw_hash)
         # Update current user passwd
         self.user_password = '123456'
 
@@ -88,7 +88,7 @@ class TestUserEdit(object):
                 })
 
         test_user = User.query.filter_by(username=u'chris').first()
-        assert not bcrypt_check_password('098765', test_user.pw_hash)
+        assert not auth.check_password('098765', test_user.pw_hash)
 
 
     def test_change_bio_url(self, test_app):
@@ -141,4 +141,68 @@ class TestUserEdit(object):
         assert form.url.errors == [
             u'This address contains errors']
 
+    def test_email_change(self, test_app):
+        self.login(test_app)
+
+        # Test email already in db
+        template.clear_test_template_context()
+        test_app.post(
+            '/edit/account/', {
+                'new_email': 'chris@example.com',
+                'password': 'toast'})
+
+        # Check form errors
+        context = template.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/edit/edit_account.html']
+        assert context['form'].new_email.errors == [
+            u'Sorry, a user with that email address already exists.']
+
+        # Test successful email change
+        template.clear_test_template_context()
+        res = test_app.post(
+            '/edit/account/', {
+                'new_email': 'new@example.com',
+                'password': 'toast'})
+        res.follow()
+
+        # Correct redirect?
+        assert urlparse.urlsplit(res.location)[2] == '/u/chris/'
+
+        # Make sure we get email verification and try verifying
+        assert len(mail.EMAIL_TEST_INBOX) == 1
+        message = mail.EMAIL_TEST_INBOX.pop()
+        assert message['To'] == 'new@example.com'
+        email_context = template.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/edit/verification.txt']
+        assert email_context['verification_url'] in \
+            message.get_payload(decode=True)
+
+        path = urlparse.urlsplit(email_context['verification_url'])[2]
+        assert path == u'/edit/verify_email/'
+
+        ## Try verifying with bs verification key, shouldn't work
+        template.clear_test_template_context()
+        res = test_app.get(
+            "/edit/verify_email/?token=total_bs")
+        res.follow()
+
+        # Correct redirect?
+        assert urlparse.urlsplit(res.location)[2] == '/'
+
+        # Email shouldn't be saved
+        email_in_db = mg_globals.database.User.find_one(
+            {'email': 'new@example.com'})
+        email = User.query.filter_by(username='chris').first().email
+        assert email_in_db is None
+        assert email == 'chris@example.com'
+
+        # Verify email activation works
+        template.clear_test_template_context()
+        get_params = urlparse.urlsplit(email_context['verification_url'])[3]
+        res = test_app.get('%s?%s' % (path, get_params))
+        res.follow()
+
+        # New email saved?
+        email = User.query.filter_by(username='chris').first().email
+        assert email == 'new@example.com'
 # test changing the url inproperly
