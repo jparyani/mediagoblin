@@ -105,8 +105,6 @@ class SQLAlchemyOpenIDStore(OpenIDStore):
             ononce.save()
             return True
 
-    # Need to test these cleanups, not sure if the expired Association query
-    # will work
     def cleanupNonces(self, _now=None):
         if _now is None:
             _now = int(time.time())
@@ -120,9 +118,10 @@ class SQLAlchemyOpenIDStore(OpenIDStore):
 
     def cleanupAssociations(self):
         now = int(time.time())
-        expired = Association.query.filter(
-            'issued + lifetime' < now)
-        count = expired.count()
-        for each in expired:
-            each.delete()
+        assoc = Association.query.all()
+        count = 0
+        for each in assoc:
+            if (each.lifetime + each.issued) <= now:
+                each.delete()
+                count = count + 1
         return count
