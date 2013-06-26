@@ -23,7 +23,6 @@ from mediagoblin.decorators import (auth_enabled, allow_registration,
                                     require_active_login)
 from mediagoblin.tools.response import redirect, render_to_response
 from mediagoblin.tools.translate import pass_to_ugettext as _
-from mediagoblin.plugins.openid import lib as auth_lib
 from mediagoblin.plugins.openid import forms as auth_forms
 from mediagoblin.plugins.openid.models import OpenIDUserURL
 from mediagoblin.plugins.openid.store import SQLAlchemyOpenIDStore
@@ -139,7 +138,7 @@ def _response_nickname(response):
 @auth_enabled
 def login(request):
     """OpenID Login View"""
-    login_form = auth_lib.get_login_form(request)
+    login_form = auth_forms.LoginForm(request)
     allow_registration = mg_globals.app_config["allow_registration"]
 
     # Can't store next in request.GET because of redirects to OpenID provider
