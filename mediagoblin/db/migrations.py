@@ -307,6 +307,7 @@ def drop_token_related_User_columns(db):
 
     db.commit()
 
+
 class CommentSubscription_v0(declarative_base()):
     __tablename__ = 'core__comment_subscriptions'
     id = Column(Integer, primary_key=True)
@@ -378,4 +379,3 @@ def pw_hash_nullable(db):
         constraint.create()
 
     db.commit()
-

@@ -21,38 +21,45 @@
 
 {% block mediagoblin_head %}
   <script type="text/javascript"
-          src="{{ request.staticdirect('/js/show_password.js') }}"></script>
-{% endblock mediagoblin_head %}
+          src="{{ request.staticdirect('/js/autofilledin_password.js') }}"></script>
+{% endblock %}
 
 {% block title -%}
-  {% trans %}Create an account!{% endtrans %} &mdash; {{ super() }}
+  {% trans %}Log in{% endtrans %} &mdash; {{ super() }}
 {%- endblock %}
 
 {% block mediagoblin_content %}
-
   <form action="{{ post_url }}"
         method="POST" enctype="multipart/form-data">
+    {{ csrf_token }}
     <div class="form_box">
-      <h1>{% trans %}Create an account!{% endtrans %}</h1>
-      {% if openid_link is defined %}
+      <h1>{% trans %}Log in{% endtrans %}</h1>
+      {% if login_failed %}
+        <div class="form_field_error">
+          {% trans %}Logging in failed!{% endtrans %}
+        </div>
+      {% endif %}
+      {% if allow_registration %}
         <p>
-        <a href="{{ request.urlgen('mediagoblin.plugins.openid.register') }}">
-          {%- trans %}Or register with OpenID!{% endtrans %}
-        </a>
+        {% trans %}Log in to create an account!{% endtrans %} 
         </p>
-      {% elif pass_auth_link is defined %}
+      {% endif %}
+      {% if pass_auth is defined %}
       <p>
-      <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
-        {%- trans %}Or register with a password!{% endtrans %}
+      <a href="{{ request.urlgen('mediagoblin.auth.login') }}?{{ request.query_string }}">
+        {%- trans %}Or login with a password!{% endtrans %}
       </a>
       </p>
       {% endif %}
-      {{ wtforms_util.render_divs(register_form, True) }}
-      {{ csrf_token }}
+      {{ wtforms_util.render_divs(login_form, True) }}
       <div class="form_submit_buttons">
-        <input type="submit" value="{% trans %}Create{% endtrans %}"
-               class="button_form" />
+        <input type="submit" value="{% trans %}Log in{% endtrans %}" class="button_form"/>
       </div>
+      {% if next %}
+        <input type="hidden" name="next" value="{{ next }}" class="button_form"
+               style="display: none;"/>
+      {% endif %}
     </div>
   </form>
 {% endblock %}
+

@@ -14,12 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import uuid
 from itsdangerous import BadSignature
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import User
 from mediagoblin.tools.crypto import get_timed_signer_url
+from mediagoblin.decorators import auth_enabled, allow_registration
 from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.mail import email_debug_message
@@ -31,21 +31,14 @@ from mediagoblin.auth.tools import (send_verification_email, register_user,
 from mediagoblin import auth
 
 
+@allow_registration
+@auth_enabled
 def register(request):
     """The registration view.
 
     Note that usernames will always be lowercased. Email domains are lowercased while
     the first part remains case-sensitive.
     """
-    # Redirects to indexpage if registrations are disabled or no authentication
-    # is enabled
-    if not mg_globals.app_config["allow_registration"] or not mg_globals.app.auth:
-        messages.add_message(
-            request,
-            messages.WARNING,
-            _('Sorry, registration is disabled on this instance.'))
-        return redirect(request, "index")
-
     if 'pass_auth' not in request.template_env.globals:
         redirect_name = hook_handle('auth_no_pass_redirect')
         return redirect(request, 'mediagoblin.plugins.{0}.register'.format(
@@ -71,20 +64,13 @@ def register(request):
          'post_url': request.urlgen('mediagoblin.auth.register')})
 
 
+@auth_enabled
 def login(request):
     """
     MediaGoblin login view.
 
     If you provide the POST with 'next', it'll redirect to that view.
     """
-    # Redirects to index page if no authentication is enabled
-    if not mg_globals.app.auth:
-        messages.add_message(
-            request,
-            messages.WARNING,
-            _('Sorry, authentication is disabled on this instance.'))
-        return redirect(request, 'index')
-
     if 'pass_auth' not in request.template_env.globals:
         redirect_name = hook_handle('auth_no_pass_redirect')
         return redirect(request, 'mediagoblin.plugins.{0}.login'.format(
