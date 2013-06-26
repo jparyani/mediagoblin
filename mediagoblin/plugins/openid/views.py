@@ -138,7 +138,7 @@ def _response_nickname(response):
 @auth_enabled
 def login(request):
     """OpenID Login View"""
-    login_form = auth_forms.LoginForm(request)
+    login_form = auth_forms.LoginForm(request.form)
     allow_registration = mg_globals.app_config["allow_registration"]
 
     # Can't store next in request.GET because of redirects to OpenID provider
