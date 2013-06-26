@@ -58,16 +58,20 @@ def setup_global_and_app_config(config_path):
     return global_config, app_config
 
 
-def setup_database():
+def setup_database(run_migrations=False):
     app_config = mg_globals.app_config
+    global_config = mg_globals.global_config
 
     # Load all models for media types (plugins, ...)
     load_models(app_config)
-
     # Set up the database
-    db = setup_connection_and_db_from_config(app_config)
-
-    check_db_migrations_current(db)
+    db = setup_connection_and_db_from_config(app_config, run_migrations)
+    if run_migrations:
+        #Run the migrations to initialize/update the database.
+        from mediagoblin.gmg_commands.dbupdate import run_all_migrations
+        run_all_migrations(db, app_config, global_config)
+    else:
+        check_db_migrations_current(db)
 
     setup_globals(database=db)
 
