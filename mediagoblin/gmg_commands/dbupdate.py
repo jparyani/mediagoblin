@@ -118,8 +118,12 @@ def run_dbupdate(app_config, global_config):
 
 def run_all_migrations(db, app_config, global_config):
     """
-    Moved the migration part of run_dbupdate to a separate function so
-    it can be used to initialize the database during tests.
+    Initializes or migrates a database that already has a 
+    connection setup and also initializes or migrates all
+    extensions based on the config files.
+
+    It can be used to initialize an in-memory database for
+    testing.
     """
     # Gather information from all media managers / projects
     dbdatas = gather_database_data(
