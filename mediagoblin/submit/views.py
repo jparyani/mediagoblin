@@ -140,9 +140,9 @@ def submit_start(request):
                     run_process_media(entry, feed_url)
                     add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
-                add_comment_subscription(request.user, entry)
+                    add_comment_subscription(request.user, entry)
 
-                return redirect(request, "mediagoblin.user_pages.user_home",
+                    return redirect(request, "mediagoblin.user_pages.user_home",
                                 user=user.username)
             except Exception as e:
                 '''
