@@ -57,8 +57,14 @@ def submit_start(request):
         return redirect(request, "mediagoblin.user_pages.user_home",
                         user=request.user.username)
 
-    submit_form = submit_forms.get_submit_start_form(request.form,
-        license=request.user.license_preference)
+    max_file_size = mg_globals.app_config.get('max_file_size', None)
+
+    submit_form = submit_forms.get_submit_start_form(
+        request.form,
+        license=request.user.license_preference,
+        max_file_size=max_file_size,
+        upload_limit=upload_limit,
+        uploaded=user.uploaded)
 
     if request.method == 'POST' and submit_form.validate():
         if not check_file_field(request, 'file'):
@@ -108,7 +114,6 @@ def submit_start(request):
                 error = False
 
                 # Check if file size is over the limit
-                max_file_size = mg_globals.app_config.get('max_file_size', None)
                 if max_file_size and file_size >= max_file_size:
                     submit_form.file.errors.append(
                         _(u'Sorry, the file size is too big.'))

@@ -24,7 +24,7 @@ from mediagoblin.tools.licenses import licenses_as_choices
 
 
 def get_submit_start_form(form, **kwargs):
-    max_file_size = mg_globals.app_config.get('max_file_size', None)
+    max_file_size = kwargs.get('max_file_size')
     desc = None
     if max_file_size:
         desc = _('Max file size: {0} mb'.format(max_file_size))
@@ -50,6 +50,9 @@ def get_submit_start_form(form, **kwargs):
             _('License'),
             [wtforms.validators.Optional(),],
             choices=licenses_as_choices())
+        max_file_size = wtforms.HiddenField('')
+        upload_limit = wtforms.HiddenField('')
+        uploaded = wtforms.HiddenField('')
 
     return SubmitStartForm(form, **kwargs)
 
