@@ -492,11 +492,13 @@ class ReportBase(Base):
     __tablename__ = 'core__reports'
     id = Column(Integer, primary_key=True)
     reporter_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    reporter =  relationship(User, backref=backref("reports_filed_by",
-                                                                lazy="dynamic",
-                                                                cascade="all, delete-orphan"))
+    reporter =  relationship(
+        User, 
+        backref=backref("reports_filed_by",
+            lazy="dynamic",
+            cascade="all, delete-orphan"))
     report_content = Column(UnicodeText)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now()) 
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now())
     resolved = Column(DateTime)
     discriminator = Column('type', Unicode(50))
     __mapper_args__ = {'polymorphic_on': discriminator}
@@ -512,9 +514,10 @@ class CommentReport(ReportBase):
     id = Column('id',Integer, ForeignKey('core__reports.id'),
                                                 primary_key=True)
     comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=False)
-    comment = relationship(MediaComment, backref=backref("reports_filed_on",
-                                                                lazy="dynamic",
-                                                                cascade="all, delete-orphan"))
+    comment = relationship(
+        MediaComment, backref=backref("reports_filed_on",
+            lazy="dynamic",
+            cascade="all, delete-orphan"))
 
 class MediaReport(ReportBase):
     """
@@ -526,27 +529,32 @@ class MediaReport(ReportBase):
     id = Column('id',Integer, ForeignKey('core__reports.id'),
                                                 primary_key=True)
     media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
-    media_entry = relationship(MediaEntry, backref=backref("reports_filed_on",
-                                                                lazy="dynamic",
-                                                                cascade="all, delete-orphan"))
+    media_entry = relationship(
+        MediaEntry, 
+        backref=backref("reports_filed_on",
+            lazy="dynamic",
+            cascade="all, delete-orphan"))
 
 class UserBan(Base):
     """
-    Holds the information on a specific user's ban-state. As long as one of these
-      is attached to a user, they are banned from accessing mediagoblin. When they
-      try to log in, they are greeted with a page that tells them the reason why 
-      they are banned and when (if ever) the ban will be lifted
-        :param user_id          Holds the id of the user this object is attached to.
-                                    This should be a one-to-one relationship.
-        :param expiration_date  Holds the date that the ban will be lifted. If this
-                                    is null, the ban is permanent unless a moderator
-                                    manually lifts it.
+    Holds the information on a specific user's ban-state. As long as one of 
+        these is attached to a user, they are banned from accessing mediagoblin. 
+        When they try to log in, they are greeted with a page that tells them 
+        the reason why they are banned and when (if ever) the ban will be 
+        lifted
+
+        :param user_id          Holds the id of the user this object is 
+                                    attached to. This is a one-to-one 
+                                    relationship.
+        :param expiration_date  Holds the date that the ban will be lifted. 
+                                    If this is null, the ban is permanent 
+                                    unless a moderator manually lifts it.
         :param reason           Holds the reason why the user was banned.
     """
     __tablename__ = 'core__user_bans'
 
-    user_id = Column('id',Integer, ForeignKey(User.id), nullable=False,
-                                         primary_key=True)
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False, 
+                                                        primary_key=True)
     expiration_date = Column(DateTime)
     reason = Column(UnicodeText, nullable=False)
 
@@ -555,8 +563,14 @@ class Group(Base):
     __tablename__ = 'core__groups'
 
     id = Column(Integer, nullable=False, primary_key=True)
-    group_name = Column(Unicode, nullable=False)
-    all_users = relationship(User, backref='all_groups', secondary="core__group_user_associations")
+    group_name = Column(Unicode, nullable=False, unique=True)
+    all_users = relationship(
+        User, 
+        backref='all_groups', 
+        secondary="core__group_user_associations")
+
+    def __init__(self, group_name):
+        self.group_name = group_name
 
     def __repr__(self):
         return "<Group %s>" % (self.group_name)
@@ -564,14 +578,31 @@ class Group(Base):
 class GroupUserAssociation(Base):
     __tablename__ = 'core__group_user_associations'
 
-    group_id = Column('core__group_id', Integer, ForeignKey(User.id), primary_key=True)
-    user_id = Column('core__user_id', Integer, ForeignKey(Group.id), primary_key=True)
+    group_id = Column(
+        'core__group_id', 
+        Integer, 
+        ForeignKey(User.id), 
+        primary_key=True)
+    user_id = Column(
+        'core__user_id', 
+        Integer, 
+        ForeignKey(Group.id), 
+        primary_key=True)
 
 
+group_foundations = [[u'admin'], [u'moderator'], [u'commenter'], [u'uploader'],[u'reporter'],[u'active']]
 
 MODELS = [
-    User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem, MediaFile, FileKeynames,
-    MediaAttachmentFile, ProcessingMetaData, CommentReport, MediaReport, UserBan, Group, GroupUserAssociation]
+    User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem, 
+    MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData, ReportBase,
+    CommentReport, MediaReport, UserBan, Group, GroupUserAssociation]
+
+# Foundations are the default rows that are created immediately after the tables are initialized. Each entry to
+#   this dictionary should be in the format of 
+#                                               ModelObject:List of Rows
+#                                         (Each Row must be a list of parameters that can create and instance of the ModelObject)
+#   
+FOUNDATIONS = {Group:group_foundations}
 
 ######################################################
 # Special, migrations-tracking table

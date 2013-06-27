@@ -21,7 +21,7 @@ from werkzeug.exceptions import Forbidden, NotFound
 from werkzeug.urls import url_quote
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.models import MediaEntry, User, MediaComment
+from mediagoblin.db.models import MediaEntry, User, MediaComment, Group
 from mediagoblin.tools.response import redirect, render_404
 
 
@@ -62,6 +62,26 @@ def active_user_from_url(controller):
         return controller(request, *args, url_user=user, **kwargs)
 
     return wrapper
+
+def user_in_group(group_name):
+#TODO handle possible errors correctly
+    def user_in_group_decorator(controller):
+        @wraps(controller)
+
+        def wrapper(request, *args, **kwargs):
+            user_id = request.user.id
+            group = Group.query.filter(
+                Group.group_name==group_name).first()
+            if not (group.query.filter(
+                Group.all_users.any(
+                    User.id==user_id)).count()):
+
+                raise Forbidden()
+
+            return controller(request, *args, **kwargs)
+
+        return wrapper
+    return user_in_group_decorator
 
 
 def user_may_delete_media(controller):
@@ -253,3 +273,26 @@ def get_workbench(func):
             return func(*args, workbench=workbench, **kwargs)
 
     return new_func
+
+def require_admin_login(controller):
+    """
+    Require an login from an administrator.
+    """
+    @wraps(controller)
+    def new_controller_func(request, *args, **kwargs):
+        if request.user and \
+                not request.user.is_admin:
+            raise Forbidden()
+        elif not request.user:
+            next_url = urljoin(
+                    request.urlgen('mediagoblin.auth.login',
+                        qualified=True),
+                    request.url)
+
+            return redirect(request, 'mediagoblin.auth.login',
+                            next=next_url)
+
+        return controller(request, *args, **kwargs)
+
+    return new_controller_func
+

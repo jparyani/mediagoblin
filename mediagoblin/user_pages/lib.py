@@ -79,12 +79,15 @@ def add_media_to_collection(collection, media, note=None, commit=True):
 
 def build_report_form(form_dict):
     """
-    :param form_dict should be an ImmutableMultiDict object which is what is
-            returned from 'request.form.' The Object should have valid keys
-            matching the fields in either MediaReportForm or CommentReportForm
+    This function is used to convert a form dictionary (from a User filing a 
+        report) into either a MediaReport or CommentReport object.
 
-    :returns either of MediaReport or a CommentReport object that has not been saved.
-            In case of an improper form_dict, returns None
+    :param form_dict should be an ImmutableMultiDict object as is returned from
+        'request.form.' The Object should have valid keys matching the fields 
+        in either MediaReportForm or CommentReportForm
+
+    :returns either of MediaReport or a CommentReport object that has not been 
+        saved. In case of an improper form_dict, returns None
     """
     if 'comment_id' in form_dict.keys():
         report_form = user_forms.CommentReportForm(form_dict)
@@ -92,6 +95,7 @@ def build_report_form(form_dict):
         report_form = user_forms.MediaReportForm(form_dict)
     else:
         return None
+
     if report_form.validate() and 'comment_id' in form_dict.keys():
         report_model = CommentReport()
         report_model.comment_id = report_form.comment_id.data
@@ -100,6 +104,7 @@ def build_report_form(form_dict):
         report_model.media_entry_id = report_form.media_entry_id.data
     else:
         return None
+
     report_model.report_content = report_form.report_reason.data or u''
     report_model.reporter_id = report_form.reporter_id.data
     return report_model
