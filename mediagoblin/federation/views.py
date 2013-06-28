@@ -38,17 +38,47 @@ def client_register(request):
 
     if "type" not in data:
         return json_response({"error":"No registration type provided"}, status=400)
-   
+
+    if "application_type" not in data or data["application_type"] not in client_types:
+        return json_response({"error":"Unknown application_type."}, status=400)
+    
+    client_type = data["type"]
+
+    if client_type == "client_update":
+        # updating a client
+        if "client_id" not in data:
+            return json_response({"error":"client_id is required to update."}, status=400)
+        elif "client_secret" not in data:
+            return json_response({"error":"client_secret is required to update."}, status=400)
+
+        client = Client.query.filter_by(id=data["client_id"], secret=data["client_secret"]).all()
+
+        if not client:
+            return json_response({"error":"Unauthorized.", status=403)
+
+    elif client_type == "client_associate":
+        # registering
+        if "client_id" in data:
+            return json_response({"error":"Only set client_id for update."}, status=400)
+        elif "access_token" in data:
+            return json_response({"error":"access_token not needed for registration."}, status=400)
+        elif "client_secret" in data:
+            return json_response({"error":"Only set client_secret for update."}, status=400)
+
     # generate the client_id and client_secret
     client_id = random_string(22) # seems to be what pump uses
     client_secret = random_string(43) # again, seems to be what pump uses
     expirey = 0 # for now, lets not have it expire
     expirey_db = None if expirey == 0 else expirey
+    
+    # save it
     client = Client(
         id=client_id, 
         secret=client_secret, 
         expirey=expirey_db,
-        application_type=data["type"]
+        application_type=data["type"],
+        logo_url=data.get("logo_url", None),
+        redirect_uri=data.get("redirect_uri", None)
     )
     client.save()
 
