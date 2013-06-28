@@ -87,6 +87,7 @@ This chapter contains various information for developers.
    devel/codebase
    devel/storage
    devel/originaldesigndecisions
+   devel/migrations
 
 
 Indices and tables
