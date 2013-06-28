@@ -37,7 +37,7 @@ add_route('mediagoblin.media_types.blog.blog-collection-admin', \
 
 #URL mapping for creating a new blog.
 add_route('mediagoblin.media_types.blog.create', '/u/<string:user>/b/create',
-	'mediagoblin.media_types.blog.views:blog_edit')
+	'mediagoblin.media_types.blog.views:blog_create')
 
 #URL mapping for editing an existing blog.
 add_route('mediagoblin.media_types.blog.create', '/u/<string:user>/b/<string:blog_name>/edit',
