@@ -105,6 +105,29 @@ class User(Base, UserMixin):
         _log.info('Deleted user "{0}" account'.format(self.username))
 
 
+class Client(Base):
+    """
+        Model representing a client - Used for API Auth
+    """
+    __tablename__ = "core__clients"
+
+    id = Column(Unicode, nullable=True, primary_key=True)
+    secret = Column(Unicode, nullable=False)
+    expirey = Column(DateTime, nullable=True)
+    application_type = Column(Unicode, nullable=False)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    # optional stuff
+    redirect_uri = Column(Unicode, nullable=True)
+    logo_uri = Column(Unicode, nullable=True)
+    application_name = Column(Unicode, nullable=True)
+    
+    def __repr__(self):
+        return "<Client {0}>".format(self.id)
+
+
+
 class MediaEntry(Base, MediaEntryMixin):
     """
     TODO: Consider fetching the media_files using join
@@ -580,7 +603,7 @@ with_polymorphic(
     [ProcessingNotification, CommentNotification])
 
 MODELS = [
-    User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
+    User, Client, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
     MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
     Notification, CommentNotification, ProcessingNotification,
     CommentSubscription]
