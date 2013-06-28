@@ -16,9 +16,9 @@
 
 import wtforms
 
-from mediagoblin.tols.text import tag_length_validator, TOO_LONG_TAG_WARNING
-from mediagoblin.tools.translate import lazy_pass_to_uggettext as _
-from mediagoblin.tools.licences import licences_as_choices
+from mediagoblin.tools.text import tag_length_validator, TOO_LONG_TAG_WARNING
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+from mediagoblin.tools.licenses import licenses_as_choices
 
 class BlogPostEditForm(wtforms.Form):
     title = wtforms.TextField(_('Title'),
@@ -28,6 +28,12 @@ class BlogPostEditForm(wtforms.Form):
 		description="Seperate tags by commas.")
     license = wtforms.SelectField(_('License'), 
 		[wtforms.validators.Optional(),], choices=licenses_as_choices())
+
+class BlogEditForm(wtforms.Form):
+    title = wtforms.TextField(_('Title'),
+		[wtforms.validators.Length(min=0, max=500)])
+    description = wtforms.TextAreaField(_('Content'))
+    
     
 
     
