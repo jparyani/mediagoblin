@@ -20,6 +20,12 @@ structure works, we need to add a migration so that people running
 older codebases can have their databases updated to the new structure
 when they run `./bin/gmg dbupdate`.
 
+The first time `./bin/gmg dbupdate` is run by a user, it creates the
+tables at the current state that they're defined in models.py and sets
+the migration number to the current migration... after all, migrations
+only exist to get things to the current state of the db.  After that,
+every migration is run with dbupdate.
+
 There's a few things you need to know:
 
 - We use `sqlalchemy-migrate
