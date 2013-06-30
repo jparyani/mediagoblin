@@ -56,6 +56,23 @@ def client_register(request):
         if not client:
             return json_response({"error":"Unauthorized.", status=403)
 
+        client.logo_url = data.get("logo_url", client.logo_url)
+        client.application_name = data.get("application_name", client.application_name)
+        app_name = ("application_type", client.application_name)
+        if app_name in client_types:
+            client.application_name = app_name
+        
+        client.save()
+
+        expirey = 0 if client.expirey is None else client.expirey
+
+        return json_response(
+                {
+                    "client_id":client.id,
+                    "client_secret":client.secret,
+                    "expires":expirey,
+                })
+
     elif client_type == "client_associate":
         # registering
         if "client_id" in data:
@@ -78,7 +95,8 @@ def client_register(request):
         expirey=expirey_db,
         application_type=data["type"],
         logo_url=data.get("logo_url", None),
-        redirect_uri=data.get("redirect_uri", None)
+        redirect_uri=data.get("redirect_uri", None),
+        application_type=data["application_type"]
     )
     client.save()
 
