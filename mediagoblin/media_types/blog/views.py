@@ -22,6 +22,7 @@ from mediagoblin import messages
 from mediagoblin import mg_globals
 
 from mediagoblin.media_types.blog import forms as blog_forms
+from mediagoblin.messages import add_message, SUCCESS
 #from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_media_entry_by_id, user_may_alter_collection,
@@ -74,7 +75,9 @@ def blog_create(request, media=None):
         request,
         'mediagoblin/blog/blog_edit_create.html',
         {'blog_form': blog_form,
+         'user' : request.user,
          'app_config': mg_globals.app_config})
+
 
 @require_active_login  
 @user_may_alter_collection
@@ -116,9 +119,8 @@ def blog_edit(request, collection):
         {'blog': blog,
          'form': blog_form})
 			
-			
-			
-			
+
+
 			
 			
 			
