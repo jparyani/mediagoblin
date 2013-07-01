@@ -119,12 +119,16 @@ class Client(Base):
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
 
     # optional stuff
-    redirect_uri = Column(Unicode, nullable=True)
-    logo_uri = Column(Unicode, nullable=True)
+    redirect_uri = Column(JSONEncoded, nullable=True)
+    logo_url = Column(Unicode, nullable=True)
     application_name = Column(Unicode, nullable=True)
-    
+    contacts = Column(JSONEncoded, nullable=True)
+
     def __repr__(self):
-        return "<Client {0}>".format(self.id)
+        if self.application_name:
+            return "<Client {0} - {1}>".format(self.application_name, self.id)
+        else:
+            return "<Client {0}>".format(self.id)
 
 
 
