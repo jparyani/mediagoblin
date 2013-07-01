@@ -297,8 +297,9 @@ def media_confirm_delete(request, media):
         if form.confirm.data is True:
             username = media.get_uploader.username
 
-            request.user.uploaded = request.user.uploaded - media.file_size
-            request.user.save()
+            media.get_uploader.uploaded = media.get_uploader.uploaded - \
+                media.file_size
+            media.get_uploader.save()
 
             # Delete MediaEntry and all related files, comments etc.
             media.delete()

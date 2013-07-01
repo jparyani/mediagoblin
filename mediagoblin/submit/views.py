@@ -106,7 +106,7 @@ def submit_start(request):
                 with queue_file:
                     queue_file.write(request.files['file'].stream.read())
 
-                # Get file size an round to 2 decimal places
+                # Get file size and round to 2 decimal places
                 file_size = request.app.queue_store.get_file_size(
                     entry.queued_media_file) / (1024.0 * 1024)
                 file_size = float('{0:.2f}'.format(file_size))
