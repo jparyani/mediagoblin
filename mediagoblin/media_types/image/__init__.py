@@ -26,7 +26,7 @@ MEDIA_TYPE = 'mediagoblin.media_types.image'
 
 
 def setup_plugin():
-    config = pluginapi.get_config('mediagoblin.pluginapi.media_types.image')
+    config = pluginapi.get_config('mediagoblin.media_types.image')
 
 
 class ImageMediaManager(MediaManagerBase):
@@ -66,12 +66,12 @@ def get_media_manager(media_type):
 
 def get_media_type_and_manager(ext):
     if ext in ACCEPTED_EXTENSIONS:
-        return ImageMediaManager
+        return MEDIA_TYPE, ImageMediaManager
 
 
 hooks = {
     'setup': setup_plugin,
-    'extensions': get_media_type_and_manager,
+    'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
     'get_media_manager': get_media_manager,
 }

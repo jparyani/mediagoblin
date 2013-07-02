@@ -208,7 +208,8 @@ class MediaEntryMixin(GenerateSlugMixin):
             return manager
         # Not found?  Then raise an error
         raise FileTypeNotSupported(
-            "MediaManager not in enabled types. Check media_types in config?")
+            "MediaManager not in enabled types. Check media_type plugins are"
+            " enabled in config?")
 
     def get_fail_exception(self):
         """
