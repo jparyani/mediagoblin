@@ -97,7 +97,7 @@ def resize_tool(proc_state, force, keyname, target_name,
             exif_tags, conversions_subdir)
 
 
-SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg']
+SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg', 'tiff']
 
 
 def sniff_handler(media_file, **kw):
