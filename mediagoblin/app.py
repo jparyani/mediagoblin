@@ -29,6 +29,7 @@ from mediagoblin.tools import common, session, translate, template
 from mediagoblin.tools.response import render_http_exception
 from mediagoblin.tools.theme import register_themes
 from mediagoblin.tools import request as mg_request
+from mediagoblin.media_types.tools import media_type_warning
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init.plugins import setup_plugins
@@ -68,6 +69,8 @@ class MediaGoblinApp(object):
 
         # Open and setup the config
         global_config, app_config = setup_global_and_app_config(config_path)
+
+        media_type_warning()
 
         setup_crypto()
 
