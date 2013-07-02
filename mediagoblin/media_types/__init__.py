@@ -50,36 +50,6 @@ class MediaManagerBase(object):
         return hasattr(self, i)
 
 
-class CompatMediaManager(object):
-    def __init__(self, mm_dict, entry=None):
-        self.mm_dict = mm_dict
-        self.entry = entry
-
-    def __call__(self, entry):
-        "So this object can look like a class too, somehow"
-        assert self.entry is None
-        return self.__class__(self.mm_dict, entry)
-
-    def __getitem__(self, i):
-        return self.mm_dict[i]
-
-    def __contains__(self, i):
-        return (i in self.mm_dict)
-
-    @property
-    def media_fetch_order(self):
-        return self.mm_dict.get('media_fetch_order')
-
-    def sniff_handler(self, *args, **kwargs):
-        func = self.mm_dict.get("sniff_handler", None)
-        if func is not None:
-            return func(*args, **kwargs)
-        return False
-
-    def __getattr__(self, i):
-        return self.mm_dict[i]
-
-
 def sniff_media(media):
     '''
     Iterate through the enabled media types and find those suited
