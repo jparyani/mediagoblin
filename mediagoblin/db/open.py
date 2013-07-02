@@ -52,10 +52,6 @@ class DatabaseMaster(object):
 def load_models(app_config):
     import mediagoblin.db.models
 
-    for media_type in app_config['media_types']:
-        _log.debug("Loading %s.models", media_type)
-        __import__(media_type + ".models")
-
     for plugin in mg_globals.global_config.get('plugins', {}).keys():
         _log.debug("Loading %s.models", plugin)
         try:
