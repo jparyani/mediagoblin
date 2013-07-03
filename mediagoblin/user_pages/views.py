@@ -20,7 +20,7 @@ import datetime
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
                                    CollectionItem, User, MediaComment,
-                                   CommentReport, MediaReport, Group)
+                                   CommentReport, MediaReport)
 from mediagoblin.tools.response import render_to_response, render_404, \
     redirect, redirect_obj
 from mediagoblin.tools.translate import pass_to_ugettext as _
@@ -30,7 +30,7 @@ from mediagoblin.user_pages.lib import (send_comment_email, build_report_form,
     add_media_to_collection)
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
-    get_media_entry_by_id, user_in_group,
+    get_media_entry_by_id, user_has_privilege,
     require_active_login, user_may_delete_media, user_may_alter_collection,
     get_user_collection, get_user_collection_item, active_user_from_url,
     get_media_comment_by_id)
@@ -152,6 +152,7 @@ def media_home(request, media, page, **kwargs):
 
 @get_media_entry_by_id
 @require_active_login
+@user_has_privilege(u'commenter')
 def media_post_comment(request, media):
     """
     recieves POST from a MediaEntry() comment form, saves the comment.
@@ -621,8 +622,8 @@ def processing_panel(request):
 
 @require_active_login
 @get_user_media_entry
-@user_in_group(u'reporter')
-def file_a_report(request, media, comment=None, required_group=1):
+@user_has_privilege(u'reporter')
+def file_a_report(request, media, comment=None):
     if request.method == "POST":
         report_form = build_report_form(request.form)
         report_form.save()

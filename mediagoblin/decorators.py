@@ -21,7 +21,7 @@ from werkzeug.exceptions import Forbidden, NotFound
 from werkzeug.urls import url_quote
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.models import MediaEntry, User, MediaComment, Group
+from mediagoblin.db.models import MediaEntry, User, MediaComment, Privilege
 from mediagoblin.tools.response import redirect, render_404
 
 
@@ -63,25 +63,23 @@ def active_user_from_url(controller):
 
     return wrapper
 
-def user_in_group(group_name):
+def user_has_privilege(privilege_name):
 #TODO handle possible errors correctly
-    def user_in_group_decorator(controller):
+    def user_has_privilege_decorator(controller):
         @wraps(controller)
-
         def wrapper(request, *args, **kwargs):
             user_id = request.user.id
-            group = Group.query.filter(
-                Group.group_name==group_name).first()
-            if not (group.query.filter(
-                Group.all_users.any(
-                    User.id==user_id)).count()):
-
+            privileges_of_user = Privilege.query.filter(
+                Privilege.all_users.any(
+                User.id==user_id))
+            if not privileges_of_user.filter(
+                Privilege.privilege_name==privilege_name).count():
                 raise Forbidden()
 
             return controller(request, *args, **kwargs)
 
         return wrapper
-    return user_in_group_decorator
+    return user_has_privilege_decorator
 
 
 def user_may_delete_media(controller):

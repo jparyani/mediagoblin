@@ -559,50 +559,50 @@ class UserBan(Base):
     reason = Column(UnicodeText, nullable=False)
 
 
-class Group(Base):
-    __tablename__ = 'core__groups'
+class Privilege(Base):
+    __tablename__ = 'core__privileges'
 
     id = Column(Integer, nullable=False, primary_key=True)
-    group_name = Column(Unicode, nullable=False, unique=True)
+    privilege_name = Column(Unicode, nullable=False, unique=True)
     all_users = relationship(
         User, 
-        backref='all_groups', 
-        secondary="core__group_user_associations")
+        backref='all_privileges', 
+        secondary="core__privileges_users")
 
-    def __init__(self, group_name):
-        self.group_name = group_name
+    def __init__(self, privilege_name):
+        self.privilege_name = privilege_name
 
     def __repr__(self):
-        return "<Group %s>" % (self.group_name)
+        return "<Privilege %s>" % (self.privilege_name)
 
-class GroupUserAssociation(Base):
-    __tablename__ = 'core__group_user_associations'
+class PrivilegeUserAssociation(Base):
+    __tablename__ = 'core__privileges_users'
 
-    group_id = Column(
-        'core__group_id', 
+    privilege_id = Column(
+        'core__privilege_id', 
         Integer, 
         ForeignKey(User.id), 
         primary_key=True)
     user_id = Column(
         'core__user_id', 
         Integer, 
-        ForeignKey(Group.id), 
+        ForeignKey(Privilege.id), 
         primary_key=True)
 
 
-group_foundations = [[u'admin'], [u'moderator'], [u'commenter'], [u'uploader'],[u'reporter'],[u'active']]
+privilege_foundations = [[u'admin'], [u'moderator'], [u'commenter'], [u'uploader'],[u'reporter'],[u'active']]
 
 MODELS = [
     User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem, 
     MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData, ReportBase,
-    CommentReport, MediaReport, UserBan, Group, GroupUserAssociation]
+    CommentReport, MediaReport, UserBan, Privilege, PrivilegeUserAssociation]
 
 # Foundations are the default rows that are created immediately after the tables are initialized. Each entry to
 #   this dictionary should be in the format of 
 #                                               ModelObject:List of Rows
 #                                         (Each Row must be a list of parameters that can create and instance of the ModelObject)
 #   
-FOUNDATIONS = {Group:group_foundations}
+FOUNDATIONS = {Privilege:privilege_foundations}
 
 ######################################################
 # Special, migrations-tracking table

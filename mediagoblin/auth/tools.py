@@ -22,7 +22,7 @@ from sqlalchemy import or_
 
 from mediagoblin import mg_globals
 from mediagoblin.auth import lib as auth_lib
-from mediagoblin.db.models import User
+from mediagoblin.db.models import User, Privilege
 from mediagoblin.tools.mail import (normalize_email, send_email,
                                     email_debug_message)
 from mediagoblin.tools.template import render_template
@@ -130,6 +130,14 @@ def register_user(request, register_form):
         user.verification_key = unicode(uuid.uuid4())
         user.save()
 
+        # give the user the default privileges
+        default_privileges = [ 
+            Privilege.query.filter(Privilege.privilege_name==u'commenter').first(),
+            Privilege.query.filter(Privilege.privilege_name==u'uploader').first(),
+            Privilege.query.filter(Privilege.privilege_name==u'reporter').first()]
+        user.all_privileges += default_privileges
+        user.save()
+        
         # log the user in
         request.session['user_id'] = unicode(user.id)
         request.session.save()

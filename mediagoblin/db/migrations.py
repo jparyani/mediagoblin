@@ -26,7 +26,7 @@ from sqlalchemy.sql import and_
 from migrate.changeset.constraint import UniqueConstraint
 
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
-from mediagoblin.db.models import MediaEntry, Collection, User, MediaComment, Group
+from mediagoblin.db.models import MediaEntry, Collection, User, MediaComment, Privilege
 
 MIGRATIONS = {}
 
@@ -329,23 +329,23 @@ class UserBan_v0(declarative_base()):
     expiration_date = Column(DateTime)
     reason = Column(UnicodeText, nullable=False)
 
-class Group_v0(declarative_base()):
-    __tablename__ = 'core__groups'
+class Privilege_v0(declarative_base()):
+    __tablename__ = 'core__privileges'
     id = Column(Integer, nullable=False, primary_key=True, unique=True)
-    group_name = Column(Unicode, nullable=False)
+    privilege_name = Column(Unicode, nullable=False)
 
-class GroupUserAssociation_v0(declarative_base()):
-    __tablename__ = 'core__group_user_associations'
+class PrivilegeUserAssociation_v0(declarative_base()):
+    __tablename__ = 'core__privileges_users'
 
     group_id = Column(
-        'core__group_id', 
+        'core__privilege_id', 
         Integer, 
         ForeignKey(User.id), 
         primary_key=True)
     user_id = Column(
         'core__user_id', 
         Integer, 
-        ForeignKey(Group.id), 
+        ForeignKey(Privilege.id), 
         primary_key=True)
 
 @RegisterMigration(11, MIGRATIONS)
@@ -354,8 +354,8 @@ def create_moderation_tables(db):
     CommentReport_v0.__table__.create(db.bind)
     MediaReport_v0.__table__.create(db.bind)
     UserBan_v0.__table__.create(db.bind)
-    Group_v0.__table__.create(db.bind)
-    GroupUserAssociation_v0.__table__.create(db.bind)
+    Privilege_v0.__table__.create(db.bind)
+    PrivilegeUserAssociation_v0.__table__.create(db.bind)
     db.commit()
 
 
