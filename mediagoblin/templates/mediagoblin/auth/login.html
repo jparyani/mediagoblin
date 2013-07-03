@@ -46,7 +46,7 @@
             {%- trans %}Create one here!{% endtrans %}</a>
         </p>
       {% endif %}
-      {% template_hook("openid_login_link") %} 
+      {% template_hook("login_link") %} 
       {{ wtforms_util.render_divs(login_form, True) }}
       {% if pass_auth %}
       <p>

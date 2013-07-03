@@ -57,9 +57,9 @@ def setup_plugin():
     pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
 
     pluginapi.register_template_hooks(
-        {'openid_register_link': 'mediagoblin/plugins/openid/register_link.html',
-         'openid_login_link': 'mediagoblin/plugins/openid/login_link.html',
-         'openid_edit_link': 'mediagoblin/plugins/openid/edit_link.html'})
+        {'register_link': 'mediagoblin/plugins/openid/register_link.html',
+         'login_link': 'mediagoblin/plugins/openid/login_link.html',
+         'edit_link': 'mediagoblin/plugins/openid/edit_link.html'})
 
 
 def create_user(register_form):
