@@ -47,9 +47,7 @@
     {% include "mediagoblin/extra_head.html" %}
     {% template_hook("head") %}
 
-    {% if persona is defined %}
-      {% template_hook("persona_head") %}
-    {% endif %}
+    {% template_hook("persona_head") %}
 
     {% block mediagoblin_head %}
     {% endblock mediagoblin_head %}
@@ -150,7 +148,7 @@
           {% include "mediagoblin/utils/messages.html" %}
           {% block mediagoblin_content %}
           {% endblock mediagoblin_content %}
-          {% if persona is defined and csrf_token is defined %}
+          {% if csrf_token is defined %}
             {% template_hook("persona_form") %}
           {% endif %}
         </div>

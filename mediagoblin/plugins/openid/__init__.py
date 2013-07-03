@@ -120,4 +120,6 @@ hooks = {
     'auth_no_pass_redirect': no_pass_redirect,
     ('mediagoblin.auth.register',
      'mediagoblin/auth/register.html'): add_to_form_context,
+    ('mediagoblin.auth.login',
+     'mediagoblin/auth/login.html'): add_to_form_context
 }

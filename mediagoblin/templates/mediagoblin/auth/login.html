@@ -47,13 +47,6 @@
         </p>
       {% endif %}
       {% template_hook("login_link") %} 
-      {% if persona is defined %}
-        <p>
-        <a href="javascript:;" id="persona_login">
-          {% trans %}Or login with Persona!{% endtrans %}
-        </a>
-        </p>
-      {% endif %}
       {{ wtforms_util.render_divs(login_form, True) }}
       {% if pass_auth %}
       <p>

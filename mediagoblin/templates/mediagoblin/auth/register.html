@@ -35,14 +35,6 @@
     <div class="form_box">
       <h1>{% trans %}Create an account!{% endtrans %}</h1>
       {% template_hook("register_link") %}
-      {% template_hook("openid_register_link") %}
-      {% if persona is defined %}
-        <p>
-          <a href="javascript:;" id="persona_login">
-            {% trans %}Or register with Persona!{% endtrans %}
-          </a>
-        </p>
-      {% endif %}
       {{ wtforms_util.render_divs(register_form, True) }}
       {{ csrf_token }}
       <div class="form_submit_buttons">

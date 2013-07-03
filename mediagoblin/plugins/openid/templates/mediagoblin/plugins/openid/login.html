@@ -44,13 +44,7 @@
         {% trans %}Log in to create an account!{% endtrans %} 
         </p>
       {% endif %}
-      {% if persona is defined %}
-        <p>
-        <a href="javascript:;" id="persona_login">
-          {% trans %}Or login with Persona!{% endtrans %}
-        </a>
-        </p>
-      {% endif %}
+      {% template_hook('login_link') %}
       {% if pass_auth is defined %}
       <p>
       <a href="{{ request.urlgen('mediagoblin.auth.login') }}?{{ request.query_string }}">
