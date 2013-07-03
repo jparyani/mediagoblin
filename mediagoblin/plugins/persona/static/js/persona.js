@@ -22,6 +22,11 @@ $(document).ready(function () {
         signinLink.onclick = function() { navigator.id.request(); };
     }
 
+    var signinLink1 = document.getElementById('persona_login1');
+    if (signinLink1) {
+        signinLink1.onclick = function() { navigator.id.request(); };
+    }
+
     var signoutLink = document.getElementById('logout');
     if (signoutLink) {
         signoutLink.onclick = function() { navigator.id.logout(); };

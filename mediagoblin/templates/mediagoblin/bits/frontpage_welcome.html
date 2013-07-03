@@ -28,7 +28,7 @@
       <p>{% trans %}Don't have one yet? It's easy!{% endtrans %}</p>
       <a class="button_action_highlight" href=
         {% if persona_auth is defined %}
-          "javascript:;" id="persona_login"
+          "javascript:;" id="persona_login1"
         {% else %}
           "{{ request.urlgen('mediagoblin.auth.register') }}"
         {% endif %}
