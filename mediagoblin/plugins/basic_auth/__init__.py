@@ -21,7 +21,7 @@ from sqlalchemy import or_
 
 
 def setup_plugin():
-    config = pluginapi.get_config('mediagoblin.pluginapi.basic_auth')
+    config = pluginapi.get_config('mediagoblin.plugins.basic_auth')
 
 
 def get_user(**kwargs):
