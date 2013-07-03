@@ -34,19 +34,7 @@
         method="POST" enctype="multipart/form-data">
     <div class="form_box">
       <h1>{% trans %}Create an account!{% endtrans %}</h1>
-      {% if openid_link is defined %}
-        <p>
-        <a href="{{ request.urlgen('mediagoblin.plugins.openid.register') }}">
-          {%- trans %}Or register with OpenID!{% endtrans %}
-        </a>
-        </p>
-      {% elif pass_auth_link is defined %}
-      <p>
-      <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
-        {%- trans %}Or register with a password!{% endtrans %}
-      </a>
-      </p>
-      {% endif %}
+      {% template_hook("openid_register_link") %}
       {{ wtforms_util.render_divs(register_form, True) }}
       {{ csrf_token }}
       <div class="form_submit_buttons">

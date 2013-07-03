@@ -46,13 +46,7 @@
             {%- trans %}Create one here!{% endtrans %}</a>
         </p>
       {% endif %}
-      {% if openid_link is defined %}
-        <p>
-        <a href="{{ request.urlgen('mediagoblin.plugins.openid.login') }}?{{ request.query_string }}">
-          {%- trans %}Or login with OpenID!{% endtrans %}
-        </a>
-        </p>
-      {% endif %}
+      {% template_hook("openid_login_link") %} 
       {{ wtforms_util.render_divs(login_form, True) }}
       {% if pass_auth %}
       <p>

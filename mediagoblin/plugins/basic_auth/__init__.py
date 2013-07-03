@@ -71,11 +71,6 @@ def append_to_global_context(context):
     return context
 
 
-def add_to_form_context(context):
-    context['pass_auth_link'] = True
-    return context
-
-
 hooks = {
     'setup': setup_plugin,
     'authentication': auth,
@@ -87,8 +82,4 @@ hooks = {
     'auth_check_password': check_password,
     'auth_fake_login_attempt': auth_tools.fake_login_attempt,
     'template_global_context': append_to_global_context,
-    ('mediagoblin.plugins.openid.register',
-     'mediagoblin/auth/register.html'): add_to_form_context,
-    ('mediagoblin.plugins.openid.finish_login',
-     'mediagoblin/auth/register.html'): add_to_form_context,
 }

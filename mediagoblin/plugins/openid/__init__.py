@@ -56,6 +56,11 @@ def setup_plugin():
     pluginapi.register_routes(routes)
     pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
 
+    pluginapi.register_template_hooks(
+        {'openid_register_link': 'mediagoblin/plugins/openid/register_link.html',
+         'openid_login_link': 'mediagoblin/plugins/openid/login_link.html',
+         'openid_edit_link': 'mediagoblin/plugins/openid/edit_link.html'})
+
 
 def create_user(register_form):
     if 'openid' in register_form:
@@ -115,8 +120,4 @@ hooks = {
     'auth_no_pass_redirect': no_pass_redirect,
     ('mediagoblin.auth.register',
      'mediagoblin/auth/register.html'): add_to_form_context,
-    ('mediagoblin.auth.login',
-     'mediagoblin/auth/login.html'): add_to_form_context,
-    ('mediagoblin.edit.account',
-     'mediagoblin/edit/edit_account.html'): add_to_form_context,
 }
