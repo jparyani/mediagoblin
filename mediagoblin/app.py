@@ -87,7 +87,7 @@ class MediaGoblinApp(object):
         setup_plugins()
 
         # Set up the database
-        self.db = setup_database()
+        self.db = setup_database(app_config['run_migrations'])
 
         # Register themes
         self.theme_registry, self.current_theme = register_themes(app_config)
