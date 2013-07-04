@@ -18,11 +18,12 @@ from functools import wraps
 
 from urlparse import urljoin
 from werkzeug.exceptions import Forbidden, NotFound
-from werkzeug.urls import url_quote
 
 from mediagoblin import mg_globals as mgg
+from mediagoblin import messages
 from mediagoblin.db.models import MediaEntry, User
 from mediagoblin.tools.response import redirect, render_404
+from mediagoblin.tools.translate import pass_to_ugettext as _
 
 
 def require_active_login(controller):
@@ -235,3 +236,35 @@ def get_workbench(func):
             return func(*args, workbench=workbench, **kwargs)
 
     return new_func
+
+
+def allow_registration(controller):
+    """ Decorator for if registration is enabled"""
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        if not mgg.app_config["allow_registration"]:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                _('Sorry, registration is disabled on this instance.'))
+            return redirect(request, "index")
+
+        return controller(request, *args, **kwargs)
+
+    return wrapper
+
+
+def auth_enabled(controller):
+    """Decorator for if an auth plugin is enabled"""
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        if not mgg.app.auth:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                _('Sorry, authentication is disabled on this instance.'))
+            return redirect(request, 'index')
+
+        return controller(request, *args, **kwargs)
+
+    return wrapper

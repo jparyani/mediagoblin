@@ -19,28 +19,26 @@
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
-{% block mediagoblin_head %}
-  <script type="text/javascript"
-          src="{{ request.staticdirect('/js/show_password.js') }}"></script>
-{% endblock mediagoblin_head %}
-
 {% block title -%}
-  {% trans %}Create an account!{% endtrans %} &mdash; {{ super() }}
+  {% trans %}Add an OpenID{% endtrans %} &mdash; {{ super() }}
 {%- endblock %}
 
 {% block mediagoblin_content %}
-
-  <form action="{{ post_url }}"
+    <form action="{{ request.urlgen('mediagoblin.plugins.openid.edit') }}"
         method="POST" enctype="multipart/form-data">
+    {{ csrf_token }}
     <div class="form_box">
-      <h1>{% trans %}Create an account!{% endtrans %}</h1>
-      {% template_hook("register_link") %}
-      {{ wtforms_util.render_divs(register_form, True) }}
-      {{ csrf_token }}
+      <h1>{% trans %}Add an OpenID{% endtrans %}</h1>
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.plugins.openid.delete') }}">
+          {% trans %}Delete an OpenID{% endtrans %}
+        </a>
+      </p>
+      {{ wtforms_util.render_divs(form, True) }}
       <div class="form_submit_buttons">
-        <input type="submit" value="{% trans %}Create{% endtrans %}"
-               class="button_form" />
+        <input type="submit" value="{% trans %}Add{% endtrans %}" class="button_form"/>
       </div>
     </div>
   </form>
 {% endblock %}
+

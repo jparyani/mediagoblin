@@ -41,19 +41,17 @@
       {% endif %}
       {% if allow_registration %}
         <p>
-        {% trans %}Don't have an account yet?{% endtrans %} 
-        <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
-            {%- trans %}Create one here!{% endtrans %}</a>
+        {% trans %}Log in to create an account!{% endtrans %} 
         </p>
       {% endif %}
-      {% template_hook("login_link") %} 
-      {{ wtforms_util.render_divs(login_form, True) }}
-      {% if pass_auth %}
+      {% if pass_auth is defined %}
       <p>
-        <a href="{{ request.urlgen('mediagoblin.auth.forgot_password') }}" id="forgot_password">
-        {% trans %}Forgot your password?{% endtrans %}</a>
+      <a href="{{ request.urlgen('mediagoblin.auth.login') }}?{{ request.query_string }}">
+        {%- trans %}Or login with a password!{% endtrans %}
+      </a>
       </p>
       {% endif %}
+      {{ wtforms_util.render_divs(login_form, True) }}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Log in{% endtrans %}" class="button_form"/>
       </div>
@@ -64,3 +62,4 @@
     </div>
   </form>
 {% endblock %}
+

@@ -17,30 +17,8 @@
 #}
 {% extends "mediagoblin/base.html" %}
 
-{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
-
-{% block mediagoblin_head %}
-  <script type="text/javascript"
-          src="{{ request.staticdirect('/js/show_password.js') }}"></script>
-{% endblock mediagoblin_head %}
-
-{% block title -%}
-  {% trans %}Create an account!{% endtrans %} &mdash; {{ super() }}
-{%- endblock %}
-
 {% block mediagoblin_content %}
-
-  <form action="{{ post_url }}"
-        method="POST" enctype="multipart/form-data">
-    <div class="form_box">
-      <h1>{% trans %}Create an account!{% endtrans %}</h1>
-      {% template_hook("register_link") %}
-      {{ wtforms_util.render_divs(register_form, True) }}
-      {{ csrf_token }}
-      <div class="form_submit_buttons">
-        <input type="submit" value="{% trans %}Create{% endtrans %}"
-               class="button_form" />
-      </div>
-    </div>
-  </form>
+  <div onload="document.getElementById('openid_message').submit()">
+  {{ html|safe }}
+  </div>
 {% endblock %}

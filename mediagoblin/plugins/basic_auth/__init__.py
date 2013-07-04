@@ -15,13 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from mediagoblin.plugins.basic_auth import forms as auth_forms
 from mediagoblin.plugins.basic_auth import tools as auth_tools
+from mediagoblin.auth.tools import create_basic_user
 from mediagoblin.db.models import User
 from mediagoblin.tools import pluginapi
 from sqlalchemy import or_
 
 
 def setup_plugin():
-    config = pluginapi.get_config('mediagoblin.pluginapi.basic_auth')
+    config = pluginapi.get_config('mediagoblin.plugins.basic_auth')
 
 
 def get_user(**kwargs):
@@ -38,9 +39,7 @@ def get_user(**kwargs):
 def create_user(registration_form):
     user = get_user(username=registration_form.username.data)
     if not user and 'password' in registration_form:
-        user = User()
-        user.username = registration_form.username.data
-        user.email = registration_form.email.data
+        user = create_basic_user(registration_form)
         user.pw_hash = gen_password_hash(
             registration_form.password.data)
         user.save()
@@ -72,11 +71,6 @@ def append_to_global_context(context):
     return context
 
 
-def add_to_form_context(context):
-    context['pass_auth_link'] = True
-    return context
-
-
 hooks = {
     'setup': setup_plugin,
     'authentication': auth,
@@ -88,8 +82,4 @@ hooks = {
     'auth_check_password': check_password,
     'auth_fake_login_attempt': auth_tools.fake_login_attempt,
     'template_global_context': append_to_global_context,
-    ('mediagoblin.plugins.openid.register',
-    'mediagoblin/auth/register.html'): add_to_form_context,
-    ('mediagoblin.plugins.openid.login',
-     'mediagoblin/auth/login.html'): add_to_form_context,
 }

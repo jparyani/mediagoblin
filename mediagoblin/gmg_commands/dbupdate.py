@@ -110,13 +110,25 @@ def run_dbupdate(app_config, global_config):
     in the future, plugins)
     """
 
+    # Set up the database
+    db = setup_connection_and_db_from_config(app_config, migrations=True)
+    #Run the migrations
+    run_all_migrations(db, app_config, global_config)
+
+
+def run_all_migrations(db, app_config, global_config):
+    """
+    Initializes or migrates a database that already has a 
+    connection setup and also initializes or migrates all
+    extensions based on the config files.
+
+    It can be used to initialize an in-memory database for
+    testing.
+    """
     # Gather information from all media managers / projects
     dbdatas = gather_database_data(
             app_config['media_types'],
             global_config.get('plugins', {}).keys())
-
-    # Set up the database
-    db = setup_connection_and_db_from_config(app_config, migrations=True)
 
     Session = sessionmaker(bind=db.engine)
 

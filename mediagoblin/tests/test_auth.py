@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import urlparse
-import datetime
 import pkg_resources
 import pytest
 
@@ -235,6 +234,7 @@ def test_authentication_views(test_app):
     """
     # Make a new user
     test_user = fixture_add_user(active_user=False)
+
 
     # Get login
     # ---------

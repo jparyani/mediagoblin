@@ -41,13 +41,16 @@
           Changing {{ username }}'s account settings
         {%- endtrans -%}
       </h1>
+      {% if pass_auth is defined %}
       <p>
         <a href="{{ request.urlgen('mediagoblin.edit.pass') }}">
           {% trans %}Change your password.{% endtrans %}
         </a>
       </p>
+      {% endif %}
+      {% template_hook("edit_link") %} 
       {{ wtforms_util.render_divs(form, True) }}
-      <div class="form_submit_buttons">
+     <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button_form" />
   {{ csrf_token }}
       </div>

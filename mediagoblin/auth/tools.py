@@ -116,6 +116,7 @@ def send_fp_verification_email(user, request):
     """
     fp_verification_key = get_timed_signer_url('mail_verification_token') \
             .dumps(user.id)
+
     rendered_email = render_template(
         request, 'mediagoblin/auth/fp_verification_email.txt',
         {'username': user.username,
@@ -199,3 +200,11 @@ def no_auth_logout(request):
     if not mg_globals.app.auth and 'user_id' in request.session:
         del request.session['user_id']
         request.session.save()
+
+
+def create_basic_user(form):
+    user = User()
+    user.username = form.username.data
+    user.email = form.email.data
+    user.save()
+    return user
