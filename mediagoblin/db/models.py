@@ -130,7 +130,36 @@ class Client(Base):
         else:
             return "<Client {0}>".format(self.id)
 
+class RequestToken(Base):
+    """
+        Model for representing the request tokens
+    """
+    __tablename__ = "core__request_tokens"
 
+    token = Column(Unicode, primary_key=True)
+    secret = Column(Unicode, nullable=False)
+    client = Column(Unicode, ForeignKey(Client.id))
+    user = Column(Integer, ForeignKey(User.id), nullable=True)
+    used = Column(Boolean, default=False)
+    authenticated = Column(Boolean, default=False)
+    verifier = Column(Unicode, nullable=True)
+    callback = Column(Unicode, nullable=True)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    
+class AccessToken(Base):
+    """
+        Model for representing the access tokens
+    """
+    __tablename__ = "core__access_tokens"
+
+    token = Column(Unicode, nullable=False, primary_key=True)
+    secret = Column(Unicode, nullable=False)
+    user = Column(Integer, ForeignKey(User.id))
+    request_token = Column(Unicode, ForeignKey(RequestToken.token))
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+ 
 
 class MediaEntry(Base, MediaEntryMixin):
     """
@@ -607,10 +636,10 @@ with_polymorphic(
     [ProcessingNotification, CommentNotification])
 
 MODELS = [
-    User, Client, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
-    MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
-    Notification, CommentNotification, ProcessingNotification,
-    CommentSubscription]
+    User, Client, RequestToken, AccessToken, MediaEntry, Tag, MediaTag, 
+    MediaComment, Collection, CollectionItem, MediaFile, FileKeynames, 
+    MediaAttachmentFile, ProcessingMetaData, Notification, CommentNotification,
+    ProcessingNotification, CommentSubscription]
 
 
 ######################################################

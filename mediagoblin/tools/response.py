@@ -45,6 +45,15 @@ def render_error(request, status=500, title=_('Oops!'),
         {'err_code': status, 'title': title, 'err_msg': err_msg}),
         status=status)
 
+def render_400(request, err_msg=None):
+    """ Render a standard 400 page"""
+    _ = pass_to_ugettext
+    title = _("Bad Request")
+    if err_msg is None:
+        err_msg = _("The request sent to the server is invalid, please double check it")
+
+    return render_error(request, 400, title, err_msg)
+
 def render_403(request):
     """Render a standard 403 page"""
     _ = pass_to_ugettext

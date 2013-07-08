@@ -113,8 +113,8 @@ Errors
 
 There are a number of errors you could get back, This explains what could cause some of them:
 
-Could not decode JSON
-    This is caused when you have an error in your JSON, you may want to use a JSON validator to ensure that your JSON is correct.
+Could not decode data
+    This is caused when you have an error in the encoding of your data.
 
 Unknown Content-Type
     You should sent a Content-Type header with when you make a request, this should be either application/json or www-form-urlencoded. This is caused when a unknown Content-Type is used.
