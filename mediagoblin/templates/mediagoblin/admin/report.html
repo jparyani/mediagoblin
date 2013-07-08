@@ -66,7 +66,8 @@
   <div id="report-{{ report.id }}"
        class="report_wrapper">
     <div class="report_author">
-        <img src="{{ request.staticdirect('/images/icon_clipboard.png') }}" />
+        <img src="{{ request.staticdirect('/images/icon_clipboard.png') }}" 
+             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license. Distributed by the GNOME project http://www.gnome.org" />
         <a href="{{ request.urlgen('mediagoblin.admin.users_detail',
                         user=report.reporter.username) }}"
            class="report_authorlink">
