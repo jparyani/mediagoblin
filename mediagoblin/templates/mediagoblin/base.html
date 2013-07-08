@@ -104,7 +104,7 @@
               {% if request.user.is_admin %}
                 <p>
                   <span class="dropdown_title">Admin powers:</span>
-                  <a href="{{ request.urlgen('mediagoblin.admin.panel') }}">
+                  <a href="{{ request.urlgen('mediagoblin.admin.media_panel') }}">
                     {%- trans %}Media processing panel{% endtrans -%}
                   </a>
                 </p>

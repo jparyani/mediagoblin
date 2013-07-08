@@ -26,7 +26,8 @@ from sqlalchemy.sql import and_
 from migrate.changeset.constraint import UniqueConstraint
 
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
-from mediagoblin.db.models import MediaEntry, Collection, User, MediaComment, Privilege
+from mediagoblin.db.models import (MediaEntry, Collection, User, 
+                                   MediaComment, Privilege, ReportBase)
 
 MIGRATIONS = {}
 
@@ -296,6 +297,7 @@ class ReportBase_v0(declarative_base()):
     id = Column(Integer, primary_key=True)
     reporter_id = Column(Integer, ForeignKey(User.id), nullable=False)
     report_content = Column(UnicodeText)
+    reported_user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now) 
     resolved = Column(DateTime)
     discriminator = Column('type', Unicode(50))
@@ -357,5 +359,3 @@ def create_moderation_tables(db):
     Privilege_v0.__table__.create(db.bind)
     PrivilegeUserAssociation_v0.__table__.create(db.bind)
     db.commit()
-
-

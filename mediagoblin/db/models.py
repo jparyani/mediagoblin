@@ -496,8 +496,16 @@ class ReportBase(Base):
         User, 
         backref=backref("reports_filed_by",
             lazy="dynamic",
-            cascade="all, delete-orphan"))
+            cascade="all, delete-orphan"),
+        primaryjoin="User.id==ReportBase.reporter_id")
     report_content = Column(UnicodeText)
+    reported_user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    reported_user = relationship(
+        User, 
+        backref=backref("reports_filed_on",
+            lazy="dynamic",
+            cascade="all, delete-orphan"),
+        primaryjoin="User.id==ReportBase.reported_user_id")
     created = Column(DateTime, nullable=False, default=datetime.datetime.now())
     resolved = Column(DateTime)
     discriminator = Column('type', Unicode(50))
@@ -590,7 +598,7 @@ class PrivilegeUserAssociation(Base):
         primary_key=True)
 
 
-privilege_foundations = [[u'admin'], [u'moderator'], [u'commenter'], [u'uploader'],[u'reporter'],[u'active']]
+privilege_foundations = [[u'admin'], [u'moderator'], [u'uploader'],[u'reporter'], [u'commenter'] ,[u'active']]
 
 MODELS = [
     User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem, 

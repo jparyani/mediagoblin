@@ -15,81 +15,76 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
-{% extends "mediagoblin/base.html" %}
+{%- extends "mediagoblin/base.html" %}
 
-{% block title -%}
-  {% trans %}Report panel{% endtrans %} &mdash; {{ super() }}
-{%- endblock %}
-
-{% block mediagoblin_content %}
-
-<h1>{% trans %}Report panel{% endtrans %}</h1>
-
-<p>
-  {% trans %}Here you can look up users in order to take punitive actions on them.{% endtrans %}
-</p>
-    
-<h2>{% trans %}Reports Filed on Comments{% endtrans %}</h2>
-
-{% if report_list.count() %}
-  <table class="media_panel processing">
-    <tr>
-      <th>ID</th>
-      <th>Report Type</th>
-      <th>Offender</th>
-      <th>When Reported</th>
-      <th>Reported By</th>
-      <th>Reason</th>
-      <th>Reported Comment or Media Entry</th>
-    </tr>
-    {% for report in report_list %}
-      <tr>
-        {% if report.discriminator == "comment_report" %}
-            <td>{{ report.id }}</td>
-            <td>Comment Report</td>
-            <td>{{ report.comment.get_author.username }}</td>
-            <td>{{ report.created.strftime("%F %R") }}</td>
-            <td>{{ report.reporter.username }}</td>
-            <td>{{ report.report_content }}</td>
-            <td><a href="{{ report.comment.get_media_entry.url_for_self(request.urlgen) }}">{{ report.comment.get_media_entry.title }}</a></td>
-        {% elif report.discriminator == "media_report" %}
-            <td>{{ report.id }}</td>
-            <td>Media Report</td>
-            <td>{{ report.media_entry.get_uploader.username }}</td>
-            <td>{{ report.created.strftime("%F %R") }}</td>
-            <td>{{ report.reporter.username }}</td>
-            <td>{{ report.report_content[0:20] }}...</td>
-            <td><a href="{{ report.media_entry.url_for_self(request.urlgen) }}">{{ report.media_entry.title }}</a></td>
-        {% endif %}
-      </tr>
-    {% endfor %}
-  </table>
+{%- block mediagoblin_content %}
+{% if not report %}
+  Sorry, no such report found.
 {% else %}
-  <p><em>{% trans %}No open reports found.{% endtrans %}</em></p>
+  <h2> Report #{{ report.id }}</h2>
+  {% if comment %}
+    Reported comment:
+    {% set reported_user = comment.get_author %}
+    <div id="comment-{{ comment.id }}"
+        class="comment_wrapper">
+      <div class="comment_author">
+        <img src="{{ request.staticdirect('/images/icon_comment.png') }}" />
+            <a href="{{ request.urlgen('mediagoblin.admin.users_detail',
+                            user=comment.get_author.username) }}"
+               class="comment_authorlink">
+          {{- reported_user.username -}}
+        </a>
+        <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
+                        comment=comment.id,
+                        user=comment.get_media_entry.get_uploader.username,
+                        media=comment.get_media_entry.slug_or_id) }}#comment"
+           class="comment_whenlink">
+          <span title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+            {%- trans formatted_time=timesince(comment.created) -%}
+              {{ formatted_time }} ago
+            {%- endtrans -%}
+          </span></a>:
+      </div>
+      <div class=comment_content>
+        {% autoescape False %}
+          {{ comment.content_html }}
+        {% endautoescape %}
+      </div>
+    </div>
+  {% elif media_entry %}
+    <div class="media_thumbnail">
+      <a href="request.urlgen('mediagoblin.user_pages.media_home'),
+                                                              user=media_entry.get_uploader.username,
+                                                              media=media_entry.slug_or_id)"><img src="{{ media_entry.thumb_url}}"/></a>
+      <a href="request.urlgen('mediagoblin.user_pages.media_home'),
+                    user=media_entry.get_uploader.username,
+                    media=media_entry.slug_or_id)" class=thumb_entry_title>{{ media_entry.title }}</a>
+    </div>
+    <div class=clear></div>
+  {% endif %}
+  Reason for report:
+  <div id="report-{{ report.id }}"
+       class="report_wrapper">
+    <div class="report_author">
+        <img src="{{ request.staticdirect('/images/icon_clipboard.png') }}" />
+        <a href="{{ request.urlgen('mediagoblin.admin.users_detail',
+                        user=report.reporter.username) }}"
+           class="report_authorlink">
+        {{- report.reporter.username -}}
+        </a>
+        <a href="{{ request.urlgen('mediagoblin.admin.reports_detail',
+                        report_id=report.id) }}"
+           class="report_whenlink">
+          <span title='{{- report.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+            {%- trans formatted_time=timesince(report.created) -%}
+              {{ formatted_time }} ago
+            {%- endtrans -%}
+          </span>
+        </a>
+    </div>
+    <div class="report_content">
+      {{ report.report_content }}
+    </div>
+  </div>
 {% endif %}
-<h2>{% trans %}Closed Reports on Comments{% endtrans %}</h2>
-{% if closed_report_list.count() %}
-  <table class="media_panel processing">
-    <tr>
-      <th>ID</th>
-      <th>Offender</th>
-      <th>When Reported</th>
-      <th>Reported By</th>
-      <th>Reason</th>
-      <th>Comment Posted On</th>
-    </tr>
-    {% for report in closed_report_list %}
-      <tr>
-        <td>{{ report.id }}</td>
-        <td>{{ report.comment.get_author.username }}</td>
-        <td>{{ report.created.strftime("%F %R") }}</td>
-        <td>{{ report.reporter.username }}</td>
-        <td>{{ report.report_content }}</td>
-        <td><a href="{{ report.comment.get_media_entry.url_for_self(request.urlgen) }}">{{ report.comment.get_media_entry.title }}</a></td>
-      </tr>
-    {% endfor %}
-  </table>
-{% else %}
-  <p><em>{% trans %}No closed reports found.{% endtrans %}</em></p>
-{% endif %} 
 {% endblock %}

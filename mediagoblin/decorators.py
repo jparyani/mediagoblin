@@ -64,7 +64,6 @@ def active_user_from_url(controller):
     return wrapper
 
 def user_has_privilege(privilege_name):
-#TODO handle possible errors correctly
     def user_has_privilege_decorator(controller):
         @wraps(controller)
         def wrapper(request, *args, **kwargs):

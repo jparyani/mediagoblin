@@ -16,12 +16,13 @@
 
 from werkzeug.exceptions import Forbidden
 
-from mediagoblin.db.models import MediaEntry, User, MediaComment, CommentReport, ReportBase
+from mediagoblin.db.models import (MediaEntry, User, MediaComment, \
+                                   CommentReport, ReportBase, Privilege)
 from mediagoblin.decorators import require_admin_login
 from mediagoblin.tools.response import render_to_response
 
 @require_admin_login
-def admin_processing_panel(request):
+def admin_media_processing_panel(request):
     '''
     Show the global media processing panel for this instance
     '''
@@ -38,7 +39,7 @@ def admin_processing_panel(request):
     # Render to response
     return render_to_response(
         request,
-        'mediagoblin/admin/panel.html',
+        'mediagoblin/admin/media_panel.html',
         {'processing_entries': processing_entries,
          'failed_entries': failed_entries,
          'processed_entries': processed_entries})
@@ -50,11 +51,29 @@ def admin_users_panel(request):
     '''
     user_list = User.query
 
-    # Render to response
+    return render_to_response(
+        request,
+        'mediagoblin/admin/user_panel.html',
+        {'user_list': user_list})
+
+@require_admin_login
+def admin_users_detail(request):
+    '''
+    Shows details about a particular user.
+    '''
+    user = User.query.filter_by(username=request.matchdict['user']).first()
+    privileges = Privilege.query
+    active_reports = user.reports_filed_on.filter(
+        ReportBase.resolved==None).limit(5)
+    closed_reports = user.reports_filed_on.filter(
+        ReportBase.resolved!=None).all()
+
     return render_to_response(
         request,
         'mediagoblin/admin/user.html',
-        {'user_list': user_list})
+        {'user':user,
+         'privileges':privileges,
+         'reports':active_reports})
 
 @require_admin_login
 def admin_reports_panel(request):
@@ -72,7 +91,25 @@ def admin_reports_panel(request):
     # Render to response
     return render_to_response(
         request,
-        'mediagoblin/admin/report.html',
+        'mediagoblin/admin/report_panel.html',
         {'report_list':report_list,
          'closed_report_list':closed_report_list})
+
+@require_admin_login
+def admin_reports_detail(request):
+    report = ReportBase.query.get(request.matchdict['report_id'])
+    if report.discriminator == 'comment_report':
+        comment = MediaComment.query.get(report.comment_id)
+        media_entry = None
+    elif report.discriminator == 'media_report':
+        media_entry = MediaEntry.query.get(report.media_entry_id)
+        comment = None
+
+    return render_to_response(
+        request,
+        'mediagoblin/admin/report.html',
+        {'report':report,
+         'media_entry':media_entry,
+         'comment':comment})
+    
 

@@ -17,38 +17,121 @@
 #}
 {% extends "mediagoblin/base.html" %}
 
-{% block title -%}
-  {% trans %}User panel{% endtrans %} &mdash; {{ super() }}
-{%- endblock %}
 
-{% block mediagoblin_content %}
+{% block title %}
+  {%- if user -%}
+    {%- trans username=user.username -%}
+      User: {{ username }}
+    {%- endtrans %} &mdash; {{ super() }}
+  {%- else -%}
+    {{ super() }}
+  {%- endif -%}
+{% endblock %}
 
-<h1>{% trans %}User panel{% endtrans %}</h1>
 
-<p>
-  {% trans %}Here you can look up users in order to take punitive actions on them.{% endtrans %}
-</p>
-    
-<h2>{% trans %}Active Users{% endtrans %}</h2>
+{% block mediagoblin_content -%}
+  {# If no user... #}
+  {% if not user %}
+    <p>{% trans %}Sorry, no such user found.{% endtrans %}</p>
 
-{% if user_list.count() %}
-  <table class="media_panel processing">
-    <tr>
-      <th>ID</th>
-      <th>Username</th>
-      <th>When Joined</th>
-      <th># of Comments Posted</th>
-    </tr>
-    {% for user in user_list %}
+  {# User exists, but needs verification #}
+  {% elif user.status == "needs_email_verification" %}
+    <div class="form_box">
+    <h1>{% trans %}Email verification needed{% endtrans %}</h1>
+
+    <p>
+      {% trans -%}
+        Someone has registered an account with this username, but it still has to be activated.
+      {%- endtrans %}
+    </p>
+  
+    <p>
+      {% trans login_url=request.urlgen('mediagoblin.auth.login') -%}
+        If you are that person but you've lost your verification email, you can <a href="{{ login_url }}">log in</a> and resend it.
+      {%- endtrans %}
+    </p>
+    </div>
+
+  {# Active(?) (or at least verified at some point) user, horray! #}
+  {% else %}
+    <h1>
+      {%- trans username=user.username %}{{ username }}'s profile{% endtrans -%}
+    </h1>
+
+    {% if not user.url and not user.bio %}
+        <div class="profile_sidebar empty_space">
+          <p>
+            {% trans -%}
+              This user hasn't filled in their profile (yet).
+            {%- endtrans %}
+          </p>
+    {% else %}
+      <div class="profile_sidebar">
+        {% include "mediagoblin/utils/profile.html" %}
+        {% if request.user and
+              (request.user.id == user.id or request.user.is_admin) %}
+          <a href="{{ request.urlgen('mediagoblin.edit.profile',
+                   user=user.username) }}">
+            {%- trans %}Edit profile{% endtrans -%}
+          </a>
+        {% endif %}
+    {% endif %}
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.user_pages.collection_list',
+                                           user=user.username) }}">
+          {%- trans %}Browse collections{% endtrans -%}
+        </a>
+      </p>
+    </div>
+  {% endif %}
+  {% if user %}
+    <h2>{%- trans %}Active Reports on{% endtrans -%} {{ user.username }}</h2>
+    {% if reports.count() %}
+    <table class="admin_side_panel">
       <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ user.username }}</td>
-        <td>{{ user.created.strftime("%F %R") }}</td>
-        <td>{{ user.posted_comments.count() }}</td>
+        <th>{%- trans %}Report ID{% endtrans -%}</th>
+        <th>{%- trans %}Reported Content{% endtrans -%}</th>
+        <th>{%- trans %}Description of Report{% endtrans -%}</th>
       </tr>
-    {% endfor %}
-  </table>
-{% else %}
-  <p><em>{% trans %}No users found.{% endtrans %}</em></p>
-{% endif %} 
+      {% for report in reports %}
+        <tr>
+          <td>
+            <img src="{{ request.staticdirect('/images/icon_clipboard.png') }}" />
+            <a href="{{ request.urlgen('mediagoblin.admin.reports_detail',
+                                               report_id=report.id) }}">
+              {%- trans %}Report #{% endtrans -%}{{ report.id }}
+            </a>
+          </td>
+          <td>
+            {% if report.discriminator == "comment_report" %}
+              <a>{%- trans %}Reported Comment{% endtrans -%}</a>
+            {% elif report.discriminator == "media_report" %}
+              <a>{%- trans %}Reported Media Entry{% endtrans -%}</a>
+            {% endif %}
+          </td>
+          <td>{{ report.report_content[:21] }}{% if report.report_content|count >20 %}...{% endif %}</td>
+          <td>{%- trans %}Resolve{% endtrans -%}</td>
+        </tr>
+      {% endfor %}
+        <tr><td></td><td></td>
+    </table>
+    {% else %}
+      {%- trans %}No active reports filed on{% endtrans -%} {{ user.username }}
+    {% endif %}
+    <a class="right_align">{{ user.username }}'s report history</a>
+    <span class=clear></span>
+    <h2>{{ user.username }}'s Privileges</h2>
+    <table class="admin_panel">
+        <tr>
+          <th>{% trans %}Privilege{% endtrans %}</th>
+          <th>{% trans %}User Has Privilege{% endtrans %}</th>
+      {% for privilege in privileges %}
+        <tr>
+          <td>{{ privilege.privilege_name }}</td>
+          <td>{% if privilege in user.all_privileges %}Yes{% else %}No{% endif %}</td>
+          <td>{% if privilege in user.all_privileges and privilege.id < request.user.get_highest_privilege().id %}<a>{% trans %}Take Away{% endtrans %}</a>{% else %}<a>{% trans %}Give Privilege{% endtrans %}</a>{% endif %}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% endif %}
 {% endblock %}

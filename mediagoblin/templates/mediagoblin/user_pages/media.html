@@ -95,17 +95,6 @@
           {% trans %}Add a comment{% endtrans %}
         </a>
       {% endif %}
-        <a 
-          {% if not request.user -%}
-            href="{{ request.urlgen('mediagoblin.auth.login') }}"
-          {% else %}
-            href="{{ request.urlgen('mediagoblin.user_pages.media_home.report_media',
-                            user=media.get_uploader.username,
-                             media=media.slug_or_id) }}"
-          {% endif %}
-          class="button_action" id="button_reportmedia" title="Report media">
-          {% trans %}Report media{% endtrans %}
-        </a>
       {% if request.user %}
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment',
                                          user= media.get_uploader.username,
@@ -184,6 +173,8 @@
     {% endif %}
 
     {% include "mediagoblin/utils/collections.html" %}
+
+    {% include "mediagoblin/utils/report.html" %}
 
     {% include "mediagoblin/utils/license.html" %}
 

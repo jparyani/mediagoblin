@@ -19,7 +19,8 @@ from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin import mg_globals
 from mediagoblin.db.base import Session
-from mediagoblin.db.models import CollectionItem, MediaReport, CommentReport
+from mediagoblin.db.models import (CollectionItem, MediaReport, CommentReport, 
+                                  MediaComment, MediaEntry)
 from mediagoblin.user_pages import forms as user_forms
 
 
@@ -99,9 +100,13 @@ def build_report_form(form_dict):
     if report_form.validate() and 'comment_id' in form_dict.keys():
         report_model = CommentReport()
         report_model.comment_id = report_form.comment_id.data
+        report_model.reported_user_id = MediaComment.query.get(
+            report_model.comment_id).get_author.id
     elif report_form.validate() and 'media_entry_id' in form_dict.keys():
         report_model = MediaReport()
         report_model.media_entry_id = report_form.media_entry_id.data
+        report_model.reported_user_id = MediaEntry.query.get(
+            report_model.media_entry_id).get_uploader.id
     else:
         return None
 
