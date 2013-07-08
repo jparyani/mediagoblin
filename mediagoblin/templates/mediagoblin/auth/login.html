@@ -48,7 +48,7 @@
       {% endif %}
       {% template_hook("login_link") %} 
       {{ wtforms_util.render_divs(login_form, True) }}
-      {% if pass_auth %}
+      {% if pass_auth is defined %}
       <p>
         <a href="{{ request.urlgen('mediagoblin.auth.forgot_password') }}" id="forgot_password">
         {% trans %}Forgot your password?{% endtrans %}</a>

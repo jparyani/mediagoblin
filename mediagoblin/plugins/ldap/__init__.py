@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.auth.tools import create_basic_user
-from mediagoblin.plugins.ldap.tools import LDAP
 from mediagoblin.plugins.ldap import forms
 from mediagoblin.tools import pluginapi
 
@@ -26,37 +25,27 @@ def setup_plugin():
     routes = [
         ('mediagoblin.plugins.ldap.register',
          '/auth/ldap/register/',
-         'mediagoblin.plugins.ldap.views:register')]
+         'mediagoblin.plugins.ldap.views:register'),
+        ('mediagoblin.plugins.ldap.login',
+         '/auth/ldap/login/',
+         'mediagoblin.plugins.ldap.views:login')]
     pluginapi.register_routes(routes)
 
 
-def check_login_simple(username, password, request):
-    l = LDAP(request)
-    return l.login(username, password)
-
-
 def create_user(register_form):
-    user = create_basic_user(register_form)
-    return user
+    return create_basic_user(register_form)
 
 
-def get_login_form(request):
-    return forms.LoginForm(request.form)
+def no_pass_redirect():
+    return 'ldap'
 
 
 def auth():
     return True
 
-
-def append_to_global_context(context):
-    context['pass_auth'] = True
-    return context
-
 hooks = {
     'setup': setup_plugin,
     'authentication': auth,
-    'auth_check_login_simple': check_login_simple,
+    'auth_no_pass_redirect': no_pass_redirect,
     'auth_create_user': create_user,
-    'template_global_context': append_to_global_context,
-    'auth_get_login_form': get_login_form,
 }

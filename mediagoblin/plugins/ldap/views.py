@@ -13,21 +13,80 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from mediagoblin import mg_globals, messages
 from mediagoblin.auth.tools import register_user
+from mediagoblin.db.models import User
+from mediagoblin.decorators import allow_registration, auth_enabled
 from mediagoblin.plugins.ldap import forms
+from mediagoblin.plugins.ldap.tools import LDAP
+from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import redirect, render_to_response
 
 
-def register(request):
-    username = request.session.pop('username')
-    if 'email' in request.session:
-        email = request.session.pop('email')
-    else:
-        email = None
-    register_form = forms.RegisterForm(request.form, username=username,
-                                       email=email)
+@auth_enabled
+def login(request):
+    login_form = forms.LoginForm(request.form)
 
-    if request.method == 'POST' and register_form.validate():
+    login_failed = False
+
+    if request.method == 'POST' and login_form.validate():
+        l = LDAP()
+        username = l.login(login_form.username.data, login_form.password.data)
+
+        if username:
+            user = User.query.filter_by(
+                username=username).first()
+
+            if user:
+                # set up login in session
+                request.session['user_id'] = unicode(user.id)
+                request.session.save()
+
+                if request.form.get('next'):
+                    return redirect(request, location=request.form['next'])
+                else:
+                    return redirect(request, "index")
+            else:
+                if not mg_globals.app.auth:
+                    messages.add_message(
+                        request,
+                        messages.WARNING,
+                        _('Sorry, authentication is disabled on this '
+                          'instance.'))
+                    return redirect(request, 'index')
+
+                register_form = forms.RegisterForm(request.form,
+                                                   username=username)
+
+                return render_to_response(
+                    request,
+                    'mediagoblin/auth/register.html',
+                    {'register_form': register_form,
+                    'post_url': request.urlgen('mediagoblin.plugins.ldap.register')})
+
+        login_failed = True
+
+    return render_to_response(
+        request,
+        'mediagoblin/auth/login.html',
+        {'login_form': login_form,
+         'next': request.GET.get('next') or request.form.get('next'),
+         'login_failed': login_failed,
+         'post_url': request.urlgen('mediagoblin.plugins.ldap.login'),
+         'allow_registration': mg_globals.app_config["allow_registration"]})
+
+
+@allow_registration
+@auth_enabled
+def register(request):
+    if request.method == 'GET':
+        return redirect(
+            request,
+            'mediagoblin.plugins.ldap.login')
+
+    register_form = forms.RegisterForm(request.form)
+
+    if register_form.validate():
         user = register_user(request, register_form)
 
         if user:
