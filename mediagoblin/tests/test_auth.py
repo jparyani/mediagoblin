@@ -183,7 +183,7 @@ def test_register_views(test_app):
     message = mail.EMAIL_TEST_INBOX.pop()
     assert message['To'] == 'happygrrl@example.org'
     email_context = template.TEMPLATE_TEST_CONTEXT[
-        'mediagoblin/auth/fp_verification_email.txt']
+        'mediagoblin/plugins/basic_auth/fp_verification_email.txt']
     #TODO - change the name of verification_url to something forgot-password-ish
     assert email_context['verification_url'] in message.get_payload(decode=True)
 
@@ -204,7 +204,8 @@ def test_register_views(test_app):
     ## Verify step 1 of password-change works -- can see form to change password
     template.clear_test_template_context()
     response = test_app.get("%s?%s" % (path, get_params))
-    assert 'mediagoblin/auth/change_fp.html' in template.TEMPLATE_TEST_CONTEXT
+    assert 'mediagoblin/plugins/basic_auth/change_fp.html' in \
+            template.TEMPLATE_TEST_CONTEXT
 
     ## Verify step 2.1 of password-change works -- report success to user
     template.clear_test_template_context()

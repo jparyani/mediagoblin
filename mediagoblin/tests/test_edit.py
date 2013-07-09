@@ -56,41 +56,6 @@ class TestUserEdit(object):
         self.login(test_app)
 
 
-    def test_change_password(self, test_app):
-        """Test changing password correctly and incorrectly"""
-        self.login(test_app)
-
-        # test that the password can be changed
-        template.clear_test_template_context()
-        res = test_app.post(
-            '/edit/password/', {
-                'old_password': 'toast',
-                'new_password': '123456',
-                })
-        res.follow()
-
-        # Did we redirect to the correct page?
-        assert urlparse.urlsplit(res.location)[2] == '/edit/account/'
-
-        # test_user has to be fetched again in order to have the current values
-        test_user = User.query.filter_by(username=u'chris').first()
-        assert auth.check_password('123456', test_user.pw_hash)
-        # Update current user passwd
-        self.user_password = '123456'
-
-        # test that the password cannot be changed if the given
-        # old_password is wrong
-        template.clear_test_template_context()
-        test_app.post(
-            '/edit/password/', {
-                'old_password': 'toast',
-                'new_password': '098765',
-                })
-
-        test_user = User.query.filter_by(username=u'chris').first()
-        assert not auth.check_password('098765', test_user.pw_hash)
-
-
     def test_change_bio_url(self, test_app):
         """Test changing bio and URL"""
         self.login(test_app)

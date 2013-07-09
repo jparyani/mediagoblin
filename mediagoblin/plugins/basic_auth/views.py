@@ -17,6 +17,7 @@ from itsdangerous import BadSignature
 
 from mediagoblin import messages
 from mediagoblin.db.models import User
+from mediagoblin.decorators import require_active_login
 from mediagoblin.plugins.basic_auth import forms, tools
 from mediagoblin.tools.crypto import get_timed_signer_url
 from mediagoblin.tools.mail import email_debug_message
@@ -178,3 +179,39 @@ def _process_for_token(request):
         'has_token': 'token' in formdata_vars}
 
     return formdata
+
+
+@require_active_login
+def change_pass(request):
+    form = forms.ChangePassForm(request.form)
+    user = request.user
+
+    if request.method == 'POST' and form.validate():
+
+        if not tools.bcrypt_check_password(
+                form.old_password.data, user.pw_hash):
+            form.old_password.errors.append(
+                _('Wrong password'))
+
+            return render_to_response(
+                request,
+                'mediagoblin/plugins/basic_auth/change_pass.html',
+                {'form': form,
+                 'user': user})
+
+        # Password matches
+        user.pw_hash = tools.bcrypt_gen_password_hash(
+            form.new_password.data)
+        user.save()
+
+        messages.add_message(
+            request, messages.SUCCESS,
+            _('Your password was changed successfully'))
+
+        return redirect(request, 'mediagoblin.edit.account')
+
+    return render_to_response(
+        request,
+        'mediagoblin/plugins/basic_auth/change_pass.html',
+        {'form': form,
+         'user': user})

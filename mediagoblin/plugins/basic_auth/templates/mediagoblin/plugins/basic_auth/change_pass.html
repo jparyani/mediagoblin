@@ -31,7 +31,7 @@
 {%- endblock %}
 
 {% block mediagoblin_content %}
-  <form action="{{ request.urlgen('mediagoblin.edit.pass') }}"
+  <form action="{{ request.urlgen('mediagoblin.plugins.basic_auth.edit.pass') }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box edit_box">
       <h1>

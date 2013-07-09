@@ -23,7 +23,6 @@ from werkzeug.utils import secure_filename
 from mediagoblin import messages
 from mediagoblin import mg_globals
 
-from mediagoblin import auth
 from mediagoblin.auth import tools as auth_tools
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
@@ -338,46 +337,6 @@ def edit_collection(request, collection):
         'mediagoblin/edit/edit_collection.html',
         {'collection': collection,
          'form': form})
-
-
-@require_active_login
-def change_pass(request):
-    # If no password authentication, no need to change your password
-    if 'pass_auth' not in request.template_env.globals:
-        return redirect(request, 'index')
-
-    form = forms.ChangePassForm(request.form)
-    user = request.user
-
-    if request.method == 'POST' and form.validate():
-
-        if not auth.check_password(
-                form.old_password.data, user.pw_hash):
-            form.old_password.errors.append(
-                _('Wrong password'))
-
-            return render_to_response(
-                request,
-                'mediagoblin/edit/change_pass.html',
-                {'form': form,
-                 'user': user})
-
-        # Password matches
-        user.pw_hash = auth.gen_password_hash(
-            form.new_password.data)
-        user.save()
-
-        messages.add_message(
-            request, messages.SUCCESS,
-            _('Your password was changed successfully'))
-
-        return redirect(request, 'mediagoblin.edit.account')
-
-    return render_to_response(
-        request,
-        'mediagoblin/edit/change_pass.html',
-        {'form': form,
-         'user': user})
 
 
 def verify_email(request):

@@ -29,7 +29,7 @@
 {%- endblock %}
 
 {% block mediagoblin_content %}
-  <form action="{{ request.urlgen('mediagoblin.auth.verify_forgot_password') }}"
+  <form action="{{ request.urlgen('mediagoblin.plugins.basic_auth.verify_forgot_password') }}"
         method="POST" enctype="multipart/form-data">
     {{ csrf_token }}
     <div class="form_box">

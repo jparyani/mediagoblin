@@ -61,3 +61,16 @@ class ChangeForgotPassForm(wtforms.Form):
     token = wtforms.HiddenField(
         '',
         [wtforms.validators.Required()])
+
+
+class ChangePassForm(wtforms.Form):
+    old_password = wtforms.PasswordField(
+        _('Old password'),
+        [wtforms.validators.Required()],
+        description=_(
+            "Enter your old password to prove you own this account."))
+    new_password = wtforms.PasswordField(
+        _('New password'),
+        [wtforms.validators.Required(),
+         wtforms.validators.Length(min=6, max=30)],
+        id="password")

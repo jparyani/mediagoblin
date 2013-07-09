@@ -13,7 +13,12 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import urlparse
+
+from mediagoblin.db.models import User
 from mediagoblin.plugins.basic_auth import tools as auth_tools
+from mediagoblin.tests.tools import fixture_add_user
+from mediagoblin.tools import template
 from mediagoblin.tools.testing import _activate_testing
 
 _activate_testing()
@@ -57,3 +62,40 @@ def test_bcrypt_gen_password_hash():
         pw, hashed_pw, '3><7R45417')
     assert not auth_tools.bcrypt_check_password(
         'notthepassword', hashed_pw, '3><7R45417')
+
+
+def test_change_password(self, test_app):
+        """Test changing password correctly and incorrectly"""
+        test_user = fixture_add_user(password=u'toast')
+
+        test_app.post(
+            '/auth/login/', {
+                'username': u'chris',
+                'password': u'toast'})
+
+        # test that the password can be changed
+        res = test_app.post(
+            '/edit/password/', {
+                'old_password': 'toast',
+                'new_password': '123456',
+                })
+        res.follow()
+
+        # Did we redirect to the correct page?
+        assert urlparse.urlsplit(res.location)[2] == '/edit/account/'
+
+        # test_user has to be fetched again in order to have the current values
+        test_user = User.query.filter_by(username=u'chris').first()
+        assert auth_tools.bcrypt_check_password('123456', test_user.pw_hash)
+
+        # test that the password cannot be changed if the given
+        # old_password is wrong
+        template.clear_test_template_context()
+        test_app.post(
+            '/edit/password/', {
+                'old_password': 'toast',
+                'new_password': '098765',
+                })
+
+        test_user = User.query.filter_by(username=u'chris').first()
+        assert not auth_tools.bcrypt_check_password('098765', test_user.pw_hash)

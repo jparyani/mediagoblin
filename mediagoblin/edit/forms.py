@@ -98,16 +98,3 @@ class EditCollectionForm(wtforms.Form):
         description=_(
             "The title part of this collection's address. "
             "You usually don't need to change this."))
-
-
-class ChangePassForm(wtforms.Form):
-    old_password = wtforms.PasswordField(
-        _('Old password'),
-        [wtforms.validators.Required()],
-        description=_(
-            "Enter your old password to prove you own this account."))
-    new_password = wtforms.PasswordField(
-        _('New password'),
-        [wtforms.validators.Required(),
-         wtforms.validators.Length(min=6, max=30)],
-        id="password")
