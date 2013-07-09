@@ -48,7 +48,9 @@ def setup_plugin():
     pluginapi.register_template_hooks(
         {'edit_link': 'mediagoblin/plugins/basic_auth/edit_link.html',
          'fp_link': 'mediagoblin/plugins/basic_auth/fp_link.html',
-         'fp_head': 'mediagoblin/plugins/basic_auth/fp_head.html'})
+         'fp_head': 'mediagoblin/plugins/basic_auth/fp_head.html',
+         'create_account':
+            'mediagoblin/plugins/basic_auth/create_account_link.html'})
 
 
 def get_user(**kwargs):

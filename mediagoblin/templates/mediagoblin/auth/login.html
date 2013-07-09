@@ -39,13 +39,7 @@
           {% trans %}Logging in failed!{% endtrans %}
         </div>
       {% endif %}
-      {% if allow_registration %}
-        <p>
-        {% trans %}Don't have an account yet?{% endtrans %} 
-        <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
-            {%- trans %}Create one here!{% endtrans %}</a>
-        </p>
-      {% endif %}
+      {% template_hook("create_account") %}
       {% template_hook("login_link") %} 
       {{ wtforms_util.render_divs(login_form, True) }}
       {% template_hook("fp_link") %}
