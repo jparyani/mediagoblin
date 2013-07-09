@@ -26,19 +26,26 @@ class LDAP(object):
         self.ldap_settings = mg_globals.global_config['plugins']['mediagoblin.plugins.ldap']
 
     def _connect(self, server):
-        _log.info('Connecting to {0}.'.format(server['LDAP_HOST']))
-        self.conn = ldap.initialize('ldap://{0}:{1}/'.format(
-            server['LDAP_HOST'], server['LDAP_PORT']))
+        _log.info('Connecting to {0}.'.format(server['LDAP_SERVER_URI']))
+        self.conn = ldap.initialize(server['LDAP_SERVER_URI'])
+
+        if server['LDAP_START_TLS'] == 'true':
+            _log.info('Initiating TLS')
+            self.conn.start_tls_s()
 
     def login(self, username, password):
         for k, v in self.ldap_settings.iteritems():
             try:
                 self._connect(v)
-                user_dn = v['USER_DN_TEMPLATE'].format(username=username)
+                user_dn = v['LDAP_USER_DN_TEMPLATE'].format(username=username)
                 self.conn.simple_bind_s(user_dn, password.encode('utf8'))
                 return username
 
             except ldap.LDAPError, e:
                 _log.info(e)
+
+            finally:
+                _log.info('Unbinding {0}.').format(v['LDAP_SERVER_URI'])
+                self.conn.unbind()
 
         return False
