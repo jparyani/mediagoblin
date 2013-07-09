@@ -16,7 +16,6 @@
 import os
 
 from mediagoblin.auth.tools import create_basic_user
-from mediagoblin.plugins.ldap import forms
 from mediagoblin.tools import pluginapi
 
 PLUGIN_DIR = os.path.dirname(__file__)
