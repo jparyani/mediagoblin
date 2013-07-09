@@ -16,14 +16,14 @@
 import ldap
 import logging
 
-from mediagoblin import mg_globals
+from mediagoblin.tools import pluginapi
 
 _log = logging.getLogger(__name__)
 
 
 class LDAP(object):
     def __init__(self):
-        self.ldap_settings = mg_globals.global_config['plugins']['mediagoblin.plugins.ldap']
+        self.ldap_settings = pluginapi.get_config('mediagoblin.plugins.ldap')
 
     def _connect(self, server):
         _log.info('Connecting to {0}.'.format(server['LDAP_SERVER_URI']))
