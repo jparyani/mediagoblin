@@ -13,6 +13,8 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import os
+
 from mediagoblin.plugins.basic_auth import forms as auth_forms
 from mediagoblin.plugins.basic_auth import tools as auth_tools
 from mediagoblin.auth.tools import create_basic_user
@@ -20,9 +22,25 @@ from mediagoblin.db.models import User
 from mediagoblin.tools import pluginapi
 from sqlalchemy import or_
 
+PLUGIN_DIR = os.path.dirname(__file__)
+
 
 def setup_plugin():
     config = pluginapi.get_config('mediagoblin.plugins.basic_auth')
+
+    routes = [
+        ('mediagoblin.plugins.basic_auth.edit.pass',
+         '/edit/password/',
+         'mediagoblin.plugins.basic_auth.views:change_pass'),
+        ('mediagoblin.plugins.basic_auth.forgot_password',
+         '/auth/forgot_password/',
+         'mediagoblin.plugins.basic_auth.views:forgot_password'),
+        ('mediagoblin.plugins.basic_auth.verify_forgot_password',
+         '/auth/forgot_password/verify/',
+         'mediagoblin.plugins.basic_auth.views:verify_forgot_password')]
+
+    pluginapi.register_routes(routes)
+    pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
 
 
 def get_user(**kwargs):

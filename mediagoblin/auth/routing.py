@@ -25,9 +25,4 @@ auth_routes = [
     ('mediagoblin.auth.verify_email', '/verify_email/',
      'mediagoblin.auth.views:verify_email'),
     ('mediagoblin.auth.resend_verification', '/resend_verification/',
-     'mediagoblin.auth.views:resend_activation'),
-    ('mediagoblin.auth.forgot_password', '/forgot_password/',
-     'mediagoblin.auth.views:forgot_password'),
-    ('mediagoblin.auth.verify_forgot_password',
-     '/forgot_password/verify/',
-     'mediagoblin.auth.views:verify_forgot_password')]
+     'mediagoblin.auth.views:resend_activation')]
