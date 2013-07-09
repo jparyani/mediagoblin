@@ -13,10 +13,13 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import os
 
 from mediagoblin.auth.tools import create_basic_user
 from mediagoblin.plugins.ldap import forms
 from mediagoblin.tools import pluginapi
+
+PLUGIN_DIR = os.path.dirname(__file__)
 
 
 def setup_plugin():
@@ -29,7 +32,12 @@ def setup_plugin():
         ('mediagoblin.plugins.ldap.login',
          '/auth/ldap/login/',
          'mediagoblin.plugins.ldap.views:login')]
+
     pluginapi.register_routes(routes)
+    pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
+
+    pluginapi.register_template_hooks(
+        {'create_account': 'mediagoblin/plugins/ldap/create_account_link.html'})
 
 
 def create_user(register_form):
