@@ -195,11 +195,11 @@ def finish_login(request):
             return redirect(request, "index")
     else:
         # No user, need to register
-        if not mg_globals.app.auth:
+        if not mg_globals.app_config['allow_registration']:
             messages.add_message(
                 request,
                 messages.WARNING,
-                _('Sorry, authentication is disabled on this instance.'))
+                _('Sorry, registration is disabled on this instance.'))
             return redirect(request, 'index')
 
         # Get email and nickname from response
