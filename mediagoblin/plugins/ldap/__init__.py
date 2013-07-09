@@ -33,7 +33,8 @@ def setup_plugin():
 
 
 def create_user(register_form):
-    return create_basic_user(register_form)
+    if 'username' in register_form and 'password' not in register_form:
+        return create_basic_user(register_form)
 
 
 def no_pass_redirect():
