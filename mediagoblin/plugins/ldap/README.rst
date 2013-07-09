@@ -2,7 +2,7 @@
  ldap plugin
 =============
 
-.. Warning:
+.. Warning::
    This plugin is not compatible with the other authentication plugins.
 
 This plugin allow your GNU Mediagoblin instance to authenticate against an
@@ -40,10 +40,10 @@ registration, add ``LDAP_SEARCH_BASE = 'ou=users,dc=testathon,dc=net'`` and
 ``EMAIL_SEARCH_FIELD = 'mail'`` under you server configuration in your
 MediaGoblin .ini file.
 
-.. Warning:
+.. Warning::
    By default, this plugin provides no encryption when communicating with the
    ldap servers. If you would like to use an SSL connection, change
-   LDAP_SERVER_URI to use ``ldaps://'' and whichever port you use. Default ldap
+   LDAP_SERVER_URI to use ``ldaps://`` and whichever port you use. Default ldap
    port for SSL connections is 636. If you would like to use a TLS connection,
    add ``LDAP_START_TLS = 'true'`` under your server configuration in your
    MediaGoblin .ini file.
