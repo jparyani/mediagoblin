@@ -59,6 +59,8 @@ Part 2: Core plugin documentation
    plugindocs/oauth
    plugindocs/trim_whitespace
    plugindocs/raven
+   plugindocs/basic_auth
+   plugindocs/openid
 
 
 Part 3: Plugin Writer's Guide
