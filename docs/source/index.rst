@@ -61,6 +61,7 @@ Part 2: Core plugin documentation
    plugindocs/raven
    plugindocs/basic_auth
    plugindocs/openid
+   plugindocs/persona
 
 
 Part 3: Plugin Writer's Guide
