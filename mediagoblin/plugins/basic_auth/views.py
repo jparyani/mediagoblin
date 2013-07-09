@@ -127,7 +127,7 @@ def verify_forgot_password(request):
     # check if user active and has email verified
     if user.email_verified and user.status == 'active':
 
-        cp_form = forms.ChangePassForm(formdata_vars)
+        cp_form = forms.ChangeForgotPassForm(formdata_vars)
 
         if request.method == 'POST' and cp_form.validate():
             user.pw_hash = tools.bcrypt_gen_password_hash(

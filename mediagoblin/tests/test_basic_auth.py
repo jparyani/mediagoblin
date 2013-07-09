@@ -64,7 +64,7 @@ def test_bcrypt_gen_password_hash():
         'notthepassword', hashed_pw, '3><7R45417')
 
 
-def test_change_password(self, test_app):
+def test_change_password(test_app):
         """Test changing password correctly and incorrectly"""
         test_user = fixture_add_user(password=u'toast')
 

@@ -16,6 +16,11 @@
 import bcrypt
 import random
 
+from mediagoblin import mg_globals
+from mediagoblin.tools.crypto import get_timed_signer_url
+from mediagoblin.tools.mail import send_email
+from mediagoblin.tools.template import render_template
+
 
 def bcrypt_check_password(raw_pass, stored_hash, extra_salt=None):
     """
@@ -101,10 +106,10 @@ def send_fp_verification_email(user, request):
             .dumps(user.id)
 
     rendered_email = render_template(
-        request, 'mediagoblin/auth/fp_verification_email.txt',
+        request, 'mediagoblin/plugins/basic_auth/fp_verification_email.txt',
         {'username': user.username,
          'verification_url': EMAIL_FP_VERIFICATION_TEMPLATE.format(
-             uri=request.urlgen('mediagoblin.auth.verify_forgot_password',
+             uri=request.urlgen('mediagoblin.plugins.basic_auth.verify_forgot_password',
                                 qualified=True),
              fp_verification_key=fp_verification_key)})
 
@@ -114,4 +119,3 @@ def send_fp_verification_email(user, request):
         [user.email],
         'GNU MediaGoblin - Change forgotten password!',
         rendered_email)
-
