@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from pkg_resources import resource_filename
 import os
 
 from mediagoblin.plugins.basic_auth import forms as auth_forms
@@ -21,6 +22,8 @@ from mediagoblin.auth.tools import create_basic_user
 from mediagoblin.db.models import User
 from mediagoblin.tools import pluginapi
 from sqlalchemy import or_
+from mediagoblin.tools.staticdirect import PluginStatic
+
 
 PLUGIN_DIR = os.path.dirname(__file__)
 
@@ -41,6 +44,11 @@ def setup_plugin():
 
     pluginapi.register_routes(routes)
     pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
+
+    pluginapi.register_template_hooks(
+        {'edit_link': 'mediagoblin/plugins/basic_auth/edit_link.html',
+         'fp_link': 'mediagoblin/plugins/basic_auth/fp_link.html',
+         'fp_head': 'mediagoblin/plugins/basic_auth/fp_head.html'})
 
 
 def get_user(**kwargs):
@@ -103,4 +111,7 @@ hooks = {
     'auth_check_password': check_password,
     'auth_fake_login_attempt': auth_tools.fake_login_attempt,
     'template_global_context': append_to_global_context,
+    'static_setup': lambda: PluginStatic(
+        'coreplugin_basic_auth',
+        resource_filename('mediagoblin.plugins.basic_auth', 'static'))
 }

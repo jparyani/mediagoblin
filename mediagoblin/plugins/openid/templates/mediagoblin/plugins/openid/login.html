@@ -20,8 +20,8 @@
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {% block mediagoblin_head %}
-  <script type="text/javascript"
-          src="{{ request.staticdirect('/js/autofilledin_password.js') }}"></script>
+ {{ super() }}
+ {% template_hook("fp_head") %}
 {% endblock %}
 
 {% block title -%}
