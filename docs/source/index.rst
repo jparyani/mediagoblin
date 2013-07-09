@@ -59,6 +59,7 @@ Part 2: Core plugin documentation
    plugindocs/oauth
    plugindocs/trim_whitespace
    plugindocs/raven
+   plugindocs/ldap
 
 
 Part 3: Plugin Writer's Guide
