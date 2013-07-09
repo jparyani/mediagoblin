@@ -5,7 +5,7 @@
 ================
 
 The persona plugin allows users to login to you GNU MediaGoblin instance using
-`Mozilla's Persona`_.
+`Mozilla Persona`_.
 
 This plugin can be enabled alongside :ref:`openid-chapter` and
 :ref:`basic_auth-chapter`.
@@ -16,7 +16,7 @@ This plugin can be enabled alongside :ref:`openid-chapter` and
     password to their account, they can use the forgot password feature to do
     so.
 
-.. _Mozilla's Persona: https://www.mozilla.org/en-US/persona/
+.. _Mozilla Persona: https://www.mozilla.org/en-US/persona/
 
 Set up the persona plugin
 =========================
