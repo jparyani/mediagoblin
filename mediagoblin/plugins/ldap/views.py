@@ -31,7 +31,8 @@ def login(request):
 
     if request.method == 'POST' and login_form.validate():
         l = LDAP()
-        username = l.login(login_form.username.data, login_form.password.data)
+        username, email = l.login(login_form.username.data,
+                                  login_form.password.data)
 
         if username:
             user = User.query.filter_by(
@@ -55,8 +56,8 @@ def login(request):
                           'instance.'))
                     return redirect(request, 'index')
 
-                register_form = forms.RegisterForm(request.form,
-                                                   username=username)
+                register_form = forms.RegisterForm(username=username,
+                                                   email=email)
 
                 return render_to_response(
                     request,

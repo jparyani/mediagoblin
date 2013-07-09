@@ -33,19 +33,33 @@ class LDAP(object):
             _log.info('Initiating TLS')
             self.conn.start_tls_s()
 
+    def _get_email(self, server, username):
+        results = self.conn.search_s(server['LDAP_SEARCH_BASE'],
+                                     ldap.SCOPE_SUBTREE, 'uid={0}'
+                                     .format(username),
+                                     [server['EMAIL_SEARCH_FIELD']])
+
+        try:
+            email = results[0][1][server['EMAIL_SEARCH_FIELD']][0]
+        except KeyError:
+            email = None
+
+        return email
+
     def login(self, username, password):
         for k, v in self.ldap_settings.iteritems():
             try:
                 self._connect(v)
                 user_dn = v['LDAP_USER_DN_TEMPLATE'].format(username=username)
                 self.conn.simple_bind_s(user_dn, password.encode('utf8'))
-                return username
+                email = self._get_email(v, username)
+                return username, email
 
             except ldap.LDAPError, e:
                 _log.info(e)
 
             finally:
-                _log.info('Unbinding {0}.').format(v['LDAP_SERVER_URI'])
+                _log.info('Unbinding {0}.'.format(v['LDAP_SERVER_URI']))
                 self.conn.unbind()
 
-        return False
+        return False, None
