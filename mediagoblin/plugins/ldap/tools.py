@@ -34,12 +34,12 @@ class LDAP(object):
             self.conn.start_tls_s()
 
     def _get_email(self, server, username):
-        results = self.conn.search_s(server['LDAP_SEARCH_BASE'],
-                                     ldap.SCOPE_SUBTREE, 'uid={0}'
-                                     .format(username),
-                                     [server['EMAIL_SEARCH_FIELD']])
-
         try:
+            results = self.conn.search_s(server['LDAP_SEARCH_BASE'],
+                                        ldap.SCOPE_SUBTREE, 'uid={0}'
+                                        .format(username),
+                                        [server['EMAIL_SEARCH_FIELD']])
+
             email = results[0][1][server['EMAIL_SEARCH_FIELD']][0]
         except KeyError:
             email = None
