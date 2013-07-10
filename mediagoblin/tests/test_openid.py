@@ -29,6 +29,7 @@ from mediagoblin.plugins.openid.models import OpenIDUserURL
 from mediagoblin.tests.tools import get_app, fixture_add_user
 from mediagoblin.tools import template
 
+
 # App with plugin enabled
 @pytest.fixture()
 def openid_plugin_app(request):
