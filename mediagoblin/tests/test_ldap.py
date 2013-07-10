@@ -23,6 +23,8 @@ from mediagoblin.db.base import Session
 from mediagoblin.tests.tools import get_app
 from mediagoblin.tools import template
 
+pytest.importorskip("ldap")
+
 
 @pytest.fixture()
 def ldap_plugin_app(request):
