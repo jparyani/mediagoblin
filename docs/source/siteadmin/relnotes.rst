@@ -21,6 +21,17 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+0.4.1
+=====
+
+This is a bugfix release for 0.4.0.  This only implements one major
+fix in the newly released document support which prevented the
+"conversion via libreoffice" feature.
+
+If you were running 0.4.0 you can upgrade to v0.4.1 via a simple
+switch and restarting mediagoblin/celery with no other actions.
+
+
 0.4.0
 =====
 
