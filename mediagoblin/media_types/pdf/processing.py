@@ -250,8 +250,8 @@ def process_pdf(proc_state):
     else:
         pdf_filename = queued_filename.rsplit('.', 1)[0] + '.pdf'
         unoconv = where('unoconv')
-        call(executable=unoconv,
-             args=[unoconv, '-v', '-f', 'pdf', queued_filename])
+        Popen(executable=unoconv,
+              args=[unoconv, '-v', '-f', 'pdf', queued_filename]).wait()
         if not os.path.exists(pdf_filename):
             _log.debug('unoconv failed to convert file to pdf')
             raise BadMediaFail()
