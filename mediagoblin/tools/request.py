@@ -48,7 +48,7 @@ def decode_request(request):
     
     if request.content_type == json_encoded:
         data = json.loads(data)
-    elif request.content_type == form_encoded:
+    elif request.content_type == form_encoded or request.content_type == "":
         data = request.form
     else:
         data = ""

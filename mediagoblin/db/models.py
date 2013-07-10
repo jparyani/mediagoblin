@@ -143,7 +143,7 @@ class RequestToken(Base):
     used = Column(Boolean, default=False)
     authenticated = Column(Boolean, default=False)
     verifier = Column(Unicode, nullable=True)
-    callback = Column(Unicode, nullable=True)
+    callback = Column(Unicode, nullable=False, default=u"oob")
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
     

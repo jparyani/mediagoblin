@@ -14,15 +14,22 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from oauthlib.oauth1 import RequestValidator, RequestTokenEndpoint
+import datetime
 
+import oauthlib.common
+from oauthlib.oauth1 import (AuthorizationEndpoint, RequestValidator, 
+                             RequestTokenEndpoint)
+
+from mediagoblin.decorators import require_active_login
 from mediagoblin.tools.translate import pass_to_ugettext
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.tools.request import decode_request
-from mediagoblin.tools.response import json_response, render_400
+from mediagoblin.tools.response import (render_to_response, redirect, 
+                                        json_response, render_400)
 from mediagoblin.tools.crypto import random_string
 from mediagoblin.tools.validator import validate_email, validate_url
-from mediagoblin.db.models import Client, RequestToken, AccessToken
+from mediagoblin.db.models import User, Client, RequestToken, AccessToken
+from mediagoblin.federation.forms import AuthorizeForm
 
 # possible client types
 client_types = ["web", "native"] # currently what pump supports
@@ -120,7 +127,8 @@ def client_register(request):
                 )
     else:
         client.logo_url = logo_url
-    application_name=data.get("application_name", None)
+    
+    client.application_name = data.get("application_name", None)
 
     contacts = data.get("contact", None)
     if contacts is not None:
@@ -171,7 +179,7 @@ class ValidationException(Exception):
 
 class GMGRequestValidator(RequestValidator):
 
-    def __init__(self, data):
+    def __init__(self, data=None):
         self.POST = data
 
     def save_request_token(self, token, request):
@@ -183,8 +191,25 @@ class GMGRequestValidator(RequestValidator):
                 secret=token["oauth_token_secret"],
                 )
         request_token.client = client_id
+        request_token.callback = token.get("oauth_callback", None)
         request_token.save()
 
+    def save_verifier(self, token, verifier, request):
+        """ Saves the oauth request verifier """
+        request_token = RequestToken.query.filter_by(token=token).first()
+        request_token.verifier = verifier["oauth_verifier"]
+        request_token.save()
+
+
+    def save_access_token(self, token, request):
+        """ Saves access token in db """
+        access_token = AccessToken(
+                token=token["oauth_token"],
+                secret=token["oauth_secret"],
+        )
+        access_token.request_token = request.body["oauth_token"]
+        access_token.user = token["user"].id
+        access_token.save()
 
 @csrf_exempt
 def request_token(request):
@@ -195,8 +220,14 @@ def request_token(request):
         error = "Could not decode data."
         return json_response({"error": error}, status=400)
 
-    if data is "":
+    if data == "":
         error = "Unknown Content-Type"
+        return json_response({"error": error}, status=400)
+
+    print data
+
+    if "Authorization" not in data:
+        error = "Missing required parameter."
         return json_response({"error": error}, status=400)
 
 
@@ -206,6 +237,10 @@ def request_token(request):
         key, value = item.split("=", 1)
         authorization[key] = value
     data[u"Authorization"] = authorization
+
+    if "oauth_consumer_key" not in data[u"Authorization"]:
+        error = "Missing required parameter."
+        return json_respinse({"error": error}, status=400)
 
     # check the client_id
     client_id = data[u"Authorization"][u"oauth_consumer_key"]
@@ -217,29 +252,137 @@ def request_token(request):
 
     request_validator = GMGRequestValidator(data)
     rv = RequestTokenEndpoint(request_validator)
-    tokens = rv.create_request_token(request, {})
+    tokens = rv.create_request_token(request, authorization)
 
     tokenized = {}
     for t in tokens.split("&"):
         key, value = t.split("=")
         tokenized[key] = value
 
+    print "[DEBUG] %s" % tokenized
+
     # check what encoding to return them in
     return json_response(tokenized)
-    
+
+class WTFormData(dict):
+    """
+        Provides a WTForm usable dictionary
+    """
+    def getlist(self, key):
+        v = self[key]
+        if not isinstance(v, (list, tuple)):
+            v = [v]
+        return v
+
+@require_active_login    
 def authorize(request):
     """ Displays a page for user to authorize """
+    if request.method == "POST":
+        return authorize_finish(request)
+    
     _ = pass_to_ugettext
     token = request.args.get("oauth_token", None)
     if token is None:
         # no token supplied, display a html 400 this time
-        err_msg = _("Must provide an oauth_token")
+        err_msg = _("Must provide an oauth_token.")
         return render_400(request, err_msg=err_msg)
 
-    # AuthorizationEndpoint
+    oauth_request = RequestToken.query.filter_by(token=token).first()
+    if oauth_request is None:
+        err_msg = _("No request token found.")
+        return render_400(request, err_msg)
     
+    if oauth_request.used:
+        return authorize_finish(request)
+    
+    if oauth_request.verifier is None:
+        orequest = oauthlib.common.Request(
+                uri=request.url,
+                http_method=request.method,
+                body=request.get_data(),
+                headers=request.headers
+                )
+        request_validator = GMGRequestValidator()
+        auth_endpoint = AuthorizationEndpoint(request_validator)
+        verifier = auth_endpoint.create_verifier(orequest, {})
+        oauth_request.verifier = verifier["oauth_verifier"]
+
+    oauth_request.user = request.user.id
+    oauth_request.save()
+
+    # find client & build context
+    client = Client.query.filter_by(id=oauth_request.client).first()
+
+    authorize_form = AuthorizeForm(WTFormData({
+            "oauth_token": oauth_request.token,
+            "oauth_verifier": oauth_request.verifier
+            }))
+
+    context = {
+            "user": request.user,
+            "oauth_request": oauth_request,
+            "client": client,
+            "authorize_form": authorize_form,
+            }
+
+
+    # AuthorizationEndpoint
+    return render_to_response(
+            request,
+            "mediagoblin/api/authorize.html",
+            context
+            )
+            
+
+def authorize_finish(request):
+    """ Finishes the authorize """
+    _ = pass_to_ugettext
+    token = request.form["oauth_token"]
+    verifier = request.form["oauth_verifier"]
+    oauth_request = RequestToken.query.filter_by(token=token, verifier=verifier)
+    oauth_request = oauth_request.first()
+    
+    if oauth_request is None:
+        # invalid token or verifier
+        err_msg = _("No request token found.")
+        return render_400(request, err_msg)
+
+    oauth_request.used = True
+    oauth_request.updated = datetime.datetime.now()
+    oauth_request.save()
+
+    if oauth_request.callback == "oob":
+        # out of bounds
+        context = {"oauth_request": oauth_request}
+        return render_to_response(
+                request,
+                "mediagoblin/api/oob.html",
+                context
+                )
+
+    # okay we need to redirect them then!
+    querystring = "?oauth_token={0}&oauth_verifier={1}".format(
+            oauth_request.token,
+            oauth_request.verifier
+            )
+
+    return redirect(
+            request,
+            querystring=querystring,
+            location=oauth_request.callback
+            )
 
 @csrf_exempt
 def access_token(request):
     """ Provides an access token based on a valid verifier and request token """ 
-    pass
+    try:
+        data = decode_request(request)
+    except ValueError:
+        error = "Could not decode data."
+        return json_response({"error": error}, status=400)
+
+    if data == "":
+        error = "Unknown Content-Type"
+        return json_response({"error": error}, status=400)
+
+    print "debug: %s" % data
