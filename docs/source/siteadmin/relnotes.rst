@@ -21,6 +21,7 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+
 0.4.1
 =====
 
@@ -38,6 +39,7 @@ Otherwise, follow 0.4.0 instructions.
 =====
 
 **Do this to upgrade**
+
 1. Make sure to run
    ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
    after upgrading.
