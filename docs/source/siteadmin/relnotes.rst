@@ -25,7 +25,9 @@ carefully, or at least skim over it.
 =====
 
 **Do this to upgrade**
-1. Make sure to run ``bin/gmg dbupdate`` after upgrading.
+1. Make sure to run
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+   after upgrading.
 2. See "For Theme authors" if you have a custom theme.
 3. Note that ``./bin/gmg theme assetlink`` is now just
    ``./bin/gmg assetlink`` and covers both plugins and assets.
