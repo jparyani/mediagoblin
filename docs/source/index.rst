@@ -77,6 +77,7 @@ This guide covers writing new GNU MediaGoblin plugins.
    pluginwriter/database
    pluginwriter/api
    pluginwriter/tests
+   pluginwriter/authhooks
 
 
 Part 4: Developer's Zone
