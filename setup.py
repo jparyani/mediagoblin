@@ -45,7 +45,7 @@ setup(
         'PasteScript',
         'wtforms',
         'py-bcrypt',
-        'pytest>=2.3',
+        'pytest>=2.3.1',
         'pytest-xdist',
         'werkzeug>=0.7',
         'celery==2.5.3',

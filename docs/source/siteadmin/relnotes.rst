@@ -21,6 +21,19 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+0.4.1
+=====
+
+This is a bugfix release for 0.4.0.  This only implements one major
+fix in the newly released document support which prevented the
+"conversion via libreoffice" feature.
+
+If you were running 0.4.0 you can upgrade to v0.4.1 via a simple
+switch and restarting mediagoblin/celery with no other actions.
+
+Otherwise, follow 0.4.0 instructions.
+
+
 0.4.0
 =====
 
@@ -47,6 +60,9 @@ carefully, or at least skim over it.
 5. We now use itsdangerous for sessions; if you had any references to
    beaker in your paste config you can remove them.  Again, see the
    default paste.ini config
+6. We also now use git submodules.  Please do:
+   ``git submodule init && git submodule fetch``
+   You will need to do this to use the new PDF support.
 
 **For theme authors**
 
