@@ -90,10 +90,15 @@
 {# Render a boolean field #}
 {% macro render_bool(field) %}
   <div class="boolean">
-  <label for="{{ field.label.field_id }}">
-    {{ field }}</input>
-    {{ field.description|safe }}
-  </label>
-</div>
+    <label for="{{ field.label.field_id }}">
+      {{ field }}</input>
+      {{ field.description|safe }}
+    </label>
+    {%- if field.errors -%}
+      {% for error in field.errors %}
+        <p class="form_field_error">{{ error }}</p>
+      {% endfor %}
+    {% endif %}
+  </div>
 {% endmacro %}
 
