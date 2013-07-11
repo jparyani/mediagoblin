@@ -39,7 +39,7 @@
           Changing {{ username }}'s password
         {%- endtrans -%}
       </h1>
-      {{ wtforms_util.render_divs(form) }}
+      {{ wtforms_util.render_divs(form, True) }}
       {{ csrf_token }}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Save{% endtrans %}"
