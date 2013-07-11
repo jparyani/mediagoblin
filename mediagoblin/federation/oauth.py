@@ -24,6 +24,8 @@ from mediagoblin.db.models import Client, RequestToken, AccessToken
 
 class GMGRequestValidator(RequestValidator):
 
+    enforce_ssl = False
+
     def __init__(self, data=None):
         self.POST = data
 

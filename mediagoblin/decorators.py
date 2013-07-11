@@ -18,6 +18,7 @@ from functools import wraps
 
 from urlparse import urljoin
 from werkzeug.exceptions import Forbidden, NotFound
+from oauthlib.oauth1 import ResourceEndpoint
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin import messages
@@ -271,7 +272,7 @@ def auth_enabled(controller):
 
     return wrapper
 
-def oauth_requeired(controller):
+def oauth_required(controller):
     """ Used to wrap API endpoints where oauth is required """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
@@ -282,5 +283,18 @@ def oauth_requeired(controller):
             error = "Missing required parameter."
             return json_response({"error": error}, status=400)
 
-        
-        
+         
+        request_validator = GMGRequestValidator()
+        resource_endpoint = ResourceEndpoint(request_validator)
+        valid, request = resource_endpoint.validate_protected_resource_request(
+                uri=request.url,
+                http_method=request.method,
+                body=request.get_data(),
+                headers=dict(request.headers),
+                )
+        #print "[VALID] %s" % valid
+        #print "[REQUEST] %s" % request
+
+        return controller(request, *args, **kwargs)
+
+    return wrapper

@@ -19,7 +19,7 @@ import datetime
 from oauthlib.oauth1 import (AuthorizationEndpoint, RequestValidator, 
                              RequestTokenEndpoint, AccessTokenEndpoint)
 
-from mediagoblin.decorators import require_active_login
+from mediagoblin.decorators import require_active_login, oauth_required
 from mediagoblin.tools.translate import pass_to_ugettext
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.tools.request import decode_request
@@ -337,4 +337,8 @@ def access_token(request):
     av = AccessTokenEndpoint(request_validator)
     tokens = av.create_access_token(request, {})
     return form_response(tokens)
- 
+
+@csrf_exempt
+@oauth_required 
+def test(request):
+    return json_response({"check":"OK"})

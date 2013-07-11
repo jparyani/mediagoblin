@@ -41,3 +41,9 @@ add_route(
         "/oauth/access_token",
         "mediagoblin.federation.views:access_token"
         )
+
+add_route(
+        "mediagoblin.federation",
+        "/api/test",
+        "mediagoblin.federation.views:test"
+        )
