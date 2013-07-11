@@ -292,8 +292,10 @@ def oauth_required(controller):
                 body=request.get_data(),
                 headers=dict(request.headers),
                 )
-        #print "[VALID] %s" % valid
-        #print "[REQUEST] %s" % request
+
+        if not valid:
+            error = "Invalid oauth prarameter."
+            return json_response({"error": error}, status=400)
 
         return controller(request, *args, **kwargs)
 

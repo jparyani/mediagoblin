@@ -62,6 +62,51 @@ class GMGRequestValidator(RequestValidator):
         """ Currently a stub - called when making AccessTokens """
         return list()
 
+    def validate_timestamp_and_nonce(self, client_key, timestamp, 
+                                     nonce, request, request_token=None, 
+                                     access_token=None):
+        return True # TODO!!! - SECURITY RISK IF NOT DONE
+
+    def validate_client_key(self, client_key, request):
+        """ Verifies client exists with id of client_key """
+        client = Client.query.filter_by(id=client_key).first()
+        if client is None:
+            return False
+        
+        return True
+
+    def validate_access_token(self, client_key, token, request):
+        """ Verifies token exists for client with id of client_key """
+        client = Client.query.filter_by(id=client_key).first()
+        token = AccessToken.query.filter_by(token=token)
+        token = token.first()
+
+        if token is None:
+            return False
+
+        request_token = RequestToken.query.filter_by(token=token.request_token)
+        request_token = request_token.first()
+
+        if client.id != request_token.client:
+            return False
+
+        return True
+
+    def validate_realms(self, *args, **kwargs):
+        """ Would validate reals however not using these yet. """
+        return True # implement when realms are implemented
+
+
+    def get_client_secret(self, client_key, request):
+        """ Retrives a client secret with from a client with an id of client_key """
+        client = Client.query.filter_by(id=client_key).first()
+        return client.secret
+
+    def get_access_token_secret(self, client_key, token, request):
+        client = Client.query.filter_by(id=client_key).first()
+        access_token = AccessToken.query.filter_by(token=token).first()
+        return access_token.secret
+
 class GMGRequest(Request):
     """
         Fills in data to produce a oauth.common.Request object from a
