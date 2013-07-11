@@ -16,21 +16,23 @@
 
 import datetime
 
-import oauthlib.common
 from oauthlib.oauth1 import (AuthorizationEndpoint, RequestValidator, 
                              RequestTokenEndpoint, AccessTokenEndpoint)
 
 from mediagoblin.decorators import require_active_login
 from mediagoblin.tools.translate import pass_to_ugettext
 from mediagoblin.meddleware.csrf import csrf_exempt
-from mediagoblin.tools.request import decode_request, decode_authorization_header
+from mediagoblin.tools.request import decode_request
 from mediagoblin.tools.response import (render_to_response, redirect, 
                                         json_response, render_400,
                                         form_response)
 from mediagoblin.tools.crypto import random_string
 from mediagoblin.tools.validator import validate_email, validate_url
-from mediagoblin.db.models import User, Client, RequestToken, AccessToken
 from mediagoblin.federation.forms import AuthorizeForm
+from mediagoblin.federation.exceptions import ValidationException
+from mediagoblin.federation.oauth import GMGRequestValidator, GMGRequest
+from mediagoblin.federation.tools.request import decode_authorization_header
+from mediagoblin.db.models import Client, RequestToken, AccessToken
 
 # possible client types
 client_types = ["web", "native"] # currently what pump supports
@@ -175,47 +177,6 @@ def client_register(request):
             "expires_at": expirey,
         })
 
-class ValidationException(Exception):
-    pass
-
-class GMGRequestValidator(RequestValidator):
-
-    def __init__(self, data=None):
-        self.POST = data
-
-    def save_request_token(self, token, request):
-        """ Saves request token in db """
-        client_id = self.POST[u"oauth_consumer_key"]
-
-        request_token = RequestToken(
-                token=token["oauth_token"],
-                secret=token["oauth_token_secret"],
-                )
-        request_token.client = client_id
-        request_token.callback = token.get("oauth_callback", None)
-        request_token.save()
-
-    def save_verifier(self, token, verifier, request):
-        """ Saves the oauth request verifier """
-        request_token = RequestToken.query.filter_by(token=token).first()
-        request_token.verifier = verifier["oauth_verifier"]
-        request_token.save()
-
-    def save_access_token(self, token, request):
-        """ Saves access token in db """
-        access_token = AccessToken(
-                token=token["oauth_token"],
-                secret=token["oauth_token_secret"],
-        )
-        access_token.request_token = request.oauth_token
-        request_token = RequestToken.query.filter_by(token=request.oauth_token).first()
-        access_token.user = request_token.user
-        access_token.save()
-
-    def get_realms(*args, **kwargs):
-        """ Currently a stub - called when making AccessTokens """
-        return list()
-
 @csrf_exempt
 def request_token(request):
     """ Returns request token """
@@ -288,12 +249,7 @@ def authorize(request):
         return authorize_finish(request)
     
     if oauth_request.verifier is None:
-        orequest = oauthlib.common.Request(
-                uri=request.url,
-                http_method=request.method,
-                body=request.get_data(),
-                headers=request.headers
-                )
+        orequest = GMGRequest(request)
         request_validator = GMGRequestValidator()
         auth_endpoint = AuthorizationEndpoint(request_validator)
         verifier = auth_endpoint.create_verifier(orequest, {})

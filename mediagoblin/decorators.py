@@ -22,10 +22,11 @@ from werkzeug.exceptions import Forbidden, NotFound
 from mediagoblin import mg_globals as mgg
 from mediagoblin import messages
 from mediagoblin.db.models import MediaEntry, User
-from mediagoblin.tools.request import decode_authorization_header
 from mediagoblin.tools.response import json_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 
+from mediagoblin.federation.tools.request import decode_authorization_header
+from mediagoblin.federation.oauth import GMGRequestValidator
 
 def require_active_login(controller):
     """
@@ -281,4 +282,5 @@ def oauth_requeired(controller):
             error = "Missing required parameter."
             return json_response({"error": error}, status=400)
 
+        
         

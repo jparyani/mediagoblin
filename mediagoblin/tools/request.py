@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
 import json
 import logging
 from mediagoblin.db.models import User
@@ -26,8 +25,6 @@ _log = logging.getLogger(__name__)
 form_encoded = "application/x-www-form-urlencoded"
 json_encoded = "application/json"
 
-# Regex for Authorization header
-auth_header_re = re.compile('(\w+)[:=] ?"?(\w+)"?')
 
 def setup_user_in_request(request):
     """
@@ -57,9 +54,3 @@ def decode_request(request):
     else:
         data = ""
     return data
-
-def decode_authorization_header(header):
-    """ Decodes a HTTP Authorization Header to python dictionary """
-    authorization = header.get("Authorization", "")
-    tokens = dict(auth_header_re.findall(authorization))
-    return tokens
