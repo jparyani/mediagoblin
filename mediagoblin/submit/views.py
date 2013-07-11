@@ -138,9 +138,9 @@ def add_collection(request, media=None):
         collection.generate_slug()
 
         # Make sure this user isn't duplicating an existing collection
-        existing_collection = request.db.Collection.find_one({
-                'creator': request.user.id,
-                'title':collection.title})
+        existing_collection = request.db.Collection.query.filter_by(
+                creator=request.user.id,
+                title=collection.title).first()
 
         if existing_collection:
             add_message(request, messages.ERROR,

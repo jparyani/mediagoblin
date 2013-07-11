@@ -164,7 +164,7 @@ def assert_db_meets_expected(db, expected):
     for collection_name, collection_data in expected.iteritems():
         collection = db[collection_name]
         for expected_document in collection_data:
-            document = collection.find_one({'id': expected_document['id']})
+            document = collection.query.filter_by(id=expected_document['id']).first()
             assert document is not None  # make sure it exists
             assert document == expected_document  # make sure it matches
 

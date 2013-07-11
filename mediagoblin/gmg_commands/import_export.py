@@ -63,7 +63,7 @@ def _import_media(db, args):
     # TODO: Add import of queue files
     queue_cache = BasicFileStorage(args._cache_path['queue'])
 
-    for entry in db.MediaEntry.find():
+    for entry in db.MediaEntry.query.filter_by():
         for name, path in entry.media_files.items():
             _log.info('Importing: {0} - {1}'.format(
                     entry.title.encode('ascii', 'replace'),
@@ -204,7 +204,7 @@ def _export_media(db, args):
     # TODO: Add export of queue files
     queue_cache = BasicFileStorage(args._cache_path['queue'])
 
-    for entry in db.MediaEntry.find():
+    for entry in db.MediaEntry.query.filter_by():
         for name, path in entry.media_files.items():
             _log.info(u'Exporting {0} - {1}'.format(
                     entry.title,
