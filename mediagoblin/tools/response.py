@@ -138,3 +138,22 @@ def json_response(serializable, _disable_cors=False, *args, **kw):
             response.headers.set(key, value)
 
     return response
+
+def form_response(data, *args, **kwargs):
+    """
+        Responds using application/x-www-form-urlencoded and returns a werkzeug
+        Response object with the data argument as the body
+        and 'application/x-www-form-urlencoded' as the Content-Type.
+
+        Any extra arguments and keyword arguments are passed to the
+        Response.__init__ method.
+    """
+
+    response = wz_Response(
+            data,
+            content_type="application/x-www-form-urlencoded",
+            *args,
+            **kwargs
+            )
+
+    return response

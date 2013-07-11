@@ -18,14 +18,15 @@ import datetime
 
 import oauthlib.common
 from oauthlib.oauth1 import (AuthorizationEndpoint, RequestValidator, 
-                             RequestTokenEndpoint)
+                             RequestTokenEndpoint, AccessTokenEndpoint)
 
 from mediagoblin.decorators import require_active_login
 from mediagoblin.tools.translate import pass_to_ugettext
 from mediagoblin.meddleware.csrf import csrf_exempt
-from mediagoblin.tools.request import decode_request
+from mediagoblin.tools.request import decode_request, decode_authorization_header
 from mediagoblin.tools.response import (render_to_response, redirect, 
-                                        json_response, render_400)
+                                        json_response, render_400,
+                                        form_response)
 from mediagoblin.tools.crypto import random_string
 from mediagoblin.tools.validator import validate_email, validate_url
 from mediagoblin.db.models import User, Client, RequestToken, AccessToken
@@ -184,7 +185,7 @@ class GMGRequestValidator(RequestValidator):
 
     def save_request_token(self, token, request):
         """ Saves request token in db """
-        client_id = self.POST[u"Authorization"][u"oauth_consumer_key"]
+        client_id = self.POST[u"oauth_consumer_key"]
 
         request_token = RequestToken(
                 token=token["oauth_token"],
@@ -200,16 +201,20 @@ class GMGRequestValidator(RequestValidator):
         request_token.verifier = verifier["oauth_verifier"]
         request_token.save()
 
-
     def save_access_token(self, token, request):
         """ Saves access token in db """
         access_token = AccessToken(
                 token=token["oauth_token"],
-                secret=token["oauth_secret"],
+                secret=token["oauth_token_secret"],
         )
-        access_token.request_token = request.body["oauth_token"]
-        access_token.user = token["user"].id
+        access_token.request_token = request.oauth_token
+        request_token = RequestToken.query.filter_by(token=request.oauth_token).first()
+        access_token.user = request_token.user
         access_token.save()
+
+    def get_realms(*args, **kwargs):
+        """ Currently a stub - called when making AccessTokens """
+        return list()
 
 @csrf_exempt
 def request_token(request):
@@ -224,45 +229,32 @@ def request_token(request):
         error = "Unknown Content-Type"
         return json_response({"error": error}, status=400)
 
-    print data
+    if not data and request.headers:
+        data = request.headers
+    
+    data = dict(data) # mutableifying
 
-    if "Authorization" not in data:
+    authorization = decode_authorization_header(data)
+
+
+    if authorization == dict() or u"oauth_consumer_key" not in authorization:
         error = "Missing required parameter."
         return json_response({"error": error}, status=400)
 
-
-    # Convert 'Authorization' to a dictionary
-    authorization = {}
-    for item in data["Authorization"].split(","):
-        key, value = item.split("=", 1)
-        authorization[key] = value
-    data[u"Authorization"] = authorization
-
-    if "oauth_consumer_key" not in data[u"Authorization"]:
-        error = "Missing required parameter."
-        return json_respinse({"error": error}, status=400)
-
     # check the client_id
-    client_id = data[u"Authorization"][u"oauth_consumer_key"]
+    client_id = authorization[u"oauth_consumer_key"]
     client = Client.query.filter_by(id=client_id).first()
     if client is None:
         # client_id is invalid
         error = "Invalid client_id"
         return json_response({"error": error}, status=400)
 
-    request_validator = GMGRequestValidator(data)
+    # make request token and return to client
+    request_validator = GMGRequestValidator(authorization)
     rv = RequestTokenEndpoint(request_validator)
     tokens = rv.create_request_token(request, authorization)
 
-    tokenized = {}
-    for t in tokens.split("&"):
-        key, value = t.split("=")
-        tokenized[key] = value
-
-    print "[DEBUG] %s" % tokenized
-
-    # check what encoding to return them in
-    return json_response(tokenized)
+    return form_response(tokens)
 
 class WTFormData(dict):
     """
@@ -375,14 +367,18 @@ def authorize_finish(request):
 @csrf_exempt
 def access_token(request):
     """ Provides an access token based on a valid verifier and request token """ 
-    try:
-        data = decode_request(request)
-    except ValueError:
-        error = "Could not decode data."
+    data = request.headers
+
+    parsed_tokens = decode_authorization_header(data)    
+
+    if parsed_tokens == dict() or "oauth_token" not in parsed_tokens:
+        error = "Missing required parameter."
         return json_response({"error": error}, status=400)
 
-    if data == "":
-        error = "Unknown Content-Type"
-        return json_response({"error": error}, status=400)
 
-    print "debug: %s" % data
+    request.oauth_token = parsed_tokens["oauth_token"]
+    request_validator = GMGRequestValidator(data)
+    av = AccessTokenEndpoint(request_validator)
+    tokens = av.create_access_token(request, {})
+    return form_response(tokens)
+ 

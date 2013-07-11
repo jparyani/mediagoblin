@@ -22,7 +22,8 @@ from werkzeug.exceptions import Forbidden, NotFound
 from mediagoblin import mg_globals as mgg
 from mediagoblin import messages
 from mediagoblin.db.models import MediaEntry, User
-from mediagoblin.tools.response import redirect, render_404
+from mediagoblin.tools.request import decode_authorization_header
+from mediagoblin.tools.response import json_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 
 
@@ -268,3 +269,16 @@ def auth_enabled(controller):
         return controller(request, *args, **kwargs)
 
     return wrapper
+
+def oauth_requeired(controller):
+    """ Used to wrap API endpoints where oauth is required """
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        data = request.headers
+        authorization = decode_authorization_header(data)
+
+        if authorization == dict():
+            error = "Missing required parameter."
+            return json_response({"error": error}, status=400)
+
+        
