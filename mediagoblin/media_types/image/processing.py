@@ -35,6 +35,8 @@ PIL_FILTERS = {
     'BICUBIC': Image.BICUBIC,
     'ANTIALIAS': Image.ANTIALIAS}
 
+MEDIA_TYPE = 'mediagoblin.media_types.image'
+
 
 def resize_image(proc_state, resized, keyname, target_name, new_size,
                  exif_tags, workdir):
@@ -95,17 +97,18 @@ def resize_tool(proc_state, force, keyname, target_name,
             exif_tags, conversions_subdir)
 
 
-SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg']
+SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg', 'tiff']
 
 
 def sniff_handler(media_file, **kw):
+    _log.info('Sniffing {0}'.format(MEDIA_TYPE))
     if kw.get('media') is not None:  # That's a double negative!
         name, ext = os.path.splitext(kw['media'].filename)
         clean_ext = ext[1:].lower()  # Strip the . from ext and make lowercase
 
         if clean_ext in SUPPORTED_FILETYPES:
             _log.info('Found file extension in supported filetypes')
-            return True
+            return MEDIA_TYPE
         else:
             _log.debug('Media present, extension not found in {0}'.format(
                     SUPPORTED_FILETYPES))
@@ -113,7 +116,7 @@ def sniff_handler(media_file, **kw):
         _log.warning('Need additional information (keyword argument \'media\')'
                      ' to be able to handle sniffing')
 
-    return False
+    return None
 
 
 def process_image(proc_state):

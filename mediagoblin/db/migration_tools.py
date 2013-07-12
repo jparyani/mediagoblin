@@ -175,8 +175,7 @@ class MigrationManager(object):
         if self.name == u'__main__':
             return u"main mediagoblin tables"
         else:
-            # TODO: Use the friendlier media manager "human readable" name
-            return u'media type "%s"' % self.name
+            return u'plugin "%s"' % self.name
 
     def init_or_migrate(self):
         """

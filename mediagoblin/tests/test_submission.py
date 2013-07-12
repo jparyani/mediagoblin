@@ -26,7 +26,7 @@ from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools import template
-from mediagoblin.media_types.image import MEDIA_MANAGER as img_MEDIA_MANAGER
+from mediagoblin.media_types.image import ImageMediaManager
 from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
 
 from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
@@ -219,7 +219,7 @@ class TestSubmission:
         media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
 
         assert media.media_type == u'mediagoblin.media_types.image'
-        assert isinstance(media.media_manager, img_MEDIA_MANAGER)
+        assert isinstance(media.media_manager, ImageMediaManager)
         assert media.media_manager.entry == media
 
 
