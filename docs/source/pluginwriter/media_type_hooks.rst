@@ -25,3 +25,14 @@ This hook is used by ``get_media_type_and_manager`` in
 ``mediagoblin.media_types.__init__``. When this hook is called, your media type
 plugin should check if it can handle the given extension. If so, your media
 type plugin should return the media type and media manager.
+
+('media_manager', MEDIA_TYPE)
+-----------------------------
+
+If you already know the string representing the media type of a type
+of media, you can pull down the manager specifically.  Note that this
+hook is not a string but a tuple of two strings, the latter being the
+name of the media type.
+
+This is used by media entries to pull down their media managers, and
+so on.
