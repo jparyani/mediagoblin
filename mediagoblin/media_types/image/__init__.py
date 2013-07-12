@@ -59,11 +59,6 @@ class ImageMediaManager(MediaManagerBase):
             return None
 
 
-def get_media_manager(media_type):
-    if media_type == MEDIA_TYPE:
-        return ImageMediaManager
-
-
 def get_media_type_and_manager(ext):
     if ext in ACCEPTED_EXTENSIONS:
         return MEDIA_TYPE, ImageMediaManager
@@ -73,5 +68,5 @@ hooks = {
     'setup': setup_plugin,
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
-    'get_media_manager': get_media_manager,
+    ('media_manager', MEDIA_TYPE): lambda: ImageMediaManager,
 }

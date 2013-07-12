@@ -69,7 +69,7 @@ def sniff_media(media):
         media_type = hook_handle('sniff_handler', media_file, media=media)
         if media_type:
             _log.info('{0} accepts the file'.format(media_type))
-            return media_type, hook_handle('get_media_managers', media_type)
+            return media_type, hook_handle(('media_manager', media_type))
         else:
             _log.debug('{0} did not accept the file'.format(media_type))
 

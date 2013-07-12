@@ -34,11 +34,6 @@ class STLMediaManager(MediaManagerBase):
     default_thumb = "images/media_thumbs/video.jpg"
 
 
-def get_media_manager(media_type):
-    if media_type == MEDIA_TYPE:
-        return STLMediaManager
-
-
 def get_media_type_and_manager(ext):
     if ext in ACCEPTED_EXTENSIONS:
         return MEDIA_TYPE, STLMediaManager
@@ -47,5 +42,5 @@ hooks = {
     'setup': setup_plugin,
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
-    'get_media_manager': get_media_manager,
+    ('media_manager', MEDIA_TYPE): lambda: STLMediaManager,
 }

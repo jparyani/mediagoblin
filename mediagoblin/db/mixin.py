@@ -203,7 +203,7 @@ class MediaEntryMixin(GenerateSlugMixin):
 
         Raises FileTypeNotSupported in case no such manager is enabled
         """
-        manager = hook_handle('get_media_manager', self.media_type)
+        manager = hook_handle(('media_manager', self.media_type))
         if manager:
             return manager(self)
 

@@ -39,11 +39,6 @@ class VideoMediaManager(MediaManagerBase):
     default_webm_type = 'video/webm; codecs="vp8, vorbis"'
 
 
-def get_media_manager(media_type):
-    if media_type == MEDIA_TYPE:
-        return VideoMediaManager
-
-
 def get_media_type_and_manager(ext):
     if ext in ACCEPTED_EXTENSIONS:
         return MEDIA_TYPE, VideoMediaManager
@@ -52,5 +47,5 @@ hooks = {
     'setup': setup_plugin,
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
-    'get_media_manager': get_media_manager,
+    ('media_manager', MEDIA_TYPE): lambda: VideoMediaManager,
 }
