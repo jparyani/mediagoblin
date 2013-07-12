@@ -205,7 +205,8 @@ class MediaEntryMixin(GenerateSlugMixin):
         """
         manager = hook_handle('get_media_manager', self.media_type)
         if manager:
-            return manager
+            return manager(self)
+
         # Not found?  Then raise an error
         raise FileTypeNotSupported(
             "MediaManager not in enabled types. Check media_type plugins are"
