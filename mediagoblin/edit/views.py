@@ -444,7 +444,7 @@ def change_email(request):
                 _('Sorry, a user with that email address'
                     ' already exists.'))
 
-        if user.pw_hash and not auth.check_password(
+        if form.password and user.pw_hash and not auth.check_password(
                 form.password.data, user.pw_hash):
             form.password.errors.append(
                 _('Wrong password'))
