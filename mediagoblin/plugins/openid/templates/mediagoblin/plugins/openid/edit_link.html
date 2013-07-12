@@ -17,9 +17,8 @@
 #}
 
 {% block openid_edit_link %}
-    <p>
-      <a href="{{ request.urlgen('mediagoblin.plugins.openid.edit') }}">
-          {% trans %}Edit your OpenID's{% endtrans %}
-      </a>
-    </p>
+  <a href="{{ request.urlgen('mediagoblin.plugins.openid.edit') }}">
+      {% trans %}OpenID's{% endtrans %}
+  </a>
+  &middot;
 {% endblock %}
