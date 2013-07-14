@@ -161,6 +161,16 @@ class AccessToken(Base):
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
  
 
+class NonceTimestamp(Base):
+    """
+        A place the timestamp and nonce can be stored - this is for OAuth1
+    """
+    __tablename__ = "core__nonce_timestamps"
+
+    nonce = Column(Unicode, nullable=False, primary_key=True)
+    timestamp = Column(DateTime, nullable=False, primary_key=True)
+
+
 class MediaEntry(Base, MediaEntryMixin):
     """
     TODO: Consider fetching the media_files using join
@@ -636,8 +646,8 @@ with_polymorphic(
     [ProcessingNotification, CommentNotification])
 
 MODELS = [
-    User, Client, RequestToken, AccessToken, MediaEntry, Tag, MediaTag, 
-    MediaComment, Collection, CollectionItem, MediaFile, FileKeynames, 
+    User, Client, RequestToken, AccessToken, NonceTimestamp, MediaEntry, Tag, 
+    MediaTag, MediaComment, Collection, CollectionItem, MediaFile, FileKeynames, 
     MediaAttachmentFile, ProcessingMetaData, Notification, CommentNotification,
     ProcessingNotification, CommentSubscription]
 

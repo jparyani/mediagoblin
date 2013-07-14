@@ -32,7 +32,7 @@ from mediagoblin.federation.forms import AuthorizeForm
 from mediagoblin.federation.exceptions import ValidationException
 from mediagoblin.federation.oauth import GMGRequestValidator, GMGRequest
 from mediagoblin.federation.tools.request import decode_authorization_header
-from mediagoblin.db.models import Client, RequestToken, AccessToken
+from mediagoblin.db.models import NonceTimestamp, Client, RequestToken, AccessToken
 
 # possible client types
 client_types = ["web", "native"] # currently what pump supports
@@ -214,6 +214,14 @@ def request_token(request):
     request_validator = GMGRequestValidator(authorization)
     rv = RequestTokenEndpoint(request_validator)
     tokens = rv.create_request_token(request, authorization)
+
+    # store the nonce & timestamp before we return back
+    nonce = authorization[u"oauth_nonce"]
+    timestamp = authorization[u"oauth_timestamp"]
+    timestamp = datetime.datetime.fromtimestamp(int(timestamp))
+
+    nc = NonceTimestamp(nonce=nonce, timestamp=timestamp)
+    nc.save()
 
     return form_response(tokens)
 

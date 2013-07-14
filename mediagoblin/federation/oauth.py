@@ -18,7 +18,7 @@ from oauthlib.common import Request
 from oauthlib.oauth1 import (AuthorizationEndpoint, RequestValidator, 
                              RequestTokenEndpoint, AccessTokenEndpoint)
 
-from mediagoblin.db.models import Client, RequestToken, AccessToken
+from mediagoblin.db.models import NonceTimestamp, Client, RequestToken, AccessToken
 
 
 
@@ -65,7 +65,12 @@ class GMGRequestValidator(RequestValidator):
     def validate_timestamp_and_nonce(self, client_key, timestamp, 
                                      nonce, request, request_token=None, 
                                      access_token=None):
-        return True # TODO!!! - SECURITY RISK IF NOT DONE
+        nc = NonceTimestamp.query.filter_by(timestamp=timestamp, nonce=nonce)
+        nc = nc.first()
+        if nc is None:
+            return True
+        
+        return False
 
     def validate_client_key(self, client_key, request):
         """ Verifies client exists with id of client_key """
