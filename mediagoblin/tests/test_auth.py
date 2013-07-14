@@ -93,8 +93,8 @@ def test_register_views(test_app):
     assert 'mediagoblin/user_pages/user.html' in template.TEMPLATE_TEST_CONTEXT
 
     ## Make sure user is in place
-    new_user = mg_globals.database.User.find_one(
-        {'username': u'happygirl'})
+    new_user = mg_globals.database.User.query.filter_by(
+        username=u'happygirl').first()
     assert new_user
     assert new_user.status == u'needs_email_verification'
     assert new_user.email_verified == False
@@ -128,8 +128,8 @@ def test_register_views(test_app):
 
     # assert context['verification_successful'] == True
     # TODO: Would be good to test messages here when we can do so...
-    new_user = mg_globals.database.User.find_one(
-        {'username': u'happygirl'})
+    new_user = mg_globals.database.User.query.filter_by(
+        username=u'happygirl').first()
     assert new_user
     assert new_user.status == u'needs_email_verification'
     assert new_user.email_verified == False
@@ -142,8 +142,8 @@ def test_register_views(test_app):
         'mediagoblin/user_pages/user.html']
     # assert context['verification_successful'] == True
     # TODO: Would be good to test messages here when we can do so...
-    new_user = mg_globals.database.User.find_one(
-        {'username': u'happygirl'})
+    new_user = mg_globals.database.User.query.filter_by(
+        username=u'happygirl').first()
     assert new_user
     assert new_user.status == u'active'
     assert new_user.email_verified == True

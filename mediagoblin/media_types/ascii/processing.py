@@ -28,17 +28,19 @@ from mediagoblin.media_types.ascii import asciitoimage
 _log = logging.getLogger(__name__)
 
 SUPPORTED_EXTENSIONS = ['txt', 'asc', 'nfo']
+MEDIA_TYPE = 'mediagoblin.media_types.ascii'
 
 
 def sniff_handler(media_file, **kw):
+    _log.info('Sniffing {0}'.format(MEDIA_TYPE))
     if kw.get('media') is not None:
         name, ext = os.path.splitext(kw['media'].filename)
         clean_ext = ext[1:].lower()
 
         if clean_ext in SUPPORTED_EXTENSIONS:
-            return True
+            return MEDIA_TYPE
 
-    return False
+    return None
 
 
 def process_ascii(proc_state):

@@ -17,15 +17,31 @@
 from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.ascii.processing import process_ascii, \
     sniff_handler
+from mediagoblin.tools import pluginapi
+
+ACCEPTED_EXTENSIONS = ["txt", "asc", "nfo"]
+MEDIA_TYPE = 'mediagoblin.media_types.ascii'
+
+
+def setup_plugin():
+    config = pluginapi.get_config(MEDIA_TYPE)
 
 
 class ASCIIMediaManager(MediaManagerBase):
     human_readable = "ASCII"
     processor = staticmethod(process_ascii)
-    sniff_handler = staticmethod(sniff_handler)
     display_template = "mediagoblin/media_displays/ascii.html"
     default_thumb = "images/media_thumbs/ascii.jpg"
-    accepted_extensions = ["txt", "asc", "nfo"]
-    
 
-MEDIA_MANAGER = ASCIIMediaManager
+
+def get_media_type_and_manager(ext):
+    if ext in ACCEPTED_EXTENSIONS:
+        return MEDIA_TYPE, ASCIIMediaManager
+
+
+hooks = {
+    'setup': setup_plugin,
+    'get_media_type_and_manager': get_media_type_and_manager,
+    ('media_manager', MEDIA_TYPE): lambda: ASCIIMediaManager,
+    'sniff_handler': sniff_handler,
+}

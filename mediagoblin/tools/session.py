@@ -21,6 +21,8 @@ import crypto
 
 _log = logging.getLogger(__name__)
 
+MAX_AGE = 30 * 24 * 60 * 60
+
 class Session(dict):
     def __init__(self, *args, **kwargs):
         self.send_new_cookie = False
@@ -64,5 +66,10 @@ class SessionManager(object):
         elif not session:
             response.delete_cookie(self.cookie_name)
         else:
+            if session.get('stay_logged_in', False):
+                max_age = MAX_AGE
+            else:
+                max_age = None
+
             response.set_cookie(self.cookie_name, self.signer.dumps(session),
-                httponly=True)
+                max_age=max_age, httponly=True)

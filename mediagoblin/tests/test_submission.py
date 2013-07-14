@@ -26,7 +26,7 @@ from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools import template
-from mediagoblin.media_types.image import MEDIA_MANAGER as img_MEDIA_MANAGER
+from mediagoblin.media_types.image import ImageMediaManager
 from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
 
 from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
@@ -77,7 +77,7 @@ class TestSubmission:
         return {'upload_files': [('file', filename)]}
 
     def check_comments(self, request, media_id, count):
-        comments = request.db.MediaComment.find({'media_entry': media_id})
+        comments = request.db.MediaComment.query.filter_by(media_entry=media_id)
         assert count == len(list(comments))
 
     def test_missing_fields(self):
@@ -122,7 +122,7 @@ class TestSubmission:
         assert 'mediagoblin/user_pages/user.html' in context
 
     def check_media(self, request, find_data, count=None):
-        media = MediaEntry.find(find_data)
+        media = MediaEntry.query.filter_by(**find_data)
         if count is not None:
             assert media.count() == count
             if count == 0:
@@ -219,7 +219,7 @@ class TestSubmission:
         media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
 
         assert media.media_type == u'mediagoblin.media_types.image'
-        assert isinstance(media.media_manager, img_MEDIA_MANAGER)
+        assert isinstance(media.media_manager, ImageMediaManager)
         assert media.media_manager.entry == media
 
 
@@ -240,8 +240,8 @@ class TestSubmission:
 
         request = context['request']
 
-        media = request.db.MediaEntry.find_one({
-            u'title': u'UNIQUE_TITLE_PLS_DONT_CREATE_OTHER_MEDIA_WITH_THIS_TITLE'})
+        media = request.db.MediaEntry.query.filter_by(
+            title=u'UNIQUE_TITLE_PLS_DONT_CREATE_OTHER_MEDIA_WITH_THIS_TITLE').first()
 
         assert media.media_type == 'mediagoblin.media_types.image'
 
@@ -252,7 +252,7 @@ class TestSubmission:
         response, context = self.do_post({'title': title}, do_follow=True,
                                          **self.upload_data(filename))
         self.check_url(response, '/u/{0}/'.format(self.test_user.username))
-        entry = mg_globals.database.MediaEntry.find_one({'title': title})
+        entry = mg_globals.database.MediaEntry.query.filter_by(title=title).first()
         assert entry.state == 'failed'
         assert entry.fail_error == u'mediagoblin.processing:BadMediaFail'
 

@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.db.util import media_entries_for_tag_slug
 from mediagoblin.tools.pagination import Pagination
@@ -80,6 +81,17 @@ def atom_feed(request):
         link = request.urlgen('index', qualified=True)
         feed_title += "for all recent items"
 
+    atomlinks = [
+        {'href': link,
+         'rel': 'alternate',
+         'type': 'text/html'}]
+
+    if mg_globals.app_config["push_urls"]:
+        for push_url in mg_globals.app_config["push_urls"]:
+            atomlinks.append({
+                'rel': 'hub',
+                'href': push_url})
+
     cursor = cursor.order_by(MediaEntry.created.desc())
     cursor = cursor.limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
@@ -87,9 +99,8 @@ def atom_feed(request):
         feed_title,
         feed_url=request.url,
         id=link,
-        links=[{'href': link,
-            'rel': 'alternate',
-            'type': 'text/html'}])
+        links=atomlinks)
+
     for entry in cursor:
         feed.add(entry.get('title'),
             entry.description_html,

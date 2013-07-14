@@ -29,15 +29,14 @@ real objects.
 
 import uuid
 import re
-import datetime
-
 from datetime import datetime
 
 from werkzeug.utils import cached_property
 
 from mediagoblin import mg_globals
-from mediagoblin.media_types import get_media_managers, FileTypeNotSupported
+from mediagoblin.media_types import FileTypeNotSupported
 from mediagoblin.tools import common, licenses
+from mediagoblin.tools.pluginapi import hook_handle
 from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.url import slugify
 
@@ -204,14 +203,14 @@ class MediaEntryMixin(GenerateSlugMixin):
 
         Raises FileTypeNotSupported in case no such manager is enabled
         """
-        # TODO, we should be able to make this a simple lookup rather
-        # than iterating through all media managers.
-        for media_type, manager in get_media_managers():
-            if media_type == self.media_type:
-                return manager(self)
+        manager = hook_handle(('media_manager', self.media_type))
+        if manager:
+            return manager(self)
+
         # Not found?  Then raise an error
         raise FileTypeNotSupported(
-            "MediaManager not in enabled types.  Check media_types in config?")
+            "MediaManager not in enabled types. Check media_type plugins are"
+            " enabled in config?")
 
     def get_fail_exception(self):
         """

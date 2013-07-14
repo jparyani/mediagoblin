@@ -88,6 +88,8 @@ def login(request):
 
             if user:
                 # set up login in session
+                if login_form.stay_logged_in.data:
+                    request.session['stay_logged_in'] = True
                 request.session['user_id'] = unicode(user.id)
                 request.session.save()
 

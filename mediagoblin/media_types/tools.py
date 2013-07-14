@@ -1,4 +1,3 @@
-{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -14,21 +13,15 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
-{%- if request.user %}
-    {% set subscription = request.notifications.get_comment_subscription(
-                                request.user.id, media.id) %}
-    {% if not subscription or not subscription.notify %}
-        <a type="submit" href="{{ request.urlgen('mediagoblin.notifications.subscribe_comments',
-            user=media.get_uploader.username,
-            media=media.slug_or_id)}}"
-            class="button_action">Subscribe to comments
-        </a>
-    {% else %}
-        <a type="submit" href="{{ request.urlgen('mediagoblin.notifications.silence_comments',
-            user=media.get_uploader.username,
-            media=media.slug_or_id)}}"
-            class="button_action">Silence comments
-        </a>
-    {% endif %}
-{%- endif %}
+import logging
+
+from mediagoblin import mg_globals
+
+_log = logging.getLogger(__name__)
+
+
+def media_type_warning():
+    if mg_globals.app_config.get('media_types'):
+        _log.warning('Media_types have been converted to plugins. Old'
+                     ' media_types will no longer work. Please convert them'
+                     ' to plugins to continue using them.')

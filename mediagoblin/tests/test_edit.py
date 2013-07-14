@@ -190,8 +190,8 @@ class TestUserEdit(object):
         assert urlparse.urlsplit(res.location)[2] == '/'
 
         # Email shouldn't be saved
-        email_in_db = mg_globals.database.User.find_one(
-            {'email': 'new@example.com'})
+        email_in_db = mg_globals.database.User.query.filter_by(
+            email='new@example.com').first()
         email = User.query.filter_by(username='chris').first().email
         assert email_in_db is None
         assert email == 'chris@example.com'

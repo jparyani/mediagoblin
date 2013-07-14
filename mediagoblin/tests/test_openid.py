@@ -186,8 +186,8 @@ class TestOpenIDPlugin(object):
             openid_plugin_app.get('/auth/logout')
 
             # Get user and detach from session
-            test_user = mg_globals.database.User.find_one({
-                'username': u'chris'})
+            test_user = mg_globals.database.User.query.filter_by(
+                username=u'chris').first()
             Session.expunge(test_user)
 
             # Log back in
@@ -314,8 +314,8 @@ class TestOpenIDPlugin(object):
             assert 'mediagoblin/edit/edit_account.html' in template.TEMPLATE_TEST_CONTEXT
 
             # OpenID Added?
-            new_openid = mg_globals.database.OpenIDUserURL.find_one(
-                {'openid_url': u'http://add.myopenid.com'})
+            new_openid = mg_globals.database.OpenIDUserURL.query.filter_by(
+                openid_url=u'http://add.myopenid.com').first()
             assert new_openid
 
         _test_add()
@@ -365,8 +365,8 @@ class TestOpenIDPlugin(object):
             assert 'mediagoblin/edit/edit_account.html' in template.TEMPLATE_TEST_CONTEXT
 
             # OpenID deleted?
-            new_openid = mg_globals.database.OpenIDUserURL.find_one(
-                {'openid_url': u'http://add.myopenid.com'})
+            new_openid = mg_globals.database.OpenIDUserURL.query.filter_by(
+                openid_url=u'http://add.myopenid.com').first()
             assert not new_openid
 
         _test_delete(self, test_user)

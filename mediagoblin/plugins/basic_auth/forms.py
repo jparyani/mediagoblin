@@ -41,3 +41,6 @@ class LoginForm(wtforms.Form):
          normalize_user_or_email_field()])
     password = wtforms.PasswordField(
         _('Password'))
+    stay_logged_in = wtforms.BooleanField(
+        label='',
+        description=_('Stay logged in'))
