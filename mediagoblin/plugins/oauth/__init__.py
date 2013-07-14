@@ -35,22 +35,22 @@ def setup_plugin():
 
     routes = [
         ('mediagoblin.plugins.oauth.authorize',
-            '/oauth/authorize',
+            '/oauth-2/authorize',
             'mediagoblin.plugins.oauth.views:authorize'),
         ('mediagoblin.plugins.oauth.authorize_client',
-            '/oauth/client/authorize',
+            '/oauth-2/client/authorize',
             'mediagoblin.plugins.oauth.views:authorize_client'),
         ('mediagoblin.plugins.oauth.access_token',
-            '/oauth/access_token',
+            '/oauth-2/access_token',
             'mediagoblin.plugins.oauth.views:access_token'),
         ('mediagoblin.plugins.oauth.list_connections',
-            '/oauth/client/connections',
+            '/oauth-2/client/connections',
             'mediagoblin.plugins.oauth.views:list_connections'),
         ('mediagoblin.plugins.oauth.register_client',
-            '/oauth/client/register',
+            '/oauth-2/client/register',
             'mediagoblin.plugins.oauth.views:register_client'),
         ('mediagoblin.plugins.oauth.list_clients',
-            '/oauth/client/list',
+            '/oauth-2/client/list',
             'mediagoblin.plugins.oauth.views:list_clients')]
 
     pluginapi.register_routes(routes)

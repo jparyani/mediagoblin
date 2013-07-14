@@ -23,7 +23,6 @@ add_route(
         "mediagoblin.federation.views:client_register"
         )
 
-
 add_route(
         "mediagoblin.federation",
         "/oauth/request_token",
@@ -42,8 +41,3 @@ add_route(
         "mediagoblin.federation.views:access_token"
         )
 
-add_route(
-        "mediagoblin.federation",
-        "/api/test",
-        "mediagoblin.federation.views:test"
-        )

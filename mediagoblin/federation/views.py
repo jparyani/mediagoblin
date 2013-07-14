@@ -346,7 +346,3 @@ def access_token(request):
     tokens = av.create_access_token(request, {})
     return form_response(tokens)
 
-@csrf_exempt
-@oauth_required 
-def test(request):
-    return json_response({"check":"OK"})

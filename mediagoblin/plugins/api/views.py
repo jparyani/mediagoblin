@@ -21,7 +21,7 @@ from os.path import splitext
 from werkzeug.exceptions import BadRequest, Forbidden
 from werkzeug.wrappers import Response
 
-from mediagoblin.tools.json import json_response
+from mediagoblin.tools.response import json_response
 from mediagoblin.decorators import require_active_login
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.media_types import sniff_media
