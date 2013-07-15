@@ -63,7 +63,7 @@ Otherwise, follow 0.4.0 instructions.
    beaker in your paste config you can remove them.  Again, see the
    default paste.ini config
 6. We also now use git submodules.  Please do:
-   ``git submodule init && git submodule fetch``
+   ``git submodule init && git submodule update``
    You will need to do this to use the new PDF support.
 
 **For theme authors**
