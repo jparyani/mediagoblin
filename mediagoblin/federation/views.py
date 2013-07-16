@@ -108,13 +108,14 @@ def client_register(request):
         client_secret = random_string(43) # again, seems to be what pump uses
         expirey = 0 # for now, lets not have it expire
         expirey_db = None if expirey == 0 else expirey
-  
+        application_type = data["application_type"] 
+ 
         # save it
         client = Client(
                 id=client_id, 
                 secret=client_secret, 
                 expirey=expirey_db,
-                application_type=data["application_type"],
+                application_type=application_type,
                 )
 
     else:
@@ -133,7 +134,7 @@ def client_register(request):
     
     client.application_name = data.get("application_name", None)
 
-    contacts = data.get("contact", None)
+    contacts = data.get("contacts", None)
     if contacts is not None:
         if type(contacts) is not unicode:
             error = "Contacts must be a string of space-seporated email addresses."
@@ -149,21 +150,21 @@ def client_register(request):
         
         client.contacts = contacts
 
-    request_uri = data.get("request_uris", None)
-    if request_uri is not None:
-        if type(request_uri) is not unicode:
+    redirect_uris = data.get("redirect_uris", None)
+    if redirect_uris is not None:
+        if type(redirect_uris) is not unicode:
             error = "redirect_uris must be space-seporated URLs."
             return json_respinse({"error": error}, status=400)
 
-        request_uri = request_uri.split()
+        redirect_uris = redirect_uris.split()
 
-        for uri in request_uri:
+        for uri in redirect_uris:
             if not validate_url(uri):
                 # not a valid uri
                 error = "URI {0} is not a valid URI".format(uri)
                 return json_response({"error": error}, status=400)
 
-        client.request_uri = request_uri
+        client.redirect_uri = redirect_uris
 
  
     client.save()
