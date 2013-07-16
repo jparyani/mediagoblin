@@ -59,7 +59,10 @@ def gen_password_hash(raw_pass, extra_salt=None):
 
 
 def check_password(raw_pass, stored_hash, extra_salt=None):
-    return auth_tools.bcrypt_check_password(raw_pass, stored_hash, extra_salt)
+    if stored_hash:
+        return auth_tools.bcrypt_check_password(raw_pass,
+                                                stored_hash, extra_salt)
+    return None
 
 
 def auth():

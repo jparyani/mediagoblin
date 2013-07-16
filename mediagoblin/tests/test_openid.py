@@ -13,12 +13,14 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import urlparse
 import pkg_resources
 import pytest
 import mock
 
-from openid.consumer.consumer import SuccessResponse
+openid_consumer = pytest.importorskip(
+    "openid.consumer.consumer")
 
 from mediagoblin import mg_globals
 from mediagoblin.db.base import Session
@@ -26,7 +28,6 @@ from mediagoblin.db.models import User
 from mediagoblin.plugins.openid.models import OpenIDUserURL
 from mediagoblin.tests.tools import get_app, fixture_add_user
 from mediagoblin.tools import template
-
 
 # App with plugin enabled
 @pytest.fixture()
@@ -41,7 +42,7 @@ def openid_plugin_app(request):
 class TestOpenIDPlugin(object):
     def _setup(self, openid_plugin_app, value=True, edit=False, delete=False):
         if value:
-            response = SuccessResponse(mock.Mock(), mock.Mock())
+            response = openid_consumer.SuccessResponse(mock.Mock(), mock.Mock())
             if edit or delete:
                 response.identity_url = u'http://add.myopenid.com'
             else:
@@ -186,8 +187,8 @@ class TestOpenIDPlugin(object):
             openid_plugin_app.get('/auth/logout')
 
             # Get user and detach from session
-            test_user = mg_globals.database.User.find_one({
-                'username': u'chris'})
+            test_user = mg_globals.database.User.query.filter_by(
+                username=u'chris').first()
             Session.expunge(test_user)
 
             # Log back in
@@ -314,8 +315,8 @@ class TestOpenIDPlugin(object):
             assert 'mediagoblin/edit/edit_account.html' in template.TEMPLATE_TEST_CONTEXT
 
             # OpenID Added?
-            new_openid = mg_globals.database.OpenIDUserURL.find_one(
-                {'openid_url': u'http://add.myopenid.com'})
+            new_openid = mg_globals.database.OpenIDUserURL.query.filter_by(
+                openid_url=u'http://add.myopenid.com').first()
             assert new_openid
 
         _test_add()
@@ -365,8 +366,8 @@ class TestOpenIDPlugin(object):
             assert 'mediagoblin/edit/edit_account.html' in template.TEMPLATE_TEST_CONTEXT
 
             # OpenID deleted?
-            new_openid = mg_globals.database.OpenIDUserURL.find_one(
-                {'openid_url': u'http://add.myopenid.com'})
+            new_openid = mg_globals.database.OpenIDUserURL.query.filter_by(
+                openid_url=u'http://add.myopenid.com').first()
             assert not new_openid
 
         _test_delete(self, test_user)

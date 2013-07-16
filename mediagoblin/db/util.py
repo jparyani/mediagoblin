@@ -24,7 +24,7 @@ from mediagoblin.db.models import MediaEntry, Tag, MediaTag, Collection
 
 
 def atomic_update(table, query_dict, update_values):
-    table.find(query_dict).update(update_values,
+    table.query.filter_by(**query_dict).update(update_values,
     	synchronize_session=False)
     Session.commit()
 

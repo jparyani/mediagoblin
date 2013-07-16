@@ -87,8 +87,8 @@ def user_may_alter_collection(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        creator_id = request.db.User.find_one(
-            {'username': request.matchdict['user']}).id
+        creator_id = request.db.User.query.filter_by(
+            username=request.matchdict['user']).first().id
         if not (request.user.is_admin or
                 request.user.id == creator_id):
             raise Forbidden()
@@ -162,15 +162,15 @@ def get_user_collection(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        user = request.db.User.find_one(
-            {'username': request.matchdict['user']})
+        user = request.db.User.query.filter_by(
+            username=request.matchdict['user']).first()
 
         if not user:
             return render_404(request)
 
-        collection = request.db.Collection.find_one(
-            {'slug': request.matchdict['collection'],
-             'creator': user.id})
+        collection = request.db.Collection.query.filter_by(
+            slug=request.matchdict['collection'],
+            creator=user.id).first()
 
         # Still no collection?  Okay, 404.
         if not collection:
@@ -187,14 +187,14 @@ def get_user_collection_item(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        user = request.db.User.find_one(
-            {'username': request.matchdict['user']})
+        user = request.db.User.query.filter_by(
+            username=request.matchdict['user']).first()
 
         if not user:
             return render_404(request)
 
-        collection_item = request.db.CollectionItem.find_one(
-            {'id': request.matchdict['collection_item'] })
+        collection_item = request.db.CollectionItem.query.filter_by(
+            id=request.matchdict['collection_item']).first()
 
         # Still no collection item?  Okay, 404.
         if not collection_item:

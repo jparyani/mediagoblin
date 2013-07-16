@@ -108,32 +108,26 @@ window.show_things = function () {
 
 
 <div style="padding: 4px;">
-  <a class="button_action" onclick="show('perspective');"
-     title="{%- trans %}Toggle Rotate{% endtrans -%}">
+  <a class="button_action" onclick="show('perspective');">
     {%- trans %}Perspective{% endtrans -%}
   </a>
-  <a class="button_action" onclick="show('front_view');"
-     title="{%- trans %}Front{% endtrans -%}">
+  <a class="button_action" onclick="show('front_view');">
     {%- trans %}Front{% endtrans -%}
   </a>
-  <a class="button_action" onclick="show('top_view');"
-     title="{%- trans %}Top{% endtrans -%}">
+  <a class="button_action" onclick="show('top_view');">
     {%- trans %}Top{% endtrans -%}
   </a>
-  <a class="button_action" onclick="show('side_view');"
-     title="{%- trans %}Side{% endtrans -%}">
+  <a class="button_action" onclick="show('side_view');">
     {%- trans %}Side{% endtrans -%}
   </a>
 {% if media.media_data.file_type == "stl" %}
   <a id="webgl_button" class="button_action"
-     onclick="show_things();"
-     title="{%- trans %}WebGL{% endtrans -%}">
+     onclick="show_things();">
     {%- trans %}WebGL{% endtrans -%}
   </a>
 {% endif %}
 
   <a class="button_action" href="{{ model_download }}"
-     title="{%- trans %}Download{% endtrans -%}"
      style="float:right;">
     {%- trans %}Download model{% endtrans -%}
   </a>

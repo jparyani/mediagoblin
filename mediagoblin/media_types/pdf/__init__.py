@@ -17,15 +17,31 @@
 from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.pdf.processing import process_pdf, \
     sniff_handler
+from mediagoblin.tools import pluginapi
+
+ACCEPTED_EXTENSIONS = ['pdf']
+MEDIA_TYPE = 'mediagoblin.media_types.pdf'
+
+
+def setup_plugin():
+    config = pluginapi.get_config(MEDIA_TYPE)
 
 
 class PDFMediaManager(MediaManagerBase):
     human_readable = "PDF"
     processor = staticmethod(process_pdf)
-    sniff_handler = staticmethod(sniff_handler)
     display_template = "mediagoblin/media_displays/pdf.html"
     default_thumb = "images/media_thumbs/pdf.jpg"
-    accepted_extensions = ["pdf"]
 
 
-MEDIA_MANAGER = PDFMediaManager
+def get_media_type_and_manager(ext):
+    if ext in ACCEPTED_EXTENSIONS:
+        return MEDIA_TYPE, PDFMediaManager
+
+
+hooks = {
+    'setup': setup_plugin,
+    'get_media_type_and_manager': get_media_type_and_manager,
+    'sniff_handler': sniff_handler,
+    ('media_manager', MEDIA_TYPE): lambda: PDFMediaManager,
+}

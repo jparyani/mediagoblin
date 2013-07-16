@@ -40,9 +40,9 @@ def adduser(args):
 
     db = mg_globals.database
     users_with_username = \
-        db.User.find({
-            'username': args.username.lower(),
-        }).count()
+        db.User.query.filter_by(
+            username=args.username.lower()
+        ).count()
 
     if users_with_username:
         print u'Sorry, a user with that name already exists.'
@@ -71,7 +71,8 @@ def makeadmin(args):
 
     db = mg_globals.database
 
-    user = db.User.one({'username': unicode(args.username.lower())})
+    user = db.User.query.filter_by(
+        username=unicode(args.username.lower())).one()
     if user:
         user.is_admin = True
         user.save()
@@ -94,7 +95,8 @@ def changepw(args):
 
     db = mg_globals.database
 
-    user = db.User.one({'username': unicode(args.username.lower())})
+    user = db.User.query.filter_by(
+        username=unicode(args.username.lower())).one()
     if user:
         user.pw_hash = auth.gen_password_hash(args.password)
         user.save()

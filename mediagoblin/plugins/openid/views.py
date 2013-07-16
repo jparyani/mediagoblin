@@ -342,7 +342,7 @@ def delete_openid(request):
             form.openid.errors.append(
                 _('That OpenID is not registered to this account.'))
 
-        if not form.errors and not request.session['messages']:
+        if not form.errors and not request.session.get('messages'):
             # Okay to continue with deleting openid
             return_to = request.urlgen(
                 'mediagoblin.plugins.openid.finish_delete')

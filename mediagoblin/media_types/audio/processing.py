@@ -27,19 +27,22 @@ from mediagoblin.media_types.audio.transcoders import (AudioTranscoder,
 
 _log = logging.getLogger(__name__)
 
+MEDIA_TYPE = 'mediagoblin.media_types.audio'
+
 
 def sniff_handler(media_file, **kw):
+    _log.info('Sniffing {0}'.format(MEDIA_TYPE))
     try:
         transcoder = AudioTranscoder()
         data = transcoder.discover(media_file.name)
     except BadMediaFail:
         _log.debug('Audio discovery raised BadMediaFail')
-        return False
+        return None
 
     if data.is_audio == True and data.is_video == False:
-        return True
+        return MEDIA_TYPE
 
-    return False
+    return None
 
 
 def process_audio(proc_state):

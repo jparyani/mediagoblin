@@ -34,26 +34,26 @@
 
 {# Generically render a field #}
 {% macro render_field_div(field, autofocus_first=False) %}
-  {{- render_label_p(field) }}
-  <div class="form_field_input">
-    {% if autofocus_first %}
-      {{ field(autofocus=True) }}
-    {% else %}
-      {{ field }}
-    {% endif %}
-    {%- if field.errors -%}
-      {% for error in field.errors %}
-        <p class="form_field_error">{{ error }}</p>
-      {% endfor %}
-    {%- endif %}
-    {%- if field.description %}
-      {% if field.type == 'BooleanField' %}
-        <label for="{{ field.label.field_id }}">{{ field.description|safe }}</label>
+  {% if field.type == 'BooleanField' %}
+    {{ render_bool(field) }}
+  {% else %}
+    {{- render_label_p(field) }}
+    <div class="form_field_input">
+      {% if autofocus_first %}
+        {{ field(autofocus=True) }}
       {% else %}
-        <p class="form_field_description">{{ field.description|safe }}</p>
+        {{ field }}
       {% endif %}
-    {%- endif %}
-  </div>
+      {%- if field.errors -%}
+        {% for error in field.errors %}
+          <p class="form_field_error">{{ error }}</p>
+        {% endfor %}
+      {%- endif %}
+      {%- if field.description %}
+        <p class="form_field_description">{{ field.description|safe }}</p>
+      {%- endif %}
+    </div>
+  {% endif %}
 {%- endmacro %}
 
 {# Auto-render a form as a series of divs #}
@@ -86,3 +86,19 @@
     </tr>
   {% endfor %}
 {%- endmacro %}
+
+{# Render a boolean field #}
+{% macro render_bool(field) %}
+  <div class="boolean">
+    <label for="{{ field.label.field_id }}">
+      {{ field }}</input>
+      {{ field.description|safe }}
+    </label>
+    {%- if field.errors -%}
+      {% for error in field.errors %}
+        <p class="form_field_error">{{ error }}</p>
+      {% endfor %}
+    {% endif %}
+  </div>
+{% endmacro %}
+

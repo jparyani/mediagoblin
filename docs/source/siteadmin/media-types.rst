@@ -18,15 +18,17 @@ Media Types
 ====================
 
 In the future, there will be all sorts of media types you can enable,
-but in the meanwhile there are three additional media types: video, audio
-and ascii art.
+but in the meanwhile there are five additional media types: video, audio,
+ascii art, STL/3d models, PDF and Document.
 
 First, you should probably read ":doc:`configuration`" to make sure
 you know how to modify the mediagoblin config file.
 
-
 Enabling Media Types
 ====================
+
+.. note::
+    Media types are now plugins
 
 Media types are enabled in your mediagoblin configuration file, typically it is
 created by copying ``mediagoblin.ini`` to ``mediagoblin_local.ini`` and then
@@ -37,11 +39,13 @@ Most media types have additional dependencies that you will have to install.
 You will find descriptions on how to satisfy the requirements of each media type
 on this page.
 
-To enable a media type, edit the ``media_types`` list in your
-``mediagoblin_local.ini``. For example, if your system supported image and
-video media types, then the list would look like this::
+To enable a media type, add the the media type under the ``[plugins]`` section
+in you ``mediagoblin_local.ini``. For example, if your system supported image
+and video media types, then it would look like this::
 
-    media_types = mediagoblin.media_types.image, mediagoblin.media_types.video
+    [plugins]
+    [[mediagoblin.media_types.image]]
+    [[mediagoblin.media_types.video]]
 
 Note that after enabling new media types, you must run dbupdate like so::
 
@@ -83,8 +87,8 @@ good/bad/ugly).  On Debianoid systems
         gstreamer0.10-ffmpeg
 
 
-Add ``mediagoblin.media_types.video`` to the ``media_types`` list in your
-``mediagoblin_local.ini`` and restart MediaGoblin.
+Add ``[[mediagoblin.media_types.video]]`` under the ``[plugins]`` section in
+your ``mediagoblin_local.ini`` and restart MediaGoblin.
 
 Run
 
@@ -133,7 +137,7 @@ Then install ``scikits.audiolab`` for the spectrograms::
 
     ./bin/pip install scikits.audiolab
 
-Add ``mediagoblin.media_types.audio`` to the ``media_types`` list in your
+Add ``[[mediagoblin.media_types.audio]]`` under the ``[plugins]`` section in your
 ``mediagoblin_local.ini`` and restart MediaGoblin.
 
 Run
@@ -158,13 +162,8 @@ library, which is necessary for creating thumbnails of ascii art
 
 
 Next, modify (and possibly copy over from ``mediagoblin.ini``) your
-``mediagoblin_local.ini``.  In the ``[mediagoblin]`` section, add
-``mediagoblin.media_types.ascii`` to the ``media_types`` list.
-
-For example, if your system supported image and ascii art media types, then
-the list would look like this::
-
-    media_types = mediagoblin.media_types.image, mediagoblin.media_types.ascii
+``mediagoblin_local.ini``.  In the ``[plugins]`` section, add
+``[[mediagoblin.media_types.ascii]]``.
 
 Run
 
@@ -184,7 +183,7 @@ your execution path.  This feature has been tested with Blender 2.63.
 It may work on some earlier versions, but that is not guaranteed (and
 is surely not to work prior to Blender 2.5X).
 
-Add ``mediagoblin.media_types.stl`` to the ``media_types`` list in your
+Add ``[[mediagoblin.media_types.stl]]`` under the ``[plugins]`` section in your
 ``mediagoblin_local.ini`` and restart MediaGoblin. 
 
 Run
@@ -233,7 +232,7 @@ This feature has been tested on Fedora with:
 
 It may work on some earlier versions, but that is not guaranteed.
 
-Add ``mediagoblin.media_types.pdf`` to the ``media_types`` list in your
+Add ``[[mediagoblin.media_types.pdf]]`` under the ``[plugins]`` section in your
 ``mediagoblin_local.ini`` and restart MediaGoblin. 
 
 Run

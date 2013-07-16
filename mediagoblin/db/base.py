@@ -24,18 +24,6 @@ Session = scoped_session(sessionmaker())
 class GMGTableBase(object):
     query = Session.query_property()
 
-    @classmethod
-    def find(cls, query_dict):
-        return cls.query.filter_by(**query_dict)
-
-    @classmethod
-    def find_one(cls, query_dict):
-        return cls.query.filter_by(**query_dict).first()
-
-    @classmethod
-    def one(cls, query_dict):
-        return cls.find(query_dict).one()
-
     def get(self, key):
         return getattr(self, key)
 

@@ -13,14 +13,15 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import logging
 
-# valid version formats:
-# * x.y      - final release
-# * x.ya1    - alpha 1
-# * x.yb1    - beta 1
-# * x.yrc1   - release candidate 1
-# * x.y.dev  - dev
+from mediagoblin import mg_globals
 
-# see http://www.python.org/dev/peps/pep-0386/
+_log = logging.getLogger(__name__)
 
-__version__ = "0.5.0.dev"
+
+def media_type_warning():
+    if mg_globals.app_config.get('media_types'):
+        _log.warning('Media_types have been converted to plugins. Old'
+                     ' media_types will no longer work. Please convert them'
+                     ' to plugins to continue using them.')

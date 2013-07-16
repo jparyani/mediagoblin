@@ -29,6 +29,7 @@ from mediagoblin.media_types.stl import model_loader
 
 _log = logging.getLogger(__name__)
 SUPPORTED_FILETYPES = ['stl', 'obj']
+MEDIA_TYPE = 'mediagoblin.media_types.stl'
 
 BLEND_FILE = pkg_resources.resource_filename(
     'mediagoblin.media_types.stl',
@@ -43,13 +44,14 @@ BLEND_SCRIPT = pkg_resources.resource_filename(
 
 
 def sniff_handler(media_file, **kw):
+    _log.info('Sniffing {0}'.format(MEDIA_TYPE))
     if kw.get('media') is not None:
         name, ext = os.path.splitext(kw['media'].filename)
         clean_ext = ext[1:].lower()
 
         if clean_ext in SUPPORTED_FILETYPES:
             _log.info('Found file extension in supported filetypes')
-            return True
+            return MEDIA_TYPE
         else:
             _log.debug('Media present, extension not found in {0}'.format(
                     SUPPORTED_FILETYPES))
@@ -57,7 +59,7 @@ def sniff_handler(media_file, **kw):
         _log.warning('Need additional information (keyword argument \'media\')'
                      ' to be able to handle sniffing')
 
-    return False
+    return None
 
 
 def blender_render(config):

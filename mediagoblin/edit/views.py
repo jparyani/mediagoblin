@@ -305,9 +305,9 @@ def edit_collection(request, collection):
                 form.slug.data, collection.id)
 
         # Make sure there isn't already a Collection with this title
-        existing_collection = request.db.Collection.find_one({
-                'creator': request.user.id,
-                'title':form.title.data})
+        existing_collection = request.db.Collection.query.filter_by(
+                creator=request.user.id,
+                title=form.title.data).first()
 
         if existing_collection and existing_collection.id != collection.id:
             messages.add_message(

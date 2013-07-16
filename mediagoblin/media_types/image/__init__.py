@@ -13,23 +13,30 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 import datetime
 
 from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.image.processing import process_image, \
     sniff_handler
+from mediagoblin.tools import pluginapi
+
+
+ACCEPTED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "tiff"]
+MEDIA_TYPE = 'mediagoblin.media_types.image'
+
+
+def setup_plugin():
+    config = pluginapi.get_config('mediagoblin.media_types.image')
 
 
 class ImageMediaManager(MediaManagerBase):
     human_readable = "Image"
     processor = staticmethod(process_image)
-    sniff_handler = staticmethod(sniff_handler)
     display_template = "mediagoblin/media_displays/image.html"
     default_thumb = "images/media_thumbs/image.png"
-    accepted_extensions = ["jpg", "jpeg", "png", "gif", "tiff"]
+
     media_fetch_order = [u'medium', u'original', u'thumb']
-    
+
     def get_original_date(self):
         """
         Get the original date and time from the EXIF information. Returns
@@ -52,4 +59,14 @@ class ImageMediaManager(MediaManagerBase):
             return None
 
 
-MEDIA_MANAGER = ImageMediaManager
+def get_media_type_and_manager(ext):
+    if ext in ACCEPTED_EXTENSIONS:
+        return MEDIA_TYPE, ImageMediaManager
+
+
+hooks = {
+    'setup': setup_plugin,
+    'get_media_type_and_manager': get_media_type_and_manager,
+    'sniff_handler': sniff_handler,
+    ('media_manager', MEDIA_TYPE): lambda: ImageMediaManager,
+}

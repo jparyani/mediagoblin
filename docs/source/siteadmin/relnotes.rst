@@ -21,11 +21,28 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+
+0.4.1
+=====
+
+This is a bugfix release for 0.4.0.  This only implements one major
+fix in the newly released document support which prevented the
+"conversion via libreoffice" feature.
+
+If you were running 0.4.0 you can upgrade to v0.4.1 via a simple
+switch and restarting mediagoblin/celery with no other actions.
+
+Otherwise, follow 0.4.0 instructions.
+
+
 0.4.0
 =====
 
 **Do this to upgrade**
-1. Make sure to run ``bin/gmg dbupdate`` after upgrading.
+
+1. Make sure to run
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+   after upgrading.
 2. See "For Theme authors" if you have a custom theme.
 3. Note that ``./bin/gmg theme assetlink`` is now just
    ``./bin/gmg assetlink`` and covers both plugins and assets.
@@ -45,6 +62,9 @@ carefully, or at least skim over it.
 5. We now use itsdangerous for sessions; if you had any references to
    beaker in your paste config you can remove them.  Again, see the
    default paste.ini config
+6. We also now use git submodules.  Please do:
+   ``git submodule init && git submodule update``
+   You will need to do this to use the new PDF support.
 
 **For theme authors**
 
