@@ -32,7 +32,7 @@ class BlogPostEditForm(wtforms.Form):
 class BlogEditForm(wtforms.Form):
     title = wtforms.TextField(_('Title'),
 		[wtforms.validators.Length(min=0, max=500)])
-    description = wtforms.TextAreaField(_('Content'))
+    description = wtforms.TextAreaField(_('Description'))
     
     
 
