@@ -21,8 +21,9 @@ from werkzeug.exceptions import Forbidden, NotFound
 from werkzeug.urls import url_quote
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.models import MediaEntry, User, MediaComment, Privilege
-from mediagoblin.tools.response import redirect, render_404
+from mediagoblin.db.models import MediaEntry, User, MediaComment, Privilege, \
+                            UserBan
+from mediagoblin.tools.response import redirect, render_404, render_user_banned
 
 
 def require_active_login(controller):
@@ -64,6 +65,7 @@ def active_user_from_url(controller):
     return wrapper
 
 def user_has_privilege(privilege_name):
+
     def user_has_privilege_decorator(controller):
         @wraps(controller)
         def wrapper(request, *args, **kwargs):
@@ -71,7 +73,9 @@ def user_has_privilege(privilege_name):
             privileges_of_user = Privilege.query.filter(
                 Privilege.all_users.any(
                 User.id==user_id))
-            if not privileges_of_user.filter(
+            if UserBan.query.filter(UserBan.user_id==user_id).count():
+                return render_user_banned(request)
+            elif not privileges_of_user.filter(
                 Privilege.privilege_name==privilege_name).count():
                 raise Forbidden()
 
@@ -271,14 +275,18 @@ def get_workbench(func):
 
     return new_func
 
-def require_admin_login(controller):
+def require_admin_or_moderator_login(controller):
     """
-    Require an login from an administrator.
+    Require an login from an administrator or a moderator.
     """
     @wraps(controller)
     def new_controller_func(request, *args, **kwargs):
+        admin_privilege = Privilege.one({'privilege_name':u'admin'})
+        moderator_privilege = Privilege.one({'privilege_name':u'moderator'})
         if request.user and \
-                not request.user.is_admin:
+            not admin_privilege in request.user.all_privileges and \
+                 not moderator_privilege in request.user.all_privileges:
+
             raise Forbidden()
         elif not request.user:
             next_url = urljoin(
@@ -292,4 +300,19 @@ def require_admin_login(controller):
         return controller(request, *args, **kwargs)
 
     return new_controller_func
+
+def user_not_banned(controller):
+    """
+    Requires that the user has not been banned. Otherwise redirects to the page
+    explaining why they have been banned
+    """
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        if request.user:
+            user_banned = UserBan.query.get(request.user.id)
+            if user_banned:
+                return render_user_banned(request)
+        return controller(request, *args, **kwargs)
+
+    return wrapper
 

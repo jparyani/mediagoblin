@@ -85,7 +85,7 @@
     </div>
   {% endif %}
   {% if user %}
-    <h2>{%- trans %}Active Reports on{% endtrans -%} {{ user.username }}</h2>
+    <h2>{%- trans %}Active Reports on {% endtrans -%}{{ user.username }}</h2>
     {% if reports.count() %}
     <table class="admin_side_panel">
       <tr>
@@ -97,7 +97,7 @@
         <tr>
           <td>
             <img src="{{ request.staticdirect('/images/icon_clipboard.png') }}" />
-            <a href="{{ request.urlgen('mediagoblin.admin.reports_detail',
+            <a href="{{ request.urlgen('mediagoblin.moderation.reports_detail',
                                                report_id=report.id) }}">
               {%- trans %}Report #{% endtrans -%}{{ report.id }}
             </a>
@@ -116,7 +116,7 @@
         <tr><td></td><td></td>
     </table>
     {% else %}
-      {%- trans %}No active reports filed on{% endtrans -%} {{ user.username }}
+      {%- trans %}No active reports filed on {% endtrans -%} {{ user.username }}
     {% endif %}
     <a class="right_align">{{ user.username }}'s report history</a>
     <span class=clear></span>
@@ -125,13 +125,31 @@
         <tr>
           <th>{% trans %}Privilege{% endtrans %}</th>
           <th>{% trans %}User Has Privilege{% endtrans %}</th>
-      {% for privilege in privileges %}
-        <tr>
-          <td>{{ privilege.privilege_name }}</td>
-          <td>{% if privilege in user.all_privileges %}Yes{% else %}No{% endif %}</td>
-          <td>{% if privilege in user.all_privileges and privilege.id < request.user.get_highest_privilege().id %}<a>{% trans %}Take Away{% endtrans %}</a>{% else %}<a>{% trans %}Give Privilege{% endtrans %}</a>{% endif %}</td>
         </tr>
-      {% endfor %}
+        {% for privilege in privileges %}
+          <tr>
+            <form action="{{ request.urlgen('mediagoblin.moderation.give_or_take_away_privilege',
+                             user=user.username) }}" 
+                  method=post >
+            <td>{{ privilege.privilege_name }}</td>
+            <td>
+              {% if privilege in user.all_privileges %}Yes</td>
+                {% if (not privilege.is_admin_or_moderator() or request.user.is_admin) and not (user.is_admin and not request.user.is_admin) %}                
+                  <td><input type=submit value="{% trans %}Take Away{% endtrans %}" />
+                  <input type=hidden name=giving_privilege />
+                {% endif %}
+              {% else %}No</td>
+                {% if (not privilege.is_admin_or_moderator() or request.user.is_admin) and not (user.is_admin and not request.user.is_admin) %}                
+                  <td><input type=submit value="{% trans %}Give Privilege{% endtrans %}" >
+                  <input type=hidden name=giving_privilege value=True />
+                {% endif %}
+              {% endif %}
+                <input type=hidden name=privilege_name value="{{ privilege.privilege_name }}" />
+            </td>           
+	{{ csrf_token }}
+            </form> 
+          </tr>    
+        {% endfor %}
     </table>
   {% endif %}
 {% endblock %}

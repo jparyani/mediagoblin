@@ -26,14 +26,14 @@ from mediagoblin.tools.response import render_to_response, render_404, \
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.user_pages import forms as user_forms
-from mediagoblin.user_pages.lib import (send_comment_email, build_report_form,
+from mediagoblin.user_pages.lib import (send_comment_email, build_report_table,
     add_media_to_collection)
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
     get_media_entry_by_id, user_has_privilege,
     require_active_login, user_may_delete_media, user_may_alter_collection,
     get_user_collection, get_user_collection_item, active_user_from_url,
-    get_media_comment_by_id)
+    get_media_comment_by_id, user_not_banned)
 
 from werkzeug.contrib.atom import AtomFeed
 
@@ -41,7 +41,7 @@ from werkzeug.contrib.atom import AtomFeed
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
 
-
+@user_not_banned
 @uses_pagination
 def user_home(request, page):
     """'Homepage' of a User()"""
@@ -80,7 +80,7 @@ def user_home(request, page):
          'media_entries': media_entries,
          'pagination': pagination})
 
-
+@user_not_banned
 @active_user_from_url
 @uses_pagination
 def user_gallery(request, page, url_user=None):
@@ -114,7 +114,7 @@ def user_gallery(request, page, url_user=None):
 
 MEDIA_COMMENTS_PER_PAGE = 50
 
-
+@user_not_banned
 @get_user_media_entry
 @uses_pagination
 def media_home(request, media, page, **kwargs):
@@ -190,7 +190,7 @@ def media_post_comment(request, media):
 
     return redirect_obj(request, media)
 
-
+@user_not_banned
 @get_media_entry_by_id
 @require_active_login
 def media_collect(request, media):
@@ -269,6 +269,7 @@ def media_collect(request, media):
 
 
 #TODO: Why does @user_may_delete_media not implicate @require_active_login?
+@user_not_banned
 @get_media_entry_by_id
 @require_active_login
 @user_may_delete_media
@@ -305,7 +306,7 @@ def media_confirm_delete(request, media):
         {'media': media,
          'form': form})
 
-
+@user_not_banned
 @active_user_from_url
 @uses_pagination
 def user_collection(request, page, url_user=None):
@@ -335,7 +336,7 @@ def user_collection(request, page, url_user=None):
          'collection_items': collection_items,
          'pagination': pagination})
 
-
+@user_not_banned
 @active_user_from_url
 def collection_list(request, url_user=None):
     """A User-defined Collection"""
@@ -391,7 +392,7 @@ def collection_item_confirm_remove(request, collection_item):
         {'collection_item': collection_item,
          'form': form})
 
-
+@user_not_banned
 @get_user_collection
 @require_active_login
 @user_may_alter_collection
@@ -575,7 +576,7 @@ def collection_atom_feed(request):
 
     return feed.get_response()
 
-
+@user_not_banned
 @require_active_login
 def processing_panel(request):
     """
@@ -625,8 +626,8 @@ def processing_panel(request):
 @user_has_privilege(u'reporter')
 def file_a_report(request, media, comment=None):
     if request.method == "POST":
-        report_form = build_report_form(request.form)
-        report_form.save()
+        report_table = build_report_table(request.form)
+        report_table.save()
 
         return redirect(
             request,

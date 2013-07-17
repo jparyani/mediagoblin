@@ -1,3 +1,4 @@
+{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -13,20 +14,15 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
 
-admin_routes = [
-    ('mediagoblin.admin.media_panel',
-        '/media',
-        'mediagoblin.admin.views:admin_media_processing_panel'),
-    ('mediagoblin.admin.users',
-        '/users',
-        'mediagoblin.admin.views:admin_users_panel'),
-    ('mediagoblin.admin.reports',
-        '/reports',
-        'mediagoblin.admin.views:admin_reports_panel'),
-    ('mediagoblin.admin.users_detail',
-        '/users/<string:user>',
-        'mediagoblin.admin.views:admin_users_detail'),
-    ('mediagoblin.admin.reports_detail',
-        '/reports/<int:report_id>',
-        'mediagoblin.admin.views:admin_reports_detail')]
+{% block title %}You are Banned.{% endblock %}
+
+{% block mediagoblin_content %}
+  <img class="right_align" src="{{ request.staticdirect('/images/404.png') }}"
+       alt="{% trans %}Image of goblin stressing out{% endtrans %}" />
+  <h1>You have been banned until {{ expiration_date }}</h1>
+  <p>{{ reason|safe }}</p>
+  <div class="clear"></div>
+{% endblock %}

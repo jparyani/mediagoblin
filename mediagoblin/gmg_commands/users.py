@@ -55,6 +55,13 @@ def adduser(args):
         entry.pw_hash = auth_lib.bcrypt_gen_password_hash(args.password)
         entry.status = u'active'
         entry.email_verified = True
+        default_privileges = [ 
+            db.Privilege.one({'privilege_name':u'commenter'}),
+            db.Privilege.one({'privilege_name':u'uploader'}),
+            db.Privilege.one({'privilege_name':u'reporter'}),
+            db.Privilege.one({'privilege_name':u'active'})
+]
+        entry.all_privileges = default_privileges
         entry.save()
 
         print "User created (and email marked as verified)"

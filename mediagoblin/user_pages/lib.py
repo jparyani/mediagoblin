@@ -78,7 +78,7 @@ def add_media_to_collection(collection, media, note=None, commit=True):
     if commit:
         Session.commit()
 
-def build_report_form(form_dict):
+def build_report_table(form_dict):
     """
     This function is used to convert a form dictionary (from a User filing a 
         report) into either a MediaReport or CommentReport object.

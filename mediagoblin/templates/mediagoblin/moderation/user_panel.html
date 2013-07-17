@@ -42,7 +42,7 @@
     {% for user in user_list %}
       <tr>
         <td>{{ user.id }}</td>
-        <td><a href="{{ request.urlgen('mediagoblin.admin.users_detail',
+        <td><a href="{{ request.urlgen('mediagoblin.moderation.users_detail',
                                          user= user.username) }}">{{ user.username }}</a></td>
         <td>{{ user.created.strftime("%F %R") }}</td>
         <td>{{ user.posted_comments.count() }}</td>

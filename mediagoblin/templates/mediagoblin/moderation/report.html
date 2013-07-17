@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 {%- extends "mediagoblin/base.html" %}
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {%- block mediagoblin_content %}
 {% if not report %}
@@ -29,7 +30,7 @@
         class="comment_wrapper">
       <div class="comment_author">
         <img src="{{ request.staticdirect('/images/icon_comment.png') }}" />
-            <a href="{{ request.urlgen('mediagoblin.admin.users_detail',
+            <a href="{{ request.urlgen('mediagoblin.moderation.users_detail',
                             user=comment.get_author.username) }}"
                class="comment_authorlink">
           {{- reported_user.username -}}
@@ -68,12 +69,12 @@
     <div class="report_author">
         <img src="{{ request.staticdirect('/images/icon_clipboard.png') }}" 
              alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license. Distributed by the GNOME project http://www.gnome.org" />
-        <a href="{{ request.urlgen('mediagoblin.admin.users_detail',
+        <a href="{{ request.urlgen('mediagoblin.moderation.users_detail',
                         user=report.reporter.username) }}"
            class="report_authorlink">
         {{- report.reporter.username -}}
         </a>
-        <a href="{{ request.urlgen('mediagoblin.admin.reports_detail',
+        <a href="{{ request.urlgen('mediagoblin.moderation.reports_detail',
                         report_id=report.id) }}"
            class="report_whenlink">
           <span title='{{- report.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
@@ -87,5 +88,50 @@
       {{ report.report_content }}
     </div>
   </div>
+  {% if not report.resolved %}
+    <input type=button value=Resolve id=open_resolution_form />
+    <form action="" method="POST" id=resolution_form>
+      {{ wtforms_util.render_divs(form) }}
+      {{ csrf_token }}
+      <input type=submit id="submit_this_report" value="Resolve This Report"/>
+    </form>
+
+
+  <script>
+  $(document).ready(function() {
+      $('form#resolution_form').hide()
+      $('#user_banned_until').val("YYYY-MM-DD")
+      $('#open_resolution_form').click(function() {
+          $('form#resolution_form').toggle();
+          $('#user_banned_until').hide();
+          $('label[for=user_banned_until]').hide();
+      });
+      $('#action_to_resolve').change(function() {
+          if ($('ul#action_to_resolve li input:checked').val() == "userban") {
+              $('#user_banned_until').show();
+              $('label[for=user_banned_until]').show();
+          } else {
+              $('#user_banned_until').hide();
+              $('label[for=user_banned_until]').hide();
+          }
+      });
+      $("#user_banned_until").focus(function() {
+          $(this).val("");
+          $(this).unbind('focus');
+      });
+      $("#submit_this_report").click(function(){
+          if ($("#user_banned_until").val() == 'YYYY-MM-DD'){
+              $("#user_banned_until").val("");
+          }
+      });
+  });
+  </script>
+  {% else %}
+    <h2>Status:</h2>
+    RESOLVED on {{ report.resolved.strftime("%I:%M%p %Y-%m-%d") }}
+    {% autoescape False %}
+    <p>{{ report.result }}</p>
+    {% endautoescape %}
+  {% endif %}
 {% endif %}
 {% endblock %}

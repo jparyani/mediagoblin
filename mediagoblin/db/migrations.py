@@ -300,6 +300,7 @@ class ReportBase_v0(declarative_base()):
     reported_user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now) 
     resolved = Column(DateTime)
+    result = Column(UnicodeText)
     discriminator = Column('type', Unicode(50))
     __mapper_args__ = {'polymorphic_on': discriminator}
 

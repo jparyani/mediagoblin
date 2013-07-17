@@ -18,10 +18,10 @@ from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.response import render_to_response
-from mediagoblin.decorators import uses_pagination
+from mediagoblin.decorators import uses_pagination, user_not_banned
 
 
-
+@user_not_banned
 @uses_pagination
 def root_view(request, page):
     cursor = MediaEntry.query.filter_by(state=u'processed').\

@@ -239,8 +239,8 @@ class MediaEntry(Base, MediaEntryMixin):
         This will *not* automatically delete unused collections, which
         can remain empty...
 
-        :param del_orphan_tags: True/false if we delete unused Tags too
-        :param commit: True/False if this should end the db transaction"""
+        :keyword del_orphan_tags: True/false if we delete unused Tags too
+        :keyword commit: True/False if this should end the db transaction"""
         # User's CollectionItems are automatically deleted via "cascade".
         # Comments on this Media are deleted by cascade, hopefully.
 
@@ -487,6 +487,14 @@ class ProcessingMetaData(Base):
 
 class ReportBase(Base):
     """
+    This is the basic report table which the other reports are based off of.
+        :keyword reporter_id
+        :keyword report_content
+        :keyword reported_user_id
+        :keyword created
+        :keyword resolved
+        :keyword result
+        :keyword discriminator
 
     """
     __tablename__ = 'core__reports'
@@ -508,6 +516,7 @@ class ReportBase(Base):
         primaryjoin="User.id==ReportBase.reported_user_id")
     created = Column(DateTime, nullable=False, default=datetime.datetime.now())
     resolved = Column(DateTime)
+    result = Column(UnicodeText)
     discriminator = Column('type', Unicode(50))
     __mapper_args__ = {'polymorphic_on': discriminator}
 
@@ -551,13 +560,13 @@ class UserBan(Base):
         the reason why they are banned and when (if ever) the ban will be 
         lifted
 
-        :param user_id          Holds the id of the user this object is 
+        :keyword user_id          Holds the id of the user this object is 
                                     attached to. This is a one-to-one 
                                     relationship.
-        :param expiration_date  Holds the date that the ban will be lifted. 
+        :keyword expiration_date  Holds the date that the ban will be lifted. 
                                     If this is null, the ban is permanent 
                                     unless a moderator manually lifts it.
-        :param reason           Holds the reason why the user was banned.
+        :keyword reason           Holds the reason why the user was banned.
     """
     __tablename__ = 'core__user_bans'
 
@@ -568,6 +577,17 @@ class UserBan(Base):
 
 
 class Privilege(Base):
+    """
+    The Privilege table holds all of the different privileges a user can hold.
+    If a user 'has' a privilege, the User object is in a relationship with the
+    privilege object. 
+
+        :keyword privilege_name   Holds a unicode object that is the recognizable
+                                    name of this privilege. This is the column 
+                                    used for identifying whether or not a user
+                                    has a necessary privilege or not.
+                                
+    """
     __tablename__ = 'core__privileges'
 
     id = Column(Integer, nullable=False, primary_key=True)
@@ -578,12 +598,30 @@ class Privilege(Base):
         secondary="core__privileges_users")
 
     def __init__(self, privilege_name):
+        '''
+        Currently consructors are required for tables that are initialized thru
+        the FOUNDATIONS system. This is because they need to be able to be con-
+        -structed by a list object holding their arg*s
+        '''
         self.privilege_name = privilege_name
 
     def __repr__(self):
         return "<Privilege %s>" % (self.privilege_name)
 
+    def is_admin_or_moderator(self):
+        '''
+        This method is necessary to check if a user is able to take moderation
+        actions.
+        '''
+        
+        return (self.privilege_name==u'admin' or 
+                self.privilege_name==u'moderator')
+
 class PrivilegeUserAssociation(Base):
+    '''
+    This table holds the many-to-many relationship between User and Privilege
+    '''
+    
     __tablename__ = 'core__privileges_users'
 
     privilege_id = Column(

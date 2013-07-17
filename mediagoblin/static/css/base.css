@@ -402,6 +402,8 @@ a.report_authorlink, a.report_whenlink {
   color: #D486B1;
 }
 
+ul#action_to_resolve {list-style:none; margin-left:10px;}
+
 /* media galleries */
 
 .media_thumbnail {

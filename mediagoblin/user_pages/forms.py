@@ -51,11 +51,15 @@ class MediaCollectForm(wtforms.Form):
                       Markdown</a> for formatting."""))
 
 class CommentReportForm(wtforms.Form):
-    report_reason = wtforms.TextAreaField('Reason for Reporting')
+    report_reason = wtforms.TextAreaField(
+        _('Reason for Reporting'),
+        [wtforms.validators.Required()])
     comment_id = wtforms.IntegerField()
     reporter_id = wtforms.IntegerField()
 
 class MediaReportForm(wtforms.Form):
-    report_reason = wtforms.TextAreaField('Reason for Reporting')
+    report_reason = wtforms.TextAreaField(
+        _('Reason for Reporting'),
+        [wtforms.validators.Required()])
     media_entry_id = wtforms.IntegerField()
     reporter_id = wtforms.IntegerField()
