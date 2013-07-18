@@ -26,7 +26,9 @@ from sqlalchemy.sql import and_
 from migrate.changeset.constraint import UniqueConstraint
 
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
-from mediagoblin.db.models import MediaEntry, Collection, User, MediaComment
+from mediagoblin.db.models import (MediaEntry, Collection, User, MediaComment,
+                                   Client, RequestToken, AccessToken,
+                                   NonceTimestamp)
 
 MIGRATIONS = {}
 
@@ -377,5 +379,17 @@ def pw_hash_nullable(db):
     if db.bind.url.drivername == 'sqlite':
         constraint = UniqueConstraint('username', table=user_table)
         constraint.create()
+
+    db.commit()
+
+
+@RegisterMigration(14, MIGRATIONS)
+def create_oauth1_tables(db):
+    """ Creates the OAuth1 tables """
+
+    Client.__table__.create(db.bind)
+    RequestToken.__table__.create(db.bind)
+    AccessToken.__table__.create(db.bind)
+    NonceTimestamp.__table__.create(db.bind)
 
     db.commit()
