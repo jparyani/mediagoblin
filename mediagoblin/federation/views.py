@@ -198,7 +198,6 @@ def request_token(request):
 
     authorization = decode_authorization_header(data)
 
-
     if authorization == dict() or u"oauth_consumer_key" not in authorization:
         error = "Missing required parameter."
         return json_response({"error": error}, status=400)
@@ -206,12 +205,13 @@ def request_token(request):
     # check the client_id
     client_id = authorization[u"oauth_consumer_key"]
     client = Client.query.filter_by(id=client_id).first()
-    if client is None:
+
+    if client == None:
         # client_id is invalid
         error = "Invalid client_id"
         return json_response({"error": error}, status=400)
 
-    # make request token and return to client
+   # make request token and return to client
     request_validator = GMGRequestValidator(authorization)
     rv = RequestTokenEndpoint(request_validator)
     tokens = rv.create_request_token(request, authorization)
@@ -219,7 +219,7 @@ def request_token(request):
     # store the nonce & timestamp before we return back
     nonce = authorization[u"oauth_nonce"]
     timestamp = authorization[u"oauth_timestamp"]
-    timestamp = datetime.datetime.fromtimestamp(int(timestamp))
+    timestamp = datetime.datetime.fromtimestamp(float(timestamp))
 
     nc = NonceTimestamp(nonce=nonce, timestamp=timestamp)
     nc.save()

@@ -26,8 +26,9 @@ class GMGRequestValidator(RequestValidator):
 
     enforce_ssl = False
 
-    def __init__(self, data=None):
+    def __init__(self, data=None, *args, **kwargs):
         self.POST = data
+        super(GMGRequestValidator, self).__init__(*args, **kwargs)
 
     def save_request_token(self, token, request):
         """ Saves request token in db """
@@ -38,7 +39,8 @@ class GMGRequestValidator(RequestValidator):
                 secret=token["oauth_token_secret"],
                 )
         request_token.client = client_id
-        request_token.callback = token.get("oauth_callback", None)
+        if u"oauth_callback" in self.POST:
+            request_token.callback = self.POST[u"oauth_callback"]
         request_token.save()
 
     def save_verifier(self, token, verifier, request):

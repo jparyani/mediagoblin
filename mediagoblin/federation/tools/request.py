@@ -14,14 +14,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
-
-# Regex for parsing Authorization string
-auth_header_re = re.compile('(\w+)[:=] ?"?(\w+)"?')
-
 def decode_authorization_header(header):
     """ Decodes a HTTP Authorization Header to python dictionary """
-    authorization = header.get("Authorization", "")
-    tokens = dict(auth_header_re.findall(authorization))
+    authorization = header.get("Authorization", "").lstrip(" ").lstrip("OAuth")
+    tokens = {}
+
+    for param in authorization.split(","):
+        key, value = param.split("=")
+        
+        key = key.lstrip(" ")
+        value = value.lstrip(" ").lstrip('"')
+        value = value.rstrip(" ").rstrip('"')
+
+        tokens[key] = value
+
     return tokens
 
