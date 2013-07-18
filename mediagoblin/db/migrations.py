@@ -26,9 +26,7 @@ from sqlalchemy.sql import and_
 from migrate.changeset.constraint import UniqueConstraint
 
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
-from mediagoblin.db.models import (MediaEntry, Collection, User, MediaComment,
-                                   Client, RequestToken, AccessToken,
-                                   NonceTimestamp)
+from mediagoblin.db.models import MediaEntry, Collection, User, MediaComment
 
 MIGRATIONS = {}
 
@@ -383,13 +381,80 @@ def pw_hash_nullable(db):
     db.commit()
 
 
+# oauth1 migrations
+class Client_v0(Base):
+    """
+        Model representing a client - Used for API Auth
+    """
+    __tablename__ = "core__clients"
+
+    id = Column(Unicode, nullable=True, primary_key=True)
+    secret = Column(Unicode, nullable=False)
+    expirey = Column(DateTime, nullable=True)
+    application_type = Column(Unicode, nullable=False)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    # optional stuff
+    redirect_uri = Column(JSONEncoded, nullable=True)
+    logo_url = Column(Unicode, nullable=True)
+    application_name = Column(Unicode, nullable=True)
+    contacts = Column(JSONEncoded, nullable=True)
+
+    def __repr__(self):
+        if self.application_name:
+            return "<Client {0} - {1}>".format(self.application_name, self.id)
+        else:
+            return "<Client {0}>".format(self.id)
+
+class RequestToken_v0(Base):
+    """
+        Model for representing the request tokens
+    """
+    __tablename__ = "core__request_tokens"
+
+    token = Column(Unicode, primary_key=True)
+    secret = Column(Unicode, nullable=False)
+    client = Column(Unicode, ForeignKey(Client.id))
+    user = Column(Integer, ForeignKey(User.id), nullable=True)
+    used = Column(Boolean, default=False)
+    authenticated = Column(Boolean, default=False)
+    verifier = Column(Unicode, nullable=True)
+    callback = Column(Unicode, nullable=False, default=u"oob")
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    
+class AccessToken_v0(Base):
+    """
+        Model for representing the access tokens
+    """
+    __tablename__ = "core__access_tokens"
+
+    token = Column(Unicode, nullable=False, primary_key=True)
+    secret = Column(Unicode, nullable=False)
+    user = Column(Integer, ForeignKey(User.id))
+    request_token = Column(Unicode, ForeignKey(RequestToken.token))
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+ 
+
+class NonceTimestamp_v0(Base):
+    """
+        A place the timestamp and nonce can be stored - this is for OAuth1
+    """
+    __tablename__ = "core__nonce_timestamps"
+
+    nonce = Column(Unicode, nullable=False, primary_key=True)
+    timestamp = Column(DateTime, nullable=False, primary_key=True)
+
+
 @RegisterMigration(14, MIGRATIONS)
 def create_oauth1_tables(db):
     """ Creates the OAuth1 tables """
 
-    Client.__table__.create(db.bind)
-    RequestToken.__table__.create(db.bind)
-    AccessToken.__table__.create(db.bind)
-    NonceTimestamp.__table__.create(db.bind)
+    Client_v0.__table__.create(db.bind)
+    RequestToken_v0.__table__.create(db.bind)
+    AccessToken_v0.__table__.create(db.bind)
+    NonceTimestamp_v0.__table__.create(db.bind)
 
     db.commit()
