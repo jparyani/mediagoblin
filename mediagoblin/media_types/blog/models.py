@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011, 2012 MediaGoblin contributors. See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -17,21 +17,34 @@
 import datetime
 
 from mediagoblin.db.base import Base
-from mediagoblin.db.models import Collection, User
+from mediagoblin.db.models import Collection, User, MediaEntry
+from mediagoblin.db.mixin import GenerateSlugMixin
+
+from mediagoblin.media_types.blog.lib import check_blog_slug_used
+
+from mediagoblin.tools.text import cleaned_markdown_conversion
 
 from sqlalchemy import (
     Column, Integer, ForeignKey, Unicode, UnicodeText, DateTime)
 from sqlalchemy.orm import relationship, backref
 
-class Blog(Base):
-	__tablename__ = "core__blogs"
-	id = Column(Integer, primary_key=True)
-	title = Column(Unicode)
-	description = Column(UnicodeText)
-	author = Column(Integer, ForeignKey(User.id), nullable=False, index=True)
-	created = Column(DateTime, nullable=False, default=datetime.datetime.now,
-        index=True)
+
+class BlogMixin(GenerateSlugMixin):
+    def check_slug_used(self, slug):
+        return check_blog_slug_used(self.author, slug, self.id)
+
+class Blog(Base, BlogMixin):
+    __tablename__ = "mediatype__blogs"
+    id = Column(Integer, primary_key=True)
+    title = Column(Unicode)
+    description = Column(UnicodeText)
+    author = Column(Integer, ForeignKey(User.id), nullable=False, index=True) #similar to uploader
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now, index=True)
+    slug = Column(Unicode)
     
+#class BlogPost(MediaEntry):
+    #__tablename__ = "mediatype__blog_blogposts"
+    #blog = Column(Integer, ForeignKey(Blog.id), nullable=False)
     
 BACKREF_NAME = "blogpost__media_data"
 
@@ -40,12 +53,11 @@ class BlogpostData(Base):
     __tablename__ = "blogpost__mediadata"
 
     # The primary key *and* reference to the main media_entry
-    media_entry = Column(Integer, ForeignKey('core__media_entries.id'),
-        primary_key=True)
+    media_entry = Column(Integer, ForeignKey('core__media_entries.id'), primary_key=True)
     get_media_entry = relationship("MediaEntry",
         backref=backref(BACKREF_NAME, uselist=False,
                         cascade="all, delete-orphan"))
 
 
 DATA_MODEL = BlogpostData
-MODELS = [BlogpostData]
+MODELS = [BlogpostData, Blog]
