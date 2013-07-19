@@ -18,9 +18,9 @@ from mediagoblin.tools.routing import add_route
 
 #URL mapping for blog-admin, where all the blog posts of a particular blog
 #are listed. providing the facility of edit, delete and view a particular blog post."
-add_route('mediagoblin.media_types.blog.blog-admin', \
-	'/u/<string:user>/b/<string:blog_name>/blog-admin/', 'mediagoblin.media_types.blog.views:blog-admin')
-	
+#add_route('mediagoblin.media_types.blog.blog-admin', \
+#	'/u/<string:user>/b/<string:blog_name>/blog-admin/', 'mediagoblin.media_types.blog.views:blog-admin')
+
 #URL mapping for creating a new blog post.
 add_route('mediagoblin.media_types.blog.blogpost.create', '/u/<string:user>/b/<string:blog_name>/create/',
 	'mediagoblin.media_types.blog.views:blog_post_edit')
@@ -35,12 +35,20 @@ add_route('mediagoblin.media_types.blog.blogpost.edit', '/u/<string:user>/b/<str
 add_route('mediagoblin.media_types.blog.blog-collection-admin', \
 	'/u/<string:user>/blog-collection-admin/', 'mediagoblin.media_types.blog.views:blog-collection-admin')
 
+##URL mapping for creating a new blog.
+#add_route('mediagoblin.media_types.blog.create', '/u/<string:user>/b/create/',
+	#'mediagoblin.media_types.blog.views:blog_create')
+
+
 #URL mapping for creating a new blog.
 add_route('mediagoblin.media_types.blog.create', '/u/<string:user>/b/create/',
-	'mediagoblin.media_types.blog.views:blog_create')
+	'mediagoblin.media_types.blog.views:blog_edit')
+
+
+
 
 #URL mapping for editing an existing blog.
-add_route('mediagoblin.media_types.blog.create', '/u/<string:user>/b/<string:blog_name>/edit/',
+add_route('mediagoblin.media_types.blog.edit', '/u/<string:user>/b/<string:blog_slug>/edit/',
 	'mediagoblin.media_types.blog.views:blog_edit')
 	
 #route for gallery view of blog posts and blogs.
