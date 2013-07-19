@@ -22,8 +22,8 @@ from mediagoblin.tools.routing import add_route
 #	'/u/<string:user>/b/<string:blog_name>/blog-admin/', 'mediagoblin.media_types.blog.views:blog-admin')
 
 #URL mapping for creating a new blog post.
-add_route('mediagoblin.media_types.blog.blogpost.create', '/u/<string:user>/b/<string:blog_name>/create/',
-	'mediagoblin.media_types.blog.views:blog_post_edit')
+add_route('mediagoblin.media_types.blog.blogpost.create', '/u/<string:user>/b/blogpost/create/',
+	'mediagoblin.media_types.blog.views:blogpost_create')
 
 #URL mapping for editing an existing blog post.
 add_route('mediagoblin.media_types.blog.blogpost.edit', '/u/<string:user>/b/<string:blog_name>/p/blog_post_slug/edit/',
@@ -43,8 +43,6 @@ add_route('mediagoblin.media_types.blog.blog-collection-admin', \
 #URL mapping for creating a new blog.
 add_route('mediagoblin.media_types.blog.create', '/u/<string:user>/b/create/',
 	'mediagoblin.media_types.blog.views:blog_edit')
-
-
 
 
 #URL mapping for editing an existing blog.
