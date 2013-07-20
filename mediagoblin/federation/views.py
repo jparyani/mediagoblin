@@ -16,10 +16,10 @@
 
 import datetime
 
-from oauthlib.oauth1 import (AuthorizationEndpoint, RequestValidator, 
-                             RequestTokenEndpoint, AccessTokenEndpoint)
+from oauthlib.oauth1 import (RequestTokenEndpoint, AuthorizationEndpoint,
+                             AccessTokenEndpoint)
 
-from mediagoblin.decorators import require_active_login, oauth_required
+from mediagoblin.decorators import require_active_login
 from mediagoblin.tools.translate import pass_to_ugettext
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.tools.request import decode_request
@@ -29,10 +29,9 @@ from mediagoblin.tools.response import (render_to_response, redirect,
 from mediagoblin.tools.crypto import random_string
 from mediagoblin.tools.validator import validate_email, validate_url
 from mediagoblin.federation.forms import AuthorizeForm
-from mediagoblin.federation.exceptions import ValidationException
 from mediagoblin.federation.oauth import GMGRequestValidator, GMGRequest
 from mediagoblin.federation.tools.request import decode_authorization_header
-from mediagoblin.db.models import NonceTimestamp, Client, RequestToken, AccessToken
+from mediagoblin.db.models import NonceTimestamp, Client, RequestToken
 
 # possible client types
 client_types = ["web", "native"] # currently what pump supports
@@ -154,7 +153,7 @@ def client_register(request):
     if redirect_uris is not None:
         if type(redirect_uris) is not unicode:
             error = "redirect_uris must be space-seporated URLs."
-            return json_respinse({"error": error}, status=400)
+            return json_response({"error": error}, status=400)
 
         redirect_uris = redirect_uris.split()
 
