@@ -41,19 +41,16 @@ class Blog(Base, BlogMixin):
     author = Column(Integer, ForeignKey(User.id), nullable=False, index=True) #similar to uploader
     created = Column(DateTime, nullable=False, default=datetime.datetime.now, index=True)
     slug = Column(Unicode)
-    
-#class BlogPost(MediaEntry):
-    #__tablename__ = "mediatype__blog_blogposts"
-    #blog = Column(Integer, ForeignKey(Blog.id), nullable=False)
+
     
 BACKREF_NAME = "blogpost__media_data"
-
 
 class BlogpostData(Base):
     __tablename__ = "blogpost__mediadata"
 
     # The primary key *and* reference to the main media_entry
     media_entry = Column(Integer, ForeignKey('core__media_entries.id'), primary_key=True)
+    #blog = Column(Integer, ForeignKey('mediatype__blogs.id', nullable=False)
     get_media_entry = relationship("MediaEntry",
         backref=backref(BACKREF_NAME, uselist=False,
                         cascade="all, delete-orphan"))
