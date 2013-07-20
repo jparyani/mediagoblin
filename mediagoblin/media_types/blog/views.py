@@ -102,49 +102,49 @@ def blog_edit(request):
                      'app_config': mg_globals.app_config})
         else:
             if request.method == 'POST' and form.validate():
-			blog.title = unicode(form.title.data)
-			blog.description = unicode(form.description.data)
-			blog.author = request.user.id
-			blog.generate_slug()
-			
-			blog.save()
-			add_message(request, SUCCESS, "Your blog is updated.")
-            return redirect(request, "mediagoblin.user_pages.user_home",
-                        user=request.user.username)            
-        
+                blog.title = unicode(form.title.data)
+                blog.description = unicode(form.description.data)
+                blog.author = request.user.id
+                blog.generate_slug()
+                
+                blog.save()
+                add_message(request, SUCCESS, "Your blog is updated.")
+                return redirect(request, "mediagoblin.user_pages.user_home",
+                            user=request.user.username)            
+            
 @require_active_login        
 def blogpost_create(request):
-	form = blog_forms.BlogPostEditForm(request.form, license=request.user.license_preference)
-	
-	if request.method == 'POST' and form.validate():
-		blogpost = MediaEntry()
-		blogpost.media_type = 'blog_post'
-		blogpost.title = unicode(form.title.data)
-		blogpost.description = unicode(form.description.data)
-		blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
-		blogpost.license = unicode(form.license.data) or None
-		blogpost.uploader = request.user.id
-		#blogpost.state = 'processed'
-		
-		blogpost.generate_slug()
-		
-		blogpost.save()
-	
-		add_message(request, SUCCESS, _('Woohoo! Submitted!'))
-		add_comment_subscription(request.user, blogpost)
-		return redirect(request, "mediagoblin.user_pages.user_home", 
-			user=request.user.username)
-		
-	return render_to_response(
+    form = blog_forms.BlogPostEditForm(request.form, license=request.user.license_preference)
+    
+    if request.method == 'POST' and form.validate():
+        blogpost = MediaEntry()
+        blogpost.media_type = 'blog_post'
+        blogpost.title = unicode(form.title.data)
+        blogpost.description = unicode(form.description.data)
+        blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
+        blogpost.license = unicode(form.license.data) or None
+        blogpost.uploader = request.user.id
+        #blogpost.state = 'processed'
+        
+        blogpost.generate_slug()
+        
+        blogpost.save()
+    
+        add_message(request, SUCCESS, _('Woohoo! Submitted!'))
+        add_comment_subscription(request.user, blogpost)
+        return redirect(request, "mediagoblin.user_pages.user_home", 
+            user=request.user.username)
+        
+    return render_to_response(
         request,
         'mediagoblin/blog/blog_post_edit_create.html',
         {'form': form,
         'app_config': mg_globals.app_config,
         'user': request.user.username})
-	
-		
-		
-	
-	            
+    
+        
+        
+    
+                
             
     

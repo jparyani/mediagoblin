@@ -24,7 +24,7 @@
         method="POST" enctype="multipart/form-data">
     <div class="form_box_xl">
       <h1>{% trans %}Create/Edit a Blog{% endtrans %}</h1>
-      {{ wtforms_util.render_divs(blog_form) }}
+      {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
         {{ csrf_token }}
         <input type="submit" value="{% trans %}Add{% endtrans %}" class="button_form" />
