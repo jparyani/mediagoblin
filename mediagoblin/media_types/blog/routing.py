@@ -21,13 +21,13 @@ from mediagoblin.tools.routing import add_route
 #add_route('mediagoblin.media_types.blog.blog-admin', \
 #	'/u/<string:user>/b/<string:blog_name>/blog-admin/', 'mediagoblin.media_types.blog.views:blog-admin')
 
-#URL mapping for creating a new blog post.
+#URL mapping for creating a new blog post. (add blo_slug in the url at "blogpost" place later"
 add_route('mediagoblin.media_types.blog.blogpost.create', '/u/<string:user>/b/blogpost/create/',
 	'mediagoblin.media_types.blog.views:blogpost_create')
 
 #URL mapping for editing an existing blog post.
-add_route('mediagoblin.media_types.blog.blogpost.edit', '/u/<string:user>/b/<string:blog_name>/p/blog_post_slug/edit/',
-	'mediagoblin.media_types.blog.views:blog_post_edit')
+add_route('mediagoblin.media_types.blog.blogpost.edit', '/u/<string:user>/b/blogpost/p/<string:blog_post_slug>/edit/',
+	'mediagoblin.media_types.blog.views:blogpost_edit')
 
 #URL mapping for blog-collection-admin, where all the blogs of the user
 #are listed. providing the facility of edit, delete and view a blog. 
