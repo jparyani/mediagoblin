@@ -14,8 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.db.base import Session
-
 
 def check_blog_slug_used(author_id, slug, ignore_b_id=None):
     from mediagoblin.media_types.blog.models import Blog
