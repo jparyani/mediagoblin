@@ -18,7 +18,7 @@ from mediagoblin.media_types import MediaManagerBase
 
 from mediagoblin.tools import pluginapi
 
-MEDIA_TYPE = 'mediagoblin.media_types.blog'
+MEDIA_TYPE = 'mediagoblin.media_types.blogpost'
 
 def setup_plugin():
     config = pluginapi.get_config(MEDIA_TYPE)
@@ -28,7 +28,7 @@ class BlogPostMediaManager(MediaManagerBase):
     display_template = "mediagoblin/media_displays/blogpost.html"
     default_thumb = "images/media_thumbs/blogpost.jpg"
     
-def get_media_type_and_manager():
+def get_media_type_and_manager(ext):
         return MEDIA_TYPE, BlogPostMediaManager
 
 
