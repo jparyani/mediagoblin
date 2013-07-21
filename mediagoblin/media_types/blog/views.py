@@ -117,7 +117,7 @@ def blogpost_create(request):
     
     if request.method == 'POST' and form.validate():
         blogpost = MediaEntry()
-        blogpost.media_type = 'blog_post'
+        blogpost.media_type = 'mediagoblin.media_types.blogpost'
         blogpost.title = unicode(form.title.data)
         blogpost.description = unicode(form.description.data)
         blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
@@ -145,9 +145,7 @@ def blogpost_create(request):
 @require_active_login
 def blogpost_edit(request):
 	
-	blogpost = MediaEntry.query.filter_by(
-                blog=request.matchdict['blog_slug'],
-                slug=request.matchdict['blog_post_slug'], uploader=request.user.id).first()
+	blogpost = MediaEntry.query.filter_by(slug=request.matchdict['blog_post_slug'], uploader=request.user.id).first()
 	defaults = dict(
 				title = blogpost.title,
 				description = blogpost.description,
@@ -174,8 +172,8 @@ def blogpost_edit(request):
         {'form': form,
         'app_config': mg_globals.app_config,
         'user': request.user.username,
-        'blog_post_slug': blogpost.slug,
-        'blog_slug':blogpost.blog})    
+        'blog_post_slug': blogpost.slug
+        })    
 
 #def blog_admin_view(request):
     
