@@ -27,7 +27,6 @@ from mediagoblin import mg_globals
 from mediagoblin.media_types.blog import forms as blog_forms
 from mediagoblin.media_types.blog.models import Blog
 from mediagoblin.messages import add_message, SUCCESS, ERROR
-#from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_media_entry_by_id, user_may_alter_collection,
                             get_user_collection)
@@ -124,7 +123,7 @@ def blogpost_create(request):
         blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
         blogpost.license = unicode(form.license.data) or None
         blogpost.uploader = request.user.id
-        #blogpost.state = 'processed'
+        blogpost.state = 'processed'
         
         blogpost.generate_slug()
         
@@ -141,10 +140,43 @@ def blogpost_create(request):
         {'form': form,
         'app_config': mg_globals.app_config,
         'user': request.user.username})
+
+
+@require_active_login
+def blogpost_edit(request):
+	
+	blogpost = MediaEntry.query.filter_by(
+                blog=request.matchdict['blog_slug'],
+                slug=request.matchdict['blog_post_slug'], uploader=request.user.id).first()
+	defaults = dict(
+				title = blogpost.title,
+				description = blogpost.description,
+				tags=media_tags_as_string(blogpost.tags),
+				license=blogpost.license)
+	
+	form = blog_forms.BlogPostEditForm(request.form, **defaults)
+	if request.method == 'POST' and form.validate():
+		blogpost.title = unicode(form.title.data)
+		blogpost.description = unicode(form.description.data)
+		blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
+		blogpost.license = unicode(form.license.data) 
+		
+		blogpost.generate_slug()
+		blogpost.save()
+		
+		add_message(request, SUCCESS, _('Woohoo! edited blogpost is submitted'))
+		return redirect(request, "mediagoblin.user_pages.user_home", 
+			user=request.user.username)
+	
+	return render_to_response(
+        request,
+        'mediagoblin/blog/blog_post_edit_create.html',
+        {'form': form,
+        'app_config': mg_globals.app_config,
+        'user': request.user.username,
+        'blog_post_slug': blogpost.slug,
+        'blog_slug':blogpost.blog})    
+
+#def blog_admin_view(request):
     
-        
-        
-    
-                
-            
-    
+ 
