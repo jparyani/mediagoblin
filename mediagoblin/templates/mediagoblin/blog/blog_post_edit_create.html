@@ -24,8 +24,7 @@
 {%- endblock %}
 
 {% block mediagoblin_content %}
-  <form action="{{ request.urlgen('mediagoblin.media_types.blog.blogpost.create', user=user) }}"
-        method="POST">
+  <form action=""  method="POST">
     <div class="form_box_xl">
       <h1>{% trans %}Create a blog post.{% endtrans %}</h1>
       {{ wtforms_util.render_divs(form) }}
