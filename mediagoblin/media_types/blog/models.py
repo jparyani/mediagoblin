@@ -45,16 +45,16 @@ class Blog(Base, BlogMixin):
     
 BACKREF_NAME = "blogpost__media_data"
 
-class BlogpostData(Base):
+class BlogPostData(Base):
     __tablename__ = "blogpost__mediadata"
 
     # The primary key *and* reference to the main media_entry
     media_entry = Column(Integer, ForeignKey('core__media_entries.id'), primary_key=True)
-    #blog = Column(Integer, ForeignKey('mediatype__blogs.id', nullable=False)
+    blog = Column(Integer, ForeignKey('mediatype__blogs.id'), nullable=False)
     get_media_entry = relationship("MediaEntry",
         backref=backref(BACKREF_NAME, uselist=False,
                         cascade="all, delete-orphan"))
 
 
-DATA_MODEL = BlogpostData
-MODELS = [BlogpostData, Blog]
+DATA_MODEL = BlogPostData
+MODELS = [BlogPostData, Blog]
