@@ -25,7 +25,9 @@ from werkzeug.exceptions import Forbidden
 from mediagoblin import mg_globals
 
 from mediagoblin.media_types.blog import forms as blog_forms
-from mediagoblin.media_types.blog.models import Blog
+from mediagoblin.media_types.blog.models import Blog, BlogPostData
+from mediagoblin.media_types.blog.lib import may_edit_blogpost
+
 from mediagoblin.messages import add_message, SUCCESS, ERROR
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_media_entry_by_id, user_may_alter_collection,
@@ -37,6 +39,7 @@ from mediagoblin.tools.template import render_template
 from mediagoblin.tools.text import (
     convert_to_tag_list_of_dicts, media_tags_as_string)
 from mediagoblin.tools.url import slugify
+
 from mediagoblin.db.util import check_media_slug_used, check_collection_slug_used
 from mediagoblin.db.models import User, Collection, MediaEntry
 
@@ -113,10 +116,17 @@ def blog_edit(request):
             
 @require_active_login        
 def blogpost_create(request):
-    form = blog_forms.BlogPostEditForm(request.form, license=request.user.license_preference)
     
+
+    form = blog_forms.BlogPostEditForm(request.form, license=request.user.license_preference)
+     
     if request.method == 'POST' and form.validate():
-        blogpost = MediaEntry()
+        blog_slug = request.matchdict.get('blog_slug')
+        blog = request.db.Blog.query.filter_by(slug=blog_slug,
+            author=request.user.id).first()
+        
+
+        blogpost = request.db.MediaEntry()
         blogpost.media_type = 'mediagoblin.media_types.blogpost'
         blogpost.title = unicode(form.title.data)
         blogpost.description = unicode(form.description.data)
@@ -128,6 +138,12 @@ def blogpost_create(request):
         blogpost.generate_slug()
         
         blogpost.save()
+        
+        # connect this blogpost to its blog
+        blog_post_data = request.db.BlogPostData()
+        blog_post_data.blog = blog.id
+        blog_post_data.media_entry = blogpost.id
+        blog_post_data.save()
     
         add_message(request, SUCCESS, _('Woohoo! Submitted!'))
         add_comment_subscription(request.user, blogpost)
@@ -144,37 +160,70 @@ def blogpost_create(request):
 
 @require_active_login
 def blogpost_edit(request):
-	
-	blogpost = MediaEntry.query.filter_by(slug=request.matchdict['blog_post_slug'], uploader=request.user.id).first()
-	defaults = dict(
-				title = blogpost.title,
-				description = blogpost.description,
-				tags=media_tags_as_string(blogpost.tags),
-				license=blogpost.license)
-	
-	form = blog_forms.BlogPostEditForm(request.form, **defaults)
-	if request.method == 'POST' and form.validate():
-		blogpost.title = unicode(form.title.data)
-		blogpost.description = unicode(form.description.data)
-		blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
-		blogpost.license = unicode(form.license.data) 
-		
-		blogpost.generate_slug()
-		blogpost.save()
-		
-		add_message(request, SUCCESS, _('Woohoo! edited blogpost is submitted'))
-		return redirect(request, "mediagoblin.user_pages.user_home", 
-			user=request.user.username)
-	
-	return render_to_response(
+    blog_slug = request.matchdict.get('blog_slug')
+    blog_post_slug = request.matchdict.get('blog_post_slug')
+
+    blog = request.db.Blog.query.filter_by(slug=blog_slug, author=request.user.id).first()
+    blog_post_data = request.db.BlogPostData.query.filter_by(blog=blog.id).first()
+
+    blogpost = blog_post_data.get_media_entry
+
+    defaults = dict(
+                title = blogpost.title,
+                description = blogpost.description,
+                tags=media_tags_as_string(blogpost.tags),
+                license=blogpost.license)
+    
+    form = blog_forms.BlogPostEditForm(request.form, **defaults)
+    if request.method == 'POST' and form.validate():
+        blogpost.title = unicode(form.title.data)
+        blogpost.description = unicode(form.description.data)
+        blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
+        blogpost.license = unicode(form.license.data) 
+        
+        blogpost.generate_slug()
+        blogpost.save()
+        
+        add_message(request, SUCCESS, _('Woohoo! edited blogpost is submitted'))
+        return redirect(request, "mediagoblin.user_pages.user_home", 
+            user=request.user.username)
+    
+    return render_to_response(
         request,
         'mediagoblin/blog/blog_post_edit_create.html',
         {'form': form,
         'app_config': mg_globals.app_config,
         'user': request.user.username,
-        'blog_post_slug': blogpost.slug
+        'blog_post_slug': blog_post_slug
         })    
 
-#def blog_admin_view(request):
+@require_active_login
+def blog_dashboard(request):
+    blog_posts_list = []
+    blog_slug = request.matchdict.get('blog_slug')
+    _log.info(blog_slug)
+
+    blog = request.db.Blog.query.filter_by(slug=blog_slug).first()
+    blog_post_data = request.db.BlogPostData.query.filter_by(blog=blog.id).all()
+
+    for each_blog_post_data in blog_post_data:
+        blog_post = each_blog_post_data.get_media_entry
+        if blog_post:
+            blog_posts_list.append(blog_post)
+    blog_post_count = len(blog_posts_list)
+
+    if may_edit_blogpost(request, blog):
+        return render_to_response(
+        request,
+        'mediagoblin/blog/blog_admin_dashboard.html',
+        {'blog_posts_list': blog_posts_list,
+        'blog_slug':blog_slug,
+        'blog':blog,
+        'blog_post_count':blog_post_count
+        })
+
+                                                            
+    
+    
     
  
