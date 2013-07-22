@@ -18,26 +18,26 @@ from mediagoblin.tools.routing import add_route
 
 # client registration & oauth
 add_route(
-        "mediagoblin.federation",
+        "mediagoblin.oauth",
         "/api/client/register",
-        "mediagoblin.federation.views:client_register"
+        "mediagoblin.oauth.views:client_register"
         )
 
 add_route(
-        "mediagoblin.federation",
+        "mediagoblin.oauth",
         "/oauth/request_token",
-        "mediagoblin.federation.views:request_token"
+        "mediagoblin.oauth.views:request_token"
         )
 
 add_route(
-        "mediagoblin.federation",
+        "mediagoblin.oauth",
         "/oauth/authorize",
-        "mediagoblin.federation.views:authorize",
+        "mediagoblin.oauth.views:authorize",
         )
 
 add_route(
-        "mediagoblin.federation",
+        "mediagoblin.oauth",
         "/oauth/access_token",
-        "mediagoblin.federation.views:access_token"
+        "mediagoblin.oauth.views:access_token"
         )
 

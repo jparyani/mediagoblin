@@ -18,7 +18,7 @@ import datetime
 
 from oauthlib.oauth1 import (RequestTokenEndpoint, AuthorizationEndpoint,
                              AccessTokenEndpoint)
-
+                             
 from mediagoblin.decorators import require_active_login
 from mediagoblin.tools.translate import pass_to_ugettext
 from mediagoblin.meddleware.csrf import csrf_exempt
@@ -28,10 +28,10 @@ from mediagoblin.tools.response import (render_to_response, redirect,
                                         form_response)
 from mediagoblin.tools.crypto import random_string
 from mediagoblin.tools.validator import validate_email, validate_url
-from mediagoblin.federation.forms import AuthorizeForm
-from mediagoblin.federation.oauth import GMGRequestValidator, GMGRequest
-from mediagoblin.federation.tools.request import decode_authorization_header
-from mediagoblin.federation.tools.forms import WTFormData
+from mediagoblin.oauth.forms import AuthorizeForm
+from mediagoblin.oauth.oauth import GMGRequestValidator, GMGRequest
+from mediagoblin.oauth.tools.request import decode_authorization_header
+from mediagoblin.oauth.tools.forms import WTFormData
 from mediagoblin.db.models import NonceTimestamp, Client, RequestToken
 
 # possible client types
