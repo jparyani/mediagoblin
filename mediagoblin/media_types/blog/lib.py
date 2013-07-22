@@ -22,3 +22,9 @@ def check_blog_slug_used(author_id, slug, ignore_b_id=None):
         query = query.filter(Blog.id != ignore_b_id)
     does_exist = query.first() is not None
     return does_exist
+    
+def may_edit_blogpost(request, blog):
+    if request.is_admin or request.user.id == blog.author:
+        return True
+    return False
+    
