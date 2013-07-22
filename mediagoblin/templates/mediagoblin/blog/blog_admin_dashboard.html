@@ -1,0 +1,54 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% extends "mediagoblin/base.html" %}
+
+{% block title -%}
+{{blog.title}} Dashboard &mdash; {{ super() }}
+{%- endblock title %}
+
+{% block mediagoblin_content %}
+<h1> {{blog.title}} Dashboard  </h1>
+<p>
+    {{blog.description}}  
+</p> 
+<h2> Blog Post Entries </h2>
+    {% if blog_post_count!=0 %}
+     <table class="media_panel processing">
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Title</th>
+            <th>submitted</th>
+        </tr>
+        {% for blog_post in blog_posts_list %}
+        <tr>
+            <td>{{ blog_post.id }}</td>
+            <td>{{ blog_post.get_uploader.username }}</td>
+            <td><a href="{{ blog_post.url_for_self(request.urlgen) }}">{{ blog_post.title }}</a></td>
+            <td>{{ blog_post.created.strftime("%F %R") }}</td>
+        </tr>
+        {% endfor %}
+     </table>   
+    {% else %}
+        {% trans %} No blog post yet. {% endtrans %}
+    {% endif %}
+{% endblock %}
+     
+
+
