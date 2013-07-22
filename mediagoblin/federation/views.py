@@ -31,6 +31,7 @@ from mediagoblin.tools.validator import validate_email, validate_url
 from mediagoblin.federation.forms import AuthorizeForm
 from mediagoblin.federation.oauth import GMGRequestValidator, GMGRequest
 from mediagoblin.federation.tools.request import decode_authorization_header
+from mediagoblin.federation.tools.forms import WTFormData
 from mediagoblin.db.models import NonceTimestamp, Client, RequestToken
 
 # possible client types
@@ -224,16 +225,6 @@ def request_token(request):
     nc.save()
 
     return form_response(tokens)
-
-class WTFormData(dict):
-    """
-        Provides a WTForm usable dictionary
-    """
-    def getlist(self, key):
-        v = self[key]
-        if not isinstance(v, (list, tuple)):
-            v = [v]
-        return v
 
 @require_active_login    
 def authorize(request):
