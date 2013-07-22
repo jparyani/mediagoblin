@@ -15,8 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from oauthlib.common import Request
-from oauthlib.oauth1 import (AuthorizationEndpoint, RequestValidator, 
-                             RequestTokenEndpoint, AccessTokenEndpoint)
+from oauthlib.oauth1 import RequestValidator 
 
 from mediagoblin.db.models import NonceTimestamp, Client, RequestToken, AccessToken
 
@@ -110,7 +109,6 @@ class GMGRequestValidator(RequestValidator):
         return client.secret
 
     def get_access_token_secret(self, client_key, token, request):
-        client = Client.query.filter_by(id=client_key).first()
         access_token = AccessToken.query.filter_by(token=token).first()
         return access_token.secret
 

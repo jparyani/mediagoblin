@@ -25,6 +25,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import and_
 from migrate.changeset.constraint import UniqueConstraint
 
+
+from mediagoblin.db.extratypes import JSONEncoded
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
 from mediagoblin.db.models import MediaEntry, Collection, User, MediaComment
 
@@ -382,7 +384,7 @@ def pw_hash_nullable(db):
 
 
 # oauth1 migrations
-class Client_v0(Base):
+class Client_v0(declarative_base()):
     """
         Model representing a client - Used for API Auth
     """
@@ -407,7 +409,7 @@ class Client_v0(Base):
         else:
             return "<Client {0}>".format(self.id)
 
-class RequestToken_v0(Base):
+class RequestToken_v0(declarative_base()):
     """
         Model for representing the request tokens
     """
@@ -415,7 +417,7 @@ class RequestToken_v0(Base):
 
     token = Column(Unicode, primary_key=True)
     secret = Column(Unicode, nullable=False)
-    client = Column(Unicode, ForeignKey(Client.id))
+    client = Column(Unicode, ForeignKey(Client_v0.id))
     user = Column(Integer, ForeignKey(User.id), nullable=True)
     used = Column(Boolean, default=False)
     authenticated = Column(Boolean, default=False)
@@ -424,7 +426,7 @@ class RequestToken_v0(Base):
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
     
-class AccessToken_v0(Base):
+class AccessToken_v0(declarative_base()):
     """
         Model for representing the access tokens
     """
@@ -433,12 +435,12 @@ class AccessToken_v0(Base):
     token = Column(Unicode, nullable=False, primary_key=True)
     secret = Column(Unicode, nullable=False)
     user = Column(Integer, ForeignKey(User.id))
-    request_token = Column(Unicode, ForeignKey(RequestToken.token))
+    request_token = Column(Unicode, ForeignKey(RequestToken_v0.token))
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
  
 
-class NonceTimestamp_v0(Base):
+class NonceTimestamp_v0(declarative_base()):
     """
         A place the timestamp and nonce can be stored - this is for OAuth1
     """
