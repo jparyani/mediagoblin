@@ -27,6 +27,10 @@
 <p>
     {{blog.description}}  
 </p> 
+
+<a class="button_action" ALIGN="Left" href="{{ request.urlgen('mediagoblin.media_types.blog.blogpost.create', blog_slug=blog.slug, user=request.user.username) }}">
+{%- trans %}Add Blog Post{% endtrans -%}
+</a>
 <h2> Blog Post Entries </h2>
     {% if blog_post_count!=0 %}
      <table class="media_panel processing">
