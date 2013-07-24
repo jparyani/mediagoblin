@@ -160,11 +160,11 @@ directory. Modify these commands to reflect your own environment::
 Clone the MediaGoblin repository and set up the git submodules::
 
     git clone git://gitorious.org/mediagoblin/mediagoblin.git
+    cd mediagoblin
     git submodule init && git submodule update
 
 And set up the in-package virtualenv::
 
-    cd mediagoblin
     (virtualenv --system-site-packages . || virtualenv .) && ./bin/python setup.py develop
 
 .. note::
