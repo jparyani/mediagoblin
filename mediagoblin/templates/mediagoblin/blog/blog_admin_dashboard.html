@@ -46,7 +46,7 @@
             <td><a href="{{ blog_post.url_for_self(request.urlgen) }}">{{ blog_post.title }}</a></td>
             <td>{{ blog_post.created.strftime("%F %R") }}</td>
             <td></td>
-            <td><a href="{{request.urlgen('mediagoblin.media_types.blog.blogpost.edit', blog_slug=blog.slug, user=request.user.username, blog_post_slug=blog_post.slug) }}">Edit</a></td>
+            <td><a class="button_action" href="{{request.urlgen('mediagoblin.media_types.blog.blogpost.edit', blog_slug=blog.slug, user=request.user.username, blog_post_slug=blog_post.slug) }}">Edit</a></td>
         </tr>
         {% endfor %}
      </table>   
