@@ -85,10 +85,10 @@ def blog_edit(request):
                         user=request.user.username)
 
 
-
+    #Blog already exists.
     else:
+        blog = Blog.query.filter_by(slug=blog_slug).first()
         if request.method == 'GET':
-            blog = Blog.query.filter_by(slug=blog_slug).first()
             defaults = dict(
                 title = blog.title,
                 description = blog.description,
@@ -119,8 +119,11 @@ def blogpost_create(request):
     
 
     form = blog_forms.BlogPostEditForm(request.form, license=request.user.license_preference)
-     
+    
     if request.method == 'POST' and form.validate():
+       
+        _log.info(request.form['status'])
+           
         blog_slug = request.matchdict.get('blog_slug')
         blog = request.db.Blog.query.filter_by(slug=blog_slug,
             author=request.user.id).first()
@@ -220,9 +223,7 @@ def blog_dashboard(request):
         'blog_slug':blog_slug,
         'blog':blog,
         'blog_post_count':blog_post_count
-        })
-
-                                                            
+        })                                                            
     
     
     
