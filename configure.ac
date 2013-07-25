@@ -197,6 +197,6 @@ dnl Finish #
 dnl#########
 
 dnl Define the files to be configured
-AC_CONFIG_FILES([Makefile setup.py])
+AC_CONFIG_FILES([Makefile])
 dnl Generate config.status
 AC_OUTPUT

@@ -34,7 +34,7 @@ def get_version():
 
 
 setup(
-    name="@PACKAGE_NAME@",
+    name="mediagoblin",
     version=get_version(),
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     zip_safe=False,
@@ -91,7 +91,7 @@ setup(
         """,
     license='AGPLv3',
     author='Free Software Foundation and contributors',
-    author_email='@PACKAGE_BUGREPORT@',
+    author_email='cwebber@gnu.org',
     url="http://mediagoblin.org/",
     download_url="http://mediagoblin.org/download/",
     long_description=open(READMEFILE).read(),
