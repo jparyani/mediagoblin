@@ -18,11 +18,13 @@ from werkzeug.exceptions import Forbidden
 
 from mediagoblin.db.models import (MediaEntry, User, MediaComment, \
                                    CommentReport, ReportBase, Privilege, \
-                                   UserBan)
+                                   UserBan, ArchivedReport)
+from mediagoblin.db.util import user_privileges_to_dictionary
 from mediagoblin.decorators import (require_admin_or_moderator_login, \
                                     active_user_from_url)
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.moderation import forms as moderation_forms
+from mediagoblin.moderation.tools import take_punitive_actions
 from datetime import datetime
 
 @require_admin_or_moderator_login
@@ -67,17 +69,22 @@ def moderation_users_detail(request):
     '''
     user = User.query.filter_by(username=request.matchdict['user']).first()
     active_reports = user.reports_filed_on.filter(
-        ReportBase.resolved==None).limit(5)
+        ReportBase.discriminator!='archived_report').limit(5)
     closed_reports = user.reports_filed_on.filter(
-        ReportBase.resolved!=None).all()
+        ReportBase.discriminator=='archived_report').all()
     privileges = Privilege.query
+    user_banned = UserBan.query.get(user.id)
+    user_privileges = user_privileges_to_dictionary(user.id)
+    requesting_user_privileges = user_privileges_to_dictionary(request.user.id)
 
     return render_to_response(
         request,
         'mediagoblin/moderation/user.html',
         {'user':user,
-         'privileges':privileges,
-         'reports':active_reports})
+         'privileges': privileges,
+         'requesting_user_privileges':requesting_user_privileges,
+         'reports':active_reports,
+         'user_banned':user_banned})
 
 @require_admin_or_moderator_login
 def moderation_reports_panel(request):
@@ -86,10 +93,10 @@ def moderation_reports_panel(request):
         media entries for this instance.
     '''
     report_list = ReportBase.query.filter(
-        ReportBase.resolved==None).order_by(
+        ReportBase.discriminator!="archived_report").order_by(
         ReportBase.created.desc()).limit(10)
     closed_report_list = ReportBase.query.filter(
-        ReportBase.resolved!=None).order_by(
+        ReportBase.discriminator=="archived_report").order_by(
         ReportBase.created.desc()).limit(10)
 
     # Render to response
@@ -109,66 +116,12 @@ def moderation_reports_detail(request):
     form = moderation_forms.ReportResolutionForm(request.form)
     report = ReportBase.query.get(request.matchdict['report_id'])
 
+    form.take_away_privileges.choices = [(s.privilege_name,s.privilege_name.title()) for s in report.reported_user.all_privileges]
+
     if request.method == "POST" and form.validate():
         user = User.query.get(form.targeted_user.data)
-        if form.action_to_resolve.data == u'takeaway':
-            if report.discriminator == u'comment_report':
-                privilege = Privilege.one({'privilege_name':u'commenter'})
-                form.resolution_content.data += \
-                    u"<br>%s took away %s\'s commenting privileges" % (
-                        request.user.username,
-                        user.username)
-            else:
-                privilege = Privilege.one({'privilege_name':u'uploader'})
-                form.resolution_content.data += \
-                    u"<br>%s took away %s\'s media uploading privileges" % (
-                        request.user.username,
-                        user.username)
-            user.all_privileges.remove(privilege)
-            user.save()
-            report.result = form.resolution_content.data
-            report.resolved = datetime.now()
-            report.save()
-            
-        elif form.action_to_resolve.data == u'userban':
-            reason = form.resolution_content.data + \
-                "<br>"+request.user.username
-            user_ban = UserBan(
-                user_id=form.targeted_user.data,
-                expiration_date=form.user_banned_until.data,
-                reason= form.resolution_content.data)
-            user_ban.save()
-            if not form.user_banned_until == "":
-                form.resolution_content.data += \
-                    u"<br>%s banned user %s until %s." % (
-                    request.user.username,
-                    user.username,
-                    form.user_banned_until.data)
-            else:
-                form.resolution_content.data += \
-                    u"<br>%s banned user %s indefinitely." % (
-                    request.user.username,
-                    user.username,
-                    form.user_banned_until.data)
+        return take_punitive_actions(request, form, report, user)
 
-            report.result = form.resolution_content.data
-            report.resolved = datetime.now()
-            report.save()
-
-        else:
-            pass
-
-        return redirect(
-            request,
-            'mediagoblin.moderation.users_detail',
-            user=user.username)
-
-    if report.discriminator == 'comment_report':
-        comment = MediaComment.query.get(report.comment_id)
-        media_entry = None
-    elif report.discriminator == 'media_report':
-        media_entry = MediaEntry.query.get(report.media_entry_id)
-        comment = None
 
     form.targeted_user.data = report.reported_user_id
 
@@ -176,8 +129,6 @@ def moderation_reports_detail(request):
         request,
         'mediagoblin/moderation/report.html',
         {'report':report,
-         'media_entry':media_entry,
-         'comment':comment,
          'form':form})
 
 @require_admin_or_moderator_login
@@ -189,7 +140,7 @@ def give_or_take_away_privilege(request, url_user):
     form = moderation_forms.PrivilegeAddRemoveForm(request.form)
     if request.method == "POST" and form.validate():
         privilege = Privilege.one({'privilege_name':form.privilege_name.data})
-        if privilege in url_user.all_privileges is True:
+        if privilege in url_user.all_privileges:
             url_user.all_privileges.remove(privilege)
         else:      
             url_user.all_privileges.append(privilege)

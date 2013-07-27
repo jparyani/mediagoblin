@@ -26,7 +26,9 @@
 <h1>{% trans %}User panel{% endtrans %}</h1>
 
 <p>
-  {% trans %}Here you can look up users in order to take punitive actions on them.{% endtrans %}
+  {% trans %}
+    Here you can look up users in order to take punitive actions on them.
+  {% endtrans %}
 </p>
     
 <h2>{% trans %}Active Users{% endtrans %}</h2>
@@ -42,8 +44,12 @@
     {% for user in user_list %}
       <tr>
         <td>{{ user.id }}</td>
-        <td><a href="{{ request.urlgen('mediagoblin.moderation.users_detail',
-                                         user= user.username) }}">{{ user.username }}</a></td>
+        <td>
+          <a href="{{ request.urlgen('mediagoblin.moderation.users_detail',
+                                         user= user.username) }}">
+            {{ user.username }}
+          </a>
+        </td>
         <td>{{ user.created.strftime("%F %R") }}</td>
         <td>{{ user.posted_comments.count() }}</td>
       </tr>

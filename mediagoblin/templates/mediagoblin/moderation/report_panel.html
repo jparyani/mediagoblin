@@ -26,42 +26,57 @@
 <h1>{% trans %}Report panel{% endtrans %}</h1>
 
 <p>
-  {% trans %}Here you can look up users in order to take punitive actions on them.{% endtrans %}
+  {% trans %}
+    Here you can look up open reports that have been filed by users.
+  {% endtrans %}
 </p>
     
-<h2>{% trans %}Reports Filed{% endtrans %}</h2>
+<h2>{% trans %}Active Reports Filed{% endtrans %}</h2>
 
 {% if report_list.count() %}
   <table class="admin_panel processing">
     <tr>
-      <th>ID</th>
-      <th>Report Type</th>
-      <th>Offender</th>
-      <th>When Reported</th>
-      <th>Reported By</th>
-      <th>Reason</th>
-      <th>Reported Comment or Media Entry</th>
+      <th></th>
+      <th>{% trans %}Offender{% endtrans %}</th>
+      <th>{% trans %}When Reported{% endtrans %}</th>
+      <th>{% trans %}Reported By{% endtrans %}</th>
+      <th>{% trans %}Reason{% endtrans %}</th>
     </tr>
     {% for report in report_list %}
       <tr>
-
-            <td><a href="{{ request.urlgen('mediagoblin.moderation.reports_detail',
-                                    report_id=report.id) }}">{{ report.id }}</a></td>
         {% if report.discriminator == "comment_report" %}
-            <td>Comment Report</td>
-            <td>{{ report.comment.get_author.username }}</td>
-            <td>{{ report.created.strftime("%F %R") }}</td>
-            <td>{{ report.reporter.username }}</td>
-            <td>{{ report.report_content }}</td>
-            <td><a href="{{ report.comment.get_media_entry.url_for_self(request.urlgen) }}">{{ report.comment.get_media_entry.title }}</a></td>
+          <td>
+            <img 
+              src="{{ request.staticdirect('/images/icon_clipboard_alert.png') }}" 
+              alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
+                   Distributed by the GNOME project http://www.gnome.org" />
+            <a href="{{ request.urlgen(
+                    'mediagoblin.moderation.reports_detail',
+                     report_id=report.id) }}">
+              {% trans report_id=report.id %}
+                Comment Report #{{ report_id }} 
+              {% endtrans %}
+            </a>
+          </td>
         {% elif report.discriminator == "media_report" %}
-            <td>Media Report</td>
-            <td>{{ report.media_entry.get_uploader.username }}</td>
-            <td>{{ report.created.strftime("%F %R") }}</td>
-            <td>{{ report.reporter.username }}</td>
-            <td>{{ report.report_content[0:20] }}...</td>
-            <td><a href="{{ report.media_entry.url_for_self(request.urlgen) }}">{{ report.media_entry.title }}</a></td>
+          <td>
+            <img 
+              src="{{ request.staticdirect('/images/icon_clipboard_alert.png') }}" 
+              alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
+                   Distributed by the GNOME project http://www.gnome.org" />
+            <a href="{{ request.urlgen(
+                    'mediagoblin.moderation.reports_detail',
+                    report_id=report.id) }}">
+              {% trans report_id=report.id %}
+                Media Report #{{ report_id }}
+              {% endtrans %}
+            </a>
+          </td>
         {% endif %}
+          <td>{{ report.reported_user.username }}</td>
+          <td>{{ report.created.strftime("%F %R") }}</td>
+          <td>{{ report.reporter.username }}</td>
+          <td>{{ report.report_content[0:20] }}...</td>
       </tr>
     {% endfor %}
   </table>
@@ -72,32 +87,33 @@
 {% if closed_report_list.count() %}
   <table class="media_panel processing">
     <tr>
-      <th>ID</th>
-      <th>Resolved</th>
-      <th>Offender</th>
-      <th>Action Taken</th>
-      <th>Reported By</th>
-      <th>Reason</th>
-      <th>Reported Comment or Media Entry</th>
+      <th></th>
+      <th>{% trans %}Resolved{% endtrans %}</th>
+      <th>{% trans %}Offender{% endtrans %}</th>
+      <th>{% trans %}Action Taken{% endtrans %}</th>
+      <th>{% trans %}Reported By{% endtrans %}</th>
+      <th>{% trans %}Reason{% endtrans %}</th>
     </tr>
     {% for report in closed_report_list %}
-            <td><a href="{{ request.urlgen('mediagoblin.moderation.reports_detail',
-                                    report_id=report.id) }}">{{ report.id }}</a></td>
-        {% if report.discriminator == "comment_report" %}
-            <td>{{ report.resolved.strftime("%F %R") }}</td>
-            <td>{{ report.comment.get_author.username }}</td>
-            <td>{{ report.created.strftime("%F %R") }}</td>
-            <td>{{ report.reporter.username }}</td>
-            <td>{{ report.report_content }}</td>
-            <td><a href="{{ report.comment.get_media_entry.url_for_self(request.urlgen) }}">{{ report.comment.get_media_entry.title }}</a></td>
-        {% elif report.discriminator == "media_report" %}
-            <td>{{ report.resolved.strftime("%F %R") }}</td>
-            <td>{{ report.media_entry.get_uploader.username }}</td>
-            <td>{{ report.created.strftime("%F %R") }}</td>
-            <td>{{ report.reporter.username }}</td>
-            <td>{{ report.report_content[0:20] }}...</td>
-            <td><a href="{{ report.media_entry.url_for_self(request.urlgen) }}">{{ report.media_entry.title }}</a></td>
-        {% endif %}
+      <tr>
+        <td>
+          <img 
+            src="{{ request.staticdirect('/images/icon_clipboard.png') }}" 
+            alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
+                 Distributed by the GNOME project http://www.gnome.org" />
+          <a href="{{ request.urlgen('mediagoblin.moderation.reports_detail',
+                          report_id=report.id) }}">
+            {% trans report_id=report.id %}
+              Closed Report #{{ report_id }}
+            {% endtrans %}
+          </a>
+        </td>
+        <td>{{ report.resolved.strftime("%F %R") }}</td>
+        <td>{{ report.reported_user.username }}</td>
+        <td>{{ report.created.strftime("%F %R") }}</td>
+        <td>{{ report.reporter.username }}</td>
+        <td>{{ report.report_content }}</td>
+      </tr>
     {% endfor %}
   </table>
 {% else %}

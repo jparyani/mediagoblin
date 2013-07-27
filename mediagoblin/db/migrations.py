@@ -299,8 +299,6 @@ class ReportBase_v0(declarative_base()):
     report_content = Column(UnicodeText)
     reported_user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now) 
-    resolved = Column(DateTime)
-    result = Column(UnicodeText)
     discriminator = Column('type', Unicode(50))
     __mapper_args__ = {'polymorphic_on': discriminator}
 
@@ -317,13 +315,20 @@ class MediaReport_v0(ReportBase_v0):
     __tablename__ = 'core__reports_on_media'
     __mapper_args__ = {'polymorphic_identity': 'media_report'}
 
-    id = Column(
-        'id',
-        Integer, 
-        ForeignKey('core__reports.id'),
-        primary_key=True)
+    id = Column('id',Integer, ForeignKey('core__reports.id'), primary_key=True)
     media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
 
+class ArchivedReport_v0(ReportBase_v0):
+    __tablename__ = 'core__reports_archived'
+    __mapper_args__ = {'polymorphic_identity': 'archived_report'}
+
+    id = Column('id',Integer, ForeignKey('core__reports.id'))
+
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id))
+    comment_id = Column(Integer, ForeignKey(MediaComment.id))
+    resolver_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    resolved_time = Column(DateTime)
+    result = Column(UnicodeText)
 
 class UserBan_v0(declarative_base()):
     __tablename__ = 'core__user_bans'
@@ -356,6 +361,7 @@ def create_moderation_tables(db):
     ReportBase_v0.__table__.create(db.bind)
     CommentReport_v0.__table__.create(db.bind)
     MediaReport_v0.__table__.create(db.bind)
+    ArchivedReport_v0.__table__.create(db.bind)
     UserBan_v0.__table__.create(db.bind)
     Privilege_v0.__table__.create(db.bind)
     PrivilegeUserAssociation_v0.__table__.create(db.bind)

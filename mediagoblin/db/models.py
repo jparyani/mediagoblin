@@ -515,10 +515,17 @@ class ReportBase(Base):
             cascade="all, delete-orphan"),
         primaryjoin="User.id==ReportBase.reported_user_id")
     created = Column(DateTime, nullable=False, default=datetime.datetime.now())
-    resolved = Column(DateTime)
-    result = Column(UnicodeText)
     discriminator = Column('type', Unicode(50))
     __mapper_args__ = {'polymorphic_on': discriminator}
+
+    def is_comment_report(self):
+        return self.discriminator=='comment_report'
+
+    def is_media_entry_report(self):
+        return self.discriminator=='media_report'
+
+    def is_archived_report(self):
+        return self.discriminator=='archived_report'
 
 
 class CommentReport(ReportBase):
@@ -548,9 +555,39 @@ class MediaReport(ReportBase):
     media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
     media_entry = relationship(
         MediaEntry, 
-        backref=backref("reports_filed_on",
+        backref=backref("reports_filed_onmod/reports/1/",
             lazy="dynamic",
             cascade="all, delete-orphan"))
+
+class ArchivedReport(ReportBase):
+    """
+    A table to keep track of reports that have been resolved
+    """
+    __tablename__ = 'core__reports_archived'
+    __mapper_args__ = {'polymorphic_identity': 'archived_report'}
+    id = Column('id',Integer, ForeignKey('core__reports.id'),
+                primary_key=True)
+
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id))
+    media_entry = relationship(
+        MediaEntry, 
+        backref=backref("past_reports_filed_on",
+            lazy="dynamic"))
+    comment_id = Column(Integer, ForeignKey(MediaComment.id))
+    comment = relationship(
+        MediaComment, backref=backref("past_reports_filed_on",
+            lazy="dynamic"))
+
+    resolver_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    resolver = relationship(
+        User, 
+        backref=backref("reports_resolved_by",
+            lazy="dynamic",
+            cascade="all, delete-orphan"),
+        primaryjoin="User.id==ArchivedReport.resolver_id")
+
+    resolved = Column(DateTime)
+    result = Column(UnicodeText)
 
 class UserBan(Base):
     """
@@ -641,7 +678,8 @@ privilege_foundations = [[u'admin'], [u'moderator'], [u'uploader'],[u'reporter']
 MODELS = [
     User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem, 
     MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData, ReportBase,
-    CommentReport, MediaReport, UserBan, Privilege, PrivilegeUserAssociation]
+    CommentReport, MediaReport, UserBan, Privilege, PrivilegeUserAssociation,
+    ArchivedReport]
 
 # Foundations are the default rows that are created immediately after the tables are initialized. Each entry to
 #   this dictionary should be in the format of 

@@ -41,13 +41,15 @@
 
     <p>
       {% trans -%}
-        Someone has registered an account with this username, but it still has to be activated.
+        Someone has registered an account with this username, but it still has
+        to be activated.
       {%- endtrans %}
     </p>
-  
+
     <p>
       {% trans login_url=request.urlgen('mediagoblin.auth.login') -%}
-        If you are that person but you've lost your verification email, you can <a href="{{ login_url }}">log in</a> and resend it.
+        If you are that person but you've lost your verification email, you can
+        <a href="{{ login_url }}">log in</a> and resend it.
       {%- endtrans %}
     </p>
     </div>
@@ -56,6 +58,11 @@
   {% else %}
     <h1>
       {%- trans username=user.username %}{{ username }}'s profile{% endtrans -%}
+    {% if user_banned and user_banned.expiration_date %}
+      &mdash; BANNED until {{ user_banned.expiration_date }}
+    {% elif user_banned %}
+      &mdash; Banned Indefinitely
+    {% endif %}
     </h1>
 
     {% if not user.url and not user.bio %}
@@ -121,35 +128,42 @@
     <a class="right_align">{{ user.username }}'s report history</a>
     <span class=clear></span>
     <h2>{{ user.username }}'s Privileges</h2>
-    <table class="admin_panel">
+    <form action="{{ request.urlgen('mediagoblin.moderation.give_or_take_away_privilege',
+               user=user.username) }}"
+        method=post >
+    <table class="admin_side_panel">
         <tr>
           <th>{% trans %}Privilege{% endtrans %}</th>
           <th>{% trans %}User Has Privilege{% endtrans %}</th>
         </tr>
         {% for privilege in privileges %}
           <tr>
-            <form action="{{ request.urlgen('mediagoblin.moderation.give_or_take_away_privilege',
-                             user=user.username) }}" 
-                  method=post >
             <td>{{ privilege.privilege_name }}</td>
-            <td>
-              {% if privilege in user.all_privileges %}Yes</td>
-                {% if (not privilege.is_admin_or_moderator() or request.user.is_admin) and not (user.is_admin and not request.user.is_admin) %}                
-                  <td><input type=submit value="{% trans %}Take Away{% endtrans %}" />
-                  <input type=hidden name=giving_privilege />
-                {% endif %}
-              {% else %}No</td>
-                {% if (not privilege.is_admin_or_moderator() or request.user.is_admin) and not (user.is_admin and not request.user.is_admin) %}                
-                  <td><input type=submit value="{% trans %}Give Privilege{% endtrans %}" >
-                  <input type=hidden name=giving_privilege value=True />
-                {% endif %}
-              {% endif %}
-                <input type=hidden name=privilege_name value="{{ privilege.privilege_name }}" />
-            </td>           
-	{{ csrf_token }}
-            </form> 
-          </tr>    
+            {% if privilege in user.all_privileges  %}
+              <td class="user_with_privilege">
+                Yes{% else %}
+              <td class="user_without_privilege">
+                No{% endif %}
+            </td>
+            {% if requesting_user_privileges.admin%}
+              <td>{% if privilege in user.all_privileges  %}
+                <input type=submit id="{{ privilege.privilege_name }}" class=submit_button value ="-" />{% else %}
+                <input type=submit id="{{ privilege.privilege_name }}" class=submit_button value ="+" />{% endif %}
+              </td>
+            {% endif %}
+
+          </tr>
         {% endfor %}
     </table>
+	{{ csrf_token }}
+    <input type=hidden name=privilege_name id=hidden_privilege_name />
+    </form>
   {% endif %}
+    <script>
+$(document).ready(function(){
+    $('.submit_button').click(function(){
+        $('#hidden_privilege_name').val($(this).attr('id'));
+    });
+});
+    </script>
 {% endblock %}

@@ -15,7 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.db.base import Session
-from mediagoblin.db.models import MediaEntry, Tag, MediaTag, Collection
+from mediagoblin.db.models import (MediaEntry, Tag, MediaTag, Collection, \
+                                 User, Privilege, FOUNDATIONS)
 
 
 ##########################
@@ -67,6 +68,22 @@ def check_collection_slug_used(creator_id, slug, ignore_c_id):
     does_exist = Session.query(Collection.id).filter(filt).first() is not None
     return does_exist
 
+def user_privileges_to_dictionary(user_id):
+    """
+    This function accepts a users id and returns a dictionary of True or False
+    values for each privilege the user does or does not have. This allows for 
+    easier referencing of a user's privileges inside templates.
+    """
+    privilege_dictionary = {}
+    user = User.query.get(user_id)
+    users_privileges = [p_item.privilege_name for p_item in user.all_privileges]
+    for privilege_name in FOUNDATIONS[Privilege]:
+        privilege_name = privilege_name[0]
+        if privilege_name in users_privileges:
+            privilege_dictionary[privilege_name]=True
+        else:
+            privilege_dictionary[privilege_name]=False
+    return privilege_dictionary
 
 if __name__ == '__main__':
     from mediagoblin.db.open import setup_connection_and_db_from_config

@@ -19,7 +19,8 @@ from werkzeug.wrappers import Response as wz_Response
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import (lazy_pass_to_ugettext as _,
                                          pass_to_ugettext)
-from mediagoblin.db.models import UserBan
+from mediagoblin.db.models import UserBan, User
+from datetime import datetime
 
 class Response(wz_Response):
     """Set default response mimetype to HTML, otherwise we get text/plain"""
@@ -68,6 +69,10 @@ def render_user_banned(request):
     and the reason why they have been banned"
     """
     user_ban = UserBan.query.get(request.user.id)
+    if datetime.now()>user_ban.expiration_date:
+        user_ban.delete()
+        redirect(request,
+            'mediagoblin.index')
     return render_to_response(request,
         'mediagoblin/banned.html',
         {'reason':user_ban.reason,

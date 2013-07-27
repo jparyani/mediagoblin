@@ -22,9 +22,16 @@
 {% if not report %}
   Sorry, no such report found.
 {% else %}
-  <h2> Report #{{ report.id }}</h2>
-  {% if comment %}
-    Reported comment:
+    <a href="{{ request.urlgen('mediagoblin.moderation.reports') }}"
+       class="return_to_panel button_action"
+       title="Return to Reports Panel">
+      {% trans %}Return to Reports Panel{% endtrans %}</a>
+  <h2>{% trans %}Report{% endtrans %} #{{ report.id }}</h2>
+  {% if report.is_comment_report() or 
+    (report.is_archived_report() and report.comment) %}
+
+    {% trans %}Reported comment{% endtrans %}:
+    {% set comment = report.comment %}
     {% set reported_user = comment.get_author %}
     <div id="comment-{{ comment.id }}"
         class="comment_wrapper">
@@ -35,7 +42,8 @@
                class="comment_authorlink">
           {{- reported_user.username -}}
         </a>
-        <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
+        <a href="{{ request.urlgen(
+                        'mediagoblin.user_pages.media_home.view_comment',
                         comment=comment.id,
                         user=comment.get_media_entry.get_uploader.username,
                         media=comment.get_media_entry.slug_or_id) }}#comment"
@@ -52,23 +60,43 @@
         {% endautoescape %}
       </div>
     </div>
-  {% elif media_entry %}
+  {% elif report.is_media_entry_report() or 
+    (report.is_archived_report() and report.media_entry) %}
+
+    {% set media_entry = report.media_entry %}
     <div class="media_thumbnail">
-      <a href="request.urlgen('mediagoblin.user_pages.media_home'),
-                                                              user=media_entry.get_uploader.username,
-                                                              media=media_entry.slug_or_id)"><img src="{{ media_entry.thumb_url}}"/></a>
-      <a href="request.urlgen('mediagoblin.user_pages.media_home'),
+      <a href="{{ request.urlgen('mediagoblin.user_pages.media_home',
+                            user=media_entry.get_uploader.username,
+                            media=media_entry.slug_or_id) }}">
+      <img src="{{ media_entry.thumb_url}}"/></a>
+      <a href="{{ request.urlgen('mediagoblin.user_pages.media_home',
                     user=media_entry.get_uploader.username,
-                    media=media_entry.slug_or_id)" class=thumb_entry_title>{{ media_entry.title }}</a>
+                    media=media_entry.slug_or_id) }}" class=thumb_entry_title>
+        {{ media_entry.title }}</a>
     </div>
     <div class=clear></div>
+    <p>❖ Reported media by <a href="">
+      {{ report.reported_user.username }}</a></p>
+    <div class=clear></div>
+  {% else %}
+    <h2>{% trans user_url="request.urlgen(
+                        'mediagoblin.moderation.users_detail',
+                        user=report.reporter.username)",
+                 user_name=report.reported_user.username %}
+          CONTENT BY
+          <a href="{{ user_url }}">
+            {{ user_name }}</a>
+          HAS BEEN DELETED{% endtrans %}
+    </h2>
   {% endif %}
   Reason for report:
   <div id="report-{{ report.id }}"
        class="report_wrapper">
     <div class="report_author">
-        <img src="{{ request.staticdirect('/images/icon_clipboard.png') }}" 
-             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license. Distributed by the GNOME project http://www.gnome.org" />
+        <img src="{{ request.staticdirect(
+                  '/images/icon_clipboard_alert.png') }}" 
+             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license. 
+                  Distributed by the GNOME project http://www.gnome.org" />
         <a href="{{ request.urlgen('mediagoblin.moderation.users_detail',
                         user=report.reporter.username) }}"
            class="report_authorlink">
@@ -88,7 +116,7 @@
       {{ report.report_content }}
     </div>
   </div>
-  {% if not report.resolved %}
+  {% if not report.is_archived_report() %}
     <input type=button value=Resolve id=open_resolution_form />
     <form action="" method="POST" id=resolution_form>
       {{ wtforms_util.render_divs(form) }}
@@ -98,39 +126,72 @@
 
 
   <script>
-  $(document).ready(function() {
-      $('form#resolution_form').hide()
-      $('#user_banned_until').val("YYYY-MM-DD")
-      $('#open_resolution_form').click(function() {
-          $('form#resolution_form').toggle();
-          $('#user_banned_until').hide();
-          $('label[for=user_banned_until]').hide();
-      });
-      $('#action_to_resolve').change(function() {
-          if ($('ul#action_to_resolve li input:checked').val() == "userban") {
-              $('#user_banned_until').show();
-              $('label[for=user_banned_until]').show();
-          } else {
-              $('#user_banned_until').hide();
-              $('label[for=user_banned_until]').hide();
-          }
-      });
-      $("#user_banned_until").focus(function() {
-          $(this).val("");
-          $(this).unbind('focus');
-      });
-      $("#submit_this_report").click(function(){
-          if ($("#user_banned_until").val() == 'YYYY-MM-DD'){
-              $("#user_banned_until").val("");
-          }
-      });
+$(document).ready(function() {
+    hidden_input_names = {
+        'takeaway':['take_away_privileges'],
+        'userban':['user_banned_until','why_user_was_banned'],
+        'sendmessage':['message_to_user']
+}
+
+    $('form#resolution_form').hide()
+    $('#user_banned_until').val("YYYY-MM-DD")
+    $('#open_resolution_form').click(function() {
+        $('form#resolution_form').toggle();
+        $.each(hidden_input_names, function(key, list){
+            $.each(list, function(index, name){
+                $('label[for='+name+']').hide();
+                $('#'+name).hide();
+            });
+        });
+    });
+    $('#action_to_resolve').change(function() {
+        $('ul#action_to_resolve li input:checked').each(function() {
+            $.each(hidden_input_names[$(this).val()], function(index, name){
+                $('label[for='+name+']').show();
+                $('#'+name).show();
+            });
+        });
+        $('ul#action_to_resolve li input:not(:checked)').each(function() {
+            $.each(hidden_input_names[$(this).val()], function(index, name){
+                $('label[for='+name+']').hide();
+                $('#'+name).hide();                
+            });
+        });
+/*        $.each(hidden_input_names, function(key,name){
+            if ($.inArray(key, $('ul#action_to_resolve li input:checked').val())){
+                $.each(hidden_input_names[key], function(index,name){
+                    $('#'+name).show();
+                    $('label[for='+name+']').show();
+                });
+            } else {
+                $.each(hidden_input_names[key], function(index,name){
+                    $('#'+name).hide();
+                    $('label[for='+name+']').hide();
+                });
+            }
+        });*/
+    });
+    $("#user_banned_until").focus(function() {
+        $(this).val("");
+        $(this).unbind('focus');
+    });
+    $("#submit_this_report").click(function(){
+        if ($("#user_banned_until").val() == 'YYYY-MM-DD'){
+            $("#user_banned_until").val("");
+        }
+    });
   });
   </script>
   {% else %}
-    <h2>Status:</h2>
-    RESOLVED on {{ report.resolved.strftime("%I:%M%p %Y-%m-%d") }}
+    <h2><img src="{{ request.staticdirect('/images/icon_clipboard.png') }}" 
+             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
+                  Distributed by the GNOME project http://www.gnome.org" /> 
+          {% trans %}Status{% endtrans %}:
+    </h2>
+    <b>{% trans %}RESOLVED{% endtrans %}</b> 
+    {{ report.resolved.strftime("%I:%M%p %Y-%m-%d") }}
     {% autoescape False %}
-    <p>{{ report.result }}</p>
+      <p>{{ report.result }}</p>
     {% endautoescape %}
   {% endif %}
 {% endif %}

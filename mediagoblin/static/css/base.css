@@ -618,6 +618,23 @@ table.admin_panel th, table.admin_side_panel th {
   font-weight: bold;
   padding-bottom: 4px;
   text-align: left;
+  color: #fff;
+}
+
+table td.user_with_privilege {
+  font-weight: bold;
+  color: #86D4B1;
+}
+
+table td.user_without_privilege {
+  font-weight: bold;
+  color: #D486B1;
+}
+
+.return_to_panel    {
+  text-align:right;
+  float: right;
+  font-size:1.2em
 }
 
 /* Delete panel */
