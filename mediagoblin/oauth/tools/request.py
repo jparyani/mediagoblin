@@ -20,8 +20,11 @@ def decode_authorization_header(header):
     tokens = {}
 
     for param in authorization.split(","):
-        key, value = param.split("=")
-        
+        try:
+            key, value = param.split("=")
+        except ValueError:
+            continue
+ 
         key = key.lstrip(" ")
         value = value.lstrip(" ").lstrip('"')
         value = value.rstrip(" ").rstrip('"')
