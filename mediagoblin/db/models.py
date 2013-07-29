@@ -136,6 +136,16 @@ class User(Base, UserMixin):
         return UserBan.query.get(self.id) is not None
 
 
+    def serialize(self, request):
+        user = {
+            "preferredUsername": self.username,
+            "displayName": "{username}@{server}".format(username=self.username, server=request.url)
+            "objectType": "person",
+            "url": self.url,
+            "links": {
+            },
+        }
+
 class Client(Base):
     """
         Model representing a client - Used for API Auth
