@@ -23,14 +23,19 @@
 {%- endblock title %}
 
 {% block mediagoblin_content %}
-<h1> {{blog.title}} Dashboard  </h1>
+<h1> {{blog.title}}</h1>
 <p>
     {{blog.description}}  
 </p> 
-
-<a class="button_action" ALIGN="Left" href="{{ request.urlgen('mediagoblin.media_types.blog.blogpost.create', blog_slug=blog.slug, user=request.user.username) }}">
+<p>
+<a class="button_action" href="{{ request.urlgen('mediagoblin.media_types.blog.blogpost.create', blog_slug=blog.slug, user=request.user.username) }}">
 {%- trans %}Add Blog Post{% endtrans -%}
 </a>
+&middot;
+<a class="button_action" href="{{ request.urlgen('mediagoblin.media_types.blog.edit', blog_slug=blog.slug, user=request.user.username) }}">
+{%- trans %}Edit Blog{% endtrans -%}
+</a>
+</p>
 <h2> Blog Post Entries </h2>
     {% if blog_post_count!=0 %}
      <table class="media_panel processing">
@@ -46,7 +51,11 @@
             <td><a href="{{ blog_post.url_for_self(request.urlgen) }}">{{ blog_post.title }}</a></td>
             <td>{{ blog_post.created.strftime("%F %R") }}</td>
             <td></td>
-            <td><a class="button_action" href="{{request.urlgen('mediagoblin.media_types.blog.blogpost.edit', blog_slug=blog.slug, user=request.user.username, blog_post_slug=blog_post.slug) }}">Edit</a></td>
+            <td><a class="button_action" href="{{request.urlgen('mediagoblin.media_types.blog.blogpost.edit', 
+                        blog_slug=blog.slug, user=request.user.username, blog_post_slug=blog_post.slug) }}">Edit</a>
+            <a class="button_action" >Delete</a>
+            </td>
+            
         </tr>
         {% endfor %}
      </table>   
