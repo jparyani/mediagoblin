@@ -77,8 +77,9 @@ def blog_edit(request):
                 blog.generate_slug()
                
                 blog.save()
-                return redirect(request, "mediagoblin.user_pages.user_home",
-                        user=request.user.username)
+                return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
+                        user=request.user.username,
+                        blog_slug=blog.slug)
         else:
             add_message(request, ERROR, "You can not create any more blogs")
             return redirect(request, "mediagoblin.user_pages.user_home",
@@ -111,8 +112,9 @@ def blog_edit(request):
                 
                 blog.save()
                 add_message(request, SUCCESS, "Your blog is updated.")
-                return redirect(request, "mediagoblin.user_pages.user_home",
-                            user=request.user.username)            
+                return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
+                        user=request.user.username,
+                        blog_slug=blog.slug)            
             
 @require_active_login        
 def blogpost_create(request):
@@ -163,8 +165,8 @@ def blogpost_create(request):
 
 @require_active_login
 def blogpost_edit(request):
-    blog_slug = request.matchdict.get('blog_slug')
-    blog_post_slug = request.matchdict.get('blog_post_slug')
+    blog_slug = request.matchdict.get('blog_slug', None)
+    blog_post_slug = request.matchdict.get('blog_post_slug', None)
 
     blog = request.db.Blog.query.filter_by(slug=blog_slug, author=request.user.id).first()
     blog_post_data = request.db.BlogPostData.query.filter_by(blog=blog.id).first()
