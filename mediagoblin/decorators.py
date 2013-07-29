@@ -401,7 +401,7 @@ def oauth_required(controller):
 
         request_validator = GMGRequestValidator()
         resource_endpoint = ResourceEndpoint(request_validator)
-        valid, request = resource_endpoint.validate_protected_resource_request(
+        valid, r = resource_endpoint.validate_protected_resource_request(
                 uri=request.url,
                 http_method=request.method,
                 body=request.get_data(),

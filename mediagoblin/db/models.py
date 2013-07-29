@@ -138,13 +138,37 @@ class User(Base, UserMixin):
 
     def serialize(self, request):
         user = {
+            "id": "acct:{0}@{1}".format(self.username, request.url),
             "preferredUsername": self.username,
-            "displayName": "{username}@{server}".format(username=self.username, server=request.url)
+            "displayName": "{0}@{1}".format(self.username, request.url),
             "objectType": "person",
             "url": self.url,
+            "summary": self.bio,
             "links": {
+                "self": {
+                    "href": request.urlgen(
+                            "mediagoblin.federation.profile",
+                             username=self.username,
+                             qualified=True
+                             ),
+                },
+                "activity-inbox": {
+                    "href": request.urlgen(
+                            "mediagoblin.federation.inbox",
+                            username=self.username,
+                            qualified=True
+                            )
+                },
+                "activity-outbox": {
+                    "href": request.urlgen(
+                            "mediagoblin.federation.feed",
+                            username=self.username,
+                            qualified=True
+                            )
+                },
             },
         }
+        return user
 
 class Client(Base):
     """
