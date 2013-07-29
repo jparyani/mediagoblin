@@ -19,6 +19,9 @@ from mediagoblin.media_types.audio.processing import process_audio, \
     sniff_handler
 from mediagoblin.tools import pluginapi
 
+# Why isn't .ogg in this list?  It's still detected, but via sniffing,
+# .ogg files could be either video or audio... sniffing determines which.
+
 ACCEPTED_EXTENSIONS = ["mp3", "flac", "wav", "m4a"]
 MEDIA_TYPE = 'mediagoblin.media_types.audio'
 
