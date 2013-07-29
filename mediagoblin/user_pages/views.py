@@ -26,7 +26,7 @@ from mediagoblin.tools.response import render_to_response, render_404, \
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.user_pages import forms as user_forms
-from mediagoblin.user_pages.lib import (send_comment_email, build_report_table,
+from mediagoblin.user_pages.lib import (send_comment_email, build_report_object,
     add_media_to_collection)
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
@@ -625,19 +625,30 @@ def processing_panel(request):
 @get_user_media_entry
 @user_has_privilege(u'reporter')
 def file_a_report(request, media, comment=None):
-    if request.method == "POST":
-        report_table = build_report_table(request.form)
-        report_table.save()
-
-        return redirect(
-            request,
-            'index')
-
     if comment is not None:
+        form = user_forms.CommentReportForm(request.form)
+        form.reporter_id.data = request.user.id
         context = {'media': media,
-                   'comment':comment}
+                   'comment':comment,
+                   'form':form}
     else:
-        context = {'media': media}
+        form = user_forms.MediaReportForm(request.form)
+        form.reporter_id.data = request.user.id
+        context = {'media': media,
+                   'form':form}
+
+    if request.method == "POST":
+        report_table = build_report_object(form, 
+            media_entry=media, 
+            comment=comment)
+
+        # if the object was built successfully, report_table will not be None
+        if report_table:
+            report_table.save()
+            return redirect(
+                request,
+                'index')
+
 
     return render_to_response(
         request,

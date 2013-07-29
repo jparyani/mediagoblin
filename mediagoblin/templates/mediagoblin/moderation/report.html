@@ -75,18 +75,24 @@
         {{ media_entry.title }}</a>
     </div>
     <div class=clear></div>
-    <p>❖ Reported media by <a href="">
-      {{ report.reported_user.username }}</a></p>
+    <p>
+    {% trans user_name=report.reported_user.username,
+             user_url=request.urlgen(
+                        'mediagoblin.moderation.users_detail',
+                        user=report.reporter.username) %}
+        ❖ Reported media by <a href="{{ user_url }}">{{ user_name }}</a>
+    {% endtrans %}
+    </p>
     <div class=clear></div>
   {% else %}
-    <h2>{% trans user_url="request.urlgen(
+    <h2>{% trans user_url=request.urlgen(
                         'mediagoblin.moderation.users_detail',
-                        user=report.reporter.username)",
+                        user=report.reporter.username),
                  user_name=report.reported_user.username %}
-          CONTENT BY
-          <a href="{{ user_url }}">
-            {{ user_name }}</a>
-          HAS BEEN DELETED{% endtrans %}
+          CONTENT BY 
+            <a href="{{ user_url }}"> {{ user_name }}</a>
+          HAS BEEN DELETED
+        {% endtrans %}
     </h2>
   {% endif %}
   Reason for report:

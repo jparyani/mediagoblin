@@ -107,7 +107,7 @@ def take_punitive_actions(request, form, report, user):
 
 
         archive.result=form.resolution_content.data
-#        Session.add(archive)
+        Session.add(archive)
         Session.commit()
         if message_body:
             send_email(

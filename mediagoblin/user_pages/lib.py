@@ -78,39 +78,33 @@ def add_media_to_collection(collection, media, note=None, commit=True):
     if commit:
         Session.commit()
 
-def build_report_table(form_dict):
+def build_report_object(report_form, media_entry=None, comment=None):
     """
-    This function is used to convert a form dictionary (from a User filing a 
+    This function is used to convert a form object (from a User filing a 
         report) into either a MediaReport or CommentReport object.
 
-    :param form_dict should be an ImmutableMultiDict object as is returned from
-        'request.form.' The Object should have valid keys matching the fields 
-        in either MediaReportForm or CommentReportForm
+    :param report_form should be a MediaReportForm or a CommentReportForm 
+        object
+    :param 
 
     :returns either of MediaReport or a CommentReport object that has not been 
         saved. In case of an improper form_dict, returns None
     """
-    if 'comment_id' in form_dict.keys():
-        report_form = user_forms.CommentReportForm(form_dict)
-    elif 'media_entry_id' in form_dict.keys():
-        report_form = user_forms.MediaReportForm(form_dict)
+
+    if report_form.validate() and comment is not None:
+        report_object = CommentReport()
+        report_object.comment_id = comment.id
+        report_object.reported_user_id = MediaComment.query.get(
+            comment.id).get_author.id
+    elif report_form.validate() and media_entry is not None:
+        report_object = MediaReport()
+        report_object.media_entry_id = media_entry.id
+        report_object.reported_user_id = MediaEntry.query.get(
+            media_entry.id).get_uploader.id
     else:
         return None
 
-    if report_form.validate() and 'comment_id' in form_dict.keys():
-        report_model = CommentReport()
-        report_model.comment_id = report_form.comment_id.data
-        report_model.reported_user_id = MediaComment.query.get(
-            report_model.comment_id).get_author.id
-    elif report_form.validate() and 'media_entry_id' in form_dict.keys():
-        report_model = MediaReport()
-        report_model.media_entry_id = report_form.media_entry_id.data
-        report_model.reported_user_id = MediaEntry.query.get(
-            report_model.media_entry_id).get_uploader.id
-    else:
-        return None
-
-    report_model.report_content = report_form.report_reason.data or u''
-    report_model.reporter_id = report_form.reporter_id.data
-    return report_model
+    report_object.report_content = report_form.report_reason.data
+    report_object.reporter_id = report_form.reporter_id.data
+    return report_object
 
