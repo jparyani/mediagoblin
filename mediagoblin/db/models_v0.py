@@ -18,6 +18,29 @@
 TODO: indexes on foreignkeys, where useful.
 """
 
+###########################################################################
+# WHAT IS THIS FILE?
+# ------------------
+#
+# Upon occasion, someone runs into this file and wonders why we have
+# both a models.py and a models_v0.py.
+#
+# The short of it is: you can ignore this file.
+#
+# The long version is, in two parts:
+#
+#  - We used to use MongoDB, then we switched to SQL and SQLAlchemy.
+#    We needed to convert peoples' databases; the script we had would
+#    switch them to the first version right after Mongo, convert over
+#    all their tables, then run any migrations that were added after.
+#
+#  - That script is now removed, but there is some discussion of
+#    writing a test that would set us at the first SQL migration and
+#    run everything after.  If we wrote that, this file would still be
+#    useful.  But for now, it's legacy!
+#
+###########################################################################
+
 
 import datetime
 import sys

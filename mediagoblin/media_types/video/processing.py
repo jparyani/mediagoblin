@@ -29,6 +29,8 @@ from .util import skip_transcode
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
 
+MEDIA_TYPE = 'mediagoblin.media_types.video'
+
 
 class VideoTranscodingFail(BaseProcessingFail):
     '''
@@ -41,17 +43,18 @@ def sniff_handler(media_file, **kw):
     transcoder = transcoders.VideoTranscoder()
     data = transcoder.discover(media_file.name)
 
+    _log.info('Sniffing {0}'.format(MEDIA_TYPE))
     _log.debug('Discovered: {0}'.format(data))
 
     if not data:
         _log.error('Could not discover {0}'.format(
                 kw.get('media')))
-        return False
+        return None
 
     if data['is_video'] == True:
-        return True
+        return MEDIA_TYPE
 
-    return False
+    return None
 
 
 def process_video(proc_state):
@@ -186,7 +189,7 @@ def store_metadata(media_entry, metadata):
             [(key, tags_metadata[key])
              for key in [
                      "application-name", "artist", "audio-codec", "bitrate",
-                     "container-format", "copyright", "encoder", 
+                     "container-format", "copyright", "encoder",
                      "encoder-version", "license", "nominal-bitrate", "title",
                      "video-codec"]
              if key in tags_metadata])
@@ -203,7 +206,7 @@ def store_metadata(media_entry, metadata):
                 dt.get_year(), dt.get_month(), dt.get_day(), dt.get_hour(),
                 dt.get_minute(), dt.get_second(),
                 dt.get_microsecond()).isoformat()
-    
+
         metadata['tags'] = tags
 
     # Only save this field if there's something to save

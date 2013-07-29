@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.gmg_commands import util as commands_util
-from mediagoblin.auth import lib as auth_lib
+from mediagoblin import auth
 from mediagoblin import mg_globals
 
 def adduser_parser_setup(subparser):
@@ -40,9 +40,9 @@ def adduser(args):
 
     db = mg_globals.database
     users_with_username = \
-        db.User.find({
-            'username': args.username.lower(),
-        }).count()
+        db.User.query.filter_by(
+            username=args.username.lower()
+        ).count()
 
     if users_with_username:
         print u'Sorry, a user with that name already exists.'
@@ -52,7 +52,7 @@ def adduser(args):
         entry = db.User()
         entry.username = unicode(args.username.lower())
         entry.email = unicode(args.email)
-        entry.pw_hash = auth_lib.bcrypt_gen_password_hash(args.password)
+        entry.pw_hash = auth.gen_password_hash(args.password)
         entry.status = u'active'
         entry.email_verified = True
         default_privileges = [ 
@@ -78,7 +78,8 @@ def makeadmin(args):
 
     db = mg_globals.database
 
-    user = db.User.one({'username': unicode(args.username.lower())})
+    user = db.User.query.filter_by(
+        username=unicode(args.username.lower())).one()
     if user:
         user.is_admin = True
         user.all_privileges.append(
@@ -105,9 +106,10 @@ def changepw(args):
 
     db = mg_globals.database
 
-    user = db.User.one({'username': unicode(args.username.lower())})
+    user = db.User.query.filter_by(
+        username=unicode(args.username.lower())).one()
     if user:
-        user.pw_hash = auth_lib.bcrypt_gen_password_hash(args.password)
+        user.pw_hash = auth.gen_password_hash(args.password)
         user.save()
         print 'Password successfully changed'
     else:

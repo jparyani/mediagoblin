@@ -24,16 +24,16 @@ import datetime
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
         SmallInteger
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, with_polymorphic
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
-from sqlalchemy.schema import Table
 
 from mediagoblin.db.extratypes import PathTupleWithSlashes, JSONEncoded
 from mediagoblin.db.base import Base, DictReadAttrProxy
-from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, MediaCommentMixin, CollectionMixin, CollectionItemMixin
+from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, \
+        MediaCommentMixin, CollectionMixin, CollectionItemMixin
 from mediagoblin.tools.files import delete_media_files
 from mediagoblin.tools.common import import_component
 
@@ -239,8 +239,8 @@ class MediaEntry(Base, MediaEntryMixin):
         This will *not* automatically delete unused collections, which
         can remain empty...
 
-        :keyword del_orphan_tags: True/false if we delete unused Tags too
-        :keyword commit: True/False if this should end the db transaction"""
+        :param del_orphan_tags: True/false if we delete unused Tags too
+        :param commit: True/False if this should end the db transaction"""
         # User's CollectionItems are automatically deleted via "cascade".
         # Comments on this Media are deleted by cascade, hopefully.
 
@@ -393,6 +393,10 @@ class MediaComment(Base, MediaCommentMixin):
                               backref=backref("posted_comments",
                                               lazy="dynamic",
                                               cascade="all, delete-orphan"))
+    get_entry = relationship(MediaEntry,
+                             backref=backref("comments",
+                                             lazy="dynamic",
+                                             cascade="all, delete-orphan"))
 
     # Cascade: Comments are somewhat owned by their MediaEntry.
     #     So do the full thing.
@@ -484,6 +488,92 @@ class ProcessingMetaData(Base):
         """A dict like view on this object"""
         return DictReadAttrProxy(self)
 
+class CommentSubscription(Base):
+    __tablename__ = 'core__comment_subscriptions'
+    id = Column(Integer, primary_key=True)
+
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
+    media_entry = relationship(MediaEntry,
+                        backref=backref('comment_subscriptions',
+                                        cascade='all, delete-orphan'))
+
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    user = relationship(User,
+                        backref=backref('comment_subscriptions',
+                                        cascade='all, delete-orphan'))
+
+    notify = Column(Boolean, nullable=False, default=True)
+    send_email = Column(Boolean, nullable=False, default=True)
+
+    def __repr__(self):
+        return ('<{classname} #{id}: {user} {media} notify: '
+                '{notify} email: {email}>').format(
+            id=self.id,
+            classname=self.__class__.__name__,
+            user=self.user,
+            media=self.media_entry,
+            notify=self.notify,
+            email=self.send_email)
+
+
+class Notification(Base):
+    __tablename__ = 'core__notifications'
+    id = Column(Integer, primary_key=True)
+    type = Column(Unicode)
+
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    user_id = Column(Integer, ForeignKey('core__users.id'), nullable=False,
+                     index=True)
+    seen = Column(Boolean, default=lambda: False, index=True)
+    user = relationship(
+        User,
+        backref=backref('notifications', cascade='all, delete-orphan'))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'notification',
+        'polymorphic_on': type
+    }
+
+    def __repr__(self):
+        return '<{klass} #{id}: {user}: {subject} ({seen})>'.format(
+            id=self.id,
+            klass=self.__class__.__name__,
+            user=self.user,
+            subject=getattr(self, 'subject', None),
+            seen='unseen' if not self.seen else 'seen')
+
+
+class CommentNotification(Notification):
+    __tablename__ = 'core__comment_notifications'
+    id = Column(Integer, ForeignKey(Notification.id), primary_key=True)
+
+    subject_id = Column(Integer, ForeignKey(MediaComment.id))
+    subject = relationship(
+        MediaComment,
+        backref=backref('comment_notifications', cascade='all, delete-orphan'))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'comment_notification'
+    }
+
+
+class ProcessingNotification(Notification):
+    __tablename__ = 'core__processing_notifications'
+
+    id = Column(Integer, ForeignKey(Notification.id), primary_key=True)
+
+    subject_id = Column(Integer, ForeignKey(MediaEntry.id))
+    subject = relationship(
+        MediaEntry,
+        backref=backref('processing_notifications',
+                        cascade='all, delete-orphan'))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'processing_notification'
+    }
 
 class ReportBase(Base):
     """
@@ -672,20 +762,38 @@ class PrivilegeUserAssociation(Base):
         ForeignKey(Privilege.id), 
         primary_key=True)
 
+with_polymorphic(
+    Notification,
+    [ProcessingNotification, CommentNotification])
 
-privilege_foundations = [[u'admin'], [u'moderator'], [u'uploader'],[u'reporter'], [u'commenter'] ,[u'active']]
 
 MODELS = [
     User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem, 
     MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData, ReportBase,
     CommentReport, MediaReport, UserBan, Privilege, PrivilegeUserAssociation,
-    ArchivedReport]
+    ArchivedReport, Notification, CommentNotification, 
+	ProcessingNotification, CommentSubscription]
 
-# Foundations are the default rows that are created immediately after the tables are initialized. Each entry to
-#   this dictionary should be in the format of 
-#                                               ModelObject:List of Rows
-#                                         (Each Row must be a list of parameters that can create and instance of the ModelObject)
-#   
+"""
+ Foundations are the default rows that are created immediately after the tables 
+ are initialized. Each entry to  this dictionary should be in the format of:
+                 ModelConstructorObject:List of Dictionaries
+ (Each Dictionary represents a row on the Table to be created, containing each
+  of the columns' names as a key string, and each of the columns' values as a
+  value)
+
+ ex. [NOTE THIS IS NOT BASED OFF OF OUR USER TABLE]
+    user_foundations = [{'name':u'Joanna', 'age':24},
+                        {'name':u'Andrea', 'age':41}]
+
+    FOUNDATIONS = {User:user_foundations}
+"""
+privilege_foundations = [{'privilege_name':u'admin'}, 
+						{'privilege_name':u'moderator'}, 
+						{'privilege_name':u'uploader'},
+						{'privilege_name':u'reporter'}, 
+						{'privilege_name':u'commenter'},
+						{'privilege_name':u'active'}]
 FOUNDATIONS = {Privilege:privilege_foundations}
 
 ######################################################

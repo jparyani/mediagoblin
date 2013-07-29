@@ -157,13 +157,14 @@ directory. Modify these commands to reflect your own environment::
     mkdir -p /srv/mediagoblin.example.org/
     cd /srv/mediagoblin.example.org/
 
-Clone the MediaGoblin repository::
+Clone the MediaGoblin repository and set up the git submodules::
 
     git clone git://gitorious.org/mediagoblin/mediagoblin.git
+    cd mediagoblin
+    git submodule init && git submodule update
 
 And set up the in-package virtualenv::
 
-    cd mediagoblin
     (virtualenv --system-site-packages . || virtualenv .) && ./bin/python setup.py develop
 
 .. note::
@@ -194,7 +195,7 @@ This concludes the initial configuration of the development
 environment. In the future, when you update your
 codebase, you should also run::
 
-    ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate
+    ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate && git submodule fetch
 
 Note: If you are running an active site, depending on your server
 configuration, you may need to stop it first or the dbupdate command

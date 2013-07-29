@@ -19,6 +19,7 @@ import mediagoblin.mg_globals as mg_globals
 from os.path import splitext
 
 import logging
+import uuid
 
 _log = logging.getLogger(__name__)
 
@@ -33,6 +34,8 @@ from mediagoblin.media_types import sniff_media, \
     InvalidFileType, FileTypeNotSupported
 from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
     run_process_media, new_upload_entry
+
+from mediagoblin.notifications import add_comment_subscription
 
 
 @require_active_login
@@ -52,6 +55,10 @@ def submit_start(request):
             try:
                 filename = request.files['file'].filename
 
+                # If the filename contains non ascii generate a unique name
+                if not all(ord(c) < 128 for c in filename):
+                    filename = unicode(uuid.uuid4()) + splitext(filename)[-1]
+
                 # Sniff the submitted media to determine which
                 # media plugin should handle processing
                 media_type, media_manager = sniff_media(
@@ -62,7 +69,7 @@ def submit_start(request):
                 entry.media_type = unicode(media_type)
                 entry.title = (
                     unicode(submit_form.title.data)
-                    or unicode(splitext(filename)[0]))
+                    or unicode(splitext(request.files['file'].filename)[0]))
 
                 entry.description = unicode(submit_form.description.data)
 
@@ -92,6 +99,8 @@ def submit_start(request):
                     qualified=True, user=request.user.username)
                 run_process_media(entry, feed_url)
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
+
+                add_comment_subscription(request.user, entry)
 
                 return redirect(request, "mediagoblin.user_pages.user_home",
                                 user=request.user.username)
@@ -130,9 +139,9 @@ def add_collection(request, media=None):
         collection.generate_slug()
 
         # Make sure this user isn't duplicating an existing collection
-        existing_collection = request.db.Collection.find_one({
-                'creator': request.user.id,
-                'title':collection.title})
+        existing_collection = request.db.Collection.query.filter_by(
+                creator=request.user.id,
+                title=collection.title).first()
 
         if existing_collection:
             add_message(request, messages.ERROR,

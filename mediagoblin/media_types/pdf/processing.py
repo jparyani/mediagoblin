@@ -25,6 +25,8 @@ from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 
 _log = logging.getLogger(__name__)
 
+MEDIA_TYPE = 'mediagoblin.media_types.pdf'
+
 # TODO - cache (memoize) util
 
 # This is a list created via uniconv --show and hand removing some types that
@@ -163,16 +165,17 @@ def check_prerequisites():
     return True
 
 def sniff_handler(media_file, **kw):
+    _log.info('Sniffing {0}'.format(MEDIA_TYPE))
     if not check_prerequisites():
-        return False
+        return None
     if kw.get('media') is not None:
         name, ext = os.path.splitext(kw['media'].filename)
         clean_ext = ext[1:].lower()
 
         if clean_ext in supported_extensions():
-            return True
+            return MEDIA_TYPE
 
-    return False
+    return None
 
 def create_pdf_thumb(original, thumb_filename, width, height):
     # Note: pdftocairo adds '.png', remove it
@@ -250,8 +253,8 @@ def process_pdf(proc_state):
     else:
         pdf_filename = queued_filename.rsplit('.', 1)[0] + '.pdf'
         unoconv = where('unoconv')
-        call(executable=unoconv,
-             args=[unoconv, '-v', '-f', 'pdf', queued_filename])
+        Popen(executable=unoconv,
+              args=[unoconv, '-v', '-f', 'pdf', queued_filename]).wait()
         if not os.path.exists(pdf_filename):
             _log.debug('unoconv failed to convert file to pdf')
             raise BadMediaFail()

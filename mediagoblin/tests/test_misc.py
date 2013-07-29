@@ -28,8 +28,10 @@ def test_user_deletes_other_comments(test_app):
     user_a = fixture_add_user(u"chris_a")
     user_b = fixture_add_user(u"chris_b")
 
-    media_a = fixture_media_entry(uploader=user_a.id, save=False)
-    media_b = fixture_media_entry(uploader=user_b.id, save=False)
+    media_a = fixture_media_entry(uploader=user_a.id, save=False,
+                                  expunge=False, fake_upload=False)
+    media_b = fixture_media_entry(uploader=user_b.id, save=False,
+                                  expunge=False, fake_upload=False)
     Session.add(media_a)
     Session.add(media_b)
     Session.flush()
@@ -79,7 +81,7 @@ def test_user_deletes_other_comments(test_app):
 def test_media_deletes_broken_attachment(test_app):
     user_a = fixture_add_user(u"chris_a")
 
-    media = fixture_media_entry(uploader=user_a.id, save=False)
+    media = fixture_media_entry(uploader=user_a.id, save=False, expunge=False)
     media.attachment_files.append(dict(
             name=u"some name",
             filepath=[u"does", u"not", u"exist"],

@@ -29,7 +29,7 @@
 {%- endblock %}
 
 {% block mediagoblin_content %}
-  <form action="{{ request.urlgen('mediagoblin.auth.login') }}"
+  <form action="{{ post_url }}"
         method="POST" enctype="multipart/form-data">
     {{ csrf_token }}
     <div class="form_box">
@@ -41,15 +41,19 @@
       {% endif %}
       {% if allow_registration %}
         <p>
-          {% trans %}Don't have an account yet?{% endtrans %} <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
+        {% trans %}Don't have an account yet?{% endtrans %} 
+        <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
             {%- trans %}Create one here!{% endtrans %}</a>
         </p>
       {% endif %}
-      {{ wtforms_util.render_divs(login_form) }}
-        <p>
-          <a href="{{ request.urlgen('mediagoblin.auth.forgot_password') }}" id="forgot_password">
-          {% trans %}Forgot your password?{% endtrans %}</a>
-        </p>
+      {% template_hook("login_link") %} 
+      {{ wtforms_util.render_divs(login_form, True) }}
+      {% if pass_auth %}
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.auth.forgot_password') }}" id="forgot_password">
+        {% trans %}Forgot your password?{% endtrans %}</a>
+      </p>
+      {% endif %}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Log in{% endtrans %}" class="button_form"/>
       </div>

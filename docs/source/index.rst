@@ -74,6 +74,7 @@ This guide covers writing new GNU MediaGoblin plugins.
    pluginwriter/database
    pluginwriter/api
    pluginwriter/tests
+   pluginwriter/media_type_hooks
 
 
 Part 4: Developer's Zone
@@ -87,6 +88,7 @@ This chapter contains various information for developers.
    devel/codebase
    devel/storage
    devel/originaldesigndecisions
+   devel/migrations
 
 
 Indices and tables

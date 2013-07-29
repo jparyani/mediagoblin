@@ -26,8 +26,10 @@ from mediagoblin.tools.response import render_to_response, render_404, \
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.user_pages import forms as user_forms
-from mediagoblin.user_pages.lib import (send_comment_email, build_report_object,
-    add_media_to_collection)
+from mediagoblin.user_pages.lib import (send_comment_email,
+	add_media_to_collection)
+from mediagoblin.notifications import trigger_notification, \
+    add_comment_subscription, mark_comment_notification_seen
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
     get_media_entry_by_id, user_has_privilege,
@@ -36,6 +38,7 @@ from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
     get_media_comment_by_id, user_not_banned)
 
 from werkzeug.contrib.atom import AtomFeed
+from werkzeug.exceptions import MethodNotAllowed
 
 
 _log = logging.getLogger(__name__)
@@ -112,6 +115,7 @@ def user_gallery(request, page, url_user=None):
          'media_entries': media_entries,
          'pagination': pagination})
 
+
 MEDIA_COMMENTS_PER_PAGE = 50
 
 @user_not_banned
@@ -123,6 +127,9 @@ def media_home(request, media, page, **kwargs):
     """
     comment_id = request.matchdict.get('comment', None)
     if comment_id:
+        if request.user:
+            mark_comment_notification_seen(comment_id, request.user)
+
         pagination = Pagination(
             page, media.get_comments(
                 mg_globals.app_config['comments_ascending']),
@@ -138,7 +145,7 @@ def media_home(request, media, page, **kwargs):
 
     comment_form = user_forms.MediaCommentForm(request.form)
 
-    media_template_name = media.media_manager['display_template']
+    media_template_name = media.media_manager.display_template
 
     return render_to_response(
         request,
@@ -157,7 +164,8 @@ def media_post_comment(request, media):
     """
     recieves POST from a MediaEntry() comment form, saves the comment.
     """
-    assert request.method == 'POST'
+    if not request.method == 'POST':
+        raise MethodNotAllowed()
 
     comment = request.db.MediaComment()
     comment.media_entry = media.id
@@ -182,11 +190,9 @@ def media_post_comment(request, media):
             request, messages.SUCCESS,
             _('Your comment has been posted!'))
 
-        media_uploader = media.get_uploader
-        #don't send email if you comment on your own post
-        if (comment.author != media_uploader and
-            media_uploader.wants_comment_notification):
-            send_comment_email(media_uploader, comment, media, request)
+        trigger_notification(comment, media, request)
+
+        add_comment_subscription(request.user, media)
 
     return redirect_obj(request, media)
 

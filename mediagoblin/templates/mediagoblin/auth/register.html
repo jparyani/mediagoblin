@@ -30,11 +30,12 @@
 
 {% block mediagoblin_content %}
 
-  <form action="{{ request.urlgen('mediagoblin.auth.register') }}"
+  <form action="{{ post_url }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box">
       <h1>{% trans %}Create an account!{% endtrans %}</h1>
-      {{ wtforms_util.render_divs(register_form) }}
+      {% template_hook("register_link") %}
+      {{ wtforms_util.render_divs(register_form, True) }}
       {{ csrf_token }}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Create{% endtrans %}"
@@ -42,6 +43,4 @@
       </div>
     </div>
   </form>
-<!-- Focus the username field by default -->
-<script>$(document).ready(function(){$("#username").focus();});</script>
 {% endblock %}

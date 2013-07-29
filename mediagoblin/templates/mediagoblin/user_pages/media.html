@@ -81,6 +81,7 @@
                                  user= media.get_uploader.username,
                                  media_id=media.id) %}
       <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
+
     {% endif %}
     {% autoescape False %}
       <p>{{ media.description_html }}</p>
@@ -94,6 +95,8 @@
           class="button_action" id="button_addcomment" title="Add a comment">
           {% trans %}Add a comment{% endtrans %}
         </a>
+        {% include "mediagoblin/utils/comment-subscription.html" %}
+
       {% endif %}
       {% if request.user %}
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment',

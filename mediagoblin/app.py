@@ -29,6 +29,7 @@ from mediagoblin.tools import common, session, translate, template
 from mediagoblin.tools.response import render_http_exception
 from mediagoblin.tools.theme import register_themes
 from mediagoblin.tools import request as mg_request
+from mediagoblin.media_types.tools import media_type_warning
 from mediagoblin.mg_globals import setup_globals
 from mediagoblin.init.celery import setup_celery_from_config
 from mediagoblin.init.plugins import setup_plugins
@@ -37,6 +38,8 @@ from mediagoblin.init import (get_jinja_loader, get_staticdirector,
     setup_storage)
 from mediagoblin.tools.pluginapi import PluginManager, hook_transform
 from mediagoblin.tools.crypto import setup_crypto
+from mediagoblin.auth.tools import check_auth_enabled, no_auth_logout
+from mediagoblin import notifications
 
 
 _log = logging.getLogger(__name__)
@@ -67,6 +70,8 @@ class MediaGoblinApp(object):
         # Open and setup the config
         global_config, app_config = setup_global_and_app_config(config_path)
 
+        media_type_warning()
+
         setup_crypto()
 
         ##########################################
@@ -85,7 +90,7 @@ class MediaGoblinApp(object):
         setup_plugins()
 
         # Set up the database
-        self.db = setup_database()
+        self.db = setup_database(app_config['run_migrations'])
 
         # Register themes
         self.theme_registry, self.current_theme = register_themes(app_config)
@@ -96,6 +101,11 @@ class MediaGoblinApp(object):
             self.current_theme,
             PluginManager().get_template_paths()
             )
+
+        # Check if authentication plugin is enabled and respond accordingly.
+        self.auth = check_auth_enabled()
+        if not self.auth:
+            app_config['allow_comments'] = False
 
         # Set up storage systems
         self.public_store, self.queue_store = setup_storage()
@@ -185,6 +195,11 @@ class MediaGoblinApp(object):
                     force_external=qualified)
 
         request.urlgen = build_proxy
+
+        # Log user out if authentication_disabled
+        no_auth_logout(request)
+
+        request.notifications = notifications
 
         mg_request.setup_user_in_request(request)
 

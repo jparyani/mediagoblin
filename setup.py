@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 import re
 
@@ -36,7 +36,7 @@ def get_version():
 setup(
     name="mediagoblin",
     version=get_version(),
-    packages=['mediagoblin'],
+    packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     zip_safe=False,
     include_package_data = True,
     # scripts and dependencies
@@ -45,19 +45,19 @@ setup(
         'PasteScript',
         'wtforms',
         'py-bcrypt',
-        'pytest>=2.3',
+        'pytest>=2.3.1',
         'pytest-xdist',
         'werkzeug>=0.7',
         'celery==2.5.3',
         'kombu==2.1.7',
         'jinja2',
         'sphinx',
-        'Babel',
+        'Babel<1.0',
         'argparse',
         'webtest<2',
         'ConfigObj',
         'Markdown',
-        'sqlalchemy>=0.7.0',
+        'sqlalchemy>=0.8.0',
         'sqlalchemy-migrate',
         'mock',
         'itsdangerous',

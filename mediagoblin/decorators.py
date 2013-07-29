@@ -21,9 +21,11 @@ from werkzeug.exceptions import Forbidden, NotFound
 from werkzeug.urls import url_quote
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.models import MediaEntry, User, MediaComment, Privilege, \
-                            UserBan
-from mediagoblin.tools.response import redirect, render_404, render_user_banned
+from mediagoblin import messages
+from mediagoblin.db.models import MediaEntry, User, MediaComment,
+							UserBan
+from mediagoblin.tools.response import redirect, render_404
+from mediagoblin.tools.translate import pass_to_ugettext as _
 
 
 def require_active_login(controller):
@@ -107,8 +109,8 @@ def user_may_alter_collection(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        creator_id = request.db.User.find_one(
-            {'username': request.matchdict['user']}).id
+        creator_id = request.db.User.query.filter_by(
+            username=request.matchdict['user']).first().id
         if not (request.user.is_admin or
                 request.user.id == creator_id):
             raise Forbidden()
@@ -182,15 +184,15 @@ def get_user_collection(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        user = request.db.User.find_one(
-            {'username': request.matchdict['user']})
+        user = request.db.User.query.filter_by(
+            username=request.matchdict['user']).first()
 
         if not user:
             return render_404(request)
 
-        collection = request.db.Collection.find_one(
-            {'slug': request.matchdict['collection'],
-             'creator': user.id})
+        collection = request.db.Collection.query.filter_by(
+            slug=request.matchdict['collection'],
+            creator=user.id).first()
 
         # Still no collection?  Okay, 404.
         if not collection:
@@ -207,14 +209,14 @@ def get_user_collection_item(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        user = request.db.User.find_one(
-            {'username': request.matchdict['user']})
+        user = request.db.User.query.filter_by(
+            username=request.matchdict['user']).first()
 
         if not user:
             return render_404(request)
 
-        collection_item = request.db.CollectionItem.find_one(
-            {'id': request.matchdict['collection_item'] })
+        collection_item = request.db.CollectionItem.query.filter_by(
+            id=request.matchdict['collection_item']).first()
 
         # Still no collection item?  Okay, 404.
         if not collection_item:
@@ -247,6 +249,21 @@ def get_media_entry_by_id(controller):
     return wrapper
 
 
+def allow_registration(controller):
+    """ Decorator for if registration is enabled"""
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        if not mgg.app_config["allow_registration"]:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                _('Sorry, registration is disabled on this instance.'))
+            return redirect(request, "index")
+
+        return controller(request, *args, **kwargs)
+
+    return wrapper
+
 def get_media_comment_by_id(controller):
     """
     Pass in a MediaComment based off of a url component
@@ -264,15 +281,26 @@ def get_media_comment_by_id(controller):
     return wrapper
 
 
+def auth_enabled(controller):
+    """Decorator for if an auth plugin is enabled"""
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        if not mgg.app.auth:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                _('Sorry, authentication is disabled on this instance.'))
+            return redirect(request, 'index')
+        return controller(request, *args, **kwargs)
+
+    return wrapper
 
 def get_workbench(func):
     """Decorator, passing in a workbench as kwarg which is cleaned up afterwards"""
-
     @wraps(func)
     def new_func(*args, **kwargs):
         with mgg.workbench_manager.create() as workbench:
             return func(*args, workbench=workbench, **kwargs)
-
     return new_func
 
 def require_admin_or_moderator_login(controller):

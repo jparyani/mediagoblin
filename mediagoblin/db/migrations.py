@@ -289,10 +289,99 @@ def unique_collections_slug(db):
 
     db.commit()
 
-class ReportBase_v0(declarative_base()):
+@RegisterMigration(11, MIGRATIONS)
+def drop_token_related_User_columns(db):
     """
+    Drop unneeded columns from the User table after switching to using
+    itsdangerous tokens for email and forgot password verification.
+    """
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, 'core__users')
 
-    """
+
+    verification_key = user_table.columns['verification_key']
+    fp_verification_key = user_table.columns['fp_verification_key']
+    fp_token_expire = user_table.columns['fp_token_expire']
+
+    verification_key.drop()
+    fp_verification_key.drop()
+    fp_token_expire.drop()
+
+    db.commit()
+
+
+class CommentSubscription_v0(declarative_base()):
+    __tablename__ = 'core__comment_subscriptions'
+    id = Column(Integer, primary_key=True)
+
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
+
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+
+
+    notify = Column(Boolean, nullable=False, default=True)
+    send_email = Column(Boolean, nullable=False, default=True)
+
+
+class Notification_v0(declarative_base()):
+    __tablename__ = 'core__notifications'
+    id = Column(Integer, primary_key=True)
+    type = Column(Unicode)
+
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False,
+                     index=True)
+    seen = Column(Boolean, default=lambda: False, index=True)
+
+
+class CommentNotification_v0(Notification_v0):
+    __tablename__ = 'core__comment_notifications'
+    id = Column(Integer, ForeignKey(Notification_v0.id), primary_key=True)
+
+    subject_id = Column(Integer, ForeignKey(MediaComment.id))
+
+
+class ProcessingNotification_v0(Notification_v0):
+    __tablename__ = 'core__processing_notifications'
+
+    id = Column(Integer, ForeignKey(Notification_v0.id), primary_key=True)
+
+    subject_id = Column(Integer, ForeignKey(MediaEntry.id))
+
+
+@RegisterMigration(12, MIGRATIONS)
+def add_new_notification_tables(db):
+    metadata = MetaData(bind=db.bind)
+
+    user_table = inspect_table(metadata, 'core__users')
+    mediaentry_table = inspect_table(metadata, 'core__media_entries')
+    mediacomment_table = inspect_table(metadata, 'core__media_comments')
+
+    CommentSubscription_v0.__table__.create(db.bind)
+
+    Notification_v0.__table__.create(db.bind)
+    CommentNotification_v0.__table__.create(db.bind)
+    ProcessingNotification_v0.__table__.create(db.bind)
+
+
+@RegisterMigration(13, MIGRATIONS)
+def pw_hash_nullable(db):
+    """Make pw_hash column nullable"""
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
+
+    user_table.c.pw_hash.alter(nullable=True)
+
+    # sqlite+sqlalchemy seems to drop this constraint during the
+    # migration, so we add it back here for now a bit manually.
+    if db.bind.url.drivername == 'sqlite':
+        constraint = UniqueConstraint('username', table=user_table)
+        constraint.create()
+
+class ReportBase_v0(declarative_base()):
     __tablename__ = 'core__reports'
     id = Column(Integer, primary_key=True)
     reporter_id = Column(Integer, ForeignKey(User.id), nullable=False)
@@ -301,7 +390,6 @@ class ReportBase_v0(declarative_base()):
     created = Column(DateTime, nullable=False, default=datetime.datetime.now) 
     discriminator = Column('type', Unicode(50))
     __mapper_args__ = {'polymorphic_on': discriminator}
-
 
 class CommentReport_v0(ReportBase_v0):
     __tablename__ = 'core__reports_on_comments'
@@ -316,14 +404,13 @@ class MediaReport_v0(ReportBase_v0):
     __mapper_args__ = {'polymorphic_identity': 'media_report'}
 
     id = Column('id',Integer, ForeignKey('core__reports.id'), primary_key=True)
-    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.i
 
 class ArchivedReport_v0(ReportBase_v0):
     __tablename__ = 'core__reports_archived'
     __mapper_args__ = {'polymorphic_identity': 'archived_report'}
 
     id = Column('id',Integer, ForeignKey('core__reports.id'))
-
     media_entry_id = Column(Integer, ForeignKey(MediaEntry.id))
     comment_id = Column(Integer, ForeignKey(MediaComment.id))
     resolver_id = Column(Integer, ForeignKey(User.id), nullable=False)
@@ -344,7 +431,6 @@ class Privilege_v0(declarative_base()):
 
 class PrivilegeUserAssociation_v0(declarative_base()):
     __tablename__ = 'core__privileges_users'
-
     group_id = Column(
         'core__privilege_id', 
         Integer, 
@@ -356,7 +442,7 @@ class PrivilegeUserAssociation_v0(declarative_base()):
         ForeignKey(Privilege.id), 
         primary_key=True)
 
-@RegisterMigration(11, MIGRATIONS)
+@RegisterMigration(14, MIGRATIONS)
 def create_moderation_tables(db):
     ReportBase_v0.__table__.create(db.bind)
     CommentReport_v0.__table__.create(db.bind)
