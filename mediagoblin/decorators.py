@@ -26,8 +26,8 @@ from mediagoblin.db.models import MediaEntry, User
 from mediagoblin.tools.response import json_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 
-from mediagoblin.federation.tools.request import decode_authorization_header
-from mediagoblin.federation.oauth import GMGRequestValidator
+from mediagoblin.oauth.tools.request import decode_authorization_header
+from mediagoblin.oauth.oauth import GMGRequestValidator
 
 def require_active_login(controller):
     """
