@@ -5,21 +5,21 @@
 What is GNU MediaGoblin?
 ========================
 
-* Initially, a place to store all your photos that’s as awesome as, if
-  not more awesome than, existing network services (Flickr, SmugMug,
-  Picasa, etc)
+* A place to store all your different media (photos, videos, audios,
+  and more!) that’s as awesome as, if not more awesome than, existing
+  network services (Flickr, YouTube, etc)
 * Customizable!
 * A place for people to collaborate and show off original and derived
   creations.  Free, as in freedom.  We’re a GNU project after all.
-* Later, a place for all sorts of media, such as video, music, etc hosting.
-* Later, federated with OStatus!
+* Extensible: Plugins allow you to add new media types (3d models?
+  Presentations and documents?  Yes, and more!) or extend old ones.
+* A real community, and we'd love to have you join us!
 
 
 Is it ready for me to use?
 ==========================
 
-Yes!  But with caveats.  The software is usable and there are instances
-running, but it's still in its early stages.
+Yes!
 
 
 Can I help/hang out/participate/whisper sweet nothings in your ear?
