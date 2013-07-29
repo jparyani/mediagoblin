@@ -140,6 +140,18 @@ class MigrationManager(object):
             self.session.bind,
             tables=[model.__table__ for model in self.models])
 
+    def populate_table_foundations(self):
+        """
+        Create the table foundations (default rows) as layed out in FOUNDATIONS
+            in mediagoblin.db.models
+        """
+        from mediagoblin.db.models import FOUNDATIONS as MAIN_FOUNDATIONS
+        for Model, rows in MAIN_FOUNDATIONS.items():
+            print u'\n--> Laying foundations for %s table' % Model.__name__
+            for parameters in rows:
+                row = Model(**parameters)
+                row.save()
+
     def create_new_migration_record(self):
         """
         Create a new migration record for this migration set
@@ -202,7 +214,9 @@ class MigrationManager(object):
 
             self.init_tables()
             # auto-set at latest migration number
-            self.create_new_migration_record()  
+            self.create_new_migration_record()
+            if self.name==u'__main__':
+                self.populate_table_foundations()
             
             self.printer(u"done.\n")
             self.set_current_migration()
