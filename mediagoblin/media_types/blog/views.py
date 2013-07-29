@@ -167,11 +167,8 @@ def blogpost_create(request):
 def blogpost_edit(request):
     blog_slug = request.matchdict.get('blog_slug', None)
     blog_post_slug = request.matchdict.get('blog_post_slug', None)
-
+    blogpost = request.db.MediaEntry.query.filter_by(slug=blog_post_slug, uploader=request.user.id).first()
     blog = request.db.Blog.query.filter_by(slug=blog_slug, author=request.user.id).first()
-    blog_post_data = request.db.BlogPostData.query.filter_by(blog=blog.id).first()
-
-    blogpost = blog_post_data.get_media_entry
 
     defaults = dict(
                 title = blogpost.title,
