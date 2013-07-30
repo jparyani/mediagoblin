@@ -77,8 +77,9 @@ def user_privileges_to_dictionary(user_id):
     privilege_dictionary = {}
     user = User.query.get(user_id)
     users_privileges = [p_item.privilege_name for p_item in user.all_privileges]
-    for privilege_name in FOUNDATIONS[Privilege]:
-        privilege_name = privilege_name[0]
+    #TODO update this to account for plugins that may add foundations
+    for privilege in FOUNDATIONS[Privilege]:
+        privilege_name = privilege['privilege_name']
         if privilege_name in users_privileges:
             privilege_dictionary[privilege_name]=True
         else:

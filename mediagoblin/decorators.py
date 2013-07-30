@@ -22,9 +22,9 @@ from werkzeug.urls import url_quote
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin import messages
-from mediagoblin.db.models import MediaEntry, User, MediaComment,
-							UserBan
-from mediagoblin.tools.response import redirect, render_404
+from mediagoblin.db.models import (MediaEntry, User, MediaComment,
+							UserBan, Privilege)
+from mediagoblin.tools.response import redirect, render_404, render_user_banned
 from mediagoblin.tools.translate import pass_to_ugettext as _
 
 
@@ -309,8 +309,10 @@ def require_admin_or_moderator_login(controller):
     """
     @wraps(controller)
     def new_controller_func(request, *args, **kwargs):
-        admin_privilege = Privilege.one({'privilege_name':u'admin'})
-        moderator_privilege = Privilege.one({'privilege_name':u'moderator'})
+        admin_privilege = Privilege.query.filter(
+            Privilege.privilege_name==u'admin').one()
+        moderator_privilege = Privilege.query.filter(
+            Privilege.privilege_name==u'moderator').one()
         if request.user and \
             not admin_privilege in request.user.all_privileges and \
                  not moderator_privilege in request.user.all_privileges:

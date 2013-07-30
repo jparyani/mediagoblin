@@ -56,11 +56,15 @@ def adduser(args):
         entry.status = u'active'
         entry.email_verified = True
         default_privileges = [ 
-            db.Privilege.one({'privilege_name':u'commenter'}),
-            db.Privilege.one({'privilege_name':u'uploader'}),
-            db.Privilege.one({'privilege_name':u'reporter'}),
-            db.Privilege.one({'privilege_name':u'active'})
-]
+            db.Privilege.query.filter(
+                db.Privilege.privilege_name==u'commenter').one(),
+            db.Privilege.query.filter(
+                db.Privilege.privilege_name==u'uploader').one(),
+            db.Privilege.query.filter(
+                db.Privilege.privilege_name==u'reporter').one(),
+            db.Privilege.query.filter(
+                db.Privilege.privilege_name==u'active').one()
+        ]
         entry.all_privileges = default_privileges
         entry.save()
 
@@ -83,9 +87,9 @@ def makeadmin(args):
     if user:
         user.is_admin = True
         user.all_privileges.append(
-            db.Privilege.one({
-                'privilege_name':u'admin'})
-            )
+            db.Privilege.query.filter(
+                db.Privilege.privilege_name==u'admin').one()
+        )
         user.save()
         print 'The user is now Admin'
     else:

@@ -118,6 +118,9 @@
                   <a href="{{ request.urlgen('mediagoblin.moderation.users') }}">
                     {%- trans %}User management panel{% endtrans -%}
                   </a>
+                  <a href="{{ request.urlgen('mediagoblin.moderation.reports') }}">
+                    {%- trans %}Report management panel{% endtrans -%}
+                  </a>
                 </p>
               {% endif %}
               {% include 'mediagoblin/fragments/header_notifications.html' %}

@@ -116,7 +116,10 @@ def moderation_reports_detail(request):
     form = moderation_forms.ReportResolutionForm(request.form)
     report = ReportBase.query.get(request.matchdict['report_id'])
 
-    form.take_away_privileges.choices = [(s.privilege_name,s.privilege_name.title()) for s in report.reported_user.all_privileges]
+    form.take_away_privileges.choices = [
+        (s.privilege_name,s.privilege_name.title()) \
+            for s in report.reported_user.all_privileges 
+    ]
 
     if request.method == "POST" and form.validate():
         user = User.query.get(form.targeted_user.data)
@@ -139,7 +142,8 @@ def give_or_take_away_privilege(request, url_user):
     '''
     form = moderation_forms.PrivilegeAddRemoveForm(request.form)
     if request.method == "POST" and form.validate():
-        privilege = Privilege.one({'privilege_name':form.privilege_name.data})
+        privilege = Privilege.query.filter(
+            Privilege.privilege_name==form.privilege_name.data).one()
         if privilege in url_user.all_privileges:
             url_user.all_privileges.remove(privilege)
         else:      

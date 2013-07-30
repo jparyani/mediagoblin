@@ -31,7 +31,8 @@ def take_punitive_actions(request, form, report, user):
         # punitive actions that a moderator could take.
         if u'takeaway' in form.action_to_resolve.data:
             for privilege_name in form.take_away_privileges.data:
-                privilege = Privilege.one({u'privilege_name':privilege_name})
+                privilege = Privilege.query.filter(
+                    Privilege.privilege_name==privilege_name).one()
                 form.resolution_content.data += \
                     u"<br>%s took away %s\'s %s privileges" % (
                         request.user.username,

@@ -404,7 +404,7 @@ class MediaReport_v0(ReportBase_v0):
     __mapper_args__ = {'polymorphic_identity': 'media_report'}
 
     id = Column('id',Integer, ForeignKey('core__reports.id'), primary_key=True)
-    media_entry_id = Column(Integer, ForeignKey(MediaEntry.i
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
 
 class ArchivedReport_v0(ReportBase_v0):
     __tablename__ = 'core__reports_archived'

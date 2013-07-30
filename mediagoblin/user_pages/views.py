@@ -27,7 +27,7 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.user_pages import forms as user_forms
 from mediagoblin.user_pages.lib import (send_comment_email,
-	add_media_to_collection)
+	add_media_to_collection, build_report_object)
 from mediagoblin.notifications import trigger_notification, \
     add_comment_subscription, mark_comment_notification_seen
 
