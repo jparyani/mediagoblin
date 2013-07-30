@@ -17,3 +17,12 @@
 -#}
 
 {# Add extra head declarations here for your theme, if appropriate #}
+
+<script type="text/javascript"  
+            src="{{request.staticdirect('/tinymce/jscripts/tiny_mce/tiny_mce.js')}}"></script>
+    <script type="text/javascript">
+    tinyMCE.init({
+        selector: "div.form_field_input textarea",
+        theme: "advanced"
+        })
+</script>
