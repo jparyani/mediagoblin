@@ -82,8 +82,9 @@ def blog_edit(request):
                         blog_slug=blog.slug)
         else:
             add_message(request, ERROR, "You can not create any more blogs")
-            return redirect(request, "mediagoblin.user_pages.user_home",
-                        user=request.user.username)
+            return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
+                        user=request.user.username,
+                        blog_slug=blog.slug)
 
 
     #Blog already exists.
@@ -167,9 +168,13 @@ def blogpost_create(request):
 def blogpost_edit(request):
     blog_slug = request.matchdict.get('blog_slug', None)
     blog_post_slug = request.matchdict.get('blog_post_slug', None)
+   
     blogpost = request.db.MediaEntry.query.filter_by(slug=blog_post_slug, uploader=request.user.id).first()
     blog = request.db.Blog.query.filter_by(slug=blog_slug, author=request.user.id).first()
-
+    
+    if not blogpost or not blog:
+        return render_404(request)
+    
     defaults = dict(
                 title = blogpost.title,
                 description = blogpost.description,
@@ -201,11 +206,17 @@ def blogpost_edit(request):
 
 @require_active_login
 def blog_dashboard(request):
+    
+    url_user = request.matchdict.get('user')
     blog_posts_list = []
     blog_slug = request.matchdict.get('blog_slug')
     _log.info(blog_slug)
 
     blog = request.db.Blog.query.filter_by(slug=blog_slug).first()
+   
+    if not blog:
+        return render_404(request)
+   
     blog_post_data = request.db.BlogPostData.query.filter_by(blog=blog.id).all()
 
     for each_blog_post_data in blog_post_data:
