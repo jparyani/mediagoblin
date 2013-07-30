@@ -40,14 +40,12 @@
     {% if blog_post_count!=0 %}
      <table class="media_panel processing">
         <tr>
-            <th>ID</th>
             <th>Title</th>
             <th>submitted</th>
             <th>  </th>
         </tr>
         {% for blog_post in blog_posts_list %}
         <tr>
-            <td>{{ blog_post.id }}</td>
             <td><a href="{{ blog_post.url_for_self(request.urlgen) }}">{{ blog_post.title }}</a></td>
             <td>{{ blog_post.created.strftime("%F %R") }}</td>
             <td></td>
