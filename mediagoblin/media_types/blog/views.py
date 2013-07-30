@@ -153,8 +153,9 @@ def blogpost_create(request):
     
         add_message(request, SUCCESS, _('Woohoo! Submitted!'))
         add_comment_subscription(request.user, blogpost)
-        return redirect(request, "mediagoblin.user_pages.user_home", 
-            user=request.user.username)
+        return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
+                        user=request.user.username,
+                        blog_slug=blog.slug)
         
     return render_to_response(
         request,
