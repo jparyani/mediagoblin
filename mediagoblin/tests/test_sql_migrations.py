@@ -58,6 +58,9 @@ class Level1(Base1):
 
 SET1_MODELS = [Creature1, Level1]
 
+SET1_FOUNDATIONS = {Creature1:[{'name':u'goblin','num_legs':2,'is_demon':False},
+                               {'name':u'cerberus','num_legs':4,'is_demon':True}]}
+
 SET1_MIGRATIONS = {}
 
 #######################################################
@@ -542,7 +545,6 @@ def _insert_migration3_objects(session):
 
     session.commit()
 
-
 def create_test_engine():
     from sqlalchemy import create_engine
     engine = create_engine('sqlite:///:memory:', echo=False)
@@ -572,7 +574,7 @@ def test_set1_to_set3():
 
     printer = CollectingPrinter()
     migration_manager = MigrationManager(
-        u'__main__', SET1_MODELS, SET1_MIGRATIONS, Session(),
+        u'__main__', SET1_MODELS, SET1_FOUNDATIONS, SET1_MIGRATIONS, Session(),
         printer)
 
     # Check latest migration and database current migration
@@ -585,7 +587,8 @@ def test_set1_to_set3():
     assert result == u'inited'
     # Check output
     assert printer.combined_string == (
-        "-> Initializing main mediagoblin tables... done.\n")
+        "-> Initializing main mediagoblin tables... done.\n" + \
+        "   + Laying foundations for Creature1 table\n"    )
     # Check version in database
     assert migration_manager.latest_migration == 0
     assert migration_manager.database_current_migration == 0
@@ -597,8 +600,8 @@ def test_set1_to_set3():
 
     # Try to "re-migrate" with same manager settings... nothing should happen
     migration_manager = MigrationManager(
-        u'__main__', SET1_MODELS, SET1_MIGRATIONS, Session(),
-        printer)
+        u'__main__', SET1_MODELS, SET1_FOUNDATIONS, SET1_MIGRATIONS, 
+        Session(), printer)
     assert migration_manager.init_or_migrate() == None
 
     # Check version in database

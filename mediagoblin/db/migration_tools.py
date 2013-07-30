@@ -147,10 +147,11 @@ class MigrationManager(object):
             in mediagoblin.db.models
         """
         for Model, rows in self.foundations.items():
-            print u'\n  + Laying foundations for %s table' % (Model.__name__)
+            self.printer(u'   + Laying foundations for %s table\n' % 
+                (Model.__name__))
             for parameters in rows:
                 new_row = Model(**parameters)
-                new_row.save()
+                self.session.add(new_row)
 
     def create_new_migration_record(self):
         """
@@ -215,9 +216,8 @@ class MigrationManager(object):
             self.init_tables()
             # auto-set at latest migration number
             self.create_new_migration_record()
-            self.populate_table_foundations()
-            
             self.printer(u"done.\n")
+            self.populate_table_foundations()
             self.set_current_migration()
             return u'inited'
 
