@@ -224,6 +224,7 @@ def blog_dashboard(request):
         blog_post = each_blog_post_data.get_media_entry
         if blog_post:
             blog_posts_list.append(blog_post)
+    blog_posts_list.reverse()
     blog_post_count = len(blog_posts_list)
 
     if may_edit_blogpost(request, blog):
