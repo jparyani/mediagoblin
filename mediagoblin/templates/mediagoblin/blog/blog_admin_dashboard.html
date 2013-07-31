@@ -28,11 +28,17 @@
     {{blog.description}}  
 </p> 
 <p>
-<a class="button_action" href="{{ request.urlgen('mediagoblin.media_types.blog.blogpost.create', blog_slug=blog.slug, user=request.user.username) }}">
+    {% set blogpost_create_url = request.urlgen('mediagoblin.media_types.blog.blogpost.create', 
+                                      blog_slug=blog.slug, 
+                                      user=request.user.username) %}
+<a class="button_action" href="{{ blogpost_create_url }}">
 {%- trans %}Add Blog Post{% endtrans -%}
 </a>
 &middot;
-<a class="button_action" href="{{ request.urlgen('mediagoblin.media_types.blog.edit', blog_slug=blog.slug, user=request.user.username) }}">
+    {% set blog_edit_url = request.urlgen('mediagoblin.media_types.blog.edit', 
+                                      blog_slug=blog.slug, 
+                                      user=request.user.username) %}
+<a class="button_action" href="{{ blog_edit_url }}">
 {%- trans %}Edit Blog{% endtrans -%}
 </a>
 </p>
@@ -42,15 +48,17 @@
         <tr>
             <th>Title</th>
             <th>submitted</th>
-            <th>  </th>
+            <th></th>
         </tr>
         {% for blog_post in blog_posts_list %}
         <tr>
             <td><a href="{{ blog_post.url_for_self(request.urlgen) }}">{{ blog_post.title }}</a></td>
             <td>{{ blog_post.created.strftime("%F %R") }}</td>
-            <td></td>
-            <td><a class="button_action" href="{{request.urlgen('mediagoblin.media_types.blog.blogpost.edit', 
-                        blog_slug=blog.slug, user=request.user.username, blog_post_slug=blog_post.slug) }}">Edit</a>
+            <td><h6><em>{{ blog_post.state }}</em></h6></td>
+            {% set blogpost_edit_url = request.urlgen('mediagoblin.media_types.blog.blogpost.edit', 
+                                      blog_slug=blog.slug, user=request.user.username, 
+                                      blog_post_slug=blog_post.slug) %}
+            <td><a class="button_action" href="{{ blogpost_edit_url }}">Edit</a>
             <a class="button_action" >Delete</a>
             </td>
             
