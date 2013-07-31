@@ -17,7 +17,7 @@
 import itsdangerous
 import logging
 
-import crypto
+from mediagoblin.tools import crypto
 
 _log = logging.getLogger(__name__)
 
