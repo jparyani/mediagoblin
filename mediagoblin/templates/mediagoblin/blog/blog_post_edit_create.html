@@ -25,12 +25,28 @@
 
 {% block mediagoblin_content %}
   <form action=""  method="POST">
-    <div class="form_box_xl">
-      <h1>{% trans %}Create a blog post.{% endtrans %}</h1>
-      {{ wtforms_util.render_divs(form) }}
+    <div class="blog_form_box_xl">
+      <h1>{% trans %}Create a Blog Post.{% endtrans %}</h1>
+      <b>Title</b>
+      <div class="blog_form_field_input input">
+        <h3>{{ form.title}}</h3>
+      </div>
+      <b>Description</b>
+      <div class="blog_form_field_input textarea">
+         <h3>{{form.description|safe}}</h3>
+      </div>
+      <b>Tags</b>
+      <div class="blog_form_field_input input">
+         <h3>{{form.tags}}</h3>
+      </div>
+      <b>License</b>
+      <div class="blog_form_field_input input">
+         <h3>{{form.license}}</h3>
+      </div>
       <div class="form_submit_buttons">
         {{ csrf_token }}
       <input type="submit" name="status" value="Publish" class="button_form">
+      <input type="submit" name="status" value="Draft" class="button_form">
       </div>
     </div>
   </form>
