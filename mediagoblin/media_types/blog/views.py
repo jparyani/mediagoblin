@@ -37,7 +37,8 @@ from mediagoblin.tools.response import (render_to_response,
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.text import (
-    convert_to_tag_list_of_dicts, media_tags_as_string)
+    convert_to_tag_list_of_dicts, media_tags_as_string, clean_html, 
+    cleaned_markdown_conversion)
 from mediagoblin.tools.url import slugify
 
 from mediagoblin.db.util import check_media_slug_used, check_collection_slug_used
@@ -81,6 +82,8 @@ def blog_edit(request):
                         user=request.user.username,
                         blog_slug=blog.slug)
         else:
+            #the case when max blog count is one.
+            blog = request.db.Blog.query.filter_by(author=request.user.id).first()
             add_message(request, ERROR, "You can not create any more blogs")
             return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
                         user=request.user.username,
@@ -125,7 +128,9 @@ def blogpost_create(request):
     
     if request.method == 'POST' and form.validate():
        
-        _log.info(request.form['status'])
+        state_value = request.form['status']
+        if state_value == u'Publish':
+            state_value = u'processed'
            
         blog_slug = request.matchdict.get('blog_slug')
         blog = request.db.Blog.query.filter_by(slug=blog_slug,
@@ -139,7 +144,7 @@ def blogpost_create(request):
         blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
         blogpost.license = unicode(form.license.data) or None
         blogpost.uploader = request.user.id
-        blogpost.state = 'processed'
+        blogpost.state = state_value
         
         blogpost.generate_slug()
         
@@ -184,17 +189,23 @@ def blogpost_edit(request):
     
     form = blog_forms.BlogPostEditForm(request.form, **defaults)
     if request.method == 'POST' and form.validate():
+        
+        state_value = request.form['status']
+        if state_value == u'Publish':
+            state_value = u'processed'
         blogpost.title = unicode(form.title.data)
         blogpost.description = unicode(form.description.data)
         blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
         blogpost.license = unicode(form.license.data) 
         
         blogpost.generate_slug()
+        blogpost.state = state_value
         blogpost.save()
         
         add_message(request, SUCCESS, _('Woohoo! edited blogpost is submitted'))
-        return redirect(request, "mediagoblin.user_pages.user_home", 
-            user=request.user.username)
+        return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
+                        user=request.user.username,
+                        blog_slug=blog.slug)
     
     return render_to_response(
         request,
@@ -237,6 +248,30 @@ def blog_dashboard(request):
         'blog_post_count':blog_post_count
         })                                                            
     
+#supposed to list all the blog posts not just belonging to a particular post.
+def blog_post_listing(request):
+    
+    blog_owner = request.matchdict.get('user')
+    _log.info("Username is %s"%(blog_owner))
+    owner_user = User.query.filter_by(username=blog_owner).one()
+    
+    if not owner_user:
+        return render_404(request)
+    
+    all_blog_posts = MediaEntry.query.filter_by(
+        uploader=owner_user.id, media_type='mediagoblin.media_types.blogpost',
+        state=u'processed').all()
+    all_blog_posts.reverse()
+    _log.info(len(all_blog_posts))
+    
+    return render_to_response(
+        request,
+        'mediagoblin/blog/blog_post_listing.html',
+        {'blog_posts': all_blog_posts,
+         'blog_owner': blog_owner
+        })
+    
+        
     
     
  
