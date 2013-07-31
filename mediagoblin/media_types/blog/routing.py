@@ -37,11 +37,6 @@ add_route('mediagoblin.media_types.blog.blogpost.edit',
 add_route('mediagoblin.media_types.blog.blog-collection-admin', \
 	'/u/<string:user>/blog-collection-admin/', 'mediagoblin.media_types.blog.views:blog-collection-admin')
 
-##URL mapping for creating a new blog.
-#add_route('mediagoblin.media_types.blog.create', '/u/<string:user>/b/create/',
-	#'mediagoblin.media_types.blog.views:blog_create')
-
-
 #URL mapping for creating a new blog.
 add_route('mediagoblin.media_types.blog.create', '/u/<string:user>/b/create/',
 	'mediagoblin.media_types.blog.views:blog_edit')
@@ -51,7 +46,9 @@ add_route('mediagoblin.media_types.blog.create', '/u/<string:user>/b/create/',
 add_route('mediagoblin.media_types.blog.edit', '/u/<string:user>/b/<string:blog_slug>/edit/',
 	'mediagoblin.media_types.blog.views:blog_edit')
 	
-#route for gallery view of blog posts and blogs.
+#URL mapping for blog_post_listing view.
+add_route('mediagoblin.media_types.blog.blog_post_listing', '/u/<string:user>/b/',
+	'mediagoblin.media_types.blog.views:blog_post_listing')
 	
 
 
