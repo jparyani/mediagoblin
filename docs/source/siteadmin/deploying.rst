@@ -131,20 +131,20 @@ The following command (entered as root or with sudo) will create a
 system account with a username of ``mediagoblin``. You may choose a different
 username if you wish.::
 
-  ``# adduser --system mediagoblin``
+   adduser --system mediagoblin
 
 No password will be assigned to this account, and you will not be able
 to log in as this user. To switch to this account, enter either::
 
-  ``sudo su - mediagoblin`` (if you have sudo permissions)
+  sudo su - mediagoblin (if you have sudo permissions)
 
-or
+or::
 
-  ``su - mediagoblin`` (if you have to use root permissions)
+  su - mediagoblin (if you have to use root permissions)
 
 You may get a warning similar to this when entering these commands::
 
-  ``warning: cannot change directory to /home/mediagoblin: No such file or directory``
+  warning: cannot change directory to /home/mediagoblin: No such file or directory
 
 You can disregard this warning. To return to your regular user account after
 using the system account, just enter ``exit``.
@@ -171,11 +171,11 @@ to the unpriviledged system account.
 To do this, enter either of the following commands, changing the defaults
 to suit your particular requirements::
 
-  ``sudo mkdir -p /srv/mediagoblin.example.org && sudo chown -hR mediagoblin:mediagoblin /srv/mediagobin.example.org``
+  sudo mkdir -p /srv/mediagoblin.example.org && sudo chown -hR mediagoblin:mediagoblin /srv/mediagobin.example.org
 
-or (as the root user)
+or (as the root user)::
 
-  ``# mkdir -p /srv/mediagoblin.example.org && chown -hR mediagoblin:mediagoblin /srv/mediagobin.example.org``
+  mkdir -p /srv/mediagoblin.example.org && chown -hR mediagoblin:mediagoblin /srv/mediagobin.example.org
 
 
 Install MediaGoblin and Virtualenv
