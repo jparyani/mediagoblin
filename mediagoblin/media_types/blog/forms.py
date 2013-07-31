@@ -23,7 +23,7 @@ from mediagoblin.tools.licenses import licenses_as_choices
 class BlogPostEditForm(wtforms.Form):
     title = wtforms.TextField(_('Title'),
 		[wtforms.validators.Length(min=0, max=500)])
-    description = wtforms.TextAreaField(_('Content'))
+    description = wtforms.TextAreaField(_('Description'))
     tags = wtforms.TextField(_('Tags'), [tag_length_validator], 
 		description="Seperate tags by commas.")
     license = wtforms.SelectField(_('License'), 
