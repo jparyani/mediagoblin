@@ -85,7 +85,15 @@ def _reprocess_all(args):
 
 def _run_reprocessing(args):
     if args[0].available:
-        return hook_handle(('reprocess_action', args[0].type), args)
+        if args[0].state == 'failed':
+            print _('\n Available reprocess actions for all failed'
+                    ' media_entries: \n \t --initial_processing')
+        else:
+            result = hook_handle(('reprocess_action', args[0].type), args)
+            if not result:
+                print _('Sorry there is no available reprocessing for {}'
+                        ' entries in the {} state'.format(args[0].type,
+                                                          args[0].state))
     else:
         return hook_handle(('media_reprocess', args[0].type), args)
 
