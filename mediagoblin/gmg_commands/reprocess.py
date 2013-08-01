@@ -97,6 +97,10 @@ def _reprocess_all(args):
                               ' all media_entries, unless you set --state'
                               ' to "failed".'))
 
+    _run_reprocessing(args)
+
+
+def _run_reprocessing(args):
     if args[0].available:
         return hook_handle(('reprocess_action', args[0].type), args)
     else:
@@ -113,3 +117,5 @@ def reprocess(args):
         return _reprocess_all(args)
 
     _set_media_type(args)
+
+    return _run_reprocessing(args)
