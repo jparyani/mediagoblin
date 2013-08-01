@@ -44,7 +44,7 @@ def reprocess_parser_setup(subparser):
 def _set_media_type(args):
     if len(args[0].media_id) == 1:
         media_type = MediaEntry.query.filter_by(id=args[0].media_id[0])\
-                .first().media_type.split('.')[-1]
+            .first().media_type.split('.')[-1]
 
         if not args[0].type:
             args[0].type = media_type
@@ -55,7 +55,7 @@ def _set_media_type(args):
         media_types = []
 
         for id in args[0].media_id:
-            media_types.append(MediaEntry.query.filter_by(id=id).first()\
+            media_types.append(MediaEntry.query.filter_by(id=id).first()
                                .media_type.split('.')[-1])
         for type in media_types:
             if media_types[0] != type:
@@ -77,8 +77,8 @@ def _reprocess_all(args):
     if not args[0].type:
         if args[0].state == 'failed':
             if args[0].available:
-                print _('\n Available reprocess actions for all failed' \
-                      ' media_entries: \n \t --initial_processing')
+                print _('\n Available reprocess actions for all failed'
+                        ' media_entries: \n \t --initial_processing')
                 return
             else:
                 #TODO reprocess all failed entries
