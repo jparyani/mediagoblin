@@ -41,13 +41,6 @@ def reprocess_parser_setup(subparser):
         help="The media_entry id(s) you wish to reprocess.")
 
 
-class MismatchingMediaTypes(Exception):
-    """
-    Error that should be raised if the media_types are not the same
-    """
-    pass
-
-
 def _set_media_type(args):
     if len(args[0].media_id) == 1:
         media_type = MediaEntry.query.filter_by(id=args[0].media_id[0])\
@@ -56,9 +49,8 @@ def _set_media_type(args):
         if not args[0].type:
             args[0].type = media_type
         elif args[0].type != media_type:
-            raise MismatchingMediaTypes(_('The type that you set does not'
-                                          ' match the type of the given'
-                                          ' media_id.'))
+            raise Exception(_('The type that you set does not match the type'
+                              ' of the given media_id.'))
     elif len(args[0].media_id) > 1:
         media_types = []
 
@@ -67,27 +59,26 @@ def _set_media_type(args):
                                .media_type.split('.')[-1])
         for type in media_types:
             if media_types[0] != type:
-                raise MismatchingMediaTypes((u'You cannot reprocess different'
-                        ' media_types at the same time.'))
+                raise Exception((u'You cannot reprocess different media_types'
+                                 ' at the same time.'))
 
         if not args[0].type:
             args[0].type = media_types[0]
         elif args[0].type != media_types[0]:
-            raise MismatchingMediaTypes(_('The type that you set does not'
-                                          ' match the type of the given'
-                                          ' media_ids.'))
+            raise Exception(_('The type that you set does not match the type'
+                              ' of the given media_ids.'))
 
     elif not args[0].type:
-        raise MismatchingMediaTypes(_('You must provide either a media_id or'
-                                      ' set the --type flag'))
+        raise Exception(_('You must provide either a media_id or set the'
+                          ' --type flag'))
 
 
 def _reprocess_all(args):
     if not args[0].type:
         if args[0].state == 'failed':
             if args[0].available:
-                print '\n Available reprocess actions for all failed' \
-                      ' media_entries: \n \t --initial_processing'
+                print _('\n Available reprocess actions for all failed' \
+                      ' media_entries: \n \t --initial_processing')
                 return
             else:
                 #TODO reprocess all failed entries
