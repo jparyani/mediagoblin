@@ -50,24 +50,24 @@ def _set_media_type(args):
             if not args[0].type:
                 args[0].type = media_type
             elif args[0].type != media_type:
-                raise Exception(_('The --type that you set does not match the type'
-                                ' of the given media_id.'))
+                raise Exception(_('The --type that you set does not match the'
+                                  'type of the given media_id.'))
         elif len(args[0].media_id) > 1:
             media_types = []
 
             for id in args[0].media_id:
                 media_types.append(MediaEntry.query.filter_by(id=id).first()
-                                .media_type.split('.')[-1])
+                                   .media_type.split('.')[-1])
             for type in media_types:
                 if media_types[0] != type:
-                    raise Exception((u'You cannot reprocess different media_types'
-                                    ' at the same time.'))
+                    raise Exception((u'You cannot reprocess different'
+                                     ' media_types at the same time.'))
 
             if not args[0].type:
                 args[0].type = media_types[0]
             elif args[0].type != media_types[0]:
-                raise Exception(_('The --type that you set does not match the type'
-                                ' of the given media_ids.'))
+                raise Exception(_('The --type that you set does not match the'
+                                  ' type of the given media_ids.'))
 
 
 def _reprocess_all(args):
@@ -128,8 +128,8 @@ def _set_media_state(args):
                                     .state)
             for state in media_states:
                 if state != media_states[0]:
-                    raise Exception(_('You can only reprocess media that is in the'
-                                    ' same state.'))
+                    raise Exception(_('You can only reprocess media that is in'
+                                      ' the same state.'))
 
             args[0].state = media_states[0]
 
