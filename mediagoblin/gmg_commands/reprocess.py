@@ -16,6 +16,7 @@
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+from mediagoblin.tools.pluginapi import hook_handle
 
 
 def reprocess_parser_setup(subparser):
@@ -81,7 +82,34 @@ def _set_media_type(args):
                                       ' set the --type flag'))
 
 
+def _reprocess_all(args):
+    if not args[0].type:
+        if args[0].state == 'failed':
+            if args[0].available:
+                print '\n Available reprocess actions for all failed' \
+                      ' media_entries: \n \t --initial_processing'
+                return
+            else:
+                #TODO reprocess all failed entries
+                pass
+        else:
+            raise Exception(_('You must set --type when trying to reprocess'
+                              ' all media_entries, unless you set --state'
+                              ' to "failed".'))
+
+    if args[0].available:
+        return hook_handle(('reprocess_action', args[0].type), args)
+    else:
+        return hook_handle(('media_reprocess', args[0].type), args)
+
+
 def reprocess(args):
     commands_util.setup_app(args[0])
+
+    if not args[0].state:
+        args[0].state = 'processed'
+
+    if args[0].all:
+        return _reprocess_all(args)
 
     _set_media_type(args)
