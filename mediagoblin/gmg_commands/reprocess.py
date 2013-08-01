@@ -13,6 +13,9 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from mediagoblin.db.models import MediaEntry
+from mediagoblin.gmg_commands import util as commands_util
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 
 def reprocess_parser_setup(subparser):
@@ -37,5 +40,48 @@ def reprocess_parser_setup(subparser):
         help="The media_entry id(s) you wish to reprocess.")
 
 
-def reprocess(args):
+class MismatchingMediaTypes(Exception):
+    """
+    Error that should be raised if the media_types are not the same
+    """
     pass
+
+
+def _set_media_type(args):
+    if len(args[0].media_id) == 1:
+        media_type = MediaEntry.query.filter_by(id=args[0].media_id[0])\
+                .first().media_type.split('.')[-1]
+
+        if not args[0].type:
+            args[0].type = media_type
+        elif args[0].type != media_type:
+            raise MismatchingMediaTypes(_('The type that you set does not'
+                                          ' match the type of the given'
+                                          ' media_id.'))
+    elif len(args[0].media_id) > 1:
+        media_types = []
+
+        for id in args[0].media_id:
+            media_types.append(MediaEntry.query.filter_by(id=id).first()\
+                               .media_type.split('.')[-1])
+        for type in media_types:
+            if media_types[0] != type:
+                raise MismatchingMediaTypes((u'You cannot reprocess different'
+                        ' media_types at the same time.'))
+
+        if not args[0].type:
+            args[0].type = media_types[0]
+        elif args[0].type != media_types[0]:
+            raise MismatchingMediaTypes(_('The type that you set does not'
+                                          ' match the type of the given'
+                                          ' media_ids.'))
+
+    elif not args[0].type:
+        raise MismatchingMediaTypes(_('You must provide either a media_id or'
+                                      ' set the --type flag'))
+
+
+def reprocess(args):
+    commands_util.setup_app(args[0])
+
+    _set_media_type(args)
