@@ -29,7 +29,7 @@ class MigrationManager(object):
     to the latest migrations, etc.
     """
 
-    def __init__(self, name, models, migration_registry, session,
+    def __init__(self, name, models, foundations, migration_registry, session,
                  printer=simple_printer):
         """
         Args:
@@ -40,6 +40,7 @@ class MigrationManager(object):
         """
         self.name = unicode(name)
         self.models = models
+        self.foundations = foundations
         self.session = session
         self.migration_registry = migration_registry
         self._sorted_migrations = None
@@ -140,6 +141,18 @@ class MigrationManager(object):
             self.session.bind,
             tables=[model.__table__ for model in self.models])
 
+    def populate_table_foundations(self):
+        """
+        Create the table foundations (default rows) as layed out in FOUNDATIONS
+            in mediagoblin.db.models
+        """
+        for Model, rows in self.foundations.items():
+            self.printer(u'   + Laying foundations for %s table\n' % 
+                (Model.__name__))
+            for parameters in rows:
+                new_row = Model(**parameters)
+                self.session.add(new_row)
+
     def create_new_migration_record(self):
         """
         Create a new migration record for this migration set
@@ -202,9 +215,9 @@ class MigrationManager(object):
 
             self.init_tables()
             # auto-set at latest migration number
-            self.create_new_migration_record()  
-            
+            self.create_new_migration_record()
             self.printer(u"done.\n")
+            self.populate_table_foundations()
             self.set_current_migration()
             return u'inited'
 
