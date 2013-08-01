@@ -19,6 +19,7 @@ from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.image.processing import process_image, \
     sniff_handler
 from mediagoblin.tools import pluginapi
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 
 ACCEPTED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "tiff"]
@@ -64,9 +65,25 @@ def get_media_type_and_manager(ext):
         return MEDIA_TYPE, ImageMediaManager
 
 
+def reprocess_action(args):
+    if args[0].state == 'processed':
+        print _('\n Available reprocessing actions for processed images:'
+                '\n \t --resize: thumbnail or medium'
+                '\n Options:'
+                '\n \t --size: max_width max_height (defaults to config specs)')
+        return True
+
+
+def media_reprocess(args):
+    import ipdb
+    ipdb.set_trace()
+
+
 hooks = {
     'setup': setup_plugin,
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
     ('media_manager', MEDIA_TYPE): lambda: ImageMediaManager,
+    ('reprocess_action', 'image'): reprocess_action,
+    ('media_reprocess', 'image'): media_reprocess,
 }
