@@ -32,6 +32,7 @@ def adduser_parser_setup(subparser):
 
 def adduser(args):
     #TODO: Lets trust admins this do not validate Emails :)
+    commands_util.check_unrecognized_args(args)
     commands_util.setup_app(args[0])
 
     args[0].username = commands_util.prompt_if_not_set(args[0].username, "Username:")
@@ -67,6 +68,7 @@ def makeadmin_parser_setup(subparser):
 
 
 def makeadmin(args):
+    commands_util.check_unrecognized_args(args)
     commands_util.setup_app(args[0])
 
     db = mg_globals.database
@@ -91,6 +93,7 @@ def changepw_parser_setup(subparser):
 
 
 def changepw(args):
+    commands_util.check_unrecognized_args(args)
     commands_util.setup_app(args[0])
 
     db = mg_globals.database
