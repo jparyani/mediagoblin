@@ -65,10 +65,10 @@ def shell(args):
     """
     user_namespace = {
         'mg_globals': mg_globals,
-        'mgoblin_app': commands_util.setup_app(args),
+        'mgoblin_app': commands_util.setup_app(args[0]),
         'db': mg_globals.database}
 
-    if args.ipython:
+    if args[0].ipython:
         ipython_shell(**user_namespace)
     else:
         # Try ipython_shell first and fall back if not available

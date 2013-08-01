@@ -147,5 +147,5 @@ def run_all_migrations(db, app_config, global_config):
 
 
 def dbupdate(args):
-    global_config, app_config = setup_global_and_app_config(args.conf_file)
+    global_config, app_config = setup_global_and_app_config(args[0].conf_file)
     run_dbupdate(app_config, global_config)

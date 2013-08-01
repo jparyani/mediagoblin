@@ -32,16 +32,16 @@ def adduser_parser_setup(subparser):
 
 def adduser(args):
     #TODO: Lets trust admins this do not validate Emails :)
-    commands_util.setup_app(args)
+    commands_util.setup_app(args[0])
 
-    args.username = commands_util.prompt_if_not_set(args.username, "Username:")
-    args.password = commands_util.prompt_if_not_set(args.password, "Password:",True)
-    args.email = commands_util.prompt_if_not_set(args.email, "Email:")
+    args[0].username = commands_util.prompt_if_not_set(args[0].username, "Username:")
+    args[0].password = commands_util.prompt_if_not_set(args[0].password, "Password:",True)
+    args[0].email = commands_util.prompt_if_not_set(args[0].email, "Email:")
 
     db = mg_globals.database
     users_with_username = \
         db.User.query.filter_by(
-            username=args.username.lower()
+            username=args[0].username.lower()
         ).count()
 
     if users_with_username:
@@ -50,9 +50,9 @@ def adduser(args):
     else:
         # Create the user
         entry = db.User()
-        entry.username = unicode(args.username.lower())
-        entry.email = unicode(args.email)
-        entry.pw_hash = auth.gen_password_hash(args.password)
+        entry.username = unicode(args[0].username.lower())
+        entry.email = unicode(args[0].email)
+        entry.pw_hash = auth.gen_password_hash(args[0].password)
         entry.status = u'active'
         entry.email_verified = True
         entry.save()
@@ -67,12 +67,12 @@ def makeadmin_parser_setup(subparser):
 
 
 def makeadmin(args):
-    commands_util.setup_app(args)
+    commands_util.setup_app(args[0])
 
     db = mg_globals.database
 
     user = db.User.query.filter_by(
-        username=unicode(args.username.lower())).one()
+        username=unicode(args[0].username.lower())).one()
     if user:
         user.is_admin = True
         user.save()
@@ -91,14 +91,14 @@ def changepw_parser_setup(subparser):
 
 
 def changepw(args):
-    commands_util.setup_app(args)
+    commands_util.setup_app(args[0])
 
     db = mg_globals.database
 
     user = db.User.query.filter_by(
-        username=unicode(args.username.lower())).one()
+        username=unicode(args[0].username.lower())).one()
     if user:
-        user.pw_hash = auth.gen_password_hash(args.password)
+        user.pw_hash = auth.gen_password_hash(args[0].password)
         user.save()
         print 'Password successfully changed'
     else:
