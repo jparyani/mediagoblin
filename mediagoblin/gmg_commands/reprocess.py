@@ -35,6 +35,10 @@ def reprocess_parser_setup(subparser):
         '--media_id',
         nargs='*',
         help="The media_entry id(s) you wish to reprocess.")
+    subparser.add_argument(
+        '--thumbnails',
+        action="store_true",
+        help="Regenerate thumbnails for all processed media")
 
 
 def _set_media_type(args):
@@ -68,20 +72,31 @@ def _set_media_type(args):
 
 def _reprocess_all(args):
     if not args[0].type:
-        if args[0].state == 'failed':
+        if args[0].thumbnails:
+            if args[0].available:
+                print _('Available options for regenerating all processed'
+                        ' media thumbnails: \n'
+                        '\t --size: max_width max_height'
+                        ' (defaults to config specs)')
+            else:
+                #TODO regenerate all thumbnails
+                pass
+
+        elif args[0].state == 'failed':
             if args[0].available:
                 print _('\n Available reprocess actions for all failed'
                         ' media_entries: \n \t --initial_processing')
-                return
             else:
                 #TODO reprocess all failed entries
                 pass
+
         else:
             raise Exception(_('You must set --type when trying to reprocess'
                               ' all media_entries, unless you set --state'
                               ' to "failed".'))
 
-    _run_reprocessing(args)
+    else:
+        _run_reprocessing(args)
 
 
 def _run_reprocessing(args):
