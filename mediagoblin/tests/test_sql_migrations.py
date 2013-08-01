@@ -59,7 +59,8 @@ class Level1(Base1):
 SET1_MODELS = [Creature1, Level1]
 
 FOUNDATIONS = {Creature1:[{'name':u'goblin','num_legs':2,'is_demon':False},
-                          {'name':u'cerberus','num_legs':4,'is_demon':True}]}
+                          {'name':u'cerberus','num_legs':4,'is_demon':True}]
+              }
 
 SET1_MIGRATIONS = {}
 
@@ -790,6 +791,15 @@ def test_set1_to_set3():
 
     # Now check to see if stuff seems to be in there.
     session = Session()
+
+
+    # Start with making sure that the foundations did not run again
+    assert session.query(Creature3).filter_by(
+        name=u'goblin').count() == 1
+    assert session.query(Creature3).filter_by(
+        name=u'cerberus').count() == 1
+
+    # Then make sure the models have been migrated correctly
     creature = session.query(Creature3).filter_by(
         name=u'centipede').one()
     assert creature.num_limbs == 100.0
