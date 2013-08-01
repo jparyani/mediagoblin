@@ -25,10 +25,6 @@ def reprocess_parser_setup(subparser):
         action="store_true",
         help="List available actions for a given media entry")
     subparser.add_argument(
-        '--all', '-A',
-        action="store_true",
-        help="Reprocess all media entries")
-    subparser.add_argument(
         '--state', '-s',
         help="Reprocess media entries in this state"
              " such as 'failed' or 'processed'")
@@ -49,7 +45,7 @@ def _set_media_type(args):
         if not args[0].type:
             args[0].type = media_type
         elif args[0].type != media_type:
-            raise Exception(_('The type that you set does not match the type'
+            raise Exception(_('The --type that you set does not match the type'
                               ' of the given media_id.'))
     elif len(args[0].media_id) > 1:
         media_types = []
@@ -65,12 +61,8 @@ def _set_media_type(args):
         if not args[0].type:
             args[0].type = media_types[0]
         elif args[0].type != media_types[0]:
-            raise Exception(_('The type that you set does not match the type'
+            raise Exception(_('The --type that you set does not match the type'
                               ' of the given media_ids.'))
-
-    elif not args[0].type:
-        raise Exception(_('You must provide either a media_id or set the'
-                          ' --type flag'))
 
 
 def _reprocess_all(args):
@@ -98,15 +90,35 @@ def _run_reprocessing(args):
         return hook_handle(('media_reprocess', args[0].type), args)
 
 
+def _set_media_state(args):
+    if len(args[0].media_id) == 1:
+        args[0].state = MediaEntry.query.filter_by(id=args[0].media_id[0])\
+            .first().state
+
+    elif len(args[0].media_id) > 1:
+        media_states = []
+
+        for id in args[0].media_id:
+            media_states.append(MediaEntry.query.filter_by(id=id).first()
+                                .state)
+        for state in media_states:
+            if state != media_states[0]:
+                raise Exception(_('You can only reprocess media that is in the'
+                                  ' same state.'))
+
+        args[0].state = media_states[0]
+
+    elif not args[0].state:
+        args[0].state = 'processed'
+
+
 def reprocess(args):
     commands_util.setup_app(args[0])
 
-    if not args[0].state:
-        args[0].state = 'processed'
-
-    if args[0].all:
-        return _reprocess_all(args)
-
+    _set_media_state(args)
     _set_media_type(args)
+
+    if not args[0].media_id:
+        return _reprocess_all(args)
 
     return _run_reprocessing(args)
