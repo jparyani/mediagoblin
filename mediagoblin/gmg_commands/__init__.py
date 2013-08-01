@@ -45,6 +45,10 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.assetlink:assetlink_parser_setup',
         'func': 'mediagoblin.gmg_commands.assetlink:assetlink',
         'help': 'Link assets for themes and plugins for static serving'},
+    'reprocess': {
+        'setup': 'mediagoblin.gmg_commands.reprocess:reprocess_parser_setup',
+        'func': 'mediagoblin.gmg_commands.reprocess:reprocess',
+        'help': 'Reprocess media entries'},
     # 'theme': {
     #     'setup': 'mediagoblin.gmg_commands.theme:theme_parser_setup',
     #     'func': 'mediagoblin.gmg_commands.theme:theme',
