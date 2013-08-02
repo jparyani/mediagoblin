@@ -49,16 +49,18 @@ def reprocess_parser_setup(subparser):
 
 
 def _set_media_type(args):
+    """
+    This will verify that all media id's are of the same media_type. If the
+    --type flag is set, it will be replaced by the given media id's type.
+
+    If they are trying to process different media types, an Exception will be
+    raised.
+    """
     if args[0].media_id:
         if len(args[0].media_id) == 1:
-            media_type = MediaEntry.query.filter_by(id=args[0].media_id[0])\
+            args[0].type = MediaEntry.query.filter_by(id=args[0].media_id[0])\
                 .first().media_type.split('.')[-1]
 
-            if not args[0].type:
-                args[0].type = media_type
-            elif args[0].type != media_type:
-                raise Exception(_('The --type that you set does not match the'
-                                  'type of the given media_id.'))
         elif len(args[0].media_id) > 1:
             media_types = []
 
@@ -70,15 +72,17 @@ def _set_media_type(args):
                     raise Exception((u'You cannot reprocess different'
                                      ' media_types at the same time.'))
 
-            if not args[0].type:
-                args[0].type = media_types[0]
-            elif args[0].type != media_types[0]:
-                raise Exception(_('The --type that you set does not match the'
-                                  ' type of the given media_ids.'))
+            args[0].type = media_types[0]
 
 
 def _reprocess_all(args):
+    """
+    This handles reprocessing if no media_id's are given.
+    """
     if not args[0].type:
+        # If no media type is given, we can either regenerate all thumbnails,
+        # or try to reprocess all failed media
+
         if args[0].thumbnails:
             if args[0].available:
                 print _('Available options for regenerating all processed'
@@ -89,6 +93,7 @@ def _reprocess_all(args):
                 #TODO regenerate all thumbnails
                 pass
 
+        # Reprocess all failed media
         elif args[0].state == 'failed':
             if args[0].available:
                 print _('\n Available reprocess actions for all failed'
@@ -97,6 +102,8 @@ def _reprocess_all(args):
                 #TODO reprocess all failed entries
                 pass
 
+        # If here, they didn't set the --type flag and were trying to do
+        # something other the generating thumbnails or initial_processing
         else:
             raise Exception(_('You must set --type when trying to reprocess'
                               ' all media_entries, unless you set --state'
@@ -107,6 +114,8 @@ def _reprocess_all(args):
 
 
 def _run_reprocessing(args):
+    # Are they just asking for the available reprocessing options for the given
+    # media?
     if args[0].available:
         if args[0].state == 'failed':
             print _('\n Available reprocess actions for all failed'
@@ -118,11 +127,20 @@ def _run_reprocessing(args):
                         ' entries in the {} state'.format(args[0].type,
                                                           args[0].state))
     else:
+        # Run media reprocessing
         return hook_handle(('media_reprocess', args[0].type), args)
 
 
 def _set_media_state(args):
+    """
+    This will verify that all media id's are in the same state. If the
+    --state flag is set, it will be replaced by the given media id's state.
+
+    If they are trying to process different media states, an Exception will be
+    raised.
+    """
     if args[0].media_id:
+        # Only check if we are given media_ids
         if len(args[0].media_id) == 1:
             args[0].state = MediaEntry.query.filter_by(id=args[0].media_id[0])\
                 .first().state
@@ -133,6 +151,8 @@ def _set_media_state(args):
             for id in args[0].media_id:
                 media_states.append(MediaEntry.query.filter_by(id=id).first()
                                     .state)
+
+            # Make sure that all media are in the same state
             for state in media_states:
                 if state != media_states[0]:
                     raise Exception(_('You can only reprocess media that is in'
@@ -140,11 +160,13 @@ def _set_media_state(args):
 
             args[0].state = media_states[0]
 
+    # If no state was set, then we will default to the processed state
     if not args[0].state:
         args[0].state = 'processed'
 
 
 def reprocess(args):
+    # Run eagerly unless explicetly set not to
     if not args[0].celery:
         os.environ['CELERY_ALWAYS_EAGER'] = 'true'
     commands_util.setup_app(args[0])
@@ -152,6 +174,7 @@ def reprocess(args):
     _set_media_state(args)
     _set_media_type(args)
 
+    # If no media_ids were given, then try to reprocess all entries
     if not args[0].media_id:
         return _reprocess_all(args)
 

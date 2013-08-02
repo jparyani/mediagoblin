@@ -72,6 +72,9 @@ def get_media_type_and_manager(ext):
 
 
 def reprocess_action(args):
+    """
+    List the available actions for media in a given state
+    """
     if args[0].state == 'processed':
         print _('\n Available reprocessing actions for processed images:'
                 '\n \t --resize: thumb or medium'
@@ -81,9 +84,13 @@ def reprocess_action(args):
 
 
 def _parser(args):
+    """
+    Parses the unknown args from the gmg parser
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--resize')
+        '--resize',
+        choices=['thumb', 'medium'])
     parser.add_argument(
         '--size',
         nargs=2,
@@ -96,6 +103,10 @@ def _parser(args):
 
 
 def _check_eligible(entry_args, reprocess_args):
+    """
+    Check to see if we can actually process the given media as requested
+    """
+
     if entry_args.state == 'processed':
         if reprocess_args.initial_processing:
             raise Exception(_('You can not run --initial_processing on media'
@@ -118,36 +129,37 @@ def media_reprocess(args):
     reprocess_args = _parser(args)
     entry_args = args[0]
 
+    # Can we actually process the given media as requested?
     _check_eligible(entry_args, reprocess_args)
+
+    # Do we want to re-try initial processing?
     if reprocess_args.initial_processing:
         for id in entry_args.media_id:
             entry = MediaEntry.query.filter_by(id=id).first()
-            # Should we get the feed_url?
             run_process_media(entry)
 
+    # Are we wanting to resize the thumbnail or medium?
     elif reprocess_args.resize:
-        if reprocess_args.resize == 'medium' or reprocess_args.resize == \
-           'thumb':
-            for id in entry_args.media_id:
-                entry = MediaEntry.query.filter_by(id=id).first()
 
-                # For now we can only reprocess with the original file
-                if not entry.media_files.get('original'):
-                    raise Exception(_('The original file for this media entry'
-                                      ' does not exist.'))
+        # reprocess all given media entries
+        for id in entry_args.media_id:
+            entry = MediaEntry.query.filter_by(id=id).first()
 
-                reprocess_info = {'resize': reprocess_args.resize}
+            # For now we can only reprocess with the original file
+            if not entry.media_files.get('original'):
+                raise Exception(_('The original file for this media entry'
+                                    ' does not exist.'))
 
-                if reprocess_args.size:
-                    reprocess_info['max_width'] = reprocess_args.size[0]
-                    reprocess_info['max_height'] = reprocess_args.size[1]
+            reprocess_info = {'resize': reprocess_args.resize}
 
-                run_process_media(entry, reprocess_info=reprocess_info)
+            if reprocess_args.size:
+                reprocess_info['max_width'] = reprocess_args.size[0]
+                reprocess_info['max_height'] = reprocess_args.size[1]
 
-        else:
-            raise Exception(_('The --resize flag must set either "thumb"'
-                              ' or "medium".'))
+            run_process_media(entry, reprocess_info=reprocess_info)
 
+
+    # If we are here, they forgot to tell us how to reprocess
     else:
         _log.warn('You must set either --resize or --initial_processing flag'
                   ' to reprocess an image.')

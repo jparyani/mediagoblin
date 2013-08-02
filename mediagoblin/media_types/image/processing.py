@@ -73,12 +73,17 @@ def resize_image(proc_state, resized, keyname, target_name, new_size,
     proc_state.store_public(keyname, tmp_resized_filename, target_name)
 
 
-def resize_tool(proc_state, force, keyname, filename, target_name,
+def resize_tool(proc_state, force, keyname, target_name,
                 conversions_subdir, exif_tags, new_size=None):
+    # Get the filename of the original file
+    filename = proc_state.get_orig_filename()
+
+    # Use the default size if new_size was not given
     if not new_size:
         max_width = mgg.global_config['media:' + keyname]['max_width']
         max_height = mgg.global_config['media:' + keyname]['max_height']
         new_size = (max_width, max_height)
+
     # If the size of the original file exceeds the specified size for the desized
     # file, a target_name file is created and later associated with the media
     # entry.
@@ -125,74 +130,67 @@ def process_image(proc_state, reprocess_info=None):
     A Workbench() represents a local tempory dir. It is automatically
     cleaned up when this function exits.
     """
-    entry = proc_state.entry
-    workbench = proc_state.workbench
+    def init(self, proc_state):
+        self.proc_state = proc_state
+        self.entry = proc_state.entry
+        self.workbench = proc_state.workbench
 
-    # Conversions subdirectory to avoid collisions
-    conversions_subdir = os.path.join(
-        workbench.dir, 'conversions')
-    os.mkdir(conversions_subdir)
+        # Conversions subdirectory to avoid collisions
+        self.conversions_subdir = os.path.join(
+            self.workbench.dir, 'convirsions')
 
-    if reprocess_info:
-        _reprocess_image(proc_state, reprocess_info, conversions_subdir)
+        self.orig_filename = proc_state.get_orig_filename()
+        self.name_builder = FilenameBuilder(self.orig_filename)
 
-    else:
-        queued_filename = proc_state.get_queued_filename()
-        name_builder = FilenameBuilder(queued_filename)
+        # Exif extraction
+        self.exif_tags = extract_exif(self.orig_filename)
 
-        # EXIF extraction
-        exif_tags = extract_exif(queued_filename)
-        gps_data = get_gps_data(exif_tags)
+        os.mkdir(self.conversions_subdir)
 
-        # Always create a small thumbnail
-        resize_tool(proc_state, True, 'thumb', queued_filename,
-                    name_builder.fill('{basename}.thumbnail{ext}'),
-                    conversions_subdir, exif_tags)
+    def initial_processing(self):
+        # Is there any GPS data
+        gps_data = get_gps_data(self.exif_tags)
+
+         # Always create a small thumbnail
+        resize_tool(self.proc_state, True, 'thumb', self.orig_filename,
+                    self.name_builder.fill('{basename}.thumbnail{ext}'),
+                    self.conversions_subdir, self.exif_tags)
 
         # Possibly create a medium
-        resize_tool(proc_state, False, 'medium', queued_filename,
-                    name_builder.fill('{basename}.medium{ext}'),
-                    conversions_subdir, exif_tags)
+        resize_tool(self.proc_state, False, 'medium', self.orig_filename,
+                    self.name_builder.fill('{basename}.medium{ext}'),
+                    self.conversions_subdir, self.exif_tags)
 
         # Copy our queued local workbench to its final destination
-        proc_state.copy_original(name_builder.fill('{basename}{ext}'))
+        self.proc_state.copy_original(self.name_builder.fill('{basename}{ext}'))
 
         # Remove queued media file from storage and database
-        proc_state.delete_queue_file()
+        self.proc_state.delete_queue_file()
 
         # Insert exif data into database
-        exif_all = clean_exif(exif_tags)
+        exif_all = clean_exif(self.exif_tags)
 
         if len(exif_all):
-            entry.media_data_init(exif_all=exif_all)
+            self.entry.media_data_init(exif_all=exif_all)
 
         if len(gps_data):
             for key in list(gps_data.keys()):
                 gps_data['gps_' + key] = gps_data.pop(key)
-            entry.media_data_init(**gps_data)
+            self.entry.media_data_init(**gps_data)
 
+    def reprocess(self, reprocess_info):
+        new_size = None
 
-def _reprocess_image(proc_state, reprocess_info, conversions_subdir):
-    reprocess_filename = proc_state.get_reprocess_filename()
-    name_builder = FilenameBuilder(reprocess_filename)
+        # Did they specify a size?
+        if reprocess_info.get('max_width'):
+            max_width = reprocess_info['max_width']
+            max_height = reprocess_info['max_height']
 
-    exif_tags = extract_exif(reprocess_filename)
+            new_size = (max_width, max_height)
 
-    if reprocess_info.get('max_width'):
-        max_width = reprocess_info['max_width']
-        max_height = reprocess_info['max_height']
-    else:
-        max_width = mgg.global_config \
-            ['media:' + reprocess_info['resize']]['max_width']
-        max_height = mgg.global_config \
-            ['media:' + reprocess_info['resize']]['max_height']
-
-    new_size = (max_width, max_height)
-
-    resize_tool(proc_state, False, reprocess_info['resize'], reprocess_filename,
-                name_builder.fill('{basename}.thumbnail{ext}'),
-                conversions_subdir, exif_tags, new_size)
-
+        resize_tool(self.proc_state, False, reprocess_info['resize'],
+                    self.name_builder.fill('{basename}.medium{ext}'),
+                    self.conversions_subdir, self.exif_tags, new_size)
 
 if __name__ == '__main__':
     import sys

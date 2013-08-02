@@ -89,9 +89,17 @@ class ProcessMedia(task.Task):
 
             proc_state = ProcessingState(entry)
             with mgg.workbench_manager.create() as workbench:
+
                 proc_state.set_workbench(workbench)
-                # run the processing code
-                entry.media_manager.processor(proc_state, reprocess_info)
+                processor = entry.media_manager.processor(proc_state)
+
+                # If we have reprocess_info, let's reprocess
+                if reprocess_info:
+                    processor.reprocess(reprocess_info)
+
+                # Run initial processing
+                else:
+                    processor.initial_processing()
 
             # We set the state to processed and save the entry here so there's
             # no need to save at the end of the processing stage, probably ;)
