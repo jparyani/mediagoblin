@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
@@ -143,6 +144,8 @@ def reprocess(args):
     _set_media_state(args)
     _set_media_type(args)
 
+    import ipdb
+    ipdb.set_trace()
     if not args[0].media_id:
         return _reprocess_all(args)
 

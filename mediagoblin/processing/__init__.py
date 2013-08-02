@@ -87,6 +87,7 @@ class ProcessingState(object):
         self.entry = entry
         self.workbench = None
         self.queued_filename = None
+        self.reprocess_filename = None
 
     def set_workbench(self, wb):
         self.workbench = wb
@@ -127,6 +128,22 @@ class ProcessingState(object):
         mgg.queue_store.delete_file(queued_filepath)      # rm file
         mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
         self.entry.queued_media_file = []
+
+    def get_reprocess_filename(self):
+        """
+        Get the filename to use during reprocessing
+        """
+        # Currently only returns the original file, but eventually will return
+        # the highest quality file if the original doesn't exist
+        if self.reprocess_filename is not None:
+            return self.reprocess_filename
+
+        reprocess_filepath = self.entry.media_files['original'][2]
+        reprocess_filename = self.workbench.local_file(
+            mgg.public_store, reprocess_filepath,
+            'original')
+        self.reprocess_filename = reprocess_filename
+        return reprocess_filename
 
 
 def mark_entry_failed(entry_id, exc):

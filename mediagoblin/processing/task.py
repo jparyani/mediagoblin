@@ -68,13 +68,15 @@ class ProcessMedia(task.Task):
     """
     Pass this entry off for processing.
     """
-    def run(self, media_id, feed_url):
+    def run(self, media_id, feed_url, reprocess_info=None):
         """
         Pass the media entry off to the appropriate processing function
         (for now just process_image...)
 
         :param feed_url: The feed URL that the PuSH server needs to be
             updated for.
+        :param reprocess: A dict containing all of the necessary reprocessing
+            info for the media_type.
         """
         entry = MediaEntry.query.get(media_id)
 
@@ -89,7 +91,7 @@ class ProcessMedia(task.Task):
             with mgg.workbench_manager.create() as workbench:
                 proc_state.set_workbench(workbench)
                 # run the processing code
-                entry.media_manager.processor(proc_state)
+                entry.media_manager.processor(proc_state, reprocess_info)
 
             # We set the state to processed and save the entry here so there's
             # no need to save at the end of the processing stage, probably ;)
