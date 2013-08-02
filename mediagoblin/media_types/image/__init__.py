@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import argparse
 import datetime
 
 from mediagoblin.media_types import MediaManagerBase
@@ -74,7 +75,24 @@ def reprocess_action(args):
         return True
 
 
+def _parser(args):
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--resize',
+    action='store_true')
+    parser.add_argument(
+        '--size',
+        nargs=2)
+    parser.add_argument(
+        '--initial_processing',
+        action='store_true')
+
+    return parser.parse_args(args[1])
+
+
 def media_reprocess(args):
+    reprocess_args = _parser(args)
+    args = args[0]
     import ipdb
     ipdb.set_trace()
 
