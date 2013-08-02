@@ -86,27 +86,37 @@ class ProcessingState(object):
     def __init__(self, entry):
         self.entry = entry
         self.workbench = None
-        self.queued_filename = None
-        self.reprocess_filename = None
+        self.orig_filename = None
 
     def set_workbench(self, wb):
         self.workbench = wb
 
-    def get_queued_filename(self):
+    def get_orig_filename(self):
         """
         Get the a filename for the original, on local storage
+
+        If the media entry has a queued_media_file, use that, otherwise
+        use the original.
+
+        In the future, this will return the highest quality file available
+        if neither the original or queued file are available
         """
-        if self.queued_filename is not None:
-            return self.queued_filename
-        queued_filepath = self.entry.queued_media_file
-        queued_filename = self.workbench.localized_file(
-            mgg.queue_store, queued_filepath,
+        if self.orig_filename is not None:
+            return self.orig_filename
+
+        if self.entry.queued_media_file:
+            orig_filepath = self.entry.queued_media_file
+        else:
+            orig_filepath = self.entry.media_files['original']
+
+        orig_filename = self.workbench.localized_file(
+            mgg.queue_store, orig_filepath,
             'source')
-        self.queued_filename = queued_filename
-        return queued_filename
+        self.orig_filename = orig_filename
+        return orig_filename
 
     def copy_original(self, target_name, keyname=u"original"):
-        self.store_public(keyname, self.get_queued_filename(), target_name)
+        self.store_public(keyname, self.get_orig_filename(), target_name)
 
     def store_public(self, keyname, local_file, target_name=None):
         if target_name is None:
@@ -128,22 +138,6 @@ class ProcessingState(object):
         mgg.queue_store.delete_file(queued_filepath)      # rm file
         mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
         self.entry.queued_media_file = []
-
-    def get_reprocess_filename(self):
-        """
-        Get the filename to use during reprocessing
-        """
-        # Currently only returns the original file, but eventually will return
-        # the highest quality file if the original doesn't exist
-        if self.reprocess_filename is not None:
-            return self.reprocess_filename
-
-        reprocess_filepath = self.entry.media_files['original']
-        reprocess_filename = self.workbench.localized_file(
-            mgg.public_store, reprocess_filepath,
-            'source')
-        self.reprocess_filename = reprocess_filename
-        return reprocess_filename
 
 
 def mark_entry_failed(entry_id, exc):

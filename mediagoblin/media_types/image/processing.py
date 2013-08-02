@@ -75,7 +75,7 @@ def resize_image(proc_state, resized, keyname, target_name, new_size,
 
 def resize_tool(proc_state, force, keyname, target_name,
                 conversions_subdir, exif_tags, new_size=None):
-    # Get the filename of the original file
+    # filename -- the filename of the original image being resized
     filename = proc_state.get_orig_filename()
 
     # Use the default size if new_size was not given
