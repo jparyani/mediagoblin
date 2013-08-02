@@ -90,9 +90,27 @@ def _parser(args):
     return parser.parse_args(args[1])
 
 
+def _check_eligible(entry_args, reprocess_args):
+    if entry_args.state == 'processed':
+        if reprocess_args.initial_processing:
+            raise Exception(_('You can not run --initial_processing on media'
+                              ' that has already been processed.'))
+
+    if entry_args.state == 'failed':
+        if reprocess_args.resize:
+            raise Exception(_('You can not run --resize on media that has not'
+                              'been processed.'))
+
+    if entry_args.state == 'processing':
+        raise Exception(_('We currently do not support reprocessing on media'
+                          'that is in the "processing" state.'))
+
+
 def media_reprocess(args):
     reprocess_args = _parser(args)
-    args = args[0]
+    entry_args = args[0]
+
+    _check_eligible(entry_args, reprocess_args)
     import ipdb
     ipdb.set_trace()
 
