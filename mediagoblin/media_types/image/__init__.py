@@ -86,7 +86,8 @@ def _parser(args):
         '--resize')
     parser.add_argument(
         '--size',
-        nargs=2)
+        nargs=2,
+        type=int)
     parser.add_argument(
         '--initial_processing',
         action='store_true')
@@ -103,14 +104,14 @@ def _check_eligible(entry_args, reprocess_args):
     if entry_args.state == 'failed':
         if reprocess_args.resize:
             raise Exception(_('You can not run --resize on media that has not'
-                              'been processed.'))
+                              ' been processed.'))
         if reprocess_args.size:
             _log.warn('With --initial_processing, the --size flag will be'
                       ' ignored.')
 
     if entry_args.state == 'processing':
         raise Exception(_('We currently do not support reprocessing on media'
-                          'that is in the "processing" state.'))
+                          ' that is in the "processing" state.'))
 
 
 def media_reprocess(args):
@@ -133,15 +134,15 @@ def media_reprocess(args):
                 # For now we can only reprocess with the original file
                 if not entry.media_files.get('original'):
                     raise Exception(_('The original file for this media entry'
-                                      'does not exist.'))
+                                      ' does not exist.'))
 
                 reprocess_info = {'resize': reprocess_args.resize}
 
-                if reprocess_args.size and len(reprocess_args.size) == 2:
+                if reprocess_args.size:
                     reprocess_info['max_width'] = reprocess_args.size[0]
                     reprocess_info['max_height'] = reprocess_args.size[1]
 
-                run_process_media(entry, reprocess_info)
+                run_process_media(entry, reprocess_info=reprocess_info)
 
         else:
             raise Exception(_('The --resize flag must set either "thumb"'

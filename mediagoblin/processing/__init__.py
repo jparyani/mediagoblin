@@ -138,10 +138,10 @@ class ProcessingState(object):
         if self.reprocess_filename is not None:
             return self.reprocess_filename
 
-        reprocess_filepath = self.entry.media_files['original'][2]
-        reprocess_filename = self.workbench.local_file(
+        reprocess_filepath = self.entry.media_files['original']
+        reprocess_filename = self.workbench.localized_file(
             mgg.public_store, reprocess_filepath,
-            'original')
+            'source')
         self.reprocess_filename = reprocess_filename
         return reprocess_filename
 

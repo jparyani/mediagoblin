@@ -73,10 +73,8 @@ def resize_image(proc_state, resized, keyname, target_name, new_size,
     proc_state.store_public(keyname, tmp_resized_filename, target_name)
 
 
-def resize_tool(proc_state, force, keyname, target_name,
+def resize_tool(proc_state, force, keyname, filename, target_name,
                 conversions_subdir, exif_tags, new_size=None):
-    # filename -- the filename of the original image being resized
-    filename = proc_state.get_queued_filename()
     if not new_size:
         max_width = mgg.global_config['media:' + keyname]['max_width']
         max_height = mgg.global_config['media:' + keyname]['max_height']
@@ -90,8 +88,8 @@ def resize_tool(proc_state, force, keyname, target_name,
     except IOError:
         raise BadMediaFail()
     if force \
-        or im.size[0] > max_width \
-        or im.size[1] > max_height \
+        or im.size[0] > new_size[0]\
+        or im.size[1] > new_size[1]\
         or exif_image_needs_rotation(exif_tags):
         resize_image(
             proc_state, im, unicode(keyname), target_name,
@@ -129,8 +127,7 @@ def process_image(proc_state, reprocess_info=None):
     """
     entry = proc_state.entry
     workbench = proc_state.workbench
-    import ipdb
-    ipdb.set_trace()
+
     # Conversions subdirectory to avoid collisions
     conversions_subdir = os.path.join(
         workbench.dir, 'conversions')
@@ -148,12 +145,12 @@ def process_image(proc_state, reprocess_info=None):
         gps_data = get_gps_data(exif_tags)
 
         # Always create a small thumbnail
-        resize_tool(proc_state, True, 'thumb',
+        resize_tool(proc_state, True, 'thumb', queued_filename,
                     name_builder.fill('{basename}.thumbnail{ext}'),
                     conversions_subdir, exif_tags)
 
         # Possibly create a medium
-        resize_tool(proc_state, False, 'medium',
+        resize_tool(proc_state, False, 'medium', queued_filename,
                     name_builder.fill('{basename}.medium{ext}'),
                     conversions_subdir, exif_tags)
 
@@ -183,19 +180,16 @@ def _reprocess_image(proc_state, reprocess_info, conversions_subdir):
 
     if reprocess_info.get('max_width'):
         max_width = reprocess_info['max_width']
+        max_height = reprocess_info['max_height']
     else:
         max_width = mgg.global_config \
             ['media:' + reprocess_info['resize']]['max_width']
-
-    if reprocess_info.get('max_height'):
-        max_height = reprocess_info['max_height']
-    else:
         max_height = mgg.global_config \
             ['media:' + reprocess_info['resize']]['max_height']
 
     new_size = (max_width, max_height)
 
-    resize_tool(proc_state, False, reprocess_info['resize'],
+    resize_tool(proc_state, False, reprocess_info['resize'], reprocess_filename,
                 name_builder.fill('{basename}.thumbnail{ext}'),
                 conversions_subdir, exif_tags, new_size)
 
