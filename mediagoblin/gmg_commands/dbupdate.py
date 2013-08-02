@@ -96,7 +96,7 @@ forgotten to add it? ({1})'.format(plugin, exc))
                 plugin,
                 exc))
 
-            foundations = []
+            foundations = {}
         except AttributeError as exc:
             _log.debug('Could not find FOUNDATIONS in {0}.models, have you \
 forgotten to add it? ({1})'.format(plugin, exc))
@@ -126,7 +126,7 @@ def run_dbupdate(app_config, global_config):
 
 def run_all_migrations(db, app_config, global_config):
     """
-    Initializes or migrates a database that already has a 
+    Initializes or migrates a database that already has a
     connection setup and also initializes or migrates all
     extensions based on the config files.
 
