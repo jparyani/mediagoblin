@@ -13,6 +13,8 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import os
+
 from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.gmg_commands import util as commands_util
@@ -40,6 +42,10 @@ def reprocess_parser_setup(subparser):
         '--thumbnails',
         action="store_true",
         help="Regenerate thumbnails for all processed media")
+    subparser.add_argument(
+        '--celery',
+        action='store_true',
+        help="Don't process eagerly, pass off to celery")
 
 
 def _set_media_type(args):
@@ -139,13 +145,13 @@ def _set_media_state(args):
 
 
 def reprocess(args):
+    if not args[0].celery:
+        os.environ['CELERY_ALWAYS_EAGER'] = 'true'
     commands_util.setup_app(args[0])
 
     _set_media_state(args)
     _set_media_type(args)
 
-    import ipdb
-    ipdb.set_trace()
     if not args[0].media_id:
         return _reprocess_all(args)
 
