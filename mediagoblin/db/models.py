@@ -585,6 +585,21 @@ MODELS = [
     Notification, CommentNotification, ProcessingNotification,
     CommentSubscription]
 
+"""
+ Foundations are the default rows that are created immediately after the tables 
+ are initialized. Each entry to  this dictionary should be in the format of:
+                 ModelConstructorObject:List of Dictionaries
+ (Each Dictionary represents a row on the Table to be created, containing each
+  of the columns' names as a key string, and each of the columns' values as a
+  value)
+
+ ex. [NOTE THIS IS NOT BASED OFF OF OUR USER TABLE]
+    user_foundations = [{'name':u'Joanna', 'age':24},
+                        {'name':u'Andrea', 'age':41}]
+
+    FOUNDATIONS = {User:user_foundations}
+"""
+FOUNDATIONS = {}
 
 ######################################################
 # Special, migrations-tracking table
