@@ -32,14 +32,15 @@ def dbupdate_parse_setup(subparser):
 
 
 class DatabaseData(object):
-    def __init__(self, name, models, migrations):
+    def __init__(self, name, models, foundations, migrations):
         self.name = name
         self.models = models
+        self.foundations = foundations
         self.migrations = migrations
 
     def make_migration_manager(self, session):
         return MigrationManager(
-            self.name, self.models, self.migrations, session)
+            self.name, self.models, self.foundations, self.migrations, session)
 
 
 def gather_database_data(plugins):
@@ -54,10 +55,11 @@ def gather_database_data(plugins):
     # Add main first
     from mediagoblin.db.models import MODELS as MAIN_MODELS
     from mediagoblin.db.migrations import MIGRATIONS as MAIN_MIGRATIONS
+    from mediagoblin.db.models import FOUNDATIONS as MAIN_FOUNDATIONS
 
     managed_dbdata.append(
         DatabaseData(
-            u'__main__', MAIN_MODELS, MAIN_MIGRATIONS))
+            u'__main__', MAIN_MODELS, MAIN_FOUNDATIONS, MAIN_MIGRATIONS))
 
     for plugin in plugins:
         try:
@@ -83,13 +85,26 @@ forgotten to add it? ({1})'.format(plugin, exc))
 
             migrations = {}
         except AttributeError as exc:
-            _log.debug('Cloud not find MIGRATIONS in {0}.migrations, have you \
+            _log.debug('Could not find MIGRATIONS in {0}.migrations, have you \
 forgotten to add it? ({1})'.format(plugin, exc))
             migrations = {}
 
+        try:
+            foundations = import_component('{0}.models:FOUNDATIONS'.format(plugin))
+        except ImportError as exc:
+            _log.debug('No foundations found for {0}: {1}'.format(
+                plugin,
+                exc))
+
+            foundations = {}
+        except AttributeError as exc:
+            _log.debug('Could not find FOUNDATIONS in {0}.models, have you \
+forgotten to add it? ({1})'.format(plugin, exc))
+            foundations = {}
+
         if models:
             managed_dbdata.append(
-                    DatabaseData(plugin, models, migrations))
+                    DatabaseData(plugin, models, foundations, migrations))
 
 
     return managed_dbdata
@@ -111,7 +126,7 @@ def run_dbupdate(app_config, global_config):
 
 def run_all_migrations(db, app_config, global_config):
     """
-    Initializes or migrates a database that already has a 
+    Initializes or migrates a database that already has a
     connection setup and also initializes or migrates all
     extensions based on the config files.
 

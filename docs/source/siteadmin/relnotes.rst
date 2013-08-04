@@ -108,8 +108,8 @@ please note the following:
 
    .. code-block:: ini
 
-      [plugins]
-      [[mediagoblin.plugins.geolocation]]
+    [plugins]
+    [[mediagoblin.plugins.geolocation]]
 
 If you have your own theme, you may need to make some adjustments to
 it as some theme related things may have changed in this release.  If
