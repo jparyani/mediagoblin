@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
-{% extends 'mediagoblin/user_pages/media.html' %}
+{% extends 'mediagoblin/user_pages/blog_media.html' %}
 
 {% block mediagoblin_head %}
   {{ super() }}
@@ -24,7 +24,7 @@
 
 {% block mediagoblin_media %}
 <h1> {{media.title}}</h1>
-<p>{{media.description}}</p>
+<p>{{media.description|safe}}</p>
 
 {% endblock %}
   
