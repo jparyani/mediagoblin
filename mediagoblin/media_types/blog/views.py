@@ -73,7 +73,7 @@ def blog_edit(request):
                 _log.info("Here")
                 blog = Blog()
                 blog.title = unicode(form.title.data)
-                blog.description = unicode(form.description.data)  #remember clean html data.
+                blog.description = unicode(cleaned_markdown_conversion((form.description.data)))  #remember clean html data.
                 blog.author = request.user.id
                 blog.generate_slug()
                
@@ -96,7 +96,7 @@ def blog_edit(request):
         if request.method == 'GET':
             defaults = dict(
                 title = blog.title,
-                description = blog.description,
+                description = cleaned_markdown_conversion(blog.description),
                 author = request.user.id) 
             
             form = blog_forms.BlogEditForm(**defaults)
@@ -110,7 +110,7 @@ def blog_edit(request):
         else:
             if request.method == 'POST' and form.validate():
                 blog.title = unicode(form.title.data)
-                blog.description = unicode(form.description.data)
+                blog.description = unicode(cleaned_markdown_conversion((form.description.data)))
                 blog.author = request.user.id
                 blog.generate_slug()
                 
@@ -127,11 +127,7 @@ def blogpost_create(request):
     form = blog_forms.BlogPostEditForm(request.form, license=request.user.license_preference)
     
     if request.method == 'POST' and form.validate():
-       
-        state_value = request.form['status']
-        if state_value == u'Publish':
-            state_value = u'processed'
-           
+                  
         blog_slug = request.matchdict.get('blog_slug')
         blog = request.db.Blog.query.filter_by(slug=blog_slug,
             author=request.user.id).first()
@@ -140,11 +136,11 @@ def blogpost_create(request):
         blogpost = request.db.MediaEntry()
         blogpost.media_type = 'mediagoblin.media_types.blogpost'
         blogpost.title = unicode(form.title.data)
-        blogpost.description = unicode(form.description.data)
+        blogpost.description = unicode(cleaned_markdown_conversion((form.description.data)))
         blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
         blogpost.license = unicode(form.license.data) or None
         blogpost.uploader = request.user.id
-        blogpost.state = state_value
+        blogpost.state = u'processed'
         
         blogpost.generate_slug()
         
@@ -183,23 +179,19 @@ def blogpost_edit(request):
     
     defaults = dict(
                 title = blogpost.title,
-                description = blogpost.description,
+                description = cleaned_markdown_conversion(blogpost.description),
                 tags=media_tags_as_string(blogpost.tags),
                 license=blogpost.license)
     
     form = blog_forms.BlogPostEditForm(request.form, **defaults)
     if request.method == 'POST' and form.validate():
         
-        state_value = request.form['status']
-        if state_value == u'Publish':
-            state_value = u'processed'
         blogpost.title = unicode(form.title.data)
-        blogpost.description = unicode(form.description.data)
+        blogpost.description = unicode(cleaned_markdown_conversion((form.description.data)))
         blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
         blogpost.license = unicode(form.license.data) 
         
         blogpost.generate_slug()
-        blogpost.state = state_value
         blogpost.save()
         
         add_message(request, SUCCESS, _('Woohoo! edited blogpost is submitted'))
@@ -252,7 +244,6 @@ def blog_dashboard(request):
 def blog_post_listing(request):
     
     blog_owner = request.matchdict.get('user')
-    _log.info("Username is %s"%(blog_owner))
     owner_user = User.query.filter_by(username=blog_owner).one()
     
     if not owner_user:
