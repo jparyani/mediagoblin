@@ -307,6 +307,7 @@ text-align: center;
   padding: 0px;
   background-color: #86D4B1;
   text-transform:capitalize;
+  text-decoration: none;
   border-radius: 4px;
  }
  
@@ -317,7 +318,7 @@ text-align: center;
   margin-right: auto;
   background-color: #DDA0DD;
   border-radius: 4px;
-  
+  text-transform: capitalize;
  }
 
 .b_list_des {

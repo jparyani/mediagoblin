@@ -23,11 +23,11 @@
   {% trans %}{{ blog_owner }} 's Blog{% endtrans %} &mdash; {{ super() }}
 {%- endblock %}
 {% block mediagoblin_content %}
-    <div class="b_list_owner"> <h1> {{ blog_owner }} 's Blog </h1></div>
+    <div class="b_list_owner"> <h1><font color="black"> {{ blog_owner }} 's Blog</font></h1></div>
     <div>
         {% for post in blog_posts[0:9] %}
-            <div class="b_listing_title"><a href="{{ post.url_for_self(request.urlgen) }}"><h2>{{ post.title }}</h2></a></div>
-            <div class="b_list_des"> <p>{{ post.description|safe }} </p></div>
+            <div class="b_listing_title"><a href="{{ post.url_for_self(request.urlgen) }}"><h2><font color="black">{{ post.title }}</font></h2></a></div>
+            <div class="b_list_des"> <p>{{ post.description|safe }} </font></p></div>
         {% endfor %}
     </div>
 {% endblock %}
