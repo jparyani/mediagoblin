@@ -22,6 +22,13 @@
 {{blog.title}} Dashboard &mdash; {{ super() }}
 {%- endblock title %}
 
+{% block mediagoblin_head%}
+<style type = "text/css">
+    td > a { text-decoration:none; font-weight: bold; }
+</style>
+{% endblock %}
+
+
 {% block mediagoblin_content %}
 <h1> {{blog.title}}</h1>
 <p>

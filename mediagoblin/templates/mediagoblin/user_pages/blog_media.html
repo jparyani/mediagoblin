@@ -39,7 +39,7 @@
               'mediagoblin.user_pages.user_home',
               user=media.get_uploader.username),
               username=media.get_uploader.username -%}
-    ❖ Browsing media by <a href="{{user_url}}">{{username}}</a>
+    ❖ Blog post by <a href="{{user_url}}">{{username}}</a>
     {%- endtrans -%}
   </p>
   {% include "mediagoblin/utils/prev_next.html" %}
