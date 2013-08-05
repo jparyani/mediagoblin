@@ -301,6 +301,29 @@ text-align: center;
   margin-right: auto;
 }
 
+.b_listing_title {
+  height: 30px;
+  width: 100%;
+  padding: 0px;
+  background-color: #86D4B1;
+  text-transform:capitalize;
+  border-radius: 4px;
+ }
+ 
+.b_list_owner {
+  height: 100px;
+  width: 100%;
+  padding: 0em;
+  margin-right: auto;
+  background-color: #DDA0DD;
+  border-radius: 4px;
+  
+ }
+
+.b_list_des {
+  text-align:justify;
+ }
+
 
 .edit_box {
   border-top: 6px dashed #D49086
