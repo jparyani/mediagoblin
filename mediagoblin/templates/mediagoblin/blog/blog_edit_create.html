@@ -30,7 +30,7 @@
       </div>
       <b>Description</b>
       <div class="blog_form_field_input textarea">
-         <h3>{{form.description}}</h3>
+         <h3>{{form.description|safe}}</h3>
       </div>
       <div class="form_submit_buttons">
         {{ csrf_token }}
