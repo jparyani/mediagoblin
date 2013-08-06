@@ -19,7 +19,7 @@ import logging
 
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.media_types import MediaManagerBase
-from mediagoblin.media_types.image.processing import process_image, \
+from mediagoblin.media_types.image.processing import ProcessImage, \
     sniff_handler
 from mediagoblin.submit.lib import run_process_media
 from mediagoblin.tools import pluginapi
@@ -38,7 +38,7 @@ def setup_plugin():
 
 class ImageMediaManager(MediaManagerBase):
     human_readable = "Image"
-    processor = staticmethod(process_image)
+    processor = ProcessImage
     display_template = "mediagoblin/media_displays/image.html"
     default_thumb = "images/media_thumbs/image.png"
 

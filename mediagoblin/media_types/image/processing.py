@@ -124,7 +124,7 @@ def sniff_handler(media_file, **kw):
     return None
 
 
-def process_image(proc_state, reprocess_info=None):
+class ProcessImage(object):
     """Code to process an image. Will be run by celery.
 
     A Workbench() represents a local tempory dir. It is automatically
