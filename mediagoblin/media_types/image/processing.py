@@ -134,22 +134,23 @@ class ProcessImage(object):
     A Workbench() represents a local tempory dir. It is automatically
     cleaned up when this function exits.
     """
-    def init(self, proc_state):
-        self.proc_state = proc_state
-        self.entry = proc_state.entry
-        self.workbench = proc_state.workbench
+    def __init__(self, proc_state=None):
+        if proc_state:
+            self.proc_state = proc_state
+            self.entry = proc_state.entry
+            self.workbench = proc_state.workbench
 
-        # Conversions subdirectory to avoid collisions
-        self.conversions_subdir = os.path.join(
-            self.workbench.dir, 'convirsions')
+            # Conversions subdirectory to avoid collisions
+            self.conversions_subdir = os.path.join(
+                self.workbench.dir, 'convirsions')
 
-        self.orig_filename = proc_state.get_orig_filename()
-        self.name_builder = FilenameBuilder(self.orig_filename)
+            self.orig_filename = proc_state.get_orig_filename()
+            self.name_builder = FilenameBuilder(self.orig_filename)
 
-        # Exif extraction
-        self.exif_tags = extract_exif(self.orig_filename)
+            # Exif extraction
+            self.exif_tags = extract_exif(self.orig_filename)
 
-        os.mkdir(self.conversions_subdir)
+            os.mkdir(self.conversions_subdir)
 
     def reprocess_action(self, args):
         """
@@ -174,6 +175,7 @@ class ProcessImage(object):
         parser.add_argument(
             '--size',
             nargs=2,
+            metavar=('max_width', 'max_height'),
             type=int)
         parser.add_argument(
             '--initial_processing',

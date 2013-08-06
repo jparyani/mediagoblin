@@ -34,7 +34,7 @@ def setup_plugin():
 
 class ImageMediaManager(MediaManagerBase):
     human_readable = "Image"
-    processor = ProcessImage
+    processor = staticmethod(ProcessImage)
     display_template = "mediagoblin/media_displays/image.html"
     default_thumb = "images/media_thumbs/image.png"
 

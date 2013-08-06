@@ -106,11 +106,13 @@ class ProcessingState(object):
 
         if self.entry.queued_media_file:
             orig_filepath = self.entry.queued_media_file
+            storage = mgg.queue_store
         else:
             orig_filepath = self.entry.media_files['original']
+            storage = mgg.public_store
 
         orig_filename = self.workbench.localized_file(
-            mgg.queue_store, orig_filepath,
+            storage, orig_filepath,
             'source')
         self.orig_filename = orig_filename
         return orig_filename
