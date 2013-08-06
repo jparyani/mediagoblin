@@ -108,6 +108,7 @@
               {{ csrf_token }}
           </div>
           <input type="hidden" value="{{ request.urlgen('mediagoblin.user_pages.media_preview_comment') }}" id="previewURL" />
+          <input type="hidden" value="{% trans %}Comment Preview{% endtrans %}" id="previewText"/>
         </form>
 	<div id="comment_preview"></div>
       {% endif %}

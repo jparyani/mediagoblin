@@ -17,7 +17,6 @@
 import logging
 import datetime
 import json
-import urllib
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
@@ -199,15 +198,11 @@ def media_post_comment(request, media):
 
 
 def media_preview_comment(request):
+    """Runs a comment through markdown so it can be previewed."""
+    comment = unicode(request.form['comment_content'])
+    cleancomment = { "content":cleaned_markdown_conversion(comment)}
 
-    comment = unicode(urllib.unquote(request.query_string).decode('string_escape'))
-    if comment.startswith('"') and comment.endswith('"'):
-        comment = comment[1:-1]
-    print comment
-    #decoderRing = json.JSONDecoder()
-   #comment = decoderRing.decode(request.query_string)
-
-    return Response(json.dumps(cleaned_markdown_conversion(comment)))
+    return Response(json.dumps(cleancomment))
 
 @get_media_entry_by_id
 @require_active_login
