@@ -109,6 +109,10 @@
               <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
                 {%- trans %}Create new collection{% endtrans -%}
               </a>
+              <a class="button_action" href="{{ request.urlgen('mediagoblin.media_types.blog.create', 
+                                                                 user=request.user.username) }}">
+               {%- trans %}Start Blogging{% endtrans -%}
+              </a>
               {% if request.user.is_admin %}
                 <p>
                   <span class="dropdown_title">Admin powers:</span>
