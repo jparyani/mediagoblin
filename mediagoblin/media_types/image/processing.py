@@ -20,12 +20,16 @@ except ImportError:
     import Image
 import os
 import logging
+import argparse
 
 from mediagoblin import mg_globals as mgg
+from mediagoblin.db.models import MediaEntry
 from mediagoblin.processing import BadMediaFail, FilenameBuilder
+from mediagoblin.submit.lib import run_process_media
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful, \
     exif_image_needs_rotation
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 _log = logging.getLogger(__name__)
 
@@ -147,6 +151,58 @@ class ProcessImage(object):
 
         os.mkdir(self.conversions_subdir)
 
+    def reprocess_action(self, args):
+        """
+        List the available actions for media in a given state
+        """
+        if args[0].state == 'processed':
+            print _('\n Available reprocessing actions for processed images:'
+                    '\n \t --resize: thumb or medium'
+                    '\n Options:'
+                    '\n \t --size: max_width max_height (defaults to'
+                    'config specs)')
+            return True
+
+    def _parser(self, args):
+        """
+        Parses the unknown args from the gmg parser
+        """
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '--resize',
+            choices=['thumb', 'medium'])
+        parser.add_argument(
+            '--size',
+            nargs=2,
+            type=int)
+        parser.add_argument(
+            '--initial_processing',
+            action='store_true')
+
+        return parser.parse_args(args[1])
+
+    def _check_eligible(self, entry_args, reprocess_args):
+        """
+        Check to see if we can actually process the given media as requested
+        """
+
+        if entry_args.state == 'processed':
+            if reprocess_args.initial_processing:
+                raise Exception(_('You can not run --initial_processing on'
+                                  ' media that has already been processed.'))
+
+        if entry_args.state == 'failed':
+            if reprocess_args.resize:
+                raise Exception(_('You can not run --resize on media that has'
+                                  ' not been processed.'))
+            if reprocess_args.size:
+                _log.warn('With --initial_processing, the --size flag will be'
+                          ' ignored.')
+
+        if entry_args.state == 'processing':
+            raise Exception(_('We currently do not support reprocessing on'
+                              ' media that is in the "processing" state.'))
+
     def initial_processing(self):
         # Is there any GPS data
         gps_data = get_gps_data(self.exif_tags)
@@ -179,9 +235,14 @@ class ProcessImage(object):
             self.entry.media_data_init(**gps_data)
 
     def reprocess(self, reprocess_info):
+        """
+        This function actually does the reprocessing when called by
+        ProcessMedia in gmg/processing/task.py
+        """
         new_size = None
 
-        # Did they specify a size?
+        # Did they specify a size? They must specify either both or none, so
+        # we only need to check if one is present
         if reprocess_info.get('max_width'):
             max_width = reprocess_info['max_width']
             max_height = reprocess_info['max_height']
@@ -191,6 +252,53 @@ class ProcessImage(object):
         resize_tool(self.proc_state, False, reprocess_info['resize'],
                     self.name_builder.fill('{basename}.medium{ext}'),
                     self.conversions_subdir, self.exif_tags, new_size)
+
+    def media_reprocess(self, args):
+        """
+        This function handles the all of the reprocessing logic, before calling
+        gmg/submit/lib/run_process_media
+        """
+        reprocess_args = self._parser(args)
+        entry_args = args[0]
+
+        # Can we actually process the given media as requested?
+        self._check_eligible(entry_args, reprocess_args)
+
+        # Do we want to re-try initial processing?
+        if reprocess_args.initial_processing:
+            for id in entry_args.media_id:
+                entry = MediaEntry.query.filter_by(id=id).first()
+                run_process_media(entry)
+
+        # Are we wanting to resize the thumbnail or medium?
+        elif reprocess_args.resize:
+
+            # reprocess all given media entries
+            for id in entry_args.media_id:
+                entry = MediaEntry.query.filter_by(id=id).first()
+
+                # For now we can only reprocess with the original file
+                if not entry.media_files.get('original'):
+                    raise Exception(_('The original file for this media entry'
+                                      ' does not exist.'))
+
+                reprocess_info = self._get_reprocess_info(reprocess_args)
+                run_process_media(entry, reprocess_info=reprocess_info)
+
+        # If we are here, they forgot to tell us how to reprocess
+        else:
+            _log.warn('You must set either --resize or --initial_processing'
+                      ' flag to reprocess an image.')
+
+    def _get_reprocess_info(self, args):
+        """ Returns a dict with the info needed for reprocessing"""
+        reprocess_info = {'resize': args.resize}
+
+        if args.size:
+            reprocess_info['max_width'] = args.size[0]
+            reprocess_info['max_height'] = args.size[1]
+
+        return reprocess_info
 
 if __name__ == '__main__':
     import sys
