@@ -27,4 +27,10 @@ def may_edit_blogpost(request, blog):
     if request.user.is_admin or request.user.id == blog.author:
         return True
     return False
+
+def set_blogpost_state(request, blogpost):
+    if request.form['status'] == 'Publish':
+        blogpost.state = u'processed'
+    else:
+        blogpost.state = u'failed'
     
