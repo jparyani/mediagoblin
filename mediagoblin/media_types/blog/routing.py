@@ -34,13 +34,13 @@ add_route('mediagoblin.media_types.blog.blogpost.edit',
 #URL mapping for blog-collection-admin, where all the blogs of the user
 #are listed. providing the facility of edit, delete and view a blog. 
 #view facility redirects to blog-admin page of that particular blog.  
-add_route('mediagoblin.media_types.blog.blog-collection-admin', \
-	'/u/<string:user>/blog-collection-admin/', 'mediagoblin.media_types.blog.views:blog-collection-admin')
+add_route('mediagoblin.media_types.blog.blog-collection-admin', 
+	'/u/<string:user>/blog-collection-admin/', 
+    'mediagoblin.media_types.blog.views:blog-collection-admin')
 
 #URL mapping for creating a new blog.
 add_route('mediagoblin.media_types.blog.create', '/u/<string:user>/b/create/',
 	'mediagoblin.media_types.blog.views:blog_edit')
-
 
 #URL mapping for editing an existing blog.
 add_route('mediagoblin.media_types.blog.edit', '/u/<string:user>/b/<string:blog_slug>/edit/',
@@ -49,6 +49,11 @@ add_route('mediagoblin.media_types.blog.edit', '/u/<string:user>/b/<string:blog_
 #URL mapping for blog_post_listing view.
 add_route('mediagoblin.media_types.blog.blog_post_listing', '/u/<string:user>/b/',
 	'mediagoblin.media_types.blog.views:blog_post_listing')
+    
+#URL mapping for blog post draft display.
+add_route('mediagoblin.media_types.blog.blogpost_draft_view', 
+    '/u/<string:user>/b/<string:blog_slug>/p/<string:blog_post_slug>/draft/',
+    'mediagoblin.media_types.blog.views:draft_view')
 	
 
 
