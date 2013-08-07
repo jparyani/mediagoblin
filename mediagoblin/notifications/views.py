@@ -14,19 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.tools.response import render_to_response, render_404, redirect
+from mediagoblin.tools.response import redirect
 from mediagoblin.tools.translate import pass_to_ugettext as _
-from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
-    get_media_entry_by_id,
-    require_active_login, user_may_delete_media, user_may_alter_collection,
-    get_user_collection, get_user_collection_item, active_user_from_url)
-
+from mediagoblin.decorators import get_user_media_entry, require_active_login
 from mediagoblin import messages
 
 from mediagoblin.notifications import add_comment_subscription, \
-        silence_comment_subscription, mark_comment_notification_seen
+    silence_comment_subscription, mark_comment_notification_seen
 
-from werkzeug.exceptions import BadRequest
 
 @get_user_media_entry
 @require_active_login
@@ -40,6 +35,7 @@ def subscribe_comments(request, media):
                          % media.title)
 
     return redirect(request, location=media.url_for_self(request.urlgen))
+
 
 @get_user_media_entry
 @require_active_login
