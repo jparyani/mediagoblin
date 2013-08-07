@@ -26,7 +26,7 @@ from mediagoblin import mg_globals
 
 from mediagoblin.media_types.blog import forms as blog_forms
 from mediagoblin.media_types.blog.models import Blog, BlogPostData
-from mediagoblin.media_types.blog.lib import may_edit_blogpost
+from mediagoblin.media_types.blog.lib import may_edit_blogpost, set_blogpost_state
 
 from mediagoblin.messages import add_message, SUCCESS, ERROR
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
@@ -123,16 +123,15 @@ def blog_edit(request):
 @require_active_login        
 def blogpost_create(request):
     
-
     form = blog_forms.BlogPostEditForm(request.form, license=request.user.license_preference)
     
     if request.method == 'POST' and form.validate():
-                  
         blog_slug = request.matchdict.get('blog_slug')
         blog = request.db.Blog.query.filter_by(slug=blog_slug,
             author=request.user.id).first()
+        if not blog:
+            return render_404(request)
         
-
         blogpost = request.db.MediaEntry()
         blogpost.media_type = 'mediagoblin.media_types.blogpost'
         blogpost.title = unicode(form.title.data)
@@ -140,10 +139,9 @@ def blogpost_create(request):
         blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
         blogpost.license = unicode(form.license.data) or None
         blogpost.uploader = request.user.id
-        blogpost.state = u'processed'
-        
         blogpost.generate_slug()
         
+        set_blogpost_state(request, blogpost)
         blogpost.save()
         
         # connect this blogpost to its blog
@@ -185,12 +183,11 @@ def blogpost_edit(request):
     
     form = blog_forms.BlogPostEditForm(request.form, **defaults)
     if request.method == 'POST' and form.validate():
-        
         blogpost.title = unicode(form.title.data)
         blogpost.description = unicode(cleaned_markdown_conversion((form.description.data)))
         blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
         blogpost.license = unicode(form.license.data) 
-        
+        set_blogpost_state(request, blogpost)
         blogpost.generate_slug()
         blogpost.save()
         
@@ -263,6 +260,25 @@ def blog_post_listing(request):
         })
     
         
+def draft_view(request):
+    blog_slug = request.matchdict.get('blog_slug')
+    blog_post_slug = request.matchdict.get('blog_post_slug')
+    user = request.matchdict.get('user')
+   
+    blog = request.db.Blog.query.filter_by(author=request.user.id, slug=blog_slug).first()
+    blogpost = request.db.MediaEntry.query.filter_by(state = u'failed', uploader=request.user.id, slug=blog_post_slug).first()
     
+    if not blog or not blogpost:
+        return render_404(request)
+        
+    return render_to_response(
+        request,
+        'mediagoblin/blog/blogpost_draft_view.html',
+        {'blogpost':blogpost,
+         'blog': blog
+         })
+        
+        
+        
     
  
