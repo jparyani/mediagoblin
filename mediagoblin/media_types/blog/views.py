@@ -84,7 +84,7 @@ def blog_edit(request):
         else:
             #the case when max blog count is one.
             blog = request.db.Blog.query.filter_by(author=request.user.id).first()
-            add_message(request, ERROR, "You can not create any more blogs")
+            add_message(request, ERROR, "Welcome! You already have created a blog.")
             return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
                         user=request.user.username,
                         blog_slug=blog.slug)
