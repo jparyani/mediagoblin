@@ -94,6 +94,8 @@ class ProcessMedia(task.Task):
             # We set the state to processed and save the entry here so there's
             # no need to save at the end of the processing stage, probably ;)
             entry.state = u'processed'
+            #Generate the slug here rather than earlier when it could have failed.
+            entry.generate_slug()
             entry.save()
 
             # Notify the PuSH servers as async task

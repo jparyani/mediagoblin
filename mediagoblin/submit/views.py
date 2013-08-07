@@ -78,9 +78,6 @@ def submit_start(request):
                 entry.tags = convert_to_tag_list_of_dicts(
                     submit_form.tags.data)
 
-                # Generate a slug from the title
-                entry.generate_slug()
-
                 queue_file = prepare_queue_task(request.app, entry, filename)
 
                 with queue_file:
