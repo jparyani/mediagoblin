@@ -59,9 +59,21 @@
         </tr>
         {% for blog_post in blog_posts_list %}
         <tr>
-            <td><a href="{{ blog_post.url_for_self(request.urlgen) }}">{{ blog_post.title }}</a></td>
+            {% if blog_post.state == 'processed' %}
+                <td><a href="{{ blog_post.url_for_self(request.urlgen) }}">{{ blog_post.title }}</a></td>
+            {% else %}
+                {% set draft_url = request.urlgen('mediagoblin.media_types.blog.blogpost_draft_view', 
+                                      blog_slug=blog.slug, user=request.user.username, 
+                                      blog_post_slug=blog_post.slug) %}
+                <td><a href="{{ draft_url }}">{{ blog_post.title }}</a></td>
+            {% endif %}
             <td>{{ blog_post.created.strftime("%F %R") }}</td>
-            <td><h6><em>{{ blog_post.state }}</em></h6></td>
+            
+            {% if blog_post.state == 'processed' %}
+            <td><h6><em>Published</em></h6></td>
+            {% else %}
+            <td><h6><em>Draft</em></h6></td>
+            {% endif %}
             {% set blogpost_edit_url = request.urlgen('mediagoblin.media_types.blog.blogpost.edit', 
                                       blog_slug=blog.slug, user=request.user.username, 
                                       blog_post_slug=blog_post.slug) %}
