@@ -74,6 +74,58 @@ class FilenameBuilder(object):
                              ext=self.ext)
 
 
+
+
+class MediaProcessor(object):
+    # You MUST override this in the child MediaProcessor!
+    name = None
+
+    def __init__(self, manager):
+        self.manager = manager
+
+    def media_is_eligibile(self, media_entry):
+        raise NotImplementedError
+
+    def process(self):
+        raise NotImplementedError
+
+    def generate_parser(self):
+        raise NotImplementedError
+
+
+class ProcessingManager(object):
+    def __init__(self, entry):
+        self.entry = entry
+        # May merge these two classes soon....
+        self.state = ProcessingState(entry)
+
+        # Dict of all MediaProcessors of this media type
+        self.processors = {}
+
+    def add_processor(self, processor):
+        """
+        Add a processor class to this media type
+        """
+        name = processor.name
+        if name is None:
+            raise AttributeError("Processor class's .name attribute not set")
+        
+        self.processors[name] = processor
+
+    def list_eligible_processors(self):
+        """
+        List all processors that this media entry is eligible to be processed
+        for.
+        """
+        return [
+            processor
+            for processor in self.processors.keys()
+            if processor.media_is_eligible(self.entry)]
+
+    def process(self, processor):
+        pass
+
+
 class ProcessingState(object):
     """
     The first and only argument to the "processor" of a media type
