@@ -33,4 +33,17 @@ var notifications = {};
 
 $(document).ready(function () {
     notifications.init();
+
+    var mark_all_comments_seen = document.getElementById('mark_all_comments_seen');
+
+    if (mark_all_comments_seen) {
+        mark_all_comments_seen.href = '#';
+        mark_all_comments_seen.onclick = function() {
+            $.ajax({
+                type: 'GET',
+                url: '/notifications/comments/mark_all_seen/',
+                success: function(res, status, xhr) { window.location.reload(); },
+            });
+        }
+    }
 });

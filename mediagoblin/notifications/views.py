@@ -24,7 +24,7 @@ from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
 from mediagoblin import messages
 
 from mediagoblin.notifications import add_comment_subscription, \
-        silence_comment_subscription
+        silence_comment_subscription, mark_comment_notification_seen
 
 from werkzeug.exceptions import BadRequest
 
@@ -52,3 +52,17 @@ def silence_comments(request, media):
                            ' %s.') % media.title)
 
     return redirect(request, location=media.url_for_self(request.urlgen))
+
+
+@require_active_login
+def mark_all_comment_notifications_seen(request):
+    """
+    Marks all comment notifications seen.
+    """
+    for comment in request.notifications.get_notifications(request.user.id):
+        mark_comment_notification_seen(comment.subject_id, request.user)
+
+    if request.GET.get('next'):
+        return redirect(request, location=request.GET.get('next'))
+    else:
+        return redirect(request, 'index')
