@@ -75,25 +75,75 @@ class FilenameBuilder(object):
 
 
 
-
 class MediaProcessor(object):
+    """A particular processor for this media type.
+
+    While the ProcessingManager handles all types of MediaProcessing
+    possible for a particular media type, a MediaProcessor can be
+    thought of as a *particular* processing action for a media type.
+    For example, you may have separate MediaProcessors for:
+
+    - initial_processing: the intial processing of a media
+    - gen_thumb: generate a thumbnail
+    - resize: resize an image
+    - transcode: transcode a video
+
+    ... etc.  
+
+    Some information on producing a new MediaProcessor for your media type:
+
+    - You *must* supply a name attribute.  This must be a class level
+      attribute, and a string.  This will be used to determine the
+      subcommand of your process
+    - It's recommended that you supply a class level description
+      attribute.
+    - Supply a media_is_eligible classmethod.  This will be used to
+      determine whether or not a media entry is eligible to use this
+      processor type.  See the method documentation for details.
+    - To give "./bin/gmg reprocess run" abilities to this media type,
+      supply both gnerate_parser and parser_to_request classmethods.
+    - The process method will be what actually processes your media.
+    """
     # You MUST override this in the child MediaProcessor!
     name = None
+
+    # Optional, but will be used in various places to describe the
+    # action this MediaProcessor provides
+    description = None
 
     def __init__(self, manager):
         self.manager = manager
 
+    def process(self, **kwargs):
+        """
+        Actually process this media entry.
+        """
+        raise NotImplementedError
+
+    @classmethod
     def media_is_eligibile(self, media_entry):
         raise NotImplementedError
 
-    def process(self):
-        raise NotImplementedError
+    ###############################
+    # Command line interface things
+    ###############################
 
+    @classmethod
     def generate_parser(self):
         raise NotImplementedError
 
+    @classmethod
+    def parser_to_request(self, parser):
+        raise NotImplementedError
+
+    ##########################################
+    # THE FUTURE: web interface things here :)
+    ##########################################
+
 
 class ProcessingManager(object):
+    """
+    """
     def __init__(self, entry):
         self.entry = entry
         # May merge these two classes soon....
@@ -122,7 +172,7 @@ class ProcessingManager(object):
             for processor in self.processors.keys()
             if processor.media_is_eligible(self.entry)]
 
-    def process(self, processor):
+    def process(self, directive, request):
         pass
 
 
