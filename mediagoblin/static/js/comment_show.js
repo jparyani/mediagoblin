@@ -33,7 +33,7 @@ $(document).ready(function(){
   $('#button_addcomment').click(function(){
     $(this).fadeOut('fast');
     $('#form_comment').slideDown(function(){
-    setInterval("previewComment()",500);
+    setInterval("previewComment()",1000);
         $('#comment_content').focus();
     });
   });
