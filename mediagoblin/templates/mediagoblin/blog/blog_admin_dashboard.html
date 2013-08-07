@@ -75,8 +75,8 @@
             <td><h6><em>Draft</em></h6></td>
             {% endif %}
             {% set blogpost_edit_url = request.urlgen('mediagoblin.media_types.blog.blogpost.edit', 
-                                      blog_slug=blog.slug, user=request.user.username, 
-                                      blog_post_slug=blog_post.slug) %}
+                                 blog_slug=blog.slug, user=request.user.username, 
+                                 blog_post_slug=blog_post.slug) %}
             {% set blogpost_delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                                  user= blog_post.get_uploader.username,
                                  media_id=blog_post.id) %}
