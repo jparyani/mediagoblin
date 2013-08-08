@@ -90,7 +90,8 @@
       {% if app_config['allow_comments'] %}
         <a
           {% if not request.user %}
-            href="{{ request.urlgen('mediagoblin.auth.login') }}"
+          href="{{ request.urlgen('mediagoblin.auth.login') }}?next={{
+                                                request.base_url|urlencode }}"
           {% endif %}
           class="button_action" id="button_addcomment" title="Add a comment">
           {% trans %}Add a comment{% endtrans %}
