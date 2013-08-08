@@ -41,7 +41,7 @@ $(document).ready(function () {
         mark_all_comments_seen.onclick = function() {
             $.ajax({
                 type: 'GET',
-                url: '/notifications/comments/mark_all_seen/',
+                url: mark_all_comments_seen_url,
                 success: function(res, status, xhr) { window.location.reload(); },
             });
         }
