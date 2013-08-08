@@ -61,6 +61,8 @@ def post_entry(request):
     entry.description = unicode(request.form.get('description'))
     entry.license = unicode(request.form.get('license', ''))
 
+    entry.generate_slug()
+
     # queue appropriately
     queue_file = prepare_queue_task(request.app, entry, media_file.filename)
 
