@@ -271,11 +271,25 @@ def media_collect(request, media):
 
 
 #TODO: Why does @user_may_delete_media not implicate @require_active_login?
-@get_media_entry_by_id
-@require_active_login
-@user_may_delete_media
-def media_confirm_delete(request, media):
 
+@require_active_login
+def media_confirm_delete(request):
+    
+    allowed_state = [u'processed', u'failed']
+    for media_state in allowed_state:
+        media = request.db.MediaEntry.query.filter_by(id=request.matchdict['media_id'], state=media_state).first()
+    if not media:
+        return render_404(request)
+        
+    given_username = request.matchdict.get('user')
+    if given_username and (given_username != media.get_uploader.username):
+        return render_404(request)
+    
+    uploader_id = media.uploader
+    if not (request.user.is_admin or
+            request.user.id == uploader_id):
+        raise Forbidden()
+    
     form = user_forms.ConfirmDeleteForm(request.form)
 
     if request.method == 'POST' and form.validate():
