@@ -148,6 +148,9 @@ def pwg_images_addSimple(request):
         form.tags.data)
     '''
 
+    # Generate a slug from the title
+    entry.generate_slug()
+
     queue_file = prepare_queue_task(request.app, entry, filename)
 
     with queue_file:
