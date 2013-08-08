@@ -199,6 +199,10 @@ def media_post_comment(request, media):
 
 def media_preview_comment(request):
     """Runs a comment through markdown so it can be previewed."""
+    # If this isn't an ajax request, render_404
+    if not request.is_xhr:
+        return render_404(request)
+
     comment = unicode(request.form['comment_content'])
     cleancomment = { "content":cleaned_markdown_conversion(comment)}
 
