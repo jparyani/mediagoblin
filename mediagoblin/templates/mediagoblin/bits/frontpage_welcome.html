@@ -19,8 +19,8 @@
 {% if request.user %}
     <h1>{% trans %}Explore{% endtrans %}</h1>
   {% else %}
+    <img class="right_align" src="{{ request.staticdirect('/images/home_goblin.png') }}" />
     <h1>{% trans %}Hi there, welcome to this MediaGoblin site!{% endtrans %}</h1>
-    <img class="right_align" src="{{ request.staticdirect('/images/frontpage_image.png') }}" />
     <p>{% trans %}This site is running <a href="http://mediagoblin.org">MediaGoblin</a>, an extraordinarily great piece of media hosting software.{% endtrans %}</p>
     {% if auth %}
     <p>{% trans %}To add your own media, place comments, and more, you can log in with your MediaGoblin account.{% endtrans %}</p>
@@ -33,7 +33,7 @@
     {% endif %}
     {% endif %}
       {% trans %}
-        <a class="button_action" href="http://wiki.mediagoblin.org/HackingHowto">Set up MediaGoblin on your own server</a>
+        <a class="button_action" href="http://mediagoblin.readthedocs.org/">Set up MediaGoblin on your own server</a>
       {%- endtrans %}
 
     <div class="clear"></div>
