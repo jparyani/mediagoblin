@@ -114,6 +114,10 @@ class MediaProcessor(object):
     def __init__(self, manager):
         self.manager = manager
 
+        # Should be initialized at time of processing, at least
+        self.workbench = None
+
+    # @with_workbench
     def process(self, **kwargs):
         """
         Actually process this media entry.
@@ -142,13 +146,12 @@ class MediaProcessor(object):
 
 
 class ProcessingManager(object):
-    """
-    """
-    def __init__(self, entry):
-        self.entry = entry
-        # May merge these two classes soon....
-        self.state = ProcessingState(entry)
+    """Manages all the processing actions available for a media type
 
+    Specific processing actions, MediaProcessor subclasses, are added
+    to the ProcessingManager.
+    """
+    def __init__(self):
         # Dict of all MediaProcessors of this media type
         self.processors = {}
 
@@ -162,7 +165,7 @@ class ProcessingManager(object):
         
         self.processors[name] = processor
 
-    def list_eligible_processors(self):
+    def list_eligible_processors(self, entry):
         """
         List all processors that this media entry is eligible to be processed
         for.
@@ -170,9 +173,16 @@ class ProcessingManager(object):
         return [
             processor
             for processor in self.processors.keys()
-            if processor.media_is_eligible(self.entry)]
+            if processor.media_is_eligible(entry)]
 
-    def process(self, directive, request):
+    def gen_process_request_via_cli(self, subparser):
+        # Got to figure out what actually goes here before I can write this properly
+        pass
+
+    def process(self, entry, directive, request):
+        """
+        Process a media entry.
+        """
         pass
 
 
