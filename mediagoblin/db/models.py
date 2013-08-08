@@ -69,6 +69,7 @@ class User(Base, UserMixin):
     # Intented to be nullable=False, but migrations would not work for it
     # set to nullable=True implicitly.
     wants_comment_notification = Column(Boolean, default=True)
+    wants_notifications = Column(Boolean, default=True)
     license_preference = Column(Unicode)
     is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
