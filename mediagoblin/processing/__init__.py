@@ -126,7 +126,7 @@ class MediaProcessor(object):
         raise NotImplementedError
 
     @classmethod
-    def media_is_eligibile(cls, media_entry):
+    def media_is_eligible(cls, media_entry):
         raise NotImplementedError
 
     ###############################
@@ -144,6 +144,11 @@ class MediaProcessor(object):
     ##########################################
     # THE FUTURE: web interface things here :)
     ##########################################
+
+
+class ProcessingKeyError(Exception): pass
+class ProcessorDoesNotExist(ProcessingKeyError): pass
+class ProcessorNotEligible(ProcessingKeyError): pass
 
 
 class ProcessingManager(object):
@@ -182,6 +187,25 @@ class ProcessingManager(object):
     def gen_process_request_via_cli(self, subparser):
         # Got to figure out what actually goes here before I can write this properly
         pass
+
+    def get_processor(self, key, entry=None):
+        """
+        Get the processor with this key.
+
+        If entry supplied, make sure this entry is actually compatible;
+        otherwise raise error.
+        """
+        try:
+            processor = self.processors[key]
+        except KeyError:
+            raise ProcessorDoesNotExist(
+                "'%s' processor does not exist for this media type" % key)
+
+        if entry and not processor.media_is_eligible(entry):
+            raise ProcessorNotEligible(
+                "This entry is not eligible for processor with name '%s'" % key)
+
+        return processor
 
     def process(self, entry, directive, request):
         """

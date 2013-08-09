@@ -333,7 +333,7 @@ class InitialProcessor(CommonImageProcessor):
     description = "Initial processing"
 
     @classmethod
-    def media_is_eligibile(cls, media_entry):
+    def media_is_eligible(cls, media_entry):
         """
         Determine if this media type is eligible for processing
         """

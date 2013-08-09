@@ -21,6 +21,7 @@ from mediagoblin.db.models import MediaEntry
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.pluginapi import hook_handle
+from mediagoblin.processing import ProcessorDoesNotExist, ProcessorNotEligible
 
 
 def reprocess_parser_setup(subparser):
@@ -204,8 +205,17 @@ def _set_media_state(args):
         args[0].state = 'processed'
 
 
+class MediaEntryNotFound(Exception): pass
+
 def extract_entry_and_type(media_id):
-    raise NotImplementedError
+    """
+    Fetch a media entry, as well as its media type
+    """
+    entry = MediaEntry.query.filter_by(id=media_id).first()
+    if entry is None:
+        raise MediaEntryNotFound("Can't find media with id '%s'" % media_id)
+
+    return entry.media_type, entry
 
 
 def available(args):
@@ -247,16 +257,29 @@ def available(args):
 
 
 def run(args):
-    ### OLD CODE, review
+    media_type, media_entry = extract_entry_and_type(args.media_id)
 
-    _set_media_state(args)
-    _set_media_type(args)
+    manager_class = hook_handle(('reprocess_manager', media_type))
+    manager = manager_class()
 
-    # If no media_ids were given, then try to reprocess all entries
-    if not args[0].media_id:
-        return _reprocess_all(args)
+    # TOOD: Specify in error
+    try:
+        processor_class = manager.get_processor(
+            args.reprocess_command, media_entry)
+    except ProcessorDoesNotExist:
+        print 'No such processor "%s" for media with id "%s"' % (
+            args.reprocess_command, media_entry.id)
+        return
+    except ProcessorNotEligible:
+        print 'Processor "%s" exists but media "%s" is not eligible' % (
+            args.reprocess_command, media_entry.id)
+        return
 
-    return _run_reprocessing(args)
+    reprocess_parser = processor_class.generate_parser()
+    reprocess_args = reprocess_parser.parse_args(args.reprocess_args)
+
+    import pdb
+    pdb.set_trace()
 
 
 def reprocess(args):
