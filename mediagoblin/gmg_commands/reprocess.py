@@ -249,10 +249,6 @@ def available(args):
 def run(args):
     ### OLD CODE, review
 
-    # Run eagerly unless explicetly set not to
-    if not args.celery:
-        os.environ['CELERY_ALWAYS_EAGER'] = 'true'
-
     _set_media_state(args)
     _set_media_type(args)
 
@@ -264,6 +260,10 @@ def run(args):
 
 
 def reprocess(args):
+    # Run eagerly unless explicetly set not to
+    if not args.celery:
+        os.environ['CELERY_ALWAYS_EAGER'] = 'true'
+
     commands_util.setup_app(args)
 
     if args.reprocess_subcommand == "run":
