@@ -65,8 +65,8 @@
                 <a href="#notifications" class="notification-gem button_action" title="Notifications">
                 {{ notification_count }}</a>
                 {% endif %}
-                <div class="button_action header_dropdown_down">&#9660;</div>
-                <div class="button_action header_dropdown_up">&#9650;</div>
+                <a href="#header" class="button_action header_dropdown_down">&#9660;</a>
+                <a href="#no_header" class="button_action header_dropdown_up">&#9650;</a>
               {% elif request.user and request.user.status == "needs_email_verification" %}
               {# the following link should only appear when verification is needed #}
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
