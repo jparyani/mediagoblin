@@ -19,6 +19,7 @@ import logging
 _log = logging.getLogger(__name__)
 
 from mediagoblin.media_types import MediaManagerBase
+from mediagoblin.media_types.blog.models import Blog, BlogPostData
 
 from mediagoblin.tools import pluginapi
 
@@ -76,6 +77,11 @@ class BlogPostMediaManager(MediaManagerBase):
     display_template = "mediagoblin/media_displays/blogpost.html"
     default_thumb = "images/media_thumbs/blogpost.jpg"
     
+    def get_blog_by_blogpost(self):
+        blog_post_data = BlogPostData.query.filter_by(media_entry=self.entry.id).first()
+        blog = Blog.query.filter_by(id=blog_post_data.blog).first()
+        return blog
+        
 def get_media_type_and_manager():
         return MEDIA_TYPE, BlogPostMediaManager
 
