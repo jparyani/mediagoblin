@@ -227,6 +227,7 @@ def available(args):
 
     print "Available processors:"
     print "====================="
+    print ""
 
     if args.action_help:
         for processor in processors:
@@ -235,6 +236,7 @@ def available(args):
 
             parser = processor.generate_parser()
             parser.print_help()
+            print ""
 
     else:
         for processor in processors:
@@ -266,5 +268,6 @@ def reprocess(args):
 
     if args.reprocess_subcommand == "run":
         run(args)
+
     elif args.reprocess_subcommand == "available":
         available(args)
