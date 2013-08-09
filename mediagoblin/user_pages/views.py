@@ -275,12 +275,16 @@ def media_collect(request, media):
 @require_active_login
 def media_confirm_delete(request):
     
-    allowed_state = [u'processed', u'failed']
+    allowed_state = [u'failed', u'processed']
+    media = None
     for media_state in allowed_state:
         media = request.db.MediaEntry.query.filter_by(id=request.matchdict['media_id'], state=media_state).first()
+        if media:
+            break
+    
     if not media:
         return render_404(request)
-        
+    
     given_username = request.matchdict.get('user')
     if given_username and (given_username != media.get_uploader.username):
         return render_404(request)
