@@ -112,8 +112,9 @@ class MediaProcessor(object):
     # action this MediaProcessor provides
     description = None
 
-    def __init__(self, manager):
+    def __init__(self, manager, media_entry):
         self.manager = manager
+        self.media_entry = media_entry
 
         # Should be initialized at time of processing, at least
         self.workbench = None
@@ -138,7 +139,7 @@ class MediaProcessor(object):
         raise NotImplementedError
 
     @classmethod
-    def parser_to_request(cls, parser):
+    def args_to_request(cls, args):
         raise NotImplementedError
 
     ##########################################
@@ -212,6 +213,17 @@ class ProcessingManager(object):
         Process a media entry.
         """
         pass
+
+
+def request_from_args(args, which_args):
+    """
+    Generate a request from the values of some argparse parsed args
+    """
+    request = {}
+    for arg in which_args:
+        request[arg] = getattr(args, arg)
+
+    return request
 
 
 class ProcessingState(object):

@@ -262,7 +262,8 @@ def run(args):
     manager_class = hook_handle(('reprocess_manager', media_type))
     manager = manager_class()
 
-    # TOOD: Specify in error
+    # TODO: (maybe?) This could probably be handled entirely by the
+    # processor class...
     try:
         processor_class = manager.get_processor(
             args.reprocess_command, media_entry)
@@ -277,9 +278,9 @@ def run(args):
 
     reprocess_parser = processor_class.generate_parser()
     reprocess_args = reprocess_parser.parse_args(args.reprocess_args)
-
-    import pdb
-    pdb.set_trace()
+    reprocess_request = processor_class.args_to_request(reprocess_args)
+    processor = processor_class(manager, media_entry)
+    processor.process(**reprocess_request)
 
 
 def reprocess(args):

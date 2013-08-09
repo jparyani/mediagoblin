@@ -26,7 +26,8 @@ from mediagoblin import mg_globals as mgg
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.processing import (
     BadMediaFail, FilenameBuilder,
-    MediaProcessor, ProcessingManager)
+    MediaProcessor, ProcessingManager,
+    request_from_args)
 from mediagoblin.submit.lib import run_process_media
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful, \
@@ -356,7 +357,8 @@ class InitialProcessor(CommonImageProcessor):
 
     @classmethod
     def args_to_request(cls, args):
-        raise NotImplementedError
+        return request_from_args(
+            args, ['width', 'height'])
 
 
 
