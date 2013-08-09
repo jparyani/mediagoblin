@@ -199,13 +199,35 @@ def _set_media_state(args):
         args[0].state = 'processed'
 
 
+def extract_entry_and_type(media_id):
+    raise NotImplementedError
+
+
 def available(args):
     # Get the media type, either by looking up media id, or by specific type
-    
-    ### TODO: look up by id
+    try:
+        media_id = int(args.id_or_type)
+        media_type, media_entry = extract_entry_and_type(media_id)
+    except ValueError:
+        media_type = args.id_or_type
+        media_entry = None
 
-    #
-    pass
+    manager_class = hook_handle(('reprocess_manager', media_type))
+    manager = manager_class()
+    
+    if media_entry is None:
+        processors = manager.list_all_processors()
+    else:
+        processors = manager.list_eligible_processors(media_entry)
+
+    print "Available processors:"
+    print "---------------------"
+
+    for processor in processors:
+        if processor.description:
+            print " - %s: %s" % (processor.name, processor.description)
+        else:
+            print " - %s" % processor.name
 
 
 def run(args):
@@ -214,7 +236,6 @@ def run(args):
     # Run eagerly unless explicetly set not to
     if not args.celery:
         os.environ['CELERY_ALWAYS_EAGER'] = 'true'
-    commands_util.setup_app(args)
 
     _set_media_state(args)
     _set_media_type(args)
@@ -227,6 +248,8 @@ def run(args):
 
 
 def reprocess(args):
+    commands_util.setup_app(args)
+
     if args.reprocess_subcommand == "run":
         run(args)
     elif args.reprocess_subcommand == "available":

@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from collections import OrderedDict
 import logging
 import os
 
@@ -153,7 +154,7 @@ class ProcessingManager(object):
     """
     def __init__(self):
         # Dict of all MediaProcessors of this media type
-        self.processors = {}
+        self.processors = OrderedDict()
 
     def add_processor(self, processor):
         """
@@ -172,8 +173,11 @@ class ProcessingManager(object):
         """
         return [
             processor
-            for processor in self.processors.keys()
+            for processor in self.processors.values()
             if processor.media_is_eligible(entry)]
+
+    def list_all_processors(self):
+        return self.processors.values()
 
     def gen_process_request_via_cli(self, subparser):
         # Got to figure out what actually goes here before I can write this properly

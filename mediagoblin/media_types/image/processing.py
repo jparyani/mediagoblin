@@ -24,7 +24,9 @@ import argparse
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.db.models import MediaEntry
-from mediagoblin.processing import BadMediaFail, FilenameBuilder
+from mediagoblin.processing import (
+    BadMediaFail, FilenameBuilder,
+    MediaProcessor, ProcessingManager)
 from mediagoblin.submit.lib import run_process_media
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful, \
@@ -301,6 +303,66 @@ class ProcessImage(object):
             reprocess_info['max_height'] = args.size[1]
 
         return reprocess_info
+
+
+class CommonImageProcessor(MediaProcessor):
+    """
+    Provides a base for various media processing steps
+    """
+    # Common resizing step
+    def resize_step(self):
+        pass
+
+    def _add_width_height_args(self, parser):
+        parser.add_argument(
+            "--width", default=None,
+            help=(
+                "Width of the resized image (if not using defaults)"))
+        parser.add_argument(
+            "--height", default=None,
+            help=(
+                "Height of the resized image (if not using defaults)"))
+
+
+class InitialProcessor(CommonImageProcessor):
+    """
+    Initial processing step for new images
+    """
+    name = "initial"
+    description = "Initial processing"
+
+    @classmethod
+    def media_is_eligibile(self, media_entry):
+        """
+        Determine if this media type is eligible for processing
+        """
+        return media_entry.state in (
+            "unprocessed", "failed")
+
+    ###############################
+    # Command line interface things
+    ###############################
+
+    @classmethod
+    def generate_parser(self):
+        parser = argparse.ArgumentParser(
+            description=self.description)
+
+        self._add_width_height_args(parser)
+
+        return parser
+
+    @classmethod
+    def args_to_request(self, args):
+        raise NotImplementedError
+
+
+
+class ImageProcessingManager(ProcessingManager):
+    def __init__(self):
+        super(self.__class__, self).__init__()
+        self.add_processor(InitialProcessor)
+
 
 if __name__ == '__main__':
     import sys

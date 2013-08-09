@@ -18,7 +18,7 @@ import logging
 
 from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.image.processing import ProcessImage, \
-    sniff_handler
+    sniff_handler, ImageProcessingManager
 from mediagoblin.tools import pluginapi
 
 _log = logging.getLogger(__name__)
@@ -72,6 +72,6 @@ hooks = {
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
     ('media_manager', MEDIA_TYPE): lambda: ImageMediaManager,
-    ('reprocess_action', MEDIA_TYPE): ProcessImage().reprocess_action,
-    ('media_reprocess', MEDIA_TYPE): ProcessImage().media_reprocess,
+    ('reprocess_manager', MEDIA_TYPE): lambda: ImageProcessingManager,
+    # ('media_reprocess', MEDIA_TYPE): ProcessImage().media_reprocess,
 }
