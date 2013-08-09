@@ -23,7 +23,7 @@ class MediaCommentForm(wtforms.Form):
         _('Comment'),
         [wtforms.validators.Required()],
         description=_(u'You can use '
-                      u'<a href="http://daringfireball.net/projects/markdown/basics">'
+                      u'<a href="http://daringfireball.net/projects/markdown/basics" target="_blank">'
                       u'Markdown</a> for formatting.'))
 
 class ConfirmDeleteForm(wtforms.Form):
@@ -47,5 +47,5 @@ class MediaCollectForm(wtforms.Form):
     collection_description = wtforms.TextAreaField(
         _('Description of this collection'),
         description=_("""You can use
-                      <a href="http://daringfireball.net/projects/markdown/basics">
+                      <a href="http://daringfireball.net/projects/markdown/basics" target="_blank">
                       Markdown</a> for formatting."""))

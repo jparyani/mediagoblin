@@ -24,6 +24,14 @@
 /kombu.db
 /server-log.txt
 
+# pyconfigure/automake generated files
+/Makefile
+/autom4te.cache/
+/config.log
+/config.status
+/configure
+/aclocal.m4
+
 # Tests
 /mediagoblin/tests/user_dev/
 
