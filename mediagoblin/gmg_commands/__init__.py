@@ -96,16 +96,16 @@ def main_cli():
 
         subparser.set_defaults(func=exec_func)
 
-    args = parser.parse_known_args()
-    args[0].orig_conf_file = args[0].conf_file
-    if args[0].conf_file is None:
+    args = parser.parse_args()
+    args.orig_conf_file = args.conf_file
+    if args.conf_file is None:
         if os.path.exists('mediagoblin_local.ini') \
                 and os.access('mediagoblin_local.ini', os.R_OK):
-            args[0].conf_file = 'mediagoblin_local.ini'
+            args.conf_file = 'mediagoblin_local.ini'
         else:
-            args[0].conf_file = 'mediagoblin.ini'
+            args.conf_file = 'mediagoblin.ini'
 
-    args[0].func(args)
+    args.func(args)
 
 
 if __name__ == '__main__':

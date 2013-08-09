@@ -72,6 +72,6 @@ hooks = {
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
     ('media_manager', MEDIA_TYPE): lambda: ImageMediaManager,
-    ('reprocess_action', 'image'): ProcessImage().reprocess_action,
-    ('media_reprocess', 'image'): ProcessImage().media_reprocess,
+    ('reprocess_action', MEDIA_TYPE): ProcessImage().reprocess_action,
+    ('media_reprocess', MEDIA_TYPE): ProcessImage().media_reprocess,
 }

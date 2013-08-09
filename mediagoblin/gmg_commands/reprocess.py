@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import argparse
 import os
 
 from mediagoblin import mg_globals
@@ -23,29 +24,62 @@ from mediagoblin.tools.pluginapi import hook_handle
 
 
 def reprocess_parser_setup(subparser):
-    subparser.add_argument(
-        '--available', '-a',
-        action="store_true",
-        help="List available actions for a given media entry")
-    subparser.add_argument(
+    subparsers = subparser.add_subparsers(dest="reprocess_subcommand")
+
+    ###################
+    # available command
+    ###################
+    available_parser = subparsers.add_parser(
+        "available",
+        help="Find out what actions are available for this media")
+    
+    available_parser.add_argument(
+        "id_or_type",
+        help="Media id or media type to check")
+
+    
+    ############################################
+    # run command (TODO: and bulk_run command??)
+    ############################################
+    
+    run_parser = subparsers.add_parser(
+        "run",
+        help="Run a reprocessing on one or more media")
+
+    run_parser.add_argument(
         '--state', '-s',
         help="Reprocess media entries in this state"
              " such as 'failed' or 'processed'")
-    subparser.add_argument(
+    run_parser.add_argument(
         '--type', '-t',
         help="The type of media to be reprocessed such as 'video' or 'image'")
-    subparser.add_argument(
-        '--media_id',
-        nargs='*',
-        help="The media_entry id(s) you wish to reprocess.")
-    subparser.add_argument(
+    run_parser.add_argument(
         '--thumbnails',
         action="store_true",
         help="Regenerate thumbnails for all processed media")
-    subparser.add_argument(
+    run_parser.add_argument(
         '--celery',
         action='store_true',
         help="Don't process eagerly, pass off to celery")
+
+    run_parser.add_argument(
+        'media_id',
+        help="The media_entry id(s) you wish to reprocess.")
+
+    run_parser.add_argument(
+        'reprocess_command',
+        help="The reprocess command you intend to run")
+
+    run_parser.add_argument(
+        'reprocess_args',
+        nargs=argparse.REMAINDER,
+        help="rest of arguments to the reprocessing tool")
+
+
+    ###############
+    # help command?
+    ###############
+
 
 
 def _set_media_type(args):
@@ -165,11 +199,22 @@ def _set_media_state(args):
         args[0].state = 'processed'
 
 
-def reprocess(args):
+def available(args):
+    # Get the media type, either by looking up media id, or by specific type
+    
+    ### TODO: look up by id
+
+    #
+    pass
+
+
+def run(args):
+    ### OLD CODE, review
+
     # Run eagerly unless explicetly set not to
-    if not args[0].celery:
+    if not args.celery:
         os.environ['CELERY_ALWAYS_EAGER'] = 'true'
-    commands_util.setup_app(args[0])
+    commands_util.setup_app(args)
 
     _set_media_state(args)
     _set_media_type(args)
@@ -179,3 +224,10 @@ def reprocess(args):
         return _reprocess_all(args)
 
     return _run_reprocessing(args)
+
+
+def reprocess(args):
+    if args.reprocess_subcommand == "run":
+        run(args)
+    elif args.reprocess_subcommand == "available":
+        available(args)
