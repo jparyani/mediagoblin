@@ -37,6 +37,11 @@ def reprocess_parser_setup(subparser):
         "id_or_type",
         help="Media id or media type to check")
 
+    available_parser.add_argument(
+        "--action-help",
+        action="store_true",
+        help="List argument help for each action available")
+
     
     ############################################
     # run command (TODO: and bulk_run command??)
@@ -221,13 +226,22 @@ def available(args):
         processors = manager.list_eligible_processors(media_entry)
 
     print "Available processors:"
-    print "---------------------"
+    print "====================="
 
-    for processor in processors:
-        if processor.description:
-            print " - %s: %s" % (processor.name, processor.description)
-        else:
-            print " - %s" % processor.name
+    if args.action_help:
+        for processor in processors:
+            print processor.name
+            print "-" * len(processor.name)
+
+            parser = processor.generate_parser()
+            parser.print_help()
+
+    else:
+        for processor in processors:
+            if processor.description:
+                print " - %s: %s" % (processor.name, processor.description)
+            else:
+                print " - %s" % processor.name
 
 
 def run(args):

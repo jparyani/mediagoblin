@@ -313,7 +313,8 @@ class CommonImageProcessor(MediaProcessor):
     def resize_step(self):
         pass
 
-    def _add_width_height_args(self, parser):
+    @classmethod
+    def _add_width_height_args(cls, parser):
         parser.add_argument(
             "--width", default=None,
             help=(
@@ -332,7 +333,7 @@ class InitialProcessor(CommonImageProcessor):
     description = "Initial processing"
 
     @classmethod
-    def media_is_eligibile(self, media_entry):
+    def media_is_eligibile(cls, media_entry):
         """
         Determine if this media type is eligible for processing
         """
@@ -344,16 +345,17 @@ class InitialProcessor(CommonImageProcessor):
     ###############################
 
     @classmethod
-    def generate_parser(self):
+    def generate_parser(cls):
         parser = argparse.ArgumentParser(
-            description=self.description)
+            description=cls.description,
+            prog=cls.name)
 
-        self._add_width_height_args(parser)
+        cls._add_width_height_args(parser)
 
         return parser
 
     @classmethod
-    def args_to_request(self, args):
+    def args_to_request(cls, args):
         raise NotImplementedError
 
 

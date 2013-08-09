@@ -126,7 +126,7 @@ class MediaProcessor(object):
         raise NotImplementedError
 
     @classmethod
-    def media_is_eligibile(self, media_entry):
+    def media_is_eligibile(cls, media_entry):
         raise NotImplementedError
 
     ###############################
@@ -134,11 +134,11 @@ class MediaProcessor(object):
     ###############################
 
     @classmethod
-    def generate_parser(self):
+    def generate_parser(cls):
         raise NotImplementedError
 
     @classmethod
-    def parser_to_request(self, parser):
+    def parser_to_request(cls, parser):
         raise NotImplementedError
 
     ##########################################
