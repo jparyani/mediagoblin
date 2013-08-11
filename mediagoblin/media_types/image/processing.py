@@ -325,6 +325,18 @@ class CommonImageProcessor(MediaProcessor):
             help=(
                 "Height of the resized image (if not using defaults)"))
 
+    def fetch_original(self):
+        pass
+
+    def generate_medium_if_applicable(self, size=None):
+        pass
+
+    def generate_thumb(self, size=None):
+        pass
+
+    def extract_metadata(self):
+        pass
+
 
 class InitialProcessor(CommonImageProcessor):
     """
@@ -360,6 +372,12 @@ class InitialProcessor(CommonImageProcessor):
         return request_from_args(
             args, ['width', 'height'])
 
+
+    def process(self, size=None, thumb_size=None):
+        self.fetch_original()
+        self.generate_medium_if_applicable(size=size)
+        self.generate_thumb(size=thumb_size)
+        self.extract_metadata()
 
 
 class ImageProcessingManager(ProcessingManager):
