@@ -24,7 +24,7 @@ from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.pluginapi import hook_handle
 from mediagoblin.processing import (
     ProcessorDoesNotExist, ProcessorNotEligible,
-    get_entry_and_manager, get_manager_for_type)
+    get_entry_and_processing_manager, get_processing_manager_for_type)
 
 
 def reprocess_parser_setup(subparser):
@@ -211,12 +211,12 @@ def _set_media_state(args):
 def available(args):
     # Get the media type, either by looking up media id, or by specific type
     try:
-        media_entry, manager = get_entry_and_manager(args.id_or_type)
+        media_entry, manager = get_entry_and_processing_manager(args.id_or_type)
         media_type = media_entry.type
     except ValueError:
         media_type = args.id_or_type
         media_entry = None
-        manager = get_manager_for_type(media_type)
+        manager = get_processing_manager_for_type(media_type)
 
     if media_entry is None:
         processors = manager.list_all_processors()
@@ -245,7 +245,7 @@ def available(args):
 
 
 def run(args):
-    media_entry, manager = get_entry_and_manager(args.media_id)
+    media_entry, manager = get_entry_and_processing_manager(args.media_id)
 
     # TODO: (maybe?) This could probably be handled entirely by the
     # processor class...

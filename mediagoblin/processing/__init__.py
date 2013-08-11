@@ -120,6 +120,13 @@ class MediaProcessor(object):
         # Should be initialized at time of processing, at least
         self.workbench = None
 
+    def __enter__(self):
+        self.workbench = mgg.workbench_manager.create()
+
+    def __exit__(self, *args):
+        self.workbench.destroy()
+        self.workbench = None
+
     # @with_workbench
     def process(self, **kwargs):
         """
@@ -230,7 +237,7 @@ def request_from_args(args, which_args):
 class MediaEntryNotFound(Exception): pass
 
 
-def get_manager_for_type(media_type):
+def get_processing_manager_for_type(media_type):
     """
     Get the appropriate media manager for this type
     """
@@ -240,7 +247,7 @@ def get_manager_for_type(media_type):
     return manager
 
 
-def get_entry_and_manager(media_id):
+def get_entry_and_processing_manager(media_id):
     """
     Get a MediaEntry, its media type, and its manager all in one go.
 
@@ -250,7 +257,7 @@ def get_entry_and_manager(media_id):
     if entry is None:
         raise MediaEntryNotFound("Can't find media with id '%s'" % media_id)
 
-    manager = get_manager_for_type(entry.media_type)
+    manager = get_processing_manager_for_type(entry.media_type)
 
     return entry, manager
 

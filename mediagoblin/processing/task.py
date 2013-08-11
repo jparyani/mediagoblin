@@ -23,7 +23,7 @@ from celery import registry, task
 from mediagoblin import mg_globals as mgg
 from . import mark_entry_failed, BaseProcessingFail
 from mediagoblin.tools.processing import json_processing_callback
-from mediagoblin.processing import get_entry_and_manager
+from mediagoblin.processing import get_entry_and_processing_manager
 
 _log = logging.getLogger(__name__)
 logging.basicConfig()
@@ -79,7 +79,7 @@ class ProcessMedia(task.Task):
             info for the media_type.
         """
         reprocess_info = reprocess_info or {}
-        entry, manager = get_entry_and_manager(media_id)
+        entry, manager = get_entry_and_processing_manager(media_id)
 
         # Try to process, and handle expected errors.
         try:
