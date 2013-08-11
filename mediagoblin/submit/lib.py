@@ -76,7 +76,8 @@ def prepare_queue_task(app, entry, filename):
     return queue_file
 
 
-def run_process_media(entry, feed_url=None, reprocess_info=None):
+def run_process_media(entry, feed_url=None,
+                      reprocess_action="inital", reprocess_info=None):
     """Process the media asynchronously
 
     :param entry: MediaEntry() instance to be processed.
@@ -84,11 +85,12 @@ def run_process_media(entry, feed_url=None, reprocess_info=None):
         should be notified of. This will be sth like: `request.urlgen(
             'mediagoblin.user_pages.atom_feed',qualified=True,
             user=request.user.username)`
-    :param reprocess: A dict containing all of the necessary reprocessing
+    :param reprocess_action: What particular action should be run.
+    :param reprocess_info: A dict containing all of the necessary reprocessing
         info for the given media_type"""
     try:
         process_media.apply_async(
-            [entry.id, feed_url, reprocess_info], {},
+            [entry.id, feed_url, reprocess_action, reprocess_info], {},
             task_id=entry.queued_task_id)
     except BaseException as exc:
         # The purpose of this section is because when running in "lazy"

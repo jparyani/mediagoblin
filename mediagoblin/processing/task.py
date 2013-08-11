@@ -21,9 +21,9 @@ import urllib2
 from celery import registry, task
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.models import MediaEntry
-from . import mark_entry_failed, BaseProcessingFail, ProcessingState
+from . import mark_entry_failed, BaseProcessingFail
 from mediagoblin.tools.processing import json_processing_callback
+from mediagoblin.processing import get_entry_and_manager
 
 _log = logging.getLogger(__name__)
 logging.basicConfig()
@@ -68,7 +68,7 @@ class ProcessMedia(task.Task):
     """
     Pass this entry off for processing.
     """
-    def run(self, media_id, feed_url, reprocess_info=None):
+    def run(self, media_id, feed_url, reprocess_action, reprocess_info=None):
         """
         Pass the media entry off to the appropriate processing function
         (for now just process_image...)
@@ -78,28 +78,20 @@ class ProcessMedia(task.Task):
         :param reprocess: A dict containing all of the necessary reprocessing
             info for the media_type.
         """
-        entry = MediaEntry.query.get(media_id)
+        reprocess_info = reprocess_info or {}
+        entry, manager = get_entry_and_manager(media_id)
 
         # Try to process, and handle expected errors.
         try:
+            processor_class = manager.get_processor(reprocess_action, entry)
+
             entry.state = u'processing'
             entry.save()
 
             _log.debug('Processing {0}'.format(entry))
 
-            proc_state = ProcessingState(entry)
-            with mgg.workbench_manager.create() as workbench:
-
-                proc_state.set_workbench(workbench)
-                processor = entry.media_manager.processor(proc_state)
-
-                # If we have reprocess_info, let's reprocess
-                if reprocess_info:
-                    processor.reprocess(reprocess_info)
-
-                # Run initial processing
-                else:
-                    processor.initial_processing()
+            with processor_class(manager, entry) as processor:
+                processor.process(**reprocess_info)
 
             # We set the state to processed and save the entry here so there's
             # no need to save at the end of the processing stage, probably ;)

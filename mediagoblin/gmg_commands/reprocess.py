@@ -19,9 +19,12 @@ import os
 from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.gmg_commands import util as commands_util
+from mediagoblin.submit.lib import run_process_media
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.pluginapi import hook_handle
-from mediagoblin.processing import ProcessorDoesNotExist, ProcessorNotEligible
+from mediagoblin.processing import (
+    ProcessorDoesNotExist, ProcessorNotEligible,
+    get_entry_and_manager, get_manager_for_type)
 
 
 def reprocess_parser_setup(subparser):
@@ -205,31 +208,16 @@ def _set_media_state(args):
         args[0].state = 'processed'
 
 
-class MediaEntryNotFound(Exception): pass
-
-def extract_entry_and_type(media_id):
-    """
-    Fetch a media entry, as well as its media type
-    """
-    entry = MediaEntry.query.filter_by(id=media_id).first()
-    if entry is None:
-        raise MediaEntryNotFound("Can't find media with id '%s'" % media_id)
-
-    return entry.media_type, entry
-
-
 def available(args):
     # Get the media type, either by looking up media id, or by specific type
     try:
-        media_id = int(args.id_or_type)
-        media_type, media_entry = extract_entry_and_type(media_id)
+        media_entry, manager = get_entry_and_manager(args.id_or_type)
+        media_type = media_entry.type
     except ValueError:
         media_type = args.id_or_type
         media_entry = None
+        manager = get_manager_for_type(media_type)
 
-    manager_class = hook_handle(('reprocess_manager', media_type))
-    manager = manager_class()
-    
     if media_entry is None:
         processors = manager.list_all_processors()
     else:
@@ -257,10 +245,7 @@ def available(args):
 
 
 def run(args):
-    media_type, media_entry = extract_entry_and_type(args.media_id)
-
-    manager_class = hook_handle(('reprocess_manager', media_type))
-    manager = manager_class()
+    media_entry, manager = get_entry_and_manager(args.media_id)
 
     # TODO: (maybe?) This could probably be handled entirely by the
     # processor class...
@@ -279,8 +264,11 @@ def run(args):
     reprocess_parser = processor_class.generate_parser()
     reprocess_args = reprocess_parser.parse_args(args.reprocess_args)
     reprocess_request = processor_class.args_to_request(reprocess_args)
-    processor = processor_class(manager, media_entry)
-    processor.process(**reprocess_request)
+    run_process_media(
+        media_entry,
+        reprocess_action=args.reprocess_command,
+        reprocess_info=reprocess_request)
+    manager.process(media_entry, args.reprocess_command, **reprocess_request)
 
 
 def reprocess(args):

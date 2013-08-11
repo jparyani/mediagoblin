@@ -18,9 +18,10 @@ from collections import OrderedDict
 import logging
 import os
 
-from mediagoblin.db.util import atomic_update
 from mediagoblin import mg_globals as mgg
-
+from mediagoblin.db.util import atomic_update
+from mediagoblin.db.models import MediaEntry
+from mediagoblin.tools.pluginapi import hook_handle
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 _log = logging.getLogger(__name__)
@@ -208,7 +209,7 @@ class ProcessingManager(object):
 
         return processor
 
-    def process(self, entry, directive, request):
+    def process_from_args(self, entry, reprocess_command, request):
         """
         Process a media entry.
         """
@@ -225,6 +226,39 @@ def request_from_args(args, which_args):
 
     return request
 
+
+class MediaEntryNotFound(Exception): pass
+
+
+def get_manager_for_type(media_type):
+    """
+    Get the appropriate media manager for this type
+    """
+    manager_class = hook_handle(('reprocess_manager', media_type))
+    manager = manager_class()
+
+    return manager
+
+
+def get_entry_and_manager(media_id):
+    """
+    Get a MediaEntry, its media type, and its manager all in one go.
+
+    Returns a tuple of: `(entry, media_type, media_manager)`
+    """
+    entry = MediaEntry.query.filter_by(id=media_id).first()
+    if entry is None:
+        raise MediaEntryNotFound("Can't find media with id '%s'" % media_id)
+
+    manager = get_manager_for_type(entry.media_type)
+
+    return entry, manager
+
+
+################################################
+# TODO: This ProcessingState is OUTDATED,
+#   and needs to be refactored into other tools!
+################################################
 
 class ProcessingState(object):
     """
