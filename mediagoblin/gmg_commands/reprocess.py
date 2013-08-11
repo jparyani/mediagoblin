@@ -268,7 +268,6 @@ def run(args):
         media_entry,
         reprocess_action=args.reprocess_command,
         reprocess_info=reprocess_request)
-    manager.process(media_entry, args.reprocess_command, **reprocess_request)
 
 
 def reprocess(args):
