@@ -123,6 +123,7 @@ class MediaProcessor(object):
 
     def __enter__(self):
         self.workbench = mgg.workbench_manager.create()
+        return self
 
     def __exit__(self, *args):
         self.workbench.destroy()
