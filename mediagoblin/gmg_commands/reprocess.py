@@ -322,8 +322,46 @@ def bulk_run(args):
 
 
 def thumbs(args):
-    #TODO regenerate thumbs for all processed media
-    pass
+    """
+    Regenerate thumbs for all processed media
+    """
+    query = MediaEntry.query.filter_by(state='processed')
+
+    for entry in query:
+        try:
+            media_entry, manager = get_entry_and_processing_manager(entry.id)
+
+            # TODO: (maybe?) This could probably be handled entirely by the
+            # processor class...
+            try:
+                processor_class = manager.get_processor(
+                    'resize', media_entry)
+            except ProcessorDoesNotExist:
+                print 'No such processor "%s" for media with id "%s"' % (
+                    'resize', media_entry.id)
+                return
+            except ProcessorNotEligible:
+                print 'Processor "%s" exists but media "%s" is not eligible' % (
+                    'resize', media_entry.id)
+                return
+
+            reprocess_parser = processor_class.generate_parser()
+
+            # prepare filetype and size to be passed into reprocess_parser
+            if args.size:
+                extra_args = 'thumb --size {0} {1}'.format(args.size[0], args.size[1])
+            else:
+                extra_args = 'thumb'
+
+            reprocess_args = reprocess_parser.parse_args(extra_args.split())
+            reprocess_request = processor_class.args_to_request(reprocess_args)
+            run_process_media(
+                media_entry,
+                reprocess_action='resize',
+                reprocess_info=reprocess_request)
+
+        except ProcessingManagerDoesNotExist:
+            print 'No such processing manager for {0}'.format(entry.media_type)
 
 
 def initial(args):
