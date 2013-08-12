@@ -212,8 +212,9 @@ def _set_media_state(args):
 def available(args):
     # Get the media type, either by looking up media id, or by specific type
     try:
-        media_entry, manager = get_entry_and_processing_manager(args.id_or_type)
-        media_type = media_entry.type
+        media_id = int(args.id_or_type)
+        media_entry, manager = get_entry_and_processing_manager(media_id)
+        media_type = media_entry.media_type
     except ValueError:
         media_type = args.id_or_type
         media_entry = None
