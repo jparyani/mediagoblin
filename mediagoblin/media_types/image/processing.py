@@ -425,6 +425,7 @@ class InitialProcessor(CommonImageProcessor):
         self.common_setup()
         self.generate_medium_if_applicable(size=size)
         self.generate_thumb(size=thumb_size)
+        self.copy_original()
         self.extract_metadata()
 
 
