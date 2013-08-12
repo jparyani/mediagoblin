@@ -412,7 +412,8 @@ def get_orig_filename(entry, workbench):
     return orig_filename
 
 
-def store_public(entry, keyname, local_file, target_name=None):
+def store_public(entry, keyname, local_file, target_name=None,
+                 delete_if_exists=True):
     if target_name is None:
         target_name = os.path.basename(local_file)
     target_filepath = create_pub_filepath(entry, target_name)
@@ -420,6 +421,8 @@ def store_public(entry, keyname, local_file, target_name=None):
         _log.warn("store_public: keyname %r already used for file %r, "
                   "replacing with %r", keyname,
                   entry.media_files[keyname], target_filepath)
+        if delete_if_exists:
+            mgg.public_store.delete_file(entry.media_files[keyname])
     mgg.public_store.copy_local_to_storage(local_file, target_filepath)
     entry.media_files[keyname] = target_filepath
 
