@@ -85,12 +85,14 @@ class ProcessMedia(task.Task):
         try:
             processor_class = manager.get_processor(reprocess_action, entry)
 
-            entry.state = u'processing'
-            entry.save()
-
-            _log.debug('Processing {0}'.format(entry))
-
             with processor_class(manager, entry) as processor:
+                # Initial state change has to be here because
+                # the entry.state gets recorded on processor_class init
+                entry.state = u'processing'
+                entry.save()
+
+                _log.debug('Processing {0}'.format(entry))
+
                 processor.process(**reprocess_info)
 
             # We set the state to processed and save the entry here so there's

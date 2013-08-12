@@ -116,6 +116,7 @@ class MediaProcessor(object):
     def __init__(self, manager, media_entry):
         self.manager = manager
         self.media_entry = media_entry
+        self.entry_orig_state = media_entry.state
 
         # Should be initialized at time of processing, at least
         self.workbench = None
