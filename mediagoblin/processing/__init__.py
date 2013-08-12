@@ -113,10 +113,10 @@ class MediaProcessor(object):
     # action this MediaProcessor provides
     description = None
 
-    def __init__(self, manager, media_entry):
+    def __init__(self, manager, entry):
         self.manager = manager
-        self.media_entry = media_entry
-        self.entry_orig_state = media_entry.state
+        self.entry = entry
+        self.entry_orig_state = entry.state
 
         # Should be initialized at time of processing, at least
         self.workbench = None
@@ -136,7 +136,7 @@ class MediaProcessor(object):
         raise NotImplementedError
 
     @classmethod
-    def media_is_eligible(cls, media_entry):
+    def media_is_eligible(cls, entry):
         raise NotImplementedError
 
     ###############################
@@ -154,6 +154,20 @@ class MediaProcessor(object):
     ##########################################
     # THE FUTURE: web interface things here :)
     ##########################################
+
+    #####################
+    # Some common "steps"
+    #####################
+
+    def delete_queue_file(self):
+        # Remove queued media file from storage and database.
+        # queued_filepath is in the task_id directory which should
+        # be removed too, but fail if the directory is not empty to be on
+        # the super-safe side.
+        queued_filepath = self.entry.queued_media_file
+        mgg.queue_store.delete_file(queued_filepath)      # rm file
+        mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
+        self.entry.queued_media_file = []
 
 
 class ProcessingKeyError(Exception): pass
@@ -216,12 +230,6 @@ class ProcessingManager(object):
                 "This entry is not eligible for processor with name '%s'" % key)
 
         return processor
-
-    def process_from_args(self, entry, reprocess_command, request):
-        """
-        Process a media entry.
-        """
-        pass
 
 
 def request_from_args(args, which_args):
@@ -399,6 +407,22 @@ def get_orig_filename(entry, workbench):
         'source')
 
     return orig_filename
+
+
+def store_public(entry, keyname, local_file, target_name=None):
+    if target_name is None:
+        target_name = os.path.basename(local_file)
+    target_filepath = create_pub_filepath(entry, target_name)
+    if keyname in entry.media_files:
+        _log.warn("store_public: keyname %r already used for file %r, "
+                  "replacing with %r", keyname,
+                  entry.media_files[keyname], target_filepath)
+    mgg.public_store.copy_local_to_storage(local_file, target_filepath)
+    entry.media_files[keyname] = target_filepath
+
+
+def copy_original(entry, orig_filename, target_name, keyname=u"original"):
+    store_public(entry, keyname, orig_filename, target_name)
 
 
 # end refactoring

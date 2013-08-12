@@ -27,7 +27,8 @@ from mediagoblin.db.models import MediaEntry
 from mediagoblin.processing import (
     BadMediaFail, FilenameBuilder,
     MediaProcessor, ProcessingManager,
-    request_from_args, get_orig_filename)
+    request_from_args, get_orig_filename,
+    store_public, copy_original)
 from mediagoblin.submit.lib import run_process_media
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful, \
@@ -45,7 +46,7 @@ PIL_FILTERS = {
 MEDIA_TYPE = 'mediagoblin.media_types.image'
 
 
-def resize_image(proc_state, resized, keyname, target_name, new_size,
+def resize_image(entry, resized, keyname, target_name, new_size,
                  exif_tags, workdir):
     """
     Store a resized version of an image and return its pathname.
@@ -77,13 +78,14 @@ def resize_image(proc_state, resized, keyname, target_name, new_size,
     tmp_resized_filename = os.path.join(workdir, target_name)
     with file(tmp_resized_filename, 'w') as resized_file:
         resized.save(resized_file, quality=config['quality'])
-    proc_state.store_public(keyname, tmp_resized_filename, target_name)
+    store_public(entry, keyname, tmp_resized_filename, target_name)
 
 
-def resize_tool(proc_state, force, keyname, target_name,
+def resize_tool(entry, orig_filename,
+                force, keyname, target_name,
                 conversions_subdir, exif_tags, new_size=None):
     # filename -- the filename of the original image being resized
-    filename = proc_state.get_orig_filename()
+    filename = orig_filename
 
     # Use the default size if new_size was not given
     if not new_size:
@@ -104,7 +106,7 @@ def resize_tool(proc_state, force, keyname, target_name,
         or im.size[1] > new_size[1]\
         or exif_image_needs_rotation(exif_tags):
         resize_image(
-            proc_state, im, unicode(keyname), target_name,
+            entry, im, unicode(keyname), target_name,
             new_size,
             exif_tags, conversions_subdir)
 
@@ -325,24 +327,53 @@ class CommonImageProcessor(MediaProcessor):
             help=(
                 "Height of the resized image (if not using defaults)"))
 
-    def setup_workbench_subdirs(self):
+    def common_setup(self):
+        """
+        Set up the workbench directory and pull down the original file
+        """
+        ## @@: Should this be two functions?
         # Conversions subdirectory to avoid collisions
         self.conversions_subdir = os.path.join(
             self.workbench.dir, 'convirsions')
+        os.mkdir(self.conversions_subdir)
 
-    def fetch_original(self):
+        # Pull down and set up the original file
         self.orig_filename = get_orig_filename(
             self.entry, self.workbench)
         self.name_builder = FilenameBuilder(self.orig_filename)
 
     def generate_medium_if_applicable(self, size=None):
-        pass
+        resize_tool(self.entry, False, 'medium', self.orig_filename,
+                    self.name_builder.fill('{basename}.medium{ext}'),
+                    self.conversions_subdir, self.exif_tags)
 
     def generate_thumb(self, size=None):
-        pass
+        resize_tool(self.entry, True, 'thumb', self.orig_filename,
+                    self.name_builder.fill('{basename}.thumbnail{ext}'),
+                    self.conversions_subdir, self.exif_tags)
+
+    def copy_original(self):
+        copy_original(
+            self.entry, self.orig_filename,
+            self.name_builder.fill('{basename}{ext}'))
 
     def extract_metadata(self):
-        pass
+        # Exif extraction
+        exif_tags = extract_exif(self.orig_filename)
+
+        # Is there any GPS data
+        gps_data = get_gps_data(exif_tags)
+
+        # Insert exif data into database
+        exif_all = clean_exif(exif_tags)
+
+        if len(exif_all):
+            self.entry.media_data_init(exif_all=exif_all)
+
+        if len(gps_data):
+            for key in list(gps_data.keys()):
+                gps_data['gps_' + key] = gps_data.pop(key)
+            self.entry.media_data_init(**gps_data)
 
 
 class InitialProcessor(CommonImageProcessor):
@@ -353,11 +384,11 @@ class InitialProcessor(CommonImageProcessor):
     description = "Initial processing"
 
     @classmethod
-    def media_is_eligible(cls, media_entry):
+    def media_is_eligible(cls, entry):
         """
         Determine if this media type is eligible for processing
         """
-        return media_entry.state in (
+        return entry.state in (
             "unprocessed", "failed")
 
     ###############################
@@ -381,8 +412,7 @@ class InitialProcessor(CommonImageProcessor):
 
 
     def process(self, size=None, thumb_size=None):
-        self.setup_workbench_subdirs()
-        self.fetch_original()
+        self.common_setup()
         self.generate_medium_if_applicable(size=size)
         self.generate_thumb(size=thumb_size)
         self.extract_metadata()
