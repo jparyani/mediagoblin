@@ -24,7 +24,8 @@ from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.pluginapi import hook_handle
 from mediagoblin.processing import (
     ProcessorDoesNotExist, ProcessorNotEligible,
-    get_entry_and_processing_manager, get_processing_manager_for_type)
+    get_entry_and_processing_manager, get_processing_manager_for_type,
+    ProcessingManagerDoesNotExist)
 
 
 def reprocess_parser_setup(subparser):
@@ -307,6 +308,7 @@ def run(args):
         reprocess_action=args.reprocess_command,
         reprocess_info=reprocess_request)
 
+
 def bulk_run(args):
     pass
 
@@ -317,8 +319,19 @@ def thumbs(args):
 
 
 def initial(args):
-    #TODO initial processing on all failed media
-    pass
+    """
+    Reprocess all failed media
+    """
+    query = MediaEntry.query.filter_by(state='failed')
+
+    for entry in query:
+        try:
+            media_entry, manager = get_entry_and_processing_manager(entry.id)
+            run_process_media(
+                media_entry,
+                reprocess_action='initial')
+        except ProcessingManagerDoesNotExist:
+            print 'No such processing manager for {0}'.format(entry.media_type)
 
 
 def reprocess(args):

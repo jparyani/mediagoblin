@@ -174,6 +174,8 @@ class MediaProcessor(object):
 class ProcessingKeyError(Exception): pass
 class ProcessorDoesNotExist(ProcessingKeyError): pass
 class ProcessorNotEligible(ProcessingKeyError): pass
+class ProcessingManagerDoesNotExist(ProcessingKeyError): pass
+
 
 
 class ProcessingManager(object):
@@ -265,6 +267,9 @@ def get_processing_manager_for_type(media_type):
     Get the appropriate media manager for this type
     """
     manager_class = hook_handle(('reprocess_manager', media_type))
+    if not manager_class:
+        raise ProcessingManagerDoesNotExist(
+            "A processing manager does not exist for {0}".format(media_type))
     manager = manager_class()
 
     return manager
