@@ -82,11 +82,8 @@ def resize_image(entry, resized, keyname, target_name, new_size,
 
 
 def resize_tool(entry,
-                force, keyname, target_name,
+                force, keyname, orig_file, target_name,
                 conversions_subdir, exif_tags, new_size=None):
-    # filename -- the filename of the original image being resized
-    filename = target_name
-
     # Use the default size if new_size was not given
     if not new_size:
         max_width = mgg.global_config['media:' + keyname]['max_width']
@@ -98,7 +95,7 @@ def resize_tool(entry,
     # entry.
     # Also created if the file needs rotation, or if forced.
     try:
-        im = Image.open(filename)
+        im = Image.open(orig_file)
     except IOError:
         raise BadMediaFail()
     if force \
