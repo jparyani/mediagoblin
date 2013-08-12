@@ -254,6 +254,9 @@ def available(args):
         media_type = args.id_or_type
         media_entry = None
         manager = get_processing_manager_for_type(media_type)
+    except ProcessingManagerDoesNotExist:
+        entry = MediaEntry.query.filter_by(id=args.id_or_type).first()
+        print 'No such processing manager for {0}'.format(entry.media_type)
 
     if args.state:
         processors = manager.list_all_processors_by_state(args.state)
@@ -284,29 +287,34 @@ def available(args):
 
 
 def run(args):
-    media_entry, manager = get_entry_and_processing_manager(args.media_id)
-
-    # TODO: (maybe?) This could probably be handled entirely by the
-    # processor class...
     try:
-        processor_class = manager.get_processor(
-            args.reprocess_command, media_entry)
-    except ProcessorDoesNotExist:
-        print 'No such processor "%s" for media with id "%s"' % (
-            args.reprocess_command, media_entry.id)
-        return
-    except ProcessorNotEligible:
-        print 'Processor "%s" exists but media "%s" is not eligible' % (
-            args.reprocess_command, media_entry.id)
-        return
+        media_entry, manager = get_entry_and_processing_manager(args.media_id)
 
-    reprocess_parser = processor_class.generate_parser()
-    reprocess_args = reprocess_parser.parse_args(args.reprocess_args)
-    reprocess_request = processor_class.args_to_request(reprocess_args)
-    run_process_media(
-        media_entry,
-        reprocess_action=args.reprocess_command,
-        reprocess_info=reprocess_request)
+        # TODO: (maybe?) This could probably be handled entirely by the
+        # processor class...
+        try:
+            processor_class = manager.get_processor(
+                args.reprocess_command, media_entry)
+        except ProcessorDoesNotExist:
+            print 'No such processor "%s" for media with id "%s"' % (
+                args.reprocess_command, media_entry.id)
+            return
+        except ProcessorNotEligible:
+            print 'Processor "%s" exists but media "%s" is not eligible' % (
+                args.reprocess_command, media_entry.id)
+            return
+
+        reprocess_parser = processor_class.generate_parser()
+        reprocess_args = reprocess_parser.parse_args(args.reprocess_args)
+        reprocess_request = processor_class.args_to_request(reprocess_args)
+        run_process_media(
+            media_entry,
+            reprocess_action=args.reprocess_command,
+            reprocess_info=reprocess_request)
+
+    except ProcessingManagerDoesNotExist:
+        entry = MediaEntry.query.filter_by(id=args.media_id).first()
+        print 'No such processing manager for {0}'.format(entry.media_type)
 
 
 def bulk_run(args):
