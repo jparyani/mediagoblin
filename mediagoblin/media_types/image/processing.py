@@ -81,11 +81,11 @@ def resize_image(entry, resized, keyname, target_name, new_size,
     store_public(entry, keyname, tmp_resized_filename, target_name)
 
 
-def resize_tool(entry, orig_filename,
+def resize_tool(entry,
                 force, keyname, target_name,
                 conversions_subdir, exif_tags, new_size=None):
     # filename -- the filename of the original image being resized
-    filename = orig_filename
+    filename = target_name
 
     # Use the default size if new_size was not given
     if not new_size:
@@ -342,6 +342,10 @@ class CommonImageProcessor(MediaProcessor):
             self.entry, self.workbench)
         self.name_builder = FilenameBuilder(self.orig_filename)
 
+        # Exif extraction
+        self.exif_tags = extract_exif(self.orig_filename)
+
+
     def generate_medium_if_applicable(self, size=None):
         resize_tool(self.entry, False, 'medium', self.orig_filename,
                     self.name_builder.fill('{basename}.medium{ext}'),
@@ -358,14 +362,11 @@ class CommonImageProcessor(MediaProcessor):
             self.name_builder.fill('{basename}{ext}'))
 
     def extract_metadata(self):
-        # Exif extraction
-        exif_tags = extract_exif(self.orig_filename)
-
         # Is there any GPS data
-        gps_data = get_gps_data(exif_tags)
+        gps_data = get_gps_data(self.exif_tags)
 
         # Insert exif data into database
-        exif_all = clean_exif(exif_tags)
+        exif_all = clean_exif(self.exif_tags)
 
         if len(exif_all):
             self.entry.media_data_init(exif_all=exif_all)
@@ -401,14 +402,23 @@ class InitialProcessor(CommonImageProcessor):
             description=cls.description,
             prog=cls.name)
 
-        cls._add_width_height_args(parser)
+        parser.add_argument(
+            '--size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        parser.add_argument(
+            '--thumb-size',
+            nargs=2,
+            type=int)
 
         return parser
 
     @classmethod
     def args_to_request(cls, args):
         return request_from_args(
-            args, ['width', 'height'])
+            args, ['size', 'thumb_size'])
 
 
     def process(self, size=None, thumb_size=None):
