@@ -97,28 +97,27 @@ def env_import(args):
     '''
     Restore mongo database and media files from a tar archive
     '''
-    commands_util.check_unrecognized_args(args)
-    if not args[0].cache_path:
-        args[0].cache_path = tempfile.mkdtemp()
+    if not args.cache_path:
+        args.cache_path = tempfile.mkdtemp()
 
-    setup_global_and_app_config(args[0].conf_file)
+    setup_global_and_app_config(args.conf_file)
 
     # Creates mg_globals.public_store and mg_globals.queue_store
     setup_storage()
 
-    global_config, app_config = setup_global_and_app_config(args[0].conf_file)
+    global_config, app_config = setup_global_and_app_config(args.conf_file)
     db = setup_connection_and_db_from_config(
         app_config)
 
     tf = tarfile.open(
-        args[0].tar_file,
+        args.tar_file,
         mode='r|gz')
 
-    tf.extractall(args[0].cache_path)
+    tf.extractall(args.cache_path)
 
-    args[0].cache_path = os.path.join(
-        args[0].cache_path, 'mediagoblin-data')
-    args = _setup_paths(args[0])
+    args.cache_path = os.path.join(
+        args.cache_path, 'mediagoblin-data')
+    args = _setup_paths(args)
 
     # Import database from extracted data
     _import_database(db, args)
@@ -227,16 +226,16 @@ def env_export(args):
     '''
     commands_util.check_unrecognized_args(args)
     if args.cache_path:
-        if os.path.exists(args[0].cache_path):
+        if os.path.exists(args.cache_path):
             _log.error('The cache directory must not exist '
                        'before you run this script')
-            _log.error('Cache directory: {0}'.format(args[0].cache_path))
+            _log.error('Cache directory: {0}'.format(args.cache_path))
 
             return False
     else:
-        args[0].cache_path = tempfile.mkdtemp()
+        args.cache_path = tempfile.mkdtemp()
 
-    args = _setup_paths(args[0])
+    args = _setup_paths(args)
 
     if not _export_check(args):
         _log.error('Checks did not pass, exiting')

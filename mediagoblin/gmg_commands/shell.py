@@ -63,13 +63,12 @@ def shell(args):
     """
     Setup a shell for the user either a normal Python shell or an IPython one
     """
-    commands_util.check_unrecognized_args(args)
     user_namespace = {
         'mg_globals': mg_globals,
-        'mgoblin_app': commands_util.setup_app(args[0]),
+        'mgoblin_app': commands_util.setup_app(args),
         'db': mg_globals.database}
 
-    if args[0].ipython:
+    if args.ipython:
         ipython_shell(**user_namespace)
     else:
         # Try ipython_shell first and fall back if not available

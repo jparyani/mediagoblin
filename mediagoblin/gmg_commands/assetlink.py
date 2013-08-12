@@ -138,8 +138,7 @@ def assetlink(args):
     """
     Link the asset directory of the currently installed theme and plugins
     """
-    commands_util.check_unrecognized_args(args)
-    mgoblin_app = commands_util.setup_app(args[0])
+    mgoblin_app = commands_util.setup_app(args)
     app_config = mg_globals.app_config
 
     # link theme

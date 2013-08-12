@@ -20,7 +20,6 @@ from sqlalchemy.orm import sessionmaker
 
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.db.migration_tools import MigrationManager
-from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.init import setup_global_and_app_config
 from mediagoblin.tools.common import import_component
 
@@ -148,6 +147,5 @@ def run_all_migrations(db, app_config, global_config):
 
 
 def dbupdate(args):
-    commands_util.check_unrecognized_args(args)
-    global_config, app_config = setup_global_and_app_config(args[0].conf_file)
+    global_config, app_config = setup_global_and_app_config(args.conf_file)
     run_dbupdate(app_config, global_config)

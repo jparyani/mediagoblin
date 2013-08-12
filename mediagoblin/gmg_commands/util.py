@@ -17,7 +17,6 @@
 
 from mediagoblin import app
 import getpass
-import argparse
 
 
 def setup_app(args):
@@ -39,9 +38,3 @@ def prompt_if_not_set(variable, text, password=False):
             variable=getpass.getpass(text + u' ')
 
     return variable
-
-
-def check_unrecognized_args(args):
-    if args[1]:
-        parser = argparse.ArgumentParser()
-        parser.error('unrecognized arguments: {}'.format(args[1]))
