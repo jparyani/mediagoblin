@@ -77,7 +77,7 @@ def prepare_queue_task(app, entry, filename):
 
 
 def run_process_media(entry, feed_url=None,
-                      reprocess_action="inital", reprocess_info=None):
+                      reprocess_action="initial", reprocess_info=None):
     """Process the media asynchronously
 
     :param entry: MediaEntry() instance to be processed.
