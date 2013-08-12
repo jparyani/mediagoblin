@@ -274,79 +274,6 @@ def get_entry_and_processing_manager(media_id):
     return entry, manager
 
 
-################################################
-# TODO: This ProcessingState is OUTDATED,
-#   and needs to be refactored into other tools!
-################################################
-
-class ProcessingState(object):
-    """
-    The first and only argument to the "processor" of a media type
-
-    This could be thought of as a "request" to the processor
-    function. It has the main info for the request (media entry)
-    and a bunch of tools for the request on it.
-    It can get more fancy without impacting old media types.
-    """
-    def __init__(self, entry):
-        self.entry = entry
-        self.workbench = None
-        self.orig_filename = None
-
-    def set_workbench(self, wb):
-        self.workbench = wb
-
-    def get_orig_filename(self):
-        """
-        Get the a filename for the original, on local storage
-
-        If the media entry has a queued_media_file, use that, otherwise
-        use the original.
-
-        In the future, this will return the highest quality file available
-        if neither the original or queued file are available
-        """
-        if self.orig_filename is not None:
-            return self.orig_filename
-
-        if self.entry.queued_media_file:
-            orig_filepath = self.entry.queued_media_file
-            storage = mgg.queue_store
-        else:
-            orig_filepath = self.entry.media_files['original']
-            storage = mgg.public_store
-
-        orig_filename = self.workbench.localized_file(
-            storage, orig_filepath,
-            'source')
-        self.orig_filename = orig_filename
-        return orig_filename
-
-    def copy_original(self, target_name, keyname=u"original"):
-        self.store_public(keyname, self.get_orig_filename(), target_name)
-
-    def store_public(self, keyname, local_file, target_name=None):
-        if target_name is None:
-            target_name = os.path.basename(local_file)
-        target_filepath = create_pub_filepath(self.entry, target_name)
-        if keyname in self.entry.media_files:
-            _log.warn("store_public: keyname %r already used for file %r, "
-                      "replacing with %r", keyname,
-                      self.entry.media_files[keyname], target_filepath)
-        mgg.public_store.copy_local_to_storage(local_file, target_filepath)
-        self.entry.media_files[keyname] = target_filepath
-
-    def delete_queue_file(self):
-        # Remove queued media file from storage and database.
-        # queued_filepath is in the task_id directory which should
-        # be removed too, but fail if the directory is not empty to be on
-        # the super-safe side.
-        queued_filepath = self.entry.queued_media_file
-        mgg.queue_store.delete_file(queued_filepath)      # rm file
-        mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
-        self.entry.queued_media_file = []
-
-
 def mark_entry_failed(entry_id, exc):
     """
     Mark a media entry as having failed in its conversion.
@@ -381,10 +308,6 @@ def mark_entry_failed(entry_id, exc):
             {u'state': u'failed',
              u'fail_error': None,
              u'fail_metadata': {}})
-
-
-###############################################################################
-# refactoring procstate stuff here
 
 
 def get_orig_filename(entry, workbench):
@@ -429,11 +352,6 @@ def store_public(entry, keyname, local_file, target_name=None,
 
 def copy_original(entry, orig_filename, target_name, keyname=u"original"):
     store_public(entry, keyname, orig_filename, target_name)
-
-
-# end refactoring
-###############################################################################
-
 
 
 class BaseProcessingFail(Exception):
