@@ -27,7 +27,7 @@ from mediagoblin.db.models import MediaEntry
 from mediagoblin.processing import (
     BadMediaFail, FilenameBuilder,
     MediaProcessor, ProcessingManager,
-    request_from_args)
+    request_from_args, get_orig_filename)
 from mediagoblin.submit.lib import run_process_media
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful, \
@@ -325,8 +325,15 @@ class CommonImageProcessor(MediaProcessor):
             help=(
                 "Height of the resized image (if not using defaults)"))
 
+    def setup_workbench_subdirs(self):
+        # Conversions subdirectory to avoid collisions
+        self.conversions_subdir = os.path.join(
+            self.workbench.dir, 'convirsions')
+
     def fetch_original(self):
-        pass
+        self.orig_filename = get_orig_filename(
+            self.entry, self.workbench)
+        self.name_builder = FilenameBuilder(self.orig_filename)
 
     def generate_medium_if_applicable(self, size=None):
         pass
@@ -374,6 +381,7 @@ class InitialProcessor(CommonImageProcessor):
 
 
     def process(self, size=None, thumb_size=None):
+        self.setup_workbench_subdirs()
         self.fetch_original()
         self.generate_medium_if_applicable(size=size)
         self.generate_thumb(size=thumb_size)

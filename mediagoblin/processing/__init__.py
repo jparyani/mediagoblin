@@ -372,6 +372,40 @@ def mark_entry_failed(entry_id, exc):
              u'fail_metadata': {}})
 
 
+###############################################################################
+# refactoring procstate stuff here
+
+
+def get_orig_filename(entry, workbench):
+    """
+    Get the a filename for the original, on local storage
+
+    If the media entry has a queued_media_file, use that, otherwise
+    use the original.
+
+    In the future, this will return the highest quality file available
+    if neither the original or queued file are available by checking
+    some ordered list of preferred keys.
+    """
+    if entry.queued_media_file:
+        orig_filepath = entry.queued_media_file
+        storage = mgg.queue_store
+    else:
+        orig_filepath = entry.media_files['original']
+        storage = mgg.public_store
+
+    orig_filename = workbench.localized_file(
+        storage, orig_filepath,
+        'source')
+
+    return orig_filename
+
+
+# end refactoring
+###############################################################################
+
+
+
 class BaseProcessingFail(Exception):
     """
     Base exception that all other processing failure messages should
