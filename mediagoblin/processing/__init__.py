@@ -137,7 +137,7 @@ class MediaProcessor(object):
         raise NotImplementedError
 
     @classmethod
-    def media_is_eligible(cls, entry):
+    def media_is_eligible(cls, entry=None, state=None):
         raise NotImplementedError
 
     ###############################
@@ -204,7 +204,18 @@ class ProcessingManager(object):
         return [
             processor
             for processor in self.processors.values()
-            if processor.media_is_eligible(entry)]
+            if processor.media_is_eligible(entry=entry)]
+
+    def list_all_processors_by_state(self, state):
+        """
+        List all processors that this media state is eligible to be processed
+        for.
+        """
+        return [
+            processor
+            for processor in self.processors.values()
+            if processor.media_is_eligible(state=state)]
+
 
     def list_all_processors(self):
         return self.processors.values()

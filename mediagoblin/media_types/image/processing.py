@@ -203,11 +203,13 @@ class InitialProcessor(CommonImageProcessor):
     description = "Initial processing"
 
     @classmethod
-    def media_is_eligible(cls, entry):
+    def media_is_eligible(cls, entry=None, state=None):
         """
         Determine if this media type is eligible for processing
         """
-        return entry.state in (
+        if not state:
+            state = entry.state
+        return state in (
             "unprocessed", "failed")
 
     ###############################
@@ -256,11 +258,13 @@ class Resizer(CommonImageProcessor):
     description = 'Resize image'
 
     @classmethod
-    def media_is_eligible(cls, entry):
+    def media_is_eligible(cls, entry=None, state=None):
         """
         Determine if this media type is eligible for processing
         """
-        return entry.state in 'processed'
+        if not state:
+            state = entry.state
+        return state in 'processed'
 
     ###############################
     # Command line interface things

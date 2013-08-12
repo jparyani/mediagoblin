@@ -41,7 +41,7 @@ def reprocess_parser_setup(subparser):
     available_parser = subparsers.add_parser(
         "available",
         help="Find out what actions are available for this media")
-    
+
     available_parser.add_argument(
         "id_or_type",
         help="Media id or media type to check")
@@ -51,26 +51,18 @@ def reprocess_parser_setup(subparser):
         action="store_true",
         help="List argument help for each action available")
 
-    
-    ############################################
-    # run command (TODO: and bulk_run command??)
-    ############################################
-    
+    available_parser.add_argument(
+        "--state",
+        help="The state of media you would like to reprocess")
+
+
+    #############
+    # run command
+    #############
+
     run_parser = subparsers.add_parser(
         "run",
         help="Run a reprocessing on one or more media")
-
-    run_parser.add_argument(
-        '--state', '-s',
-        help="Reprocess media entries in this state"
-             " such as 'failed' or 'processed'")
-    run_parser.add_argument(
-        '--type', '-t',
-        help="The type of media to be reprocessed such as 'video' or 'image'")
-    run_parser.add_argument(
-        '--thumbnails',
-        action="store_true",
-        help="Regenerate thumbnails for all processed media")
 
     run_parser.add_argument(
         'media_id',
@@ -85,6 +77,48 @@ def reprocess_parser_setup(subparser):
         nargs=argparse.REMAINDER,
         help="rest of arguments to the reprocessing tool")
 
+
+    ################
+    # thumbs command
+    ################
+    thumbs = subparsers.add_parser(
+        'thumbs',
+        help='Regenerate thumbs for all processed media')
+
+    thumbs.add_argument(
+        '--size',
+        nargs=2,
+        type=int,
+        metavar=('max_width', 'max_height'))
+
+    #################
+    # initial command
+    #################
+    subparsers.add_parser(
+        'initial',
+        help='Reprocess all failed media')
+
+    ##################
+    # bulk_run command
+    ##################
+    bulk_run_parser = subparsers.add_parser(
+        'bulk_run',
+        help='Run reprocessing on a given media type or state')
+
+    bulk_run_parser.add_argument(
+        'type',
+        help='The type of media you would like to process')
+
+    bulk_run_parser.add_argument(
+        'state',
+        default='processed',
+        help='The state of the media you would like to process. Defaults to' \
+             " 'processed'")
+
+    bulk_run_parser.add_argument(
+        'reprocess_args',
+        nargs=argparse.REMAINDER,
+        help='The rest of the arguments to the reprocessing tool')
 
     ###############
     # help command?
@@ -220,7 +254,9 @@ def available(args):
         media_entry = None
         manager = get_processing_manager_for_type(media_type)
 
-    if media_entry is None:
+    if args.state:
+        processors = manager.list_all_processors_by_state(args.state)
+    elif media_entry is None:
         processors = manager.list_all_processors()
     else:
         processors = manager.list_eligible_processors(media_entry)
@@ -271,6 +307,19 @@ def run(args):
         reprocess_action=args.reprocess_command,
         reprocess_info=reprocess_request)
 
+def bulk_run(args):
+    pass
+
+
+def thumbs(args):
+    #TODO regenerate thumbs for all processed media
+    pass
+
+
+def initial(args):
+    #TODO initial processing on all failed media
+    pass
+
 
 def reprocess(args):
     # Run eagerly unless explicetly set not to
@@ -284,3 +333,12 @@ def reprocess(args):
 
     elif args.reprocess_subcommand == "available":
         available(args)
+
+    elif args.reprocess_subcommand == "bulk_run":
+        bulk_run(args)
+
+    elif args.reprocess_subcommand == "thumbs":
+        thumbs(args)
+
+    elif args.reprocess_subcommand == "initial":
+        initial(args)
