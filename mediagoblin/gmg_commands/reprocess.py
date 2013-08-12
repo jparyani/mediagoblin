@@ -28,6 +28,11 @@ from mediagoblin.processing import (
 
 
 def reprocess_parser_setup(subparser):
+    subparser.add_argument(
+        '--celery',
+        action='store_true',
+        help="Don't process eagerly, pass off to celery")
+
     subparsers = subparser.add_subparsers(dest="reprocess_subcommand")
 
     ###################
@@ -66,10 +71,6 @@ def reprocess_parser_setup(subparser):
         '--thumbnails',
         action="store_true",
         help="Regenerate thumbnails for all processed media")
-    run_parser.add_argument(
-        '--celery',
-        action='store_true',
-        help="Don't process eagerly, pass off to celery")
 
     run_parser.add_argument(
         'media_id',
