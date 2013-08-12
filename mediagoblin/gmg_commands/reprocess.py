@@ -111,10 +111,15 @@ def reprocess_parser_setup(subparser):
         help='The type of media you would like to process')
 
     bulk_run_parser.add_argument(
-        'state',
+        '--state',
         default='processed',
+        nargs='?',
         help='The state of the media you would like to process. Defaults to' \
              " 'processed'")
+
+    bulk_run_parser.add_argument(
+        'reprocess_command',
+        help='The reprocess command you intend to run')
 
     bulk_run_parser.add_argument(
         'reprocess_args',
@@ -286,9 +291,11 @@ def available(args):
                 print " - %s" % processor.name
 
 
-def run(args):
+def run(args, media_id=None):
+    if not media_id:
+        media_id = args.media_id
     try:
-        media_entry, manager = get_entry_and_processing_manager(args.media_id)
+        media_entry, manager = get_entry_and_processing_manager(media_id)
 
         # TODO: (maybe?) This could probably be handled entirely by the
         # processor class...
@@ -313,12 +320,19 @@ def run(args):
             reprocess_info=reprocess_request)
 
     except ProcessingManagerDoesNotExist:
-        entry = MediaEntry.query.filter_by(id=args.media_id).first()
+        entry = MediaEntry.query.filter_by(id=media_id).first()
         print 'No such processing manager for {0}'.format(entry.media_type)
 
 
 def bulk_run(args):
-    pass
+    """
+    Bulk reprocessing of a given media_type
+    """
+    query = MediaEntry.query.filter_by(media_type=args.type,
+                                       state=args.state)
+
+    for entry in query:
+        run(args, entry.id)
 
 
 def thumbs(args):
