@@ -17,8 +17,8 @@ import datetime
 import logging
 
 from mediagoblin.media_types import MediaManagerBase
-from mediagoblin.media_types.image.processing import ProcessImage, \
-    sniff_handler, ImageProcessingManager
+from mediagoblin.media_types.image.processing import sniff_handler, \
+        ImageProcessingManager
 from mediagoblin.tools import pluginapi
 
 _log = logging.getLogger(__name__)
@@ -34,7 +34,6 @@ def setup_plugin():
 
 class ImageMediaManager(MediaManagerBase):
     human_readable = "Image"
-    processor = staticmethod(ProcessImage)
     display_template = "mediagoblin/media_displays/image.html"
     default_thumb = "images/media_thumbs/image.png"
 

@@ -90,7 +90,7 @@ class MediaProcessor(object):
     - resize: resize an image
     - transcode: transcode a video
 
-    ... etc.  
+    ... etc.
 
     Some information on producing a new MediaProcessor for your media type:
 
@@ -193,7 +193,7 @@ class ProcessingManager(object):
         name = processor.name
         if name is None:
             raise AttributeError("Processor class's .name attribute not set")
-        
+
         self.processors[name] = processor
 
     def list_eligible_processors(self, entry):
