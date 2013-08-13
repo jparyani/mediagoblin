@@ -332,10 +332,11 @@ class InitialProcessor(CommonAudioProcessor):
 
     def process(self, quality=None, fft_size=None, thumb_size=None,
                 create_spectrogram=None, medium_width=None):
+        self.common_setup()
+
         if not create_spectrogram:
             create_spectrogram = self.audio_config['create_spectrogram']
 
-        self.common_setup()
         self.transcode(quality=quality)
         self.copy_original()
 
