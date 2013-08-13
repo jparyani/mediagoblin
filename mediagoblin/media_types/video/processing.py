@@ -19,8 +19,12 @@ import logging
 import datetime
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.processing import \
-    create_pub_filepath, FilenameBuilder, BaseProcessingFail, ProgressCallback
+from mediagoblin.processing import (
+    FilenameBuilder, BaseProcessingFail,
+    ProgressCallback, MediaProcessor,
+    ProcessingManager, request_from_args,
+    get_orig_filename, store_public,
+    copy_original)
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 from . import transcoders
@@ -55,106 +59,6 @@ def sniff_handler(media_file, **kw):
         return MEDIA_TYPE
 
     return None
-
-
-def process_video(proc_state):
-    """
-    Process a video entry, transcode the queued media files (originals) and
-    create a thumbnail for the entry.
-
-    A Workbench() represents a local tempory dir. It is automatically
-    cleaned up when this function exits.
-    """
-    entry = proc_state.entry
-    workbench = proc_state.workbench
-    video_config = mgg.global_config['media_type:mediagoblin.media_types.video']
-
-    queued_filepath = entry.queued_media_file
-    queued_filename = proc_state.get_queued_filename()
-    name_builder = FilenameBuilder(queued_filename)
-
-    medium_basename = name_builder.fill('{basename}-640p.webm')
-    medium_filepath = create_pub_filepath(entry, medium_basename)
-
-    thumbnail_basename = name_builder.fill('{basename}.thumbnail.jpg')
-    thumbnail_filepath = create_pub_filepath(entry, thumbnail_basename)
-
-    # Create a temporary file for the video destination (cleaned up with workbench)
-    tmp_dst = os.path.join(workbench.dir, medium_basename)
-    # Transcode queued file to a VP8/vorbis file that fits in a 640x640 square
-    progress_callback = ProgressCallback(entry)
-
-    dimensions = (
-        mgg.global_config['media:medium']['max_width'],
-        mgg.global_config['media:medium']['max_height'])
-
-    # Extract metadata and keep a record of it
-    metadata = transcoders.VideoTranscoder().discover(queued_filename)
-    store_metadata(entry, metadata)
-
-    # Figure out whether or not we need to transcode this video or
-    # if we can skip it
-    if skip_transcode(metadata):
-        _log.debug('Skipping transcoding')
-
-        dst_dimensions = metadata['videowidth'], metadata['videoheight']
-
-            # Push original file to public storage
-        _log.debug('Saving original...')
-        proc_state.copy_original(queued_filepath[-1])
-
-        did_transcode = False
-    else:
-        transcoder = transcoders.VideoTranscoder()
-
-        transcoder.transcode(queued_filename, tmp_dst,
-                vp8_quality=video_config['vp8_quality'],
-                vp8_threads=video_config['vp8_threads'],
-                vorbis_quality=video_config['vorbis_quality'],
-                progress_callback=progress_callback,
-                dimensions=dimensions)
-
-        dst_dimensions = transcoder.dst_data.videowidth,\
-            transcoder.dst_data.videoheight
-
-        # Push transcoded video to public storage
-        _log.debug('Saving medium...')
-        mgg.public_store.copy_local_to_storage(tmp_dst, medium_filepath)
-        _log.debug('Saved medium')
-
-        entry.media_files['webm_640'] = medium_filepath
-
-        did_transcode = True
-
-    # Save the width and height of the transcoded video
-    entry.media_data_init(
-        width=dst_dimensions[0],
-        height=dst_dimensions[1])
-
-    # Temporary file for the video thumbnail (cleaned up with workbench)
-    tmp_thumb = os.path.join(workbench.dir, thumbnail_basename)
-
-    # Create a thumbnail.jpg that fits in a 180x180 square
-    transcoders.VideoThumbnailerMarkII(
-        queued_filename,
-        tmp_thumb,
-        180)
-
-    # Push the thumbnail to public storage
-    _log.debug('Saving thumbnail...')
-    mgg.public_store.copy_local_to_storage(tmp_thumb, thumbnail_filepath)
-    entry.media_files['thumb'] = thumbnail_filepath
-
-    # save the original... but only if we did a transcoding
-    # (if we skipped transcoding and just kept the original anyway as the main
-    #  media, then why would we save the original twice?)
-    if video_config['keep_original'] and did_transcode:
-        # Push original file to public storage
-        _log.debug('Saving original...')
-        proc_state.copy_original(queued_filepath[-1])
-
-    # Remove queued media file from storage and database
-    proc_state.delete_queue_file()
 
 
 def store_metadata(media_entry, metadata):
@@ -211,3 +115,175 @@ def store_metadata(media_entry, metadata):
     if len(stored_metadata):
         media_entry.media_data_init(
             orig_metadata=stored_metadata)
+
+
+class CommonVideoProcessor(MediaProcessor):
+    """
+    Provides a base for various video processing steps
+    """
+
+    def common_setup(self):
+        self.video_config = mgg \
+            .global_config['media_type:mediagoblin.media_types.audio']
+
+        # Pull down and set up the original file
+        self.orig_filename = get_orig_filename(
+            self.entry, self.workbench)
+        self.name_builder = FilenameBuilder(self.orig_filename)
+
+        self.transcoder = transcoders.VideoTranscoder()
+        self.did_transcode = False
+
+    def copy_original(self):
+        # If we didn't transcode, then we need to keep the original
+        if not self.did_transcode or \
+           (self.video_config['keep_original'] and self.did_transcode):
+            copy_original(
+                self.entry, self.orig_filename,
+                self.name_builder.fill('{basename}{ext}'))
+
+    def transcode(self, medium_size=None, vp8_quality=None, vp8_threads=None,
+                  vorbis_quality=None):
+        progress_callback = ProgressCallback(entry)
+        tmp_dst = os.path.join(self.workbench.dir,
+                               self.name_builder.fill('{basename}-640p.webm'))
+
+        if not medium_size:
+            medium_size = (
+                mgg.global_config['media:medium']['max_width'],
+                mgg.global_config['media:medium']['max_height'])
+        if not vp8_quality:
+            vp8_quality = self.video_config['vp8_quality']
+        if not vp8_threads:
+            vp8_threads = self.video_config['vp8_threads']
+        if not vorbis_quality:
+            vorbis_quality = self.video_config['vorbis_quality']
+
+        # Extract metadata and keep a record of it
+        metadata = self.transcoder.discover(self.orig_filename)
+        store_metadata(self.entry, metadata)
+
+        # Figure out whether or not we need to transcode this video or
+        # if we can skip it
+        if skip_transcode(metadata):
+            _log.debug('Skipping transcoding')
+
+            dst_dimensions = metadata['videowidth'], metadata['videoheight']
+
+        else:
+            self.transcoder.transcode(self.orig_filename, tmp_dst,
+                                      vp8_quality=vp8_quality,
+                                      vp8_threads=vp8_threads,
+                                      vorbis_quality=vorbis_quality,
+                                      progress_callback=progress_callback,
+                                      dimensions=medium_size)
+
+            dst_dimensions = self.transcoder.dst_data.videowidth,\
+                self.transcoder.dst_data.videoheight
+
+            # Push transcoded video to public storage
+            _log.debug('Saving medium...')
+            store_public(self.entry, 'webm_640', tmp_dst,
+                         self.name_builder.fill('{basename}-640p.webm'))
+            _log.debug('Saved medium')
+
+            self.did_transcode = True
+
+        # Save the width and height of the transcoded video
+        self.entry.media_data_init(
+            width=dst_dimensions[0],
+            height=dst_dimensions[1])
+
+    def generate_thumb(self, thumb_size=None):
+        # Temporary file for the video thumbnail (cleaned up with workbench)
+        tmp_thumb = os.path.join(self.workbench.dir,
+                                 self.name_builder.fill(
+                                     '{basename}.thumbnail.jpg'))
+
+        if not thumb_size:
+            thumb_size = (mgg.global_config['media:thumb']['max_width'],
+                          mgg.global_config['media:thumb']['max_height'])
+
+        transcoders.VideoThumbnailerMarkII(
+            self.orig_filename,
+            tmp_thumb,
+            thumb_size[0],
+            thumb_size[1])
+
+        # Push the thumbnail to public storage
+        _log.debug('Saving thumbnail...')
+        store_public(self.entry, 'thumb', tmp_thumb,
+                     self.name_builder.fill('{basename}.thumbnail.jpg'))
+
+
+class InitialProcessor(CommonVideoProcessor):
+    """
+    Initial processing steps for new video
+    """
+    name = "initial"
+    description = "Initial processing"
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        if not state:
+            state = entry.state
+        return state in (
+            "unprocessed", "failed")
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--medium_size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        parser.add_argument(
+            '--vp8_quality',
+            type=int,
+            help='Range 0..10')
+
+        parser.add_argument(
+            '--vp8_threads',
+            type=int,
+            help='0 means number_of_CPUs - 1')
+
+        parser.add_argument(
+            '--vorbis_quality',
+            type=float,
+            help='Range -0.1..1')
+
+        parser.add_argument(
+            '--thumb_size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['medium_size', 'vp8_quality', 'vp8_threads',
+                   'vorbis_quality', 'thumb_size'])
+
+    def process(self, medium_size=None, vp8_threads=None, vp8_quality=None,
+                vorbis_quality=None, thumb_size=None):
+        self.common_setup()
+
+        self.transcode(medium_size=medium_size, vp8_quality=vp8_quality,
+                       vp8_threads=vp8_threads, vorbis_quality=vorbis_quality)
+
+        self.copy_original()
+        self.generate_thumb(thumb_size=thumb_size)
+        self.delete_queue_file()
+
+
+class VideoProcessingManager(ProcessingManager):
+    def __init__(self):
+        super(self.__class__, self).__init__()
+        self.add_processor(InitialProcessor)

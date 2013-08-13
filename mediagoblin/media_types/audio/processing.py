@@ -113,8 +113,8 @@ class CommonAudioProcessor(MediaProcessor):
                 self.audio_config['quality']))
 
         spectrogram_tmp = os.path.join(self.workbench.dir,
-                                        self.name_builder.fill(
-                                            '{basename}-spectrogram.jpg'))
+                                       self.name_builder.fill(
+                                           '{basename}-spectrogram.jpg'))
 
         self.thumbnailer.spectrogram(
             wav_tmp,
