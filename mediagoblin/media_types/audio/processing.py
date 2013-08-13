@@ -216,8 +216,8 @@ class CommonAudioProcessor(MediaProcessor):
         self.transcoder.discover(webm_audio_tmp)
 
         _log.debug('Saving medium...')
-        store_public(self.entry, 'medium', webm_audio_tmp,
-                     self.name_builder.fill('{basename}.medium{ext}'))
+        store_public(self.entry, 'webm_audio', webm_audio_tmp,
+                     self.name_builder.fill('{basename}.medium.webm'))
 
     def create_spectrogram(self, quality=None, max_width=None, fft_size=None):
         if not quality:
