@@ -180,6 +180,7 @@ class InitialProcessor(CommonAudioProcessor):
 
         parser.add_argument(
             '--thumb_size',
+            nargs=2,
             metavar=('max_width', 'max_height'),
             type=int)
 
