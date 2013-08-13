@@ -109,9 +109,9 @@
               <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
                 {%- trans %}Create new collection{% endtrans -%}
               </a>
-              {% if request.user.is_admin %}
+              {% if request.user.has_privilege('admin','moderator') %}
                 <p>
-                  <span class="dropdown_title">Admin powers:</span>
+                  <span class="dropdown_title">Moderation powers:</span>
                   <a href="{{ request.urlgen('mediagoblin.moderation.media_panel') }}">
                     {%- trans %}Media processing panel{% endtrans -%}
                   </a>

@@ -39,7 +39,7 @@
             {% endif %}
 	    {% if request.user and
                   (item.in_collection.creator == request.user.id or 
-                  request.user.is_admin) %}
+                  request.user.has_privilege(u'admin')) %}
 	      {%- set remove_url=request.urlgen(
                                  'mediagoblin.user_pages.collection_item_confirm_remove',
                                  user=item.in_collection.get_creator.username,

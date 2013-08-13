@@ -1,3 +1,4 @@
+{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -13,12 +14,33 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
 
+{% block title %}
+  Code of Conduct
+{% endblock %}
 
-def may_edit_media(request, media):
-    """Check, if the request's user may edit the media details"""
-    if media.uploader == request.user.id:
-        return True
-    if request.user.has_privilege(u'admin'):
-        return True
-    return False
+{% block mediagoblin_content -%}
+<h2>{% trans %}Code of Conduct for this Website{% endtrans %}</h2>
+
+{# Suggested layout for this page:
+<ol id="code_of_conduct_list">
+  <li> Item #1 </li>
+  <li>
+    Item #2
+    <ol class="nested_sublist">
+      <li>Sub-Item #1</li>
+      <li>Sub-Item #2</li>
+      <li>
+        Sub-Item #3
+        <ol class="nested_sublist">
+          <li>Sub-Subitem #1</li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+  <li>Item #3 </li>
+</ol>
+#}
+{% endblock -%}

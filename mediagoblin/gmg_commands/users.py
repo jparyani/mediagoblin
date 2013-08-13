@@ -85,7 +85,6 @@ def makeadmin(args):
     user = db.User.query.filter_by(
         username=unicode(args.username.lower())).one()
     if user:
-        user.is_admin = True
         user.all_privileges.append(
             db.Privilege.query.filter(
                 db.Privilege.privilege_name==u'admin').one()

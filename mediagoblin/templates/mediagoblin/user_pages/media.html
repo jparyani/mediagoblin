@@ -72,7 +72,7 @@
     </h2>
     {% if request.user and
           (media.uploader == request.user.id or
-           request.user.is_admin) %}
+           request.user.has_privilege('admin')) %}
       {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
                                  user= media.get_uploader.username,
                                  media_id=media.id) %}
@@ -198,7 +198,7 @@
     {%- if app_config['allow_attachments']
           and request.user
           and (media.uploader == request.user.id
-               or request.user.is_admin) %}
+               or request.user.has_privilege('admin')) %}
       {%- if not media.attachment_files|count %}
         <h3>{% trans %}Attachments{% endtrans %}</h3>
       {%- endif %}

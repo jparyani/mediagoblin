@@ -122,7 +122,7 @@
       {{ report.report_content }}
     </div>
   </div>
-  {% if not report.is_archived_report() %}
+  {% if not report.is_archived_report() and not (report.reported_user.has_privilege('admin') and not request.user.has_privilege('admin')) %}
     <input type=button value=Resolve id=open_resolution_form />
     <form action="" method="POST" id=resolution_form>
       {{ wtforms_util.render_divs(form) }}
@@ -163,19 +163,6 @@ $(document).ready(function() {
                 $('#'+name).hide();                
             });
         });
-/*        $.each(hidden_input_names, function(key,name){
-            if ($.inArray(key, $('ul#action_to_resolve li input:checked').val())){
-                $.each(hidden_input_names[key], function(index,name){
-                    $('#'+name).show();
-                    $('label[for='+name+']').show();
-                });
-            } else {
-                $.each(hidden_input_names[key], function(index,name){
-                    $('#'+name).hide();
-                    $('label[for='+name+']').hide();
-                });
-            }
-        });*/
     });
     $("#user_banned_until").focus(function() {
         $(this).val("");
@@ -188,7 +175,7 @@ $(document).ready(function() {
     });
   });
   </script>
-  {% else %}
+  {% elif not (report.reported_user.has_privilege('admin')) %}
     <h2><img src="{{ request.staticdirect('/images/icon_clipboard.png') }}" 
              alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
                   Distributed by the GNOME project http://www.gnome.org" /> 
@@ -199,6 +186,9 @@ $(document).ready(function() {
     {% autoescape False %}
       <p>{{ report.result }}</p>
     {% endautoescape %}
+  {% else %}
+    <input type=button disabled=disabled value="Resolve This Report"/>
+    <p>You cannot take action against an administrator</p>
   {% endif %}
 {% endif %}
 {% endblock %}

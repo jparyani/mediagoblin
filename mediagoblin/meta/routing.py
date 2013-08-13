@@ -14,11 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-def may_edit_media(request, media):
-    """Check, if the request's user may edit the media details"""
-    if media.uploader == request.user.id:
-        return True
-    if request.user.has_privilege(u'admin'):
-        return True
-    return False
+meta_routes = [
+    ('mediagoblin.meta.code_of_conduct',
+        '/coc/',
+        'mediagoblin.meta.views:code_of_conduct'),
+    ('mediagoblin.meta.reports_panel',
+        '/reports/',
+        'mediagoblin.meta.views:public_reports_panel'),
+    ('mediagoblin.meta.reports_detail',
+        '/reports/<int:report_id>',
+        'mediagoblin.meta.views:public_reports_details')
+]

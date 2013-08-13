@@ -35,11 +35,11 @@ def require_active_login(controller):
     @wraps(controller)
     def new_controller_func(request, *args, **kwargs):
         if request.user and \
-                request.user.status == u'needs_email_verification':
+                not request.user.has_privilege(u'active'):
             return redirect(
                 request, 'mediagoblin.user_pages.user_home',
                 user=request.user.username)
-        elif not request.user or request.user.status != u'active':
+        elif not request.user or not request.user.has_privilege(u'active'):
             next_url = urljoin(
                     request.urlgen('mediagoblin.auth.login',
                         qualified=True),
@@ -72,13 +72,9 @@ def user_has_privilege(privilege_name):
         @wraps(controller)
         def wrapper(request, *args, **kwargs):
             user_id = request.user.id
-            privileges_of_user = Privilege.query.filter(
-                Privilege.all_users.any(
-                User.id==user_id))
             if UserBan.query.filter(UserBan.user_id==user_id).count():
                 return render_user_banned(request)
-            elif not privileges_of_user.filter(
-                Privilege.privilege_name==privilege_name).count():
+            elif not request.user.has_privilege(privilege_name):
                 raise Forbidden()
 
             return controller(request, *args, **kwargs)
@@ -94,7 +90,7 @@ def user_may_delete_media(controller):
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
         uploader_id = kwargs['media'].uploader
-        if not (request.user.is_admin or
+        if not (request.user.has_privilege(u'admin') or
                 request.user.id == uploader_id):
             raise Forbidden()
 
@@ -111,7 +107,7 @@ def user_may_alter_collection(controller):
     def wrapper(request, *args, **kwargs):
         creator_id = request.db.User.query.filter_by(
             username=request.matchdict['user']).first().id
-        if not (request.user.is_admin or
+        if not (request.user.has_privilege(u'admin') or
                 request.user.id == creator_id):
             raise Forbidden()
 
@@ -309,13 +305,8 @@ def require_admin_or_moderator_login(controller):
     """
     @wraps(controller)
     def new_controller_func(request, *args, **kwargs):
-        admin_privilege = Privilege.query.filter(
-            Privilege.privilege_name==u'admin').one()
-        moderator_privilege = Privilege.query.filter(
-            Privilege.privilege_name==u'moderator').one()
         if request.user and \
-            not admin_privilege in request.user.all_privileges and \
-                 not moderator_privilege in request.user.all_privileges:
+            not request.user.has_privilege(u'admin',u'moderator'):
 
             raise Forbidden()
         elif not request.user:

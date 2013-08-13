@@ -220,6 +220,7 @@ footer {
   color: #283F35;
 }
 
+
 .button_form {
   min-width: 99px;
   margin: 10px 0px 10px 15px;
@@ -615,7 +616,7 @@ table.media_panel th {
   text-align: left;
 }
 
-/* admin panels */
+/* moderator panels */
 
 table.admin_panel {
   width: 100%
@@ -654,6 +655,21 @@ table td.user_without_privilege {
   margin-top: 10px;
   margin-left: 10px;
 }
+
+/* code of conduct */
+
+#code_of_conduct_list  {
+    margin-left:25px;
+    margin-bottom: 10px;
+}
+#code_of_conduct_list li {
+    margin-top:5px;
+}
+ol.nested_sublist{
+    margin: 5px 0 10px 25px;
+    font-size:80%;
+}
+
 
 /* ASCII art and code */
 

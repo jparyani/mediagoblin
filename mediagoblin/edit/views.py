@@ -83,7 +83,7 @@ def edit_media(request, media):
 
             return redirect_obj(request, media)
 
-    if request.user.is_admin \
+    if request.user.has_privilege(u'admin') \
             and media.uploader != request.user.id \
             and request.method != 'POST':
         messages.add_message(
@@ -184,7 +184,7 @@ def legacy_edit_profile(request):
 def edit_profile(request, url_user=None):
     # admins may edit any user profile
     if request.user.username != url_user.username:
-        if not request.user.is_admin:
+        if not request.user.has_privilege(u'admin'):
             raise Forbidden(_("You can only edit your own profile."))
 
         # No need to warn again if admin just submitted an edited profile
@@ -326,7 +326,7 @@ def edit_collection(request, collection):
 
             return redirect_obj(request, collection)
 
-    if request.user.is_admin \
+    if request.user.has_privilege(u'admin') \
             and collection.creator != request.user.id \
             and request.method != 'POST':
         messages.add_message(

@@ -111,7 +111,7 @@
       <div class="profile_sidebar">
         {% include "mediagoblin/utils/profile.html" %}
         {% if request.user and
-              (request.user.id == user.id or request.user.is_admin) %}
+              (request.user.id == user.id or request.user.has_privilege('admin')) %}
           <a href="{{ request.urlgen('mediagoblin.edit.profile',
                    user=user.username) }}">
             {%- trans %}Edit profile{% endtrans -%}

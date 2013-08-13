@@ -72,7 +72,7 @@ def render_user_banned(request):
     if datetime.now()>user_ban.expiration_date:
         user_ban.delete()
         redirect(request,
-            'mediagoblin.index')
+            'index')
     return render_to_response(request,
         'mediagoblin/banned.html',
         {'reason':user_ban.reason,

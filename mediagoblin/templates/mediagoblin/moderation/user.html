@@ -33,12 +33,10 @@
   {# If no user... #}
   {% if not user %}
     <p>{% trans %}Sorry, no such user found.{% endtrans %}</p>
-
   {# User exists, but needs verification #}
   {% elif user.status == "needs_email_verification" %}
     <div class="form_box">
     <h1>{% trans %}Email verification needed{% endtrans %}</h1>
-
     <p>
       {% trans -%}
         Someone has registered an account with this username, but it still has
@@ -56,6 +54,10 @@
 
   {# Active(?) (or at least verified at some point) user, horray! #}
   {% else %}
+    <a href="{{ request.urlgen('mediagoblin.moderation.users') }}"
+       class="return_to_panel button_action"
+       title="Return to Users Panel">
+      {% trans %}Return to Users Panel{% endtrans %}</a>
     <h1>
       {%- trans username=user.username %}{{ username }}'s profile{% endtrans -%}
     {% if user_banned and user_banned.expiration_date %}
@@ -64,7 +66,6 @@
       &mdash; Banned Indefinitely
     {% endif %}
     </h1>
-
     {% if not user.url and not user.bio %}
         <div class="profile_sidebar empty_space">
           <p>
@@ -76,7 +77,7 @@
       <div class="profile_sidebar">
         {% include "mediagoblin/utils/profile.html" %}
         {% if request.user and
-              (request.user.id == user.id or request.user.is_admin) %}
+              (request.user.id == user.id or request.user.has_privilege('admin')) %}
           <a href="{{ request.urlgen('mediagoblin.edit.profile',
                    user=user.username) }}">
             {%- trans %}Edit profile{% endtrans -%}
@@ -145,13 +146,19 @@
               <td class="user_without_privilege">
                 No{% endif %}
             </td>
-            {% if requesting_user_privileges.admin%}
-              <td>{% if privilege in user.all_privileges  %}
-                <input type=submit id="{{ privilege.privilege_name }}" class=submit_button value ="-" />{% else %}
-                <input type=submit id="{{ privilege.privilege_name }}" class=submit_button value ="+" />{% endif %}
+            {% if request.user.has_privilege('admin') %}
+              <td>
+                {% if privilege in user.all_privileges  %}
+                <input type=submit id="{{ privilege.privilege_name }}"
+                       class="submit_button button_action"
+                       value =" -" />
+                {% else %}
+                <input type=submit id="{{ privilege.privilege_name }}"
+                       class="submit_button button_action"
+                       value ="+" />
+                {% endif %}
               </td>
             {% endif %}
-
           </tr>
         {% endfor %}
     </table>

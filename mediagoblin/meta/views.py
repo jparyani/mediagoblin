@@ -14,11 +14,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin.tools.response import render_to_response
 
-def may_edit_media(request, media):
-    """Check, if the request's user may edit the media details"""
-    if media.uploader == request.user.id:
-        return True
-    if request.user.has_privilege(u'admin'):
-        return True
-    return False
+
+def code_of_conduct(request):
+    return render_to_response(request,
+        'mediagoblin/meta/code_of_conduct.html',
+        {})
+
+def public_reports_panel(request):
+    return render_to_response(request,
+        'mediagoblin/meta/reports_panel.html',
+        {})
+
+def public_reports_details(request):
+    return render_to_response(request,
+        'mediagoblin/meta/reports_details.html',
+        {})

@@ -112,7 +112,7 @@
         <td>{{ report.reported_user.username }}</td>
         <td>{{ report.created.strftime("%F %R") }}</td>
         <td>{{ report.reporter.username }}</td>
-        <td>{{ report.report_content }}</td>
+        <td>{{ report.report_content[:15] }}...</td>
       </tr>
     {% endfor %}
   </table>

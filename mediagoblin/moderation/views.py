@@ -74,15 +74,12 @@ def moderation_users_detail(request):
         ReportBase.discriminator=='archived_report').all()
     privileges = Privilege.query
     user_banned = UserBan.query.get(user.id)
-    user_privileges = user_privileges_to_dictionary(user.id)
-    requesting_user_privileges = user_privileges_to_dictionary(request.user.id)
 
     return render_to_response(
         request,
         'mediagoblin/moderation/user.html',
         {'user':user,
          'privileges': privileges,
-         'requesting_user_privileges':requesting_user_privileges,
          'reports':active_reports,
          'user_banned':user_banned})
 
@@ -121,7 +118,10 @@ def moderation_reports_detail(request):
             for s in report.reported_user.all_privileges 
     ]
 
-    if request.method == "POST" and form.validate():
+    if request.method == "POST" and form.validate() and not (
+        not request.user.has_privilege(u'admin') and
+        report.reported_user.has_privilege(u'admin')):
+
         user = User.query.get(form.targeted_user.data)
         return take_punitive_actions(request, form, report, user)
 

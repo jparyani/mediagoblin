@@ -299,7 +299,7 @@ def media_confirm_delete(request, media):
                 _("The media was not deleted because you didn't check that you were sure."))
             return redirect_obj(request, media)
 
-    if ((request.user.is_admin and
+    if ((request.user.has_privilege(u'admin') and
          request.user.id != media.uploader)):
         messages.add_message(
             request, messages.WARNING,
@@ -385,7 +385,7 @@ def collection_item_confirm_remove(request, collection_item):
 
         return redirect_obj(request, collection)
 
-    if ((request.user.is_admin and
+    if ((request.user.has_privilege(u'admin') and
          request.user.id != collection_item.in_collection.creator)):
         messages.add_message(
             request, messages.WARNING,
@@ -433,7 +433,7 @@ def collection_confirm_delete(request, collection):
 
             return redirect_obj(request, collection)
 
-    if ((request.user.is_admin and
+    if ((request.user.has_privilege(u'admin') and
          request.user.id != collection.creator)):
         messages.add_message(
             request, messages.WARNING,
@@ -594,7 +594,7 @@ def processing_panel(request):
     #
     # Make sure we have permission to access this user's panel.  Only
     # admins and this user herself should be able to do so.
-    if not (user.id == request.user.id or request.user.is_admin):
+    if not (user.id == request.user.id or request.user.has_privilege(u'admin')):
         # No?  Simply redirect to this user's homepage.
         return redirect(
             request, 'mediagoblin.user_pages.user_home',

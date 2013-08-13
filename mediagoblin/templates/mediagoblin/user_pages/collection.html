@@ -45,7 +45,7 @@
     {%- endtrans %}
   </h1>
   {% if request.user and (collection.creator == request.user.id or 
-                                                request.user.is_admin) %}
+                                                request.user.has_privilege(u'admin')) %}
     {% set edit_url = request.urlgen('mediagoblin.edit.edit_collection',
                                      user=collection.get_creator.username,
                                      collection=collection.slug) %}
