@@ -66,11 +66,6 @@ class CommonAudioProcessor(MediaProcessor):
             self.entry, self.workbench)
         self.name_builder = FilenameBuilder(self.orig_filename)
 
-        # spectrogram_tmp is used for thumbnails and spectograms
-        self.spectrogram_tmp = os.path.join(self.workbench.dir,
-                                            self.name_builder.fill(
-                                                '{basename}-spectrogram.jpg'))
-
         self.transcoder = AudioTranscoder()
         self.thumbnailer = AudioThumbnailer()
 
@@ -118,14 +113,18 @@ class CommonAudioProcessor(MediaProcessor):
             wav_tmp,
             mux_string='vorbisenc quality={0} ! oggmux'.format(quality))
 
+        spectrogram_tmp = os.path.join(self.workbench.dir,
+                                        self.name_builder.fill(
+                                            '{basename}-spectrogram.jpg'))
+
         self.thumbnailer.spectrogram(
             wav_tmp,
-            self.spectrogram_tmp,
+            spectrogram_tmp,
             width=max_width,
             fft_size=fft_size)
 
         _log.debug('Saving spectrogram...')
-        store_public(self.entry, 'spectrogram', self.spectrogram_tmp,
+        store_public(self.entry, 'spectrogram', spectrogram_tmp,
                      self.name_builder.fill('{basename}.spectrogram.jpg'))
 
     def generate_thumb(self, size=None):
@@ -137,8 +136,17 @@ class CommonAudioProcessor(MediaProcessor):
         thumb_tmp = os.path.join(self.workbench.dir, self.name_builder.fill(
             '{basename}-thumbnail.jpg'))
 
+        # We need the spectrogram to create a thumbnail
+        spectrogram = self.entry.media_files.get('spectrogram')
+        if not spectrogram:
+            _log.info('No spectrogram found, we will create one.')
+            self.create_spectrogram()
+            spectrogram = self.entry.media_files['spectrogram']
+
+        spectrogram_filepath = mgg.public_store.get_local_path(spectrogram)
+
         self.thumbnailer.thumbnail_spectrogram(
-            self.spectrogram_tmp,
+            spectrogram_filepath,
             thumb_tmp,
             size)
 
@@ -171,7 +179,7 @@ class InitialProcessor(CommonAudioProcessor):
 
         parser.add_argument(
             '--quality',
-            help='vorbisenc quality')
+            help='vorbisenc quality. Range: -0.1..1')
 
         parser.add_argument(
             '--fft_size',
