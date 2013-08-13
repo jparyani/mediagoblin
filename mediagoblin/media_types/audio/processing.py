@@ -14,16 +14,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import argparse
 import logging
 from tempfile import NamedTemporaryFile
 import os
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.processing import (create_pub_filepath, BadMediaFail,
-    FilenameBuilder, ProgressCallback)
+from mediagoblin.processing import (
+    create_pub_filepath, BadMediaFail, FilenameBuilder,
+    ProgressCallback, MediaProcessor, ProcessingManager,
+    request_from_args, get_orig_filename,
+    store_public, copy_original)
 
-from mediagoblin.media_types.audio.transcoders import (AudioTranscoder,
-    AudioThumbnailer)
+from mediagoblin.media_types.audio.transcoders import (
+    AudioTranscoder,AudioThumbnailer)
 
 _log = logging.getLogger(__name__)
 
@@ -157,3 +161,192 @@ def process_audio(proc_state):
     mgg.queue_store.delete_file(queued_filepath)      # rm file
     mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
     entry.queued_media_file = []
+
+
+class CommonAudioProcessor(MediaProcessor):
+    """
+    Provides a base for various audio processing steps
+    """
+
+    def common_setup(self):
+        """
+        """
+        self.audio_config = mgg \
+            .global_config['media_type:mediagoblin.media_types.audio']
+
+        # Pull down and set up the original file
+        self.orig_filename = get_orig_filename(
+            self.entry, self.workbench)
+        self.name_builder = FilenameBuilder(self.orig_filename)
+
+        self.spectrogram_tmp = os.path.join(self.workbench.dir,
+                                            self.name_builder.fill(
+                                                '{basename}-spectrogram.jpg'))
+
+        self.transcoder = AudioTranscoder()
+        self.thumbnailer = AudioThumbnailer()
+
+    def copy_original(self):
+        if self.audio_config['keep_original']:
+            copy_original(
+                self.entry, self.orig_filename,
+                self.name_builder.fill('{basename}{ext}'))
+
+    def transcode(self, quality=None):
+        if not quality:
+            quality = self.audio_config['quality']
+
+        progress_callback = ProgressCallback(self.entry)
+        webm_audio_tmp = os.path.join(self.workbench.dir,
+                                      self.name_builder.fill(
+                                          '{basename}{ext}'))
+
+        webm_audio_filepath = create_pub_filepath(
+            self.entry,
+            '{original}.webm'.format(
+                original=os.path.splitext(
+                    self.orig_filename[-1])[0]))
+
+        self.transcoder.transcode(
+            self.orig_filename,
+            webm_audio_tmp,
+            quality=quality,
+            progress_callback=progress_callback)
+
+        self.transcoder.discover(webm_audio_tmp)
+
+        _log.debug('Saving medium...')
+        store_public(self.entry, 'medium', webm_audio_tmp,
+                     webm_audio_filepath)
+
+    def create_spectrogram(self, quality=None, max_width=None, fft_size=None):
+        if not quality:
+            quality = self.audio_config['quality']
+        if not max_width:
+            max_width = mgg.global_config['media:medium']['max_width']
+        if not fft_size:
+            fft_size = self.audio_config['spectrogram_fft_size']
+
+        spectrogram_filepath = create_pub_filepath(
+            self.entry,
+            '{original}-spectrogram.jpg'.format(
+                original=os.path.splitext(
+                    self.orig_filename[-1])[0]))
+
+        wav_tmp = os.path.join(self.workbench.dir, self.name_builder.fill(
+            '{basename}.ogg'))
+
+        _log.info('Creating OGG source for spectrogram')
+        self.transcoder.transcode(
+            self.orig_filename,
+            wav_tmp,
+            mux_string='vorbisenc quality={0} ! oggmux'.format(quality))
+
+        self.thumbnailer.spectrogram(
+            wav_tmp,
+            self.spectrogram_tmp,
+            width=max_width,
+            fft_size=fft_size)
+
+        _log.debug('Saving spectrogram...')
+        store_public(self.entry, 'spectrogram', self.spectrogram_tmp,
+                     spectrogram_filepath)
+
+    def generate_thumb(self, size=None):
+        if not size:
+            max_width = mgg.global_config['medium:thumb']['max_width']
+            max_height = mgg.global_config['medium:thumb']['max_height']
+            size = (max_width, max_height)
+
+        thumb_tmp = os.path.join(self.workbench.dir, self.name_builder.fill(
+            '{basename}-thumbnail.jpg'))
+
+        self.thumbnailer.thumbnail_spectrogram(
+            self.spectrogram_tmp,
+            thumb_tmp,
+            size)
+
+        thumb_filepath = create_pub_filepath(
+            self.entry,
+            '{original}-thumbnail.jpg'.format(
+                original=os.path.splitext(
+                    self.orig_filename[-1])[0]))
+
+        store_public(self.entry, 'thumb', thumb_tmp, thumb_filepath)
+
+
+class InitialProcessor(CommonAudioProcessor):
+    """
+    Initial processing steps for new audio
+    """
+    name = "initial"
+    description = "Initial processing"
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        """
+        Determine if this media type is eligible for processing
+        """
+        if not state:
+            state = entry.state
+        return state in (
+            "unprocessed", "failed")
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--quality',
+            help='vorbisenc quality')
+
+        parser.add_argument(
+            '--fft_size',
+            type=int,
+            help='spectrogram fft size')
+
+        parser.add_argument(
+            '--thumb_size',
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        parser.add_argument(
+            '--medium_width',
+            type=int,
+            help='The width of the spectogram')
+
+        parser.add_argument(
+            '--create_spectrogram',
+            action='store_true',
+            help='Create spectogram and thumbnail')
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['create_spectrogram', 'quality', 'fft_size',
+                   'thumb_size', 'medium_width'])
+
+    def process(self, quality=None, fft_size=None, thumb_size=None,
+                create_spectrogram=None, medium_width=None):
+        if not create_spectrogram:
+            create_spectrogram = self.audio_config['create_spectrogram']
+
+        self.common_setup()
+        self.transcode(quality=quality)
+        self.copy_original()
+
+        if create_spectrogram:
+            self.create_spectrogram(quality=quality, max_width=medium_width,
+                                    fft_size=fft_size)
+            self.generate_thumb(size=thumb_size)
+        self.delete_queue_file()
+
+
+class AudioProcessingManager(ProcessingManager):
+    def __init__(self):
+        super(self.__class__, self).__init__()
+        self.add_processor(InitialProcessor)

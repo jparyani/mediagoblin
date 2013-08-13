@@ -245,7 +245,8 @@ def thumbs(args):
 
             # prepare filetype and size to be passed into reprocess_parser
             if args.size:
-                extra_args = 'thumb --size {0} {1}'.format(args.size[0], args.size[1])
+                extra_args = 'thumb --size {0} {1}'.format(args.size[0],
+                                                           args.size[1])
             else:
                 extra_args = 'thumb'
 
