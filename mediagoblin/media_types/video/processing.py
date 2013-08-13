@@ -283,7 +283,43 @@ class InitialProcessor(CommonVideoProcessor):
         self.delete_queue_file()
 
 
+class Resizer(CommonVideoProcessor):
+    """
+    Video thumbnail resizing process steps for processed media
+    """
+    name = 'resize'
+    description = 'Resize thumbnail'
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        if not state:
+            state = entry.state
+        return state in 'processed'
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--thumb_size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['thumb_size'])
+
+    def process(self, thumb_size=None):
+        self.common_setup()
+        self.generate_thumb(thumb_size=thumb_size)
+
+
 class VideoProcessingManager(ProcessingManager):
     def __init__(self):
         super(self.__class__, self).__init__()
         self.add_processor(InitialProcessor)
+        self.add_processor(Resizer)
