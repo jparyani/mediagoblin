@@ -96,9 +96,7 @@ class CommonAudioProcessor(MediaProcessor):
         store_public(self.entry, 'webm_audio', webm_audio_tmp,
                      self.name_builder.fill('{basename}.medium.webm'))
 
-    def create_spectrogram(self, quality=None, max_width=None, fft_size=None):
-        if not quality:
-            quality = self.audio_config['quality']
+    def create_spectrogram(self, max_width=None, fft_size=None):
         if not max_width:
             max_width = mgg.global_config['media:medium']['max_width']
         if not fft_size:
@@ -111,7 +109,8 @@ class CommonAudioProcessor(MediaProcessor):
         self.transcoder.transcode(
             self.orig_filename,
             wav_tmp,
-            mux_string='vorbisenc quality={0} ! oggmux'.format(quality))
+            mux_string='vorbisenc quality={0} ! oggmux'.format(
+                self.audio_config['quality']))
 
         spectrogram_tmp = os.path.join(self.workbench.dir,
                                         self.name_builder.fill(
@@ -221,8 +220,7 @@ class InitialProcessor(CommonAudioProcessor):
         self.copy_original()
 
         if create_spectrogram:
-            self.create_spectrogram(quality=quality, max_width=medium_width,
-                                    fft_size=fft_size)
+            self.create_spectrogram(max_width=medium_width, fft_size=fft_size)
             self.generate_thumb(size=thumb_size)
         self.delete_queue_file()
 
@@ -232,7 +230,7 @@ class Resizer(CommonAudioProcessor):
     Thumbnail and spectogram resizing process steps for processed audio
     """
     name = 'resize'
-    description = 'Resize audio thumbnail or spectogram'
+    description = 'Resize thumbnail or spectogram'
 
     @classmethod
     def media_is_eligible(cls, entry=None, state=None):
@@ -248,10 +246,6 @@ class Resizer(CommonAudioProcessor):
         parser = argparse.ArgumentParser(
             description=cls.description,
             prog=cls.name)
-
-        parser.add_argument(
-            '--quality',
-            help='vorbisenc quality. Range: -0.1..1')
 
         parser.add_argument(
             '--fft_size',
@@ -278,16 +272,16 @@ class Resizer(CommonAudioProcessor):
     @classmethod
     def args_to_request(cls, args):
         return request_from_args(
-            args, ['thumb_size', 'file', 'quality', 'fft_size', 'medium_width'])
+            args, ['thumb_size', 'file', 'fft_size', 'medium_width'])
 
-    def process(self, thumb_size=None, file=None, quality=None, fft_size=None,
+    def process(self, thumb_size=None, file=None, fft_size=None,
                 medium_width=None):
         self.common_setup()
+
         if file == 'thumb':
             self.generate_thumb(size=thumb_size)
         elif file == 'spectrogram':
-            self.create_spectrogram(quality=quality, max_width=medium_width,
-                                    fft_size=fft_size)
+            self.create_spectrogram(max_width=medium_width, fft_size=fft_size)
 
 
 class AudioProcessingManager(ProcessingManager):
