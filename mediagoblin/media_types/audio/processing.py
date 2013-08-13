@@ -178,6 +178,7 @@ class InitialProcessor(CommonAudioProcessor):
 
         parser.add_argument(
             '--quality',
+            type=float,
             help='vorbisenc quality. Range: -0.1..1')
 
         parser.add_argument(
