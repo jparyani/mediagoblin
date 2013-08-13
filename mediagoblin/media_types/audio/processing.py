@@ -227,7 +227,71 @@ class InitialProcessor(CommonAudioProcessor):
         self.delete_queue_file()
 
 
+class Resizer(CommonAudioProcessor):
+    """
+    Thumbnail and spectogram resizing process steps for processed audio
+    """
+    name = 'resize'
+    description = 'Resize audio thumbnail or spectogram'
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        """
+        Determine if this media entry is eligible for processing
+        """
+        if not state:
+            state = entry.state
+        return state in 'processed'
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--quality',
+            help='vorbisenc quality. Range: -0.1..1')
+
+        parser.add_argument(
+            '--fft_size',
+            type=int,
+            help='spectrogram fft size')
+
+        parser.add_argument(
+            '--thumb_size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        parser.add_argument(
+            '--medium_width',
+            type=int,
+            help='The width of the spectogram')
+
+        parser.add_argument(
+            'file',
+            choices=['thumb', 'spectrogram'])
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['thumb_size', 'file', 'quality', 'fft_size', 'medium_width'])
+
+    def process(self, thumb_size=None, file=None, quality=None, fft_size=None,
+                medium_width=None):
+        self.common_setup()
+        if file == 'thumb':
+            self.generate_thumb(size=thumb_size)
+        elif file == 'spectrogram':
+            self.create_spectrogram(quality=quality, max_width=medium_width,
+                                    fft_size=fft_size)
+
+
 class AudioProcessingManager(ProcessingManager):
     def __init__(self):
         super(self.__class__, self).__init__()
         self.add_processor(InitialProcessor)
+        self.add_processor(Resizer)
