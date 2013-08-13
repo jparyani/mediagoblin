@@ -274,7 +274,7 @@ class Resizer(CommonAudioProcessor):
         return request_from_args(
             args, ['thumb_size', 'file', 'fft_size', 'medium_width'])
 
-    def process(self, thumb_size=None, file=None, fft_size=None,
+    def process(self, file, thumb_size=None, fft_size=None,
                 medium_width=None):
         self.common_setup()
 
@@ -284,8 +284,44 @@ class Resizer(CommonAudioProcessor):
             self.create_spectrogram(max_width=medium_width, fft_size=fft_size)
 
 
+class Transcoder(CommonAudioProcessor):
+    """
+    Transcoding processing steps for processed audio
+    """
+    name = 'transcode'
+    description = 'Re-transcode audio'
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        if not state:
+            state = entry.state
+        return state in 'processed'
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--quality',
+            help='vorbisenc quality. Range: -0.1..1')
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['quality'])
+
+    def process(self, quality=None):
+        self.common_setup()
+        self.transcode(quality=quality)
+
+
 class AudioProcessingManager(ProcessingManager):
     def __init__(self):
         super(self.__class__, self).__init__()
         self.add_processor(InitialProcessor)
         self.add_processor(Resizer)
+        self.add_processor(Transcoder)
