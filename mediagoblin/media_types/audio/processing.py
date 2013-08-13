@@ -254,8 +254,8 @@ class CommonAudioProcessor(MediaProcessor):
 
     def generate_thumb(self, size=None):
         if not size:
-            max_width = mgg.global_config['medium:thumb']['max_width']
-            max_height = mgg.global_config['medium:thumb']['max_height']
+            max_width = mgg.global_config['media:thumb']['max_width']
+            max_height = mgg.global_config['media:thumb']['max_height']
             size = (max_width, max_height)
 
         thumb_tmp = os.path.join(self.workbench.dir, self.name_builder.fill(
