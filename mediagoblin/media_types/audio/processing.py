@@ -201,11 +201,11 @@ class CommonAudioProcessor(MediaProcessor):
                                       self.name_builder.fill(
                                           '{basename}{ext}'))
 
-        webm_audio_filepath = create_pub_filepath(
-            self.entry,
-            '{original}.webm'.format(
-                original=os.path.splitext(
-                    self.orig_filename[-1])[0]))
+        #webm_audio_filepath = create_pub_filepath(
+        #    self.entry,
+        #    '{original}.webm'.format(
+        #        original=os.path.splitext(
+        #            self.orig_filename[-1])[0]))
 
         self.transcoder.transcode(
             self.orig_filename,
@@ -217,7 +217,7 @@ class CommonAudioProcessor(MediaProcessor):
 
         _log.debug('Saving medium...')
         store_public(self.entry, 'medium', webm_audio_tmp,
-                     webm_audio_filepath)
+                     self.name_builder.fill('{basename}.medium{ext}'))
 
     def create_spectrogram(self, quality=None, max_width=None, fft_size=None):
         if not quality:
@@ -227,11 +227,11 @@ class CommonAudioProcessor(MediaProcessor):
         if not fft_size:
             fft_size = self.audio_config['spectrogram_fft_size']
 
-        spectrogram_filepath = create_pub_filepath(
-            self.entry,
-            '{original}-spectrogram.jpg'.format(
-                original=os.path.splitext(
-                    self.orig_filename[-1])[0]))
+        #spectrogram_filepath = create_pub_filepath(
+        #    self.entry,
+        #    '{original}-spectrogram.jpg'.format(
+        #        original=os.path.splitext(
+        #            self.orig_filename[-1])[0]))
 
         wav_tmp = os.path.join(self.workbench.dir, self.name_builder.fill(
             '{basename}.ogg'))
@@ -250,7 +250,7 @@ class CommonAudioProcessor(MediaProcessor):
 
         _log.debug('Saving spectrogram...')
         store_public(self.entry, 'spectrogram', self.spectrogram_tmp,
-                     spectrogram_filepath)
+                     self.name_builder.fill('{basename}.spectrogram.jpg'))
 
     def generate_thumb(self, size=None):
         if not size:
@@ -266,13 +266,14 @@ class CommonAudioProcessor(MediaProcessor):
             thumb_tmp,
             size)
 
-        thumb_filepath = create_pub_filepath(
-            self.entry,
-            '{original}-thumbnail.jpg'.format(
-                original=os.path.splitext(
-                    self.orig_filename[-1])[0]))
+        #thumb_filepath = create_pub_filepath(
+        #    self.entry,
+        #    '{original}-thumbnail.jpg'.format(
+        #        original=os.path.splitext(
+        #            self.orig_filename[-1])[0]))
 
-        store_public(self.entry, 'thumb', thumb_tmp, thumb_filepath)
+        store_public(self.entry, 'thumb', thumb_tmp,
+                     self.name_builder.fill('{basename}.thumbnail.jpg'))
 
 
 class InitialProcessor(CommonAudioProcessor):
