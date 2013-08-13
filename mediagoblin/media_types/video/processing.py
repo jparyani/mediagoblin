@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import argparse
 import os.path
 import logging
 import datetime
@@ -52,10 +53,10 @@ def sniff_handler(media_file, **kw):
 
     if not data:
         _log.error('Could not discover {0}'.format(
-                kw.get('media')))
+            kw.get('media')))
         return None
 
-    if data['is_video'] == True:
+    if data['is_video'] is True:
         return MEDIA_TYPE
 
     return None
@@ -69,9 +70,9 @@ def store_metadata(media_entry, metadata):
     stored_metadata = dict(
         [(key, metadata[key])
          for key in [
-                 "videoheight", "videolength", "videowidth",
-                 "audiorate", "audiolength", "audiochannels", "audiowidth",
-                 "mimetype"]
+             "videoheight", "videolength", "videowidth",
+             "audiorate", "audiolength", "audiochannels", "audiowidth",
+             "mimetype"]
          if key in metadata])
 
     # We have to convert videorate into a sequence because it's a
@@ -90,10 +91,10 @@ def store_metadata(media_entry, metadata):
         tags = dict(
             [(key, tags_metadata[key])
              for key in [
-                     "application-name", "artist", "audio-codec", "bitrate",
-                     "container-format", "copyright", "encoder",
-                     "encoder-version", "license", "nominal-bitrate", "title",
-                     "video-codec"]
+                 "application-name", "artist", "audio-codec", "bitrate",
+                 "container-format", "copyright", "encoder",
+                 "encoder-version", "license", "nominal-bitrate", "title",
+                 "video-codec"]
              if key in tags_metadata])
         if 'date' in tags_metadata:
             date = tags_metadata['date']
@@ -144,7 +145,7 @@ class CommonVideoProcessor(MediaProcessor):
 
     def transcode(self, medium_size=None, vp8_quality=None, vp8_threads=None,
                   vorbis_quality=None):
-        progress_callback = ProgressCallback(entry)
+        progress_callback = ProgressCallback(self.entry)
         tmp_dst = os.path.join(self.workbench.dir,
                                self.name_builder.fill('{basename}-640p.webm'))
 
@@ -299,7 +300,7 @@ class Resizer(CommonVideoProcessor):
     @classmethod
     def generate_parser(cls):
         parser = argparse.ArgumentParser(
-            description=description,
+            description=cls.description,
             prog=cls.name)
 
         parser.add_argument(
@@ -307,6 +308,8 @@ class Resizer(CommonVideoProcessor):
             nargs=2,
             metavar=('max_width', 'max_height'),
             type=int)
+
+        return parser
 
     @classmethod
     def args_to_request(cls, args):
@@ -318,8 +321,64 @@ class Resizer(CommonVideoProcessor):
         self.generate_thumb(thumb_size=thumb_size)
 
 
+class Transcoder(CommonVideoProcessor):
+    """
+    Transcoding processing steps for processed video
+    """
+    name = 'transcode'
+    description = 'Re-transcode video'
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        if not state:
+            state = entry.state
+        return state in 'processed'
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--medium_size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        parser.add_argument(
+            '--vp8_quality',
+            type=int,
+            help='Range 0..10')
+
+        parser.add_argument(
+            '--vp8_threads',
+            type=int,
+            help='0 means number_of_CPUs - 1')
+
+        parser.add_argument(
+            '--vorbis_quality',
+            type=float,
+            help='Range -0.1..1')
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['medium_size', 'vp8_threads', 'vp8_quality',
+                   'vorbis_quality'])
+
+    def process(self, medium_size=None, vp8_quality=None, vp8_threads=None,
+                vorbis_quality=None):
+        self.common_setup()
+        self.transcode(medium_size=medium_size, vp8_threads=vp8_threads,
+                       vp8_quality=vp8_quality, vorbis_quality=vorbis_quality)
+
+
 class VideoProcessingManager(ProcessingManager):
     def __init__(self):
         super(self.__class__, self).__init__()
         self.add_processor(InitialProcessor)
         self.add_processor(Resizer)
+        self.add_processor(Transcoder)

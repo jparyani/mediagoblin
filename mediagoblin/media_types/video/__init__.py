@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.media_types import MediaManagerBase
-from mediagoblin.media_types.video.processing import process_video, \
+from mediagoblin.media_types.video.processing import VideoProcessingManager, \
     sniff_handler
 from mediagoblin.tools import pluginapi
 
@@ -30,7 +30,6 @@ def setup_plugin():
 
 class VideoMediaManager(MediaManagerBase):
     human_readable = "Video"
-    processor = staticmethod(process_video)
     display_template = "mediagoblin/media_displays/video.html"
     default_thumb = "images/media_thumbs/video.jpg"
 
@@ -48,4 +47,5 @@ hooks = {
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
     ('media_manager', MEDIA_TYPE): lambda: VideoMediaManager,
+    ('reprocess_manager', MEDIA_TYPE): lambda: VideoProcessingManager,
 }
