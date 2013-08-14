@@ -466,7 +466,6 @@ def create_oauth1_tables(db):
 
     db.commit()
 
-
 @RegisterMigration(15, MIGRATIONS)
 def wants_notifications(db):
     """Add a wants_notifications field to User model"""

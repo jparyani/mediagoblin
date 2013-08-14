@@ -20,6 +20,7 @@ TODO: indexes on foreignkeys, where useful.
 
 import logging
 import datetime
+import base64
 
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
@@ -421,7 +422,6 @@ class MediaEntry(Base, MediaEntryMixin):
             clean_orphan_tags(commit=False)
         # pass through commit=False/True in kwargs
         super(MediaEntry, self).delete(**kwargs)
-
 
 class FileKeynames(Base):
     """
