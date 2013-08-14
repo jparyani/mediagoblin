@@ -230,51 +230,142 @@ def pdf_info(original):
 
     return ret_dict
 
-def process_pdf(proc_state):
-    """Code to process a pdf file. Will be run by celery.
 
-    A Workbench() represents a local tempory dir. It is automatically
-    cleaned up when this function exits.
+class CommonPdfProcessor(MediaProcessor):
     """
-    entry = proc_state.entry
-    workbench = proc_state.workbench
+    Provides a base for various pdf processing steps
+    """
+    def common_setup(self):
+        """
+        Set up common pdf processing steps
+        """
+        # Pull down and set up the original file
+        self.orig_filename = get_orig_filename(
+            self.entry, self.workbench)
+        self.name_builder = FilenameBuilder(self.orig_filename)
 
-    queued_filename = proc_state.get_queued_filename()
-    name_builder = FilenameBuilder(queued_filename)
+        self._set_pdf_filename()
 
-    # Copy our queued local workbench to its final destination
-    original_dest = name_builder.fill('{basename}{ext}')
-    proc_state.copy_original(original_dest)
+    def _set_pdf_filename(self):
+        if self.name_builder.ext == 'pdf':
+            self.pdf_filename = self.orig_filename
+        else:
+            self.pdf_filename = self.name_builder.fill('{basename}.pdf')
 
-    # Create a pdf if this is a different doc, store pdf for viewer
-    ext = queued_filename.rsplit('.', 1)[-1].lower()
-    if ext == 'pdf':
-        pdf_filename = queued_filename
-    else:
-        pdf_filename = queued_filename.rsplit('.', 1)[0] + '.pdf'
-        unoconv = where('unoconv')
-        Popen(executable=unoconv,
-              args=[unoconv, '-v', '-f', 'pdf', queued_filename]).wait()
-        if not os.path.exists(pdf_filename):
-            _log.debug('unoconv failed to convert file to pdf')
-            raise BadMediaFail()
-        proc_state.store_public(keyname=u'pdf', local_file=pdf_filename)
+    def copy_original(self):
+        copy_original(
+            self.entry, self.orig_filename,
+            self.name_builder.fill('{basename}{ext}'))
 
-    pdf_info_dict = pdf_info(pdf_filename)
+    def generate_thumb(self, thumb_size=None):
+        if not thumb_size:
+            thumb_size = (mgg.global_config['media:thumb']['max_width'],
+                          mgg.global_config['media:thumb']['max_height'])
 
-    for name, width, height in [
-        (u'thumb', mgg.global_config['media:thumb']['max_width'],
-                   mgg.global_config['media:thumb']['max_height']),
-        (u'medium', mgg.global_config['media:medium']['max_width'],
-                   mgg.global_config['media:medium']['max_height']),
-        ]:
-        filename = name_builder.fill('{basename}.%s.png' % name)
-        path = workbench.joinpath(filename)
-        create_pdf_thumb(pdf_filename, path, width, height)
-        assert(os.path.exists(path))
-        proc_state.store_public(keyname=name, local_file=path)
+        # Note: pdftocairo adds '.png', so don't include an ext
+        thumb_filename = self.name_builder.fill('{basename}.thumbnail')
 
-    proc_state.delete_queue_file()
+        executable = where('pdftocairo')
+        args = [executable, '-scale-to', str(thumb_size),
+                '-singlefile', '-png', self.pdf_filename, thumb_filename]
 
-    entry.media_data_init(**pdf_info_dict)
-    entry.save()
+        _log.debug('calling {0}'.format(repr(' '.join(args))))
+        Popen(executable=executable, args=args).wait()
+
+        store_public(self.entry, 'thumb', thumb_filename,
+                     self.name_builder.fill('{basename}.thumbnail.png'))
+
+    def generate_pdf(self):
+        """
+        Store the pdf. If the file is not a pdf, make it a pdf
+        """
+        if self.name_builder.ext != 'pdf':
+            unoconv = where('unoconv')
+            Popen(executable=unoconv,
+                args=[unoconv, '-v', '-f', 'pdf', self.orig_filename]).wait()
+
+            if not os.path.exists(self.pdf_filename):
+                _log.debug('unoconv failed to convert file to pdf')
+                raise BadMediaFail()
+
+        store_public(self.entry, 'pdf', self.pdf_filename,
+                     self.name_builder.fill('{basename}.pdf'))
+
+    def extract_pdf_info(self):
+        pdf_info_dict = pdf_info(self.pdf_filename)
+        entry.media_data_init(**pdf_info_dict)
+
+    def generate_medium(self, size=None):
+        if not size:
+            size = (mgg.global_config['media:medium']['max_width'],
+                    mgg.global_config['media:medium']['max_height'])
+
+        # Note: pdftocairo adds '.png', so don't include an ext
+        filename = self.name_builder.fill('{basename}.medium')
+
+        executable = where('pdftocairo')
+        args = [executable, '-scale-to', str(size),
+                '-singlefile', '-png', self.pdf_filename, filename]
+
+        _log.debug('calling {0}'.format(repr(' '.join(args))))
+        Popen(executable=executable, args=args).wait()
+
+        store_public(self.entry, 'thumb', filename,
+                     self.name_builder.fill('{basename}.medium.png'))
+
+class InitialProcessor(CommonPdfProcessor):
+    """
+    Initial processing step for new pdfs
+    """
+    name = "initial"
+    description = "Initial processing"
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        """
+        Determine if this media type is eligible for processing
+        """
+        if not state:
+            state = entry.state
+        return state in (
+            "unprocessed", "failed")
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        parser.add_argument(
+            '--thumb-size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['size', 'thumb_size'])
+
+    def process(self, size=None, thumb_size=None):
+        self.common_setup()
+        self.generate_pdf()
+        self.extract_pdf_info()
+        self.copy_original()
+        self.generate_medium(size=size)
+        self.generate_thumb(thumb_size=thumb_size)
+        self.delete_queue_file()
+
+
+class PdfProcessingManager(ProcessingManager):
+    def __init__(self):
+        super(self.__class__, self).__init__()
+        self.add_processor(InitialProcessor)
