@@ -237,6 +237,10 @@ class NonceTimestamp(Base):
     timestamp = Column(DateTime, nullable=False, primary_key=True)
 
 
+def create_uuid():
+    """ Creates a new uuid which is suitable for use in a URL """
+    return base64.urlsafe_b64encode(uuid.uuid4().bytes).strip("=")
+
 class MediaEntry(Base, MediaEntryMixin):
     """
     TODO: Consider fetching the media_files using join

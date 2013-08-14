@@ -25,12 +25,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import and_
 from migrate.changeset.constraint import UniqueConstraint
 
-
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import (
     RegisterMigration, inspect_table, replace_table_hack)
-from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User, 
-        Privilege)
+from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User,
+        create_uuid, Privilege)
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 
 MIGRATIONS = {}
@@ -659,8 +658,8 @@ def create_moderation_tables(db):
     # admin, an active user or an inactive user ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     for admin_user in admin_users_ids:
         admin_user_id = admin_user['id']
-        for privilege_id in [admin_privilege_id, uploader_privilege_id, 
-                            reporter_privilege_id, commenter_privilege_id, 
+        for privilege_id in [admin_privilege_id, uploader_privilege_id,
+                            reporter_privilege_id, commenter_privilege_id,
                             active_privilege_id]:
             db.execute(user_privilege_assoc.insert().values(
                 core__privilege_id=admin_user_id,
@@ -668,7 +667,7 @@ def create_moderation_tables(db):
 
     for active_user in active_users_ids:
         active_user_id = active_user['id']
-        for privilege_id in [uploader_privilege_id, reporter_privilege_id, 
+        for privilege_id in [uploader_privilege_id, reporter_privilege_id,
                             commenter_privilege_id, active_privilege_id]:
             db.execute(user_privilege_assoc.insert().values(
                 core__privilege_id=active_user_id,
@@ -676,7 +675,7 @@ def create_moderation_tables(db):
 
     for inactive_user in inactive_users_ids:
         inactive_user_id = inactive_user['id']
-        for privilege_id in [uploader_privilege_id, reporter_privilege_id, 
+        for privilege_id in [uploader_privilege_id, reporter_privilege_id,
                              commenter_privilege_id]:
             db.execute(user_privilege_assoc.insert().values(
                 core__privilege_id=inactive_user_id,
