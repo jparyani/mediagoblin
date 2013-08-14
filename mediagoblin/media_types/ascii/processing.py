@@ -87,6 +87,9 @@ class CommonAsciiProcessor(MediaProcessor):
                   d_charset,
                   self.charset))
 
+        # Rewind the file
+        orig_file.seek(0)
+
     def store_unicode_file(self):
         with file(self.orig_filename, 'rb') as orig_file:
             self._detect_charset(orig_file)
