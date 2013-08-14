@@ -281,7 +281,9 @@ class CommonPdfProcessor(MediaProcessor):
         _log.debug('calling {0}'.format(repr(' '.join(args))))
         Popen(executable=executable, args=args).wait()
 
-        store_public(self.entry, 'thumb', thumb_filename,
+        # since pdftocairo added '.png', we need to include it with the
+        # filename
+        store_public(self.entry, 'thumb', thumb_filename + '.png',
                      self.name_builder.fill('{basename}.thumbnail.png'))
 
     def _generate_pdf(self):
@@ -324,7 +326,9 @@ class CommonPdfProcessor(MediaProcessor):
         _log.debug('calling {0}'.format(repr(' '.join(args))))
         Popen(executable=executable, args=args).wait()
 
-        store_public(self.entry, 'thumb', filename,
+        # since pdftocairo added '.png', we need to include it with the
+        # filename
+        store_public(self.entry, 'thumb', filename + '.png',
                      self.name_builder.fill('{basename}.medium.png'))
 
 
