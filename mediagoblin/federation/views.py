@@ -39,25 +39,6 @@ def inbox(request):
     """ Handles the user's inbox - /api/user/<username>/inbox """
     raise NotImplemented("Yet to implement looking up user's inbox")
 
-def image_object(request, media):
-    """ Return image object - /api/image/<uuid> """
-    author = media.get_uploader
-    url = request.urlgen(
-        "mediagoblin.user_pages.media_home",
-        user=author.username,
-        media=media.slug,
-        qualified=True
-        )
-
-    context = {
-        "author": author.serialize(request),
-        "displayName": media.title,
-        "objectType": "image",
-        "url": url,
-    }
-
-    return json_response(context)
-
 @oauth_required
 def object(request):
     """ Lookup for a object type """
@@ -74,5 +55,4 @@ def object(request):
         error = "Can't find a {0} with ID = {1}".format(objectType, uuid)
         return json_response({"error": error}, status=404)
 
-    if objectType == "image":
-        return image_object(request, media)
+    return json_response(media.serialize(request))

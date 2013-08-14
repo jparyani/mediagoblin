@@ -427,6 +427,37 @@ class MediaEntry(Base, MediaEntryMixin):
         # pass through commit=False/True in kwargs
         super(MediaEntry, self).delete(**kwargs)
 
+    @property
+    def objectType(self):
+        """ Converts media_type to pump-like type - don't use internally """
+        return self.media_type.split(".")[-1]
+
+    def serialize(self, request):
+        """ Unserialize MediaEntry to object """
+        author = self.get_uploader
+        url = request.urlgen(
+            "mediagoblin.user_pages.media_home",
+            user=author.username,
+            media=self.slug,
+            qualified=True
+            )
+
+        id = request.urlgen(
+            "mediagoblin.federation.object",
+            objectType=self.objectType,
+            uuid=self.uuid,
+            qualified=True
+            )
+
+        context = {
+            "id": id, 
+            "author": author.serialize(request),
+            "displayName": self.title,
+            "objectType": self.objectType,
+            "url": url,
+        }
+        return context 
+
 class FileKeynames(Base):
     """
     keywords for various places.
@@ -572,6 +603,18 @@ class MediaComment(Base, MediaCommentMixin):
                                                    lazy="dynamic",
                                                    cascade="all, delete-orphan"))
 
+
+    def serialize(self, request):
+        """ Unserialize to python dictionary for API """
+        media = MediaEntry.query.filter_by(self.media_entry).first()
+        context = {
+            "objectType": "comment",
+            "content": self.content,
+            "inReplyTo": media.unserialize(request),
+            "author": self.get_author.unserialize(request)
+        }
+
+        return context
 
 class Collection(Base, CollectionMixin):
     """An 'album' or 'set' of media by a user.
