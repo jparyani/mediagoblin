@@ -2,7 +2,7 @@ from mediagoblin.decorators import oauth_required
 from mediagoblin.db.models import User, MediaEntry
 from mediagoblin.tools.response import json_response
 
-#@oauth_required
+@oauth_required
 def user(request):
     """ Handles user response at /api/user/<username>/ """
     user = request.matchdict["username"]
@@ -39,7 +39,7 @@ def inbox(request):
     """ Handles the user's inbox - /api/user/<username>/inbox """
     raise NotImplemented("Yet to implement looking up user's inbox")
 
-#@oauth_required
+@oauth_required
 def object(request):
     """ Lookup for a object type """
     objectType = request.matchdict["objectType"]

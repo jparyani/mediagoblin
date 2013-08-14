@@ -455,6 +455,12 @@ class MediaEntry(Base, MediaEntryMixin):
             "displayName": self.title,
             "objectType": self.objectType,
             "url": url,
+            "image": {
+                "url": request.host_url + self.thumb_url[1:],
+            },
+            "fullImage":{
+                "url": request.host_url + self.original_url[1:],
+            }
         }
 
         if show_comments:
