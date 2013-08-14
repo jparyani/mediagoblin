@@ -275,7 +275,7 @@ class CommonPdfProcessor(MediaProcessor):
                                           '{basename}.thumbnail'))
 
         executable = where('pdftocairo')
-        args = [executable, '-scale-to', str(thumb_size),
+        args = [executable, '-scale-to', str(min(thumb_size)),
                 '-singlefile', '-png', self.pdf_filename, thumb_filename]
 
         _log.debug('calling {0}'.format(repr(' '.join(args))))
@@ -320,7 +320,7 @@ class CommonPdfProcessor(MediaProcessor):
                                 self.name_builder.fill('{basename}.medium'))
 
         executable = where('pdftocairo')
-        args = [executable, '-scale-to', str(size),
+        args = [executable, '-scale-to', str(min(size)),
                 '-singlefile', '-png', self.pdf_filename, filename]
 
         _log.debug('calling {0}'.format(repr(' '.join(args))))
