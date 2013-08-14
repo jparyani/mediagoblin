@@ -279,6 +279,7 @@ class Resizer(CommonStlProcessor):
     """
     name = 'resize'
     description = 'Resize thumbnail and mediums'
+    thumb_size = 'size'
 
     @classmethod
     def media_is_eligible(cls, entry=None, state=None):

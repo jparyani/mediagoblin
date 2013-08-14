@@ -290,6 +290,7 @@ class Resizer(CommonVideoProcessor):
     """
     name = 'resize'
     description = 'Resize thumbnail'
+    thumb_size = 'thumb_size'
 
     @classmethod
     def media_is_eligible(cls, entry=None, state=None):

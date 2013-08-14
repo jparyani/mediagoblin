@@ -389,6 +389,7 @@ class Resizer(CommonPdfProcessor):
     """
     name = 'resize'
     description = 'Resize thumbnail and medium'
+    thumb_size = 'size'
 
     @classmethod
     def media_is_eligible(cls, entry=None, state=None):

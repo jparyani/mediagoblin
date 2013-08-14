@@ -267,6 +267,7 @@ class Resizer(CommonImageProcessor):
     """
     name = 'resize'
     description = 'Resize image'
+    thumb_size = 'size'
 
     @classmethod
     def media_is_eligible(cls, entry=None, state=None):
