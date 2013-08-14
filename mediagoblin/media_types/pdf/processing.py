@@ -20,7 +20,10 @@ from subprocess import PIPE, Popen
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (create_pub_filepath,
-                                    FilenameBuilder, BadMediaFail)
+                                    FilenameBuilder, BadMediaFail,
+                                    MediaProcessor, ProcessingManager,
+                                    request_from_args, get_orig_filename,
+                                    store_public, copy_original)
 from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 
 _log = logging.getLogger(__name__)
@@ -365,7 +368,55 @@ class InitialProcessor(CommonPdfProcessor):
         self.delete_queue_file()
 
 
+class Resizer(CommonImageProcessor):
+    """
+    Resizing process steps for processed pdfs
+    """
+    name = 'resize'
+    description = 'Resize thumbnail and medium'
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        """
+        Determine if this media type is eligible for processing
+        """
+        if not state:
+            state = entry.state
+        return state in 'processed'
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        parser.add_argument(
+            'file',
+            choices=['medium', 'thumb'])
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['size', 'file'])
+
+    def process(self, file, size=None):
+        self.common_setup()
+        if file == 'medium':
+            self.generate_medium(size=size)
+        elif file == 'thumb':
+            self.generate_thumb(size=size)
+
+
 class PdfProcessingManager(ProcessingManager):
     def __init__(self):
         super(self.__class__, self).__init__()
         self.add_processor(InitialProcessor)
+        self.add_processor(Resizer)
