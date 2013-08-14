@@ -288,15 +288,17 @@ class CommonPdfProcessor(MediaProcessor):
         """
         Store the pdf. If the file is not a pdf, make it a pdf
         """
+        tmp_pdf = self.orig_filename
+
         unoconv = where('unoconv')
         Popen(executable=unoconv,
               args=[unoconv, '-v', '-f', 'pdf', self.orig_filename]).wait()
 
-        if not os.path.exists(self.pdf_filename):
+        if not os.path.exists(tmp_pdf):
             _log.debug('unoconv failed to convert file to pdf')
             raise BadMediaFail()
 
-        store_public(self.entry, 'pdf', self.pdf_filename,
+        store_public(self.entry, 'pdf', tmp_pdf,
                      self.name_builder.fill('{basename}.pdf'))
 
         return self.workbench.local_file(
