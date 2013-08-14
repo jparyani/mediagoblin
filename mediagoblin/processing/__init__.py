@@ -356,13 +356,24 @@ def store_public(entry, keyname, local_file, target_name=None,
     if target_name is None:
         target_name = os.path.basename(local_file)
     target_filepath = create_pub_filepath(entry, target_name)
+
     if keyname in entry.media_files:
         _log.warn("store_public: keyname %r already used for file %r, "
                   "replacing with %r", keyname,
                   entry.media_files[keyname], target_filepath)
         if delete_if_exists:
             mgg.public_store.delete_file(entry.media_files[keyname])
-    mgg.public_store.copy_local_to_storage(local_file, target_filepath)
+
+    try:
+        mgg.public_store.copy_local_to_storage(local_file, target_filepath)
+    except:
+        raise PublicStoreFail(keyname=keyname)
+
+    # raise an error if the file failed to copy
+    copied_filepath = mgg.public_store.get_local_path(target_filepath)
+    if not os.path.exists(copied_filepath):
+        raise PublicStoreFail(keyname=keyname)
+
     entry.media_files[keyname] = target_filepath
 
 
@@ -396,3 +407,10 @@ class BadMediaFail(BaseProcessingFail):
     for the media type specified.
     """
     general_message = _(u'Invalid file given for media type.')
+
+
+class PublicStoreFail(BaseProcessingFail):
+    """
+    Error that should be raised when copying to public store fails
+    """
+    general_message = _('Copying to public storage failed.')
