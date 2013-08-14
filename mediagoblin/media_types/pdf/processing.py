@@ -301,7 +301,7 @@ class CommonPdfProcessor(MediaProcessor):
         store_public(self.entry, 'pdf', tmp_pdf,
                      self.name_builder.fill('{basename}.pdf'))
 
-        return self.workbench.local_file(
+        return self.workbench.localized_file(
             mgg.public_store, self.entry.media_files['pdf'])
 
     def extract_pdf_info(self):
