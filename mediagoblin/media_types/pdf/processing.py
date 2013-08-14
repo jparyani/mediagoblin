@@ -13,17 +13,18 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import argparse
 import os
 import logging
 import dateutil.parser
 from subprocess import PIPE, Popen
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.processing import (create_pub_filepath,
-                                    FilenameBuilder, BadMediaFail,
-                                    MediaProcessor, ProcessingManager,
-                                    request_from_args, get_orig_filename,
-                                    store_public, copy_original)
+from mediagoblin.processing import (
+    FilenameBuilder, BadMediaFail,
+    MediaProcessor, ProcessingManager,
+    request_from_args, get_orig_filename,
+    store_public, copy_original)
 from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 
 _log = logging.getLogger(__name__)
@@ -252,8 +253,11 @@ class CommonPdfProcessor(MediaProcessor):
     def _set_pdf_filename(self):
         if self.name_builder.ext == 'pdf':
             self.pdf_filename = self.orig_filename
+        elif self.entry.media_files.get('pdf'):
+            self.pdf_filename = self.workbench.local_file(
+                mgg.public_store, self.entry.media_files['pdf'])
         else:
-            self.pdf_filename = self.name_builder.fill('{basename}.pdf')
+            self.pdf_filename = self._generate_pdf()
 
     def copy_original(self):
         copy_original(
@@ -266,7 +270,9 @@ class CommonPdfProcessor(MediaProcessor):
                           mgg.global_config['media:thumb']['max_height'])
 
         # Note: pdftocairo adds '.png', so don't include an ext
-        thumb_filename = self.name_builder.fill('{basename}.thumbnail')
+        thumb_filename = os.path.join(self.workbench.dir,
+                                      self.name_builder.fill(
+                                          '{basename}.thumbnail'))
 
         executable = where('pdftocairo')
         args = [executable, '-scale-to', str(thumb_size),
@@ -278,25 +284,27 @@ class CommonPdfProcessor(MediaProcessor):
         store_public(self.entry, 'thumb', thumb_filename,
                      self.name_builder.fill('{basename}.thumbnail.png'))
 
-    def generate_pdf(self):
+    def _generate_pdf(self):
         """
         Store the pdf. If the file is not a pdf, make it a pdf
         """
-        if self.name_builder.ext != 'pdf':
-            unoconv = where('unoconv')
-            Popen(executable=unoconv,
-                args=[unoconv, '-v', '-f', 'pdf', self.orig_filename]).wait()
+        unoconv = where('unoconv')
+        Popen(executable=unoconv,
+              args=[unoconv, '-v', '-f', 'pdf', self.orig_filename]).wait()
 
-            if not os.path.exists(self.pdf_filename):
-                _log.debug('unoconv failed to convert file to pdf')
-                raise BadMediaFail()
+        if not os.path.exists(self.pdf_filename):
+            _log.debug('unoconv failed to convert file to pdf')
+            raise BadMediaFail()
 
         store_public(self.entry, 'pdf', self.pdf_filename,
                      self.name_builder.fill('{basename}.pdf'))
 
+        return self.workbench.local_file(
+            mgg.public_store, self.entry.media_files['pdf'])
+
     def extract_pdf_info(self):
         pdf_info_dict = pdf_info(self.pdf_filename)
-        entry.media_data_init(**pdf_info_dict)
+        self.entry.media_data_init(**pdf_info_dict)
 
     def generate_medium(self, size=None):
         if not size:
@@ -304,7 +312,8 @@ class CommonPdfProcessor(MediaProcessor):
                     mgg.global_config['media:medium']['max_height'])
 
         # Note: pdftocairo adds '.png', so don't include an ext
-        filename = self.name_builder.fill('{basename}.medium')
+        filename = os.path.join(self.workbench.dir,
+                                self.name_builder.fill('{basename}.medium'))
 
         executable = where('pdftocairo')
         args = [executable, '-scale-to', str(size),
@@ -315,6 +324,7 @@ class CommonPdfProcessor(MediaProcessor):
 
         store_public(self.entry, 'thumb', filename,
                      self.name_builder.fill('{basename}.medium.png'))
+
 
 class InitialProcessor(CommonPdfProcessor):
     """
@@ -360,7 +370,6 @@ class InitialProcessor(CommonPdfProcessor):
 
     def process(self, size=None, thumb_size=None):
         self.common_setup()
-        self.generate_pdf()
         self.extract_pdf_info()
         self.copy_original()
         self.generate_medium(size=size)
@@ -368,7 +377,7 @@ class InitialProcessor(CommonPdfProcessor):
         self.delete_queue_file()
 
 
-class Resizer(CommonImageProcessor):
+class Resizer(CommonPdfProcessor):
     """
     Resizing process steps for processed pdfs
     """
