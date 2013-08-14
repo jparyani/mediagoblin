@@ -428,7 +428,7 @@ class Resizer(CommonPdfProcessor):
         if file == 'medium':
             self.generate_medium(size=size)
         elif file == 'thumb':
-            self.generate_thumb(size=size)
+            self.generate_thumb(thumb_size=size)
 
 
 class PdfProcessingManager(ProcessingManager):
