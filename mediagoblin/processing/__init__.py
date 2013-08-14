@@ -166,9 +166,10 @@ class MediaProcessor(object):
         # be removed too, but fail if the directory is not empty to be on
         # the super-safe side.
         queued_filepath = self.entry.queued_media_file
-        mgg.queue_store.delete_file(queued_filepath)      # rm file
-        mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
-        self.entry.queued_media_file = []
+        if queued_filepath:
+            mgg.queue_store.delete_file(queued_filepath)      # rm file
+            mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
+            self.entry.queued_media_file = []
 
 
 class ProcessingKeyError(Exception): pass
