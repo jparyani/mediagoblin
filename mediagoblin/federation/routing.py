@@ -41,3 +41,10 @@ add_route(
     "/api/user/<string:username>/inbox",
     "mediagoblin.federation.views:inbox"
     )
+
+# object endpoints
+add_route(
+    "mediagoblin.federation.object",
+    "/api/<string:objectType>/<string:uuid>",
+    "mediagoblin.federation.views:object"
+    )
