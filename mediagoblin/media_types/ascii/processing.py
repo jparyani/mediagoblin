@@ -189,6 +189,52 @@ class InitialProcessor(CommonAsciiProcessor):
         self.delete_queue_file()
 
 
+class Resizer(CommonAsciiProcessor):
+    """
+    Resizing process steps for processed media
+    """
+    name = 'resize'
+    description = 'Resize thumbnail'
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        """
+        Determine if this media type is eligible for processing
+        """
+        if not state:
+            state = entry.state
+        return state in 'processed'
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--thumb_size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        # Needed for gmg reprocess thumbs to work
+        parser.add_argument(
+            'file',
+            nargs='?',
+            default='thumb')
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['size', 'file'])
+
+    def process(self, thumb_size=None, file=None):
+        self.common_setup()
+        self.generate_thumb(thumb_size=thumb_size)
+
+
 class AsciiProcessingManager(ProcessingManager):
     def __init__(self):
         super(self.__class__, self).__init__()

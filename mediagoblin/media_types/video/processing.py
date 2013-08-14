@@ -309,14 +309,20 @@ class Resizer(CommonVideoProcessor):
             metavar=('max_width', 'max_height'),
             type=int)
 
+        # Needed for gmg reprocess thumbs to work
+        parser.add_argument(
+            'file',
+            nargs='?',
+            default='thumb')
+
         return parser
 
     @classmethod
     def args_to_request(cls, args):
         return request_from_args(
-            args, ['thumb_size'])
+            args, ['thumb_size', 'file'])
 
-    def process(self, thumb_size=None):
+    def process(self, thumb_size=None, file=None):
         self.common_setup()
         self.generate_thumb(thumb_size=thumb_size)
 
