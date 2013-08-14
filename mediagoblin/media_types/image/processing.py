@@ -44,7 +44,7 @@ MEDIA_TYPE = 'mediagoblin.media_types.image'
 
 
 def resize_image(entry, resized, keyname, target_name, new_size,
-                 exif_tags, workdir):
+                 exif_tags, workdir, quality, filter):
     """
     Store a resized version of an image and return its pathname.
 
@@ -56,17 +56,16 @@ def resize_image(entry, resized, keyname, target_name, new_size,
     exif_tags -- EXIF data for the original image
     workdir -- directory path for storing converted image files
     new_size -- 2-tuple size for the resized image
+    quality -- level of compression used when resizing images
+    filter -- One of BICUBIC, BILINEAR, NEAREST, ANTIALIAS
     """
-    config = mgg.global_config['media_type:mediagoblin.media_types.image']
-
     resized = exif_fix_image_orientation(resized, exif_tags)  # Fix orientation
 
-    filter_config = config['resize_filter']
     try:
-        resize_filter = PIL_FILTERS[filter_config.upper()]
+        resize_filter = PIL_FILTERS[filter.upper()]
     except KeyError:
         raise Exception('Filter "{0}" not found, choose one of {1}'.format(
-            unicode(filter_config),
+            unicode(filter),
             u', '.join(PIL_FILTERS.keys())))
 
     resized.thumbnail(new_size, resize_filter)
@@ -74,13 +73,13 @@ def resize_image(entry, resized, keyname, target_name, new_size,
     # Copy the new file to the conversion subdir, then remotely.
     tmp_resized_filename = os.path.join(workdir, target_name)
     with file(tmp_resized_filename, 'w') as resized_file:
-        resized.save(resized_file, quality=config['quality'])
+        resized.save(resized_file, quality=quality)
     store_public(entry, keyname, tmp_resized_filename, target_name)
 
 
 def resize_tool(entry,
                 force, keyname, orig_file, target_name,
-                conversions_subdir, exif_tags, new_size=None):
+                conversions_subdir, exif_tags, quality, filter, new_size=None):
     # Use the default size if new_size was not given
     if not new_size:
         max_width = mgg.global_config['media:' + keyname]['max_width']
@@ -102,7 +101,8 @@ def resize_tool(entry,
         resize_image(
             entry, im, unicode(keyname), target_name,
             new_size,
-            exif_tags, conversions_subdir)
+            exif_tags, conversions_subdir,
+            quality, filter)
 
 
 SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg', 'tiff']
@@ -135,6 +135,9 @@ class CommonImageProcessor(MediaProcessor):
         """
         Set up the workbench directory and pull down the original file
         """
+        self.image_config = mgg.global_config[
+            'media_type:mediagoblin.media_types.image']
+
         ## @@: Should this be two functions?
         # Conversions subdirectory to avoid collisions
         self.conversions_subdir = os.path.join(
@@ -149,15 +152,28 @@ class CommonImageProcessor(MediaProcessor):
         # Exif extraction
         self.exif_tags = extract_exif(self.orig_filename)
 
-    def generate_medium_if_applicable(self, size=None):
+    def generate_medium_if_applicable(self, size=None, quality=None,
+                                      filter=None):
+        if not quality:
+            quality = self.image_config['quality']
+        if not filter:
+            filter = self.image_config['resize_filter']
+
         resize_tool(self.entry, False, 'medium', self.orig_filename,
                     self.name_builder.fill('{basename}.medium{ext}'),
-                    self.conversions_subdir, self.exif_tags, size)
+                    self.conversions_subdir, self.exif_tags, quality,
+                    filter, size)
 
-    def generate_thumb(self, size=None):
+    def generate_thumb(self, size=None, quality=None, filter=None):
+        if not quality:
+            quality = self.image_config['quality']
+        if not filter:
+            filter = self.image_config['filter']
+
         resize_tool(self.entry, True, 'thumb', self.orig_filename,
                     self.name_builder.fill('{basename}.thumbnail{ext}'),
-                    self.conversions_subdir, self.exif_tags, size)
+                    self.conversions_subdir, self.exif_tags, quality,
+                    filter, size)
 
     def copy_original(self):
         copy_original(
@@ -219,17 +235,27 @@ class InitialProcessor(CommonImageProcessor):
             metavar=('max_width', 'max_height'),
             type=int)
 
+        parser.add_argument(
+            '--filter',
+            choices=['BICUBIC', 'BILINEAR', 'NEAREST', 'ANTIALIAS'])
+
+        parser.add_argument(
+            '--quality',
+            type=int,
+            help='level of compression used when resizing images')
+
         return parser
 
     @classmethod
     def args_to_request(cls, args):
         return request_from_args(
-            args, ['size', 'thumb_size'])
+            args, ['size', 'thumb_size', 'filter', 'quality'])
 
-    def process(self, size=None, thumb_size=None):
+    def process(self, size=None, thumb_size=None, quality=None, filter=None):
         self.common_setup()
-        self.generate_medium_if_applicable(size=size)
-        self.generate_thumb(size=thumb_size)
+        self.generate_medium_if_applicable(size=size, filter=filter,
+                                           quality=quality)
+        self.generate_thumb(size=thumb_sizei, filter=filter, quality=quality)
         self.copy_original()
         self.extract_metadata()
         self.delete_queue_file()
@@ -268,6 +294,15 @@ class Resizer(CommonImageProcessor):
             type=int)
 
         parser.add_argument(
+            '--filter',
+            choices=['BICUBIC', 'BILINEAR', 'NEAREST', 'ANTIALIAS'])
+
+        parser.add_argument(
+            '--quality',
+            type=int,
+            help='level of compression used when resizing images')
+
+        parser.add_argument(
             'file',
             choices=['medium', 'thumb'])
 
@@ -276,14 +311,15 @@ class Resizer(CommonImageProcessor):
     @classmethod
     def args_to_request(cls, args):
         return request_from_args(
-            args, ['size', 'file'])
+            args, ['size', 'file', 'quality', 'filter'])
 
-    def process(self, file, size=None):
+    def process(self, file, size=None, filter=None, quality=None):
         self.common_setup()
         if file == 'medium':
-            self.generate_medium_if_applicable(size=size)
+            self.generate_medium_if_applicable(size=size, filter=filter,
+                                              quality=quality)
         elif file == 'thumb':
-            self.generate_thumb(size=size)
+            self.generate_thumb(size=size, filter=filter, quality=quality)
 
 
 class ImageProcessingManager(ProcessingManager):
