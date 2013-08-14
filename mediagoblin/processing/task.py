@@ -93,7 +93,18 @@ class ProcessMedia(task.Task):
 
                 _log.debug('Processing {0}'.format(entry))
 
-                processor.process(**reprocess_info)
+                try:
+                    processor.process(**reprocess_info)
+                except Exception as exc:
+                    if processor.entry_orig_state == 'processed':
+                        _log.error(
+                            'Entry {0} failed to process due to the following'
+                            ' error: {1}'.format(entry.id, exc))
+                        _log.info(
+                            'Setting entry.state back to "processed"')
+                        pass
+                    else:
+                        raise
 
             # We set the state to processed and save the entry here so there's
             # no need to save at the end of the processing stage, probably ;)
