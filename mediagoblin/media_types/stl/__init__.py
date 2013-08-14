@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.media_types import MediaManagerBase
-from mediagoblin.media_types.stl.processing import process_stl, \
+from mediagoblin.media_types.stl.processing import StlProcessingManager, \
     sniff_handler
 from mediagoblin.tools import pluginapi
 
@@ -29,7 +29,6 @@ def setup_plugin():
 
 class STLMediaManager(MediaManagerBase):
     human_readable = "stereo lithographics"
-    processor = staticmethod(process_stl)
     display_template = "mediagoblin/media_displays/stl.html"
     default_thumb = "images/media_thumbs/video.jpg"
 
@@ -43,4 +42,5 @@ hooks = {
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
     ('media_manager', MEDIA_TYPE): lambda: STLMediaManager,
+    ('reprocess_manager', MEDIA_TYPE): lambda: StlProcessingManager,
 }
