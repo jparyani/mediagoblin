@@ -147,7 +147,7 @@ class CommonAudioProcessor(MediaProcessor):
         self.thumbnailer.thumbnail_spectrogram(
             spectrogram_filepath,
             thumb_tmp,
-            size)
+            tuple(size))
 
         store_public(self.entry, 'thumb', thumb_tmp,
                      self.name_builder.fill('{basename}.thumbnail.jpg'))
@@ -200,7 +200,7 @@ class InitialProcessor(CommonAudioProcessor):
         parser.add_argument(
             '--create_spectrogram',
             action='store_true',
-            help='Create spectogram and thumbnail')
+            help='Create spectogram and thumbnail, will default to config')
 
         return parser
 
