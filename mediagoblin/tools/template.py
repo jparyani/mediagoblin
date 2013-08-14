@@ -95,6 +95,8 @@ def get_jinja_env(template_loader, locale):
     from mediagoblin import notifications
     template_env.globals['get_notifications'] = notifications.get_notifications
     template_env.globals[
+        'get_notification_count'] = notifications.get_notification_count
+    template_env.globals[
         'get_comment_subscription'] = notifications.get_comment_subscription
 
     if exists(locale):
