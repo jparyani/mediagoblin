@@ -432,7 +432,7 @@ class MediaEntry(Base, MediaEntryMixin):
         """ Converts media_type to pump-like type - don't use internally """
         return self.media_type.split(".")[-1]
 
-    def serialize(self, request):
+    def serialize(self, request, show_comments=True):
         """ Unserialize MediaEntry to object """
         author = self.get_uploader
         url = request.urlgen(
@@ -456,6 +456,17 @@ class MediaEntry(Base, MediaEntryMixin):
             "objectType": self.objectType,
             "url": url,
         }
+
+        if show_comments:
+            comments = [comment.serialize(request) for comment in self.get_comments()]
+            total = len(comments)
+            if total > 0:
+                # we only want to include replies if there are any.
+                context["replies"] = {
+                    "totalItems": total,
+                    "items": comments
+                }
+
         return context 
 
 class FileKeynames(Base):
@@ -603,15 +614,15 @@ class MediaComment(Base, MediaCommentMixin):
                                                    lazy="dynamic",
                                                    cascade="all, delete-orphan"))
 
-
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
-        media = MediaEntry.query.filter_by(self.media_entry).first()
+        media = MediaEntry.query.filter_by(id=self.media_entry).first()
+        author = self.get_author
         context = {
             "objectType": "comment",
             "content": self.content,
-            "inReplyTo": media.unserialize(request),
-            "author": self.get_author.unserialize(request)
+            "inReplyTo": media.serialize(request, show_comments=False),
+            "author": author.serialize(request)
         }
 
         return context
