@@ -131,21 +131,6 @@ class CommonImageProcessor(MediaProcessor):
     """
     Provides a base for various media processing steps
     """
-    # Common resizing step
-    def resize_step(self):
-        pass
-
-    @classmethod
-    def _add_width_height_args(cls, parser):
-        parser.add_argument(
-            "--width", default=None,
-            help=(
-                "Width of the resized image (if not using defaults)"))
-        parser.add_argument(
-            "--height", default=None,
-            help=(
-                "Height of the resized image (if not using defaults)"))
-
     def common_setup(self):
         """
         Set up the workbench directory and pull down the original file
