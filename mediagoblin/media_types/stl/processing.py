@@ -95,7 +95,7 @@ class CommonStlProcessor(MediaProcessor):
         self._set_greatest()
 
     def _set_ext(self):
-        ext = self.name_builder.ext
+        ext = self.name_builder.ext[1:]
 
         if not ext:
             ext = None
