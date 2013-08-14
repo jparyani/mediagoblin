@@ -16,8 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 {%- if request.user %}
-    {% set subscription = request.notifications.get_comment_subscription(
-                                request.user.id, media.id) %}
+    {% set subscription = get_comment_subscription(request.user.id, media.id) %}
     {% if not subscription or not subscription.notify %}
         <a type="submit" href="{{ request.urlgen('mediagoblin.notifications.subscribe_comments',
             user=media.get_uploader.username,

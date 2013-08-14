@@ -32,7 +32,6 @@ from mediagoblin.tools.timesince import timesince
 from mediagoblin.meddleware.csrf import render_csrf_form_token
 
 
-
 SETUP_JINJA_ENVS = {}
 
 
@@ -89,6 +88,14 @@ def get_jinja_env(template_loader, locale):
 
     template_env.globals = hook_transform(
         'template_global_context', template_env.globals)
+
+    #### THIS IS TEMPORARY, PLEASE FIX IT
+    ## Notifications stuff is not yet a plugin (and we're not sure it will be),
+    ## but it needs to add stuff to the context.  This is THE WRONG WAY TO DO IT
+    from mediagoblin import notifications
+    template_env.globals['get_notifications'] = notifications.get_notifications
+    template_env.globals[
+        'get_comment_subscription'] = notifications.get_comment_subscription
 
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env

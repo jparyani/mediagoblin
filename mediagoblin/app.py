@@ -39,7 +39,6 @@ from mediagoblin.init import (get_jinja_loader, get_staticdirector,
 from mediagoblin.tools.pluginapi import PluginManager, hook_transform
 from mediagoblin.tools.crypto import setup_crypto
 from mediagoblin.auth.tools import check_auth_enabled, no_auth_logout
-from mediagoblin import notifications
 
 
 _log = logging.getLogger(__name__)
@@ -198,8 +197,6 @@ class MediaGoblinApp(object):
 
         # Log user out if authentication_disabled
         no_auth_logout(request)
-
-        request.notifications = notifications
 
         mg_request.setup_user_in_request(request)
 

@@ -60,10 +60,10 @@
             {%- if request.user %}
               {% if request.user and request.user.status == 'active' %}
 
-                {% set notification_count = request.notifications.get_notification_count(request.user.id) %}
+                {% set notification_count = get_notification_count(request.user.id) %}
                 {% if notification_count %}
-                <a href="#notifications" class="notification-gem button_action" title="Notifications">
-                {{ notification_count }}</a>
+                  <a href="#notifications" class="notification-gem button_action" title="Notifications">
+                  {{ notification_count }}</a>
                 {% endif %}
                 <a href="#header" class="button_action header_dropdown_down">&#9660;</a>
                 <a href="#no_header" class="button_action header_dropdown_up">&#9650;</a>
