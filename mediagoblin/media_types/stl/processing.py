@@ -249,7 +249,7 @@ class InitialProcessor(CommonStlProcessor):
             type=int)
 
         parser.add_argument(
-            '--thumb-size',
+            '--thumb_size',
             nargs=2,
             metavar=('max_width', 'max_height'),
             type=int)
@@ -320,7 +320,7 @@ class Resizer(CommonStlProcessor):
             self.generate_frontview(size=size)
             self.generate_sideview(size=size)
         elif file == 'thumb':
-            self.generate_thumb(size=size)
+            self.generate_thumb(thumb_size=size)
 
 
 class StlProcessingManager(ProcessingManager):

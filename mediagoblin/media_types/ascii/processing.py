@@ -224,14 +224,15 @@ class Resizer(CommonAsciiProcessor):
         parser.add_argument(
             'file',
             nargs='?',
-            default='thumb')
+            default='thumb',
+            choices=['thumb'])
 
         return parser
 
     @classmethod
     def args_to_request(cls, args):
         return request_from_args(
-            args, ['size', 'file'])
+            args, ['thumb_size', 'file'])
 
     def process(self, thumb_size=None, file=None):
         self.common_setup()

@@ -254,7 +254,7 @@ class CommonPdfProcessor(MediaProcessor):
         if self.name_builder.ext == 'pdf':
             self.pdf_filename = self.orig_filename
         elif self.entry.media_files.get('pdf'):
-            self.pdf_filename = self.workbench.local_file(
+            self.pdf_filename = self.workbench.localized_file(
                 mgg.public_store, self.entry.media_files['pdf'])
         else:
             self.pdf_filename = self._generate_pdf()
@@ -328,7 +328,7 @@ class CommonPdfProcessor(MediaProcessor):
 
         # since pdftocairo added '.png', we need to include it with the
         # filename
-        store_public(self.entry, 'thumb', filename + '.png',
+        store_public(self.entry, 'medium', filename + '.png',
                      self.name_builder.fill('{basename}.medium.png'))
 
 

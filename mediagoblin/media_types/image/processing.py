@@ -168,7 +168,7 @@ class CommonImageProcessor(MediaProcessor):
         if not quality:
             quality = self.image_config['quality']
         if not filter:
-            filter = self.image_config['filter']
+            filter = self.image_config['resize_filter']
 
         resize_tool(self.entry, True, 'thumb', self.orig_filename,
                     self.name_builder.fill('{basename}.thumbnail{ext}'),
@@ -255,7 +255,7 @@ class InitialProcessor(CommonImageProcessor):
         self.common_setup()
         self.generate_medium_if_applicable(size=size, filter=filter,
                                            quality=quality)
-        self.generate_thumb(size=thumb_sizei, filter=filter, quality=quality)
+        self.generate_thumb(size=thumb_size, filter=filter, quality=quality)
         self.copy_original()
         self.extract_metadata()
         self.delete_queue_file()
