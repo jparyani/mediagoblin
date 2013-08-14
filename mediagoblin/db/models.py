@@ -139,7 +139,7 @@ class User(Base, UserMixin):
 
     def serialize(self, request):
         user = {
-            "id": "acct:{0}@{1}".format(self.username, request.url),
+            "id": "acct:{0}@{1}".format(self.username, request.host),
             "preferredUsername": self.username,
             "displayName": "{0}@{1}".format(self.username, request.url),
             "objectType": "person",
