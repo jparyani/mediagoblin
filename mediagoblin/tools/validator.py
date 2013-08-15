@@ -14,31 +14,33 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
+from wtforms.validators import Email, URL
 
-from mediagoblin.tools.routing import add_route, mount, url_map
-from mediagoblin.tools.pluginapi import PluginManager
-from mediagoblin.admin.routing import admin_routes
-from mediagoblin.auth.routing import auth_routes
-
-
-_log = logging.getLogger(__name__)
-
-
-def get_url_map():
-    add_route('index', '/', 'mediagoblin.views:root_view')
-    mount('/auth', auth_routes)
-    mount('/a', admin_routes)
-
-    import mediagoblin.submit.routing
-    import mediagoblin.user_pages.routing
-    import mediagoblin.edit.routing
-    import mediagoblin.webfinger.routing
-    import mediagoblin.listings.routing
-    import mediagoblin.notifications.routing
-    import mediagoblin.oauth.routing
+def validate_email(email):
+    """ 
+        Validates an email 
     
-    for route in PluginManager().get_routes():
-        add_route(*route)
+        Returns True if valid and False if invalid
+    """
 
-    return url_map
+    email_re = Email().regex
+    result = email_re.match(email)
+    if result is None:
+        return False
+    else:
+        return result.string
+
+def validate_url(url):
+    """
+        Validates a url
+
+        Returns True if valid and False if invalid
+    """
+
+    url_re = URL().regex
+    result = url_re.match(url)
+    if result is None:
+        return False
+    else:
+        return result.string
+

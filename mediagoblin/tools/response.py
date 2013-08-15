@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
+
 import werkzeug.utils
 from werkzeug.wrappers import Response as wz_Response
 from mediagoblin.tools.template import render_template
@@ -31,7 +33,6 @@ def render_to_response(request, template, context, status=200):
         render_template(request, template, context),
         status=status)
 
-
 def render_error(request, status=500, title=_('Oops!'),
                  err_msg=_('An error occured')):
     """Render any error page with a given error code, title and text body
@@ -44,6 +45,14 @@ def render_error(request, status=500, title=_('Oops!'),
         {'err_code': status, 'title': title, 'err_msg': err_msg}),
         status=status)
 
+def render_400(request, err_msg=None):
+    """ Render a standard 400 page"""
+    _ = pass_to_ugettext
+    title = _("Bad Request")
+    if err_msg is None:
+        err_msg = _("The request sent to the server is invalid, please double check it")
+
+    return render_error(request, 400, title, err_msg)
 
 def render_403(request):
     """Render a standard 403 page"""
@@ -106,3 +115,45 @@ def redirect_obj(request, obj):
 
     Requires obj to have a .url_for_self method."""
     return redirect(request, location=obj.url_for_self(request.urlgen))
+
+def json_response(serializable, _disable_cors=False, *args, **kw):
+    '''
+    Serializes a json objects and returns a werkzeug Response object with the
+    serialized value as the response body and Content-Type: application/json.
+
+    :param serializable: A json-serializable object
+
+    Any extra arguments and keyword arguments are passed to the
+    Response.__init__ method.
+    '''
+    
+    response = wz_Response(json.dumps(serializable), *args, content_type='application/json', **kw)
+
+    if not _disable_cors:
+        cors_headers = {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With'}
+        for key, value in cors_headers.iteritems():
+            response.headers.set(key, value)
+
+    return response
+
+def form_response(data, *args, **kwargs):
+    """
+        Responds using application/x-www-form-urlencoded and returns a werkzeug
+        Response object with the data argument as the body
+        and 'application/x-www-form-urlencoded' as the Content-Type.
+
+        Any extra arguments and keyword arguments are passed to the
+        Response.__init__ method.
+    """
+
+    response = wz_Response(
+            data,
+            content_type="application/x-www-form-urlencoded",
+            *args,
+            **kwargs
+            )
+
+    return response

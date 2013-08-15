@@ -23,7 +23,7 @@ from mediagoblin import mg_globals
 from mediagoblin.tools import processing
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin.tests.test_submission import GOOD_PNG
-from mediagoblin.tests import test_oauth as oauth
+from mediagoblin.tests import test_oauth2 as oauth
 
 
 class TestHTTPCallback(object):
@@ -44,7 +44,7 @@ class TestHTTPCallback(object):
             'password': self.user_password})
 
     def get_access_token(self, client_id, client_secret, code):
-        response = self.test_app.get('/oauth/access_token', {
+        response = self.test_app.get('/oauth-2/access_token', {
                 'code': code,
                 'client_id': client_id,
                 'client_secret': client_secret})

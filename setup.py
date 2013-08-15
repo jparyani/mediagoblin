@@ -63,6 +63,8 @@ setup(
         'itsdangerous',
         'pytz',
         'six',
+        'oauthlib',
+        'pypump',
         ## This is optional!
         # 'translitcodec',
         ## For now we're expecting that users will install this from

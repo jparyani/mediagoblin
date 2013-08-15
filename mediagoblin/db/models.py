@@ -105,6 +105,72 @@ class User(Base, UserMixin):
         _log.info('Deleted user "{0}" account'.format(self.username))
 
 
+class Client(Base):
+    """
+        Model representing a client - Used for API Auth
+    """
+    __tablename__ = "core__clients"
+
+    id = Column(Unicode, nullable=True, primary_key=True)
+    secret = Column(Unicode, nullable=False)
+    expirey = Column(DateTime, nullable=True)
+    application_type = Column(Unicode, nullable=False)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    # optional stuff
+    redirect_uri = Column(JSONEncoded, nullable=True)
+    logo_url = Column(Unicode, nullable=True)
+    application_name = Column(Unicode, nullable=True)
+    contacts = Column(JSONEncoded, nullable=True)
+
+    def __repr__(self):
+        if self.application_name:
+            return "<Client {0} - {1}>".format(self.application_name, self.id)
+        else:
+            return "<Client {0}>".format(self.id)
+
+class RequestToken(Base):
+    """
+        Model for representing the request tokens
+    """
+    __tablename__ = "core__request_tokens"
+
+    token = Column(Unicode, primary_key=True)
+    secret = Column(Unicode, nullable=False)
+    client = Column(Unicode, ForeignKey(Client.id))
+    user = Column(Integer, ForeignKey(User.id), nullable=True)
+    used = Column(Boolean, default=False)
+    authenticated = Column(Boolean, default=False)
+    verifier = Column(Unicode, nullable=True)
+    callback = Column(Unicode, nullable=False, default=u"oob")
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    
+class AccessToken(Base):
+    """
+        Model for representing the access tokens
+    """
+    __tablename__ = "core__access_tokens"
+
+    token = Column(Unicode, nullable=False, primary_key=True)
+    secret = Column(Unicode, nullable=False)
+    user = Column(Integer, ForeignKey(User.id))
+    request_token = Column(Unicode, ForeignKey(RequestToken.token))
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+ 
+
+class NonceTimestamp(Base):
+    """
+        A place the timestamp and nonce can be stored - this is for OAuth1
+    """
+    __tablename__ = "core__nonce_timestamps"
+
+    nonce = Column(Unicode, nullable=False, primary_key=True)
+    timestamp = Column(DateTime, nullable=False, primary_key=True)
+
+
 class MediaEntry(Base, MediaEntryMixin):
     """
     TODO: Consider fetching the media_files using join
@@ -580,10 +646,10 @@ with_polymorphic(
     [ProcessingNotification, CommentNotification])
 
 MODELS = [
-    User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
-    MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
-    Notification, CommentNotification, ProcessingNotification,
-    CommentSubscription]
+    User, Client, RequestToken, AccessToken, NonceTimestamp, MediaEntry, Tag, 
+    MediaTag, MediaComment, Collection, CollectionItem, MediaFile, FileKeynames, 
+    MediaAttachmentFile, ProcessingMetaData, Notification, CommentNotification,
+    ProcessingNotification, CommentSubscription]
 
 """
  Foundations are the default rows that are created immediately after the tables 

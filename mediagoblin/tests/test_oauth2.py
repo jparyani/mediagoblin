@@ -51,7 +51,7 @@ class TestOAuth(object):
     def register_client(self, name, client_type, description=None,
                         redirect_uri=''):
         return self.test_app.post(
-                '/oauth/client/register', {
+                '/oauth-2/client/register', {
                     'name': name,
                     'description': description,
                     'type': client_type,
@@ -115,7 +115,7 @@ class TestOAuth(object):
         client_identifier = client.identifier
 
         redirect_uri = 'https://foo.example'
-        response = self.test_app.get('/oauth/authorize', {
+        response = self.test_app.get('/oauth-2/authorize', {
                 'client_id': client.identifier,
                 'scope': 'all',
                 'redirect_uri': redirect_uri})
@@ -129,7 +129,7 @@ class TestOAuth(object):
 
         # Short for client authorization post reponse
         capr = self.test_app.post(
-                '/oauth/client/authorize', {
+                '/oauth-2/client/authorize', {
                     'client_id': form.client_id.data,
                     'allow': 'Allow',
                     'next': form.next.data})
@@ -155,7 +155,7 @@ class TestOAuth(object):
         client = self.db.OAuthClient.query.filter(
                 self.db.OAuthClient.identifier == unicode(client_id)).first()
 
-        token_res = self.test_app.get('/oauth/access_token?client_id={0}&\
+        token_res = self.test_app.get('/oauth-2/access_token?client_id={0}&\
 code={1}&client_secret={2}'.format(client_id, code, client.secret))
 
         assert token_res.status_int == 200
@@ -183,7 +183,7 @@ code={1}&client_secret={2}'.format(client_id, code, client.secret))
         client = self.db.OAuthClient.query.filter(
                 self.db.OAuthClient.identifier == unicode(client_id)).first()
 
-        token_res = self.test_app.get('/oauth/access_token?\
+        token_res = self.test_app.get('/oauth-2/access_token?\
 code={0}&client_secret={1}'.format(code, client.secret))
 
         assert token_res.status_int == 200
@@ -204,7 +204,7 @@ code={0}&client_secret={1}'.format(code, client.secret))
         client = self.db.OAuthClient.query.filter(
             self.db.OAuthClient.identifier == client_id).first()
 
-        token_res = self.test_app.get('/oauth/access_token',
+        token_res = self.test_app.get('/oauth-2/access_token',
                      {'refresh_token': token_data['refresh_token'],
                       'client_id': client_id,
                       'client_secret': client.secret

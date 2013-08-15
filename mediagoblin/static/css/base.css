@@ -757,3 +757,10 @@ pre {
 #exif_additional_info table tr {
    margin-bottom: 10px;
 }
+
+p.verifier {
+    text-align:center;
+    font-size:50px;
+    none repeat scroll 0% 0% rgb(221, 221, 221);
+    padding: 1em 0px;
+}
