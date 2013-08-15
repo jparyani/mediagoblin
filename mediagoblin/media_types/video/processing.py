@@ -177,7 +177,7 @@ class CommonVideoProcessor(MediaProcessor):
                                       vp8_threads=vp8_threads,
                                       vorbis_quality=vorbis_quality,
                                       progress_callback=progress_callback,
-                                      dimensions=medium_size)
+                                      dimensions=tuple(medium_size))
 
             dst_dimensions = self.transcoder.dst_data.videowidth,\
                 self.transcoder.dst_data.videoheight
