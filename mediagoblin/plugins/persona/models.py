@@ -1,4 +1,3 @@
-{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -14,14 +13,24 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
+from sqlalchemy import Column, Integer, Unicode, ForeignKey
+from sqlalchemy.orm import relationship, backref
 
-{% block openid_login_link %}
-  {% if openid_link is defined %}
-    <p>
-      <a href="{{ request.urlgen('mediagoblin.plugins.openid.login') }}?{{ request.query_string }}">
-          {%- trans %}Or login with OpenID!{% endtrans %}
-      </a>
-    </p>
-  {% endif %}
-{% endblock %}
+from mediagoblin.db.models import User
+from mediagoblin.db.base import Base
+
+
+class PersonaUserEmails(Base):
+    __tablename__ = "persona__user_emails"
+
+    id = Column(Integer, primary_key=True)
+    persona_email = Column(Unicode, nullable=False)
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+
+    # Persona's are owned by their user, so do the full thing.
+    user = relationship(User, backref=backref('persona_emails',
+                                              cascade='all, delete-orphan'))
+
+MODELS = [
+    PersonaUserEmails
+]

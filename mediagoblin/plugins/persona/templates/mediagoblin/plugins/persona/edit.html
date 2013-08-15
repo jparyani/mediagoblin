@@ -19,48 +19,25 @@
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
-{% block mediagoblin_head %}
-  <script type="text/javascript"
-          src="{{ request.staticdirect('/js/autofilledin_password.js') }}"></script>
-{% endblock %}
-
 {% block title -%}
-  {% trans %}Log in{% endtrans %} &mdash; {{ super() }}
+  {% trans %}Add an OpenID{% endtrans %} &mdash; {{ super() }}
 {%- endblock %}
 
 {% block mediagoblin_content %}
-  <form action="{{ post_url }}"
+    <form action="{{ request.urlgen('mediagoblin.plugins.persona.edit') }}"
         method="POST" enctype="multipart/form-data">
     {{ csrf_token }}
     <div class="form_box">
-      <h1>{% trans %}Log in{% endtrans %}</h1>
-      {% if login_failed %}
-        <div class="form_field_error">
-          {% trans %}Logging in failed!{% endtrans %}
-        </div>
-      {% endif %}
-      {% if allow_registration %}
-        <p>
-        {% trans %}Log in to create an account!{% endtrans %} 
-        </p>
-      {% endif %}
-      {% template_hook('login_link') %}
-      {% if pass_auth is defined %}
+      <h1>{% trans %}Delete a Persona email address{% endtrans %}</h1>
       <p>
-      <a href="{{ request.urlgen('mediagoblin.auth.login') }}?{{ request.query_string }}">
-        {%- trans %}Or login with a password!{% endtrans %}
-      </a>
+      <a href="javascript:;" id="persona_login">
+          {% trans %}Add a Persona email address{% endtrans %}
+        </a>
       </p>
-      {% endif %}
-      {{ wtforms_util.render_divs(login_form, True) }}
+      {{ wtforms_util.render_divs(form, True) }}
       <div class="form_submit_buttons">
-        <input type="submit" value="{% trans %}Log in{% endtrans %}" class="button_form"/>
+        <input type="submit" value="{% trans %}Delete{% endtrans %}" class="button_form"/>
       </div>
-      {% if next %}
-        <input type="hidden" name="next" value="{{ next }}" class="button_form"
-               style="display: none;"/>
-      {% endif %}
     </div>
   </form>
 {% endblock %}
-

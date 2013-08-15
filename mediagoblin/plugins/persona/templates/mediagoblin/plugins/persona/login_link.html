@@ -16,12 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
-{% block openid_login_link %}
-  {% if openid_link is defined %}
+{% block person_login_link %}
     <p>
-      <a href="{{ request.urlgen('mediagoblin.plugins.openid.login') }}?{{ request.query_string }}">
-          {%- trans %}Or login with OpenID!{% endtrans %}
+      <a href="javascript:;" id="persona_login">
+          {% trans %}Or login with Persona!{% endtrans %}
       </a>
     </p>
-  {% endif %}
 {% endblock %}

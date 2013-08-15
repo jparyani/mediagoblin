@@ -16,12 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
-{% block openid_login_link %}
-  {% if openid_link is defined %}
-    <p>
-      <a href="{{ request.urlgen('mediagoblin.plugins.openid.login') }}?{{ request.query_string }}">
-          {%- trans %}Or login with OpenID!{% endtrans %}
-      </a>
-    </p>
-  {% endif %}
-{% endblock %}
+<script src="https://login.persona.org/include.js"></script>
+<script type="text/javascript"
+        src="{{ request.staticdirect('/js/persona.js', 'coreplugin_persona') }}"></script>
