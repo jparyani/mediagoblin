@@ -18,11 +18,11 @@
 {% block persona %}
   <form id="_persona_login"
     action=
-    {% if edit_persona is defined %}
+    {%- if edit_persona is defined -%}
       "{{ request.urlgen('mediagoblin.plugins.persona.add') }}"
-    {% else %}
+    {%- else -%}
       "{{ request.urlgen('mediagoblin.plugins.persona.login') }}"
-    {% endif %}
+    {%- endif %}
     method="POST">
     {{ csrf_token }}
     <input type="hidden" name="assertion" type="text" id="_assertion"/>
