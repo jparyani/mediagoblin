@@ -122,7 +122,7 @@ class CommonVideoProcessor(MediaProcessor):
     """
     Provides a base for various video processing steps
     """
-    acceptable_files = ['original', 'webm_640']
+    acceptable_files = ['original', 'best_quality', 'webm_640']
 
     def common_setup(self):
         self.video_config = mgg \
@@ -143,6 +143,18 @@ class CommonVideoProcessor(MediaProcessor):
             copy_original(
                 self.entry, self.process_filename,
                 self.name_builder.fill('{basename}{ext}'))
+
+    def _keep_best(self):
+        """
+        If there is no original, keep the best file that we have
+        """
+        if not self.entry.media_files.get('best_quality'):
+            # Save the best quality file if no original?
+            if not self.entry.media_files.get('original') and \
+                    self.entry.media_files.get('webm_640'):
+                self.entry.media_files['best_quality'] = self.entry \
+                    .media_files['webm_640']
+
 
     def transcode(self, medium_size=None, vp8_quality=None, vp8_threads=None,
                   vorbis_quality=None):
@@ -188,6 +200,8 @@ class CommonVideoProcessor(MediaProcessor):
 
             dst_dimensions = self.transcoder.dst_data.videowidth,\
                 self.transcoder.dst_data.videoheight
+
+            self._keep_best()
 
             # Push transcoded video to public storage
             _log.debug('Saving medium...')

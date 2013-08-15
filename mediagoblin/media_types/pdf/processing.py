@@ -253,7 +253,7 @@ class CommonPdfProcessor(MediaProcessor):
         self._set_pdf_filename()
 
     def _set_pdf_filename(self):
-        if self.name_builder.ext == 'pdf':
+        if self.name_builder.ext == '.pdf':
             self.pdf_filename = self.process_filename
         elif self.entry.media_files.get('pdf'):
             self.pdf_filename = self.workbench.localized_file(

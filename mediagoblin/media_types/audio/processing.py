@@ -52,7 +52,7 @@ class CommonAudioProcessor(MediaProcessor):
     """
     Provides a base for various audio processing steps
     """
-    acceptable_files = ['original', 'webm_audio']
+    acceptable_files = ['original', 'best_quality', 'webm_audio']
 
     def common_setup(self):
         """
@@ -76,6 +76,17 @@ class CommonAudioProcessor(MediaProcessor):
                 self.entry, self.process_filename,
                 self.name_builder.fill('{basename}{ext}'))
 
+    def _keep_best(self):
+        """
+        If there is no original, keep the best file that we have
+        """
+        if not self.entry.media_files.get('best_quality'):
+            # Save the best quality file if no original?
+            if not self.entry.media_files.get('original') and \
+                    self.entry.media_files.get('webm_audio'):
+                self.entry.media_files['best_quality'] = self.entry \
+                    .media_files['webm_audio']
+
     def transcode(self, quality=None):
         if not quality:
             quality = self.audio_config['quality']
@@ -92,6 +103,8 @@ class CommonAudioProcessor(MediaProcessor):
             progress_callback=progress_callback)
 
         self.transcoder.discover(webm_audio_tmp)
+
+        self._keep_best()
 
         _log.debug('Saving medium...')
         store_public(self.entry, 'webm_audio', webm_audio_tmp,
