@@ -24,7 +24,7 @@ from mediagoblin.processing import (
     FilenameBuilder, BaseProcessingFail,
     ProgressCallback, MediaProcessor,
     ProcessingManager, request_from_args,
-    get_orig_filename, store_public,
+    get_process_filename, store_public,
     copy_original)
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
@@ -122,15 +122,16 @@ class CommonVideoProcessor(MediaProcessor):
     """
     Provides a base for various video processing steps
     """
+    acceptable_files = ['original', 'webm_640']
 
     def common_setup(self):
         self.video_config = mgg \
             .global_config['media_type:mediagoblin.media_types.video']
 
-        # Pull down and set up the original file
-        self.orig_filename = get_orig_filename(
-            self.entry, self.workbench)
-        self.name_builder = FilenameBuilder(self.orig_filename)
+        # Pull down and set up the processing file
+        self.process_filename = get_process_filename(
+            self.entry, self.workbench, self.acceptable_files)
+        self.name_builder = FilenameBuilder(self.process_filename)
 
         self.transcoder = transcoders.VideoTranscoder()
         self.did_transcode = False
@@ -140,7 +141,7 @@ class CommonVideoProcessor(MediaProcessor):
         if not self.did_transcode or \
            (self.video_config['keep_original'] and self.did_transcode):
             copy_original(
-                self.entry, self.orig_filename,
+                self.entry, self.process_filename,
                 self.name_builder.fill('{basename}{ext}'))
 
     def transcode(self, medium_size=None, vp8_quality=None, vp8_threads=None,
@@ -161,7 +162,7 @@ class CommonVideoProcessor(MediaProcessor):
             vorbis_quality = self.video_config['vorbis_quality']
 
         # Extract metadata and keep a record of it
-        metadata = self.transcoder.discover(self.orig_filename)
+        metadata = self.transcoder.discover(self.process_filename)
         store_metadata(self.entry, metadata)
 
         # Figure out whether or not we need to transcode this video or
@@ -171,8 +172,14 @@ class CommonVideoProcessor(MediaProcessor):
 
             dst_dimensions = metadata['videowidth'], metadata['videoheight']
 
+            # If there is an original and transcoded, delete the transcoded
+            # since it must be of lower quality then the original
+            if self.entry.media_files.get('original') and \
+               self.entry.media_files.get('webm_640'):
+                self.entry.media_files['webm_640'].delete()
+
         else:
-            self.transcoder.transcode(self.orig_filename, tmp_dst,
+            self.transcoder.transcode(self.process_filename, tmp_dst,
                                       vp8_quality=vp8_quality,
                                       vp8_threads=vp8_threads,
                                       vorbis_quality=vorbis_quality,
@@ -206,7 +213,7 @@ class CommonVideoProcessor(MediaProcessor):
                           mgg.global_config['media:thumb']['max_height'])
 
         transcoders.VideoThumbnailerMarkII(
-            self.orig_filename,
+            self.process_filename,
             tmp_thumb,
             thumb_size[0],
             thumb_size[1])

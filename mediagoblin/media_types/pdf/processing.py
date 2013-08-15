@@ -23,7 +23,7 @@ from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
     FilenameBuilder, BadMediaFail,
     MediaProcessor, ProcessingManager,
-    request_from_args, get_orig_filename,
+    request_from_args, get_process_filename,
     store_public, copy_original)
 from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 
@@ -239,20 +239,22 @@ class CommonPdfProcessor(MediaProcessor):
     """
     Provides a base for various pdf processing steps
     """
+    acceptable_files = ['original', 'pdf']
+
     def common_setup(self):
         """
         Set up common pdf processing steps
         """
-        # Pull down and set up the original file
-        self.orig_filename = get_orig_filename(
-            self.entry, self.workbench)
-        self.name_builder = FilenameBuilder(self.orig_filename)
+        # Pull down and set up the processing file
+        self.process_filename = get_process_filename(
+            self.entry, self.workbench, self.acceptable_files)
+        self.name_builder = FilenameBuilder(self.process_filename)
 
         self._set_pdf_filename()
 
     def _set_pdf_filename(self):
         if self.name_builder.ext == 'pdf':
-            self.pdf_filename = self.orig_filename
+            self.pdf_filename = self.process_filename
         elif self.entry.media_files.get('pdf'):
             self.pdf_filename = self.workbench.localized_file(
                 mgg.public_store, self.entry.media_files['pdf'])
@@ -261,7 +263,7 @@ class CommonPdfProcessor(MediaProcessor):
 
     def copy_original(self):
         copy_original(
-            self.entry, self.orig_filename,
+            self.entry, self.process_filename,
             self.name_builder.fill('{basename}{ext}'))
 
     def generate_thumb(self, thumb_size=None):
@@ -290,11 +292,11 @@ class CommonPdfProcessor(MediaProcessor):
         """
         Store the pdf. If the file is not a pdf, make it a pdf
         """
-        tmp_pdf = self.orig_filename
+        tmp_pdf = self.process_filename
 
         unoconv = where('unoconv')
         Popen(executable=unoconv,
-              args=[unoconv, '-v', '-f', 'pdf', self.orig_filename]).wait()
+              args=[unoconv, '-v', '-f', 'pdf', self.process_filename]).wait()
 
         if not os.path.exists(tmp_pdf):
             _log.debug('unoconv failed to convert file to pdf')

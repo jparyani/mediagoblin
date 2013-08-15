@@ -26,7 +26,7 @@ from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
     create_pub_filepath, FilenameBuilder,
     MediaProcessor, ProcessingManager,
-    get_orig_filename, copy_original,
+    get_process_filename, copy_original,
     store_public, request_from_args)
 from mediagoblin.media_types.ascii import asciitoimage
 
@@ -52,6 +52,8 @@ class CommonAsciiProcessor(MediaProcessor):
     """
     Provides a base for various ascii processing steps
     """
+    acceptable_files = ['original', 'unicode']
+
     def common_setup(self):
         self.ascii_config = mgg.global_config[
             'media_type:mediagoblin.media_types.ascii']
@@ -61,16 +63,16 @@ class CommonAsciiProcessor(MediaProcessor):
             self.workbench.dir, 'convirsions')
         os.mkdir(self.conversions_subdir)
 
-        # Pull down and set up the original file
-        self.orig_filename = get_orig_filename(
-            self.entry, self.workbench)
-        self.name_builder = FilenameBuilder(self.orig_filename)
+        # Pull down and set up the processing file
+        self.process_filename = get_process_filename(
+            self.entry, self.workbench, self.acceptable_files)
+        self.name_builder = FilenameBuilder(self.process_filename)
 
         self.charset = None
 
     def copy_original(self):
         copy_original(
-            self.entry, self.orig_filename,
+            self.entry, self.process_filename,
             self.name_builder.fill('{basename}{ext}'))
 
     def _detect_charset(self, orig_file):
@@ -91,7 +93,7 @@ class CommonAsciiProcessor(MediaProcessor):
         orig_file.seek(0)
 
     def store_unicode_file(self):
-        with file(self.orig_filename, 'rb') as orig_file:
+        with file(self.process_filename, 'rb') as orig_file:
             self._detect_charset(orig_file)
             unicode_filepath = create_pub_filepath(self.entry,
                                                    'ascii-portable.txt')
@@ -110,7 +112,7 @@ class CommonAsciiProcessor(MediaProcessor):
         self.entry.media_files['unicode'] = unicode_filepath
 
     def generate_thumb(self, font=None, thumb_size=None):
-        with file(self.orig_filename, 'rb') as orig_file:
+        with file(self.process_filename, 'rb') as orig_file:
             # If no font kwarg, check config
             if not font:
                 font = self.ascii_config.get('thumbnail_font', None)

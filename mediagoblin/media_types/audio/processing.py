@@ -22,7 +22,7 @@ from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
     BadMediaFail, FilenameBuilder,
     ProgressCallback, MediaProcessor, ProcessingManager,
-    request_from_args, get_orig_filename,
+    request_from_args, get_process_filename,
     store_public, copy_original)
 
 from mediagoblin.media_types.audio.transcoders import (
@@ -52,6 +52,7 @@ class CommonAudioProcessor(MediaProcessor):
     """
     Provides a base for various audio processing steps
     """
+    acceptable_files = ['original', 'webm_audio']
 
     def common_setup(self):
         """
@@ -61,10 +62,10 @@ class CommonAudioProcessor(MediaProcessor):
         self.audio_config = mgg \
             .global_config['media_type:mediagoblin.media_types.audio']
 
-        # Pull down and set up the original file
-        self.orig_filename = get_orig_filename(
-            self.entry, self.workbench)
-        self.name_builder = FilenameBuilder(self.orig_filename)
+        # Pull down and set up the processing file
+        self.process_filename = get_process_filename(
+            self.entry, self.workbench, self.acceptable_files)
+        self.name_builder = FilenameBuilder(self.process_filename)
 
         self.transcoder = AudioTranscoder()
         self.thumbnailer = AudioThumbnailer()
@@ -72,7 +73,7 @@ class CommonAudioProcessor(MediaProcessor):
     def copy_original(self):
         if self.audio_config['keep_original']:
             copy_original(
-                self.entry, self.orig_filename,
+                self.entry, self.process_filename,
                 self.name_builder.fill('{basename}{ext}'))
 
     def transcode(self, quality=None):
@@ -85,7 +86,7 @@ class CommonAudioProcessor(MediaProcessor):
                                           '{basename}{ext}'))
 
         self.transcoder.transcode(
-            self.orig_filename,
+            self.process_filename,
             webm_audio_tmp,
             quality=quality,
             progress_callback=progress_callback)
@@ -107,7 +108,7 @@ class CommonAudioProcessor(MediaProcessor):
 
         _log.info('Creating OGG source for spectrogram')
         self.transcoder.transcode(
-            self.orig_filename,
+            self.process_filename,
             wav_tmp,
             mux_string='vorbisenc quality={0} ! oggmux'.format(
                 self.audio_config['quality']))

@@ -26,7 +26,7 @@ from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
     BadMediaFail, FilenameBuilder,
     MediaProcessor, ProcessingManager,
-    request_from_args, get_orig_filename,
+    request_from_args, get_process_filename,
     store_public, copy_original)
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful, \
@@ -131,6 +131,9 @@ class CommonImageProcessor(MediaProcessor):
     """
     Provides a base for various media processing steps
     """
+    # list of acceptable file keys in order of prefrence for reprocessing
+    acceptable_files = ['original', 'medium']
+
     def common_setup(self):
         """
         Set up the workbench directory and pull down the original file
@@ -144,13 +147,13 @@ class CommonImageProcessor(MediaProcessor):
             self.workbench.dir, 'convirsions')
         os.mkdir(self.conversions_subdir)
 
-        # Pull down and set up the original file
-        self.orig_filename = get_orig_filename(
-            self.entry, self.workbench)
-        self.name_builder = FilenameBuilder(self.orig_filename)
+        # Pull down and set up the processing file
+        self.process_filename = get_process_filename(
+            self.entry, self.workbench, self.acceptable_files)
+        self.name_builder = FilenameBuilder(self.process_filename)
 
         # Exif extraction
-        self.exif_tags = extract_exif(self.orig_filename)
+        self.exif_tags = extract_exif(self.process_filename)
 
     def generate_medium_if_applicable(self, size=None, quality=None,
                                       filter=None):
@@ -159,7 +162,7 @@ class CommonImageProcessor(MediaProcessor):
         if not filter:
             filter = self.image_config['resize_filter']
 
-        resize_tool(self.entry, False, 'medium', self.orig_filename,
+        resize_tool(self.entry, False, 'medium', self.process_filename,
                     self.name_builder.fill('{basename}.medium{ext}'),
                     self.conversions_subdir, self.exif_tags, quality,
                     filter, size)
@@ -170,14 +173,14 @@ class CommonImageProcessor(MediaProcessor):
         if not filter:
             filter = self.image_config['resize_filter']
 
-        resize_tool(self.entry, True, 'thumb', self.orig_filename,
+        resize_tool(self.entry, True, 'thumb', self.process_filename,
                     self.name_builder.fill('{basename}.thumbnail{ext}'),
                     self.conversions_subdir, self.exif_tags, quality,
                     filter, size)
 
     def copy_original(self):
         copy_original(
-            self.entry, self.orig_filename,
+            self.entry, self.process_filename,
             self.name_builder.fill('{basename}{ext}'))
 
     def extract_metadata(self):

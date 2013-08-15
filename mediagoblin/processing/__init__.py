@@ -327,29 +327,34 @@ def mark_entry_failed(entry_id, exc):
              u'fail_metadata': {}})
 
 
-def get_orig_filename(entry, workbench):
+def get_process_filename(entry, workbench, acceptable_files):
     """
-    Get the a filename for the original, on local storage
+    Try and get the queued file if available, otherwise return the first file
+    in the acceptable_files that we have.
 
-    If the media entry has a queued_media_file, use that, otherwise
-    use the original.
-
-    In the future, this will return the highest quality file available
-    if neither the original or queued file are available by checking
-    some ordered list of preferred keys.
+    If no acceptable_files, raise ProcessFileNotFound
     """
     if entry.queued_media_file:
-        orig_filepath = entry.queued_media_file
+        filepath = entry.queued_media_file
         storage = mgg.queue_store
     else:
-        orig_filepath = entry.media_files['original']
-        storage = mgg.public_store
+        for keyname in acceptable_files:
+            if entry.media_files.get(keyname):
+                filepath = entry.media_files[keyname]
+                storage = mgg.public_store
+                break
 
-    orig_filename = workbench.localized_file(
-        storage, orig_filepath,
+    if not filepath:
+        raise ProcessFileNotFound()
+
+    filename = workbench.localized_file(
+        storage, filepath,
         'source')
 
-    return orig_filename
+    if not os.path.exists(filename):
+        raise ProcessFileNotFound()
+
+    return filename
 
 
 def store_public(entry, keyname, local_file, target_name=None,
@@ -415,3 +420,11 @@ class PublicStoreFail(BaseProcessingFail):
     Error that should be raised when copying to public store fails
     """
     general_message = _('Copying to public storage failed.')
+
+
+class ProcessFileNotFound(BaseProcessingFail):
+    """
+    Error that should be raised when an acceptable file for processing
+    is not found.
+    """
+    general_message = _(u'An acceptable processing file was not found')

@@ -25,7 +25,7 @@ from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
     FilenameBuilder, MediaProcessor,
     ProcessingManager, request_from_args,
-    get_orig_filename, store_public,
+    get_process_filename, store_public,
     copy_original)
 
 from mediagoblin.media_types.stl import model_loader
@@ -83,12 +83,13 @@ class CommonStlProcessor(MediaProcessor):
     """
     Provides a common base for various stl processing steps
     """
+    acceptable_files = ['original']
 
     def common_setup(self):
-        # Pull down and set up the original file
-        self.orig_filename = get_orig_filename(
-            self.entry, self.workbench)
-        self.name_builder = FilenameBuilder(self.orig_filename)
+        # Pull down and set up the processing file
+        self.process_filename = get_process_filename(
+            self.entry, self.workbench, self.acceptable_files)
+        self.name_builder = FilenameBuilder(self.process_filename)
 
         self._set_ext()
         self._set_model()
@@ -107,7 +108,7 @@ class CommonStlProcessor(MediaProcessor):
         Attempt to parse the model file and divine some useful
         information about it.
         """
-        with open(self.orig_filename, 'rb') as model_file:
+        with open(self.process_filename, 'rb') as model_file:
             self.model = model_loader.auto_detect(model_file, self.ext)
 
     def _set_greatest(self):
@@ -117,14 +118,14 @@ class CommonStlProcessor(MediaProcessor):
 
     def copy_original(self):
         copy_original(
-            self.entry, self.orig_filename,
+            self.entry, self.process_filename,
             self.name_builder.fill('{basename}{ext}'))
 
     def _snap(self, keyname, name, camera, size, project="ORTHO"):
         filename = self.name_builder.fill(name)
         workbench_path = self.workbench.joinpath(filename)
         shot = {
-            "model_path": self.orig_filename,
+            "model_path": self.process_filename,
             "model_ext": self.ext,
             "camera_coord": camera,
             "camera_focus": self.model.average,
