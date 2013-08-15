@@ -191,7 +191,8 @@ class InitialProcessor(CommonAudioProcessor):
             '--thumb_size',
             nargs=2,
             metavar=('max_width', 'max_height'),
-            type=int)
+            type=int,
+            help='minimum size is 100 x 100')
 
         parser.add_argument(
             '--medium_width',
@@ -259,7 +260,8 @@ class Resizer(CommonAudioProcessor):
             '--thumb_size',
             nargs=2,
             metavar=('max_width', 'max_height'),
-            type=int)
+            type=int,
+            help='minimum size is 100 x 100')
 
         parser.add_argument(
             '--medium_width',
