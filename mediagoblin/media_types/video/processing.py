@@ -125,7 +125,7 @@ class CommonVideoProcessor(MediaProcessor):
 
     def common_setup(self):
         self.video_config = mgg \
-            .global_config['media_type:mediagoblin.media_types.audio']
+            .global_config['media_type:mediagoblin.media_types.video']
 
         # Pull down and set up the original file
         self.orig_filename = get_orig_filename(
@@ -166,7 +166,7 @@ class CommonVideoProcessor(MediaProcessor):
 
         # Figure out whether or not we need to transcode this video or
         # if we can skip it
-        if skip_transcode(metadata):
+        if skip_transcode(metadata, medium_size):
             _log.debug('Skipping transcoding')
 
             dst_dimensions = metadata['videowidth'], metadata['videoheight']
@@ -314,7 +314,8 @@ class Resizer(CommonVideoProcessor):
         parser.add_argument(
             'file',
             nargs='?',
-            default='thumb')
+            default='thumb',
+            choices=['thumb'])
 
         return parser
 
