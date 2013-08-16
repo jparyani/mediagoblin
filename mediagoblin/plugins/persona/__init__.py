@@ -48,7 +48,7 @@ def setup_plugin():
     pluginapi.register_routes(routes)
     pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
     pluginapi.register_template_hooks(
-        {'persona_head': 'mediagoblin/plugins/persona/persona_js_head.html',
+        {'persona_end': 'mediagoblin/plugins/persona/persona_js_end.html',
          'persona_form': 'mediagoblin/plugins/persona/persona.html',
          'edit_link': 'mediagoblin/plugins/persona/edit_link.html',
          'login_link': 'mediagoblin/plugins/persona/login_link.html',
