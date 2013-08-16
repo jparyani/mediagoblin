@@ -32,6 +32,8 @@ $(document).ready(function () {
         signoutLink.onclick = function() { navigator.id.logout(); };
     }
 
+    var logout_url = document.getElementById('_logout_url').value;
+
     navigator.id.watch({
         onlogin: function(assertion) {
             document.getElementById('_assertion').value = assertion;
@@ -39,8 +41,8 @@ $(document).ready(function () {
     },
         onlogout: function() {
             $.ajax({
-                type: 'POST',
-                url: '/auth/logout',
+                type: 'GET',
+                url: logout_url,
                 success: function(res, status, xhr) { window.location.reload(); },
                 error: function(xhr, status, err) { alert("Logout failure: " + err); }
             });

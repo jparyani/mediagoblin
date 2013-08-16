@@ -26,5 +26,7 @@
     method="POST">
     {{ csrf_token }}
     <input type="hidden" name="assertion" type="text" id="_assertion"/>
+    <input type="hidden" name="_logout_url" type="text" id="_logout_url"
+      value="{{ request.urlgen('mediagoblin.auth.logout') }}"/>
   </form>
 {% endblock %}
