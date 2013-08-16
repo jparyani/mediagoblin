@@ -100,7 +100,7 @@ def resize_tool(entry,
         or exif_image_needs_rotation(exif_tags):
         resize_image(
             entry, im, unicode(keyname), target_name,
-            new_size,
+            tuple(new_size),
             exif_tags, conversions_subdir,
             quality, filter)
 
