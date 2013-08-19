@@ -18,6 +18,8 @@ import pkg_resources
 import pytest
 import mock
 
+pytest.importorskip("requests")
+
 from mediagoblin import mg_globals
 from mediagoblin.db.base import Session
 from mediagoblin.tests.tools import get_app
