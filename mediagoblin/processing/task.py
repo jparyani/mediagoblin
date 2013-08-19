@@ -72,7 +72,7 @@ class ProcessMedia(celery.Task):
     """
     track_started=True
 
-    def run(self, media_id):
+    def run(self, media_id, feed_url):
         """
         Pass the media entry off to the appropriate processing function
         (for now just process_image...)
@@ -86,6 +86,7 @@ class ProcessMedia(celery.Task):
         try:
             entry.state = u'processing'
             entry.save()
+
             _log.debug('Processing {0}'.format(entry))
 
             proc_state = ProcessingState(entry)
