@@ -18,13 +18,13 @@ import logging
 import urllib
 import urllib2
 
-#TODO: newer celeries use from celery import Task. Change when we upgrade
-from celery.task import Task
+import celery
 from celery.registry import tasks
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.sql.models import MediaEntry
-from mediagoblin.processing import mark_entry_failed, BaseProcessingFail
+from mediagoblin.db.models import MediaEntry
+from mediagoblin.processing import (mark_entry_failed, BaseProcessingFail,
+                                    ProcessingState)
 from mediagoblin.tools.processing import json_processing_callback
 
 _log = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ logging.basicConfig()
 _log.setLevel(logging.DEBUG)
 
 
-@task.task(default_retry_delay=2 * 60)
+@celery.task(default_retry_delay=2 * 60)
 def handle_push_urls(feed_url):
     """Subtask, notifying the PuSH servers of new content
 
@@ -62,10 +62,14 @@ def handle_push_urls(feed_url):
                           'Giving up.'.format(feed_url))
                 return False
 
+
 ################################
 # Media processing initial steps
 ################################
-class ProcessMedia(Task):
+class ProcessMedia(celery.Task):
+    """
+    Pass this entry off for processing.
+    """
     track_started=True
 
     def run(self, media_id):
@@ -81,7 +85,6 @@ class ProcessMedia(Task):
         # Try to process, and handle expected errors.
         try:
             entry.state = u'processing'
-            entry.queued_task_id = self.request.id
             entry.save()
             _log.debug('Processing {0}'.format(entry))
 

@@ -146,7 +146,7 @@ class RequestToken(Base):
     callback = Column(Unicode, nullable=False, default=u"oob")
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    
+
 class AccessToken(Base):
     """
         Model for representing the access tokens
@@ -159,7 +159,7 @@ class AccessToken(Base):
     request_token = Column(Unicode, ForeignKey(RequestToken.token))
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
- 
+
 
 class NonceTimestamp(Base):
     """
@@ -646,13 +646,13 @@ with_polymorphic(
     [ProcessingNotification, CommentNotification])
 
 MODELS = [
-    User, Client, RequestToken, AccessToken, NonceTimestamp, MediaEntry, Tag, 
-    MediaTag, MediaComment, Collection, CollectionItem, MediaFile, FileKeynames, 
+    User, Client, RequestToken, AccessToken, NonceTimestamp, MediaEntry, Tag,
+    MediaTag, MediaComment, Collection, CollectionItem, MediaFile, FileKeynames,
     MediaAttachmentFile, ProcessingMetaData, Notification, CommentNotification,
     ProcessingNotification, CommentSubscription]
 
 """
- Foundations are the default rows that are created immediately after the tables 
+ Foundations are the default rows that are created immediately after the tables
  are initialized. Each entry to  this dictionary should be in the format of:
                  ModelConstructorObject:List of Dictionaries
  (Each Dictionary represents a row on the Table to be created, containing each

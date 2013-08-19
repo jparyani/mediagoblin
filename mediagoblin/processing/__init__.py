@@ -181,10 +181,8 @@ class BaseProcessingFail(Exception):
         return u"%s:%s" % (
             self.__class__.__module__, self.__class__.__name__)
 
-    def __init__(self, *args, **kwargs):
-        # next line is REQUIRED to have pickable exceptions if you want
-        # to be able to pass in custom arguments (see celery docs)
-        Exception.__init__(self, *args, **metadata)
+    def __init__(self, **metadata):
+        self.metadata = metadata or {}
 
 class BadMediaFail(BaseProcessingFail):
     """

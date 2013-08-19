@@ -21,7 +21,7 @@ from werkzeug.datastructures import FileStorage
 
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.processing import mark_entry_failed
-from mediagoblin.processing.task import process_media
+from mediagoblin.processing.task import ProcessMedia
 
 
 _log = logging.getLogger(__name__)
@@ -85,7 +85,7 @@ def run_process_media(entry, feed_url=None):
             'mediagoblin.user_pages.atom_feed',qualified=True,
             user=request.user.username)`"""
     try:
-        process_media.apply_async(
+        ProcessMedia().apply_async(
             [entry.id, feed_url], {},
             task_id=entry.queued_task_id)
     except BaseException as exc:
