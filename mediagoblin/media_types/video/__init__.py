@@ -34,7 +34,7 @@ class VideoMediaManager(MediaManagerBase):
     default_thumb = "images/media_thumbs/video.jpg"
 
     # Used by the media_entry.get_display_media method
-    media_fetch_order = [u'webm_640', u'original']
+    media_fetch_order = [u'webm_video', u'original']
     default_webm_type = 'video/webm; codecs="vp8, vorbis"'
 
 

@@ -122,7 +122,7 @@ class CommonVideoProcessor(MediaProcessor):
     """
     Provides a base for various video processing steps
     """
-    acceptable_files = ['original', 'best_quality', 'webm_640']
+    acceptable_files = ['original', 'best_quality', 'webm_video']
 
     def common_setup(self):
         self.video_config = mgg \
@@ -151,16 +151,16 @@ class CommonVideoProcessor(MediaProcessor):
         if not self.entry.media_files.get('best_quality'):
             # Save the best quality file if no original?
             if not self.entry.media_files.get('original') and \
-                    self.entry.media_files.get('webm_640'):
+                    self.entry.media_files.get('webm_video'):
                 self.entry.media_files['best_quality'] = self.entry \
-                    .media_files['webm_640']
+                    .media_files['webm_video']
 
 
     def transcode(self, medium_size=None, vp8_quality=None, vp8_threads=None,
                   vorbis_quality=None):
         progress_callback = ProgressCallback(self.entry)
         tmp_dst = os.path.join(self.workbench.dir,
-                               self.name_builder.fill('{basename}-640p.webm'))
+                               self.name_builder.fill('{basename}.medium.webm'))
 
         if not medium_size:
             medium_size = (
@@ -187,8 +187,8 @@ class CommonVideoProcessor(MediaProcessor):
             # If there is an original and transcoded, delete the transcoded
             # since it must be of lower quality then the original
             if self.entry.media_files.get('original') and \
-               self.entry.media_files.get('webm_640'):
-                self.entry.media_files['webm_640'].delete()
+               self.entry.media_files.get('webm_video'):
+                self.entry.media_files['webm_video'].delete()
 
         else:
             self.transcoder.transcode(self.process_filename, tmp_dst,
@@ -205,8 +205,8 @@ class CommonVideoProcessor(MediaProcessor):
 
             # Push transcoded video to public storage
             _log.debug('Saving medium...')
-            store_public(self.entry, 'webm_640', tmp_dst,
-                         self.name_builder.fill('{basename}-640p.webm'))
+            store_public(self.entry, 'webm_video', tmp_dst,
+                         self.name_builder.fill('{basename}.medium.webm'))
             _log.debug('Saved medium')
 
             self.did_transcode = True
