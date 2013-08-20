@@ -144,16 +144,13 @@ dnl----
 dnl
 AC_PROG_MKDIR_P
 AC_PROG_INSTALL	    
-AC_CHECK_PROG(HAVE_PKG_CONFIG, pkg-config, yes)
-AS_IF([test "x$HAVE_PKG_CONFIG" = "x"],
-   [AC_MSG_ERROR([you need pkg-config])])
 
 # Check for a supported database program
-PKG_CHECK_EXISTS([sqlite3], HAVE_SQLITE3="yes")
-PKG_CHECK_EXISTS([pq], HAVE_PQ="yes")
-
-AS_IF([test "x$HAVE_SQLITE3" = "x" -a "x$HAVE_PQ" = "x"],
+AC_PATH_PROG([SQLITE], [sqlite3])
+AC_PATH_PROG([POSTGRES], [postgres])
+AS_IF([test "x$SQLITE" = x -a "x$POSTGRES" = "x"],
    [AC_MSG_ERROR([SQLite or PostgreSQL is required])])
+
 
 dnl--PC_PYTHON_SITE_PACKAGE_DIR---------------------------------------
 dnl This uses PYTHON_SITE_DIR to construct a directory for this
