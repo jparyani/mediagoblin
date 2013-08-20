@@ -21,7 +21,7 @@ from sqlalchemy import or_
 
 from mediagoblin import mg_globals
 from mediagoblin.tools.crypto import get_timed_signer_url
-from mediagoblin.db.models import User
+from mediagoblin.db.models import User, Privilege
 from mediagoblin.tools.mail import (normalize_email, send_email,
                                     email_debug_message)
 from mediagoblin.tools.template import render_template

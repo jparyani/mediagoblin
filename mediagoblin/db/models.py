@@ -649,6 +649,10 @@ class ProcessingNotification(Notification):
         'polymorphic_identity': 'processing_notification'
     }
 
+with_polymorphic(
+    Notification,
+    [ProcessingNotification, CommentNotification])
+
 class ReportBase(Base):
     """
     This is the basic report table which the other reports are based off of.
@@ -828,16 +832,13 @@ class PrivilegeUserAssociation(Base):
         ForeignKey(Privilege.id), 
         primary_key=True)
 
-with_polymorphic(
-    Notification,
-    [ProcessingNotification, CommentNotification])
-
 MODELS = [
     User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
     MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
-    Notification, CommentNotification, ProcessingNotification,
+    Notification, CommentNotification, ProcessingNotification, Client,
     CommentSubscription, ReportBase, CommentReport, MediaReport, UserBan, 
-	Privilege, PrivilegeUserAssociation, ArchivedReport, ArchivedReport]
+	Privilege, PrivilegeUserAssociation, ArchivedReport,
+    RequestToken, AccessToken, NonceTimestamp]
 
 """
  Foundations are the default rows that are created immediately after the tables

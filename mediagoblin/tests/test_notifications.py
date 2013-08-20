@@ -38,7 +38,7 @@ class TestNotifications:
 
         # TODO: Possibly abstract into a decorator like:
         # @as_authenticated_user('chris')
-        self.test_user = fixture_add_user()
+        self.test_user = fixture_add_user(privileges=[u'active',u'commenter'])
 
         self.current_user = None
 
@@ -75,7 +75,10 @@ class TestNotifications:
 
         '''
         user = fixture_add_user('otherperson', password='nosreprehto',
-                                wants_comment_notification=wants_email)
+                                wants_comment_notification=wants_email,
+                                privileges=[u'active',u'commenter'])
+
+        assert user.wants_comment_notification == wants_email
 
         user_id = user.id
 
@@ -123,6 +126,8 @@ otherperson@example.com\n\nSGkgb3RoZXJwZXJzb24sCmNocmlzIGNvbW1lbnRlZCBvbiB5b3VyI
                 'to': [u'otherperson@example.com']}]
         else:
             assert mail.EMAIL_TEST_MBOX_INBOX == []
+
+        mail.EMAIL_TEST_MBOX_INBOX = []
 
         # Save the ids temporarily because of DetachedInstanceError
         notification_id = notification.id

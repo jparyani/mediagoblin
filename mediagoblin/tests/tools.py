@@ -133,7 +133,6 @@ def get_app(request, paste_config=None, mgoblin_config=None):
     mg_globals.app.meddleware.insert(0, TestingMeddleware(mg_globals.app))
 
     app = TestApp(test_app)
-
     return app
 
 

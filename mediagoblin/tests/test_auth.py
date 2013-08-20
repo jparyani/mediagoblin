@@ -342,6 +342,7 @@ def authentication_disabled_app(request):
 
 def test_authentication_disabled_app(authentication_disabled_app):
     # app.auth should = false
+    assert mg_globals
     assert mg_globals.app.auth is False
 
     # Try to visit register page

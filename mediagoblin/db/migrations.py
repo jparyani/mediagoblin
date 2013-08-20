@@ -383,79 +383,6 @@ def pw_hash_nullable(db):
         constraint = UniqueConstraint('username', table=user_table)
         constraint.create()
 
-class ReportBase_v0(declarative_base()):
-    __tablename__ = 'core__reports'
-    id = Column(Integer, primary_key=True)
-    reporter_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    report_content = Column(UnicodeText)
-    reported_user_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now) 
-    discriminator = Column('type', Unicode(50))
-    __mapper_args__ = {'polymorphic_on': discriminator}
-
-class CommentReport_v0(ReportBase_v0):
-    __tablename__ = 'core__reports_on_comments'
-    __mapper_args__ = {'polymorphic_identity': 'comment_report'}
-
-    id = Column('id',Integer, ForeignKey('core__reports.id'),
-                                                primary_key=True)
-    comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=False)
-
-class MediaReport_v0(ReportBase_v0):
-    __tablename__ = 'core__reports_on_media'
-    __mapper_args__ = {'polymorphic_identity': 'media_report'}
-
-    id = Column('id',Integer, ForeignKey('core__reports.id'), primary_key=True)
-    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
-
-class ArchivedReport_v0(ReportBase_v0):
-    __tablename__ = 'core__reports_archived'
-    __mapper_args__ = {'polymorphic_identity': 'archived_report'}
-
-    id = Column('id',Integer, ForeignKey('core__reports.id'), primary_key=True)
-    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id))
-    comment_id = Column(Integer, ForeignKey(MediaComment.id))
-    resolver_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    resolved_time = Column(DateTime)
-    result = Column(UnicodeText)
-
-class UserBan_v0(declarative_base()):
-    __tablename__ = 'core__user_bans'
-    user_id = Column('id',Integer, ForeignKey(User.id), nullable=False,
-                                         primary_key=True)
-    expiration_date = Column(DateTime)
-    reason = Column(UnicodeText, nullable=False)
-
-class Privilege_v0(declarative_base()):
-    __tablename__ = 'core__privileges'
-    id = Column(Integer, nullable=False, primary_key=True, unique=True)
-    privilege_name = Column(Unicode, nullable=False, unique=True)
-
-class PrivilegeUserAssociation_v0(declarative_base()):
-    __tablename__ = 'core__privileges_users'
-    group_id = Column(
-        'core__privilege_id', 
-        Integer, 
-        ForeignKey(User.id), 
-        primary_key=True)
-    user_id = Column(
-        'core__user_id', 
-        Integer, 
-        ForeignKey(Privilege.id), 
-        primary_key=True)
-
-@RegisterMigration(14, MIGRATIONS)
-def create_moderation_tables(db):
-    ReportBase_v0.__table__.create(db.bind)
-    CommentReport_v0.__table__.create(db.bind)
-    MediaReport_v0.__table__.create(db.bind)
-    ArchivedReport_v0.__table__.create(db.bind)
-    UserBan_v0.__table__.create(db.bind)
-    Privilege_v0.__table__.create(db.bind)
-    PrivilegeUserAssociation_v0.__table__.create(db.bind)
-    db.commit()
-
-
 # oauth1 migrations
 class Client_v0(declarative_base()):
     """
@@ -533,3 +460,77 @@ def create_oauth1_tables(db):
     NonceTimestamp_v0.__table__.create(db.bind)
 
     db.commit()
+
+class ReportBase_v0(declarative_base()):
+    __tablename__ = 'core__reports'
+    id = Column(Integer, primary_key=True)
+    reporter_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    report_content = Column(UnicodeText)
+    reported_user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now) 
+    discriminator = Column('type', Unicode(50))
+    __mapper_args__ = {'polymorphic_on': discriminator}
+
+class CommentReport_v0(ReportBase_v0):
+    __tablename__ = 'core__reports_on_comments'
+    __mapper_args__ = {'polymorphic_identity': 'comment_report'}
+
+    id = Column('id',Integer, ForeignKey('core__reports.id'),
+                                                primary_key=True)
+    comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=False)
+
+class MediaReport_v0(ReportBase_v0):
+    __tablename__ = 'core__reports_on_media'
+    __mapper_args__ = {'polymorphic_identity': 'media_report'}
+
+    id = Column('id',Integer, ForeignKey('core__reports.id'), primary_key=True)
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
+
+class ArchivedReport_v0(ReportBase_v0):
+    __tablename__ = 'core__reports_archived'
+    __mapper_args__ = {'polymorphic_identity': 'archived_report'}
+
+    id = Column('id',Integer, ForeignKey('core__reports.id'), primary_key=True)
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id))
+    comment_id = Column(Integer, ForeignKey(MediaComment.id))
+    resolver_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    resolved_time = Column(DateTime)
+    result = Column(UnicodeText)
+
+class UserBan_v0(declarative_base()):
+    __tablename__ = 'core__user_bans'
+    user_id = Column('id',Integer, ForeignKey(User.id), nullable=False,
+                                         primary_key=True)
+    expiration_date = Column(DateTime)
+    reason = Column(UnicodeText, nullable=False)
+
+class Privilege_v0(declarative_base()):
+    __tablename__ = 'core__privileges'
+    id = Column(Integer, nullable=False, primary_key=True, unique=True)
+    privilege_name = Column(Unicode, nullable=False, unique=True)
+
+class PrivilegeUserAssociation_v0(declarative_base()):
+    __tablename__ = 'core__privileges_users'
+    group_id = Column(
+        'core__privilege_id', 
+        Integer, 
+        ForeignKey(User.id), 
+        primary_key=True)
+    user_id = Column(
+        'core__user_id', 
+        Integer, 
+        ForeignKey(Privilege.id), 
+        primary_key=True)
+
+@RegisterMigration(15, MIGRATIONS)
+def create_moderation_tables(db):
+    ReportBase_v0.__table__.create(db.bind)
+    CommentReport_v0.__table__.create(db.bind)
+    MediaReport_v0.__table__.create(db.bind)
+    ArchivedReport_v0.__table__.create(db.bind)
+    UserBan_v0.__table__.create(db.bind)
+    Privilege_v0.__table__.create(db.bind)
+    PrivilegeUserAssociation_v0.__table__.create(db.bind)
+    db.commit()
+
+
