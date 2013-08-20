@@ -19,8 +19,9 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.decorators import get_user_media_entry, require_active_login
 from mediagoblin import messages
 
-from mediagoblin.notifications import add_comment_subscription, \
-    silence_comment_subscription, mark_comment_notification_seen
+from mediagoblin.notifications import (add_comment_subscription,
+    silence_comment_subscription, mark_comment_notification_seen,
+    get_notifications)
 
 
 @get_user_media_entry
@@ -55,7 +56,7 @@ def mark_all_comment_notifications_seen(request):
     """
     Marks all comment notifications seen.
     """
-    for comment in request.notifications.get_notifications(request.user.id):
+    for comment in get_notifications(request.user.id):
         mark_comment_notification_seen(comment.subject_id, request.user)
 
     if request.GET.get('next'):
