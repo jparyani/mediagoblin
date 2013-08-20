@@ -1,4 +1,4 @@
-{% set notifications = request.notifications.get_notifications(request.user.id) %}
+{% set notifications = get_notifications(request.user.id) %}
 {% if notifications %}
     <div class="header_notifications">
     <h3>{% trans %}New comments{% endtrans %}</h3>

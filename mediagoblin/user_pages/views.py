@@ -16,6 +16,7 @@
 
 import logging
 import datetime
+import json
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
@@ -23,6 +24,7 @@ from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
                                    CommentReport, MediaReport)
 from mediagoblin.tools.response import render_to_response, render_404, \
     redirect, redirect_obj
+from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.user_pages import forms as user_forms
@@ -39,6 +41,7 @@ from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
 
 from werkzeug.contrib.atom import AtomFeed
 from werkzeug.exceptions import MethodNotAllowed
+from werkzeug.wrappers import Response
 
 
 _log = logging.getLogger(__name__)
@@ -159,7 +162,6 @@ def media_home(request, media, page, **kwargs):
 
 @get_media_entry_by_id
 @require_active_login
-@user_has_privilege(u'commenter')
 def media_post_comment(request, media):
     """
     recieves POST from a MediaEntry() comment form, saves the comment.
@@ -291,8 +293,13 @@ def media_confirm_delete(request, media):
             messages.add_message(
                 request, messages.SUCCESS, _('You deleted the media.'))
 
-            return redirect(request, "mediagoblin.user_pages.user_home",
-                user=username)
+            location = media.url_to_next(request.urlgen)
+            if not location:
+                location=media.url_to_prev(request.urlgen)
+            if not location:
+                location=request.urlgen("mediagoblin.user_pages.user_home",
+                                        user=username)
+            return redirect(request, location=location)
         else:
             messages.add_message(
                 request, messages.ERROR,

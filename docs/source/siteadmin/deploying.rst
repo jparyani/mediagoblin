@@ -1,6 +1,6 @@
 .. MediaGoblin Documentation
 
-   Written in 2011, 2012 by MediaGoblin contributors
+   Written in 2011, 2012, 2013 by MediaGoblin contributors
 
    To the extent possible under law, the author(s) have dedicated all
    copyright and related and neighboring rights to this software to
@@ -77,7 +77,7 @@ Configure PostgreSQL
 
    If you don't want/need postgres, skip this section.
 
-These are the packages needed for Debian Wheezy (testing)::
+These are the packages needed for Debian Wheezy (stable)::
 
     sudo apt-get install postgresql postgresql-client python-psycopg2
 
@@ -121,25 +121,62 @@ where the first ``mediagoblin`` is the database owner and the second
 Drop Privileges for MediaGoblin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As MediaGoblin does not require special permissions or elevated
-access, you should run MediaGoblin under an existing non-root user or
-preferably create a dedicated user for the purpose of running
-MediaGoblin. Consult your distribution's documentation on how to
-create "system account" or dedicated service user. Ensure that it is
-not possible to log in to your system with as this user.
+MediaGoblin does not require special permissions or elevated
+access to run. As such, the prefered way to run MediaGoblin is to 
+create a dedicated, unpriviledged system user for sole the purpose of running
+MediaGoblin. Running MediaGoblin processes under an unpriviledged system user
+helps to keep it more secure. 
+
+The following command (entered as root or with sudo) will create a
+system account with a username of ``mediagoblin``. You may choose a different
+username if you wish.::
+
+   adduser --system mediagoblin
+
+No password will be assigned to this account, and you will not be able
+to log in as this user. To switch to this account, enter either::
+
+  sudo su - mediagoblin (if you have sudo permissions)
+
+or::
+
+  su - mediagoblin (if you have to use root permissions)
+
+You may get a warning similar to this when entering these commands::
+
+  warning: cannot change directory to /home/mediagoblin: No such file or directory
+
+You can disregard this warning. To return to your regular user account after
+using the system account, just enter ``exit``.
+
+.. note::
+
+    Unless otherwise noted, the remainder of this document assumes that all
+    operations are performed using this unpriviledged account.
+
+.. _create-mediagoblin-directory:
+
+Create a MediaGoblin Directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You should create a working directory for MediaGoblin. This document
 assumes your local git repository will be located at 
-``/srv/mediagoblin.example.org/mediagoblin/`` for this documentation.
-Substitute your prefer ed local deployment path as needed.
+``/srv/mediagoblin.example.org/mediagoblin/``.
+Substitute your prefered local deployment path as needed.
 
-This document assumes that all operations are performed as this
-user. To drop privileges to this user, run the following command::
+Setting up the working directory requires that we first create the directory
+with elevated priviledges, and then assign ownership of the directory
+to the unpriviledged system account.
 
-      su - [mediagoblin]
+To do this, enter either of the following commands, changing the defaults
+to suit your particular requirements::
 
-Where, "``[mediagoblin]``" is the username of the system user that will
-run MediaGoblin.
+  sudo mkdir -p /srv/mediagoblin.example.org && sudo chown -hR mediagoblin:mediagoblin /srv/mediagobin.example.org
+
+or (as the root user)::
+
+  mkdir -p /srv/mediagoblin.example.org && chown -hR mediagoblin:mediagoblin /srv/mediagobin.example.org
+
 
 Install MediaGoblin and Virtualenv
 ----------------------------------
@@ -151,11 +188,14 @@ Install MediaGoblin and Virtualenv
    branch of the git repository. Eventually production deployments will
    want to transition to running from more consistent releases.
 
-Issue the following commands, to create and change the working
-directory. Modify these commands to reflect your own environment::
+We will now clone the MediaGoblin source code repository and setup and
+configure the necessary services. Modify these commands to
+suit your own environment. As a reminder, you should enter these
+commands using your unpriviledged system account.
 
-    mkdir -p /srv/mediagoblin.example.org/
-    cd /srv/mediagoblin.example.org/
+Change to the MediaGoblin directory that you just created::
+
+    cd /srv/mediagoblin.example.org
 
 Clone the MediaGoblin repository and set up the git submodules::
 
@@ -163,11 +203,22 @@ Clone the MediaGoblin repository and set up the git submodules::
     cd mediagoblin
     git submodule init && git submodule update
 
-And set up the in-package virtualenv::
+Set up the in-package virtualenv via make::
 
-    (virtualenv --system-site-packages . || virtualenv .) && ./bin/python setup.py develop
+    ./bootstrap.sh && ./configure && make
 
 .. note::
+
+   Prefer not to use make, or want to use the "old way" of installing
+   MediaGoblin (maybe you know how to use virtualenv and python
+   packaging)?  You still can!  All that the above make script is doing
+   is installing an in-package virtualenv and running
+
+     ./bin/python setup.py develop
+
+.. ::
+
+   (NOTE: Is this still relevant?)
 
    If you have problems here, consider trying to install virtualenv
    with the ``--distribute`` or ``--no-site-packages`` options. If
@@ -388,4 +439,5 @@ Security Considerations
    for session security. Make sure not to leak its contents anywhere.
    If the contents gets leaked nevertheless, delete your file
    and restart the server, so that it creates a new secret key.
-   All previous sessions will be invalifated then.
+   All previous sessions will be invalidated.
+

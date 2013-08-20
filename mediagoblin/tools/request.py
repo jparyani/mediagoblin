@@ -14,10 +14,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
 import logging
 from mediagoblin.db.models import User
 
 _log = logging.getLogger(__name__)
+
+
+# MIME-Types
+form_encoded = "application/x-www-form-urlencoded"
+json_encoded = "application/json"
 
 
 def setup_user_in_request(request):
@@ -36,3 +42,15 @@ def setup_user_in_request(request):
         # this session.
         _log.warn("Killing session for user id %r", request.session['user_id'])
         request.session.delete()
+
+def decode_request(request):
+    """ Decodes a request based on MIME-Type """
+    data = request.get_data()
+    
+    if request.content_type == json_encoded:
+        data = json.loads(data)
+    elif request.content_type == form_encoded or request.content_type == "":
+        data = request.form
+    else:
+        data = ""
+    return data

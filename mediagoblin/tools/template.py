@@ -32,7 +32,6 @@ from mediagoblin.tools.timesince import timesince
 from mediagoblin.meddleware.csrf import render_csrf_form_token
 
 
-
 SETUP_JINJA_ENVS = {}
 
 
@@ -50,6 +49,12 @@ def get_jinja_env(template_loader, locale):
     if locale in SETUP_JINJA_ENVS:
         return SETUP_JINJA_ENVS[locale]
 
+    # The default config does not require a [jinja2] block.
+    # You may create one if you wish to enable additional jinja2 extensions,
+    # see example in config_spec.ini 
+    jinja2_config = mg_globals.global_config.get('jinja2', {})
+    local_exts = jinja2_config.get('extensions', [])
+
     # jinja2.StrictUndefined will give exceptions on references
     # to undefined/unknown variables in templates.
     template_env = jinja2.Environment(
@@ -57,7 +62,7 @@ def get_jinja_env(template_loader, locale):
         undefined=jinja2.StrictUndefined,
         extensions=[
             'jinja2.ext.i18n', 'jinja2.ext.autoescape',
-            TemplateHookExtension])
+            TemplateHookExtension] + local_exts)
 
     template_env.install_gettext_callables(
         mg_globals.thread_scope.translations.ugettext,
@@ -83,6 +88,16 @@ def get_jinja_env(template_loader, locale):
 
     template_env.globals = hook_transform(
         'template_global_context', template_env.globals)
+
+    #### THIS IS TEMPORARY, PLEASE FIX IT
+    ## Notifications stuff is not yet a plugin (and we're not sure it will be),
+    ## but it needs to add stuff to the context.  This is THE WRONG WAY TO DO IT
+    from mediagoblin import notifications
+    template_env.globals['get_notifications'] = notifications.get_notifications
+    template_env.globals[
+        'get_notification_count'] = notifications.get_notification_count
+    template_env.globals[
+        'get_comment_subscription'] = notifications.get_comment_subscription
 
     if exists(locale):
         SETUP_JINJA_ENVS[locale] = template_env

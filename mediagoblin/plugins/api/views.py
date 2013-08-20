@@ -21,11 +21,11 @@ from os.path import splitext
 from werkzeug.exceptions import BadRequest, Forbidden
 from werkzeug.wrappers import Response
 
+from mediagoblin.tools.response import json_response
 from mediagoblin.decorators import require_active_login
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.media_types import sniff_media
-from mediagoblin.plugins.api.tools import api_auth, get_entry_serializable, \
-        json_response
+from mediagoblin.plugins.api.tools import api_auth, get_entry_serializable
 from mediagoblin.submit.lib import check_file_field, prepare_queue_task, \
     run_process_media, new_upload_entry
 

@@ -59,6 +59,9 @@ Part 2: Core plugin documentation
    plugindocs/oauth
    plugindocs/trim_whitespace
    plugindocs/raven
+   plugindocs/basic_auth
+   plugindocs/openid
+   plugindocs/persona
 
 
 Part 3: Plugin Writer's Guide
@@ -75,6 +78,7 @@ This guide covers writing new GNU MediaGoblin plugins.
    pluginwriter/api
    pluginwriter/tests
    pluginwriter/media_type_hooks
+   pluginwriter/authhooks
 
 
 Part 4: Developer's Zone

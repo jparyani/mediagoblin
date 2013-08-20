@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from tempfile import NamedTemporaryFile
+import os.path
 import logging
 import datetime
 
@@ -73,79 +73,77 @@ def process_video(proc_state):
     queued_filename = proc_state.get_queued_filename()
     name_builder = FilenameBuilder(queued_filename)
 
-    medium_filepath = create_pub_filepath(
-        entry, name_builder.fill('{basename}-640p.webm'))
+    medium_basename = name_builder.fill('{basename}-640p.webm')
+    medium_filepath = create_pub_filepath(entry, medium_basename)
 
-    thumbnail_filepath = create_pub_filepath(
-        entry, name_builder.fill('{basename}.thumbnail.jpg'))
+    thumbnail_basename = name_builder.fill('{basename}.thumbnail.jpg')
+    thumbnail_filepath = create_pub_filepath(entry, thumbnail_basename)
 
     # Create a temporary file for the video destination (cleaned up with workbench)
-    tmp_dst = NamedTemporaryFile(dir=workbench.dir, delete=False)
-    with tmp_dst:
-        # Transcode queued file to a VP8/vorbis file that fits in a 640x640 square
-        progress_callback = ProgressCallback(entry)
+    tmp_dst = os.path.join(workbench.dir, medium_basename)
+    # Transcode queued file to a VP8/vorbis file that fits in a 640x640 square
+    progress_callback = ProgressCallback(entry)
 
-        dimensions = (
-            mgg.global_config['media:medium']['max_width'],
-            mgg.global_config['media:medium']['max_height'])
+    dimensions = (
+        mgg.global_config['media:medium']['max_width'],
+        mgg.global_config['media:medium']['max_height'])
 
-        # Extract metadata and keep a record of it
-        metadata = transcoders.VideoTranscoder().discover(queued_filename)
-        store_metadata(entry, metadata)
+    # Extract metadata and keep a record of it
+    metadata = transcoders.VideoTranscoder().discover(queued_filename)
+    store_metadata(entry, metadata)
 
-        # Figure out whether or not we need to transcode this video or
-        # if we can skip it
-        if skip_transcode(metadata):
-            _log.debug('Skipping transcoding')
+    # Figure out whether or not we need to transcode this video or
+    # if we can skip it
+    if skip_transcode(metadata):
+        _log.debug('Skipping transcoding')
 
-            dst_dimensions = metadata['videowidth'], metadata['videoheight']
+        dst_dimensions = metadata['videowidth'], metadata['videoheight']
 
             # Push original file to public storage
-            _log.debug('Saving original...')
-            proc_state.copy_original(queued_filepath[-1])
+        _log.debug('Saving original...')
+        proc_state.copy_original(queued_filepath[-1])
 
-            did_transcode = False
-        else:
-            transcoder = transcoders.VideoTranscoder()
+        did_transcode = False
+    else:
+        transcoder = transcoders.VideoTranscoder()
 
-            transcoder.transcode(queued_filename, tmp_dst.name,
-                    vp8_quality=video_config['vp8_quality'],
-                    vp8_threads=video_config['vp8_threads'],
-                    vorbis_quality=video_config['vorbis_quality'],
-                    progress_callback=progress_callback,
-                    dimensions=dimensions)
+        transcoder.transcode(queued_filename, tmp_dst,
+                vp8_quality=video_config['vp8_quality'],
+                vp8_threads=video_config['vp8_threads'],
+                vorbis_quality=video_config['vorbis_quality'],
+                progress_callback=progress_callback,
+                dimensions=dimensions)
 
-            dst_dimensions = transcoder.dst_data.videowidth,\
-                    transcoder.dst_data.videoheight
+        dst_dimensions = transcoder.dst_data.videowidth,\
+            transcoder.dst_data.videoheight
 
-            # Push transcoded video to public storage
-            _log.debug('Saving medium...')
-            mgg.public_store.copy_local_to_storage(tmp_dst.name, medium_filepath)
-            _log.debug('Saved medium')
+        # Push transcoded video to public storage
+        _log.debug('Saving medium...')
+        mgg.public_store.copy_local_to_storage(tmp_dst, medium_filepath)
+        _log.debug('Saved medium')
 
-            entry.media_files['webm_640'] = medium_filepath
+        entry.media_files['webm_640'] = medium_filepath
 
-            did_transcode = True
+        did_transcode = True
 
-        # Save the width and height of the transcoded video
-        entry.media_data_init(
-            width=dst_dimensions[0],
-            height=dst_dimensions[1])
+    # Save the width and height of the transcoded video
+    entry.media_data_init(
+        width=dst_dimensions[0],
+        height=dst_dimensions[1])
 
     # Temporary file for the video thumbnail (cleaned up with workbench)
-    tmp_thumb = NamedTemporaryFile(dir=workbench.dir, suffix='.jpg', delete=False)
+    tmp_thumb = os.path.join(workbench.dir, thumbnail_basename)
 
-    with tmp_thumb:
-        # Create a thumbnail.jpg that fits in a 180x180 square
-        transcoders.VideoThumbnailerMarkII(
-                queued_filename,
-                tmp_thumb.name,
-                180)
+    # Create a thumbnail.jpg that fits in a 180x180 square
+    transcoders.VideoThumbnailerMarkII(
+        queued_filename,
+        tmp_thumb,
+        180)
 
-        # Push the thumbnail to public storage
-        _log.debug('Saving thumbnail...')
-        mgg.public_store.copy_local_to_storage(tmp_thumb.name, thumbnail_filepath)
-        entry.media_files['thumb'] = thumbnail_filepath
+    # Push the thumbnail to public storage
+    _log.debug('Saving thumbnail...')
+    mgg.public_store.copy_local_to_storage(tmp_thumb, thumbnail_filepath)
+    entry.media_files['thumb'] = thumbnail_filepath
 
     # save the original... but only if we did a transcoding
     # (if we skipped transcoding and just kept the original anyway as the main

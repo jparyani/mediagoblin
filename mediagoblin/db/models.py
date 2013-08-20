@@ -30,6 +30,7 @@ from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
 
+
 from mediagoblin.db.extratypes import PathTupleWithSlashes, JSONEncoded
 from mediagoblin.db.base import Base, DictReadAttrProxy
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, \
@@ -61,20 +62,17 @@ class User(Base, UserMixin):
     # the RFC) and because it would be a mess to implement at this
     # point.
     email = Column(Unicode, nullable=False)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    pw_hash = Column(Unicode, nullable=False)
+    pw_hash = Column(Unicode)
     email_verified = Column(Boolean, default=False)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     status = Column(Unicode, default=u"needs_email_verification", nullable=False)
     # Intented to be nullable=False, but migrations would not work for it
     # set to nullable=True implicitly.
     wants_comment_notification = Column(Boolean, default=True)
     license_preference = Column(Unicode)
-    verification_key = Column(Unicode)
     is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
     bio = Column(UnicodeText)  # ??
-    fp_verification_key = Column(Unicode)
-    fp_token_expire = Column(DateTime)
 
     ## TODO
     # plugin data would be in a separate model
@@ -115,6 +113,71 @@ class User(Base, UserMixin):
             return self.has_privilege(priv_names[0]) or \
                 self.has_privilege(*priv_names[1:])
         return False
+
+class Client(Base):
+    """
+        Model representing a client - Used for API Auth
+    """
+    __tablename__ = "core__clients"
+
+    id = Column(Unicode, nullable=True, primary_key=True)
+    secret = Column(Unicode, nullable=False)
+    expirey = Column(DateTime, nullable=True)
+    application_type = Column(Unicode, nullable=False)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    # optional stuff
+    redirect_uri = Column(JSONEncoded, nullable=True)
+    logo_url = Column(Unicode, nullable=True)
+    application_name = Column(Unicode, nullable=True)
+    contacts = Column(JSONEncoded, nullable=True)
+
+    def __repr__(self):
+        if self.application_name:
+            return "<Client {0} - {1}>".format(self.application_name, self.id)
+        else:
+            return "<Client {0}>".format(self.id)
+
+class RequestToken(Base):
+    """
+        Model for representing the request tokens
+    """
+    __tablename__ = "core__request_tokens"
+
+    token = Column(Unicode, primary_key=True)
+    secret = Column(Unicode, nullable=False)
+    client = Column(Unicode, ForeignKey(Client.id))
+    user = Column(Integer, ForeignKey(User.id), nullable=True)
+    used = Column(Boolean, default=False)
+    authenticated = Column(Boolean, default=False)
+    verifier = Column(Unicode, nullable=True)
+    callback = Column(Unicode, nullable=False, default=u"oob")
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+class AccessToken(Base):
+    """
+        Model for representing the access tokens
+    """
+    __tablename__ = "core__access_tokens"
+
+    token = Column(Unicode, nullable=False, primary_key=True)
+    secret = Column(Unicode, nullable=False)
+    user = Column(Integer, ForeignKey(User.id))
+    request_token = Column(Unicode, ForeignKey(RequestToken.token))
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+
+class NonceTimestamp(Base):
+    """
+        A place the timestamp and nonce can be stored - this is for OAuth1
+    """
+    __tablename__ = "core__nonce_timestamps"
+
+    nonce = Column(Unicode, nullable=False, primary_key=True)
+    timestamp = Column(DateTime, nullable=False, primary_key=True)
 
 
 class MediaEntry(Base, MediaEntryMixin):
@@ -498,6 +561,7 @@ class ProcessingMetaData(Base):
         """A dict like view on this object"""
         return DictReadAttrProxy(self)
 
+
 class CommentSubscription(Base):
     __tablename__ = 'core__comment_subscriptions'
     id = Column(Integer, primary_key=True)
@@ -768,16 +832,15 @@ with_polymorphic(
     Notification,
     [ProcessingNotification, CommentNotification])
 
-
 MODELS = [
-    User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem, 
-    MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData, ReportBase,
-    CommentReport, MediaReport, UserBan, Privilege, PrivilegeUserAssociation,
-    ArchivedReport, Notification, CommentNotification, 
-	ProcessingNotification, CommentSubscription]
+    User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
+    MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
+    Notification, CommentNotification, ProcessingNotification,
+    CommentSubscription, ReportBase, CommentReport, MediaReport, UserBan, 
+	Privilege, PrivilegeUserAssociation, ArchivedReport, ArchivedReport]
 
 """
- Foundations are the default rows that are created immediately after the tables 
+ Foundations are the default rows that are created immediately after the tables
  are initialized. Each entry to  this dictionary should be in the format of:
                  ModelConstructorObject:List of Dictionaries
  (Each Dictionary represents a row on the Table to be created, containing each

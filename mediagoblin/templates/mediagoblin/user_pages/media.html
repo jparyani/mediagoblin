@@ -90,7 +90,8 @@
       {% if app_config['allow_comments'] %}
         <a
           {% if not request.user %}
-            href="{{ request.urlgen('mediagoblin.auth.login') }}"
+          href="{{ request.urlgen('mediagoblin.auth.login') }}?next={{
+                                                request.base_url|urlencode }}"
           {% endif %}
           class="button_action" id="button_addcomment" title="Add a comment">
           {% trans %}Add a comment{% endtrans %}
@@ -107,7 +108,10 @@
             <input type="submit" value="{% trans %}Add this comment{% endtrans %}" class="button_action" />
               {{ csrf_token }}
           </div>
+          <input type="hidden" value="{{ request.urlgen('mediagoblin.user_pages.media_preview_comment') }}" id="previewURL" />
+          <input type="hidden" value="{% trans %}Comment Preview{% endtrans %}" id="previewText"/>
         </form>
+	<div id="comment_preview"></div>
       {% endif %}
       <ul style="list-style:none">
       {% for comment in comments %}

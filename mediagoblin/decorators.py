@@ -18,15 +18,18 @@ from functools import wraps
 
 from urlparse import urljoin
 from werkzeug.exceptions import Forbidden, NotFound
-from werkzeug.urls import url_quote
+from oauthlib.oauth1 import ResourceEndpoint
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin import messages
 from mediagoblin.db.models import (MediaEntry, User, MediaComment,
 							UserBan, Privilege)
-from mediagoblin.tools.response import redirect, render_404, render_user_banned
+from mediagoblin.tools.response import (redirect, render_404, 
+								render_user_banned, json_response)
 from mediagoblin.tools.translate import pass_to_ugettext as _
 
+from mediagoblin.oauth.tools.request import decode_authorization_header
+from mediagoblin.oauth.oauth import GMGRequestValidator
 
 def require_active_login(controller):
     """
@@ -245,6 +248,17 @@ def get_media_entry_by_id(controller):
     return wrapper
 
 
+def get_workbench(func):
+    """Decorator, passing in a workbench as kwarg which is cleaned up afterwards"""
+
+    @wraps(func)
+    def new_func(*args, **kwargs):
+        with mgg.workbench_manager.create() as workbench:
+            return func(*args, workbench=workbench, **kwargs)
+
+    return new_func
+
+
 def allow_registration(controller):
     """ Decorator for if registration is enabled"""
     @wraps(controller)
@@ -287,17 +301,10 @@ def auth_enabled(controller):
                 messages.WARNING,
                 _('Sorry, authentication is disabled on this instance.'))
             return redirect(request, 'index')
+
         return controller(request, *args, **kwargs)
 
     return wrapper
-
-def get_workbench(func):
-    """Decorator, passing in a workbench as kwarg which is cleaned up afterwards"""
-    @wraps(func)
-    def new_func(*args, **kwargs):
-        with mgg.workbench_manager.create() as workbench:
-            return func(*args, workbench=workbench, **kwargs)
-    return new_func
 
 def require_admin_or_moderator_login(controller):
     """
@@ -322,6 +329,7 @@ def require_admin_or_moderator_login(controller):
 
     return new_controller_func
 
+
 def user_not_banned(controller):
     """
     Requires that the user has not been banned. Otherwise redirects to the page
@@ -337,3 +345,33 @@ def user_not_banned(controller):
 
     return wrapper
 
+
+
+def oauth_required(controller):
+    """ Used to wrap API endpoints where oauth is required """
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        data = request.headers
+        authorization = decode_authorization_header(data)
+
+        if authorization == dict():
+            error = "Missing required parameter."
+            return json_response({"error": error}, status=400)
+
+         
+        request_validator = GMGRequestValidator()
+        resource_endpoint = ResourceEndpoint(request_validator)
+        valid, request = resource_endpoint.validate_protected_resource_request(
+                uri=request.url,
+                http_method=request.method,
+                body=request.get_data(),
+                headers=dict(request.headers),
+                )
+
+        if not valid:
+            error = "Invalid oauth prarameter."
+            return json_response({"error": error}, status=400)
+
+        return controller(request, *args, **kwargs)
+
+    return wrapper

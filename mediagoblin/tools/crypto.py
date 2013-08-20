@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import base64
+import string
 import errno
 import itsdangerous
 import logging
@@ -24,6 +26,9 @@ from mediagoblin import mg_globals
 
 _log = logging.getLogger(__name__)
 
+# produces base64 alphabet
+alphabet = string.ascii_letters + "-_"
+base = len(alphabet)
 
 # Use the system (hardware-based) random number generator if it exists.
 # -- this optimization is lifted from Django
@@ -111,3 +116,13 @@ def get_timed_signer_url(namespace):
     assert __itsda_secret is not None
     return itsdangerous.URLSafeTimedSerializer(__itsda_secret,
          salt=namespace)
+
+def random_string(length):
+    """ Returns a URL safe base64 encoded crypographically strong string """
+    rstring = ""
+    for i in range(length):
+        n = getrandbits(6) # 6 bytes = 2^6 = 64
+        n = divmod(n, base)[1]
+        rstring += alphabet[n]
+
+    return rstring

@@ -184,7 +184,6 @@ class BaseProcessingFail(Exception):
     def __init__(self, **metadata):
         self.metadata = metadata or {}
 
-
 class BadMediaFail(BaseProcessingFail):
     """
     Error that should be raised when an inappropriate file was given

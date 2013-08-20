@@ -21,7 +21,7 @@ from urllib import urlencode
 
 from werkzeug.exceptions import BadRequest
 
-from mediagoblin.tools.response import render_to_response, redirect
+from mediagoblin.tools.response import render_to_response, redirect, json_response
 from mediagoblin.decorators import require_active_login
 from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.tools.translate import pass_to_ugettext as _
@@ -31,7 +31,6 @@ from mediagoblin.plugins.oauth.forms import ClientRegistrationForm, \
         AuthorizationForm
 from mediagoblin.plugins.oauth.tools import require_client_auth, \
         create_token
-from mediagoblin.plugins.api.tools import json_response
 
 _log = logging.getLogger(__name__)
 

@@ -41,8 +41,11 @@ def register(request):
     """
     if 'pass_auth' not in request.template_env.globals:
         redirect_name = hook_handle('auth_no_pass_redirect')
-        return redirect(request, 'mediagoblin.plugins.{0}.register'.format(
-            redirect_name))
+        if redirect_name:
+            return redirect(request, 'mediagoblin.plugins.{0}.register'.format(
+                redirect_name))
+        else:
+            return redirect(request, 'index')
 
     register_form = hook_handle("auth_get_registration_form", request)
 
@@ -73,8 +76,11 @@ def login(request):
     """
     if 'pass_auth' not in request.template_env.globals:
         redirect_name = hook_handle('auth_no_pass_redirect')
-        return redirect(request, 'mediagoblin.plugins.{0}.login'.format(
-            redirect_name))
+        if redirect_name:
+            return redirect(request, 'mediagoblin.plugins.{0}.login'.format(
+                redirect_name))
+        else:
+            return redirect(request, 'index')
 
     login_form = hook_handle("auth_get_login_form", request)
 
