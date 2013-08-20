@@ -745,14 +745,6 @@ class Privilege(Base):
     def __repr__(self):
         return "<Privilege %s>" % (self.privilege_name)
 
-    def is_admin_or_moderator(self):
-        '''
-        This method is necessary to check if a user is able to take moderation
-        actions.
-        '''
-        
-        return (self.privilege_name==u'admin' or 
-                self.privilege_name==u'moderator')
 
 class PrivilegeUserAssociation(Base):
     '''

@@ -25,6 +25,7 @@ from mediagoblin.tools import template, pluginapi
 from mediagoblin.tests.tools import fixture_add_user
 from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
     BIG_BLUE
+from mediagoblin.db.models import Privilege
 
 
 _log = logging.getLogger(__name__)
@@ -35,7 +36,8 @@ class TestAPI(object):
         self.db = mg_globals.database
 
         self.user_password = u'4cc355_70k3N'
-        self.user = fixture_add_user(u'joapi', self.user_password)
+        self.user = fixture_add_user(u'joapi', self.user_password,
+            privileges=[u'active',u'uploader'])
 
     def login(self, test_app):
         test_app.post(

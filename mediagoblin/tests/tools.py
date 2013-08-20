@@ -25,7 +25,7 @@ from webtest import TestApp
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User, MediaEntry, Collection, MediaComment, \
-    CommentSubscription, CommentNotification
+    CommentSubscription, CommentNotification, Privilege
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.db.base import Session
@@ -170,7 +170,7 @@ def assert_db_meets_expected(db, expected):
 
 
 def fixture_add_user(username=u'chris', password=u'toast',
-                     active_user=True, wants_comment_notification=True):
+                     privileges=[], wants_comment_notification=True):
     # Reuse existing user or create a new one
     test_user = User.query.filter_by(username=username).first()
     if test_user is None:
@@ -179,14 +179,13 @@ def fixture_add_user(username=u'chris', password=u'toast',
     test_user.email = username + u'@example.com'
     if password is not None:
         test_user.pw_hash = gen_password_hash(password)
-    if active_user:
-        test_user.email_verified = True
-        test_user.status = u'active'
-
     test_user.wants_comment_notification = wants_comment_notification
+    for privilege in privileges:
+        query = Privilege.query.filter(Privilege.privilege_name==privilege)
+        if query.count():
+            test_user.all_privileges.append(query.one())
 
     test_user.save()
-
     # Reload
     test_user = User.query.filter_by(username=username).first()
 

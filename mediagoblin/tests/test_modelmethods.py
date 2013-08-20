@@ -18,7 +18,7 @@
 # methods, and so it makes sense to test them here.
 
 from mediagoblin.db.base import Session
-from mediagoblin.db.models import MediaEntry
+from mediagoblin.db.models import MediaEntry, User, Privilege
 
 from mediagoblin.tests.tools import fixture_add_user
 
@@ -151,6 +151,46 @@ class TestMediaEntrySlugs(object):
         qbert_entry.generate_slug()
         assert qbert_entry.slug is None
 
+class TestUserHasPrivilege:
+    def _setup(self):
+        self.natalie_user = fixture_add_user(u'natalie')
+        self.aeva_user = fixture_add_user(u'aeva')
+        self.natalie_user.all_privileges += [
+                Privilege.query.filter(
+                    Privilege.privilege_name == u'admin').one(),
+                Privilege.query.filter(
+                    Privilege.privilege_name == u'moderator').one()]
+        self.aeva_user.all_privileges += [
+                Privilege.query.filter(
+                    Privilege.privilege_name == u'moderator').one()]
+
+    def test_privilege_added_correctly(self, test_app):
+        self._setup()
+        admin = Privilege.query.filter(
+            Privilege.privilege_name == u'admin').one()
+        # first make sure the privileges were added successfully
+
+        assert admin in self.natalie_user.all_privileges
+        assert admin not in self.aeva_user.all_privileges
+
+    def test_user_has_privilege_one(self, test_app):
+        self._setup()
+
+        # then test out the user.has_privilege method for one privilege
+        assert not natalie_user.has_privilege(u'commenter')
+        assert aeva_user.has_privilege(u'active')
+
+
+    def test_user_has_privileges_multiple(self, test_app):
+        self._setup()
+
+        # when multiple args are passed to has_privilege,  the method returns
+        # True if the user has ANY of the privileges
+        assert natalie_user.has_privilege(u'admin',u'commenter')
+        assert aeva_user.has_privilege(u'moderator',u'active')
+        assert not natalie_user.has_privilege(u'commenter',u'uploader')
+
+
 
 def test_media_data_init(test_app):
     Session.rollback()
@@ -165,3 +205,4 @@ def test_media_data_init(test_app):
         obj_in_session += 1
         print repr(obj)
     assert obj_in_session == 0
+

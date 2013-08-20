@@ -427,7 +427,7 @@ class UserBan_v0(declarative_base()):
 class Privilege_v0(declarative_base()):
     __tablename__ = 'core__privileges'
     id = Column(Integer, nullable=False, primary_key=True, unique=True)
-    privilege_name = Column(Unicode, nullable=False)
+    privilege_name = Column(Unicode, nullable=False, unique=True)
 
 class PrivilegeUserAssociation_v0(declarative_base()):
     __tablename__ = 'core__privileges_users'

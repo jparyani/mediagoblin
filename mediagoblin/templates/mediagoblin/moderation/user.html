@@ -117,7 +117,8 @@
               <a>{%- trans %}Reported Media Entry{% endtrans -%}</a>
             {% endif %}
           </td>
-          <td>{{ report.report_content[:21] }}{% if report.report_content|count >20 %}...{% endif %}</td>
+          <td>{{ report.report_content[:21] }}
+                {% if report.report_content|count >20 %}...{% endif %}</td>
           <td>{%- trans %}Resolve{% endtrans -%}</td>
         </tr>
       {% endfor %}
@@ -129,9 +130,18 @@
     <a class="right_align">{{ user.username }}'s report history</a>
     <span class=clear></span>
     <h2>{{ user.username }}'s Privileges</h2>
+    {% if request.user.has_privilege('admin') and not user_banned and 
+        not user.id == request.user.id %}
+        <input type=button class="button_action right_align" 
+               value="Ban User" />
+    {% elif request.user.has_privilege('admin') and
+            not user.id == request.user.id %}
+        <input type=button class="button_action right_align"
+               value="UnBan User" />
+    {% endif %}
     <form action="{{ request.urlgen('mediagoblin.moderation.give_or_take_away_privilege',
                user=user.username) }}"
-        method=post >
+          method=post >
     <table class="admin_side_panel">
         <tr>
           <th>{% trans %}Privilege{% endtrans %}</th>
