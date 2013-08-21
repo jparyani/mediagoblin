@@ -122,8 +122,7 @@ class AudioThumbnailer(object):
                 int(start_x), 0,
                 int(stop_x), int(im_h)))
 
-        if th.size[0] > th_w or th.size[1] > th_h:
-            th.thumbnail(thumb_size, Image.ANTIALIAS)
+        th.thumbnail(thumb_size, Image.ANTIALIAS)
 
         th.save(dst)
 

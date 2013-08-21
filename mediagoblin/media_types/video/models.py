@@ -36,12 +36,12 @@ class VideoData(Base):
      - orig_metadata: A loose json structure containing metadata gstreamer
          pulled from the original video.
          This field is NOT GUARANTEED to exist!
-    
+
          Likely metadata extracted:
            "videoheight", "videolength", "videowidth",
            "audiorate", "audiolength", "audiochannels", "audiowidth",
            "mimetype", "tags"
-     
+
          TODO: document the above better.
     """
     __tablename__ = "video__mediadata"
@@ -68,7 +68,7 @@ class VideoData(Base):
         """
         orig_metadata = self.orig_metadata or {}
 
-        if "webm_640" not in self.get_media_entry.media_files \
+        if "webm_video" not in self.get_media_entry.media_files \
            and "mimetype" in orig_metadata \
            and "tags" in orig_metadata \
            and "audio-codec" in orig_metadata["tags"] \

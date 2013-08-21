@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.media_types import MediaManagerBase
-from mediagoblin.media_types.pdf.processing import process_pdf, \
+from mediagoblin.media_types.pdf.processing import PdfProcessingManager, \
     sniff_handler
 from mediagoblin.tools import pluginapi
 
@@ -29,7 +29,6 @@ def setup_plugin():
 
 class PDFMediaManager(MediaManagerBase):
     human_readable = "PDF"
-    processor = staticmethod(process_pdf)
     display_template = "mediagoblin/media_displays/pdf.html"
     default_thumb = "images/media_thumbs/pdf.jpg"
 
@@ -44,4 +43,5 @@ hooks = {
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
     ('media_manager', MEDIA_TYPE): lambda: PDFMediaManager,
+    ('reprocess_manager', MEDIA_TYPE): lambda: PdfProcessingManager,
 }
