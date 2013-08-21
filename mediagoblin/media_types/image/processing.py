@@ -76,6 +76,14 @@ def resize_image(entry, resized, keyname, target_name, new_size,
         resized.save(resized_file, quality=quality)
     store_public(entry, keyname, tmp_resized_filename, target_name)
 
+    # store the thumb/medium info
+    image_info = {'width': new_size[0],
+                  'height': new_size[1],
+                  'quality': quality,
+                  'filter': filter}
+
+    entry.set_file_metadata(keyname, **image_info)
+
 
 def resize_tool(entry,
                 force, keyname, orig_file, target_name,
@@ -85,6 +93,13 @@ def resize_tool(entry,
         max_width = mgg.global_config['media:' + keyname]['max_width']
         max_height = mgg.global_config['media:' + keyname]['max_height']
         new_size = (max_width, max_height)
+
+    # If thumb or medium is already the same quality and size, then don't
+    # reprocess
+    if _skip_resizing(entry, keyname, new_size, quality, filter):
+        _log.info('{0} of same size and quality already in use, skipping '
+                  'resizing of media {1}.'.format(keyname, entry.id))
+        return
 
     # If the size of the original file exceeds the specified size for the desized
     # file, a target_name file is created and later associated with the media
@@ -103,6 +118,32 @@ def resize_tool(entry,
             tuple(new_size),
             exif_tags, conversions_subdir,
             quality, filter)
+
+
+def _skip_resizing(entry, keyname, size, quality, filter):
+    """
+    Determines wither the saved thumb or medium is of the same quality and size
+    """
+    image_info = entry.get_file_metadata(keyname)
+
+    if not image_info:
+        return False
+
+    skip = True
+
+    if image_info.get('width') != size[0]:
+        skip = False
+
+    elif image_info.get('height') != size[1]:
+        skip = False
+
+    elif image_info.get('filter') != filter:
+        skip = False
+
+    elif image_info.get('quality') != quality:
+        skip = False
+
+    return skip
 
 
 SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg', 'tiff']

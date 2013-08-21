@@ -269,7 +269,7 @@ class MediaEntry(Base, MediaEntryMixin):
         return the value of the key.
         """
         media_file = MediaFile.query.filter_by(media_entry=self.id,
-                                               name=file_key).first()
+                                               name=unicode(file_key)).first()
 
         if media_file:
             if metadata_key:
@@ -282,7 +282,7 @@ class MediaEntry(Base, MediaEntryMixin):
         Update the file_metadata of a MediaFile.
         """
         media_file = MediaFile.query.filter_by(media_entry=self.id,
-                                               name=file_key).first()
+                                               name=unicode(file_key)).first()
 
         file_metadata = media_file.file_metadata or {}
 
