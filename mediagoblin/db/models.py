@@ -287,7 +287,6 @@ class MediaEntry(Base, MediaEntryMixin):
         """
         media_file = MediaFile.query.filter_by(media_entry=self.id,
                                                name=unicode(file_key)).first()
-                                               name=file_key).first()
 
         file_metadata = media_file.file_metadata or {}
 
