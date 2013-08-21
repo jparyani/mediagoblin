@@ -34,7 +34,7 @@ def add_orig_metadata_column(db_conn):
 
 
 @RegisterMigration(2, MIGRATIONS)
-def webm_640_to_wemb_video(db):
+def webm_640_to_webm_video(db):
     metadata = MetaData(bind=db.bind)
 
     file_keynames = inspect_table(metadata, 'core__file_keynames')
