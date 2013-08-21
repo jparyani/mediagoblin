@@ -425,7 +425,7 @@ class RequestToken_v0(declarative_base()):
     callback = Column(Unicode, nullable=False, default=u"oob")
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    
+
 class AccessToken_v0(declarative_base()):
     """
         Model for representing the access tokens
@@ -438,7 +438,7 @@ class AccessToken_v0(declarative_base()):
     request_token = Column(Unicode, ForeignKey(RequestToken_v0.token))
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
- 
+
 
 class NonceTimestamp_v0(declarative_base()):
     """
@@ -459,4 +459,15 @@ def create_oauth1_tables(db):
     AccessToken_v0.__table__.create(db.bind)
     NonceTimestamp_v0.__table__.create(db.bind)
 
+    db.commit()
+
+
+@RegisterMigration(15, MIGRATIONS)
+def add_file_metadata(db):
+    """Add file_metadata to MediaFile"""
+    metadata = MetaData(bind=db.bind)
+    media_file_table = inspect_table(metadata, "core__mediafiles")
+
+    col = Column('file_metadata', JSONEncoded)
+    col.create(media_file_table)
     db.commit()
