@@ -36,5 +36,9 @@
         </li>
         {% endfor %}
     </ul>
+    <a href="{{ request.urlgen('mediagoblin.notifications.mark_all_comment_notifications_seen') }}?next={{ 
+      request.base_url|urlencode }}" id="mark_all_comments_seen">
+      {% trans %}Mark all read{% endtrans %}
+    </a>
     </div>
 {% endif %}
