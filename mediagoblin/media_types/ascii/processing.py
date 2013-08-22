@@ -157,22 +157,22 @@ class CommonAsciiProcessor(MediaProcessor):
             store_public(self.entry, 'thumb', tmp_thumb,
                          self.name_builder.fill('{basename}.thumbnail.jpg'))
 
-        def _skip_resizing(self, font, thumb_size):
-            thumb_info = self.entry.get_file_metadata('thumb')
+    def _skip_resizing(self, font, thumb_size):
+        thumb_info = self.entry.get_file_metadata('thumb')
 
-            if not thumb_info:
-                return False
+        if not thumb_info:
+            return False
 
-            skip = True
+        skip = True
 
-            if thumb_info.get('font') != font:
-                skip = False
-            elif thumb_info.get('width') != thumb_size[0]:
-                skip = False
-            elif thumb_info.get('height') != thumb_size[1]:
-                skip = False
+        if thumb_info.get('font') != font:
+            skip = False
+        elif thumb_info.get('width') != thumb_size[0]:
+            skip = False
+        elif thumb_info.get('height') != thumb_size[1]:
+            skip = False
 
-            return skip
+        return skip
 
 
 class InitialProcessor(CommonAsciiProcessor):
