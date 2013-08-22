@@ -365,6 +365,8 @@ def add_new_notification_tables(db):
     CommentNotification_v0.__table__.create(db.bind)
     ProcessingNotification_v0.__table__.create(db.bind)
 
+    db.commit()
+
 
 @RegisterMigration(13, MIGRATIONS)
 def pw_hash_nullable(db):
