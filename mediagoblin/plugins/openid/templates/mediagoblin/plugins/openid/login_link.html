@@ -17,9 +17,11 @@
 #}
 
 {% block openid_login_link %}
+  {% if openid_link is defined %}
     <p>
       <a href="{{ request.urlgen('mediagoblin.plugins.openid.login') }}?{{ request.query_string }}">
           {%- trans %}Or login with OpenID!{% endtrans %}
       </a>
     </p>
+  {% endif %}
 {% endblock %}

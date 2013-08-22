@@ -63,6 +63,7 @@ setup(
         'itsdangerous',
         'pytz',
         'six',
+        'oauthlib',
         ## This is optional!
         # 'translitcodec',
         ## For now we're expecting that users will install this from

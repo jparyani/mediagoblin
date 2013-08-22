@@ -23,6 +23,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <title>{% block title %}{{ app_config['html_title'] }}{% endblock %}</title>
     <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/extlib/reset.css') }}"/>
@@ -60,24 +61,35 @@
             {%- if request.user %}
               {% if request.user and request.user.status == 'active' %}
 
-                {% set notification_count = request.notifications.get_notification_count(request.user.id) %}
+                {% set notification_count = get_notification_count(request.user.id) %}
                 {% if notification_count %}
-                <a href="#notifications" class="notification-gem button_action" title="Notifications">
-                {{ notification_count }}</a>
+                  <a href="#notifications" class="notification-gem button_action" title="Notifications">
+                  {{ notification_count }}</a>
                 {% endif %}
-                <div class="button_action header_dropdown_down">&#9660;</div>
-                <div class="button_action header_dropdown_up">&#9650;</div>
+                <a href="#header" class="button_action header_dropdown_down">&#9660;</a>
+                <a href="#no_header" class="button_action header_dropdown_up">&#9650;</a>
               {% elif request.user and request.user.status == "needs_email_verification" %}
               {# the following link should only appear when verification is needed #}
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                  user=request.user.username) }}"
                    class="button_action_highlight">
                {% trans %}Verify your email!{% endtrans %}</a>
-               or <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}log out{% endtrans %}</a>
+               or <a id="logout" href=
+               {% if persona is not defined %}
+                 "{{ request.urlgen('mediagoblin.auth.logout') }}"
+               {% else %}
+                 "javascript:;"
+               {% endif %}
+               >{% trans %}log out{% endtrans %}</a>
               {% endif %}
             {%- elif auth %}
-              <a href="{{ request.urlgen('mediagoblin.auth.login') }}?next={{
-                                                request.base_url|urlencode }}">
+            <a href=
+              {% if persona_auth is defined %}
+                "javascript:;" id="persona_login"
+              {% else %}
+                "{{ request.urlgen('mediagoblin.auth.login') }}"
+              {% endif %}
+              >
                 {%- trans %}Log in{% endtrans -%}
               </a>
             {%- endif %}
@@ -101,7 +113,13 @@
                   {%- trans %}Media processing panel{% endtrans -%}
                 </a>
                 &middot;
-                <a href="{{ request.urlgen('mediagoblin.auth.logout') }}">{% trans %}Log out{% endtrans %}</a>
+                <a id="logout" href=
+                  {% if persona is not defined %}
+                    "{{ request.urlgen('mediagoblin.auth.logout') }}"
+                  {% else %}
+                    "javascript:;"
+                  {% endif %}
+                  >{% trans %}Log out{% endtrans %}</a>
               </p>
               <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
                 {%- trans %}Add media{% endtrans -%}
@@ -132,6 +150,9 @@
           {% include "mediagoblin/utils/messages.html" %}
           {% block mediagoblin_content %}
           {% endblock mediagoblin_content %}
+          {% if csrf_token is defined %}
+            {% template_hook("persona_form") %}
+          {% endif %}
         </div>
         {%- include "mediagoblin/bits/base_footer.html" %}
       </div>

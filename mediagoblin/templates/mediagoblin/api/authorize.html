@@ -1,0 +1,56 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% block title -%}
+  {% trans %}Authorization{% endtrans %} &mdash; {{ super() }}
+{%- endblock %}
+
+{% block mediagoblin_content %}
+
+<h1>{% trans %}Authorize{% endtrans %}</h1>
+
+<p>
+    {% trans %}You are logged in as{% endtrans %}
+     <strong>{{user.username}}</strong>
+    <br /><br />
+    
+    {% trans %}Do you want to authorize {% endtrans %}
+    {% if client.application_name -%}
+        <em>{{ client.application_name }}</em>
+    {%- else -%}
+        <em>{% trans %}an unknown application{% endtrans %}</em>
+    {%- endif %}
+    {% trans %} to access your account? {% endtrans %}
+    <br /><br />
+    {% trans %}Applications with access to your account can: {% endtrans %}
+    <ul>
+        <li>{% trans %}Post new media as you{% endtrans %}</li>
+        <li>{% trans %}See your information (e.g profile, meida, etc...){% endtrans %}</li>
+        <li>{% trans %}Change your information{% endtrans %}</li>
+    </ul>
+    <br />
+
+    <form method="POST">
+        {{ csrf_token }}
+        {{ authorize_form.oauth_token }}
+        {{ authorize_form.oauth_verifier }}
+        <input type="submit" value="{% trans %}Authorize{% endtrans %}">
+    </form>
+</p>
+{% endblock %}

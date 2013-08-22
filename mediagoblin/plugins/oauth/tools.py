@@ -23,7 +23,7 @@ from datetime import datetime
 
 from functools import wraps
 
-from mediagoblin.plugins.api.tools import json_response
+from mediagoblin.tools.response import json_response
 
 
 def require_client_auth(controller):

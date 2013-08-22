@@ -18,7 +18,6 @@ import logging
 
 from mediagoblin.db.models import Notification, \
         CommentNotification, CommentSubscription
-from mediagoblin.notifications.task import email_notification_task
 from mediagoblin.notifications.tools import generate_comment_message
 
 _log = logging.getLogger(__name__)
@@ -50,6 +49,7 @@ def trigger_notification(comment, media_entry, request):
                 media_entry,
                 request)
 
+            from mediagoblin.notifications.task import email_notification_task
             email_notification_task.apply_async([cn.id, message])
 
 
