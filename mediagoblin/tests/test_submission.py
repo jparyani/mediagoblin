@@ -24,7 +24,7 @@ import pytest
 
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin import mg_globals
-from mediagoblin.db.models import MediaEntry
+from mediagoblin.db.models import MediaEntry, User
 from mediagoblin.tools import template
 from mediagoblin.media_types.image import ImageMediaManager
 from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
@@ -46,9 +46,9 @@ class TestSubmission:
 
         # TODO: Possibly abstract into a decorator like:
         # @as_authenticated_user('chris')
-        test_user = fixture_add_user(privileges=[u'active',u'uploader'])
+        fixture_add_user(privileges=[u'active',u'uploader'])
 
-        self.test_user = test_user
+        self.test_user = User.query.filter(User.username==u'chris').first()
 
         self.login()
 

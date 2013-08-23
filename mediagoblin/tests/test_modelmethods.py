@@ -153,16 +153,14 @@ class TestMediaEntrySlugs(object):
 
 class TestUserHasPrivilege:
     def _setup(self):
-        self.natalie_user = fixture_add_user(u'natalie')
-        self.aeva_user = fixture_add_user(u'aeva')
-        self.natalie_user.all_privileges += [
-                Privilege.query.filter(
-                    Privilege.privilege_name == u'admin').one(),
-                Privilege.query.filter(
-                    Privilege.privilege_name == u'moderator').one()]
-        self.aeva_user.all_privileges += [
-                Privilege.query.filter(
-                    Privilege.privilege_name == u'moderator').one()]
+        fixture_add_user(u'natalie',
+            privileges=[u'admin',u'moderator',u'active'])
+        fixture_add_user(u'aeva',
+            privileges=[u'moderator',u'active'])
+        self.natalie_user = User.query.filter(
+            User.username==u'natalie').first()
+        self.aeva_user = User.query.filter(
+            User.username==u'aeva').first()
 
     def test_privilege_added_correctly(self, test_app):
         self._setup()
@@ -177,8 +175,8 @@ class TestUserHasPrivilege:
         self._setup()
 
         # then test out the user.has_privilege method for one privilege
-        assert not natalie_user.has_privilege(u'commenter')
-        assert aeva_user.has_privilege(u'active')
+        assert not self.natalie_user.has_privilege(u'commenter')
+        assert self.aeva_user.has_privilege(u'active')
 
 
     def test_user_has_privileges_multiple(self, test_app):
@@ -186,9 +184,9 @@ class TestUserHasPrivilege:
 
         # when multiple args are passed to has_privilege,  the method returns
         # True if the user has ANY of the privileges
-        assert natalie_user.has_privilege(u'admin',u'commenter')
-        assert aeva_user.has_privilege(u'moderator',u'active')
-        assert not natalie_user.has_privilege(u'commenter',u'uploader')
+        assert self.natalie_user.has_privilege(u'admin',u'commenter')
+        assert self.aeva_user.has_privilege(u'moderator',u'active')
+        assert not self.natalie_user.has_privilege(u'commenter',u'uploader')
 
 
 
