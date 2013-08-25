@@ -17,14 +17,10 @@
 from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.stl.processing import StlProcessingManager, \
     sniff_handler
-from mediagoblin.tools import pluginapi
+
 
 MEDIA_TYPE = 'mediagoblin.media_types.stl'
 ACCEPTED_EXTENSIONS = ["obj", "stl"]
-
-
-def setup_plugin():
-    config = pluginapi.get_config(MEDIA_TYPE)
 
 
 class STLMediaManager(MediaManagerBase):
@@ -38,7 +34,6 @@ def get_media_type_and_manager(ext):
         return MEDIA_TYPE, STLMediaManager
 
 hooks = {
-    'setup': setup_plugin,
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
     ('media_manager', MEDIA_TYPE): lambda: STLMediaManager,

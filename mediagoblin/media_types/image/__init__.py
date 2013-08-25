@@ -19,17 +19,13 @@ import logging
 from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.image.processing import sniff_handler, \
         ImageProcessingManager
-from mediagoblin.tools import pluginapi
+
 
 _log = logging.getLogger(__name__)
 
 
 ACCEPTED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "tiff"]
 MEDIA_TYPE = 'mediagoblin.media_types.image'
-
-
-def setup_plugin():
-    config = pluginapi.get_config('mediagoblin.media_types.image')
 
 
 class ImageMediaManager(MediaManagerBase):
@@ -67,7 +63,6 @@ def get_media_type_and_manager(ext):
 
 
 hooks = {
-    'setup': setup_plugin,
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
     ('media_manager', MEDIA_TYPE): lambda: ImageMediaManager,
