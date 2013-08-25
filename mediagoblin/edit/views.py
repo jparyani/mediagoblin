@@ -228,10 +228,12 @@ def edit_account(request):
     user = request.user
     form = forms.EditAccountForm(request.form,
         wants_comment_notification=user.wants_comment_notification,
-        license_preference=user.license_preference)
+        license_preference=user.license_preference,
+        wants_notifications=user.wants_notifications)
 
     if request.method == 'POST' and form.validate():
         user.wants_comment_notification = form.wants_comment_notification.data
+        user.wants_notifications = form.wants_notifications.data
 
         user.license_preference = form.license_preference.data
 

@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import argparse
 import os
 import json
 import logging
@@ -21,8 +22,11 @@ import subprocess
 import pkg_resources
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.processing import create_pub_filepath, \
-    FilenameBuilder
+from mediagoblin.processing import (
+    FilenameBuilder, MediaProcessor,
+    ProcessingManager, request_from_args,
+    get_process_filename, store_public,
+    copy_original)
 
 from mediagoblin.media_types.stl import model_loader
 
@@ -75,49 +79,61 @@ def blender_render(config):
         env=env)
 
 
-def process_stl(proc_state):
-    """Code to process an stl or obj model. Will be run by celery.
-
-    A Workbench() represents a local tempory dir. It is automatically
-    cleaned up when this function exits.
+class CommonStlProcessor(MediaProcessor):
     """
-    entry = proc_state.entry
-    workbench = proc_state.workbench
+    Provides a common base for various stl processing steps
+    """
+    acceptable_files = ['original']
 
-    queued_filepath = entry.queued_media_file
-    queued_filename = workbench.localized_file(
-        mgg.queue_store, queued_filepath, 'source')
-    name_builder = FilenameBuilder(queued_filename)
+    def common_setup(self):
+        # Pull down and set up the processing file
+        self.process_filename = get_process_filename(
+            self.entry, self.workbench, self.acceptable_files)
+        self.name_builder = FilenameBuilder(self.process_filename)
 
-    ext = queued_filename.lower().strip()[-4:]
-    if ext.startswith("."):
-        ext = ext[1:]
-    else:
-        ext = None
+        self._set_ext()
+        self._set_model()
+        self._set_greatest()
 
-    # Attempt to parse the model file and divine some useful
-    # information about it.
-    with open(queued_filename, 'rb') as model_file:
-        model = model_loader.auto_detect(model_file, ext)
+    def _set_ext(self):
+        ext = self.name_builder.ext[1:]
 
-    # generate preview images
-    greatest = [model.width, model.height, model.depth]
-    greatest.sort()
-    greatest = greatest[-1]
+        if not ext:
+            ext = None
 
-    def snap(name, camera, width=640, height=640, project="ORTHO"):
-        filename = name_builder.fill(name)
-        workbench_path = workbench.joinpath(filename)
+        self.ext = ext
+
+    def _set_model(self):
+        """
+        Attempt to parse the model file and divine some useful
+        information about it.
+        """
+        with open(self.process_filename, 'rb') as model_file:
+            self.model = model_loader.auto_detect(model_file, self.ext)
+
+    def _set_greatest(self):
+        greatest = [self.model.width, self.model.height, self.model.depth]
+        greatest.sort()
+        self.greatest = greatest[-1]
+
+    def copy_original(self):
+        copy_original(
+            self.entry, self.process_filename,
+            self.name_builder.fill('{basename}{ext}'))
+
+    def _snap(self, keyname, name, camera, size, project="ORTHO"):
+        filename = self.name_builder.fill(name)
+        workbench_path = self.workbench.joinpath(filename)
         shot = {
-            "model_path": queued_filename,
-            "model_ext": ext,
+            "model_path": self.process_filename,
+            "model_ext": self.ext,
             "camera_coord": camera,
-            "camera_focus": model.average,
-            "camera_clip": greatest*10,
-            "greatest": greatest,
+            "camera_focus": self.model.average,
+            "camera_clip": self.greatest*10,
+            "greatest": self.greatest,
             "projection": project,
-            "width": width,
-            "height": height,
+            "width": size[0],
+            "height": size[1],
             "out_file": workbench_path,
             }
         blender_render(shot)
@@ -126,70 +142,191 @@ def process_stl(proc_state):
         assert os.path.exists(workbench_path)
 
         # copy it up!
-        with open(workbench_path, 'rb') as rendered_file:
-            public_path = create_pub_filepath(entry, filename)
+        store_public(self.entry, keyname, workbench_path, filename)
 
-            with mgg.public_store.get_file(public_path, "wb") as public_file:
-                public_file.write(rendered_file.read())
+    def generate_thumb(self, thumb_size=None):
+        if not thumb_size:
+            thumb_size = (mgg.global_config['media:thumb']['max_width'],
+                          mgg.global_config['media:thumb']['max_height'])
 
-        return public_path
+        self._snap(
+            "thumb",
+            "{basename}.thumb.jpg",
+            [0, self.greatest*-1.5, self.greatest],
+            thumb_size,
+            project="PERSP")
 
-    thumb_path = snap(
-        "{basename}.thumb.jpg",
-        [0, greatest*-1.5, greatest],
-        mgg.global_config['media:thumb']['max_width'],
-        mgg.global_config['media:thumb']['max_height'],
-        project="PERSP")
+    def generate_perspective(self, size=None):
+        if not size:
+            size = (mgg.global_config['media:medium']['max_width'],
+                    mgg.global_config['media:medium']['max_height'])
 
-    perspective_path = snap(
-        "{basename}.perspective.jpg",
-        [0, greatest*-1.5, greatest], project="PERSP")
+        self._snap(
+            "perspective",
+            "{basename}.perspective.jpg",
+            [0, self.greatest*-1.5, self.greatest],
+            size,
+            project="PERSP")
 
-    topview_path = snap(
-        "{basename}.top.jpg",
-        [model.average[0], model.average[1], greatest*2])
+    def generate_topview(self, size=None):
+        if not size:
+            size = (mgg.global_config['media:medium']['max_width'],
+                    mgg.global_config['media:medium']['max_height'])
 
-    frontview_path = snap(
-        "{basename}.front.jpg",
-        [model.average[0], greatest*-2, model.average[2]])
+        self._snap(
+            "top",
+            "{basename}.top.jpg",
+            [self.model.average[0], self.model.average[1],
+             self.greatest*2],
+            size)
 
-    sideview_path = snap(
-        "{basename}.side.jpg",
-        [greatest*-2, model.average[1], model.average[2]])
+    def generate_frontview(self, size=None):
+        if not size:
+            size = (mgg.global_config['media:medium']['max_width'],
+                    mgg.global_config['media:medium']['max_height'])
 
-    ## Save the public file stuffs
-    model_filepath = create_pub_filepath(
-        entry, name_builder.fill('{basename}{ext}'))
+        self._snap(
+            "front",
+            "{basename}.front.jpg",
+            [self.model.average[0], self.greatest*-2,
+             self.model.average[2]],
+            size)
 
-    with mgg.public_store.get_file(model_filepath, 'wb') as model_file:
-        with open(queued_filename, 'rb') as queued_file:
-            model_file.write(queued_file.read())
+    def generate_sideview(self, size=None):
+        if not size:
+            size = (mgg.global_config['media:medium']['max_width'],
+                    mgg.global_config['media:medium']['max_height'])
 
-    # Remove queued media file from storage and database.
-    # queued_filepath is in the task_id directory which should
-    # be removed too, but fail if the directory is not empty to be on
-    # the super-safe side.
-    mgg.queue_store.delete_file(queued_filepath)      # rm file
-    mgg.queue_store.delete_dir(queued_filepath[:-1])  # rm dir
-    entry.queued_media_file = []
+        self._snap(
+            "side",
+            "{basename}.side.jpg",
+            [self.greatest*-2, self.model.average[1],
+             self.model.average[2]],
+            size)
 
-    # Insert media file information into database
-    media_files_dict = entry.setdefault('media_files', {})
-    media_files_dict[u'original'] = model_filepath
-    media_files_dict[u'thumb'] = thumb_path
-    media_files_dict[u'perspective'] = perspective_path
-    media_files_dict[u'top'] = topview_path
-    media_files_dict[u'side'] = sideview_path
-    media_files_dict[u'front'] = frontview_path
+    def store_dimensions(self):
+        """
+        Put model dimensions into the database
+        """
+        dimensions = {
+            "center_x": self.model.average[0],
+            "center_y": self.model.average[1],
+            "center_z": self.model.average[2],
+            "width": self.model.width,
+            "height": self.model.height,
+            "depth": self.model.depth,
+            "file_type": self.ext,
+            }
+        self.entry.media_data_init(**dimensions)
 
-    # Put model dimensions into the database
-    dimensions = {
-        "center_x" : model.average[0],
-        "center_y" : model.average[1],
-        "center_z" : model.average[2],
-        "width" : model.width,
-        "height" : model.height,
-        "depth" : model.depth,
-        "file_type" : ext,
-        }
-    entry.media_data_init(**dimensions)
+
+class InitialProcessor(CommonStlProcessor):
+    """
+    Initial processing step for new stls
+    """
+    name = "initial"
+    description = "Initial processing"
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        """
+        Determine if this media type is eligible for processing
+        """
+        if not state:
+            state = entry.state
+        return state in (
+            "unprocessed", "failed")
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        parser.add_argument(
+            '--thumb_size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['size', 'thumb_size'])
+
+    def process(self, size=None, thumb_size=None):
+        self.common_setup()
+        self.generate_thumb(thumb_size=thumb_size)
+        self.generate_perspective(size=size)
+        self.generate_topview(size=size)
+        self.generate_frontview(size=size)
+        self.generate_sideview(size=size)
+        self.store_dimensions()
+        self.copy_original()
+        self.delete_queue_file()
+
+
+class Resizer(CommonStlProcessor):
+    """
+    Resizing process steps for processed stls
+    """
+    name = 'resize'
+    description = 'Resize thumbnail and mediums'
+    thumb_size = 'size'
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        """
+        Determine if this media type is eligible for processing
+        """
+        if not state:
+            state = entry.state
+        return state in 'processed'
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        parser.add_argument(
+            'file',
+            choices=['medium', 'thumb'])
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['size', 'file'])
+
+    def process(self, file, size=None):
+        self.common_setup()
+        if file == 'medium':
+            self.generate_perspective(size=size)
+            self.generate_topview(size=size)
+            self.generate_frontview(size=size)
+            self.generate_sideview(size=size)
+        elif file == 'thumb':
+            self.generate_thumb(thumb_size=size)
+
+
+class StlProcessingManager(ProcessingManager):
+    def __init__(self):
+        super(self.__class__, self).__init__()
+        self.add_processor(InitialProcessor)
+        self.add_processor(Resizer)

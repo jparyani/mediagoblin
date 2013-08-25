@@ -23,3 +23,7 @@ add_route('mediagoblin.notifications.subscribe_comments',
 add_route('mediagoblin.notifications.silence_comments',
           '/u/<string:user>/m/<string:media>/notifications/silence/',
           'mediagoblin.notifications.views:silence_comments')
+
+add_route('mediagoblin.notifications.mark_all_comment_notifications_seen',
+          '/notifications/comments/mark_all_seen/',
+          'mediagoblin.notifications.views:mark_all_comment_notifications_seen')

@@ -323,8 +323,9 @@ def media_confirm_delete(request):
             if not location:
                 location=media.url_to_prev(request.urlgen)
             if not location:
-                location="mediagoblin.user_pages.user_home"
-            return redirect(request, location=location, user=username)
+                location=request.urlgen("mediagoblin.user_pages.user_home",
+                                        user=username)
+            return redirect(request, location=location)
         else:
             messages.add_message(
                 request, messages.ERROR,

@@ -18,19 +18,20 @@ import logging
 import urllib
 import urllib2
 
-from celery import registry, task
+import celery
+from celery.registry import tasks
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.models import MediaEntry
-from . import mark_entry_failed, BaseProcessingFail, ProcessingState
+from . import mark_entry_failed, BaseProcessingFail
 from mediagoblin.tools.processing import json_processing_callback
+from mediagoblin.processing import get_entry_and_processing_manager
 
 _log = logging.getLogger(__name__)
 logging.basicConfig()
 _log.setLevel(logging.DEBUG)
 
 
-@task.task(default_retry_delay=2 * 60)
+@celery.task(default_retry_delay=2 * 60)
 def handle_push_urls(feed_url):
     """Subtask, notifying the PuSH servers of new content
 
@@ -60,36 +61,51 @@ def handle_push_urls(feed_url):
                           'Giving up.'.format(feed_url))
                 return False
 
+
 ################################
 # Media processing initial steps
 ################################
-
-class ProcessMedia(task.Task):
+class ProcessMedia(celery.Task):
     """
     Pass this entry off for processing.
     """
-    def run(self, media_id, feed_url):
+    def run(self, media_id, feed_url, reprocess_action, reprocess_info=None):
         """
         Pass the media entry off to the appropriate processing function
         (for now just process_image...)
 
         :param feed_url: The feed URL that the PuSH server needs to be
             updated for.
+        :param reprocess: A dict containing all of the necessary reprocessing
+            info for the media_type.
         """
-        entry = MediaEntry.query.get(media_id)
+        reprocess_info = reprocess_info or {}
+        entry, manager = get_entry_and_processing_manager(media_id)
 
         # Try to process, and handle expected errors.
         try:
-            entry.state = u'processing'
-            entry.save()
+            processor_class = manager.get_processor(reprocess_action, entry)
 
-            _log.debug('Processing {0}'.format(entry))
+            with processor_class(manager, entry) as processor:
+                # Initial state change has to be here because
+                # the entry.state gets recorded on processor_class init
+                entry.state = u'processing'
+                entry.save()
 
-            proc_state = ProcessingState(entry)
-            with mgg.workbench_manager.create() as workbench:
-                proc_state.set_workbench(workbench)
-                # run the processing code
-                entry.media_manager.processor(proc_state)
+                _log.debug('Processing {0}'.format(entry))
+
+                try:
+                    processor.process(**reprocess_info)
+                except Exception as exc:
+                    if processor.entry_orig_state == 'processed':
+                        _log.error(
+                            'Entry {0} failed to process due to the following'
+                            ' error: {1}'.format(entry.id, exc))
+                        _log.info(
+                            'Setting entry.state back to "processed"')
+                        pass
+                    else:
+                        raise
 
             # We set the state to processed and save the entry here so there's
             # no need to save at the end of the processing stage, probably ;)
@@ -140,6 +156,4 @@ class ProcessMedia(task.Task):
         entry = mgg.database.MediaEntry.query.filter_by(id=entry_id).first()
         json_processing_callback(entry)
 
-# Register the task
-process_media = registry.tasks[ProcessMedia.name]
-
+tasks.register(ProcessMedia)

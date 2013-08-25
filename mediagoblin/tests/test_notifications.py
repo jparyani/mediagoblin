@@ -149,3 +149,56 @@ otherperson@example.com\n\nSGkgb3RoZXJwZXJzb24sCmNocmlzIGNvbW1lbnRlZCBvbiB5b3VyI
 
         # User should not have been notified
         assert len(notifications) == 1
+
+    def test_mark_all_comment_notifications_seen(self):
+        """ Test that mark_all_comments_seen works"""
+
+        user = fixture_add_user('otherperson', password='nosreprehto')
+
+        media_entry = fixture_media_entry(uploader=user.id, state=u'processed')
+
+        fixture_comment_subscription(media_entry)
+
+        media_uri_id = '/u/{0}/m/{1}/'.format(user.username,
+                                              media_entry.id)
+
+        # add 2 comments
+        self.test_app.post(
+            media_uri_id + 'comment/add/',
+            {
+                'comment_content': u'Test comment #43'
+            }
+        )
+
+        self.test_app.post(
+            media_uri_id + 'comment/add/',
+            {
+                'comment_content': u'Test comment #44'
+            }
+        )
+
+        notifications = Notification.query.filter_by(
+            user_id=user.id).all()
+
+        assert len(notifications) == 2
+
+        # both comments should not be marked seen
+        assert notifications[0].seen == False
+        assert notifications[1].seen == False
+
+        # login with other user to mark notifications seen
+        self.logout()
+        self.login('otherperson', 'nosreprehto')
+
+        # mark all comment notifications seen
+        res = self.test_app.get('/notifications/comments/mark_all_seen/')
+        res.follow()
+
+        assert urlparse.urlsplit(res.location)[2] == '/'
+
+        notifications = Notification.query.filter_by(
+            user_id=user.id).all()
+
+        # both notifications should be marked seen
+        assert notifications[0].seen == True
+        assert notifications[1].seen == True

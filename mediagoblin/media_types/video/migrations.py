@@ -20,6 +20,7 @@ from sqlalchemy import MetaData, Column, Unicode
 
 MIGRATIONS = {}
 
+
 @RegisterMigration(1, MIGRATIONS)
 def add_orig_metadata_column(db_conn):
     metadata = MetaData(bind=db_conn.bind)
@@ -30,3 +31,19 @@ def add_orig_metadata_column(db_conn):
                  default=None, nullable=True)
     col.create(vid_data)
     db_conn.commit()
+
+
+@RegisterMigration(2, MIGRATIONS)
+def webm_640_to_webm_video(db):
+    metadata = MetaData(bind=db.bind)
+
+    file_keynames = inspect_table(metadata, 'core__file_keynames')
+
+    for row in db.execute(file_keynames.select()):
+        if row.name == 'webm_640':
+            db.execute(
+                file_keynames.update(). \
+                where(file_keynames.c.id==row.id).\
+                values(name='webm_video'))
+
+    db.commit()

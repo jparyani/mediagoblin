@@ -365,6 +365,8 @@ def add_new_notification_tables(db):
     CommentNotification_v0.__table__.create(db.bind)
     ProcessingNotification_v0.__table__.create(db.bind)
 
+    db.commit()
+
 
 @RegisterMigration(13, MIGRATIONS)
 def pw_hash_nullable(db):
@@ -425,7 +427,7 @@ class RequestToken_v0(declarative_base()):
     callback = Column(Unicode, nullable=False, default=u"oob")
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    
+
 class AccessToken_v0(declarative_base()):
     """
         Model for representing the access tokens
@@ -438,7 +440,7 @@ class AccessToken_v0(declarative_base()):
     request_token = Column(Unicode, ForeignKey(RequestToken_v0.token))
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
- 
+
 
 class NonceTimestamp_v0(declarative_base()):
     """
@@ -458,5 +460,17 @@ def create_oauth1_tables(db):
     RequestToken_v0.__table__.create(db.bind)
     AccessToken_v0.__table__.create(db.bind)
     NonceTimestamp_v0.__table__.create(db.bind)
+
+    db.commit()
+
+
+@RegisterMigration(15, MIGRATIONS)
+def wants_notifications(db):
+    """Add a wants_notifications field to User model"""
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
+
+    col = Column('wants_notifications', Boolean, default=True)
+    col.create(user_table)
 
     db.commit()

@@ -37,6 +37,9 @@
             src="{{ request.staticdirect('/js/header_dropdown.js') }}"></script>
     <script type="text/javascript"
             src="{{ request.staticdirect('/js/notifications.js') }}"></script>
+    <script>
+      var mark_all_comments_seen_url = "{{ request.urlgen('mediagoblin.notifications.mark_all_comment_notifications_seen') }}"
+    </script>
 
     {# For clarification, the difference between the extra_head.html template
      # and the head template hook is that the former should be used by
@@ -63,11 +66,11 @@
 
                 {% set notification_count = get_notification_count(request.user.id) %}
                 {% if notification_count %}
-                  <a href="#notifications" class="notification-gem button_action" title="Notifications">
+                  <a href="javascript:;" class="notification-gem button_action" title="Notifications">
                   {{ notification_count }}</a>
                 {% endif %}
-                <a href="#header" class="button_action header_dropdown_down">&#9660;</a>
-                <a href="#no_header" class="button_action header_dropdown_up">&#9650;</a>
+                <a href="javascript:;" class="button_action header_dropdown_down">&#9660;</a>
+                <a href="javascript:;" class="button_action header_dropdown_up">&#9650;</a>
               {% elif request.user and request.user.status == "needs_email_verification" %}
               {# the following link should only appear when verification is needed #}
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
