@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-08-26 14:18-0500\n"
+"POT-Creation-Date: 2013-08-26 17:38-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -592,7 +592,7 @@ msgid "Sorry, an account is already registered with that Persona email address."
 msgstr ""
 
 #: mediagoblin/plugins/persona/views.py:189
-msgid "Your Person email address was saved successfully."
+msgid "Your Persona email address was saved successfully."
 msgstr ""
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:31
@@ -759,7 +759,7 @@ msgid "Post new media as you"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:44
-msgid "See your information (e.g profile, meida, etc...)"
+msgid "See your information (e.g profile, media, etc...)"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:45

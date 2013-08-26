@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2013-08-26 14:18-0500\n"
-"PO-Revision-Date: 2013-08-26 19:18+0000\n"
+"POT-Creation-Date: 2013-08-26 17:38-0500\n"
+"PO-Revision-Date: 2013-08-26 22:39+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/projects/p/mediagoblin/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
@@ -591,7 +591,7 @@ msgid ""
 msgstr ""
 
 #: mediagoblin/plugins/persona/views.py:189
-msgid "Your Person email address was saved successfully."
+msgid "Your Persona email address was saved successfully."
 msgstr ""
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:31
@@ -759,7 +759,7 @@ msgid "Post new media as you"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:44
-msgid "See your information (e.g profile, meida, etc...)"
+msgid "See your information (e.g profile, media, etc...)"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:45
