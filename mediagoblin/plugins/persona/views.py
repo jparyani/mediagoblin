@@ -186,6 +186,6 @@ def add(request):
         messages.add_message(
             request,
             messages.SUCCESS,
-            _('Your Person email address was saved successfully.'))
+            _('Your Persona email address was saved successfully.'))
 
         return redirect(request, 'mediagoblin.edit.account')
