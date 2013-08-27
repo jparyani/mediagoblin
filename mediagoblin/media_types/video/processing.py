@@ -155,6 +155,29 @@ class CommonVideoProcessor(MediaProcessor):
                 self.entry.media_files['best_quality'] = self.entry \
                     .media_files['webm_video']
 
+    def _skip_processing(self, keyname, **kwargs):
+        file_metadata = self.entry.get_file_metadata(keyname)
+
+        if not file_metadata:
+            return False
+        skip = True
+
+        if keyname == 'webm_video':
+            if kwargs.get('medium_size') != file_metadata.get('medium_size'):
+                skip = False
+            elif kwargs.get('vp8_quality') != file_metadata.get('vp8_quality'):
+                skip = False
+            elif kwargs.get('vp8_threads') != file_metadata.get('vp8_threads'):
+                skip = False
+            elif kwargs.get('vorbis_quality') != \
+                    file_metadata.get('vorbis_quality'):
+                skip = False
+        elif keyname == 'thumb':
+            if kwargs.get('thumb_size') != file_metadata.get('thumb_size'):
+                skip = False
+
+        return skip
+
 
     def transcode(self, medium_size=None, vp8_quality=None, vp8_threads=None,
                   vorbis_quality=None):
@@ -172,6 +195,14 @@ class CommonVideoProcessor(MediaProcessor):
             vp8_threads = self.video_config['vp8_threads']
         if not vorbis_quality:
             vorbis_quality = self.video_config['vorbis_quality']
+
+        file_metadata = {'medium_size': medium_size,
+                         'vp8_threads': vp8_threads,
+                         'vp8_quality': vp8_quality,
+                         'vorbis_quality': vorbis_quality}
+
+        if self._skip_processing('webm_video', **file_metadata):
+            return
 
         # Extract metadata and keep a record of it
         metadata = self.transcoder.discover(self.process_filename)
@@ -209,6 +240,8 @@ class CommonVideoProcessor(MediaProcessor):
                          self.name_builder.fill('{basename}.medium.webm'))
             _log.debug('Saved medium')
 
+            self.entry.set_file_metadata('webm_video', **file_metadata)
+
             self.did_transcode = True
 
         # Save the width and height of the transcoded video
@@ -225,6 +258,9 @@ class CommonVideoProcessor(MediaProcessor):
         if not thumb_size:
             thumb_size = (mgg.global_config['media:thumb']['max_width'],)
 
+        if self._skip_processing('thumb', thumb_size=thumb_size):
+            return
+
         # We will only use the width so that the correct scale is kept
         transcoders.VideoThumbnailerMarkII(
             self.process_filename,
@@ -236,6 +272,7 @@ class CommonVideoProcessor(MediaProcessor):
         store_public(self.entry, 'thumb', tmp_thumb,
                      self.name_builder.fill('{basename}.thumbnail.jpg'))
 
+        self.entry.set_file_metadata('thumb', thumb_size=thumb_size)
 
 class InitialProcessor(CommonVideoProcessor):
     """
