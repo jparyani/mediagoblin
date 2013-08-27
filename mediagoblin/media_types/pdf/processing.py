@@ -261,6 +261,22 @@ class CommonPdfProcessor(MediaProcessor):
         else:
             self.pdf_filename = self._generate_pdf()
 
+    def _skip_processing(self, keyname, **kwargs):
+        file_metadata = self.entry.get_file_metadata(keyname)
+        skip = True
+
+        if not file_metadata:
+            return False
+
+        if keyname == 'thumb':
+            if kwargs.get('thumb_size') != file_metadata.get('thumb_size'):
+                skip = False
+        elif keyname == 'medium':
+            if kwargs.get('size') != file_metadata.get('size'):
+                skip = False
+
+        return skip
+
     def copy_original(self):
         copy_original(
             self.entry, self.process_filename,
@@ -270,6 +286,9 @@ class CommonPdfProcessor(MediaProcessor):
         if not thumb_size:
             thumb_size = (mgg.global_config['media:thumb']['max_width'],
                           mgg.global_config['media:thumb']['max_height'])
+
+        if self._skip_processing('thumb', thumb_size=thumb_size):
+            return
 
         # Note: pdftocairo adds '.png', so don't include an ext
         thumb_filename = os.path.join(self.workbench.dir,
@@ -287,6 +306,8 @@ class CommonPdfProcessor(MediaProcessor):
         # filename
         store_public(self.entry, 'thumb', thumb_filename + '.png',
                      self.name_builder.fill('{basename}.thumbnail.png'))
+
+        self.entry.set_file_metadata('thumb', thumb_size=thumb_size)
 
     def _generate_pdf(self):
         """
@@ -317,6 +338,9 @@ class CommonPdfProcessor(MediaProcessor):
             size = (mgg.global_config['media:medium']['max_width'],
                     mgg.global_config['media:medium']['max_height'])
 
+        if self._skip_processing('medium', size=size):
+            return
+
         # Note: pdftocairo adds '.png', so don't include an ext
         filename = os.path.join(self.workbench.dir,
                                 self.name_builder.fill('{basename}.medium'))
@@ -332,6 +356,8 @@ class CommonPdfProcessor(MediaProcessor):
         # filename
         store_public(self.entry, 'medium', filename + '.png',
                      self.name_builder.fill('{basename}.medium.png'))
+
+        self.entry.set_file_metadata('medium', size=size)
 
 
 class InitialProcessor(CommonPdfProcessor):
