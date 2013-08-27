@@ -87,9 +87,33 @@ class CommonAudioProcessor(MediaProcessor):
                 self.entry.media_files['best_quality'] = self.entry \
                     .media_files['webm_audio']
 
+    def _skip_processing(self, keyname, **kwargs):
+        file_metadata = self.entry.get_file_metadata(keyname)
+        skip = True
+
+        if not file_metadata:
+            return False
+
+        if keyname == 'webm_audio':
+            if kwargs.get('quality') != file_metadata.get('quality'):
+                skip = False
+        elif keyname == 'spectrogram':
+            if kwargs.get('max_width') != file_metadata.get('max_width'):
+                skip = False
+            elif kwargs.get('fft_size') != file_metadata.get('fft_size'):
+                skip = False
+        elif keyname == 'thumb':
+            if kwargs.get('size') != file_metadata.get('size'):
+                skip = False
+
+        return skip
+
     def transcode(self, quality=None):
         if not quality:
             quality = self.audio_config['quality']
+
+        if self._skip_processing('webm_audio', quality=quality):
+            return
 
         progress_callback = ProgressCallback(self.entry)
         webm_audio_tmp = os.path.join(self.workbench.dir,
@@ -110,11 +134,17 @@ class CommonAudioProcessor(MediaProcessor):
         store_public(self.entry, 'webm_audio', webm_audio_tmp,
                      self.name_builder.fill('{basename}.medium.webm'))
 
+        self.entry.set_file_metadata('webm_audio', **{'quality': quality})
+
     def create_spectrogram(self, max_width=None, fft_size=None):
         if not max_width:
             max_width = mgg.global_config['media:medium']['max_width']
         if not fft_size:
             fft_size = self.audio_config['spectrogram_fft_size']
+
+        if self._skip_processing('spectrogram', max_width=max_width,
+                                 fft_size=fft_size):
+            return
 
         wav_tmp = os.path.join(self.workbench.dir, self.name_builder.fill(
             '{basename}.ogg'))
@@ -140,11 +170,18 @@ class CommonAudioProcessor(MediaProcessor):
         store_public(self.entry, 'spectrogram', spectrogram_tmp,
                      self.name_builder.fill('{basename}.spectrogram.jpg'))
 
+        file_metadata = {'max_width': max_width,
+                         'fft_size': fft_size}
+        self.entry.set_file_metadata('spectrogram', **file_metadata)
+
     def generate_thumb(self, size=None):
         if not size:
             max_width = mgg.global_config['media:thumb']['max_width']
             max_height = mgg.global_config['media:thumb']['max_height']
             size = (max_width, max_height)
+
+        if self._skip_processing('thumb', size=size):
+            return
 
         thumb_tmp = os.path.join(self.workbench.dir, self.name_builder.fill(
             '{basename}-thumbnail.jpg'))
@@ -165,6 +202,8 @@ class CommonAudioProcessor(MediaProcessor):
 
         store_public(self.entry, 'thumb', thumb_tmp,
                      self.name_builder.fill('{basename}.thumbnail.jpg'))
+
+        self.entry.set_file_metadata('thumb', **{'size': size})
 
 
 class InitialProcessor(CommonAudioProcessor):
