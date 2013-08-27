@@ -48,6 +48,8 @@ from migrate import changeset
 
 _log = logging.getLogger(__name__)
 
+MutationDict.associate_with(JSONEncoded)
+
 
 class User(Base, UserMixin):
     """
@@ -393,7 +395,7 @@ class MediaFile(Base):
         nullable=False)
     name_id = Column(SmallInteger, ForeignKey(FileKeynames.id), nullable=False)
     file_path = Column(PathTupleWithSlashes)
-    file_metadata = Column(MutationDict.as_mutable(JSONEncoded))
+    file_metadata = Column(JSONEncoded)
 
     __table_args__ = (
         PrimaryKeyConstraint('media_entry', 'name_id'),
