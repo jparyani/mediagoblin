@@ -31,7 +31,8 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
 
 
-from mediagoblin.db.extratypes import PathTupleWithSlashes, JSONEncoded
+from mediagoblin.db.extratypes import (PathTupleWithSlashes, JSONEncoded,
+                                       MutationDict)
 from mediagoblin.db.base import Base, DictReadAttrProxy
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, \
         MediaCommentMixin, CollectionMixin, CollectionItemMixin
@@ -294,6 +295,7 @@ class MediaEntry(Base, MediaEntryMixin):
             file_metadata[key] = value
 
         media_file.file_metadata = file_metadata
+        media_file.save()
 
     @property
     def media_data(self):
@@ -391,7 +393,7 @@ class MediaFile(Base):
         nullable=False)
     name_id = Column(SmallInteger, ForeignKey(FileKeynames.id), nullable=False)
     file_path = Column(PathTupleWithSlashes)
-    file_metadata = Column(JSONEncoded)
+    file_metadata = Column(MutationDict.as_mutable(JSONEncoded))
 
     __table_args__ = (
         PrimaryKeyConstraint('media_entry', 'name_id'),

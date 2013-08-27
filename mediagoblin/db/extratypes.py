@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from sqlalchemy.ext.mutable import Mutable
 from sqlalchemy.types import TypeDecorator, Unicode, TEXT
 import json
 
@@ -38,7 +39,7 @@ class PathTupleWithSlashes(TypeDecorator):
         return value
 
 
-# The following class and only this one class is in very
+# The following  two classes and only these two classes is in very
 # large parts based on example code from sqlalchemy.
 #
 # The original copyright notice and license follows:
@@ -61,3 +62,30 @@ class JSONEncoded(TypeDecorator):
         if value is not None:
             value = json.loads(value)
         return value
+
+
+class MutationDict(Mutable, dict):
+    @classmethod
+    def coerce(cls, key, value):
+        "Convert plain dictionaries to MutationDict."
+
+        if not isinstance(value, MutationDict):
+            if isinstance(value, dict):
+                return MutationDict(value)
+
+            # this call will raise ValueError
+            return Mutable.coerce(key, value)
+        else:
+            return value
+
+    def __setitem__(self, key, value):
+        "Detect dictionary set events and emit change events."
+
+        dict.__setitem__(self, key, value)
+        self.changed()
+
+    def __delitem__(self, key):
+        "Detect dictionary del events and emit change events."
+
+        dict.__delitem__(self, key)
+        self.changed()
