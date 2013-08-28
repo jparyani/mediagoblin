@@ -60,7 +60,7 @@ class CommonAudioProcessor(MediaProcessor):
         the audio_config, transcoder, thumbnailer and spectrogram_tmp path
         """
         self.audio_config = mgg \
-            .global_config['media_type:mediagoblin.media_types.audio']
+            .global_config['plugins']['mediagoblin.media_types.audio']
 
         # Pull down and set up the processing file
         self.process_filename = get_process_filename(
