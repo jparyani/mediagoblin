@@ -126,7 +126,7 @@ class CommonVideoProcessor(MediaProcessor):
 
     def common_setup(self):
         self.video_config = mgg \
-            .global_config['media_type:mediagoblin.media_types.video']
+            .global_config['plugins'][MEDIA_TYPE]
 
         # Pull down and set up the processing file
         self.process_filename = get_process_filename(

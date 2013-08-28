@@ -30,7 +30,7 @@
   {% set display_type, display_path = media.get_display_media() %}
 
   <video controls
-         {% if global_config['media_type:mediagoblin.media_types.video']['auto_play'] %}autoplay{% endif %}
+         {% if global_config['plugins']['mediagoblin.media_types.video']['auto_play'] %}autoplay{% endif %}
          preload="auto" class="video-js vjs-mg-skin"
          data-setup='{"height": {{ media.media_data.height }},
                       "width": {{ media.media_data.width }} }'>
