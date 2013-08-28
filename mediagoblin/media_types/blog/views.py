@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-
 _log = logging.getLogger(__name__)
 
 from datetime import datetime
@@ -26,20 +25,20 @@ from mediagoblin import mg_globals
 
 from mediagoblin.media_types.blog import forms as blog_forms
 from mediagoblin.media_types.blog.models import Blog, BlogPostData
-from mediagoblin.media_types.blog.lib import may_edit_blogpost, set_blogpost_state
+from mediagoblin.media_types.blog.lib import may_edit_blogpost, set_blogpost_state, get_all_blogposts_of_blog
 
 from mediagoblin.messages import add_message, SUCCESS, ERROR
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_media_entry_by_id, user_may_alter_collection,
-                            get_user_collection)
+                            get_user_collection, uses_pagination)
+from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.response import (render_to_response,
-                                        redirect, redirect_obj, render_404)
+                                        redirect, render_404)
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.text import (
     convert_to_tag_list_of_dicts, media_tags_as_string, clean_html, 
     cleaned_markdown_conversion)
-from mediagoblin.tools.url import slugify
 
 from mediagoblin.db.util import check_media_slug_used, check_collection_slug_used
 from mediagoblin.db.models import User, Collection, MediaEntry
@@ -71,9 +70,9 @@ def blog_edit(request):
 
             if request.method=='POST' and form.validate():
                 _log.info("Here")
-                blog = Blog()
+                blog = request.db.Blog()
                 blog.title = unicode(form.title.data)
-                blog.description = unicode(cleaned_markdown_conversion((form.description.data)))  #remember clean html data.
+                blog.description = unicode(cleaned_markdown_conversion((form.description.data))) 
                 blog.author = request.user.id
                 blog.generate_slug()
                
@@ -92,7 +91,7 @@ def blog_edit(request):
 
     #Blog already exists.
     else:
-        blog = Blog.query.filter_by(slug=blog_slug).first()
+        blog = request.db.Blog.query.filter_by(slug=blog_slug).first()
         if request.method == 'GET':
             defaults = dict(
                 title = blog.title,
@@ -120,6 +119,7 @@ def blog_edit(request):
                         user=request.user.username,
                         blog_slug=blog.slug)            
             
+
 @require_active_login        
 def blogpost_create(request):
     
@@ -210,7 +210,7 @@ def blog_dashboard(request):
     
     url_user = request.matchdict.get('user')
     blog_posts_list = []
-    blog_slug = request.matchdict.get('blog_slug')
+    blog_slug = request.matchdict.get('blog_slug', None)
     _log.info(blog_slug)
 
     blog = request.db.Blog.query.filter_by(slug=blog_slug).first()
@@ -218,13 +218,7 @@ def blog_dashboard(request):
     if not blog:
         return render_404(request)
    
-    blog_post_data = request.db.BlogPostData.query.filter_by(blog=blog.id).all()
-
-    for each_blog_post_data in blog_post_data:
-        blog_post = each_blog_post_data.get_media_entry
-        if blog_post:
-            blog_posts_list.append(blog_post)
-    blog_posts_list.reverse()
+    blog_posts_list = get_all_blogposts_of_blog(request, blog)
     blog_post_count = len(blog_posts_list)
 
     if may_edit_blogpost(request, blog):
@@ -235,22 +229,21 @@ def blog_dashboard(request):
         'blog_slug':blog_slug,
         'blog':blog,
         'blog_post_count':blog_post_count
-        })                                                            
+        })                                                                                                   
     
-#supposed to list all the blog posts not just belonging to a particular post.
+
+#supposed to list all the blog posts belonging to a particular blog of particular user.
 def blog_post_listing(request):
     
     blog_owner = request.matchdict.get('user')
+    blog_slug = request.matchdict.get('blog_slug', None)
     owner_user = User.query.filter_by(username=blog_owner).one()
+    blog = request.db.Blog.query.filter_by(author=request.user.id, slug=blog_slug).first()
     
-    if not owner_user:
+    if not owner_user or not blog:
         return render_404(request)
     
-    all_blog_posts = MediaEntry.query.filter_by(
-        uploader=owner_user.id, media_type='mediagoblin.media_types.blogpost',
-        state=u'processed').all()
-    all_blog_posts.reverse()
-    _log.info(len(all_blog_posts))
+    all_blog_posts = get_all_blogposts_of_blog(request, blog, u'processed')
     
     return render_to_response(
         request,
@@ -261,8 +254,8 @@ def blog_post_listing(request):
     
         
 def draft_view(request):
-    blog_slug = request.matchdict.get('blog_slug')
-    blog_post_slug = request.matchdict.get('blog_post_slug')
+    blog_slug = request.matchdict.get('blog_slug', None)
+    blog_post_slug = request.matchdict.get('blog_post_slug', None)
     user = request.matchdict.get('user')
    
     blog = request.db.Blog.query.filter_by(author=request.user.id, slug=blog_slug).first()
