@@ -147,26 +147,26 @@ class TestUserEdit(object):
         # Test email already in db
         template.clear_test_template_context()
         test_app.post(
-            '/edit/account/', {
+            '/edit/email/', {
                 'new_email': 'chris@example.com',
                 'password': 'toast'})
 
         # Check form errors
         context = template.TEMPLATE_TEST_CONTEXT[
-            'mediagoblin/edit/edit_account.html']
+            'mediagoblin/edit/change_email.html']
         assert context['form'].new_email.errors == [
             u'Sorry, a user with that email address already exists.']
 
         # Test successful email change
         template.clear_test_template_context()
         res = test_app.post(
-            '/edit/account/', {
+            '/edit/email/', {
                 'new_email': 'new@example.com',
                 'password': 'toast'})
         res.follow()
 
         # Correct redirect?
-        assert urlparse.urlsplit(res.location)[2] == '/u/chris/'
+        assert urlparse.urlsplit(res.location)[2] == '/edit/account/'
 
         # Make sure we get email verification and try verifying
         assert len(mail.EMAIL_TEST_INBOX) == 1

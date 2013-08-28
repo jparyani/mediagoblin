@@ -223,7 +223,7 @@ class CommonVideoProcessor(MediaProcessor):
                                      '{basename}.thumbnail.jpg'))
 
         if not thumb_size:
-            thumb_size = (mgg.global_config['media:thumb']['max_width'])
+            thumb_size = (mgg.global_config['media:thumb']['max_width'],)
 
         # We will only use the width so that the correct scale is kept
         transcoders.VideoThumbnailerMarkII(
