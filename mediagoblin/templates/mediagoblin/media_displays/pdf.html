@@ -29,7 +29,7 @@
         media.media_files['original']) %}
 {% endif %}
 
-{% set pdf_js = global_config.get('media_type:mediagoblin.media_types.pdf', {}).get('pdf_js', False) %}
+{% set pdf_js = global_config['plugins'].get('mediagoblin.media_types.pdf', {}).get('pdf_js', False) %}
 
 {% if pdf_js %}
     {% block mediagoblin_html_tag %}
