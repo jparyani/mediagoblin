@@ -56,7 +56,6 @@ Part 2: Core plugin documentation
 
    plugindocs/flatpagesfile
    plugindocs/sampleplugin
-   plugindocs/oauth
    plugindocs/trim_whitespace
    plugindocs/raven
    plugindocs/basic_auth
