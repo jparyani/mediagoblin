@@ -58,7 +58,7 @@ def setup_plugin():
         ),
         #blog post listing view
         ('mediagoblin.media_types.blog.blog_post_listing',
-        '/u/<string:user>/b/',
+        '/u/<string:user>/b/<string:blog_slug>/',
         'mediagoblin.media_types.blog.views:blog_post_listing'
         ),
         #blog post draft view
