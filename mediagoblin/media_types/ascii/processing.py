@@ -55,8 +55,8 @@ class CommonAsciiProcessor(MediaProcessor):
     acceptable_files = ['original', 'unicode']
 
     def common_setup(self):
-        self.ascii_config = mgg.global_config[
-            'media_type:mediagoblin.media_types.ascii']
+        self.ascii_config = mgg.global_config['plugins'][
+            'mediagoblin.media_types.ascii']
 
          # Conversions subdirectory to avoid collisions
         self.conversions_subdir = os.path.join(
