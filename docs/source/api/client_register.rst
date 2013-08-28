@@ -49,7 +49,7 @@ redirect_uri
 Response
 --------
 
-You will get back a response::
+You will get back a response:
 
 client_id
     This identifies a client
