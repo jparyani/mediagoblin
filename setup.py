@@ -48,7 +48,7 @@ setup(
         'pytest>=2.3.1',
         'pytest-xdist',
         'werkzeug>=0.7',
-        'celery',
+        'celery>=3.0',
         'kombu',
         'jinja2',
         'sphinx',
