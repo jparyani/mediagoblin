@@ -33,4 +33,17 @@ def set_blogpost_state(request, blogpost):
         blogpost.state = u'processed'
     else:
         blogpost.state = u'failed'
+
+def get_all_blogposts_of_blog(request, blog, state=None):
+    blog_posts_list = []
+    blog_post_data = request.db.BlogPostData.query.filter_by(blog=blog.id).all()
+    for each_blog_post_data in blog_post_data:
+        blog_post = each_blog_post_data.get_media_entry
+        if state == None:
+            blog_posts_list.append(blog_post)
+        if blog_post.state == state:
+            blog_posts_list.append(blog_post)
+    blog_posts_list.reverse()
+    return blog_posts_list
     
+ 
