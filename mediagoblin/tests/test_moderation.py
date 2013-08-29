@@ -21,6 +21,7 @@ from mediagoblin.tests.tools import (fixture_add_user,
 from mediagoblin.db.models import User, CommentReport, MediaComment, UserBan
 from mediagoblin.moderation.tools import take_away_privileges, give_privileges
 from mediagoblin.tools import template, mail
+from datetime import date, timedelta
 
 from webtest import AppError
 
@@ -160,7 +161,9 @@ VGhpcyBpcyB5b3VyIGxhc3Qgd2FybmluZywgcmVndWxhci4uLi4=\n',
 
         response, context = self.do_post(
             {'action_to_resolve':[u'userban', u'delete'],
-            'targeted_user':self.user.id},
+            'targeted_user':self.user.id,
+            'why_user_was_banned':u'',
+            'user_banned_until':u''},
             url='/mod/reports/{0}/'.format(comment_report.id))
         assert response.status == '302 FOUND'
         self.query_for_users()
@@ -189,6 +192,44 @@ VGhpcyBpcyB5b3VyIGxhc3Qgd2FybmluZywgcmVndWxhci4uLi4=\n',
 
     def testAllModerationViews(self):
         self.login(u'moderator')
-        self.test_app.get('/mod/reports/')
-        self.test_app.get('/mod/users/')
+        username = self.user.username
+        fixture_add_comment_report(reported_user=self.admin_user)
+        response = self.test_app.get('/mod/reports/')
+        assert response.status == "200 OK"
+
+        response = self.test_app.get('/mod/reports/1/')
+        assert response.status == "200 OK"
+
+        response = self.test_app.get('/mod/users/')
+        assert response.status == "200 OK"
+
+        user_page_url = '/mod/users/{0}/'.format(username)
+        response = self.test_app.get(user_page_url)
+        assert response.status == "200 OK"
+
         self.test_app.get('/mod/media/')
+        assert response.status == "200 OK"
+
+    def testBanUnBanUser(self):
+        self.login(u'admin')
+        username = self.user.username
+        user_id = self.user.id
+        ban_url = '/mod/users/{0}/ban/'.format(username)
+        response, context = self.do_post({
+            'user_banned_until':u'',
+            'why_user_was_banned':u'Because I said so'},
+            url=ban_url)
+
+        assert response.status == "302 FOUND"
+        user_banned = UserBan.query.filter(UserBan.user_id==user_id).first()
+        assert user_banned is not None
+        assert user_banned.expiration_date is None
+        assert user_banned.reason == u'Because I said so'
+
+        response, context = self.do_post({},
+            url=ban_url)
+
+        assert response.status == "302 FOUND"
+        user_banned = UserBan.query.filter(UserBan.user_id==user_id).first()
+        assert user_banned is None
+

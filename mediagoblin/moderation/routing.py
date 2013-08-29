@@ -30,6 +30,9 @@ moderation_routes = [
     ('mediagoblin.moderation.give_or_take_away_privilege',
         '/users/<string:user>/privilege/',
         'mediagoblin.moderation.views:give_or_take_away_privilege'),
+    ('mediagoblin.moderation.ban_or_unban',
+        '/users/<string:user>/ban/',
+        'mediagoblin.moderation.views:ban_or_unban'),
     ('mediagoblin.moderation.reports_detail',
         '/reports/<int:report_id>/',
         'mediagoblin.moderation.views:moderation_reports_detail')]

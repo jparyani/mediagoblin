@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 {% extends "mediagoblin/base.html" %}
-
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {% block title %}
   {%- if user -%}
@@ -130,15 +130,22 @@
     <a class="right_align">{{ user.username }}'s report history</a>
     <span class=clear></span>
     <h2>{{ user.username }}'s Privileges</h2>
-    {% if request.user.has_privilege('admin') and not user_banned and
-        not user.id == request.user.id %}
-        <input type=button class="button_action right_align"
-               value="Ban User" />
-    {% elif request.user.has_privilege('admin') and
+      <form method=POST action="{{ request.urlgen(
+        'mediagoblin.moderation.ban_or_unban',
+        user=user.username) }}" class="right_align">
+        {{ csrf_token }}
+        {% if request.user.has_privilege('admin') and not user_banned and
             not user.id == request.user.id %}
-        <input type=button class="button_action right_align"
-               value="UnBan User" />
-    {% endif %}
+          {{ wtforms_util.render_divs(ban_form) }}
+          <input type=submit class="button_action"
+               value="{% trans %}Ban User{% endtrans %}"
+               id="ban_user_submit" />
+        {% elif request.user.has_privilege('admin') and
+            not user.id == request.user.id %}
+          <input type=submit class="button_action right_align"
+               value="{% trans %}UnBan User{% endtrans %}" />
+        {% endif %}
+      </form>
     <form action="{{ request.urlgen('mediagoblin.moderation.give_or_take_away_privilege',
                user=user.username) }}"
           method=post >
@@ -172,7 +179,7 @@
           </tr>
         {% endfor %}
     </table>
-	{{ csrf_token }}
+    {{ csrf_token }}
     <input type=hidden name=privilege_name id=hidden_privilege_name />
     </form>
   {% endif %}
@@ -180,6 +187,16 @@
 $(document).ready(function(){
     $('.submit_button').click(function(){
         $('#hidden_privilege_name').val($(this).attr('id'));
+    });
+    $('#user_banned_until').val("YYYY-MM-DD")
+    $("#user_banned_until").focus(function() {
+        $(this).val("");
+        $(this).unbind('focus');
+    });
+    $("#ban_user_submit").click(function(){
+        if ($("#user_banned_until").val() == 'YYYY-MM-DD'){
+            $("#user_banned_until").val("");
+        }
     });
 });
     </script>

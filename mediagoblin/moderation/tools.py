@@ -43,11 +43,9 @@ def take_punitive_actions(request, form, report, user):
         if u'userban' in form.action_to_resolve.data:
             reason = form.resolution_content.data + \
                 "<br>"+request.user.username
-            user_ban = UserBan(
-                user_id=form.targeted_user.data,
+            user_ban = ban_user(form.targeted_user.data,
                 expiration_date=form.user_banned_until.data,
-                reason= form.why_user_was_banned.data
-            )
+                reason=form.why_user_was_banned.data)
             Session.add(user_ban)
 
             if form.user_banned_until.data is not None:
@@ -161,4 +159,41 @@ def give_privileges(user,*privileges):
     elif len(privileges) > 1:
         return (give_privileges(user, privileges[0]) and \
             give_privileges(user, *privileges[1:]))
+
+def ban_user(user_id, expiration_date=None, reason=None):
+    """
+    This function is used to ban a user. If the user is already banned, the
+    function returns False. If the user is not already banned, this function 
+    bans the user using the arguments to build a new UserBan object.
+
+    :returns    False if the user is already banned and the ban is not updated
+    :returns    UserBan object if there is a new ban that was created.
+    """
+    user_ban =UserBan.query.filter(
+            UserBan.user_id==user_id)
+    if user_ban.count():
+        return False
+    new_user_ban = UserBan(
+        user_id=user_id,
+        expiration_date=expiration_date,
+        reason=reason)
+    return new_user_ban    
+
+def unban_user(user_id):
+    """
+    This function is used to unban a user. If the user is not currently banned,
+    nothing happens.
+
+    :returns    True if the operation was completed successfully and the user
+                has been unbanned
+    :returns    False if the user was never banned.
+    """
+    user_ban = UserBan.query.filter(
+            UserBan.user_id==user_id)
+    if user_ban.count() == 0:
+        return False
+    user_ban.first().delete()
+    return True
+
+
 

@@ -367,6 +367,7 @@ def collection_list(request, url_user=None):
 @get_user_collection_item
 @require_active_login
 @user_may_alter_collection
+@user_not_banned
 def collection_item_confirm_remove(request, collection_item):
 
     form = user_forms.ConfirmCollectionItemRemoveForm(request.form)

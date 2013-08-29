@@ -125,6 +125,7 @@ def submit_start(request):
 
 
 @require_active_login
+@user_not_banned
 def add_collection(request, media=None):
     """
     View to create a new collection

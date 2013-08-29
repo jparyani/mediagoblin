@@ -23,7 +23,7 @@ import datetime
 
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
-        SmallInteger
+        SmallInteger, Date
 from sqlalchemy.orm import relationship, backref, with_polymorphic
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
@@ -777,7 +777,7 @@ class UserBan(Base):
 
     user_id = Column(Integer, ForeignKey(User.id), nullable=False,
                                                         primary_key=True)
-    expiration_date = Column(DateTime)
+    expiration_date = Column(Date)
     reason = Column(UnicodeText, nullable=False)
 
 

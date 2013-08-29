@@ -38,6 +38,15 @@ class MultiCheckboxField(wtforms.SelectMultipleField):
 class PrivilegeAddRemoveForm(wtforms.Form):
     privilege_name = wtforms.HiddenField('',[wtforms.validators.required()])
 
+class BanForm(wtforms.Form):
+    user_banned_until = wtforms.DateField(
+        _(u'User will be banned until:'),
+        format='%Y-%m-%d',
+        validators=[wtforms.validators.optional()])
+    why_user_was_banned = wtforms.TextAreaField(
+        _(u'Why are you banning this User?'),
+        validators=[wtforms.validators.optional()])
+
 class ReportResolutionForm(wtforms.Form):
     action_to_resolve = MultiCheckboxField(
         _(u'What action will you take to resolve the report?'),

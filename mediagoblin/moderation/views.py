@@ -24,7 +24,7 @@ from mediagoblin.decorators import (require_admin_or_moderator_login, \
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.moderation import forms as moderation_forms
 from mediagoblin.moderation.tools import (take_punitive_actions, \
-    take_away_privileges, give_privileges)
+    take_away_privileges, give_privileges, ban_user, unban_user)
 from datetime import datetime
 
 @require_admin_or_moderator_login
@@ -74,6 +74,7 @@ def moderation_users_detail(request):
         ReportBase.discriminator=='archived_report').all()
     privileges = Privilege.query
     user_banned = UserBan.query.get(user.id)
+    ban_form = moderation_forms.BanForm()
 
     return render_to_response(
         request,
@@ -81,7 +82,8 @@ def moderation_users_detail(request):
         {'user':user,
          'privileges': privileges,
          'reports':active_reports,
-         'user_banned':user_banned})
+         'user_banned':user_banned,
+         'ban_form':ban_form})
 
 @require_admin_or_moderator_login
 def moderation_reports_panel(request):
@@ -150,6 +152,26 @@ def give_or_take_away_privilege(request, url_user):
             give_privileges(url_user.username, form.privilege_name.data)
         url_user.save()
 
+    return redirect(
+        request,
+        'mediagoblin.moderation.users_detail',
+        user=url_user.username)
+
+@user_has_privilege(u'admin')
+@active_user_from_url
+def ban_or_unban(request, url_user):
+    """
+    A page to ban or unban a user. Only can be used by an admin.
+    """
+    form = moderation_forms.BanForm(request.form)
+    print "accessed page"
+    if request.method == "POST" and form.validate():
+        already_banned = unban_user(url_user.id)
+        if not already_banned:
+            user_ban = ban_user(url_user.id,
+                expiration_date = form.user_banned_until.data,
+                reason = form.why_user_was_banned.data)
+            user_ban.save()
     return redirect(
         request,
         'mediagoblin.moderation.users_detail',

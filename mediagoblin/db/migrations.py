@@ -19,7 +19,7 @@ import uuid
 
 from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         Integer, Unicode, UnicodeText, DateTime,
-                        ForeignKey)
+                        ForeignKey, Date)
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import and_
@@ -501,7 +501,7 @@ class UserBan_v0(declarative_base()):
     __tablename__ = 'core__user_bans'
     user_id = Column('id',Integer, ForeignKey(User.id), nullable=False,
                                          primary_key=True)
-    expiration_date = Column(DateTime)
+    expiration_date = Column(Date)
     reason = Column(UnicodeText, nullable=False)
 
 class Privilege_v0(declarative_base()):
