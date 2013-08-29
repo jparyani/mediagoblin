@@ -164,13 +164,13 @@ def register_user(request, register_form):
         user = auth.create_user(register_form)
 
         # give the user the default privileges
-        default_privileges = [ 
+        default_privileges = [
             Privilege.query.filter(Privilege.privilege_name==u'commenter').first(),
             Privilege.query.filter(Privilege.privilege_name==u'uploader').first(),
             Privilege.query.filter(Privilege.privilege_name==u'reporter').first()]
         user.all_privileges += default_privileges
         user.save()
-        
+
         # log the user in
         request.session['user_id'] = unicode(user.id)
         request.session.save()

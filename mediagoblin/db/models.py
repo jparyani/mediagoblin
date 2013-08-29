@@ -669,7 +669,7 @@ class ReportBase(Base):
     id = Column(Integer, primary_key=True)
     reporter_id = Column(Integer, ForeignKey(User.id), nullable=False)
     reporter =  relationship(
-        User, 
+        User,
         backref=backref("reports_filed_by",
             lazy="dynamic",
             cascade="all, delete-orphan"),
@@ -677,7 +677,7 @@ class ReportBase(Base):
     report_content = Column(UnicodeText)
     reported_user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     reported_user = relationship(
-        User, 
+        User,
         backref=backref("reports_filed_on",
             lazy="dynamic",
             cascade="all, delete-orphan"),
@@ -722,7 +722,7 @@ class MediaReport(ReportBase):
                                                 primary_key=True)
     media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
     media_entry = relationship(
-        MediaEntry, 
+        MediaEntry,
         backref=backref("reports_filed_onmod/reports/1/",
             lazy="dynamic",
             cascade="all, delete-orphan"))
@@ -738,7 +738,7 @@ class ArchivedReport(ReportBase):
 
     media_entry_id = Column(Integer, ForeignKey(MediaEntry.id))
     media_entry = relationship(
-        MediaEntry, 
+        MediaEntry,
         backref=backref("past_reports_filed_on",
             lazy="dynamic"))
     comment_id = Column(Integer, ForeignKey(MediaComment.id))
@@ -748,7 +748,7 @@ class ArchivedReport(ReportBase):
 
     resolver_id = Column(Integer, ForeignKey(User.id), nullable=False)
     resolver = relationship(
-        User, 
+        User,
         backref=backref("reports_resolved_by",
             lazy="dynamic",
             cascade="all, delete-orphan"),
@@ -759,23 +759,23 @@ class ArchivedReport(ReportBase):
 
 class UserBan(Base):
     """
-    Holds the information on a specific user's ban-state. As long as one of 
-        these is attached to a user, they are banned from accessing mediagoblin. 
-        When they try to log in, they are greeted with a page that tells them 
-        the reason why they are banned and when (if ever) the ban will be 
+    Holds the information on a specific user's ban-state. As long as one of
+        these is attached to a user, they are banned from accessing mediagoblin.
+        When they try to log in, they are greeted with a page that tells them
+        the reason why they are banned and when (if ever) the ban will be
         lifted
 
-        :keyword user_id          Holds the id of the user this object is 
-                                    attached to. This is a one-to-one 
+        :keyword user_id          Holds the id of the user this object is
+                                    attached to. This is a one-to-one
                                     relationship.
-        :keyword expiration_date  Holds the date that the ban will be lifted. 
-                                    If this is null, the ban is permanent 
+        :keyword expiration_date  Holds the date that the ban will be lifted.
+                                    If this is null, the ban is permanent
                                     unless a moderator manually lifts it.
         :keyword reason           Holds the reason why the user was banned.
     """
     __tablename__ = 'core__user_bans'
 
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False, 
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False,
                                                         primary_key=True)
     expiration_date = Column(DateTime)
     reason = Column(UnicodeText, nullable=False)
@@ -785,21 +785,21 @@ class Privilege(Base):
     """
     The Privilege table holds all of the different privileges a user can hold.
     If a user 'has' a privilege, the User object is in a relationship with the
-    privilege object. 
+    privilege object.
 
         :keyword privilege_name   Holds a unicode object that is the recognizable
-                                    name of this privilege. This is the column 
+                                    name of this privilege. This is the column
                                     used for identifying whether or not a user
                                     has a necessary privilege or not.
-                                
+
     """
     __tablename__ = 'core__privileges'
 
     id = Column(Integer, nullable=False, primary_key=True)
     privilege_name = Column(Unicode, nullable=False, unique=True)
     all_users = relationship(
-        User, 
-        backref='all_privileges', 
+        User,
+        backref='all_privileges',
         secondary="core__privileges_users")
 
     def __init__(self, privilege_name):
@@ -818,25 +818,25 @@ class PrivilegeUserAssociation(Base):
     '''
     This table holds the many-to-many relationship between User and Privilege
     '''
-    
+
     __tablename__ = 'core__privileges_users'
 
     privilege_id = Column(
-        'core__privilege_id', 
-        Integer, 
-        ForeignKey(User.id), 
+        'core__privilege_id',
+        Integer,
+        ForeignKey(User.id),
         primary_key=True)
     user_id = Column(
-        'core__user_id', 
-        Integer, 
-        ForeignKey(Privilege.id), 
+        'core__user_id',
+        Integer,
+        ForeignKey(Privilege.id),
         primary_key=True)
 
 MODELS = [
     User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
     MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
     Notification, CommentNotification, ProcessingNotification, Client,
-    CommentSubscription, ReportBase, CommentReport, MediaReport, UserBan, 
+    CommentSubscription, ReportBase, CommentReport, MediaReport, UserBan,
 	Privilege, PrivilegeUserAssociation, ArchivedReport,
     RequestToken, AccessToken, NonceTimestamp]
 
@@ -854,10 +854,10 @@ MODELS = [
 
     FOUNDATIONS = {User:user_foundations}
 """
-privilege_foundations = [{'privilege_name':u'admin'}, 
-						{'privilege_name':u'moderator'}, 
+privilege_foundations = [{'privilege_name':u'admin'},
+						{'privilege_name':u'moderator'},
 						{'privilege_name':u'uploader'},
-						{'privilege_name':u'reporter'}, 
+						{'privilege_name':u'reporter'},
 						{'privilege_name':u'commenter'},
 						{'privilege_name':u'active'}]
 FOUNDATIONS = {Privilege:privilege_foundations}

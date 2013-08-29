@@ -24,7 +24,7 @@ from mediagoblin import mg_globals as mgg
 from mediagoblin import messages
 from mediagoblin.db.models import (MediaEntry, User, MediaComment,
 							UserBan, Privilege)
-from mediagoblin.tools.response import (redirect, render_404, 
+from mediagoblin.tools.response import (redirect, render_404,
 								render_user_banned, json_response)
 from mediagoblin.tools.translate import pass_to_ugettext as _
 
@@ -358,7 +358,7 @@ def oauth_required(controller):
             error = "Missing required parameter."
             return json_response({"error": error}, status=400)
 
-         
+
         request_validator = GMGRequestValidator()
         resource_endpoint = ResourceEndpoint(request_validator)
         valid, request = resource_endpoint.validate_protected_resource_request(

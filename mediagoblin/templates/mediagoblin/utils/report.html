@@ -18,7 +18,7 @@
 
 {% block report_content -%}
   <p>
-    <a 
+    <a
       {% if not request.user -%}
         href="{{ request.urlgen('mediagoblin.auth.login') }}"
       {% else %}

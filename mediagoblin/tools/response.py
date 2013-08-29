@@ -52,7 +52,8 @@ def render_400(request, err_msg=None):
     _ = pass_to_ugettext
     title = _("Bad Request")
     if err_msg is None:
-        err_msg = _("The request sent to the server is invalid, please double check it")
+        err_msg = _("The request sent to the server is invalid, \
+please double check it")
 
     return render_error(request, 400, title, err_msg)
 
@@ -78,9 +79,11 @@ def render_user_banned(request):
     and the reason why they have been banned"
     """
     user_ban = UserBan.query.get(request.user.id)
-    if datetime.now()>user_ban.expiration_date:
+    if (user_ban.expiration_date is not None and
+            datetime.now()>user_ban.expiration_date):
+
         user_ban.delete()
-        redirect(request,
+        return redirect(request,
             'index')
     return render_to_response(request,
         'mediagoblin/banned.html',
@@ -141,7 +144,7 @@ def json_response(serializable, _disable_cors=False, *args, **kw):
     Any extra arguments and keyword arguments are passed to the
     Response.__init__ method.
     '''
-    
+
     response = wz_Response(json.dumps(serializable), *args, content_type='application/json', **kw)
 
     if not _disable_cors:

@@ -330,6 +330,13 @@ def test_authentication_views(test_app):
             'next' : '/u/chris/'})
     assert urlparse.urlsplit(response.location)[2] == '/u/chris/'
 
+def test_basic_privileges_granted_on_registration(test_app):
+    user = User.query.filter(User.username==u'angrygirl').first()
+
+    assert User.has_privilege(u'commenter')
+    assert User.has_privilege(u'uploader')
+    assert User.has_privilege(u'reporter')
+    assert not User.has_privilege(u'active')
 
 @pytest.fixture()
 def authentication_disabled_app(request):

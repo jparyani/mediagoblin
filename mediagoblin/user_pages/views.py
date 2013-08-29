@@ -162,6 +162,7 @@ def media_home(request, media, page, **kwargs):
 
 @get_media_entry_by_id
 @require_active_login
+@user_has_privilege(u'commenter')
 def media_post_comment(request, media):
     """
     recieves POST from a MediaEntry() comment form, saves the comment.
@@ -651,13 +652,13 @@ def file_a_report(request, media, comment=None):
                    'form':form}
 
     if request.method == "POST":
-        report_table = build_report_object(form, 
-            media_entry=media, 
+        report_object = build_report_object(form,
+            media_entry=media,
             comment=comment)
 
         # if the object was built successfully, report_table will not be None
-        if report_table:
-            report_table.save()
+        if report_object:
+            report_object.save()
             return redirect(
                 request,
                 'index')
@@ -671,5 +672,5 @@ def file_a_report(request, media, comment=None):
 @require_active_login
 @get_user_media_entry
 @get_media_comment_by_id
-def file_a_comment_report(request, media, comment):        
+def file_a_comment_report(request, media, comment):
         return file_a_report(request, comment=comment)

@@ -27,7 +27,7 @@
        title="Return to Reports Panel">
       {% trans %}Return to Reports Panel{% endtrans %}</a>
   <h2>{% trans %}Report{% endtrans %} #{{ report.id }}</h2>
-  {% if report.is_comment_report() or 
+  {% if report.is_comment_report() or
     (report.is_archived_report() and report.comment) %}
 
     {% trans %}Reported comment{% endtrans %}:
@@ -60,7 +60,7 @@
         {% endautoescape %}
       </div>
     </div>
-  {% elif report.is_media_entry_report() or 
+  {% elif report.is_media_entry_report() or
     (report.is_archived_report() and report.media_entry) %}
 
     {% set media_entry = report.media_entry %}
@@ -89,7 +89,7 @@
                         'mediagoblin.moderation.users_detail',
                         user=report.reporter.username),
                  user_name=report.reported_user.username %}
-          CONTENT BY 
+          CONTENT BY
             <a href="{{ user_url }}"> {{ user_name }}</a>
           HAS BEEN DELETED
         {% endtrans %}
@@ -100,8 +100,8 @@
        class="report_wrapper">
     <div class="report_author">
         <img src="{{ request.staticdirect(
-                  '/images/icon_clipboard_alert.png') }}" 
-             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license. 
+                  '/images/icon_clipboard_alert.png') }}"
+             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
                   Distributed by the GNOME project http://www.gnome.org" />
         <a href="{{ request.urlgen('mediagoblin.moderation.users_detail',
                         user=report.reporter.username) }}"
@@ -160,7 +160,7 @@ $(document).ready(function() {
         $('ul#action_to_resolve li input:not(:checked)').each(function() {
             $.each(hidden_input_names[$(this).val()], function(index, name){
                 $('label[for='+name+']').hide();
-                $('#'+name).hide();                
+                $('#'+name).hide();
             });
         });
     });
@@ -176,12 +176,12 @@ $(document).ready(function() {
   });
   </script>
   {% elif not (report.reported_user.has_privilege('admin')) %}
-    <h2><img src="{{ request.staticdirect('/images/icon_clipboard.png') }}" 
+    <h2><img src="{{ request.staticdirect('/images/icon_clipboard.png') }}"
              alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
-                  Distributed by the GNOME project http://www.gnome.org" /> 
+                  Distributed by the GNOME project http://www.gnome.org" />
           {% trans %}Status{% endtrans %}:
     </h2>
-    <b>{% trans %}RESOLVED{% endtrans %}</b> 
+    <b>{% trans %}RESOLVED{% endtrans %}</b>
     {{ report.resolved.strftime("%I:%M%p %Y-%m-%d") }}
     {% autoescape False %}
       <p>{{ report.result }}</p>

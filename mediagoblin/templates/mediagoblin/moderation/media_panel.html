@@ -28,7 +28,7 @@
 <p>
   {% trans %}Here you can track the state of media being processed on this instance.{% endtrans %}
 </p>
-    
+
 <h2>{% trans %}Media in-processing{% endtrans %}</h2>
 
 {% if processing_entries.count() %}
@@ -56,7 +56,7 @@
   </table>
 {% else %}
   <p><em>{% trans %}No media in-processing{% endtrans %}</em></p>
-{% endif %}  
+{% endif %}
 
 <h2>{% trans %}These uploads failed to process:{% endtrans %}</h2>
 {% if failed_entries.count() %}

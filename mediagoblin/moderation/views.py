@@ -19,12 +19,12 @@ from werkzeug.exceptions import Forbidden
 from mediagoblin.db.models import (MediaEntry, User, MediaComment, \
                                    CommentReport, ReportBase, Privilege, \
                                    UserBan, ArchivedReport)
-from mediagoblin.db.util import user_privileges_to_dictionary
 from mediagoblin.decorators import (require_admin_or_moderator_login, \
-                                    active_user_from_url)
+                                    active_user_from_url, user_has_privilege)
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.moderation import forms as moderation_forms
-from mediagoblin.moderation.tools import take_punitive_actions
+from mediagoblin.moderation.tools import (take_punitive_actions, \
+    take_away_privileges, give_privileges)
 from datetime import datetime
 
 @require_admin_or_moderator_login
@@ -86,7 +86,7 @@ def moderation_users_detail(request):
 @require_admin_or_moderator_login
 def moderation_reports_panel(request):
     '''
-    Show the global panel for monitoring reports filed against comments or 
+    Show the global panel for monitoring reports filed against comments or
         media entries for this instance.
     '''
     report_list = ReportBase.query.filter(
@@ -115,7 +115,7 @@ def moderation_reports_detail(request):
 
     form.take_away_privileges.choices = [
         (s.privilege_name,s.privilege_name.title()) \
-            for s in report.reported_user.all_privileges 
+            for s in report.reported_user.all_privileges
     ]
 
     if request.method == "POST" and form.validate() and not (
@@ -134,7 +134,7 @@ def moderation_reports_detail(request):
         {'report':report,
          'form':form})
 
-@require_admin_or_moderator_login
+@user_has_privilege(u'admin')
 @active_user_from_url
 def give_or_take_away_privilege(request, url_user):
     '''
@@ -144,12 +144,13 @@ def give_or_take_away_privilege(request, url_user):
     if request.method == "POST" and form.validate():
         privilege = Privilege.query.filter(
             Privilege.privilege_name==form.privilege_name.data).one()
-        if privilege in url_user.all_privileges:
-            url_user.all_privileges.remove(privilege)
-        else:      
-            url_user.all_privileges.append(privilege)
+        if not take_away_privileges(
+            url_user.username, form.privilege_name.data):
+
+            give_privileges(url_user.username, form.privilege_name.data)
         url_user.save()
-        return redirect(
-            request,
-            'mediagoblin.moderation.users_detail',
-            user=url_user.username)
+
+    return redirect(
+        request,
+        'mediagoblin.moderation.users_detail',
+        user=url_user.username)

@@ -25,13 +25,15 @@ from webtest import TestApp
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User, MediaEntry, Collection, MediaComment, \
-    CommentSubscription, CommentNotification, Privilege
+    CommentSubscription, CommentNotification, Privilege, CommentReport
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.db.base import Session
 from mediagoblin.meddleware import BaseMeddleware
 from mediagoblin.auth import gen_password_hash
 from mediagoblin.gmg_commands.dbupdate import run_dbupdate
+
+from datetime import datetime
 
 
 MEDIAGOBLIN_TEST_DB_NAME = u'__mediagoblin_tests__'
@@ -312,3 +314,33 @@ def fixture_add_comment(author=None, media_entry=None, comment=None):
 
     return comment
 
+def fixture_add_comment_report(comment=None, reported_user=None,
+        reporter=None, created=None, report_content=None):
+    if comment is None:
+        comment = fixture_add_comment()
+
+    if reported_user is None:
+        reported_user = fixture_add_user()
+
+    if reporter is None:
+        reporter = fixture_add_user()
+
+    if created is None:
+        created=datetime.now()
+
+    if report_content is None:
+        report_content = \
+            'Auto-generated test report by user {0}'.format(
+                reporter)
+
+    comment_report = CommentReport(comment=comment,
+        reported_user = reported_user,
+        reporter = reporter,
+        created = created,
+        report_content=report_content)
+
+    comment_report.save()
+
+    Session.expunge(comment_report)
+
+    return comment_report

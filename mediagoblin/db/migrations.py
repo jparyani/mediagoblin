@@ -28,7 +28,7 @@ from migrate.changeset.constraint import UniqueConstraint
 
 from mediagoblin.db.extratypes import JSONEncoded
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
-from mediagoblin.db.models import (MediaEntry, Collection, User, 
+from mediagoblin.db.models import (MediaEntry, Collection, User,
                                    MediaComment, Privilege, ReportBase)
 
 MIGRATIONS = {}
@@ -425,7 +425,7 @@ class RequestToken_v0(declarative_base()):
     callback = Column(Unicode, nullable=False, default=u"oob")
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    
+
 class AccessToken_v0(declarative_base()):
     """
         Model for representing the access tokens
@@ -438,7 +438,7 @@ class AccessToken_v0(declarative_base()):
     request_token = Column(Unicode, ForeignKey(RequestToken_v0.token))
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
- 
+
 
 class NonceTimestamp_v0(declarative_base()):
     """
@@ -467,7 +467,7 @@ class ReportBase_v0(declarative_base()):
     reporter_id = Column(Integer, ForeignKey(User.id), nullable=False)
     report_content = Column(UnicodeText)
     reported_user_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now) 
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     discriminator = Column('type', Unicode(50))
     __mapper_args__ = {'polymorphic_on': discriminator}
 
@@ -512,14 +512,14 @@ class Privilege_v0(declarative_base()):
 class PrivilegeUserAssociation_v0(declarative_base()):
     __tablename__ = 'core__privileges_users'
     group_id = Column(
-        'core__privilege_id', 
-        Integer, 
-        ForeignKey(User.id), 
+        'core__privilege_id',
+        Integer,
+        ForeignKey(User.id),
         primary_key=True)
     user_id = Column(
-        'core__user_id', 
-        Integer, 
-        ForeignKey(Privilege.id), 
+        'core__user_id',
+        Integer,
+        ForeignKey(Privilege.id),
         primary_key=True)
 
 @RegisterMigration(15, MIGRATIONS)

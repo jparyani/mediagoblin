@@ -30,7 +30,7 @@
     Here you can look up open reports that have been filed by users.
   {% endtrans %}
 </p>
-    
+
 <h2>{% trans %}Active Reports Filed{% endtrans %}</h2>
 
 {% if report_list.count() %}
@@ -46,22 +46,22 @@
       <tr>
         {% if report.discriminator == "comment_report" %}
           <td>
-            <img 
-              src="{{ request.staticdirect('/images/icon_clipboard_alert.png') }}" 
+            <img
+              src="{{ request.staticdirect('/images/icon_clipboard_alert.png') }}"
               alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
                    Distributed by the GNOME project http://www.gnome.org" />
             <a href="{{ request.urlgen(
                     'mediagoblin.moderation.reports_detail',
                      report_id=report.id) }}">
               {% trans report_id=report.id %}
-                Comment Report #{{ report_id }} 
+                Comment Report #{{ report_id }}
               {% endtrans %}
             </a>
           </td>
         {% elif report.discriminator == "media_report" %}
           <td>
-            <img 
-              src="{{ request.staticdirect('/images/icon_clipboard_alert.png') }}" 
+            <img
+              src="{{ request.staticdirect('/images/icon_clipboard_alert.png') }}"
               alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
                    Distributed by the GNOME project http://www.gnome.org" />
             <a href="{{ request.urlgen(
@@ -97,8 +97,8 @@
     {% for report in closed_report_list %}
       <tr>
         <td>
-          <img 
-            src="{{ request.staticdirect('/images/icon_clipboard.png') }}" 
+          <img
+            src="{{ request.staticdirect('/images/icon_clipboard.png') }}"
             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
                  Distributed by the GNOME project http://www.gnome.org" />
           <a href="{{ request.urlgen('mediagoblin.moderation.reports_detail',
@@ -118,5 +118,5 @@
   </table>
 {% else %}
   <p><em>{% trans %}No closed reports found.{% endtrans %}</em></p>
-{% endif %} 
+{% endif %}
 {% endblock %}

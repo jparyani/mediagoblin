@@ -127,7 +127,6 @@ otherperson@example.com\n\nSGkgb3RoZXJwZXJzb24sCmNocmlzIGNvbW1lbnRlZCBvbiB5b3VyI
         else:
             assert mail.EMAIL_TEST_MBOX_INBOX == []
 
-        mail.EMAIL_TEST_MBOX_INBOX = []
 
         # Save the ids temporarily because of DetachedInstanceError
         notification_id = notification.id

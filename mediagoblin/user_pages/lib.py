@@ -19,7 +19,7 @@ from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin import mg_globals
 from mediagoblin.db.base import Session
-from mediagoblin.db.models import (CollectionItem, MediaReport, CommentReport, 
+from mediagoblin.db.models import (CollectionItem, MediaReport, CommentReport,
                                   MediaComment, MediaEntry)
 from mediagoblin.user_pages import forms as user_forms
 
@@ -80,14 +80,14 @@ def add_media_to_collection(collection, media, note=None, commit=True):
 
 def build_report_object(report_form, media_entry=None, comment=None):
     """
-    This function is used to convert a form object (from a User filing a 
+    This function is used to convert a form object (from a User filing a
         report) into either a MediaReport or CommentReport object.
 
-    :param report_form should be a MediaReportForm or a CommentReportForm 
+    :param report_form should be a MediaReportForm or a CommentReportForm
         object
-    :param 
+    :param
 
-    :returns either of MediaReport or a CommentReport object that has not been 
+    :returns either of MediaReport or a CommentReport object that has not been
         saved. In case of an improper form_dict, returns None
     """
 

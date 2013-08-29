@@ -31,17 +31,15 @@ def take_punitive_actions(request, form, report, user):
         # punitive actions that a moderator could take.
         if u'takeaway' in form.action_to_resolve.data:
             for privilege_name in form.take_away_privileges.data:
-                privilege = Privilege.query.filter(
-                    Privilege.privilege_name==privilege_name).one()
+                take_away_privileges(user.username, privilege_name)
                 form.resolution_content.data += \
-                    u"<br>%s took away %s\'s %s privileges" % (
+                    u"<br>%s took away %s\'s %s privileges." % (
                         request.user.username,
                         user.username,
-                        privilege.privilege_name)
-                user.all_privileges.remove(privilege)
+                        privilege_name)
 
         # If the moderator elects to ban the user, a new instance of user_ban
-        # will be created.        
+        # will be created.
         if u'userban' in form.action_to_resolve.data:
             reason = form.resolution_content.data + \
                 "<br>"+request.user.username
@@ -51,7 +49,7 @@ def take_punitive_actions(request, form, report, user):
                 reason= form.why_user_was_banned.data
             )
             Session.add(user_ban)
-    
+
             if form.user_banned_until.data is not None:
                 form.resolution_content.data += \
                     u"<br>%s banned user %s until %s." % (
@@ -86,17 +84,17 @@ def take_punitive_actions(request, form, report, user):
                 deleted_comment = report.comment
                 Session.delete(deleted_comment)
                 form.resolution_content.data += \
-                    u"<br>%s deleted the comment" % (
+                    u"<br>%s deleted the comment." % (
                         request.user.username)
         elif u'delete' in form.action_to_resolve.data and \
-            report.is_media_entry_report():    
+            report.is_media_entry_report():
                 deleted_media = report.media_entry
                 Session.delete(deleted_media)
                 form.resolution_content.data += \
-                    u"<br>%s deleted the media entry" % (
-                        request.user.username)    
+                    u"<br>%s deleted the media entry." % (
+                        request.user.username)
 
-        # If the moderator didn't delete the content we then attach the 
+        # If the moderator didn't delete the content we then attach the
         # content to the archived report. We also have to actively delete the
         # old report, since it won't be deleted by cascading.
         elif report.is_comment_report():
@@ -133,3 +131,34 @@ def take_punitive_actions(request, form, report, user):
             request,
             'mediagoblin.moderation.reports_detail',
             report_id=report.id)
+
+def take_away_privileges(user,*privileges):
+    if len(privileges) == 1:
+        privilege = Privilege.query.filter(
+            Privilege.privilege_name==privileges[0]).first()
+        user = User.query.filter(
+            User.username==user).first()
+        if privilege in user.all_privileges:
+            user.all_privileges.remove(privilege)
+            return True
+        return False
+
+    elif len(privileges) > 1:
+        return (take_away_privileges(user, privileges[0]) and \
+            take_away_privileges(user, *privileges[1:]))
+
+def give_privileges(user,*privileges):
+    if len(privileges) == 1:
+        privilege = Privilege.query.filter(
+            Privilege.privilege_name==privileges[0]).first()
+        user = User.query.filter(
+            User.username==user).first()
+        if privilege not in user.all_privileges:
+            user.all_privileges.append(privilege)
+            return True
+        return False
+
+    elif len(privileges) > 1:
+        return (give_privileges(user, privileges[0]) and \
+            give_privileges(user, *privileges[1:]))
+

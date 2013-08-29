@@ -28,7 +28,7 @@ class MultiCheckboxField(wtforms.SelectMultipleField):
 
     Iterating the field will produce subfields, allowing custom rendering of
     the enclosed checkbox fields.
-    
+
     code from http://wtforms.simplecodes.com/docs/1.0.4/specific_problems.html
     """
     widget = wtforms.widgets.ListWidget(prefix_label=False)
@@ -40,7 +40,7 @@ class PrivilegeAddRemoveForm(wtforms.Form):
 
 class ReportResolutionForm(wtforms.Form):
     action_to_resolve = MultiCheckboxField(
-        _(u'What action will you take to resolve the report?'), 
+        _(u'What action will you take to resolve the report?'),
         validators=[wtforms.validators.optional()],
         choices=ACTION_CHOICES)
     targeted_user   = wtforms.HiddenField('',
