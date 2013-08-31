@@ -141,6 +141,7 @@ please note the following:
 
 
 **New features**
+
 * PDF media type!
 * Improved plugin system.  More flexible, better documented, with a
   new plugin authoring section of the docs.

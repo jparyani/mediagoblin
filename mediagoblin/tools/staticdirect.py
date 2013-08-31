@@ -35,7 +35,8 @@ class StaticDirect(object):
     staticdirect to.  In general, you should supply a None domain, as
     that's the "default" domain.
 
-    Things work like this:
+    Things work like this::
+
       >>> staticdirect = StaticDirect(
       ...     {None: "/static/",
       ...      "theme": "http://example.org/themestatic/"})
@@ -69,17 +70,18 @@ class PluginStatic(object):
 
     This has two mandatory attributes that you must pass in on class
     init:
-     - name: this name will be both used for lookup in "urlgen" for
-       your plugin's static resources and for the subdirectory that
-       it'll be "mounted" to for serving via your web browser.  It
-       *MUST* be unique.  If writing a plugin bundled with MediaGoblin
-       please use the pattern 'coreplugin__foo' where 'foo' is your
-       plugin name.  All external plugins should use their modulename,
-       so if your plugin is 'mg_bettertags' you should also call this
-       name 'mg_bettertags'.
-     - file_path: the directory your plugin's static resources are
-       located in.  It's recommended that you use
-       pkg_resources.resource_filename() for this.
+
+    - *name:* this name will be both used for lookup in "urlgen" for
+      your plugin's static resources and for the subdirectory that
+      it'll be "mounted" to for serving via your web browser.  It
+      *MUST* be unique.  If writing a plugin bundled with MediaGoblin
+      please use the pattern 'coreplugin__foo' where 'foo' is your
+      plugin name.  All external plugins should use their modulename,
+      so if your plugin is 'mg_bettertags' you should also call this
+      name 'mg_bettertags'.
+    - *file_path:* the directory your plugin's static resources are
+      located in.  It's recommended that you use
+      pkg_resources.resource_filename() for this.
 
     An example of using this::
 

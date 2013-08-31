@@ -138,8 +138,8 @@ class CommonImageProcessor(MediaProcessor):
         """
         Set up the workbench directory and pull down the original file
         """
-        self.image_config = mgg.global_config[
-            'media_type:mediagoblin.media_types.image']
+        self.image_config = mgg.global_config['plugins'][
+            'mediagoblin.media_types.image']
 
         ## @@: Should this be two functions?
         # Conversions subdirectory to avoid collisions

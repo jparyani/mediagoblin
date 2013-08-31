@@ -27,7 +27,7 @@ def skip_transcode(metadata, size):
 
     Returns True if the video matches the requirements in the configuration.
     '''
-    config = mgg.global_config['media_type:mediagoblin.media_types.video']\
+    config = mgg.global_config['plugins']['mediagoblin.media_types.video']\
             ['skip_transcode']
 
     medium_config = mgg.global_config['media:medium']
