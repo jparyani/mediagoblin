@@ -237,17 +237,13 @@ def edit_account(request):
 
         user.license_preference = form.license_preference.data
 
-        if form.new_email.data:
-            _update_email(request, form, user)
-
-        if not form.errors:
-            user.save()
-            messages.add_message(request,
-                                 messages.SUCCESS,
-                                 _("Account settings saved"))
-            return redirect(request,
-                            'mediagoblin.user_pages.user_home',
-                            user=user.username)
+        user.save()
+        messages.add_message(request,
+                             messages.SUCCESS,
+                             _("Account settings saved"))
+        return redirect(request,
+                        'mediagoblin.user_pages.user_home',
+                        user=user.username)
 
     return render_to_response(
         request,
