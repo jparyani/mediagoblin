@@ -209,7 +209,6 @@ def blogpost_edit(request):
 def blog_dashboard(request):
     
     url_user = request.matchdict.get('user')
-    blog_posts_list = []
     blog_slug = request.matchdict.get('blog_slug', None)
     _log.info(blog_slug)
 
@@ -218,8 +217,8 @@ def blog_dashboard(request):
     if not blog:
         return render_404(request)
    
-    blog_posts_list = get_all_blogposts_of_blog(request, blog)
-    blog_post_count = len(blog_posts_list)
+    blog_posts_list = blog.get_all_posts_of_a_blog(None)
+    blog_post_count = blog_posts_list.count()
 
     if may_edit_blogpost(request, blog):
         return render_to_response(
@@ -243,7 +242,7 @@ def blog_post_listing(request):
     if not owner_user or not blog:
         return render_404(request)
     
-    all_blog_posts = get_all_blogposts_of_blog(request, blog, u'processed')
+    all_blog_posts = blog.get_all_posts_of_a_blog(u'processed')
     
     return render_to_response(
         request,
