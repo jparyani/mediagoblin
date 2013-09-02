@@ -17,6 +17,7 @@
 import datetime
 
 from mediagoblin.db.base import Base
+from mediagoblin.db.base import Session
 from mediagoblin.db.models import Collection, User, MediaEntry
 from mediagoblin.db.mixin import GenerateSlugMixin
 
@@ -41,6 +42,13 @@ class Blog(Base, BlogMixin):
     author = Column(Integer, ForeignKey(User.id), nullable=False, index=True) #similar to uploader
     created = Column(DateTime, nullable=False, default=datetime.datetime.now, index=True)
     slug = Column(Unicode)
+    
+    def get_all_posts_of_a_blog(self, state=None):
+		blog_posts = Session.query(MediaEntry).join(BlogPostData)\
+		.filter(BlogPostData.blog == self.id)
+		if state is not None:
+			blog_posts = blog_posts.filter(MediaEntry.state==state)
+		return blog_posts
 
     
 BACKREF_NAME = "blogpost__media_data"
