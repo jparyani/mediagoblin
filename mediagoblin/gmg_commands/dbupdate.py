@@ -24,8 +24,6 @@ from mediagoblin.init import setup_global_and_app_config
 from mediagoblin.tools.common import import_component
 
 _log = logging.getLogger(__name__)
-logging.basicConfig()
-_log.setLevel(logging.DEBUG)
 
 def dbupdate_parse_setup(subparser):
     pass
