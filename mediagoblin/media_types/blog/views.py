@@ -206,33 +206,36 @@ def blogpost_edit(request):
         })    
 
 @require_active_login
-def blog_dashboard(request):
+@uses_pagination
+def blog_dashboard(request, page):
     
     url_user = request.matchdict.get('user')
     blog_slug = request.matchdict.get('blog_slug', None)
-    _log.info(blog_slug)
-
+    
     blog = request.db.Blog.query.filter_by(slug=blog_slug).first()
    
     if not blog:
         return render_404(request)
    
-    blog_posts_list = blog.get_all_posts_of_a_blog(None)
-    blog_post_count = blog_posts_list.count()
+    blog_posts_list = blog.get_all_posts_of_a_blog().order_by(MediaEntry.created.desc())
+    pagination = Pagination(page, blog_posts_list)
+    pagination.per_page = 15
+    blog_posts_on_a_page = pagination()
 
     if may_edit_blogpost(request, blog):
         return render_to_response(
         request,
         'mediagoblin/blog/blog_admin_dashboard.html',
-        {'blog_posts_list': blog_posts_list,
+        {'blog_posts_list': blog_posts_on_a_page,
         'blog_slug':blog_slug,
         'blog':blog,
-        'blog_post_count':blog_post_count
+        'pagination':pagination 
         })                                                                                                   
     
 
 #supposed to list all the blog posts belonging to a particular blog of particular user.
-def blog_post_listing(request):
+@uses_pagination
+def blog_post_listing(request, page):
     
     blog_owner = request.matchdict.get('user')
     blog_slug = request.matchdict.get('blog_slug', None)
@@ -242,12 +245,16 @@ def blog_post_listing(request):
     if not owner_user or not blog:
         return render_404(request)
     
-    all_blog_posts = blog.get_all_posts_of_a_blog(u'processed')
+    all_blog_posts = blog.get_all_posts_of_a_blog(u'processed').order_by(MediaEntry.created.desc())
+    pagination = Pagination(page, all_blog_posts)
+    pagination.per_page = 8
+    blog_posts_on_a_page = pagination()
     
     return render_to_response(
         request,
         'mediagoblin/blog/blog_post_listing.html',
-        {'blog_posts': all_blog_posts,
+        {'blog_posts': blog_posts_on_a_page,
+         'pagination': pagination,
          'blog_owner': blog_owner
         })
     

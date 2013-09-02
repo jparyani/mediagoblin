@@ -17,6 +17,7 @@
 #}
 
 {% extends "mediagoblin/base.html" %}
+{% from "mediagoblin/utils/pagination.html" import render_pagination %}
 
 {% block title -%}
 {{blog.title}} Dashboard &mdash; {{ super() }}
@@ -50,7 +51,7 @@
 </a>
 </p>
 <h2> Blog Post Entries </h2>
-    {% if blog_post_count!=0 %}
+    {% if blog_posts_list.count() %}
      <table class="media_panel processing">
         <tr>
             <th>Title</th>
@@ -90,6 +91,7 @@
     {% else %}
         {% trans %} No blog post yet. {% endtrans %}
     {% endif %}
+    {{ render_pagination(request, pagination) }}
 {% endblock %}
      
 
