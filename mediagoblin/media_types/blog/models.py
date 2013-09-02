@@ -43,7 +43,7 @@ class Blog(Base, BlogMixin):
     created = Column(DateTime, nullable=False, default=datetime.datetime.now, index=True)
     slug = Column(Unicode)
     
-    def get_all_posts_of_a_blog(self, state=None):
+    def get_all_blog_posts(self, state=None):
 		blog_posts = Session.query(MediaEntry).join(BlogPostData)\
 		.filter(BlogPostData.blog == self.id)
 		if state is not None:

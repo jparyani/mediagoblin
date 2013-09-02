@@ -217,7 +217,7 @@ def blog_dashboard(request, page):
     if not blog:
         return render_404(request)
    
-    blog_posts_list = blog.get_all_posts_of_a_blog().order_by(MediaEntry.created.desc())
+    blog_posts_list = blog.get_all_blog_posts().order_by(MediaEntry.created.desc())
     pagination = Pagination(page, blog_posts_list)
     pagination.per_page = 15
     blog_posts_on_a_page = pagination()
@@ -245,7 +245,7 @@ def blog_post_listing(request, page):
     if not owner_user or not blog:
         return render_404(request)
     
-    all_blog_posts = blog.get_all_posts_of_a_blog(u'processed').order_by(MediaEntry.created.desc())
+    all_blog_posts = blog.get_all_blog_posts(u'processed').order_by(MediaEntry.created.desc())
     pagination = Pagination(page, all_blog_posts)
     pagination.per_page = 8
     blog_posts_on_a_page = pagination()
