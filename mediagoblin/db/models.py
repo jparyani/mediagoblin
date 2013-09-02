@@ -141,7 +141,7 @@ class User(Base, UserMixin):
         user = {
             "id": "acct:{0}@{1}".format(self.username, request.host),
             "preferredUsername": self.username,
-            "displayName": "{0}@{1}".format(self.username, request.url),
+            "displayName": "{0}@{1}".format(self.username, request.host),
             "objectType": "person",
             "url": self.url,
             "summary": self.bio,
