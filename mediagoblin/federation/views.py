@@ -39,8 +39,8 @@ def inbox(request):
     """ Handles the user's inbox - /api/user/<username>/inbox """
     raise NotImplemented("Yet to implement looking up user's inbox")
 
-@oauth_required
-def object(request):
+#@oauth_required
+def object(request, raw_obj=False):
     """ Lookup for a object type """
     objectType = request.matchdict["objectType"]
     uuid = request.matchdict["uuid"]
@@ -55,4 +55,26 @@ def object(request):
         error = "Can't find a {0} with ID = {1}".format(objectType, uuid)
         return json_response({"error": error}, status=404)
 
+    if raw_obj:
+        return media
+
     return json_response(media.serialize(request))
+
+def object_comments(request):
+    """ Looks up for the comments on a object """
+    media = object(request, raw_obj=True)
+    response = media
+    if isinstance(response, MediaEntry):
+        comments = response.serialize(request)
+        comments = comments.get("replies", {
+                "totalItems": 0,
+                "items": [],
+                "url": request.urlgen(
+                    "mediagoblin.federation.object.comments",
+                    objectType=media.objectType,
+                    uuid=media.slug,
+                    qualified=True)
+                })
+        response = json_response(comments)
+
+    return response

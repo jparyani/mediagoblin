@@ -455,7 +455,9 @@ class MediaEntry(Base, MediaEntryMixin):
             },
             "fullImage":{
                 "url": request.host_url + self.original_url[1:],
-            }
+            },
+            "published": self.created.isoformat(),
+            "updated": self.created.isoformat(),
         }
 
         if show_comments:
@@ -465,7 +467,13 @@ class MediaEntry(Base, MediaEntryMixin):
                 # we only want to include replies if there are any.
                 context["replies"] = {
                     "totalItems": total,
-                    "items": comments
+                    "items": comments,
+                    "url": request.urlgen(
+                            "mediagoblin.federation.object.comments",
+                            objectType=self.objectType,
+                            uuid=self.slug,
+                            qualified=True
+                            ),
                 }
 
         return context 

@@ -48,3 +48,8 @@ add_route(
     "/api/<string:objectType>/<string:uuid>",
     "mediagoblin.federation.views:object"
     )
+add_route(
+    "mediagoblin.federation.object.comments",
+    "/api/<string:objectType>/<string:uuid>/comments",
+    "mediagoblin.federation.views:object_comments"
+    )
