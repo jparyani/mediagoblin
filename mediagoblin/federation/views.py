@@ -49,7 +49,7 @@ def object(request):
         # not sure why this is 404, maybe ask evan. Maybe 400? 
         return json_response({"error": error}, status=404)
 
-    media = MediaEntry.query.filter_by(uuid=uuid).first()
+    media = MediaEntry.query.filter_by(slug=uuid).first()
     if media is None:
         # no media found with that uuid
         error = "Can't find a {0} with ID = {1}".format(objectType, uuid)
