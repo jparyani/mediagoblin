@@ -120,7 +120,7 @@ def host_meta(request):
         "href": request.urlgen("mediagoblin.oauth.access_token", qualified=True),
         })
 
-    return json_response(links)
+    return json_response({"links": links})
 
 def whoami(request):
     """ This is /api/whoami - This is a HTTP redirect to api profile """

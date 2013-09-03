@@ -61,6 +61,12 @@ add_route(
     )
 
 add_route(
+    "mediagoblin.webfinger.well-known.host-meta.json",
+    "/.well-known/host-meta.json",
+    "mediagoblin.federation.views:host_meta"
+    )
+
+add_route(
     "mediagoblin.webfinger.whoami",
     "/api/whoami",
     "mediagoblin.federation.views:whoami"
