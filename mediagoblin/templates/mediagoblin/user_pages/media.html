@@ -86,7 +86,7 @@
     {% autoescape False %}
       <p>{{ media.description_html }}</p>
     {% endautoescape %}
-    {% if comments and request.user.has_privilege('commenter') %}
+    {% if comments and request.user and request.user.has_privilege('commenter') %}
       {% if app_config['allow_comments'] %}
         <a
           {% if not request.user %}
@@ -167,7 +167,7 @@
   <div class="media_sidebar">
     <h3>{% trans %}Added{% endtrans %}</h3>
     <p><span title="{{ media.created.strftime("%I:%M%p %Y-%m-%d") }}">
-        {%- trans formatted_time=timesince(media.created) -%}    
+        {%- trans formatted_time=timesince(media.created) -%}
           {{ formatted_time }} ago
         {%- endtrans -%}
     </span></p>

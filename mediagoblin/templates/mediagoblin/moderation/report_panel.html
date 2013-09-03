@@ -32,7 +32,37 @@
 </p>
 
 <h2>{% trans %}Active Reports Filed{% endtrans %}</h2>
-
+  {% if not active_settings.last_page == 1 %}
+  {% if 'active_p='~active_settings.start_page in request.query_string %}
+    {% set query_string = request.query_string %}{% else %}
+    {% set query_string =
+'active_p='~active_settings.start_page~"&"+request.query_string %}
+  {% endif %}
+  <div class="right_align">
+    {% set first_vis = active_settings.start_page-3  %}
+    {% set last_vis = active_settings.start_page+3 %}
+    {% set curr_page = active_settings.start_page %}
+    {% if 1 == curr_page %}<b>1</b>{% else %}
+    <a href ="?{{ query_string.replace(
+                    'active_p='~active_settings.start_page,
+                    'active_p='~1) }}">
+        {{ 1 }}</a>{% endif %}
+    {% if first_vis > 1 %}...{% endif %}
+    {% for p in range(first_vis,last_vis+1) %}
+      {% if p > 1 and p < active_settings.last_page %}
+        <a href="?{{ query_string.replace(
+                    'active_p='~active_settings.start_page,
+                    'active_p='~p) }}">
+          {{ p }}</a>
+      {% endif  %}
+    {% endfor %}
+    {% if last_vis < active_settings.last_page %}...{% endif %}
+    <a href ="?{{ query_string.replace(
+                    'active_p='~active_settings.start_page,
+                    'active_p='~active_settings.last_page) }}">
+      {{ active_settings.last_page }}</a>
+  </div>
+  {% endif %}
 {% if report_list.count() %}
   <table class="admin_panel processing">
     <tr>
@@ -84,6 +114,35 @@
   <p><em>{% trans %}No open reports found.{% endtrans %}</em></p>
 {% endif %}
 <h2>{% trans %}Closed Reports{% endtrans %}</h2>
+  {% if not closed_settings.last_page == 1 %}
+  {% if 'closed_p='~closed_settings.start_page in request.query_string %}
+    {% set query_string = request.query_string %}{% else %}
+    {% set query_string =
+'closed_p='~closed_settings.start_page~"&"+request.query_string %}
+  {% endif %}
+  <div class="right_align">
+    {% set first_vis = closed_settings.start_page-3  %}
+    {% set last_vis = closed_settings.start_page+3 %}
+    <a href ="?{{ query_string.replace(
+                    'closed_p='~closed_settings.start_page,
+                    'closed_p='~1) }}">
+        {{ 1 }}</a>
+    {% if first_vis > 1 %}...{% endif %}
+    {% for p in range(first_vis,last_vis+1) %}
+      {% if p > 1 and p < closed_settings.last_page %}
+        <a href="?{{ query_string.replace(
+                    'closed_p='~closed_settings.start_page,
+                    'closed_p='~p) }}">
+          {{ p }}</a>
+      {% endif  %}
+    {% endfor %}
+    {% if last_vis < closed_settings.last_page %}...{% endif %}
+    <a href ="?{{ query_string.replace(
+                    'closed_p='~closed_settings.start_page,
+                    'closed_p='~closed_settings.last_page) }}">
+      {{ closed_settings.last_page }}</a>
+  </div>
+  {% endif %}
 {% if closed_report_list.count() %}
   <table class="media_panel processing">
     <tr>

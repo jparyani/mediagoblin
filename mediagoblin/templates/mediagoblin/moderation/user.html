@@ -28,6 +28,9 @@
   {%- endif -%}
 {% endblock %}
 
+{%- block mediagoblin_head %}
+ <script src="{{ request.staticdirect('/js/setup_report_forms.js') }}"></script>
+{% endblock %}
 
 {% block mediagoblin_content -%}
   {# If no user... #}
@@ -127,7 +130,8 @@
     {% else %}
       {%- trans %}No active reports filed on {% endtrans -%} {{ user.username }}
     {% endif %}
-    <a class="right_align">{{ user.username }}'s report history</a>
+    <a  href="{{ request.urlgen('mediagoblin.moderation.reports') }}?active_reported_user={{user.id}}&closed_reported_user={{user.id}}"
+        class="right_align">{{ user.username }}'s report history</a>
     <span class=clear></span>
     <h2>{{ user.username }}'s Privileges</h2>
       <form method=POST action="{{ request.urlgen(
@@ -188,16 +192,8 @@ $(document).ready(function(){
     $('.submit_button').click(function(){
         $('#hidden_privilege_name').val($(this).attr('id'));
     });
-    $('#user_banned_until').val("YYYY-MM-DD")
-    $("#user_banned_until").focus(function() {
-        $(this).val("");
-        $(this).unbind('focus');
-    });
-    $("#ban_user_submit").click(function(){
-        if ($("#user_banned_until").val() == 'YYYY-MM-DD'){
-            $("#user_banned_until").val("");
-        }
-    });
+    init_user_banned_form();
+    $('.ban_user_submit').click(function(){submit_user_banned_form()});
 });
     </script>
 {% endblock %}

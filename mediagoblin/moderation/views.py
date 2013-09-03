@@ -26,6 +26,7 @@ from mediagoblin.moderation import forms as moderation_forms
 from mediagoblin.moderation.tools import (take_punitive_actions, \
     take_away_privileges, give_privileges, ban_user, unban_user)
 from datetime import datetime
+from math import ceil
 
 @require_admin_or_moderator_login
 def moderation_media_processing_panel(request):
@@ -91,19 +92,47 @@ def moderation_reports_panel(request):
     Show the global panel for monitoring reports filed against comments or
         media entries for this instance.
     '''
-    report_list = ReportBase.query.filter(
-        ReportBase.discriminator!="archived_report").order_by(
-        ReportBase.created.desc()).limit(10)
-    closed_report_list = ReportBase.query.filter(
-        ReportBase.discriminator=="archived_report").order_by(
-        ReportBase.created.desc()).limit(10)
 
+    form = moderation_forms.ReportPanelSortingForm(request.args)
+    active_settings = {'start_page':1, 'filters':{}}
+    closed_settings = {'start_page':1, 'filters':{}}
+    if form.validate():
+        active_settings['start_page'] = form.active_p.data or 1
+        active_settings['filters']['reported_user_id'] = form.active_reported_user.data
+        active_settings['filters']['reporter_id'] = form.active_reporter.data
+        closed_settings['start_page'] = form.closed_p.data or 1
+        closed_settings['filters']['reported_user_id'] = form.closed_reported_user.data
+        closed_settings['filters']['reporter_id'] = form.closed_reporter.data
+
+    active_settings['filters']=dict((k, v) for k, v in active_settings['filters'].iteritems() if v)
+    closed_settings['filters']=dict((k, v) for k, v in closed_settings['filters'].iteritems() if v)
+    active_filter = [
+        getattr(ReportBase,key)==val \
+for key,val in active_settings['filters'].viewitems()]
+    closed_filter = [
+        getattr(ReportBase,key)==val \
+for key,val in active_settings['filters'].viewitems()]
+
+    all_active = ReportBase.query.filter(
+        ReportBase.discriminator!="archived_report").filter(
+        *active_filter)
+    all_closed = ReportBase.query.filter(
+        ReportBase.discriminator=="archived_report").filter(
+        *closed_filter)
+    report_list = all_active.order_by(
+        ReportBase.created.desc()).offset((active_settings['start_page']-1)*10).limit(10)
+    closed_report_list = all_closed.order_by(
+        ReportBase.created.desc()).offset((closed_settings['start_page']-1)*10).limit(10)
+    active_settings['last_page'] = int(ceil(all_active.count()/10.))
+    closed_settings['last_page'] = int(ceil(all_closed.count()/10.))
     # Render to response
     return render_to_response(
         request,
         'mediagoblin/moderation/report_panel.html',
         {'report_list':report_list,
-         'closed_report_list':closed_report_list})
+         'closed_report_list':closed_report_list,
+         'active_settings':active_settings,
+         'closed_settings':closed_settings})
 
 @require_admin_or_moderator_login
 def moderation_reports_detail(request):

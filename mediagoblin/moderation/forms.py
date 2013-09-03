@@ -67,3 +67,23 @@ class ReportResolutionForm(wtforms.Form):
         validators=[wtforms.validators.optional()])
     resolution_content = wtforms.TextAreaField()
 
+class ReportPanelSortingForm(wtforms.Form):
+    active_p = wtforms.IntegerField(
+        _(u'Page'),
+        validators=[wtforms.validators.optional()])
+    active_reported_user = wtforms.IntegerField(
+        _(u'Reported User'),
+        validators=[wtforms.validators.optional()])
+    active_reporter = wtforms.IntegerField(
+        _(u'Reporter'),
+        validators=[wtforms.validators.optional()])
+    closed_p = wtforms.IntegerField(
+        _(u'Page'),
+        validators=[wtforms.validators.optional()])
+    closed_reported_user = wtforms.IntegerField(
+        _(u'Reported User'),
+        validators=[wtforms.validators.optional()])
+    closed_reporter = wtforms.IntegerField(
+        _(u'Reporter'),
+        validators=[wtforms.validators.optional()])
+

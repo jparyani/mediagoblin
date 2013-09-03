@@ -163,7 +163,7 @@ def give_privileges(user,*privileges):
 def ban_user(user_id, expiration_date=None, reason=None):
     """
     This function is used to ban a user. If the user is already banned, the
-    function returns False. If the user is not already banned, this function 
+    function returns False. If the user is not already banned, this function
     bans the user using the arguments to build a new UserBan object.
 
     :returns    False if the user is already banned and the ban is not updated
@@ -177,7 +177,7 @@ def ban_user(user_id, expiration_date=None, reason=None):
         user_id=user_id,
         expiration_date=expiration_date,
         reason=reason)
-    return new_user_ban    
+    return new_user_ban
 
 def unban_user(user_id):
     """

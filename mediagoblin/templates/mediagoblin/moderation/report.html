@@ -17,6 +17,9 @@
 #}
 {%- extends "mediagoblin/base.html" %}
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+{%- block mediagoblin_head %}
+ <script src="{{ request.staticdirect('/js/setup_report_forms.js') }}"></script>
+{% endblock %}
 
 {%- block mediagoblin_content %}
 {% if not report %}
@@ -79,7 +82,7 @@
     {% trans user_name=report.reported_user.username,
              user_url=request.urlgen(
                         'mediagoblin.moderation.users_detail',
-                        user=report.reporter.username) %}
+                        user=report.reported_user.username) %}
         ❖ Reported media by <a href="{{ user_url }}">{{ user_name }}</a>
     {% endtrans %}
     </p>
@@ -129,50 +132,9 @@
       {{ csrf_token }}
       <input type=submit id="submit_this_report" value="Resolve This Report"/>
     </form>
-
-
   <script>
-$(document).ready(function() {
-    hidden_input_names = {
-        'takeaway':['take_away_privileges'],
-        'userban':['user_banned_until','why_user_was_banned'],
-        'sendmessage':['message_to_user']
-}
-
-    $('form#resolution_form').hide()
-    $('#user_banned_until').val("YYYY-MM-DD")
-    $('#open_resolution_form').click(function() {
-        $('form#resolution_form').toggle();
-        $.each(hidden_input_names, function(key, list){
-            $.each(list, function(index, name){
-                $('label[for='+name+']').hide();
-                $('#'+name).hide();
-            });
-        });
-    });
-    $('#action_to_resolve').change(function() {
-        $('ul#action_to_resolve li input:checked').each(function() {
-            $.each(hidden_input_names[$(this).val()], function(index, name){
-                $('label[for='+name+']').show();
-                $('#'+name).show();
-            });
-        });
-        $('ul#action_to_resolve li input:not(:checked)').each(function() {
-            $.each(hidden_input_names[$(this).val()], function(index, name){
-                $('label[for='+name+']').hide();
-                $('#'+name).hide();
-            });
-        });
-    });
-    $("#user_banned_until").focus(function() {
-        $(this).val("");
-        $(this).unbind('focus');
-    });
-    $("#submit_this_report").click(function(){
-        if ($("#user_banned_until").val() == 'YYYY-MM-DD'){
-            $("#user_banned_until").val("");
-        }
-    });
+  $(document).ready(function() {
+    init_report_resolution_form();
   });
   </script>
   {% elif not (report.reported_user.has_privilege('admin')) %}

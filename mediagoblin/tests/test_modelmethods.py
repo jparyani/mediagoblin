@@ -47,7 +47,7 @@ class TestMediaEntrySlugs(object):
         entry.id = this_id
         entry.uploader = uploader or self.chris_user.id
         entry.media_type = u'image'
-        
+
         if save:
             entry.save()
 
@@ -99,7 +99,7 @@ class TestMediaEntrySlugs(object):
                 u"Beware, I exist!!", this_id=9000, save=False)
             entry.generate_slug()
             assert entry.slug == u"beware-i-exist-test"
-            
+
         _real_test()
 
     def test_existing_slug_cant_use_id_extra_junk(self, test_app):
