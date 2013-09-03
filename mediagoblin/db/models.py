@@ -148,7 +148,7 @@ class User(Base, UserMixin):
             "links": {
                 "self": {
                     "href": request.urlgen(
-                            "mediagoblin.federation.profile",
+                            "mediagoblin.federation.user.profile",
                              username=self.username,
                              qualified=True
                              ),

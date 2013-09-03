@@ -24,9 +24,9 @@ add_route(
     )
 
 add_route(
-    "mediagoblin.federation.profile",
+    "mediagoblin.federation.user.profile",
     "/api/user/<string:username>/profile",
-    "mediagoblin.federation.views:user"
+    "mediagoblin.federation.views:profile"
     )
 
 # Inbox and Outbox (feed)
@@ -52,4 +52,16 @@ add_route(
     "mediagoblin.federation.object.comments",
     "/api/<string:objectType>/<string:uuid>/comments",
     "mediagoblin.federation.views:object_comments"
+    )
+
+add_route(
+    "mediagoblin.webfinger.well-known.host-meta",
+    "/.well-known/host-meta",
+    "mediagoblin.federation.views:host_meta"
+    )
+
+add_route(
+    "mediagoblin.webfinger.whoami",
+    "/api/whoami",
+    "mediagoblin.federation.views:whoami"
     )

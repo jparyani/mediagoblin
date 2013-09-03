@@ -1,10 +1,10 @@
 from mediagoblin.decorators import oauth_required
 from mediagoblin.db.models import User, MediaEntry
-from mediagoblin.tools.response import json_response
+from mediagoblin.tools.response import redirect, json_response
 
-@oauth_required
-def user(request):
-    """ Handles user response at /api/user/<username>/ """
+#@oauth_required
+def profile(request, raw=False):
+    """ This is /api/user/<username>/profile - This will give profile info """
     user = request.matchdict["username"]
     requested_user = User.query.filter_by(username=user)
     
@@ -15,8 +15,23 @@ def user(request):
 
     user = requested_user[0]
 
+    if raw:
+        return (user, user.serialize(request))
+
     # user profiles are public so return information
     return json_response(user.serialize(request))
+
+def user(request):
+    """ This is /api/user/<username> - This will get the user """
+    user, user_profile = profile(request, raw=True)
+    data = {
+        "nickname": user.username,
+        "updated": user.created.isoformat(),
+        "published": user.created.isoformat(),
+        "profile": user_profile
+        }
+
+    return json_response(data)
 
 @oauth_required
 def feed(request):
@@ -78,3 +93,41 @@ def object_comments(request):
         response = json_response(comments)
 
     return response
+
+
+##
+# Well known
+##
+def host_meta(request):
+    """ This is /.well-known/host-meta - provides URL's to resources on server """
+    links = []
+    
+    # Client registration links
+    links.append({
+        "ref": "registration_endpoint",
+        "href": request.urlgen("mediagoblin.oauth.client_register", qualified=True),
+        })
+    links.append({
+        "ref": "http://apinamespace.org/oauth/request_token",
+        "href": request.urlgen("mediagoblin.oauth.request_token", qualified=True),
+        })
+    links.append({
+        "ref": "http://apinamespace.org/oauth/authorize",
+        "href": request.urlgen("mediagoblin.oauth.authorize", qualified=True),
+        })
+    links.append({
+        "ref": "http://apinamespace.org/oauth/access_token",
+        "href": request.urlgen("mediagoblin.oauth.access_token", qualified=True),
+        })
+
+    return json_response(links)
+
+def whoami(request):
+    """ This is /api/whoami - This is a HTTP redirect to api profile """
+    profile = request.urlgen(
+        "mediagoblin.federation.user.profile",
+        username=request.user.username,
+        qualified=True
+        )
+
+    return redirect(request, location=profile)
