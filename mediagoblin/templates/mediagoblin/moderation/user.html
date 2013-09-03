@@ -193,7 +193,9 @@ $(document).ready(function(){
         $('#hidden_privilege_name').val($(this).attr('id'));
     });
     init_user_banned_form();
-    $('.ban_user_submit').click(function(){submit_user_banned_form()});
+    $('#ban_user_submit').click(function(){
+        submit_user_banned_form()
+    });
 });
     </script>
 {% endblock %}

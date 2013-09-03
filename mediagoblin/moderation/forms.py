@@ -35,10 +35,19 @@ class MultiCheckboxField(wtforms.SelectMultipleField):
     option_widget = wtforms.widgets.CheckboxInput()
 
 
+# ============ Forms for mediagoblin.moderation.user page ==================  #
+
 class PrivilegeAddRemoveForm(wtforms.Form):
+    """
+    This form is used by an admin to give/take away a privilege directly from
+        their user page.
+    """
     privilege_name = wtforms.HiddenField('',[wtforms.validators.required()])
 
 class BanForm(wtforms.Form):
+    """
+    This form is used by an admin to ban a user directly from their user page.
+    """
     user_banned_until = wtforms.DateField(
         _(u'User will be banned until:'),
         format='%Y-%m-%d',
@@ -47,7 +56,54 @@ class BanForm(wtforms.Form):
         _(u'Why are you banning this User?'),
         validators=[wtforms.validators.optional()])
 
+# =========== Forms for mediagoblin.moderation.report page =================  #
+
 class ReportResolutionForm(wtforms.Form):
+    """
+    This form carries all the information necessary to take punitive actions
+        against a user who created content that has been reported.
+
+        :param  action_to_resolve       A list of Unicode objects representing
+                                        a choice from the ACTION_CHOICES const-
+                                        -ant. Every choice passed affects what
+                                        punitive actions will be taken against
+                                        the user.
+
+        :param targeted_user            A HiddenField object that holds the id
+                                        of the user that was reported.
+
+        :param take_away_privileges     A list of Unicode objects which repres-
+                                        -ent the privileges that are being tak-
+                                        -en away. This field is optional and
+                                        only relevant if u'takeaway' is in the
+                                        `action_to_resolve` list.
+
+        :param user_banned_until        A DateField object that holds the date
+                                        that the user will be unbanned. This
+                                        field is optional and only relevant if
+                                        u'userban' is in the action_to_resolve
+                                        list. If the user is being banned and
+                                        this field is blank, the user is banned
+                                        indefinitely.
+
+         :param why_user_was_banned     A TextArea object that holds the
+                                        reason that a user was banned, to disp-
+                                        -lay to them when they try to log in.
+                                        This field is optional and only relevant
+                                        if u'userban' is in the
+                                        `action_to_resolve` list.
+
+        :param message_to_user          A TextArea object that holds a message
+                                        which will be emailed to the user. This
+                                        is only relevant if the u'sendmessage'
+                                        option is in the `action_to_resolve`
+                                        list.
+
+        :param resolution_content       A TextArea object that is required for
+                                        every report filed. It represents the
+                                        reasons that the moderator/admin resol-
+                                        -ved the report in such a way.
+    """
     action_to_resolve = MultiCheckboxField(
         _(u'What action will you take to resolve the report?'),
         validators=[wtforms.validators.optional()],
@@ -67,7 +123,18 @@ class ReportResolutionForm(wtforms.Form):
         validators=[wtforms.validators.optional()])
     resolution_content = wtforms.TextAreaField()
 
+# ======== Forms for mediagoblin.moderation.report_panel page ==============  #
+
 class ReportPanelSortingForm(wtforms.Form):
+    """
+    This form is used for sorting and filtering through different reports in
+    the mediagoblin.moderation.reports_panel view.
+
+    Parameters that start with 'active_' refer to a sort/filter for the active
+        reports.
+    Parameters that start with 'closed_' refer to a sort/filter for the closed
+        reports.
+    """
     active_p = wtforms.IntegerField(
         _(u'Page'),
         validators=[wtforms.validators.optional()])

@@ -50,7 +50,7 @@ add_route('mediagoblin.user_pages.media_home.view_comment',
 
 add_route('mediagoblin.user_pages.media_home.report_comment',
           '/u/<string:user>/m/<string:media>/c/<int:comment>/report/',
-          'mediagoblin.user_pages.views:file_a_comment_report')
+          'mediagoblin.user_pages.views:file_a_report')
 
 # User's tags gallery
 add_route('mediagoblin.user_pages.user_tag_gallery',

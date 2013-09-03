@@ -31,11 +31,29 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.oauth.tools.request import decode_authorization_header
 from mediagoblin.oauth.oauth import GMGRequestValidator
 
-def require_active_login(controller):
+
+def user_not_banned(controller):
     """
-    Require an active login from the user.
+    Requires that the user has not been banned. Otherwise redirects to the page
+    explaining why they have been banned
     """
     @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        if request.user:
+            if request.user.is_banned():
+                return render_user_banned(request)
+        return controller(request, *args, **kwargs)
+
+    return wrapper
+
+
+def require_active_login(controller):
+    """
+    Require an active login from the user. If the user is banned, redirects to
+    the "You are Banned" page.
+    """
+    @wraps(controller)
+    @user_not_banned
     def new_controller_func(request, *args, **kwargs):
         if request.user and \
                 not request.user.has_privilege(u'active'):
@@ -55,6 +73,34 @@ def require_active_login(controller):
 
     return new_controller_func
 
+
+def user_has_privilege(privilege_name):
+    """
+    Requires that a user have a particular privilege in order to access a page.
+    In order to require that a user have multiple privileges, use this
+    decorator twice on the same view. This decorator also makes sure that the
+    user is not banned, or else it redirects them to the "You are Banned" page.
+
+        :param privilege_name       A unicode object that is that represents
+                                        the privilege object. This object is
+                                        the name of the privilege, as assigned
+                                        in the Privilege.privilege_name column
+    """
+
+    def user_has_privilege_decorator(controller):
+        @wraps(controller)
+        @require_active_login
+        def wrapper(request, *args, **kwargs):
+            user_id = request.user.id
+            if not request.user.has_privilege(privilege_name):
+                raise Forbidden()
+
+            return controller(request, *args, **kwargs)
+
+        return wrapper
+    return user_has_privilege_decorator
+
+
 def active_user_from_url(controller):
     """Retrieve User() from <user> URL pattern and pass in as url_user=...
 
@@ -68,22 +114,6 @@ def active_user_from_url(controller):
         return controller(request, *args, url_user=user, **kwargs)
 
     return wrapper
-
-def user_has_privilege(privilege_name):
-
-    def user_has_privilege_decorator(controller):
-        @wraps(controller)
-        def wrapper(request, *args, **kwargs):
-            user_id = request.user.id
-            if UserBan.query.filter(UserBan.user_id==user_id).count():
-                return render_user_banned(request)
-            elif not request.user.has_privilege(privilege_name):
-                raise Forbidden()
-
-            return controller(request, *args, **kwargs)
-
-        return wrapper
-    return user_has_privilege_decorator
 
 
 def user_may_delete_media(controller):
@@ -274,20 +304,31 @@ def allow_registration(controller):
 
     return wrapper
 
-def get_media_comment_by_id(controller):
+def get_optional_media_comment_by_id(controller):
     """
-    Pass in a MediaComment based off of a url component
+    Pass in a MediaComment based off of a url component. Because of this decor-
+    -ator's use in filing Media or Comment Reports, it has two valid outcomes.
+
+    :returns        The view function being wrapped with kwarg `comment` set to
+                        the MediaComment who's id is in the URL. If there is a
+                        comment id in the URL and if it is valid.
+    :returns        The view function being wrapped with kwarg `comment` set to
+                        None. If there is no comment id in the URL.
+    :returns        A 404 Error page, if there is a comment if in the URL and it
+                        is invalid.
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        comment = MediaComment.query.filter_by(
-                id=request.matchdict['comment']).first()
-        # Still no media?  Okay, 404.
-        if not comment:
-            return render_404(request)
+        if 'comment' in request.matchdict:
+            comment = MediaComment.query.filter_by(
+                    id=request.matchdict['comment']).first()
 
-        return controller(request, comment=comment, *args, **kwargs)
+            if comment is None:
+                return render_404(request)
 
+            return controller(request, comment=comment, *args, **kwargs)
+        else:
+            return controller(request, comment=None, *args, **kwargs)
     return wrapper
 
 
@@ -308,7 +349,7 @@ def auth_enabled(controller):
 
 def require_admin_or_moderator_login(controller):
     """
-    Require an login from an administrator or a moderator.
+    Require a login from an administrator or a moderator.
     """
     @wraps(controller)
     def new_controller_func(request, *args, **kwargs):
@@ -328,22 +369,6 @@ def require_admin_or_moderator_login(controller):
         return controller(request, *args, **kwargs)
 
     return new_controller_func
-
-
-def user_not_banned(controller):
-    """
-    Requires that the user has not been banned. Otherwise redirects to the page
-    explaining why they have been banned
-    """
-    @wraps(controller)
-    def wrapper(request, *args, **kwargs):
-        if request.user:
-            user_banned = UserBan.query.get(request.user.id)
-            if user_banned:
-                return render_user_banned(request)
-        return controller(request, *args, **kwargs)
-
-    return wrapper
 
 
 

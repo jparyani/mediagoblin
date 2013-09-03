@@ -46,7 +46,7 @@ class TestSubmission:
 
         # TODO: Possibly abstract into a decorator like:
         # @as_authenticated_user('chris')
-        fixture_add_user(privileges=[u'active',u'uploader'])
+        fixture_add_user(privileges=[u'active',u'uploader', u'commenter'])
 
         self.login()
 

@@ -169,7 +169,8 @@ def moderation_reports_detail(request):
 @active_user_from_url
 def give_or_take_away_privilege(request, url_user):
     '''
-    A form action to give or take away a particular privilege from a user
+    A form action to give or take away a particular privilege from a user.
+    Can only be used by an admin.
     '''
     form = moderation_forms.PrivilegeAddRemoveForm(request.form)
     if request.method == "POST" and form.validate():
@@ -193,10 +194,10 @@ def ban_or_unban(request, url_user):
     A page to ban or unban a user. Only can be used by an admin.
     """
     form = moderation_forms.BanForm(request.form)
-    print "accessed page"
     if request.method == "POST" and form.validate():
         already_banned = unban_user(url_user.id)
-        if not already_banned:
+        same_as_requesting_user = (request.user.id == url_user.id)
+        if not already_banned and not same_as_requesting_user:
             user_ban = ban_user(url_user.id,
                 expiration_date = form.user_banned_until.data,
                 reason = form.why_user_was_banned.data)

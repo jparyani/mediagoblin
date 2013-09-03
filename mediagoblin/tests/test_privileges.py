@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import pytest
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 from webtest import AppError
 
 from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
@@ -88,7 +88,7 @@ class TestPrivilegeFunctionality:
         user_ban.delete()
         user_ban = UserBan(user_id=uid,
             reason=u'Testing whether user is banned',
-            expiration_date= datetime.now() + timedelta(days=20))
+            expiration_date= date.today() + timedelta(days=20))
         user_ban.save()
 
         response = self.test_app.get('/')
@@ -100,7 +100,7 @@ class TestPrivilegeFunctionality:
         #----------------------------------------------------------------------
         user_ban = UserBan.query.get(uid)
         user_ban.delete()
-        exp_date = datetime.now() - timedelta(days=20)
+        exp_date = date.today() - timedelta(days=20)
         user_ban = UserBan(user_id=uid,
             reason=u'Testing whether user is banned',
             expiration_date= exp_date)

@@ -34,10 +34,10 @@ from mediagoblin.notifications import trigger_notification, \
     add_comment_subscription, mark_comment_notification_seen
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
-    get_media_entry_by_id, user_has_privilege,
+    get_media_entry_by_id, user_has_privilege, user_not_banned,
     require_active_login, user_may_delete_media, user_may_alter_collection,
     get_user_collection, get_user_collection_item, active_user_from_url,
-    get_media_comment_by_id, user_not_banned)
+    get_optional_media_comment_by_id)
 
 from werkzeug.contrib.atom import AtomFeed
 from werkzeug.exceptions import MethodNotAllowed
@@ -161,7 +161,6 @@ def media_home(request, media, page, **kwargs):
 
 
 @get_media_entry_by_id
-@require_active_login
 @user_has_privilege(u'commenter')
 def media_post_comment(request, media):
     """
@@ -291,7 +290,6 @@ def media_collect(request, media):
 
 
 #TODO: Why does @user_may_delete_media not implicate @require_active_login?
-@user_not_banned
 @get_media_entry_by_id
 @require_active_login
 @user_may_delete_media
@@ -380,7 +378,6 @@ def collection_list(request, url_user=None):
 @get_user_collection_item
 @require_active_login
 @user_may_alter_collection
-@user_not_banned
 def collection_item_confirm_remove(request, collection_item):
 
     form = user_forms.ConfirmCollectionItemRemoveForm(request.form)
@@ -420,7 +417,7 @@ def collection_item_confirm_remove(request, collection_item):
         {'collection_item': collection_item,
          'form': form})
 
-@user_not_banned
+
 @get_user_collection
 @require_active_login
 @user_may_alter_collection
@@ -604,7 +601,6 @@ def collection_atom_feed(request):
 
     return feed.get_response()
 
-@user_not_banned
 @require_active_login
 def processing_panel(request):
     """
@@ -649,21 +645,27 @@ def processing_panel(request):
          'failed_entries': failed_entries,
          'processed_entries': processed_entries})
 
-@require_active_login
 @get_user_media_entry
 @user_has_privilege(u'reporter')
-def file_a_report(request, media, comment=None):
+@get_optional_media_comment_by_id
+def file_a_report(request, media, comment):
+    """
+    This view handles the filing of a MediaReport or a CommentReport.
+    """
     if comment is not None:
+        if not comment.get_media_entry.id == media.id:
+            return render_404(request)
+
         form = user_forms.CommentReportForm(request.form)
-        form.reporter_id.data = request.user.id
         context = {'media': media,
                    'comment':comment,
                    'form':form}
     else:
         form = user_forms.MediaReportForm(request.form)
-        form.reporter_id.data = request.user.id
         context = {'media': media,
                    'form':form}
+    form.reporter_id.data = request.user.id
+
 
     if request.method == "POST":
         report_object = build_report_object(form,
@@ -683,8 +685,3 @@ def file_a_report(request, media, comment=None):
         'mediagoblin/user_pages/report.html',
         context)
 
-@require_active_login
-@get_user_media_entry
-@get_media_comment_by_id
-def file_a_comment_report(request, media, comment):
-        return file_a_report(request, comment=comment)

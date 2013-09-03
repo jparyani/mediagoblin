@@ -131,6 +131,23 @@ def take_punitive_actions(request, form, report, user):
             report_id=report.id)
 
 def take_away_privileges(user,*privileges):
+    """
+    Take away all of the privileges passed as arguments.
+
+        :param user             A Unicode object representing the target user's
+                                User.username value.
+
+        :param privileges       A variable number of Unicode objects describing
+                                the privileges being taken away.
+
+
+        :returns True           If ALL of the privileges were taken away
+                                successfully.
+
+        :returns False          If ANY of the privileges were not taken away
+                                successfully. This means the user did not have
+                                (one of) the privilege(s) to begin with.
+    """
     if len(privileges) == 1:
         privilege = Privilege.query.filter(
             Privilege.privilege_name==privileges[0]).first()
@@ -146,6 +163,23 @@ def take_away_privileges(user,*privileges):
             take_away_privileges(user, *privileges[1:]))
 
 def give_privileges(user,*privileges):
+    """
+    Take away all of the privileges passed as arguments.
+
+        :param user             A Unicode object representing the target user's
+                                User.username value.
+
+        :param privileges       A variable number of Unicode objects describing
+                                the privileges being granted.
+
+
+        :returns True           If ALL of the privileges were granted successf-
+                                -ully.
+
+        :returns False          If ANY of the privileges were not granted succ-
+                                essfully. This means the user already had (one
+                                of) the privilege(s) to begin with.
+    """
     if len(privileges) == 1:
         privilege = Privilege.query.filter(
             Privilege.privilege_name==privileges[0]).first()

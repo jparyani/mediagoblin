@@ -22,7 +22,7 @@ from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import (lazy_pass_to_ugettext as _,
                                          pass_to_ugettext)
 from mediagoblin.db.models import UserBan, User
-from datetime import datetime
+from datetime import date
 
 class Response(wz_Response):
     """Set default response mimetype to HTML, otherwise we get text/plain"""
@@ -80,7 +80,7 @@ def render_user_banned(request):
     """
     user_ban = UserBan.query.get(request.user.id)
     if (user_ban.expiration_date is not None and
-            datetime.now()>user_ban.expiration_date):
+            date.today()>user_ban.expiration_date):
 
         user_ban.delete()
         return redirect(request,

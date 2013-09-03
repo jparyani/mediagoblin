@@ -105,6 +105,17 @@ class User(Base, UserMixin):
         _log.info('Deleted user "{0}" account'.format(self.username))
 
     def has_privilege(self,*priv_names):
+        """
+        This method checks to make sure a user has all the correct privileges
+        to access a piece of content.
+
+        :param  priv_names      A variable number of unicode objects which rep-
+                                -resent the different privileges which may give
+                                the user access to this content. If you pass
+                                multiple arguments, the user will be granted
+                                access if they have ANY of the privileges
+                                passed.
+        """
         if len(priv_names) == 1:
             priv = Privilege.query.filter(
                 Privilege.privilege_name==priv_names[0]).one()
@@ -113,6 +124,16 @@ class User(Base, UserMixin):
             return self.has_privilege(priv_names[0]) or \
                 self.has_privilege(*priv_names[1:])
         return False
+
+    def is_banned(self):
+        """
+        Checks if this user is banned.
+
+            :returns                True if self is banned
+            :returns                False if self is not
+        """
+        return UserBan.query.get(self.id) is not None
+
 
 class Client(Base):
     """
@@ -655,15 +676,21 @@ with_polymorphic(
 
 class ReportBase(Base):
     """
-    This is the basic report table which the other reports are based off of.
-        :keyword reporter_id
-        :keyword report_content
-        :keyword reported_user_id
-        :keyword created
-        :keyword resolved
-        :keyword result
-        :keyword discriminator
+    This is the basic report object which the other reports are based off of.
 
+        :keyword    reporter_id         Holds the id of the user who created
+                                            the report, as an Integer column.
+        :keyword    report_content      Hold the explanation left by the repor-
+                                            -ter to indicate why they filed the
+                                            report in the first place, as a
+                                            Unicode column.
+        :keyword    reported_user_id    Holds the id of the user who created
+                                            the content which was reported, as
+                                            an Integer column.
+        :keyword    created             Holds a datetime column of when the re-
+                                            -port was filed.
+        :keyword    discriminator       This column distinguishes between the
+                                            different types of reports.
     """
     __tablename__ = 'core__reports'
     id = Column(Integer, primary_key=True)
@@ -698,7 +725,9 @@ class ReportBase(Base):
 
 class CommentReport(ReportBase):
     """
-    A class to keep track of reports that have been filed on comments
+    Reports that have been filed on comments.
+        :keyword    comment_id          Holds the integer value of the reported
+                                            comment's ID
     """
     __tablename__ = 'core__reports_on_comments'
     __mapper_args__ = {'polymorphic_identity': 'comment_report'}
@@ -713,7 +742,9 @@ class CommentReport(ReportBase):
 
 class MediaReport(ReportBase):
     """
-    A class to keep track of reports that have been filed on media entries
+    Reports that have been filed on media entries
+        :keyword    media_entry_id      Holds the integer value of the reported
+                                            media entry's ID
     """
     __tablename__ = 'core__reports_on_media'
     __mapper_args__ = {'polymorphic_identity': 'media_report'}
@@ -729,7 +760,23 @@ class MediaReport(ReportBase):
 
 class ArchivedReport(ReportBase):
     """
-    A table to keep track of reports that have been resolved
+    Reports that have been resolved. The media_entry and comment columns must
+    be optional so that if the media entry/comment is deleted, the archive can
+    still exist.
+        :keyword    comment_id          Holds the Integer value of the reported
+                                            comment's ID. This column is optio-
+                                            -nal.
+        :keyword    media_entry_id      Holds the Integer value of the reported
+                                            media entry's ID. This column is
+                                            optional.
+        :keyword    resolver_id         Holds the id of the moderator/admin who
+                                            resolved the report.
+        :keyword    resolved            Holds the DateTime object which descri-
+                                            -bes when this report was resolved
+        :keyword    result              Holds the UnicodeText column of the
+                                            resolver's reasons for resolving
+                                            the report this way. Some of this
+                                            is auto-generated
     """
     __tablename__ = 'core__reports_archived'
     __mapper_args__ = {'polymorphic_identity': 'archived_report'}

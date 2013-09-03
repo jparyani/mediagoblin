@@ -83,12 +83,22 @@ def build_report_object(report_form, media_entry=None, comment=None):
     This function is used to convert a form object (from a User filing a
         report) into either a MediaReport or CommentReport object.
 
-    :param report_form should be a MediaReportForm or a CommentReportForm
-        object
-    :param
+    :param report_form          A MediaReportForm or a CommentReportForm object
+                                  with valid information from a POST request.
+    :param media_entry          A MediaEntry object. The MediaEntry being repo-
+                                  -rted by a MediaReport. In a CommentReport,
+                                  this will be None.
+    :param comment              A MediaComment object. The MediaComment being 
+                                  reported by a CommentReport. In a MediaReport
+                                  this will be None.
 
-    :returns either of MediaReport or a CommentReport object that has not been
-        saved. In case of an improper form_dict, returns None
+    :returns                A MediaReport object if a valid MediaReportForm is
+                              passed as kwarg media_entry. This MediaReport has
+                              not been saved.
+    :returns                A CommentReport object if a valid CommentReportForm
+                              is passed as kwarg comment. This CommentReport
+                              has not been saved.
+    :returns                None if the form_dict is invalid.
     """
 
     if report_form.validate() and comment is not None:
