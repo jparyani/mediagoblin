@@ -1,6 +1,9 @@
+import json
+
 from mediagoblin.decorators import oauth_required
-from mediagoblin.db.models import User, MediaEntry
+from mediagoblin.db.models import User, MediaEntry, MediaComment
 from mediagoblin.tools.response import redirect, json_response
+from mediagoblin.meddleware.csrf import csrf_exempt
 
 #@oauth_required
 def profile(request, raw=False):
@@ -34,8 +37,10 @@ def user(request):
     return json_response(data)
 
 @oauth_required
+@csrf_exempt
 def feed(request):
     """ Handles the user's outbox - /api/user/<username>/feed """
+    print request.user
     user = request.matchdict["username"]
     requested_user = User.query.filter_by(username=user)
 
@@ -44,10 +49,76 @@ def feed(request):
         error = "No such 'user' with id '{0}'".format(user)
         return json_response({"error": error}, status=404)
 
-    user = request_user[0]
+    user = requested_user[0]
+
+    if request.method == "POST":
+        data = json.loads(request.data)
+        obj = data.get("object", None)
+        if obj is None:
+            error = {"error": "Could not find 'object' element."}
+            return json_response(error, status=400)
+  
+        if obj.get("objectType", None) == "comment":
+            # post a comment
+            media = int(data["object"]["inReplyTo"]["id"])
+            author = request.user
+            comment = MediaComment(
+                media_entry=media,
+                author=request.user.id,
+                content=data["object"]["content"]
+                )
+            comment.save()
+        elif obj.get("objectType", None) is None:
+            error = {"error": "No objectType specified."}
+            return json_response(error, status=400)
+        else:
+            error = {"error": "Unknown object type '{0}'.".format(obj.get("objectType", None))}
+            return json_response(error, status=400)
+
+    feed_url = request.urlgen(
+            "mediagoblin.federation.feed",
+            username=user.username,
+            qualified=True
+            )
+
+    feed = {
+        "displayName": "Activities by {0}@{1}".format(user.username, request.host),
+        "objectTypes": ["activity"],
+        "url": feed_url,
+        "links": {
+            "first": {
+                "href": feed_url,
+            },
+            "self": {
+                "href": request.url,
+            },
+            "prev": {
+                "href": feed_url,
+            },
+            "next": {
+                "href": feed_url,
+            }
+        },
+        "author": user.serialize(request),
+        "items": [],
+    }
+    
 
     # Now lookup the user's feed.
-    raise NotImplemented("Yet to implement looking up user's feed")
+    for media in MediaEntry.query.all():
+        feed["items"].append({
+            "verb": "post",
+            "object": media.serialize(request),
+            "actor": user.serialize(request),
+            "content": "{0} posted a picture".format(user.username),
+            "id": 1,
+            })
+        feed["items"][-1]["updated"] = feed["items"][-1]["object"]["updated"]
+        feed["items"][-1]["published"] = feed["items"][-1]["object"]["published"]
+        feed["items"][-1]["url"] = feed["items"][-1]["object"]["url"]
+    feed["totalItems"] = len(feed["items"])
+
+    return json_response(feed)
 
 @oauth_required
 def inbox(request):
@@ -90,6 +161,11 @@ def object_comments(request):
                     uuid=media.slug,
                     qualified=True)
                 })
+        comments["displayName"] = "Replies to {0}".format(comments["url"])
+        comments["links"] = {
+            "first": comments["url"],
+            "self": comments["url"],
+        }
         response = json_response(comments)
 
     return response

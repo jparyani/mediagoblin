@@ -445,15 +445,8 @@ class MediaEntry(Base, MediaEntryMixin):
             qualified=True
             )
 
-        id = request.urlgen(
-            "mediagoblin.federation.object",
-            objectType=self.objectType,
-            uuid=self.slug,
-            qualified=True
-            )
-
         context = {
-            "id": id, 
+            "id": self.id, 
             "author": author.serialize(request),
             "displayName": self.title,
             "objectType": self.objectType,
