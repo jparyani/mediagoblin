@@ -64,7 +64,7 @@ class EditAccountForm(wtforms.Form):
     wants_comment_notification = wtforms.BooleanField(
         description=_("Email me when others comment on my media"))
     wants_notifications = wtforms.BooleanField(
-        description=_("Enable/Disable insite notifications"))
+        description=_("Enable insite notifications about events."))
     license_preference = wtforms.SelectField(
         _('License preference'),
         [
