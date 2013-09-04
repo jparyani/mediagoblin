@@ -39,11 +39,13 @@ $(document).ready(function () {
     }
 
     var logout_url = document.getElementById('_logout_url').value;
+    var persona_user = document.getElementById('_persona_user').value;
 
     navigator.id.watch({
+        loggedInUser: persona_user || null,
         onlogin: function(assertion) {
             document.getElementById('_assertion').value = assertion;
-            document.getElementById('_persona_login').submit()
+            document.getElementById('_persona_login').submit();
     },
         onlogout: function() {
             $.ajax({

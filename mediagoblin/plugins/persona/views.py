@@ -64,6 +64,7 @@ def login(request):
 
         if user:
             request.session['user_id'] = unicode(user.id)
+            request.session['persona_login_email'] = email
             request.session.save()
 
             return redirect(request, "index")
@@ -182,6 +183,8 @@ def add(request):
         new_entry.persona_email = email
         new_entry.user_id = request.user.id
         new_entry.save()
+
+        request.session['persona_login_email'] = email
 
         messages.add_message(
             request,
