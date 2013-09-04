@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
 "POT-Creation-Date: 2013-08-26 17:38-0500\n"
-"PO-Revision-Date: 2013-08-26 22:39+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2013-09-04 20:53+0000\n"
+"Last-Translator: tryggvib <tryggvib@fsfi.is>\n"
 "Language-Team: Icelandic (Iceland) (http://www.transifex.com/projects/p/mediagoblin/language/is_IS/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,7 +29,7 @@ msgstr "Því miður er nýskráning ekki leyfð á þessu svæði."
 #: mediagoblin/decorators.py:268 mediagoblin/plugins/openid/views.py:202
 #: mediagoblin/plugins/persona/views.py:76
 msgid "Sorry, authentication is disabled on this instance."
-msgstr ""
+msgstr "Því miður er auðkenning ekki möguleg á þessu vefsvæði."
 
 #: mediagoblin/auth/forms.py:25
 msgid "Username or email"
@@ -58,7 +58,7 @@ msgstr "Því miður þá er annar notandi í kerfinu með þetta netfang skrá�
 #: mediagoblin/auth/views.py:145 mediagoblin/auth/views.py:293
 #: mediagoblin/edit/views.py:402 mediagoblin/edit/views.py:423
 msgid "The verification key or user id is incorrect."
-msgstr ""
+msgstr "Staðfestingarlykillinn eða notendaauðkennið er rangt."
 
 #: mediagoblin/auth/views.py:161
 msgid ""
@@ -105,7 +105,7 @@ msgstr "Gat ekki sent tölvupóst um endurstillingu lykilorðs því notandanafn
 
 #: mediagoblin/auth/views.py:306
 msgid "The user id is incorrect."
-msgstr ""
+msgstr "Notendaauðkennið er rangt."
 
 #: mediagoblin/auth/views.py:323
 msgid "You can now log in using your new password."
@@ -113,13 +113,13 @@ msgstr "Þú getur núna innskráð þig með nýja lykilorðinu þínu."
 
 #: mediagoblin/auth/views.py:334
 msgid "You need to verify your email before you can reset your password."
-msgstr ""
+msgstr "Þú verður að staðfesta netfangið þitt áður en þú getur endurstillt lykilorðið þitt."
 
 #: mediagoblin/auth/views.py:340
 msgid ""
 "You are no longer an active user. Please contact the system admin to "
 "reactivate your accoutn."
-msgstr ""
+msgstr "Þú ert ekki lengur virkur notandi. Vinsamlegast hafðu samband við kerfisstjóra til að endurvirkja aðganginn þinn."
 
 #: mediagoblin/edit/forms.py:27 mediagoblin/edit/forms.py:86
 #: mediagoblin/submit/forms.py:28 mediagoblin/submit/forms.py:47
@@ -185,7 +185,7 @@ msgstr "Senda mér tölvupóst þegar einhver bætir athugasemd við efnið mitt
 
 #: mediagoblin/edit/forms.py:67
 msgid "Enable/Disable insite notifications"
-msgstr ""
+msgstr "Virkja/Afvirkja innri tilkynningar"
 
 #: mediagoblin/edit/forms.py:69
 msgid "License preference"
@@ -224,7 +224,7 @@ msgstr "Nýtt lykilorð"
 
 #: mediagoblin/edit/forms.py:116
 msgid "New email address"
-msgstr ""
+msgstr "Nýtt netfang"
 
 #: mediagoblin/edit/forms.py:120 mediagoblin/plugins/basic_auth/forms.py:28
 #: mediagoblin/plugins/basic_auth/forms.py:43
@@ -235,7 +235,7 @@ msgstr "Lykilorð"
 
 #: mediagoblin/edit/forms.py:122
 msgid "Enter your password to prove you own this account."
-msgstr ""
+msgstr "Sláðu inn lykilorðið þitt til að sanna að þú eigir þennan aðgang."
 
 #: mediagoblin/edit/views.py:73
 msgid "An entry with that slug already exists for this user."
@@ -294,7 +294,7 @@ msgstr "Það tókst að breyta lykilorðinu þínu"
 
 #: mediagoblin/edit/views.py:417
 msgid "Your email address has been verified."
-msgstr ""
+msgstr "Netfangið þitt hefur verið staðfest."
 
 #: mediagoblin/gmg_commands/assetlink.py:60
 msgid "Cannot link theme... no theme set\n"
@@ -350,20 +350,20 @@ msgstr "skrifaði athugasemd við færsluna þína"
 #: mediagoblin/notifications/views.py:35
 #, python-format
 msgid "Subscribed to comments on %s!"
-msgstr ""
+msgstr "Þú ert nú áskrifandi að athugasemdum „%s“!"
 
 #: mediagoblin/notifications/views.py:48
 #, python-format
 msgid "You will not receive notifications for comments on %s."
-msgstr ""
+msgstr "Þú færð tilkynningar þegar einhver skrifar athugasemd við „%s“."
 
 #: mediagoblin/oauth/views.py:239
 msgid "Must provide an oauth_token."
-msgstr ""
+msgstr "Þú verður að gefa upp OAuth tóka (oauth_token)."
 
 #: mediagoblin/oauth/views.py:244 mediagoblin/oauth/views.py:294
 msgid "No request token found."
-msgstr ""
+msgstr "Engin beiðni fannst."
 
 #: mediagoblin/plugins/basic_auth/forms.py:24
 #: mediagoblin/plugins/openid/forms.py:27
@@ -384,7 +384,7 @@ msgstr "Notandanafn eða tölvupóstur"
 
 #: mediagoblin/plugins/basic_auth/forms.py:46
 msgid "Stay logged in"
-msgstr ""
+msgstr "Muna eftir mér"
 
 #: mediagoblin/plugins/geolocation/templates/mediagoblin/plugins/geolocation/map.html:24
 msgid "Location"
@@ -473,60 +473,60 @@ msgstr "Bæta við"
 #: mediagoblin/plugins/openid/views.py:268
 #: mediagoblin/plugins/openid/views.py:297
 msgid "Sorry, an account is already registered to that OpenID."
-msgstr ""
+msgstr "Því miður er annar aðgangur nú þegar skráður fyrir þetta OpenID auðkenni."
 
 #: mediagoblin/plugins/openid/forms.py:38
 msgid "OpenID"
-msgstr ""
+msgstr "OpenID auðkenni"
 
 #: mediagoblin/plugins/openid/views.py:48
 msgid "Sorry, the OpenID server could not be found"
-msgstr ""
+msgstr "Því miður fannst OpenID netþjónninn ekki"
 
 #: mediagoblin/plugins/openid/views.py:61
 #, python-format
 msgid "No OpenID service was found for %s"
-msgstr ""
+msgstr "Engin OpenID þjónusta fannst fyrir „%s“"
 
 #: mediagoblin/plugins/openid/views.py:106
 #, python-format
 msgid "Verification of %s failed: %s"
-msgstr ""
+msgstr "Staðfesting á „%s“ mistóksts: „%s“"
 
 #: mediagoblin/plugins/openid/views.py:117
 msgid "Verification cancelled"
-msgstr ""
+msgstr "Hætt við staðfestingu"
 
 #: mediagoblin/plugins/openid/views.py:314
 msgid "Your OpenID url was saved successfully."
-msgstr ""
+msgstr "Það tókst að vista OpenID vefslóðina þína."
 
 #: mediagoblin/plugins/openid/views.py:338
 #: mediagoblin/plugins/openid/views.py:393
 msgid "You can't delete your only OpenID URL unless you have a password set"
-msgstr ""
+msgstr "Þú getur ekki eytt einu OpenID vefslóðinni nema þú hafir skráð lykilorð"
 
 #: mediagoblin/plugins/openid/views.py:343
 #: mediagoblin/plugins/openid/views.py:402
 msgid "That OpenID is not registered to this account."
-msgstr ""
+msgstr "Þetta OpenID auðkenni er ekki skráð á þennan aðgang."
 
 #: mediagoblin/plugins/openid/views.py:385
 msgid "OpenID was successfully removed."
-msgstr ""
+msgstr "Það tókst að fjarlægja OpenID auðkennið."
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:23
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:31
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:34
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:23
 msgid "Add an OpenID"
-msgstr ""
+msgstr "Bæta við OpenID auðkenni"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:34
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:23
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:31
 msgid "Delete an OpenID"
-msgstr ""
+msgstr "Eyða OpenID auðkenni"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:39
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:39
@@ -537,7 +537,7 @@ msgstr "Eyða"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/edit_link.html:21
 msgid "OpenID's"
-msgstr ""
+msgstr "OpenID auðkenni"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:28
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:36
@@ -556,66 +556,66 @@ msgstr "Mistókst að skrá þig inn."
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:44
 msgid "Log in to create an account!"
-msgstr ""
+msgstr "Skráðu þig inn til að búa til nýjan aðgang!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:51
 msgid "Or login with a password!"
-msgstr ""
+msgstr "...eða skráðu þig inn með lykilorði!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login_link.html:23
 msgid "Or login with OpenID!"
-msgstr ""
+msgstr "...eða skráðu þig inn með OpenID auðkenni!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/register_link.html:23
 msgid "Or register with OpenID!"
-msgstr ""
+msgstr "...eða nýskráðu þig með OpenID auðkenni!"
 
 #: mediagoblin/plugins/persona/__init__.py:90
 msgid "Sorry, an account is already registered to that Persona email."
-msgstr ""
+msgstr "Því miður er annar aðgangur nú þegar skráður fyrir þetta „Persona“ netfang."
 
 #: mediagoblin/plugins/persona/views.py:137
 msgid "The Persona email address was successfully removed."
-msgstr ""
+msgstr "Það tókst að fjarlægja „Persona“ netfangið."
 
 #: mediagoblin/plugins/persona/views.py:143
 msgid ""
 "You can't delete your only Persona email address unless you have a password "
 "set."
-msgstr ""
+msgstr "Þú getur ekki eytt eina „Persona“ netfanginu þínu nema þú hafir skráð lykilorð."
 
 #: mediagoblin/plugins/persona/views.py:148
 msgid "That Persona email address is not registered to this account."
-msgstr ""
+msgstr "Þetta „Persona“ netfang er ekki skráð fyrir þennan aðgang."
 
 #: mediagoblin/plugins/persona/views.py:175
 msgid ""
 "Sorry, an account is already registered with that Persona email address."
-msgstr ""
+msgstr "Því miður er annar aðgangur nú þegar skráður fyrir þetta „Persona“ netfang."
 
 #: mediagoblin/plugins/persona/views.py:189
 msgid "Your Persona email address was saved successfully."
-msgstr ""
+msgstr "Það tókst að vista „Persona“ netfangið þitt."
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:31
 msgid "Delete a Persona email address"
-msgstr ""
+msgstr "Eyða „Persona“ netfangi"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:34
 msgid "Add a Persona email address"
-msgstr ""
+msgstr "Bæta við „Persona“ netfangi"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit_link.html:22
 msgid "Edit your Persona email addresses"
-msgstr ""
+msgstr "Breyta „Persona“ netföngunum þínum"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/login_link.html:22
 msgid "Or login with Persona!"
-msgstr ""
+msgstr "...eða skráðu þig inn með „Persona“!"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/register_link.html:22
 msgid "Or register with Persona!"
-msgstr ""
+msgstr "...eða nýskráðu þig með „Persona“!"
 
 #: mediagoblin/processing/__init__.py:414
 msgid "Invalid file given for media type."
@@ -623,11 +623,11 @@ msgstr "Ógild skrá gefin fyrir þessa margmiðlunartegund."
 
 #: mediagoblin/processing/__init__.py:421
 msgid "Copying to public storage failed."
-msgstr ""
+msgstr "Það tókst ekki að afrita yfir í almennu geymsluna."
 
 #: mediagoblin/processing/__init__.py:429
 msgid "An acceptable processing file was not found"
-msgstr ""
+msgstr "Nothæf keyrsluskrá fannst ekki"
 
 #: mediagoblin/submit/forms.py:26
 msgid "File"
@@ -730,56 +730,56 @@ msgstr "Ekkert fullunnið efni enn!"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:21
 msgid "Authorization"
-msgstr ""
+msgstr "Heimilun"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:26
 #: mediagoblin/templates/mediagoblin/api/authorize.html:53
 msgid "Authorize"
-msgstr ""
+msgstr "Heimila"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:29
 msgid "You are logged in as"
-msgstr ""
+msgstr "Þú ert"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:33
 msgid "Do you want to authorize "
-msgstr ""
+msgstr "Viltu heimila"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:37
 msgid "an unknown application"
-msgstr ""
+msgstr "óþekktu forriti"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:39
 msgid " to access your account? "
-msgstr ""
+msgstr "að fá aðgang að aðganginum þínum?"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:41
 msgid "Applications with access to your account can: "
-msgstr ""
+msgstr "Forrit með aðgang að notendaaðganginum þínum geta:"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:43
 msgid "Post new media as you"
-msgstr ""
+msgstr "Sent inn nýtt margmiðlunarefni sem þú"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:44
 msgid "See your information (e.g profile, media, etc...)"
-msgstr ""
+msgstr "Skoða upplýsingarnar þínar (t.d. kenniskrá, margmiðlunarefni o.s.frv.)"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:45
 msgid "Change your information"
-msgstr ""
+msgstr "Breytt upplýsingunum þínum"
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:21
 msgid "Authorization Finished"
-msgstr ""
+msgstr "Heimilun lokið"
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:26
 msgid "Authorization Complete"
-msgstr ""
+msgstr "Heimild klár"
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:28
 msgid "Copy and paste this into your client:"
-msgstr ""
+msgstr "Afritaðu og límdu þetta í forritið þitt:"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:28
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:36
@@ -889,13 +889,13 @@ msgid ""
 "\n"
 "        >Create an account at this site</a>\n"
 "        or"
-msgstr ""
+msgstr "\n>Búa til aðgang á þessari síðu</a>\neða"
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:41
 msgid ""
 "\n"
 "        <a class=\"button_action\" href=\"http://mediagoblin.readthedocs.org/\">Set up MediaGoblin on your own server</a>"
-msgstr ""
+msgstr "\n        <a class=\"button_action\" href=\"http://mediagoblin.readthedocs.org/\">settu upp þinn eigin margmiðlunarþjón</a>"
 
 #: mediagoblin/templates/mediagoblin/bits/logo.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
@@ -942,7 +942,7 @@ msgstr "Vista breytingar"
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:33
 #, python-format
 msgid "Changing %(username)s's email"
-msgstr ""
+msgstr "Breyti netfangi fyrir notandann: %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:40
 #: mediagoblin/templates/mediagoblin/edit/change_pass.html:45
@@ -988,7 +988,7 @@ msgstr "Eyða aðganginum mínum"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:58
 msgid "Email"
-msgstr ""
+msgstr "Netfang"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:29
 #, python-format
@@ -1013,11 +1013,11 @@ msgid ""
 "\n"
 "If you are not %(username)s or didn't request an email change, you can ignore\n"
 "this email."
-msgstr ""
+msgstr "Hi,\n\nVið vildum staðfesta að þú værir notandinn „%(username)s“. Ef það er rétt,\nvinsamlegast smelltu á tengilinn hér fyrir neðan til að staðfesta nýja netfangið þitt.\n\n%(verification_url)s\n\nEf þú ert ekki „%(username)s“ or baðst ekki um að breytan netfanginu getur þú hunsað\nþennan tölvupóst."
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:4
 msgid "New comments"
-msgstr ""
+msgstr "Nýjar athugasemdir"
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:24
 #: mediagoblin/templates/mediagoblin/media_displays/image.html:39
@@ -1029,7 +1029,7 @@ msgstr "Fyrir %(formatted_time)s"
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:41
 msgid "Mark all read"
-msgstr ""
+msgstr "Merkja allt lesið"
 
 #: mediagoblin/templates/mediagoblin/listings/collection.html:30
 #: mediagoblin/templates/mediagoblin/listings/collection.html:35
@@ -1141,7 +1141,7 @@ msgstr "Þú getur náð í nýlegan vafra sem \n      sem getur spilað myndske
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:69
 msgid "WebM file (VP8/Vorbis)"
-msgstr ""
+msgstr "WebM skrá (VP8/Vorbis)"
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
@@ -1231,7 +1231,7 @@ msgstr "Senda inn þessa athugasemd"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:112
 msgid "Comment Preview"
-msgstr ""
+msgstr "Útlit athugasemdar"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:157
 msgid "Added"
@@ -1405,11 +1405,11 @@ msgstr "Villa kom upp"
 
 #: mediagoblin/tools/response.py:51
 msgid "Bad Request"
-msgstr ""
+msgstr "Ekki nógu góð beiðni"
 
 #: mediagoblin/tools/response.py:53
 msgid "The request sent to the server is invalid, please double check it"
-msgstr ""
+msgstr "Beiðnin sem var send til netþjónsins er ógild, vinsamlegast athugaðu hana aftur"
 
 #: mediagoblin/tools/response.py:60
 msgid "Operation not allowed"
@@ -1461,7 +1461,7 @@ msgstr "Athugasemd"
 msgid ""
 "You can use <a href=\"http://daringfireball.net/projects/markdown/basics\" "
 "target=\"_blank\">Markdown</a> for formatting."
-msgstr ""
+msgstr "Þú getur notað <a href=\"http://daringfireball.net/projects/markdown/basics\" target=\"_blank\">Markdown</a> til að stílgera textann."
 
 #: mediagoblin/user_pages/forms.py:31
 msgid "I am sure I want to delete this"
@@ -1488,7 +1488,7 @@ msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\" target=\"_blank\">\n"
 "                      Markdown</a> for formatting."
-msgstr ""
+msgstr "Þú getur notað\n                      <a href=\"http://daringfireball.net/projects/markdown/basics\" target=\"_blank\">\n                      Markdown</a> til að stílgera textann."
 
 #: mediagoblin/user_pages/views.py:179
 msgid "Sorry, comments are disabled."
