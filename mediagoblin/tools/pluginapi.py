@@ -252,7 +252,7 @@ def get_hook_templates(hook_name):
 
     .. code-block:: html+jinja
 
-      {% template_hook "media_sidebar" %}
+      {% template_hook("media_sidebar") %}
 
     ... which will include all templates for you, partly using this
     method.
