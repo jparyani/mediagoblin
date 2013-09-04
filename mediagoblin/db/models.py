@@ -143,8 +143,10 @@ class User(Base, UserMixin):
             "preferredUsername": self.username,
             "displayName": "{0}@{1}".format(self.username, request.host),
             "objectType": "person",
-            "url": self.url,
-            "summary": self.bio,
+            "pump_io": {
+                "shared": False,
+                "followed": False,
+            },
             "links": {
                 "self": {
                     "href": request.urlgen(
@@ -169,6 +171,12 @@ class User(Base, UserMixin):
                 },
             },
         }
+
+        if self.bio:
+            user.update({"summary": self.bio})
+        if self.url:
+            user.update({"url": self.url})
+
         return user
 
 class Client(Base):
@@ -458,6 +466,9 @@ class MediaEntry(Base, MediaEntryMixin):
             },
             "published": self.created.isoformat(),
             "updated": self.created.isoformat(),
+            "pump_io": {
+                "shared": False,
+            },
         }
 
         if show_comments:
