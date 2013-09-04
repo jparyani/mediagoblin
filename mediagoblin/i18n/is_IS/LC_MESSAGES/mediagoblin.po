@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2013-08-26 17:38-0500\n"
-"PO-Revision-Date: 2013-09-04 20:53+0000\n"
-"Last-Translator: tryggvib <tryggvib@fsfi.is>\n"
+"POT-Creation-Date: 2013-09-04 16:02-0500\n"
+"PO-Revision-Date: 2013-09-04 21:03+0000\n"
+"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Icelandic (Iceland) (http://www.transifex.com/projects/p/mediagoblin/language/is_IS/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +27,7 @@ msgid "Sorry, registration is disabled on this instance."
 msgstr "Því miður er nýskráning ekki leyfð á þessu svæði."
 
 #: mediagoblin/decorators.py:268 mediagoblin/plugins/openid/views.py:202
-#: mediagoblin/plugins/persona/views.py:76
+#: mediagoblin/plugins/persona/views.py:77
 msgid "Sorry, authentication is disabled on this instance."
 msgstr "Því miður er auðkenning ekki möguleg á þessu vefsvæði."
 
@@ -51,12 +51,12 @@ msgstr "í þennan reit verður að slá inn tölvupóstfang."
 msgid "Sorry, a user with that name already exists."
 msgstr "Því miður er nú þegar til notandi með þetta nafn."
 
-#: mediagoblin/auth/tools.py:150 mediagoblin/edit/views.py:446
+#: mediagoblin/auth/tools.py:150 mediagoblin/edit/views.py:442
 msgid "Sorry, a user with that email address already exists."
 msgstr "Því miður þá er annar notandi í kerfinu með þetta netfang skráð."
 
 #: mediagoblin/auth/views.py:145 mediagoblin/auth/views.py:293
-#: mediagoblin/edit/views.py:402 mediagoblin/edit/views.py:423
+#: mediagoblin/edit/views.py:398 mediagoblin/edit/views.py:419
 msgid "The verification key or user id is incorrect."
 msgstr "Staðfestingarlykillinn eða notendaauðkennið er rangt."
 
@@ -118,8 +118,8 @@ msgstr "Þú verður að staðfesta netfangið þitt áður en þú getur endurs
 #: mediagoblin/auth/views.py:340
 msgid ""
 "You are no longer an active user. Please contact the system admin to "
-"reactivate your accoutn."
-msgstr "Þú ert ekki lengur virkur notandi. Vinsamlegast hafðu samband við kerfisstjóra til að endurvirkja aðganginn þinn."
+"reactivate your account."
+msgstr ""
 
 #: mediagoblin/edit/forms.py:27 mediagoblin/edit/forms.py:86
 #: mediagoblin/submit/forms.py:28 mediagoblin/submit/forms.py:47
@@ -184,8 +184,8 @@ msgid "Email me when others comment on my media"
 msgstr "Senda mér tölvupóst þegar einhver bætir athugasemd við efnið mitt"
 
 #: mediagoblin/edit/forms.py:67
-msgid "Enable/Disable insite notifications"
-msgstr "Virkja/Afvirkja innri tilkynningar"
+msgid "Enable insite notifications about events."
+msgstr ""
 
 #: mediagoblin/edit/forms.py:69
 msgid "License preference"
@@ -262,37 +262,37 @@ msgstr "Þú ert að breyta kenniskrá notanda. Farðu mjög varlega."
 msgid "Profile changes saved"
 msgstr "Breytingar á kenniskrá vistaðar"
 
-#: mediagoblin/edit/views.py:247
+#: mediagoblin/edit/views.py:243
 msgid "Account settings saved"
 msgstr "Aðgangsstillingar vistaðar"
 
-#: mediagoblin/edit/views.py:281
+#: mediagoblin/edit/views.py:277
 msgid "You need to confirm the deletion of your account."
 msgstr "Þú verður að samþykkja eyðingu á notandaaðganginum þínum."
 
-#: mediagoblin/edit/views.py:317 mediagoblin/submit/views.py:148
+#: mediagoblin/edit/views.py:313 mediagoblin/submit/views.py:148
 #: mediagoblin/user_pages/views.py:242
 #, python-format
 msgid "You already have a collection called \"%s\"!"
 msgstr "Þú hefur nú þegar albúm sem kallast \"%s\"!"
 
-#: mediagoblin/edit/views.py:321
+#: mediagoblin/edit/views.py:317
 msgid "A collection with that slug already exists for this user."
 msgstr "Albúm með þessu vefslóðarormi er nú þegar til fyrir þennan notanda."
 
-#: mediagoblin/edit/views.py:336
+#: mediagoblin/edit/views.py:332
 msgid "You are editing another user's collection. Proceed with caution."
 msgstr "Þú ert að breyta albúmi annars notanda. Farðu mjög varlega."
 
-#: mediagoblin/edit/views.py:359 mediagoblin/edit/views.py:452
+#: mediagoblin/edit/views.py:355 mediagoblin/edit/views.py:448
 msgid "Wrong password"
 msgstr "Rangt lykilorð"
 
-#: mediagoblin/edit/views.py:374
+#: mediagoblin/edit/views.py:370
 msgid "Your password was changed successfully"
 msgstr "Það tókst að breyta lykilorðinu þínu"
 
-#: mediagoblin/edit/views.py:417
+#: mediagoblin/edit/views.py:413
 msgid "Your email address has been verified."
 msgstr "Netfangið þitt hefur verið staðfest."
 
@@ -574,26 +574,26 @@ msgstr "...eða nýskráðu þig með OpenID auðkenni!"
 msgid "Sorry, an account is already registered to that Persona email."
 msgstr "Því miður er annar aðgangur nú þegar skráður fyrir þetta „Persona“ netfang."
 
-#: mediagoblin/plugins/persona/views.py:137
+#: mediagoblin/plugins/persona/views.py:138
 msgid "The Persona email address was successfully removed."
 msgstr "Það tókst að fjarlægja „Persona“ netfangið."
 
-#: mediagoblin/plugins/persona/views.py:143
+#: mediagoblin/plugins/persona/views.py:144
 msgid ""
 "You can't delete your only Persona email address unless you have a password "
 "set."
 msgstr "Þú getur ekki eytt eina „Persona“ netfanginu þínu nema þú hafir skráð lykilorð."
 
-#: mediagoblin/plugins/persona/views.py:148
+#: mediagoblin/plugins/persona/views.py:149
 msgid "That Persona email address is not registered to this account."
 msgstr "Þetta „Persona“ netfang er ekki skráð fyrir þennan aðgang."
 
-#: mediagoblin/plugins/persona/views.py:175
+#: mediagoblin/plugins/persona/views.py:176
 msgid ""
 "Sorry, an account is already registered with that Persona email address."
 msgstr "Því miður er annar aðgangur nú þegar skráður fyrir þetta „Persona“ netfang."
 
-#: mediagoblin/plugins/persona/views.py:189
+#: mediagoblin/plugins/persona/views.py:192
 msgid "Your Persona email address was saved successfully."
 msgstr "Það tókst að vista „Persona“ netfangið þitt."
 
@@ -617,15 +617,15 @@ msgstr "...eða skráðu þig inn með „Persona“!"
 msgid "Or register with Persona!"
 msgstr "...eða nýskráðu þig með „Persona“!"
 
-#: mediagoblin/processing/__init__.py:414
+#: mediagoblin/processing/__init__.py:413
 msgid "Invalid file given for media type."
 msgstr "Ógild skrá gefin fyrir þessa margmiðlunartegund."
 
-#: mediagoblin/processing/__init__.py:421
+#: mediagoblin/processing/__init__.py:420
 msgid "Copying to public storage failed."
 msgstr "Það tókst ekki að afrita yfir í almennu geymsluna."
 
-#: mediagoblin/processing/__init__.py:429
+#: mediagoblin/processing/__init__.py:428
 msgid "An acceptable processing file was not found"
 msgstr "Nothæf keyrsluskrá fannst ekki"
 
