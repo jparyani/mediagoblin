@@ -25,6 +25,13 @@ carefully, or at least skim over it.
 0.5.0
 =====
 
+**NOTE:** If using the API is important to you, we're in a state of
+ransition towards a new API via the Pump API.  As such, though the old
+API still probably works, some changes have happened to the way oauth
+works to make it more Pump-compatible.  If you're heavily using
+clients using the old API, you may wish to hold off on upgrading for
+now.  Otherwise, jump in and have fun! :)
+
 **Do this to upgrade**
 
 1. Make sure to run
