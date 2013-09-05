@@ -199,7 +199,7 @@ Change to the MediaGoblin directory that you just created::
 
 Clone the MediaGoblin repository and set up the git submodules::
 
-    git clone git://gitorious.org/mediagoblin/mediagoblin.git
+    git clone http://git.gitorious.org/mediagoblin/mediagoblin.git
     cd mediagoblin
     git submodule init && git submodule update
 
