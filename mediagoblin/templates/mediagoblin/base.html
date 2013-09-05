@@ -132,7 +132,11 @@
               </a>
               <a class="button_action" href="{{ request.urlgen('mediagoblin.media_types.blog.create', 
                                                                  user=request.user.username) }}">
-               {%- trans %} Blog {% endtrans -%}
+               {%- trans %} Create Blog {% endtrans -%}
+              </a>
+              <a class="button_action" href="{{ request.urlgen('mediagoblin.media_types.blog.blog_admin_dashboard', 
+                                                                 user=request.user.username) }}">
+               {%- trans %} Blog Dashboard {% endtrans -%}
               </a>
               {% if request.user.is_admin %}
                 <p>
