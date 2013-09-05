@@ -338,7 +338,7 @@ def verify_forgot_password(request):
         messages.add_message(
             request, messages.ERROR,
             _('You are no longer an active user. Please contact the system'
-              ' admin to reactivate your accoutn.'))
+              ' admin to reactivate your account.'))
 
     return redirect(
         request, 'index')

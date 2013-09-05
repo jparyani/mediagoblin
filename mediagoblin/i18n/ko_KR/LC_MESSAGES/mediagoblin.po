@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2013-08-26 17:38-0500\n"
-"PO-Revision-Date: 2013-08-26 22:39+0000\n"
+"POT-Creation-Date: 2013-09-04 16:02-0500\n"
+"PO-Revision-Date: 2013-09-04 21:03+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/projects/p/mediagoblin/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgid "Sorry, registration is disabled on this instance."
 msgstr "죄송합니다. 지금은 가입 하실 수 없습니다."
 
 #: mediagoblin/decorators.py:268 mediagoblin/plugins/openid/views.py:202
-#: mediagoblin/plugins/persona/views.py:76
+#: mediagoblin/plugins/persona/views.py:77
 msgid "Sorry, authentication is disabled on this instance."
 msgstr ""
 
@@ -48,12 +48,12 @@ msgstr ""
 msgid "Sorry, a user with that name already exists."
 msgstr "죄송합니다. 해당 사용자 이름이 이미 존재 합니다."
 
-#: mediagoblin/auth/tools.py:150 mediagoblin/edit/views.py:446
+#: mediagoblin/auth/tools.py:150 mediagoblin/edit/views.py:442
 msgid "Sorry, a user with that email address already exists."
 msgstr "죄송합니다. 사용자와 해당 이메일은 이미 등록되어 있습니다."
 
 #: mediagoblin/auth/views.py:145 mediagoblin/auth/views.py:293
-#: mediagoblin/edit/views.py:402 mediagoblin/edit/views.py:423
+#: mediagoblin/edit/views.py:398 mediagoblin/edit/views.py:419
 msgid "The verification key or user id is incorrect."
 msgstr ""
 
@@ -115,7 +115,7 @@ msgstr ""
 #: mediagoblin/auth/views.py:340
 msgid ""
 "You are no longer an active user. Please contact the system admin to "
-"reactivate your accoutn."
+"reactivate your account."
 msgstr ""
 
 #: mediagoblin/edit/forms.py:27 mediagoblin/edit/forms.py:86
@@ -181,7 +181,7 @@ msgid "Email me when others comment on my media"
 msgstr "제 미디어에 대한 컨텍을 원한다면, 메일을 보내주세요."
 
 #: mediagoblin/edit/forms.py:67
-msgid "Enable/Disable insite notifications"
+msgid "Enable insite notifications about events."
 msgstr ""
 
 #: mediagoblin/edit/forms.py:69
@@ -259,37 +259,37 @@ msgstr "사용자의 계정 정보를 수정하고 있습니다. 조심해서 �
 msgid "Profile changes saved"
 msgstr "계정 정보가 저장 되었습니다."
 
-#: mediagoblin/edit/views.py:247
+#: mediagoblin/edit/views.py:243
 msgid "Account settings saved"
 msgstr "계정 설정이 저장 되었습니다."
 
-#: mediagoblin/edit/views.py:281
+#: mediagoblin/edit/views.py:277
 msgid "You need to confirm the deletion of your account."
 msgstr ""
 
-#: mediagoblin/edit/views.py:317 mediagoblin/submit/views.py:148
+#: mediagoblin/edit/views.py:313 mediagoblin/submit/views.py:148
 #: mediagoblin/user_pages/views.py:242
 #, python-format
 msgid "You already have a collection called \"%s\"!"
 msgstr "\"%s\" 모음집을 이미 가지고 있습니다!"
 
-#: mediagoblin/edit/views.py:321
+#: mediagoblin/edit/views.py:317
 msgid "A collection with that slug already exists for this user."
 msgstr ""
 
-#: mediagoblin/edit/views.py:336
+#: mediagoblin/edit/views.py:332
 msgid "You are editing another user's collection. Proceed with caution."
 msgstr "다른 유저의 모음집을 수정 중 입니다. 주의하세요."
 
-#: mediagoblin/edit/views.py:359 mediagoblin/edit/views.py:452
+#: mediagoblin/edit/views.py:355 mediagoblin/edit/views.py:448
 msgid "Wrong password"
 msgstr "잘못된 비밀번호"
 
-#: mediagoblin/edit/views.py:374
+#: mediagoblin/edit/views.py:370
 msgid "Your password was changed successfully"
 msgstr ""
 
-#: mediagoblin/edit/views.py:417
+#: mediagoblin/edit/views.py:413
 msgid "Your email address has been verified."
 msgstr ""
 
@@ -571,26 +571,26 @@ msgstr ""
 msgid "Sorry, an account is already registered to that Persona email."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:137
+#: mediagoblin/plugins/persona/views.py:138
 msgid "The Persona email address was successfully removed."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:143
+#: mediagoblin/plugins/persona/views.py:144
 msgid ""
 "You can't delete your only Persona email address unless you have a password "
 "set."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:148
+#: mediagoblin/plugins/persona/views.py:149
 msgid "That Persona email address is not registered to this account."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:175
+#: mediagoblin/plugins/persona/views.py:176
 msgid ""
 "Sorry, an account is already registered with that Persona email address."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:189
+#: mediagoblin/plugins/persona/views.py:192
 msgid "Your Persona email address was saved successfully."
 msgstr ""
 
@@ -614,15 +614,15 @@ msgstr ""
 msgid "Or register with Persona!"
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:414
+#: mediagoblin/processing/__init__.py:413
 msgid "Invalid file given for media type."
 msgstr "알수없는 미디어 파일 입니다."
 
-#: mediagoblin/processing/__init__.py:421
+#: mediagoblin/processing/__init__.py:420
 msgid "Copying to public storage failed."
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:429
+#: mediagoblin/processing/__init__.py:428
 msgid "An acceptable processing file was not found"
 msgstr ""
 

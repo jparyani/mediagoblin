@@ -5,12 +5,13 @@
 # Translators:
 # aleksejrs <deletesoftware@yandex.ru>, 2013
 # aleksejrs <deletesoftware@yandex.ru>, 2011-2012
+# Yury Sakarinen, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2013-08-26 17:38-0500\n"
-"PO-Revision-Date: 2013-08-26 22:39+0000\n"
+"POT-Creation-Date: 2013-09-04 16:02-0500\n"
+"PO-Revision-Date: 2013-09-04 21:03+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/mediagoblin/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +26,7 @@ msgid "Sorry, registration is disabled on this instance."
 msgstr "Извините, на этом сайте регистрация запрещена."
 
 #: mediagoblin/decorators.py:268 mediagoblin/plugins/openid/views.py:202
-#: mediagoblin/plugins/persona/views.py:76
+#: mediagoblin/plugins/persona/views.py:77
 msgid "Sorry, authentication is disabled on this instance."
 msgstr ""
 
@@ -35,7 +36,7 @@ msgstr "Имя пользователя или адрес электронной
 
 #: mediagoblin/auth/tools.py:41
 msgid "Invalid User name or email address."
-msgstr ""
+msgstr "Неправильное имя пользователя или адрес электронной почты."
 
 #: mediagoblin/auth/tools.py:42
 msgid "This field does not take email addresses."
@@ -49,12 +50,12 @@ msgstr "Это поле — для адреса электронной почт�
 msgid "Sorry, a user with that name already exists."
 msgstr "Извините, пользователь с этим именем уже зарегистрирован."
 
-#: mediagoblin/auth/tools.py:150 mediagoblin/edit/views.py:446
+#: mediagoblin/auth/tools.py:150 mediagoblin/edit/views.py:442
 msgid "Sorry, a user with that email address already exists."
 msgstr "Сожалеем, но на этот адрес электронной почты уже зарегистрирована другая учётная запись."
 
 #: mediagoblin/auth/views.py:145 mediagoblin/auth/views.py:293
-#: mediagoblin/edit/views.py:402 mediagoblin/edit/views.py:423
+#: mediagoblin/edit/views.py:398 mediagoblin/edit/views.py:419
 msgid "The verification key or user id is incorrect."
 msgstr ""
 
@@ -78,7 +79,7 @@ msgstr "Вы уже потвердили свой адрес электронн�
 
 #: mediagoblin/auth/views.py:203
 msgid "Resent your verification email."
-msgstr "Переслать сообщение с подтверждением аккаунта."
+msgstr "Отправить заново запрос на подтверждение по е-мэйл."
 
 #: mediagoblin/auth/views.py:237
 msgid ""
@@ -103,7 +104,7 @@ msgstr "Мы не можем отправить сообщение для вос
 
 #: mediagoblin/auth/views.py:306
 msgid "The user id is incorrect."
-msgstr ""
+msgstr "ID пользователя указано неверно."
 
 #: mediagoblin/auth/views.py:323
 msgid "You can now log in using your new password."
@@ -116,7 +117,7 @@ msgstr ""
 #: mediagoblin/auth/views.py:340
 msgid ""
 "You are no longer an active user. Please contact the system admin to "
-"reactivate your accoutn."
+"reactivate your account."
 msgstr ""
 
 #: mediagoblin/edit/forms.py:27 mediagoblin/edit/forms.py:86
@@ -182,7 +183,7 @@ msgid "Email me when others comment on my media"
 msgstr "Уведомлять меня по e-mail о комментариях к моим файлам"
 
 #: mediagoblin/edit/forms.py:67
-msgid "Enable/Disable insite notifications"
+msgid "Enable insite notifications about events."
 msgstr ""
 
 #: mediagoblin/edit/forms.py:69
@@ -222,7 +223,7 @@ msgstr "Новый пароль"
 
 #: mediagoblin/edit/forms.py:116
 msgid "New email address"
-msgstr ""
+msgstr "Новый адрес электронной почты"
 
 #: mediagoblin/edit/forms.py:120 mediagoblin/plugins/basic_auth/forms.py:28
 #: mediagoblin/plugins/basic_auth/forms.py:43
@@ -233,7 +234,7 @@ msgstr "Пароль"
 
 #: mediagoblin/edit/forms.py:122
 msgid "Enter your password to prove you own this account."
-msgstr ""
+msgstr "Введите свой пароль в качестве доказательства, что это ваша учётная запись."
 
 #: mediagoblin/edit/views.py:73
 msgid "An entry with that slug already exists for this user."
@@ -260,37 +261,37 @@ msgstr "Вы редактируете профиль пользователя. �
 msgid "Profile changes saved"
 msgstr "Изменения профиля сохранены"
 
-#: mediagoblin/edit/views.py:247
+#: mediagoblin/edit/views.py:243
 msgid "Account settings saved"
 msgstr "Настройки учётной записи записаны"
 
-#: mediagoblin/edit/views.py:281
+#: mediagoblin/edit/views.py:277
 msgid "You need to confirm the deletion of your account."
 msgstr "Вам нужно подтвердить, что вы хотите удалить свою учётную запись."
 
-#: mediagoblin/edit/views.py:317 mediagoblin/submit/views.py:148
+#: mediagoblin/edit/views.py:313 mediagoblin/submit/views.py:148
 #: mediagoblin/user_pages/views.py:242
 #, python-format
 msgid "You already have a collection called \"%s\"!"
 msgstr "У вас уже есть коллекция с названием «%s»!"
 
-#: mediagoblin/edit/views.py:321
+#: mediagoblin/edit/views.py:317
 msgid "A collection with that slug already exists for this user."
 msgstr "У этого пользователя уже есть коллекция с такой отличительной частью адреса."
 
-#: mediagoblin/edit/views.py:336
+#: mediagoblin/edit/views.py:332
 msgid "You are editing another user's collection. Proceed with caution."
 msgstr "Вы редактируете коллекцию другого пользователя.  Будьте осторожны."
 
-#: mediagoblin/edit/views.py:359 mediagoblin/edit/views.py:452
+#: mediagoblin/edit/views.py:355 mediagoblin/edit/views.py:448
 msgid "Wrong password"
 msgstr "Неправильный пароль"
 
-#: mediagoblin/edit/views.py:374
+#: mediagoblin/edit/views.py:370
 msgid "Your password was changed successfully"
 msgstr "Ваш пароль сменён успешно"
 
-#: mediagoblin/edit/views.py:417
+#: mediagoblin/edit/views.py:413
 msgid "Your email address has been verified."
 msgstr ""
 
@@ -367,7 +368,7 @@ msgstr ""
 #: mediagoblin/plugins/openid/forms.py:27
 #: mediagoblin/plugins/persona/forms.py:24
 msgid "Username"
-msgstr "Логин"
+msgstr "Имя пользователя"
 
 #: mediagoblin/plugins/basic_auth/forms.py:32
 #: mediagoblin/plugins/openid/forms.py:31
@@ -395,15 +396,15 @@ msgstr "Посмотреть на <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
-msgstr ""
+msgstr "Разрешить"
 
 #: mediagoblin/plugins/oauth/forms.py:30
 msgid "Deny"
-msgstr ""
+msgstr "Запретить"
 
 #: mediagoblin/plugins/oauth/forms.py:34
 msgid "Name"
-msgstr ""
+msgstr "Имя"
 
 #: mediagoblin/plugins/oauth/forms.py:35
 msgid "The name of the OAuth client"
@@ -475,7 +476,7 @@ msgstr ""
 
 #: mediagoblin/plugins/openid/forms.py:38
 msgid "OpenID"
-msgstr ""
+msgstr "OpenID"
 
 #: mediagoblin/plugins/openid/views.py:48
 msgid "Sorry, the OpenID server could not be found"
@@ -518,13 +519,13 @@ msgstr ""
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:34
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:23
 msgid "Add an OpenID"
-msgstr ""
+msgstr "Добавить OpenID"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:34
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:23
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:31
 msgid "Delete an OpenID"
-msgstr ""
+msgstr "Удалить OpenID"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:39
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:39
@@ -572,26 +573,26 @@ msgstr ""
 msgid "Sorry, an account is already registered to that Persona email."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:137
+#: mediagoblin/plugins/persona/views.py:138
 msgid "The Persona email address was successfully removed."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:143
+#: mediagoblin/plugins/persona/views.py:144
 msgid ""
 "You can't delete your only Persona email address unless you have a password "
 "set."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:148
+#: mediagoblin/plugins/persona/views.py:149
 msgid "That Persona email address is not registered to this account."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:175
+#: mediagoblin/plugins/persona/views.py:176
 msgid ""
 "Sorry, an account is already registered with that Persona email address."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:189
+#: mediagoblin/plugins/persona/views.py:192
 msgid "Your Persona email address was saved successfully."
 msgstr ""
 
@@ -615,15 +616,15 @@ msgstr ""
 msgid "Or register with Persona!"
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:414
+#: mediagoblin/processing/__init__.py:413
 msgid "Invalid file given for media type."
 msgstr "Неправильный формат файла."
 
-#: mediagoblin/processing/__init__.py:421
+#: mediagoblin/processing/__init__.py:420
 msgid "Copying to public storage failed."
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:429
+#: mediagoblin/processing/__init__.py:428
 msgid "An acceptable processing file was not found"
 msgstr ""
 
@@ -761,7 +762,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:44
 msgid "See your information (e.g profile, media, etc...)"
-msgstr ""
+msgstr "Посмотреть личную информацию (напр. профиль, файлы и т.д.)"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:45
 msgid "Change your information"
@@ -813,7 +814,7 @@ msgstr "Привет, %(username)s,\n\nчтобы сменить свой пар
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:44
 msgid "Don't have an account yet?"
-msgstr "Ещё нету аккаунта?"
+msgstr "Нет аккаунта?"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:46
 msgid "Create one here!"
@@ -826,7 +827,7 @@ msgstr "Забыли свой пароль?"
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
 msgid "Create an account!"
-msgstr "Создать аккаунт!"
+msgstr "Создайте аккаунт!"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:41
 msgid "Create"
@@ -986,7 +987,7 @@ msgstr "Удалить мою учётную запись"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:58
 msgid "Email"
-msgstr ""
+msgstr "Е-майл "
 
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:29
 #, python-format
@@ -1015,7 +1016,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:4
 msgid "New comments"
-msgstr ""
+msgstr "Новые комментарии"
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:24
 #: mediagoblin/templates/mediagoblin/media_displays/image.html:39
@@ -1027,7 +1028,7 @@ msgstr "%(formatted_time)s назад"
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:41
 msgid "Mark all read"
-msgstr ""
+msgstr "Отметить все, как прочтенные"
 
 #: mediagoblin/templates/mediagoblin/listings/collection.html:30
 #: mediagoblin/templates/mediagoblin/listings/collection.html:35
@@ -1139,7 +1140,7 @@ msgstr "Вы можете скачать современный браузер, 
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:69
 msgid "WebM file (VP8/Vorbis)"
-msgstr ""
+msgstr "WebM файл (VP8/Vorbis)"
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
@@ -1229,7 +1230,7 @@ msgstr "Добавить этот комментарий"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:112
 msgid "Comment Preview"
-msgstr ""
+msgstr "Предварительный просмотр комментария"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:157
 msgid "Added"
@@ -1243,7 +1244,7 @@ msgstr "Добавление «%(media_title)s» в коллекцию"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:54
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:58
 msgid "Add a new collection"
@@ -1403,7 +1404,7 @@ msgstr "Произошла ошибка"
 
 #: mediagoblin/tools/response.py:51
 msgid "Bad Request"
-msgstr ""
+msgstr "Неверный запрос"
 
 #: mediagoblin/tools/response.py:53
 msgid "The request sent to the server is invalid, please double check it"
@@ -1429,23 +1430,23 @@ msgstr ""
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"
-msgstr ""
+msgstr "год"
 
 #: mediagoblin/tools/timesince.py:63
 msgid "month"
-msgstr ""
+msgstr "месяц"
 
 #: mediagoblin/tools/timesince.py:64
 msgid "week"
-msgstr ""
+msgstr "неделя"
 
 #: mediagoblin/tools/timesince.py:65
 msgid "day"
-msgstr ""
+msgstr "день"
 
 #: mediagoblin/tools/timesince.py:66
 msgid "hour"
-msgstr ""
+msgstr "час"
 
 #: mediagoblin/tools/timesince.py:67
 msgid "minute"

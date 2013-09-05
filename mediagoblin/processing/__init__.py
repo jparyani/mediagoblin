@@ -376,8 +376,7 @@ def store_public(entry, keyname, local_file, target_name=None,
         raise PublicStoreFail(keyname=keyname)
 
     # raise an error if the file failed to copy
-    copied_filepath = mgg.public_store.get_local_path(target_filepath)
-    if not os.path.exists(copied_filepath):
+    if not mgg.public_store.file_exists(target_filepath):
         raise PublicStoreFail(keyname=keyname)
 
     entry.media_files[keyname] = target_filepath

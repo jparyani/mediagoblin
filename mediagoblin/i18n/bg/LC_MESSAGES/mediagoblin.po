@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
+# Yasen Pramatarov <yasen@lindeas.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2013-08-26 17:38-0500\n"
-"PO-Revision-Date: 2013-08-26 22:39+0000\n"
+"POT-Creation-Date: 2013-09-04 16:02-0500\n"
+"PO-Revision-Date: 2013-09-04 21:03+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/projects/p/mediagoblin/language/bg/)\n"
 "MIME-Version: 1.0\n"
@@ -23,17 +24,17 @@ msgid "Sorry, registration is disabled on this instance."
 msgstr ""
 
 #: mediagoblin/decorators.py:268 mediagoblin/plugins/openid/views.py:202
-#: mediagoblin/plugins/persona/views.py:76
+#: mediagoblin/plugins/persona/views.py:77
 msgid "Sorry, authentication is disabled on this instance."
 msgstr ""
 
 #: mediagoblin/auth/forms.py:25
 msgid "Username or email"
-msgstr ""
+msgstr "Потребителско име или е-поща"
 
 #: mediagoblin/auth/tools.py:41
 msgid "Invalid User name or email address."
-msgstr ""
+msgstr "Неправилно потребителско име или е-поща."
 
 #: mediagoblin/auth/tools.py:42
 msgid "This field does not take email addresses."
@@ -47,12 +48,12 @@ msgstr ""
 msgid "Sorry, a user with that name already exists."
 msgstr ""
 
-#: mediagoblin/auth/tools.py:150 mediagoblin/edit/views.py:446
+#: mediagoblin/auth/tools.py:150 mediagoblin/edit/views.py:442
 msgid "Sorry, a user with that email address already exists."
 msgstr ""
 
 #: mediagoblin/auth/views.py:145 mediagoblin/auth/views.py:293
-#: mediagoblin/edit/views.py:402 mediagoblin/edit/views.py:423
+#: mediagoblin/edit/views.py:398 mediagoblin/edit/views.py:419
 msgid "The verification key or user id is incorrect."
 msgstr ""
 
@@ -105,7 +106,7 @@ msgstr ""
 
 #: mediagoblin/auth/views.py:323
 msgid "You can now log in using your new password."
-msgstr ""
+msgstr "Вече може да влезете с новата си парола."
 
 #: mediagoblin/auth/views.py:334
 msgid "You need to verify your email before you can reset your password."
@@ -114,14 +115,14 @@ msgstr ""
 #: mediagoblin/auth/views.py:340
 msgid ""
 "You are no longer an active user. Please contact the system admin to "
-"reactivate your accoutn."
+"reactivate your account."
 msgstr ""
 
 #: mediagoblin/edit/forms.py:27 mediagoblin/edit/forms.py:86
 #: mediagoblin/submit/forms.py:28 mediagoblin/submit/forms.py:47
 #: mediagoblin/user_pages/forms.py:45
 msgid "Title"
-msgstr ""
+msgstr "Заглавие"
 
 #: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:31
 msgid "Description of this work"
@@ -134,11 +135,11 @@ msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
-msgstr ""
+msgstr "Може да ползвате\n                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n                      Markdown</a> за форматиране."
 
 #: mediagoblin/edit/forms.py:35 mediagoblin/submit/forms.py:36
 msgid "Tags"
-msgstr ""
+msgstr "Етикети"
 
 #: mediagoblin/edit/forms.py:37 mediagoblin/submit/forms.py:38
 msgid "Separate tags by commas."
@@ -161,11 +162,11 @@ msgstr ""
 #: mediagoblin/edit/forms.py:46 mediagoblin/submit/forms.py:41
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
-msgstr ""
+msgstr "Лиценз"
 
 #: mediagoblin/edit/forms.py:52
 msgid "Bio"
-msgstr ""
+msgstr "Биография"
 
 #: mediagoblin/edit/forms.py:58
 msgid "Website"
@@ -173,14 +174,14 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:60
 msgid "This address contains errors"
-msgstr ""
+msgstr "Адресът съдържа грешки"
 
 #: mediagoblin/edit/forms.py:65
 msgid "Email me when others comment on my media"
 msgstr ""
 
 #: mediagoblin/edit/forms.py:67
-msgid "Enable/Disable insite notifications"
+msgid "Enable insite notifications about events."
 msgstr ""
 
 #: mediagoblin/edit/forms.py:69
@@ -193,12 +194,12 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:87
 msgid "The title can't be empty"
-msgstr ""
+msgstr "Заглавието е задължително"
 
 #: mediagoblin/edit/forms.py:89 mediagoblin/submit/forms.py:50
 #: mediagoblin/user_pages/forms.py:48
 msgid "Description of this collection"
-msgstr ""
+msgstr "Описание на колекцията"
 
 #: mediagoblin/edit/forms.py:96
 msgid ""
@@ -208,7 +209,7 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:103
 msgid "Old password"
-msgstr ""
+msgstr "Стара парола"
 
 #: mediagoblin/edit/forms.py:105
 msgid "Enter your old password to prove you own this account."
@@ -216,18 +217,18 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:108
 msgid "New password"
-msgstr ""
+msgstr "Нова парола"
 
 #: mediagoblin/edit/forms.py:116
 msgid "New email address"
-msgstr ""
+msgstr "Нов адрес на е-поща"
 
 #: mediagoblin/edit/forms.py:120 mediagoblin/plugins/basic_auth/forms.py:28
 #: mediagoblin/plugins/basic_auth/forms.py:43
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:63
 #: mediagoblin/tests/test_util.py:110
 msgid "Password"
-msgstr ""
+msgstr "Парола"
 
 #: mediagoblin/edit/forms.py:122
 msgid "Enter your password to prove you own this account."
@@ -256,41 +257,41 @@ msgstr ""
 
 #: mediagoblin/edit/views.py:210
 msgid "Profile changes saved"
-msgstr ""
+msgstr "Промените в профила са запазени"
 
-#: mediagoblin/edit/views.py:247
+#: mediagoblin/edit/views.py:243
 msgid "Account settings saved"
-msgstr ""
+msgstr "Настройките на профила са запазени"
 
-#: mediagoblin/edit/views.py:281
+#: mediagoblin/edit/views.py:277
 msgid "You need to confirm the deletion of your account."
 msgstr ""
 
-#: mediagoblin/edit/views.py:317 mediagoblin/submit/views.py:148
+#: mediagoblin/edit/views.py:313 mediagoblin/submit/views.py:148
 #: mediagoblin/user_pages/views.py:242
 #, python-format
 msgid "You already have a collection called \"%s\"!"
 msgstr ""
 
-#: mediagoblin/edit/views.py:321
+#: mediagoblin/edit/views.py:317
 msgid "A collection with that slug already exists for this user."
 msgstr ""
 
-#: mediagoblin/edit/views.py:336
+#: mediagoblin/edit/views.py:332
 msgid "You are editing another user's collection. Proceed with caution."
 msgstr ""
 
-#: mediagoblin/edit/views.py:359 mediagoblin/edit/views.py:452
+#: mediagoblin/edit/views.py:355 mediagoblin/edit/views.py:448
 msgid "Wrong password"
-msgstr ""
+msgstr "Грешна парола"
 
-#: mediagoblin/edit/views.py:374
+#: mediagoblin/edit/views.py:370
 msgid "Your password was changed successfully"
-msgstr ""
+msgstr "Паролата ви е сменена успешно"
 
-#: mediagoblin/edit/views.py:417
+#: mediagoblin/edit/views.py:413
 msgid "Your email address has been verified."
-msgstr ""
+msgstr "Адресът на е-пощата ви е проверен."
 
 #: mediagoblin/gmg_commands/assetlink.py:60
 msgid "Cannot link theme... no theme set\n"
@@ -365,18 +366,18 @@ msgstr ""
 #: mediagoblin/plugins/openid/forms.py:27
 #: mediagoblin/plugins/persona/forms.py:24
 msgid "Username"
-msgstr ""
+msgstr "Потребителско име"
 
 #: mediagoblin/plugins/basic_auth/forms.py:32
 #: mediagoblin/plugins/openid/forms.py:31
 #: mediagoblin/plugins/persona/forms.py:28
 #: mediagoblin/plugins/persona/forms.py:39
 msgid "Email address"
-msgstr ""
+msgstr "Адрес на е-поща"
 
 #: mediagoblin/plugins/basic_auth/forms.py:39
 msgid "Username or Email"
-msgstr ""
+msgstr "Потребителско име или е-поща"
 
 #: mediagoblin/plugins/basic_auth/forms.py:46
 msgid "Stay logged in"
@@ -384,32 +385,32 @@ msgstr ""
 
 #: mediagoblin/plugins/geolocation/templates/mediagoblin/plugins/geolocation/map.html:24
 msgid "Location"
-msgstr ""
+msgstr "Местоположение"
 
 #: mediagoblin/plugins/geolocation/templates/mediagoblin/plugins/geolocation/map.html:52
 #, python-format
 msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
-msgstr ""
+msgstr "Разглеждане с <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
-msgstr ""
+msgstr "Позволение"
 
 #: mediagoblin/plugins/oauth/forms.py:30
 msgid "Deny"
-msgstr ""
+msgstr "Забрана"
 
 #: mediagoblin/plugins/oauth/forms.py:34
 msgid "Name"
-msgstr ""
+msgstr "Име"
 
 #: mediagoblin/plugins/oauth/forms.py:35
 msgid "The name of the OAuth client"
-msgstr ""
+msgstr "Име на OAuth клиента"
 
 #: mediagoblin/plugins/oauth/forms.py:36
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #: mediagoblin/plugins/oauth/forms.py:38
 msgid ""
@@ -419,7 +420,7 @@ msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:40
 msgid "Type"
-msgstr ""
+msgstr "Вид"
 
 #: mediagoblin/plugins/oauth/forms.py:45
 msgid ""
@@ -463,7 +464,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/submit/start.html:34
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
 msgid "Add"
-msgstr ""
+msgstr "Добавяне"
 
 #: mediagoblin/plugins/openid/__init__.py:97
 #: mediagoblin/plugins/openid/views.py:268
@@ -473,7 +474,7 @@ msgstr ""
 
 #: mediagoblin/plugins/openid/forms.py:38
 msgid "OpenID"
-msgstr ""
+msgstr "OpenID"
 
 #: mediagoblin/plugins/openid/views.py:48
 msgid "Sorry, the OpenID server could not be found"
@@ -487,11 +488,11 @@ msgstr ""
 #: mediagoblin/plugins/openid/views.py:106
 #, python-format
 msgid "Verification of %s failed: %s"
-msgstr ""
+msgstr "Грешка при проверката на %s: %s"
 
 #: mediagoblin/plugins/openid/views.py:117
 msgid "Verification cancelled"
-msgstr ""
+msgstr "Проверката е отменена"
 
 #: mediagoblin/plugins/openid/views.py:314
 msgid "Your OpenID url was saved successfully."
@@ -516,20 +517,20 @@ msgstr ""
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:34
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:23
 msgid "Add an OpenID"
-msgstr ""
+msgstr "Добавяне на OpenID"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:34
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:23
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:31
 msgid "Delete an OpenID"
-msgstr ""
+msgstr "Изтриване на OpenID"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:39
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:39
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:56
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:83
 msgid "Delete"
-msgstr ""
+msgstr "Изтриване"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/edit_link.html:21
 msgid "OpenID's"
@@ -543,12 +544,12 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/auth/login.html:36
 #: mediagoblin/templates/mediagoblin/auth/login.html:58
 msgid "Log in"
-msgstr ""
+msgstr "Вход"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:39
 #: mediagoblin/templates/mediagoblin/auth/login.html:39
 msgid "Logging in failed!"
-msgstr ""
+msgstr "Грешка при влизането"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:44
 msgid "Log in to create an account!"
@@ -570,26 +571,26 @@ msgstr ""
 msgid "Sorry, an account is already registered to that Persona email."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:137
+#: mediagoblin/plugins/persona/views.py:138
 msgid "The Persona email address was successfully removed."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:143
+#: mediagoblin/plugins/persona/views.py:144
 msgid ""
 "You can't delete your only Persona email address unless you have a password "
 "set."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:148
+#: mediagoblin/plugins/persona/views.py:149
 msgid "That Persona email address is not registered to this account."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:175
+#: mediagoblin/plugins/persona/views.py:176
 msgid ""
 "Sorry, an account is already registered with that Persona email address."
 msgstr ""
 
-#: mediagoblin/plugins/persona/views.py:189
+#: mediagoblin/plugins/persona/views.py:192
 msgid "Your Persona email address was saved successfully."
 msgstr ""
 
@@ -613,25 +614,25 @@ msgstr ""
 msgid "Or register with Persona!"
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:414
+#: mediagoblin/processing/__init__.py:413
 msgid "Invalid file given for media type."
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:421
+#: mediagoblin/processing/__init__.py:420
 msgid "Copying to public storage failed."
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:429
+#: mediagoblin/processing/__init__.py:428
 msgid "An acceptable processing file was not found"
 msgstr ""
 
 #: mediagoblin/submit/forms.py:26
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 #: mediagoblin/submit/views.py:52
 msgid "You must provide a file."
-msgstr ""
+msgstr "Трябва да предоставите файл"
 
 #: mediagoblin/submit/views.py:101
 msgid "Woohoo! Submitted!"
@@ -644,11 +645,11 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:79
 msgid "Verify your email!"
-msgstr ""
+msgstr "Проверете е-пощата си!"
 
 #: mediagoblin/templates/mediagoblin/base.html:86
 msgid "log out"
-msgstr ""
+msgstr "изход"
 
 #: mediagoblin/templates/mediagoblin/base.html:105
 #, python-format
@@ -657,7 +658,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:112
 msgid "Change account settings"
-msgstr ""
+msgstr "Промяна настройките на профила"
 
 #: mediagoblin/templates/mediagoblin/base.html:116
 #: mediagoblin/templates/mediagoblin/base.html:137
@@ -670,7 +671,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:125
 msgid "Log out"
-msgstr ""
+msgstr "Изход"
 
 #: mediagoblin/templates/mediagoblin/base.html:128
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:156
@@ -680,7 +681,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/base.html:131
 #: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
 msgid "Create new collection"
-msgstr ""
+msgstr "Създаване на нова колекция"
 
 #: mediagoblin/templates/mediagoblin/error.html:24
 msgid "Image of goblin stressing out"
@@ -717,7 +718,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:92
 msgid "Last 10 successful uploads"
-msgstr ""
+msgstr "Последни 10 успешни качвания"
 
 #: mediagoblin/templates/mediagoblin/admin/panel.html:112
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
@@ -735,7 +736,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:29
 msgid "You are logged in as"
-msgstr ""
+msgstr "Влезли сте като"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:33
 msgid "Do you want to authorize "
@@ -763,7 +764,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:45
 msgid "Change your information"
-msgstr ""
+msgstr "Промяна на данните ви"
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:21
 msgid "Authorization Finished"
@@ -780,20 +781,20 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:28
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:36
 msgid "Set your new password"
-msgstr ""
+msgstr "Задаване на нова парола"
 
 #: mediagoblin/templates/mediagoblin/auth/change_fp.html:39
 msgid "Set password"
-msgstr ""
+msgstr "Задаване на парола"
 
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:23
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:31
 msgid "Recover password"
-msgstr ""
+msgstr "Възстановяване на парола"
 
 #: mediagoblin/templates/mediagoblin/auth/forgot_password.html:34
 msgid "Send instructions"
-msgstr ""
+msgstr "Изпращане на указания"
 
 #: mediagoblin/templates/mediagoblin/auth/fp_verification_email.txt:19
 #, python-format
@@ -811,24 +812,24 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:44
 msgid "Don't have an account yet?"
-msgstr ""
+msgstr "Нямате профил?"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:46
 msgid "Create one here!"
-msgstr ""
+msgstr "Създайте си!"
 
 #: mediagoblin/templates/mediagoblin/auth/login.html:54
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Забравили сте паролата си?"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
 msgid "Create an account!"
-msgstr ""
+msgstr "Създаване на профил"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:41
 msgid "Create"
-msgstr ""
+msgstr "Създаване"
 
 #: mediagoblin/templates/mediagoblin/auth/verification_email.txt:19
 #, python-format
@@ -846,7 +847,7 @@ msgstr ""
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org/\" title='Version "
 "%(version)s'>MediaGoblin</a>, a <a href=\"http://gnu.org/\">GNU</a> project."
-msgstr ""
+msgstr "Задвижвано от <a href=\"http://mediagoblin.org/\" title='Version %(version)s'>MediaGoblin</a>, проект на <a href=\"http://gnu.org/\">GNU</a>."
 
 #: mediagoblin/templates/mediagoblin/bits/base_footer.html:24
 #, python-format
@@ -854,7 +855,7 @@ msgid ""
 "Released under the <a "
 "href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a "
 "href=\"%(source_link)s\">Source code</a> available."
-msgstr ""
+msgstr "Публикувано съгласно <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a href=\"%(source_link)s\">Изходният код</a> е наличен."
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:20
 msgid "Explore"
@@ -862,7 +863,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:23
 msgid "Hi there, welcome to this MediaGoblin site!"
-msgstr ""
+msgstr "Здравейте и добре дошли в този сайт на MediaGoblin!"
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:24
 msgid ""
@@ -896,7 +897,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/bits/logo.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
 msgid "MediaGoblin logo"
-msgstr ""
+msgstr "Лого на MediaGoblin"
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:23
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:35
@@ -924,7 +925,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:67
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:48
 msgid "Cancel"
-msgstr ""
+msgstr "Отказ"
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:63
 #: mediagoblin/templates/mediagoblin/edit/edit.html:42
@@ -932,33 +933,33 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:33
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:40
 msgid "Save changes"
-msgstr ""
+msgstr "Запазване на промените"
 
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:23
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:33
 #, python-format
 msgid "Changing %(username)s's email"
-msgstr ""
+msgstr "Промяна е-пощата на %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:40
 #: mediagoblin/templates/mediagoblin/edit/change_pass.html:45
 msgid "Save"
-msgstr ""
+msgstr "Запис"
 
 #: mediagoblin/templates/mediagoblin/edit/change_pass.html:28
 #: mediagoblin/templates/mediagoblin/edit/change_pass.html:38
 #, python-format
 msgid "Changing %(username)s's password"
-msgstr ""
+msgstr "Промяна паролата на %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:28
 #, python-format
 msgid "Really delete user '%(user_name)s' and all related media/comments?"
-msgstr ""
+msgstr "Наистина ли да се изтрие потребителят '%(user_name)s' и всички прилежащи файлове и коментари?"
 
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:35
 msgid "Yes, really delete my account"
-msgstr ""
+msgstr "Да, наистина да се изтрие профилът ми"
 
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:44
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:48
@@ -970,32 +971,32 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/edit/edit.html:35
 #, python-format
 msgid "Editing %(media_title)s"
-msgstr ""
+msgstr "Редактиране на %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:28
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:40
 #, python-format
 msgid "Changing %(username)s's account settings"
-msgstr ""
+msgstr "Промяна настройките на профила на %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:53
 msgid "Delete my account"
-msgstr ""
+msgstr "Изтриване на профила ми"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:58
 msgid "Email"
-msgstr ""
+msgstr "Е-поща"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:29
 #, python-format
 msgid "Editing %(collection_title)s"
-msgstr ""
+msgstr "Редактиране на %(collection_title)s"
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:23
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:34
 #, python-format
 msgid "Editing %(username)s's profile"
-msgstr ""
+msgstr "Редактиране профила на %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/verification.txt:19
 #, python-format
@@ -1013,7 +1014,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:4
 msgid "New comments"
-msgstr ""
+msgstr "Нови коментари"
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:24
 #: mediagoblin/templates/mediagoblin/media_displays/image.html:39
@@ -1025,7 +1026,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:41
 msgid "Mark all read"
-msgstr ""
+msgstr "Отбелязване на всички като прочетени"
 
 #: mediagoblin/templates/mediagoblin/listings/collection.html:30
 #: mediagoblin/templates/mediagoblin/listings/collection.html:35
@@ -1040,7 +1041,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:67
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:55
 msgid "Download"
-msgstr ""
+msgstr "Изтегляне"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:38
 msgid "Original"
@@ -1072,7 +1073,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/image.html:36
 msgid "Created"
-msgstr ""
+msgstr "Създадено"
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:59
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:87
@@ -1087,7 +1088,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:81
 msgid "PDF file"
-msgstr ""
+msgstr "Файл PDF"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
 msgid "Perspective"
@@ -1115,7 +1116,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:140
 msgid "File Format"
-msgstr ""
+msgstr "Файлов формат"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:142
 msgid "Object Height"
@@ -1141,7 +1142,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
-msgstr ""
+msgstr "Добавяне на колекция"
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:23
 #: mediagoblin/templates/mediagoblin/submit/start.html:30
@@ -1151,32 +1152,32 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format
 msgid "%(collection_title)s (%(username)s's collection)"
-msgstr ""
+msgstr "%(collection_title)s (колекция на %(username)s)"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:39
 #, python-format
 msgid "%(collection_title)s by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr ""
+msgstr "%(collection_title)s от <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:52
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:79
 msgid "Edit"
-msgstr ""
+msgstr "Редактиране"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
 msgid "Really delete %(title)s?"
-msgstr ""
+msgstr "Наистина ли да се изтрие %(title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:31
 #, python-format
 msgid "Really remove %(media_title)s from %(collection_title)s?"
-msgstr ""
+msgstr "Наистина ли да се премахне %(media_title)s от %(collection_title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:54
 msgid "Remove"
-msgstr ""
+msgstr "Премахване"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:21
 #, python-format
@@ -1219,33 +1220,33 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:97
 msgid "Add a comment"
-msgstr ""
+msgstr "Добавяне на коментар"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:108
 msgid "Add this comment"
-msgstr ""
+msgstr "Добавяне на коментара"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:112
 msgid "Comment Preview"
-msgstr ""
+msgstr "Преглед на коментара"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:157
 msgid "Added"
-msgstr ""
+msgstr "Добавено"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:28
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:40
 #, python-format
 msgid "Add “%(media_title)s” to a collection"
-msgstr ""
+msgstr "Добавяне на “%(media_title)s” към колекция"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:54
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:58
 msgid "Add a new collection"
-msgstr ""
+msgstr "Добавяне на нова колекция"
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:29
 msgid ""
@@ -1260,16 +1261,16 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:89
 #, python-format
 msgid "%(username)s's profile"
-msgstr ""
+msgstr "Профил на %(username)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:43
 msgid "Sorry, no such user found."
-msgstr ""
+msgstr "Не е открит такъв потребител."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:50
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:70
 msgid "Email verification needed"
-msgstr ""
+msgstr "Нужна е проверка на е-пощата"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:53
 msgid "Almost done! Your account still needs to be activated."
@@ -1308,7 +1309,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:100
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:117
 msgid "Edit profile"
-msgstr ""
+msgstr "Редактиране на профила"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:105
 msgid "This user hasn't filled in their profile (yet)."
@@ -1316,7 +1317,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:124
 msgid "Browse collections"
-msgstr ""
+msgstr "Преглед на колекциите"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:137
 #, python-format
@@ -1337,7 +1338,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
 msgid "(remove)"
-msgstr ""
+msgstr "(премахване)"
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:21
 msgid "Collected in"
@@ -1345,7 +1346,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:40
 msgid "Add to a collection"
-msgstr ""
+msgstr "Добавяне към колекция"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
@@ -1355,33 +1356,33 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:23
 msgid "Atom feed"
-msgstr ""
+msgstr "Емисия Atom"
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:25
 msgid "All rights reserved"
-msgstr ""
+msgstr "Всички права запазени"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:39
 msgid "← Newer"
-msgstr ""
+msgstr "← По-ново"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:45
 msgid "Older →"
-msgstr ""
+msgstr "По-старо →"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:48
 msgid "Go to page:"
-msgstr ""
+msgstr "Отиване на страница:"
 
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:28
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:33
 msgid "newer"
-msgstr ""
+msgstr "по-ново"
 
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:39
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:44
 msgid "older"
-msgstr ""
+msgstr "по-старо"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
@@ -1393,15 +1394,15 @@ msgstr ""
 
 #: mediagoblin/tools/response.py:36
 msgid "Oops!"
-msgstr ""
+msgstr "Опа!"
 
 #: mediagoblin/tools/response.py:37
 msgid "An error occured"
-msgstr ""
+msgstr "Възникна грешка"
 
 #: mediagoblin/tools/response.py:51
 msgid "Bad Request"
-msgstr ""
+msgstr "Неправилна заявка"
 
 #: mediagoblin/tools/response.py:53
 msgid "The request sent to the server is invalid, please double check it"
@@ -1409,7 +1410,7 @@ msgstr ""
 
 #: mediagoblin/tools/response.py:60
 msgid "Operation not allowed"
-msgstr ""
+msgstr "Действието не е позволено"
 
 #: mediagoblin/tools/response.py:61
 msgid ""
@@ -1427,37 +1428,37 @@ msgstr ""
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"
-msgstr ""
+msgstr "година"
 
 #: mediagoblin/tools/timesince.py:63
 msgid "month"
-msgstr ""
+msgstr "месец"
 
 #: mediagoblin/tools/timesince.py:64
 msgid "week"
-msgstr ""
+msgstr "седмица"
 
 #: mediagoblin/tools/timesince.py:65
 msgid "day"
-msgstr ""
+msgstr "ден"
 
 #: mediagoblin/tools/timesince.py:66
 msgid "hour"
-msgstr ""
+msgstr "час"
 
 #: mediagoblin/tools/timesince.py:67
 msgid "minute"
-msgstr ""
+msgstr "минута"
 
 #: mediagoblin/user_pages/forms.py:23
 msgid "Comment"
-msgstr ""
+msgstr "Коментар"
 
 #: mediagoblin/user_pages/forms.py:25
 msgid ""
 "You can use <a href=\"http://daringfireball.net/projects/markdown/basics\" "
 "target=\"_blank\">Markdown</a> for formatting."
-msgstr ""
+msgstr "Може да ползвате <a href=\"http://daringfireball.net/projects/markdown/basics\" target=\"_blank\">Markdown</a> за форматиране."
 
 #: mediagoblin/user_pages/forms.py:31
 msgid "I am sure I want to delete this"
@@ -1465,11 +1466,11 @@ msgstr ""
 
 #: mediagoblin/user_pages/forms.py:35
 msgid "I am sure I want to remove this item from the collection"
-msgstr ""
+msgstr "Наистина искам да премахна този запис от колекцията"
 
 #: mediagoblin/user_pages/forms.py:39
 msgid "Collection"
-msgstr ""
+msgstr "Колекция"
 
 #: mediagoblin/user_pages/forms.py:40
 msgid "-- Select --"
@@ -1477,14 +1478,14 @@ msgstr ""
 
 #: mediagoblin/user_pages/forms.py:42
 msgid "Include a note"
-msgstr ""
+msgstr "Добавяне на бележка"
 
 #: mediagoblin/user_pages/forms.py:49
 msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\" target=\"_blank\">\n"
 "                      Markdown</a> for formatting."
-msgstr ""
+msgstr "Може да ползвате\n                      <a href=\"http://daringfireball.net/projects/markdown/basics\" target=\"_blank\">\n                      Markdown</a> за форматиране."
 
 #: mediagoblin/user_pages/views.py:179
 msgid "Sorry, comments are disabled."
@@ -1496,7 +1497,7 @@ msgstr ""
 
 #: mediagoblin/user_pages/views.py:190
 msgid "Your comment has been posted!"
-msgstr ""
+msgstr "Коментарът ви е публикуван."
 
 #: mediagoblin/user_pages/views.py:225
 msgid "Please check your entries and try again."
@@ -1504,17 +1505,17 @@ msgstr ""
 
 #: mediagoblin/user_pages/views.py:265
 msgid "You have to select or add a collection"
-msgstr ""
+msgstr "Трябва да изберете или добавите колекция"
 
 #: mediagoblin/user_pages/views.py:276
 #, python-format
 msgid "\"%s\" already in collection \"%s\""
-msgstr ""
+msgstr "\"%s\" вече е в колекцията \"%s\""
 
 #: mediagoblin/user_pages/views.py:282
 #, python-format
 msgid "\"%s\" added to collection \"%s\""
-msgstr ""
+msgstr "\"%s\" е добавено към колекцията \"%s\""
 
 #: mediagoblin/user_pages/views.py:302
 msgid "You deleted the media."
@@ -1530,7 +1531,7 @@ msgstr ""
 
 #: mediagoblin/user_pages/views.py:395
 msgid "You deleted the item from the collection."
-msgstr ""
+msgstr "Изтрихте запис от колекцията."
 
 #: mediagoblin/user_pages/views.py:399
 msgid "The item was not removed because you didn't check that you were sure."
@@ -1545,7 +1546,7 @@ msgstr ""
 #: mediagoblin/user_pages/views.py:440
 #, python-format
 msgid "You deleted the collection \"%s\""
-msgstr ""
+msgstr "Изтрихте колекцията \"%s\""
 
 #: mediagoblin/user_pages/views.py:447
 msgid ""
