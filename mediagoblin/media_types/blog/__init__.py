@@ -51,9 +51,14 @@ def setup_plugin():
         '/u/<string:user>/b/<string:blog_slug>/p/<string:blog_post_slug>/edit/',
         'mediagoblin.media_types.blog.views:blogpost_edit'
         ),
-        #blog admin dashboard
+        #blog collection dashboard in case of multiple blogs
+        ('mediagoblin.media_types.blog.blog_admin_dashboard',
+        '/u/<string:user>/b/dashboard/',
+        'mediagoblin.media_types.blog.views:blog_dashboard'
+        ),
+        #blog dashboard
         ('mediagoblin.media_types.blog.blog-dashboard',
-        '/u/<string:user>/b/<string:blog_slug>/blog_dashboard/',
+        '/u/<string:user>/b/<string:blog_slug>/dashboard/',
         'mediagoblin.media_types.blog.views:blog_dashboard'
         ),
         #blog post listing view
@@ -82,12 +87,8 @@ class BlogPostMediaManager(MediaManagerBase):
         blog = Blog.query.filter_by(id=blog_post_data.blog).first()
         return blog
         
-def get_media_type_and_manager():
-        return MEDIA_TYPE, BlogPostMediaManager
-
 hooks = {
     'setup': setup_plugin,
-    'get_media_type_and_manager': get_media_type_and_manager,
     ('media_manager', MEDIA_TYPE): lambda: BlogPostMediaManager,
 }
 
