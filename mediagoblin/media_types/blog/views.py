@@ -55,7 +55,7 @@ def blog_edit(request):
     url_user = request.matchdict.get('user', None)
     blog_slug = request.matchdict.get('blog_slug', None)
     
-    max_blog_count = 1
+    max_blog_count = 4
     form = blog_forms.BlogEditForm(request.form)
     # the blog doesn't exists yet
     if not blog_slug:
@@ -77,16 +77,14 @@ def blog_edit(request):
                 blog.generate_slug()
                
                 blog.save()
-                return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
-                        user=request.user.username,
-                        blog_slug=blog.slug)
+                return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
+                        user=request.user.username
+                       )
         else:
             #the case when max blog count is one.
-            blog = request.db.Blog.query.filter_by(author=request.user.id).first()
             add_message(request, ERROR, "Welcome! You already have created a blog.")
-            return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
-                        user=request.user.username,
-                        blog_slug=blog.slug)
+            return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
+                        user=request.user.username)
 
 
     #Blog already exists.
@@ -209,28 +207,43 @@ def blogpost_edit(request):
 @uses_pagination
 def blog_dashboard(request, page):
     
-    url_user = request.matchdict.get('user')
-    blog_slug = request.matchdict.get('blog_slug', None)
-    
-    blog = request.db.Blog.query.filter_by(slug=blog_slug).first()
-   
-    if not blog:
-        return render_404(request)
-   
-    blog_posts_list = blog.get_all_blog_posts().order_by(MediaEntry.created.desc())
-    pagination = Pagination(page, blog_posts_list)
-    pagination.per_page = 15
-    blog_posts_on_a_page = pagination()
+	url_user = request.matchdict.get('user')
+	user = request.db.User.query.filter_by(username=url_user).one()
+	blog_slug = request.matchdict.get('blog_slug', None)
 
-    if may_edit_blogpost(request, blog):
-        return render_to_response(
-        request,
-        'mediagoblin/blog/blog_admin_dashboard.html',
-        {'blog_posts_list': blog_posts_on_a_page,
-        'blog_slug':blog_slug,
-        'blog':blog,
-        'pagination':pagination 
-        })                                                                                                   
+	blogs = request.db.Blog.query.filter_by(author=request.user.id)
+	if blog_slug and user.id == request.user.id:
+		blog = blogs.filter(Blog.slug==blog_slug).first()
+		if not blog:
+			return render_404(request)
+		blog_posts_list = blog.get_all_blog_posts().order_by(MediaEntry.created.desc())
+		_log.info(type(blog_posts_list))
+		pagination = Pagination(page, blog_posts_list)
+		pagination.per_page = 15
+		blog_posts_on_a_page = pagination()
+
+		if may_edit_blogpost(request, blog):
+			return render_to_response(
+			request,
+			'mediagoblin/blog/blog_admin_dashboard.html',
+			{'blog_posts_list': blog_posts_on_a_page,
+			'blog_slug':blog_slug,
+			'blog':blog,
+			'pagination':pagination 
+			}) 
+		else:
+			return render_403(request)
+	else:
+		blogs = request.db.Blog.query.filter_by(author=user.id)
+		_log.info(blogs.count())
+		return render_to_response(
+		request,
+		'mediagoblin/blog/list_of_blogs.html',
+		{
+		'blogs':blogs,
+		'url_user':url_user
+		}) 
+
     
 
 #supposed to list all the blog posts belonging to a particular blog of particular user.
@@ -240,7 +253,7 @@ def blog_post_listing(request, page):
     blog_owner = request.matchdict.get('user')
     blog_slug = request.matchdict.get('blog_slug', None)
     owner_user = User.query.filter_by(username=blog_owner).one()
-    blog = request.db.Blog.query.filter_by(author=request.user.id, slug=blog_slug).first()
+    blog = request.db.Blog.query.filter_by(slug=blog_slug).first()
     
     if not owner_user or not blog:
         return render_404(request)
@@ -258,7 +271,7 @@ def blog_post_listing(request, page):
          'blog_owner': blog_owner
         })
     
-        
+@require_active_login        
 def draft_view(request):
     blog_slug = request.matchdict.get('blog_slug', None)
     blog_post_slug = request.matchdict.get('blog_post_slug', None)
@@ -277,7 +290,3 @@ def draft_view(request):
          'blog': blog
          })
         
-        
-        
-    
- 
