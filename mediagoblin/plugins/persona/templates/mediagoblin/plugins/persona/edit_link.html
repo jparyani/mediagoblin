@@ -17,9 +17,8 @@
 #}
 
 {% block persona_edit_link %}
-    <p>
-      <a href="{{ request.urlgen('mediagoblin.plugins.persona.edit') }}">
-          {% trans %}Edit your Persona email addresses{% endtrans %}
-      </a>
-    </p>
+  <a href="{{ request.urlgen('mediagoblin.plugins.persona.edit') }}">
+    {% trans %}Persona's{% endtrans %}
+  </a>
+  &middot;
 {% endblock %}
