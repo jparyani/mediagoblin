@@ -26,8 +26,10 @@
 
 {% block mediagoblin_head -%}
   <style type="text/css">
-  h3 {margin = 0; padding = 0;
-        font-size=.7 em;}
+  h4 {margin:0; padding : 0;
+        font-size:.7 em;}
+  a{text-decoration:none;
+    text-transform:capitalize;}
   
   </style>
 {%- endblock %}
@@ -39,8 +41,15 @@
             <div class="b_listing_title"><a href="{{ post.url_for_self(request.urlgen) }}">
                                             <h2><font color="black">{{ post.title }}</font></h2></a>
             </div>
-            <h3>{{ post.created.strftime("%d %b, %Y") }}</h3>
-            
+            <h4 align="right">{{ post.created.strftime("%d %b, %Y") }}</h4>
+            {% if post.tags %}
+                {% for tag in post.tags %}
+                    <a href="{{ request.urlgen(
+                          'mediagoblin.user_pages.user_tag_gallery',
+                          tag=tag['slug'],
+                          user=post.get_uploader.username) }}">{{ tag['name'] }}  |</a>
+                {% endfor %}
+            {% endif %}
             <div class="b_list_des"> <p>{{ post.description|safe }} </p></div>
             </br>
             </br>
