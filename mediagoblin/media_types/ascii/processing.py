@@ -60,7 +60,7 @@ class CommonAsciiProcessor(MediaProcessor):
 
          # Conversions subdirectory to avoid collisions
         self.conversions_subdir = os.path.join(
-            self.workbench.dir, 'convirsions')
+            self.workbench.dir, 'conversions')
         os.mkdir(self.conversions_subdir)
 
         # Pull down and set up the processing file
