@@ -20,6 +20,7 @@ _log = logging.getLogger(__name__)
 from datetime import datetime
 
 from werkzeug.exceptions import Forbidden
+from mediagoblin.tools import pluginapi
 
 from mediagoblin import mg_globals
 
@@ -55,8 +56,8 @@ def blog_edit(request):
     url_user = request.matchdict.get('user', None)
     blog_slug = request.matchdict.get('blog_slug', None)
     
-    
-    max_blog_count = 4
+    config = pluginapi.get_config('mediagoblin.media_types.blog')
+    max_blog_count = config['max_blog_count']
     form = blog_forms.BlogEditForm(request.form)
     # the blog doesn't exists yet
     if not blog_slug:
@@ -211,8 +212,6 @@ def blog_dashboard(request, page):
 	url_user = request.matchdict.get('user')
 	user = request.db.User.query.filter_by(username=url_user).one()
 	blog_slug = request.matchdict.get('blog_slug', None)
-	max_blog_count = 4
-	#_log.info(dir(mg_globals.app_config['max_blog_count']))
 	blogs = request.db.Blog.query.filter_by(author=user.id)
 	if (request.user and request.user.id == user.id) or (request.user and request.user.is_admin):
 		if blog_slug:
