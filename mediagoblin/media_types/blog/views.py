@@ -55,6 +55,7 @@ def blog_edit(request):
     url_user = request.matchdict.get('user', None)
     blog_slug = request.matchdict.get('blog_slug', None)
     
+    
     max_blog_count = 4
     form = blog_forms.BlogEditForm(request.form)
     # the blog doesn't exists yet
@@ -203,46 +204,43 @@ def blogpost_edit(request):
         'blog_post_slug': blog_post_slug
         })    
 
-@require_active_login
+
 @uses_pagination
 def blog_dashboard(request, page):
     
 	url_user = request.matchdict.get('user')
 	user = request.db.User.query.filter_by(username=url_user).one()
 	blog_slug = request.matchdict.get('blog_slug', None)
-
-	blogs = request.db.Blog.query.filter_by(author=request.user.id)
-	if blog_slug and user.id == request.user.id:
-		blog = blogs.filter(Blog.slug==blog_slug).first()
-		if not blog:
-			return render_404(request)
-		blog_posts_list = blog.get_all_blog_posts().order_by(MediaEntry.created.desc())
-		_log.info(type(blog_posts_list))
-		pagination = Pagination(page, blog_posts_list)
-		pagination.per_page = 15
-		blog_posts_on_a_page = pagination()
-
-		if may_edit_blogpost(request, blog):
-			return render_to_response(
-			request,
-			'mediagoblin/blog/blog_admin_dashboard.html',
-			{'blog_posts_list': blog_posts_on_a_page,
-			'blog_slug':blog_slug,
-			'blog':blog,
-			'pagination':pagination 
-			}) 
-		else:
-			return render_403(request)
-	else:
-		blogs = request.db.Blog.query.filter_by(author=user.id)
-		_log.info(blogs.count())
+	max_blog_count = 4
+	#_log.info(dir(mg_globals.app_config['max_blog_count']))
+	blogs = request.db.Blog.query.filter_by(author=user.id)
+	if not request.user or request.user.id != user.id or not request.user.is_admin or not blog_slug:
 		return render_to_response(
-		request,
-		'mediagoblin/blog/list_of_blogs.html',
-		{
-		'blogs':blogs,
-		'url_user':url_user
-		}) 
+        request,
+        'mediagoblin/blog/list_of_blogs.html',
+        {
+        'blogs':blogs,
+        'user':user
+        }) 
+	elif (request.user and request.user.id == user.id) or request.user.is_admin:
+		if blog_slug:
+			blog = blogs.filter(Blog.slug==blog_slug).first()
+			if not blog:
+				return render_404(request)
+			else:
+				blog_posts_list = blog.get_all_blog_posts().order_by(MediaEntry.created.desc())
+				pagination = Pagination(page, blog_posts_list)
+				pagination.per_page = 15
+				blog_posts_on_a_page = pagination()
+				if may_edit_blogpost(request, blog):
+					return render_to_response(
+						request,
+						'mediagoblin/blog/blog_admin_dashboard.html',
+						{'blog_posts_list': blog_posts_on_a_page,
+						'blog_slug':blog_slug,
+						'blog':blog,
+						'pagination':pagination 
+						}) 
 
     
 
