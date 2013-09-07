@@ -141,6 +141,7 @@
         {% set feed_url = request.urlgen(
                   'mediagoblin.user_pages.atom_feed',
                   user=user.username) %}
+        {% template_hook("user_profile") %}
         {% include "mediagoblin/utils/feed_link.html" %}
       </div>
     {% else %}
