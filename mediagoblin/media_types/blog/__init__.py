@@ -75,7 +75,8 @@ def setup_plugin():
             
     pluginapi.register_routes(routes)
     pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
-    pluginapi.register_template_hooks({"user_profile": "mediagoblin/blog/url_to_blogs_dashboard.html"
+    pluginapi.register_template_hooks({"user_profile": "mediagoblin/blog/url_to_blogs_dashboard.html",
+										"base_path_to_blog": "mediagoblin/blog/url_to_blogging.html"
 									})
     
     

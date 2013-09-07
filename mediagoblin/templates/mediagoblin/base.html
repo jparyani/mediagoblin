@@ -130,14 +130,7 @@
               <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
                 {%- trans %}Create new collection{% endtrans -%}
               </a>
-              <a class="button_action" href="{{ request.urlgen('mediagoblin.media_types.blog.create', 
-                                                                 user=request.user.username) }}">
-               {%- trans %} Create Blog {% endtrans -%}
-              </a>
-              <a class="button_action" href="{{ request.urlgen('mediagoblin.media_types.blog.blog_admin_dashboard', 
-                                                                 user=request.user.username) }}">
-               {%- trans %} Blog Dashboard {% endtrans -%}
-              </a>
+              {% template_hook("base_path_to_blog")%}
               {% if request.user.is_admin %}
                 <p>
                   <span class="dropdown_title">Admin powers:</span>
