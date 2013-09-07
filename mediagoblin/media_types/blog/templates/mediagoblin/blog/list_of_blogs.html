@@ -28,33 +28,23 @@
 {% block mediagoblin_content %}
 <table>
     {% if blogs%}
-	{% for blog in blogs %}
-    {% set others_blog_url = request.urlgen('mediagoblin.media_types.blog.blog_post_listing', 
-                                      blog_slug=blog.slug, user=user.username) %}
-     {% if not request.user or request.user.username != user%}  
-            <tr><a href="{{ others_blog_url }}">{{ blog.title }}</a></tr>
-    {% else %}      
-            {% set my_blog_url = request.urlgen('mediagoblin.media_types.blog.blog-dashboard', 
-           blog_slug=blog.slug, user=request.user.username) %}                                
-		<tr><a href="{{ my_blog_url }}">{{ blog.title }}</a></tr>
-	{% endif %}
-	<br>
-	{% endfor %}
+        {% for blog in blogs %}
+            {% set others_blog_url = request.urlgen('mediagoblin.media_types.blog.blog_post_listing', 
+                                              blog_slug=blog.slug, user=user.username) %}
+             {% if not request.user or request.user.username != user.username%}  
+                    <tr><a href="{{ others_blog_url }}">{{ blog.title }}</a></tr>
+             {% else %}      
+                    {% set my_blog_url = request.urlgen('mediagoblin.media_types.blog.blog-dashboard', 
+                   blog_slug=blog.slug, user=request.user.username) %}                                
+                <tr><a href="{{ my_blog_url }}">{{ blog.title }}</a></tr>
+             {% endif %}
+             <br>
+        {% endfor %}
     {% else %}
-    <p>No blog has been created yet.</p>
+        <p>No blog has been created yet.</p>
     {% endif %}
 </table>
 {% endblock mediagoblin_content %}
-
-
-
-
-
-
-
-
-
-
 
 
 
