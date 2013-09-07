@@ -214,15 +214,7 @@ def blog_dashboard(request, page):
 	max_blog_count = 4
 	#_log.info(dir(mg_globals.app_config['max_blog_count']))
 	blogs = request.db.Blog.query.filter_by(author=user.id)
-	if not request.user or request.user.id != user.id or not request.user.is_admin or not blog_slug:
-		return render_to_response(
-        request,
-        'mediagoblin/blog/list_of_blogs.html',
-        {
-        'blogs':blogs,
-        'user':user
-        }) 
-	elif (request.user and request.user.id == user.id) or request.user.is_admin:
+	if (request.user and request.user.id == user.id) or (request.user and request.user.is_admin):
 		if blog_slug:
 			blog = blogs.filter(Blog.slug==blog_slug).first()
 			if not blog:
@@ -241,6 +233,14 @@ def blog_dashboard(request, page):
 						'blog':blog,
 						'pagination':pagination 
 						}) 
+	if not request.user or request.user.id != user.id or not blog_slug:
+		return render_to_response(
+		request,
+		'mediagoblin/blog/list_of_blogs.html',
+		{
+		'blogs':blogs,
+		'user':user
+		}) 
 
     
 
