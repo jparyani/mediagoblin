@@ -231,6 +231,7 @@ def blog_dashboard(request, page):
 						{'blog_posts_list': blog_posts_on_a_page,
 						'blog_slug':blog_slug,
 						'blog':blog,
+						'user':user,
 						'pagination':pagination 
 						}) 
 	if not request.user or request.user.id != user.id or not blog_slug:
