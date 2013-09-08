@@ -59,7 +59,7 @@
           {% block mediagoblin_header_title %}{% endblock %}
           <div class="header_right">
             {%- if request.user %}
-              {% if request.user and request.user.status == 'active' and not request.user.is_banned() %}
+              {% if request.user and request.user.has_privilege('active') and not request.user.is_banned() %}
 
                 {% set notification_count = get_notification_count(request.user.id) %}
                 {% if notification_count %}
@@ -68,13 +68,21 @@
                 {% endif %}
                 <a href="javascript:;" class="button_action header_dropdown_down">&#9660;</a>
                 <a href="javascript:;" class="button_action header_dropdown_up">&#9650;</a>
-              {% elif request.user and request.user.status == "needs_email_verification" %}
+              {% elif request.user and not request.user.has_privilege('active') %}
               {# the following link should only appear when verification is needed #}
                 <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
                                  user=request.user.username) }}"
                    class="button_action_highlight">
                {% trans %}Verify your email!{% endtrans %}</a>
                or <a id="logout" href=
+               {% if persona is not defined %}
+                 "{{ request.urlgen('mediagoblin.auth.logout') }}"
+               {% else %}
+                 "javascript:;"
+               {% endif %}
+               >{% trans %}log out{% endtrans %}</a>
+              {% elif request.user and request.user.is_banned() %}
+                <a id="logout" href=
                {% if persona is not defined %}
                  "{{ request.urlgen('mediagoblin.auth.logout') }}"
                {% else %}
@@ -95,7 +103,7 @@
             {%- endif %}
           </div>
           <div class="clear"></div>
-          {% if request.user and request.user.status == 'active' %}
+          {% if request.user and request.user.has_privilege('active') %}
             <div class="header_dropdown">
               <p>
                 <span class="dropdown_title">

@@ -57,7 +57,7 @@ def user_home(request, page):
     user = User.query.filter_by(username=request.matchdict['user']).first()
     if not user:
         return render_404(request)
-    elif user.status != u'active':
+    elif not user.has_privilege(u'active'):
         return render_to_response(
             request,
             'mediagoblin/user_pages/user.html',
@@ -474,9 +474,8 @@ def atom_feed(request):
     generates the atom feed with the newest images
     """
     user = User.query.filter_by(
-        username = request.matchdict['user'],
-        status = u'active').first()
-    if not user:
+        username = request.matchdict['user']).first()
+    if not user or not user.has_privilege(u'active'):
         return render_404(request)
 
     cursor = MediaEntry.query.filter_by(
@@ -537,9 +536,8 @@ def collection_atom_feed(request):
     generates the atom feed with the newest images from a collection
     """
     user = User.query.filter_by(
-        username = request.matchdict['user'],
-        status = u'active').first()
-    if not user:
+        username = request.matchdict['user']).first()
+    if not user or not user.has_privilege(u'active'):
         return render_404(request)
 
     collection = Collection.query.filter_by(

@@ -34,7 +34,7 @@
   </h1>
 
   {% if request.user %}
-    {% if request.user.status == 'active' %}
+    {% if request.user.has_privilege('active') %}
       <p>
         <a href="{{ request.urlgen('mediagoblin.submit.collection',
                                             user=user.username) }}">

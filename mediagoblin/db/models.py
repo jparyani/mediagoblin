@@ -81,8 +81,8 @@ class User(Base, UserMixin):
         return '<{0} #{1} {2} {3} "{4}">'.format(
                 self.__class__.__name__,
                 self.id,
-                'verified' if self.email_verified else 'non-verified',
-                'admin' if self.is_admin else 'user',
+                'verified' if self.has_privilege(u'active') else 'non-verified',
+                'admin' if self.has_privilege(u'admin') else 'user',
                 self.username)
 
     def delete(self, **kwargs):

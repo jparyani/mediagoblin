@@ -663,13 +663,15 @@ table td.user_without_privilege {
     margin-bottom: 10px;
 }
 #code_of_conduct_list li {
-    margin-top:5px;
+    margin:5px 0 15px 25px;
 }
-ol.nested_sublist{
+.nested_sublist {
     margin: 5px 0 10px 25px;
     font-size:80%;
 }
-
+.nested_sublist li {
+    margin-bottom: 10px;
+}
 
 /* ASCII art and code */
 

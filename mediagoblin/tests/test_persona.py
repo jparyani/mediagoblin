@@ -112,8 +112,6 @@ class TestPersonaPlugin(object):
             # Get user and detach from session
             test_user = mg_globals.database.User.query.filter_by(
                 username=u'chris').first()
-            test_user.email_verified = True
-            test_user.status = u'active'
             test_user.save()
             test_user = mg_globals.database.User.query.filter_by(
                 username=u'chris').first()

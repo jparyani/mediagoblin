@@ -17,9 +17,9 @@
 from mediagoblin.tools.response import render_to_response
 
 
-def code_of_conduct(request):
+def terms_of_service(request):
     return render_to_response(request,
-        'mediagoblin/meta/code_of_conduct.html',
+        'mediagoblin/meta/terms_of_service.html',
         {})
 
 def public_reports_panel(request):

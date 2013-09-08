@@ -29,7 +29,8 @@ from migrate.changeset.constraint import UniqueConstraint
 from mediagoblin.db.extratypes import JSONEncoded
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
 from mediagoblin.db.models import (MediaEntry, Collection, User,
-                                   MediaComment, Privilege, ReportBase)
+                                   MediaComment, Privilege, ReportBase,
+                                   FOUNDATIONS)
 
 MIGRATIONS = {}
 
@@ -531,6 +532,40 @@ def create_moderation_tables(db):
     UserBan_v0.__table__.create(db.bind)
     Privilege_v0.__table__.create(db.bind)
     PrivilegeUserAssociation_v0.__table__.create(db.bind)
+
     db.commit()
 
+    for parameters in FOUNDATIONS[Privilege]:
+        p = Privilege(**parameters)
+        p.save()
 
+
+@RegisterMigration(16, MIGRATIONS)
+def update_user_privilege_columns(db):
+    metadata = MetaData(bind=db.bind)
+    default_privileges = Privilege.query.filter(
+        Privilege.privilege_name !=u'admin').filter(
+        Privilege.privilege_name !=u'moderator').filter(
+        Privilege.privilege_name !=u'active').all()
+    admin_privilege = Privilege.query.filter(
+        Privilege.privilege_name ==u'admin').first()
+    active_privilege = Privilege.query.filter(
+        Privilege.privilege_name ==u'active').first()
+    for inactive_user in User.query.filter(
+        User.status!=u'active').filter(
+        User.is_admin==False).all():
+
+        inactive_user.all_privileges = default_privileges
+        inactive_user.save()
+    for user in User.query.filter(
+        User.status==u'active').filter(
+        User.is_admin==False).all():
+
+        user.all_privileges = default_privileges + [active_privilege]
+        user.save()
+    for admin_user in User.query.filter(
+        User.is_admin==True).all():
+
+        admin_user.all_privileges = default_privileges + [
+            admin_privilege, active_privilege]
+        admin_user.save()

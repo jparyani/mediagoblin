@@ -96,8 +96,6 @@ def test_register_views(test_app):
     new_user = mg_globals.database.User.query.filter_by(
         username=u'angrygirl').first()
     assert new_user
-    assert new_user.status == u'needs_email_verification'
-    assert new_user.email_verified == False
 
     ## Make sure that the proper privileges are granted on registration
 
@@ -137,8 +135,6 @@ def test_register_views(test_app):
     new_user = mg_globals.database.User.query.filter_by(
         username=u'angrygirl').first()
     assert new_user
-    assert new_user.status == u'needs_email_verification'
-    assert new_user.email_verified == False
 
     ## Verify the email activation works
     template.clear_test_template_context()
@@ -151,8 +147,6 @@ def test_register_views(test_app):
     new_user = mg_globals.database.User.query.filter_by(
         username=u'angrygirl').first()
     assert new_user
-    assert new_user.status == u'active'
-    assert new_user.email_verified == True
 
     # Uniqueness checks
     # -----------------

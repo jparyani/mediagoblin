@@ -43,7 +43,7 @@
     <p>{% trans %}Sorry, no such user found.{% endtrans %}</p>
 
   {# User exists, but needs verification #}
-  {% elif user.status == "needs_email_verification" %}
+  {% elif not user.status.has_privilege('active') %}
     {% if user == request.user %}
       {# this should only be visible when you are this user #}
       <div class="form_box">

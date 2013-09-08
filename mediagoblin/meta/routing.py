@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 meta_routes = [
-    ('mediagoblin.meta.code_of_conduct',
-        '/coc/',
-        'mediagoblin.meta.views:code_of_conduct'),
+    ('mediagoblin.meta.terms_of_service',
+        '/tos/',
+        'mediagoblin.meta.views:terms_of_service'),
     ('mediagoblin.meta.reports_panel',
         '/reports/',
         'mediagoblin.meta.views:public_reports_panel'),

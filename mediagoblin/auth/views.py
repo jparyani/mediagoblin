@@ -150,9 +150,7 @@ def verify_email(request):
 
     user = User.query.filter_by(id=int(token)).first()
 
-    if user and user.email_verified is False:
-        user.status = u'active'
-        user.email_verified = True
+    if user and user.has_privilege(u'active') is False:
         user.verification_key = None
         user.all_privileges.append(
             Privilege.query.filter(
@@ -191,7 +189,7 @@ def resend_activation(request):
 
         return redirect(request, 'mediagoblin.auth.login')
 
-    if request.user.email_verified:
+    if request.user.has_privilege(u'active'):
         messages.add_message(
             request,
             messages.ERROR,
@@ -256,7 +254,7 @@ def forgot_password(request):
         success_message=_("An email has been sent with instructions "
                           "on how to change your password.")
 
-    if user and not(user.email_verified and user.status == 'active'):
+    if user and not(user.has_privilege(u'active')):
         # Don't send reminder because user is inactive or has no verified email
         messages.add_message(request,
             messages.WARNING,
@@ -312,8 +310,8 @@ def verify_forgot_password(request):
         return redirect(
             request, 'index')
 
-    # check if user active and has email verified
-    if user.email_verified and user.status == 'active':
+    # check if user active
+    if user.has_privilege(u'active'):
 
         cp_form = auth_forms.ChangePassForm(formdata_vars)
 
@@ -333,13 +331,13 @@ def verify_forgot_password(request):
                 'mediagoblin/auth/change_fp.html',
                 {'cp_form': cp_form,})
 
-    if not user.email_verified:
+    if not user.has_privilege(u'active'):
         messages.add_message(
             request, messages.ERROR,
             _('You need to verify your email before you can reset your'
               ' password.'))
 
-    if not user.status == 'active':
+    if not user.has_privilege(u'active'):
         messages.add_message(
             request, messages.ERROR,
             _('You are no longer an active user. Please contact the system'
