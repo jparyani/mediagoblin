@@ -209,38 +209,38 @@ def blogpost_edit(request):
 @uses_pagination
 def blog_dashboard(request, page):
     
-	url_user = request.matchdict.get('user')
-	user = request.db.User.query.filter_by(username=url_user).one()
-	blog_slug = request.matchdict.get('blog_slug', None)
-	blogs = request.db.Blog.query.filter_by(author=user.id)
-	if (request.user and request.user.id == user.id) or (request.user and request.user.is_admin):
-		if blog_slug:
-			blog = blogs.filter(Blog.slug==blog_slug).first()
-			if not blog:
-				return render_404(request)
-			else:
-				blog_posts_list = blog.get_all_blog_posts().order_by(MediaEntry.created.desc())
-				pagination = Pagination(page, blog_posts_list)
-				pagination.per_page = 15
-				blog_posts_on_a_page = pagination()
-				if may_edit_blogpost(request, blog):
-					return render_to_response(
-						request,
-						'mediagoblin/blog/blog_admin_dashboard.html',
-						{'blog_posts_list': blog_posts_on_a_page,
-						'blog_slug':blog_slug,
-						'blog':blog,
-						'user':user,
-						'pagination':pagination 
-						}) 
-	if not request.user or request.user.id != user.id or not blog_slug:
-		return render_to_response(
-		request,
-		'mediagoblin/blog/list_of_blogs.html',
-		{
-		'blogs':blogs,
-		'user':user
-		}) 
+    url_user = request.matchdict.get('user')
+    user = request.db.User.query.filter_by(username=url_user).one()
+    blog_slug = request.matchdict.get('blog_slug', None)
+    blogs = request.db.Blog.query.filter_by(author=user.id)
+    if (request.user and request.user.id == user.id) or (request.user and request.user.is_admin):
+        if blog_slug:
+            blog = blogs.filter(Blog.slug==blog_slug).first()
+            if not blog:
+                return render_404(request)
+            else:
+                blog_posts_list = blog.get_all_blog_posts().order_by(MediaEntry.created.desc())
+                pagination = Pagination(page, blog_posts_list)
+                pagination.per_page = 15
+                blog_posts_on_a_page = pagination()
+                if may_edit_blogpost(request, blog):
+                    return render_to_response(
+                        request,
+                        'mediagoblin/blog/blog_admin_dashboard.html',
+                        {'blog_posts_list': blog_posts_on_a_page,
+                        'blog_slug':blog_slug,
+                        'blog':blog,
+                        'user':user,
+                        'pagination':pagination 
+                        }) 
+    if not request.user or request.user.id != user.id or not blog_slug:
+        return render_to_response(
+        request,
+        'mediagoblin/blog/list_of_blogs.html',
+        {
+        'blogs':blogs,
+        'user':user
+        }) 
 
     
 
@@ -287,4 +287,52 @@ def draft_view(request):
         {'blogpost':blogpost,
          'blog': blog
          })
+@require_active_login         
+def blog_delete(request, **kwargs):
+    url_user = request.matchdict.get('user')
+    owner_user = request.db.User.query.filter_by(username=url_user).first()
+    
+    blog_slug = request.matchdict.get('blog_slug', None)
+    blog = request.db.Blog.query.filter_by(slug=blog_slug, author=owner_user.id).first()
+    if not blog:
+        return render_404(reequest)
+    
+    form = blog_forms.ConfirmDeleteForm(request.form)
+    if request.user.id == blog.author or request.user.is_admin:
+        if request.method == 'POST' and form.validate():
+            _log.info('blab blab1')
+            if form.confirm.data is True:
+                blog.delete()
+                add_message(
+                request, SUCCESS, _('You deleted the Blog.'))
+                return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
+                        user=request.user.username)
+            else:
+                add_message(
+                request, ERROR,
+                _("The media was not deleted because you didn't check that you were sure."))
+                return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
+                        user=request.user.username)
+        else:
+            if request.user.is_admin:
+                add_message(
+                    request, WARNING,
+                    _("You are about to delete another user's Blog. "
+                      "Proceed with caution."))
+            return render_to_response(
+            request,
+            'mediagoblin/blog/blog_confirm_delete.html',
+            {'blog':blog,
+            'form':form
+            })
+    else:
+        add_message(
+        request, ERROR,
+        _("The blog was not deleted because you have no rights."))
+        return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
+        user=request.user.username)
+
+
+            
+    
         
