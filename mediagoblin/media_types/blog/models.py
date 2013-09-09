@@ -43,13 +43,24 @@ class Blog(Base, BlogMixin):
     created = Column(DateTime, nullable=False, default=datetime.datetime.now, index=True)
     slug = Column(Unicode)
     
+ 
     def get_all_blog_posts(self, state=None):
-		blog_posts = Session.query(MediaEntry).join(BlogPostData)\
-		.filter(BlogPostData.blog == self.id)
-		if state is not None:
-			blog_posts = blog_posts.filter(MediaEntry.state==state)
-		return blog_posts
-
+        blog_posts = Session.query(MediaEntry).join(BlogPostData)\
+        .filter(BlogPostData.blog == self.id)
+        if state is not None:
+            blog_posts = blog_posts.filter(MediaEntry.state==state)
+        return blog_posts
+    
+    def delete(self, **kwargs):
+        all_posts = self.get_all_blog_posts()
+        for post in all_posts:
+            post.delete(del_orphan_tags=False, commit=False)
+        from mediagoblin.db.util import clean_orphan_tags
+        clean_orphan_tags(commit=False)
+        super(Blog, self).delete(**kwargs)
+        
+        
+    
     
 BACKREF_NAME = "blogpost__media_data"
 
