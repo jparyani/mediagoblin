@@ -69,7 +69,12 @@ def setup_plugin():
         #blog post draft view
         ('mediagoblin.media_types.blog.blogpost_draft_view', 
         '/u/<string:user>/b/<string:blog_slug>/p/<string:blog_post_slug>/draft/',
-        'mediagoblin.media_types.blog.views:draft_view')
+        'mediagoblin.media_types.blog.views:draft_view'
+        ),
+		#blog delete view
+		('mediagoblin.media_types.blog.blog_delete', 
+        '/u/<string:user>/b/<string:blog_slug>/delete/',
+        'mediagoblin.media_types.blog.views:blog_delete')
         ]
             
             

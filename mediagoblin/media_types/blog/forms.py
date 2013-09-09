@@ -34,6 +34,10 @@ class BlogEditForm(wtforms.Form):
 		[wtforms.validators.Length(min=0, max=500)])
     description = wtforms.TextAreaField(_('Description'))
     
+
+class ConfirmDeleteForm(wtforms.Form):
+    confirm = wtforms.BooleanField(
+        _('I am sure I want to delete this'))
     
 
     
