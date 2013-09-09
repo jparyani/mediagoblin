@@ -14,7 +14,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from collections import OrderedDict
+# Use an ordered dict if we can.  If not, we'll just use a normal dict
+# later.
+try:
+    from collections import OrderedDict
+except:
+    OrderedDict = None
+
 import logging
 import os
 
@@ -187,7 +193,10 @@ class ProcessingManager(object):
     """
     def __init__(self):
         # Dict of all MediaProcessors of this media type
-        self.processors = OrderedDict()
+        if OrderedDict is not None:
+            self.processors = OrderedDict()
+        else:
+            self.processors = {}
 
     def add_processor(self, processor):
         """
