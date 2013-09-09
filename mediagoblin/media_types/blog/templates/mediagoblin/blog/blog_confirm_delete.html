@@ -1,0 +1,53 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+
+{% block mediagoblin_content %}
+
+  <form action="{{ request.urlgen('mediagoblin.media_types.blog.blog_delete',
+		                  user=request.user.username,
+				  blog_slug=blog.slug) }}"
+        method="POST" enctype="multipart/form-data">
+    <div class="form_box">
+      <h1>
+        {%- trans title=blog.title -%}
+          Really delete {{ title }}?
+        {%- endtrans %}
+      </h1>
+    
+    <br/>
+    
+    <p class="delete_checkbox_box">
+	{{ form.confirm }}
+	{{ wtforms_util.render_label(form.confirm) }}
+      </p>
+
+      <div class="form_submit_buttons">
+        {# TODO: This isn't a button really... might do unexpected things :) #}
+        {% set blog_dashboard_url = request.urlgen('mediagoblin.media_types.blog.blog-dashboard',
+                                        blog_slug=blog.slug, user=request.user.username) %} 
+            
+	<a class="button_action" href="{{ blog_dashboard_url }}">{% trans %}Cancel{% endtrans %}</a>
+    <input type="submit" value="{% trans %}Delete permanently{% endtrans %}" class="button_form" />
+	{{ csrf_token }}
+      </div>
+    </div>
+  </form>
+{% endblock %}    

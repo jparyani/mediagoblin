@@ -49,6 +49,13 @@
 <a class="button_action" href="{{ blog_edit_url }}">
 {%- trans %}Edit Blog{% endtrans -%}
 </a>
+&middot;
+    {% set blog_delete_url = request.urlgen('mediagoblin.media_types.blog.blog_delete', 
+                                      blog_slug=blog.slug, 
+                                      user=request.user.username) %}
+<a class="button_action" href="{{ blog_delete_url }}">
+{%- trans %}Delete Blog{% endtrans -%}
+</a>
 </p>
 <h2> Blog Post Entries </h2>
     {% if blog_posts_list.count() %}
