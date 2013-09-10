@@ -89,6 +89,12 @@
                  "javascript:;"
                {% endif %}
                >{% trans %}log out{% endtrans %}</a>
+              <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
+                {%- trans %}Create new collection{% endtrans -%}
+              </a>
+                <p class="fine_print">
+                  <a href="{{ request.urlgen('terms_of_service') }}">Terms of Service</a>
+                </p>
               {% endif %}
             {%- elif auth %}
             <a href=
@@ -132,23 +138,28 @@
               <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
                 {%- trans %}Add media{% endtrans -%}
               </a>
-              <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
-                {%- trans %}Create new collection{% endtrans -%}
-              </a>
               {% if request.user.has_privilege('admin','moderator') %}
                 <p>
                   <span class="dropdown_title">Moderation powers:</span>
                   <a href="{{ request.urlgen('mediagoblin.moderation.media_panel') }}">
                     {%- trans %}Media processing panel{% endtrans -%}
                   </a>
+                  &middot;
                   <a href="{{ request.urlgen('mediagoblin.moderation.users') }}">
                     {%- trans %}User management panel{% endtrans -%}
                   </a>
+                  &middot;
                   <a href="{{ request.urlgen('mediagoblin.moderation.reports') }}">
                     {%- trans %}Report management panel{% endtrans -%}
                   </a>
                 </p>
               {% endif %}
+              <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
+                {%- trans %}Create new collection{% endtrans -%}
+              </a>
+                <p class="fine_print">
+                  <a href="{{ request.urlgen('terms_of_service') }}">Terms of Service</a>
+                </p>
               {% include 'mediagoblin/fragments/header_notifications.html' %}
             </div>
           {% endif %}

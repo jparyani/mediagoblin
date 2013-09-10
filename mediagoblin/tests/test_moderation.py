@@ -193,6 +193,7 @@ VGhpcyBpcyB5b3VyIGxhc3Qgd2FybmluZywgcmVndWxhci4uLi4=\n',
     def testAllModerationViews(self):
         self.login(u'moderator')
         username = self.user.username
+        self.query_for_users()
         fixture_add_comment_report(reported_user=self.admin_user)
         response = self.test_app.get('/mod/reports/')
         assert response.status == "200 OK"
@@ -232,4 +233,3 @@ VGhpcyBpcyB5b3VyIGxhc3Qgd2FybmluZywgcmVndWxhci4uLi4=\n',
         assert response.status == "302 FOUND"
         user_banned = UserBan.query.filter(UserBan.user_id==user_id).first()
         assert user_banned is None
-

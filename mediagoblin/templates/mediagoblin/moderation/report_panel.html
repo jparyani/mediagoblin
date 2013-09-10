@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 {% extends "mediagoblin/base.html" %}
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {% block title -%}
   {% trans %}Report panel{% endtrans %} &mdash; {{ super() }}
@@ -33,34 +34,40 @@
 
 <h2>{% trans %}Active Reports Filed{% endtrans %}</h2>
   {% if not active_settings.last_page == 1 %}
-  {% if 'active_p='~active_settings.start_page in request.query_string %}
+  {% if 'active_p='~active_settings.current_page in request.query_string %}
     {% set query_string = request.query_string %}{% else %}
     {% set query_string =
-'active_p='~active_settings.start_page~"&"+request.query_string %}
+'active_p='~active_settings.current_page~"&"+request.query_string %}
   {% endif %}
   <div class="right_align">
-    {% set first_vis = active_settings.start_page-3  %}
-    {% set last_vis = active_settings.start_page+3 %}
-    {% set curr_page = active_settings.start_page %}
+    {% set first_vis = active_settings.current_page-3  %}
+    {% set last_vis = active_settings.current_page+3 %}
+    {% set curr_page = active_settings.current_page %}
     {% if 1 == curr_page %}<b>1</b>{% else %}
     <a href ="?{{ query_string.replace(
-                    'active_p='~active_settings.start_page,
+                    'active_p='~active_settings.current_page,
                     'active_p='~1) }}">
-        {{ 1 }}</a>{% endif %}
+        1</a>{% endif %}
     {% if first_vis > 1 %}...{% endif %}
     {% for p in range(first_vis,last_vis+1) %}
-      {% if p > 1 and p < active_settings.last_page %}
+      {% if p > 1 and p < active_settings.last_page and
+curr_page !=p %}
         <a href="?{{ query_string.replace(
-                    'active_p='~active_settings.start_page,
+                    'active_p='~active_settings.current_page,
                     'active_p='~p) }}">
           {{ p }}</a>
+      {% elif p > 1 and p < active_settings.last_page %}
+        <b>{{ p }}</b>
       {% endif  %}
     {% endfor %}
     {% if last_vis < active_settings.last_page %}...{% endif %}
+    {% if active_settings.last_page != curr_page %}
     <a href ="?{{ query_string.replace(
-                    'active_p='~active_settings.start_page,
+                    'active_p='~active_settings.current_page,
                     'active_p='~active_settings.last_page) }}">
       {{ active_settings.last_page }}</a>
+    {% else %}<b>{{ active_settings.last_page }}</b>
+    {% endif %}
   </div>
   {% endif %}
 {% if report_list.count() %}
@@ -115,32 +122,43 @@
 {% endif %}
 <h2>{% trans %}Closed Reports{% endtrans %}</h2>
   {% if not closed_settings.last_page == 1 %}
-  {% if 'closed_p='~closed_settings.start_page in request.query_string %}
+  {% if 'closed_p='~closed_settings.current_page in request.query_string %}
     {% set query_string = request.query_string %}{% else %}
     {% set query_string =
-'closed_p='~closed_settings.start_page~"&"+request.query_string %}
+'closed_p='~closed_settings.current_page~"&"+request.query_string %}
   {% endif %}
   <div class="right_align">
-    {% set first_vis = closed_settings.start_page-3  %}
-    {% set last_vis = closed_settings.start_page+3 %}
+    {% set first_vis = closed_settings.current_page-3  %}
+    {% set last_vis = closed_settings.current_page+3 %}
+    {% set curr_page = closed_settings.current_page %}
+    {% if not curr_page==1 %}
     <a href ="?{{ query_string.replace(
-                    'closed_p='~closed_settings.start_page,
-                    'closed_p='~1) }}">
-        {{ 1 }}</a>
+                    'closed_p='~closed_settings.current_page,
+                    'closed_p='~1) }}">1</a>
+    {% else %}
+      <b>1 </b>
+    {% endif %}
     {% if first_vis > 1 %}...{% endif %}
     {% for p in range(first_vis,last_vis+1) %}
-      {% if p > 1 and p < closed_settings.last_page %}
+      {% if p > 1 and p < closed_settings.last_page and
+curr_page !=p %}
         <a href="?{{ query_string.replace(
-                    'closed_p='~closed_settings.start_page,
+                    'closed_p='~closed_settings.current_page,
                     'closed_p='~p) }}">
           {{ p }}</a>
+
+      {% elif p > 1 and p < closed_settings.last_page %}
+        <b>{{ p }}</b>
       {% endif  %}
     {% endfor %}
     {% if last_vis < closed_settings.last_page %}...{% endif %}
-    <a href ="?{{ query_string.replace(
-                    'closed_p='~closed_settings.start_page,
+    {% if curr_page != closed_settings.last_page %}
+      <a href ="?{{ query_string.replace(
+                    'closed_p='~closed_settings.current_page,
                     'closed_p='~closed_settings.last_page) }}">
-      {{ closed_settings.last_page }}</a>
+        {{ closed_settings.last_page }}</a>
+    {% else  %}<b>{{ closed_settings.last_page }}</b>
+    {% endif %}
   </div>
   {% endif %}
 {% if closed_report_list.count() %}
@@ -178,4 +196,5 @@
 {% else %}
   <p><em>{% trans %}No closed reports found.{% endtrans %}</em></p>
 {% endif %}
+
 {% endblock %}

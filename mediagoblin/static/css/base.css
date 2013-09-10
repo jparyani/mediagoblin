@@ -156,6 +156,10 @@ a.logo {
   margin: 6px 8px 6px 0;
 }
 
+.fine_print {
+  font-size: 0.8em;
+}
+
 .mediagoblin_content {
   width: 100%;
   padding-bottom: 74px;
@@ -665,6 +669,10 @@ table td.user_without_privilege {
 #code_of_conduct_list li {
     margin:5px 0 15px 25px;
 }
+#code_of_conduct_list strong{
+    color:#fff;
+}
+
 .nested_sublist {
     margin: 5px 0 10px 25px;
     font-size:80%;

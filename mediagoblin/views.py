@@ -44,3 +44,7 @@ def simple_template_render(request):
     template_name = request.matchdict['template']
     return render_to_response(
         request, template_name, {})
+
+def terms_of_service(request):
+    return render_to_response(request,
+        'mediagoblin/terms_of_service.html', {})

@@ -542,7 +542,7 @@ def create_moderation_tables(db):
 
 @RegisterMigration(16, MIGRATIONS)
 def update_user_privilege_columns(db):
-    metadata = MetaData(bind=db.bind)
+    # first, create the privileges which would be created by foundations
     default_privileges = Privilege.query.filter(
         Privilege.privilege_name !=u'admin').filter(
         Privilege.privilege_name !=u'moderator').filter(
@@ -551,6 +551,7 @@ def update_user_privilege_columns(db):
         Privilege.privilege_name ==u'admin').first()
     active_privilege = Privilege.query.filter(
         Privilege.privilege_name ==u'active').first()
+    # then, assign them to the appropriate users
     for inactive_user in User.query.filter(
         User.status!=u'active').filter(
         User.is_admin==False).all():
@@ -569,3 +570,11 @@ def update_user_privilege_columns(db):
         admin_user.all_privileges = default_privileges + [
             admin_privilege, active_privilege]
         admin_user.save()
+
+    # and then drop the now vestigial status column
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, 'core__users')
+    status = user_table.columns['status']
+    status.drop()
+    db.commit()
+

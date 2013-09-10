@@ -229,5 +229,21 @@ def unban_user(user_id):
     user_ban.first().delete()
     return True
 
+def parse_report_panel_settings(form):
+    """
+    This function parses the url arguments to which are used to filter reports
+    in the reports panel view. More filters can be added to make a usuable
+    search function.
 
+    :returns    A dictionary of sqlalchemy-usable filters.
+    """
+    filters = {}
 
+    if form.validate():
+        filters['reported_user_id'] = form.reported_user.data
+        filters['reporter_id'] = form.reporter.data
+
+    filters = dict((k, v)
+        for k, v in filters.iteritems() if v)
+
+    return filters

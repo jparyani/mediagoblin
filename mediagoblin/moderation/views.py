@@ -24,7 +24,9 @@ from mediagoblin.decorators import (require_admin_or_moderator_login, \
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.moderation import forms as moderation_forms
 from mediagoblin.moderation.tools import (take_punitive_actions, \
-    take_away_privileges, give_privileges, ban_user, unban_user)
+    take_away_privileges, give_privileges, ban_user, unban_user, \
+    parse_report_panel_settings)
+from werkzeug.datastructures import ImmutableMultiDict
 from datetime import datetime
 from math import ceil
 
@@ -92,37 +94,35 @@ def moderation_reports_panel(request):
     Show the global panel for monitoring reports filed against comments or
         media entries for this instance.
     '''
+    filters = []
+    active_settings, closed_settings = {'current_page':1}, {'current_page':1}
 
-    form = moderation_forms.ReportPanelSortingForm(request.args)
-    active_settings = {'start_page':1, 'filters':{}}
-    closed_settings = {'start_page':1, 'filters':{}}
-    if form.validate():
-        active_settings['start_page'] = form.active_p.data or 1
-        active_settings['filters']['reported_user_id'] = form.active_reported_user.data
-        active_settings['filters']['reporter_id'] = form.active_reporter.data
-        closed_settings['start_page'] = form.closed_p.data or 1
-        closed_settings['filters']['reported_user_id'] = form.closed_reported_user.data
-        closed_settings['filters']['reporter_id'] = form.closed_reporter.data
-
-    active_settings['filters']=dict((k, v) for k, v in active_settings['filters'].iteritems() if v)
-    closed_settings['filters']=dict((k, v) for k, v in closed_settings['filters'].iteritems() if v)
-    active_filter = [
-        getattr(ReportBase,key)==val \
-for key,val in active_settings['filters'].viewitems()]
-    closed_filter = [
-        getattr(ReportBase,key)==val \
-for key,val in active_settings['filters'].viewitems()]
+    if len(request.args) > 0:
+        form = moderation_forms.ReportPanelSortingForm(request.args)
+        if form.validate():
+            filters = parse_report_panel_settings(form)
+            active_settings['current_page'] = form.active_p.data or 1
+            closed_settings['current_page'] = form.closed_p.data or 1
+            filters = [
+               getattr(ReportBase,key)==val
+               for key,val in filters.viewitems()]
 
     all_active = ReportBase.query.filter(
         ReportBase.discriminator!="archived_report").filter(
-        *active_filter)
+        *filters)
     all_closed = ReportBase.query.filter(
         ReportBase.discriminator=="archived_report").filter(
-        *closed_filter)
+        *filters)
+
+    # report_list and closed_report_list are the two lists of up to 10
+    # items which are actually passed to the user in this request
     report_list = all_active.order_by(
-        ReportBase.created.desc()).offset((active_settings['start_page']-1)*10).limit(10)
+        ReportBase.created.desc()).offset(
+            (active_settings['current_page']-1)*10).limit(10)
     closed_report_list = all_closed.order_by(
-        ReportBase.created.desc()).offset((closed_settings['start_page']-1)*10).limit(10)
+        ReportBase.created.desc()).offset(
+            (closed_settings['current_page']-1)*10).limit(10)
+
     active_settings['last_page'] = int(ceil(all_active.count()/10.))
     closed_settings['last_page'] = int(ceil(all_closed.count()/10.))
     # Render to response

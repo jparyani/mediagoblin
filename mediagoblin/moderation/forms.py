@@ -130,27 +130,12 @@ class ReportPanelSortingForm(wtforms.Form):
     This form is used for sorting and filtering through different reports in
     the mediagoblin.moderation.reports_panel view.
 
-    Parameters that start with 'active_' refer to a sort/filter for the active
-        reports.
-    Parameters that start with 'closed_' refer to a sort/filter for the closed
-        reports.
     """
     active_p = wtforms.IntegerField(
-        _(u'Page'),
-        validators=[wtforms.validators.optional()])
-    active_reported_user = wtforms.IntegerField(
-        _(u'Reported User'),
-        validators=[wtforms.validators.optional()])
-    active_reporter = wtforms.IntegerField(
-        _(u'Reporter'),
         validators=[wtforms.validators.optional()])
     closed_p = wtforms.IntegerField(
-        _(u'Page'),
         validators=[wtforms.validators.optional()])
-    closed_reported_user = wtforms.IntegerField(
-        _(u'Reported User'),
+    reported_user = wtforms.IntegerField(
         validators=[wtforms.validators.optional()])
-    closed_reporter = wtforms.IntegerField(
-        _(u'Reporter'),
+    reporter = wtforms.IntegerField(
         validators=[wtforms.validators.optional()])
-

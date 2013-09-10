@@ -330,8 +330,7 @@ def fixture_add_comment_report(comment=None, reported_user=None,
 
     if report_content is None:
         report_content = \
-            'Auto-generated test report by user {0}'.format(
-                reporter)
+            'Auto-generated test report'
 
     comment_report = CommentReport(comment=comment,
         reported_user = reported_user,
