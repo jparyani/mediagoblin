@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin import mg_globals
-from mediagoblin.db.models import User, Privilege, ArchivedReport, UserBan
+from mediagoblin.db.models import User, Privilege, UserBan
 from mediagoblin.db.base import Session
 from mediagoblin.tools.mail import send_email
 from mediagoblin.tools.response import redirect
@@ -68,15 +68,6 @@ def take_punitive_actions(request, form, report, user):
                 u"<br>%s sent a warning email to the offender." % (
                     request.user.username)
 
-        archive = ArchivedReport(
-            reporter_id=report.reporter_id,
-            report_content=report.report_content,
-            reported_user_id=report.reported_user_id,
-            created=report.created,
-            resolved=datetime.now(),
-            resolver_id=request.user.id
-            )
-
         if u'delete' in form.action_to_resolve.data and \
             report.is_comment_report():
                 deleted_comment = report.comment
@@ -91,20 +82,12 @@ def take_punitive_actions(request, form, report, user):
                 form.resolution_content.data += \
                     u"<br>%s deleted the media entry." % (
                         request.user.username)
-
-        # If the moderator didn't delete the content we then attach the
-        # content to the archived report. We also have to actively delete the
-        # old report, since it won't be deleted by cascading.
-        elif report.is_comment_report():
-            archive.comment_id = report.comment_id
-            Session.delete(report)
-        elif report.is_media_entry_report():
-            archive.media_entry_id = report.media_entry.id
-            Session.delete(report)
-
-
-        archive.result=form.resolution_content.data
-        Session.add(archive)
+        report.archive(
+            resolver_id=request.user.id, 
+            resolved=datetime.now(), 
+            result=form.resolution_content.data)
+        
+        Session.add(report)
         Session.commit()
         if message_body:
             send_email(

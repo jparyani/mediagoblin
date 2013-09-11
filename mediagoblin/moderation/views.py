@@ -18,7 +18,7 @@ from werkzeug.exceptions import Forbidden
 
 from mediagoblin.db.models import (MediaEntry, User, MediaComment, \
                                    CommentReport, ReportBase, Privilege, \
-                                   UserBan, ArchivedReport)
+                                   UserBan)
 from mediagoblin.decorators import (require_admin_or_moderator_login, \
                                     active_user_from_url, user_has_privilege)
 from mediagoblin.tools.response import render_to_response, redirect
@@ -72,9 +72,9 @@ def moderation_users_detail(request):
     '''
     user = User.query.filter_by(username=request.matchdict['user']).first()
     active_reports = user.reports_filed_on.filter(
-        ReportBase.discriminator!='archived_report').limit(5)
+        ReportBase.resolved==None).limit(5)
     closed_reports = user.reports_filed_on.filter(
-        ReportBase.discriminator=='archived_report').all()
+        ReportBase.resolved!=None).all()
     privileges = Privilege.query
     user_banned = UserBan.query.get(user.id)
     ban_form = moderation_forms.BanForm()
@@ -108,10 +108,10 @@ def moderation_reports_panel(request):
                for key,val in filters.viewitems()]
 
     all_active = ReportBase.query.filter(
-        ReportBase.discriminator!="archived_report").filter(
+        ReportBase.resolved==None).filter(
         *filters)
     all_closed = ReportBase.query.filter(
-        ReportBase.discriminator=="archived_report").filter(
+        ReportBase.resolved!=None).filter(
         *filters)
 
     # report_list and closed_report_list are the two lists of up to 10

@@ -120,12 +120,16 @@ class TestModerationViews:
             'targeted_user':self.user.id},
             url='/mod/reports/{0}/'.format(comment_report.id))
 
+        self.query_for_users()
+        comment_report = CommentReport.query.filter(
+            CommentReport.reported_user==self.user).first()
         assert response.status == '302 FOUND'
+        assert not self.user.has_privilege(u'commenter')
+        assert comment_report.is_archived_report() is True
+
         fixture_add_comment_report(reported_user=self.user)
         comment_report = CommentReport.query.filter(
             CommentReport.reported_user==self.user).first()
-
-        assert not self.user.has_privilege(u'commenter')
 
         # Then, test a moderator sending an email to a user in response to a
         # reported comment
@@ -137,6 +141,9 @@ class TestModerationViews:
             'targeted_user':self.user.id},
             url='/mod/reports/{0}/'.format(comment_report.id))
 
+        self.query_for_users()
+        comment_report = CommentReport.query.filter(
+            CommentReport.reported_user==self.user).first()
         assert response.status == '302 FOUND'
         assert mail.EMAIL_TEST_MBOX_INBOX ==  [{'to': [u'regular@example.com'],
             'message': 'Content-Type: text/plain; charset="utf-8"\n\
@@ -144,6 +151,7 @@ MIME-Version: 1.0\nContent-Transfer-Encoding: base64\nSubject: Warning from- \
 moderator \nFrom: notice@mediagoblin.example.org\nTo: regular@example.com\n\n\
 VGhpcyBpcyB5b3VyIGxhc3Qgd2FybmluZywgcmVndWxhci4uLi4=\n',
             'from': 'notice@mediagoblin.example.org'}]
+        assert comment_report.is_archived_report() is True
 
         # Then test a moderator banning a user AND a moderator deleting the
         # offending comment. This also serves as a test for taking multiple
@@ -157,7 +165,8 @@ VGhpcyBpcyB5b3VyIGxhc3Qgd2FybmluZywgcmVndWxhci4uLi4=\n',
         fixture_add_comment_report(comment=test_comment,
             reported_user=self.user)
         comment_report = CommentReport.query.filter(
-            CommentReport.reported_user==self.user).first()
+            CommentReport.comment==test_comment).filter(
+            CommentReport.resolved==None).first()
 
         response, context = self.do_post(
             {'action_to_resolve':[u'userban', u'delete'],
@@ -179,7 +188,8 @@ VGhpcyBpcyB5b3VyIGxhc3Qgd2FybmluZywgcmVndWxhci4uLi4=\n',
         #----------------------------------------------------------------------
         fixture_add_comment_report(reported_user=self.admin_user)
         comment_report = CommentReport.query.filter(
-            CommentReport.reported_user==self.admin_user).first()
+            CommentReport.reported_user==self.admin_user).filter(
+            CommentReport.resolved==None).first()
 
         response, context = self.do_post({'action_to_resolve':[u'takeaway'],
             'take_away_privileges':[u'active'],

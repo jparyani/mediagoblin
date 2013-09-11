@@ -20,7 +20,7 @@ from mediagoblin.tools import template
 from mediagoblin.tests.tools import (fixture_add_user, fixture_media_entry,
         fixture_add_comment, fixture_add_comment_report)
 from mediagoblin.db.models import (MediaReport, CommentReport, User,
-    MediaComment,ArchivedReport)
+    MediaComment)
 
 
 class TestReportFiling:
@@ -148,11 +148,12 @@ class TestReportFiling:
             url='/mod/reports/{0}/'.format(comment_report.id))
 
         assert response.status == "302 FOUND"
-        self.query_for_users()
+        allie_user, natalie_user = self.query_for_users()
 
-        archived_report = ArchivedReport.query.first()
+        archived_report = CommentReport.query.filter(
+            CommentReport.reported_user==allie_user).first()
 
-        assert CommentReport.query.count() == 0
+        assert CommentReport.query.count() != 0
         assert archived_report is not None
         assert archived_report.report_content == u'Testing Archived Reports #1'
         assert archived_report.reporter_id == natalie_id
@@ -161,5 +162,5 @@ class TestReportFiling:
         assert archived_report.resolved is not None
         assert archived_report.result == u'This is a test of archiving reports\
 .<br>natalie banned user allie indefinitely.<br>natalie deleted the comment.'
-        assert archived_report.discriminator == 'archived_report'
+        assert archived_report.discriminator == 'comment_report'
 

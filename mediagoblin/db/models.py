@@ -694,6 +694,14 @@ class ReportBase(Base):
                                             -port was filed.
         :keyword    discriminator       This column distinguishes between the
                                             different types of reports.
+        :keyword    resolver_id         Holds the id of the moderator/admin who
+                                            resolved the report.
+        :keyword    resolved            Holds the DateTime object which descri-
+                                            -bes when this report was resolved
+        :keyword    result              Holds the UnicodeText column of the
+                                            resolver's reasons for resolving
+                                            the report this way. Some of this
+                                            is auto-generated
     """
     __tablename__ = 'core__reports'
     id = Column(Integer, primary_key=True)
@@ -714,6 +722,16 @@ class ReportBase(Base):
         primaryjoin="User.id==ReportBase.reported_user_id")
     created = Column(DateTime, nullable=False, default=datetime.datetime.now())
     discriminator = Column('type', Unicode(50))
+    resolver_id = Column(Integer, ForeignKey(User.id))
+    resolver = relationship(
+        User,
+        backref=backref("reports_resolved_by",
+            lazy="dynamic",
+            cascade="all, delete-orphan"),
+        primaryjoin="User.id==ReportBase.resolver_id")
+
+    resolved = Column(DateTime)
+    result = Column(UnicodeText)
     __mapper_args__ = {'polymorphic_on': discriminator}
 
     def is_comment_report(self):
@@ -723,7 +741,12 @@ class ReportBase(Base):
         return self.discriminator=='media_report'
 
     def is_archived_report(self):
-        return self.discriminator=='archived_report'
+        return self.resolved is not None
+
+    def archive(self,resolver_id, resolved, result):
+        self.resolver_id   = resolver_id
+        self.resolved   = resolved
+        self.result     = result
 
 
 class CommentReport(ReportBase):
@@ -737,11 +760,12 @@ class CommentReport(ReportBase):
 
     id = Column('id',Integer, ForeignKey('core__reports.id'),
                                                 primary_key=True)
-    comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=False)
+    comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=True)
     comment = relationship(
         MediaComment, backref=backref("reports_filed_on",
             lazy="dynamic",
             cascade="all, delete-orphan"))
+
 
 class MediaReport(ReportBase):
     """
@@ -754,58 +778,12 @@ class MediaReport(ReportBase):
 
     id = Column('id',Integer, ForeignKey('core__reports.id'),
                                                 primary_key=True)
-    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=True)
     media_entry = relationship(
         MediaEntry,
         backref=backref("reports_filed_onmod/reports/1/",
             lazy="dynamic",
             cascade="all, delete-orphan"))
-
-class ArchivedReport(ReportBase):
-    """
-    Reports that have been resolved. The media_entry and comment columns must
-    be optional so that if the media entry/comment is deleted, the archive can
-    still exist.
-        :keyword    comment_id          Holds the Integer value of the reported
-                                            comment's ID. This column is optio-
-                                            -nal.
-        :keyword    media_entry_id      Holds the Integer value of the reported
-                                            media entry's ID. This column is
-                                            optional.
-        :keyword    resolver_id         Holds the id of the moderator/admin who
-                                            resolved the report.
-        :keyword    resolved            Holds the DateTime object which descri-
-                                            -bes when this report was resolved
-        :keyword    result              Holds the UnicodeText column of the
-                                            resolver's reasons for resolving
-                                            the report this way. Some of this
-                                            is auto-generated
-    """
-    __tablename__ = 'core__reports_archived'
-    __mapper_args__ = {'polymorphic_identity': 'archived_report'}
-    id = Column('id',Integer, ForeignKey('core__reports.id'),
-                primary_key=True)
-
-    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id))
-    media_entry = relationship(
-        MediaEntry,
-        backref=backref("past_reports_filed_on",
-            lazy="dynamic"))
-    comment_id = Column(Integer, ForeignKey(MediaComment.id))
-    comment = relationship(
-        MediaComment, backref=backref("past_reports_filed_on",
-            lazy="dynamic"))
-
-    resolver_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    resolver = relationship(
-        User,
-        backref=backref("reports_resolved_by",
-            lazy="dynamic",
-            cascade="all, delete-orphan"),
-        primaryjoin="User.id==ArchivedReport.resolver_id")
-
-    resolved = Column(DateTime)
-    result = Column(UnicodeText)
 
 class UserBan(Base):
     """
@@ -887,7 +865,7 @@ MODELS = [
     MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
     Notification, CommentNotification, ProcessingNotification, Client,
     CommentSubscription, ReportBase, CommentReport, MediaReport, UserBan,
-	Privilege, PrivilegeUserAssociation, ArchivedReport,
+	Privilege, PrivilegeUserAssociation,
     RequestToken, AccessToken, NonceTimestamp]
 
 """
