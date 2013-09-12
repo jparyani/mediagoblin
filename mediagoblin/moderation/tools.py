@@ -33,60 +33,57 @@ def take_punitive_actions(request, form, report, user):
             for privilege_name in form.take_away_privileges.data:
                 take_away_privileges(user.username, privilege_name)
                 form.resolution_content.data += \
-                    u"<br>%s took away %s\'s %s privileges." % (
-                        request.user.username,
-                        user.username,
-                        privilege_name)
+                    u"\n{mod} took away {user}\'{privilege} privileges.".format(
+                        mod=request.user.username,
+                        user=user.username,
+                        privilege=privilege_name)
 
         # If the moderator elects to ban the user, a new instance of user_ban
         # will be created.
         if u'userban' in form.action_to_resolve.data:
-            reason = form.resolution_content.data + \
-                "<br>"+request.user.username
             user_ban = ban_user(form.targeted_user.data,
                 expiration_date=form.user_banned_until.data,
                 reason=form.why_user_was_banned.data)
             Session.add(user_ban)
-
-            if form.user_banned_until.data is not None:
-                form.resolution_content.data += \
-                    u"<br>%s banned user %s until %s." % (
-                    request.user.username,
-                    user.username,
-                    form.user_banned_until.data)
-            else:
-                form.resolution_content.data += \
-                    u"<br>%s banned user %s indefinitely." % (
-                    request.user.username,
-                    user.username)
+            form.resolution_content.data += \
+                u"\n{mod} banned user {user} until {expiration_date}.".format(
+                    mod=request.user.username,
+                    user=user.username,
+                    expiration_date = (
+                    "until {date}".format(date=form.user_banned_until.data)
+                        if form.user_banned_until.data
+                        else "indefinitely"
+                        )
+                )
 
         # If the moderator elects to send a warning message. An email will be
         # sent to the email address given at sign up
         if u'sendmessage' in form.action_to_resolve.data:
             message_body = form.message_to_user.data
             form.resolution_content.data += \
-                u"<br>%s sent a warning email to the offender." % (
-                    request.user.username)
+                u"\n{mod} sent a warning email to the {user}.".format(
+                    mod=request.user.username,
+                    user=user.username)
 
         if u'delete' in form.action_to_resolve.data and \
             report.is_comment_report():
                 deleted_comment = report.comment
                 Session.delete(deleted_comment)
                 form.resolution_content.data += \
-                    u"<br>%s deleted the comment." % (
-                        request.user.username)
+                    u"\n{mod} deleted the comment.".format(
+                        mod=request.user.username)
         elif u'delete' in form.action_to_resolve.data and \
             report.is_media_entry_report():
                 deleted_media = report.media_entry
                 Session.delete(deleted_media)
                 form.resolution_content.data += \
-                    u"<br>%s deleted the media entry." % (
-                        request.user.username)
+                    u"\n{mod} deleted the media entry.".format(
+                        mod=request.user.username)
         report.archive(
-            resolver_id=request.user.id, 
-            resolved=datetime.now(), 
+            resolver_id=request.user.id,
+            resolved=datetime.now(),
             result=form.resolution_content.data)
-        
+
         Session.add(report)
         Session.commit()
         if message_body:

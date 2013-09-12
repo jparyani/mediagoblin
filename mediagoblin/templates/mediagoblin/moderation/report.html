@@ -30,8 +30,7 @@
        title="Return to Reports Panel">
       {% trans %}Return to Reports Panel{% endtrans %}</a>
   <h2>{% trans %}Report{% endtrans %} #{{ report.id }}</h2>
-  {% if report.is_comment_report() or
-    (report.is_archived_report() and report.comment) %}
+  {% if report.comment %}
 
     {% trans %}Reported comment{% endtrans %}:
     {% set comment = report.comment %}
@@ -63,8 +62,7 @@
         {% endautoescape %}
       </div>
     </div>
-  {% elif report.is_media_entry_report() or
-    (report.is_archived_report() and report.media_entry) %}
+  {% elif report.media_entry %}
 
     {% set media_entry = report.media_entry %}
     <div class="media_thumbnail">
@@ -137,7 +135,7 @@
     init_report_resolution_form();
   });
   </script>
-  {% elif not (report.reported_user.has_privilege('admin')) %}
+  {% elif report.is_archived_report() %}
     <h2><img src="{{ request.staticdirect('/images/icon_clipboard.png') }}"
              alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
                   Distributed by the GNOME project http://www.gnome.org" />
@@ -145,9 +143,9 @@
     </h2>
     <b>{% trans %}RESOLVED{% endtrans %}</b>
     {{ report.resolved.strftime("%I:%M%p %Y-%m-%d") }}
-    {% autoescape False %}
+    <pre>
       <p>{{ report.result }}</p>
-    {% endautoescape %}
+    </pre>
   {% else %}
     <input type=button disabled=disabled value="Resolve This Report"/>
     <p>You cannot take action against an administrator</p>
