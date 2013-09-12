@@ -203,18 +203,20 @@ Clone the MediaGoblin repository and set up the git submodules::
     cd mediagoblin
     git submodule init && git submodule update
 
-Set up the in-package virtualenv via make::
 
-    ./bootstrap.sh && ./configure && make
+And set up the in-package virtualenv::
+
+    (virtualenv --system-site-packages . || virtualenv .) && ./bin/python setup.py develop
 
 .. note::
 
-   Prefer not to use make, or want to use the "old way" of installing
-   MediaGoblin (maybe you know how to use virtualenv and python
-   packaging)?  You still can!  All that the above make script is doing
-   is installing an in-package virtualenv and running
+   We presently have an experimental make-style deployment system.  if
+   you'd like to try it, instead of the above command, you can run::
 
-     ./bin/python setup.py develop
+     ./bootstrap.sh && ./configure && make
+
+   This also includes a number of nice features, such as keeping your
+   viratualenv up to date by simply running `make update`.
 
 .. ::
 

@@ -16,6 +16,7 @@
 
 from mediagoblin import mg_globals
 from mediagoblin.db.open import setup_connection_and_db_from_config
+from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.storage.filestorage import BasicFileStorage
 from mediagoblin.init import setup_storage, setup_global_and_app_config
 
@@ -223,6 +224,7 @@ def env_export(args):
     '''
     Export database and media files to a tar archive
     '''
+    commands_util.check_unrecognized_args(args)
     if args.cache_path:
         if os.path.exists(args.cache_path):
             _log.error('The cache directory must not exist '

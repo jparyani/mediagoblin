@@ -70,6 +70,7 @@ class User(Base, UserMixin):
     # Intented to be nullable=False, but migrations would not work for it
     # set to nullable=True implicitly.
     wants_comment_notification = Column(Boolean, default=True)
+    wants_notifications = Column(Boolean, default=True)
     license_preference = Column(Unicode)
 #--column admin is VESTIGIAL with privileges and should not be used------------
 #--should be dropped ASAP though a bug in sqlite3 prevents this atm------------

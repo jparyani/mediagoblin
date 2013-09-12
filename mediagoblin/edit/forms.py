@@ -61,12 +61,10 @@ class EditProfileForm(wtforms.Form):
 
 
 class EditAccountForm(wtforms.Form):
-    new_email = wtforms.TextField(
-        _('New email address'),
-        [wtforms.validators.Optional(),
-         normalize_user_or_email_field(allow_user=False)])
     wants_comment_notification = wtforms.BooleanField(
         description=_("Email me when others comment on my media"))
+    wants_notifications = wtforms.BooleanField(
+        description=_("Enable insite notifications about events."))
     license_preference = wtforms.SelectField(
         _('License preference'),
         [
@@ -111,3 +109,15 @@ class ChangePassForm(wtforms.Form):
         [wtforms.validators.Required(),
          wtforms.validators.Length(min=6, max=30)],
         id="password")
+
+
+class ChangeEmailForm(wtforms.Form):
+    new_email = wtforms.TextField(
+        _('New email address'),
+        [wtforms.validators.Required(),
+         normalize_user_or_email_field(allow_user=False)])
+    password = wtforms.PasswordField(
+        _('Password'),
+        [wtforms.validators.Required()],
+        description=_(
+            "Enter your password to prove you own this account."))

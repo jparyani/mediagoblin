@@ -14,24 +14,22 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import datetime
+import logging
 
 from mediagoblin.media_types import MediaManagerBase
-from mediagoblin.media_types.image.processing import process_image, \
-    sniff_handler
-from mediagoblin.tools import pluginapi
+from mediagoblin.media_types.image.processing import sniff_handler, \
+        ImageProcessingManager
+
+
+_log = logging.getLogger(__name__)
 
 
 ACCEPTED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "tiff"]
 MEDIA_TYPE = 'mediagoblin.media_types.image'
 
 
-def setup_plugin():
-    config = pluginapi.get_config('mediagoblin.media_types.image')
-
-
 class ImageMediaManager(MediaManagerBase):
     human_readable = "Image"
-    processor = staticmethod(process_image)
     display_template = "mediagoblin/media_displays/image.html"
     default_thumb = "images/media_thumbs/image.png"
 
@@ -65,8 +63,8 @@ def get_media_type_and_manager(ext):
 
 
 hooks = {
-    'setup': setup_plugin,
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
     ('media_manager', MEDIA_TYPE): lambda: ImageMediaManager,
+    ('reprocess_manager', MEDIA_TYPE): lambda: ImageProcessingManager,
 }

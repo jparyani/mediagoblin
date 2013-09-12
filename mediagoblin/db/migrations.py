@@ -301,7 +301,6 @@ def drop_token_related_User_columns(db):
     metadata = MetaData(bind=db.bind)
     user_table = inspect_table(metadata, 'core__users')
 
-
     verification_key = user_table.columns['verification_key']
     fp_verification_key = user_table.columns['fp_verification_key']
     fp_token_expire = user_table.columns['fp_token_expire']
@@ -322,7 +321,6 @@ class CommentSubscription_v0(declarative_base()):
     media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
 
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
-
 
     notify = Column(Boolean, nullable=False, default=True)
     send_email = Column(Boolean, nullable=False, default=True)
@@ -369,6 +367,8 @@ def add_new_notification_tables(db):
     CommentNotification_v0.__table__.create(db.bind)
     ProcessingNotification_v0.__table__.create(db.bind)
 
+    db.commit()
+
 
 @RegisterMigration(13, MIGRATIONS)
 def pw_hash_nullable(db):
@@ -383,6 +383,9 @@ def pw_hash_nullable(db):
     if db.bind.url.drivername == 'sqlite':
         constraint = UniqueConstraint('username', table=user_table)
         constraint.create()
+
+    db.commit()
+
 
 # oauth1 migrations
 class Client_v0(declarative_base()):
@@ -462,6 +465,16 @@ def create_oauth1_tables(db):
 
     db.commit()
 
+
+@RegisterMigration(15, MIGRATIONS)
+def wants_notifications(db):
+    """Add a wants_notifications field to User model"""
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
+    col = Column('wants_notifications', Boolean, default=True)
+    col.create(user_table)
+    db.commit()
+
 class ReportBase_v0(declarative_base()):
     __tablename__ = 'core__reports'
     id = Column(Integer, primary_key=True)
@@ -482,6 +495,8 @@ class CommentReport_v0(ReportBase_v0):
     id = Column('id',Integer, ForeignKey('core__reports.id'),
                                                 primary_key=True)
     comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=False)
+
+
 
 class MediaReport_v0(ReportBase_v0):
     __tablename__ = 'core__reports_on_media'
@@ -515,7 +530,7 @@ class PrivilegeUserAssociation_v0(declarative_base()):
         ForeignKey(Privilege.id),
         primary_key=True)
 
-@RegisterMigration(15, MIGRATIONS)
+@RegisterMigration(16, MIGRATIONS)
 def create_moderation_tables(db):
     ReportBase_v0.__table__.create(db.bind)
     CommentReport_v0.__table__.create(db.bind)
@@ -531,7 +546,7 @@ def create_moderation_tables(db):
         p.save()
 
 
-@RegisterMigration(16, MIGRATIONS)
+@RegisterMigration(17, MIGRATIONS)
 def update_user_privilege_columns(db):
     # first, create the privileges which would be created by foundations
     default_privileges = Privilege.query.filter(

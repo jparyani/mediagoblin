@@ -21,13 +21,13 @@ from mediagoblin import mg_globals as mgg
 _log = logging.getLogger(__name__)
 
 
-def skip_transcode(metadata):
+def skip_transcode(metadata, size):
     '''
     Checks video metadata against configuration values for skip_transcode.
 
     Returns True if the video matches the requirements in the configuration.
     '''
-    config = mgg.global_config['media_type:mediagoblin.media_types.video']\
+    config = mgg.global_config['plugins']['mediagoblin.media_types.video']\
             ['skip_transcode']
 
     medium_config = mgg.global_config['media:medium']
@@ -51,9 +51,9 @@ def skip_transcode(metadata):
             return False
 
     if config['dimensions_match']:
-        if not metadata['videoheight'] <= medium_config['max_height']:
+        if not metadata['videoheight'] <= size[1]:
             return False
-        if not metadata['videowidth'] <= medium_config['max_width']:
+        if not metadata['videowidth'] <= size[0]:
             return False
 
     return True

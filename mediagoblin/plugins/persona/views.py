@@ -64,6 +64,7 @@ def login(request):
 
         if user:
             request.session['user_id'] = unicode(user.id)
+            request.session['persona_login_email'] = email
             request.session.save()
 
             return redirect(request, "index")
@@ -183,9 +184,11 @@ def add(request):
         new_entry.user_id = request.user.id
         new_entry.save()
 
+        request.session['persona_login_email'] = email
+
         messages.add_message(
             request,
             messages.SUCCESS,
-            _('Your Person email address was saved successfully.'))
+            _('Your Persona email address was saved successfully.'))
 
         return redirect(request, 'mediagoblin.edit.account')

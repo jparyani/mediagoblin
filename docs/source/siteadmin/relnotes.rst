@@ -22,6 +22,74 @@ If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
 
+0.5.0
+=====
+
+**NOTE:** If using the API is important to you, we're in a state of
+ransition towards a new API via the Pump API.  As such, though the old
+API still probably works, some changes have happened to the way oauth
+works to make it more Pump-compatible.  If you're heavily using
+clients using the old API, you may wish to hold off on upgrading for
+now.  Otherwise, jump in and have fun! :)
+
+**Do this to upgrade**
+
+1. Make sure to run
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+   after upgrading.
+
+.. mention something about new, experimental configure && make support
+
+2. Note that a couple of things have changed with ``mediagoblin.ini``. First
+   we have a new Authentication System. You need to add 
+   ``[[mediagoblin.plugins.basic_auth]]`` under the ``[plugins]`` section of 
+   your config file. Second, media types are now plugins, so you need to add
+   each media type under the ``[plugins]`` section of your config file.
+
+
+3. We have made a script to transition your ``mediagoblin_local.ini`` file for
+   you. This script can be found at 
+   
+.. add a link to the script
+
+If you run into problems, don't hesitate to
+`contact us <http://mediagoblin.org/pages/join.html>`_
+(IRC is often best).
+
+**New features**
+
+* As mentioned above, we now have a plugable Authentication system. You can
+  use any combination of the multiple authentication systems 
+  (:ref:`basic_auth-chapter`, :ref:`persona-chapter`, :ref:`openid-chapter`)
+  or write your own!
+* Media types are now plugins!  This means that new media types will
+  be able to do new, fancy things they couldn't in the future.
+* We now have notification support! This allows you to subscribe to media
+  comments and to be notified when someone comments on your media.
+* New reprocessing framework! You can now reprocess failed uploads, and
+  send already processed media back to processing to re-transcode or resize
+  media.
+* Comment preview!
+* Users now have the ability to change their email associated with their
+  account.
+* New oauth code as we move closer to federation support.
+* Experimental pyconfigure support for GNU-style configue and makefile
+  deployment.
+* Database foundations! You can now pre-populate the database models.
+* Way faster unit test run-time via in-memory database.
+* All mongokit stuff has been cleaned up.
+* Fixes for non-ascii filenames.
+* The option to stay logged in.
+* Mediagoblin has been upgraded to use the latest `celery <http://celeryproject.org/>`_
+  version.
+* You can now add jinja2 extensions to your config file to use in custom
+  templates.
+* Fixed video permission issues.
+* Mediagoblin docs are now hosted with multiple versions.
+* We removed redundent tooltips from the STL media display.
+* We are now using itsdangerous for verification tokens.
+
+
 0.4.1
 =====
 
@@ -80,6 +148,7 @@ please note the following:
 
 
 **New features**
+
 * PDF media type!
 * Improved plugin system.  More flexible, better documented, with a
   new plugin authoring section of the docs.

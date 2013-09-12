@@ -23,4 +23,4 @@
 
 # see http://www.python.org/dev/peps/pep-0386/
 
-__version__ = "0.5.0.dev"
+__version__ = "0.6.0.dev"

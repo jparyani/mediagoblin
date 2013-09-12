@@ -30,7 +30,7 @@
   {% set display_type, display_path = media.get_display_media() %}
 
   <video controls
-         {% if global_config['media_type:mediagoblin.media_types.video']['auto_play'] %}autoplay{% endif %}
+         {% if global_config['plugins']['mediagoblin.media_types.video']['auto_play'] %}autoplay{% endif %}
          preload="auto" class="video-js vjs-mg-skin"
          data-setup='{"height": {{ media.media_data.height }},
                       "width": {{ media.media_data.width }} }'>
@@ -62,11 +62,11 @@
         </a>
       </li>
     {% endif %}
-    {% if 'webm_640' in media.media_files %}
+    {% if 'webm_video' in media.media_files %}
       <li>
         <a href="{{ request.app.public_store.file_url(
-                       media.media_files.webm_640) }}">
-          {%- trans %}WebM file (640p; VP8/Vorbis){% endtrans -%}
+                       media.media_files.webm_video) }}">
+          {%- trans %}WebM file (VP8/Vorbis){% endtrans -%}
         </a>
       </li>
     {% endif %}

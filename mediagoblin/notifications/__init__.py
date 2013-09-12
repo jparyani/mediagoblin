@@ -17,7 +17,8 @@
 import logging
 
 from mediagoblin.db.models import Notification, \
-        CommentNotification, CommentSubscription
+        CommentNotification, CommentSubscription, User
+from mediagoblin.notifications.task import email_notification_task
 from mediagoblin.notifications.tools import generate_comment_message
 
 _log = logging.getLogger(__name__)
@@ -121,6 +122,12 @@ NOTIFICATION_FETCH_LIMIT = 100
 
 def get_notifications(user_id, only_unseen=True):
     query = Notification.query.filter_by(user_id=user_id)
+    wants_notifications = User.query.filter_by(id=user_id).first()\
+        .wants_notifications
+
+    # If the user does not want notifications, don't return any
+    if not wants_notifications:
+        return None
 
     if only_unseen:
         query = query.filter_by(seen=False)
@@ -130,12 +137,19 @@ def get_notifications(user_id, only_unseen=True):
 
     return notifications
 
+
 def get_notification_count(user_id, only_unseen=True):
     query = Notification.query.filter_by(user_id=user_id)
+    wants_notifications = User.query.filter_by(id=user_id).first()\
+        .wants_notifications
 
     if only_unseen:
         query = query.filter_by(seen=False)
 
-    count = query.count()
+    # If the user doesn't want notifications, don't show any
+    if not wants_notifications:
+        count = None
+    else:
+        count = query.count()
 
     return count

@@ -13,14 +13,18 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import argparse
 import os
 import logging
 import dateutil.parser
 from subprocess import PIPE, Popen
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.processing import (create_pub_filepath,
-                                    FilenameBuilder, BadMediaFail)
+from mediagoblin.processing import (
+    FilenameBuilder, BadMediaFail,
+    MediaProcessor, ProcessingManager,
+    request_from_args, get_process_filename,
+    store_public, copy_original)
 from mediagoblin.tools.translate import fake_ugettext_passthrough as _
 
 _log = logging.getLogger(__name__)
@@ -230,51 +234,207 @@ def pdf_info(original):
 
     return ret_dict
 
-def process_pdf(proc_state):
-    """Code to process a pdf file. Will be run by celery.
 
-    A Workbench() represents a local tempory dir. It is automatically
-    cleaned up when this function exits.
+class CommonPdfProcessor(MediaProcessor):
     """
-    entry = proc_state.entry
-    workbench = proc_state.workbench
+    Provides a base for various pdf processing steps
+    """
+    acceptable_files = ['original', 'pdf']
 
-    queued_filename = proc_state.get_queued_filename()
-    name_builder = FilenameBuilder(queued_filename)
+    def common_setup(self):
+        """
+        Set up common pdf processing steps
+        """
+        # Pull down and set up the processing file
+        self.process_filename = get_process_filename(
+            self.entry, self.workbench, self.acceptable_files)
+        self.name_builder = FilenameBuilder(self.process_filename)
 
-    # Copy our queued local workbench to its final destination
-    original_dest = name_builder.fill('{basename}{ext}')
-    proc_state.copy_original(original_dest)
+        self._set_pdf_filename()
 
-    # Create a pdf if this is a different doc, store pdf for viewer
-    ext = queued_filename.rsplit('.', 1)[-1].lower()
-    if ext == 'pdf':
-        pdf_filename = queued_filename
-    else:
-        pdf_filename = queued_filename.rsplit('.', 1)[0] + '.pdf'
+    def _set_pdf_filename(self):
+        if self.name_builder.ext == '.pdf':
+            self.pdf_filename = self.process_filename
+        elif self.entry.media_files.get('pdf'):
+            self.pdf_filename = self.workbench.localized_file(
+                mgg.public_store, self.entry.media_files['pdf'])
+        else:
+            self.pdf_filename = self._generate_pdf()
+
+    def copy_original(self):
+        copy_original(
+            self.entry, self.process_filename,
+            self.name_builder.fill('{basename}{ext}'))
+
+    def generate_thumb(self, thumb_size=None):
+        if not thumb_size:
+            thumb_size = (mgg.global_config['media:thumb']['max_width'],
+                          mgg.global_config['media:thumb']['max_height'])
+
+        # Note: pdftocairo adds '.png', so don't include an ext
+        thumb_filename = os.path.join(self.workbench.dir,
+                                      self.name_builder.fill(
+                                          '{basename}.thumbnail'))
+
+        executable = where('pdftocairo')
+        args = [executable, '-scale-to', str(min(thumb_size)),
+                '-singlefile', '-png', self.pdf_filename, thumb_filename]
+
+        _log.debug('calling {0}'.format(repr(' '.join(args))))
+        Popen(executable=executable, args=args).wait()
+
+        # since pdftocairo added '.png', we need to include it with the
+        # filename
+        store_public(self.entry, 'thumb', thumb_filename + '.png',
+                     self.name_builder.fill('{basename}.thumbnail.png'))
+
+    def _generate_pdf(self):
+        """
+        Store the pdf. If the file is not a pdf, make it a pdf
+        """
+        tmp_pdf = self.process_filename
+
         unoconv = where('unoconv')
         Popen(executable=unoconv,
-              args=[unoconv, '-v', '-f', 'pdf', queued_filename]).wait()
-        if not os.path.exists(pdf_filename):
+              args=[unoconv, '-v', '-f', 'pdf', self.process_filename]).wait()
+
+        if not os.path.exists(tmp_pdf):
             _log.debug('unoconv failed to convert file to pdf')
             raise BadMediaFail()
-        proc_state.store_public(keyname=u'pdf', local_file=pdf_filename)
 
-    pdf_info_dict = pdf_info(pdf_filename)
+        store_public(self.entry, 'pdf', tmp_pdf,
+                     self.name_builder.fill('{basename}.pdf'))
 
-    for name, width, height in [
-        (u'thumb', mgg.global_config['media:thumb']['max_width'],
-                   mgg.global_config['media:thumb']['max_height']),
-        (u'medium', mgg.global_config['media:medium']['max_width'],
-                   mgg.global_config['media:medium']['max_height']),
-        ]:
-        filename = name_builder.fill('{basename}.%s.png' % name)
-        path = workbench.joinpath(filename)
-        create_pdf_thumb(pdf_filename, path, width, height)
-        assert(os.path.exists(path))
-        proc_state.store_public(keyname=name, local_file=path)
+        return self.workbench.localized_file(
+            mgg.public_store, self.entry.media_files['pdf'])
 
-    proc_state.delete_queue_file()
+    def extract_pdf_info(self):
+        pdf_info_dict = pdf_info(self.pdf_filename)
+        self.entry.media_data_init(**pdf_info_dict)
 
-    entry.media_data_init(**pdf_info_dict)
-    entry.save()
+    def generate_medium(self, size=None):
+        if not size:
+            size = (mgg.global_config['media:medium']['max_width'],
+                    mgg.global_config['media:medium']['max_height'])
+
+        # Note: pdftocairo adds '.png', so don't include an ext
+        filename = os.path.join(self.workbench.dir,
+                                self.name_builder.fill('{basename}.medium'))
+
+        executable = where('pdftocairo')
+        args = [executable, '-scale-to', str(min(size)),
+                '-singlefile', '-png', self.pdf_filename, filename]
+
+        _log.debug('calling {0}'.format(repr(' '.join(args))))
+        Popen(executable=executable, args=args).wait()
+
+        # since pdftocairo added '.png', we need to include it with the
+        # filename
+        store_public(self.entry, 'medium', filename + '.png',
+                     self.name_builder.fill('{basename}.medium.png'))
+
+
+class InitialProcessor(CommonPdfProcessor):
+    """
+    Initial processing step for new pdfs
+    """
+    name = "initial"
+    description = "Initial processing"
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        """
+        Determine if this media type is eligible for processing
+        """
+        if not state:
+            state = entry.state
+        return state in (
+            "unprocessed", "failed")
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        parser.add_argument(
+            '--thumb-size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['size', 'thumb_size'])
+
+    def process(self, size=None, thumb_size=None):
+        self.common_setup()
+        self.extract_pdf_info()
+        self.copy_original()
+        self.generate_medium(size=size)
+        self.generate_thumb(thumb_size=thumb_size)
+        self.delete_queue_file()
+
+
+class Resizer(CommonPdfProcessor):
+    """
+    Resizing process steps for processed pdfs
+    """
+    name = 'resize'
+    description = 'Resize thumbnail and medium'
+    thumb_size = 'size'
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        """
+        Determine if this media type is eligible for processing
+        """
+        if not state:
+            state = entry.state
+        return state in 'processed'
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name)
+
+        parser.add_argument(
+            '--size',
+            nargs=2,
+            metavar=('max_width', 'max_height'),
+            type=int)
+
+        parser.add_argument(
+            'file',
+            choices=['medium', 'thumb'])
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(
+            args, ['size', 'file'])
+
+    def process(self, file, size=None):
+        self.common_setup()
+        if file == 'medium':
+            self.generate_medium(size=size)
+        elif file == 'thumb':
+            self.generate_thumb(thumb_size=size)
+
+
+class PdfProcessingManager(ProcessingManager):
+    def __init__(self):
+        super(self.__class__, self).__init__()
+        self.add_processor(InitialProcessor)
+        self.add_processor(Resizer)

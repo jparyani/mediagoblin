@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.media_types import MediaManagerBase
-from mediagoblin.media_types.audio.processing import process_audio, \
+from mediagoblin.media_types.audio.processing import AudioProcessingManager, \
     sniff_handler
 from mediagoblin.tools import pluginapi
 
@@ -32,8 +32,8 @@ def setup_plugin():
 
 class AudioMediaManager(MediaManagerBase):
     human_readable = "Audio"
-    processor = staticmethod(process_audio)
     display_template = "mediagoblin/media_displays/audio.html"
+    default_thumb = "images/media_thumbs/image.png"
 
 
 def get_media_type_and_manager(ext):
@@ -45,4 +45,5 @@ hooks = {
     'get_media_type_and_manager': get_media_type_and_manager,
     'sniff_handler': sniff_handler,
     ('media_manager', MEDIA_TYPE): lambda: AudioMediaManager,
+    ('reprocess_manager', MEDIA_TYPE): lambda: AudioProcessingManager,
 }
