@@ -18,7 +18,7 @@ import urllib
 import copy
 from math import ceil, floor
 from itertools import izip, count
-
+from werkzeug.datastructures import MultiDict
 
 PAGINATION_DEFAULT_PER_PAGE = 30
 
@@ -98,7 +98,11 @@ class Pagination(object):
         """
         Get a page url by adding a page= parameter to the base url
         """
-        new_get_params = dict(get_params) or {}
+        if isinstance(get_params, MultiDict):
+            new_get_params = get_params.to_dict()
+        else:
+            new_get_params = dict(get_params) or {}
+
         new_get_params['page'] = page_no
         return "%s?%s" % (
             base_url, urllib.urlencode(new_get_params))
