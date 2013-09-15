@@ -130,7 +130,7 @@
               <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
                 {%- trans %}Create new collection{% endtrans -%}
               </a>
-              {% template_hook("base_path_to_blog")%}
+              {% template_hook("header_actions") %}
               {% if request.user.is_admin %}
                 <p>
                   <span class="dropdown_title">Admin powers:</span>
