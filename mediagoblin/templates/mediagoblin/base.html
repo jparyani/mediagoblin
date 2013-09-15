@@ -116,6 +116,8 @@
                   {%- trans %}Media processing panel{% endtrans -%}
                 </a>
                 &middot;
+                {% template_hook("blog_dashboard_home") %}
+                &middot;
                 <a id="logout" href=
                   {% if persona is not defined %}
                     "{{ request.urlgen('mediagoblin.auth.logout') }}"
@@ -130,7 +132,7 @@
               <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
                 {%- trans %}Create new collection{% endtrans -%}
               </a>
-              {% template_hook("header_actions") %}
+              {% template_hook("create_blog_home") %}
               {% if request.user.is_admin %}
                 <p>
                   <span class="dropdown_title">Admin powers:</span>

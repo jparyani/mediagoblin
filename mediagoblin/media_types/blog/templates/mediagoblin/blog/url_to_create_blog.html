@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
+  <a class="button_action" href="{{ request.urlgen('mediagoblin.media_types.blog.create',
+                                user=request.user.username) }}">
+    {%- trans %} Create Blog {% endtrans -%}
+  </a>
 
-  <a href="{{ request.urlgen('mediagoblin.media_types.blog.blog_admin_dashboard',
-                                 user=request.user.username) }}">
-   {%- trans %} Blog Dashboard {% endtrans -%}
-    </a>
