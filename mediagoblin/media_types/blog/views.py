@@ -38,7 +38,7 @@ from mediagoblin.tools.response import (render_to_response,
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.text import (
-    convert_to_tag_list_of_dicts, media_tags_as_string, clean_html, 
+    convert_to_tag_list_of_dicts, media_tags_as_string, clean_html,
     cleaned_markdown_conversion)
 
 from mediagoblin.db.util import check_media_slug_used, check_collection_slug_used
@@ -55,7 +55,7 @@ def blog_edit(request):
     """
     url_user = request.matchdict.get('user', None)
     blog_slug = request.matchdict.get('blog_slug', None)
-    
+
     config = pluginapi.get_config('mediagoblin.media_types.blog')
     max_blog_count = config['max_blog_count']
     form = blog_forms.BlogEditForm(request.form)
@@ -74,10 +74,10 @@ def blog_edit(request):
                 _log.info("Here")
                 blog = request.db.Blog()
                 blog.title = unicode(form.title.data)
-                blog.description = unicode(cleaned_markdown_conversion((form.description.data))) 
+                blog.description = unicode(cleaned_markdown_conversion((form.description.data)))
                 blog.author = request.user.id
                 blog.generate_slug()
-               
+
                 blog.save()
                 return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
                         user=request.user.username
@@ -96,8 +96,8 @@ def blog_edit(request):
             defaults = dict(
                 title = blog.title,
                 description = cleaned_markdown_conversion(blog.description),
-                author = request.user.id) 
-            
+                author = request.user.id)
+
             form = blog_forms.BlogEditForm(**defaults)
 
             return render_to_response(
@@ -112,26 +112,26 @@ def blog_edit(request):
                 blog.description = unicode(cleaned_markdown_conversion((form.description.data)))
                 blog.author = request.user.id
                 blog.generate_slug()
-                
+
                 blog.save()
                 add_message(request, SUCCESS, "Your blog is updated.")
                 return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
                         user=request.user.username,
-                        blog_slug=blog.slug)            
-            
+                        blog_slug=blog.slug)
 
-@require_active_login        
+
+@require_active_login
 def blogpost_create(request):
-    
+
     form = blog_forms.BlogPostEditForm(request.form, license=request.user.license_preference)
-    
+
     if request.method == 'POST' and form.validate():
         blog_slug = request.matchdict.get('blog_slug')
         blog = request.db.Blog.query.filter_by(slug=blog_slug,
             author=request.user.id).first()
         if not blog:
             return render_404(request)
-        
+
         blogpost = request.db.MediaEntry()
         blogpost.media_type = 'mediagoblin.media_types.blogpost'
         blogpost.title = unicode(form.title.data)
@@ -140,22 +140,22 @@ def blogpost_create(request):
         blogpost.license = unicode(form.license.data) or None
         blogpost.uploader = request.user.id
         blogpost.generate_slug()
-        
+
         set_blogpost_state(request, blogpost)
         blogpost.save()
-        
+
         # connect this blogpost to its blog
         blog_post_data = request.db.BlogPostData()
         blog_post_data.blog = blog.id
         blog_post_data.media_entry = blogpost.id
         blog_post_data.save()
-    
+
         add_message(request, SUCCESS, _('Woohoo! Submitted!'))
         add_comment_subscription(request.user, blogpost)
         return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
                         user=request.user.username,
                         blog_slug=blog.slug)
-        
+
     return render_to_response(
         request,
         'mediagoblin/blog/blog_post_edit_create.html',
@@ -168,34 +168,34 @@ def blogpost_create(request):
 def blogpost_edit(request):
     blog_slug = request.matchdict.get('blog_slug', None)
     blog_post_slug = request.matchdict.get('blog_post_slug', None)
-   
+
     blogpost = request.db.MediaEntry.query.filter_by(slug=blog_post_slug, uploader=request.user.id).first()
     blog = request.db.Blog.query.filter_by(slug=blog_slug, author=request.user.id).first()
-    
+
     if not blogpost or not blog:
         return render_404(request)
-    
+
     defaults = dict(
                 title = blogpost.title,
                 description = cleaned_markdown_conversion(blogpost.description),
                 tags=media_tags_as_string(blogpost.tags),
                 license=blogpost.license)
-    
+
     form = blog_forms.BlogPostEditForm(request.form, **defaults)
     if request.method == 'POST' and form.validate():
         blogpost.title = unicode(form.title.data)
         blogpost.description = unicode(cleaned_markdown_conversion((form.description.data)))
         blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
-        blogpost.license = unicode(form.license.data) 
+        blogpost.license = unicode(form.license.data)
         set_blogpost_state(request, blogpost)
         blogpost.generate_slug()
         blogpost.save()
-        
+
         add_message(request, SUCCESS, _('Woohoo! edited blogpost is submitted'))
         return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
                         user=request.user.username,
                         blog_slug=blog.slug)
-    
+
     return render_to_response(
         request,
         'mediagoblin/blog/blog_post_edit_create.html',
@@ -203,12 +203,12 @@ def blogpost_edit(request):
         'app_config': mg_globals.app_config,
         'user': request.user.username,
         'blog_post_slug': blog_post_slug
-        })    
+        })
 
 
 @uses_pagination
 def blog_dashboard(request, page):
-    
+
     url_user = request.matchdict.get('user')
     user = request.db.User.query.filter_by(username=url_user).one()
     blog_slug = request.matchdict.get('blog_slug', None)
@@ -231,36 +231,37 @@ def blog_dashboard(request, page):
                         'blog_slug':blog_slug,
                         'blog':blog,
                         'user':user,
-                        'pagination':pagination 
-                        }) 
+                        'pagination':pagination
+                        })
     if not request.user or request.user.id != user.id or not blog_slug:
+        blogs = blogs.all()
         return render_to_response(
         request,
         'mediagoblin/blog/list_of_blogs.html',
         {
         'blogs':blogs,
         'user':user
-        }) 
+        })
 
-    
+
 
 #supposed to list all the blog posts belonging to a particular blog of particular user.
 @uses_pagination
 def blog_post_listing(request, page):
-    
+
     blog_owner = request.matchdict.get('user')
     blog_slug = request.matchdict.get('blog_slug', None)
     owner_user = User.query.filter_by(username=blog_owner).one()
     blog = request.db.Blog.query.filter_by(slug=blog_slug).first()
-    
+
     if not owner_user or not blog:
         return render_404(request)
-    
+
     all_blog_posts = blog.get_all_blog_posts(u'processed').order_by(MediaEntry.created.desc())
     pagination = Pagination(page, all_blog_posts)
     pagination.per_page = 8
     blog_posts_on_a_page = pagination()
-    
+
     return render_to_response(
         request,
         'mediagoblin/blog/blog_post_listing.html',
@@ -268,35 +269,35 @@ def blog_post_listing(request, page):
          'pagination': pagination,
          'blog_owner': blog_owner
         })
-    
-@require_active_login        
+
+@require_active_login
 def draft_view(request):
     blog_slug = request.matchdict.get('blog_slug', None)
     blog_post_slug = request.matchdict.get('blog_post_slug', None)
     user = request.matchdict.get('user')
-   
+
     blog = request.db.Blog.query.filter_by(author=request.user.id, slug=blog_slug).first()
     blogpost = request.db.MediaEntry.query.filter_by(state = u'failed', uploader=request.user.id, slug=blog_post_slug).first()
-    
+
     if not blog or not blogpost:
         return render_404(request)
-        
+
     return render_to_response(
         request,
         'mediagoblin/blog/blogpost_draft_view.html',
         {'blogpost':blogpost,
          'blog': blog
          })
-@require_active_login         
+@require_active_login
 def blog_delete(request, **kwargs):
     url_user = request.matchdict.get('user')
     owner_user = request.db.User.query.filter_by(username=url_user).first()
-    
+
     blog_slug = request.matchdict.get('blog_slug', None)
     blog = request.db.Blog.query.filter_by(slug=blog_slug, author=owner_user.id).first()
     if not blog:
         return render_404(reequest)
-    
+
     form = blog_forms.ConfirmDeleteForm(request.form)
     if request.user.id == blog.author or request.user.is_admin:
         if request.method == 'POST' and form.validate():
@@ -333,6 +334,6 @@ def blog_delete(request, **kwargs):
         user=request.user.username)
 
 
-            
-    
-        
+
+
+
