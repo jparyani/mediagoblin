@@ -26,33 +26,33 @@
 {% endblock %}
 
 {% block mediagoblin_content %}
-<table>
-    {% if blogs%}
+
+    {% if blogs %}
+        <table>
         {% for blog in blogs %}
-            {% set others_blog_url = request.urlgen('mediagoblin.media_types.blog.blog_post_listing', 
+            {% set others_blog_url = request.urlgen('mediagoblin.media_types.blog.blog_post_listing',
                                               blog_slug=blog.slug, user=user.username) %}
-             {% if not request.user or request.user.username != user.username%}  
+             {% if not request.user or request.user.username != user.username%}
                     <tr><a href="{{ others_blog_url }}">{{ blog.title }}</a></tr>
-             {% else %}      
-                    {% set my_blog_url = request.urlgen('mediagoblin.media_types.blog.blog-dashboard', 
-                   blog_slug=blog.slug, user=request.user.username) %}                                
+             {% else %}
+                    {% set my_blog_url = request.urlgen('mediagoblin.media_types.blog.blog-dashboard',
+                   blog_slug=blog.slug, user=request.user.username) %}
                 <tr><a href="{{ my_blog_url }}">{{ blog.title }}</a></tr>
              {% endif %}
              <br>
+         </table>
         {% endfor %}
     {% else %}
-        <p>No blog has been created yet.</p>
+
+        {% if request.user and request.user.username==user.username %}
+            <p>You have not created any blog yet.</p>
+            {% set blog_create_url = request.urlgen('mediagoblin.media_types.blog.create',
+              user=request.user.username) %}
+          <a class="button_action" href="{{ blog_create_url }}">{% trans %}Create a Blog{% endtrans %}</a>
+          {% else %}
+            <p>No blog has been created by <strong>{{ user.username }}</strong>yet.</p>
+        {% endif %}
     {% endif %}
-</table>
+
 {% endblock mediagoblin_content %}
-
-
-
-
-
-
-
-
-
-
 
