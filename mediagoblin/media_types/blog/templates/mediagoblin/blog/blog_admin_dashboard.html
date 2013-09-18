@@ -95,6 +95,11 @@
         </tr>
         {% endfor %}
      </table>
+     {% set blogpost_listing_url = request.urlgen('mediagoblin.media_types.blog.blog_post_listing',
+                                              blog_slug=blog_slug, user=user.username) %}
+      <br/>
+      <br/>
+      <a href="{{ blogpost_listing_url}}">{% trans %}<em> Go to blog post list view </em>{% endtrans %}</a>
     {% else %}
         {% trans %} No blog post yet. {% endtrans %}
     {% endif %}
