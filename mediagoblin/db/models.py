@@ -267,6 +267,34 @@ class MediaEntry(Base, MediaEntryMixin):
         if media is not None:
             return media.url_for_self(urlgen)
 
+    def get_file_metadata(self, file_key, metadata_key=None):
+        """
+        Return the file_metadata dict of a MediaFile. If metadata_key is given,
+        return the value of the key.
+        """
+        media_file = MediaFile.query.filter_by(media_entry=self.id,
+                                               name=unicode(file_key)).first()
+
+        if media_file:
+            if metadata_key:
+                return media_file.file_metadata.get(metadata_key, None)
+
+            return media_file.file_metadata
+
+    def set_file_metadata(self, file_key, **kwargs):
+        """
+        Update the file_metadata of a MediaFile.
+        """
+        media_file = MediaFile.query.filter_by(media_entry=self.id,
+                                               name=unicode(file_key)).first()
+
+        file_metadata = media_file.file_metadata or {}
+
+        for key, value in kwargs.iteritems():
+            file_metadata[key] = value
+
+        media_file.file_metadata = file_metadata
+
     @property
     def media_data(self):
         return getattr(self, self.media_data_ref)
@@ -363,6 +391,7 @@ class MediaFile(Base):
         nullable=False)
     name_id = Column(SmallInteger, ForeignKey(FileKeynames.id), nullable=False)
     file_path = Column(PathTupleWithSlashes)
+    file_metadata = Column(JSONEncoded)
 
     __table_args__ = (
         PrimaryKeyConstraint('media_entry', 'name_id'),

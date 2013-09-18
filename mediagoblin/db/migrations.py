@@ -494,3 +494,15 @@ def upload_limits(db):
     col.create(media_entry_table)
 
     db.commit()
+
+
+@RegisterMigration(17, MIGRATIONS)
+def add_file_metadata(db):
+    """Add file_metadata to MediaFile"""
+    metadata = MetaData(bind=db.bind)
+    media_file_table = inspect_table(metadata, "core__mediafiles")
+
+    col = Column('file_metadata', JSONEncoded)
+    col.create(media_file_table)
+
+    db.commit()

@@ -120,6 +120,9 @@ class CommonAsciiProcessor(MediaProcessor):
                 thumb_size = (mgg.global_config['media:thumb']['max_width'],
                               mgg.global_config['media:thumb']['max_height'])
 
+            if self._skip_resizing(font, thumb_size):
+                return
+
             tmp_thumb = os.path.join(
                 self.conversions_subdir,
                 self.name_builder.fill('{basename}.thumbnail.png'))
@@ -144,9 +147,32 @@ class CommonAsciiProcessor(MediaProcessor):
                     Image.ANTIALIAS)
                 thumb.save(thumb_file)
 
+            thumb_info = {'font': font,
+                          'width': thumb_size[0],
+                          'height': thumb_size[1]}
+
+            self.entry.set_file_metadata('thumb', **thumb_info)
+
             _log.debug('Copying local file to public storage')
             store_public(self.entry, 'thumb', tmp_thumb,
                          self.name_builder.fill('{basename}.thumbnail.jpg'))
+
+        def _skip_resizing(self, font, thumb_size):
+            thumb_info = self.entry.get_file_metadata('thumb')
+
+            if not thumb_info:
+                return False
+
+            skip = True
+
+            if thumb_info.get('font') != font:
+                skip = False
+            elif thumb_info.get('width') != thumb_size[0]:
+                skip = False
+            elif thumb_info.get('height') != thumb_size[1]:
+                skip = False
+
+            return skip
 
 
 class InitialProcessor(CommonAsciiProcessor):
