@@ -474,3 +474,23 @@ def wants_notifications(db):
     col.create(user_table)
 
     db.commit()
+
+
+@RegisterMigration(16, MIGRATIONS)
+def upload_limits(db):
+    """Add user upload limit columns"""
+    metadata = MetaData(bind=db.bind)
+
+    user_table = inspect_table(metadata, 'core__users')
+    media_entry_table = inspect_table(metadata, 'core__media_entries')
+
+    col = Column('uploaded', Integer, default=0)
+    col.create(user_table)
+
+    col = Column('upload_limit', Integer)
+    col.create(user_table)
+
+    col = Column('file_size', Integer, default=0)
+    col.create(media_entry_table)
+
+    db.commit()

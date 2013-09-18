@@ -21,9 +21,32 @@
 {% block mediagoblin_head -%}
   {{ super() }}
   <script type="text/javascript" src="{{
-     request.staticdirect('/extlib/video-js/video.min.js') }}"></script>
-  <link href="{{ request.staticdirect('/css/vjs-mg-skin.css') }}"
+     request.staticdirect('/extlib/video-js/video.js') }}"></script>
+  {# Sadly commented out till we can get the mediagoblin skin ported over
+   # to the newest video.js release ;\  #}
+  {#
+     <link href="{{ request.staticdirect('/css/vjs-mg-skin.css') }}"
+           rel="stylesheet">
+  #}
+  <link href="{{
+          request.staticdirect('/extlib/video-js/video-js.css') }}"
         rel="stylesheet">
+
+  <style type="text/css">
+    .vjs-default-skin .vjs-big-play-button
+    {
+      top: 50%;
+      left: 50%;
+      margin: -1.5em auto auto -2em;
+    }
+    .vjs-play-progress, .vjs-volume-level {
+      background-color: #561792 !important;
+    }
+    .vjs-default-skin {
+      color: #a59ead !important;
+    }
+
+  </style>
 {%- endblock %}
 
 {% block mediagoblin_media %}
@@ -31,7 +54,7 @@
 
   <video controls
          {% if global_config['plugins']['mediagoblin.media_types.video']['auto_play'] %}autoplay{% endif %}
-         preload="auto" class="video-js vjs-mg-skin"
+         preload="auto" class="video-js vjs-default-skin"
          data-setup='{"height": {{ media.media_data.height }},
                       "width": {{ media.media_data.width }} }'>
     <source src="{{ request.app.public_store.file_url(display_path) }}"

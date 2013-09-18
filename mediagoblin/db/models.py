@@ -74,6 +74,8 @@ class User(Base, UserMixin):
     is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
     bio = Column(UnicodeText)  # ??
+    uploaded = Column(Integer, default=0)
+    upload_limit = Column(Integer)
 
     ## TODO
     # plugin data would be in a separate model
@@ -190,6 +192,7 @@ class MediaEntry(Base, MediaEntryMixin):
         # or use sqlalchemy.types.Enum?
     license = Column(Unicode)
     collected = Column(Integer, default=0)
+    file_size = Column(Integer, default=0)
 
     fail_error = Column(Unicode)
     fail_metadata = Column(JSONEncoded)
