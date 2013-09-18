@@ -213,6 +213,8 @@ def blog_dashboard(request, page):
     user = request.db.User.query.filter_by(username=url_user).one()
     blog_slug = request.matchdict.get('blog_slug', None)
     blogs = request.db.Blog.query.filter_by(author=user.id)
+    config = pluginapi.get_config('mediagoblin.media_types.blog')
+    max_blog_count = config['max_blog_count']
     if (request.user and request.user.id == user.id) or (request.user and request.user.is_admin):
         if blog_slug:
             blog = blogs.filter(Blog.slug==blog_slug).first()
@@ -240,7 +242,8 @@ def blog_dashboard(request, page):
         'mediagoblin/blog/list_of_blogs.html',
         {
         'blogs':blogs,
-        'user':user
+        'user':user,
+        'max_blog_count':max_blog_count
         })
 
 
@@ -288,6 +291,7 @@ def draft_view(request):
         {'blogpost':blogpost,
          'blog': blog
          })
+         
 @require_active_login
 def blog_delete(request, **kwargs):
     url_user = request.matchdict.get('user')
@@ -301,7 +305,6 @@ def blog_delete(request, **kwargs):
     form = blog_forms.ConfirmDeleteForm(request.form)
     if request.user.id == blog.author or request.user.is_admin:
         if request.method == 'POST' and form.validate():
-            _log.info('blab blab1')
             if form.confirm.data is True:
                 blog.delete()
                 add_message(
@@ -332,6 +335,30 @@ def blog_delete(request, **kwargs):
         _("The blog was not deleted because you have no rights."))
         return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
         user=request.user.username)
+        
+def blog_about_view(request):
+    blog_slug = request.matchdict.get('blog_slug', None)
+    url_user = request.matchdict.get('user', None)
+    
+    user = request.db.User.query.filter_by(username=url_user).first() 
+    blog = request.db.Blog.query.filter_by(author=user.id, slug=blog_slug).first()
+    
+    if not user or not blog:
+        return render_404(request)
+    
+    
+    else:
+        blog_posts_processed = blog.get_all_blog_posts(u'processed').count()
+        return render_to_response(
+                request,
+                'mediagoblin/blog/blog_about.html',
+                {'user': user,
+                'blog': blog,
+                'blogpost_count': blog_posts_processed
+                })
+        
+    
+    
 
 
 
