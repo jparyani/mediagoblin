@@ -19,9 +19,9 @@
 {#This injects the URL to a user's blog dashboard on her profile.
 #}
 {%if blogs %}
-<h2>Blog</h2>
+<h3>Blog</h3>
 {% set blogs_url = request.urlgen('mediagoblin.media_types.blog.blog_admin_dashboard', 
                                       blogs=blogs, user=user.username) %}
-
-<p><a href="{{ blogs_url }}">The user's blogs can be found here</a></p>
+                                    
+<p><a href="{{ blogs_url }}"><em>Go to blogs</em></a></p>
 {%endif%}
