@@ -75,7 +75,15 @@ def setup_plugin():
         #blog delete view
         ('mediagoblin.media_types.blog.blog_delete',
         '/u/<string:user>/b/<string:blog_slug>/delete/',
-        'mediagoblin.media_types.blog.views:blog_delete')
+        'mediagoblin.media_types.blog.views:blog_delete'
+        ),
+        # blog about view
+        ('mediagoblin.media_types.blog.blog_about',
+        '/u/<string:user>/b/<string:blog_slug>/about/',
+        'mediagoblin.media_types.blog.views:blog_about_view'
+        )
+        
+        
         ]
 
 
