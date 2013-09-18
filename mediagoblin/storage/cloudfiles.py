@@ -168,6 +168,12 @@ class CloudFilesStorage(StorageInterface):
                 # Copy to storage system in 4096 byte chunks
                 dest_file.send(source_file)
 
+    def get_file_size(self, filepath):
+        """Returns the file size in bytes"""
+        obj = self.container.get_object(
+                self._resolve_filepath(filepath))
+        return obj.total_bytes
+
 class CloudFilesStorageObjectWrapper():
     """
     Wrapper for python-cloudfiles's cloudfiles.storage_object.Object

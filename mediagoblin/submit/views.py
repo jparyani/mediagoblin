@@ -43,8 +43,28 @@ def submit_start(request):
     """
     First view for submitting a file.
     """
-    submit_form = submit_forms.SubmitStartForm(request.form,
-        license=request.user.license_preference)
+    user = request.user
+    if user.upload_limit >= 0:
+        upload_limit = user.upload_limit
+    else:
+        upload_limit = mg_globals.app_config.get('upload_limit', None)
+
+    if upload_limit and user.uploaded >= upload_limit:
+        messages.add_message(
+            request,
+            messages.WARNING,
+            _('Sorry, you have reached your upload limit.'))
+        return redirect(request, "mediagoblin.user_pages.user_home",
+                        user=request.user.username)
+
+    max_file_size = mg_globals.app_config.get('max_file_size', None)
+
+    submit_form = submit_forms.get_submit_start_form(
+        request.form,
+        license=request.user.license_preference,
+        max_file_size=max_file_size,
+        upload_limit=upload_limit,
+        uploaded=user.uploaded)
 
     if request.method == 'POST' and submit_form.validate():
         if not check_file_field(request, 'file'):
@@ -86,24 +106,49 @@ def submit_start(request):
                 with queue_file:
                     queue_file.write(request.files['file'].stream.read())
 
-                # Save now so we have this data before kicking off processing
-                entry.save()
+                # Get file size and round to 2 decimal places
+                file_size = request.app.queue_store.get_file_size(
+                    entry.queued_media_file) / (1024.0 * 1024)
+                file_size = float('{0:.2f}'.format(file_size))
 
-                # Pass off to async processing
-                #
-                # (... don't change entry after this point to avoid race
-                # conditions with changes to the document via processing code)
-                feed_url = request.urlgen(
-                    'mediagoblin.user_pages.atom_feed',
-                    qualified=True, user=request.user.username)
-                run_process_media(entry, feed_url)
+                error = False
 
-                add_message(request, SUCCESS, _('Woohoo! Submitted!'))
+                # Check if file size is over the limit
+                if max_file_size and file_size >= max_file_size:
+                    submit_form.file.errors.append(
+                        _(u'Sorry, the file size is too big.'))
+                    error = True
 
-                add_comment_subscription(request.user, entry)
+                # Check if user is over upload limit
+                if upload_limit and (user.uploaded + file_size) >= upload_limit:
+                    submit_form.file.errors.append(
+                        _('Sorry, uploading this file will put you over your'
+                          ' upload limit.'))
+                    error = True
 
-                return redirect(request, "mediagoblin.user_pages.user_home",
-                                user=request.user.username)
+                if not error:
+                    user.uploaded = user.uploaded + file_size
+                    user.save()
+
+                    entry.file_size = file_size
+
+                    # Save now so we have this data before kicking off processing
+                    entry.save()
+
+                    # Pass off to processing
+                    #
+                    # (... don't change entry after this point to avoid race
+                    # conditions with changes to the document via processing code)
+                    feed_url = request.urlgen(
+                        'mediagoblin.user_pages.atom_feed',
+                        qualified=True, user=request.user.username)
+                    run_process_media(entry, feed_url)
+                    add_message(request, SUCCESS, _('Woohoo! Submitted!'))
+
+                    add_comment_subscription(request.user, entry)
+
+                    return redirect(request, "mediagoblin.user_pages.user_home",
+                                user=user.username)
             except Exception as e:
                 '''
                 This section is intended to catch exceptions raised in

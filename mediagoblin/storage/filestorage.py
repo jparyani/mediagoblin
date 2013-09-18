@@ -111,3 +111,6 @@ class BasicFileStorage(StorageInterface):
                 os.makedirs(directory)
         # This uses chunked copying of 16kb buffers (Py2.7):
         shutil.copy(filename, self.get_local_path(filepath))
+
+    def get_file_size(self, filepath):
+        return os.stat(self._resolve_filepath(filepath)).st_size

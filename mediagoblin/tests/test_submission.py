@@ -24,13 +24,14 @@ import pytest
 
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin import mg_globals
-from mediagoblin.db.models import MediaEntry
+from mediagoblin.db.models import MediaEntry, User
+from mediagoblin.db.base import Session
 from mediagoblin.tools import template
 from mediagoblin.media_types.image import ImageMediaManager
 from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
 
 from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
-    BIG_BLUE, GOOD_PDF, GPS_JPG
+    BIG_BLUE, GOOD_PDF, GPS_JPG, MED_PNG, BIG_PNG
 
 GOOD_TAG_STRING = u'yin,yang'
 BAD_TAG_STRING = unicode('rage,' + 'f' * 26 + 'u' * 26)
@@ -107,8 +108,37 @@ class TestSubmission:
         self.logout()
         self.test_app.get(url)
 
+    def user_upload_limits(self, uploaded=None, upload_limit=None):
+        if uploaded:
+            self.test_user.uploaded = uploaded
+        if upload_limit:
+            self.test_user.upload_limit = upload_limit
+
+        self.test_user.save()
+
+        # Reload
+        self.test_user = User.query.filter_by(
+            username=self.test_user.username
+        ).first()
+
+        # ... and detach from session:
+        Session.expunge(self.test_user)
+
     def test_normal_jpg(self):
+        # User uploaded should be 0
+        assert self.test_user.uploaded == 0
+
         self.check_normal_upload(u'Normal upload 1', GOOD_JPG)
+
+        # User uploaded should be the same as GOOD_JPG size in Mb
+        file_size = os.stat(GOOD_JPG).st_size / (1024.0 * 1024)
+        file_size = float('{0:.2f}'.format(file_size))
+
+        # Reload user
+        self.test_user = User.query.filter_by(
+            username=self.test_user.username
+        ).first()
+        assert self.test_user.uploaded == file_size
 
     def test_normal_png(self):
         self.check_normal_upload(u'Normal upload 2', GOOD_PNG)
@@ -120,6 +150,75 @@ class TestSubmission:
                                          **self.upload_data(GOOD_PDF))
         self.check_url(response, '/u/{0}/'.format(self.test_user.username))
         assert 'mediagoblin/user_pages/user.html' in context
+
+    def test_default_upload_limits(self):
+        self.user_upload_limits(uploaded=500)
+
+        # User uploaded should be 500
+        assert self.test_user.uploaded == 500
+
+        response, context = self.do_post({'title': u'Normal upload 4'},
+                                         do_follow=True,
+                                         **self.upload_data(GOOD_JPG))
+        self.check_url(response, '/u/{0}/'.format(self.test_user.username))
+        assert 'mediagoblin/user_pages/user.html' in context
+
+        # Reload user
+        self.test_user = User.query.filter_by(
+            username=self.test_user.username
+        ).first()
+
+        # Shouldn't have uploaded
+        assert self.test_user.uploaded == 500
+
+    def test_user_upload_limit(self):
+        self.user_upload_limits(uploaded=25, upload_limit=25)
+
+        # User uploaded should be 25
+        assert self.test_user.uploaded == 25
+
+        response, context = self.do_post({'title': u'Normal upload 5'},
+                                         do_follow=True,
+                                         **self.upload_data(GOOD_JPG))
+        self.check_url(response, '/u/{0}/'.format(self.test_user.username))
+        assert 'mediagoblin/user_pages/user.html' in context
+
+        # Reload user
+        self.test_user = User.query.filter_by(
+            username=self.test_user.username
+        ).first()
+
+        # Shouldn't have uploaded
+        assert self.test_user.uploaded == 25
+
+    def test_user_under_limit(self):
+        self.user_upload_limits(uploaded=499)
+
+        # User uploaded should be 499
+        assert self.test_user.uploaded == 499
+
+        response, context = self.do_post({'title': u'Normal upload 6'},
+                                         do_follow=False,
+                                         **self.upload_data(MED_PNG))
+        form = context['mediagoblin/submit/start.html']['submit_form']
+        assert form.file.errors == [u'Sorry, uploading this file will put you'
+                                    ' over your upload limit.']
+
+        # Reload user
+        self.test_user = User.query.filter_by(
+            username=self.test_user.username
+        ).first()
+
+        # Shouldn't have uploaded
+        assert self.test_user.uploaded == 499
+
+    def test_big_file(self):
+        response, context = self.do_post({'title': u'Normal upload 7'},
+                                         do_follow=False,
+                                         **self.upload_data(BIG_PNG))
+
+        form = context['mediagoblin/submit/start.html']['submit_form']
+        assert form.file.errors == [u'Sorry, the file size is too big.']
 
     def check_media(self, request, find_data, count=None):
         media = MediaEntry.query.filter_by(**find_data)
@@ -155,6 +254,7 @@ class TestSubmission:
                     'ffffffffffffffffffffffffffuuuuuuuuuuuuuuuuuuuuuuuuuu']
 
     def test_delete(self):
+        self.user_upload_limits(uploaded=50)
         response, request = self.do_post({'title': u'Balanced Goblin'},
                                          *REQUEST_CONTEXT, do_follow=True,
                                          **self.upload_data(GOOD_JPG))
@@ -198,6 +298,14 @@ class TestSubmission:
                                          do_follow=True, url=delete_url)
         self.check_media(request, {'id': media_id}, 0)
         self.check_comments(request, media_id, 0)
+
+        # Reload user
+        self.test_user = User.query.filter_by(
+            username = self.test_user.username
+        ).first()
+
+        # Check that user.uploaded is the same as before the upload
+        assert self.test_user.uploaded == 50
 
     def test_evil_file(self):
         # Test non-suppoerted file with non-supported extension

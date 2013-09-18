@@ -191,6 +191,13 @@ class StorageInterface(object):
                 # Copy to storage system in 4M chunks
                 shutil.copyfileobj(source_file, dest_file, length=4*1048576)
 
+    def get_file_size(self, filepath):
+        """
+        Return the size of the file in bytes.
+        """
+        # Subclasses should override this method.
+        self.__raise_not_implemented()
+
 
 ###########
 # Utilities
