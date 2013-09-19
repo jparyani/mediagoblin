@@ -1,6 +1,6 @@
 {#
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2011 Free Software Foundation, Inc
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -25,28 +25,19 @@
 {% endblock mediagoblin_head %}
 
 {% block title -%}
-  {% trans username=user.username -%}
-    Changing {{ username }}'s password
-  {%- endtrans %} &mdash; {{ super() }}
+  {% trans %}Set your new password{% endtrans %} &mdash; {{ super() }}
 {%- endblock %}
 
 {% block mediagoblin_content %}
-  <form action="{{ request.urlgen('mediagoblin.edit.pass') }}"
+  <form action="{{ request.urlgen('mediagoblin.plugins.basic_auth.verify_forgot_password') }}"
         method="POST" enctype="multipart/form-data">
-    <div class="form_box edit_box">
-      <h1>
-        {%- trans username=user.username -%}
-          Changing {{ username }}'s password
-        {%- endtrans -%}
-      </h1>
-      {{ wtforms_util.render_divs(form, True) }}
-      {{ csrf_token }}
+    {{ csrf_token }}
+    <div class="form_box">
+      <h1>{% trans %}Set your new password{% endtrans %}</h1>
+      {{ wtforms_util.render_divs(cp_form, True) }}
       <div class="form_submit_buttons">
-        <input type="submit" value="{% trans %}Save{% endtrans %}"
-        class="button_form" />
+        <input type="submit" value="{% trans %}Set password{% endtrans %}" class="button_form"/>
       </div>
     </div>
-  </form>
 {% endblock %}
-
 

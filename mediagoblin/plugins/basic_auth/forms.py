@@ -44,3 +44,33 @@ class LoginForm(wtforms.Form):
     stay_logged_in = wtforms.BooleanField(
         label='',
         description=_('Stay logged in'))
+
+
+class ForgotPassForm(wtforms.Form):
+    username = wtforms.TextField(
+        _('Username or email'),
+        [wtforms.validators.Required(),
+         normalize_user_or_email_field()])
+
+
+class ChangeForgotPassForm(wtforms.Form):
+    password = wtforms.PasswordField(
+        'Password',
+        [wtforms.validators.Required(),
+         wtforms.validators.Length(min=5, max=1024)])
+    token = wtforms.HiddenField(
+        '',
+        [wtforms.validators.Required()])
+
+
+class ChangePassForm(wtforms.Form):
+    old_password = wtforms.PasswordField(
+        _('Old password'),
+        [wtforms.validators.Required()],
+        description=_(
+            "Enter your old password to prove you own this account."))
+    new_password = wtforms.PasswordField(
+        _('New password'),
+        [wtforms.validators.Required(),
+         wtforms.validators.Length(min=6, max=30)],
+        id="password")

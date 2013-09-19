@@ -81,6 +81,7 @@ class EditAttachmentsForm(wtforms.Form):
     attachment_file = wtforms.FileField(
         'File')
 
+
 class EditCollectionForm(wtforms.Form):
     title = wtforms.TextField(
         _('Title'),

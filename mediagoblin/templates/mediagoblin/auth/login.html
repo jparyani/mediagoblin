@@ -20,8 +20,8 @@
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
 {% block mediagoblin_head %}
-  <script type="text/javascript"
-          src="{{ request.staticdirect('/js/autofilledin_password.js') }}"></script>
+  {{ super() }}
+  {% template_hook("fp_head") %}
 {% endblock %}
 
 {% block title -%}
@@ -39,21 +39,10 @@
           {% trans %}Logging in failed!{% endtrans %}
         </div>
       {% endif %}
-      {% if allow_registration %}
-        <p>
-        {% trans %}Don't have an account yet?{% endtrans %} 
-        <a href="{{ request.urlgen('mediagoblin.auth.register') }}">
-            {%- trans %}Create one here!{% endtrans %}</a>
-        </p>
-      {% endif %}
+      {% template_hook("create_account") %}
       {% template_hook("login_link") %} 
       {{ wtforms_util.render_divs(login_form, True) }}
-      {% if pass_auth %}
-      <p>
-        <a href="{{ request.urlgen('mediagoblin.auth.forgot_password') }}" id="forgot_password">
-        {% trans %}Forgot your password?{% endtrans %}</a>
-      </p>
-      {% endif %}
+      {% template_hook("fp_link") %}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Log in{% endtrans %}" class="button_form"/>
       </div>

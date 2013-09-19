@@ -24,11 +24,8 @@ from mediagoblin.tools.response import render_to_response, redirect, render_404
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.mail import email_debug_message
 from mediagoblin.tools.pluginapi import hook_handle
-from mediagoblin.auth import forms as auth_forms
 from mediagoblin.auth.tools import (send_verification_email, register_user,
-                                    send_fp_verification_email,
                                     check_login_simple)
-from mediagoblin import auth
 
 
 @allow_registration
