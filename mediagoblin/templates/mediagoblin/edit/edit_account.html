@@ -60,7 +60,7 @@
     </a>
     {% if pass_auth is defined %}
       &middot;
-      <a href="{{ request.urlgen('mediagoblin.edit.pass') }}">
+      <a href="{{ request.urlgen('mediagoblin.plugins.basic_auth.edit.pass') }}">
         {% trans %}Password{% endtrans %}
       </a>
     {% endif %}
