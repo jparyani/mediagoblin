@@ -18,12 +18,12 @@ import datetime
 
 from oauthlib.oauth1 import (RequestTokenEndpoint, AuthorizationEndpoint,
                              AccessTokenEndpoint)
-                             
+
 from mediagoblin.decorators import require_active_login
 from mediagoblin.tools.translate import pass_to_ugettext
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.tools.request import decode_request
-from mediagoblin.tools.response import (render_to_response, redirect, 
+from mediagoblin.tools.response import (render_to_response, redirect,
                                         json_response, render_400,
                                         form_response)
 from mediagoblin.tools.crypto import random_string
@@ -41,7 +41,7 @@ client_types = ["web", "native"] # currently what pump supports
 def client_register(request):
     """ Endpoint for client registration """
     try:
-        data = decode_request(request) 
+        data = decode_request(request)
     except ValueError:
         error = "Could not decode data."
         return json_response({"error": error}, status=400)
@@ -56,7 +56,7 @@ def client_register(request):
     if data.get("application_type", None) not in client_types:
         error = "Unknown application_type."
         return json_response({"error": error}, status=400)
-    
+
     client_type = data["type"]
 
     if client_type == "client_update":
@@ -69,7 +69,7 @@ def client_register(request):
             return json_response({"error": error}, status=400)
 
         client = Client.query.filter_by(
-                id=data["client_id"], 
+                id=data["client_id"],
                 secret=data["client_secret"]
                 ).first()
 
@@ -78,7 +78,7 @@ def client_register(request):
             return json_response({"error": error}, status=403)
 
         client.application_name = data.get(
-                "application_name", 
+                "application_name",
                 client.application_name
                 )
 
@@ -108,12 +108,12 @@ def client_register(request):
         client_secret = random_string(43) # again, seems to be what pump uses
         expirey = 0 # for now, lets not have it expire
         expirey_db = None if expirey == 0 else expirey
-        application_type = data["application_type"] 
- 
+        application_type = data["application_type"]
+
         # save it
         client = Client(
-                id=client_id, 
-                secret=client_secret, 
+                id=client_id,
+                secret=client_secret,
                 expirey=expirey_db,
                 application_type=application_type,
                 )
@@ -126,12 +126,12 @@ def client_register(request):
     if logo_url is not None and not validate_url(logo_url):
         error = "Logo URL {0} is not a valid URL.".format(logo_url)
         return json_response(
-                {"error": error}, 
+                {"error": error},
                 status=400
                 )
     else:
         client.logo_url = logo_url
-    
+
     client.application_name = data.get("application_name", None)
 
     contacts = data.get("contacts", None)
@@ -146,8 +146,8 @@ def client_register(request):
                 # not a valid email
                 error = "Email {0} is not a valid email.".format(contact)
                 return json_response({"error": error}, status=400)
-     
-        
+
+
         client.contacts = contacts
 
     redirect_uris = data.get("redirect_uris", None)
@@ -166,7 +166,7 @@ def client_register(request):
 
         client.redirect_uri = redirect_uris
 
- 
+
     client.save()
 
     expirey = 0 if client.expirey is None else client.expirey
@@ -182,7 +182,7 @@ def client_register(request):
 def request_token(request):
     """ Returns request token """
     try:
-        data = decode_request(request) 
+        data = decode_request(request)
     except ValueError:
         error = "Could not decode data."
         return json_response({"error": error}, status=400)
@@ -193,7 +193,7 @@ def request_token(request):
 
     if not data and request.headers:
         data = request.headers
-    
+
     data = dict(data) # mutableifying
 
     authorization = decode_authorization_header(data)
@@ -226,12 +226,12 @@ def request_token(request):
 
     return form_response(tokens)
 
-@require_active_login    
+@require_active_login
 def authorize(request):
     """ Displays a page for user to authorize """
     if request.method == "POST":
         return authorize_finish(request)
-    
+
     _ = pass_to_ugettext
     token = request.args.get("oauth_token", None)
     if token is None:
@@ -243,10 +243,10 @@ def authorize(request):
     if oauth_request is None:
         err_msg = _("No request token found.")
         return render_400(request, err_msg)
-    
+
     if oauth_request.used:
         return authorize_finish(request)
-    
+
     if oauth_request.verifier is None:
         orequest = GMGRequest(request)
         request_validator = GMGRequestValidator()
@@ -279,7 +279,7 @@ def authorize(request):
             "mediagoblin/api/authorize.html",
             context
             )
-            
+
 
 def authorize_finish(request):
     """ Finishes the authorize """
@@ -288,7 +288,7 @@ def authorize_finish(request):
     verifier = request.form["oauth_verifier"]
     oauth_request = RequestToken.query.filter_by(token=token, verifier=verifier)
     oauth_request = oauth_request.first()
-    
+
     if oauth_request is None:
         # invalid token or verifier
         err_msg = _("No request token found.")
@@ -321,10 +321,10 @@ def authorize_finish(request):
 
 @csrf_exempt
 def access_token(request):
-    """ Provides an access token based on a valid verifier and request token """ 
+    """ Provides an access token based on a valid verifier and request token """
     data = request.headers
 
-    parsed_tokens = decode_authorization_header(data)    
+    parsed_tokens = decode_authorization_header(data)
 
     if parsed_tokens == dict() or "oauth_token" not in parsed_tokens:
         error = "Missing required parameter."

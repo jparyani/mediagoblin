@@ -26,7 +26,7 @@ from sqlalchemy.sql import and_
 from migrate.changeset.constraint import UniqueConstraint
 
 
-from mediagoblin.db.extratypes import JSONEncoded
+from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
 from mediagoblin.db.models import MediaEntry, Collection, User, MediaComment
 
@@ -502,7 +502,7 @@ def add_file_metadata(db):
     metadata = MetaData(bind=db.bind)
     media_file_table = inspect_table(metadata, "core__mediafiles")
 
-    col = Column('file_metadata', JSONEncoded)
+    col = Column('file_metadata', MutationDict.as_mutable(JSONEncoded))
     col.create(media_file_table)
 
     db.commit()
