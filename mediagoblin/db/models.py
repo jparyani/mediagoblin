@@ -30,7 +30,6 @@ from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
 
-
 from mediagoblin.db.extratypes import (PathTupleWithSlashes, JSONEncoded,
                                        MutationDict)
 from mediagoblin.db.base import Base, DictReadAttrProxy
