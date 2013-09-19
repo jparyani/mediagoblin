@@ -23,7 +23,8 @@ from werkzeug.utils import secure_filename
 from mediagoblin import messages
 from mediagoblin import mg_globals
 
-from mediagoblin.auth import tools as auth_tools
+from mediagoblin.auth import (check_password,
+                              tools as auth_tools)
 from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
@@ -401,7 +402,7 @@ def change_email(request):
                 _('Sorry, a user with that email address'
                     ' already exists.'))
 
-        if form.password and user.pw_hash and not auth.check_password(
+        if form.password and user.pw_hash and not check_password(
                 form.password.data, user.pw_hash):
             form.password.errors.append(
                 _('Wrong password'))
