@@ -102,8 +102,8 @@ def test_ldap_plugin(ldap_plugin_app):
         ldap_plugin_app.get('/auth/logout/')
 
         # Get user and detach from session
-        test_user = mg_globals.database.User.find_one({
-            'username': u'chris'})
+        test_user = mg_globals.database.User.query.filter_by(
+            username=u'chris').first()
         Session.expunge(test_user)
 
         # Log back in
