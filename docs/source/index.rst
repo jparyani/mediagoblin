@@ -61,6 +61,7 @@ Part 2: Core plugin documentation
    plugindocs/basic_auth
    plugindocs/openid
    plugindocs/persona
+   plugindocs/ldap
 
 
 Part 3: Plugin Writer's Guide
