@@ -81,10 +81,7 @@ def setup_plugin():
         ('mediagoblin.media_types.blog.blog_about',
         '/u/<string:user>/b/<string:blog_slug>/about/',
         'mediagoblin.media_types.blog.views:blog_about_view'
-        )
-        
-        
-        ]
+        )]
 
 
     pluginapi.register_routes(routes)

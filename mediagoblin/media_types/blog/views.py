@@ -270,7 +270,8 @@ def blog_post_listing(request, page):
         'mediagoblin/blog/blog_post_listing.html',
         {'blog_posts': blog_posts_on_a_page,
          'pagination': pagination,
-         'blog_owner': blog_owner
+         'blog_owner': blog_owner,
+         'blog':blog
         })
 
 @require_active_login
@@ -345,7 +346,6 @@ def blog_about_view(request):
     
     if not user or not blog:
         return render_404(request)
-    
     
     else:
         blog_posts_processed = blog.get_all_blog_posts(u'processed').count()

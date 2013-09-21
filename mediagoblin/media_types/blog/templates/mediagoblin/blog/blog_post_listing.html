@@ -36,7 +36,7 @@
 {%- endblock %}
 
 {% block mediagoblin_content %}
-    <div class="b_list_owner"> <h1><font color="black"> {{ blog_owner }} 's Blog</font></h1></div>
+    <div class="b_list_owner"> <h1><font color="black"> {{ blog.title }} <font size="2">by {{ blog_owner }}</font> </font></h1></div>
     <div>
         {% for post in blog_posts %}
             <div class="b_listing_title"><a href="{{ post.url_for_self(request.urlgen) }}">
@@ -56,5 +56,11 @@
             </br>
         {% endfor %}
     </div>
+    <br/>
+    <br/>
+    {% set blog_about_url = request.urlgen('mediagoblin.media_types.blog.blog_about', 
+                                      blog_slug=blog.slug, user=blog_owner) %}
+    <a style="text-decoration:underline" href="{{ blog_about_url}}">About Blog</a>
+    <br/>
     {{ render_pagination(request, pagination) }}
 {% endblock %}
