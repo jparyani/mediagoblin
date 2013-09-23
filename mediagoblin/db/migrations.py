@@ -29,8 +29,7 @@ from migrate.changeset.constraint import UniqueConstraint
 from mediagoblin.db.extratypes import JSONEncoded
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
 from mediagoblin.db.models import (MediaEntry, Collection, User,
-                                   MediaComment, Privilege, ReportBase,
-                                   FOUNDATIONS)
+                                   MediaComment, Privilege, FOUNDATIONS)
 
 MIGRATIONS = {}
 

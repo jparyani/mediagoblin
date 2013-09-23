@@ -20,8 +20,7 @@ import json
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
-                                   CollectionItem, User, MediaComment,
-                                   CommentReport, MediaReport)
+                                   CollectionItem, User)
 from mediagoblin.tools.response import render_to_response, render_404, \
     redirect, redirect_obj
 from mediagoblin.tools.text import cleaned_markdown_conversion

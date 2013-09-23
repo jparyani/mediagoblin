@@ -20,8 +20,7 @@ from webtest import AppError
 
 from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
 
-from mediagoblin.db.models import User, Privilege, UserBan
-from mediagoblin.db.base import Session
+from mediagoblin.db.models import User, UserBan
 from mediagoblin.tools import template
 
 from .resources import GOOD_JPG
@@ -34,7 +33,7 @@ class TestPrivilegeFunctionality:
 
         fixture_add_user(u'alex',
             privileges=[u'admin',u'active'])
-        fixture_add_user(u'raven',
+        fixture_add_user(u'meow',
             privileges=[u'moderator',u'active',u'reporter'])
         fixture_add_user(u'natalie',
             privileges=[u'active'])
@@ -65,7 +64,7 @@ class TestPrivilegeFunctionality:
 
     def query_for_users(self):
         self.admin_user = User.query.filter(User.username==u'alex').first()
-        self.mod_user = User.query.filter(User.username==u'raven').first()
+        self.mod_user = User.query.filter(User.username==u'meow').first()
         self.user = User.query.filter(User.username==u'natalie').first()
 
     def testUserBanned(self):

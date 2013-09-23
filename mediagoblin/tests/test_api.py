@@ -25,7 +25,6 @@ from mediagoblin.tools import template, pluginapi
 from mediagoblin.tests.tools import fixture_add_user
 from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
     BIG_BLUE
-from mediagoblin.db.models import Privilege
 
 
 _log = logging.getLogger(__name__)

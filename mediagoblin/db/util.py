@@ -15,8 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from mediagoblin.db.base import Session
-from mediagoblin.db.models import (MediaEntry, Tag, MediaTag, Collection, \
-                                 User, Privilege, FOUNDATIONS)
+from mediagoblin.db.models import MediaEntry, Tag, MediaTag, Collection
 
 
 ##########################

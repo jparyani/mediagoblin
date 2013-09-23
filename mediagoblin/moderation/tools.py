@@ -21,7 +21,6 @@ from mediagoblin.tools.mail import send_email
 from mediagoblin.tools.response import redirect
 from datetime import datetime
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
-import sys, traceback
 
 def take_punitive_actions(request, form, report, user):
     message_body =''
@@ -32,7 +31,7 @@ def take_punitive_actions(request, form, report, user):
         for privilege_name in form.take_away_privileges.data:
             take_away_privileges(user.username, privilege_name)
             form.resolution_content.data += \
-                u"\n{mod} took away {user}\'{privilege} privileges.".format(
+                u"\n{mod} took away {user}\'s {privilege} privileges.".format(
                     mod=request.user.username,
                     user=user.username,
                     privilege=privilege_name)

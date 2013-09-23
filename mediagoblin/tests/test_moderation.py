@@ -19,10 +19,7 @@ import pytest
 from mediagoblin.tests.tools import (fixture_add_user,
             fixture_add_comment_report, fixture_add_comment)
 from mediagoblin.db.models import User, CommentReport, MediaComment, UserBan
-from mediagoblin.moderation.tools import take_away_privileges, give_privileges
 from mediagoblin.tools import template, mail
-from datetime import date, timedelta
-
 from webtest import AppError
 
 class TestModerationViews:

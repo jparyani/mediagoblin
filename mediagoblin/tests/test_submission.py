@@ -24,7 +24,7 @@ import pytest
 
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin import mg_globals
-from mediagoblin.db.models import MediaEntry, User, Privilege
+from mediagoblin.db.models import MediaEntry, User
 from mediagoblin.tools import template
 from mediagoblin.media_types.image import ImageMediaManager
 from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites

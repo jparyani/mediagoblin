@@ -14,12 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from werkzeug.exceptions import Forbidden
 
-from mediagoblin.db.models import (MediaEntry, User, MediaComment, \
-                                   CommentReport, ReportBase, Privilege, \
+from mediagoblin.db.models import (MediaEntry, User,ReportBase, Privilege,
                                    UserBan)
-from mediagoblin.decorators import (require_admin_or_moderator_login, 
+from mediagoblin.decorators import (require_admin_or_moderator_login,
                                     active_user_from_url, user_has_privilege,
                                     allow_reporting)
 from mediagoblin.tools.response import render_to_response, redirect
@@ -27,8 +25,6 @@ from mediagoblin.moderation import forms as moderation_forms
 from mediagoblin.moderation.tools import (take_punitive_actions, \
     take_away_privileges, give_privileges, ban_user, unban_user, \
     parse_report_panel_settings)
-from werkzeug.datastructures import ImmutableMultiDict
-from datetime import datetime
 from math import ceil
 
 @require_admin_or_moderator_login
