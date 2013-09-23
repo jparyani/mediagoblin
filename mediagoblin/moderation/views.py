@@ -19,8 +19,9 @@ from werkzeug.exceptions import Forbidden
 from mediagoblin.db.models import (MediaEntry, User, MediaComment, \
                                    CommentReport, ReportBase, Privilege, \
                                    UserBan)
-from mediagoblin.decorators import (require_admin_or_moderator_login, \
-                                    active_user_from_url, user_has_privilege)
+from mediagoblin.decorators import (require_admin_or_moderator_login, 
+                                    active_user_from_url, user_has_privilege,
+                                    allow_reporting)
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.moderation import forms as moderation_forms
 from mediagoblin.moderation.tools import (take_punitive_actions, \
@@ -58,12 +59,24 @@ def moderation_users_panel(request):
     '''
     Show the global panel for monitoring users in this instance
     '''
-    user_list = User.query
+    current_page = 1
+    if len(request.args) > 0:
+        form = moderation_forms.UserPanelSortingForm(request.args)
+        if form.validate():
+            current_page = form.p.data or 1
+
+    all_user_list = User.query
+    user_list = all_user_list.order_by(
+        User.created.desc()).offset(
+            (current_page-1)*10).limit(10)
+    last_page = int(ceil(all_user_list.count()/10.))
 
     return render_to_response(
         request,
         'mediagoblin/moderation/user_panel.html',
-        {'user_list': user_list})
+        {'user_list': user_list,
+         'current_page':current_page,
+         'last_page':last_page})
 
 @require_admin_or_moderator_login
 def moderation_users_detail(request):
@@ -89,6 +102,7 @@ def moderation_users_detail(request):
          'ban_form':ban_form})
 
 @require_admin_or_moderator_login
+@allow_reporting
 def moderation_reports_panel(request):
     '''
     Show the global panel for monitoring reports filed against comments or
@@ -135,6 +149,7 @@ def moderation_reports_panel(request):
          'closed_settings':closed_settings})
 
 @require_admin_or_moderator_login
+@allow_reporting
 def moderation_reports_detail(request):
     """
     This is the page an admin or moderator goes to see the details of a report.

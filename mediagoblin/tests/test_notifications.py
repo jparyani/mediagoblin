@@ -157,7 +157,8 @@ otherperson@example.com\n\nSGkgb3RoZXJwZXJzb24sCmNocmlzIGNvbW1lbnRlZCBvbiB5b3VyI
     def test_mark_all_comment_notifications_seen(self):
         """ Test that mark_all_comments_seen works"""
 
-        user = fixture_add_user('otherperson', password='nosreprehto')
+        user = fixture_add_user('otherperson', password='nosreprehto',
+                        privileges=[u'active'])
 
         media_entry = fixture_media_entry(uploader=user.id, state=u'processed')
 

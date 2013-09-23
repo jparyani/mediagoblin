@@ -764,8 +764,7 @@ class CommentReport(ReportBase):
     comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=True)
     comment = relationship(
         MediaComment, backref=backref("reports_filed_on",
-            lazy="dynamic",
-            cascade="all, delete-orphan"))
+            lazy="dynamic"))
 
 
 class MediaReport(ReportBase):
@@ -782,9 +781,8 @@ class MediaReport(ReportBase):
     media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=True)
     media_entry = relationship(
         MediaEntry,
-        backref=backref("reports_filed_onmod/reports/1/",
-            lazy="dynamic",
-            cascade="all, delete-orphan"))
+        backref=backref("reports_filed_on",
+            lazy="dynamic"))
 
 class UserBan(Base):
     """

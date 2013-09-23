@@ -160,7 +160,8 @@ class TestReportFiling:
         assert archived_report.reported_user_id == allie_id
         assert archived_report.created is not None
         assert archived_report.resolved is not None
-        assert archived_report.result == u'This is a test of archiving reports\
-.<br>natalie banned user allie indefinitely.<br>natalie deleted the comment.'
+        assert archived_report.result == u'''This is a test of archiving reports.
+natalie banned user allie indefinitely.
+natalie deleted the comment.'''
         assert archived_report.discriminator == 'comment_report'
 

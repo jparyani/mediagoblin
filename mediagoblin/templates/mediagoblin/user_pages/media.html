@@ -147,15 +147,13 @@
             {%- endautoescape %}
           </div>
           <div>
-                <a {% if not request.user -%}
-                    href="{{ request.urlgen('mediagoblin.auth.login') }}"
-                  {%- else %}
-                    href="{{ request.urlgen('mediagoblin.user_pages.media_home.report_comment',
+            {% if app_config.allow_reporting %}
+                <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.report_comment',
                             user=media.get_uploader.username,
                              media=media.slug_or_id,
-                             comment=comment.id) }}"
-                  {%- endif %}>
-                    {% trans %} Report {% endtrans %}</a>
+                             comment=comment.id) }}">
+                    {% trans %}Report{% endtrans %}</a>
+            {% endif %}
           </div>
         </li>
       {% endfor %}
@@ -181,7 +179,9 @@
 
     {% include "mediagoblin/utils/collections.html" %}
 
-    {% include "mediagoblin/utils/report.html" %}
+    {% if app_config.allow_reporting %}
+      {% include "mediagoblin/utils/report.html" %}
+    {% endif %}
 
     {% include "mediagoblin/utils/license.html" %}
 

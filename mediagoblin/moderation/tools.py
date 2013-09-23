@@ -25,90 +25,79 @@ import sys, traceback
 
 def take_punitive_actions(request, form, report, user):
     message_body =''
-    try:
 
-        # The bulk of this action is running through all of the different
-        # punitive actions that a moderator could take.
-        if u'takeaway' in form.action_to_resolve.data:
-            for privilege_name in form.take_away_privileges.data:
-                take_away_privileges(user.username, privilege_name)
-                form.resolution_content.data += \
-                    u"\n{mod} took away {user}\'{privilege} privileges.".format(
-                        mod=request.user.username,
-                        user=user.username,
-                        privilege=privilege_name)
-
-        # If the moderator elects to ban the user, a new instance of user_ban
-        # will be created.
-        if u'userban' in form.action_to_resolve.data:
-            user_ban = ban_user(form.targeted_user.data,
-                expiration_date=form.user_banned_until.data,
-                reason=form.why_user_was_banned.data)
-            Session.add(user_ban)
+    # The bulk of this action is running through all of the different
+    # punitive actions that a moderator could take.
+    if u'takeaway' in form.action_to_resolve.data:
+        for privilege_name in form.take_away_privileges.data:
+            take_away_privileges(user.username, privilege_name)
             form.resolution_content.data += \
-                u"\n{mod} banned user {user} until {expiration_date}.".format(
+                u"\n{mod} took away {user}\'{privilege} privileges.".format(
                     mod=request.user.username,
                     user=user.username,
-                    expiration_date = (
-                    "until {date}".format(date=form.user_banned_until.data)
-                        if form.user_banned_until.data
-                        else "indefinitely"
-                        )
-                )
+                    privilege=privilege_name)
 
-        # If the moderator elects to send a warning message. An email will be
-        # sent to the email address given at sign up
-        if u'sendmessage' in form.action_to_resolve.data:
-            message_body = form.message_to_user.data
+    # If the moderator elects to ban the user, a new instance of user_ban
+    # will be created.
+    if u'userban' in form.action_to_resolve.data:
+        user_ban = ban_user(form.targeted_user.data,
+            expiration_date=form.user_banned_until.data,
+            reason=form.why_user_was_banned.data)
+        Session.add(user_ban)
+        form.resolution_content.data += \
+            u"\n{mod} banned user {user} {expiration_date}.".format(
+                mod=request.user.username,
+                user=user.username,
+                expiration_date = (
+                "until {date}".format(date=form.user_banned_until.data)
+                    if form.user_banned_until.data
+                    else "indefinitely"
+                    )
+            )
+
+    # If the moderator elects to send a warning message. An email will be
+    # sent to the email address given at sign up
+    if u'sendmessage' in form.action_to_resolve.data:
+        message_body = form.message_to_user.data
+        form.resolution_content.data += \
+            u"\n{mod} sent a warning email to the {user}.".format(
+                mod=request.user.username,
+                user=user.username)
+
+    if u'delete' in form.action_to_resolve.data and \
+        report.is_comment_report():
+            deleted_comment = report.comment
+            Session.delete(deleted_comment)
             form.resolution_content.data += \
-                u"\n{mod} sent a warning email to the {user}.".format(
-                    mod=request.user.username,
-                    user=user.username)
+                u"\n{mod} deleted the comment.".format(
+                    mod=request.user.username)
+    elif u'delete' in form.action_to_resolve.data and \
+        report.is_media_entry_report():
+            deleted_media = report.media_entry
+            Session.delete(deleted_media)
+            form.resolution_content.data += \
+                u"\n{mod} deleted the media entry.".format(
+                    mod=request.user.username)
+    report.archive(
+        resolver_id=request.user.id,
+        resolved=datetime.now(),
+        result=form.resolution_content.data)
 
-        if u'delete' in form.action_to_resolve.data and \
-            report.is_comment_report():
-                deleted_comment = report.comment
-                Session.delete(deleted_comment)
-                form.resolution_content.data += \
-                    u"\n{mod} deleted the comment.".format(
-                        mod=request.user.username)
-        elif u'delete' in form.action_to_resolve.data and \
-            report.is_media_entry_report():
-                deleted_media = report.media_entry
-                Session.delete(deleted_media)
-                form.resolution_content.data += \
-                    u"\n{mod} deleted the media entry.".format(
-                        mod=request.user.username)
-        report.archive(
-            resolver_id=request.user.id,
-            resolved=datetime.now(),
-            result=form.resolution_content.data)
+    Session.add(report)
+    Session.commit()
+    if message_body:
+        send_email(
+            mg_globals.app_config['email_sender_address'],
+            [user.email],
+            _('Warning from')+ '- {moderator} '.format(
+                moderator=request.user.username),
+            message_body)
 
-        Session.add(report)
-        Session.commit()
-        if message_body:
-            send_email(
-                mg_globals.app_config['email_sender_address'],
-                [user.email],
-                _('Warning from')+ '- {moderator} '.format(
-                    moderator=request.user.username),
-                message_body)
+    return redirect(
+        request,
+        'mediagoblin.moderation.users_detail',
+        user=user.username)
 
-        return redirect(
-            request,
-            'mediagoblin.moderation.users_detail',
-            user=user.username)
-    except:
-#TODO make a more effective and specific try except statement. To account for
-# incorrect value addition my moderators
-        print sys.exc_info()[0]
-        print sys.exc_info()[1]
-        traceback.print_tb(sys.exc_info()[2])
-        Session.rollback()
-        return redirect(
-            request,
-            'mediagoblin.moderation.reports_detail',
-            report_id=report.id)
 
 def take_away_privileges(user,*privileges):
     """

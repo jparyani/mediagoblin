@@ -139,3 +139,10 @@ class ReportPanelSortingForm(wtforms.Form):
         validators=[wtforms.validators.optional()])
     reporter = wtforms.IntegerField(
         validators=[wtforms.validators.optional()])
+
+class UserPanelSortingForm(wtforms.Form):
+    """
+    This form is used for sorting different reports.
+    """
+    p = wtforms.IntegerField(
+        validators=[wtforms.validators.optional()])

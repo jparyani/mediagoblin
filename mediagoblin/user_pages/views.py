@@ -37,7 +37,7 @@ from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
     get_media_entry_by_id, user_has_privilege, user_not_banned,
     require_active_login, user_may_delete_media, user_may_alter_collection,
     get_user_collection, get_user_collection_item, active_user_from_url,
-    get_optional_media_comment_by_id)
+    get_optional_media_comment_by_id, allow_reporting)
 
 from werkzeug.contrib.atom import AtomFeed
 from werkzeug.exceptions import MethodNotAllowed
@@ -643,6 +643,7 @@ def processing_panel(request):
          'failed_entries': failed_entries,
          'processed_entries': processed_entries})
 
+@allow_reporting
 @get_user_media_entry
 @user_has_privilege(u'reporter')
 @get_optional_media_comment_by_id
@@ -682,4 +683,3 @@ def file_a_report(request, media, comment):
         request,
         'mediagoblin/user_pages/report.html',
         context)
-

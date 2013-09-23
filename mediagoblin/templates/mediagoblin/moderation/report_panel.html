@@ -33,6 +33,7 @@
 </p>
 
 <h2>{% trans %}Active Reports Filed{% endtrans %}</h2>
+{% if report_list.count() %}
   {% if not active_settings.last_page == 1 %}
   {% if 'active_p='~active_settings.current_page in request.query_string %}
     {% set query_string = request.query_string %}{% else %}
@@ -70,7 +71,6 @@ curr_page !=p %}
     {% endif %}
   </div>
   {% endif %}
-{% if report_list.count() %}
   <table class="admin_panel processing">
     <tr>
       <th></th>
@@ -121,6 +121,7 @@ curr_page !=p %}
   <p><em>{% trans %}No open reports found.{% endtrans %}</em></p>
 {% endif %}
 <h2>{% trans %}Closed Reports{% endtrans %}</h2>
+{% if closed_report_list.count() %}
   {% if not closed_settings.last_page == 1 %}
   {% if 'closed_p='~closed_settings.current_page in request.query_string %}
     {% set query_string = request.query_string %}{% else %}
@@ -161,7 +162,6 @@ curr_page !=p %}
     {% endif %}
   </div>
   {% endif %}
-{% if closed_report_list.count() %}
   <table class="media_panel processing">
     <tr>
       <th></th>

@@ -92,11 +92,10 @@
                  "javascript:;"
                {% endif %}
                >{% trans %}log out{% endtrans %}</a>
-              <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
-                {%- trans %}Create new collection{% endtrans -%}
-              </a>
                 <p class="fine_print">
-                  <a href="{{ request.urlgen('terms_of_service') }}">Terms of Service</a>
+                  <a href="{{ request.urlgen('terms_of_service') }}">
+                    {%- trans %}Terms of Service{%- endtrans %}
+                  </a>
                 </p>
               {% endif %}
             {%- elif auth %}
@@ -141,6 +140,9 @@
               <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
                 {%- trans %}Add media{% endtrans -%}
               </a>
+              <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
+                {%- trans %}Create new collection{% endtrans -%}
+              </a>
               {% if request.user.has_privilege('admin','moderator') %}
                 <p>
                   <span class="dropdown_title">Moderation powers:</span>
@@ -157,9 +159,6 @@
                   </a>
                 </p>
               {% endif %}
-              <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
-                {%- trans %}Create new collection{% endtrans -%}
-              </a>
                 <p class="fine_print">
                   <a href="{{ request.urlgen('terms_of_service') }}">Terms of Service</a>
                 </p>

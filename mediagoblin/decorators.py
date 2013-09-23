@@ -304,6 +304,21 @@ def allow_registration(controller):
 
     return wrapper
 
+def allow_reporting(controller):
+    """ Decorator for if reporting is enabled"""
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        if not mgg.app_config["allow_reporting"]:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                _('Sorry, reporting is disabled on this instance.'))
+            return redirect(request, 'index')
+
+        return controller(request, *args, **kwargs)
+
+    return wrapper
+
 def get_optional_media_comment_by_id(controller):
     """
     Pass in a MediaComment based off of a url component. Because of this decor-

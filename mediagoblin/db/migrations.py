@@ -494,7 +494,7 @@ class CommentReport_v0(ReportBase_v0):
 
     id = Column('id',Integer, ForeignKey('core__reports.id'),
                                                 primary_key=True)
-    comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=False)
+    comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=True)
 
 
 
@@ -503,7 +503,7 @@ class MediaReport_v0(ReportBase_v0):
     __mapper_args__ = {'polymorphic_identity': 'media_report'}
 
     id = Column('id',Integer, ForeignKey('core__reports.id'), primary_key=True)
-    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=True)
 
 class UserBan_v0(declarative_base()):
     __tablename__ = 'core__user_bans'

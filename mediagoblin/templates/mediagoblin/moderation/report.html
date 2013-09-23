@@ -30,7 +30,7 @@
        title="Return to Reports Panel">
       {% trans %}Return to Reports Panel{% endtrans %}</a>
   <h2>{% trans %}Report{% endtrans %} #{{ report.id }}</h2>
-  {% if report.comment %}
+  {% if report.is_comment_report() and report.comment %}
 
     {% trans %}Reported comment{% endtrans %}:
     {% set comment = report.comment %}
@@ -62,7 +62,7 @@
         {% endautoescape %}
       </div>
     </div>
-  {% elif report.media_entry %}
+  {% elif report.is_media_entry_report() and report.media_entry %}
 
     {% set media_entry = report.media_entry %}
     <div class="media_thumbnail">

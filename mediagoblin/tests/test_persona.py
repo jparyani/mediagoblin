@@ -22,6 +22,7 @@ pytest.importorskip("requests")
 
 from mediagoblin import mg_globals
 from mediagoblin.db.base import Session
+from mediagoblin.db.models import Privilege
 from mediagoblin.tests.tools import get_app
 from mediagoblin.tools import template
 
@@ -112,6 +113,9 @@ class TestPersonaPlugin(object):
             # Get user and detach from session
             test_user = mg_globals.database.User.query.filter_by(
                 username=u'chris').first()
+            active_privilege = Privilege.query.filter(
+                Privilege.privilege_name==u'active').first()
+            test_user.all_privileges.append(active_privilege)
             test_user.save()
             test_user = mg_globals.database.User.query.filter_by(
                 username=u'chris').first()

@@ -237,7 +237,7 @@ class TestOpenIDPlugin(object):
     def test_add_delete(self, openid_plugin_app):
         """Test adding and deleting openids"""
         # Add user
-        test_user = fixture_add_user(password='')
+        test_user = fixture_add_user(password='', privileges=[u'active'])
         openid = OpenIDUserURL()
         openid.openid_url = 'http://real.myopenid.com'
         openid.user_id = test_user.id
