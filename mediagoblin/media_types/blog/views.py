@@ -50,8 +50,8 @@ from mediagoblin.notifications import add_comment_subscription
 @require_active_login
 def blog_edit(request):
     """
-    View for editing the existing blog or automatically
-    creating a new blog if user does not have any yet.
+    View for editing an existing blog or creating a new blog 
+    if user have not exceeded maximum allowed acount of blogs.
     """
     url_user = request.matchdict.get('user', None)
     blog_slug = request.matchdict.get('blog_slug', None)
@@ -59,7 +59,7 @@ def blog_edit(request):
     config = pluginapi.get_config('mediagoblin.media_types.blog')
     max_blog_count = config['max_blog_count']
     form = blog_forms.BlogEditForm(request.form)
-    # the blog doesn't exists yet
+    # creating a blog
     if not blog_slug:
         if Blog.query.filter_by(author=request.user.id).count()<max_blog_count:
             if request.method=='GET':
@@ -83,8 +83,8 @@ def blog_edit(request):
                         user=request.user.username
                        )
         else:
-            #the case when max blog count is one.
-            add_message(request, ERROR, "Welcome! You already have created a blog.")
+            add_message(request, ERROR, "Welcome! You already have created \
+                                                        maximum number of blogs.")
             return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
                         user=request.user.username)
 
@@ -92,6 +92,8 @@ def blog_edit(request):
     #Blog already exists.
     else:
         blog = request.db.Blog.query.filter_by(slug=blog_slug).first()
+        if not blog:
+            return render_404(request)
         if request.method == 'GET':
             defaults = dict(
                 title = blog.title,
@@ -166,6 +168,7 @@ def blogpost_create(request):
 
 @require_active_login
 def blogpost_edit(request):
+    
     blog_slug = request.matchdict.get('blog_slug', None)
     blog_post_slug = request.matchdict.get('blog_post_slug', None)
 
@@ -208,7 +211,10 @@ def blogpost_edit(request):
 
 @uses_pagination
 def blog_dashboard(request, page):
-
+    """
+    Dashboard for a blog, only accessible to
+    the owner of the blog.
+    """
     url_user = request.matchdict.get('user')
     user = request.db.User.query.filter_by(username=url_user).one()
     blog_slug = request.matchdict.get('blog_slug', None)
@@ -247,11 +253,11 @@ def blog_dashboard(request, page):
         })
 
 
-
-#supposed to list all the blog posts belonging to a particular blog of particular user.
 @uses_pagination
 def blog_post_listing(request, page):
-
+    """
+    Page, listing all the blog posts of a particular blog.
+    """
     blog_owner = request.matchdict.get('user')
     blog_slug = request.matchdict.get('blog_slug', None)
     owner_user = User.query.filter_by(username=blog_owner).one()
@@ -273,9 +279,11 @@ def blog_post_listing(request, page):
          'blog_owner': blog_owner,
          'blog':blog
         })
+        
 
 @require_active_login
 def draft_view(request):
+    
     blog_slug = request.matchdict.get('blog_slug', None)
     blog_post_slug = request.matchdict.get('blog_post_slug', None)
     user = request.matchdict.get('user')
@@ -292,9 +300,13 @@ def draft_view(request):
         {'blogpost':blogpost,
          'blog': blog
          })
+  
          
 @require_active_login
 def blog_delete(request, **kwargs):
+    """
+    Deletes a blog and media entries, tags associated with it. 
+    """
     url_user = request.matchdict.get('user')
     owner_user = request.db.User.query.filter_by(username=url_user).first()
 
@@ -337,7 +349,11 @@ def blog_delete(request, **kwargs):
         return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
         user=request.user.username)
         
+        
 def blog_about_view(request):
+    """
+    Page containing blog description and statistics
+    """
     blog_slug = request.matchdict.get('blog_slug', None)
     url_user = request.matchdict.get('user', None)
     
