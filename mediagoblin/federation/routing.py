@@ -37,6 +37,12 @@ add_route(
     )
 
 add_route(
+    "mediagoblin.federation.user.uploads",
+    "/api/user/<string:username>/uploads",
+    "mediagoblin.federation.views:uploads"
+    )
+
+add_route(
     "mediagoblin.federation.inbox",
     "/api/user/<string:username>/inbox",
     "mediagoblin.federation.views:feed"

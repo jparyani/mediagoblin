@@ -45,7 +45,7 @@ def setup_user_in_request(request):
 
 def decode_request(request):
     """ Decodes a request based on MIME-Type """
-    data = request.get_data()
+    data = request.data
     
     if request.content_type == json_encoded:
         data = json.loads(data)

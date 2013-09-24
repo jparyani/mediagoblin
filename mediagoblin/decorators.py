@@ -404,7 +404,7 @@ def oauth_required(controller):
         valid, r = resource_endpoint.validate_protected_resource_request(
                 uri=request.url,
                 http_method=request.method,
-                body=request.get_data(),
+                body=request.data,
                 headers=dict(request.headers),
                 )
 

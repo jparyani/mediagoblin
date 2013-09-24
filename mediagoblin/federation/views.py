@@ -1,9 +1,16 @@
 import json
+import io
 
+from werkzeug.datastructures import FileStorage 
+
+from mediagoblin.media_types import sniff_media
 from mediagoblin.decorators import oauth_required
 from mediagoblin.db.models import User, MediaEntry, MediaComment
 from mediagoblin.tools.response import redirect, json_response
 from mediagoblin.meddleware.csrf import csrf_exempt
+from mediagoblin.notifications import add_comment_subscription
+from mediagoblin.submit.lib import (new_upload_entry, prepare_queue_task,
+                                    run_process_media)
 
 #@oauth_required
 def profile(request, raw=False):
@@ -36,11 +43,58 @@ def user(request):
 
     return json_response(data)
 
+#@oauth_required
+@csrf_exempt
+def uploads(request):
+    """ This is the endpoint which uploads can be sent ot - /api/user/<username>/uploads """
+    user = request.matchdict["username"]
+    requested_user = User.query.filter_by(username=user)
+
+    if requested_user is None:
+        error = "No such 'user' with id '{0}'".format(user)
+        return json_response({"error": error}, status=404)
+
+    request.user = requested_user[0]
+    if request.method == "POST":
+        # Wrap the data in the werkzeug file wrapper
+        file_data = FileStorage(
+                stream=io.BytesIO(request.data),
+                filename=request.form.get("qqfile", "unknown.jpg"),
+                content_type=request.headers.get("Content-Type", "application/octal-stream")
+                )
+        
+        # Use the same kind of method from mediagoblin/submit/views:submit_start
+        media_type, media_manager = sniff_media(file_data)
+        entry = new_upload_entry(request.user)
+        entry.media_type = unicode(media_type)
+        entry.title = u"Hello ^_^"
+        entry.description = u""
+        entry.license = None
+
+        entry.generate_slug()
+
+        queue_file = prepare_queue_task(request.app, entry, file_data.filename) 
+        with queue_file:
+            queue_file.write(request.data)
+
+        entry.save()
+
+        # run the processing
+        feed_url = request.urlgen(
+                'mediagoblin.user_pages.atom_feed',
+                qualified=True, user=request.user.username)
+
+        run_process_media(entry, feed_url)
+        add_comment_subscription(request.user, entry)
+
+        return json_response(entry.serialize(request))
+
+    return json_response({"error": "Not yet implemented"}, status=400)
+
 @oauth_required
 @csrf_exempt
 def feed(request):
     """ Handles the user's outbox - /api/user/<username>/feed """
-    print request.user
     user = request.matchdict["username"]
     requested_user = User.query.filter_by(username=user)
 

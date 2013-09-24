@@ -126,7 +126,7 @@ class GMGRequest(Request):
         """
         kwargs["uri"] = kwargs.get("uri", request.url)
         kwargs["http_method"] = kwargs.get("http_method", request.method)
-        kwargs["body"] = kwargs.get("body", request.get_data())
+        kwargs["body"] = kwargs.get("body", request.data)
         kwargs["headers"] = kwargs.get("headers", dict(request.headers))
 
         super(GMGRequest, self).__init__(*args, **kwargs)
