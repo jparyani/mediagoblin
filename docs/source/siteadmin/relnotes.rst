@@ -48,9 +48,9 @@ now.  Otherwise, jump in and have fun! :)
 
 
 3. We have made a script to transition your ``mediagoblin_local.ini`` file for
-   you. This script can be found at 
+   you. This script can be found at:
    
-.. add a link to the script
+   http://mediagoblin.org/download/0.5.0_config_converter.py
 
 If you run into problems, don't hesitate to
 `contact us <http://mediagoblin.org/pages/join.html>`_
