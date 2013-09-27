@@ -22,6 +22,17 @@ If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
 
+0.5.1
+=====
+
+v0.5.1 is a bugfix release... the steps are the same as for 0.5.1.
+
+**Bugfixes:**
+
+- python 2.6 compatibility restored
+- Fixed last release's release notes ;)
+
+
 0.5.0
 =====
 
