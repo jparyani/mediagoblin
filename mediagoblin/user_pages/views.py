@@ -47,16 +47,13 @@ _log.setLevel(logging.DEBUG)
 @uses_pagination
 def user_home(request, page):
     """'Homepage' of a User()"""
-    # TODO: decide if we only want homepages for active users, we can
-    # then use the @get_active_user decorator and also simplify the
-    # template html.
     user = User.query.filter_by(username=request.matchdict['user']).first()
     if not user:
         return render_404(request)
     elif user.status != u'active':
         return render_to_response(
             request,
-            'mediagoblin/user_pages/user.html',
+            'mediagoblin/user_pages/user_nonactive.html',
             {'user': user})
 
     cursor = MediaEntry.query.\
