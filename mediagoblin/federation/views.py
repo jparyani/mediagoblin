@@ -59,7 +59,7 @@ def uploads(request):
         # Wrap the data in the werkzeug file wrapper
         file_data = FileStorage(
                 stream=io.BytesIO(request.data),
-                filename=request.form.get("qqfile", "unknown.jpg"),
+                filename=request.args.get("qqfile", "unknown.jpg"),
                 content_type=request.headers.get("Content-Type", "application/octal-stream")
                 )
         
@@ -67,8 +67,8 @@ def uploads(request):
         media_type, media_manager = sniff_media(file_data)
         entry = new_upload_entry(request.user)
         entry.media_type = unicode(media_type)
-        entry.title = u"Hello ^_^"
-        entry.description = u""
+        entry.title = unicode(request.args.get("title", "Hello ^_^"))
+        entry.description = unicode(request.args.get("description", ""))
         entry.license = None
 
         entry.generate_slug()
@@ -122,10 +122,25 @@ def feed(request):
                 content=data["object"]["content"]
                 )
             comment.save()
+        elif obj.get("objectType", None) == "image":
+            # Posting an image to the feed
+            # NB: This is currently just handing the image back until we have an
+            #     to send the image to the actual feed
+ 
+            media_id = int(data["object"]["id"])
+            media = MediaEntry.query.filter_by(id=media_id)
+            if media is None:
+                error = "No such 'image' with id '{0}'".format(id=media_id)
+                return json_response(error, status=404)
+            media = media[0]
+            return json_response(media.serialize(request))
+
         elif obj.get("objectType", None) is None:
+            # They need to tell us what type of object they're giving us.
             error = {"error": "No objectType specified."}
             return json_response(error, status=400)
         else:
+            # Oh no! We don't know about this type of object (yet)
             error = {"error": "Unknown object type '{0}'.".format(obj.get("objectType", None))}
             return json_response(error, status=400)
 
