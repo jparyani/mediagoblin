@@ -103,7 +103,7 @@ def feed(request):
         error = "No such 'user' with id '{0}'".format(user)
         return json_response({"error": error}, status=404)
 
-    user = requested_user[0]
+    request.user = requested_user[0]
 
     if request.method == "POST":
         data = json.loads(request.data)
@@ -122,6 +122,8 @@ def feed(request):
                 content=data["object"]["content"]
                 )
             comment.save()
+            data = {"verb": "post", "object": comment.serialize(request)}
+            return json_response(data)
         elif obj.get("objectType", None) == "image":
             # Posting an image to the feed
             # NB: This is currently just handing the image back until we have an
@@ -146,12 +148,12 @@ def feed(request):
 
     feed_url = request.urlgen(
             "mediagoblin.federation.feed",
-            username=user.username,
+            username=request.user.username,
             qualified=True
             )
 
     feed = {
-        "displayName": "Activities by {0}@{1}".format(user.username, request.host),
+        "displayName": "Activities by {0}@{1}".format(request.user.username, request.host),
         "objectTypes": ["activity"],
         "url": feed_url,
         "links": {
@@ -168,7 +170,7 @@ def feed(request):
                 "href": feed_url,
             }
         },
-        "author": user.serialize(request),
+        "author": request.user.serialize(request),
         "items": [],
     }
     
@@ -178,8 +180,8 @@ def feed(request):
         feed["items"].append({
             "verb": "post",
             "object": media.serialize(request),
-            "actor": user.serialize(request),
-            "content": "{0} posted a picture".format(user.username),
+            "actor": request.user.serialize(request),
+            "content": "{0} posted a picture".format(request.user.username),
             "id": 1,
             })
         feed["items"][-1]["updated"] = feed["items"][-1]["object"]["updated"]
