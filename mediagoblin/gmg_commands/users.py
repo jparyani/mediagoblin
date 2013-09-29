@@ -34,7 +34,7 @@ def adduser(args):
     #TODO: Lets trust admins this do not validate Emails :)
     commands_util.setup_app(args)
 
-    args.username = commands_util.prompt_if_not_set(args.username, "Username:")
+    args.username = unicode(commands_util.prompt_if_not_set(args.username, "Username:"))
     args.password = commands_util.prompt_if_not_set(args.password, "Password:",True)
     args.email = commands_util.prompt_if_not_set(args.email, "Email:")
 
@@ -50,7 +50,7 @@ def adduser(args):
     else:
         # Create the user
         entry = db.User()
-        entry.username = unicode(args.username.lower())
+        entry.username = args.username.lower()
         entry.email = unicode(args.email)
         entry.pw_hash = auth.gen_password_hash(args.password)
         default_privileges = [
