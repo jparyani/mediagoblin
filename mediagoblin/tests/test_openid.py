@@ -178,7 +178,7 @@ class TestOpenIDPlugin(object):
 
             # Correct place?
             assert urlparse.urlsplit(res.location)[2] == '/u/chris/'
-            assert 'mediagoblin/user_pages/user.html' in template.TEMPLATE_TEST_CONTEXT
+            assert 'mediagoblin/user_pages/user_nonactive.html' in template.TEMPLATE_TEST_CONTEXT
 
             # No need to test if user is in logged in and verification email
             # awaits, since openid uses the register_user function which is

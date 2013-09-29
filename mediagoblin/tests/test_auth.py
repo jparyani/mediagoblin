@@ -1,3 +1,4 @@
+
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -90,7 +91,7 @@ def test_register_views(test_app):
 
     ## Did we redirect to the proper page?  Use the right template?
     assert urlparse.urlsplit(response.location)[2] == '/u/happygirl/'
-    assert 'mediagoblin/user_pages/user.html' in template.TEMPLATE_TEST_CONTEXT
+    assert 'mediagoblin/user_pages/user_nonactive.html' in template.TEMPLATE_TEST_CONTEXT
 
     ## Make sure user is in place
     new_user = mg_globals.database.User.query.filter_by(
@@ -101,7 +102,7 @@ def test_register_views(test_app):
 
     ## Make sure user is logged in
     request = template.TEMPLATE_TEST_CONTEXT[
-        'mediagoblin/user_pages/user.html']['request']
+        'mediagoblin/user_pages/user_nonactive.html']['request']
     assert request.session['user_id'] == unicode(new_user.id)
 
     ## Make sure we get email confirmation, and try verifying

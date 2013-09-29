@@ -90,7 +90,7 @@ class TestPersonaPlugin(object):
             res.follow()
 
             assert urlparse.urlsplit(res.location)[2] == '/u/chris/'
-            assert 'mediagoblin/user_pages/user.html' in template.TEMPLATE_TEST_CONTEXT
+            assert 'mediagoblin/user_pages/user_nonactive.html' in template.TEMPLATE_TEST_CONTEXT
 
             # Try to register same Persona email address
             template.clear_test_template_context()

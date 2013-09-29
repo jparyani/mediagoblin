@@ -83,7 +83,7 @@ def test_ldap_plugin(ldap_plugin_app):
         res.follow()
 
         assert urlparse.urlsplit(res.location)[2] == '/u/chris/'
-        assert 'mediagoblin/user_pages/user.html' in template.TEMPLATE_TEST_CONTEXT
+        assert 'mediagoblin/user_pages/user_nonactive.html' in template.TEMPLATE_TEST_CONTEXT
 
         # Try to register with same email and username
         template.clear_test_template_context()
