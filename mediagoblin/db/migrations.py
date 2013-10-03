@@ -28,8 +28,8 @@ from migrate.changeset.constraint import UniqueConstraint
 
 from mediagoblin.db.extratypes import JSONEncoded
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
-from mediagoblin.db.models import (MediaEntry, Collection, User,
-                                   MediaComment, Privilege)
+from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User, 
+        Privilege)
 
 MIGRATIONS = {}
 
@@ -506,7 +506,7 @@ class MediaReport_v0(ReportBase_v0):
 
 class UserBan_v0(declarative_base()):
     __tablename__ = 'core__user_bans'
-    user_id = Column('id',Integer, ForeignKey(User.id), nullable=False,
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False,
                                          primary_key=True)
     expiration_date = Column(Date)
     reason = Column(UnicodeText, nullable=False)

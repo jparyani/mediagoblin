@@ -73,7 +73,7 @@ def take_punitive_actions(request, form, report, user):
     elif u'delete' in form.action_to_resolve.data and \
         report.is_media_entry_report():
             deleted_media = report.media_entry
-            Session.delete(deleted_media)
+            deleted_media.delete()
             form.resolution_content.data += \
                 u"\n{mod} deleted the media entry.".format(
                     mod=request.user.username)
