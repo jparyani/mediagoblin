@@ -29,7 +29,7 @@ from migrate.changeset.constraint import UniqueConstraint
 from mediagoblin.db.extratypes import JSONEncoded
 from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
 from mediagoblin.db.models import (MediaEntry, Collection, User,
-                                   MediaComment, Privilege, FOUNDATIONS)
+                                   MediaComment, Privilege)
 
 MIGRATIONS = {}
 
@@ -518,7 +518,7 @@ class Privilege_v0(declarative_base()):
 
 class PrivilegeUserAssociation_v0(declarative_base()):
     __tablename__ = 'core__privileges_users'
-    group_id = Column(
+    privilege_id = Column(
         'core__privilege_id',
         Integer,
         ForeignKey(User.id),
@@ -529,8 +529,32 @@ class PrivilegeUserAssociation_v0(declarative_base()):
         ForeignKey(Privilege.id),
         primary_key=True)
 
-@RegisterMigration(16, MIGRATIONS)
+PRIVILEGE_FOUNDATIONS_v0 = [{'privilege_name':u'admin'},
+						{'privilege_name':u'moderator'},
+						{'privilege_name':u'uploader'},
+						{'privilege_name':u'reporter'},
+						{'privilege_name':u'commenter'},
+						{'privilege_name':u'active'}]
+
+
+class User_vR1(declarative_base()):
+    __tablename__ = 'rename__users'
+    id = Column(Integer, primary_key=True)
+    username = Column(Unicode, nullable=False, unique=True)
+    email = Column(Unicode, nullable=False)
+    pw_hash = Column(Unicode)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    wants_comment_notification = Column(Boolean, default=True)
+    wants_notifications = Column(Boolean, default=True)
+    license_preference = Column(Unicode)
+    url = Column(Unicode)
+    bio = Column(UnicodeText)  # ??
+
+@RegisterMigration(18, MIGRATIONS)
 def create_moderation_tables(db):
+
+    # First, we will create the new tables in the database.
+    #--------------------------------------------------------------------------
     ReportBase_v0.__table__.create(db.bind)
     CommentReport_v0.__table__.create(db.bind)
     MediaReport_v0.__table__.create(db.bind)
@@ -540,46 +564,109 @@ def create_moderation_tables(db):
 
     db.commit()
 
-    for parameters in FOUNDATIONS[Privilege]:
-        p = Privilege(**parameters)
-        p.save()
-
-
-@RegisterMigration(17, MIGRATIONS)
-def update_user_privilege_columns(db):
-    # first, create the privileges which would be created by foundations
-    default_privileges = Privilege.query.filter(
-        Privilege.privilege_name !=u'admin').filter(
-        Privilege.privilege_name !=u'moderator').filter(
-        Privilege.privilege_name !=u'active').all()
-    admin_privilege = Privilege.query.filter(
-        Privilege.privilege_name ==u'admin').first()
-    active_privilege = Privilege.query.filter(
-        Privilege.privilege_name ==u'active').first()
-    # then, assign them to the appropriate users
-    for inactive_user in User.query.filter(
-        User.status!=u'active').filter(
-        User.is_admin==False).all():
-
-        inactive_user.all_privileges = default_privileges
-        inactive_user.save()
-    for user in User.query.filter(
-        User.status==u'active').filter(
-        User.is_admin==False).all():
-
-        user.all_privileges = default_privileges + [active_privilege]
-        user.save()
-    for admin_user in User.query.filter(
-        User.is_admin==True).all():
-
-        admin_user.all_privileges = default_privileges + [
-            admin_privilege, active_privilege]
-        admin_user.save()
-
-    # and then drop the now vestigial status column
+    # Then initialize the tables that we will later use
+    #--------------------------------------------------------------------------
     metadata = MetaData(bind=db.bind)
+    privileges_table= inspect_table(metadata, "core__privileges")
     user_table = inspect_table(metadata, 'core__users')
-    status = user_table.columns['status']
-    status.drop()
+    user_privilege_assoc = inspect_table(
+        metadata, 'core__privileges_users')
+
+    # This section initializes the default Privilege foundations, that
+    # would be created through the FOUNDATIONS system in a new instance
+    #--------------------------------------------------------------------------
+    for parameters in PRIVILEGE_FOUNDATIONS_v0:
+        db.execute(privileges_table.insert().values(**parameters))
+
     db.commit()
 
+    # This next section takes the information from the old is_admin and status
+    # columns and converts those to the new privilege system
+    #--------------------------------------------------------------------------
+    admin_users_ids, active_users_ids, inactive_users_ids = (
+        db.execute(
+            user_table.select().where(
+                user_table.c.is_admin==1)).fetchall(),
+        db.execute(
+            user_table.select().where(
+                user_table.c.is_admin==0).where(
+                user_table.c.status==u"active")).fetchall(),
+        db.execute(
+            user_table.select().where(
+                user_table.c.is_admin==0).where(
+                user_table.c.status!=u"active")).fetchall())
+
+    # Get the ids for each of the privileges so we can reference them ~~~~~~~~~
+    (admin_privilege_id, uploader_privilege_id,
+     reporter_privilege_id, commenter_privilege_id,
+     active_privilege_id) = [
+        db.execute(privileges_table.select().where(
+            privileges_table.c.privilege_name==privilege_name)).first()['id']
+        for privilege_name in
+            [u"admin",u"uploader",u"reporter",u"commenter",u"active"]
+    ]
+
+    # Give each user the appopriate privileges depending whether they are an
+    # admin, an active user or an inactivated user ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    for admin_user in admin_users_ids:
+        admin_user_id = admin_user['id']
+        for privilege_id in [admin_privilege_id, uploader_privilege_id, reporter_privilege_id, commenter_privilege_id, active_privilege_id]:
+            db.execute(user_privilege_assoc.insert().values(
+                core__privilege_id=admin_user_id,
+                core__user_id=privilege_id))
+
+    for active_user in active_users_ids:
+        active_user_id = active_user['id']
+        for privilege_id in [uploader_privilege_id, reporter_privilege_id, commenter_privilege_id, active_privilege_id]:
+            db.execute(user_privilege_assoc.insert().values(
+                core__privilege_id=active_user_id,
+                core__user_id=privilege_id))
+
+    for inactive_user in inactive_users_ids:
+        inactive_user_id = inactive_user['id']
+        for privilege_id in [uploader_privilege_id, reporter_privilege_id, commenter_privilege_id]:
+            db.execute(user_privilege_assoc.insert().values(
+                core__privilege_id=inactive_user_id,
+                core__user_id=privilege_id))
+
+    db.commit()
+
+    # And then, once the information is taken from the is_admin & status columns
+    # we drop all of the vestigial columns from the User table.
+    #--------------------------------------------------------------------------
+    if db.bind.url.drivername == 'sqlite':
+        # SQLite has some issues that make it *impossible* to drop boolean
+        # columns. So, the following code is a very hacky workaround which
+        # makes it possible. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        User_vR1.__table__.create(db.bind)
+        db.commit()
+        new_user_table = inspect_table(metadata, 'rename__users')
+        for row in db.execute(user_table.select()):
+            db.execute(new_user_table.insert().values(
+                username=row.username,
+                email=row.email,
+                pw_hash=row.pw_hash,
+                created=row.created,
+                wants_comment_notification=row.wants_comment_notification,
+                wants_notifications=row.wants_notifications,
+                license_preference=row.license_preference,
+                url=row.url,
+                bio=row.bio))
+
+        db.commit()
+        user_table.drop()
+
+        db.commit()
+        new_user_table.rename("core__users")
+    else:
+        # If the db is not SQLite, this process is much simpler ~~~~~~~~~~~~~~~
+
+        status = user_table.columns['status']
+        email_verified = user_table.columns['email_verified']
+        is_admin = user_table.columns['is_admin']
+        status.drop()
+        email_verified.drop()
+        is_admin.drop()
+
+    db.commit()
