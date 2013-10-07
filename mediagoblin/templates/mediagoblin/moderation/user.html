@@ -1,0 +1,204 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+
+{% block title %}
+  {%- if user -%}
+    {%- trans username=user.username -%}
+      User: {{ username }}
+    {%- endtrans %} &mdash; {{ super() }}
+  {%- else -%}
+    {{ super() }}
+  {%- endif -%}
+{% endblock %}
+
+{%- block mediagoblin_head %}
+ <script src="{{ request.staticdirect('/js/setup_report_forms.js') }}"></script>
+{% endblock %}
+
+{% block mediagoblin_content -%}
+  {# If no user... #}
+  {% if not user %}
+    <p>{% trans %}Sorry, no such user found.{% endtrans %}</p>
+  {# User exists, but needs verification #}
+  {% elif not user.has_privilege('active') %}
+    <div class="profile_sidebar empty_space">
+    <h1>{% trans %}Email verification needed{% endtrans %}</h1>
+    <p>
+      {% trans -%}
+        Someone has registered an account with this username, but it still has
+        to be activated.
+      {%- endtrans %}
+    </p>
+
+    </div>
+
+  {# Active(?) (or at least verified at some point) user, horray! #}
+  {% else %}
+    <a href="{{ request.urlgen('mediagoblin.moderation.users') }}"
+       class="return_to_panel button_action"
+       title="Return to Users Panel">
+      {% trans %}Return to Users Panel{% endtrans %}</a>
+    <h1>
+      {%- trans username=user.username %}{{ username }}'s profile{% endtrans -%}
+    {% if user_banned and user_banned.expiration_date %}
+      &mdash; BANNED until {{ user_banned.expiration_date }}
+    {% elif user_banned %}
+      &mdash; Banned Indefinitely
+    {% endif %}
+    </h1>
+    {% if not user.url and not user.bio %}
+        <div class="profile_sidebar empty_space">
+          <p>
+            {% trans -%}
+              This user hasn't filled in their profile (yet).
+            {%- endtrans %}
+          </p>
+    {% else %}
+      <div class="profile_sidebar">
+        {% include "mediagoblin/utils/profile.html" %}
+        {% if request.user and
+              (request.user.id == user.id or request.user.has_privilege('admin')) %}
+          <a href="{{ request.urlgen('mediagoblin.edit.profile',
+                   user=user.username) }}">
+            {%- trans %}Edit profile{% endtrans -%}
+          </a>
+        {% endif %}
+    {% endif %}
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.user_pages.collection_list',
+                                           user=user.username) }}">
+          {%- trans %}Browse collections{% endtrans -%}
+        </a>
+      </p>
+    </div>
+  {% endif %}
+  {% if user %}
+    <h2>{%- trans %}Active Reports on {% endtrans -%}{{ user.username }}</h2>
+    {% if reports.count() %}
+    <table class="admin_side_panel">
+      <tr>
+        <th>{%- trans %}Report ID{% endtrans -%}</th>
+        <th>{%- trans %}Reported Content{% endtrans -%}</th>
+        <th>{%- trans %}Description of Report{% endtrans -%}</th>
+      </tr>
+      {% for report in reports %}
+        <tr>
+          <td>
+            <img src="{{ request.staticdirect('/images/icon_clipboard.png') }}" />
+            <a href="{{ request.urlgen('mediagoblin.moderation.reports_detail',
+                                               report_id=report.id) }}">
+              {%- trans %}Report #{% endtrans -%}{{ report.id }}
+            </a>
+          </td>
+          <td>
+            {% if report.discriminator == "comment_report" %}
+              <a>{%- trans %}Reported Comment{% endtrans -%}</a>
+            {% elif report.discriminator == "media_report" %}
+              <a>{%- trans %}Reported Media Entry{% endtrans -%}</a>
+            {% endif %}
+          </td>
+          <td>{{ report.report_content[:21] }}
+                {% if report.report_content|count >20 %}...{% endif %}</td>
+          <td>{%- trans %}Resolve{% endtrans -%}</td>
+        </tr>
+      {% endfor %}
+        <tr><td></td><td></td>
+    </table>
+    {% else %}
+      {%- trans %}No active reports filed on {% endtrans -%} {{ user.username }}
+    {% endif %}
+    <span class="right_align">
+        <a href="{{ request.urlgen(
+            'mediagoblin.moderation.reports') }}?reported_user={{user.id}}">
+        {%- trans
+            username=user.username %}All reports on {{ username }}{% endtrans %}</a>
+    &middot;
+        <a href="{{ request.urlgen(
+                'mediagoblin.moderation.reports') }}?reporter={{user.id}}">
+        {%- trans
+            username=user.username %}All reports that {{ username }} has filed{% endtrans %}</a>
+    </span>
+    <span class=clear></span>
+    <h2>{{ user.username }}'s Privileges</h2>
+      <form method=POST action="{{ request.urlgen(
+        'mediagoblin.moderation.ban_or_unban',
+        user=user.username) }}" class="right_align">
+        {{ csrf_token }}
+        {% if request.user.has_privilege('admin') and not user_banned and
+            not user.id == request.user.id %}
+          {{ wtforms_util.render_divs(ban_form) }}
+          <input type=submit class="button_action"
+               value="{% trans %}Ban User{% endtrans %}"
+               id="ban_user_submit" />
+        {% elif request.user.has_privilege('admin') and
+            not user.id == request.user.id %}
+          <input type=submit class="button_action right_align"
+               value="{% trans %}UnBan User{% endtrans %}" />
+        {% endif %}
+      </form>
+    <form action="{{ request.urlgen('mediagoblin.moderation.give_or_take_away_privilege',
+               user=user.username) }}"
+          method=post >
+    <table class="admin_side_panel">
+        <tr>
+          <th>{% trans %}Privilege{% endtrans %}</th>
+          <th>{% trans %}User Has Privilege{% endtrans %}</th>
+        </tr>
+        {% for privilege in privileges %}
+          <tr>
+            <td>{{ privilege.privilege_name }}</td>
+            {% if privilege in user.all_privileges  %}
+              <td class="user_with_privilege">
+                Yes{% else %}
+              <td class="user_without_privilege">
+                No{% endif %}
+            </td>
+            {% if request.user.has_privilege('admin') %}
+              <td>
+                {% if privilege in user.all_privileges  %}
+                <input type=submit id="{{ privilege.privilege_name }}"
+                       class="submit_button button_action"
+                       value =" -" />
+                {% else %}
+                <input type=submit id="{{ privilege.privilege_name }}"
+                       class="submit_button button_action"
+                       value ="+" />
+                {% endif %}
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+    </table>
+    {{ csrf_token }}
+    <input type=hidden name=privilege_name id=hidden_privilege_name />
+    </form>
+  {% endif %}
+    <script>
+$(document).ready(function(){
+    $('.submit_button').click(function(){
+        $('#hidden_privilege_name').val($(this).attr('id'));
+    });
+    init_user_banned_form();
+    $('#ban_user_submit').click(function(){
+        submit_user_banned_form()
+    });
+});
+    </script>
+{% endblock %}

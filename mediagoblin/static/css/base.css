@@ -156,6 +156,10 @@ a.logo {
   margin: 6px 8px 6px 0;
 }
 
+.fine_print {
+  font-size: 0.8em;
+}
+
 .mediagoblin_content {
   width: 100%;
   padding-bottom: 74px;
@@ -219,6 +223,7 @@ footer {
   border-color: #A2DEC3 #6CAA8E #5C9179;
   color: #283F35;
 }
+
 
 .button_form {
   min-width: 99px;
@@ -351,40 +356,40 @@ textarea#description, textarea#bio {
 
 /* comments */
 
-.comment_wrapper {
+.comment_wrapper, .report_wrapper {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-.comment_wrapper p {
+.comment_wrapper p, .report_wrapper p {
   margin-bottom: 2px;
 }
 
-.comment_author {
+.comment_author, .report_author {
   padding-top: 4px;
   font-size: 0.9em;
 }
 
-a.comment_authorlink {
+a.comment_authorlink, a.report_authorlink {
   text-decoration: none;
   padding-right: 5px;
   font-weight: bold;
   padding-left: 2px;
 }
 
-a.comment_authorlink:hover {
+a.comment_authorlink:hover, a.report_authorlink:hover {
   text-decoration: underline;
 }
 
-a.comment_whenlink {
+a.comment_whenlink, a.report_whenlink {
   text-decoration: none;
 }
 
-a.comment_whenlink:hover {
+a.comment_whenlink:hover, a.report_whenlink:hover {
   text-decoration: underline;
 }
 
-.comment_content {
+.comment_content, .report_content {
   margin-left: 8px;
   margin-top: 8px;
 }
@@ -407,6 +412,13 @@ textarea#comment_content {
 #form_comment .form_field_input {
 	padding-right: 6px;
 }
+
+
+a.report_authorlink, a.report_whenlink {
+  color: #D486B1;
+}
+
+ul#action_to_resolve {list-style:none; margin-left:10px;}
 
 /* media galleries */
 
@@ -608,12 +620,65 @@ table.media_panel th {
   text-align: left;
 }
 
+/* moderator panels */
+
+table.admin_panel {
+  width: 100%
+}
+
+table.admin_side_panel {
+  width: 60%
+}
+
+table.admin_panel th, table.admin_side_panel th {
+  font-weight: bold;
+  padding-bottom: 4px;
+  text-align: left;
+  color: #fff;
+}
+
+table td.user_with_privilege {
+  font-weight: bold;
+  color: #86D4B1;
+}
+
+table td.user_without_privilege {
+  font-weight: bold;
+  color: #D486B1;
+}
+
+.return_to_panel    {
+  text-align:right;
+  float: right;
+  font-size:1.2em
+}
 
 /* Delete panel */
 
 .delete_checkbox_box {
   margin-top: 10px;
   margin-left: 10px;
+}
+
+/* code of conduct */
+
+#code_of_conduct_list  {
+    margin-left:25px;
+    margin-bottom: 10px;
+}
+#code_of_conduct_list li {
+    margin:5px 0 15px 25px;
+}
+#code_of_conduct_list strong{
+    color:#fff;
+}
+
+.nested_sublist {
+    margin: 5px 0 10px 25px;
+    font-size:80%;
+}
+.nested_sublist li {
+    margin-bottom: 10px;
 }
 
 /* ASCII art and code */

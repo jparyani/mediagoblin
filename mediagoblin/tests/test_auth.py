@@ -84,22 +84,26 @@ def test_register_views(test_app):
     template.clear_test_template_context()
     response = test_app.post(
         '/auth/register/', {
-            'username': u'happygirl',
-            'password': 'iamsohappy',
-            'email': 'happygrrl@example.org'})
+            'username': u'angrygirl',
+            'password': 'iamsoangry',
+            'email': 'angrygrrl@example.org'})
     response.follow()
 
     ## Did we redirect to the proper page?  Use the right template?
-    assert urlparse.urlsplit(response.location)[2] == '/u/happygirl/'
+    assert urlparse.urlsplit(response.location)[2] == '/u/angrygirl/'
     assert 'mediagoblin/user_pages/user_nonactive.html' in template.TEMPLATE_TEST_CONTEXT
 
     ## Make sure user is in place
     new_user = mg_globals.database.User.query.filter_by(
-        username=u'happygirl').first()
+        username=u'angrygirl').first()
     assert new_user
-    assert new_user.status == u'needs_email_verification'
-    assert new_user.email_verified == False
 
+    ## Make sure that the proper privileges are granted on registration
+
+    assert new_user.has_privilege(u'commenter')
+    assert new_user.has_privilege(u'uploader')
+    assert new_user.has_privilege(u'reporter')
+    assert not new_user.has_privilege(u'active')
     ## Make sure user is logged in
     request = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/user_pages/user_nonactive.html']['request']
@@ -108,7 +112,7 @@ def test_register_views(test_app):
     ## Make sure we get email confirmation, and try verifying
     assert len(mail.EMAIL_TEST_INBOX) == 1
     message = mail.EMAIL_TEST_INBOX.pop()
-    assert message['To'] == 'happygrrl@example.org'
+    assert message['To'] == 'angrygrrl@example.org'
     email_context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/auth/verification_email.txt']
     assert email_context['verification_url'] in message.get_payload(decode=True)
@@ -130,10 +134,8 @@ def test_register_views(test_app):
     # assert context['verification_successful'] == True
     # TODO: Would be good to test messages here when we can do so...
     new_user = mg_globals.database.User.query.filter_by(
-        username=u'happygirl').first()
+        username=u'angrygirl').first()
     assert new_user
-    assert new_user.status == u'needs_email_verification'
-    assert new_user.email_verified == False
 
     ## Verify the email activation works
     template.clear_test_template_context()
@@ -144,10 +146,8 @@ def test_register_views(test_app):
     # assert context['verification_successful'] == True
     # TODO: Would be good to test messages here when we can do so...
     new_user = mg_globals.database.User.query.filter_by(
-        username=u'happygirl').first()
+        username=u'angrygirl').first()
     assert new_user
-    assert new_user.status == u'active'
-    assert new_user.email_verified == True
 
     # Uniqueness checks
     # -----------------
@@ -155,9 +155,9 @@ def test_register_views(test_app):
     template.clear_test_template_context()
     response = test_app.post(
         '/auth/register/', {
-            'username': u'happygirl',
-            'password': 'iamsohappy2',
-            'email': 'happygrrl2@example.org'})
+            'username': u'angrygirl',
+            'password': 'iamsoangry2',
+            'email': 'angrygrrl2@example.org'})
 
     context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/auth/register.html']
@@ -172,7 +172,7 @@ def test_register_views(test_app):
     template.clear_test_template_context()
     response = test_app.post(
         '/auth/forgot_password/',
-        {'username': u'happygirl'})
+        {'username': u'angrygirl'})
     response.follow()
 
     ## Did we redirect to the proper page?  Use the right template?
@@ -182,7 +182,7 @@ def test_register_views(test_app):
     ## Make sure link to change password is sent by email
     assert len(mail.EMAIL_TEST_INBOX) == 1
     message = mail.EMAIL_TEST_INBOX.pop()
-    assert message['To'] == 'happygrrl@example.org'
+    assert message['To'] == 'angrygrrl@example.org'
     email_context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/plugins/basic_auth/fp_verification_email.txt']
     #TODO - change the name of verification_url to something forgot-password-ish
@@ -212,7 +212,7 @@ def test_register_views(test_app):
     template.clear_test_template_context()
     response = test_app.post(
         '/auth/forgot_password/verify/', {
-            'password': 'iamveryveryhappy',
+            'password': 'iamveryveryangry',
             'token': parsed_get_params['token']})
     response.follow()
     assert 'mediagoblin/auth/login.html' in template.TEMPLATE_TEST_CONTEXT
@@ -221,8 +221,8 @@ def test_register_views(test_app):
     template.clear_test_template_context()
     response = test_app.post(
         '/auth/login/', {
-            'username': u'happygirl',
-            'password': 'iamveryveryhappy'})
+            'username': u'angrygirl',
+            'password': 'iamveryveryangry'})
 
     # User should be redirected
     response.follow()
@@ -235,7 +235,7 @@ def test_authentication_views(test_app):
     Test logging in and logging out
     """
     # Make a new user
-    test_user = fixture_add_user(active_user=False)
+    test_user = fixture_add_user()
 
 
     # Get login
@@ -332,7 +332,6 @@ def test_authentication_views(test_app):
             'next' : '/u/chris/'})
     assert urlparse.urlsplit(response.location)[2] == '/u/chris/'
 
-
 @pytest.fixture()
 def authentication_disabled_app(request):
     return get_app(
@@ -344,6 +343,7 @@ def authentication_disabled_app(request):
 
 def test_authentication_disabled_app(authentication_disabled_app):
     # app.auth should = false
+    assert mg_globals
     assert mg_globals.app.auth is False
 
     # Try to visit register page

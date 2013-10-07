@@ -53,8 +53,17 @@ def adduser(args):
         entry.username = unicode(args.username.lower())
         entry.email = unicode(args.email)
         entry.pw_hash = auth.gen_password_hash(args.password)
-        entry.status = u'active'
-        entry.email_verified = True
+        default_privileges = [
+            db.Privilege.query.filter(
+                db.Privilege.privilege_name==u'commenter').one(),
+            db.Privilege.query.filter(
+                db.Privilege.privilege_name==u'uploader').one(),
+            db.Privilege.query.filter(
+                db.Privilege.privilege_name==u'reporter').one(),
+            db.Privilege.query.filter(
+                db.Privilege.privilege_name==u'active').one()
+        ]
+        entry.all_privileges = default_privileges
         entry.save()
 
         print "User created (and email marked as verified)"
@@ -74,7 +83,10 @@ def makeadmin(args):
     user = db.User.query.filter_by(
         username=unicode(args.username.lower())).one()
     if user:
-        user.is_admin = True
+        user.all_privileges.append(
+            db.Privilege.query.filter(
+                db.Privilege.privilege_name==u'admin').one()
+        )
         user.save()
         print 'The user is now Admin'
     else:

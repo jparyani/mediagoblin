@@ -49,3 +49,15 @@ class MediaCollectForm(wtforms.Form):
         description=_("""You can use
                       <a href="http://daringfireball.net/projects/markdown/basics" target="_blank">
                       Markdown</a> for formatting."""))
+
+class CommentReportForm(wtforms.Form):
+    report_reason = wtforms.TextAreaField(
+        _('Reason for Reporting'),
+        [wtforms.validators.Required()])
+    reporter_id = wtforms.HiddenField('')
+
+class MediaReportForm(wtforms.Form):
+    report_reason = wtforms.TextAreaField(
+        _('Reason for Reporting'),
+        [wtforms.validators.Required()])
+    reporter_id = wtforms.HiddenField('')

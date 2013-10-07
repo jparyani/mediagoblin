@@ -19,7 +19,9 @@ from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin import mg_globals
 from mediagoblin.db.base import Session
-from mediagoblin.db.models import CollectionItem
+from mediagoblin.db.models import (CollectionItem, MediaReport, CommentReport,
+                                  MediaComment, MediaEntry)
+from mediagoblin.user_pages import forms as user_forms
 
 
 def send_comment_email(user, comment, media, request):
@@ -75,3 +77,44 @@ def add_media_to_collection(collection, media, note=None, commit=True):
 
     if commit:
         Session.commit()
+
+def build_report_object(report_form, media_entry=None, comment=None):
+    """
+    This function is used to convert a form object (from a User filing a
+        report) into either a MediaReport or CommentReport object.
+
+    :param report_form          A MediaReportForm or a CommentReportForm object
+                                  with valid information from a POST request.
+    :param media_entry          A MediaEntry object. The MediaEntry being repo-
+                                  -rted by a MediaReport. In a CommentReport,
+                                  this will be None.
+    :param comment              A MediaComment object. The MediaComment being 
+                                  reported by a CommentReport. In a MediaReport
+                                  this will be None.
+
+    :returns                A MediaReport object if a valid MediaReportForm is
+                              passed as kwarg media_entry. This MediaReport has
+                              not been saved.
+    :returns                A CommentReport object if a valid CommentReportForm
+                              is passed as kwarg comment. This CommentReport
+                              has not been saved.
+    :returns                None if the form_dict is invalid.
+    """
+
+    if report_form.validate() and comment is not None:
+        report_object = CommentReport()
+        report_object.comment_id = comment.id
+        report_object.reported_user_id = MediaComment.query.get(
+            comment.id).get_author.id
+    elif report_form.validate() and media_entry is not None:
+        report_object = MediaReport()
+        report_object.media_entry_id = media_entry.id
+        report_object.reported_user_id = MediaEntry.query.get(
+            media_entry.id).get_uploader.id
+    else:
+        return None
+
+    report_object.report_content = report_form.report_reason.data
+    report_object.reporter_id = report_form.reporter_id.data
+    return report_object
+

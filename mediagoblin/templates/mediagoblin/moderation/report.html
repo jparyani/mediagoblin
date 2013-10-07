@@ -1,0 +1,154 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{%- extends "mediagoblin/base.html" %}
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+{%- block mediagoblin_head %}
+ <script src="{{ request.staticdirect('/js/setup_report_forms.js') }}"></script>
+{% endblock %}
+
+{%- block mediagoblin_content %}
+{% if not report %}
+  Sorry, no such report found.
+{% else %}
+    <a href="{{ request.urlgen('mediagoblin.moderation.reports') }}"
+       class="return_to_panel button_action"
+       title="Return to Reports Panel">
+      {% trans %}Return to Reports Panel{% endtrans %}</a>
+  <h2>{% trans %}Report{% endtrans %} #{{ report.id }}</h2>
+  {% if report.is_comment_report() and report.comment %}
+
+    {% trans %}Reported comment{% endtrans %}:
+    {% set comment = report.comment %}
+    {% set reported_user = comment.get_author %}
+    <div id="comment-{{ comment.id }}"
+        class="comment_wrapper">
+      <div class="comment_author">
+        <img src="{{ request.staticdirect('/images/icon_comment.png') }}" />
+            <a href="{{ request.urlgen('mediagoblin.moderation.users_detail',
+                            user=comment.get_author.username) }}"
+               class="comment_authorlink">
+          {{- reported_user.username -}}
+        </a>
+        <a href="{{ request.urlgen(
+                        'mediagoblin.user_pages.media_home.view_comment',
+                        comment=comment.id,
+                        user=comment.get_media_entry.get_uploader.username,
+                        media=comment.get_media_entry.slug_or_id) }}#comment"
+           class="comment_whenlink">
+          <span title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+            {%- trans formatted_time=timesince(comment.created) -%}
+              {{ formatted_time }} ago
+            {%- endtrans -%}
+          </span></a>:
+      </div>
+      <div class=comment_content>
+        {% autoescape False %}
+          {{ comment.content_html }}
+        {% endautoescape %}
+      </div>
+    </div>
+  {% elif report.is_media_entry_report() and report.media_entry %}
+
+    {% set media_entry = report.media_entry %}
+    <div class="media_thumbnail">
+      <a href="{{ request.urlgen('mediagoblin.user_pages.media_home',
+                            user=media_entry.get_uploader.username,
+                            media=media_entry.slug_or_id) }}">
+      <img src="{{ media_entry.thumb_url}}"/></a>
+      <a href="{{ request.urlgen('mediagoblin.user_pages.media_home',
+                    user=media_entry.get_uploader.username,
+                    media=media_entry.slug_or_id) }}" class=thumb_entry_title>
+        {{ media_entry.title }}</a>
+    </div>
+    <div class=clear></div>
+    <p>
+    {% trans user_name=report.reported_user.username,
+             user_url=request.urlgen(
+                        'mediagoblin.moderation.users_detail',
+                        user=report.reported_user.username) %}
+        ❖ Reported media by <a href="{{ user_url }}">{{ user_name }}</a>
+    {% endtrans %}
+    </p>
+    <div class=clear></div>
+  {% else %}
+    <h2>{% trans user_url=request.urlgen(
+                        'mediagoblin.moderation.users_detail',
+                        user=report.reporter.username),
+                 user_name=report.reported_user.username %}
+          CONTENT BY
+            <a href="{{ user_url }}"> {{ user_name }}</a>
+          HAS BEEN DELETED
+        {% endtrans %}
+    </h2>
+  {% endif %}
+  Reason for report:
+  <div id="report-{{ report.id }}"
+       class="report_wrapper">
+    <div class="report_author">
+        <img src="{{ request.staticdirect(
+                  '/images/icon_clipboard_alert.png') }}"
+             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
+                  Distributed by the GNOME project http://www.gnome.org" />
+        <a href="{{ request.urlgen('mediagoblin.moderation.users_detail',
+                        user=report.reporter.username) }}"
+           class="report_authorlink">
+        {{- report.reporter.username -}}
+        </a>
+        <a href="{{ request.urlgen('mediagoblin.moderation.reports_detail',
+                        report_id=report.id) }}"
+           class="report_whenlink">
+          <span title='{{- report.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+            {%- trans formatted_time=timesince(report.created) -%}
+              {{ formatted_time }} ago
+            {%- endtrans -%}
+          </span>
+        </a>
+    </div>
+    <div class="report_content">
+      {{ report.report_content }}
+    </div>
+  </div>
+  {% if not report.is_archived_report() and not (report.reported_user.has_privilege('admin') and not request.user.has_privilege('admin')) %}
+    <input type=button value=Resolve id=open_resolution_form />
+    <form action="" method="POST" id=resolution_form>
+      {{ wtforms_util.render_divs(form) }}
+      {{ csrf_token }}
+      <input type=submit id="submit_this_report" value="Resolve This Report"/>
+    </form>
+  <script>
+  $(document).ready(function() {
+    init_report_resolution_form();
+  });
+  </script>
+  {% elif report.is_archived_report() %}
+    <h2><img src="{{ request.staticdirect('/images/icon_clipboard.png') }}"
+             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
+                  Distributed by the GNOME project http://www.gnome.org" />
+          {% trans %}Status{% endtrans %}:
+    </h2>
+    <b>{% trans %}RESOLVED{% endtrans %}</b>
+    {{ report.resolved.strftime("%I:%M%p %Y-%m-%d") }}
+    <pre>
+      <p>{{ report.result }}</p>
+    </pre>
+  {% else %}
+    <input type=button disabled=disabled value="Resolve This Report"/>
+    <p>You cannot take action against an administrator</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

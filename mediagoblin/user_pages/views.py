@@ -27,13 +27,16 @@ from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.user_pages import forms as user_forms
-from mediagoblin.user_pages.lib import add_media_to_collection
+from mediagoblin.user_pages.lib import (send_comment_email,
+	add_media_to_collection, build_report_object)
 from mediagoblin.notifications import trigger_notification, \
     add_comment_subscription, mark_comment_notification_seen
+
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
-    get_media_entry_by_id,
+    get_media_entry_by_id, user_has_privilege, user_not_banned,
     require_active_login, user_may_delete_media, user_may_alter_collection,
-    get_user_collection, get_user_collection_item, active_user_from_url)
+    get_user_collection, get_user_collection_item, active_user_from_url,
+    get_optional_media_comment_by_id, allow_reporting)
 
 from werkzeug.contrib.atom import AtomFeed
 from werkzeug.exceptions import MethodNotAllowed
@@ -43,14 +46,14 @@ from werkzeug.wrappers import Response
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
 
-
+@user_not_banned
 @uses_pagination
 def user_home(request, page):
     """'Homepage' of a User()"""
     user = User.query.filter_by(username=request.matchdict['user']).first()
     if not user:
         return render_404(request)
-    elif user.status != u'active':
+    elif not user.has_privilege(u'active'):
         return render_to_response(
             request,
             'mediagoblin/user_pages/user_nonactive.html',
@@ -79,7 +82,7 @@ def user_home(request, page):
          'media_entries': media_entries,
          'pagination': pagination})
 
-
+@user_not_banned
 @active_user_from_url
 @uses_pagination
 def user_gallery(request, page, url_user=None):
@@ -114,7 +117,7 @@ def user_gallery(request, page, url_user=None):
 
 MEDIA_COMMENTS_PER_PAGE = 50
 
-
+@user_not_banned
 @get_user_media_entry
 @uses_pagination
 def media_home(request, media, page, **kwargs):
@@ -154,7 +157,7 @@ def media_home(request, media, page, **kwargs):
 
 
 @get_media_entry_by_id
-@require_active_login
+@user_has_privilege(u'commenter')
 def media_post_comment(request, media):
     """
     recieves POST from a MediaEntry() comment form, saves the comment.
@@ -165,7 +168,6 @@ def media_post_comment(request, media):
     comment = request.db.MediaComment()
     comment.media_entry = media.id
     comment.author = request.user.id
-    print request.form['comment_content']
     comment.content = unicode(request.form['comment_content'])
 
     # Show error message if commenting is disabled.
@@ -205,6 +207,7 @@ def media_preview_comment(request):
 
     return Response(json.dumps(cleancomment))
 
+@user_not_banned
 @get_media_entry_by_id
 @require_active_login
 def media_collect(request, media):
@@ -316,7 +319,7 @@ def media_confirm_delete(request, media):
                 _("The media was not deleted because you didn't check that you were sure."))
             return redirect_obj(request, media)
 
-    if ((request.user.is_admin and
+    if ((request.user.has_privilege(u'admin') and
          request.user.id != media.uploader)):
         messages.add_message(
             request, messages.WARNING,
@@ -329,7 +332,7 @@ def media_confirm_delete(request, media):
         {'media': media,
          'form': form})
 
-
+@user_not_banned
 @active_user_from_url
 @uses_pagination
 def user_collection(request, page, url_user=None):
@@ -359,7 +362,7 @@ def user_collection(request, page, url_user=None):
          'collection_items': collection_items,
          'pagination': pagination})
 
-
+@user_not_banned
 @active_user_from_url
 def collection_list(request, url_user=None):
     """A User-defined Collection"""
@@ -402,7 +405,7 @@ def collection_item_confirm_remove(request, collection_item):
 
         return redirect_obj(request, collection)
 
-    if ((request.user.is_admin and
+    if ((request.user.has_privilege(u'admin') and
          request.user.id != collection_item.in_collection.creator)):
         messages.add_message(
             request, messages.WARNING,
@@ -450,7 +453,7 @@ def collection_confirm_delete(request, collection):
 
             return redirect_obj(request, collection)
 
-    if ((request.user.is_admin and
+    if ((request.user.has_privilege(u'admin') and
          request.user.id != collection.creator)):
         messages.add_message(
             request, messages.WARNING,
@@ -472,9 +475,8 @@ def atom_feed(request):
     generates the atom feed with the newest images
     """
     user = User.query.filter_by(
-        username = request.matchdict['user'],
-        status = u'active').first()
-    if not user:
+        username = request.matchdict['user']).first()
+    if not user or not user.has_privilege(u'active'):
         return render_404(request)
 
     cursor = MediaEntry.query.filter_by(
@@ -535,9 +537,8 @@ def collection_atom_feed(request):
     generates the atom feed with the newest images from a collection
     """
     user = User.query.filter_by(
-        username = request.matchdict['user'],
-        status = u'active').first()
-    if not user:
+        username = request.matchdict['user']).first()
+    if not user or not user.has_privilege(u'active'):
         return render_404(request)
 
     collection = Collection.query.filter_by(
@@ -599,7 +600,6 @@ def collection_atom_feed(request):
 
     return feed.get_response()
 
-
 @require_active_login
 def processing_panel(request):
     """
@@ -611,7 +611,7 @@ def processing_panel(request):
     #
     # Make sure we have permission to access this user's panel.  Only
     # admins and this user herself should be able to do so.
-    if not (user.id == request.user.id or request.user.is_admin):
+    if not (user.id == request.user.id or request.user.has_privilege(u'admin')):
         # No?  Simply redirect to this user's homepage.
         return redirect(
             request, 'mediagoblin.user_pages.user_home',
@@ -643,3 +643,44 @@ def processing_panel(request):
          'processing_entries': processing_entries,
          'failed_entries': failed_entries,
          'processed_entries': processed_entries})
+
+@allow_reporting
+@get_user_media_entry
+@user_has_privilege(u'reporter')
+@get_optional_media_comment_by_id
+def file_a_report(request, media, comment):
+    """
+    This view handles the filing of a MediaReport or a CommentReport.
+    """
+    if comment is not None:
+        if not comment.get_media_entry.id == media.id:
+            return render_404(request)
+
+        form = user_forms.CommentReportForm(request.form)
+        context = {'media': media,
+                   'comment':comment,
+                   'form':form}
+    else:
+        form = user_forms.MediaReportForm(request.form)
+        context = {'media': media,
+                   'form':form}
+    form.reporter_id.data = request.user.id
+
+
+    if request.method == "POST":
+        report_object = build_report_object(form,
+            media_entry=media,
+            comment=comment)
+
+        # if the object was built successfully, report_table will not be None
+        if report_object:
+            report_object.save()
+            return redirect(
+                request,
+                'index')
+
+
+    return render_to_response(
+        request,
+        'mediagoblin/user_pages/report.html',
+        context)

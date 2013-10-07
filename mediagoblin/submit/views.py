@@ -27,7 +27,7 @@ _log = logging.getLogger(__name__)
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import render_to_response, redirect
-from mediagoblin.decorators import require_active_login
+from mediagoblin.decorators import require_active_login, user_has_privilege
 from mediagoblin.submit import forms as submit_forms
 from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.media_types import sniff_media, \
@@ -39,6 +39,7 @@ from mediagoblin.notifications import add_comment_subscription
 
 
 @require_active_login
+@user_has_privilege(u'uploader')
 def submit_start(request):
     """
     First view for submitting a file.

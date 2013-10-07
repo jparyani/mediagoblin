@@ -47,11 +47,21 @@ class TestSubmission:
 
         # TODO: Possibly abstract into a decorator like:
         # @as_authenticated_user('chris')
-        test_user = fixture_add_user()
-
-        self.test_user = test_user
+        fixture_add_user(privileges=[u'active',u'uploader', u'commenter'])
 
         self.login()
+
+    def our_user(self):
+        """
+        Fetch the user we're submitting with.  Every .get() or .post()
+        invalidates the session; this is a hacky workaround.
+        """
+        #### FIXME: Pytest collects this as a test and runs this.
+        ####   ... it shouldn't.  At least it passes, but that's
+        ####   totally stupid.
+        ####   Also if we found a way to make this run it should be a
+        ####   property.
+        return User.query.filter(User.username==u'chris').first()
 
     def login(self):
         self.test_app.post(
@@ -98,10 +108,10 @@ class TestSubmission:
     def check_normal_upload(self, title, filename):
         response, context = self.do_post({'title': title}, do_follow=True,
                                          **self.upload_data(filename))
-        self.check_url(response, '/u/{0}/'.format(self.test_user.username))
+        self.check_url(response, '/u/{0}/'.format(self.our_user().username))
         assert 'mediagoblin/user_pages/user.html' in context
         # Make sure the media view is at least reachable, logged in...
-        url = '/u/{0}/m/{1}/'.format(self.test_user.username,
+        url = '/u/{0}/m/{1}/'.format(self.our_user().username,
                                      title.lower().replace(' ', '-'))
         self.test_app.get(url)
         # ... and logged out too.
@@ -148,7 +158,7 @@ class TestSubmission:
         response, context = self.do_post({'title': u'Normal upload 3 (pdf)'},
                                          do_follow=True,
                                          **self.upload_data(GOOD_PDF))
-        self.check_url(response, '/u/{0}/'.format(self.test_user.username))
+        self.check_url(response, '/u/{0}/'.format(self.our_user().username))
         assert 'mediagoblin/user_pages/user.html' in context
 
     def test_default_upload_limits(self):
@@ -264,7 +274,7 @@ class TestSubmission:
         # render and post to the edit page.
         edit_url = request.urlgen(
             'mediagoblin.edit.edit_media',
-            user=self.test_user.username, media_id=media_id)
+            user=self.our_user().username, media_id=media_id)
         self.test_app.get(edit_url)
         self.test_app.post(edit_url,
             {'title': u'Balanced Goblin',
@@ -277,7 +287,7 @@ class TestSubmission:
         self.check_comments(request, media_id, 0)
         comment_url = request.urlgen(
             'mediagoblin.user_pages.media_post_comment',
-            user=self.test_user.username, media_id=media_id)
+            user=self.our_user().username, media_id=media_id)
         response = self.do_post({'comment_content': 'i love this test'},
                                 url=comment_url, do_follow=True)[0]
         self.check_comments(request, media_id, 1)
@@ -286,7 +296,7 @@ class TestSubmission:
         # ---------------------------------------------------
         delete_url = request.urlgen(
             'mediagoblin.user_pages.media_confirm_delete',
-            user=self.test_user.username, media_id=media_id)
+            user=self.our_user().username, media_id=media_id)
         # Empty data means don't confirm
         response = self.do_post({}, do_follow=True, url=delete_url)[0]
         media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
@@ -359,7 +369,7 @@ class TestSubmission:
         #   they'll be caught as failures during the processing step.
         response, context = self.do_post({'title': title}, do_follow=True,
                                          **self.upload_data(filename))
-        self.check_url(response, '/u/{0}/'.format(self.test_user.username))
+        self.check_url(response, '/u/{0}/'.format(self.our_user().username))
         entry = mg_globals.database.MediaEntry.query.filter_by(title=title).first()
         assert entry.state == 'failed'
         assert entry.fail_error == u'mediagoblin.processing:BadMediaFail'

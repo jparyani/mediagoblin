@@ -18,7 +18,7 @@ import logging
 
 from mediagoblin.tools.routing import add_route, mount, url_map
 from mediagoblin.tools.pluginapi import PluginManager
-from mediagoblin.admin.routing import admin_routes
+from mediagoblin.moderation.routing import moderation_routes
 from mediagoblin.auth.routing import auth_routes
 
 
@@ -27,8 +27,10 @@ _log = logging.getLogger(__name__)
 
 def get_url_map():
     add_route('index', '/', 'mediagoblin.views:root_view')
+    add_route('terms_of_service','/terms_of_service',
+        'mediagoblin.views:terms_of_service')
     mount('/auth', auth_routes)
-    mount('/a', admin_routes)
+    mount('/mod', moderation_routes)
 
     import mediagoblin.submit.routing
     import mediagoblin.user_pages.routing

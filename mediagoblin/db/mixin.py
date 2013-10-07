@@ -46,7 +46,6 @@ class UserMixin(object):
     def bio_html(self):
         return cleaned_markdown_conversion(self.bio)
 
-
 class GenerateSlugMixin(object):
     """
     Mixin to add a generate_slug method to objects.

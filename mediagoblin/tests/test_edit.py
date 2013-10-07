@@ -27,7 +27,8 @@ class TestUserEdit(object):
     def setup(self):
         # set up new user
         self.user_password = u'toast'
-        self.user = fixture_add_user(password = self.user_password)
+        self.user = fixture_add_user(password = self.user_password,
+                               privileges=[u'active'])
 
     def login(self, test_app):
         test_app.post(
@@ -52,7 +53,8 @@ class TestUserEdit(object):
         # deleted too. Perhaps in submission test?
 
         #Restore user at end of test
-        self.user = fixture_add_user(password = self.user_password)
+        self.user = fixture_add_user(password = self.user_password,
+                               privileges=[u'active'])
         self.login(test_app)
 
 
@@ -80,7 +82,8 @@ class TestUserEdit(object):
         assert test_user.url == u'http://dustycloud.org/'
 
         # change a different user than the logged in (should fail with 403)
-        fixture_add_user(username=u"foo")
+        fixture_add_user(username=u"foo",
+                         privileges=[u'active'])
         res = test_app.post(
             '/u/foo/edit/', {
                 'bio': u'I love toast!',

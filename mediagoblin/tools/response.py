@@ -21,6 +21,8 @@ from werkzeug.wrappers import Response as wz_Response
 from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import (lazy_pass_to_ugettext as _,
                                          pass_to_ugettext)
+from mediagoblin.db.models import UserBan, User
+from datetime import date
 
 class Response(wz_Response):
     """Set default response mimetype to HTML, otherwise we get text/plain"""
@@ -50,7 +52,8 @@ def render_400(request, err_msg=None):
     _ = pass_to_ugettext
     title = _("Bad Request")
     if err_msg is None:
-        err_msg = _("The request sent to the server is invalid, please double check it")
+        err_msg = _("The request sent to the server is invalid, \
+please double check it")
 
     return render_error(request, 400, title, err_msg)
 
@@ -71,6 +74,21 @@ def render_404(request):
                 "you're looking for has been moved or deleted.")
     return render_error(request, 404, err_msg=err_msg)
 
+def render_user_banned(request):
+    """Renders the page which tells a user they have been banned, for how long
+    and the reason why they have been banned"
+    """
+    user_ban = UserBan.query.get(request.user.id)
+    if (user_ban.expiration_date is not None and
+            date.today()>user_ban.expiration_date):
+
+        user_ban.delete()
+        return redirect(request,
+            'index')
+    return render_to_response(request,
+        'mediagoblin/banned.html',
+        {'reason':user_ban.reason,
+         'expiration_date':user_ban.expiration_date})
 
 def render_http_exception(request, exc, description):
     """Return Response() given a werkzeug.HTTPException
@@ -126,7 +144,7 @@ def json_response(serializable, _disable_cors=False, *args, **kw):
     Any extra arguments and keyword arguments are passed to the
     Response.__init__ method.
     '''
-    
+
     response = wz_Response(json.dumps(serializable), *args, content_type='application/json', **kw)
 
     if not _disable_cors:

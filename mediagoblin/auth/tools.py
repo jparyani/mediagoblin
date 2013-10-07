@@ -14,12 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 import logging
 import wtforms
+from sqlalchemy import or_
 
 from mediagoblin import mg_globals
 from mediagoblin.tools.crypto import get_timed_signer_url
-from mediagoblin.db.models import User
+from mediagoblin.db.models import User, Privilege
 from mediagoblin.tools.mail import (normalize_email, send_email,
                                     email_debug_message)
 from mediagoblin.tools.template import render_template
@@ -128,6 +130,14 @@ def register_user(request, register_form):
     if extra_validation_passes:
         # Create the user
         user = auth.create_user(register_form)
+
+        # give the user the default privileges
+        default_privileges = [
+            Privilege.query.filter(Privilege.privilege_name==u'commenter').first(),
+            Privilege.query.filter(Privilege.privilege_name==u'uploader').first(),
+            Privilege.query.filter(Privilege.privilege_name==u'reporter').first()]
+        user.all_privileges += default_privileges
+        user.save()
 
         # log the user in
         request.session['user_id'] = unicode(user.id)

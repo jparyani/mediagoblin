@@ -23,6 +23,10 @@ add_route('mediagoblin.user_pages.media_home',
           '/u/<string:user>/m/<string:media>/',
           'mediagoblin.user_pages.views:media_home')
 
+add_route('mediagoblin.user_pages.media_home.report_media',
+          '/u/<string:user>/m/<string:media>/report/',
+          'mediagoblin.user_pages.views:file_a_report')
+
 add_route('mediagoblin.user_pages.media_confirm_delete',
           '/u/<string:user>/m/<int:media_id>/confirm-delete/',
           'mediagoblin.user_pages.views:media_confirm_delete')
@@ -43,6 +47,10 @@ add_route('mediagoblin.user_pages.user_gallery',
 add_route('mediagoblin.user_pages.media_home.view_comment',
           '/u/<string:user>/m/<string:media>/c/<int:comment>/',
           'mediagoblin.user_pages.views:media_home')
+
+add_route('mediagoblin.user_pages.media_home.report_comment',
+          '/u/<string:user>/m/<string:media>/c/<int:comment>/report/',
+          'mediagoblin.user_pages.views:file_a_report')
 
 # User's tags gallery
 add_route('mediagoblin.user_pages.user_tag_gallery',

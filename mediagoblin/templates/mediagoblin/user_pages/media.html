@@ -72,7 +72,7 @@
     </h2>
     {% if request.user and
           (media.uploader == request.user.id or
-           request.user.is_admin) %}
+           request.user.has_privilege('admin')) %}
       {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
                                  user= media.get_uploader.username,
                                  media_id=media.id) %}
@@ -86,7 +86,7 @@
     {% autoescape False %}
       <p>{{ media.description_html }}</p>
     {% endautoescape %}
-    {% if comments %}
+    {% if comments and request.user and request.user.has_privilege('commenter') %}
       {% if app_config['allow_comments'] %}
         <a
           {% if not request.user %}
@@ -146,6 +146,15 @@
               {{ comment.content_html }}
             {%- endautoescape %}
           </div>
+          <div>
+            {% if app_config.allow_reporting %}
+                <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.report_comment',
+                            user=media.get_uploader.username,
+                             media=media.slug_or_id,
+                             comment=comment.id) }}">
+                    {% trans %}Report{% endtrans %}</a>
+            {% endif %}
+          </div>
         </li>
       {% endfor %}
       </ul>
@@ -156,7 +165,7 @@
   <div class="media_sidebar">
     <h3>{% trans %}Added{% endtrans %}</h3>
     <p><span title="{{ media.created.strftime("%I:%M%p %Y-%m-%d") }}">
-        {%- trans formatted_time=timesince(media.created) -%}    
+        {%- trans formatted_time=timesince(media.created) -%}
           {{ formatted_time }} ago
         {%- endtrans -%}
     </span></p>
@@ -169,6 +178,10 @@
     {% endif %}
 
     {% include "mediagoblin/utils/collections.html" %}
+
+    {% if app_config.allow_reporting %}
+      {% include "mediagoblin/utils/report.html" %}
+    {% endif %}
 
     {% include "mediagoblin/utils/license.html" %}
 
@@ -189,7 +202,7 @@
     {%- if app_config['allow_attachments']
           and request.user
           and (media.uploader == request.user.id
-               or request.user.is_admin) %}
+               or request.user.has_privilege('admin')) %}
       {%- if not media.attachment_files|count %}
         <h3>{% trans %}Attachments{% endtrans %}</h3>
       {%- endif %}

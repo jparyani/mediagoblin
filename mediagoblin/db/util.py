@@ -67,7 +67,6 @@ def check_collection_slug_used(creator_id, slug, ignore_c_id):
     does_exist = Session.query(Collection.id).filter(filt).first() is not None
     return does_exist
 
-
 if __name__ == '__main__':
     from mediagoblin.db.open import setup_connection_and_db_from_config
 

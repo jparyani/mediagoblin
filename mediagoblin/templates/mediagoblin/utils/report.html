@@ -1,3 +1,4 @@
+{#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -13,8 +14,15 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
 
-admin_routes = [
-    ('mediagoblin.admin.panel',
-        '/panel',
-        'mediagoblin.admin.views:admin_processing_panel')]
+{% block report_content -%}
+  <p>
+    <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.report_media',
+                            user=media.get_uploader.username,
+                             media=media.slug_or_id) }}"
+        class="button_action" id="button_reportmedia" title="Report media">
+        {% trans %}Report media{% endtrans %}
+    </a>
+  </p>
+{% endblock %}

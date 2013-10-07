@@ -23,7 +23,7 @@ import datetime
 
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
-        SmallInteger
+        SmallInteger, Date
 from sqlalchemy.orm import relationship, backref, with_polymorphic
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
@@ -64,15 +64,12 @@ class User(Base, UserMixin):
     # point.
     email = Column(Unicode, nullable=False)
     pw_hash = Column(Unicode)
-    email_verified = Column(Boolean, default=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    status = Column(Unicode, default=u"needs_email_verification", nullable=False)
     # Intented to be nullable=False, but migrations would not work for it
     # set to nullable=True implicitly.
     wants_comment_notification = Column(Boolean, default=True)
     wants_notifications = Column(Boolean, default=True)
     license_preference = Column(Unicode)
-    is_admin = Column(Boolean, default=False, nullable=False)
     url = Column(Unicode)
     bio = Column(UnicodeText)  # ??
     uploaded = Column(Integer, default=0)
@@ -85,8 +82,8 @@ class User(Base, UserMixin):
         return '<{0} #{1} {2} {3} "{4}">'.format(
                 self.__class__.__name__,
                 self.id,
-                'verified' if self.email_verified else 'non-verified',
-                'admin' if self.is_admin else 'user',
+                'verified' if self.has_privilege(u'active') else 'non-verified',
+                'admin' if self.has_privilege(u'admin') else 'user',
                 self.username)
 
     def delete(self, **kwargs):
@@ -107,6 +104,36 @@ class User(Base, UserMixin):
         # Delete user, pass through commit=False/True in kwargs
         super(User, self).delete(**kwargs)
         _log.info('Deleted user "{0}" account'.format(self.username))
+
+    def has_privilege(self,*priv_names):
+        """
+        This method checks to make sure a user has all the correct privileges
+        to access a piece of content.
+
+        :param  priv_names      A variable number of unicode objects which rep-
+                                -resent the different privileges which may give
+                                the user access to this content. If you pass
+                                multiple arguments, the user will be granted
+                                access if they have ANY of the privileges
+                                passed.
+        """
+        if len(priv_names) == 1:
+            priv = Privilege.query.filter(
+                Privilege.privilege_name==priv_names[0]).one()
+            return (priv in self.all_privileges)
+        elif len(priv_names) > 1:
+            return self.has_privilege(priv_names[0]) or \
+                self.has_privilege(*priv_names[1:])
+        return False
+
+    def is_banned(self):
+        """
+        Checks if this user is banned.
+
+            :returns                True if self is banned
+            :returns                False if self is not
+        """
+        return UserBan.query.get(self.id) is not None
 
 
 class Client(Base):
@@ -675,16 +702,198 @@ class ProcessingNotification(Notification):
         'polymorphic_identity': 'processing_notification'
     }
 
-
 with_polymorphic(
     Notification,
     [ProcessingNotification, CommentNotification])
 
+class ReportBase(Base):
+    """
+    This is the basic report object which the other reports are based off of.
+
+        :keyword    reporter_id         Holds the id of the user who created
+                                            the report, as an Integer column.
+        :keyword    report_content      Hold the explanation left by the repor-
+                                            -ter to indicate why they filed the
+                                            report in the first place, as a
+                                            Unicode column.
+        :keyword    reported_user_id    Holds the id of the user who created
+                                            the content which was reported, as
+                                            an Integer column.
+        :keyword    created             Holds a datetime column of when the re-
+                                            -port was filed.
+        :keyword    discriminator       This column distinguishes between the
+                                            different types of reports.
+        :keyword    resolver_id         Holds the id of the moderator/admin who
+                                            resolved the report.
+        :keyword    resolved            Holds the DateTime object which descri-
+                                            -bes when this report was resolved
+        :keyword    result              Holds the UnicodeText column of the
+                                            resolver's reasons for resolving
+                                            the report this way. Some of this
+                                            is auto-generated
+    """
+    __tablename__ = 'core__reports'
+    id = Column(Integer, primary_key=True)
+    reporter_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    reporter =  relationship(
+        User,
+        backref=backref("reports_filed_by",
+            lazy="dynamic",
+            cascade="all, delete-orphan"),
+        primaryjoin="User.id==ReportBase.reporter_id")
+    report_content = Column(UnicodeText)
+    reported_user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    reported_user = relationship(
+        User,
+        backref=backref("reports_filed_on",
+            lazy="dynamic",
+            cascade="all, delete-orphan"),
+        primaryjoin="User.id==ReportBase.reported_user_id")
+    created = Column(DateTime, nullable=False, default=datetime.datetime.now())
+    discriminator = Column('type', Unicode(50))
+    resolver_id = Column(Integer, ForeignKey(User.id))
+    resolver = relationship(
+        User,
+        backref=backref("reports_resolved_by",
+            lazy="dynamic",
+            cascade="all, delete-orphan"),
+        primaryjoin="User.id==ReportBase.resolver_id")
+
+    resolved = Column(DateTime)
+    result = Column(UnicodeText)
+    __mapper_args__ = {'polymorphic_on': discriminator}
+
+    def is_comment_report(self):
+        return self.discriminator=='comment_report'
+
+    def is_media_entry_report(self):
+        return self.discriminator=='media_report'
+
+    def is_archived_report(self):
+        return self.resolved is not None
+
+    def archive(self,resolver_id, resolved, result):
+        self.resolver_id   = resolver_id
+        self.resolved   = resolved
+        self.result     = result
+
+
+class CommentReport(ReportBase):
+    """
+    Reports that have been filed on comments.
+        :keyword    comment_id          Holds the integer value of the reported
+                                            comment's ID
+    """
+    __tablename__ = 'core__reports_on_comments'
+    __mapper_args__ = {'polymorphic_identity': 'comment_report'}
+
+    id = Column('id',Integer, ForeignKey('core__reports.id'),
+                                                primary_key=True)
+    comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=True)
+    comment = relationship(
+        MediaComment, backref=backref("reports_filed_on",
+            lazy="dynamic"))
+
+
+class MediaReport(ReportBase):
+    """
+    Reports that have been filed on media entries
+        :keyword    media_entry_id      Holds the integer value of the reported
+                                            media entry's ID
+    """
+    __tablename__ = 'core__reports_on_media'
+    __mapper_args__ = {'polymorphic_identity': 'media_report'}
+
+    id = Column('id',Integer, ForeignKey('core__reports.id'),
+                                                primary_key=True)
+    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=True)
+    media_entry = relationship(
+        MediaEntry,
+        backref=backref("reports_filed_on",
+            lazy="dynamic"))
+
+class UserBan(Base):
+    """
+    Holds the information on a specific user's ban-state. As long as one of
+        these is attached to a user, they are banned from accessing mediagoblin.
+        When they try to log in, they are greeted with a page that tells them
+        the reason why they are banned and when (if ever) the ban will be
+        lifted
+
+        :keyword user_id          Holds the id of the user this object is
+                                    attached to. This is a one-to-one
+                                    relationship.
+        :keyword expiration_date  Holds the date that the ban will be lifted.
+                                    If this is null, the ban is permanent
+                                    unless a moderator manually lifts it.
+        :keyword reason           Holds the reason why the user was banned.
+    """
+    __tablename__ = 'core__user_bans'
+
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False,
+                                                        primary_key=True)
+    expiration_date = Column(Date)
+    reason = Column(UnicodeText, nullable=False)
+
+
+class Privilege(Base):
+    """
+    The Privilege table holds all of the different privileges a user can hold.
+    If a user 'has' a privilege, the User object is in a relationship with the
+    privilege object.
+
+        :keyword privilege_name   Holds a unicode object that is the recognizable
+                                    name of this privilege. This is the column
+                                    used for identifying whether or not a user
+                                    has a necessary privilege or not.
+
+    """
+    __tablename__ = 'core__privileges'
+
+    id = Column(Integer, nullable=False, primary_key=True)
+    privilege_name = Column(Unicode, nullable=False, unique=True)
+    all_users = relationship(
+        User,
+        backref='all_privileges',
+        secondary="core__privileges_users")
+
+    def __init__(self, privilege_name):
+        '''
+        Currently consructors are required for tables that are initialized thru
+        the FOUNDATIONS system. This is because they need to be able to be con-
+        -structed by a list object holding their arg*s
+        '''
+        self.privilege_name = privilege_name
+
+    def __repr__(self):
+        return "<Privilege %s>" % (self.privilege_name)
+
+
+class PrivilegeUserAssociation(Base):
+    '''
+    This table holds the many-to-many relationship between User and Privilege
+    '''
+
+    __tablename__ = 'core__privileges_users'
+
+    privilege_id = Column(
+        'core__privilege_id',
+        Integer,
+        ForeignKey(User.id),
+        primary_key=True)
+    user_id = Column(
+        'core__user_id',
+        Integer,
+        ForeignKey(Privilege.id),
+        primary_key=True)
+
 MODELS = [
-    User, Client, RequestToken, AccessToken, NonceTimestamp, MediaEntry, Tag,
-    MediaTag, MediaComment, Collection, CollectionItem, MediaFile, FileKeynames,
-    MediaAttachmentFile, ProcessingMetaData, Notification, CommentNotification,
-    ProcessingNotification, CommentSubscription]
+    User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
+    MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
+    Notification, CommentNotification, ProcessingNotification, Client,
+    CommentSubscription, ReportBase, CommentReport, MediaReport, UserBan,
+	Privilege, PrivilegeUserAssociation,
+    RequestToken, AccessToken, NonceTimestamp]
 
 """
  Foundations are the default rows that are created immediately after the tables
@@ -700,7 +909,13 @@ MODELS = [
 
     FOUNDATIONS = {User:user_foundations}
 """
-FOUNDATIONS = {}
+privilege_foundations = [{'privilege_name':u'admin'},
+						{'privilege_name':u'moderator'},
+						{'privilege_name':u'uploader'},
+						{'privilege_name':u'reporter'},
+						{'privilege_name':u'commenter'},
+						{'privilege_name':u'active'}]
+FOUNDATIONS = {Privilege:privilege_foundations}
 
 ######################################################
 # Special, migrations-tracking table
