@@ -51,7 +51,7 @@ pkgpythondir = @pkgpythondir@
 pkgpyexecdir = @pkgpyexecdir@
 PYTHONPATH = $(pythondir)$(PATH_SEPARATOR)$(DESTDIR)$(pythondir)
 
-all: install
+all: develop
 
 .PHONY: all install develop uninstall distclean info install-html html \
 install-pdf pdf install-dvi dvi install-ps ps clean dist check \
