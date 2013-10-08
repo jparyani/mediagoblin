@@ -474,6 +474,43 @@ def wants_notifications(db):
     col.create(user_table)
     db.commit()
 
+
+
+@RegisterMigration(16, MIGRATIONS)
+def upload_limits(db):
+    """Add user upload limit columns"""
+    metadata = MetaData(bind=db.bind)
+
+    user_table = inspect_table(metadata, 'core__users')
+    media_entry_table = inspect_table(metadata, 'core__media_entries')
+
+    col = Column('uploaded', Integer, default=0)
+    col.create(user_table)
+
+    col = Column('upload_limit', Integer)
+    col.create(user_table)
+
+    col = Column('file_size', Integer, default=0)
+    col.create(media_entry_table)
+
+    db.commit()
+
+
+@RegisterMigration(17, MIGRATIONS)
+def add_file_metadata(db):
+    """Add file_metadata to MediaFile"""
+    metadata = MetaData(bind=db.bind)
+    media_file_table = inspect_table(metadata, "core__mediafiles")
+
+    col = Column('file_metadata', MutationDict.as_mutable(JSONEncoded))
+    col.create(media_file_table)
+
+    db.commit()
+
+###################
+# Moderation tables
+###################
+
 class ReportBase_v0(declarative_base()):
     __tablename__ = 'core__reports'
     id = Column(Integer, primary_key=True)
@@ -487,6 +524,7 @@ class ReportBase_v0(declarative_base()):
     result = Column(UnicodeText)
     __mapper_args__ = {'polymorphic_on': discriminator}
 
+
 class CommentReport_v0(ReportBase_v0):
     __tablename__ = 'core__reports_on_comments'
     __mapper_args__ = {'polymorphic_identity': 'comment_report'}
@@ -496,13 +534,13 @@ class CommentReport_v0(ReportBase_v0):
     comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=True)
 
 
-
 class MediaReport_v0(ReportBase_v0):
     __tablename__ = 'core__reports_on_media'
     __mapper_args__ = {'polymorphic_identity': 'media_report'}
 
     id = Column('id',Integer, ForeignKey('core__reports.id'), primary_key=True)
     media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=True)
+
 
 class UserBan_v0(declarative_base()):
     __tablename__ = 'core__user_bans'
@@ -511,10 +549,12 @@ class UserBan_v0(declarative_base()):
     expiration_date = Column(Date)
     reason = Column(UnicodeText, nullable=False)
 
+
 class Privilege_v0(declarative_base()):
     __tablename__ = 'core__privileges'
     id = Column(Integer, nullable=False, primary_key=True, unique=True)
     privilege_name = Column(Unicode, nullable=False, unique=True)
+
 
 class PrivilegeUserAssociation_v0(declarative_base()):
     __tablename__ = 'core__privileges_users'
@@ -529,12 +569,13 @@ class PrivilegeUserAssociation_v0(declarative_base()):
         ForeignKey(Privilege.id),
         primary_key=True)
 
+
 PRIVILEGE_FOUNDATIONS_v0 = [{'privilege_name':u'admin'},
-						{'privilege_name':u'moderator'},
-						{'privilege_name':u'uploader'},
-						{'privilege_name':u'reporter'},
-						{'privilege_name':u'commenter'},
-						{'privilege_name':u'active'}]
+                            {'privilege_name':u'moderator'},
+                            {'privilege_name':u'uploader'},
+                            {'privilege_name':u'reporter'},
+                            {'privilege_name':u'commenter'},
+                            {'privilege_name':u'active'}]
 
 
 class User_vR1(declarative_base()):
@@ -549,6 +590,7 @@ class User_vR1(declarative_base()):
     license_preference = Column(Unicode)
     url = Column(Unicode)
     bio = Column(UnicodeText)  # ??
+
 
 @RegisterMigration(18, MIGRATIONS)
 def create_moderation_tables(db):
@@ -668,37 +710,5 @@ def create_moderation_tables(db):
         status.drop()
         email_verified.drop()
         is_admin.drop()
-
-    db.commit()
-
-
-@RegisterMigration(16, MIGRATIONS)
-def upload_limits(db):
-    """Add user upload limit columns"""
-    metadata = MetaData(bind=db.bind)
-
-    user_table = inspect_table(metadata, 'core__users')
-    media_entry_table = inspect_table(metadata, 'core__media_entries')
-
-    col = Column('uploaded', Integer, default=0)
-    col.create(user_table)
-
-    col = Column('upload_limit', Integer)
-    col.create(user_table)
-
-    col = Column('file_size', Integer, default=0)
-    col.create(media_entry_table)
-
-    db.commit()
-
-
-@RegisterMigration(17, MIGRATIONS)
-def add_file_metadata(db):
-    """Add file_metadata to MediaFile"""
-    metadata = MetaData(bind=db.bind)
-    media_file_table = inspect_table(metadata, "core__mediafiles")
-
-    col = Column('file_metadata', MutationDict.as_mutable(JSONEncoded))
-    col.create(media_file_table)
 
     db.commit()
