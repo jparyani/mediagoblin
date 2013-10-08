@@ -68,7 +68,7 @@ def forgot_password(request):
         success_message = _("An email has been sent with instructions "
                             "on how to change your password.")
 
-    if user and not(user.email_verified and user.status == 'active'):
+    if user and user.has_privilege(u'active') is False:
         # Don't send reminder because user is inactive or has no verified email
         messages.add_message(request,
             messages.WARNING,
@@ -125,8 +125,7 @@ def verify_forgot_password(request):
             request, 'index')
 
     # check if user active and has email verified
-    if user.email_verified and user.status == 'active':
-
+    if user.has_privilege(u'active'):
         cp_form = forms.ChangeForgotPassForm(formdata_vars)
 
         if request.method == 'POST' and cp_form.validate():
@@ -145,11 +144,18 @@ def verify_forgot_password(request):
                 'mediagoblin/plugins/basic_auth/change_fp.html',
                 {'cp_form': cp_form})
 
-    if not user.email_verified:
-        messages.add_message(
-            request, messages.ERROR,
-            _('You need to verify your email before you can reset your'
-              ' password.'))
+    ## Commenting this out temporarily because I'm checking into
+    ## what's going on with user.email_verified.
+    ##
+    ## ... if this commit lasts long enough for anyone but me (cwebber) to
+    ## notice it, they should pester me to remove this or remove it
+    ## themselves ;)
+    #
+    # if not user.email_verified:
+    #     messages.add_message(
+    #         request, messages.ERROR,
+    #         _('You need to verify your email before you can reset your'
+    #           ' password.'))
 
     if not user.status == 'active':
         messages.add_message(
