@@ -578,6 +578,10 @@ PRIVILEGE_FOUNDATIONS_v0 = [{'privilege_name':u'admin'},
                             {'privilege_name':u'active'}]
 
 
+# vR1 stands for "version Rename 1".  This only exists because we need
+# to deal with dropping some booleans and it's otherwise impossible
+# with sqlite.
+
 class User_vR1(declarative_base()):
     __tablename__ = 'rename__users'
     id = Column(Integer, primary_key=True)
