@@ -66,7 +66,9 @@ def test_bcrypt_gen_password_hash():
 
 def test_change_password(test_app):
         """Test changing password correctly and incorrectly"""
-        test_user = fixture_add_user(password=u'toast')
+        test_user = fixture_add_user(
+            password=u'toast',
+            privileges=[u'active'])
 
         test_app.post(
             '/auth/login/', {
