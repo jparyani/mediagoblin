@@ -607,24 +607,28 @@ def create_moderation_tables(db):
     ]
 
     # Give each user the appopriate privileges depending whether they are an
-    # admin, an active user or an inactivated user ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # admin, an active user or an inactive user ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     for admin_user in admin_users_ids:
         admin_user_id = admin_user['id']
-        for privilege_id in [admin_privilege_id, uploader_privilege_id, reporter_privilege_id, commenter_privilege_id, active_privilege_id]:
+        for privilege_id in [admin_privilege_id, uploader_privilege_id, 
+                            reporter_privilege_id, commenter_privilege_id, 
+                            active_privilege_id]:
             db.execute(user_privilege_assoc.insert().values(
                 core__privilege_id=admin_user_id,
                 core__user_id=privilege_id))
 
     for active_user in active_users_ids:
         active_user_id = active_user['id']
-        for privilege_id in [uploader_privilege_id, reporter_privilege_id, commenter_privilege_id, active_privilege_id]:
+        for privilege_id in [uploader_privilege_id, reporter_privilege_id, 
+                            commenter_privilege_id, active_privilege_id]:
             db.execute(user_privilege_assoc.insert().values(
                 core__privilege_id=active_user_id,
                 core__user_id=privilege_id))
 
     for inactive_user in inactive_users_ids:
         inactive_user_id = inactive_user['id']
-        for privilege_id in [uploader_privilege_id, reporter_privilege_id, commenter_privilege_id]:
+        for privilege_id in [uploader_privilege_id, reporter_privilege_id, 
+                             commenter_privilege_id]:
             db.execute(user_privilege_assoc.insert().values(
                 core__privilege_id=inactive_user_id,
                 core__user_id=privilege_id))
@@ -660,7 +664,7 @@ def create_moderation_tables(db):
         db.commit()
         new_user_table.rename("core__users")
     else:
-        # If the db is not SQLite, this process is much simpler ~~~~~~~~~~~~~~~
+        # If the db is not run using SQLite, this process is much simpler ~~~~~
 
         status = user_table.columns['status']
         email_verified = user_table.columns['email_verified']

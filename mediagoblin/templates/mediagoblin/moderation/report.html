@@ -18,12 +18,13 @@
 {%- extends "mediagoblin/base.html" %}
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 {%- block mediagoblin_head %}
- <script src="{{ request.staticdirect('/js/setup_report_forms.js') }}"></script>
+ <script src="{{ request.staticdirect('/js/setup_report_forms.js') }}">
+ </script>
 {% endblock %}
 
 {%- block mediagoblin_content %}
 {% if not report %}
-  Sorry, no such report found.
+  {% trans %}Sorry, no such report found.{% endtrans %}
 {% else %}
     <a href="{{ request.urlgen('mediagoblin.moderation.reports') }}"
        class="return_to_panel button_action"
@@ -123,12 +124,14 @@
       {{ report.report_content }}
     </div>
   </div>
-  {% if not report.is_archived_report() and not (report.reported_user.has_privilege('admin') and not request.user.has_privilege('admin')) %}
-    <input type=button value=Resolve id=open_resolution_form />
+  {% if not report.is_archived_report() and 
+        not (report.reported_user.has_privilege('admin') and 
+        not request.user.has_privilege('admin')) %}
+    <input type=button value="{% trans %}Resolve{% endtrans %}" id=open_resolution_form />
     <form action="" method="POST" id=resolution_form>
       {{ wtforms_util.render_divs(form) }}
       {{ csrf_token }}
-      <input type=submit id="submit_this_report" value="Resolve This Report"/>
+      <input type=submit id="submit_this_report" value="{% trans %}Resolve This Report{% endtrans %}"/>
     </form>
   <script>
   $(document).ready(function() {
@@ -147,8 +150,12 @@
       <p>{{ report.result }}</p>
     </pre>
   {% else %}
-    <input type=button disabled=disabled value="Resolve This Report"/>
-    <p>You cannot take action against an administrator</p>
+    <input type=button disabled=disabled value="{% trans %}Resolve This Report{% endtrans %}"/>
+    <p>
+      {% trans %}
+        You cannot take action against an administrator
+      {% endtrans %}
+    </p>
   {% endif %}
 {% endif %}
 {% endblock %}
