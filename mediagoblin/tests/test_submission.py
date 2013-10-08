@@ -119,24 +119,19 @@ class TestSubmission:
         self.test_app.get(url)
 
     def user_upload_limits(self, uploaded=None, upload_limit=None):
+        our_user = self.our_user()
+
         if uploaded:
-            self.test_user.uploaded = uploaded
+            our_user.uploaded = uploaded
         if upload_limit:
-            self.test_user.upload_limit = upload_limit
+            our_user.upload_limit = upload_limit
 
-        self.test_user.save()
-
-        # Reload
-        self.test_user = User.query.filter_by(
-            username=self.test_user.username
-        ).first()
-
-        # ... and detach from session:
-        Session.expunge(self.test_user)
+        our_user.save()
+        Session.expunge(our_user)
 
     def test_normal_jpg(self):
         # User uploaded should be 0
-        assert self.test_user.uploaded == 0
+        assert self.our_user().uploaded == 0
 
         self.check_normal_upload(u'Normal upload 1', GOOD_JPG)
 
@@ -145,10 +140,7 @@ class TestSubmission:
         file_size = float('{0:.2f}'.format(file_size))
 
         # Reload user
-        self.test_user = User.query.filter_by(
-            username=self.test_user.username
-        ).first()
-        assert self.test_user.uploaded == file_size
+        assert self.our_user().uploaded == file_size
 
     def test_normal_png(self):
         self.check_normal_upload(u'Normal upload 2', GOOD_PNG)
@@ -165,47 +157,37 @@ class TestSubmission:
         self.user_upload_limits(uploaded=500)
 
         # User uploaded should be 500
-        assert self.test_user.uploaded == 500
+        assert self.our_user().uploaded == 500
 
         response, context = self.do_post({'title': u'Normal upload 4'},
                                          do_follow=True,
                                          **self.upload_data(GOOD_JPG))
-        self.check_url(response, '/u/{0}/'.format(self.test_user.username))
+        self.check_url(response, '/u/{0}/'.format(self.our_user().username))
         assert 'mediagoblin/user_pages/user.html' in context
 
-        # Reload user
-        self.test_user = User.query.filter_by(
-            username=self.test_user.username
-        ).first()
-
         # Shouldn't have uploaded
-        assert self.test_user.uploaded == 500
+        assert self.our_user().uploaded == 500
 
     def test_user_upload_limit(self):
         self.user_upload_limits(uploaded=25, upload_limit=25)
 
         # User uploaded should be 25
-        assert self.test_user.uploaded == 25
+        assert self.our_user().uploaded == 25
 
         response, context = self.do_post({'title': u'Normal upload 5'},
                                          do_follow=True,
                                          **self.upload_data(GOOD_JPG))
-        self.check_url(response, '/u/{0}/'.format(self.test_user.username))
+        self.check_url(response, '/u/{0}/'.format(self.our_user().username))
         assert 'mediagoblin/user_pages/user.html' in context
 
-        # Reload user
-        self.test_user = User.query.filter_by(
-            username=self.test_user.username
-        ).first()
-
         # Shouldn't have uploaded
-        assert self.test_user.uploaded == 25
+        assert self.our_user().uploaded == 25
 
     def test_user_under_limit(self):
         self.user_upload_limits(uploaded=499)
 
         # User uploaded should be 499
-        assert self.test_user.uploaded == 499
+        assert self.our_user().uploaded == 499
 
         response, context = self.do_post({'title': u'Normal upload 6'},
                                          do_follow=False,
@@ -214,13 +196,8 @@ class TestSubmission:
         assert form.file.errors == [u'Sorry, uploading this file will put you'
                                     ' over your upload limit.']
 
-        # Reload user
-        self.test_user = User.query.filter_by(
-            username=self.test_user.username
-        ).first()
-
         # Shouldn't have uploaded
-        assert self.test_user.uploaded == 499
+        assert self.our_user().uploaded == 499
 
     def test_big_file(self):
         response, context = self.do_post({'title': u'Normal upload 7'},
@@ -309,13 +286,8 @@ class TestSubmission:
         self.check_media(request, {'id': media_id}, 0)
         self.check_comments(request, media_id, 0)
 
-        # Reload user
-        self.test_user = User.query.filter_by(
-            username = self.test_user.username
-        ).first()
-
         # Check that user.uploaded is the same as before the upload
-        assert self.test_user.uploaded == 50
+        assert self.our_user().uploaded == 50
 
     def test_evil_file(self):
         # Test non-suppoerted file with non-supported extension
