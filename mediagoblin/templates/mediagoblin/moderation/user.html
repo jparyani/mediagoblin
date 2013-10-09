@@ -29,7 +29,8 @@
 {% endblock %}
 
 {%- block mediagoblin_head %}
- <script src="{{ request.staticdirect('/js/setup_report_forms.js') }}"></script>
+ <script src="{{ request.staticdirect('/js/setup_report_forms.js') }}">
+ </script>
 {% endblock %}
 
 {% block mediagoblin_content -%}
@@ -58,9 +59,11 @@
     <h1>
       {%- trans username=user.username %}{{ username }}'s profile{% endtrans -%}
     {% if user_banned and user_banned.expiration_date %}
-      &mdash; BANNED until {{ user_banned.expiration_date }}
+      &mdash; {% trans expiration_date=user_banned.expiration_date %}
+        BANNED until {{ expiration_date }}
+      {% endtrans %}
     {% elif user_banned %}
-      &mdash; Banned Indefinitely
+      &mdash; {% trans %}Banned Indefinitely{% endtrans %}
     {% endif %}
     </h1>
     {% if not user.url and not user.bio %}
@@ -90,7 +93,11 @@
     </div>
   {% endif %}
   {% if user %}
-    <h2>{%- trans %}Active Reports on {% endtrans -%}{{ user.username }}</h2>
+    <h2>
+      {%- trans username=user.username %}
+        Active Reports on {{ username }}
+      {% endtrans -%}
+    </h2>
     {% if reports.count() %}
     <table class="admin_side_panel">
       <tr>
@@ -104,7 +111,9 @@
             <img src="{{ request.staticdirect('/images/icon_clipboard.png') }}" />
             <a href="{{ request.urlgen('mediagoblin.moderation.reports_detail',
                                                report_id=report.id) }}">
-              {%- trans %}Report #{% endtrans -%}{{ report.id }}
+              {%- trans report_number=report.id %}
+                Report #{{ report_number }}
+              {% endtrans -%}
             </a>
           </td>
           <td>
@@ -122,7 +131,9 @@
         <tr><td></td><td></td>
     </table>
     {% else %}
-      {%- trans %}No active reports filed on {% endtrans -%} {{ user.username }}
+      {%- trans 
+        username=user.username %}No active reports filed on {{ username }}
+      {% endtrans -%}
     {% endif %}
     <span class="right_align">
         <a href="{{ request.urlgen(
@@ -133,7 +144,8 @@
         <a href="{{ request.urlgen(
                 'mediagoblin.moderation.reports') }}?reporter={{user.id}}">
         {%- trans
-            username=user.username %}All reports that {{ username }} has filed{% endtrans %}</a>
+            username=user.username %}All reports that {{ username }} has filed
+        {% endtrans %}</a>
     </span>
     <span class=clear></span>
     <h2>{{ user.username }}'s Privileges</h2>
@@ -166,9 +178,9 @@
             <td>{{ privilege.privilege_name }}</td>
             {% if privilege in user.all_privileges  %}
               <td class="user_with_privilege">
-                Yes{% else %}
+                {% trans %}Yes{% endtrans %}{% else %}
               <td class="user_without_privilege">
-                No{% endif %}
+                {% trans %}No{% endtrans %}{% endif %}
             </td>
             {% if request.user.has_privilege('admin') %}
               <td>

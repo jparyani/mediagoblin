@@ -25,7 +25,7 @@
 
   <h1>{% trans %}You have been banned{% endtrans %}
     {% if expiration_date %}
-      {% trans %}until{% endtrans %} {{ expiration_date }}
+      {% trans until_when=expiration_date %}until {{ until_when }}{% endtrans %}
     {% else %}
       {% trans %}indefinitely{% endtrans %}
     {% endif %}

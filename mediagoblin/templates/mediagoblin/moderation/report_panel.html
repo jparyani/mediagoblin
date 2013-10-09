@@ -84,7 +84,8 @@ curr_page !=p %}
         {% if report.discriminator == "comment_report" %}
           <td>
             <img
-              src="{{ request.staticdirect('/images/icon_clipboard_alert.png') }}"
+              src="{{ request.staticdirect(
+                '/images/icon_clipboard_alert.png') }}"
               alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
                    Distributed by the GNOME project http://www.gnome.org" />
             <a href="{{ request.urlgen(
@@ -98,7 +99,8 @@ curr_page !=p %}
         {% elif report.discriminator == "media_report" %}
           <td>
             <img
-              src="{{ request.staticdirect('/images/icon_clipboard_alert.png') }}"
+              src="{{ request.staticdirect(
+                '/images/icon_clipboard_alert.png') }}"
               alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
                    Distributed by the GNOME project http://www.gnome.org" />
             <a href="{{ request.urlgen(
