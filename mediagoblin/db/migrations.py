@@ -27,7 +27,8 @@ from migrate.changeset.constraint import UniqueConstraint
 
 
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
-from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
+from mediagoblin.db.migration_tools import (RegisterMigration, inspect_table,
+        replace_table)
 from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User, 
         Privilege)
 
@@ -683,7 +684,7 @@ def create_moderation_tables(db):
 
     db.commit()
 
-    # And then, once the information is taken from the is_admin & status columns
+    # And then, once the information is taken from is_admin & status columns
     # we drop all of the vestigial columns from the User table.
     #--------------------------------------------------------------------------
     if db.bind.url.drivername == 'sqlite':
@@ -694,25 +695,7 @@ def create_moderation_tables(db):
         User_vR1.__table__.create(db.bind)
         db.commit()
         new_user_table = inspect_table(metadata, 'rename__users')
-        for row in db.execute(user_table.select()):
-            db.execute(new_user_table.insert().values(
-                username=row.username,
-                email=row.email,
-                pw_hash=row.pw_hash,
-                created=row.created,
-                wants_comment_notification=row.wants_comment_notification,
-                wants_notifications=row.wants_notifications,
-                license_preference=row.license_preference,
-                url=row.url,
-                bio=row.bio,
-                uploaded=row.uploaded,
-                upload_limit=row.upload_limit))
-
-        db.commit()
-        user_table.drop()
-
-        db.commit()
-        new_user_table.rename("core__users")
+        replace_table(db,user_table, new_user_table)
     else:
         # If the db is not run using SQLite, this process is much simpler ~~~~~
 

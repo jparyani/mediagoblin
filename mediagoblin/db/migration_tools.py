@@ -16,6 +16,7 @@
 
 from mediagoblin.tools.common import simple_printer
 from sqlalchemy import Table
+from sqlalchemy.sql import select
 
 class TableAlreadyExists(Exception):
     pass
@@ -286,3 +287,29 @@ def inspect_table(metadata, table_name):
     """Simple helper to get a ref to an already existing table"""
     return Table(table_name, metadata, autoload=True,
                  autoload_with=metadata.bind)
+
+def replace_table(db, old_table,replacement_table):
+    """A function to fully replace a current table with a new one for migrati-
+    -ons. This is necessary because some changes are made tricky in some situa-
+    -tion, for example, dropping a boolean column in sqlite is impossible w/o
+    this method
+
+        :param old_table            A ref to the old table, gotten through 
+                                    inspect_table
+
+        :param replacement_table    A ref to the new table, gotten through
+                                    inspect_table"""
+    surviving_columns = replacement_table.columns.keys()
+    old_table_name = old_table.name
+    for row in db.execute(select(
+        [column for column in old_table.columns
+            if column.name in surviving_columns])):
+
+        db.execute(replacement_table.insert().values(**row))
+    db.commit()
+
+    old_table.drop()
+    db.commit()
+
+    replacement_table.name=old_table_name
+    db.commit()
