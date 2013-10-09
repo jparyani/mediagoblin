@@ -152,9 +152,9 @@
   {% else %}
     <input type=button disabled=disabled value="{% trans %}Resolve This Report{% endtrans %}"/>
     <p>
-      {% trans %}
+      {% trans -%}
         You cannot take action against an administrator
-      {% endtrans %}
+      {%- endtrans %}
     </p>
   {% endif %}
 {% endif %}
