@@ -594,6 +594,8 @@ class User_vR1(declarative_base()):
     license_preference = Column(Unicode)
     url = Column(Unicode)
     bio = Column(UnicodeText)  # ??
+    uploaded = Column(Integer, default=0)
+    upload_limit = Column(Integer)
 
 
 @RegisterMigration(18, MIGRATIONS)
@@ -702,7 +704,9 @@ def create_moderation_tables(db):
                 wants_notifications=row.wants_notifications,
                 license_preference=row.license_preference,
                 url=row.url,
-                bio=row.bio))
+                bio=row.bio,
+                uploaded=row.uploaded,
+                upload_limit=row.upload_limit))
 
         db.commit()
         user_table.drop()
