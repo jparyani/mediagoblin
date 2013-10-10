@@ -634,14 +634,14 @@ def create_moderation_tables(db):
     admin_users_ids, active_users_ids, inactive_users_ids = (
         db.execute(
             user_table.select().where(
-                user_table.c.is_admin==1)).fetchall(),
+                user_table.c.is_admin==True)).fetchall(),
         db.execute(
             user_table.select().where(
-                user_table.c.is_admin==0).where(
+                user_table.c.is_admin==False).where(
                 user_table.c.status==u"active")).fetchall(),
         db.execute(
             user_table.select().where(
-                user_table.c.is_admin==0).where(
+                user_table.c.is_admin==False).where(
                 user_table.c.status!=u"active")).fetchall())
 
     # Get the ids for each of the privileges so we can reference them ~~~~~~~~~
