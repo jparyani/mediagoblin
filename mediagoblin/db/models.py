@@ -467,18 +467,16 @@ class MediaEntry(Base, MediaEntryMixin):
         if show_comments:
             comments = [comment.serialize(request) for comment in self.get_comments()]
             total = len(comments)
-            if total > 0:
-                # we only want to include replies if there are any.
-                context["replies"] = {
-                    "totalItems": total,
-                    "items": comments,
-                    "url": request.urlgen(
-                            "mediagoblin.federation.object.comments",
-                            objectType=self.objectType,
-                            uuid=self.slug,
-                            qualified=True
-                            ),
-                }
+            context["replies"] = {
+                "totalItems": total,
+                "items": comments,
+                "url": request.urlgen(
+                        "mediagoblin.federation.object.comments",
+                        objectType=self.objectType,
+                        uuid=self.slug,
+                        qualified=True
+                        ),
+            }
 
         return context 
 

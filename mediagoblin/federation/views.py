@@ -46,7 +46,7 @@ def user(request):
 #@oauth_required
 @csrf_exempt
 def uploads(request):
-    """ This is the endpoint which uploads can be sent ot - /api/user/<username>/uploads """
+    """ This is the endpoint which uploads can be sent to - /api/user/<username>/uploads """
     user = request.matchdict["username"]
     requested_user = User.query.filter_by(username=user)
 
@@ -58,40 +58,22 @@ def uploads(request):
     if request.method == "POST":
         # Wrap the data in the werkzeug file wrapper
         file_data = FileStorage(
-                stream=io.BytesIO(request.data),
-                filename=request.args.get("qqfile", "unknown.jpg"),
-                content_type=request.headers.get("Content-Type", "application/octal-stream")
-                )
-        
-        # Use the same kind of method from mediagoblin/submit/views:submit_start
+            stream=io.BytesIO(request.data),
+            filename=request.args.get("qqfile", "unknown.jpg"),
+            content_type=request.headers.get("Content-Type", "application/octal-stream")
+        )
+
+        # Find media manager
         media_type, media_manager = sniff_media(file_data)
         entry = new_upload_entry(request.user)
-        entry.media_type = unicode(media_type)
-        entry.title = unicode(request.args.get("title", "Hello ^_^"))
-        entry.description = unicode(request.args.get("description", ""))
-        entry.license = None
-
-        entry.generate_slug()
-
-        queue_file = prepare_queue_task(request.app, entry, file_data.filename) 
-        with queue_file:
-            queue_file.write(request.data)
-
-        entry.save()
-
-        # run the processing
-        feed_url = request.urlgen(
-                'mediagoblin.user_pages.atom_feed',
-                qualified=True, user=request.user.username)
-
-        run_process_media(entry, feed_url)
-        add_comment_subscription(request.user, entry)
-
-        return json_response(entry.serialize(request))
+        if hasattr(media_manager, "api_upload_request"):
+            return media_manager.api_upload_request(request, file_data, entry)
+        else:
+            return json_response({"error": "Not yet implemented"}, status=400)
 
     return json_response({"error": "Not yet implemented"}, status=400)
 
-@oauth_required
+#@oauth_required
 @csrf_exempt
 def feed(request):
     """ Handles the user's outbox - /api/user/<username>/feed """
@@ -124,6 +106,7 @@ def feed(request):
             comment.save()
             data = {"verb": "post", "object": comment.serialize(request)}
             return json_response(data)
+
         elif obj.get("objectType", None) == "image":
             # Posting an image to the feed
             # NB: This is currently just handing the image back until we have an
@@ -145,6 +128,7 @@ def feed(request):
             # Oh no! We don't know about this type of object (yet)
             error = {"error": "Unknown object type '{0}'.".format(obj.get("objectType", None))}
             return json_response(error, status=400)
+
 
     feed_url = request.urlgen(
             "mediagoblin.federation.feed",

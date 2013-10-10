@@ -19,7 +19,9 @@ import logging
 from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.image.processing import sniff_handler, \
         ImageProcessingManager
-
+from mediagoblin.tools.response import json_response
+from mediagoblin.submit.lib import prepare_queue_task, run_process_media
+from mediagoblin.notifications import add_comment_subscription
 
 _log = logging.getLogger(__name__)
 
@@ -56,6 +58,30 @@ class ImageMediaManager(MediaManagerBase):
         except (KeyError, ValueError):
             return None
 
+    @staticmethod
+    def api_upload_request(request, file_data, entry):
+        """ This handles a image upload request """
+        # Use the same kind of method from mediagoblin/submit/views:submit_start
+        entry.media_type = unicode(MEDIA_TYPE)
+        entry.title = unicode(request.args.get("title", file_data.filename))
+        entry.description = unicode(request.args.get("description", ""))
+        entry.license = request.args.get("license", "") # not part of the standard API
+
+        entry.generate_slug()
+
+        queue_file = prepare_queue_task(request.app, entry, file_data.filename)
+        with queue_file:
+            queue_file.write(request.data)
+        
+        entry.save()
+
+        feed_url = request.urlgen(
+            'mediagoblin.user_pages.atom_feed',
+            qualified=True, user=request.user.username)
+
+        run_process_media(entry, feed_url)
+        add_comment_subscription(request.user, entry)
+        return json_response(entry.serialize(request))
 
 def get_media_type_and_manager(ext):
     if ext in ACCEPTED_EXTENSIONS:
