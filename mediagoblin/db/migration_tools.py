@@ -311,5 +311,5 @@ def replace_table(db, old_table,replacement_table):
     old_table.drop()
     db.commit()
 
-    replacement_table.name=old_table_name
+    replacement_table.rename(old_table_name)
     db.commit()
