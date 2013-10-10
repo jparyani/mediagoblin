@@ -288,8 +288,9 @@ def inspect_table(metadata, table_name):
     return Table(table_name, metadata, autoload=True,
                  autoload_with=metadata.bind)
 
-def replace_table(db, old_table,replacement_table):
-    """A function to fully replace a current table with a new one for migrati-
+def replace_table_hack(db, old_table, replacement_table):
+    """
+    A function to fully replace a current table with a new one for migrati-
     -ons. This is necessary because some changes are made tricky in some situa-
     -tion, for example, dropping a boolean column in sqlite is impossible w/o
     this method
@@ -298,7 +299,12 @@ def replace_table(db, old_table,replacement_table):
                                     inspect_table
 
         :param replacement_table    A ref to the new table, gotten through
-                                    inspect_table"""
+                                    inspect_table
+
+    Users are encouraged to sqlalchemy-migrate replace table solutions, unless
+    that is not possible... in which case, this solution works,
+    at least for sqlite.
+    """
     surviving_columns = replacement_table.columns.keys()
     old_table_name = old_table.name
     for row in db.execute(select(

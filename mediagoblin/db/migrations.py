@@ -27,8 +27,8 @@ from migrate.changeset.constraint import UniqueConstraint
 
 
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
-from mediagoblin.db.migration_tools import (RegisterMigration, inspect_table,
-        replace_table)
+from mediagoblin.db.migration_tools import (
+    RegisterMigration, inspect_table, replace_table_hack)
 from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User, 
         Privilege)
 
@@ -695,7 +695,7 @@ def create_moderation_tables(db):
         User_vR1.__table__.create(db.bind)
         db.commit()
         new_user_table = inspect_table(metadata, 'rename__users')
-        replace_table(db,user_table, new_user_table)
+        replace_table_hack(db, user_table, new_user_table)
     else:
         # If the db is not run using SQLite, this process is much simpler ~~~~~
 
