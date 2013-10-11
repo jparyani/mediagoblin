@@ -24,5 +24,12 @@
     {% trans source_link=app_config['source_link'] -%}
       Released under the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">AGPL</a>. <a href="{{ source_link }}">Source code</a> available.
     {%- endtrans %}
+    {% if app_config['show_tos'] %}
+      <p class="fine_print">
+        <a href="{{ request.urlgen('terms_of_service') }}">
+          {%- trans %}Terms of Service{%- endtrans %}
+        </a>
+      </p>
+    {% endif %}
   </footer>
 {%- endblock mediagoblin_footer -%}

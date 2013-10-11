@@ -17,7 +17,7 @@
 from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools.pagination import Pagination
-from mediagoblin.tools.response import render_to_response
+from mediagoblin.tools.response import render_to_response, render_404
 from mediagoblin.decorators import uses_pagination, user_not_banned
 
 
@@ -46,5 +46,8 @@ def simple_template_render(request):
         request, template_name, {})
 
 def terms_of_service(request):
+    if mg_globals.app_config["show_tos"] is False:
+        return render_404(request)
+
     return render_to_response(request,
         'mediagoblin/terms_of_service.html', {})

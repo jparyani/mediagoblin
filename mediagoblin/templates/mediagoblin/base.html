@@ -94,11 +94,6 @@
                  "javascript:;"
                {% endif %}
                >{% trans %}log out{% endtrans %}</a>
-                <p class="fine_print">
-                  <a href="{{ request.urlgen('terms_of_service') }}">
-                    {%- trans %}Terms of Service{%- endtrans %}
-                  </a>
-                </p>
               {% endif %}
             {%- elif auth %}
             <a href=
