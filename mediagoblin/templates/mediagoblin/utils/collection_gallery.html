@@ -38,8 +38,8 @@
               <a href="{{ entry_url }}">{{ item.note }}</a>
             {% endif %}
 	    {% if request.user and
-                  (item.in_collection.creator == request.user.id or 
-                  request.user.has_privilege(u'admin')) %}
+                  (item.in_collection.creator == request.user.id or
+                  request.user.has_privilege('admin')) %}
 	      {%- set remove_url=request.urlgen(
                                  'mediagoblin.user_pages.collection_item_confirm_remove',
                                  user=item.in_collection.get_creator.username,

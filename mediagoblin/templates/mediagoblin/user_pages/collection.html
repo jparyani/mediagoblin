@@ -44,8 +44,8 @@
       {{ collection_title }} by <a href="{{ user_url }}">{{ username }}</a>
     {%- endtrans %}
   </h1>
-  {% if request.user and (collection.creator == request.user.id or 
-                                                request.user.has_privilege(u'admin')) %}
+  {% if request.user and (collection.creator == request.user.id or
+                                                request.user.ghas_privilege('admin')) %}
     {% set edit_url = request.urlgen('mediagoblin.edit.edit_collection',
                                      user=collection.get_creator.username,
                                      collection=collection.slug) %}
@@ -63,10 +63,10 @@
   </p>
 
   {{ collection_gallery(request, collection_items, pagination) }}
-    
+
   {% set feed_url = request.urlgen('mediagoblin.user_pages.collection_atom_feed',
-                                   user=user.username, 
+                                   user=user.username,
                                    collection=collection.slug ) %}
   {% include "mediagoblin/utils/feed_link.html" %}
-    
-{% endblock %}    
+
+{% endblock %}
