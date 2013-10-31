@@ -19,6 +19,7 @@
 USAGE="Usage: $0 -h | [-p PATH] -e ENVIRONMENT"
 
 ENVIRONMENT="migration-18"
+USER_DEV="user_dev_default"
 DEV_ENV_DIRECTORY_PATH="../mg-dev-environments"
 
 while getopts ":hp:e:" opt;
@@ -80,7 +81,7 @@ else
             y)
                 break
                 ;;
-            n) 
+            n)
                 exit 1
                 ;;
             *)
@@ -98,6 +99,7 @@ else
         esac
     done
     tar -xzf $DEV_ENV_DIRECTORY_PATH/$ENVIRONMENT.tar.gz
+    tar -xzf $DEV_ENV_DIRECTORY_PATH/$USER_DEV.tar.gz
     echo "Completed."
     exit 0
 fi
