@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-04 13:23-0600\n"
+"POT-Creation-Date: 2013-11-04 15:33-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -423,7 +423,7 @@ msgstr ""
 #: mediagoblin/plugins/basic_auth/views.py:163
 msgid ""
 "You are no longer an active user. Please contact the system admin to "
-"reactivate your accoutn."
+"reactivate your account."
 msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:215
