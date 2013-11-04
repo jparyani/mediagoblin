@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2013-11-04 13:23-0600\n"
-"PO-Revision-Date: 2013-11-04 19:23+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2013-11-04 20:49+0000\n"
+"Last-Translator: larjona <larjona99@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,7 +37,7 @@ msgstr "Lo sentimos, el registro está deshabilitado en este momento."
 
 #: mediagoblin/decorators.py:314
 msgid "Sorry, reporting is disabled on this instance."
-msgstr ""
+msgstr "Lo siento, el envío de informes está deshabilitado en esta instancia."
 
 #: mediagoblin/decorators.py:357 mediagoblin/plugins/ldap/views.py:55
 #: mediagoblin/plugins/persona/views.py:77
@@ -311,51 +311,51 @@ msgstr "Ha fallado la conversión de vídeo"
 
 #: mediagoblin/moderation/forms.py:20
 msgid "takeaway"
-msgstr ""
+msgstr "retirar"
 
 #: mediagoblin/moderation/forms.py:20
 msgid "Take away privilege"
-msgstr ""
+msgstr "Retirar el privilegio"
 
 #: mediagoblin/moderation/forms.py:21
 msgid "userban"
-msgstr ""
+msgstr "inhabilitar usuario"
 
 #: mediagoblin/moderation/forms.py:21
 msgid "Ban the user"
-msgstr ""
+msgstr "Inhabilitar el usuario"
 
 #: mediagoblin/moderation/forms.py:22
 msgid "sendmessage"
-msgstr ""
+msgstr "enviar mensaje"
 
 #: mediagoblin/moderation/forms.py:23
 msgid "delete"
-msgstr ""
+msgstr "borrar"
 
 #: mediagoblin/moderation/forms.py:23
 msgid "Delete the content"
-msgstr ""
+msgstr "Borrar el contenido"
 
 #: mediagoblin/moderation/forms.py:52 mediagoblin/moderation/forms.py:117
 msgid "User will be banned until:"
-msgstr ""
+msgstr "El usuario estará inhabilitado hasta:"
 
 #: mediagoblin/moderation/forms.py:56
 msgid "Why are you banning this User?"
-msgstr ""
+msgstr "¿Por qué estás inhabilitando este usuario?"
 
 #: mediagoblin/moderation/forms.py:108
 msgid "What action will you take to resolve the report?"
-msgstr ""
+msgstr "¿Qué acción tomarás para resolver el informe?"
 
 #: mediagoblin/moderation/forms.py:114
 msgid "What privileges will you take away?"
-msgstr ""
+msgstr "¿Qué privilegios vas a retirar?"
 
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
-msgstr ""
+msgstr "Advertencia de"
 
 #: mediagoblin/notifications/tools.py:54 mediagoblin/user_pages/lib.py:60
 msgid "commented on your post"
@@ -438,7 +438,7 @@ msgstr "Ahora tu puedes iniciar sesión usando tu nueva contraseña."
 msgid ""
 "You are no longer an active user. Please contact the system admin to "
 "reactivate your accoutn."
-msgstr ""
+msgstr "Ya no eres un usuario activo. Por favor contacta con el administrador del sistema para reactivar tu cuenta."
 
 #: mediagoblin/plugins/basic_auth/views.py:215
 msgid "Your password was changed successfully"
@@ -474,7 +474,7 @@ msgstr "¡Crea una aquí!"
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/edit_link.html:22
 msgid "Change your password."
-msgstr ""
+msgstr "Cambiar tu contraseña."
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:23
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:31
@@ -500,7 +500,7 @@ msgstr "Ver en <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
 #: mediagoblin/plugins/ldap/templates/mediagoblin/plugins/ldap/create_account_link.html:22
 msgid "Sign in to create an account!"
-msgstr ""
+msgstr "¡Inicia sesión para crear una cuenta!"
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
@@ -714,7 +714,7 @@ msgstr "Agregar una dirección de correo electrónico de Persona"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit_link.html:21
 msgid "Persona's"
-msgstr ""
+msgstr "De Persona"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/login_link.html:22
 msgid "Or login with Persona!"
@@ -738,7 +738,7 @@ msgstr "No se ha encontrado un fichero de procesamiento aceptable"
 
 #: mediagoblin/submit/forms.py:30
 msgid "Max file size: {0} mb"
-msgstr ""
+msgstr "Tamaño máximo de fichero: {0} mb"
 
 #: mediagoblin/submit/forms.py:34
 msgid "File"
@@ -749,11 +749,11 @@ msgid ""
 "You can use\n"
 "                        <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                        Markdown</a> for formatting."
-msgstr ""
+msgstr "Puedes usar⏎\n<a href=\"http://daringfireball.net/projects/markdown/basics\">⏎\nMarkdown</a> para dar formato."
 
 #: mediagoblin/submit/views.py:57
 msgid "Sorry, you have reached your upload limit."
-msgstr ""
+msgstr "Lo siento, has alcanzado tu límite de subida."
 
 #: mediagoblin/submit/views.py:73
 msgid "You must provide a file."
@@ -761,11 +761,11 @@ msgstr "Debes proporcionar un archivo."
 
 #: mediagoblin/submit/views.py:120
 msgid "Sorry, the file size is too big."
-msgstr ""
+msgstr "Lo siento, el fichero es demasiado grande."
 
 #: mediagoblin/submit/views.py:126
 msgid "Sorry, uploading this file will put you over your upload limit."
-msgstr ""
+msgstr "Lo siento, subir este fichero sobrepasaría tu límite de subida."
 
 #: mediagoblin/submit/views.py:147
 msgid "Woohoo! Submitted!"
@@ -778,7 +778,7 @@ msgstr "¡Colección \"%s\" añadida!"
 
 #: mediagoblin/templates/mediagoblin/banned.html:20
 msgid "You are Banned."
-msgstr ""
+msgstr "Estás inhabilitado."
 
 #: mediagoblin/templates/mediagoblin/banned.html:24
 #: mediagoblin/templates/mediagoblin/error.html:24
@@ -787,16 +787,16 @@ msgstr "Imagen de un goblin estresándose"
 
 #: mediagoblin/templates/mediagoblin/banned.html:26
 msgid "You have been banned"
-msgstr ""
+msgstr "Has sido inhabilitado"
 
 #: mediagoblin/templates/mediagoblin/banned.html:28
 #, python-format
 msgid "until %(until_when)s"
-msgstr ""
+msgstr "hasta el %(until_when)s"
 
 #: mediagoblin/templates/mediagoblin/banned.html:30
 msgid "indefinitely"
-msgstr ""
+msgstr "indefinidamente"
 
 #: mediagoblin/templates/mediagoblin/base.html:81
 msgid "Verify your email!"
@@ -841,11 +841,11 @@ msgstr "Crear nueva colección"
 
 #: mediagoblin/templates/mediagoblin/base.html:151
 msgid "User management panel"
-msgstr ""
+msgstr "Panel de gestión de usuarios"
 
 #: mediagoblin/templates/mediagoblin/base.html:155
 msgid "Report management panel"
-msgstr ""
+msgstr "Panel de gestión de informes"
 
 #: mediagoblin/templates/mediagoblin/root.html:32
 msgid "Most recent media"
@@ -941,7 +941,7 @@ msgstr "Publicado bajo la <a href=\"http://www.fsf.org/licensing/licenses/agpl-3
 
 #: mediagoblin/templates/mediagoblin/bits/base_footer.html:30
 msgid "Terms of Service"
-msgstr ""
+msgstr "Términos del Servicio"
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:20
 msgid "Explore"
@@ -1254,20 +1254,20 @@ msgstr "¡Aún no hay entradas procesadas!"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:27
 msgid "Sorry, no such report found."
-msgstr ""
+msgstr "Lo siento, no se ha encontrado el informe."
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:32
 msgid "Return to Reports Panel"
-msgstr ""
+msgstr "Volver al panel de informes"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:33
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:155
 msgid "Report"
-msgstr ""
+msgstr "Informe"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:36
 msgid "Reported comment"
-msgstr ""
+msgstr "Comentario enviado"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:81
 #, python-format
@@ -1275,7 +1275,7 @@ msgid ""
 "\n"
 "        ❖ Reported media by <a href=\"%(user_url)s\">%(user_name)s</a>\n"
 "    "
-msgstr ""
+msgstr "\n❖ Informe de <a href=\"%(user_url)s\">%(user_name)s</a> sobre contenido⏎"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:90
 #, python-format
@@ -1285,64 +1285,64 @@ msgid ""
 "            <a href=\"%(user_url)s\"> %(user_name)s</a>\n"
 "          HAS BEEN DELETED\n"
 "        "
-msgstr ""
+msgstr "\nESTE CONTENIDO DE⏎\n<a href=\"%(user_url)s\"> %(user_name)s</a>⏎\nHA SIDO BORRADO⏎"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:130
 #: mediagoblin/templates/mediagoblin/moderation/user.html:128
 msgid "Resolve"
-msgstr ""
+msgstr "Resolver"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:134
 #: mediagoblin/templates/mediagoblin/moderation/report.html:153
 msgid "Resolve This Report"
-msgstr ""
+msgstr "Resolver este informe"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:145
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:147
 msgid "RESOLVED"
-msgstr ""
+msgstr "RESUELTO"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:155
 msgid "You cannot take action against an administrator"
-msgstr ""
+msgstr "No puedes tomar una acción contra un administrador"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:22
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:27
 msgid "Report panel"
-msgstr ""
+msgstr "Panel de informes"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:30
 msgid ""
 "\n"
 "    Here you can look up open reports that have been filed by users.\n"
 "  "
-msgstr ""
+msgstr "\nAquí puedes mirar informes abiertos que han sido enviados por usuarios.⏎"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:35
 msgid "Active Reports Filed"
-msgstr ""
+msgstr "Informes activos enviados"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:77
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:171
 msgid "Offender"
-msgstr ""
+msgstr "Ofensor"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:78
 msgid "When Reported"
-msgstr ""
+msgstr "Cuándo se informó"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:79
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:173
 msgid "Reported By"
-msgstr ""
+msgstr "Informe enviado por"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:80
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:174
 msgid "Reason"
-msgstr ""
+msgstr "Razón"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:94
 #, python-format
@@ -1350,7 +1350,7 @@ msgid ""
 "\n"
 "                Comment Report #%(report_id)s\n"
 "              "
-msgstr ""
+msgstr "\nInforme de comentario nº %(report_id)s⏎"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:109
 #, python-format
@@ -1358,23 +1358,23 @@ msgid ""
 "\n"
 "                Media Report #%(report_id)s\n"
 "              "
-msgstr ""
+msgstr "\nInforme de contenido nº %(report_id)s⏎"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:123
 msgid "No open reports found."
-msgstr ""
+msgstr "No se han encontrado informes abiertos."
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:125
 msgid "Closed Reports"
-msgstr ""
+msgstr "Informes cerrados"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:170
 msgid "Resolved"
-msgstr ""
+msgstr "Resuelto"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:172
 msgid "Action Taken"
-msgstr ""
+msgstr "Acción tomada"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:185
 #, python-format
@@ -1382,16 +1382,16 @@ msgid ""
 "\n"
 "              Closed Report #%(report_id)s\n"
 "            "
-msgstr ""
+msgstr "\nInforme cerrado nº %(report_id)s⏎"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:199
 msgid "No closed reports found."
-msgstr ""
+msgstr "No se han encontrado informes cerrados."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:23
 #, python-format
 msgid "User: %(username)s"
-msgstr ""
+msgstr "Usuario: %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:39
 msgid "Sorry, no such user found."
@@ -1407,11 +1407,11 @@ msgstr "Es necesario que verifiques tu cuenta mediante el correo de notiicación
 msgid ""
 "Someone has registered an account with this username, but it still has\n"
 "        to be activated."
-msgstr ""
+msgstr "Alguien ha registrado una cuenta con este usuario, pero aún tiene que⏎\nactivarse."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:58
 msgid "Return to Users Panel"
-msgstr ""
+msgstr "Volver al panel de usuarios"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:60
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:34
@@ -1424,11 +1424,11 @@ msgstr "Perfil de %(username)s"
 #: mediagoblin/templates/mediagoblin/moderation/user.html:62
 #, python-format
 msgid "BANNED until %(expiration_date)s"
-msgstr ""
+msgstr "INHABILITADO hasta el %(expiration_date)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:66
 msgid "Banned Indefinitely"
-msgstr ""
+msgstr "Inhabilitado indefinidamente"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:72
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:61
@@ -1449,103 +1449,103 @@ msgstr "Explorar colecciones"
 #: mediagoblin/templates/mediagoblin/moderation/user.html:97
 #, python-format
 msgid "Active Reports on %(username)s"
-msgstr ""
+msgstr "Informes activos sobre %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:104
 msgid "Report ID"
-msgstr ""
+msgstr "ID de informe"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:105
 msgid "Reported Content"
-msgstr ""
+msgstr "Contenido sobre el que se ha informado"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:106
 msgid "Description of Report"
-msgstr ""
+msgstr "Descripción del informe"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:114
 #, python-format
 msgid "Report #%(report_number)s"
-msgstr ""
+msgstr "Informe nº %(report_number)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:121
 msgid "Reported Comment"
-msgstr ""
+msgstr "Comentario sobre el que se ha informado"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:123
 msgid "Reported Media Entry"
-msgstr ""
+msgstr "Entrada de contenido sobre la que se ha informado"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:134
 #, python-format
 msgid "No active reports filed on %(username)s"
-msgstr ""
+msgstr "No hay informes activos enviados sobre %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:141
 #, python-format
 msgid "All reports on %(username)s"
-msgstr ""
+msgstr "Todos los informes sobre %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:146
 #, python-format
 msgid "All reports that %(username)s has filed"
-msgstr ""
+msgstr "Todos los informes que %(username)s ha enviado"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:160
 msgid "Ban User"
-msgstr ""
+msgstr "Inhabilitar usuario"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:165
 msgid "UnBan User"
-msgstr ""
+msgstr "Volver a habilitar usuario"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:173
 msgid "Privilege"
-msgstr ""
+msgstr "Privilegio"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:174
 msgid "User Has Privilege"
-msgstr ""
+msgstr "El usuario tiene privilegio"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:181
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:183
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:21
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:26
 msgid "User panel"
-msgstr ""
+msgstr "Panel de usuarios"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:29
 msgid ""
 "\n"
 "    Here you can look up users in order to take punitive actions on them.\n"
 "  "
-msgstr ""
+msgstr "\nAquí puedes buscar usuarios de cara a tomar acciones punitivas sobre ellos.⏎"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:34
 msgid "Active Users"
-msgstr ""
+msgstr "Usuarios activos"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:75
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:77
 msgid "When Joined"
-msgstr ""
+msgstr "Cuándo se unió"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:78
 msgid "# of Comments Posted"
-msgstr ""
+msgstr "Nº de comentarios enviados"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:95
 msgid "No users found."
-msgstr ""
+msgstr "No se han encontrado usuarios."
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
@@ -1666,15 +1666,15 @@ msgstr "Tus últimos 10 envíos exitosos"
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:21
 msgid "<h2>File a Report</h2>"
-msgstr ""
+msgstr "<h2>Enviar un informe</h2>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:24
 msgid "Reporting this Comment"
-msgstr ""
+msgstr "Informar sobre este comentario"
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:60
 msgid "Reporting this Media Entry"
-msgstr ""
+msgstr "Informar sobre esta entrada de contenido"
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:72
 #, python-format
@@ -1683,11 +1683,11 @@ msgid ""
 "            ❖ Published by <a href=\"%(user_url)s\"\n"
 "                          class=\"comment_authorlink\">%(username)s</a>\n"
 "      "
-msgstr ""
+msgstr "\n❖ Publicado por <a href=\"%(user_url)s\"⏎\nclass=\"comment_authorlink\">%(username)s</a>⏎"
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:81
 msgid "File Report "
-msgstr ""
+msgstr "Enviar informe"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:52
 msgid "Here's a spot to tell others about yourself."
@@ -1743,7 +1743,7 @@ msgstr "Si tú eres esa persona, pero has perdido tu correo electrónico de veri
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:78
 #, python-format
 msgid "%(username)s"
-msgstr ""
+msgstr "%(username)s"
 
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
 msgid "(remove)"
@@ -1795,7 +1795,7 @@ msgstr "Más viejo"
 
 #: mediagoblin/templates/mediagoblin/utils/report.html:25
 msgid "Report media"
-msgstr ""
+msgstr "Informar sobre contenido"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
@@ -1902,7 +1902,7 @@ msgstr "Puedes usar\n                      <a href=\"http://daringfireball.net/p
 
 #: mediagoblin/user_pages/forms.py:55 mediagoblin/user_pages/forms.py:61
 msgid "Reason for Reporting"
-msgstr ""
+msgstr "Razón del informe"
 
 #: mediagoblin/user_pages/views.py:178
 msgid "Sorry, comments are disabled."

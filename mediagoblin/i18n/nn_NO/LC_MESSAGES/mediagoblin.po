@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2013-11-04 13:23-0600\n"
-"PO-Revision-Date: 2013-11-04 19:23+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2013-11-04 21:03+0000\n"
+"Last-Translator: velmont <odin.omdal@gmail.com>\n"
 "Language-Team: Norwegian Nynorsk (Norway) (http://www.transifex.com/projects/p/mediagoblin/language/nn_NO/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,7 @@ msgstr "Registrering er slege av. Orsak."
 
 #: mediagoblin/decorators.py:314
 msgid "Sorry, reporting is disabled on this instance."
-msgstr ""
+msgstr "Rapportering er slege av. Orsak."
 
 #: mediagoblin/decorators.py:357 mediagoblin/plugins/ldap/views.py:55
 #: mediagoblin/plugins/persona/views.py:77
@@ -143,7 +143,7 @@ msgstr "Send meg epost når andre kjem med innspel på verka mine."
 
 #: mediagoblin/edit/forms.py:67
 msgid "Enable insite notifications about events."
-msgstr ""
+msgstr "Slå av/på notifikasjonar om hendingar."
 
 #: mediagoblin/edit/forms.py:69
 msgid "License preference"
@@ -300,51 +300,51 @@ msgstr "Skjedde noko gale med video transkodinga"
 
 #: mediagoblin/moderation/forms.py:20
 msgid "takeaway"
-msgstr ""
+msgstr "ta-med"
 
 #: mediagoblin/moderation/forms.py:20
 msgid "Take away privilege"
-msgstr ""
+msgstr "Ta-med-privilegium"
 
 #: mediagoblin/moderation/forms.py:21
 msgid "userban"
-msgstr ""
+msgstr "brukarbannlysing"
 
 #: mediagoblin/moderation/forms.py:21
 msgid "Ban the user"
-msgstr ""
+msgstr "Bannlys brukaren"
 
 #: mediagoblin/moderation/forms.py:22
 msgid "sendmessage"
-msgstr ""
+msgstr "sendmelding"
 
 #: mediagoblin/moderation/forms.py:23
 msgid "delete"
-msgstr ""
+msgstr "slett"
 
 #: mediagoblin/moderation/forms.py:23
 msgid "Delete the content"
-msgstr ""
+msgstr "Slett innhaldet"
 
 #: mediagoblin/moderation/forms.py:52 mediagoblin/moderation/forms.py:117
 msgid "User will be banned until:"
-msgstr ""
+msgstr "Brukaren vil bli bannlyst til:"
 
 #: mediagoblin/moderation/forms.py:56
 msgid "Why are you banning this User?"
-msgstr ""
+msgstr "Kvifor bannlyser du denne brukaren?"
 
 #: mediagoblin/moderation/forms.py:108
 msgid "What action will you take to resolve the report?"
-msgstr ""
+msgstr "Kva handling vil du ta for å løysa rapporteringa?"
 
 #: mediagoblin/moderation/forms.py:114
 msgid "What privileges will you take away?"
-msgstr ""
+msgstr "Kva privilegium vil du ta vekk?"
 
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
-msgstr ""
+msgstr "Åtvaring frå"
 
 #: mediagoblin/notifications/tools.py:54 mediagoblin/user_pages/lib.py:60
 msgid "commented on your post"
@@ -427,7 +427,7 @@ msgstr "Du kan no logga inn med det nye passordet ditt."
 msgid ""
 "You are no longer an active user. Please contact the system admin to "
 "reactivate your accoutn."
-msgstr ""
+msgstr "Du er ikkje ein aktiv brukar lenger. Kontakt sideeigar for å aktivera kontoen din att."
 
 #: mediagoblin/plugins/basic_auth/views.py:215
 msgid "Your password was changed successfully"
@@ -463,7 +463,7 @@ msgstr "Opprett ein!"
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/edit_link.html:22
 msgid "Change your password."
-msgstr ""
+msgstr "Endra passordet ditt."
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:23
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:31
@@ -489,7 +489,7 @@ msgstr "Sjå på <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
 #: mediagoblin/plugins/ldap/templates/mediagoblin/plugins/ldap/create_account_link.html:22
 msgid "Sign in to create an account!"
-msgstr ""
+msgstr "Logg inn for å oppretta ein konto."
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
@@ -703,7 +703,7 @@ msgstr "Ny Persona-epostadresse"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit_link.html:21
 msgid "Persona's"
-msgstr ""
+msgstr "Personaer"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/login_link.html:22
 msgid "Or login with Persona!"
@@ -727,7 +727,7 @@ msgstr "Fann ingen akseptable filar for prosessering."
 
 #: mediagoblin/submit/forms.py:30
 msgid "Max file size: {0} mb"
-msgstr ""
+msgstr "Maks filstorleik: {0} mb"
 
 #: mediagoblin/submit/forms.py:34
 msgid "File"
@@ -738,11 +738,11 @@ msgid ""
 "You can use\n"
 "                        <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                        Markdown</a> for formatting."
-msgstr ""
+msgstr "Du kan bruka\n                        <a href=\"http://daringfireball.net/projects/markdown/basics\">\n                        Markdown</a> til formattering."
 
 #: mediagoblin/submit/views.py:57
 msgid "Sorry, you have reached your upload limit."
-msgstr ""
+msgstr "Du har nådd opplastingsgrensa di."
 
 #: mediagoblin/submit/views.py:73
 msgid "You must provide a file."
@@ -750,11 +750,11 @@ msgstr "Du må velja ei fil."
 
 #: mediagoblin/submit/views.py:120
 msgid "Sorry, the file size is too big."
-msgstr ""
+msgstr "Fila er for stor."
 
 #: mediagoblin/submit/views.py:126
 msgid "Sorry, uploading this file will put you over your upload limit."
-msgstr ""
+msgstr "Opplasting av denne fila vil putta deg over opplastingsgrensa di."
 
 #: mediagoblin/submit/views.py:147
 msgid "Woohoo! Submitted!"
@@ -767,7 +767,7 @@ msgstr "La til samlinga «%s»."
 
 #: mediagoblin/templates/mediagoblin/banned.html:20
 msgid "You are Banned."
-msgstr ""
+msgstr "Du er bannlyst."
 
 #: mediagoblin/templates/mediagoblin/banned.html:24
 #: mediagoblin/templates/mediagoblin/error.html:24
@@ -776,16 +776,16 @@ msgstr "Bilete av stressa goblin"
 
 #: mediagoblin/templates/mediagoblin/banned.html:26
 msgid "You have been banned"
-msgstr ""
+msgstr "Du har blitt bannlyst."
 
 #: mediagoblin/templates/mediagoblin/banned.html:28
 #, python-format
 msgid "until %(until_when)s"
-msgstr ""
+msgstr "til %(until_when)s"
 
 #: mediagoblin/templates/mediagoblin/banned.html:30
 msgid "indefinitely"
-msgstr ""
+msgstr "for alltid"
 
 #: mediagoblin/templates/mediagoblin/base.html:81
 msgid "Verify your email!"
@@ -830,11 +830,11 @@ msgstr "Lag ny samling"
 
 #: mediagoblin/templates/mediagoblin/base.html:151
 msgid "User management panel"
-msgstr ""
+msgstr "Brukaradministrasjon"
 
 #: mediagoblin/templates/mediagoblin/base.html:155
 msgid "Report management panel"
-msgstr ""
+msgstr "Rapporteringsadministrasjon"
 
 #: mediagoblin/templates/mediagoblin/root.html:32
 msgid "Most recent media"
@@ -930,7 +930,7 @@ msgstr "Lisensiert med <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.
 
 #: mediagoblin/templates/mediagoblin/bits/base_footer.html:30
 msgid "Terms of Service"
-msgstr ""
+msgstr "Bruksvilkår"
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:20
 msgid "Explore"
@@ -1243,20 +1243,20 @@ msgstr "Ingenting prossesert, enno."
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:27
 msgid "Sorry, no such report found."
-msgstr ""
+msgstr "Fann ikkje rapporten."
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:32
 msgid "Return to Reports Panel"
-msgstr ""
+msgstr "Attende til rapporteringspanelet"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:33
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:155
 msgid "Report"
-msgstr ""
+msgstr "Rapport"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:36
 msgid "Reported comment"
-msgstr ""
+msgstr "Rapportert innspel"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:81
 #, python-format
@@ -1264,7 +1264,7 @@ msgid ""
 "\n"
 "        ❖ Reported media by <a href=\"%(user_url)s\">%(user_name)s</a>\n"
 "    "
-msgstr ""
+msgstr "\n        ❖ Rapportert verk av <a href=\"%(user_url)s\">%(user_name)s</a>\n    "
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:90
 #, python-format
@@ -1274,64 +1274,64 @@ msgid ""
 "            <a href=\"%(user_url)s\"> %(user_name)s</a>\n"
 "          HAS BEEN DELETED\n"
 "        "
-msgstr ""
+msgstr "\n          INNHALD AV\n            <a href=\"%(user_url)s\"> %(user_name)s</a>\n          ER SLETTA\n        "
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:130
 #: mediagoblin/templates/mediagoblin/moderation/user.html:128
 msgid "Resolve"
-msgstr ""
+msgstr "Løys"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:134
 #: mediagoblin/templates/mediagoblin/moderation/report.html:153
 msgid "Resolve This Report"
-msgstr ""
+msgstr "Løys denne rapporten"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:145
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:147
 msgid "RESOLVED"
-msgstr ""
+msgstr "LØYST"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:155
 msgid "You cannot take action against an administrator"
-msgstr ""
+msgstr "Du kan ikkje handla mot ein administrator"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:22
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:27
 msgid "Report panel"
-msgstr ""
+msgstr "Rapporteringspanel"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:30
 msgid ""
 "\n"
 "    Here you can look up open reports that have been filed by users.\n"
 "  "
-msgstr ""
+msgstr "\nHer kan du sjå opne rapportar som brukarane dine har lagt til."
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:35
 msgid "Active Reports Filed"
-msgstr ""
+msgstr "Aktive rapportar"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:77
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:171
 msgid "Offender"
-msgstr ""
+msgstr "Skulda"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:78
 msgid "When Reported"
-msgstr ""
+msgstr "Rapportert"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:79
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:173
 msgid "Reported By"
-msgstr ""
+msgstr "Rapportert av"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:80
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:174
 msgid "Reason"
-msgstr ""
+msgstr "Årsak"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:94
 #, python-format
@@ -1339,7 +1339,7 @@ msgid ""
 "\n"
 "                Comment Report #%(report_id)s\n"
 "              "
-msgstr ""
+msgstr "\n                Innspelsrapport #%(report_id)s\n              "
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:109
 #, python-format
@@ -1347,23 +1347,23 @@ msgid ""
 "\n"
 "                Media Report #%(report_id)s\n"
 "              "
-msgstr ""
+msgstr "\n                Verk-rapport #%(report_id)s\n              "
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:123
 msgid "No open reports found."
-msgstr ""
+msgstr "Ingen opne rapportar."
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:125
 msgid "Closed Reports"
-msgstr ""
+msgstr "Løyste rapportar"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:170
 msgid "Resolved"
-msgstr ""
+msgstr "Løyst"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:172
 msgid "Action Taken"
-msgstr ""
+msgstr "Handling teke"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:185
 #, python-format
@@ -1371,16 +1371,16 @@ msgid ""
 "\n"
 "              Closed Report #%(report_id)s\n"
 "            "
-msgstr ""
+msgstr "\nLukka rapport #%(report_id)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:199
 msgid "No closed reports found."
-msgstr ""
+msgstr "Ingen lukka rapportar."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:23
 #, python-format
 msgid "User: %(username)s"
-msgstr ""
+msgstr "Brukar: %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:39
 msgid "Sorry, no such user found."
@@ -1396,11 +1396,11 @@ msgstr "Treng stadfesting av epostadressa"
 msgid ""
 "Someone has registered an account with this username, but it still has\n"
 "        to be activated."
-msgstr ""
+msgstr "Dette brukarnamnet finst allereie,\nmen det er ikkje aktivert."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:58
 msgid "Return to Users Panel"
-msgstr ""
+msgstr "Attende til brukarpanelet"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:60
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:34
@@ -1413,11 +1413,11 @@ msgstr "%(username)s sin profil"
 #: mediagoblin/templates/mediagoblin/moderation/user.html:62
 #, python-format
 msgid "BANNED until %(expiration_date)s"
-msgstr ""
+msgstr "BANNLYST til %(expiration_date)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:66
 msgid "Banned Indefinitely"
-msgstr ""
+msgstr "Bannlyst utan tidsfrist"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:72
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:61
@@ -1438,103 +1438,103 @@ msgstr "Sjå gjennom samlingar"
 #: mediagoblin/templates/mediagoblin/moderation/user.html:97
 #, python-format
 msgid "Active Reports on %(username)s"
-msgstr ""
+msgstr "Aktive rapportar på %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:104
 msgid "Report ID"
-msgstr ""
+msgstr "Rapport ID"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:105
 msgid "Reported Content"
-msgstr ""
+msgstr "Rapportert innhald"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:106
 msgid "Description of Report"
-msgstr ""
+msgstr "Skildring av rapport"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:114
 #, python-format
 msgid "Report #%(report_number)s"
-msgstr ""
+msgstr "Rapport #%(report_number)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:121
 msgid "Reported Comment"
-msgstr ""
+msgstr "Rapportert innspel"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:123
 msgid "Reported Media Entry"
-msgstr ""
+msgstr "Rapportert verk"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:134
 #, python-format
 msgid "No active reports filed on %(username)s"
-msgstr ""
+msgstr "Ingen aktive rapportar på %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:141
 #, python-format
 msgid "All reports on %(username)s"
-msgstr ""
+msgstr "Alle rapportar på %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:146
 #, python-format
 msgid "All reports that %(username)s has filed"
-msgstr ""
+msgstr "Alle rapportar %(username)s har oppretta"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:160
 msgid "Ban User"
-msgstr ""
+msgstr "Bannlys brukar"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:165
 msgid "UnBan User"
-msgstr ""
+msgstr "Løft bannlysing"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:173
 msgid "Privilege"
-msgstr ""
+msgstr "Privilegium"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:174
 msgid "User Has Privilege"
-msgstr ""
+msgstr "Brukar har privilegium"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:181
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:183
 msgid "No"
-msgstr ""
+msgstr "Nei"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:21
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:26
 msgid "User panel"
-msgstr ""
+msgstr "Brukarpanel"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:29
 msgid ""
 "\n"
 "    Here you can look up users in order to take punitive actions on them.\n"
 "  "
-msgstr ""
+msgstr "\nHer kan du slå opp brukarar og straffa dei."
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:34
 msgid "Active Users"
-msgstr ""
+msgstr "Aktive brukarar"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:75
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:77
 msgid "When Joined"
-msgstr ""
+msgstr "Vart med"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:78
 msgid "# of Comments Posted"
-msgstr ""
+msgstr "Tal på innspel"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:95
 msgid "No users found."
-msgstr ""
+msgstr "Fann ingen brukarar."
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
@@ -1655,15 +1655,15 @@ msgstr "Dine ti siste opplastningar."
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:21
 msgid "<h2>File a Report</h2>"
-msgstr ""
+msgstr "<h2>Rapportér</h2>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:24
 msgid "Reporting this Comment"
-msgstr ""
+msgstr "Rapporterer dette innspelet"
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:60
 msgid "Reporting this Media Entry"
-msgstr ""
+msgstr "Rapporterer dette verket"
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:72
 #, python-format
@@ -1672,11 +1672,11 @@ msgid ""
 "            ❖ Published by <a href=\"%(user_url)s\"\n"
 "                          class=\"comment_authorlink\">%(username)s</a>\n"
 "      "
-msgstr ""
+msgstr "\n            ❖ Publisert av <a href=\"%(user_url)s\"\n                          class=\"comment_authorlink\">%(username)s</a>\n      "
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:81
 msgid "File Report "
-msgstr ""
+msgstr "Rapportér"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:52
 msgid "Here's a spot to tell others about yourself."
@@ -1732,7 +1732,7 @@ msgstr "Viss dette er deg, kan du <a href=\"%(login_url)s\">logga inn</a> for å
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:78
 #, python-format
 msgid "%(username)s"
-msgstr ""
+msgstr "%(username)s"
 
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
 msgid "(remove)"
@@ -1784,7 +1784,7 @@ msgstr "eldre"
 
 #: mediagoblin/templates/mediagoblin/utils/report.html:25
 msgid "Report media"
-msgstr ""
+msgstr "Rapportér verk"
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
@@ -1891,7 +1891,7 @@ msgstr "Du kan bruka <a href=\"http://daringfireball.net/projects/markdown/basic
 
 #: mediagoblin/user_pages/forms.py:55 mediagoblin/user_pages/forms.py:61
 msgid "Reason for Reporting"
-msgstr ""
+msgstr "Årsak for rapportering"
 
 #: mediagoblin/user_pages/views.py:178
 msgid "Sorry, comments are disabled."
