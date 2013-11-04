@@ -9,10 +9,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
-"Report-Msgid-Bugs-To: http://issues.mediagoblin.org/\n"
-"POT-Creation-Date: 2013-09-04 16:02-0500\n"
-"PO-Revision-Date: 2013-09-04 21:03+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2013-09-04 16:07-0500\n"
+"PO-Revision-Date: 2013-11-02 16:43+0000\n"
+"Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/mediagoblin/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +28,7 @@ msgstr "Извините, на этом сайте регистрация зап
 #: mediagoblin/decorators.py:268 mediagoblin/plugins/openid/views.py:202
 #: mediagoblin/plugins/persona/views.py:77
 msgid "Sorry, authentication is disabled on this instance."
-msgstr ""
+msgstr "Извините, аутентификация на этом сайте отключена."
 
 #: mediagoblin/auth/forms.py:25
 msgid "Username or email"
@@ -293,7 +293,7 @@ msgstr "Ваш пароль сменён успешно"
 
 #: mediagoblin/edit/views.py:413
 msgid "Your email address has been verified."
-msgstr ""
+msgstr "Ваш адрес электронной почты удостоверен."
 
 #: mediagoblin/gmg_commands/assetlink.py:60
 msgid "Cannot link theme... no theme set\n"
@@ -1426,7 +1426,7 @@ msgid ""
 "There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
 " the address is correct, maybe the page you're looking for has been moved or"
 " deleted."
-msgstr ""
+msgstr "Похоже, по этому адресу нет страницы.  Сожалеем!</p><p>Возможно, страница, которую вы ищете, была удалена или переехала."
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"
