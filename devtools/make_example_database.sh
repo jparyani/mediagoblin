@@ -72,7 +72,7 @@ else
     echo "***WARNING!***"
     echo "This script will WIPE YOUR FULL CURRENT ENVIRONMENT and REPLACE IT with a test database and media!"
     echo "Your databases and user_dev/ will all likely be wiped!"
-    echo "Do you want to continue? (y/n)"
+    echo -n "Do you want to continue? (y/n) "
     read -n1 USER_CONFIRM
     echo ""
     counter=0
