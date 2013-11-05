@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-04 15:33-0600\n"
-"PO-Revision-Date: 2013-11-04 21:34+0000\n"
+"POT-Creation-Date: 2013-11-05 14:44-0600\n"
+"PO-Revision-Date: 2013-11-05 20:45+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/mediagoblin/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -301,47 +301,35 @@ msgstr "无法运行 unoconv，请检查日志"
 msgid "Video transcoding failed"
 msgstr "视频转码失败"
 
-#: mediagoblin/moderation/forms.py:20
-msgid "takeaway"
-msgstr ""
-
-#: mediagoblin/moderation/forms.py:20
+#: mediagoblin/moderation/forms.py:21
 msgid "Take away privilege"
 msgstr ""
 
-#: mediagoblin/moderation/forms.py:21
-msgid "userban"
-msgstr ""
-
-#: mediagoblin/moderation/forms.py:21
+#: mediagoblin/moderation/forms.py:22
 msgid "Ban the user"
 msgstr ""
 
-#: mediagoblin/moderation/forms.py:22
-msgid "sendmessage"
+#: mediagoblin/moderation/forms.py:23
+msgid "Send the user a message"
 msgstr ""
 
-#: mediagoblin/moderation/forms.py:23
-msgid "delete"
-msgstr ""
-
-#: mediagoblin/moderation/forms.py:23
+#: mediagoblin/moderation/forms.py:24
 msgid "Delete the content"
 msgstr ""
 
-#: mediagoblin/moderation/forms.py:52 mediagoblin/moderation/forms.py:117
+#: mediagoblin/moderation/forms.py:53 mediagoblin/moderation/forms.py:118
 msgid "User will be banned until:"
 msgstr ""
 
-#: mediagoblin/moderation/forms.py:56
+#: mediagoblin/moderation/forms.py:57
 msgid "Why are you banning this User?"
 msgstr ""
 
-#: mediagoblin/moderation/forms.py:108
+#: mediagoblin/moderation/forms.py:109
 msgid "What action will you take to resolve the report?"
 msgstr ""
 
-#: mediagoblin/moderation/forms.py:114
+#: mediagoblin/moderation/forms.py:115
 msgid "What privileges will you take away?"
 msgstr ""
 

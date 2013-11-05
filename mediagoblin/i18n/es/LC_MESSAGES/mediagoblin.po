@@ -20,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-04 13:23-0600\n"
-"PO-Revision-Date: 2013-11-04 20:49+0000\n"
-"Last-Translator: larjona <larjona99@gmail.com>\n"
+"POT-Creation-Date: 2013-11-05 14:44-0600\n"
+"PO-Revision-Date: 2013-11-05 20:45+0000\n"
+"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -309,47 +309,35 @@ msgstr "ha fallado la ejecución de unoconv, comprueba el fichero de registro (l
 msgid "Video transcoding failed"
 msgstr "Ha fallado la conversión de vídeo"
 
-#: mediagoblin/moderation/forms.py:20
-msgid "takeaway"
-msgstr "retirar"
-
-#: mediagoblin/moderation/forms.py:20
+#: mediagoblin/moderation/forms.py:21
 msgid "Take away privilege"
 msgstr "Retirar el privilegio"
 
-#: mediagoblin/moderation/forms.py:21
-msgid "userban"
-msgstr "inhabilitar usuario"
-
-#: mediagoblin/moderation/forms.py:21
+#: mediagoblin/moderation/forms.py:22
 msgid "Ban the user"
 msgstr "Inhabilitar el usuario"
 
-#: mediagoblin/moderation/forms.py:22
-msgid "sendmessage"
-msgstr "enviar mensaje"
-
 #: mediagoblin/moderation/forms.py:23
-msgid "delete"
-msgstr "borrar"
+msgid "Send the user a message"
+msgstr ""
 
-#: mediagoblin/moderation/forms.py:23
+#: mediagoblin/moderation/forms.py:24
 msgid "Delete the content"
 msgstr "Borrar el contenido"
 
-#: mediagoblin/moderation/forms.py:52 mediagoblin/moderation/forms.py:117
+#: mediagoblin/moderation/forms.py:53 mediagoblin/moderation/forms.py:118
 msgid "User will be banned until:"
 msgstr "El usuario estará inhabilitado hasta:"
 
-#: mediagoblin/moderation/forms.py:56
+#: mediagoblin/moderation/forms.py:57
 msgid "Why are you banning this User?"
 msgstr "¿Por qué estás inhabilitando este usuario?"
 
-#: mediagoblin/moderation/forms.py:108
+#: mediagoblin/moderation/forms.py:109
 msgid "What action will you take to resolve the report?"
 msgstr "¿Qué acción tomarás para resolver el informe?"
 
-#: mediagoblin/moderation/forms.py:114
+#: mediagoblin/moderation/forms.py:115
 msgid "What privileges will you take away?"
 msgstr "¿Qué privilegios vas a retirar?"
 
@@ -437,7 +425,7 @@ msgstr "Ahora tu puedes iniciar sesión usando tu nueva contraseña."
 #: mediagoblin/plugins/basic_auth/views.py:163
 msgid ""
 "You are no longer an active user. Please contact the system admin to "
-"reactivate your accoutn."
+"reactivate your account."
 msgstr "Ya no eres un usuario activo. Por favor contacta con el administrador del sistema para reactivar tu cuenta."
 
 #: mediagoblin/plugins/basic_auth/views.py:215
