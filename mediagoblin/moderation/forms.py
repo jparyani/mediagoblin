@@ -17,10 +17,11 @@
 import wtforms
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
-ACTION_CHOICES = [(_(u'takeaway'),_(u'Take away privilege')),
-    (_(u'userban'),_(u'Ban the user')),
-    (_(u'sendmessage'),(u'Send the user a message')),
-    (_(u'delete'),_(u'Delete the content'))]
+ACTION_CHOICES = [
+    (u'takeaway', _(u'Take away privilege')),
+    (u'userban', _(u'Ban the user')),
+    (u'sendmessage', _(u'Send the user a message')),
+    (u'delete', _(u'Delete the content'))]
 
 class MultiCheckboxField(wtforms.SelectMultipleField):
     """
