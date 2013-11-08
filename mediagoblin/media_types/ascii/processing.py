@@ -151,11 +151,12 @@ class CommonAsciiProcessor(MediaProcessor):
                           'width': thumb_size[0],
                           'height': thumb_size[1]}
 
-            self.entry.set_file_metadata('thumb', **thumb_info)
-
             _log.debug('Copying local file to public storage')
             store_public(self.entry, 'thumb', tmp_thumb,
                          self.name_builder.fill('{basename}.thumbnail.jpg'))
+
+            self.entry.set_file_metadata('thumb', **thumb_info)
+
 
     def _skip_resizing(self, font, thumb_size):
         thumb_info = self.entry.get_file_metadata('thumb')
