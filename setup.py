@@ -49,7 +49,7 @@ setup(
         'pytest-xdist',
         'werkzeug>=0.7',
         'celery>=3.0',
-        'kombu<3.0',
+        'kombu',
         'jinja2',
         'sphinx',
         'Babel<1.0',
