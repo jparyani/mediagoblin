@@ -246,8 +246,6 @@ class ProcessingManager(object):
         try:
             processor = self.processors[key]
         except KeyError:
-            import pdb
-            pdb.set_trace()
             raise ProcessorDoesNotExist(
                 "'%s' processor does not exist for this media type" % key)
 
