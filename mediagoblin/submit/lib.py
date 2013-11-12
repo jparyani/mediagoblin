@@ -16,12 +16,17 @@
 
 import logging
 import uuid
+from os.path import splitext
+
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 
+from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.processing import mark_entry_failed
 from mediagoblin.processing.task import ProcessMedia
+from mediagoblin.media_types import sniff_media, \
+    InvalidFileType, FileTypeNotSupported
 
 
 _log = logging.getLogger(__name__)
@@ -45,6 +50,83 @@ def new_upload_entry(user):
     entry.uploader = user.id
     entry.license = user.license_preference
     return entry
+
+
+def submit_media(mg_app, user, submitted_file, filename,
+                 title=None, description=None,
+                 license=None, tags_string=u""):
+    # If the filename contains non ascii generate a unique name
+    if not all(ord(c) < 128 for c in filename):
+        filename = unicode(uuid.uuid4()) + splitext(filename)[-1]
+
+    # Sniff the submitted media to determine which
+    # media plugin should handle processing
+    media_type, media_manager = sniff_media(submitted_file)
+
+    # create entry and save in database
+    entry = new_upload_entry(user)
+    entry.media_type = media_type
+    entry.title = (title or splitext(filename)[0])
+
+    entry.description = description or ""
+
+    entry.license = license or None
+
+    # Process the user's folksonomy "tags"
+    entry.tags = convert_to_tag_list_of_dicts(tags_string)
+
+    # Generate a slug from the title
+    entry.generate_slug()
+
+    queue_file = prepare_queue_task(mg_app, entry, filename)
+
+    with queue_file:
+        queue_file.write(submitted_file.stream.read())
+
+    # Get file size and round to 2 decimal places
+    file_size = mg_app.queue_store.get_file_size(
+        entry.queued_media_file) / (1024.0 * 1024)
+    file_size = float('{0:.2f}'.format(file_size))
+
+    #### We should be throwing an exception here instead...
+    error = False
+    # Check if file size is over the limit
+    if max_file_size and file_size >= max_file_size:
+        submit_form.file.errors.append(
+            _(u'Sorry, the file size is too big.'))
+        error = True
+
+    # Check if user is over upload limit
+    if upload_limit and (user.uploaded + file_size) >= upload_limit:
+        submit_form.file.errors.append(
+            _('Sorry, uploading this file will put you over your'
+              ' upload limit.'))
+        error = True
+
+    if not error:
+    ####################################################3
+        user.uploaded = user.uploaded + file_size
+        user.save()
+
+        entry.file_size = file_size
+
+        # Save now so we have this data before kicking off processing
+        entry.save()
+
+        # Pass off to processing
+        #
+        # (... don't change entry after this point to avoid race
+        # conditions with changes to the document via processing code)
+        feed_url = request.urlgen(
+            'mediagoblin.user_pages.atom_feed',
+            qualified=True, user=request.user.username)
+        run_process_media(entry, feed_url)
+        add_message(request, SUCCESS, _('Woohoo! Submitted!'))
+
+        add_comment_subscription(request.user, entry)
+
+        return redirect(request, "mediagoblin.user_pages.user_home",
+                    user=user.username)
 
 
 def prepare_queue_task(app, entry, filename):
