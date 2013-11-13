@@ -25,6 +25,7 @@ from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.processing import mark_entry_failed
 from mediagoblin.processing.task import ProcessMedia
+from mediagoblin.notifications import add_comment_subscription
 from mediagoblin.media_types import sniff_media, \
     InvalidFileType, FileTypeNotSupported
 
@@ -52,9 +53,44 @@ def new_upload_entry(user):
     return entry
 
 
+class UploadLimitError(Exception):
+    """
+    General exception for when an upload will be over some upload limit
+    """
+    pass
+
+
+class FileUploadLimit(UploadLimitError):
+    """
+    This file is over the site upload limit
+    """
+    pass
+
+
+class UserUploadLimit(UploadLimitError):
+    """
+    This file is over the user's particular upload limit
+    """
+    pass
+
+
+class UserPastUploadLimit(UploadLimitError):
+    """
+    The user is *already* past their upload limit!
+    """
+    pass
+
+
+
 def submit_media(mg_app, user, submitted_file, filename,
                  title=None, description=None,
-                 license=None, tags_string=u""):
+                 license=None, tags_string=u"",
+                 upload_limit=None, max_file_size=None,
+                 # If provided we'll do the feed_url update, otherwise ignore
+                 urlgen=None):
+    if upload_limit and user.uploaded >= upload_limit:
+        raise UserPastUploadLimit()
+
     # If the filename contains non ascii generate a unique name
     if not all(ord(c) < 128 for c in filename):
         filename = unicode(uuid.uuid4()) + splitext(filename)[-1]
@@ -88,45 +124,36 @@ def submit_media(mg_app, user, submitted_file, filename,
         entry.queued_media_file) / (1024.0 * 1024)
     file_size = float('{0:.2f}'.format(file_size))
 
-    #### We should be throwing an exception here instead...
-    error = False
     # Check if file size is over the limit
     if max_file_size and file_size >= max_file_size:
-        submit_form.file.errors.append(
-            _(u'Sorry, the file size is too big.'))
-        error = True
+        raise FileUploadLimit()
 
     # Check if user is over upload limit
     if upload_limit and (user.uploaded + file_size) >= upload_limit:
-        submit_form.file.errors.append(
-            _('Sorry, uploading this file will put you over your'
-              ' upload limit.'))
-        error = True
+        raise UserUploadLimit()
 
-    if not error:
-    ####################################################3
-        user.uploaded = user.uploaded + file_size
-        user.save()
+    user.uploaded = user.uploaded + file_size
+    user.save()
 
-        entry.file_size = file_size
+    entry.file_size = file_size
 
-        # Save now so we have this data before kicking off processing
-        entry.save()
+    # Save now so we have this data before kicking off processing
+    entry.save()
 
-        # Pass off to processing
-        #
-        # (... don't change entry after this point to avoid race
-        # conditions with changes to the document via processing code)
-        feed_url = request.urlgen(
+    if urlgen:
+        feed_url = urlgen(
             'mediagoblin.user_pages.atom_feed',
-            qualified=True, user=request.user.username)
-        run_process_media(entry, feed_url)
-        add_message(request, SUCCESS, _('Woohoo! Submitted!'))
+            qualified=True, user=user.username)
+    else:
+        feed_url = None
 
-        add_comment_subscription(request.user, entry)
+    # Pass off to processing
+    #
+    # (... don't change entry after this point to avoid race
+    # conditions with changes to the document via processing code)
+    run_process_media(entry, feed_url)
 
-        return redirect(request, "mediagoblin.user_pages.user_home",
-                    user=user.username)
+    add_comment_subscription(user, entry)
 
 
 def prepare_queue_task(app, entry, filename):
