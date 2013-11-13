@@ -88,6 +88,24 @@ def submit_media(mg_app, user, submitted_file, filename,
                  upload_limit=None, max_file_size=None,
                  # If provided we'll do the feed_url update, otherwise ignore
                  urlgen=None):
+    """
+    Args:
+     - mg_app: The MediaGoblinApp instantiated for this process
+     - user: the user object this media entry should be associated with
+     - submitted_file: the file-like object that has the
+       being-submitted file data in it (this object should really have
+       a .name attribute which is the filename on disk!)
+     - filename: the *original* filename of this.  Not necessarily the
+       one on disk being referenced by submitted_file.
+     - title: title for this media entry
+     - description: description for this media entry
+     - license: license for this media entry
+     - tags_string: comma separated string of tags to be associated
+       with this entry
+     - upload_limit: size in megabytes that's the per-user upload limit
+     - max_file_size: maximum size each file can be that's uploaded
+     - urlgen: if provided, used to do the feed_url update
+    """
     if upload_limit and user.uploaded >= upload_limit:
         raise UserPastUploadLimit()
 
