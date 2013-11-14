@@ -41,7 +41,7 @@ def parser_setup(subparser):
         "-l", "--license",
         help=(
             "License this media entry will be released under. "
-            "Uses user defaults if unspecified."))
+            "Should be a URL."))
     subparser.add_argument(
         "-T", "--tags",
         help=(
