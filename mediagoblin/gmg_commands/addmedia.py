@@ -18,7 +18,7 @@ import os
 
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.submit.lib import (
-    submit_media,
+    submit_media, get_upload_file_limits,
     FileUploadLimit, UserUploadLimit, UserPastUploadLimit)
 
 from mediagoblin import mg_globals
@@ -78,12 +78,7 @@ def addmedia(args):
         print "Can't find a file with filename '%s'" % args.filename
         return
 
-    if user.upload_limit >= 0:
-        upload_limit = user.upload_limit
-    else:
-        upload_limit = mg_globals.app_config.get('upload_limit', None)
-
-    max_file_size = mg_globals.app_config.get('max_file_size', None)
+    upload_limit, max_file_size = get_upload_file_limits(user)
 
     def maybe_unicodeify(some_string):
         # this is kinda terrible
