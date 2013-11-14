@@ -68,13 +68,14 @@ def addmedia(args):
     # get the user
     user = app.db.User.query.filter_by(username=args.username.lower()).first()
     if user is None:
-        print "Sorry, no user by username '%s'" % args.user
+        print "Sorry, no user by username '%s'" % args.username
         return
     
     # check for the file, if it exists...
-    filename = os.path.abspath(args.filename)
-    if not os.path.exists(filename):
-        print "Can't find a file by that filename?"
+    filename = os.path.split(args.filename)[-1]
+    abs_filename = os.path.abspath(args.filename)
+    if not os.path.exists(abs_filename):
+        print "Can't find a file with filename '%s'" % args.filename
         return
 
     if user.upload_limit >= 0:
@@ -84,13 +85,22 @@ def addmedia(args):
 
     max_file_size = mg_globals.app_config.get('max_file_size', None)
 
+    def maybe_unicodeify(some_string):
+        # this is kinda terrible
+        if some_string is None:
+            return None
+        else:
+            return unicode(some_string)
+
     try:
         submit_media(
             mg_app=app,
             user=user,
-            submitted_file=file(filename, 'r'), filename=filename,
-            title=args.title, description=args.description,
-            license=args.license, tags_string=args.tags or u'',
+            submitted_file=file(abs_filename, 'r'), filename=filename,
+            title=maybe_unicodeify(args.title),
+            description=maybe_unicodeify(args.description),
+            license=maybe_unicodeify(args.license),
+            tags_string=maybe_unicodeify(args.tags) or u"",
             upload_limit=upload_limit, max_file_size=max_file_size)
     except FileUploadLimit:
         print "This file is larger than the upload limits for this site."
