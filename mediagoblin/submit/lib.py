@@ -120,9 +120,9 @@ def submit_media(mg_app, user, submitted_file, filename,
     # create entry and save in database
     entry = new_upload_entry(user)
     entry.media_type = media_type
-    entry.title = (title or splitext(filename)[0])
+    entry.title = (title or unicode(splitext(filename)[0]))
 
-    entry.description = description or ""
+    entry.description = description or u""
 
     entry.license = license or None
 
