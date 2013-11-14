@@ -14,80 +14,57 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-import logging
-import base64
+import urllib
 
 import pytest
+import mock
+
+from oauthlib.oauth1 import Client
 
 from mediagoblin import mg_globals
-from mediagoblin.tools import template, pluginapi
 from mediagoblin.tests.tools import fixture_add_user
-from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
-    BIG_BLUE
-
-
-_log = logging.getLogger(__name__)
-
+from .resources import GOOD_JPG
 
 class TestAPI(object):
+
     def setup(self):
         self.db = mg_globals.database
+        self.user = fixture_add_user()
 
-        self.user_password = u'4cc355_70k3N'
-        self.user = fixture_add_user(u'joapi', self.user_password,
-            privileges=[u'active',u'uploader'])
+    def test_profile_endpoint(self, test_app):
+        """ Test that you can successfully get the profile of a user """
+        @mock.patch("mediagoblin.decorators.oauth_required")
+        def _real_test(*args, **kwargs):
+            profile = test_app.get(
+                "/api/user/{0}/profile".format(self.user.username)
+            ).json
 
-    def login(self, test_app):
-        test_app.post(
-            '/auth/login/', {
-                'username': self.user.username,
-                'password': self.user_password})
+            assert profile["preferredUsername"] == self.user.username
+            assert profile["objectType"] == "person"
 
-    def get_context(self, template_name):
-        return template.TEMPLATE_TEST_CONTEXT[template_name]
+        _real_test()
 
-    def http_auth_headers(self):
-        return {'Authorization': 'Basic {0}'.format(
-                base64.b64encode(':'.join([
-                    self.user.username,
-                    self.user_password])))}
+    def test_upload_file(self, test_app):
+        """ Test that i can upload a file """
+        context = {
+            "title": "Rel",
+            "description": "ayRel sunu oeru",
+            "qqfile": "my_picture.jpg",
+        }
+        encoded_context = urllib.urlencode(context)
+        response = test_app.post(
+            "/api/user/{0}/uploads?{1}".format(
+                self.user.username,
+                encoded_context[1:]
+            )
+        )
 
-    def do_post(self, data, test_app, **kwargs):
-        url = kwargs.pop('url', '/api/submit')
-        do_follow = kwargs.pop('do_follow', False)
-
-        if not 'headers' in kwargs.keys():
-            kwargs['headers'] = self.http_auth_headers()
-
-        response = test_app.post(url, data, **kwargs)
-
-        if do_follow:
-            response.follow()
-
-        return response
-
-    def upload_data(self, filename):
-        return {'upload_files': [('file', filename)]}
-
-    def test_1_test_test_view(self, test_app):
-        self.login(test_app)
-
-        response = test_app.get(
-            '/api/test',
-            headers=self.http_auth_headers())
-
-        assert response.body == \
-                '{"username": "joapi", "email": "joapi@example.com"}'
-
-    def test_2_test_submission(self, test_app):
-        self.login(test_app)
-
-        response = self.do_post(
-            {'title': 'Great JPG!'},
-            test_app,
-            **self.upload_data(GOOD_JPG))
+        picture = self.db.MediaEntry.query.filter_by(title=context["title"])
+        picture = picture.first()
 
         assert response.status_int == 200
+        assert picture
+        raise Exception(str(dir(picture)))
+        assert picture.description == context["description"]
 
-        assert self.db.MediaEntry.query.filter_by(title=u'Great JPG!').first()
+

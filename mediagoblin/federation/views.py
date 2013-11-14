@@ -10,7 +10,7 @@ from mediagoblin.tools.response import redirect, json_response
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.submit.lib import new_upload_entry
 
-#@oauth_required
+@oauth_required
 def profile(request, raw=False):
     """ This is /api/user/<username>/profile - This will give profile info """
     user = request.matchdict["username"]
@@ -29,6 +29,7 @@ def profile(request, raw=False):
     # user profiles are public so return information
     return json_response(user.serialize(request))
 
+@oauth_required
 def user(request):
     """ This is /api/user/<username> - This will get the user """
     user, user_profile = profile(request, raw=True)
@@ -41,7 +42,7 @@ def user(request):
 
     return json_response(data)
 
-#@oauth_required
+@oauth_required
 @csrf_exempt
 def uploads(request):
     """ Endpoint for file uploads """
@@ -57,7 +58,7 @@ def uploads(request):
         # Wrap the data in the werkzeug file wrapper
         file_data = FileStorage(
             stream=io.BytesIO(request.data),
-            filename=request.args.get("qqfile", "unknown.jpg"),
+            filename=request.args.get("qqfile", "unknown"),
             content_type=request.headers.get("Content-Type", "application/octal-stream")
         )
 
@@ -71,7 +72,7 @@ def uploads(request):
 
     return json_response({"error": "Not yet implemented"}, status=400)
 
-#@oauth_required
+@oauth_required
 @csrf_exempt
 def feed(request):
     """ Handles the user's outbox - /api/user/<username>/feed """
@@ -200,6 +201,7 @@ def object(request, raw_obj=False):
 
     return json_response(media.serialize(request))
 
+@oauth_required
 def object_comments(request):
     """ Looks up for the comments on a object """
     media = object(request, raw_obj=True)
