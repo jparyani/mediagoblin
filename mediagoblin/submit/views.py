@@ -29,7 +29,8 @@ from mediagoblin.submit import forms as submit_forms
 from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.media_types import \
     InvalidFileType, FileTypeNotSupported
-from mediagoblin.submit.lib import check_file_field, submit_media, \
+from mediagoblin.submit.lib import \
+    check_file_field, submit_media, get_upload_file_limits, \
     FileUploadLimit, UserUploadLimit, UserPastUploadLimit
 
 
@@ -39,20 +40,14 @@ def submit_start(request):
     """
     First view for submitting a file.
     """
-    user = request.user
-    if user.upload_limit >= 0:
-        upload_limit = user.upload_limit
-    else:
-        upload_limit = mg_globals.app_config.get('upload_limit', None)
-
-    max_file_size = mg_globals.app_config.get('max_file_size', None)
+    upload_limit, max_file_size = get_upload_file_limits(request.user)
 
     submit_form = submit_forms.get_submit_start_form(
         request.form,
         license=request.user.license_preference,
         max_file_size=max_file_size,
         upload_limit=upload_limit,
-        uploaded=user.uploaded)
+        uploaded=request.user.uploaded)
 
     if request.method == 'POST' and submit_form.validate():
         if not check_file_field(request, 'file'):
@@ -72,7 +67,7 @@ def submit_start(request):
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
                 return redirect(request, "mediagoblin.user_pages.user_home",
-                            user=user.username)
+                            user=request.user.username)
 
 
             # Handle upload limit issues

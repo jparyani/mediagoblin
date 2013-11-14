@@ -21,13 +21,13 @@ from os.path import splitext
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 
+from mediagoblin import mg_globals
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.processing import mark_entry_failed
 from mediagoblin.processing.task import ProcessMedia
 from mediagoblin.notifications import add_comment_subscription
-from mediagoblin.media_types import sniff_media, \
-    InvalidFileType, FileTypeNotSupported
+from mediagoblin.media_types import sniff_media
 
 
 _log = logging.getLogger(__name__)
@@ -51,6 +51,20 @@ def new_upload_entry(user):
     entry.uploader = user.id
     entry.license = user.license_preference
     return entry
+
+
+def get_upload_file_limits(user):
+    """
+    Get the upload_limit and max_file_size for this user
+    """
+    if user.upload_limit >= 0:
+        upload_limit = user.upload_limit
+    else:
+        upload_limit = mg_globals.app_config.get('upload_limit', None)
+
+    max_file_size = mg_globals.app_config.get('max_file_size', None)
+
+    return upload_limit, max_file_size
 
 
 class UploadLimitError(Exception):
@@ -172,6 +186,8 @@ def submit_media(mg_app, user, submitted_file, filename,
     run_process_media(entry, feed_url)
 
     add_comment_subscription(user, entry)
+
+    return entry
 
 
 def prepare_queue_task(app, entry, filename):
