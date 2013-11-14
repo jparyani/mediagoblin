@@ -1,23 +1,21 @@
 import json
 import io
 
-from werkzeug.datastructures import FileStorage 
+from werkzeug.datastructures import FileStorage
 
 from mediagoblin.media_types import sniff_media
 from mediagoblin.decorators import oauth_required
 from mediagoblin.db.models import User, MediaEntry, MediaComment
 from mediagoblin.tools.response import redirect, json_response
 from mediagoblin.meddleware.csrf import csrf_exempt
-from mediagoblin.notifications import add_comment_subscription
-from mediagoblin.submit.lib import (new_upload_entry, prepare_queue_task,
-                                    run_process_media)
+from mediagoblin.submit.lib import new_upload_entry
 
 #@oauth_required
 def profile(request, raw=False):
     """ This is /api/user/<username>/profile - This will give profile info """
     user = request.matchdict["username"]
     requested_user = User.query.filter_by(username=user)
-    
+
     # check if the user exists
     if requested_user is None:
         error = "No such 'user' with id '{0}'".format(user)
@@ -46,7 +44,7 @@ def user(request):
 #@oauth_required
 @csrf_exempt
 def uploads(request):
-    """ This is the endpoint which uploads can be sent to - /api/user/<username>/uploads """
+    """ Endpoint for file uploads """
     user = request.matchdict["username"]
     requested_user = User.query.filter_by(username=user)
 
@@ -93,11 +91,10 @@ def feed(request):
         if obj is None:
             error = {"error": "Could not find 'object' element."}
             return json_response(error, status=400)
-  
+
         if obj.get("objectType", None) == "comment":
             # post a comment
             media = int(data["object"]["inReplyTo"]["id"])
-            author = request.user
             comment = MediaComment(
                 media_entry=media,
                 author=request.user.id,
@@ -111,7 +108,7 @@ def feed(request):
             # Posting an image to the feed
             # NB: This is currently just handing the image back until we have an
             #     to send the image to the actual feed
- 
+
             media_id = int(data["object"]["id"])
             media = MediaEntry.query.filter_by(id=media_id)
             if media is None:
@@ -126,7 +123,11 @@ def feed(request):
             return json_response(error, status=400)
         else:
             # Oh no! We don't know about this type of object (yet)
-            error = {"error": "Unknown object type '{0}'.".format(obj.get("objectType", None))}
+            error_message = "Unknown object type '{0}'.".format(
+                obj.get("objectType", None)
+            )
+
+            error = {"error": error_message}
             return json_response(error, status=400)
 
 
@@ -137,7 +138,10 @@ def feed(request):
             )
 
     feed = {
-        "displayName": "Activities by {0}@{1}".format(request.user.username, request.host),
+        "displayName": "Activities by {user}@{host}".format(
+            user=request.user.username,
+            host=request.host
+        ),
         "objectTypes": ["activity"],
         "url": feed_url,
         "links": {
@@ -157,7 +161,7 @@ def feed(request):
         "author": request.user.serialize(request),
         "items": [],
     }
-    
+
 
     # Now lookup the user's feed.
     for media in MediaEntry.query.all():
@@ -176,18 +180,13 @@ def feed(request):
     return json_response(feed)
 
 @oauth_required
-def inbox(request):
-    """ Handles the user's inbox - /api/user/<username>/inbox """
-    raise NotImplemented("Yet to implement looking up user's inbox")
-
-#@oauth_required
 def object(request, raw_obj=False):
     """ Lookup for a object type """
     objectType = request.matchdict["objectType"]
     uuid = request.matchdict["uuid"]
     if objectType not in ["image"]:
         error = "Unknown type: {0}".format(objectType)
-        # not sure why this is 404, maybe ask evan. Maybe 400? 
+        # not sure why this is 404, maybe ask evan. Maybe 400?
         return json_response({"error": error}, status=404)
 
     media = MediaEntry.query.filter_by(slug=uuid).first()
@@ -232,7 +231,7 @@ def object_comments(request):
 def host_meta(request):
     """ This is /.well-known/host-meta - provides URL's to resources on server """
     links = []
-    
+
     # Client registration links
     links.append({
         "ref": "registration_endpoint",
