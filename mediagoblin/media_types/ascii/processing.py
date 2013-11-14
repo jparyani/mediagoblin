@@ -36,14 +36,14 @@ SUPPORTED_EXTENSIONS = ['txt', 'asc', 'nfo']
 MEDIA_TYPE = 'mediagoblin.media_types.ascii'
 
 
-def sniff_handler(media_file, **kw):
+def sniff_handler(media_file, filename):
     _log.info('Sniffing {0}'.format(MEDIA_TYPE))
-    if kw.get('media') is not None:
-        name, ext = os.path.splitext(kw['media'].filename)
-        clean_ext = ext[1:].lower()
 
-        if clean_ext in SUPPORTED_EXTENSIONS:
-            return MEDIA_TYPE
+    name, ext = os.path.splitext(filename)
+    clean_ext = ext[1:].lower()
+
+    if clean_ext in SUPPORTED_EXTENSIONS:
+        return MEDIA_TYPE
 
     return None
 

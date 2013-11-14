@@ -44,7 +44,7 @@ class VideoTranscodingFail(BaseProcessingFail):
     general_message = _(u'Video transcoding failed')
 
 
-def sniff_handler(media_file, **kw):
+def sniff_handler(media_file, filename):
     transcoder = transcoders.VideoTranscoder()
     data = transcoder.discover(media_file.name)
 
@@ -52,8 +52,7 @@ def sniff_handler(media_file, **kw):
     _log.debug('Discovered: {0}'.format(data))
 
     if not data:
-        _log.error('Could not discover {0}'.format(
-            kw.get('media')))
+        _log.error('Could not discover {0}'.format(filename))
         return None
 
     if data['is_video'] is True:

@@ -168,18 +168,16 @@ def check_prerequisites():
         return False
     return True
 
-def sniff_handler(media_file, **kw):
+def sniff_handler(media_file, filename):
     _log.info('Sniffing {0}'.format(MEDIA_TYPE))
     if not check_prerequisites():
         return None
-    if kw.get('media') is not None:
-        name, ext = os.path.splitext(kw['media'].filename)
-        clean_ext = ext[1:].lower()
 
-        if clean_ext in supported_extensions():
-            return MEDIA_TYPE
+    name, ext = os.path.splitext(filename)
+    clean_ext = ext[1:].lower()
 
-    return None
+    if clean_ext in supported_extensions():
+        return MEDIA_TYPE
 
 def create_pdf_thumb(original, thumb_filename, width, height):
     # Note: pdftocairo adds '.png', remove it

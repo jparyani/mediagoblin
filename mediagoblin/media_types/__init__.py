@@ -50,23 +50,23 @@ class MediaManagerBase(object):
         return hasattr(self, i)
 
 
-def sniff_media(media):
+def sniff_media(media_file, filename):
     '''
     Iterate through the enabled media types and find those suited
     for a certain file.
     '''
 
     try:
-        return get_media_type_and_manager(media.filename)
+        return get_media_type_and_manager(filename)
     except FileTypeNotSupported:
         _log.info('No media handler found by file extension. Doing it the expensive way...')
         # Create a temporary file for sniffers suchs as GStreamer-based
         # Audio video
-        media_file = tempfile.NamedTemporaryFile()
-        media_file.write(media.stream.read())
-        media.stream.seek(0)
+        tmp_media_file = tempfile.NamedTemporaryFile()
+        tmp_media_file.write(media_file.read())
+        tmp_media_file.seek(0)
 
-        media_type = hook_handle('sniff_handler', media_file, media=media)
+        media_type = hook_handle('sniff_handler', tmp_media_file, filename)
         if media_type:
             _log.info('{0} accepts the file'.format(media_type))
             return media_type, hook_handle(('media_manager', media_type))

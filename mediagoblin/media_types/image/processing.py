@@ -149,21 +149,17 @@ def _skip_resizing(entry, keyname, size, quality, filter):
 SUPPORTED_FILETYPES = ['png', 'gif', 'jpg', 'jpeg', 'tiff']
 
 
-def sniff_handler(media_file, **kw):
+def sniff_handler(media_file, filename):
     _log.info('Sniffing {0}'.format(MEDIA_TYPE))
-    if kw.get('media') is not None:  # That's a double negative!
-        name, ext = os.path.splitext(kw['media'].filename)
-        clean_ext = ext[1:].lower()  # Strip the . from ext and make lowercase
+    name, ext = os.path.splitext(filename)
+    clean_ext = ext[1:].lower()  # Strip the . from ext and make lowercase
 
-        if clean_ext in SUPPORTED_FILETYPES:
-            _log.info('Found file extension in supported filetypes')
-            return MEDIA_TYPE
-        else:
-            _log.debug('Media present, extension not found in {0}'.format(
-                    SUPPORTED_FILETYPES))
+    if clean_ext in SUPPORTED_FILETYPES:
+        _log.info('Found file extension in supported filetypes')
+        return MEDIA_TYPE
     else:
-        _log.warning('Need additional information (keyword argument \'media\')'
-                     ' to be able to handle sniffing')
+        _log.debug('Media present, extension not found in {0}'.format(
+                SUPPORTED_FILETYPES))
 
     return None
 

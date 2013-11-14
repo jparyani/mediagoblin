@@ -33,7 +33,7 @@ _log = logging.getLogger(__name__)
 MEDIA_TYPE = 'mediagoblin.media_types.audio'
 
 
-def sniff_handler(media_file, **kw):
+def sniff_handler(media_file, filename):
     _log.info('Sniffing {0}'.format(MEDIA_TYPE))
     try:
         transcoder = AudioTranscoder()

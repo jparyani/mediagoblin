@@ -115,7 +115,7 @@ def submit_media(mg_app, user, submitted_file, filename,
 
     # Sniff the submitted media to determine which
     # media plugin should handle processing
-    media_type, media_manager = sniff_media(submitted_file)
+    media_type, media_manager = sniff_media(submitted_file, filename)
 
     # create entry and save in database
     entry = new_upload_entry(user)
@@ -135,7 +135,7 @@ def submit_media(mg_app, user, submitted_file, filename,
     queue_file = prepare_queue_task(mg_app, entry, filename)
 
     with queue_file:
-        queue_file.write(submitted_file.stream.read())
+        queue_file.write(submitted_file.read())
 
     # Get file size and round to 2 decimal places
     file_size = mg_app.queue_store.get_file_size(
