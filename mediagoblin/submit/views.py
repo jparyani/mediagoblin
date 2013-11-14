@@ -56,13 +56,14 @@ def submit_start(request):
         else:
             try:
                 submit_media(
-                    request.app, request.user,
-                    request.files['file'], request.files['file'].filename,
-                    unicode(submit_form.title.data),
-                    unicode(submit_form.description.data),
-                    unicode(submit_form.license.data) or None,
-                    submit_form.tags.data,
-                    upload_limit, max_file_size)
+                    mg_app=request.app, user=request.user,
+                    submitted_file=request.files['file'],
+                    filename=request.files['file'].filename,
+                    title=unicode(submit_form.title.data),
+                    description=unicode(submit_form.description.data),
+                    license=unicode(submit_form.license.data) or None,
+                    tags_string=submit_form.tags.data,
+                    upload_limit=upload_limit, max_file_size=max_file_size)
 
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 
