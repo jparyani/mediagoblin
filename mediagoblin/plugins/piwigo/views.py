@@ -130,11 +130,12 @@ def pwg_images_addSimple(request):
 
     try:
         entry = submit_media(
-            request.app, request.user,
-            request.files['image'], request.files['image'].filename,
-            unicode(form.name.data),
-            unicode(form.comment.data),
-            upload_limit, max_file_size)
+            mg_app=request.app, user=request.user,
+            submitted_file=request.files['image'],
+            filename=request.files['image'].filename,
+            title=unicode(form.name.data),
+            description=unicode(form.comment.data),
+            upload_limit=upload_limit, max_file_size=max_file_size)
 
         collection_id = form.category.data
         if collection_id > 0:
