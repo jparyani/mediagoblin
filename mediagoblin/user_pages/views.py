@@ -389,7 +389,6 @@ def collection_item_confirm_remove(request, collection_item):
 
         if form.confirm.data is True:
             entry = collection_item.get_media_entry
-            entry.collected = entry.collected - 1
             entry.save()
 
             collection_item.delete()
@@ -436,7 +435,6 @@ def collection_confirm_delete(request, collection):
             # Delete all the associated collection items
             for item in collection.get_collection_items():
                 entry = item.get_media_entry
-                entry.collected = entry.collected - 1
                 entry.save()
                 item.delete()
 

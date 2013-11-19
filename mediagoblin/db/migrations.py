@@ -707,3 +707,17 @@ def create_moderation_tables(db):
         is_admin.drop()
 
     db.commit()
+@RegisterMigration(19, MIGRATIONS)
+def drop_MediaEntry_collected(db):
+    """
+    Drop unused MediaEntry.collected column
+    """
+    metadata = MetaData(bind=db.bind)
+    media_collected= inspect_table(metadata, 'core__media_entries')
+
+    media_collected = media_collected.columns['collected']
+
+        
+    media_collected.drop()
+        
+    db.commit()

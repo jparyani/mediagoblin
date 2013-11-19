@@ -219,12 +219,11 @@ class MediaEntry(Base, MediaEntryMixin):
     state = Column(Unicode, default=u'unprocessed', nullable=False)
         # or use sqlalchemy.types.Enum?
     license = Column(Unicode)
-    collected = Column(Integer, default=0)
+
     file_size = Column(Integer, default=0)
 
     fail_error = Column(Unicode)
     fail_metadata = Column(JSONEncoded)
-
     transcoding_progress = Column(SmallInteger)
 
     queued_media_file = Column(PathTupleWithSlashes)
