@@ -92,14 +92,8 @@ forgotten to add it? ({1})'.format(plugin, exc))
         try:
             foundations = import_component('{0}.models:FOUNDATIONS'.format(plugin))
         except ImportError as exc:
-            _log.debug('No foundations found for {0}: {1}'.format(
-                plugin,
-                exc))
-
             foundations = {}
         except AttributeError as exc:
-            _log.debug('Could not find FOUNDATIONS in {0}.models, have you \
-forgotten to add it? ({1})'.format(plugin, exc))
             foundations = {}
 
         if models:
