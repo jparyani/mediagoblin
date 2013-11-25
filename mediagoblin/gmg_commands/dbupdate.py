@@ -25,7 +25,8 @@ from mediagoblin.tools.common import import_component
 
 _log = logging.getLogger(__name__)
 logging.basicConfig()
-_log.setLevel(logging.DEBUG)
+## Let's not set the level as debug by default to avoid confusing users :)
+# _log.setLevel(logging.DEBUG)
 
 def dbupdate_parse_setup(subparser):
     pass
