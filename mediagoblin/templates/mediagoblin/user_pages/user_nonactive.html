@@ -74,9 +74,7 @@
 
   {# Active(?) (or at least verified at some point) user, horray! #}
   {% else %}
-    <h1>
-      {%- trans username=user.username %}{{ username }}{% endtrans -%}
-    </h1>
+    <h1>{{ username }}</h1>
     <p>{{ username }} is not active.</p>
     <div class="clear"></div>
   {% endif %}
