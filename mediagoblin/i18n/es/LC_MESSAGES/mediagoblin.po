@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2013-11-25 09:37-0600\n"
-"PO-Revision-Date: 2013-11-25 15:38+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2013-11-25 16:57+0000\n"
+"Last-Translator: larjona <larjona99@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -381,12 +381,12 @@ msgstr "No se ha encontrado el código (token) de petición."
 #: mediagoblin/plugins/api/views.py:75 mediagoblin/plugins/piwigo/views.py:155
 #: mediagoblin/submit/views.py:78
 msgid "Sorry, the file size is too big."
-msgstr "Lo siento, el fichero es demasiado grande."
+msgstr "Lo siento, el archivo es demasiado grande."
 
 #: mediagoblin/plugins/api/views.py:78 mediagoblin/plugins/piwigo/views.py:158
 #: mediagoblin/submit/views.py:81
 msgid "Sorry, uploading this file will put you over your upload limit."
-msgstr "Lo siento, subir este fichero sobrepasaría tu límite de subida."
+msgstr "Lo siento, subir este archivo sobrepasaría tu límite de subida."
 
 #: mediagoblin/plugins/api/views.py:82 mediagoblin/plugins/piwigo/views.py:162
 #: mediagoblin/submit/views.py:87
@@ -519,12 +519,12 @@ msgstr "Archivo"
 
 #: mediagoblin/plugins/html5-multi-upload/views.py:53
 msgid "You must provide at least one file."
-msgstr ""
+msgstr "Debes proporcionar al menos un archivo."
 
 #: mediagoblin/plugins/html5-multi-upload/views.py:121
 #, python-format
 msgid "Woohoo! Submitted %d Files!"
-msgstr ""
+msgstr "¡Yuju! ¡%d archivos enviados!"
 
 #: mediagoblin/plugins/html5-multi-upload/templates/start.html:23
 #: mediagoblin/plugins/html5-multi-upload/templates/start.html:30
@@ -774,7 +774,7 @@ msgstr "No se ha encontrado un fichero de procesamiento aceptable"
 
 #: mediagoblin/submit/forms.py:30
 msgid "Max file size: {0} mb"
-msgstr "Tamaño máximo de fichero: {0} mb"
+msgstr "Tamaño máximo de archivo: {0} mb"
 
 #: mediagoblin/submit/forms.py:41
 msgid ""
@@ -1186,7 +1186,7 @@ msgstr "Imágenes para %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:81
 msgid "PDF file"
-msgstr "Fichero PDF"
+msgstr "Archivo PDF"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
 msgid "Perspective"
