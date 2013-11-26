@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-25 09:37-0600\n"
-"PO-Revision-Date: 2013-11-25 15:38+0000\n"
+"POT-Creation-Date: 2013-11-26 13:58-0600\n"
+"PO-Revision-Date: 2013-11-26 19:59+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/projects/p/mediagoblin/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
@@ -1742,11 +1742,6 @@ msgid ""
 "If you are that person but you've lost your verification email, you can <a "
 "href=\"%(login_url)s\">log in</a> and resend it."
 msgstr "정상적인 계정이나, 인증 메일을 잃어버리셨다면 <a href=\"%(login_url)s\">로그인</a> 을 하시고 인증 메일을 새로 보내주세요."
-
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:78
-#, python-format
-msgid "%(username)s"
-msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
 msgid "(remove)"

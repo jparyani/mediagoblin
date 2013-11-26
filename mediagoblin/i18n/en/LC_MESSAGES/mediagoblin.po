@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-25 09:37-0600\n"
+"POT-Creation-Date: 2013-11-26 13:58-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1747,11 +1747,6 @@ msgstr ""
 msgid ""
 "If you are that person but you've lost your verification email, you can "
 "<a href=\"%(login_url)s\">log in</a> and resend it."
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:78
-#, python-format
-msgid "%(username)s"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49

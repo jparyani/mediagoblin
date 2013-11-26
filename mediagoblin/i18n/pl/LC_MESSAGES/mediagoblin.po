@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-25 09:37-0600\n"
-"PO-Revision-Date: 2013-11-25 15:38+0000\n"
+"POT-Creation-Date: 2013-11-26 13:58-0600\n"
+"PO-Revision-Date: 2013-11-26 19:59+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/mediagoblin/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -1743,11 +1743,6 @@ msgid ""
 "If you are that person but you've lost your verification email, you can <a "
 "href=\"%(login_url)s\">log in</a> and resend it."
 msgstr "Jeśli jesteś tą osobą, ale zgubiłeś swój e-mail weryfikujący, to możesz się <a href=\"%(login_url)s\">zalogować</a> i wysłać go ponownie."
-
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:78
-#, python-format
-msgid "%(username)s"
-msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
 msgid "(remove)"
