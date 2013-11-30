@@ -21,6 +21,74 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+0.6.0
+=====
+
+**Do this to upgrade**
+
+1. Make sure to run
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+   after upgrading.
+
+That's it, probably!If you run into problems, don't hesitate to
+`contact us <http://mediagoblin.org/pages/join.html>`_
+(IRC is often best).
+
+This tool has a lot of new tools for administrators, hence the
+nickname "Lore of the Admin"!
+
+**New features:**
+
+- New tools to control how much users can upload, both as a general
+  user limit, or per file.
+
+  You can set this with the following options in your mediagoblin
+  config file: `upload_limit` and `max_file_size`.  Both are integers
+  in megabytes.
+
+  There is an option to control how much each individual user can
+  upload too, though an interface for this is not yet exposed.  See
+  the "uploaded" field on the core__users table.
+
+- MediaGoblin now contains an authentication plugin for ldap!  You
+  can turn on the mediagoblin.plugins.ldap plugin to make use of
+  this.  See the documentation: :ref:`ldap-plugin`
+
+- There's a new command line upload tool!  At long last!  See
+  `./bin/gmg addmedia --help` for info on how to use this.
+
+- There's now a terms of service document included in MediaGoblin.
+  It's turned on by default, but you can turn it off if you prefer,
+  just set the configuration option of `show_tos` in the [mediagoblin]
+  section of your config to false.
+
+  Alternately, you can override the template for the terms of service
+  document to set up your own.
+
+- We have a lot of new administrative tooling features!
+  - There's a built-in privileges/permissions system now.
+    Administrators are given access to modifying these parameters
+    from a user administration panel.
+  - Users can submit reports about other problematic users or media
+    and administrators are given tools to resolve said reports and
+    ban/unban users if needed.
+
+- New version of video.js is included with MediaGoblin.  Slight
+  amount of skinning to match the MediaGoblin look, otherwise also
+  uses the new default skin.
+
+Developer-oriented changes:
+
+- New developer tool for quickly setting up a development environment
+  in `devtools/make_example_database.sh`.  Requires doing a checkout
+  of our other tool `mg_dev_environments <https://gitorious.org/mediagoblin/mg-dev-environments/>`_
+  (probably in the parent Directory) though!
+- A "foundations" framework has entered into the codebase.
+  This is mostly just relevant to coders, but it does mean that it's
+  much easier to add database structures that need some entries filled
+  automatically by default.
+- Refactoring to the authentication code and the reprocessing code
+
 
 0.5.1
 =====
