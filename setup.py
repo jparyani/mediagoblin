@@ -32,8 +32,8 @@ def get_version():
         raise RuntimeError("Unable to find version string in %s." %
                            VERSIONFILE)
 
-
-setup(
+try:
+    setup(
     name="mediagoblin",
     version=get_version(),
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
@@ -107,3 +107,17 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content"
         ],
     )
+except TypeError, e:
+    # Check if the problem is caused by the sqlalchemy/setuptools conflict
+    msg_as_str = str(e)
+    if not (msg_as_str == 'dist must be a Distribution instance'):
+        raise
+
+    # If so, tell the user it is OK to just run the script again.
+    print "\n\n---------- NOTE ----------"
+    print "The setup.py command you ran failed."
+    print ""
+    print ("It is a known possible failure. Just run it again. It works the "
+           "second time.")
+    import sys
+    sys.exit(1)
