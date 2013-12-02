@@ -41,8 +41,8 @@ try:
     include_package_data = True,
     # scripts and dependencies
     install_requires=[
-        'python-dateutil',
         'setuptools',
+        'python-dateutil',
         'PasteScript',
         'wtforms',
         'py-bcrypt',
