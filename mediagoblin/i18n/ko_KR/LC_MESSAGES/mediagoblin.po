@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-26 13:58-0600\n"
-"PO-Revision-Date: 2013-11-26 19:59+0000\n"
+"POT-Creation-Date: 2013-12-02 09:28-0600\n"
+"PO-Revision-Date: 2013-12-02 15:28+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/projects/p/mediagoblin/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
@@ -80,37 +80,28 @@ msgid "Resent your verification email."
 msgstr "인증 메일을 다시 보내 주세요."
 
 #: mediagoblin/edit/forms.py:27 mediagoblin/edit/forms.py:87
-#: mediagoblin/plugins/html5-multi-upload/forms.py:28
 #: mediagoblin/submit/forms.py:37 mediagoblin/submit/forms.py:61
 #: mediagoblin/user_pages/forms.py:45
 msgid "Title"
 msgstr "제목"
 
-#: mediagoblin/edit/forms.py:30
-#: mediagoblin/plugins/html5-multi-upload/forms.py:31
-#: mediagoblin/submit/forms.py:40
+#: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:40
 msgid "Description of this work"
 msgstr "이 작업에 대한 설명"
 
 #: mediagoblin/edit/forms.py:31 mediagoblin/edit/forms.py:54
-#: mediagoblin/edit/forms.py:91
-#: mediagoblin/plugins/html5-multi-upload/forms.py:32
-#: mediagoblin/submit/forms.py:65
+#: mediagoblin/edit/forms.py:91 mediagoblin/submit/forms.py:65
 msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
 msgstr "포멧팅을 사용하려면\n                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n                      Markdown</a> 링크를 참고 하세요."
 
-#: mediagoblin/edit/forms.py:35
-#: mediagoblin/plugins/html5-multi-upload/forms.py:36
-#: mediagoblin/submit/forms.py:45
+#: mediagoblin/edit/forms.py:35 mediagoblin/submit/forms.py:45
 msgid "Tags"
 msgstr "태그"
 
-#: mediagoblin/edit/forms.py:37
-#: mediagoblin/plugins/html5-multi-upload/forms.py:38
-#: mediagoblin/submit/forms.py:47
+#: mediagoblin/edit/forms.py:37 mediagoblin/submit/forms.py:47
 msgid "Separate tags by commas."
 msgstr "태그는 , 로 구분 됩니다."
 
@@ -128,9 +119,7 @@ msgid ""
 "this."
 msgstr "제목은 미디어 주소의 일부분 입니다. 수정하지 않아도 됩니다."
 
-#: mediagoblin/edit/forms.py:46
-#: mediagoblin/plugins/html5-multi-upload/forms.py:44
-#: mediagoblin/submit/forms.py:50
+#: mediagoblin/edit/forms.py:46 mediagoblin/submit/forms.py:50
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
 msgstr "License"
@@ -500,36 +489,6 @@ msgstr "장소"
 msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 msgstr " <a href=\"%(osm_url)s\">OpenStreetMap</a>으로 보기"
 
-#: mediagoblin/plugins/html5-multi-upload/forms.py:26
-#: mediagoblin/submit/forms.py:34
-msgid "File"
-msgstr "파일"
-
-#: mediagoblin/plugins/html5-multi-upload/views.py:53
-msgid "You must provide at least one file."
-msgstr ""
-
-#: mediagoblin/plugins/html5-multi-upload/views.py:121
-#, python-format
-msgid "Woohoo! Submitted %d Files!"
-msgstr ""
-
-#: mediagoblin/plugins/html5-multi-upload/templates/start.html:23
-#: mediagoblin/plugins/html5-multi-upload/templates/start.html:30
-#: mediagoblin/templates/mediagoblin/submit/start.html:28
-#: mediagoblin/templates/mediagoblin/submit/start.html:35
-msgid "Add your media"
-msgstr "미디어 등록하기"
-
-#: mediagoblin/plugins/html5-multi-upload/templates/start.html:52
-#: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
-#: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:39
-#: mediagoblin/templates/mediagoblin/submit/collection.html:30
-#: mediagoblin/templates/mediagoblin/submit/start.html:39
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
-msgid "Add"
-msgstr "추가"
-
 #: mediagoblin/plugins/ldap/templates/mediagoblin/plugins/ldap/create_account_link.html:22
 msgid "Sign in to create an account!"
 msgstr ""
@@ -599,6 +558,14 @@ msgstr ""
 #: mediagoblin/plugins/oauth/templates/oauth/client/list.html:22
 msgid "Your OAuth clients"
 msgstr ""
+
+#: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
+#: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:39
+#: mediagoblin/templates/mediagoblin/submit/collection.html:30
+#: mediagoblin/templates/mediagoblin/submit/start.html:39
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
+msgid "Add"
+msgstr "추가"
 
 #: mediagoblin/plugins/openid/__init__.py:97
 #: mediagoblin/plugins/openid/views.py:268
@@ -763,6 +730,10 @@ msgstr ""
 #: mediagoblin/submit/forms.py:30
 msgid "Max file size: {0} mb"
 msgstr ""
+
+#: mediagoblin/submit/forms.py:34
+msgid "File"
+msgstr "파일"
 
 #: mediagoblin/submit/forms.py:41
 msgid ""
@@ -1558,6 +1529,11 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
 msgstr "모음집 추가"
+
+#: mediagoblin/templates/mediagoblin/submit/start.html:28
+#: mediagoblin/templates/mediagoblin/submit/start.html:35
+msgid "Add your media"
+msgstr "미디어 등록하기"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-26 13:58-0600\n"
-"PO-Revision-Date: 2013-11-26 19:59+0000\n"
+"POT-Creation-Date: 2013-12-02 09:28-0600\n"
+"PO-Revision-Date: 2013-12-02 15:28+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/mediagoblin/language/sq/)\n"
 "MIME-Version: 1.0\n"
@@ -81,37 +81,28 @@ msgid "Resent your verification email."
 msgstr "Ridërgoni email-in tuaj të verifikimit."
 
 #: mediagoblin/edit/forms.py:27 mediagoblin/edit/forms.py:87
-#: mediagoblin/plugins/html5-multi-upload/forms.py:28
 #: mediagoblin/submit/forms.py:37 mediagoblin/submit/forms.py:61
 #: mediagoblin/user_pages/forms.py:45
 msgid "Title"
 msgstr "Titull"
 
-#: mediagoblin/edit/forms.py:30
-#: mediagoblin/plugins/html5-multi-upload/forms.py:31
-#: mediagoblin/submit/forms.py:40
+#: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:40
 msgid "Description of this work"
 msgstr "Përshkrim i kësaj pune"
 
 #: mediagoblin/edit/forms.py:31 mediagoblin/edit/forms.py:54
-#: mediagoblin/edit/forms.py:91
-#: mediagoblin/plugins/html5-multi-upload/forms.py:32
-#: mediagoblin/submit/forms.py:65
+#: mediagoblin/edit/forms.py:91 mediagoblin/submit/forms.py:65
 msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
 msgstr "Mund të përdorni\n                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n                      Markdown</a> për formatim."
 
-#: mediagoblin/edit/forms.py:35
-#: mediagoblin/plugins/html5-multi-upload/forms.py:36
-#: mediagoblin/submit/forms.py:45
+#: mediagoblin/edit/forms.py:35 mediagoblin/submit/forms.py:45
 msgid "Tags"
 msgstr "Etiketa"
 
-#: mediagoblin/edit/forms.py:37
-#: mediagoblin/plugins/html5-multi-upload/forms.py:38
-#: mediagoblin/submit/forms.py:47
+#: mediagoblin/edit/forms.py:37 mediagoblin/submit/forms.py:47
 msgid "Separate tags by commas."
 msgstr "Ndajini etiketat me presje."
 
@@ -129,9 +120,7 @@ msgid ""
 "this."
 msgstr "Titulli i adresës së kësaj medie. Zakonisht nuk keni nevojë ta ndryshoni këtë."
 
-#: mediagoblin/edit/forms.py:46
-#: mediagoblin/plugins/html5-multi-upload/forms.py:44
-#: mediagoblin/submit/forms.py:50
+#: mediagoblin/edit/forms.py:46 mediagoblin/submit/forms.py:50
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
 msgstr "Leje"
@@ -501,36 +490,6 @@ msgstr "Vend"
 msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 msgstr "Shiheni te <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
-#: mediagoblin/plugins/html5-multi-upload/forms.py:26
-#: mediagoblin/submit/forms.py:34
-msgid "File"
-msgstr "Kartelë"
-
-#: mediagoblin/plugins/html5-multi-upload/views.py:53
-msgid "You must provide at least one file."
-msgstr "Duhet të jepni të paktën një kartelë."
-
-#: mediagoblin/plugins/html5-multi-upload/views.py:121
-#, python-format
-msgid "Woohoo! Submitted %d Files!"
-msgstr "Ohoooo! U parashtruan %d Kartela!"
-
-#: mediagoblin/plugins/html5-multi-upload/templates/start.html:23
-#: mediagoblin/plugins/html5-multi-upload/templates/start.html:30
-#: mediagoblin/templates/mediagoblin/submit/start.html:28
-#: mediagoblin/templates/mediagoblin/submit/start.html:35
-msgid "Add your media"
-msgstr "Shtoni media tuajën"
-
-#: mediagoblin/plugins/html5-multi-upload/templates/start.html:52
-#: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
-#: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:39
-#: mediagoblin/templates/mediagoblin/submit/collection.html:30
-#: mediagoblin/templates/mediagoblin/submit/start.html:39
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
-msgid "Add"
-msgstr "Shtoni"
-
 #: mediagoblin/plugins/ldap/templates/mediagoblin/plugins/ldap/create_account_link.html:22
 msgid "Sign in to create an account!"
 msgstr "Për të krijuar një llogari, hyni!"
@@ -600,6 +559,14 @@ msgstr "Lidhje klienti OAuth"
 #: mediagoblin/plugins/oauth/templates/oauth/client/list.html:22
 msgid "Your OAuth clients"
 msgstr "Klientët tuaj OAuth"
+
+#: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
+#: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:39
+#: mediagoblin/templates/mediagoblin/submit/collection.html:30
+#: mediagoblin/templates/mediagoblin/submit/start.html:39
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
+msgid "Add"
+msgstr "Shtoni"
 
 #: mediagoblin/plugins/openid/__init__.py:97
 #: mediagoblin/plugins/openid/views.py:268
@@ -764,6 +731,10 @@ msgstr "Nuk u gjet një kartelë e pranueshme përpunimi"
 #: mediagoblin/submit/forms.py:30
 msgid "Max file size: {0} mb"
 msgstr "Madhësi maksimum kartele: {0} mb"
+
+#: mediagoblin/submit/forms.py:34
+msgid "File"
+msgstr "Kartelë"
 
 #: mediagoblin/submit/forms.py:41
 msgid ""
@@ -1559,6 +1530,11 @@ msgstr "S'u gjetën përdorues."
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
 msgstr "Shtoni një koleksion"
+
+#: mediagoblin/templates/mediagoblin/submit/start.html:28
+#: mediagoblin/templates/mediagoblin/submit/start.html:35
+msgid "Add your media"
+msgstr "Shtoni media tuajën"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-26 13:58-0600\n"
-"PO-Revision-Date: 2013-11-26 19:59+0000\n"
+"POT-Creation-Date: 2013-12-02 09:28-0600\n"
+"PO-Revision-Date: 2013-12-02 15:28+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Slovak (http://www.transifex.com/projects/p/mediagoblin/language/sk/)\n"
 "MIME-Version: 1.0\n"
@@ -85,37 +85,28 @@ msgid "Resent your verification email."
 msgstr "Opätovne zaslať overovací e-mail."
 
 #: mediagoblin/edit/forms.py:27 mediagoblin/edit/forms.py:87
-#: mediagoblin/plugins/html5-multi-upload/forms.py:28
 #: mediagoblin/submit/forms.py:37 mediagoblin/submit/forms.py:61
 #: mediagoblin/user_pages/forms.py:45
 msgid "Title"
 msgstr "Titulok"
 
-#: mediagoblin/edit/forms.py:30
-#: mediagoblin/plugins/html5-multi-upload/forms.py:31
-#: mediagoblin/submit/forms.py:40
+#: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:40
 msgid "Description of this work"
 msgstr "Popis výtvoru"
 
 #: mediagoblin/edit/forms.py:31 mediagoblin/edit/forms.py:54
-#: mediagoblin/edit/forms.py:91
-#: mediagoblin/plugins/html5-multi-upload/forms.py:32
-#: mediagoblin/submit/forms.py:65
+#: mediagoblin/edit/forms.py:91 mediagoblin/submit/forms.py:65
 msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
 msgstr "Môžeš využiť\n                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n                      Markdown</a> pre formátovanie príspevku."
 
-#: mediagoblin/edit/forms.py:35
-#: mediagoblin/plugins/html5-multi-upload/forms.py:36
-#: mediagoblin/submit/forms.py:45
+#: mediagoblin/edit/forms.py:35 mediagoblin/submit/forms.py:45
 msgid "Tags"
 msgstr "Štítky"
 
-#: mediagoblin/edit/forms.py:37
-#: mediagoblin/plugins/html5-multi-upload/forms.py:38
-#: mediagoblin/submit/forms.py:47
+#: mediagoblin/edit/forms.py:37 mediagoblin/submit/forms.py:47
 msgid "Separate tags by commas."
 msgstr "Oddeľ štítky pomocou čiarky."
 
@@ -133,9 +124,7 @@ msgid ""
 "this."
 msgstr "Titulná časť adresy daného média. Zmena poľa nepovinná."
 
-#: mediagoblin/edit/forms.py:46
-#: mediagoblin/plugins/html5-multi-upload/forms.py:44
-#: mediagoblin/submit/forms.py:50
+#: mediagoblin/edit/forms.py:46 mediagoblin/submit/forms.py:50
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
 msgstr "Licencia"
@@ -505,36 +494,6 @@ msgstr "Poloha"
 msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 msgstr "Zobraziť na <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
-#: mediagoblin/plugins/html5-multi-upload/forms.py:26
-#: mediagoblin/submit/forms.py:34
-msgid "File"
-msgstr "Súbor"
-
-#: mediagoblin/plugins/html5-multi-upload/views.py:53
-msgid "You must provide at least one file."
-msgstr ""
-
-#: mediagoblin/plugins/html5-multi-upload/views.py:121
-#, python-format
-msgid "Woohoo! Submitted %d Files!"
-msgstr ""
-
-#: mediagoblin/plugins/html5-multi-upload/templates/start.html:23
-#: mediagoblin/plugins/html5-multi-upload/templates/start.html:30
-#: mediagoblin/templates/mediagoblin/submit/start.html:28
-#: mediagoblin/templates/mediagoblin/submit/start.html:35
-msgid "Add your media"
-msgstr "Pridaj svoj výtvor"
-
-#: mediagoblin/plugins/html5-multi-upload/templates/start.html:52
-#: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
-#: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:39
-#: mediagoblin/templates/mediagoblin/submit/collection.html:30
-#: mediagoblin/templates/mediagoblin/submit/start.html:39
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
-msgid "Add"
-msgstr "Pridať"
-
 #: mediagoblin/plugins/ldap/templates/mediagoblin/plugins/ldap/create_account_link.html:22
 msgid "Sign in to create an account!"
 msgstr ""
@@ -604,6 +563,14 @@ msgstr "OAuth klientské spojenia"
 #: mediagoblin/plugins/oauth/templates/oauth/client/list.html:22
 msgid "Your OAuth clients"
 msgstr "Tvoji autorizovaní OAuth klienti"
+
+#: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
+#: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:39
+#: mediagoblin/templates/mediagoblin/submit/collection.html:30
+#: mediagoblin/templates/mediagoblin/submit/start.html:39
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
+msgid "Add"
+msgstr "Pridať"
 
 #: mediagoblin/plugins/openid/__init__.py:97
 #: mediagoblin/plugins/openid/views.py:268
@@ -768,6 +735,10 @@ msgstr "Prijateľný spracúvavaný súbor nenájdený"
 #: mediagoblin/submit/forms.py:30
 msgid "Max file size: {0} mb"
 msgstr ""
+
+#: mediagoblin/submit/forms.py:34
+msgid "File"
+msgstr "Súbor"
 
 #: mediagoblin/submit/forms.py:41
 msgid ""
@@ -1563,6 +1534,11 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
 msgstr "Pridať kolekciu"
+
+#: mediagoblin/templates/mediagoblin/submit/start.html:28
+#: mediagoblin/templates/mediagoblin/submit/start.html:35
+msgid "Add your media"
+msgstr "Pridaj svoj výtvor"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format
