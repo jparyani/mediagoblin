@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-26 13:58-0600\n"
-"PO-Revision-Date: 2013-11-28 11:23+0000\n"
+"POT-Creation-Date: 2013-12-02 09:28-0600\n"
+"PO-Revision-Date: 2013-12-02 17:53+0000\n"
 "Last-Translator: GenghisKhan <genghiskhan@gmx.ca>\n"
 "Language-Team: Hebrew (http://www.transifex.com/projects/p/mediagoblin/language/he/)\n"
 "MIME-Version: 1.0\n"
@@ -82,37 +82,28 @@ msgid "Resent your verification email."
 msgstr "שלח שוב את דוא״ל האימות שלך."
 
 #: mediagoblin/edit/forms.py:27 mediagoblin/edit/forms.py:87
-#: mediagoblin/plugins/html5-multi-upload/forms.py:28
 #: mediagoblin/submit/forms.py:37 mediagoblin/submit/forms.py:61
 #: mediagoblin/user_pages/forms.py:45
 msgid "Title"
 msgstr "כותרת"
 
-#: mediagoblin/edit/forms.py:30
-#: mediagoblin/plugins/html5-multi-upload/forms.py:31
-#: mediagoblin/submit/forms.py:40
+#: mediagoblin/edit/forms.py:30 mediagoblin/submit/forms.py:40
 msgid "Description of this work"
 msgstr "תיאור של מלאכה זו"
 
 #: mediagoblin/edit/forms.py:31 mediagoblin/edit/forms.py:54
-#: mediagoblin/edit/forms.py:91
-#: mediagoblin/plugins/html5-multi-upload/forms.py:32
-#: mediagoblin/submit/forms.py:65
+#: mediagoblin/edit/forms.py:91 mediagoblin/submit/forms.py:65
 msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
 msgstr "באפשרותך להשתמש בתחביר\n                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n                      Markdown</a> לעיצוב."
 
-#: mediagoblin/edit/forms.py:35
-#: mediagoblin/plugins/html5-multi-upload/forms.py:36
-#: mediagoblin/submit/forms.py:45
+#: mediagoblin/edit/forms.py:35 mediagoblin/submit/forms.py:45
 msgid "Tags"
 msgstr "תגיות"
 
-#: mediagoblin/edit/forms.py:37
-#: mediagoblin/plugins/html5-multi-upload/forms.py:38
-#: mediagoblin/submit/forms.py:47
+#: mediagoblin/edit/forms.py:37 mediagoblin/submit/forms.py:47
 msgid "Separate tags by commas."
 msgstr "הפרד תגיות בעזרת פסיקים."
 
@@ -130,9 +121,7 @@ msgid ""
 "this."
 msgstr "אזור הכותרת של כתובת מדיה זו. לרוב אין הכרח לשנות את חלק זה."
 
-#: mediagoblin/edit/forms.py:46
-#: mediagoblin/plugins/html5-multi-upload/forms.py:44
-#: mediagoblin/submit/forms.py:50
+#: mediagoblin/edit/forms.py:46 mediagoblin/submit/forms.py:50
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
 msgstr "רשיון"
@@ -502,36 +491,6 @@ msgstr "מיקום"
 msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 msgstr "הצג בתוך <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
-#: mediagoblin/plugins/html5-multi-upload/forms.py:26
-#: mediagoblin/submit/forms.py:34
-msgid "File"
-msgstr "קובץ"
-
-#: mediagoblin/plugins/html5-multi-upload/views.py:53
-msgid "You must provide at least one file."
-msgstr "עליך לספק לפחות קובץ אחד."
-
-#: mediagoblin/plugins/html5-multi-upload/views.py:121
-#, python-format
-msgid "Woohoo! Submitted %d Files!"
-msgstr "הידד! נשלחו %d קבצים!"
-
-#: mediagoblin/plugins/html5-multi-upload/templates/start.html:23
-#: mediagoblin/plugins/html5-multi-upload/templates/start.html:30
-#: mediagoblin/templates/mediagoblin/submit/start.html:28
-#: mediagoblin/templates/mediagoblin/submit/start.html:35
-msgid "Add your media"
-msgstr "הוספת המדיה שלך"
-
-#: mediagoblin/plugins/html5-multi-upload/templates/start.html:52
-#: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
-#: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:39
-#: mediagoblin/templates/mediagoblin/submit/collection.html:30
-#: mediagoblin/templates/mediagoblin/submit/start.html:39
-#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
-msgid "Add"
-msgstr "הוסף"
-
 #: mediagoblin/plugins/ldap/templates/mediagoblin/plugins/ldap/create_account_link.html:22
 msgid "Sign in to create an account!"
 msgstr "התחבר כדי ליצור חשבון!"
@@ -601,6 +560,14 @@ msgstr "חיבורי לקוח OAuth"
 #: mediagoblin/plugins/oauth/templates/oauth/client/list.html:22
 msgid "Your OAuth clients"
 msgstr "לקוחות OAuth שלך"
+
+#: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
+#: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:39
+#: mediagoblin/templates/mediagoblin/submit/collection.html:30
+#: mediagoblin/templates/mediagoblin/submit/start.html:39
+#: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
+msgid "Add"
+msgstr "הוסף"
 
 #: mediagoblin/plugins/openid/__init__.py:97
 #: mediagoblin/plugins/openid/views.py:268
@@ -765,6 +732,10 @@ msgstr "קובץ עיבוד קביל לא נמצא"
 #: mediagoblin/submit/forms.py:30
 msgid "Max file size: {0} mb"
 msgstr "גודל קובץ מירבי {0} מ״ב"
+
+#: mediagoblin/submit/forms.py:34
+msgid "File"
+msgstr "קובץ"
 
 #: mediagoblin/submit/forms.py:41
 msgid ""
@@ -1560,6 +1531,11 @@ msgstr "לא נמצאו משתמשים."
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
 msgstr "הוסף אוסף"
+
+#: mediagoblin/templates/mediagoblin/submit/start.html:28
+#: mediagoblin/templates/mediagoblin/submit/start.html:35
+msgid "Add your media"
+msgstr "הוספת המדיה שלך"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format
