@@ -21,16 +21,36 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+0.6.1
+=====
+
+This is a short, bugfix release.
+
+**Do this to upgrade**
+
+1. Update to the latest release.  If checked out from git, run:
+   ``git fetch && git checkout -q v0.6.1``
+2. Make sure to run
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+
+This release switches the default terms of service to be off by
+default and corrects some mistakes in the default terms of service.
+
+Turning the terms of service on is very easy, just set ``show_tos`` in
+the ``[mediagoblin]`` section of your config to ``true``.
+
+
 0.6.0
 =====
 
 **Do this to upgrade**
 
-1. Make sure to run
+1. Update to the latest release.  If checked out from git, run:
+   ``git fetch && git checkout -q v0.6.0``
+2. Make sure to run
    ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
-   after upgrading.
 
-That's it, probably!If you run into problems, don't hesitate to
+That's it, probably!  If you run into problems, don't hesitate to
 `contact us <http://mediagoblin.org/pages/join.html>`_
 (IRC is often best).
 
