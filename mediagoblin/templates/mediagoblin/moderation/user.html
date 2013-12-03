@@ -148,7 +148,7 @@
         {%- endtrans %}</a>
     </span>
     <span class=clear></span>
-    <h2>{{ user.username }}'s Privileges</h2>
+    <h2>{% trans %}{{ user.username }}'s Privileges{% endtrans %}</h2>
       <form method=POST action="{{ request.urlgen(
         'mediagoblin.moderation.ban_or_unban',
         user=user.username) }}" class="right_align">
@@ -162,7 +162,7 @@
         {% elif request.user.has_privilege('admin') and
             not user.id == request.user.id %}
           <input type=submit class="button_action right_align"
-               value="{% trans %}UnBan User{% endtrans %}" />
+                 value="{% trans %}UnBan User{% endtrans %}" />
         {% endif %}
       </form>
     <form action="{{ request.urlgen('mediagoblin.moderation.give_or_take_away_privilege',
