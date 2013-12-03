@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-12-02 09:28-0600\n"
-"PO-Revision-Date: 2013-12-02 15:28+0000\n"
+"POT-Creation-Date: 2013-12-03 13:23-0600\n"
+"PO-Revision-Date: 2013-12-03 19:23+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Esperanto (http://www.transifex.com/projects/p/mediagoblin/language/eo/)\n"
 "MIME-Version: 1.0\n"
@@ -1270,7 +1270,6 @@ msgid ""
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:130
-#: mediagoblin/templates/mediagoblin/moderation/user.html:128
 msgid "Resolve"
 msgstr ""
 
@@ -1368,133 +1367,6 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:199
 msgid "No closed reports found."
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:23
-#, python-format
-msgid "User: %(username)s"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:39
-msgid "Sorry, no such user found."
-msgstr "Uzanto ne trovita."
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:43
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:60
-msgid "Email verification needed"
-msgstr "Necesas konfirmo de retpoŝtadreso"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:45
-msgid ""
-"Someone has registered an account with this username, but it still has\n"
-"        to be activated."
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:58
-msgid "Return to Users Panel"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:60
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:34
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:45
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:25
-#, python-format
-msgid "%(username)s's profile"
-msgstr "Profilo de %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:62
-#, python-format
-msgid "BANNED until %(expiration_date)s"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:66
-msgid "Banned Indefinitely"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:72
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:61
-msgid "This user hasn't filled in their profile (yet)."
-msgstr "Ĉi tiu uzanto ne jam aldonis informojn pri si."
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:83
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:56
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:73
-msgid "Edit profile"
-msgstr "Redakti profilon"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:90
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:80
-msgid "Browse collections"
-msgstr "Vidi kolektojn"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:97
-#, python-format
-msgid "Active Reports on %(username)s"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:104
-msgid "Report ID"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:105
-msgid "Reported Content"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:106
-msgid "Description of Report"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:114
-#, python-format
-msgid "Report #%(report_number)s"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:121
-msgid "Reported Comment"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:123
-msgid "Reported Media Entry"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:134
-#, python-format
-msgid "No active reports filed on %(username)s"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:141
-#, python-format
-msgid "All reports on %(username)s"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:146
-#, python-format
-msgid "All reports that %(username)s has filed"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:160
-msgid "Ban User"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:165
-msgid "UnBan User"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:173
-msgid "Privilege"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:174
-msgid "User Has Privilege"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:181
-msgid "Yes"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:183
-msgid "No"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:21
@@ -1671,9 +1543,29 @@ msgstr ""
 msgid "File Report "
 msgstr ""
 
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:34
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:45
+#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:25
+#, python-format
+msgid "%(username)s's profile"
+msgstr "Profilo de %(username)s"
+
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:52
 msgid "Here's a spot to tell others about yourself."
 msgstr "Jen estas spaceto por rakonti pri vi al aliaj."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:56
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:73
+msgid "Edit profile"
+msgstr "Redakti profilon"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:61
+msgid "This user hasn't filled in their profile (yet)."
+msgstr "Ĉi tiu uzanto ne jam aldonis informojn pri si."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:80
+msgid "Browse collections"
+msgstr "Vidi kolektojn"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:93
 #, python-format
@@ -1691,6 +1583,11 @@ msgstr "Ĝuste ĉi tie aperos viaj dosieroj, sed vi ŝajne ankoraŭ nenion alŝu
 #: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
 msgid "There doesn't seem to be any media here yet..."
 msgstr "Ĉi tie ŝajne estas ankoraŭ neniuj dosieroj…"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
+#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:60
+msgid "Email verification needed"
+msgstr "Necesas konfirmo de retpoŝtadreso"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:43
 msgid "Almost done! Your account still needs to be activated."

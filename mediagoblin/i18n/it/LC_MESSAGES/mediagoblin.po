@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-12-02 09:28-0600\n"
-"PO-Revision-Date: 2013-12-02 15:28+0000\n"
+"POT-Creation-Date: 2013-12-03 13:23-0600\n"
+"PO-Revision-Date: 2013-12-03 19:23+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/mediagoblin/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -1273,7 +1273,6 @@ msgid ""
 msgstr "\nIL CONTENUTO DI\n<a href=\"%(user_url)s\"> %(user_name)s</a>\nÈ STATO ELIMINATO\n "
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:130
-#: mediagoblin/templates/mediagoblin/moderation/user.html:128
 msgid "Resolve"
 msgstr "Risolvi"
 
@@ -1372,133 +1371,6 @@ msgstr "\nSegnalazione Chiusa #%(report_id)s\n "
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:199
 msgid "No closed reports found."
 msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:23
-#, python-format
-msgid "User: %(username)s"
-msgstr "Utente: %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:39
-msgid "Sorry, no such user found."
-msgstr "Mi dispiace, utente non trovato."
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:43
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:60
-msgid "Email verification needed"
-msgstr "E' necessario verificare l'indirizzo email"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:45
-msgid ""
-"Someone has registered an account with this username, but it still has\n"
-"        to be activated."
-msgstr "Qualcuno ha creato un account con questo nome utente, ma deve ancora\nessere attivato."
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:58
-msgid "Return to Users Panel"
-msgstr "Ritorna al Pannello Utenti"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:60
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:34
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:45
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:25
-#, python-format
-msgid "%(username)s's profile"
-msgstr "Profilo di %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:62
-#, python-format
-msgid "BANNED until %(expiration_date)s"
-msgstr "BANNATO fino al %(expiration_date)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:66
-msgid "Banned Indefinitely"
-msgstr "Bannato Indefinitamente"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:72
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:61
-msgid "This user hasn't filled in their profile (yet)."
-msgstr "Questo utente non ha (ancora) compilato il proprio profilo."
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:83
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:56
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:73
-msgid "Edit profile"
-msgstr "Modifica profilo"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:90
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:80
-msgid "Browse collections"
-msgstr "Sfoglia le raccolte"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:97
-#, python-format
-msgid "Active Reports on %(username)s"
-msgstr "Segnalazioni Attive contro %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:104
-msgid "Report ID"
-msgstr "ID Segnalazione"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:105
-msgid "Reported Content"
-msgstr "Contenuto Segnalato"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:106
-msgid "Description of Report"
-msgstr "Descrizione della Segnalazione"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:114
-#, python-format
-msgid "Report #%(report_number)s"
-msgstr "Segnalazione #%(report_number)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:121
-msgid "Reported Comment"
-msgstr "Commento Segnalato"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:123
-msgid "Reported Media Entry"
-msgstr "Elemento Multimediale Segnalato"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:134
-#, python-format
-msgid "No active reports filed on %(username)s"
-msgstr "Nessuna segnalazione attiva contro %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:141
-#, python-format
-msgid "All reports on %(username)s"
-msgstr "Tutte le segnalazioni contro %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:146
-#, python-format
-msgid "All reports that %(username)s has filed"
-msgstr "Tutte le segnalazioni inviate da %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:160
-msgid "Ban User"
-msgstr "Banna Utente"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:165
-msgid "UnBan User"
-msgstr "Riabilita Utente"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:173
-msgid "Privilege"
-msgstr "Privilegio"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:174
-msgid "User Has Privilege"
-msgstr "L'Utente ha il Privilegio"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:181
-msgid "Yes"
-msgstr "Sì"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:183
-msgid "No"
-msgstr "No"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:21
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:26
@@ -1674,9 +1546,29 @@ msgstr "\n❖ Pubblicato da <a href=\"%(user_url)s\"\nclass=\"comment_authorlink
 msgid "File Report "
 msgstr ""
 
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:34
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:45
+#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:25
+#, python-format
+msgid "%(username)s's profile"
+msgstr "Profilo di %(username)s"
+
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:52
 msgid "Here's a spot to tell others about yourself."
 msgstr "Ecco un posto dove raccontare agli altri di te."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:56
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:73
+msgid "Edit profile"
+msgstr "Modifica profilo"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:61
+msgid "This user hasn't filled in their profile (yet)."
+msgstr "Questo utente non ha (ancora) compilato il proprio profilo."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:80
+msgid "Browse collections"
+msgstr "Sfoglia le raccolte"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:93
 #, python-format
@@ -1694,6 +1586,11 @@ msgstr "I tuoi file multimediali appariranno qui, ma sembra che tu non abbia anc
 #: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
 msgid "There doesn't seem to be any media here yet..."
 msgstr "Sembra che non ci sia ancora nessun file multimediale qui..."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
+#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:60
+msgid "Email verification needed"
+msgstr "E' necessario verificare l'indirizzo email"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:43
 msgid "Almost done! Your account still needs to be activated."

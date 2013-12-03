@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-12-02 09:28-0600\n"
-"PO-Revision-Date: 2013-12-02 15:28+0000\n"
+"POT-Creation-Date: 2013-12-03 13:23-0600\n"
+"PO-Revision-Date: 2013-12-03 19:23+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/mediagoblin/language/sq/)\n"
 "MIME-Version: 1.0\n"
@@ -1268,7 +1268,6 @@ msgid ""
 msgstr "\n          LËNDË NGA\n            <a href=\"%(user_url)s\"> %(user_name)s</a>\n          ËSHTË FSHIRË\n        "
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:130
-#: mediagoblin/templates/mediagoblin/moderation/user.html:128
 msgid "Resolve"
 msgstr "Zgjidheni"
 
@@ -1367,133 +1366,6 @@ msgstr "\n              Raportim i Mbyllur #%(report_id)s\n            "
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:199
 msgid "No closed reports found."
 msgstr "S'u gjetën raportime të mbyllur."
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:23
-#, python-format
-msgid "User: %(username)s"
-msgstr "Përdorues: %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:39
-msgid "Sorry, no such user found."
-msgstr "Na ndjeni, nuk u gjet përdorues i tillë."
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:43
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:60
-msgid "Email verification needed"
-msgstr "Lypset verifikimi i email-it"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:45
-msgid ""
-"Someone has registered an account with this username, but it still has\n"
-"        to be activated."
-msgstr "Dikush ka regjistruar një llogari me këtë emër përdoruesi, por duhet\n        ende aktivizuar."
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:58
-msgid "Return to Users Panel"
-msgstr "Kthehu te Paneli i Përdoruesve"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:60
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:34
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:45
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:25
-#, python-format
-msgid "%(username)s's profile"
-msgstr "Profili i %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:62
-#, python-format
-msgid "BANNED until %(expiration_date)s"
-msgstr "DËBUAR deri më %(expiration_date)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:66
-msgid "Banned Indefinitely"
-msgstr "Dëbuar Pafundësisht"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:72
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:61
-msgid "This user hasn't filled in their profile (yet)."
-msgstr "Ky përdorues nuk e ka plotësuar (ende) profilin e vet."
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:83
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:56
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:73
-msgid "Edit profile"
-msgstr "Përpunoni profil"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:90
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:80
-msgid "Browse collections"
-msgstr "Shfletoni koleksionet"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:97
-#, python-format
-msgid "Active Reports on %(username)s"
-msgstr "Raportime Aktive mbi %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:104
-msgid "Report ID"
-msgstr "ID Raportimi"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:105
-msgid "Reported Content"
-msgstr "Lëndë e Raportuar"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:106
-msgid "Description of Report"
-msgstr "Përshkrim Raportimi"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:114
-#, python-format
-msgid "Report #%(report_number)s"
-msgstr "Raportimi #%(report_number)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:121
-msgid "Reported Comment"
-msgstr "Koment i Raportuar"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:123
-msgid "Reported Media Entry"
-msgstr "Zë Media i Raportuar"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:134
-#, python-format
-msgid "No active reports filed on %(username)s"
-msgstr "Pa raportime aktive të depozituara mbi %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:141
-#, python-format
-msgid "All reports on %(username)s"
-msgstr "Krejt raportimet mbi %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:146
-#, python-format
-msgid "All reports that %(username)s has filed"
-msgstr "Krejt raportimet që ka depozituar %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:160
-msgid "Ban User"
-msgstr "Dëboje Përdoruesin"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:165
-msgid "UnBan User"
-msgstr "Çdëboje Përdoruesin"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:173
-msgid "Privilege"
-msgstr "Privilegj"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:174
-msgid "User Has Privilege"
-msgstr "Përdoruesi Ka Privilegje"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:181
-msgid "Yes"
-msgstr "Po"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:183
-msgid "No"
-msgstr "Jo"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:21
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:26
@@ -1669,9 +1541,29 @@ msgstr "\n            ❖ Botuar nga <a href=\"%(user_url)s\"\n                 
 msgid "File Report "
 msgstr "Raportim Kartele"
 
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:34
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:45
+#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:25
+#, python-format
+msgid "%(username)s's profile"
+msgstr "Profili i %(username)s"
+
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:52
 msgid "Here's a spot to tell others about yourself."
 msgstr "Ja një vend t'i tregoni botës mbi veten."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:56
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:73
+msgid "Edit profile"
+msgstr "Përpunoni profil"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:61
+msgid "This user hasn't filled in their profile (yet)."
+msgstr "Ky përdorues nuk e ka plotësuar (ende) profilin e vet."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:80
+msgid "Browse collections"
+msgstr "Shfletoni koleksionet"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:93
 #, python-format
@@ -1689,6 +1581,11 @@ msgstr "Media juaj do të shfaqet këtu, por nuk duket të keni shtuar gjë ende
 #: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
 msgid "There doesn't seem to be any media here yet..."
 msgstr "Nuk duket ende të ketë ndonjë media këtu..."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
+#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:60
+msgid "Email verification needed"
+msgstr "Lypset verifikimi i email-it"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:43
 msgid "Almost done! Your account still needs to be activated."
