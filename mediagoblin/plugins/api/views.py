@@ -64,6 +64,7 @@ def post_entry(request):
             title=unicode(request.form.get('title')),
             description=unicode(request.form.get('description')),
             license=unicode(request.form.get('license', '')),
+            tags_string=unicode(request.form.get('tags', '')),
             upload_limit=upload_limit, max_file_size=max_file_size,
             callback_url=callback_url)
 
