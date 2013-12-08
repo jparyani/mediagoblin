@@ -148,7 +148,8 @@
         {%- endtrans %}</a>
     </span>
     <span class=clear></span>
-    <h2>{% trans %}{{ user.username }}'s Privileges{% endtrans %}</h2>
+    <h2>{% trans username=user.username -%}
+          {{ username }}'s Privileges{% endtrans %}</h2>
       <form method=POST action="{{ request.urlgen(
         'mediagoblin.moderation.ban_or_unban',
         user=user.username) }}" class="right_align">
