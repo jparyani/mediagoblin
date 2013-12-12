@@ -1,2 +1,0 @@
-mediagoblin_blog
-================
