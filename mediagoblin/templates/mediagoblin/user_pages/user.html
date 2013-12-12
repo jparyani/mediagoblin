@@ -111,11 +111,6 @@
            href="{{ request.urlgen('mediagoblin.submit.start') }}">
           {%- trans %}Add media{% endtrans -%}
         </a>
-        {% set feed_url = request.urlgen(
-                  'mediagoblin.user_pages.atom_feed',
-                  user=user.username) %}
-        {% template_hook("user_profile") %}
-        {% include "mediagoblin/utils/feed_link.html" %}
       </div>
     {% else %}
       <div class="profile_showcase empty_space">
@@ -127,5 +122,6 @@
       </div>
     {% endif %}
   {% endif %}
+  {% template_hook("user_profile") %}
   <div class="clear"></div>
 {% endblock %}
