@@ -127,7 +127,6 @@
                 </a>
                 &middot;
                 {% template_hook("blog_dashboard_home") %}
-                &middot;
                 <a id="logout" href=
                   {% if persona is not defined %}
                     "{{ request.urlgen('mediagoblin.auth.logout') }}"
