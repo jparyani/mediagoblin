@@ -28,7 +28,7 @@ ACCEPTED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "tiff"]
 MEDIA_TYPE = 'mediagoblin.media_types.image'
 
 def setup_plugin():
-    config = pluginapi.get_config('mediagoblin.media_types.image')
+    config = pluginapi.get_config(MEDIA_TYPE)
 
 class ImageMediaManager(MediaManagerBase):
     human_readable = "Image"
