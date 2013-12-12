@@ -209,19 +209,18 @@ def blogpost_edit(request):
         })
 
 
+@active_user_from_url
 @uses_pagination
-def blog_dashboard(request, page):
+def blog_dashboard(request, page, url_user=None):
     """
     Dashboard for a blog, only accessible to
     the owner of the blog.
     """
-    url_user = request.matchdict.get('user')
-    user = request.db.User.query.filter_by(username=url_user).one()
     blog_slug = request.matchdict.get('blog_slug', None)
-    blogs = request.db.Blog.query.filter_by(author=user.id)
+    blogs = request.db.Blog.query.filter_by(author=url_user.id)
     config = pluginapi.get_config('mediagoblin.media_types.blog')
     max_blog_count = config['max_blog_count']
-    if request.user and (request.user.id == user.id or request.user.has_privilege(u'admin')):
+    if request.user and (request.user.id == url_user.id or request.user.has_privilege(u'admin')):
         if blog_slug:
             blog = blogs.filter(Blog.slug==blog_slug).first()
             if not blog:
@@ -238,32 +237,30 @@ def blog_dashboard(request, page):
                         {'blog_posts_list': blog_posts_on_a_page,
                         'blog_slug':blog_slug,
                         'blog':blog,
-                        'user':user,
+                        'user':url_user,
                         'pagination':pagination
                         })
-    if not request.user or request.user.id != user.id or not blog_slug:
+    if not request.user or request.user.id != url_user.id or not blog_slug:
         blogs = blogs.all()
         return render_to_response(
         request,
         'mediagoblin/blog/list_of_blogs.html',
         {
         'blogs':blogs,
-        'user':user,
+        'user':url_user,
         'max_blog_count':max_blog_count
         })
 
 
+@active_user_from_url
 @uses_pagination
-def blog_post_listing(request, page):
+def blog_post_listing(request, page, url_user=None):
     """
     Page, listing all the blog posts of a particular blog.
     """
-    blog_owner = request.matchdict.get('user')
     blog_slug = request.matchdict.get('blog_slug', None)
-    owner_user = User.query.filter_by(username=blog_owner).one()
     blog = request.db.Blog.query.filter_by(slug=blog_slug).first()
-
-    if not owner_user or not blog:
+    if not blog:
         return render_404(request)
 
     all_blog_posts = blog.get_all_blog_posts(u'processed').order_by(MediaEntry.created.desc())
@@ -276,7 +273,7 @@ def blog_post_listing(request, page):
         'mediagoblin/blog/blog_post_listing.html',
         {'blog_posts': blog_posts_on_a_page,
          'pagination': pagination,
-         'blog_owner': blog_owner,
+         'blog_owner': url_user,
          'blog':blog
         })
         

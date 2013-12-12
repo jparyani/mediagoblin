@@ -18,7 +18,7 @@
 {%if blogs %}
 <h3>Blog</h3>
 {% set blogs_url = request.urlgen('mediagoblin.media_types.blog.blog_admin_dashboard', 
-                                      blogs=blogs, user=user.username) %}
+                                  user=user.username) %}
                                     
 <p><a href="{{ blogs_url }}"><em>Go to user's blog</em></a></p>
 {%endif%}
