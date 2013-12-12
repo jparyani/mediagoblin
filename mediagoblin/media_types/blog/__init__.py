@@ -88,7 +88,6 @@ def setup_plugin():
     pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
     pluginapi.register_template_hooks({"user_profile": "mediagoblin/blog/url_to_blogs_dashboard.html",
                                         "blog_dashboard_home": "mediagoblin/blog/url_to_blogging.html",
-                                        "create_blog_home": "mediagoblin/blog/url_to_create_blog.html",
                                     })
 
 
