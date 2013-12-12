@@ -14,14 +14,11 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
-
-{#This injects the URL to a user's blog dashboard on her profile.
-#}
+#}{#This injects the URL to a user's blog dashboard on her profile.#}
 {%if blogs %}
 <h3>Blog</h3>
 {% set blogs_url = request.urlgen('mediagoblin.media_types.blog.blog_admin_dashboard', 
                                       blogs=blogs, user=user.username) %}
                                     
-<p><a href="{{ blogs_url }}"><em>Go to blogs</em></a></p>
+<p><a href="{{ blogs_url }}"><em>Go to user's blog</em></a></p>
 {%endif%}

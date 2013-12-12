@@ -103,9 +103,10 @@ class BlogPostMediaManager(MediaManagerBase):
         return blog
 
 def add_to_user_home_context(context):
+    """Inject a user's blogs into a (user home page) template context"""
     blogs = context['request'].db.Blog.query.filter_by(author=context['user'].id)
 
-    if blogs:
+    if blogs.count():
         context['blogs'] = blogs
     else:
         context['blogs'] = None
