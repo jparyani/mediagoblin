@@ -69,7 +69,7 @@
     </div>
         {% if request.user and
           (media.uploader == request.user.id or
-           request.user.is_admin) %}
+           request.user.has_privilege('admin')) %}
       {% set edit_url = request.urlgen('mediagoblin.media_types.blog.blogpost.edit', 
                                  blog_slug=media.media_manager.get_blog_by_blogpost().slug, 
                                  user=request.user.username, blog_post_slug=media.slug) %}

@@ -221,7 +221,7 @@ def blog_dashboard(request, page):
     blogs = request.db.Blog.query.filter_by(author=user.id)
     config = pluginapi.get_config('mediagoblin.media_types.blog')
     max_blog_count = config['max_blog_count']
-    if (request.user and request.user.id == user.id) or (request.user and request.user.is_admin):
+    if request.user and (request.user.id == user.id or request.user.has_privilege(u'admin')):
         if blog_slug:
             blog = blogs.filter(Blog.slug==blog_slug).first()
             if not blog:
@@ -316,7 +316,7 @@ def blog_delete(request, **kwargs):
         return render_404(reequest)
 
     form = blog_forms.ConfirmDeleteForm(request.form)
-    if request.user.id == blog.author or request.user.is_admin:
+    if request.user.id == blog.author or request.user.has_privilege(u'admin'):
         if request.method == 'POST' and form.validate():
             if form.confirm.data is True:
                 blog.delete()
@@ -331,7 +331,7 @@ def blog_delete(request, **kwargs):
                 return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
                         user=request.user.username)
         else:
-            if request.user.is_admin:
+            if request.user.has_privilege(u'admin'):
                 add_message(
                     request, WARNING,
                     _("You are about to delete another user's Blog. "

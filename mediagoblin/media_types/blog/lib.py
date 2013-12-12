@@ -24,7 +24,7 @@ def check_blog_slug_used(author_id, slug, ignore_b_id=None):
     return does_exist
     
 def may_edit_blogpost(request, blog):
-    if request.user.is_admin or request.user.id == blog.author:
+    if request.user.has_privilege(u'admin') or request.user.id == blog.author:
         return True
     return False
 

@@ -305,7 +305,7 @@ def media_confirm_delete(request):
         return render_404(request)
     
     uploader_id = media.uploader
-    if not (request.user.is_admin or
+    if not (request.user.has_privilege(u'admin') or
             request.user.id == uploader_id):
         raise Forbidden()
     
