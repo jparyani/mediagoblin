@@ -1,0 +1,110 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% extends "mediagoblin/base.html" %}
+{% from "mediagoblin/utils/pagination.html" import render_pagination %}
+
+{% block title -%}
+{{blog.title}} Dashboard &mdash; {{ super() }}
+{%- endblock title %}
+
+{% block mediagoblin_head%}
+<style type = "text/css">
+    td > a { text-decoration:none; font-weight: bold; }
+</style>
+{% endblock %}
+
+
+{% block mediagoblin_content %}
+<h1 style="text-transform:capitalize"> {{blog.title}}</h1>
+<p>
+    {{blog.description|safe}}
+</p>
+<p>
+    {% set blogpost_create_url = request.urlgen('mediagoblin.media_types.blog.blogpost.create',
+                                      blog_slug=blog.slug,
+                                      user=request.user.username) %}
+<a class="button_action" href="{{ blogpost_create_url }}">
+{%- trans %}Add Blog Post{% endtrans -%}
+</a>
+&middot;
+    {% set blog_edit_url = request.urlgen('mediagoblin.media_types.blog.edit',
+                                      blog_slug=blog.slug,
+                                      user=request.user.username) %}
+<a class="button_action" href="{{ blog_edit_url }}">
+{%- trans %}Edit Blog{% endtrans -%}
+</a>
+&middot;
+    {% set blog_delete_url = request.urlgen('mediagoblin.media_types.blog.blog_delete',
+                                      blog_slug=blog.slug,
+                                      user=request.user.username) %}
+<a class="button_action" href="{{ blog_delete_url }}">
+{%- trans %}Delete Blog{% endtrans -%}
+</a>
+</p>
+<h2> Blog Post Entries </h2>
+    {% if blog_posts_list.count() %}
+     <table class="media_panel processing">
+        <tr>
+            <th>Title</th>
+            <th>submitted</th>
+            <th></th>
+        </tr>
+        {% for blog_post in blog_posts_list %}
+        <tr>
+            {% if blog_post.state == 'processed' %}
+                <td><a href="{{ blog_post.url_for_self(request.urlgen) }}">{{ blog_post.title }}</a></td>
+            {% else %}
+                {% set draft_url = request.urlgen('mediagoblin.media_types.blog.blogpost_draft_view',
+                                      blog_slug=blog.slug, user=request.user.username,
+                                      blog_post_slug=blog_post.slug) %}
+                <td><a href="{{ draft_url }}">{{ blog_post.title }}</a></td>
+            {% endif %}
+            <td>{{ blog_post.created.strftime("%F %R") }}</td>
+
+            {% if blog_post.state == 'processed' %}
+            <td><h6><em>Published</em></h6></td>
+            {% else %}
+            <td><h6><em>Draft</em></h6></td>
+            {% endif %}
+            {% set blogpost_edit_url = request.urlgen('mediagoblin.media_types.blog.blogpost.edit',
+                                 blog_slug=blog.slug, user=request.user.username,
+                                 blog_post_slug=blog_post.slug) %}
+            {% set blogpost_delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
+                                 user= blog_post.get_uploader.username,
+                                 media_id=blog_post.id) %}
+            <td>
+            <a class="button_action" href="{{ blogpost_edit_url }}">{% trans %}Edit{% endtrans %}</a>
+            <a class="button_action" href="{{ blogpost_delete_url }}">{% trans %}Delete{% endtrans %}</a>
+            </td>
+        </tr>
+        {% endfor %}
+     </table>
+     {% set blogpost_listing_url = request.urlgen('mediagoblin.media_types.blog.blog_post_listing',
+                                              blog_slug=blog_slug, user=user.username) %}
+      <br/>
+      <br/>
+      <a href="{{ blogpost_listing_url}}">{% trans %}<em> Go to list view </em>{% endtrans %}</a>
+    {% else %}
+        {% trans %} No blog post yet. {% endtrans %}
+    {% endif %}
+    {{ render_pagination(request, pagination) }}
+{% endblock %}
+
+
+

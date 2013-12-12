@@ -1,0 +1,41 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+
+{% block mediagoblin_content %}
+  <form action=""
+        method="POST" enctype="multipart/form-data">
+    <div class="blog_form_box_xl">
+      <h1>{% trans %}Create/Edit a Blog{% endtrans %}</h1>
+      <b>Title</b>
+      <div class="blog_form_field_input input">
+        <h3>{{ form.title}}</h3>
+      </div>
+      <b>Description</b>
+      <div class="blog_form_field_input textarea">
+         <h3>{{form.description|safe}}</h3>
+      </div>
+      <div class="form_submit_buttons">
+        {{ csrf_token }}
+        <input type="submit" value="{% trans %}Add{% endtrans %}" class="button_form" />
+      </div>
+    </div>
+  </form>
+{% endblock %}

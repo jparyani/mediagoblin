@@ -17,3 +17,19 @@
 -#}
 
 {# Add extra head declarations here for your theme, if appropriate #}
+
+<script type="text/javascript"  
+            src="{{request.staticdirect('extlib/tinymce/js/tinymce/tinymce.min.js')}}"></script>
+    
+    <script type="text/javascript">
+    tinyMCE.init({
+        selector: "div.blog_form_field_input textarea",
+        height: 300,
+        width:  800,
+        plugins: [
+         "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+         "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+         "save table contextmenu directionality emoticons template paste textcolor"
+        ]
+       })
+</script>

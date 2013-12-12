@@ -39,6 +39,7 @@ def get_url_map():
     import mediagoblin.listings.routing
     import mediagoblin.notifications.routing
     import mediagoblin.oauth.routing
+
     
     for route in PluginManager().get_routes():
         add_route(*route)

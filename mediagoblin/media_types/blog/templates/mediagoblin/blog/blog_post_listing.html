@@ -1,0 +1,66 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+{% from "mediagoblin/utils/pagination.html" import render_pagination %}
+
+{% block title -%}
+  {% trans %}{{ blog_owner }} 's Blog{% endtrans %} &mdash; {{ super() }}
+{%- endblock %}
+
+{% block mediagoblin_head -%}
+  <style type="text/css">
+  h4 {margin:0; padding : 0;
+        font-size:.7 em;}
+  a{text-decoration:none;
+    text-transform:capitalize
+    }
+  
+  </style>
+{%- endblock %}
+
+{% block mediagoblin_content %}
+    <div class="b_list_owner"> <h1><font color="black"> {{ blog.title }} <font size="2">by {{ blog_owner }}</font> </font></h1></div>
+    <div>
+        {% for post in blog_posts %}
+            <div class="b_listing_title"><a href="{{ post.url_for_self(request.urlgen) }}">
+                                            <h2><font color="black">{{ post.title }}</font></h2></a>
+            </div>
+            <h4 align="right">{{ post.created.strftime("%d %b, %Y") }}</h4>
+            {% if post.tags %}
+                {% for tag in post.tags %}
+                    <a href="{{ request.urlgen(
+                          'mediagoblin.user_pages.user_tag_gallery',
+                          tag=tag['slug'],
+                          user=post.get_uploader.username) }}">{{ tag['name'] }}  |</a>
+                {% endfor %}
+            {% endif %}
+            <div class="b_list_des"> <p>{{ post.description|safe }} </p></div>
+            </br>
+            </br>
+        {% endfor %}
+    </div>
+    <br/>
+    <br/>
+    {% set blog_about_url = request.urlgen('mediagoblin.media_types.blog.blog_about', 
+                                      blog_slug=blog.slug, user=blog_owner) %}
+    <a style="text-decoration:underline" href="{{ blog_about_url}}">About Blog</a>
+    <br/>
+    {{ render_pagination(request, pagination) }}
+{% endblock %}

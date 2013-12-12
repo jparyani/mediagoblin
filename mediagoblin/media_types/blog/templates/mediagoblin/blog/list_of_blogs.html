@@ -1,0 +1,69 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% extends "mediagoblin/base.html" %}
+
+
+{% block mediagoblin_head%}
+<style type = "text/css">
+    table a { text-decoration:none; font-weight: bold; text-transform:capitalize; }
+    #blogs_list {border-collapse:separate; border-spacing: 40px 0px ;}
+</style>
+{% endblock %}
+
+{% block mediagoblin_content %}
+    {% if blogs %}
+        <h2>My Blogs</h2>
+        <table id="blogs_list">
+            {% for blog in blogs %}
+                {% set others_blog_url = request.urlgen('mediagoblin.media_types.blog.blog_post_listing',
+                                                  blog_slug=blog.slug, user=user.username) %}
+                
+                <tr>
+                     {% if not request.user or request.user.username != user.username%}
+                            <td><a href="{{ others_blog_url }}">{{ blog.title }}</a></td>
+                     {% else %}
+                       {% set my_blog_url = request.urlgen('mediagoblin.media_types.blog.blog-dashboard',
+                       blog_slug=blog.slug, user=request.user.username) %}
+                            <td><a href="{{ my_blog_url }}">{{ blog.title }}</a></td>
+                     {% endif %}
+                     <td>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;</td>
+                     <td><a class="button_action" href="{{ others_blog_url }}">{% trans %}View{% endtrans %}</a></td>
+                 </tr>
+             {% endfor %}
+         </table>
+    {% else %}
+
+        {% if request.user and request.user.username==user.username %}
+            <p>You have not created any blog yet.</p>
+        {% else %}
+            <p>No blog has been created by <strong>{{ user.username }}</strong>yet.</p>
+        {% endif %}
+    {% endif %}
+    <br/>
+    <br/>
+    <br/>
+    {% if blogs.__len__() <max_blog_count and request.user and request.user.username==user.username %}
+        {% set blog_create_url = request.urlgen('mediagoblin.media_types.blog.create',
+              user=request.user.username) %}
+
+        <a class="button_action" href="{{ blog_create_url }}">{% trans %}Create a Blog{% endtrans %}</a>
+    {% endif %}
+
+{% endblock mediagoblin_content %}
+

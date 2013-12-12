@@ -1,0 +1,42 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% extends 'mediagoblin/base.html' %}
+
+{% block mediagoblin_head %}
+  {{ super() }}
+{% endblock %}
+
+{% block mediagoblin_content %}
+<h1> {{ blogpost.title}}</h1>
+<p>{{ blogpost.description|safe}}</p>
+
+{% set blogpost_edit_url = request.urlgen('mediagoblin.media_types.blog.blogpost.edit', 
+                           blog_slug=blog.slug, user=request.user.username, 
+                           blog_post_slug=blogpost.slug) %}
+{% set blogpost_delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
+                             user= blogpost.get_uploader.username,
+                             media_id=blogpost.id) %}
+            <a class="button_action" href="{{ blogpost_edit_url }}">{% trans %}Edit{% endtrans %}</a>
+            <a class="button_action" href="{{ blogpost_delete_url }}">{% trans %}Delete{% endtrans %}</a>
+
+{% endblock %}
+  
+
+  
+
