@@ -316,11 +316,13 @@ class CommonPdfProcessor(MediaProcessor):
         """
         Store the pdf. If the file is not a pdf, make it a pdf
         """
-        tmp_pdf = self.process_filename
+        tmp_pdf = os.path.splitext(self.process_filename)[0] + '.pdf'
 
         unoconv = where('unoconv')
+        args = [unoconv, '-v', '-f', 'pdf', self.process_filename]
+        _log.debug('calling %s' % repr(args))
         Popen(executable=unoconv,
-              args=[unoconv, '-v', '-f', 'pdf', self.process_filename]).wait()
+              args=args).wait()
 
         if not os.path.exists(tmp_pdf):
             _log.debug('unoconv failed to convert file to pdf')
