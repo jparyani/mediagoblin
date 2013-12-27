@@ -65,6 +65,7 @@ def sniff_media(media_file, filename):
         tmp_media_file = tempfile.NamedTemporaryFile()
         tmp_media_file.write(media_file.read())
         tmp_media_file.seek(0)
+        media_file.seek(0)
 
         media_type = hook_handle('sniff_handler', tmp_media_file, filename)
         if media_type:
