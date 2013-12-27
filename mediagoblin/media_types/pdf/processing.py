@@ -210,6 +210,11 @@ def pdf_info(original):
     info_dict = dict([[part.strip() for part in l.strip().split(':', 1)]
                       for l in lines if ':' in l])
 
+    if 'Page size' not in info_dict.keys():
+        # TODO - message is for the user, not debug, but BadMediaFail not taking an argument, fix that.
+        _log.debug('Missing "Page size" key in returned pdf - conversion failed?')
+        raise BadMediaFail()
+
     for date_key in [('pdf_mod_date', 'ModDate'),
                      ('pdf_creation_date', 'CreationDate')]:
         if date_key in info_dict:
