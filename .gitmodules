@@ -5,3 +5,6 @@
 	path = extlib/pdf.js
 	url = git://github.com/mozilla/pdf.js.git
 
+[submodule "extlib/skeleton"]
+	path = extlib/skeleton
+	url = git://github.com/dhg/Skeleton.git
