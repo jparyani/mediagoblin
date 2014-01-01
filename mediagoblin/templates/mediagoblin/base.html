@@ -169,7 +169,6 @@
       </div>
     {%- endblock mediagoblin_body %}
     {% include 'mediagoblin/bits/body_end.html' %}
-  </body>
     <script type="text/javascript"
             src="{{ request.staticdirect('/js/extlib/jquery.js') }}"></script>
     <script type="text/javascript"
@@ -179,4 +178,5 @@
     <script>
       var mark_all_comments_seen_url = "{{ request.urlgen('mediagoblin.notifications.mark_all_comment_notifications_seen') }}"
     </script>
+  </body>
 </html>
