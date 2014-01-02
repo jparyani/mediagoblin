@@ -80,7 +80,7 @@ def check_db_up_to_date():
         if migration_manager.database_current_migration is None or \
                 migration_manager.migrations_to_run():
             sys.exit("Your database is not up to date. Please run "
-                     "'gmg dbupdate' before starting the webserver.")
+                     "'gmg dbupdate' before starting MediaGoblin.")
 
 
 if __name__ == '__main__':
