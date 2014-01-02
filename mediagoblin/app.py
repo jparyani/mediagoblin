@@ -25,6 +25,7 @@ from werkzeug.exceptions import HTTPException
 from werkzeug.routing import RequestRedirect
 
 from mediagoblin import meddleware, __version__
+from mediagoblin.db.util import check_db_up_to_date
 from mediagoblin.tools import common, session, translate, template
 from mediagoblin.tools.response import render_http_exception
 from mediagoblin.tools.theme import register_themes
@@ -90,6 +91,9 @@ class MediaGoblinApp(object):
 
         # Set up the database
         self.db = setup_database(app_config['run_migrations'])
+
+        # Quit app if need to run dbupdate
+        check_db_up_to_date()
 
         # Register themes
         self.theme_registry, self.current_theme = register_themes(app_config)
