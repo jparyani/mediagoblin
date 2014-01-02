@@ -266,6 +266,11 @@ class CommonVideoProcessor(MediaProcessor):
             tmp_thumb,
             thumb_size[0])
 
+        # Checking if the thumbnail was correctly created.  If it was not,
+        # then just give up.
+        if not os.path.exists (tmp_thumb):
+            return
+
         # Push the thumbnail to public storage
         _log.debug('Saving thumbnail...')
         store_public(self.entry, 'thumb', tmp_thumb,
