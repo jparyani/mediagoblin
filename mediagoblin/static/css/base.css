@@ -496,7 +496,7 @@ ul#action_to_resolve {list-style:none; margin-left:10px;}
   border-radius: 0 0 5px 5px;
   padding: 0 0 6px;
   text-overflow: ellipsis;
-/*  white-space: nowrap;*/
+  white-space: nowrap;
   overflow: hidden;
   border-color: #0D0D0D;
   border-style: solid;
