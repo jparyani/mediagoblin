@@ -26,7 +26,9 @@ from mediagoblin import mg_globals
 from mediagoblin import messages
 from mediagoblin import _version
 from mediagoblin.tools import common
+from mediagoblin.tools.translate import is_rtl
 from mediagoblin.tools.translate import set_thread_locale
+from mediagoblin.tools.translate import get_locale_from_request
 from mediagoblin.tools.pluginapi import get_hook_templates, hook_transform
 from mediagoblin.tools.timesince import timesince
 from mediagoblin.meddleware.csrf import render_csrf_form_token
@@ -72,12 +74,13 @@ def get_jinja_env(template_loader, locale):
     # ... fetch all waiting messages and remove them from the queue
     # ... construct a grid of thumbnails or other media
     # ... have access to the global and app config
+    # ... determine if the language is rtl or ltr
     template_env.globals['fetch_messages'] = messages.fetch_messages
     template_env.globals['app_config'] = mg_globals.app_config
     template_env.globals['global_config'] = mg_globals.global_config
     template_env.globals['version'] = _version.__version__
     template_env.globals['auth'] = mg_globals.app.auth
-
+    template_env.globals['is_rtl'] = is_rtl(locale)
     template_env.filters['urlencode'] = url_quote_plus
 
     # add human readable fuzzy date time
