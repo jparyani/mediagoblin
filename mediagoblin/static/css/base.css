@@ -167,6 +167,16 @@ footer {
   clear: both;
 }
 
+.thumb_gallery {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.profile_showcase .thumb_gallery {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .media_pane {
   width: 640px;
   margin-left: 0px;
@@ -181,15 +191,15 @@ footer {
 }
 
 .profile_sidebar {
-  width: 340px;
-  margin-right: 10px;
-  float: left;
+/*  width: 340px;*/
+/*  margin-right: 10px;*/
+/*  float: left;*/
 }
 
 .profile_showcase {
-  width: 580px;
-  margin-left: 10px;
-  float: left;
+/*  width: 580px;*/
+/*  margin-left: 10px;*/
+/*  float: left;*/
 }
 
 /* common website elements */
@@ -241,6 +251,17 @@ text-align: center;
 
 .right_align {
   float: right;
+}
+
+.left_align {
+  float: right;
+}
+
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
 }
 
 .clear {
@@ -761,6 +782,7 @@ pre {
 }
 
 /* Media queries and other responsivisivity */
+/* initial GMG max 940 */
 @media screen and (max-width: 940px) {
   .media_pane {
     width: 100%;
@@ -838,6 +860,7 @@ pre {
   }
   
 }
+/* desktop resolutions */
 @media screen and (min-width: 960px) {
   .container .three.columns {
     width:180px;
@@ -845,25 +868,35 @@ pre {
     margin-right:3px;
   }
 }
+/* Tablet Portrait size to standard 960 (devices and browsers) */
 @media only screen and (min-width: 768px) and (max-width: 959px) {
   .container .three.columns {
     width:147px;
     margin-left:2px;
     margin-right:2px;
   }
+  .thumb_gallery {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
+/* All Mobile Sizes (devices and browser) */
 @media screen and (max-width: 767px) {
   .thumb_row {
     margin-bottom: 0;
   }
+  .thumb_gallery {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
+/* initial GMG tablet */
 @media screen and (max-width: 570px) {
   .media_thumbnail {
     width: 29%;
   }
-
 }
-
+/* initial GMG phone */
 @media screen and (max-width: 380px) {
   .media_thumbnail {
     width: 46%;
