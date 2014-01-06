@@ -19,15 +19,15 @@
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
 
 {% macro media_grid(request, collection_items, col_number=5) %}
-  <table class="thumb_gallery">
+  <div class="thumb_gallery">
     {% for row in collection_items|batch(col_number) %}
-      <tr class="thumb_row
+      <div class="row thumb_row
                  {%- if loop.first %} thumb_row_first
                  {%- elif loop.last %} thumb_row_last{% endif %}">
         {% for item in row %}
           {% set media_entry = item.get_media_entry %}
           {% set entry_url = media_entry.url_for_self(request.urlgen) %}
-          <td class="media_thumbnail thumb_entry
+          <div class="three columns media_thumbnail thumb_entry
                      {%- if loop.first %} thumb_entry_first
                      {%- elif loop.last %} thumb_entry_last{% endif %}">
             <a href="{{ entry_url }}">
@@ -49,11 +49,11 @@
 	        {%- trans %}(remove){% endtrans -%}
 	      </a>
 	    {% endif %}
-          </td>
+          </div>
         {% endfor %}
-      </tr>
+      </div>
     {% endfor %}
-  </table>
+  </div>
 {%- endmacro %}
 
 {#

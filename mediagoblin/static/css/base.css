@@ -107,7 +107,7 @@ input, textarea {
 
 .container {
   margin: auto;
-  width: 96%;
+/*  width: 96%;*/
   max-width: 940px;
 }
 
@@ -273,6 +273,22 @@ text-align: center;
 
 .media_sidebar p {
 	margin-left: 8px;
+}
+
+.alpha {
+  margin-left:0;
+}
+
+.omega {
+  margin-right:0;
+}
+
+.heaven {
+  margin-top:0;
+}
+
+.hell {
+  margin-bottom:0;
 }
 
 /* forms */
@@ -820,7 +836,7 @@ pre {
   header {
     text-align: center;
   }
-  
+
   .header_right {
     margin-right: 2%;
     float: none;
@@ -829,12 +845,32 @@ pre {
   a.logo {
     margin-left: 2%;
   }
+  
 }
-
+@media screen and (min-width: 960px) {
+  .container .three.columns {
+    width:180px;
+    margin-left:3px;
+    margin-right:3px;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+  .container .three.columns {
+    width:147px;
+    margin-left:2px;
+    margin-right:2px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .thumb_row {
+    margin-bottom: 0;
+  }
+}
 @media screen and (max-width: 570px) {
   .media_thumbnail {
     width: 29%;
   }
+
 }
 
 @media screen and (max-width: 380px) {
