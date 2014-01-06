@@ -105,17 +105,8 @@ input, textarea {
 
 /* website structure */
 
-.container {
-  margin: auto;
-/*  width: 96%;*/
-  max-width: 940px;
-}
-
 header {
   width: 100%;
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
   padding: 0;
   margin-bottom: 42px;
   border-bottom: 1px solid #333;
