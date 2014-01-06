@@ -177,29 +177,11 @@ footer {
   margin-right: 0;
 }
 
-.media_pane {
-  width: 640px;
-  margin-left: 0px;
-  margin-right: 10px;
-  float: left;
-}
-
-.media_sidebar {
-  width: 280px;
-  margin-left: 10px;
-  float: left;
-}
-
-.profile_sidebar {
-/*  width: 340px;*/
-/*  margin-right: 10px;*/
-/*  float: left;*/
-}
-
-.profile_showcase {
-/*  width: 580px;*/
-/*  margin-left: 10px;*/
-/*  float: left;*/
+.media_image {
+  max-width: 100%;
+  margin-left:auto;
+  margin-right:auto;
+  display:block;
 }
 
 /* common website elements */
@@ -616,11 +598,10 @@ img.media_icon {
 /* navigation */
 
 .navigation {
-	float: right;
 }
 
 .navigation_button {
-  width: 135px;
+  width: 48%;
   display: inline-block;
   text-align: center;
   background-color: #1d1d1d;
@@ -633,7 +614,7 @@ img.media_icon {
 }
 
 .navigation_left {
-  margin-right: 6px;
+  margin-right: 3px;
 }
 
 /* messages */
@@ -783,20 +764,11 @@ pre {
 
 /* Media queries and other responsivisivity */
 /* initial GMG max 940 */
-@media screen and (max-width: 940px) {
-  .media_pane {
-    width: 100%;
-    margin: 0px;
-  }
-  
-  .media_sidebar {
-	  width: 100%;
-	  margin: 0px;
-	}
-	
+@media screen and (max-width: 960px) {
+
   img.media_image {
-    width: 100%;
-    display: inline;
+    max-width: 100%;
+/*    display: inline;*/
   }
 
   .media_thumbnail {
@@ -813,26 +785,11 @@ pre {
     margin: 0px;
   }
 
-	.navigation {
-	  float: none;
-	}
-
-	.navigation_button {
-	  width: 49%;
-		float: right;
-	}
-
-	.navigation_left {
-	  margin-right: 0;
-	  float: left;
-  }
-  
   .navigation {
     float: none;
   }
   
   .navigation_button {
-    width: 49%;
     float: right;
     padding: 10px 0 14px;
   }
@@ -847,22 +804,22 @@ pre {
   }
   
   header {
-    text-align: center;
+/*    text-align: center;*/
   }
 
   .header_right {
-    margin-right: 2%;
-    float: none;
+/*    margin-right: 2%;*/
+/*    float: none;*/
   }
   
   a.logo {
-    margin-left: 2%;
+/*    margin-left: 2%;*/
   }
   
 }
 /* desktop resolutions */
 @media screen and (min-width: 960px) {
-  .container .three.columns {
+  .container .three.columns { /* this needs to be more specific - inplace for the gallery... */
     width:180px;
     margin-left:3px;
     margin-right:3px;
@@ -870,7 +827,7 @@ pre {
 }
 /* Tablet Portrait size to standard 960 (devices and browsers) */
 @media only screen and (min-width: 768px) and (max-width: 959px) {
-  .container .three.columns {
+  .container .three.columns { /* this needs to be more specific - inplace for the gallery... */
     width:147px;
     margin-left:2px;
     margin-right:2px;
@@ -878,6 +835,8 @@ pre {
   .thumb_gallery {
     margin-left: 0;
     margin-right: 0;
+  }
+  .navigation_button {
   }
 }
 /* All Mobile Sizes (devices and browser) */
@@ -889,17 +848,16 @@ pre {
     margin-left: 0;
     margin-right: 0;
   }
-}
-/* initial GMG tablet */
-@media screen and (max-width: 570px) {
-  .media_thumbnail {
-    width: 29%;
+  h1,h2,h3,p {
+    margin-bottom: 10px !important;
   }
-}
-/* initial GMG phone */
-@media screen and (max-width: 380px) {
-  .media_thumbnail {
-    width: 46%;
+
+  header {
+    text-align: center;
+  }
+
+  .header_right {
+    float: none;
   }
 }
 

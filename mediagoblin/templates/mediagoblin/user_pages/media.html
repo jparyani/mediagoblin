@@ -32,9 +32,9 @@
 
   {% template_hook("media_head") %}
 {% endblock mediagoblin_head %}
-
 {% block mediagoblin_content %}
-  <p class="context">
+<div class="row hell">
+  <p class="eleven columns context">
     {%- trans user_url=request.urlgen(
               'mediagoblin.user_pages.user_home',
               user=media.get_uploader.username),
@@ -42,8 +42,11 @@
     ❖ Browsing media by <a href="{{user_url}}">{{username}}</a>
     {%- endtrans -%}
   </p>
-  {% include "mediagoblin/utils/prev_next.html" %}
-  <div class="media_pane">
+  <div class="five columns">
+    {% include "mediagoblin/utils/prev_next.html" %}
+  </div>
+</div>
+  <div class="media_pane eleven columns">
     <div class="media_image_container">
       {% block mediagoblin_media %}
         {% set display_media = request.app.public_store.file_url(
@@ -161,8 +164,8 @@
       {{ render_pagination(request, pagination,
                  media.url_for_self(request.urlgen)) }}
     {% endif %}
-  </div>
-  <div class="media_sidebar">
+  </div><!--end media_pane-->
+  <div class="five columns media_sidebar">
     <h3>{% trans %}Added{% endtrans %}</h3>
     <p><span title="{{ media.created.strftime("%I:%M%p %Y-%m-%d") }}">
         {%- trans formatted_time=timesince(media.created) -%}
