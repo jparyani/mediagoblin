@@ -41,6 +41,7 @@
 
 
 {% block mediagoblin_content -%}
+  <div class="six columns">
   <h1>
     {%- trans username=user.username %}{{ username }}'s profile{% endtrans -%}
   </h1>
@@ -81,9 +82,9 @@
       </a>
     </p>
   </div>
-
+  </div><!--end six columns-->
   {% if media_entries.count() %}
-    <div class="profile_showcase">
+    <div class="ten columns profile_showcase">
       {{ object_gallery(request, media_entries, pagination,
                         pagination_base_url=user_gallery_url, col_number=3) }}
       {% include "mediagoblin/utils/object_gallery.html" %}
@@ -101,7 +102,7 @@
     </div>
   {% else %}
     {% if request.user and (request.user.id == user.id) %}
-      <div class="profile_showcase empty_space">
+      <div class="ten columns profile_showcase empty_space">
         <p>
           {% trans -%}
           This is where your media will appear, but you don't seem to have added anything yet.
@@ -113,7 +114,7 @@
         </a>
       </div>
     {% else %}
-      <div class="profile_showcase empty_space">
+      <div class="ten columns profile_showcase empty_space">
         <p>
           {% trans -%}
           There doesn't seem to be any media here yet...
