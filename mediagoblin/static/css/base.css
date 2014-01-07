@@ -78,6 +78,11 @@ a.highlight {
   color: #fff;
 }
 
+.header_right a {
+  text-decoration: none;
+  color: #fff;
+}
+
 em {
   font-style: italic;
 }
@@ -112,10 +117,19 @@ header {
   border-bottom: 1px solid #333;
 }
 
+.header_left {
+  width: 47%;
+  margin: 0 0 0 8px;
+  display: inline-block;
+}
+
 .header_right {
-  margin: 8px;
+  width: 47%;
+  margin: 8px 8px 4px 0;
   display: inline-block;
   float: right;
+  text-align: right;
+  line-height: 1.6em;
 }
 
 .header_dropdown {
@@ -349,7 +363,7 @@ text-align: center;
   border-top: 6px dashed #D49086
 }
 
-.form_field_input input, .form_field_input textarea {
+/*.form_field_input input,*/ .form_field_input textarea {
   width: 100%;
 }
 
@@ -801,26 +815,13 @@ pre {
   }
   
   .button_action, .button_action_highlight, .button_form { 
-    padding: 9px 14px;
+    padding: 5px 14px;
   }
-  
-  header {
-/*    text-align: center;*/
-  }
-
-  .header_right {
-/*    margin-right: 2%;*/
-/*    float: none;*/
-  }
-  
-  a.logo {
-/*    margin-left: 2%;*/
-  }
-  
+    
 }
 /* desktop resolutions */
 @media screen and (min-width: 960px) {
-  .container .three.columns { /* this needs to be more specific - inplace for the gallery... */
+  .container .three.columns.media_thumbnail {
     width:180px;
     margin-left:3px;
     margin-right:3px;
@@ -828,7 +829,7 @@ pre {
 }
 /* Tablet Portrait size to standard 960 (devices and browsers) */
 @media only screen and (min-width: 768px) and (max-width: 959px) {
-  .container .three.columns { /* this needs to be more specific - inplace for the gallery... */
+  .container .three.columns.media_thumbnail {
     width:147px;
     margin-left:2px;
     margin-right:2px;
@@ -858,7 +859,7 @@ pre {
   }
 
   .header_right {
-    float: none;
+    text-align: center;
   }
 }
 

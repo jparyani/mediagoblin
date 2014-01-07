@@ -26,10 +26,12 @@
 {% if not report %}
   {% trans %}Sorry, no such report found.{% endtrans %}
 {% else %}
+  <div class="row">
     <a href="{{ request.urlgen('mediagoblin.moderation.reports') }}"
        class="return_to_panel button_action"
        title="Return to Reports Panel">
       {% trans %}Return to Reports Panel{% endtrans %}</a>
+  </div>
   <h2>{% trans %}Report{% endtrans %} #{{ report.id }}</h2>
   {% if report.is_comment_report() and report.comment %}
 
@@ -66,7 +68,7 @@
   {% elif report.is_media_entry_report() and report.media_entry %}
 
     {% set media_entry = report.media_entry %}
-    <div class="media_thumbnail">
+    <div class="three columns media_thumbnail">
       <a href="{{ request.urlgen('mediagoblin.user_pages.media_home',
                             user=media_entry.get_uploader.username,
                             media=media_entry.slug_or_id) }}">

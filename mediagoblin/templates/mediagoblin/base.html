@@ -66,11 +66,10 @@
         <div class="container">
           <header>
             <div class="row hell">
-            <div class="eight columns alpha omega">
-            {%- include "mediagoblin/bits/logo.html" -%}
-            {% block mediagoblin_header_title %}{% endblock %}
+            <div class="header_left">
+              {%- include "mediagoblin/bits/logo.html" -%}
+              {% block mediagoblin_header_title %}{% endblock %}
             </div>
-            <div class="eight columns alpha omega pull-right">
             <div class="header_right">
               {%- if request.user %}
                 {% if request.user and 
@@ -118,7 +117,6 @@
                 </a>
               {%- endif %}
             </div>
-            </div><!--end eight columns pull-right-->
             <div class="clear"></div>
             {% if request.user and request.user.has_privilege('active') %}
               <div class="header_dropdown">
