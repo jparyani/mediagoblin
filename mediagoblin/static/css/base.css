@@ -682,7 +682,8 @@ table.admin_panel {
 }
 
 table.admin_side_panel {
-  width: 60%
+  width: 90%;
+  margin-bottom: 10px;
 }
 
 table.admin_panel th, table.admin_side_panel th {
@@ -858,6 +859,12 @@ pre {
 
   .header_right {
     float: none;
+  }
+
+  .return_to_panel {
+    float: none;
+    width: 100%;
+    text-align: center;
   }
 }
 
