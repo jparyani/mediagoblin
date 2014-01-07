@@ -21,7 +21,7 @@
 
 {% block mediagoblin_content %}
   <img class="right_align" src="{{ request.staticdirect('/images/404.png') }}"
-       alt="{% trans %}Image of goblin stressing out{% endtrans %}" />
+       alt="{% trans %}Image of goblin stressing out{% endtrans %}" style="max-width:100%;"/>
   <h1>{{ title }}</h1>
   <p>{{ err_msg|safe }}</p>
   <div class="clear"></div>
