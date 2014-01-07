@@ -349,7 +349,7 @@ text-align: center;
   border-top: 6px dashed #D49086
 }
 
-.form_field_input input, .form_field_input textarea {
+/*.form_field_input input,*/ .form_field_input textarea {
   width: 100%;
 }
 
@@ -820,7 +820,7 @@ pre {
 }
 /* desktop resolutions */
 @media screen and (min-width: 960px) {
-  .container .three.columns { /* this needs to be more specific - inplace for the gallery... */
+  .container .three.columns.media_thumbnail {
     width:180px;
     margin-left:3px;
     margin-right:3px;
@@ -828,7 +828,7 @@ pre {
 }
 /* Tablet Portrait size to standard 960 (devices and browsers) */
 @media only screen and (min-width: 768px) and (max-width: 959px) {
-  .container .three.columns { /* this needs to be more specific - inplace for the gallery... */
+  .container .three.columns.media_thumbnail {
     width:147px;
     margin-left:2px;
     margin-right:2px;
