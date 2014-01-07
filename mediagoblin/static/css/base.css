@@ -860,12 +860,6 @@ pre {
   .header_right {
     float: none;
   }
-
-  .return_to_panel {
-    float: none;
-    width: 100%;
-    text-align: center;
-  }
 }
 
 /* Exif display */
