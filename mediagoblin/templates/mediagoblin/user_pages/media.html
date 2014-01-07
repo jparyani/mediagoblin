@@ -46,7 +46,7 @@
     {% include "mediagoblin/utils/prev_next.html" %}
   </div>
 </div>
-  <div class="media_pane eleven columns">
+  <div class="media_pane sixteen columns">
     <div class="media_image_container">
       {% block mediagoblin_media %}
         {% set display_media = request.app.public_store.file_url(
@@ -70,12 +70,14 @@
         {% endif %}
       {% endblock %}
     </div>
+    <div class="row heaven hell">
     <h2 class="media_title">
       {{ media.title }}
     </h2>
     {% if request.user and
           (media.uploader == request.user.id or
            request.user.has_privilege('admin')) %}
+    <div class="pull-right" style="padding-top:20px;">
       {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
                                  user= media.get_uploader.username,
                                  media_id=media.id) %}
@@ -83,13 +85,18 @@
       {% set delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                                  user= media.get_uploader.username,
                                  media_id=media.id) %}
-      <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
-
+      <a class="button_action button_warning" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
+      </div>
     {% endif %}
     {% autoescape False %}
       <p>{{ media.description_html }}</p>
     {% endautoescape %}
+    </div>
+    </div>
+
+    <div class="eleven columns omega">
     {% if comments and request.user and request.user.has_privilege('commenter') %}
+    <div class="media_comments">
       {% if app_config['allow_comments'] %}
         <a
           {% if not request.user %}
@@ -163,9 +170,13 @@
       </ul>
       {{ render_pagination(request, pagination,
                  media.url_for_self(request.urlgen)) }}
+    {% else %}
+      <div class="empty_space no_background">
     {% endif %}
-  </div><!--end media_pane-->
-  <div class="five columns media_sidebar">
+  </div>
+  </div>
+
+  <div class="five columns alpha media_sidebar">
     <h3>{% trans %}Added{% endtrans %}</h3>
     <p><span title="{{ media.created.strftime("%I:%M%p %Y-%m-%d") }}">
         {%- trans formatted_time=timesince(media.created) -%}
@@ -223,6 +234,7 @@
     {% block mediagoblin_sidebar %}
     {% endblock %}
 
-  </div>
+  </div><!--end media_sidebar-->
+
   <div class="clear"></div>
 {% endblock %}

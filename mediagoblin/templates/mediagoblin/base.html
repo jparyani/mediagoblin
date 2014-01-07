@@ -78,7 +78,7 @@
 
                   {% set notification_count = get_notification_count(request.user.id) %}
                   {% if notification_count %}
-                    <a href="javascript:;" class="notification-gem button_action" title="Notifications">
+                    <a href="javascript:;" class="notification-gem button_action button_info" title="Notifications">
                     {{ notification_count }}</a>
                   {% endif %}
                   <a href="javascript:;" class="button_action header_dropdown_down">&#9660;</a>

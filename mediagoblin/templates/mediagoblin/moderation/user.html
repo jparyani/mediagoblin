@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="eight columns">
+      <div class="six columns">
   {# If no user... #}
   {% if not user %}
     <p>{% trans %}Sorry, no such user found.{% endtrans %}</p>
@@ -100,7 +100,7 @@
   {% endif %}
     </div>
   {% if user %}
-      <div class="eight columns">
+      <div class="ten columns">
         <h2>
           {%- trans username=user.username -%}
             Active Reports on {{ username }}
@@ -163,14 +163,14 @@
     <div class="row hell">
     <h2>{% trans username=user.username -%}
           {{ username }}'s Privileges{% endtrans %}</h2>
-    <div class="eight columns">
+    <div class="six columns">
     <form action="{{ request.urlgen('mediagoblin.moderation.give_or_take_away_privilege',
                user=user.username) }}"
           method=post >
     <table class="admin_side_panel">
         <tr>
           <th>{% trans %}Privilege{% endtrans %}</th>
-          <th>{% trans %}User Has Privilege{% endtrans %}</th>
+          <th>{% trans %}Granted{% endtrans %}</th>
         </tr>
         {% for privilege in privileges %}
           <tr>
@@ -201,7 +201,7 @@
     <input type=hidden name=privilege_name id=hidden_privilege_name />
     </form>
     </div>
-    <div class="eight columns">
+    <div class="five columns">
       <form method=POST action="{{ request.urlgen(
         'mediagoblin.moderation.ban_or_unban',
         user=user.username) }}">

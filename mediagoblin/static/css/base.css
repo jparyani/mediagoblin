@@ -161,6 +161,10 @@ a.logo {
   margin: 6px 8px 6px 0;
 }
 
+.welcomeimage {
+  float: right;
+}
+
 .fine_print {
   font-size: 0.8em;
 }
@@ -198,6 +202,20 @@ footer {
   display:block;
 }
 
+.media_pane {
+  border-bottom: 1px solid #333333;
+}
+
+.media_sidebar {
+  border-left: 1px solid #333333;
+  padding-left: 1em;
+  padding-top: 1em;
+}
+
+.media_comments {
+  padding-top: 1em;
+}
+
 /* common website elements */
 
 .button_action, .button_action_highlight, .button_form {
@@ -221,6 +239,17 @@ footer {
   color: #283F35;
 }
 
+.button_info {
+  background-color: #508BB5;
+  border-color: #5899C7 #437699 #427496;
+  color: #C3C3C3;
+}
+
+.button_warning {
+  background-color: #8A2D2D;
+  border-color: #913030 #451717 #431212;
+  color: #C3C3C3;
+}
 
 .button_form {
   min-width: 99px;
@@ -243,6 +272,13 @@ text-align: center;
   text-align: center;
   height: 160px;
   padding-top: 70px;
+}
+
+.no_background {
+  background-image: none;
+  height: 0;
+  padding-top: 0;
+  display: inline-block;
 }
 
 .right_align {
@@ -274,13 +310,13 @@ text-align: center;
 }
 
 .media_sidebar h3 {
-	font-size: 1em;
-	margin: 0 0 5px;
-	border: none;
+  font-size: 1em;
+  margin: 0 0 5px;
+  border: none;
 }
 
 .media_sidebar p {
-	margin-left: 8px;
+  margin-left: 8px;
 }
 
 .alpha {
@@ -816,6 +852,7 @@ pre {
   
   .button_action, .button_action_highlight, .button_form { 
     padding: 5px 14px;
+    margin-bottom: 0.5em;
   }
     
 }
@@ -860,6 +897,25 @@ pre {
 
   .header_right {
     text-align: center;
+  }
+
+  .welcomeimage {
+    float: none;
+    display: inherit;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1em;
+  }
+
+  .media_sidebar {
+    border-left: none;
+    padding-left: 0;
+    padding-top: 1em;
+    margin-top: 1em;
+  }
+
+  .media_comments {
+    border-bottom: 1px solid #333333;
   }
 }
 
