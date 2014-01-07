@@ -161,6 +161,10 @@ a.logo {
   margin: 6px 8px 6px 0;
 }
 
+.welcomeimage {
+  float: right;
+}
+
 .fine_print {
   font-size: 0.8em;
 }
@@ -816,6 +820,7 @@ pre {
   
   .button_action, .button_action_highlight, .button_form { 
     padding: 5px 14px;
+    margin-bottom: 0.5em;
   }
     
 }
@@ -860,6 +865,14 @@ pre {
 
   .header_right {
     text-align: center;
+  }
+
+  .welcomeimage {
+    float: none;
+    display: inherit;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1em;
   }
 }
 

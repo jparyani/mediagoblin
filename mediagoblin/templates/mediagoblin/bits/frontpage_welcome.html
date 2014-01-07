@@ -19,29 +19,34 @@
 {% if request.user %}
     <h1>{% trans %}Explore{% endtrans %}</h1>
   {% else %}
-    <img class="right_align" src="{{ request.staticdirect('/images/home_goblin.png') }}" />
-    <h1>{% trans %}Hi there, welcome to this MediaGoblin site!{% endtrans %}</h1>
-    <p>{% trans %}This site is running <a href="http://mediagoblin.org">MediaGoblin</a>, an extraordinarily great piece of media hosting software.{% endtrans %}</p>
-    {% if auth %}
-    <p>{% trans %}To add your own media, place comments, and more, you can log in with your MediaGoblin account.{% endtrans %}</p>
-    {% if allow_registration %}
-      <p>{% trans %}Don't have one yet? It's easy!{% endtrans %}</p>
-      <a class="button_action_highlight" href=
-        {% if persona_auth is defined %}
-          "javascript:;" id="persona_login1"
-        {% else %}
-          "{{ request.urlgen('mediagoblin.auth.register') }}"
+    <div class="row hell">
+      <div class="eleven columns">
+        <h1>{% trans %}Hi there, welcome to this MediaGoblin site!{% endtrans %}</h1>
+        <p>{% trans %}This site is running <a href="http://mediagoblin.org">MediaGoblin</a>, an extraordinarily great piece of media hosting software.{% endtrans %}</p>
+        {% if auth %}
+        <p>{% trans %}To add your own media, place comments, and more, you can log in with your MediaGoblin account.{% endtrans %}</p>
+        {% if allow_registration %}
+          <p>{% trans %}Don't have one yet? It's easy!{% endtrans %}</p>
+          <a class="button_action_highlight" href=
+            {% if persona_auth is defined %}
+              "javascript:;" id="persona_login1"
+            {% else %}
+              "{{ request.urlgen('mediagoblin.auth.register') }}"
+            {% endif %}
+            {% trans %}
+            >Create an account at this site</a>
+            or
+          {%- endtrans %}
         {% endif %}
-        {% trans %}
-        >Create an account at this site</a>
-        or
-      {%- endtrans %}
-    {% endif %}
-    {% endif %}
-      {% trans %}
-        <a class="button_action" href="http://mediagoblin.readthedocs.org/">Set up MediaGoblin on your own server</a>
-      {%- endtrans %}
-
+        {% endif %}
+          {% trans %}
+            <a class="button_action" href="http://mediagoblin.readthedocs.org/">Set up MediaGoblin on your own server</a>
+          {%- endtrans %}
+      </div>
+      <div class="four columns offset-by-one">
+        <img class="welcomeimage" src="/mgoblin_static/images/home_goblin.png">
+      </div>
+    </div>
     <div class="clear"></div>
   {% endif %}
 
