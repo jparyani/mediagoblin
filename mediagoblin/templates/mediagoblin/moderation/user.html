@@ -35,10 +35,12 @@
 
 {% block mediagoblin_content -%}
     <div class="row">
-      <a href="{{ request.urlgen('mediagoblin.moderation.users') }}"
-         class="return_to_panel button_action"
-         title="Return to Users Panel">
-        {% trans %}Return to Users Panel{% endtrans %}</a>
+      <div class="sixteen columns">
+        <a href="{{ request.urlgen('mediagoblin.moderation.users') }}"
+           class="return_to_panel button_action"
+           title="Return to Users Panel">
+          {% trans %}Return to Users Panel{% endtrans %}</a>
+      </div>
     </div>
     <div class="row">
       <div class="eight columns">
