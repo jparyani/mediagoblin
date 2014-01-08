@@ -51,7 +51,7 @@
             {{- collection_item.in_collection.url_for_self(request.urlgen) }}">
           {%- trans %}Cancel{% endtrans -%}
         </a>
-        <input type="submit" value="{% trans %}Remove{% endtrans %}" class="button_form" />
+        <input type="submit" value="{% trans %}Remove{% endtrans %}" class="button_form button_warning" />
 	{{ csrf_token }}
       </div>
     </div>

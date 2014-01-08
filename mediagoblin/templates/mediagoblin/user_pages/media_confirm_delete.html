@@ -46,7 +46,7 @@
       <div class="form_submit_buttons">
         {# TODO: This isn't a button really... might do unexpected things :) #}
 	<a class="button_action" href="{{ media.url_for_self(request.urlgen) }}">{% trans %}Cancel{% endtrans %}</a>
-        <input type="submit" value="{% trans %}Delete permanently{% endtrans %}" class="button_form" />
+        <input type="submit" value="{% trans %}Delete permanently{% endtrans %}" class="button_form button_warning" />
 	{{ csrf_token }}
       </div>
     </div>
