@@ -205,13 +205,15 @@ footer {
 }
 
 .media_pane {
-  border-bottom: 1px solid #333333;
+/* in place for possible future wide view */
+/*  border-bottom: 1px solid #333333;*/
 }
 
 .media_sidebar {
-  border-left: 1px solid #333333;
-  padding-left: 1em;
-  padding-top: 1em;
+/* in place for possible future wide view */
+/*  border-left: 1px solid #333333;*/
+/*  padding-left: 1em;*/
+/*  padding-top: 1em;*/
 }
 
 .media_comments {
