@@ -873,6 +873,9 @@ pre {
     margin-left:2px;
     margin-right:2px;
   }
+  .media_thumbnail.thumb_entry img {
+    margin-left: -16.5px;
+  }
   .thumb_gallery {
     margin-left: 0;
     margin-right: 0;
