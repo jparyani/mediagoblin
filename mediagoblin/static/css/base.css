@@ -195,11 +195,13 @@ footer {
   margin-right: 0;
 }
 
+.media_image_container {
+  display: flex;
+  justify-content: center;
+}
+
 .media_image {
   max-width: 100%;
-  margin-left:auto;
-  margin-right:auto;
-  display:block;
 }
 
 .media_pane {
@@ -823,7 +825,7 @@ pre {
   }
 
   .media_thumbnail {
-    width: 21%;
+/*    width: 21%;*/
   }
 
   .profile_sidebar {
