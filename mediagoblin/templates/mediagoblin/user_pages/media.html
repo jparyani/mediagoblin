@@ -33,7 +33,7 @@
   {% template_hook("media_head") %}
 {% endblock mediagoblin_head %}
 {% block mediagoblin_content %}
-<div class="row hell">
+<div class="row foot">
   <p class="eleven columns context">
     {%- trans user_url=request.urlgen(
               'mediagoblin.user_pages.user_home',
@@ -46,7 +46,7 @@
     {% include "mediagoblin/utils/prev_next.html" %}
   </div>
 </div>
-  <div class="media_pane sixteen columns">
+  <div class="media_pane eleven columns">
     <div class="media_image_container">
       {% block mediagoblin_media %}
         {% set display_media = request.app.public_store.file_url(
@@ -70,7 +70,7 @@
         {% endif %}
       {% endblock %}
     </div>
-    <div class="row heaven hell">
+    <div class="row head foot">
     <h2 class="media_title">
       {{ media.title }}
     </h2>
@@ -92,9 +92,6 @@
       <p>{{ media.description_html }}</p>
     {% endautoescape %}
     </div>
-    </div>
-
-    <div class="eleven columns omega">
     {% if comments and request.user and request.user.has_privilege('commenter') %}
     <div class="media_comments">
       {% if app_config['allow_comments'] %}
@@ -174,9 +171,11 @@
       <div class="empty_space no_background">
     {% endif %}
   </div>
-  </div>
 
-  <div class="five columns alpha media_sidebar">
+    </div>
+
+
+  <div class="five columns media_sidebar">
     <h3>{% trans %}Added{% endtrans %}</h3>
     <p><span title="{{ media.created.strftime("%I:%M%p %Y-%m-%d") }}">
         {%- trans formatted_time=timesince(media.created) -%}
