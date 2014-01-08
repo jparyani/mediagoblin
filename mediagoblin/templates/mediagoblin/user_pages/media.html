@@ -33,7 +33,7 @@
   {% template_hook("media_head") %}
 {% endblock mediagoblin_head %}
 {% block mediagoblin_content %}
-<div class="row hell">
+<div class="row foot">
   <p class="eleven columns context">
     {%- trans user_url=request.urlgen(
               'mediagoblin.user_pages.user_home',
@@ -70,7 +70,7 @@
         {% endif %}
       {% endblock %}
     </div>
-    <div class="row heaven hell">
+    <div class="row head foot">
     <h2 class="media_title">
       {{ media.title }}
     </h2>
