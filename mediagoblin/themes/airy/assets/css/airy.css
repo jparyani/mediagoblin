@@ -18,6 +18,7 @@ a {
   border-width: 1px 1px 2px;
   color: #4a4a4a;
   font-weight: bold;
+  box-shadow: 0 0 3px #E4E4E4 inset;
 }
 
 p.navigation_button {
@@ -31,6 +32,10 @@ header {
   width: 940px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.header_right a {
+  color: #4a4a4a;
 }
 
 @media screen and (max-width: 940px) {
@@ -50,6 +55,7 @@ footer {
   border-color: #E4E4E4;
   border-width: 1px 1px 2px;
   padding: 5px 10px;
+  box-shadow: 0 0 3px #E4E4E4 inset;
 }
 
 .button_action_highlight, .button_form {
@@ -57,6 +63,21 @@ footer {
   background-color: #37AB74;
   border-color: #6CAA8E;
   border-width: 1px 1px 2px;
+  box-shadow: 0 0 3px #6CAA8E inset;
+}
+
+.button_info {
+  background-color: #9dbed5;
+  border-color: #E4E4E4;
+  color: #C3C3C3;
+  box-shadow: 0 0 3px #49717F inset;
+}
+
+.button_warning {
+  background-color: #d6ae96;
+  border-color: #E4E4E4;
+  color: #4a4a4a;
+  box-shadow: 0 0 3px #7F6859 inset;
 }
 
 input, textarea {
@@ -71,6 +92,8 @@ input, textarea {
 
 .media_thumbnail {
   background-color: #fff;
+  border-color: #e4e4e4;
+  box-shadow: 0 0 3px #c4c4c4;
 }
 
 .media_thumbnail a {
