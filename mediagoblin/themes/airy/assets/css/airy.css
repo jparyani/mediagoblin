@@ -103,3 +103,8 @@ input, textarea {
 .empty_space {
   background-image: url("../images/empty_dots.png");
 }
+
+#exif_content h3 {
+  border-bottom: 1px solid #E4E4E4;
+}
+
