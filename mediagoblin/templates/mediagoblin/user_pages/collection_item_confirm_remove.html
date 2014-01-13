@@ -19,6 +19,14 @@
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
+{% block title %}
+    {%- trans media_title=collection_item.get_media_entry.title,
+                  collection_title=collection_item.in_collection.title -%}
+  Remove {{ media_title }} from {{ collection_title }}
+  {%- endtrans %} &mdash; {{ super() }}
+
+{% endblock %}
+
 {% block mediagoblin_content %}
 
   <form action="{{ request.urlgen('mediagoblin.user_pages.collection_item_confirm_remove',

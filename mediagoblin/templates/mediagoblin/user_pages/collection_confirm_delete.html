@@ -19,6 +19,14 @@
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
 
+{% block title %}
+    {%- trans collection_title=collection.title
+    -%}
+ Delete collection {{ collection_title }}
+  {%- endtrans %} &mdash; {{ super() }}
+
+{% endblock %}
+
 {% block mediagoblin_content %}
 
   <form action="{{ request.urlgen('mediagoblin.user_pages.collection_confirm_delete',
@@ -28,7 +36,7 @@
     <div class="form_box">
       <h1>
         {%- trans title=collection.title -%}
-          Really delete {{ title }}?
+          Really delete collection: {{ title }}?
         {%- endtrans %}
       </h1>
 	  
