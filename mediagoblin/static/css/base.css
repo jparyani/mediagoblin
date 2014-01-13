@@ -619,34 +619,34 @@ img.media_icon {
 
 /* EXIF information */
 
-#exif_content h3 {
-   border-bottom: 1px solid #333;
+#exif_content {
+  padding-bottom: 20px;
 }
 
 #exif_camera_information {
-   margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #exif_additional_info {
-   display: none;
+  display: none;
 }
 
 #exif_additional_info table {
-   font-size: 11px;
-   margin-top: 10px;
+  font-size: 11px;
+  margin-top: 10px;
 }
 
 #exif_additional_info td {
-   vertical-align: top;
-   padding-bottom: 5px;
+  vertical-align: top;
+  padding-bottom: 5px;
 }
 
 #exif_content .col1 {
-   padding-right: 20px;
+  padding-right: 20px;
 }
 
 #exif_additional_info table tr {
-   margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 /* navigation */
@@ -924,32 +924,6 @@ pre {
   .media_comments {
     border-bottom: 1px solid #333333;
   }
-}
-
-/* Exif display */
-#exif_content h3 {
-   border-bottom: 1px solid #333;
-}
-#exif_camera_information {
-   margin-bottom: 20px;
-}
-
-#exif_additional_info {
-   display: none;
-}
-#exif_additional_info table {
-   font-size: 11px;
-   margin-top: 10px;
-}
-#exif_additional_info td {
-   vertical-align: top;
-   padding-bottom: 5px;
-}
-#exif_content .col1 {
-   padding-right: 20px;
-}
-#exif_additional_info table tr {
-   margin-bottom: 10px;
 }
 
 p.verifier {
