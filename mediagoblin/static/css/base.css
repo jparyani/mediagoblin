@@ -625,10 +625,16 @@ img.media_icon {
 
 #exif_camera_information {
   margin-bottom: 20px;
+  margin-left: 8px;
+}
+
+#exif_additional_info_button {
+  margin-left: 8px;
 }
 
 #exif_additional_info {
   display: none;
+  margin-left: 8px;
 }
 
 #exif_additional_info table {
