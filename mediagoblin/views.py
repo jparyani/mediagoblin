@@ -37,6 +37,16 @@ def default_root_view(request, page):
          'pagination': pagination})
 
 
+
+def root_view(request):
+    """
+    Proxies to the real root view that's displayed
+    """
+    view = hook_handle("frontpage_view") or default_root_view
+    return view(request)
+
+
+
 def simple_template_render(request):
     """
     A view for absolutely simple template rendering.
@@ -52,5 +62,3 @@ def terms_of_service(request):
 
     return render_to_response(request,
         'mediagoblin/terms_of_service.html', {})
-
-root_view = hook_handle("frontpage_view") or default_root_view
