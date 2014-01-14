@@ -17,13 +17,14 @@
 from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools.pagination import Pagination
+from mediagoblin.tools.pluginapi import hook_handle
 from mediagoblin.tools.response import render_to_response, render_404
 from mediagoblin.decorators import uses_pagination, user_not_banned
 
 
 @user_not_banned
 @uses_pagination
-def root_view(request, page):
+def default_root_view(request, page):
     cursor = MediaEntry.query.filter_by(state=u'processed').\
         order_by(MediaEntry.created.desc())
 
@@ -51,3 +52,5 @@ def terms_of_service(request):
 
     return render_to_response(request,
         'mediagoblin/terms_of_service.html', {})
+
+root_view = hook_handle("frontpage_view") or default_root_view
