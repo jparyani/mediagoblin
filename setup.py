@@ -66,10 +66,11 @@ try:
         'six',
         'oauthlib==0.5.0',
 
-        # Annoying.  Please remove once we can!  We only indirectly
-        # use pbr, and currently it breaks things, presumably till
-        # their next release.
-        'pbr==0.5.22',
+        ## Annoying.  Please remove once we can!  We only indirectly
+        ## use pbr, and currently it breaks things, presumably till
+        ## their next release.
+        # 'pbr==0.5.22',
+
         ## This is optional!
         # 'translitcodec',
         ## For now we're expecting that users will install this from
