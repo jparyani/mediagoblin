@@ -53,6 +53,10 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.addmedia:parser_setup',
         'func': 'mediagoblin.gmg_commands.addmedia:addmedia',
         'help': 'Reprocess media entries'},
+    'batchaddmedia': {
+        'setup': 'mediagoblin.gmg_commands.batchaddmedia:parser_setup',
+        'func': 'mediagoblin.gmg_commands.batchaddmedia:batchaddmedia',
+        'help': 'Reprocess many media entries'}
     # 'theme': {
     #     'setup': 'mediagoblin.gmg_commands.theme:theme_parser_setup',
     #     'func': 'mediagoblin.gmg_commands.theme:theme',
