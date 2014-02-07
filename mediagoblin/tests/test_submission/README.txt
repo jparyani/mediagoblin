@@ -1,0 +1,56 @@
+COPYING data for this directory
+
+"Psycho" files (the big* ones)
+==============================
+
+Files included:
+ - big.png
+ - big-fear_of_flight_source.xcf
+ - big-psycho_source.blend
+
+(C) 2008 Christopher Allan Webber
+
+This character design was originally created by Brian Raddatz for the
+comic "The Misadventures of Okk":
+	http://okk.comicgenesis.com/d/20060414.html
+
+Put into 3d by Christopher Allan Webber (homepage http://dustycloud.org).
+Technically it is not completely the same character.  But it is close
+enough to give Brian Raddatz credit, who is an awesome guy.
+
+Under the permission of both the author of this model and the
+character designer, you are free to use this model under the
+Creative Commons Attribution-ShareAlike 3.0 license, which should be
+included in this archive under the filename cc-by-sa-3.0.txt but is also
+available here:
+	http://creativecommons.org/licenses/by-sa/3.0/legalcode
+        http://creativecommons.org/licenses/by-sa/3.0/legalcode.txt
+
+A more plainspoken version is available here:
+	http://creativecommons.org/licenses/by-sa/3.0/deed.en_US
+		
+It basically means you can do whatever you want, as long as you
+attribute the original author(s) and share under the same license.
+
+Have fun!
+
+
+Gavroche sketch
+===============
+
+Files included:
+ - good.jpg
+ - good-original_gavroche_sketch_source.xcf
+
+Originally by Christopher Allan Webber in 2011;
+Waved under CC0 1.0.  See ../../../licenses/CC0_1.0.txt
+
+
+Others
+======
+
+ - bigblue.png: Probably not copyrightable since it's just a plain
+   blue square.
+ - evil*: Waived under CC0 1.0, but also probably not copyrightable
+   anyway.
+
