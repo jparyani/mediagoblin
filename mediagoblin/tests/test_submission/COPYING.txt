@@ -42,7 +42,7 @@ Files included:
  - good.jpg
  - good-original_gavroche_sketch_source.xcf
  - medium.png
- - medium-robogoblins.png
+ - medium-robogoblins.xcf
 
 Originally by Christopher Allan Webber from 2011-2012;
 Waved under CC0 1.0.  See ../../../licenses/CC0_1.0.txt
@@ -55,4 +55,5 @@ Others
    blue square.
  - evil*: Waived under CC0 1.0, but also probably not copyrightable
    anyway.
-
+ - this file waived under CC0, for maximum maximum nobody is worrying
+   about anything ;)
