@@ -58,7 +58,7 @@ try:
         'webtest<2',
         'ConfigObj',
         'Markdown',
-        'sqlalchemy<0.9.0, =>0.8.0',
+        'sqlalchemy<0.9.0, >0.8.0',
         'sqlalchemy-migrate',
         'mock',
         'itsdangerous',
