@@ -36,12 +36,12 @@ def parser_setup(subparser):
         '--directory', action='store_const',
         const='directory', dest='target_type', 
         default='directory', help=(
-"Target is a directory"))
+"Choose this option is the target is a directory."))
     target_type.add_argument('-a',
         '--archive', action='store_const',
         const='archive', dest='target_type',
         help=(
-"Target is an archive."))
+"Choose this option if the target is an archive."))
     subparser.add_argument(
         'target_path',
         help=(
