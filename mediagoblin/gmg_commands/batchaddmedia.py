@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import json, tempfile, urllib, tarfile, subprocess
+import json, tempfile, urllib, tarfile, zipfile, subprocess
 from csv import reader as csv_reader
 from urlparse import urlparse
 from pyld import jsonld
@@ -28,29 +28,28 @@ from mediagoblin.submit.lib import (
 from mediagoblin import mg_globals
 
 def parser_setup(subparser):
+    subparser.description = """\
+This command allows the administrator to upload many media files at once."""
     subparser.add_argument(
         'username',
-        help="Name of user this media entry belongs to")
-    target_type = subparser.add_mutually_exclusive_group()
-    target_type.add_argument('-d',
-        '--directory', action='store_const',
-        const='directory', dest='target_type', 
-        default='directory', help=(
-"Choose this option is the target is a directory."))
-    target_type.add_argument('-a',
-        '--archive', action='store_const',
-        const='archive', dest='target_type',
-        help=(
-"Choose this option if the target is an archive."))
+        help="Name of user these media entries belong to")
     subparser.add_argument(
         'target_path',
-        help=(
-"Path to a local archive or directory containing a location.csv and metadata.csv file"))
+        help=("""\
+Path to a local archive or directory containing a "location.csv" and a 
+"metadata.csv" file. These are csv (comma seperated value) files with the
+locations and metadata of the files to be uploaded. The location must be listed
+with either the URL of the remote media file or the filesystem path of a local
+file. The metadata should be provided with one column for each of the 15 Dublin
+Core properties (http://dublincore.org/documents/dces/). Both "location.csv" and
+"metadata.csv" must begin with a row demonstrating the order of the columns. We
+have provided an example of these files at <url to be added>
+"""))
     subparser.add_argument(
         "-l", "--license",
         help=(
-            "License these media entry will be released under, if all the same"
-            "Should be a URL."))
+           "License these media entry will be released under, if all the same. "
+           "Should be a URL."))
     subparser.add_argument(
         '--celery',
         action='store_true',
@@ -67,26 +66,38 @@ def batchaddmedia(args):
     # get the user
     user = app.db.User.query.filter_by(username=args.username.lower()).first()
     if user is None:
-        print "Sorry, no user by username '%s'" % args.username
+        print "Sorry, no user by username '%s' exists" % args.username
         return
 
     upload_limit, max_file_size = get_upload_file_limits(user)
     temp_files = []
 
-    if args.target_type == 'archive':
+    if tarfile.is_tarfile(args.target_path):
         dir_path = tempfile.mkdtemp()
         temp_files.append(dir_path)
         tar = tarfile.open(args.target_path)
         tar.extractall(path=dir_path)
 
-    elif args.target_type == 'directory':
+    elif zipfile.is_zipfile(args.target_path):
+        dir_path = tempfile.mkdtemp()
+        temp_files.append(dir_path)
+        zipped_file = zipfile.ZipFile(args.target_path)
+        zipped_file.extractall(path=dir_path)
+
+    elif os.path.isdir(args.target_path):
         dir_path = args.target_path
+
+    else:
+        print "Couldn't recognize the file. This script only accepts tar files,\
+zip files and directories"
+    if dir_path.endswith('/'):
+        dir_path = dir_path[:-1]
 
     location_file_path = "{dir_path}/location.csv".format(
         dir_path=dir_path)
     metadata_file_path = "{dir_path}/metadata.csv".format(
         dir_path=dir_path)
-    
+
     # check for the location file, if it exists...
     location_filename = os.path.split(location_file_path)[-1]
     abs_location_filename = os.path.abspath(location_file_path)
@@ -178,7 +189,7 @@ def batchaddmedia(args):
             print "This user is already past their upload limits."
     teardown(temp_files)
 
-        
+
 
 def parse_csv_file(file_contents):
     list_of_contents = file_contents.split('\n')
