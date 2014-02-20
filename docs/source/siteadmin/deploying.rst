@@ -122,8 +122,8 @@ Drop Privileges for MediaGoblin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 MediaGoblin does not require special permissions or elevated
-access to run. As such, the prefered way to run MediaGoblin is to 
-create a dedicated, unpriviledged system user for sole the purpose of running
+access to run. As such, the preferred way to run MediaGoblin is to
+create a dedicated, unprivileged system user for the sole purpose of running
 MediaGoblin. Running MediaGoblin processes under an unpriviledged system user
 helps to keep it more secure. 
 
