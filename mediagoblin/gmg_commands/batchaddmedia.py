@@ -63,6 +63,8 @@ def batchaddmedia(args):
 
     app = commands_util.setup_app(args)
 
+    files_uploaded, files_attempted = 0, 0
+
     # get the user
     user = app.db.User.query.filter_by(username=args.username.lower()).first()
     if user is None:
@@ -72,7 +74,10 @@ def batchaddmedia(args):
     upload_limit, max_file_size = get_upload_file_limits(user)
     temp_files = []
 
-    if tarfile.is_tarfile(args.target_path):
+    if os.path.isdir(args.target_path):
+        dir_path = args.target_path
+
+    elif tarfile.is_tarfile(args.target_path):
         dir_path = tempfile.mkdtemp()
         temp_files.append(dir_path)
         tar = tarfile.open(args.target_path)
@@ -83,9 +88,6 @@ def batchaddmedia(args):
         temp_files.append(dir_path)
         zipped_file = zipfile.ZipFile(args.target_path)
         zipped_file.extractall(path=dir_path)
-
-    elif os.path.isdir(args.target_path):
-        dir_path = args.target_path
 
     else:
         print "Couldn't recognize the file. This script only accepts tar files,\
@@ -141,11 +143,9 @@ zip files and directories"
         description = file_metadata.get('dcterms:description')
         license = file_metadata.get('dcterms:license')
         filename = url.path.split()[-1]
-        print "Working with {filename}".format(filename=filename)
+        files_attempted += 1
 
         if url.scheme == 'http':
-            print "Downloading {filename}...".format(
-                filename=filename)
             media_file = tempfile.TemporaryFile()
             res = urllib.urlopen(url.geturl())
             media_file.write(res.read())
@@ -163,11 +163,10 @@ zip files and directories"
             try:
                 media_file = file(file_abs_path, 'r')
             except IOError:
-                print "Local file {filename} could not be accessed.".format(
-                    filename=filename)
+                print "\
+FAIL: Local file {filename} could not be accessed.".format(filename=filename)
                 print "Skipping it."
                 continue
-        print "Submitting {filename}...".format(filename=filename)
         try:
             submit_media(
                 mg_app=app,
@@ -181,12 +180,17 @@ zip files and directories"
                 upload_limit=upload_limit, max_file_size=max_file_size)
             print "Successfully uploading {filename}!".format(filename=filename)
             print ""
+            files_uploaded += 1
         except FileUploadLimit:
-            print "This file is larger than the upload limits for this site."
+            print "FAIL: This file is larger than the upload limits for this site."
         except UserUploadLimit:
-            print "This file will put this user past their upload limits."
+            print "FAIL: This file will put this user past their upload limits."
         except UserPastUploadLimit:
-            print "This user is already past their upload limits."
+            print "FAIL: This user is already past their upload limits."
+    print "\
+{files_uploaded} out of {files_attempted} files successfully uploaded".format(
+        files_uploaded=files_uploaded,
+        files_attempted=files_attempted)
     teardown(temp_files)
 
 
