@@ -3,17 +3,22 @@
 =======================
 
 Mediagoblin templates are written with 80 char limit for better
-readability. However that means that the html output is very verbose
-containing LOTS of whitespace. This plugin inserts a Middleware that
-filters out whitespace from the returned HTML in the Response() objects.
+readability. However that means that the HTML output is very verbose
+containing *lots* of whitespace. This plugin inserts a middleware that
+filters out whitespace from the returned HTML in the ``Response()``
+objects.
 
-Simply enable this plugin by putting it somewhere where python can reach it and put it's path into the [plugins] section of your mediagoblin.ini or mediagoblin_local.ini like for example this:
+Simply enable this plugin by putting it somewhere where Python can reach
+it and put it's path into the ``[plugins]`` section of your
+``mediagoblin.ini`` or ``mediagoblin_local.ini`` like for example this:
+
+.. code-block:: ini
 
     [plugins]
     [[mediagoblin.plugins.trim_whitespace]]
 
 There is no further configuration required. If this plugin is enabled,
-all text/html documents should not have lots of whitespace in between
+all *text/html* documents should not have lots of whitespace in between
 elements, although it does a very naive filtering right now (just keep
 the first whitespace and delete all subsequent ones).
 
