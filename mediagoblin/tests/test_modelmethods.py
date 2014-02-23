@@ -20,15 +20,19 @@
 from mediagoblin.db.base import Session
 from mediagoblin.db.models import MediaEntry, User, Privilege
 
+from mediagoblin.tests import MGClientTestCase
 from mediagoblin.tests.tools import fixture_add_user
 
 import mock
+import pytest
 
 
 class FakeUUID(object):
     hex = 'testtest-test-test-test-testtesttest'
 
 UUID_MOCK = mock.Mock(return_value=FakeUUID())
+
+REQUEST_CONTEXT = ['mediagoblin/root.html', 'request']
 
 
 class TestMediaEntrySlugs(object):
@@ -204,3 +208,23 @@ def test_media_data_init(test_app):
         print repr(obj)
     assert obj_in_session == 0
 
+
+class TestUserUrlForSelf(MGClientTestCase):
+
+    usernames = [(u'lindsay', dict(privileges=[u'active']))]
+
+    def test_url_for_self(self):
+        _, request = self.do_get('/', *REQUEST_CONTEXT)
+
+        assert self.user(u'lindsay').url_for_self(request.urlgen) == '/u/lindsay/'
+
+    def test_url_for_self_not_callable(self):
+        _, request = self.do_get('/', *REQUEST_CONTEXT)
+
+        def fake_urlgen():
+            pass
+
+        with pytest.raises(TypeError) as excinfo:
+            self.user(u'lindsay').url_for_self(fake_urlgen())
+        assert excinfo.errisinstance(TypeError)
+        assert 'object is not callable' in str(excinfo)
