@@ -24,6 +24,7 @@
 /celery.db
 /kombu.db
 /server-log.txt
+*.egg/
 
 # pyconfigure/automake generated files
 /Makefile
