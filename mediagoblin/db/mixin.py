@@ -295,7 +295,7 @@ class MediaCommentMixin(object):
         return cleaned_markdown_conversion(self.content)
 
     def __repr__(self):
-        return '<{klass} #{id} {author} "{comment}">'.format(
+        return u'<{klass} #{id} {author} "{comment}">'.format(
             klass=self.__class__.__name__,
             id=self.id,
             author=self.get_author,

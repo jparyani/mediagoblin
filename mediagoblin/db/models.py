@@ -666,7 +666,7 @@ class Notification(Base):
     }
 
     def __repr__(self):
-        return '<{klass} #{id}: {user}: {subject} ({seen})>'.format(
+        return u'<{klass} #{id}: {user}: {subject} ({seen})>'.format(
             id=self.id,
             klass=self.__class__.__name__,
             user=self.user,

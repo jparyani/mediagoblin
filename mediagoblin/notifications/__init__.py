@@ -65,7 +65,7 @@ def mark_comment_notification_seen(comment_id, user):
         user_id=user.id,
         subject_id=comment_id).first()
 
-    _log.debug('Marking {0} as seen.'.format(notification))
+    _log.debug(u'Marking {0} as seen.'.format(notification))
 
     mark_notification_seen(notification)
 
