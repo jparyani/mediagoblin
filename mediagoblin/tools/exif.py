@@ -14,10 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-try:
-    from EXIF import process_file, Ratio
-except ImportError:
-    from mediagoblin.tools.extlib.EXIF import process_file, Ratio
+import sys
+sys.path.append('extlib/exif')
+
+from EXIF import process_file
+from exifread.utils import Ratio
 
 from mediagoblin.processing import BadMediaFail
 from mediagoblin.tools.translate import pass_to_ugettext as _

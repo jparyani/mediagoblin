@@ -1,1 +1,0 @@
-../../../extlib/exif/EXIF.py
