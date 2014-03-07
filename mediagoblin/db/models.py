@@ -18,6 +18,8 @@
 TODO: indexes on foreignkeys, where useful.
 """
 
+from __future__ import print_function
+
 import logging
 import datetime
 
@@ -371,7 +373,7 @@ class MediaEntry(Base, MediaEntryMixin):
         # Delete all related files/attachments
         try:
             delete_media_files(self)
-        except OSError, error:
+        except OSError as error:
             # Returns list of files we failed to delete
             _log.error('No such files from the user "{1}" to delete: '
                        '{0}'.format(str(error), self.get_uploader))
@@ -943,7 +945,7 @@ def show_table_init(engine_uri):
 
 if __name__ == '__main__':
     from sys import argv
-    print repr(argv)
+    print(repr(argv))
     if len(argv) == 2:
         uri = argv[1]
     else:
