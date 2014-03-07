@@ -61,7 +61,7 @@ install_requires = [
     'kombu',
     'jinja2',
     'sphinx',  # TODO: is this a docs requirement?
-    'Babel<1.0',
+    'Babel<1.0',  # TODO: why <1.0 or 0.9.6?
     'webtest<2',
     'ConfigObj',
     'Markdown',
@@ -78,6 +78,7 @@ install_requires = [
     # use pbr, and currently it breaks things, presumably till
     # their next release.
     'pbr==0.5.22',
+    'PasteDeploy',
     # This is optional:
     # 'translitcodec',
     # For now we're expecting that users will install this from
