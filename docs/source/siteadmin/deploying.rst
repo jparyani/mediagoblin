@@ -136,11 +136,11 @@ username if you wish.::
 No password will be assigned to this account, and you will not be able
 to log in as this user. To switch to this account, enter either::
 
-  sudo su mediagoblin  # (if you have sudo permissions)
+  sudo -u mediagoblin /bin/bash  # (if you have sudo permissions)
 
 or::
 
-  su mediagoblin  # (if you have to use root permissions)
+  su mediagoblin -s /bin/bash  # (if you have to use root permissions)
 
 You may get a warning similar to this when entering these commands::
 
