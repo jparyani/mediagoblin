@@ -15,15 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-# This import *is* used; see word.encode('tranlit/long') below.
-from unicodedata import normalize
-
-try:
-    import translitcodec
-    USING_TRANSLITCODEC = True
-except ImportError:
-    USING_TRANSLITCODEC = False
-
+from unidecode import unidecode
 
 _punct_re = re.compile(r'[\t !"#:$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
 
@@ -34,11 +26,5 @@ def slugify(text, delim=u'-'):
     """
     result = []
     for word in _punct_re.split(text.lower()):
-        if USING_TRANSLITCODEC:
-            word = word.encode('translit/long')
-        else:
-            word = normalize('NFKD', word).encode('ascii', 'ignore')
-
-        if word:
-            result.append(word)
+        result.extend(unidecode(word).split())
     return unicode(delim.join(result))

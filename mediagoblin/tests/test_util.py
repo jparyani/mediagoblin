@@ -77,6 +77,12 @@ def test_slugify():
     assert url.slugify(u'a w@lk in the park?') == u'a-w-lk-in-the-park'
     assert url.slugify(u'a walk in the par\u0107') == u'a-walk-in-the-parc'
     assert url.slugify(u'\u00E0\u0042\u00E7\u010F\u00EB\u0066') == u'abcdef'
+    # Russian
+    assert url.slugify(u'\u043f\u0440\u043e\u0433\u0443\u043b\u043a\u0430 '
+            u'\u0432 \u043f\u0430\u0440\u043a\u0435') == u'progulka-v-parke'
+    # Korean
+    assert (url.slugify(u'\uacf5\uc6d0\uc5d0\uc11c \uc0b0\ucc45') ==
+            u'gongweoneseo-sancaeg')
 
 def test_locale_to_lower_upper():
     """

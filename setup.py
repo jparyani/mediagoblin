@@ -65,6 +65,7 @@ try:
         'pytz',
         'six',
         'oauthlib==0.5.0',
+        'unidecode',
 
         ## Annoying.  Please remove once we can!  We only indirectly
         ## use pbr, and currently it breaks things, presumably till
