@@ -34,6 +34,7 @@ class BlogMixin(GenerateSlugMixin):
     def check_slug_used(self, slug):
         return check_blog_slug_used(self.author, slug, self.id)
 
+
 class Blog(Base, BlogMixin):
     __tablename__ = "mediatype__blogs"
     id = Column(Integer, primary_key=True)
@@ -42,7 +43,10 @@ class Blog(Base, BlogMixin):
     author = Column(Integer, ForeignKey(User.id), nullable=False, index=True) #similar to uploader
     created = Column(DateTime, nullable=False, default=datetime.datetime.now, index=True)
     slug = Column(Unicode)
-    
+
+    @property
+    def slug_or_id(self):
+        return (self.slug or u'blog_{0}'.format(self.id))
  
     def get_all_blog_posts(self, state=None):
         blog_posts = Session.query(MediaEntry).join(BlogPostData)\

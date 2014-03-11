@@ -59,7 +59,7 @@
     <br/>
     <br/>
     {% set blog_about_url = request.urlgen('mediagoblin.media_types.blog.blog_about', 
-                                      blog_slug=blog.slug, user=blog_owner_name) %}
+                                      blog_slug=blog.slug_or_id, user=blog_owner_name) %}
     <a style="text-decoration:underline" href="{{ blog_about_url}}">About Blog</a>
     <br/>
     {{ render_pagination(request, pagination) }}

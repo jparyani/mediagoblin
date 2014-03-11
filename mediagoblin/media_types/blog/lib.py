@@ -45,5 +45,12 @@ def get_all_blogposts_of_blog(request, blog, state=None):
             blog_posts_list.append(blog_post)
     blog_posts_list.reverse()
     return blog_posts_list
-    
+
+def get_blog_by_slug(request, slug, **kwargs):
+    if slug.startswith('blog_'):
+        blog_id = int(slug[5:])
+        blog = request.db.Blog.query.filter_by(id=blog_id, **kwargs).first()
+    else:
+        blog = request.db.Blog.query.filter_by(slug=slug, **kwargs).first()
+    return blog
  

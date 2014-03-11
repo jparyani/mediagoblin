@@ -32,14 +32,14 @@
         <table id="blogs_list">
             {% for blog in blogs %}
                 {% set others_blog_url = request.urlgen('mediagoblin.media_types.blog.blog_post_listing',
-                                                  blog_slug=blog.slug, user=user.username) %}
+                                                  blog_slug=blog.slug_or_id, user=user.username) %}
                 
                 <tr>
                      {% if not request.user or request.user.username != user.username%}
                             <td><a href="{{ others_blog_url }}">{{ blog.title }}</a></td>
                      {% else %}
                        {% set my_blog_url = request.urlgen('mediagoblin.media_types.blog.blog-dashboard',
-                       blog_slug=blog.slug, user=request.user.username) %}
+                       blog_slug=blog.slug_or_id, user=request.user.username) %}
                             <td><a href="{{ my_blog_url }}">{{ blog.title }}</a></td>
                      {% endif %}
                      <td>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;</td>

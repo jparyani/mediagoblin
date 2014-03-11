@@ -26,7 +26,9 @@ from mediagoblin import mg_globals
 
 from mediagoblin.media_types.blog import forms as blog_forms
 from mediagoblin.media_types.blog.models import Blog, BlogPostData
-from mediagoblin.media_types.blog.lib import may_edit_blogpost, set_blogpost_state, get_all_blogposts_of_blog
+from mediagoblin.media_types.blog.lib import (
+        may_edit_blogpost, set_blogpost_state, get_all_blogposts_of_blog,
+        get_blog_by_slug)
 
 from mediagoblin.messages import add_message, SUCCESS, ERROR
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
@@ -91,7 +93,7 @@ def blog_edit(request):
 
     #Blog already exists.
     else:
-        blog = request.db.Blog.query.filter_by(slug=blog_slug).first()
+        blog = get_blog_by_slug(request, blog_slug)
         if not blog:
             return render_404(request)
         if request.method == 'GET':
@@ -129,8 +131,7 @@ def blogpost_create(request):
 
     if request.method == 'POST' and form.validate():
         blog_slug = request.matchdict.get('blog_slug')
-        blog = request.db.Blog.query.filter_by(slug=blog_slug,
-            author=request.user.id).first()
+        blog = get_blog_by_slug(request, blog_slug, author=request.user.id)
         if not blog:
             return render_404(request)
 
@@ -173,7 +174,7 @@ def blogpost_edit(request):
     blog_post_slug = request.matchdict.get('blog_post_slug', None)
 
     blogpost = request.db.MediaEntry.query.filter_by(slug=blog_post_slug, uploader=request.user.id).first()
-    blog = request.db.Blog.query.filter_by(slug=blog_slug, author=request.user.id).first()
+    blog = get_blog_by_slug(request, blog_slug, author=request.user.id)
 
     if not blogpost or not blog:
         return render_404(request)
@@ -222,7 +223,7 @@ def blog_dashboard(request, page, url_user=None):
     max_blog_count = config['max_blog_count']
     if request.user and (request.user.id == url_user.id or request.user.has_privilege(u'admin')):
         if blog_slug:
-            blog = blogs.filter(Blog.slug==blog_slug).first()
+            blog = get_blog_by_slug(request, blog_slug)
             if not blog:
                 return render_404(request)
             else:
@@ -259,7 +260,7 @@ def blog_post_listing(request, page, url_user=None):
     Page, listing all the blog posts of a particular blog.
     """
     blog_slug = request.matchdict.get('blog_slug', None)
-    blog = request.db.Blog.query.filter_by(slug=blog_slug).first()
+    blog = get_blog_by_slug(request, blog_slug, author=request.user.id)
     if not blog:
         return render_404(request)
 
@@ -280,12 +281,10 @@ def blog_post_listing(request, page, url_user=None):
 
 @require_active_login
 def draft_view(request):
-    
     blog_slug = request.matchdict.get('blog_slug', None)
     blog_post_slug = request.matchdict.get('blog_post_slug', None)
     user = request.matchdict.get('user')
-
-    blog = request.db.Blog.query.filter_by(author=request.user.id, slug=blog_slug).first()
+    blog = get_blog_by_slug(request, blog_slug, author=request.user.id)
     blogpost = request.db.MediaEntry.query.filter_by(state = u'failed', uploader=request.user.id, slug=blog_post_slug).first()
 
     if not blog or not blogpost:
@@ -308,7 +307,7 @@ def blog_delete(request, **kwargs):
     owner_user = request.db.User.query.filter_by(username=url_user).first()
 
     blog_slug = request.matchdict.get('blog_slug', None)
-    blog = request.db.Blog.query.filter_by(slug=blog_slug, author=owner_user.id).first()
+    blog = get_blog_by_slug(request, blog_slug, author=owner_user.id)
     if not blog:
         return render_404(reequest)
 
@@ -355,7 +354,7 @@ def blog_about_view(request):
     url_user = request.matchdict.get('user', None)
     
     user = request.db.User.query.filter_by(username=url_user).first() 
-    blog = request.db.Blog.query.filter_by(author=user.id, slug=blog_slug).first()
+    blog = get_blog_by_slug(request, blog_slug, author=user.id)
     
     if not user or not blog:
         return render_404(request)
