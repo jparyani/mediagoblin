@@ -1,0 +1,70 @@
+{
+  "@context": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "contributor":{
+      "@id":"dc:title",
+      "@type":"xsd:string"
+    },
+    "coverage":{
+      "@id":"dc:coverage",
+      "@type":"xsd:string"
+    },
+    "created":{
+      "@id":"dc:created",
+      "@type":"xsd:date"
+    },
+    "creator":{
+      "@id":"dc:created",
+      "@type":"xsd:date"
+    },
+    "date":{
+      "@id":"dc:date",
+      "@type":"xsd:date"
+    },
+    "description":{
+      "@id":"dc:description",
+      "@type":"xsd:string"
+    },
+    "format":{
+      "@id":"dc:format",
+      "@type":"xsd:string"
+    },
+    "identifier":{
+      "@id":"dc:identifier",
+      "@type":"xsd:string"
+    },
+    "language":{
+      "@id":"dc:language",
+      "@type":"xsd:string"
+    },
+    "publisher":{
+      "@id":"dc:publisher",
+      "@type":"xsd:string"
+    },
+    "relation":{
+      "@id":"dc:relation",
+      "@type":"xsd:string"
+    },
+    "rights":{
+      "@id":"dc:rights",
+      "@type":"xsd:anyURI"
+    },
+    "source":{
+      "@id":"dc:source",
+      "@type":"xsd:string"
+    },
+  	"subject":{
+      "@id":"dc:subject",
+      "@type":"xsd:string"
+    },
+    "title": {
+      "@id":"dc:title",
+      "@type":"xsd:string"
+    },
+    "type":{
+      "@id":"dc:type",
+      "@type":"xsd:string"
+    }
+  }
+}
