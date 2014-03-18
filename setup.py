@@ -66,6 +66,7 @@ try:
         'six>=1.4.1',
         'oauthlib==0.5.0',
         'unidecode',
+        'jsonschema',
 
         ## Annoying.  Please remove once we can!  We only indirectly
         ## use pbr, and currently it breaks things, presumably till
