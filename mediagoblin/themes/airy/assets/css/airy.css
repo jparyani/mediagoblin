@@ -38,6 +38,10 @@ header {
   color: #4a4a4a;
 }
 
+#code_of_conduct_list strong {
+  color: #4a4a4a;
+}
+
 @media screen and (max-width: 940px) {
     header {
         width: 100%;
