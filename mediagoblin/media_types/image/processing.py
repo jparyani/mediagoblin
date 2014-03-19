@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 try:
     from PIL import Image
 except ImportError:
@@ -381,5 +383,4 @@ if __name__ == '__main__':
     clean = clean_exif(result)
     useful = get_useful(clean)
 
-    print pp.pprint(
-        clean)
+    print(pp.pprint(clean))

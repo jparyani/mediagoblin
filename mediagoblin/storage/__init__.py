@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import
+
 import shutil
 import uuid
 
@@ -268,4 +270,4 @@ def storage_system_from_config(config_section):
     storage_class = common.import_component(storage_class)
     return storage_class(**config_params)
 
-import filestorage
+from . import filestorage

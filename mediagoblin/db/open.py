@@ -20,6 +20,7 @@ import logging
 
 from mediagoblin.db.base import Base, Session
 from mediagoblin import mg_globals
+from mediagoblin._compat import iteritems
 
 _log = logging.getLogger(__name__)
 
@@ -28,7 +29,7 @@ class DatabaseMaster(object):
     def __init__(self, engine):
         self.engine = engine
 
-        for k, v in Base._decl_class_registry.iteritems():
+        for k, v in iteritems(Base._decl_class_registry):
             setattr(self, k, v)
 
     def commit(self):

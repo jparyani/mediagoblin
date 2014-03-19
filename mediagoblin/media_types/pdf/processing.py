@@ -138,7 +138,7 @@ def is_unoconv_working():
     try:
         proc = Popen([unoconv, '--show'], stderr=PIPE)
         output = proc.stderr.read()
-    except OSError, e:
+    except OSError:
         _log.warn(_('unoconv failing to run, check log file'))
         return False
     if 'ERROR' in output:

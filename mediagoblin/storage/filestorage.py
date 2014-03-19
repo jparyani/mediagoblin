@@ -21,7 +21,8 @@ from mediagoblin.storage import (
 
 import os
 import shutil
-import urlparse
+
+from mediagoblin._compat import urlparse
 
 
 class BasicFileStorage(StorageInterface):

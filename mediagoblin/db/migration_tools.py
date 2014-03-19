@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import unicode_literals
+
 from mediagoblin.tools.common import simple_printer
 from sqlalchemy import Table
 from sqlalchemy.sql import select
@@ -39,7 +41,7 @@ class MigrationManager(object):
          - migration_registry: where we should find all migrations to
            run
         """
-        self.name = unicode(name)
+        self.name = name
         self.models = models
         self.foundations = foundations
         self.session = session

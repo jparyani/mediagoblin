@@ -52,7 +52,7 @@ def load_key(filename):
 
 def create_key(key_dir, key_filepath):
     global __itsda_secret
-    old_umask = os.umask(077)
+    old_umask = os.umask(0o77)
     key_file = None
     try:
         if not os.path.isdir(key_dir):
@@ -80,7 +80,7 @@ def setup_crypto():
     key_filepath = os.path.join(key_dir, 'itsdangeroussecret.bin')
     try:
         load_key(key_filepath)
-    except IOError, error:
+    except IOError as error:
         if error.errno != errno.ENOENT:
             raise
         create_key(key_dir, key_filepath)
