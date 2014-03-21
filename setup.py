@@ -63,7 +63,7 @@ try:
         'mock',
         'itsdangerous',
         'pytz',
-        'six',
+        'six>=1.4.1',
         'oauthlib==0.5.0',
         'unidecode',
 
