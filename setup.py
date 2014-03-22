@@ -53,7 +53,7 @@ try:
         'kombu',
         'jinja2',
         'sphinx',
-        'Babel<1.0',
+        'Babel',
         'argparse',
         'webtest<2',
         'ConfigObj',

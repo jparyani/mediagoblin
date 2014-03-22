@@ -42,7 +42,7 @@ def set_available_locales():
     """Set available locales for which we have translations"""
     global AVAILABLE_LOCALES
     locales=['en', 'en_US'] # these are available without translations
-    for locale in localedata.list():
+    for locale in localedata.locale_identifiers():
         if gettext.find('mediagoblin', TRANSLATIONS_PATH, [locale]):
             locales.append(locale)
     AVAILABLE_LOCALES = locales
