@@ -65,7 +65,10 @@ try:
         'pytz',
         'oauthlib==0.5.0',
         'unidecode',
-        'six>=1.5.2'
+
+        # PLEASE change this when we can; a dependency is forcing us to set this
+        # specific number and it is breaking setup.py develop
+        'six==1.5.2'
 
         ## Annoying.  Please remove once we can!  We only indirectly
         ## use pbr, and currently it breaks things, presumably till
