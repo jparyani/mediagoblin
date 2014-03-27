@@ -26,6 +26,7 @@ from mediagoblin.submit.lib import (
     FileUploadLimit, UserUploadLimit, UserPastUploadLimit)
 
 from mediagoblin import mg_globals
+from jsonschema import validate
 
 def parser_setup(subparser):
     subparser.description = """\
@@ -215,3 +216,35 @@ def parse_csv_file(file_contents):
 def teardown(temp_files):
     for temp_file in temp_files:
         subprocess.call(['rm','-r',temp_file])
+
+def check_metadata_format(metadata_dict):
+    schema = json.loads("""
+{
+    "$schema":"http://json-schema.org/schema#",
+    "properties":{
+        "@context":{},
+        "contributor":{},
+        "coverage":{},
+        "created":{},
+        "creator":{},
+        "date":{},
+        "description":{},
+        "format":{},
+        "identifier":{},
+        "language":{},
+        "publisher":{},
+        "relation":{},
+        "rights" : {
+            "format":"uri",
+            "type":"string"
+        },
+        "source":{},
+        "subject":{},
+        "title":{},
+        "type":{}
+    },
+    "additionalProperties": false,
+    "required":["title","@context"]
+}""")
+    try:
+        validate(metadata_dict, schema)
