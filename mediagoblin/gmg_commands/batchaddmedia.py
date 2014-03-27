@@ -229,7 +229,7 @@ def check_metadata_format(metadata_dict):
     "$schema":"http://json-schema.org/schema#",
     "properties":{
         "@context":{},
-
+        "media:id":{},
         "dcterms:contributor":{},
         "dcterms:coverage":{},
         "dcterms:created":{},
@@ -251,18 +251,32 @@ def check_metadata_format(metadata_dict):
         "dcterms:type":{}
     },
     "additionalProperties": false,
-    "required":["dcterms:title","@context","media:id"]
+    "required":["dcterms:title","@context","media:id","bell"]
 }""")
     metadata_dict["@context"] = u"http://127.0.0.1:6543/metadata_context/v1/"
     try:
         validate(metadata_dict, schema)
         output_dict = metadata_dict
     except ValidationError, exc:
-        title = metadata_dict.get('dcterms:title') or metadata_dict.get('media:id') or \
-            _(u'UNKNOWN FILE')
-        print _(
-u"""WARN: Could not find appropriate metadata for file "{title}". 
-File will be skipped""".format(title=title))
+        title = (metadata_dict.get('dcterms:title') or 
+            metadata_dict.get('media:id') or _(u'UNKNOWN FILE'))
+
+        if exc.validator == "additionalProperties":
+            message = _(u'Invalid metadata provided for file "{title}". This \
+script only accepts the Dublin Core metadata terms.'.format(title=title))
+
+        elif exc.validator == "required":
+            message = _(
+u'All necessary metadata was not provided for file "{title}", you must include \
+a "dcterms:title" column for each media file'.format(title=title))
+
+        else:
+            message = _(u'Could not find appropriate metadata for file \
+"{title}".'.format(title=title))
+
+        print _(u"""WARN: {message} \nSkipping File...\n""".format(
+            message=message))
+
         output_dict = {}
     except:
         raise
