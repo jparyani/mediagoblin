@@ -137,6 +137,8 @@ zip files and directories"
     dcterms_context = { 'dcterms':'http://purl.org/dc/terms/' }
 
     for media_id in media_locations.keys():
+        files_attempted += 1
+
         file_metadata     = media_metadata[media_id]
         sanitized_metadata = check_metadata_format(file_metadata)
         if sanitized_metadata == {}: continue
@@ -149,7 +151,6 @@ zip files and directories"
         description = file_metadata.get('dcterms:description')
         license = file_metadata.get('dcterms:license')
         filename = url.path.split()[-1]
-        files_attempted += 1
 
         if url.scheme == 'http':
             media_file = tempfile.TemporaryFile()
@@ -228,6 +229,7 @@ def check_metadata_format(metadata_dict):
     "$schema":"http://json-schema.org/schema#",
     "properties":{
         "@context":{},
+
         "dcterms:contributor":{},
         "dcterms:coverage":{},
         "dcterms:created":{},
@@ -246,8 +248,7 @@ def check_metadata_format(metadata_dict):
         "dcterms:source":{},
         "dcterms:subject":{},
         "dcterms:title":{},
-        "dcterms:type":{},
-        "media:id":{}
+        "dcterms:type":{}
     },
     "additionalProperties": false,
     "required":["dcterms:title","@context","media:id"]
@@ -260,7 +261,7 @@ def check_metadata_format(metadata_dict):
         title = metadata_dict.get('dcterms:title') or metadata_dict.get('media:id') or \
             _(u'UNKNOWN FILE')
         print _(
-u"""WARN: Could not find appropriate metadata for file {title}. 
+u"""WARN: Could not find appropriate metadata for file "{title}". 
 File will be skipped""".format(title=title))
         output_dict = {}
     except:
