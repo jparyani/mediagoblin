@@ -24,9 +24,11 @@ from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.submit.lib import (
     submit_media, get_upload_file_limits,
     FileUploadLimit, UserUploadLimit, UserPastUploadLimit)
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 from mediagoblin import mg_globals
-from jsonschema import validate
+from jsonschema import validate 
+from jsonschema.exceptions import ValidationError
 
 def parser_setup(subparser):
     subparser.description = """\
@@ -135,7 +137,10 @@ zip files and directories"
     dcterms_context = { 'dcterms':'http://purl.org/dc/terms/' }
 
     for media_id in media_locations.keys():
-        file_metadata = media_metadata[media_id]
+        file_metadata     = media_metadata[media_id]
+        santized_metadata = check_metadata_format(file_metadata)
+        if sanitized_metadata == {}: continue
+
         json_ld_metadata = jsonld.compact(file_metadata, dcterms_context)
         original_location = media_locations[media_id]['media:original']
         url = urlparse(original_location)
@@ -248,3 +253,14 @@ def check_metadata_format(metadata_dict):
 }""")
     try:
         validate(metadata_dict, schema)
+        output_dict = metadata_dict
+    except ValidationError, exc:
+        title = metadata_dict.get('title') or metadata_dict.get('media:id') or \
+            _(u'UNKNOWN FILE')
+        print _(
+u"""WARN: Could not find appropriate metadata for file {title}. File will be
+skipped""".format(title=title))
+        output_dict = {}
+    except:
+        raise
+    return output_dict
