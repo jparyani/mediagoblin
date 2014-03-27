@@ -65,6 +65,7 @@ try:
         'pytz',
         'oauthlib==0.5.0',
         'unidecode',
+        'ExifRead',
 
         # PLEASE change this when we can; a dependency is forcing us to set this
         # specific number and it is breaking setup.py develop
