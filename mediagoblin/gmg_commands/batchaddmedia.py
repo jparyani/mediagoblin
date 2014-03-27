@@ -138,7 +138,7 @@ zip files and directories"
 
     for media_id in media_locations.keys():
         file_metadata     = media_metadata[media_id]
-        santized_metadata = check_metadata_format(file_metadata)
+        sanitized_metadata = check_metadata_format(file_metadata)
         if sanitized_metadata == {}: continue
 
         json_ld_metadata = jsonld.compact(file_metadata, dcterms_context)
@@ -207,7 +207,7 @@ def parse_csv_file(file_contents):
                   list_of_contents[1:])
     objects_dict = {}
 
-    # Build a dictionary
+    # Build a dictionaryfrom mediagoblin.tools.translate import lazy_pass_to_ugettext as _
     for line in lines:
         if line.isspace() or line == '': continue
         values = csv_reader([line]).next()
@@ -228,38 +228,40 @@ def check_metadata_format(metadata_dict):
     "$schema":"http://json-schema.org/schema#",
     "properties":{
         "@context":{},
-        "contributor":{},
-        "coverage":{},
-        "created":{},
-        "creator":{},
-        "date":{},
-        "description":{},
-        "format":{},
-        "identifier":{},
-        "language":{},
-        "publisher":{},
-        "relation":{},
-        "rights" : {
+        "dcterms:contributor":{},
+        "dcterms:coverage":{},
+        "dcterms:created":{},
+        "dcterms:creator":{},
+        "dcterms:date":{},
+        "dcterms:description":{},
+        "dcterms:format":{},
+        "dcterms:identifier":{},
+        "dcterms:language":{},
+        "dcterms:publisher":{},
+        "dcterms:relation":{},
+        "dcterms:rights" : {
             "format":"uri",
             "type":"string"
         },
-        "source":{},
-        "subject":{},
-        "title":{},
-        "type":{}
+        "dcterms:source":{},
+        "dcterms:subject":{},
+        "dcterms:title":{},
+        "dcterms:type":{},
+        "media:id":{}
     },
     "additionalProperties": false,
-    "required":["title","@context"]
+    "required":["dcterms:title","@context","media:id"]
 }""")
+    metadata_dict["@context"] = u"http://127.0.0.1:6543/metadata_context/v1/"
     try:
         validate(metadata_dict, schema)
         output_dict = metadata_dict
     except ValidationError, exc:
-        title = metadata_dict.get('title') or metadata_dict.get('media:id') or \
+        title = metadata_dict.get('dcterms:title') or metadata_dict.get('media:id') or \
             _(u'UNKNOWN FILE')
         print _(
-u"""WARN: Could not find appropriate metadata for file {title}. File will be
-skipped""".format(title=title))
+u"""WARN: Could not find appropriate metadata for file {title}. 
+File will be skipped""".format(title=title))
         output_dict = {}
     except:
         raise
