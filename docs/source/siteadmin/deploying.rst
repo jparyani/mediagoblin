@@ -91,13 +91,7 @@ name will be ``mediagoblin`` too.
 
 To create our new user, run::
 
-    sudo -u postgres createuser mediagoblin
-
-then answer NO to *all* the questions::
-
-    Shall the new role be a superuser? (y/n) n
-    Shall the new role be allowed to create databases? (y/n) n
-    Shall the new role be allowed to create more new roles? (y/n) n
+    sudo -u postgres createuser -A -D mediagoblin
 
 then create the database all our MediaGoblin data should be stored in::
 
