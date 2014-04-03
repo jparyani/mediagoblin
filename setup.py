@@ -59,7 +59,10 @@ try:
         'ConfigObj',
         'Markdown',
         'sqlalchemy<0.9.0, >0.8.0',
-        'sqlalchemy-migrate',
+        # newer sqlalchemy-migrate requires pbr which BREAKS EVERYTHING AND IS
+        #  TERRIBLE AND IS THE END OF ALL THINGS
+        #  I'd love to remove this restriction.
+        'sqlalchemy-migrate<0.8',
         'mock',
         'itsdangerous',
         'pytz',
