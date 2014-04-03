@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import json, tempfile, urllib, tarfile, zipfile, subprocess
+import tempfile, urllib, tarfile, zipfile, subprocess
 from csv import reader as csv_reader
 from urlparse import urlparse
 from pyld import jsonld
@@ -149,7 +149,7 @@ zip files and directories"
 
         title = file_metadata.get('dcterms:title')
         description = file_metadata.get('dcterms:description')
-        license = file_metadata.get('dcterms:license')
+        license = file_metadata.get('dcterms:rights')
         filename = url.path.split()[-1]
 
         if url.scheme == 'http':
@@ -201,7 +201,6 @@ FAIL: Local file {filename} could not be accessed.".format(filename=filename)
     teardown(temp_files)
 
 
-
 def parse_csv_file(file_contents):
     list_of_contents = file_contents.split('\n')
     key, lines = (list_of_contents[0].split(','),
@@ -219,16 +218,16 @@ def parse_csv_file(file_contents):
 
     return objects_dict
 
+
 def teardown(temp_files):
     for temp_file in temp_files:
         subprocess.call(['rm','-r',temp_file])
 
+
 def check_metadata_format(metadata_dict):
-    schema = json.loads("""
-{
+    schema = {
     "$schema":"http://json-schema.org/schema#",
     "properties":{
-        "@context":{},
         "media:id":{},
         "dcterms:contributor":{},
         "dcterms:coverage":{},
@@ -250,13 +249,14 @@ def check_metadata_format(metadata_dict):
         "dcterms:title":{},
         "dcterms:type":{}
     },
-    "additionalProperties": false,
-    "required":["dcterms:title","@context","media:id","bell"]
-}""")
-    metadata_dict["@context"] = u"http://127.0.0.1:6543/metadata_context/v1/"
+    "additionalProperties": False,
+    "required":["dcterms:title","media:id"]
+}
     try:
         validate(metadata_dict, schema)
         output_dict = metadata_dict
+        del output_dict['media:id']
+
     except ValidationError, exc:
         title = (metadata_dict.get('dcterms:title') or 
             metadata_dict.get('media:id') or _(u'UNKNOWN FILE'))
@@ -280,4 +280,5 @@ a "dcterms:title" column for each media file'.format(title=title))
         output_dict = {}
     except:
         raise
+
     return output_dict
