@@ -204,13 +204,15 @@ And set up the in-package virtualenv::
 
 .. note::
 
-   We presently have an experimental make-style deployment system.  if
+   We presently have an **experimental** make-style deployment system.  if
    you'd like to try it, instead of the above command, you can run::
 
-     ./bootstrap.sh && ./configure && make
+     ./experimental-bootstrap.sh && ./configure && make
 
    This also includes a number of nice features, such as keeping your
    viratualenv up to date by simply running `make update`.
+
+   Note: this is liable to break.  Use this method with caution.
 
 .. ::
 
