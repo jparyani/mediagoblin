@@ -29,8 +29,6 @@ def get_url_map():
     add_route('index', '/', 'mediagoblin.views:root_view')
     add_route('terms_of_service','/terms_of_service',
         'mediagoblin.views:terms_of_service'),
-    add_route('metadata_context','/metadata_context/v<int:version_number>/',
-        'mediagoblin.views:metadata_context_view'),
     mount('/auth', auth_routes)
     mount('/mod', moderation_routes)
 

@@ -62,9 +62,3 @@ def terms_of_service(request):
 
     return render_to_response(request,
         'mediagoblin/terms_of_service.html', {})
-
-def metadata_context_view(request):
-    version = request.matchdict['version_number']
-    return render_to_response(request,
-        'mediagoblin/metadata_contexts/v{version}'.format(
-            version=version), {})
