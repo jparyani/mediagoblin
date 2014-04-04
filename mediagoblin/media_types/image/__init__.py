@@ -26,7 +26,7 @@ from mediagoblin.notifications import add_comment_subscription
 _log = logging.getLogger(__name__)
 
 
-ACCEPTED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "tiff"]
+ACCEPTED_EXTENSIONS = ["jpe", "jpg", "jpeg", "png", "gif", "tiff"]
 MEDIA_TYPE = 'mediagoblin.media_types.image'
 
 
