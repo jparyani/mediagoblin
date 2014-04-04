@@ -29,8 +29,9 @@ from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import (
     RegisterMigration, inspect_table, replace_table_hack)
 from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User,
-        create_uuid, Privilege)
+    Privilege)
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
+
 
 MIGRATIONS = {}
 
