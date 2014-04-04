@@ -1,5 +1,6 @@
 import json
 import io
+import mimetypes
 
 from werkzeug.datastructures import FileStorage
 
@@ -56,14 +57,17 @@ def uploads(request):
     request.user = requested_user[0]
     if request.method == "POST":
         # Wrap the data in the werkzeug file wrapper
+        mimetype = request.headers.get("Content-Type", "application/octal-stream")
+        filename = mimetypes.guess_all_extensions(mimetype)
+        filename = 'unknown' + filename[0] if filename else filename
         file_data = FileStorage(
             stream=io.BytesIO(request.data),
-            filename=request.args.get("qqfile", "unknown"),
+            filename=filename,
             content_type=request.headers.get("Content-Type", "application/octal-stream")
         )
 
         # Find media manager
-        media_type, media_manager = sniff_media(file_data)
+        media_type, media_manager = sniff_media(file_data, filename)
         entry = new_upload_entry(request.user)
         if hasattr(media_manager, "api_upload_request"):
             return media_manager.api_upload_request(request, file_data, entry)

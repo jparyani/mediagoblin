@@ -72,7 +72,7 @@ class ImageMediaManager(MediaManagerBase):
         queue_file = prepare_queue_task(request.app, entry, file_data.filename)
         with queue_file:
             queue_file.write(request.data)
-        
+
         entry.save()
 
         feed_url = request.urlgen(
