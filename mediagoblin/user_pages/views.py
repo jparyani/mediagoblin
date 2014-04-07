@@ -31,6 +31,7 @@ from mediagoblin.user_pages.lib import (send_comment_email,
 	add_media_to_collection, build_report_object)
 from mediagoblin.notifications import trigger_notification, \
     add_comment_subscription, mark_comment_notification_seen
+from mediagoblin.tools.pluginapi import hook_transform
 
 from mediagoblin.decorators import (uses_pagination, get_user_media_entry,
     get_media_entry_by_id, user_has_privilege, user_not_banned,
@@ -146,14 +147,23 @@ def media_home(request, media, page, **kwargs):
 
     media_template_name = media.media_manager.display_template
 
+    context = {
+        'media': media,
+        'comments': comments,
+        'pagination': pagination,
+        'comment_form': comment_form,
+        'app_config': mg_globals.app_config}
+
+    # Since the media template name gets swapped out for each media
+    # type, normal context hooks don't work if you want to affect all
+    # media displays.  This gives a general purpose hook.
+    context = hook_transform(
+        "media_home_context", context)
+
     return render_to_response(
         request,
         media_template_name,
-        {'media': media,
-         'comments': comments,
-         'pagination': pagination,
-         'comment_form': comment_form,
-         'app_config': mg_globals.app_config})
+        context)
 
 
 @get_media_entry_by_id
