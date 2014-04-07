@@ -1,3 +1,4 @@
+
 import json
 import io
 import mimetypes
@@ -72,9 +73,9 @@ def uploads(request):
         if hasattr(media_manager, "api_upload_request"):
             return media_manager.api_upload_request(request, file_data, entry)
         else:
-            return json_response({"error": "Not yet implemented"}, status=400)
+            return json_response({"error": "Not yet implemented"}, status=501)
 
-    return json_response({"error": "Not yet implemented"}, status=400)
+    return json_response({"error": "Not yet implemented"}, status=501)
 
 @oauth_required
 @csrf_exempt
@@ -120,7 +121,10 @@ def feed(request):
                 error = "No such 'image' with id '{0}'".format(id=media_id)
                 return json_response(error, status=404)
             media = media[0]
-            return json_response(media.serialize(request))
+            return json_response({
+                "verb": "post",
+                "object": media.serialize(request)
+            })
 
         elif obj.get("objectType", None) is None:
             # They need to tell us what type of object they're giving us.
