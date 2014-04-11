@@ -98,10 +98,8 @@ zip files and directories"
     if dir_path.endswith('/'):
         dir_path = dir_path[:-1]
 
-    location_file_path = "{dir_path}/location.csv".format(
-        dir_path=dir_path)
-    metadata_file_path = "{dir_path}/metadata.csv".format(
-        dir_path=dir_path)
+    location_file_path = os.path.join(dir_path,"location.csv")
+    metadata_file_path = os.path.join(dir_path, "metadata.csv")
 
     # check for the location file, if it exists...
     location_filename = os.path.split(location_file_path)[-1]
@@ -163,9 +161,7 @@ zip files and directories"
             if os.path.isabs(path):
                 file_abs_path = os.path.abspath(path)
             else:
-                file_path = "{dir_path}/{local_path}".format(
-                    dir_path=dir_path,
-                    local_path=path)
+                file_path = os.path.join(dir_path, path)
                 file_abs_path = os.path.abspath(file_path)
             try:
                 media_file = file(file_abs_path, 'r')
