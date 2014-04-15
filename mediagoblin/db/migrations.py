@@ -728,7 +728,7 @@ def add_metadata_column(db):
 
     media_entry = inspect_table(metadata, 'core__media_entries')
 
-    col = Column('metadata', MutationDict.as_mutable(JSONEncoded))
+    col = Column('media_metadata', MutationDict.as_mutable(JSONEncoded))
     col.create(media_entry)
 
     db.commit()
