@@ -15,9 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import tempfile, urllib, tarfile, zipfile, subprocess
+import tempfile, tarfile, zipfile, subprocess, requests
 from csv import reader as csv_reader
 from urlparse import urlparse
+import requests
 from pyld import jsonld
 
 from mediagoblin.gmg_commands import util as commands_util
@@ -151,10 +152,8 @@ zip files and directories"
         filename = url.path.split()[-1]
 
         if url.scheme == 'http':
-            media_file = tempfile.TemporaryFile()
-            res = urllib.urlopen(url.geturl())
-            media_file.write(res.read())
-            media_file.seek(0)
+            res = requests.get(url.geturl())
+            media_file = res.raw
 
         elif url.scheme == '':
             path = url.path
