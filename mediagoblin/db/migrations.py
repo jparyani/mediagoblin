@@ -723,12 +723,12 @@ def drop_MediaEntry_collected(db):
     db.commit()
 
 @RegisterMigration(20, MIGRATIONS)
-def add_work_metadata_column(db):
+def add_metadata_column(db):
     metadata = MetaData(bind=db.bind)
 
-    media_file = inspect_table(metadata, 'core__mediafiles')
+    media_entry = inspect_table(metadata, 'core__media_entries')
 
-    col = Column('work_metadata', MutationDict.as_mutable(JSONEncoded))
-    col.create(media_file)
+    col = Column('metadata', MutationDict.as_mutable(JSONEncoded))
+    col.create(media_entry)
 
     db.commit()

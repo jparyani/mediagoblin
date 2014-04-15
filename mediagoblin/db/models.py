@@ -264,6 +264,7 @@ class MediaEntry(Base, MediaEntryMixin):
         cascade="all, delete-orphan"
         )
     collections = association_proxy("collections_helper", "in_collection")
+    metadata = Column(MutationDict.as_mutable(JSONEncoded))
 
     ## TODO
     # fail_error
@@ -420,7 +421,6 @@ class MediaFile(Base):
     name_id = Column(SmallInteger, ForeignKey(FileKeynames.id), nullable=False)
     file_path = Column(PathTupleWithSlashes)
     file_metadata = Column(MutationDict.as_mutable(JSONEncoded))
-    work_metadata = Column(MutationDict.as_mutable(JSONEncoded))
 
     __table_args__ = (
         PrimaryKeyConstraint('media_entry', 'name_id'),
