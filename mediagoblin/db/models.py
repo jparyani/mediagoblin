@@ -264,7 +264,7 @@ class MediaEntry(Base, MediaEntryMixin):
         cascade="all, delete-orphan"
         )
     collections = association_proxy("collections_helper", "in_collection")
-    metadata = Column(MutationDict.as_mutable(JSONEncoded))
+    media_metadata = Column(MutationDict.as_mutable(JSONEncoded))
 
     ## TODO
     # fail_error
