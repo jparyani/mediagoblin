@@ -24,13 +24,12 @@
                      {{ prefix }} {{ metadata_context[prefix] }}
                      {%- endfor %}">
         {%- for key, value in metadata.iteritems() if not key=='@context' %}
-          <tr>
-            <td>{{ format_predicate(key) }}</td>
-            {% if value -%}
-                <td property="{{ key }}">{{ value }}</td>
-            {%- else -%}
-                <td></td>
-            {%- endif -%}
+          {% if value -%}
+            <tr>
+              <td>{{ format_predicate(key) }}</td>
+              <td property="{{ key }}">{{ value }}</td>
+            </tr>
+          {%- endif -%}
         {%- endfor %}
       </table>
   {% endif %}
