@@ -132,7 +132,8 @@ zip files and directories"
         contents = all_metadata.read()
         media_metadata = parse_csv_file(contents)
 
-    dcterms_context = { 'dcterms':'http://purl.org/dc/terms/' }
+    metadata_context = { 'dcterms':'http://purl.org/dc/terms/',
+                         'xsd': 'http://www.w3.org/2001/XMLSchema#'}
 
     for media_id in media_locations.keys():
         files_attempted += 1
@@ -141,13 +142,14 @@ zip files and directories"
         sanitized_metadata = check_metadata_format(file_metadata)
         if sanitized_metadata == {}: continue
 
-        json_ld_metadata = jsonld.compact(file_metadata, dcterms_context)
+        json_ld_metadata = jsonld.compact(build_json_ld_metadata(file_metadata), 
+                                            metadata_context)
         original_location = media_locations[media_id]['media:original']
         url = urlparse(original_location)
 
-        title = file_metadata.get('dcterms:title')
-        description = file_metadata.get('dcterms:description')
-        license = file_metadata.get('dcterms:rights')
+        title = sanitized_metadata.get('dcterms:title')
+        description = sanitized_metadata.get('dcterms:description')
+        license = sanitized_metadata.get('dcterms:rights')
         filename = url.path.split()[-1]
 
         if url.scheme == 'http':
@@ -218,6 +220,19 @@ def teardown(temp_files):
     for temp_file in temp_files:
         subprocess.call(['rm','-r',temp_file])
 
+def build_json_ld_metadata(metadata_dict):
+    output_dict = {}
+    for p in metadata_dict.keys():
+        if p in ["dcterms:rights", "dcterms:relation"]:
+            m_type = "xsd:uri"
+        elif p in ["dcterms:date", "dcterms:created"]:
+            m_type = "xsd:date"
+        else:
+            m_type = "xsd:string"
+        description = {"@value": metadata_dict[p],
+                       "@type" : m_type}
+        output_dict[p] = description
+    return output_dict
 
 def check_metadata_format(metadata_dict):
     schema = {
@@ -250,6 +265,7 @@ def check_metadata_format(metadata_dict):
     try:
         validate(metadata_dict, schema)
         output_dict = metadata_dict
+        # "media:id" is only for internal use, so we delete it for the output
         del output_dict['media:id']
 
     except ValidationError, exc:
