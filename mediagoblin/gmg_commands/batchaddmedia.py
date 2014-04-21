@@ -151,7 +151,7 @@ zip files and directories"
         filename = url.path.split()[-1]
 
         if url.scheme == 'http':
-            res = requests.get(url.geturl())
+            res = requests.get(url.geturl(), stream=True)
             media_file = res.raw
 
         elif url.scheme == '':
