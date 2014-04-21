@@ -178,6 +178,7 @@ FAIL: Local file {filename} could not be accessed.".format(filename=filename)
                 title=maybe_unicodeify(title),
                 description=maybe_unicodeify(description),
                 license=maybe_unicodeify(license),
+                metadata=json_ld_metadata,
                 tags_string=u"",
                 upload_limit=upload_limit, max_file_size=max_file_size)
             print "Successfully uploading {filename}!".format(filename=filename)
