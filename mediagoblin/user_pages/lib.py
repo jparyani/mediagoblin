@@ -116,3 +116,6 @@ def build_report_object(report_form, media_entry=None, comment=None):
     report_object.reporter_id = report_form.reporter_id.data
     return report_object
 
+def rdfa_to_readable(rdfa_predicate):
+    readable = rdfa_predicate.split(u":")[1].capitalize()
+    return readable
