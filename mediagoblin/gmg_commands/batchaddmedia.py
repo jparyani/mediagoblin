@@ -18,7 +18,6 @@ import os
 import tempfile, tarfile, zipfile, subprocess, requests
 from csv import reader as csv_reader
 from urlparse import urlparse
-import requests
 from pyld import jsonld
 
 from mediagoblin.gmg_commands import util as commands_util
