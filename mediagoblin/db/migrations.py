@@ -720,3 +720,48 @@ def drop_MediaEntry_collected(db):
     media_collected.drop()
 
     db.commit()
+
+class PrivilegeUserAssociation_R1(declarative_base()):
+    __tablename__ = 'rename__privileges_users'
+    privilege_id = Column(
+        'id_of_privilege',
+        Integer,
+        ForeignKey(User.id),
+        primary_key=True)
+    user_id = Column(
+        'id_of_user',
+        Integer,
+        ForeignKey(Privilege.id),
+        primary_key=True)
+
+@RegisterMigration(20, MIGRATIONS)
+def fix_privilege_user_association_table(db):
+    """
+    There was an error in the PrivilegeUserAssociation table that allowed for a
+    dangerous sql error. We need to the change the name of the columns to be
+    unique.
+    """
+    metadata = MetaData(bind=db.bind)
+
+    privilege_user_assoc = inspect_table(
+        metadata, 'core__privileges_users')
+    PrivilegeUserAssociation_R1.__table__.create(db.bind)
+    db.commit()
+
+    new_privilege_user_assoc = inspect_table(
+        metadata, 'rename__privileges_users')
+    result = db.execute(privilege_user_assoc.select())
+    for row in result:
+        priv_id, user_id = row['core__privilege_id'], row['core__user_id']
+        db.execute(new_privilege_user_assoc.insert().values(
+            id_of_privilege=priv_id,
+            id_of_user=user_id))
+
+    db.commit()
+
+    privilege_user_assoc.drop()
+    new_privilege_user_assoc.rename('core__privileges_users')
+
+    db.commit()
+
+    
