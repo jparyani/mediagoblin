@@ -723,13 +723,11 @@ def drop_MediaEntry_collected(db):
 
 class PrivilegeUserAssociation_R1(declarative_base()):
     __tablename__ = 'rename__privileges_users'
-    privilege_id = Column(
-        'id_of_privilege',
+    user_id = Column(
         Integer,
         ForeignKey(User.id),
         primary_key=True)
-    user_id = Column(
-        'id_of_user',
+    privilege_id = Column(
         Integer,
         ForeignKey(Privilege.id),
         primary_key=True)
@@ -739,7 +737,7 @@ def fix_privilege_user_association_table(db):
     """
     There was an error in the PrivilegeUserAssociation table that allowed for a
     dangerous sql error. We need to the change the name of the columns to be
-    unique.
+    unique, and properly referenced.
     """
     metadata = MetaData(bind=db.bind)
 
@@ -752,10 +750,11 @@ def fix_privilege_user_association_table(db):
         metadata, 'rename__privileges_users')
     result = db.execute(privilege_user_assoc.select())
     for row in result:
-        priv_id, user_id = row['core__privilege_id'], row['core__user_id']
+        # The columns were improperly named before, so we switch the columns
+        user_id, priv_id = row['core__privilege_id'], row['core__user_id']
         db.execute(new_privilege_user_assoc.insert().values(
-            id_of_privilege=priv_id,
-            id_of_user=user_id))
+            user_id=user_id,
+            privilege_id=priv_id))
 
     db.commit()
 
@@ -763,5 +762,3 @@ def fix_privilege_user_association_table(db):
     new_privilege_user_assoc.rename('core__privileges_users')
 
     db.commit()
-
-    
