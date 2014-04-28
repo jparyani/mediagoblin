@@ -150,7 +150,7 @@ def register_user(request, register_form):
 def get_default_privileges(user):
     instance_privilege_scheme = mg_globals.app_config['user_privilege_scheme']
     default_privileges = [Privilege.query.filter(
-        Privilege.privilege_name==privilege_name).first() 
+        Privilege.privilege_name==privilege_name).first()
         for privilege_name in instance_privilege_scheme.split(',')]
     default_privileges = [privilege for privilege in default_privileges if not privilege == None]
 
