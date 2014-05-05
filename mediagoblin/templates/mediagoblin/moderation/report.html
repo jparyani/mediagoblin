@@ -91,7 +91,7 @@
   {% else %}
     <h2>{% trans user_url=request.urlgen(
                         'mediagoblin.moderation.users_detail',
-                        user=report.reporter.username),
+                        user=report.reported_user.username),
                  user_name=report.reported_user.username %}
           CONTENT BY
             <a href="{{ user_url }}"> {{ user_name }}</a>
