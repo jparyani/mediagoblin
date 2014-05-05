@@ -105,7 +105,8 @@
     <div class="report_author">
         <img src="{{ request.staticdirect(
                   '/images/icon_clipboard_alert.png') }}"
-             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
+             alt=""
+             title="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
                   Distributed by the GNOME project http://www.gnome.org" />
         <a href="{{ request.urlgen('mediagoblin.moderation.users_detail',
                         user=report.reporter.username) }}"
@@ -142,7 +143,8 @@
   </script>
   {% elif report.is_archived_report() %}
     <h2><img src="{{ request.staticdirect('/images/icon_clipboard.png') }}"
-             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
+             alt=""
+             title="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
                   Distributed by the GNOME project http://www.gnome.org" />
           {% trans %}Status{% endtrans %}:
     </h2>
