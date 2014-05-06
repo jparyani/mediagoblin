@@ -29,7 +29,8 @@ from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_media_entry_by_id, user_may_alter_collection,
-                            get_user_collection)
+                            get_user_collection, user_has_privilege,
+                            user_not_banned)
 from mediagoblin.tools.crypto import get_timed_signer_url
 from mediagoblin.tools.mail import email_debug_message
 from mediagoblin.tools.response import (render_to_response,
@@ -432,3 +433,13 @@ def change_email(request):
         'mediagoblin/edit/change_email.html',
         {'form': form,
          'user': user})
+
+@user_has_privilege(u'admin')
+@require_active_login
+@get_media_entry_by_id
+def edit_metadata(request, media):
+    form = forms.EditMetaDataForm()
+    return render_to_response(
+        request,
+        'mediagoblin/edit/metadata.html',
+        {'form':form})
