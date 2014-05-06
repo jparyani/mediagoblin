@@ -938,3 +938,17 @@ p.verifier {
     none repeat scroll 0% 0% rgb(221, 221, 221);
     padding: 1em 0px;
 }
+
+/* for the media metadata editing table */
+table.metadata_editor {
+
+    margin: 10px auto;
+    width: 800px;
+}
+
+table.metadata_editor tr td {
+    width:350px;
+}
+table.metadata_editor tr td input.form_field_input {
+    width: 300px
+}

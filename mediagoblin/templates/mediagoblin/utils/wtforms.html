@@ -87,6 +87,24 @@
   {% endfor %}
 {%- endmacro %}
 
+{% macro render_table_row(form) %}
+  <tr>
+  {%- for field in form %}
+    <td class="form_field_input">
+      {{field}}
+      {%- if field.errors -%}
+        <br />
+        <ul class="errors">
+          {% for error in field.errors %}
+            <li>{{error}}</li>
+          {%- endfor %}
+        </ul>
+      {%- endif -%}
+    </td>
+  {%- endfor %}
+  </tr>
+{%- endmacro %}
+
 {# Render a boolean field #}
 {% macro render_bool(field) %}
   <div class="boolean">

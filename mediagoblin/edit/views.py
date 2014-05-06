@@ -439,7 +439,22 @@ def change_email(request):
 @get_media_entry_by_id
 def edit_metadata(request, media):
     form = forms.EditMetaDataForm()
+    if media.media_metadata:
+        for row in media.media_metadata.iteritems():
+            if row[0] == "@context": continue
+            identifier = row[0]
+            # TODO Will change when we revert the metadata branch
+            value = row[1]['@value']
+            form.media_metadata.append_entry({
+                'identifier':identifier,
+                'value':value})
+        for row in media.media_metadata['@context'].iteritems():
+            identifier, value = row[0:2]
+            form.context.append_entry({
+                'identifier':identifier,
+                'value':value})
     return render_to_response(
         request,
         'mediagoblin/edit/metadata.html',
-        {'form':form})
+        {'form':form,
+         'media':media})
