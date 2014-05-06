@@ -41,7 +41,7 @@
         $('table'+list_id+' tr').each(function(row){
             id_input = $(this).find('td').find('input');
             value_input = $(this).find('td').next().find('input');
-            if ((value_input.attr('value') == "") && 
+            if ((value_input.attr('value') == "") &&
                     (id_input.attr('value') == "")) {
                 $(this).remove();
             }
@@ -52,13 +52,13 @@
         var context_lines = {{ form.context | length }};
         var metadata_lines = {{ form.media_metadata | length }};
         $("#add_new_metadata_row").click(function(){
-            add_new_row("#metadata_list", 
+            add_new_row("#metadata_list",
                         metadata_lines,
                         'media_metadata-');
             metadata_lines += 1;
         })
         $("#add_new_context_row").click(function(){
-            add_new_row("#context_list", 
+            add_new_row("#context_list",
                         context_lines,
                         'context-');
             context_lines += 1;
@@ -115,7 +115,7 @@
       <td><input type=button value="{% trans %}Add new Row{% endtrans %}"
         class="button_action" id="add_new_metadata_row" />
       </td>
-      <td><input type=submit value="{% trans %}Update Metadata{% endtrans %}" 
+      <td><input type=submit value="{% trans %}Update Metadata{% endtrans %}"
         class="button_action_highlight" /></td>
     </tr>
     <tr>
@@ -125,5 +125,5 @@
   </table>
   {{ csrf_token }}
   </form>
-  
+
 {% endblock mediagoblin_content %}

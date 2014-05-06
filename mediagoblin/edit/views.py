@@ -17,6 +17,7 @@
 from datetime import datetime
 
 from itsdangerous import BadSignature
+from pyld import jsonld
 from werkzeug.exceptions import Forbidden
 from werkzeug.utils import secure_filename
 
@@ -438,7 +439,20 @@ def change_email(request):
 @require_active_login
 @get_media_entry_by_id
 def edit_metadata(request, media):
-    form = forms.EditMetaDataForm()
+    form = forms.EditMetaDataForm(request.form)
+    if request.method == "POST" and form.validate():
+        context = dict([(row['identifier'],row['value'])
+                            for row in form.context.data])
+        metadata_dict = dict([(row['identifier'],row['value'])
+                            for row in form.media_metadata.data])
+        # TODO VALIDATE THIS BEFORE WE ENTER IT
+        # validate(metadata_dict)
+        # validate(context)
+        json_ld_metadata = jsonld.compact(metadata_dict, context)
+        # media.media_metadata = json_ld_metadata
+        # media.save()
+        return redirect_obj(request, media)
+
     if media.media_metadata:
         for row in media.media_metadata.iteritems():
             if row[0] == "@context": continue
