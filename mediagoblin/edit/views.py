@@ -467,6 +467,16 @@ def edit_metadata(request, media):
             form.context.append_entry({
                 'identifier':identifier,
                 'value':value})
+    else:
+        form.media_metadata.append_entry({
+            'identifier':"",
+            'value':""})
+        form.media_metadata.append_entry({
+            'identifier':"",
+            'value':""})
+        form.context.append_entry({
+            'identifier':"",
+            'value':""})
     return render_to_response(
         request,
         'mediagoblin/edit/metadata.html',
