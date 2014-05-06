@@ -949,6 +949,6 @@ table.metadata_editor {
 table.metadata_editor tr td {
     width:350px;
 }
-table.metadata_editor tr td input.form_field_input {
+table.metadata_editor tr td.form_field_input input {
     width: 300px
 }
