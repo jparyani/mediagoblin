@@ -78,7 +78,7 @@ DEFAULT_SCHEMA = {
 
     "type": "object",
     "properties": {
-        "dcterms:rights": {
+        "license": {
             "format": "uri",
             "type": "string",
         },
@@ -96,7 +96,7 @@ def compact_and_validate(metadata, context=MEDIAGOBLIN_CONTEXT,
     compact json with supplied context, check against schema for errors
 
     raises an exception (jsonschema.exceptions.ValidationError) if
-    there's an error.
+    there's an error.9
 
     You may wish to do this validation yourself... this is just for convenience.
     """

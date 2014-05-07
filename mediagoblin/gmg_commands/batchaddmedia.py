@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import copy, tempfile, tarfile, zipfile, subprocess, re, requests
+import tempfile, tarfile, zipfile, subprocess, requests
 from csv import reader as csv_reader
 from urlparse import urlparse
 from pyld import jsonld
@@ -24,11 +24,9 @@ from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.submit.lib import (
     submit_media, get_upload_file_limits,
     FileUploadLimit, UserUploadLimit, UserPastUploadLimit)
-from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+from mediagoblin.tools.metadata import compact_and_validate
 
-from jsonschema import validate, FormatChecker, draft4_format_checker
 from jsonschema.exceptions import ValidationError
-from jsonschema.compat import str_types
 
 
 def parser_setup(subparser):
@@ -126,25 +124,24 @@ zip files and directories"
         contents = all_metadata.read()
         media_metadata = parse_csv_file(contents)
 
-    metadata_context = { 'dcterms':'http://purl.org/dc/terms/',
-                         'xsd': 'http://www.w3.org/2001/XMLSchema#'}
-
     for media_id in media_locations.keys():
         files_attempted += 1
 
-        file_metadata     = media_metadata[media_id]
-        sanitized_metadata = check_metadata_format(file_metadata)
-        if sanitized_metadata == {}: continue
+        file_metadata = media_metadata[media_id]
+        try:
+            json_ld_metadata = compact_and_validate(file_metadata)
+        except ValidationError, exc:
+            print "Error with '%s' value '%s': %s" % (
+                media_id, exc.path[0], exc.message)
+            continue
 
-        json_ld_metadata = jsonld.compact(file_metadata, metadata_context)
         original_location = media_locations[media_id]['media:original']
         url = urlparse(original_location)
 
-        title = sanitized_metadata.get('dcterms:title')
-        description = sanitized_metadata.get('dcterms:description')
+        title = json_ld_metadata.get('dcterms:title')
+        description = json_ld_metadata.get('dcterms:description')
 
-        # TODO: this isn't the same thing
-        license = sanitized_metadata.get('dcterms:rights')
+        license = json_ld_metadata.get('license')
         filename = url.path.split()[-1]
 
         if url.scheme == 'http':
@@ -214,75 +211,3 @@ def parse_csv_file(file_contents):
 def teardown(temp_files):
     for temp_file in temp_files:
         subprocess.call(['rm','-r',temp_file])
-
-
-## Set up the MediaGoblin checker
-# 
-
-URL_REGEX = re.compile(
-    r'^[a-z]+://([^/:]+|([0-9]{1,3}\.){3}[0-9]{1,3})(:[0-9]+)?(\/.*)?$',
-    re.IGNORECASE)
-
-def is_uri(instance):
-    if not isinstance(instance, str_types):
-        return True
-
-    return URL_REGEX.match(instance)
-
-
-class DefaultChecker(FormatChecker):
-    checkers = copy.deepcopy(draft4_format_checker.checkers)
-
-DefaultChecker.checkers[u"uri"] = (is_uri, ())
-
-DEFAULT_CHECKER = DefaultChecker()
-
-def check_metadata_format(metadata_dict):
-    schema = {
-        "$schema": "http://json-schema.org/schema#",
-
-        "type": "object",
-        "properties": {
-            "dcterms:rights": {
-                "format": "uri",
-                "type": "string",
-            },
-            "dcterms:created": {
-                
-            }
-        },
-        # "required": ["dcterms:title", "media:id"],
-    }
-
-    try:
-        validate(metadata_dict, schema,
-                 format_checker=DEFAULT_CHECKER)
-        output_dict = metadata_dict
-        # "media:id" is only for internal use, so we delete it for the output
-        del output_dict['media:id']
-
-    except ValidationError, exc:
-        title = (metadata_dict.get('dcterms:title') or 
-            metadata_dict.get('media:id') or _(u'UNKNOWN FILE'))
-
-        if exc.validator == "additionalProperties":
-            message = _(u'Invalid metadata provided for file "{title}". This \
-script only accepts the Dublin Core metadata terms.'.format(title=title))
-
-        elif exc.validator == "required":
-            message = _(
-u'All necessary metadata was not provided for file "{title}", you must include \
-a "dcterms:title" column for each media file'.format(title=title))
-
-        else:
-            message = _(u'Could not find appropriate metadata for file \
-"{title}".'.format(title=title))
-
-        print _(u"""WARN: {message} \nSkipping File...\n""".format(
-            message=message))
-
-        output_dict = {}
-    except:
-        raise
-
-    return output_dict
