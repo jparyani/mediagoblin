@@ -139,8 +139,7 @@ zip files and directories"
         sanitized_metadata = check_metadata_format(file_metadata)
         if sanitized_metadata == {}: continue
 
-        json_ld_metadata = jsonld.compact(build_json_ld_metadata(file_metadata), 
-                                            metadata_context)
+        json_ld_metadata = jsonld.compact(file_metadata, metadata_context)
         original_location = media_locations[media_id]['media:original']
         url = urlparse(original_location)
 
@@ -218,20 +217,6 @@ def parse_csv_file(file_contents):
 def teardown(temp_files):
     for temp_file in temp_files:
         subprocess.call(['rm','-r',temp_file])
-
-def build_json_ld_metadata(metadata_dict):
-    output_dict = {}
-    for p in metadata_dict.keys():
-        if p in ["dcterms:rights", "dcterms:relation"]:
-            m_type = "xsd:uri"
-        elif p in ["dcterms:date", "dcterms:created"]:
-            m_type = "xsd:date"
-        else:
-            m_type = "xsd:string"
-        description = {"@value": metadata_dict[p],
-                       "@type" : m_type}
-        output_dict[p] = description
-    return output_dict
 
 
 ## Set up the MediaGoblin checker
