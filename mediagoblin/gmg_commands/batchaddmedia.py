@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import tempfile, tarfile, zipfile, subprocess, requests
+import copy, tempfile, tarfile, zipfile, subprocess, re, requests
 from csv import reader as csv_reader
 from urlparse import urlparse
 from pyld import jsonld
@@ -27,8 +27,10 @@ from mediagoblin.submit.lib import (
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 from mediagoblin import mg_globals
-from jsonschema import validate 
+from jsonschema import validate, FormatChecker, draft4_format_checker
 from jsonschema.exceptions import ValidationError
+from jsonschema.compat import str_types
+
 
 def parser_setup(subparser):
     subparser.description = """\
@@ -48,11 +50,6 @@ Core properties (http://dublincore.org/documents/dces/). Both "location.csv" and
 "metadata.csv" must begin with a row demonstrating the order of the columns. We
 have provided an example of these files at <url to be added>
 """))
-    subparser.add_argument(
-        "-l", "--license",
-        help=(
-           "License these media entry will be released under, if all the same. "
-           "Should be a URL."))
     subparser.add_argument(
         '--celery',
         action='store_true',
@@ -149,6 +146,8 @@ zip files and directories"
 
         title = sanitized_metadata.get('dcterms:title')
         description = sanitized_metadata.get('dcterms:description')
+
+        # TODO: this isn't the same thing
         license = sanitized_metadata.get('dcterms:rights')
         filename = url.path.split()[-1]
 
@@ -234,36 +233,48 @@ def build_json_ld_metadata(metadata_dict):
         output_dict[p] = description
     return output_dict
 
+
+## Set up the MediaGoblin checker
+# 
+
+URL_REGEX = re.compile(
+    r'^[a-z]+://([^/:]+|([0-9]{1,3}\.){3}[0-9]{1,3})(:[0-9]+)?(\/.*)?$',
+    re.IGNORECASE)
+
+def is_uri(instance):
+    if not isinstance(instance, str_types):
+        return True
+
+    return URL_REGEX.match(instance)
+
+
+class DefaultChecker(FormatChecker):
+    checkers = copy.deepcopy(draft4_format_checker.checkers)
+
+DefaultChecker.checkers[u"uri"] = (is_uri, ())
+
+DEFAULT_CHECKER = DefaultChecker()
+
 def check_metadata_format(metadata_dict):
     schema = {
-    "$schema":"http://json-schema.org/schema#",
-    "properties":{
-        "media:id":{},
-        "dcterms:contributor":{},
-        "dcterms:coverage":{},
-        "dcterms:created":{},
-        "dcterms:creator":{},
-        "dcterms:date":{},
-        "dcterms:description":{},
-        "dcterms:format":{},
-        "dcterms:identifier":{},
-        "dcterms:language":{},
-        "dcterms:publisher":{},
-        "dcterms:relation":{},
-        "dcterms:rights" : {
-            "format":"uri",
-            "type":"string"
+        "$schema": "http://json-schema.org/schema#",
+
+        "type": "object",
+        "properties": {
+            "dcterms:rights": {
+                "format": "uri",
+                "type": "string",
+            },
+            "dcterms:created": {
+                
+            }
         },
-        "dcterms:source":{},
-        "dcterms:subject":{},
-        "dcterms:title":{},
-        "dcterms:type":{}
-    },
-    "additionalProperties": False,
-    "required":["dcterms:title","media:id"]
-}
+        # "required": ["dcterms:title", "media:id"],
+    }
+
     try:
-        validate(metadata_dict, schema)
+        validate(metadata_dict, schema,
+                 format_checker=DEFAULT_CHECKER)
         output_dict = metadata_dict
         # "media:id" is only for internal use, so we delete it for the output
         del output_dict['media:id']
