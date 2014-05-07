@@ -26,7 +26,6 @@ from mediagoblin.submit.lib import (
     FileUploadLimit, UserUploadLimit, UserPastUploadLimit)
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
-from mediagoblin import mg_globals
 from jsonschema import validate, FormatChecker, draft4_format_checker
 from jsonschema.exceptions import ValidationError
 from jsonschema.compat import str_types
@@ -99,14 +98,12 @@ zip files and directories"
     metadata_file_path = os.path.join(dir_path, "metadata.csv")
 
     # check for the location file, if it exists...
-    location_filename = os.path.split(location_file_path)[-1]
     abs_location_filename = os.path.abspath(location_file_path)
     if not os.path.exists(abs_location_filename):
         print "Can't find a file with filename '%s'" % location_file_path
         return
 
     # check for the metadata file, if it exists...
-    metadata_filename = os.path.split(metadata_file_path)[-1]
     abs_metadata_filename = os.path.abspath(metadata_file_path)
     if not os.path.exists(abs_metadata_filename):
         print "Can't find a file with filename '%s'" % metadata_file_path
