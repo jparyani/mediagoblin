@@ -157,6 +157,25 @@ def load_context(url):
 
 DEFAULT_CONTEXT = "http://www.w3.org/2013/json-ld-context/rdfa11"
 
+def compact_json(metadata, context=DEFAULT_CONTEXT):
+    """
+    Compact json with supplied context.
+
+    Note: Free floating" nodes are removed (eg a key just named
+    "bazzzzzz" which isn't specified in the context... something like
+    bazzzzzz:blerp will stay though.  This is jsonld.compact behavior.
+    """
+    compacted = jsonld.compact(
+        metadata, context,
+        options={
+            "documentLoader": load_context,
+            # This allows for things like "license" and etc to be preserved
+            "expandContext": context,
+            "keepFreeFloatingNodes": False})
+
+    return compacted
+
+
 def compact_and_validate(metadata, context=DEFAULT_CONTEXT,
                          schema=DEFAULT_SCHEMA):
     """
@@ -171,13 +190,7 @@ def compact_and_validate(metadata, context=DEFAULT_CONTEXT,
 
     You may wish to do this validation yourself... this is just for convenience.
     """
-    compacted = jsonld.compact(
-        metadata, context,
-        options={
-            "documentLoader": load_context,
-            # This allows for things like "license" and etc to be preserved
-            "expandContext": context,
-            "keepFreeFloatingNodes": False})
+    compacted = compact_json(metadata, context)
     validate(metadata, schema, format_checker=DEFAULT_CHECKER)
 
     return compacted
