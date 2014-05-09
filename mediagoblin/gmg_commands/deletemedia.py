@@ -14,12 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
+
 from mediagoblin.gmg_commands import util as commands_util
 
 
 def parser_setup(subparser):
     subparser.add_argument('media_ids',
-                           help='Comma separated list of media IDs to will be deleted.')
+                           help='Comma separated list of media IDs will be deleted.')
 
 
 def deletemedia(args):
@@ -36,3 +38,4 @@ def deletemedia(args):
     for media in media_ids - found_medias:
         print 'Can\'t find a media with ID %d.' % media
     print 'Done.'
+    sys.exit(0)
