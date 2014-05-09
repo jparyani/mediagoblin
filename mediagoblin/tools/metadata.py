@@ -26,11 +26,8 @@ from pyld import jsonld
 from jsonschema import validate, FormatChecker, draft4_format_checker
 from jsonschema.compat import str_types
 
+from mediagoblin.tools.pluginapi import hook_handle
 
-MEDIAGOBLIN_CONTEXT_PATH = resource_filename(
-    "mediagoblin",
-    os.path.sep.join(["static", "metadata", "mediagoblin-0.1.dev.jsonld"]))
-MEDIAGOBLIN_CONTEXT = json.loads(file(MEDIAGOBLIN_CONTEXT_PATH).read())
 
 
 ########################################################
@@ -90,17 +87,99 @@ DEFAULT_SCHEMA = {
 }
 
 
-def compact_and_validate(metadata, context=MEDIAGOBLIN_CONTEXT,
+def load_resource(package, resource_path):
+    """
+    Load a resource, return it as a string.
+
+    Args:
+    - package: package or module name.  Eg "mediagoblin.media_types.audio"
+    - resource_path: path to get to this resource, a list of
+      directories and finally a filename.  Will be joined with
+      os.path.sep.
+    """
+    filename = resource_filename(package, os.path.sep.join(resource_path))
+    return file(filename).read()
+
+def load_resource_json(package, resource_path):
+    """
+    Load a resource json file, return a dictionary.
+
+    Args:
+    - package: package or module name.  Eg "mediagoblin.media_types.audio"
+    - resource_path: path to get to this resource, a list of
+      directories and finally a filename.  Will be joined with
+      os.path.sep.
+    """
+    return json.loads(load_resource(package, resource_path))
+
+
+##################################
+## Load the MediaGoblin core files
+##################################
+
+
+BUILTIN_CONTEXTS = {
+    "http://www.w3.org/2013/json-ld-context/rdfa11": load_resource(
+        "mediagoblin", ["static", "metadata", "rdfa11.jsonld"])}
+
+
+_CONTEXT_CACHE = {}
+
+def load_context(url):
+    """
+    A self-aware document loader.  For those contexts MediaGoblin
+    stores internally, load them from disk.
+    """
+    if url in _CONTEXT_CACHE:
+        return _CONTEXT_CACHE[url]        
+
+    # See if it's one of our basic ones
+    document = BUILTIN_CONTEXTS.get(url, None)
+
+    # No?  See if we have an internal schema for this
+    if document is None:
+        document = hook_handle(("context_url_data", url))
+
+    # Okay, if we've gotten a document by now... let's package it up
+    if document is not None:
+        document = {'contextUrl': None,
+                    'documentUrl': url,
+                    'document': document}
+
+    # Otherwise, use jsonld.load_document
+    else:
+        document = jsonld.load_document(url)
+
+    # cache
+    _CONTEXT_CACHE[url] = document
+    return document
+
+
+DEFAULT_CONTEXT = "http://www.w3.org/2013/json-ld-context/rdfa11"
+
+def compact_and_validate(metadata, context=DEFAULT_CONTEXT,
                          schema=DEFAULT_SCHEMA):
     """
     compact json with supplied context, check against schema for errors
 
     raises an exception (jsonschema.exceptions.ValidationError) if
-    there's an error.9
+    there's an error.
+
+    Note: Free floating" nodes are removed (eg a key just named
+    "bazzzzzz" which isn't specified in the context... something like
+    bazzzzzz:blerp will stay though.  This is jsonld.compact behavior.
 
     You may wish to do this validation yourself... this is just for convenience.
     """
-    compacted = jsonld.compact(metadata, context)
+    compacted = jsonld.compact(
+        metadata, context,
+        options={
+            "documentLoader": load_context,
+            # This allows for things like "license" and etc to be preserved
+            "expandContext": context,
+            "keepFreeFloatingNodes": False})
     validate(metadata, schema, format_checker=DEFAULT_CHECKER)
 
     return compacted
+
+
