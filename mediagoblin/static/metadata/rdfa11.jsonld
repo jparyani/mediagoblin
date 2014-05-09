@@ -1,5 +1,6 @@
 {
   "@context": {
+    "cat": "http://www.w3.org/ns/dcat#",
     "qb": "http://purl.org/linked-data/cube#",
     "grddl": "http://www.w3.org/2003/g/data-view#",
     "ma": "http://www.w3.org/ns/ma-ont#",
