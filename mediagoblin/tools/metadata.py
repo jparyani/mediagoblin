@@ -183,3 +183,18 @@ def compact_and_validate(metadata, context=DEFAULT_CONTEXT,
     return compacted
 
 
+def expand_json(metadata, context=DEFAULT_CONTEXT):
+    """
+    Expand json, but be sure to use our documentLoader.
+
+    By default this expands with DEFAULT_CONTEXT, but if you do not need this,
+    you can safely set this to None.
+
+    # @@: Is the above a good idea?  Maybe it should be set to None by
+    #   default.
+    """
+    options = {
+        "documentLoader": load_context}
+    if context is not None:
+        options["expandContext"] = context
+    return jsonld.expand(metadata, options=options)
