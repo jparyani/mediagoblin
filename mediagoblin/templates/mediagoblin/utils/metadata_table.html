@@ -20,8 +20,9 @@
   {%- set metadata=media_entry.media_metadata %}
   {%- set metadata_context=metadata['@context'] %}
   {%- if metadata %}
-      <table prefix="{% for p in metadata_context %}{% if not loop.first %}
-                    {% endif %}{{ p }} {{ metadata_context[p] }}{% endfor -%}">
+      {#- NOTE: In some smart future where the context is more extensible,
+            we will need to add to the prefix here-#}
+      <table>
         {%- for key, value_dict in metadata.iteritems() if not key=='@context' %}
           {% if value_dict['@value'] -%}
             <tr>
