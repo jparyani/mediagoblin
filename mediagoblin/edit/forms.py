@@ -122,3 +122,15 @@ class ChangeEmailForm(wtforms.Form):
         [wtforms.validators.Required()],
         description=_(
             "Enter your password to prove you own this account."))
+
+class MetaDataForm(wtforms.Form):
+    identifier = wtforms.TextField(_(u'Identifier'))
+    value = wtforms.TextField(_(u'Value'))
+
+class EditMetaDataForm(wtforms.Form):
+    media_metadata = wtforms.FieldList(
+        wtforms.FormField(MetaDataForm, label="")
+    )
+    context = wtforms.FieldList(
+        wtforms.FormField(MetaDataForm, label="")
+    )

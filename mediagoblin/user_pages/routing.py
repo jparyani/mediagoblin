@@ -101,3 +101,7 @@ add_route('mediagoblin.edit.edit_media',
 add_route('mediagoblin.edit.attachments',
           '/u/<string:user>/m/<int:media_id>/attachments/',
           'mediagoblin.edit.views:edit_attachments')
+
+add_route('mediagoblin.edit.metadata',
+          '/u/<string:user>/m/<int:media_id>/metadata/',
+          'mediagoblin.edit.views:edit_metadata')

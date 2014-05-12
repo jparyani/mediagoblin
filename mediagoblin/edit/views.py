@@ -17,6 +17,7 @@
 from datetime import datetime
 
 from itsdangerous import BadSignature
+from pyld import jsonld
 from werkzeug.exceptions import Forbidden
 from werkzeug.utils import secure_filename
 
@@ -29,7 +30,8 @@ from mediagoblin.edit import forms
 from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_media_entry_by_id, user_may_alter_collection,
-                            get_user_collection)
+                            get_user_collection, user_has_privilege,
+                            user_not_banned)
 from mediagoblin.tools.crypto import get_timed_signer_url
 from mediagoblin.tools.mail import email_debug_message
 from mediagoblin.tools.response import (render_to_response,
@@ -432,3 +434,51 @@ def change_email(request):
         'mediagoblin/edit/change_email.html',
         {'form': form,
          'user': user})
+
+@user_has_privilege(u'admin')
+@require_active_login
+@get_media_entry_by_id
+def edit_metadata(request, media):
+    form = forms.EditMetaDataForm(request.form)
+    if request.method == "POST" and form.validate():
+        context = dict([(row['identifier'],row['value'])
+                            for row in form.context.data])
+        metadata_dict = dict([(row['identifier'],row['value'])
+                            for row in form.media_metadata.data])
+        # TODO VALIDATE THIS BEFORE WE ENTER IT
+        # validate(metadata_dict)
+        # validate(context)
+        json_ld_metadata = jsonld.compact(metadata_dict, context)
+        # media.media_metadata = json_ld_metadata
+        # media.save()
+        return redirect_obj(request, media)
+
+    if media.media_metadata:
+        for row in media.media_metadata.iteritems():
+            if row[0] == "@context": continue
+            identifier = row[0]
+            # TODO Will change when we revert the metadata branch
+            value = row[1]['@value']
+            form.media_metadata.append_entry({
+                'identifier':identifier,
+                'value':value})
+        for row in media.media_metadata['@context'].iteritems():
+            identifier, value = row[0:2]
+            form.context.append_entry({
+                'identifier':identifier,
+                'value':value})
+    else:
+        form.media_metadata.append_entry({
+            'identifier':"",
+            'value':""})
+        form.media_metadata.append_entry({
+            'identifier':"",
+            'value':""})
+        form.context.append_entry({
+            'identifier':"",
+            'value':""})
+    return render_to_response(
+        request,
+        'mediagoblin/edit/metadata.html',
+        {'form':form,
+         'media':media})
