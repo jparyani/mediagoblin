@@ -20,10 +20,12 @@
   {%- set metadata=media_entry.media_metadata %}
   {%- set metadata_context=metadata['@context'] %}
   {%- if metadata %}
-      <table context="{{ metadata_context }}">
-        {%- for key, value in metadata.iteritems() if not key=='@context' %}
-            <tr>
-              <td>{{ format_predicate(key) }}</td>
+      <h3>{% trans %}Metadata Information{% endtrans %}</h3>
+      <table context="{{ metadata_context }}" class="metadata_info">
+        {%- for key, value in metadata.iteritems() if (
+            not key=='@context' and value) %}
+            <tr {% if loop.index%2 == 1 %}class="highlight"{% endif %}>
+              <th>{{ format_predicate(key) }}</th>
               <td property="{{ key }}" typeof="{{ value }}">
                 {{ value }}</td>
             </tr>
