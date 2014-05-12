@@ -15,17 +15,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
-
+{% block metadata_information_table %}
 {%- set metadata=media.media_metadata %}
 {%- set metadata_context=metadata['@context'] %}
 {%- if metadata %}
+  <h3>{% trans %}Metadata{% endtrans %}</h3>
   {#- NOTE: In some smart future where the context is more extensible,
         we will need to add to the prefix here-#}
-  <table>
+  <table class="metadata_info">
     {%- for key, value in metadata.iteritems() if not key=='@context' %}
       {% if value -%}
         <tr>
-          <td>{{ rdfa_to_readable(key) }}</td>
+          <th>{{ rdfa_to_readable(key) }}</th>
           <td property="{{ key }}">{{ value }}</td>
         </tr>
       {%- endif -%}
@@ -34,7 +35,8 @@
 {% endif %}
 {% if request.user and request.user.has_privilege('admin') %}
   <a href="{{ request.urlgen('mediagoblin.edit.metadata',
-                    user=media_entry.get_uploader.username,
-                    media_id=media_entry.id) }}">
+                    user=media.get_uploader.username,
+                    media_id=media.id) }}">
   {% trans %}Edit Metadata{% endtrans %}</a>
 {% endif %}
+{% endblock %}
