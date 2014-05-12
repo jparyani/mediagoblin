@@ -25,7 +25,7 @@ from mediagoblin.submit.lib import (
     submit_media, get_upload_file_limits,
     FileUploadLimit, UserUploadLimit, UserPastUploadLimit)
 from mediagoblin.tools.metadata import compact_and_validate
-
+from mediagoblin.tools.translate import pass_to_ugettext as _
 from jsonschema.exceptions import ValidationError
 
 
@@ -36,17 +36,7 @@ This command allows the administrator to upload many media files at once."""
         'username',
         help="Name of user these media entries belong to")
     subparser.add_argument(
-        'target_path',
-        help=("""\
-Path to a local archive or directory containing a "location.csv" and a
-"metadata.csv" file. These are csv (comma seperated value) files with the
-locations and metadata of the files to be uploaded. The location must be listed
-with either the URL of the remote media file or the filesystem path of a local
-file. The metadata should be provided with one column for each of the 15 Dublin
-Core properties (http://dublincore.org/documents/dces/). Both "location.csv" and
-"metadata.csv" must begin with a row demonstrating the order of the columns. We
-have provided an example of these files at <url to be added>
-"""))
+        'metadata_path')
     subparser.add_argument(
         '--celery',
         action='store_true',
@@ -65,48 +55,24 @@ def batchaddmedia(args):
     # get the user
     user = app.db.User.query.filter_by(username=args.username.lower()).first()
     if user is None:
-        print "Sorry, no user by username '%s' exists" % args.username
+        print _(u"Sorry, no user by username '{username}' exists".format(
+                    username=args.username))
         return
 
     upload_limit, max_file_size = get_upload_file_limits(user)
     temp_files = []
 
-    if os.path.isdir(args.target_path):
-        dir_path = args.target_path
-
-    elif tarfile.is_tarfile(args.target_path):
-        dir_path = tempfile.mkdtemp()
-        temp_files.append(dir_path)
-        tar = tarfile.open(args.target_path)
-        tar.extractall(path=dir_path)
-
-    elif zipfile.is_zipfile(args.target_path):
-        dir_path = tempfile.mkdtemp()
-        temp_files.append(dir_path)
-        zipped_file = zipfile.ZipFile(args.target_path)
-        zipped_file.extractall(path=dir_path)
+    if os.path.isfile(args.metadata_path):
+        metadata_path = args.metadata_path
 
     else:
-        print "Couldn't recognize the file. This script only accepts tar files,\
-zip files and directories"
-    if dir_path.endswith('/'):
-        dir_path = dir_path[:-1]
-
-    location_file_path = os.path.join(dir_path,"location.csv")
-    metadata_file_path = os.path.join(dir_path, "metadata.csv")
-
-    # check for the location file, if it exists...
-    abs_location_filename = os.path.abspath(location_file_path)
-    if not os.path.exists(abs_location_filename):
-        print "Can't find a file with filename '%s'" % location_file_path
+        error = _(u'File at {path} not found, use -h flag for help'.format(
+                    path=args.metadata_path))
+        print error
         return
 
-    # check for the metadata file, if it exists...
-    abs_metadata_filename = os.path.abspath(metadata_file_path)
-    if not os.path.exists(abs_metadata_filename):
-        print "Can't find a file with filename '%s'" % metadata_file_path
-        return
-
+    abs_metadata_filename = os.path.abspath(metadata_path)
+    abs_metadata_dir = os.path.dirname(abs_metadata_filename)
     upload_limit, max_file_size = get_upload_file_limits(user)
 
     def maybe_unicodeify(some_string):
@@ -116,36 +82,36 @@ zip files and directories"
         else:
             return unicode(some_string)
 
-    with file(abs_location_filename, 'r') as all_locations:
-        contents = all_locations.read()
-        media_locations = parse_csv_file(contents)
-
     with file(abs_metadata_filename, 'r') as all_metadata:
         contents = all_metadata.read()
         media_metadata = parse_csv_file(contents)
 
-    for media_id in media_locations.keys():
+    for media_id, file_metadata in media_metadata.iteritems():
         files_attempted += 1
+        # In case the metadata was not uploaded initialize an empty dictionary.
+        json_ld_metadata = compact_and_validate({})
 
-        file_metadata = media_metadata[media_id]
-
-        ### Remove all metadata entries starting with 'media' because we are ###
-        ### only using those for internal use.                               ###
+        # Get all metadata entries starting with 'media' as variables and then
+        # delete them because those are for internal use only.
+        original_location = file_metadata['media:location']
         file_metadata = dict([(key, value)
             for key, value in file_metadata.iteritems() if
                 key.split(":")[0] != 'media'])
         try:
             json_ld_metadata = compact_and_validate(file_metadata)
         except ValidationError, exc:
-            print "Error with '%s' value '%s': %s" % (
-                media_id, exc.path[0], exc.message)
+            error = _(u"""Error with media '{media_id}' value '{error_path}': {error_msg}
+Metadata was not uploaded.""".format(
+                media_id=media_id,
+                error_path=exc.path[0],
+                error_msg=exc.message))
+            print error
             continue
 
-        original_location = media_locations[media_id]['media:original']
         url = urlparse(original_location)
 
-        ### Pull the important media information for mediagoblin from the    ###
-        ### metadata, if it is provided.                                     ###
+        ### Pull the important media information for mediagoblin from the
+        ### metadata, if it is provided.
         title = json_ld_metadata.get('dc:title')
         description = json_ld_metadata.get('dc:description')
 
@@ -161,14 +127,14 @@ zip files and directories"
             if os.path.isabs(path):
                 file_abs_path = os.path.abspath(path)
             else:
-                file_path = os.path.join(dir_path, path)
+                file_path = os.path.join(abs_metadata_dir, path)
                 file_abs_path = os.path.abspath(file_path)
             try:
                 media_file = file(file_abs_path, 'r')
             except IOError:
-                print "\
-FAIL: Local file {filename} could not be accessed.".format(filename=filename)
-                print "Skipping it."
+                print _(u"""\
+FAIL: Local file {filename} could not be accessed.
+{filename} will not be uploaded.""".format(filename=filename))
                 continue
         try:
             submit_media(
@@ -182,29 +148,36 @@ FAIL: Local file {filename} could not be accessed.".format(filename=filename)
                 metadata=json_ld_metadata,
                 tags_string=u"",
                 upload_limit=upload_limit, max_file_size=max_file_size)
-            print "Successfully uploading {filename}!".format(filename=filename)
-            print ""
+            print _(u"""Successfully submitted {filename}!
+Be sure to look at the Media Processing Panel on your website to be sure it
+uploaded successfully.""".format(filename=filename))
             files_uploaded += 1
         except FileUploadLimit:
-            print "FAIL: This file is larger than the upload limits for this site."
+            print _(
+u"FAIL: This file is larger than the upload limits for this site.")
         except UserUploadLimit:
-            print "FAIL: This file will put this user past their upload limits."
+            print _(
+"FAIL: This file will put this user past their upload limits.")
         except UserPastUploadLimit:
-            print "FAIL: This user is already past their upload limits."
-    print "\
-{files_uploaded} out of {files_attempted} files successfully uploaded".format(
+            print _("FAIL: This user is already past their upload limits.")
+    print _(
+"{files_uploaded} out of {files_attempted} files successfully submitted".format(
         files_uploaded=files_uploaded,
-        files_attempted=files_attempted)
-    teardown(temp_files)
+        files_attempted=files_attempted))
 
 
 def parse_csv_file(file_contents):
+    """
+    The helper function which converts the csv file into a dictionary where each
+    item's key is the provided value 'media:id' and each item's value is another
+    dictionary.
+    """
     list_of_contents = file_contents.split('\n')
     key, lines = (list_of_contents[0].split(','),
                   list_of_contents[1:])
     objects_dict = {}
 
-    # Build a dictionaryfrom mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+    # Build a dictionary
     for line in lines:
         if line.isspace() or line == '': continue
         values = csv_reader([line]).next()
@@ -215,7 +188,3 @@ def parse_csv_file(file_contents):
 
     return objects_dict
 
-
-def teardown(temp_files):
-    for temp_file in temp_files:
-        subprocess.call(['rm','-r',temp_file])
