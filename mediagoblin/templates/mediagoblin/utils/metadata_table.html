@@ -21,12 +21,12 @@
   {%- set metadata_context=metadata['@context'] %}
   {%- if metadata %}
       <h3>{% trans %}Metadata Information{% endtrans %}</h3>
-      <table context="{{ metadata_context }}" class="metadata_info">
+      <table class="metadata_info">
         {%- for key, value in metadata.iteritems() if (
             not key=='@context' and value) %}
             <tr {% if loop.index%2 == 1 %}class="highlight"{% endif %}>
               <th>{{ format_predicate(key) }}</th>
-              <td property="{{ key }}" typeof="{{ value }}">
+              <td property="{{ key }}">
                 {{ value }}</td>
             </tr>
         {%- endfor %}
