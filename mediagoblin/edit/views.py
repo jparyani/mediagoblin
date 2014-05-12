@@ -33,6 +33,7 @@ from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_user_collection, user_has_privilege,
                             user_not_banned)
 from mediagoblin.tools.crypto import get_timed_signer_url
+from mediagoblin.tools.metadata import compact_and_validate
 from mediagoblin.tools.mail import email_debug_message
 from mediagoblin.tools.response import (render_to_response,
                                         redirect, redirect_obj, render_404)
@@ -441,30 +442,17 @@ def change_email(request):
 def edit_metadata(request, media):
     form = forms.EditMetaDataForm(request.form)
     if request.method == "POST" and form.validate():
-        context = dict([(row['identifier'],row['value'])
-                            for row in form.context.data])
         metadata_dict = dict([(row['identifier'],row['value'])
                             for row in form.media_metadata.data])
-        # TODO VALIDATE THIS BEFORE WE ENTER IT
-        # validate(metadata_dict)
-        # validate(context)
-        json_ld_metadata = jsonld.compact(metadata_dict, context)
-        # media.media_metadata = json_ld_metadata
-        # media.save()
+        json_ld_metadata = compact_and_validate(metadata_dict)
+        media.media_metadata = json_ld_metadata
+        media.save()
         return redirect_obj(request, media)
 
     if media.media_metadata:
-        for row in media.media_metadata.iteritems():
-            if row[0] == "@context": continue
-            identifier = row[0]
-            # TODO Will change when we revert the metadata branch
-            value = row[1]['@value']
+        for identifier, value in media.media_metadata.iteritems():
+            if identifier == "@context": continue
             form.media_metadata.append_entry({
-                'identifier':identifier,
-                'value':value})
-        for row in media.media_metadata['@context'].iteritems():
-            identifier, value = row[0:2]
-            form.context.append_entry({
                 'identifier':identifier,
                 'value':value})
     else:
@@ -472,9 +460,6 @@ def edit_metadata(request, media):
             'identifier':"",
             'value':""})
         form.media_metadata.append_entry({
-            'identifier':"",
-            'value':""})
-        form.context.append_entry({
             'identifier':"",
             'value':""})
     return render_to_response(

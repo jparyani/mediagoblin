@@ -131,6 +131,3 @@ class EditMetaDataForm(wtforms.Form):
     media_metadata = wtforms.FieldList(
         wtforms.FormField(MetaDataForm, label="")
     )
-    context = wtforms.FieldList(
-        wtforms.FormField(MetaDataForm, label="")
-    )

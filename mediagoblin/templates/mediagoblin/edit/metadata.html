@@ -49,7 +49,6 @@
     }
 
     $(document).ready(function(){
-        var context_lines = {{ form.context | length }};
         var metadata_lines = {{ form.media_metadata | length }};
         $("#add_new_metadata_row").click(function(){
             add_new_row("#metadata_list",
@@ -57,14 +56,8 @@
                         'media_metadata-');
             metadata_lines += 1;
         })
-        $("#add_new_context_row").click(function(){
-            add_new_row("#context_list",
-                        context_lines,
-                        'context-');
-            context_lines += 1;
         })
         $("#clear_empty_rows").click(function(){
-            clear_empty_rows("#context_list");
             clear_empty_rows("#metadata_list");
         })
     })
@@ -74,22 +67,6 @@
   <h2>{% trans media_name=media.title -%}
     Metadata for "{{ media_name }}"{% endtrans %}</h2>
   <form action="" method="POST" id="metadata_form">
-<!-- This table holds all the information about the metadata's context.
-     visit http:/wwww.json-ld.org for more information. -->
-  <h3>{% trans %}Context{% endtrans %}</h3>
-  <table class="metadata_editor" id="context_list">
-    {{ wtforms_util.render_fieldlist_as_table_rows(form.context) }}
-  </table>
-
-  <table class="metadata_editor" id="buttons_top">
-    <tr>
-      <th></th>
-      <td><input type=button value="{% trans %}Add new Row{% endtrans %}"
-        class="button_action" id="add_new_context_row" /></td>
-      <th></th>
-      <td></td>
-    </tr>
-  </table>
 
 <!-- This table holds all the information about the media entry's metadata -->
   <h3>{% trans %}Data{% endtrans %}</h3>

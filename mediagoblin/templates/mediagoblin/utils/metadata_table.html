@@ -20,16 +20,13 @@
   {%- set metadata=media_entry.media_metadata %}
   {%- set metadata_context=metadata['@context'] %}
   {%- if metadata %}
-      <table prefix="{% for p in metadata_context %}{% if not loop.first %}
-                    {% endif %}{{ p }} {{ metadata_context[p] }}{% endfor -%}">
-        {%- for key, value_dict in metadata.iteritems() if not key=='@context' %}
-          {% if value_dict['@value'] -%}
+      <table context="{{ metadata_context }}">
+        {%- for key, value in metadata.iteritems() if not key=='@context' %}
             <tr>
               <td>{{ format_predicate(key) }}</td>
-              <td property="{{ key }}" typeof="{{ value_dict['@type'] }}">
-                {{ value_dict['@value'] }}</td>
+              <td property="{{ key }}" typeof="{{ value }}">
+                {{ value }}</td>
             </tr>
-          {%- endif -%}
         {%- endfor %}
       </table>
   {% endif %}
