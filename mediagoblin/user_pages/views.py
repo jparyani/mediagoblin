@@ -28,7 +28,7 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.user_pages import forms as user_forms
 from mediagoblin.user_pages.lib import (send_comment_email,
-	add_media_to_collection, build_report_object, rdfa_to_readable)
+	add_media_to_collection, build_report_object)
 from mediagoblin.notifications import trigger_notification, \
     add_comment_subscription, mark_comment_notification_seen
 from mediagoblin.tools.pluginapi import hook_transform
@@ -152,8 +152,7 @@ def media_home(request, media, page, **kwargs):
         'comments': comments,
         'pagination': pagination,
         'comment_form': comment_form,
-        'app_config': mg_globals.app_config,
-        'rdfa_to_readable':rdfa_to_readable}
+        'app_config': mg_globals.app_config}
 
     # Since the media template name gets swapped out for each media
     # type, normal context hooks don't work if you want to affect all

@@ -16,26 +16,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
-{%- macro render_table(request, media_entry, format_predicate) %}
-  {%- set metadata=media_entry.media_metadata %}
-  {%- set metadata_context=metadata['@context'] %}
-  {%- if metadata %}
-      <h3>{% trans %}Metadata Information{% endtrans %}</h3>
-      <table class="metadata_info">
-        {%- for key, value in metadata.iteritems() if (
-            not key=='@context' and value) %}
-            <tr {% if loop.index%2 == 1 %}class="highlight"{% endif %}>
-              <th>{{ format_predicate(key) }}</th>
-              <td property="{{ key }}">
-                {{ value }}</td>
-            </tr>
-        {%- endfor %}
-      </table>
-  {% endif %}
-  {% if request.user and request.user.has_privilege('admin') %}
-      <a href="{{ request.urlgen('mediagoblin.edit.metadata',
+{%- set metadata=media.media_metadata %}
+{%- set metadata_context=metadata['@context'] %}
+{%- if metadata %}
+  {#- NOTE: In some smart future where the context is more extensible,
+        we will need to add to the prefix here-#}
+  <table>
+    {%- for key, value in metadata.iteritems() if not key=='@context' %}
+      {% if value -%}
+        <tr>
+          <td>{{ rdfa_to_readable(key) }}</td>
+          <td property="{{ key }}">{{ value }}</td>
+        </tr>
+      {%- endif -%}
+    {%- endfor %}
+  </table>
+{% endif %}
+{% if request.user and request.user.has_privilege('admin') %}
+  <a href="{{ request.urlgen('mediagoblin.edit.metadata',
                     user=media_entry.get_uploader.username,
                     media_id=media_entry.id) }}">
-        {% trans %}Edit Metadata{% endtrans %}</a>
-  {% endif %}
-{%- endmacro %}
+  {% trans %}Edit Metadata{% endtrans %}</a>
+{% endif %}

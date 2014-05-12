@@ -211,3 +211,8 @@ def expand_json(metadata, context=DEFAULT_CONTEXT):
     if context is not None:
         options["expandContext"] = context
     return jsonld.expand(metadata, options=options)
+
+
+def rdfa_to_readable(rdfa_predicate):
+    readable = rdfa_predicate.split(u":")[1].capitalize()
+    return readable
