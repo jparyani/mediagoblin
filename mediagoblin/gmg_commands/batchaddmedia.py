@@ -38,7 +38,7 @@ This command allows the administrator to upload many media files at once."""
     subparser.add_argument(
         'target_path',
         help=("""\
-Path to a local archive or directory containing a "location.csv" and a 
+Path to a local archive or directory containing a "location.csv" and a
 "metadata.csv" file. These are csv (comma seperated value) files with the
 locations and metadata of the files to be uploaded. The location must be listed
 with either the URL of the remote media file or the filesystem path of a local
@@ -128,6 +128,12 @@ zip files and directories"
         files_attempted += 1
 
         file_metadata = media_metadata[media_id]
+
+        ### Remove all metadata entries starting with 'media' because we are ###
+        ### only using those for internal use.                               ###
+        file_metadata = dict([(key, value)
+            for key, value in file_metadata.iteritems() if
+                key.split(":")[0] != 'media'])
         try:
             json_ld_metadata = compact_and_validate(file_metadata)
         except ValidationError, exc:
@@ -138,8 +144,10 @@ zip files and directories"
         original_location = media_locations[media_id]['media:original']
         url = urlparse(original_location)
 
-        title = json_ld_metadata.get('dcterms:title')
-        description = json_ld_metadata.get('dcterms:description')
+        ### Pull the important media information for mediagoblin from the    ###
+        ### metadata, if it is provided.                                     ###
+        title = json_ld_metadata.get('dc:title')
+        description = json_ld_metadata.get('dc:description')
 
         license = json_ld_metadata.get('license')
         filename = url.path.split()[-1]
