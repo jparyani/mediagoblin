@@ -18,7 +18,6 @@
 {%- extends "mediagoblin/base.html" %}
 
 {% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
-{% import "/mediagoblin/utils/metadata_table.html" as metadata_util %}
 {% from "mediagoblin/utils/pagination.html" import render_pagination %}
 
 {% block title %}{{ media.title }} &mdash; {{ super() }}{% endblock %}
@@ -230,10 +229,6 @@
     {%- endif %}
 
     {% template_hook("media_sideinfo") %}
-
-    {% block mediagoblin_sidebar %}
-       {{ metadata_util.render_table(request, media, rdfa_to_readable) }}
-    {% endblock %}
 
   </div><!--end media_sidebar-->
 

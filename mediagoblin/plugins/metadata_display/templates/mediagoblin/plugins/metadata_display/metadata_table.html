@@ -16,22 +16,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
-{%- macro render_table(request, media_entry, format_predicate) %}
-  {%- set metadata=media_entry.media_metadata %}
-  {%- set metadata_context=metadata['@context'] %}
-  {%- if metadata %}
-      {#- NOTE: In some smart future where the context is more extensible,
-            we will need to add to the prefix here-#}
-      <table>
-        {%- for key, value_dict in metadata.iteritems() if not key=='@context' %}
-          {% if value_dict['@value'] -%}
-            <tr>
-              <td>{{ format_predicate(key) }}</td>
-              <td property="{{ key }}" typeof="{{ value_dict['@type'] }}">
-                {{ value_dict['@value'] }}</td>
-            </tr>
-          {%- endif -%}
-        {%- endfor %}
-      </table>
-  {% endif %}
-{%- endmacro %}
+{%- set metadata=media.media_metadata %}
+{%- set metadata_context=metadata['@context'] %}
+{%- if metadata %}
+  {#- NOTE: In some smart future where the context is more extensible,
+        we will need to add to the prefix here-#}
+  <table>
+    {%- for key, value in metadata.iteritems() if not key=='@context' %}
+      {% if value -%}
+        <tr>
+          <td>{{ rdfa_to_readable(key) }}</td>
+          <td property="{{ key }}">{{ value }}</td>
+        </tr>
+      {%- endif -%}
+    {%- endfor %}
+  </table>
+{% endif %}
