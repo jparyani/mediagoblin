@@ -32,15 +32,21 @@ from jsonschema.exceptions import ValidationError
 def parser_setup(subparser):
     subparser.description = """\
 This command allows the administrator to upload many media files at once."""
+    subparser.epilog = _(u"""For more information about how to properly run this
+script (and how to format the metadata csv file), read the MediaGoblin
+documentation page on command line uploading 
+<http://docs.mediagoblin.org/siteadmin/commandline-upload.html>""")
     subparser.add_argument(
         'username',
-        help="Name of user these media entries belong to")
+        help=_(u"Name of user these media entries belong to"))
     subparser.add_argument(
-        'metadata_path')
+        'metadata_path',
+        help=_(
+u"""Path to the csv file containing metadata information."""))
     subparser.add_argument(
         '--celery',
         action='store_true',
-        help="Don't process eagerly, pass off to celery")
+        help=_(u"Don't process eagerly, pass off to celery"))
 
 
 def batchaddmedia(args):
