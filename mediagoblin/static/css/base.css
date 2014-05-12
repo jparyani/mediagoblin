@@ -943,12 +943,16 @@ p.verifier {
 table.metadata_editor {
 
     margin: 10px auto;
-    width: 800px;
+    width: 1000px;
+}
+
+table.metadata_editor tr th {
+    width:100px;
 }
 
 table.metadata_editor tr td {
-    width:350px;
+    width:300px;
 }
 table.metadata_editor tr td.form_field_input input {
-    width: 300px
+    width:300px;
 }

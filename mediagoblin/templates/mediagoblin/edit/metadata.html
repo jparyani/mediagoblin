@@ -78,20 +78,15 @@
      visit http:/wwww.json-ld.org for more information. -->
   <h3>{% trans %}Context{% endtrans %}</h3>
   <table class="metadata_editor" id="context_list">
-    <tr>
-      <td><a class="strong highlight">
-        {% trans %}Identifier{% endtrans %}</a></td>
-      <td><a class="strong highlight">{% trans %}Value{% endtrans %}</a></td>
-    </tr>
-  {% for miniform in form.context -%}
-    {{ wtforms_util.render_table_row(miniform) }}
-  {% endfor -%}
+    {{ wtforms_util.render_fieldlist_as_table_rows(form.context) }}
   </table>
 
   <table class="metadata_editor" id="buttons_top">
     <tr>
+      <th></th>
       <td><input type=button value="{% trans %}Add new Row{% endtrans %}"
         class="button_action" id="add_new_context_row" /></td>
+      <th></th>
       <td></td>
     </tr>
   </table>
@@ -99,26 +94,22 @@
 <!-- This table holds all the information about the media entry's metadata -->
   <h3>{% trans %}Data{% endtrans %}</h3>
   <table class="metadata_editor" id="metadata_list" >
-    <tr>
-      <td><a class="strong highlight">
-        {% trans %}Identifier{% endtrans %}</a></td>
-      <td><a class="strong highlight">{% trans %}Value{% endtrans %}</a></td>
-    </tr>
-  {% for miniform in form.media_metadata -%}
-    {{ wtforms_util.render_table_row(miniform) }}
-  {% endfor -%}
+    {{ wtforms_util.render_fieldlist_as_table_rows(form.media_metadata) }}
   </table>
 
 <!-- These are the buttons you use to control the form -->
   <table class="metadata_editor" id="buttons_bottom">
     <tr>
+      <th></th>
       <td><input type=button value="{% trans %}Add new Row{% endtrans %}"
         class="button_action" id="add_new_metadata_row" />
       </td>
+      <th></th>
       <td><input type=submit value="{% trans %}Update Metadata{% endtrans %}"
         class="button_action_highlight" /></td>
     </tr>
     <tr>
+      <th></th>
       <td><input type=button value="{% trans %}Clear empty Rows{% endtrans %}"
         class="button_action" id="clear_empty_rows" /></td>
     </tr>
