@@ -15,10 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import tempfile, tarfile, zipfile, subprocess, requests
+import requests
 from csv import reader as csv_reader
 from urlparse import urlparse
-from pyld import jsonld
 
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.submit.lib import (
