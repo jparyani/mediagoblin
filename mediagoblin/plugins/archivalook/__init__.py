@@ -21,9 +21,7 @@ from mediagoblin.tools.pluginapi import (register_template_path,
                                         register_routes,
                                         register_template_hooks)
 from mediagoblin.plugins.archivalook.views import (get_root_view,
-                                    add_featured_media_to_media_home,
-                                    promote_featured_media,
-                                    demote_featured_media)
+                                    add_featured_media_to_media_home)
 from mediagoblin.tools.staticdirect import PluginStatic
 
 

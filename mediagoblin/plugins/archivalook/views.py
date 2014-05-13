@@ -22,7 +22,6 @@ from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.tools.pagination import Pagination
 
 from mediagoblin.plugins.archivalook.tools import (
-                                        get_media_entry_from_uploader_slug,
                                         split_featured_media_list,
                                         create_featured_media_textbox,
                                         automatically_add_new_feature,
