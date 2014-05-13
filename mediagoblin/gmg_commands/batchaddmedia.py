@@ -33,7 +33,7 @@ def parser_setup(subparser):
 This command allows the administrator to upload many media files at once."""
     subparser.epilog = _(u"""For more information about how to properly run this
 script (and how to format the metadata csv file), read the MediaGoblin
-documentation page on command line uploading 
+documentation page on command line uploading
 <http://docs.mediagoblin.org/siteadmin/commandline-upload.html>""")
     subparser.add_argument(
         'username',
@@ -99,6 +99,14 @@ def batchaddmedia(args):
         # Get all metadata entries starting with 'media' as variables and then
         # delete them because those are for internal use only.
         original_location = file_metadata['location']
+
+        ### Pull the important media information for mediagoblin from the
+        ### metadata, if it is provided.
+        title = file_metadata.get('title') or file_metadata.get('dc:title')
+        description = (file_metadata.get('description') or
+            file_metadata.get('dc:description'))
+
+        license = file_metadata.get('license')
         try:
             json_ld_metadata = compact_and_validate(file_metadata)
         except ValidationError, exc:
@@ -111,13 +119,6 @@ Metadata was not uploaded.""".format(
             continue
 
         url = urlparse(original_location)
-
-        ### Pull the important media information for mediagoblin from the
-        ### metadata, if it is provided.
-        title = json_ld_metadata.get('dc:title')
-        description = json_ld_metadata.get('dc:description')
-
-        license = json_ld_metadata.get('license')
         filename = url.path.split()[-1]
 
         if url.scheme == 'http':

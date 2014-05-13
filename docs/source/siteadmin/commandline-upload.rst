@@ -61,16 +61,28 @@ be able to automatically name them appropriately.
 
 The csv file
 ============
-The media:location column
--------------------------
-The media:location column is the one column that is absolutely necessary for
+The location column
+-------------------
+The location column is the one column that is absolutely necessary for
 uploading your media. This gives a path to each piece of media you upload. This
 can either a path to a local file or a direct link to remote media (with the
 link in http format). As you can see in the example above the (fake) media was
 stored remotely on "www.example.net".
 
-Other columns
--------------
+Other internal nodes
+--------------------
+There are other columns which can be used by the script to provide information.
+These are not stored as part of the media's metadata. You can use these columns to
+provide default information for your media entry, but as you'll see below, it's
+just as easy to provide this information through the correct metadata columns.
+
+- **id** is used to identify the media entry to the user in case of an error in the batchaddmedia script.
+- **license** is used to set a license for your piece a media for mediagoblin's use. This must be a URI.
+- **title** will set the title displayed to mediagoblin users.
+- **description** will set a description of your media.
+
+Metadata columns
+----------------
 Other columns can be used to provide detailed metadata about each media entry.
 Our metadata system accepts any information provided for in the
 `RDFa Core Initial Context`_, and the batchupload script recognizes all of the
@@ -80,13 +92,17 @@ resources provided within it.
 
 The uploader may include the metadata for each piece of media, or
 leave them blank if they want to. A few columns from `Dublin Core`_ are
-notable because the batchaddmedia script uses them to set the default
+notable because the batchaddmedia script also uses them to set the default
 information of uploaded media entries.
 
 .. _Dublin Core: http://wiki.dublincore.org/index.php/User_Guide
 
-- **dc:title** sets a title for your media entry. If this is left blank, the media entry will be named according to the filename of the file being uploaded.
-- **dc:description** sets a description of your media entry. If this is left blank the media entry's description will not be filled in.
-- **dc:rights** will set a license for your media entry `if` the data provided is a valid URI. If this is left blank 'All Rights Reserved' will be selected.
+- **dc:title** sets a title for your media entry.
+- **dc:description** sets a description of your media entry.
 
-You can of course, change these values later.
+If both a metadata column and an internal node for the title are provided, mediagoblin
+will use the internal node as the media entry's display name. This makes it so
+that if you want to display a piece of media with a different title
+than the one provided in its metadata, you can just provide different data for
+the 'dc:title' and 'title' columns. The same is true of the 'description' and
+'dc:description'.
