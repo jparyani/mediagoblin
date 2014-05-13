@@ -99,10 +99,7 @@ def batchaddmedia(args):
 
         # Get all metadata entries starting with 'media' as variables and then
         # delete them because those are for internal use only.
-        original_location = file_metadata['media:location']
-        file_metadata = dict([(key, value)
-            for key, value in file_metadata.iteritems() if
-                key.split(":")[0] != 'media'])
+        original_location = file_metadata['location']
         try:
             json_ld_metadata = compact_and_validate(file_metadata)
         except ValidationError, exc:
@@ -175,7 +172,7 @@ u"FAIL: This file is larger than the upload limits for this site.")
 def parse_csv_file(file_contents):
     """
     The helper function which converts the csv file into a dictionary where each
-    item's key is the provided value 'media:id' and each item's value is another
+    item's key is the provided value 'id' and each item's value is another
     dictionary.
     """
     list_of_contents = file_contents.split('\n')
@@ -184,12 +181,12 @@ def parse_csv_file(file_contents):
     objects_dict = {}
 
     # Build a dictionary
-    for line in lines:
+    for index, line in enumerate(lines):
         if line.isspace() or line == '': continue
         values = csv_reader([line]).next()
         line_dict = dict([(key[i], val)
             for i, val in enumerate(values)])
-        media_id = line_dict['media:id']
+        media_id = line_dict.get('id') or index
         objects_dict[media_id] = (line_dict)
 
     return objects_dict
