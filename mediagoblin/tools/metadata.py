@@ -82,6 +82,10 @@ DEFAULT_SCHEMA = {
         "dcterms:created": {
             "format": "date-time",
             "type": "string",
+        },
+        "dc:created": {
+            "format": "date-time",
+            "type": "string",
         }
     },
 }
