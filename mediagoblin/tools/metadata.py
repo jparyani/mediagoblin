@@ -131,7 +131,7 @@ def load_context(url):
     stores internally, load them from disk.
     """
     if url in _CONTEXT_CACHE:
-        return _CONTEXT_CACHE[url]        
+        return _CONTEXT_CACHE[url]
 
     # See if it's one of our basic ones
     document = BUILTIN_CONTEXTS.get(url, None)

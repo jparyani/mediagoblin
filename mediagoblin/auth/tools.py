@@ -132,11 +132,7 @@ def register_user(request, register_form):
         user = auth.create_user(register_form)
 
         # give the user the default privileges
-        default_privileges = [
-            Privilege.query.filter(Privilege.privilege_name==u'commenter').first(),
-            Privilege.query.filter(Privilege.privilege_name==u'uploader').first(),
-            Privilege.query.filter(Privilege.privilege_name==u'reporter').first()]
-        user.all_privileges += default_privileges
+        user.all_privileges += get_default_privileges(user)
         user.save()
 
         # log the user in
@@ -151,6 +147,14 @@ def register_user(request, register_form):
 
     return None
 
+def get_default_privileges(user):
+    instance_privilege_scheme = mg_globals.app_config['user_privilege_scheme']
+    default_privileges = [Privilege.query.filter(
+        Privilege.privilege_name==privilege_name).first()
+        for privilege_name in instance_privilege_scheme.split(',')]
+    default_privileges = [privilege for privilege in default_privileges if not privilege == None]
+
+    return default_privileges
 
 def check_login_simple(username, password):
     user = auth.get_user(username=username)

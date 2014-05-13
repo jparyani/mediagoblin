@@ -63,16 +63,16 @@ The csv file
 ============
 The media:location column
 -------------------------
-The media:location column is the one column that is absolutely necessary for 
+The media:location column is the one column that is absolutely necessary for
 uploading your media. This gives a path to each piece of media you upload. This
-can either a path to a local file or a direct link to remote media (with the 
+can either a path to a local file or a direct link to remote media (with the
 link in http format). As you can see in the example above the (fake) media was
 stored remotely on "www.example.net".
 
 Other columns
 -------------
 Other columns can be used to provide detailed metadata about each media entry.
-Our metadata system accepts any information provided for in the 
+Our metadata system accepts any information provided for in the
 `RDFa Core Initial Context`_, and the batchupload script recognizes all of the
 resources provided within it.
 
@@ -89,4 +89,4 @@ information of uploaded media entries.
 - **dc:description** sets a description of your media entry. If this is left blank the media entry's description will not be filled in.
 - **dc:rights** will set a license for your media entry `if` the data provided is a valid URI. If this is left blank 'All Rights Reserved' will be selected.
 
-You can of course, change these values later. 
+You can of course, change these values later.

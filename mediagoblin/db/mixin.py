@@ -46,6 +46,12 @@ class UserMixin(object):
     def bio_html(self):
         return cleaned_markdown_conversion(self.bio)
 
+    def url_for_self(self, urlgen, **kwargs):
+        """Generate a URL for this User's home page."""
+        return urlgen('mediagoblin.user_pages.user_home',
+                      user=self.username, **kwargs)
+
+
 class GenerateSlugMixin(object):
     """
     Mixin to add a generate_slug method to objects.
