@@ -16,6 +16,8 @@ Featured Media on the front page.
 Q: How do I install it?
 A: Check out this page for instructions:
 http://mediagoblin.readthedocs.org/en/v0.6.1/siteadmin/plugins.html
+Be sure to run ./bin/gmg assetlink after you have added the plugin to your
+instance, this is necessary because the plugin uses custom css.
 
 Q: I set it up but I still can't feature media, what do I do?
 A: So when you first activate this plugin, no users have the proper user
