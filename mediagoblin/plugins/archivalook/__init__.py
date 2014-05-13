@@ -57,6 +57,8 @@ def setup_plugin():
           'mediagoblin.plugins.archivalook.views:demote_featured_media')])
     register_template_hooks({
             'media_sideinfo':'archivalook/feature_media_sidebar.html'})
+    register_template_hooks({
+            'moderation_powers':'archivalook/bits/feature_dropdown.html'})
 
     # Add template head hooks, if certain media types are enabled
     from mediagoblin import mg_globals
