@@ -1,0 +1,79 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+
+{% set feed_url = request.urlgen('mediagoblin.listings.atom_feed') %}
+
+{%- block mediagoblin_head -%}
+  {%- set feed_url = request.urlgen('mediagoblin.listings.atom_feed') %}
+  <link rel="alternate" type="application/atom+xml" href="{{ feed_url }}" />
+  <link rel="stylesheet" type="text/css"
+     href="{{ request.staticdirect('css/featured-media.css','archivalook') }}"/>
+
+  {% template_hook("archivalook_feature_head") %}
+{%- endblock mediagoblin_head %}
+
+{%- block mediagoblin_content %}
+  <div class="frontpage-container" >
+  {%- if featured_media.primary|length > 0 or
+         featured_media.secondary|length > 0 or
+         featured_media.tertiary|length > 0 -%}
+    {%- for feature in featured_media.primary %}
+      {% set feature_loop = loop %}
+      {% include feature_template(feature.media_entry, "primary") %}
+    {%- endfor %}
+
+    {%- for feature in featured_media.secondary %}
+      {% set feature_loop = loop %}
+      {% include feature_template(feature.media_entry, "secondary") %}
+    {%- endfor %}
+
+    <table class="tertiary-features">
+      {% set col_number = 3 %}
+      {%- for row in featured_media.tertiary|batch(col_number) %}
+        {% set row_loop = loop %}
+        <tr>
+          {%- for feature in row %}
+            {% set feature_loop = loop %}
+            {% include feature_template(feature.media_entry, "tertiary") %}
+          {%- endfor %}
+        </tr>
+      {%- endfor %}
+    </table>
+  </div>
+  {%- elif request.user and request.user.has_privilege('featurer') %}
+    <div>
+      <h2>{% trans %}Nothing is currently featured.{% endtrans %}</h2>
+      {% trans %}If you would like to feature a
+        piece of media, go to that media entry's homepage and click the button
+        that says{% endtrans %} <a class="button_action">Feature</a>.
+      {% trans %}You're seeing this page because you are a user capable of
+        featuring media, a regular user would see a blank page, so be sure to
+        have media featured as long as your instance has the 'archivalook'
+        plugin enabled. A more advanced tool to manage features can be found
+        in the{% endtrans %}
+        <a href="{{ request.urlgen(
+            'manage-featured-media') }}">
+        {% trans %}feature management panel.{% endtrans %}</a>
+    </div>
+  </div>
+  {%- endif %}
+  <a href="{{ request.urlgen('gallery-recent-media') }}">
+    {% trans %}View most recent media{% endtrans %}
+  </a>
+{% endblock %}

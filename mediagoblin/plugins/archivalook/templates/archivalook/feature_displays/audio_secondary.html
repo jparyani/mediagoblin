@@ -1,0 +1,40 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% from "archivalook/utils/display_featured.html" import
+    possibly_shortened_description %}
+
+{%- set media = feature.media_entry %}
+{%- set entry_url = media.url_for_self(request.urlgen) %}
+{%- if feature_loop.index % 2 == 1 -%}
+<div class="secondary-feature aligned-right">
+{%- else -%}
+<div class="secondary-feature aligned-left">
+{%- endif %}
+  <p class="f-display">
+      <audio class="audio-player" controls="controls"
+	         preload="metadata">
+        <source src="{{ request.app.public_store.file_url(
+		       media.media_files.webm_audio) }}" type="audio/webm; codecs=vorbis" />
+      </audio>
+  </p>
+  {{ possibly_shortened_description(request, feature.media_entry) }}
+  <a href="{{ entry_url }}">
+    <p class="f-title">{{ media.title }}</p>
+  </a>
+</div>

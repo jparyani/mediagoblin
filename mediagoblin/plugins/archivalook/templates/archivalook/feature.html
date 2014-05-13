@@ -1,0 +1,115 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% extends "mediagoblin/base.html" %}
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+
+{%- block mediagoblin_head -%}
+  <link rel="stylesheet" type="text/css"
+     href="{{ request.staticdirect('css/featured-media.css','archivalook') }}"/>
+{%- endblock mediagoblin_head %}
+
+{%- block mediagoblin_content %}
+  <form method="POST" action="" id="featured-media-panel">
+    {{ wtforms_util.render_divs(form) }}
+    <input type=submit />
+  {{ csrf_token }}
+  </form>
+
+  <h2>{% trans %}How does this work?{% endtrans %}</h2>
+    <strong><a class="highlight">{% trans %}How to feature media?{% endtrans -%}
+    </a></strong>
+    <p>
+    {% trans %}
+      Go to the page of the media entry you want to feature. Copy it's URL and
+      then paste it into a new line in the text box above. There should be only
+      one url per line. The url that you paste into the text box should be under
+      the header describing how prominent a feature it will be (whether Primary,
+      Secondary, or Tertiary). Once all of the media that you want to feature are
+      inside the text box, click the Submit Query button, and your media should be
+      displayed on the front page.
+    {% endtrans %}</p>
+
+    <strong><a class="highlight">
+        {%- trans %}Is there another way to manage featured media?{% endtrans %}
+    </a></strong>
+    <p>
+    {% trans %}
+        Yes. If you would prefer, you may go to the media homepage of the piece
+        of media you would like to feature or unfeature and look at the bar to
+        the side of the media entry. If the piece of media has not been featured
+        yet you should see a button that says 'Feature'. Press that button and
+        the media will be featured as a Primary Feature at the top of the page.
+        All other featured media entries will remain as features, but will be
+        pushed further down the page.<br /><br />
+
+        If you go to the media homepage of a piece of media that is currently
+        featured, you will see the options "Unfeature", "Promote" and "Demote"
+        where previously there was the button which said "Feature". Click
+        Unfeature and that media entry will no longer be displayed on the
+        front page, although you can feature it again at any point. Promote
+        moves the featured media higher up on the page and makes it more
+        prominent and Demote moves the featured media lower down and makes it
+        less prominent.
+    {% endtrans %}</p>
+
+    <strong><a class="highlight">{% trans -%}
+        What is a Primary Feature? What is a Secondary Feature?{% endtrans -%}
+    </a></strong>
+    <p>
+    {% trans %}
+      These categories just describe how prominent a feature will be on your
+      front page. Primary Features are placed at the top of the front page and are
+      much larger. Next are Secondary Features, which are slightly smaller.
+      Tertiary Features make up a grid at the bottom of the page.<br /><br />
+
+      Primary Features also can display longer descriptions than Secondary
+      Features, and Secondary Features can display longer descriptions than
+      Tertiary Features.{% endtrans %}</p>
+
+    <strong><a class="highlight">
+    {% trans %}How to decide what information is displayed when a media entry is
+    featured?{% endtrans %}</a></strong>
+    <p>
+    {% trans %}
+      When a media entry is featured, the entry's title, it's thumbnail and a
+      portion of its description will be displayed on your website's front page.
+      The number of characters displayed varies on the prominence of the feature.
+      Primary Features display the first 512 characters of their description,
+      Secondary Features display the first 256 characters of their description,
+      and Tertiary Features display the first 128 characters of their description.
+    {% endtrans %}
+    </p>
+
+    <strong><a class="highlight">{% trans -%}
+        How to unfeature a piece of media?{% endtrans -%}
+    </a></strong>
+    <p>
+    {% trans %}
+      Unfeature a media by removing its line from the above textarea and then
+      pressing the Submit Query button.
+    {% endtrans %}
+    </p>
+
+    <strong><a class="highlight">{% trans %}CAUTION:{% endtrans %}</a></strong>
+    <p>
+    {% trans %}
+      When copying and pasting urls into the above text box, be aware that if
+      you make a typo, once you press Submit Query, your media entry will NOT be
+      featured. Make sure that all your intended Media Entries are featured.
+    {% endtrans %}</p>
+{% endblock %}

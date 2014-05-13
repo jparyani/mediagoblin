@@ -1,0 +1,53 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% from "archivalook/utils/display_featured.html" import
+    possibly_shortened_description %}
+
+{%- set media = feature.media_entry %}
+{%- set display_media = request.app.public_store.file_url(
+             media.get_display_media()[1]) %}
+{%- set entry_url = media.url_for_self(request.urlgen) %}
+
+<div class="primary-feature">
+  <a href="{{ entry_url }}">
+    <p class="f-title">{{ media.title }}</p>
+  </a>
+  <div class="f-display">
+    {%- set display_type, display_path = media.get_display_media() %}
+    <video controls
+           {% if global_config['plugins']['mediagoblin.media_types.video']['auto_play'] %}autoplay{% endif %}
+           preload="auto" class="video-js vjs-default-skin">
+      <source src="{{ request.app.public_store.file_url(display_path) }}"
+              {% if media.media_data %}
+                type="{{ media.media_data.source_type() }}"
+              {% else %}
+                type="{{ media.media_manager['default_webm_type'] }}"
+              {% endif %} />
+      <div class="no_html5">
+          {%- trans -%}Sorry, this video will not work because
+          your web browser does not support HTML5 
+          video.{%- endtrans -%}<br/>
+          {%- trans -%}You can get a modern web browser that 
+          can play this video at <a href="http://getfirefox.com">
+          http://getfirefox.com</a>!{%- endtrans -%}
+      </div>
+    </video>
+  </div>  
+  {{ possibly_shortened_description(request, feature.media_entry) }}
+</div>
