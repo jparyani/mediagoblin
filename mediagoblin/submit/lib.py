@@ -142,7 +142,7 @@ def submit_media(mg_app, user, submitted_file, filename,
 
     entry.license = license or None
 
-    entry.media_metadata = metadata or u""
+    entry.media_metadata = metadata or {}
 
     # Process the user's folksonomy "tags"
     entry.tags = convert_to_tag_list_of_dicts(tags_string)
