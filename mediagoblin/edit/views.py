@@ -450,9 +450,9 @@ def edit_metadata(request, media):
         json_ld_metadata = compact_and_validate(metadata_dict)
         media.media_metadata = json_ld_metadata
         media.save()
-        return redirect_obj(request, media)
+        return redirect_obj(request, media)      
 
-    if media.media_metadata and len(form.media_metadata) == 0:
+    if len(form.media_metadata) == 0:
         for identifier, value in media.media_metadata.iteritems():
             if identifier == "@context": continue
             form.media_metadata.append_entry({
