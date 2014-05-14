@@ -15,39 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import pytest
-from mediagoblin.tools import template
 from mediagoblin.tools.metadata import compact_and_validate
-from webtest import AppError
 from jsonschema import ValidationError
-
-from .resources import GOOD_JPG
 
 class TestMetadataFunctionality:
 
     @pytest.fixture(autouse=True)
     def _setup(self, test_app):
         self.test_app = test_app
-
-    def login(self, username):
-        self.test_app.post(
-            '/auth/login/', {
-                'username': username,
-                'password': 'toast'})
-
-    def logout(self):
-        self.test_app.get('/auth/logout/')
-
-    def do_post(self, data, *context_keys, **kwargs):
-        url = kwargs.pop('url', '/submit/')
-        do_follow = kwargs.pop('do_follow', False)
-        template.clear_test_template_context()
-        response = self.test_app.post(url, data, **kwargs)
-        if do_follow:
-            response.follow()
-        context_data = template.TEMPLATE_TEST_CONTEXT
-        for key in context_keys:
-            context_data = context_data[key]
-        return response, context_data
 
     def testCompactAndValidate(self):
         # First, test out a well formatted piece of metadata
