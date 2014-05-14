@@ -66,8 +66,11 @@ try:
         'mock',
         'itsdangerous',
         'pytz',
+        'six>=1.4.1',
         'oauthlib==0.5.0',
         'unidecode',
+        'jsonschema',
+        'requests',
         'ExifRead',
 
         # PLEASE change this when we can; a dependency is forcing us to set this

@@ -1,0 +1,94 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{%- extends "mediagoblin/base.html" %}
+{% import "/mediagoblin/utils/wtforms.html" as wtforms_util %}
+{% block mediagoblin_head %}
+  <script>
+    function add_new_row(table_id, row_number, input_prefix) {
+        new_row = $('<tr>').append(
+                      $('<td>').attr(
+                      'class','form_field_input').append(
+                          $('<input>').attr('name',
+                          input_prefix + row_number + "-identifier").attr('id',
+                          input_prefix + row_number + "-identifier")
+                      )
+                  ).append(
+                      $('<td>').attr(
+                      'class','form_field_input').append(
+                          $('<input>').attr('name',
+                          input_prefix + row_number + "-value").attr('id',
+                          input_prefix + row_number + "-value")
+                      )
+                  );
+        $(table_id).append(new_row);
+    }
+    function clear_empty_rows(list_id) {
+        $('table'+list_id+' tr').each(function(row){
+            id_input = $(this).find('td').find('input');
+            value_input = $(this).find('td').next().find('input');
+            if ((value_input.attr('value') == "") &&
+                    (id_input.attr('value') == "")) {
+                $(this).remove();
+            }
+        })
+    }
+
+    $(document).ready(function(){
+        var metadata_lines = {{ form.media_metadata | length }};
+        $("#add_new_metadata_row").click(function(){
+            add_new_row("#metadata_list",
+                        metadata_lines,
+                        'media_metadata-');
+            metadata_lines += 1;
+        })
+
+        $("#clear_empty_rows").click(function(){
+            clear_empty_rows("#metadata_list");
+        })
+    })
+  </script>
+{% endblock %}
+{% block mediagoblin_content %}
+  <h2>{% trans media_name=media.title -%}
+    Metadata for "{{ media_name }}"{% endtrans %}</h2>
+  <form action="" method="POST" id="metadata_form">
+
+<!-- This table holds all the information about the media entry's metadata -->
+  <h3>{% trans %}MetaData{% endtrans %}</h3>
+  <table class="metadata_editor" id="metadata_list" >
+    {{ wtforms_util.render_fieldlist_as_table_rows(form.media_metadata) }}
+  </table>
+
+<!-- These are the buttons you use to control the form -->
+  <table class="metadata_editor" id="buttons_bottom">
+    <tr>
+      <td><input type=button value="{% trans %}Add new Row{% endtrans %}"
+        class="button_action" id="add_new_metadata_row" />
+      </td>
+      <td><input type=submit value="{% trans %}Update Metadata{% endtrans %}"
+        class="button_action_highlight" /></td>
+    </tr>
+    <tr>
+      <td><input type=button value="{% trans %}Clear empty Rows{% endtrans %}"
+        class="button_action" id="clear_empty_rows" /></td>
+    </tr>
+  </table>
+  {{ csrf_token }}
+  </form>
+
+{% endblock mediagoblin_content %}

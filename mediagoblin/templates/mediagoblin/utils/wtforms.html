@@ -70,22 +70,55 @@
 {# Auto-render a form as a table #}
 {% macro render_table(form) -%}
   {% for field in form %}
-    <tr>
-      <th>{{ field.label.text }}</th>
-      <td>
-        {{field}}
-        {% if field.errors %}
-          <br />
-          <ul class="errors">
-            {% for error in field.errors %}
-              <li>{{error}}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-      </td>
-    </tr>
+    render_field_as_table_row(field)
   {% endfor %}
 {%- endmacro %}
+
+{% macro render_form_as_table_row(form) %}
+  <tr>
+  {%- for field in form %}
+    <td class="form_field_input">
+      {{field}}
+    </td>
+  {%- endfor %}
+  </tr>
+  <tr>
+  {%- for field in form %}
+      {% for error in field.errors %}
+      <tr>
+        <td>
+          <p class="form_field_error">{{error}}</p>
+        </td>
+      </tr>
+      {%- endfor %}
+  {%- endfor %}
+{%- endmacro %}
+
+{% macro render_field_as_table_row(field) %}
+  <tr>
+    <th>{{ field.label.text }}</th>
+    <td>
+      {{field}}
+    </td>
+  </tr>
+  {% for error in field.errors %}
+  <tr>
+    <td>
+      <p class="form_field_error">{{error}}</p>
+    </td>
+  </tr>
+  {%- endfor %}
+{% endmacro %}
+
+{% macro render_fieldlist_as_table_rows(fieldlist) %}
+  {% for field in fieldlist -%}
+    {%- if field.type == 'FormField' %}
+        {{ render_form_as_table_row(field) }}
+    {%- else %}
+        {{ render_field_as_table_row(field) }}
+    {%- endif %}
+  {% endfor -%}
+{% endmacro %}
 
 {# Render a boolean field #}
 {% macro render_bool(field) %}

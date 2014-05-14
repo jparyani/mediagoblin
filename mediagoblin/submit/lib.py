@@ -98,7 +98,7 @@ class UserPastUploadLimit(UploadLimitError):
 
 def submit_media(mg_app, user, submitted_file, filename,
                  title=None, description=None,
-                 license=None, tags_string=u"",
+                 license=None, metadata=None, tags_string=u"",
                  upload_limit=None, max_file_size=None,
                  callback_url=None,
                  # If provided we'll do the feed_url update, otherwise ignore
@@ -141,6 +141,8 @@ def submit_media(mg_app, user, submitted_file, filename,
     entry.description = description or u""
 
     entry.license = license or None
+
+    entry.media_metadata = metadata or {}
 
     # Process the user's folksonomy "tags"
     entry.tags = convert_to_tag_list_of_dicts(tags_string)

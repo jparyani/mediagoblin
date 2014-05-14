@@ -1,0 +1,42 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% block metadata_information_table %}
+{%- set metadata=media.media_metadata %}
+{%- set metadata_context=metadata['@context'] %}
+{%- if metadata %}
+  <h3>{% trans %}Metadata{% endtrans %}</h3>
+  {#- NOTE: In some smart future where the context is more extensible,
+        we will need to add to the prefix here-#}
+  <table class="metadata_info">
+    {%- for key, value in metadata.iteritems() if not key=='@context' %}
+      {% if value -%}
+        <tr>
+          <th>{{ rdfa_to_readable(key) }}</th>
+          <td property="{{ key }}">{{ value }}</td>
+        </tr>
+      {%- endif -%}
+    {%- endfor %}
+  </table>
+{% endif %}
+{% if request.user and request.user.has_privilege('admin') %}
+  <a href="{{ request.urlgen('mediagoblin.edit.metadata',
+                    user=media.get_uploader.username,
+                    media_id=media.id) }}">
+  {% trans %}Edit Metadata{% endtrans %}</a>
+{% endif %}
+{% endblock %}

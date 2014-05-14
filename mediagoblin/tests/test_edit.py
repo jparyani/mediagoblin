@@ -14,11 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import urlparse
+import urlparse, os, pytest
 
 from mediagoblin import mg_globals
-from mediagoblin.db.models import User
-from mediagoblin.tests.tools import fixture_add_user
+from mediagoblin.db.models import User, MediaEntry
+from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
 from mediagoblin import auth
 from mediagoblin.tools import template, mail
 
@@ -174,3 +174,81 @@ class TestUserEdit(object):
         email = User.query.filter_by(username='chris').first().email
         assert email == 'new@example.com'
 # test changing the url inproperly
+
+class TestMetaDataEdit:
+    @pytest.fixture(autouse=True)
+    def setup(self, test_app):
+        # set up new user
+        self.user_password = u'toast'
+        self.user = fixture_add_user(password = self.user_password,
+                               privileges=[u'active',u'admin'])
+        self.test_app = test_app
+
+    def login(self, test_app):
+        test_app.post(
+            '/auth/login/', {
+                'username': self.user.username,
+                'password': self.user_password})
+
+    def do_post(self, data, *context_keys, **kwargs):
+        url = kwargs.pop('url', '/submit/')
+        do_follow = kwargs.pop('do_follow', False)
+        template.clear_test_template_context()
+        response = self.test_app.post(url, data, **kwargs)
+        if do_follow:
+            response.follow()
+        context_data = template.TEMPLATE_TEST_CONTEXT
+        for key in context_keys:
+            context_data = context_data[key]
+        return response, context_data
+
+    def test_edit_metadata(self, test_app):
+        media_entry = fixture_media_entry(uploader=self.user.id,
+            state=u'processed')
+        media_slug = "/u/{username}/m/{media_id}/metadata/".format(
+                username = str(self.user.username),
+                media_id = str(media_entry.id))
+
+        self.login(test_app)
+        response = test_app.get(media_slug)
+        assert response.status == '200 OK'
+        assert media_entry.media_metadata == {}
+        # First test adding in  metadata
+        ################################
+        response, context = self.do_post({
+            "media_metadata-0-identifier":"dc:title",
+            "media_metadata-0-value":"Some title",
+            "media_metadata-1-identifier":"dc:creator",
+            "media_metadata-1-value":"Me"},url=media_slug)
+
+        media_entry = MediaEntry.query.first()
+        new_metadata = media_entry.media_metadata
+        assert new_metadata != {}
+        assert new_metadata.get("dc:title") == "Some title"
+        assert new_metadata.get("dc:creator") == "Me"
+        # Now test removing the metadata
+        ################################
+        response, context = self.do_post({
+            "media_metadata-0-identifier":"dc:title",
+            "media_metadata-0-value":"Some title"},url=media_slug)
+
+        media_entry = MediaEntry.query.first()
+        new_metadata = media_entry.media_metadata
+        assert new_metadata.get("dc:title") == "Some title"
+        assert new_metadata.get("dc:creator") is None
+        # Now test adding bad metadata
+        ###############################
+        response, context = self.do_post({
+            "media_metadata-0-identifier":"dc:title",
+            "media_metadata-0-value":"Some title",
+            "media_metadata-1-identifier":"dc:creator",
+            "media_metadata-1-value":"Me",
+            "media_metadata-2-identifier":"dc:created",
+            "media_metadata-2-value":"On the worst day"},url=media_slug)
+
+        media_entry = MediaEntry.query.first()
+        old_metadata = new_metadata
+        new_metadata = media_entry.media_metadata
+        assert new_metadata == old_metadata
+        assert ("u&#39;On the worst day&#39; is not a &#39;date-time&#39;" in
+            response.body)

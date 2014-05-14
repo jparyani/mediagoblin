@@ -31,6 +31,7 @@ from mediagoblin.db.migration_tools import (
     RegisterMigration, inspect_table, replace_table_hack)
 from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User, 
         Privilege)
+from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 
 MIGRATIONS = {}
 
@@ -718,5 +719,17 @@ def drop_MediaEntry_collected(db):
     media_collected = media_collected.columns['collected']
 
     media_collected.drop()
+
+    db.commit()
+
+@RegisterMigration(20, MIGRATIONS)
+def add_metadata_column(db):
+    metadata = MetaData(bind=db.bind)
+
+    media_entry = inspect_table(metadata, 'core__media_entries')
+
+    col = Column('media_metadata', MutationDict.as_mutable(JSONEncoded),
+        default=MutationDict())
+    col.create(media_entry)
 
     db.commit()
