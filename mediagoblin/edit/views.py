@@ -20,6 +20,7 @@ from itsdangerous import BadSignature
 from pyld import jsonld
 from werkzeug.exceptions import Forbidden
 from werkzeug.utils import secure_filename
+from jsonschema import ValidationError, Draft4Validator
 
 from mediagoblin import messages
 from mediagoblin import mg_globals
@@ -33,7 +34,8 @@ from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_user_collection, user_has_privilege,
                             user_not_banned)
 from mediagoblin.tools.crypto import get_timed_signer_url
-from mediagoblin.tools.metadata import compact_and_validate
+from mediagoblin.tools.metadata import (compact_and_validate, DEFAULT_CHECKER,
+                                        DEFAULT_SCHEMA)
 from mediagoblin.tools.mail import email_debug_message
 from mediagoblin.tools.response import (render_to_response,
                                         redirect, redirect_obj, render_404)
@@ -444,24 +446,19 @@ def edit_metadata(request, media):
     if request.method == "POST" and form.validate():
         metadata_dict = dict([(row['identifier'],row['value'])
                             for row in form.media_metadata.data])
+        json_ld_metadata = None
         json_ld_metadata = compact_and_validate(metadata_dict)
         media.media_metadata = json_ld_metadata
         media.save()
         return redirect_obj(request, media)
 
-    if media.media_metadata:
+    if media.media_metadata and len(form.media_metadata) == 0:
         for identifier, value in media.media_metadata.iteritems():
             if identifier == "@context": continue
             form.media_metadata.append_entry({
                 'identifier':identifier,
                 'value':value})
-    else:
-        form.media_metadata.append_entry({
-            'identifier':"",
-            'value':""})
-        form.media_metadata.append_entry({
-            'identifier':"",
-            'value':""})
+
     return render_to_response(
         request,
         'mediagoblin/edit/metadata.html',

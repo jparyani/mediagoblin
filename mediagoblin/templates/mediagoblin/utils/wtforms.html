@@ -77,20 +77,21 @@
 {% macro render_form_as_table_row(form) %}
   <tr>
   {%- for field in form %}
-    <th>{{ render_label_p(field) }}</th>
     <td class="form_field_input">
       {{field}}
-      {%- if field.errors -%}
-        <br />
-        <ul class="errors">
-          {% for error in field.errors %}
-            <li>{{error}}</li>
-          {%- endfor %}
-        </ul>
-      {%- endif -%}
     </td>
   {%- endfor %}
   </tr>
+  <tr>
+  {%- for field in form %}
+      {% for error in field.errors %}
+      <tr>
+        <td>
+          <p class="form_field_error">{{error}}</p>
+        </td>
+      </tr>
+      {%- endfor %}
+  {%- endfor %}
 {%- endmacro %}
 
 {% macro render_field_as_table_row(field) %}
@@ -98,16 +99,15 @@
     <th>{{ field.label.text }}</th>
     <td>
       {{field}}
-      {% if field.errors %}
-        <br />
-        <ul class="errors">
-          {% for error in field.errors %}
-            <li>{{error}}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
     </td>
   </tr>
+  {% for error in field.errors %}
+  <tr>
+    <td>
+      <p class="form_field_error">{{error}}</p>
+    </td>
+  </tr>
+  {%- endfor %}
 {% endmacro %}
 
 {% macro render_fieldlist_as_table_rows(fieldlist) %}

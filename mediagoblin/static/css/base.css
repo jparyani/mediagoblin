@@ -940,18 +940,13 @@ p.verifier {
 
 /* for the media metadata editing table */
 table.metadata_editor {
-
     margin: 10px auto;
-    width: 1000px;
-}
-
-table.metadata_editor tr th {
-    width:100px;
+    width: 800px;
 }
 
 table.metadata_editor tr td {
-    width:300px;
+    width:350px;
 }
 table.metadata_editor tr td.form_field_input input {
-    width:300px;
+    width:350px;
 }

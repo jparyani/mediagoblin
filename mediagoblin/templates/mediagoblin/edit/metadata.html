@@ -69,7 +69,7 @@
   <form action="" method="POST" id="metadata_form">
 
 <!-- This table holds all the information about the media entry's metadata -->
-  <h3>{% trans %}Data{% endtrans %}</h3>
+  <h3>{% trans %}MetaData{% endtrans %}</h3>
   <table class="metadata_editor" id="metadata_list" >
     {{ wtforms_util.render_fieldlist_as_table_rows(form.media_metadata) }}
   </table>
@@ -77,16 +77,13 @@
 <!-- These are the buttons you use to control the form -->
   <table class="metadata_editor" id="buttons_bottom">
     <tr>
-      <th></th>
       <td><input type=button value="{% trans %}Add new Row{% endtrans %}"
         class="button_action" id="add_new_metadata_row" />
       </td>
-      <th></th>
       <td><input type=submit value="{% trans %}Update Metadata{% endtrans %}"
         class="button_action_highlight" /></td>
     </tr>
     <tr>
-      <th></th>
       <td><input type=button value="{% trans %}Clear empty Rows{% endtrans %}"
         class="button_action" id="clear_empty_rows" /></td>
     </tr>
