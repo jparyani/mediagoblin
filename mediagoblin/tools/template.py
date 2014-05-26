@@ -33,6 +33,7 @@ from mediagoblin.tools.pluginapi import get_hook_templates, hook_transform
 from mediagoblin.tools.timesince import timesince
 from mediagoblin.meddleware.csrf import render_csrf_form_token
 
+from mediagoblin._compat import ugettext, ungettext
 
 SETUP_JINJA_ENVS = {}
 
@@ -66,9 +67,7 @@ def get_jinja_env(template_loader, locale):
             'jinja2.ext.i18n', 'jinja2.ext.autoescape',
             TemplateHookExtension] + local_exts)
 
-    template_env.install_gettext_callables(
-        mg_globals.thread_scope.translations.ugettext,
-        mg_globals.thread_scope.translations.ungettext)
+    template_env.install_gettext_callables(ugettext, ungettext)
 
     # All templates will know how to ...
     # ... fetch all waiting messages and remove them from the queue
