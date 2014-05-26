@@ -19,7 +19,7 @@ For references, see docstring in mediagoblin/webfinger/__init__.py
 
 import re
 
-from urlparse import urlparse
+from six.moves.urllib.parse import urlparse
 
 from mediagoblin.tools.response import render_to_response, render_404
 

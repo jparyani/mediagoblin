@@ -16,7 +16,7 @@
 
 import wtforms
 
-from urlparse import urlparse
+from six.moves.urllib.parse import urlparse
 
 from mediagoblin.tools.extlib.wtf_html5 import URLField
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _

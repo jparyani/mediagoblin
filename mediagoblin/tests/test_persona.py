@@ -13,10 +13,12 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import urlparse
+
 import pkg_resources
 import pytest
 import mock
+
+import six.moves.urllib.parse as urlparse
 
 pytest.importorskip("requests")
 

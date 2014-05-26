@@ -18,9 +18,10 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-import urlparse
 import os
 import pytest
+
+import six.moves.urllib.parse as urlparse
 
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin import mg_globals
