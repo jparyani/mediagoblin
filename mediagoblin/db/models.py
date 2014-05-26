@@ -40,6 +40,8 @@ from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, \
 from mediagoblin.tools.files import delete_media_files
 from mediagoblin.tools.common import import_component
 
+import six
+
 # It's actually kind of annoying how sqlalchemy-migrate does this, if
 # I understand it right, but whatever.  Anyway, don't remove this :P
 #
@@ -319,7 +321,7 @@ class MediaEntry(Base, MediaEntryMixin):
 
         file_metadata = media_file.file_metadata or {}
 
-        for key, value in kwargs.iteritems():
+        for key, value in six.iteritems(kwargs):
             file_metadata[key] = value
 
         media_file.file_metadata = file_metadata
@@ -344,7 +346,7 @@ class MediaEntry(Base, MediaEntryMixin):
             media_data.get_media_entry = self
         else:
             # Update old media data
-            for field, value in kwargs.iteritems():
+            for field, value in six.iteritems(kwargs):
                 setattr(media_data, field, value)
 
     @memoized_property

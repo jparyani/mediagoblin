@@ -24,6 +24,8 @@
 
 import logging
 
+import six
+
 _log = logging.getLogger(__name__)
 
 
@@ -48,7 +50,7 @@ class StaticDirect(object):
     def __init__(self, domains):
         self.domains = dict(
             [(key, value.rstrip('/'))
-             for key, value in domains.iteritems()])
+             for key, value in six.iteritems(domains)])
         self.cache = {}
 
     def __call__(self, filepath, domain=None):

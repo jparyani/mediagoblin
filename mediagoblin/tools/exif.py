@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import six
+
 from exifread import process_file
 from exifread.utils import Ratio
 
@@ -94,7 +96,7 @@ def clean_exif(exif):
         'Thumbnail JPEGInterchangeFormat']
 
     return dict((key, _ifd_tag_to_dict(value)) for (key, value)
-            in exif.iteritems() if key not in disabled_tags)
+            in six.iteritems(exif) if key not in disabled_tags)
 
 
 def _ifd_tag_to_dict(tag):
@@ -149,7 +151,7 @@ def get_gps_data(tags):
             'latitude': tags['GPS GPSLatitude'],
             'longitude': tags['GPS GPSLongitude']}
 
-        for key, dat in dms_data.iteritems():
+        for key, dat in six.iteritems(dms_data):
             gps_data[key] = (
                 lambda v:
                     float(v[0].num) / float(v[0].den) \

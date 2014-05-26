@@ -19,6 +19,8 @@ from __future__ import absolute_import
 import shutil
 import uuid
 
+import six
+
 from werkzeug.utils import secure_filename
 
 from mediagoblin.tools import common
@@ -259,7 +261,7 @@ def storage_system_from_config(config_section):
     """
     # This construct is needed, because dict(config) does
     # not replace the variables in the config items.
-    config_params = dict(config_section.iteritems())
+    config_params = dict(six.iteritems(config_section))
 
     if 'storage_class' in config_params:
         storage_class = config_params['storage_class']

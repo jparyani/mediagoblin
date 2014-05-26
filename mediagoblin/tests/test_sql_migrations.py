@@ -16,6 +16,8 @@
 
 import copy
 
+import six
+
 from sqlalchemy import (
     Table, Column, MetaData, Index,
     Integer, Float, Unicode, UnicodeText, DateTime, Boolean,
@@ -190,7 +192,7 @@ def level_exits_new_table(db_conn):
 
     for level in result:
 
-        for exit_name, to_level in level['exits'].iteritems():
+        for exit_name, to_level in six.iteritems(level['exits']):
             # Insert the level exit
             db_conn.execute(
                 level_exits.insert().values(

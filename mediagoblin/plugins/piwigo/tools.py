@@ -47,7 +47,7 @@ class PwgNamedArray(list):
 
 
 def _fill_element_dict(el, data, as_attr=()):
-    for k, v in data.iteritems():
+    for k, v in six.iteritems(data):
         if k in as_attr:
             if not isinstance(v, six.string_types):
                 v = str(v)

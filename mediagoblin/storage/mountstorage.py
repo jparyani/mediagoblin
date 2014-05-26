@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import six
+
 from mediagoblin.storage import StorageInterface, clean_listy_filepath
 
 
@@ -120,7 +122,7 @@ class MountStorage(StorageInterface):
         v = table.get(None)
         if v:
             res.append("  " * len(indent) + repr(indent) + ": " + repr(v))
-        for k, v in table.iteritems():
+        for k, v in six.iteritems(table):
             if k == None:
                 continue
             res.append("  " * len(indent) + repr(k) + ":")

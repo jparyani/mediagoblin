@@ -16,6 +16,8 @@
 import ldap
 import logging
 
+import six
+
 from mediagoblin.tools import pluginapi
 
 _log = logging.getLogger(__name__)
@@ -47,7 +49,7 @@ class LDAP(object):
         return email
 
     def login(self, username, password):
-        for k, v in self.ldap_settings.iteritems():
+        for k, v in six.iteritems(self.ldap_settings):
             try:
                 self._connect(v)
                 user_dn = v['LDAP_USER_DN_TEMPLATE'].format(username=username)

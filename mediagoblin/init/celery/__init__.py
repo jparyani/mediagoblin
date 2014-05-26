@@ -18,6 +18,8 @@ import os
 import sys
 import logging
 
+import six
+
 from celery import Celery
 from mediagoblin.tools.pluginapi import hook_runall
 
@@ -45,7 +47,7 @@ def get_celery_settings_dict(app_config, global_config,
     celery_settings = {}
 
     # Add all celery settings from config
-    for key, value in celery_conf.iteritems():
+    for key, value in six.iteritems(celery_conf):
         celery_settings[key] = value
 
     # TODO: use default result stuff here if it exists
@@ -98,7 +100,7 @@ def setup_celery_from_config(app_config, global_config,
     __import__(settings_module)
     this_module = sys.modules[settings_module]
 
-    for key, value in celery_settings.iteritems():
+    for key, value in six.iteritems(celery_settings):
         setattr(this_module, key, value)
 
     if set_environ:
