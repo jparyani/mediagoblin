@@ -71,6 +71,7 @@ try:
         'unidecode',
         'jsonschema',
         'requests',
+        'pyld',
         'ExifRead',
 
         # PLEASE change this when we can; a dependency is forcing us to set this
