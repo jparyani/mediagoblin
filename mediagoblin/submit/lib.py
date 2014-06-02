@@ -18,6 +18,8 @@ import logging
 import uuid
 from os.path import splitext
 
+import six
+
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 
@@ -127,7 +129,7 @@ def submit_media(mg_app, user, submitted_file, filename,
 
     # If the filename contains non ascii generate a unique name
     if not all(ord(c) < 128 for c in filename):
-        filename = unicode(uuid.uuid4()) + splitext(filename)[-1]
+        filename = six.text_type(uuid.uuid4()) + splitext(filename)[-1]
 
     # Sniff the submitted media to determine which
     # media plugin should handle processing
@@ -136,7 +138,7 @@ def submit_media(mg_app, user, submitted_file, filename,
     # create entry and save in database
     entry = new_upload_entry(user)
     entry.media_type = media_type
-    entry.title = (title or unicode(splitext(filename)[0]))
+    entry.title = (title or six.text_type(splitext(filename)[0]))
 
     entry.description = description or u""
 
@@ -210,7 +212,7 @@ def prepare_queue_task(app, entry, filename):
     # (If we got it off the task's auto-generation, there'd be
     # a risk of a race condition when we'd save after sending
     # off the task)
-    task_id = unicode(uuid.uuid4())
+    task_id = six.text_type(uuid.uuid4())
     entry.queued_task_id = task_id
 
     # Now store generate the queueing related filename

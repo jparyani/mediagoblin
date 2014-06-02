@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import six
+
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin import auth
 from mediagoblin import mg_globals
@@ -50,8 +52,8 @@ def adduser(args):
     else:
         # Create the user
         entry = db.User()
-        entry.username = unicode(args.username.lower())
-        entry.email = unicode(args.email)
+        entry.username = six.text_type(args.username.lower())
+        entry.email = six.text_type(args.email)
         entry.pw_hash = auth.gen_password_hash(args.password)
         default_privileges = [
             db.Privilege.query.filter(
@@ -81,7 +83,7 @@ def makeadmin(args):
     db = mg_globals.database
 
     user = db.User.query.filter_by(
-        username=unicode(args.username.lower())).one()
+        username=six.text_type(args.username.lower())).one()
     if user:
         user.all_privileges.append(
             db.Privilege.query.filter(
@@ -108,7 +110,7 @@ def changepw(args):
     db = mg_globals.database
 
     user = db.User.query.filter_by(
-        username=unicode(args.username.lower())).one()
+        username=six.text_type(args.username.lower())).one()
     if user:
         user.pw_hash = auth.gen_password_hash(args.password)
         user.save()

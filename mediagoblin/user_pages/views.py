@@ -18,6 +18,8 @@ import logging
 import datetime
 import json
 
+import six
+
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
                                    CollectionItem, User)
@@ -178,7 +180,7 @@ def media_post_comment(request, media):
     comment = request.db.MediaComment()
     comment.media_entry = media.id
     comment.author = request.user.id
-    comment.content = unicode(request.form['comment_content'])
+    comment.content = six.text_type(request.form['comment_content'])
 
     # Show error message if commenting is disabled.
     if not mg_globals.app_config['allow_comments']:
@@ -212,7 +214,7 @@ def media_preview_comment(request):
     if not request.is_xhr:
         return render_404(request)
 
-    comment = unicode(request.form['comment_content'])
+    comment = six.text_type(request.form['comment_content'])
     cleancomment = { "content":cleaned_markdown_conversion(comment)}
 
     return Response(json.dumps(cleancomment))

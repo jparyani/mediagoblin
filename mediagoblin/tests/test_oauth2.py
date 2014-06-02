@@ -18,6 +18,8 @@ import json
 import logging
 
 import pytest
+import six
+
 from urlparse import parse_qs, urlparse
 
 from mediagoblin import mg_globals
@@ -154,7 +156,7 @@ class TestOAuth(object):
         code = self.get_code_from_redirect_uri(code_redirect.location)
 
         client = self.db.OAuthClient.query.filter(
-                self.db.OAuthClient.identifier == unicode(client_id)).first()
+                self.db.OAuthClient.identifier == six.text_type(client_id)).first()
 
         token_res = self.test_app.get('/oauth-2/access_token?client_id={0}&\
 code={1}&client_secret={2}'.format(client_id, code, client.secret))
@@ -182,7 +184,7 @@ code={1}&client_secret={2}'.format(client_id, code, client.secret))
         code = self.get_code_from_redirect_uri(code_redirect.location)
 
         client = self.db.OAuthClient.query.filter(
-                self.db.OAuthClient.identifier == unicode(client_id)).first()
+                self.db.OAuthClient.identifier == six.text_type(client_id)).first()
 
         token_res = self.test_app.get('/oauth-2/access_token?\
 code={0}&client_secret={1}'.format(code, client.secret))

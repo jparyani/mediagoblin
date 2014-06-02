@@ -18,6 +18,8 @@
 import pkg_resources
 import pytest
 
+import six
+
 import six.moves.urllib.parse as urlparse
 
 from mediagoblin import mg_globals
@@ -109,7 +111,7 @@ def test_register_views(test_app):
     ## Make sure user is logged in
     request = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/user_pages/user_nonactive.html']['request']
-    assert request.session['user_id'] == unicode(new_user.id)
+    assert request.session['user_id'] == six.text_type(new_user.id)
 
     ## Make sure we get email confirmation, and try verifying
     assert len(mail.EMAIL_TEST_INBOX) == 1
@@ -307,7 +309,7 @@ def test_authentication_views(test_app):
     # Make sure user is in the session
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
     session = context['request'].session
-    assert session['user_id'] == unicode(test_user.id)
+    assert session['user_id'] == six.text_type(test_user.id)
 
     # Successful logout
     # -----------------

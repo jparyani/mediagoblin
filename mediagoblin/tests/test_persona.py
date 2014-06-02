@@ -17,6 +17,7 @@
 import pkg_resources
 import pytest
 import mock
+import six
 
 import six.moves.urllib.parse as urlparse
 
@@ -142,7 +143,7 @@ class TestPersonaPlugin(object):
             # Make sure user is in the session
             context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
             session = context['request'].session
-            assert session['user_id'] == unicode(test_user.id)
+            assert session['user_id'] == six.text_type(test_user.id)
 
         _test_registration()
 

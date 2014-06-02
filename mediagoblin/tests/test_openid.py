@@ -18,6 +18,7 @@ import urlparse
 import pkg_resources
 import pytest
 import mock
+import six
 
 openid_consumer = pytest.importorskip(
     "openid.consumer.consumer")
@@ -206,7 +207,7 @@ class TestOpenIDPlugin(object):
             # Make sure user is in the session
             context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
             session = context['request'].session
-            assert session['user_id'] == unicode(test_user.id)
+            assert session['user_id'] == six.text_type(test_user.id)
 
         _test_new_user()
 

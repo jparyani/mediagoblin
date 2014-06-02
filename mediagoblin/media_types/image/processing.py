@@ -24,6 +24,8 @@ import os
 import logging
 import argparse
 
+import six
+
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
     BadMediaFail, FilenameBuilder,
@@ -67,7 +69,7 @@ def resize_image(entry, resized, keyname, target_name, new_size,
         resize_filter = PIL_FILTERS[filter.upper()]
     except KeyError:
         raise Exception('Filter "{0}" not found, choose one of {1}'.format(
-            unicode(filter),
+            six.text_type(filter),
             u', '.join(PIL_FILTERS.keys())))
 
     resized.thumbnail(new_size, resize_filter)
@@ -116,7 +118,7 @@ def resize_tool(entry,
         or im.size[1] > new_size[1]\
         or exif_image_needs_rotation(exif_tags):
         resize_image(
-            entry, im, unicode(keyname), target_name,
+            entry, im, six.text_type(keyname), target_name,
             tuple(new_size),
             exif_tags, conversions_subdir,
             quality, filter)

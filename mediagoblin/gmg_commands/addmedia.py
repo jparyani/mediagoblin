@@ -14,7 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 import os
+
+import six
 
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.submit.lib import (
@@ -68,14 +72,14 @@ def addmedia(args):
     # get the user
     user = app.db.User.query.filter_by(username=args.username.lower()).first()
     if user is None:
-        print "Sorry, no user by username '%s'" % args.username
+        print("Sorry, no user by username '%s'" % args.username)
         return
     
     # check for the file, if it exists...
     filename = os.path.split(args.filename)[-1]
     abs_filename = os.path.abspath(args.filename)
     if not os.path.exists(abs_filename):
-        print "Can't find a file with filename '%s'" % args.filename
+        print("Can't find a file with filename '%s'" % args.filename)
         return
 
     upload_limit, max_file_size = get_upload_file_limits(user)
@@ -85,7 +89,7 @@ def addmedia(args):
         if some_string is None:
             return None
         else:
-            return unicode(some_string)
+            return six.text_type(some_string)
 
     try:
         submit_media(
@@ -98,8 +102,8 @@ def addmedia(args):
             tags_string=maybe_unicodeify(args.tags) or u"",
             upload_limit=upload_limit, max_file_size=max_file_size)
     except FileUploadLimit:
-        print "This file is larger than the upload limits for this site."
+        print("This file is larger than the upload limits for this site.")
     except UserUploadLimit:
-        print "This file will put this user past their upload limits."
+        print("This file will put this user past their upload limits.")
     except UserPastUploadLimit:
-        print "This user is already past their upload limits."
+        print("This user is already past their upload limits.")

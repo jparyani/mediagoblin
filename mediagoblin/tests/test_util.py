@@ -16,6 +16,8 @@
 
 import email
 
+import six
+
 from mediagoblin.tools import common, url, translate, mail, text, testing
 
 testing._activate_testing()
@@ -117,13 +119,13 @@ def test_gettext_lazy_proxy():
     orig = u"Password"
 
     set_thread_locale("es")
-    p1 = unicode(proxy)
+    p1 = six.text_type(proxy)
     p1_should = pass_to_ugettext(orig)
     assert p1_should != orig, "Test useless, string not translated"
     assert p1 == p1_should
 
     set_thread_locale("sv")
-    p2 = unicode(proxy)
+    p2 = six.text_type(proxy)
     p2_should = pass_to_ugettext(orig)
     assert p2_should != orig, "Test broken, string not translated"
     assert p2 == p2_should

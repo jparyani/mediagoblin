@@ -20,6 +20,7 @@ sys.setdefaultencoding('utf-8')
 
 import os
 import pytest
+import six
 
 import six.moves.urllib.parse as urlparse
 
@@ -35,7 +36,7 @@ from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
     BIG_BLUE, GOOD_PDF, GPS_JPG, MED_PNG, BIG_PNG
 
 GOOD_TAG_STRING = u'yin,yang'
-BAD_TAG_STRING = unicode('rage,' + 'f' * 26 + 'u' * 26)
+BAD_TAG_STRING = six.text_type('rage,' + 'f' * 26 + 'u' * 26)
 
 FORM_CONTEXT = ['mediagoblin/submit/start.html', 'submit_form']
 REQUEST_CONTEXT = ['mediagoblin/user_pages/user.html', 'request']

@@ -19,6 +19,8 @@ import os
 import tempfile
 
 import pytest
+import six
+
 from werkzeug.utils import secure_filename
 
 from mediagoblin import storage
@@ -78,7 +80,7 @@ def test_storage_system_from_config():
              'mediagoblin.tests.test_storage:FakeStorageSystem'})
     assert this_storage.foobie == 'eiboof'
     assert this_storage.blech == 'hcelb'
-    assert unicode(this_storage.__class__) == \
+    assert six.text_type(this_storage.__class__) == \
         u'mediagoblin.tests.test_storage.FakeStorageSystem'
 
 

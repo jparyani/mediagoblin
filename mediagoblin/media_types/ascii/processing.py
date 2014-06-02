@@ -22,6 +22,8 @@ except ImportError:
     import Image
 import logging
 
+import six
+
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
     create_pub_filepath, FilenameBuilder,
@@ -104,7 +106,7 @@ class CommonAsciiProcessor(MediaProcessor):
                 # Encode the unicode instance to ASCII and replace any
                 # non-ASCII with an HTML entity (&#
                 unicode_file.write(
-                    unicode(orig_file.read().decode(
+                    six.text_type(orig_file.read().decode(
                             self.charset)).encode(
                                 'ascii',
                                 'xmlcharrefreplace'))

@@ -24,6 +24,8 @@ except:
 import logging
 import os
 
+import six
+
 from mediagoblin import mg_globals as mgg
 from mediagoblin.db.util import atomic_update
 from mediagoblin.db.models import MediaEntry
@@ -46,7 +48,7 @@ class ProgressCallback(object):
 def create_pub_filepath(entry, filename):
     return mgg.public_store.get_unique_filepath(
             ['media_entries',
-             unicode(entry.id),
+             six.text_type(entry.id),
              filename])
 
 
@@ -319,7 +321,7 @@ def mark_entry_failed(entry_id, exc):
         atomic_update(mgg.database.MediaEntry,
             {'id': entry_id},
             {u'state': u'failed',
-             u'fail_error': unicode(exc.exception_path),
+             u'fail_error': six.text_type(exc.exception_path),
              u'fail_metadata': exc.metadata})
     else:
         _log.warn("No idea what happened here, but it failed: %r", exc)

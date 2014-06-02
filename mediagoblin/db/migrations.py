@@ -17,6 +17,8 @@
 import datetime
 import uuid
 
+import six
+
 from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         Integer, Unicode, UnicodeText, DateTime,
                         ForeignKey, Date)
@@ -248,7 +250,7 @@ def mediaentry_new_slug_era(db):
     for row in db.execute(media_table.select()):
         # no slug, try setting to an id
         if not row.slug:
-            append_garbage_till_unique(row, unicode(row.id))
+            append_garbage_till_unique(row, six.text_type(row.id))
         # has "=" or ":" in it... we're getting rid of those
         elif u"=" in row.slug or u":" in row.slug:
             append_garbage_till_unique(
@@ -277,7 +279,7 @@ def unique_collections_slug(db):
                 existing_slugs[row.creator].append(row.slug)
 
     for row_id in slugs_to_change:
-        new_slug = unicode(uuid.uuid4())
+        new_slug = six.text_type(uuid.uuid4())
         db.execute(collection_table.update().
                    where(collection_table.c.id == row_id).
                    values(slug=new_slug))

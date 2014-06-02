@@ -224,7 +224,7 @@ def clean_listy_filepath(listy_filepath):
       A cleaned list of unicode objects.
     """
     cleaned_filepath = [
-        unicode(secure_filename(filepath))
+        six.text_type(secure_filename(filepath))
         for filepath in listy_filepath]
 
     if u'' in cleaned_filepath:
