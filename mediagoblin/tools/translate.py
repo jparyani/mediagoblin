@@ -32,7 +32,7 @@ TRANSLATIONS_PATH = pkg_resources.resource_filename(
     'mediagoblin', 'i18n')
 
 # Known RTL languages
-KNOWN_RTL = set(["ar", "fa", "zh","he","iw","ja","ur","yi","ji"])
+KNOWN_RTL = set(["ar", "fa", "he", "iw", "ur", "yi", "ji"])
 
 def is_rtl(lang):
     """Returns true when the local language is right to left"""
