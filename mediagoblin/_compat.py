@@ -7,6 +7,7 @@ from mediagoblin import mg_globals
 if PY3:
     from email.mime.text import MIMEText
     from urllib import parse as urlparse
+    # TODO(berker): Rename to gettext and ungettext instead?
     ugettext = mg_globals.thread_scope.translations.gettext
     ungettext = mg_globals.thread_scope.translations.ngettext
 else:
