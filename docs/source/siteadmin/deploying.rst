@@ -244,7 +244,7 @@ This concludes the initial configuration of the development
 environment. In the future, when you update your
 codebase, you should also run::
 
-    ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate && git submodule fetch
+    ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate && git submodule update
 
 Note: If you are running an active site, depending on your server
 configuration, you may need to stop it first or the dbupdate command
