@@ -109,7 +109,7 @@ def store_metadata(media_entry, metadata):
                 dt.get_minute(), dt.get_second(),
                 dt.get_microsecond()).isoformat()
 
-        metadata['tags'] = tags
+        stored_metadata['tags'] = tags
 
     # Only save this field if there's something to save
     if len(stored_metadata):
