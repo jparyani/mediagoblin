@@ -115,3 +115,23 @@ def changepw(args):
         print 'Password successfully changed'
     else:
         print 'The user doesn\'t exist'
+
+
+def deleteuser_parser_setup(subparser):
+    subparser.add_argument(
+        'username',
+        help="Username to delete")
+
+
+def deleteuser(args):
+    commands_util.setup_app(args)
+
+    db = mg_globals.database
+
+    user = db.User.query.filter_by(
+        username=unicode(args.username.lower())).one()
+    if user:
+        user.delete()
+        print 'The user %s has been deleted' % args.username
+    else:
+        print 'The user %s doesn\'t exist' % args.username
