@@ -15,7 +15,8 @@ else:
     ungettext = mg_globals.thread_scope.translations.ungettext
 
 
-# taken from https://github.com/django/django/blob/master/django/utils/encoding.py
+# taken from
+# https://github.com/django/django/blob/master/django/utils/encoding.py
 def py2_unicode(klass):
     if not PY3:
         if '__str__' not in klass.__dict__:
