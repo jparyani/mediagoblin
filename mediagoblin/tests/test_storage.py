@@ -174,7 +174,7 @@ def test_basic_storage_get_file():
     with this_storage.get_file(filepath, 'r') as our_file:
         assert our_file.read() == 'First file'
     assert os.path.exists(os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'))
-    with file(os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'), 'r') as our_file:
+    with open(os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'), 'r') as our_file:
         assert our_file.read() == 'First file'
 
     # Write to the same path but try to get a unique file.
@@ -186,13 +186,13 @@ def test_basic_storage_get_file():
     with this_storage.get_file(new_filepath, 'r') as our_file:
         assert our_file.read() == 'Second file'
     assert os.path.exists(os.path.join(tmpdir, *new_filepath))
-    with file(os.path.join(tmpdir, *new_filepath), 'r') as our_file:
+    with open(os.path.join(tmpdir, *new_filepath), 'r') as our_file:
         assert our_file.read() == 'Second file'
 
     # Read from an existing file
     manually_written_file = os.makedirs(
         os.path.join(tmpdir, 'testydir'))
-    with file(os.path.join(tmpdir, 'testydir/testyfile.txt'), 'w') as testyfile:
+    with open(os.path.join(tmpdir, 'testydir/testyfile.txt'), 'w') as testyfile:
         testyfile.write('testy file!  so testy.')
 
     with this_storage.get_file(['testydir', 'testyfile.txt']) as testyfile:
@@ -288,7 +288,7 @@ def test_basic_storage_copy_locally():
     this_storage.copy_locally(filepath, new_file_dest)
     this_storage.delete_file(filepath)
     
-    assert file(new_file_dest).read() == 'Testing this file'
+    assert open(new_file_dest).read() == 'Testing this file'
 
     os.remove(new_file_dest)
     os.rmdir(dest_tmpdir)
@@ -297,7 +297,7 @@ def test_basic_storage_copy_locally():
 
 def _test_copy_local_to_storage_works(tmpdir, this_storage):
     local_filename = tempfile.mktemp()
-    with file(local_filename, 'w') as tmpfile:
+    with open(local_filename, 'w') as tmpfile:
         tmpfile.write('haha')
 
     this_storage.copy_local_to_storage(
@@ -305,7 +305,7 @@ def _test_copy_local_to_storage_works(tmpdir, this_storage):
 
     os.remove(local_filename)
 
-    assert file(
+    assert open(
         os.path.join(tmpdir, 'dir1/dir2/copiedto.txt'),
         'r').read() == 'haha'
 

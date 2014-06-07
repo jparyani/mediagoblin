@@ -77,7 +77,7 @@ def extract_exif(filename):
     Returns EXIF tags found in file at ``filename``
     """
     try:
-        with file(filename) as image:
+        with open(filename, 'rb') as image:
             return process_file(image, details=False)
     except IOError:
         raise BadMediaFail(_('Could not read the image file.'))

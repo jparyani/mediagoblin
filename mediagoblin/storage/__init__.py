@@ -178,7 +178,7 @@ class StorageInterface(object):
             shutil.copy(self.get_local_path(filepath), dest_path)
         else:
             with self.get_file(filepath, 'rb') as source_file:
-                with file(dest_path, 'wb') as dest_file:
+                with open(dest_path, 'wb') as dest_file:
                     # Copy from remote storage in 4M chunks
                     shutil.copyfileobj(source_file, dest_file, length=4*1048576)
 
@@ -191,7 +191,7 @@ class StorageInterface(object):
         your storage system.
         """
         with self.get_file(filepath, 'wb') as dest_file:
-            with file(filename, 'rb') as source_file:
+            with open(filename, 'rb') as source_file:
                 # Copy to storage system in 4M chunks
                 shutil.copyfileobj(source_file, dest_file, length=4*1048576)
 

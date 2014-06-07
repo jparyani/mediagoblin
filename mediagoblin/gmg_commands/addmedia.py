@@ -95,7 +95,7 @@ def addmedia(args):
         submit_media(
             mg_app=app,
             user=user,
-            submitted_file=file(abs_filename, 'r'), filename=filename,
+            submitted_file=open(abs_filename, 'r'), filename=filename,
             title=maybe_unicodeify(args.title),
             description=maybe_unicodeify(args.description),
             license=maybe_unicodeify(args.license),

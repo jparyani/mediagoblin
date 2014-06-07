@@ -421,7 +421,7 @@ def test_plugin_assetlink(static_plugin_app):
     junk_file_path = os.path.join(
         linked_assets_dir.rstrip(os.path.sep),
         'junk.txt')
-    with file(junk_file_path, 'w') as junk_file:
+    with open(junk_file_path, 'w') as junk_file:
         junk_file.write('barf')
 
     os.unlink(plugin_link_dir)
@@ -440,14 +440,14 @@ to:
 
     # link dir exists, but is a non-symlink
     os.unlink(plugin_link_dir)
-    with file(plugin_link_dir, 'w') as clobber_file:
+    with open(plugin_link_dir, 'w') as clobber_file:
         clobber_file.write('clobbered!')
 
     result = run_assetlink().collection[0]
     assert result == 'Could not link "staticstuff": %s exists and is not a symlink\n' % (
         plugin_link_dir)
 
-    with file(plugin_link_dir, 'r') as clobber_file:
+    with open(plugin_link_dir, 'r') as clobber_file:
         assert clobber_file.read() == 'clobbered!'
 
 

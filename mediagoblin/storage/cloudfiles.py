@@ -143,7 +143,7 @@ class CloudFilesStorage(StorageInterface):
         """
         # Override this method, using the "stream" iterator for efficient streaming
         with self.get_file(filepath, 'rb') as source_file:
-            with file(dest_path, 'wb') as dest_file:
+            with open(dest_path, 'wb') as dest_file:
                 for data in source_file:
                     dest_file.write(data)
 
@@ -164,7 +164,7 @@ class CloudFilesStorage(StorageInterface):
         # TODO: Fixing write() still seems worthwhile though.
         _log.debug('Sending {0} to cloudfiles...'.format(filepath))
         with self.get_file(filepath, 'wb') as dest_file:
-            with file(filename, 'rb') as source_file:
+            with open(filename, 'rb') as source_file:
                 # Copy to storage system in 4096 byte chunks
                 dest_file.send(source_file)
 
