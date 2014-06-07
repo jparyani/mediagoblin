@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import urllib
-import urllib2
+
+from six.moves.urllib import request, parse
 
 import celery
 from celery.registry import tasks
@@ -42,15 +42,15 @@ def handle_push_urls(feed_url):
     hubparameters = {
         'hub.mode': 'publish',
         'hub.url': feed_url}
-    hubdata = urllib.urlencode(hubparameters)
+    hubdata = parse.urlencode(hubparameters)
     hubheaders = {
         "Content-type": "application/x-www-form-urlencoded",
         "Connection": "close"}
     for huburl in mgg.app_config["push_urls"]:
-        hubrequest = urllib2.Request(huburl, hubdata, hubheaders)
+        hubrequest = request.Request(huburl, hubdata, hubheaders)
         try:
-            hubresponse = urllib2.urlopen(hubrequest)
-        except (urllib2.HTTPError, urllib2.URLError) as exc:
+            hubresponse = request.urlopen(hubrequest)
+        except (request.HTTPError, request.URLError) as exc:
             # We retry by default 3 times before failing
             _log.info("PuSH url %r gave error %r", huburl, exc)
             try:
