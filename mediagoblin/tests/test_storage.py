@@ -47,7 +47,7 @@ def test_clean_listy_filepath():
         storage.clean_listy_filepath(['../../', 'linooks.jpg'])
 
 
-class FakeStorageSystem():
+class FakeStorageSystem(object):
     def __init__(self, foobie, blech, **kwargs):
         self.foobie = foobie
         self.blech = blech
@@ -81,7 +81,7 @@ def test_storage_system_from_config():
     assert this_storage.foobie == 'eiboof'
     assert this_storage.blech == 'hcelb'
     assert six.text_type(this_storage.__class__) == \
-        u'mediagoblin.tests.test_storage.FakeStorageSystem'
+        u"<class 'mediagoblin.tests.test_storage.FakeStorageSystem'>"
 
 
 ##########################
