@@ -24,21 +24,21 @@ from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
 class AuthorizationForm(wtforms.Form):
     client_id = wtforms.HiddenField(u'',
-                                    validators=[wtforms.validators.Required()])
-    next = wtforms.HiddenField(u'', validators=[wtforms.validators.Required()])
+                                    validators=[wtforms.validators.InputRequired()])
+    next = wtforms.HiddenField(u'', validators=[wtforms.validators.InputRequired()])
     allow = wtforms.SubmitField(_(u'Allow'))
     deny = wtforms.SubmitField(_(u'Deny'))
 
 
 class ClientRegistrationForm(wtforms.Form):
-    name = wtforms.TextField(_('Name'), [wtforms.validators.Required()],
+    name = wtforms.TextField(_('Name'), [wtforms.validators.InputRequired()],
             description=_('The name of the OAuth client'))
     description = wtforms.TextAreaField(_('Description'),
             [wtforms.validators.Length(min=0, max=500)],
             description=_('''This will be visible to users allowing your
                 application to authenticate as them.'''))
     type = wtforms.SelectField(_('Type'),
-            [wtforms.validators.Required()],
+            [wtforms.validators.InputRequired()],
             choices=[
                 ('confidential', 'Confidential'),
                 ('public', 'Public')],

@@ -40,7 +40,7 @@ class EditForm(wtforms.Form):
             "Separate tags by commas."))
     slug = wtforms.TextField(
         _('Slug'),
-        [wtforms.validators.Required(message=_("The slug can't be empty"))],
+        [wtforms.validators.InputRequired(message=_("The slug can't be empty"))],
         description=_(
             "The title part of this media's address. "
             "You usually don't need to change this."))
@@ -87,7 +87,7 @@ class EditAttachmentsForm(wtforms.Form):
 class EditCollectionForm(wtforms.Form):
     title = wtforms.TextField(
         _('Title'),
-        [wtforms.validators.Length(min=0, max=500), wtforms.validators.Required(message=_("The title can't be empty"))])
+        [wtforms.validators.Length(min=0, max=500), wtforms.validators.InputRequired(message=_("The title can't be empty"))])
     description = wtforms.TextAreaField(
         _('Description of this collection'),
         description=_("""You can use
@@ -95,7 +95,7 @@ class EditCollectionForm(wtforms.Form):
                       Markdown</a> for formatting."""))
     slug = wtforms.TextField(
         _('Slug'),
-        [wtforms.validators.Required(message=_("The slug can't be empty"))],
+        [wtforms.validators.InputRequired(message=_("The slug can't be empty"))],
         description=_(
             "The title part of this collection's address. "
             "You usually don't need to change this."))
@@ -104,12 +104,12 @@ class EditCollectionForm(wtforms.Form):
 class ChangePassForm(wtforms.Form):
     old_password = wtforms.PasswordField(
         _('Old password'),
-        [wtforms.validators.Required()],
+        [wtforms.validators.InputRequired()],
         description=_(
             "Enter your old password to prove you own this account."))
     new_password = wtforms.PasswordField(
         _('New password'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          wtforms.validators.Length(min=6, max=30)],
         id="password")
 
@@ -117,11 +117,11 @@ class ChangePassForm(wtforms.Form):
 class ChangeEmailForm(wtforms.Form):
     new_email = wtforms.TextField(
         _('New email address'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_user=False)])
     password = wtforms.PasswordField(
         _('Password'),
-        [wtforms.validators.Required()],
+        [wtforms.validators.InputRequired()],
         description=_(
             "Enter your password to prove you own this account."))
 

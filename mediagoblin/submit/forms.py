@@ -59,7 +59,7 @@ def get_submit_start_form(form, **kwargs):
 class AddCollectionForm(wtforms.Form):
     title = wtforms.TextField(
         _('Title'),
-        [wtforms.validators.Length(min=0, max=500), wtforms.validators.Required()])
+        [wtforms.validators.Length(min=0, max=500), wtforms.validators.InputRequired()])
     description = wtforms.TextAreaField(
         _('Description of this collection'),
         description=_("""You can use
