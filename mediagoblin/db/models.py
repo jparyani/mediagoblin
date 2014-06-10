@@ -877,13 +877,11 @@ class PrivilegeUserAssociation(Base):
 
     __tablename__ = 'core__privileges_users'
 
-    privilege_id = Column(
-        'core__privilege_id',
+    user_id = Column(
         Integer,
         ForeignKey(User.id),
         primary_key=True)
-    user_id = Column(
-        'core__user_id',
+    privilege_id = Column(
         Integer,
         ForeignKey(Privilege.id),
         primary_key=True)
