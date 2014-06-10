@@ -709,6 +709,7 @@ def create_moderation_tables(db):
 
     db.commit()
 
+
 @RegisterMigration(19, MIGRATIONS)
 def drop_MediaEntry_collected(db):
     """
@@ -739,15 +740,14 @@ def add_metadata_column(db):
 
 class PrivilegeUserAssociation_R1(declarative_base()):
     __tablename__ = 'rename__privileges_users'
-    user_id = Column(
+    user = Column(
         Integer,
         ForeignKey(User.id),
         primary_key=True)
-    privilege_id = Column(
+    privilege = Column(
         Integer,
         ForeignKey(Privilege.id),
         primary_key=True)
-
 
 @RegisterMigration(21, MIGRATIONS)
 def fix_privilege_user_association_table(db):
@@ -760,22 +760,28 @@ def fix_privilege_user_association_table(db):
 
     privilege_user_assoc = inspect_table(
         metadata, 'core__privileges_users')
-    PrivilegeUserAssociation_R1.__table__.create(db.bind)
-    db.commit()
 
-    new_privilege_user_assoc = inspect_table(
-        metadata, 'rename__privileges_users')
-    result = db.execute(privilege_user_assoc.select())
-    for row in result:
-        # The columns were improperly named before, so we switch the columns
-        user_id, priv_id = row['core__privilege_id'], row['core__user_id']
-        db.execute(new_privilege_user_assoc.insert().values(
-            user_id=user_id,
-            privilege_id=priv_id))
+    if db.bind.url.drivername == 'sqlite':
+        PrivilegeUserAssociation_R1.__table__.create(db.bind)
+        db.commit()
 
-    db.commit()
+        new_privilege_user_assoc = inspect_table(
+            metadata, 'rename__privileges_users')
+        result = db.execute(privilege_user_assoc.select())
+        for row in result:
+            # The columns were improperly named before, so we switch the columns
+            user_id, priv_id = row['core__privilege_id'], row['core__user_id']
+            db.execute(new_privilege_user_assoc.insert().values(
+                user=user_id,
+                privilege=priv_id))
 
-    privilege_user_assoc.drop()
-    new_privilege_user_assoc.rename('core__privileges_users')
+        db.commit()
+
+        privilege_user_assoc.drop()
+        new_privilege_user_assoc.rename('core__privileges_users')
+
+    else:
+        privilege_user_assoc.c.user_id.alter(name="privilege")
+        privilege_user_assoc.c.privilege_id.alter(name="user")
 
     db.commit()
