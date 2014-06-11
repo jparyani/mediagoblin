@@ -878,10 +878,12 @@ class PrivilegeUserAssociation(Base):
     __tablename__ = 'core__privileges_users'
 
     user = Column(
+        "user",
         Integer,
         ForeignKey(User.id),
         primary_key=True)
     privilege = Column(
+        "privilege",
         Integer,
         ForeignKey(Privilege.id),
         primary_key=True)

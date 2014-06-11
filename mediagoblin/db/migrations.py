@@ -741,10 +741,12 @@ def add_metadata_column(db):
 class PrivilegeUserAssociation_R1(declarative_base()):
     __tablename__ = 'rename__privileges_users'
     user = Column(
+        "user",
         Integer,
         ForeignKey(User.id),
         primary_key=True)
     privilege = Column(
+        "privilege",
         Integer,
         ForeignKey(Privilege.id),
         primary_key=True)
@@ -781,7 +783,7 @@ def fix_privilege_user_association_table(db):
         new_privilege_user_assoc.rename('core__privileges_users')
 
     else:
-        privilege_user_assoc.c.user_id.alter(name="privilege")
-        privilege_user_assoc.c.privilege_id.alter(name="user")
+        privilege_user_assoc.c.core__user_id.alter(name="privilege")
+        privilege_user_assoc.c.core__privilege_id.alter(name="user")
 
     db.commit()
