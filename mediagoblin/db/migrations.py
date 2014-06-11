@@ -763,6 +763,7 @@ def fix_privilege_user_association_table(db):
     privilege_user_assoc = inspect_table(
         metadata, 'core__privileges_users')
 
+    # This whole process is more complex if we're dealing with sqlite
     if db.bind.url.drivername == 'sqlite':
         PrivilegeUserAssociation_R1.__table__.create(db.bind)
         db.commit()
@@ -782,6 +783,7 @@ def fix_privilege_user_association_table(db):
         privilege_user_assoc.drop()
         new_privilege_user_assoc.rename('core__privileges_users')
 
+    # much simpler if postgres though!
     else:
         privilege_user_assoc.c.core__user_id.alter(name="privilege")
         privilege_user_assoc.c.core__privilege_id.alter(name="user")
