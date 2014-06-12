@@ -21,7 +21,7 @@ def rdfa_to_readable(rdfa_predicate):
     """
     components = rdfa_predicate.split(u":")
     if len(components) >= 2:
-        readable = [1].capitalize()
+        readable = components[1].capitalize()
     else:
         readable = u""
     return readable
