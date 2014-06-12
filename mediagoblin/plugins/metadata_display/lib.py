@@ -19,7 +19,11 @@ def rdfa_to_readable(rdfa_predicate):
     A simple script to convert rdfa resource descriptors into a form more
     accessible for humans.
     """
-    readable = rdfa_predicate.split(u":")[1].capitalize()
+    components = rdfa_predicate.split(u":")
+    if len(components) >= 2:
+        readable = [1].capitalize()
+    else:
+        readable = u""
     return readable
 
 def add_rdfa_to_readable_to_media_home(context):
