@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import requests
-from csv import reader as csv_reader
+import requests, codecs
+import csv
 from urlparse import urlparse
 
 from mediagoblin.gmg_commands import util as commands_util
@@ -87,7 +87,8 @@ def batchaddmedia(args):
         else:
             return unicode(some_string)
 
-    with file(abs_metadata_filename, 'r') as all_metadata:
+    with codecs.open(
+            abs_metadata_filename, 'r', encoding='utf-8') as all_metadata:
         contents = all_metadata.read()
         media_metadata = parse_csv_file(contents)
 
@@ -169,6 +170,18 @@ u"FAIL: This file is larger than the upload limits for this site.")
         files_attempted=files_attempted))
 
 
+def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
+    # csv.py doesn't do Unicode; encode temporarily as UTF-8:
+    csv_reader = csv.reader(utf_8_encoder(unicode_csv_data),
+                            dialect=dialect, **kwargs)
+    for row in csv_reader:
+        # decode UTF-8 back to Unicode, cell by cell:
+        yield [unicode(cell, 'utf-8') for cell in row]
+
+def utf_8_encoder(unicode_csv_data):
+    for line in unicode_csv_data:
+        yield line.encode('utf-8')
+
 def parse_csv_file(file_contents):
     """
     The helper function which converts the csv file into a dictionary where each
@@ -182,8 +195,8 @@ def parse_csv_file(file_contents):
 
     # Build a dictionary
     for index, line in enumerate(lines):
-        if line.isspace() or line == '': continue
-        values = csv_reader([line]).next()
+        if line.isspace() or line == u'': continue
+        values = unicode_csv_reader([line]).next()
         line_dict = dict([(key[i], val)
             for i, val in enumerate(values)])
         media_id = line_dict.get('id') or index
