@@ -233,6 +233,8 @@ class MediaGoblinApp(object):
                 request, e,
                 e.get_description(environ))(environ, start_response)
 
+        request = hook_transform("modify_request", request)
+
         request.start_response = start_response
 
         # get the Http response from the controller
