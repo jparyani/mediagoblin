@@ -25,7 +25,7 @@ from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import and_
-from migrate.changeset.constraint import UniqueConstraint
+from sqlalchemy.schema import UniqueConstraint
 
 
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict

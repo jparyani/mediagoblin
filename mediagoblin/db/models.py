@@ -42,15 +42,7 @@ from mediagoblin.tools.common import import_component
 
 import six
 
-# It's actually kind of annoying how sqlalchemy-migrate does this, if
-# I understand it right, but whatever.  Anyway, don't remove this :P
-#
-# We could do migration calls more manually instead of relying on
-# this import-based meddling...
-from migrate import changeset
-
 _log = logging.getLogger(__name__)
-
 
 
 class User(Base, UserMixin):
