@@ -20,7 +20,7 @@ selfname=$(basename "$0")
 local_bin="./bin"
 case "$selfname" in
     lazyserver.sh)
-        starter_cmd=paster
+        starter_cmd=gunicorn
         ini_prefix=paste
         ;;
     lazycelery.sh)
@@ -36,9 +36,8 @@ esac
 if [ "$1" = "-h" ]; then
     echo "$0 [-h] [-c filename.ini] [ARGS_to_${starter_cmd} ...]"
     echo ""
-    echo "   For example:"
-    echo "         $0 -c fcgi.ini port_number=23371"
-    echo "     or: $0 --server-name=fcgi --log-file=paste.log"
+    echo "   For Gunicorn settings, see at:"
+    echo "      http://docs.gunicorn.org/en/19.0/settings.html"
     echo ""
     echo "   The configfile defaults to ${ini_prefix}_local.ini,"
     echo "   if that is readable, otherwise ${ini_prefix}.ini."
@@ -71,7 +70,7 @@ set -x
 export CELERY_ALWAYS_EAGER=true
 case "$selfname" in
     lazyserver.sh)
-        $starter serve "$ini_file" "$@" --reload
+        $starter --paste "$ini_file" "$@"
         ;;
     lazycelery.sh)
         MEDIAGOBLIN_CONFIG="${ini_file}" \
