@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 import six
 
 from mediagoblin.gmg_commands import util as commands_util
@@ -47,7 +49,7 @@ def adduser(args):
         ).count()
 
     if users_with_username:
-        print u'Sorry, a user with that name already exists.'
+        print(u'Sorry, a user with that name already exists.')
 
     else:
         # Create the user
@@ -68,7 +70,7 @@ def adduser(args):
         entry.all_privileges = default_privileges
         entry.save()
 
-        print "User created (and email marked as verified)"
+        print(u"User created (and email marked as verified)")
 
 
 def makeadmin_parser_setup(subparser):
@@ -90,9 +92,9 @@ def makeadmin(args):
                 db.Privilege.privilege_name==u'admin').one()
         )
         user.save()
-        print 'The user is now Admin'
+        print(u'The user is now Admin')
     else:
-        print 'The user doesn\'t exist'
+        print(u'The user doesn\'t exist')
 
 
 def changepw_parser_setup(subparser):
@@ -114,6 +116,6 @@ def changepw(args):
     if user:
         user.pw_hash = auth.gen_password_hash(args.password)
         user.save()
-        print 'Password successfully changed'
+        print(u'Password successfully changed')
     else:
-        print 'The user doesn\'t exist'
+        print(u'The user doesn\'t exist')
