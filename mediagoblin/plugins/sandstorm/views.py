@@ -20,28 +20,18 @@ from mediagoblin.decorators import allow_registration, auth_enabled
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import redirect, render_to_response
 
-
 @auth_enabled
 def login(request):
     login_failed = False
 
-    username = request.headers.get('X-SANDSTORM-USERNAME', None)
-    user_id = request.headers.get('X-SANDSTORM-USER-ID', None)
+    username = request.headers.get('X-Sandstorm-Username', None)
+    user_id = request.headers.get('X-Sandstorm-User-Id', None)
+    permissions = request.headers.get('X-Sandstorm-Permissions', None)
 
     if username and user_id:
-        user = User.query.filter_by(
-            pw_hash=user_id).first()
+        user = User.query.filter_by(pw_hash=user_id).first()
 
-        if user:
-            # set up login in session
-            request.session['user_id'] = unicode(user.id)
-            request.session.save()
-
-            if request.form.get('next'):
-                return redirect(request, location=request.form['next'])
-            else:
-                return redirect(request, "index")
-        else:
+        if not user:
             if not mg_globals.app.auth:
                 messages.add_message(
                     request,
@@ -55,33 +45,37 @@ def login(request):
             user.email = ''
             user.pw_hash = user_id
 
-            default_privileges = [
-                Privilege.query.filter(Privilege.privilege_name==u'commenter').first(),
+        default_privileges = [
+            Privilege.query.filter(Privilege.privilege_name==u'commenter').first(),
+            Privilege.query.filter(Privilege.privilege_name==u'reporter').first(),
+            Privilege.query.filter(Privilege.privilege_name==u'active').first()]
+
+        if 'admin' in permissions.split(','):
+            default_privileges += [
                 Privilege.query.filter(Privilege.privilege_name==u'admin').first(),
-                Privilege.query.filter(Privilege.privilege_name==u'active').first(),
-                Privilege.query.filter(Privilege.privilege_name==u'uploader').first(),
-                Privilege.query.filter(Privilege.privilege_name==u'reporter').first()]
-            user.all_privileges += default_privileges
+                Privilege.query.filter(Privilege.privilege_name==u'moderator').first(),
+                Privilege.query.filter(Privilege.privilege_name==u'uploader').first()]
 
-            user.save()
+        user.all_privileges += default_privileges
+        user.save()
 
-            request.session['user_id'] = unicode(user.id)
-            request.session.save()
+        request.session['user_id'] = unicode(user.id)
+        request.session.save()
 
-            if request.form.get('next'):
-                return redirect(request, location=request.form['next'])
-            else:
-                return redirect(request, "index")
+        if request.form.get('next'):
+            return redirect(request, location=request.form['next'])
+        else:
+            return redirect(request, "index")
 
     login_failed = True
 
     return render_to_response(
         request,
         'mediagoblin/auth/login.html',
-        {'login_form': login_form,
+        {'login_form': {},
          'next': request.GET.get('next') or request.form.get('next'),
          'login_failed': login_failed,
-         'post_url': request.urlgen('mediagoblin.plugins.ldap.login'),
+         'post_url': request.urlgen('mediagoblin.plugins.sandstorm.login'),
          'allow_registration': mg_globals.app_config["allow_registration"]})
 
 
