@@ -34,6 +34,9 @@ def skip_transcode(metadata, size):
 
     _log.debug('skip_transcode config: {0}'.format(config))
 
+    if config['always']:
+        return True
+
     if config['mime_types'] and metadata.get('mimetype'):
         if not metadata['mimetype'] in config['mime_types']:
             return False
