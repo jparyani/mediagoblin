@@ -44,8 +44,9 @@ RUN cd /opt/app && cp -r /tmp/virtualenv/* .
 RUN rm -rf /opt/app/.git
 
 RUN cd /opt/app && ./bin/python setup.py develop
-RUN mkdir -p /var/user_dev/media/public && mkdir -p /var/user_dev/media/queue
+RUN mkdir -p /var/user_dev/media/public/media_entries && mkdir -p /var/user_dev/media/queue/media_entries
 RUN cd /opt/app && ./bin/gmg dbupdate
+RUN mkdir -p /var/user_dev && ln -s /var/user_dev /opt/app
 
 EXPOSE 6543
 
