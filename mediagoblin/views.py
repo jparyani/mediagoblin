@@ -19,11 +19,12 @@ from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.pluginapi import hook_handle
 from mediagoblin.tools.response import render_to_response, render_404
-from mediagoblin.decorators import uses_pagination, user_not_banned
+from mediagoblin.decorators import uses_pagination, user_not_banned, require_active_login
 
 
 @user_not_banned
 @uses_pagination
+@require_active_login
 def default_root_view(request, page):
     cursor = request.db.query(MediaEntry).filter_by(state=u'processed').\
         order_by(MediaEntry.created.desc())
