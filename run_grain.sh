@@ -1,5 +1,9 @@
 #!/bin/bash
 export HOME=/var
+export TMPDIR=/var/tmp
+
+rm -rf $TMPDIR
+mkdir -p $TMPDIR
 cp -r /etc/service /tmp
 test -d /var/log || cp -r /var_original/log /var
 test -d /var/lib || cp -r /var_original/lib /var
