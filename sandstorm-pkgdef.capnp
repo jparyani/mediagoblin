@@ -50,12 +50,14 @@ const pkgdef :Spk.PackageDefinition = (
   # `spk dev` will write a list of all the files your app uses to this file.
   # You should review it later, before shipping your app.
 
-  alwaysInclude = ["opt/app", "usr/lib/python2.7", "usr/lib/python3.4"]
+  alwaysInclude = ["opt/app", "usr/lib/python2.7", "usr/lib/python3.4"],
   # Fill this list with more names of files or directories that should be
   # included in your package, even if not listed in sandstorm-files.list.
   # Use this to force-include stuff that you know you need but which may
   # not have been detected as a dependency during `spk dev`. If you list
   # a directory here, its entire contents will be included recursively.
+
+  bridgeConfig = (permissions = [(name = "admin")])
 );
 
 const myCommand :Spk.Manifest.Command = (
