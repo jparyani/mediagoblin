@@ -67,7 +67,7 @@ try:
         'itsdangerous',
         'pytz',
         'six>=1.4.1',
-        'oauthlib==0.5.0',
+        'oauthlib',
         'unidecode',
         'jsonschema',
         'requests',

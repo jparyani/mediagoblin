@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import string
 
 from oauthlib.oauth1 import (RequestTokenEndpoint, AuthorizationEndpoint,
                              AccessTokenEndpoint)
@@ -35,7 +36,9 @@ from mediagoblin.oauth.tools.forms import WTFormData
 from mediagoblin.db.models import NonceTimestamp, Client, RequestToken
 
 # possible client types
-client_types = ["web", "native"] # currently what pump supports
+CLIENT_TYPES = ["web", "native"] # currently what pump supports
+OAUTH_ALPHABET = (string.ascii_letters.decode('ascii') +
+    string.digits.decode('ascii'))
 
 @csrf_exempt
 def client_register(request):
@@ -53,7 +56,7 @@ def client_register(request):
     if "type" not in data:
         error = "No registration type provided."
         return json_response({"error": error}, status=400)
-    if data.get("application_type", None) not in client_types:
+    if data.get("application_type", None) not in CLIENT_TYPES:
         error = "Unknown application_type."
         return json_response({"error": error}, status=400)
 
@@ -88,7 +91,7 @@ def client_register(request):
                 )
 
         app_name = ("application_type", client.application_name)
-        if app_name in client_types:
+        if app_name in CLIENT_TYPES:
             client.application_name = app_name
 
     elif client_type == "client_associate":
@@ -104,8 +107,8 @@ def client_register(request):
             return json_response({"error": error}, status=400)
 
         # generate the client_id and client_secret
-        client_id = random_string(22) # seems to be what pump uses
-        client_secret = random_string(43) # again, seems to be what pump uses
+        client_id = random_string(22, OAUTH_ALPHABET)
+        client_secret = random_string(43, OAUTH_ALPHABET)
         expirey = 0 # for now, lets not have it expire
         expirey_db = None if expirey == 0 else expirey
         application_type = data["application_type"]
