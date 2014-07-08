@@ -11,23 +11,36 @@
    Dedication along with this software. If not, see
    <http://creativecommons.org/publicdomain/zero/1.0/>.
 
-==================
-Uploading an Image
-==================
+.. info:: Currently only image uploading is supported.
+
+===============
+Uploading Media
+===============
 
 To use any the APIs mentioned in this document you will required :doc:`oauth`
 
-Uploading and posting an image requiest you to make two requests, one of which
-submits the image to the server, the other of which will post the meta data.
+Uploading and posting an media requiest you to make two to three requests:
 
-To upload an image you should use the URI `/api/user/<username>/uploads`.
+1) Uploads the data to the server
+2) Post media to feed
+3) Update media to have title, description, license, etc. (optional)
 
-A POST request should be made to the image upload URI submitting at least two header:
+These steps could be condenced in the future however currently this is how the
+pump.io API works. There is currently an issue open, if you would like to change
+how this works please contribute upstream: https://github.com/e14n/pump.io/issues/657
 
-* `Content-Type` - This being a valid mimetype for the image.
-* `Content-Length` - size in bytes of the image.
+----------------------
+Upload Media to Server
+----------------------
 
-The binary image data should be submitted as POST data to the image upload URI.
+To upload media you should use the URI `/api/user/<username>/uploads`.
+
+A POST request should be made to the media upload URI submitting at least two header:
+
+* `Content-Type` - This being a valid mimetype for the media.
+* `Content-Length` - size in bytes of the media.
+
+The media data should be submitted as POST data to the image upload URI.
 You will get back a JSON encoded response which will look similiar to::
 
     {
@@ -79,17 +92,21 @@ The main things in this response is `fullImage` which contains `url` (the URL
 of the original image - i.e. fullsize) and `image` which contains `url` (the URL
 of a thumbnail version).
 
+.. warning:: Media which have been uploaded but not submitted to a feed will
+             periodically be deleted.
+
+--------------
 Submit to feed
-==============
+--------------
 
-The next request you will probably wish to make is to post the image to your
-feed, this currently in GNU MediaGoblin will just show it visably on the website.
-In the future it will allow you to specify whom should see this image.
+This is submitting the media to appear on the website. This will create an
+object in your feed which will then appear on the GNU MediaGoblin website so the
+user and others can view and interact with the media.
 
-The URL you will want to make a POST request to to is `/api/user/<username>/feed`
+The URL you need to POST to is `/api/user/<username>/feed`
 
 You first should do a post to the feed URI with some of the information you got
-back from the above request (which uploaded the image). The request should look
+back from the above request (which uploaded the media). The request should look
 something like::
 
     {
@@ -100,19 +117,23 @@ something like::
         }
     }
 
-(Any other data submitted **will** be ignored)
+.. warning:: Any other data submitted **will** be ignored
 
-Finally if you wish to set a title, description and licence you will need to do
+-------------------
+Submitting Metadata
+-------------------
+
+Finally if you wish to set a title, description and license you will need to do
 and update request to the endpoint, the following attributes can be submitted:
 
 +--------------+---------------------------------------+-------------------+
 | Name         | Description                           | Required/Optional |
 +==============+=======================================+===================+
-| displayName  | This is the title for the image       | Optional          |
+| displayName  | This is the title for the media       | Optional          |
 +--------------+---------------------------------------+-------------------+
-| content      | This is the description for the image | Optional          |
+| content      | This is the description for the media | Optional          |
 +--------------+---------------------------------------+-------------------+
-| license      | This is the licence to be used        | Optional          |
+| license      | This is the license to be used        | Optional          |
 +--------------+---------------------------------------+-------------------+
 
 .. note:: license attribute is mediagoblin specific, pump.io does not support this attribute
@@ -131,4 +152,4 @@ The update request should look something similiar to::
         }
     }
 
-(Again, any other data submitted **will** be ignored).
+.. warning:: Any other data submitted **will** be ignored.
