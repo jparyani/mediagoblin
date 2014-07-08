@@ -64,7 +64,7 @@ def uploads(request):
         file_data = FileStorage(
             stream=io.BytesIO(request.data),
             filename=filename,
-            content_type=request.headers.get("Content-Type", "application/octal-stream")
+            content_type=mimetype
         )
 
         # Find media manager
@@ -90,9 +90,12 @@ def feed(request):
         return json_response({"error": error}, status=404)
 
     request.user = requested_user[0]
-
-    if request.method == "POST":
+    if request.data:
         data = json.loads(request.data)
+    else:
+        data = {"verb": None, "object": {}}
+
+    if request.method == "POST" and data["verb"] == "post":
         obj = data.get("object", None)
         if obj is None:
             error = {"error": "Could not find 'object' element."}
@@ -139,12 +142,74 @@ def feed(request):
             error = {"error": error_message}
             return json_response(error, status=400)
 
+    elif request.method in ["PUT", "POST"] and data["verb"] == "update":
+        # Check we've got a valid object
+        obj = data.get("object", None)
+
+        if obj is None:
+            error = {"error": "Could not find 'object' element."}
+            return json_response(error, status=400)
+
+        if "objectType" not in obj:
+            error = {"error": "No objectType specified."}
+            return json_response(error, status=400)
+
+        if "id" not in obj:
+            error = {"error": "Object ID has not been specified."}
+            return json_response(error, status=400)
+
+        obj_id = obj["id"]
+
+        # Now try and find object
+        if obj["objectType"] == "comment":
+            comment = MediaComment.query.filter_by(id=obj_id)
+            if comment is None:
+                error = {"error": "No such 'comment' with id '{0}'.".format(obj_id)}
+                return json_response(error, status=400)
+            comment = comment[0]
+
+            # TODO: refactor this out to update/setting method on MediaComment
+            if obj.get("content", None) is not None:
+                comment.content = obj["content"]
+
+            comment.save()
+            activity = {
+                "verb": "update",
+                "object": comment.serialize(request),
+            }
+            return json_response(activity)
+
+        elif obj["objectType"] == "image":
+            image = MediaEntry.query.filter_by(id=obj_id)
+            if image is None:
+                error = {"error": "No such 'image' with the id '{0}'.".format(obj_id)}
+                return json_response(error, status=400)
+
+            image = image[0]
+
+            # TODO: refactor this out to update/setting method on MediaEntry
+            if obj.get("displayName", None) is not None:
+                image.title = obj["displayName"]
+
+            if obj.get("content", None) is not None:
+                image.description = obj["content"]
+
+            if obj.get("license", None) is not None:
+                # I think we might need some validation here
+                image.license = obj["license"]
+
+            image.save()
+            activity = {
+                "verb": "update",
+                "object": image.serialize(request),
+            }
+            return json_response(activity)
 
     feed_url = request.urlgen(
-            "mediagoblin.federation.feed",
-            username=request.user.username,
-            qualified=True
-            )
+        "mediagoblin.federation.feed",
+        username=request.user.username,
+        qualified=True
+    )
 
     feed = {
         "displayName": "Activities by {user}@{host}".format(
@@ -191,17 +256,17 @@ def feed(request):
 @oauth_required
 def object(request, raw_obj=False):
     """ Lookup for a object type """
-    objectType = request.matchdict["objectType"]
+    object_type = request.matchdict["objectType"]
     uuid = request.matchdict["uuid"]
-    if objectType not in ["image"]:
-        error = "Unknown type: {0}".format(objectType)
+    if object_type not in ["image"]:
+        error = "Unknown type: {0}".format(object_type)
         # not sure why this is 404, maybe ask evan. Maybe 400?
         return json_response({"error": error}, status=404)
 
     media = MediaEntry.query.filter_by(slug=uuid).first()
     if media is None:
         # no media found with that uuid
-        error = "Can't find a {0} with ID = {1}".format(objectType, uuid)
+        error = "Can't find a {0} with ID = {1}".format(object_type, uuid)
         return json_response({"error": error}, status=404)
 
     if raw_obj:
@@ -217,14 +282,16 @@ def object_comments(request):
     if isinstance(response, MediaEntry):
         comments = response.serialize(request)
         comments = comments.get("replies", {
-                "totalItems": 0,
-                "items": [],
-                "url": request.urlgen(
-                    "mediagoblin.federation.object.comments",
-                    objectType=media.objectType,
-                    uuid=media.slug,
-                    qualified=True)
-                })
+            "totalItems": 0,
+            "items": [],
+            "url": request.urlgen(
+                "mediagoblin.federation.object.comments",
+                objectType=media.objectType,
+                uuid=media.slug,
+                qualified=True
+            )
+        })
+
         comments["displayName"] = "Replies to {0}".format(comments["url"])
         comments["links"] = {
             "first": comments["url"],
