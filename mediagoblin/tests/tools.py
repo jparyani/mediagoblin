@@ -25,13 +25,16 @@ from webtest import TestApp
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User, MediaEntry, Collection, MediaComment, \
-    CommentSubscription, CommentNotification, Privilege, CommentReport
+    CommentSubscription, CommentNotification, Privilege, CommentReport, Client, \
+    RequestToken, AccessToken
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.db.base import Session
 from mediagoblin.meddleware import BaseMeddleware
 from mediagoblin.auth import gen_password_hash
 from mediagoblin.gmg_commands.dbupdate import run_dbupdate
+from mediagoblin.oauth.views import OAUTH_ALPHABET
+from mediagoblin.tools.crypto import random_string
 
 from datetime import datetime
 
@@ -343,3 +346,62 @@ def fixture_add_comment_report(comment=None, reported_user=None,
     Session.expunge(comment_report)
 
     return comment_report
+
+def fixture_add_oauth_client(client_name=None, client_type="native",
+    redirect_uri=None, contacts=None):
+
+    client_id = random_string(22, OAUTH_ALPHABET)
+    client_secret = random_string(43, OAUTH_ALPHABET)
+
+    client = Client(
+        id=client_id,
+        secret=client_secret,
+        expirey=None,
+        application_type=client_type,
+        application_name=client_name,
+        contacts=contacts,
+        redirect_uri=redirect_uri
+    )
+    client.save()
+
+    return client
+
+def fixture_add_oauth_request_token(user, client=None):
+    if client is None:
+        client = fixture_add_oauth_client()
+
+    rt_token = random_string(22, OAUTH_ALPHABET)
+    rt_secret = random_string(43, OAUTH_ALPHABET)
+    rt_verifier = random_string(22, OAUTH_ALPHABET)
+
+    request_token = RequestToken(
+        token=rt_token,
+        secret=rt_secret,
+        user=user.id,
+        used=True,
+        authenticated=True,
+        verifier=rt_verifier,
+    )
+    request_token.save()
+
+    return request_token
+
+def fixture_add_oauth_access_token(user, client=None, request_token=None):
+    if client is None:
+        client = fixture_add_oauth_client()
+
+    if request_token is None:
+        request_token = fixture_add_oauth_request_token(user)
+
+    at_token = random_string(22, OAUTH_ALPHABET)
+    at_secret = random_string(43, OAUTH_ALPHABET)
+
+    access_token = AccessToken(
+        token=at_token,
+        secret=at_secret,
+        user=user.id,
+        request_token=request_token.token
+    )
+    access_token.save()
+
+    return access_token
