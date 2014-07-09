@@ -35,7 +35,8 @@ class TestAPI(object):
         self.db = mg_globals.database
 
         self.user_password = u'4cc355_70k3N'
-        self.user = fixture_add_user(u'joapi', self.user_password)
+        self.user = fixture_add_user(u'joapi', self.user_password,
+            privileges=[u'active',u'uploader'])
 
     def login(self, test_app):
         test_app.post(
