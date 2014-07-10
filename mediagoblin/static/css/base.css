@@ -132,17 +132,17 @@ header {
   line-height: 1.6em;
 }
 
-.header_dropdown {
+#header_dropdown {
   margin-bottom: 20px;
   padding: 0px 10px 0px 10px;
 }
 
-.header_dropdown li {
+#header_dropdown li {
   margin: 4px 0;
   list-style: none;
 }
 
-.header_dropdown p {
+#header_dropdown p {
   margin-top: 12px;
   margin-bottom: 10px;
 }

@@ -17,11 +17,11 @@
  */
 
 $(document).ready(function(){
-  $(".header_dropdown").hide();
+  $("#header_dropdown").hide();
   $(".header_dropdown_up").hide();
   $(".header_dropdown_down,.header_dropdown_up").click(function() {
     $(".header_dropdown_down").toggle();
     $(".header_dropdown_up").toggle();
-    $(".header_dropdown").slideToggle();
+    $("#header_dropdown").slideToggle();
   });
 });
