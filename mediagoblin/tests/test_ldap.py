@@ -61,7 +61,8 @@ def test_ldap_plugin(ldap_plugin_app):
     assert form.username.errors == [u'This field is required.']
     assert form.password.errors == [u'This field is required.']
 
-    @mock.patch('mediagoblin.plugins.ldap.tools.LDAP.login', mock.Mock(return_value=return_value()))
+    @mock.patch('mediagoblin.plugins.ldap.tools.LDAP.login',
+                mock.Mock(return_value=return_value()))
     def _test_authentication():
         template.clear_test_template_context()
         res = ldap_plugin_app.post(
@@ -69,7 +70,8 @@ def test_ldap_plugin(ldap_plugin_app):
             {'username': u'chris',
              'password': u'toast'})
 
-        context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
+        context = template.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/auth/register.html']
         register_form = context['register_form']
 
         assert register_form.username.data == u'chris'
@@ -83,7 +85,8 @@ def test_ldap_plugin(ldap_plugin_app):
         res.follow()
 
         assert urlparse.urlsplit(res.location)[2] == '/u/chris/'
-        assert 'mediagoblin/user_pages/user_nonactive.html' in template.TEMPLATE_TEST_CONTEXT
+        assert 'mediagoblin/user_pages/user_nonactive.html' in \
+            template.TEMPLATE_TEST_CONTEXT
 
         # Try to register with same email and username
         template.clear_test_template_context()
@@ -92,11 +95,14 @@ def test_ldap_plugin(ldap_plugin_app):
             {'username': u'chris',
              'email': u'chris@example.com'})
 
-        context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
+        context = template.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/auth/register.html']
         register_form = context['register_form']
 
-        assert register_form.email.errors == [u'Sorry, a user with that email address already exists.']
-        assert register_form.username.errors == [u'Sorry, a user with that name already exists.']
+        assert register_form.email.errors == [
+            u'Sorry, a user with that email address already exists.']
+        assert register_form.username.errors == [
+            u'Sorry, a user with that name already exists.']
 
         # Log out
         ldap_plugin_app.get('/auth/logout/')
