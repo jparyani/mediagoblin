@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Avery <averym@gmail.com>, 2011
+# ayleph <ayleph@thisshitistemp.com>, 2014
 # parlegon <parlegon@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2013-12-03 13:23-0600\n"
-"PO-Revision-Date: 2013-12-03 19:23+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2014-05-23 22:31+0000\n"
+"Last-Translator: ayleph <ayleph@thisshitistemp.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/mediagoblin/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -170,7 +171,7 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:104 mediagoblin/plugins/basic_auth/forms.py:68
 msgid "Old password"
-msgstr ""
+msgstr "旧パスワード"
 
 #: mediagoblin/edit/forms.py:106 mediagoblin/plugins/basic_auth/forms.py:70
 msgid "Enter your old password to prove you own this account."
@@ -178,7 +179,7 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:109 mediagoblin/plugins/basic_auth/forms.py:73
 msgid "New password"
-msgstr ""
+msgstr "新パスワード"
 
 #: mediagoblin/edit/forms.py:117
 msgid "New email address"
@@ -376,7 +377,7 @@ msgstr ""
 #: mediagoblin/plugins/persona/forms.py:24
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:76
 msgid "Username"
-msgstr "ユーザネーム"
+msgstr "ユーザーID"
 
 #: mediagoblin/plugins/basic_auth/forms.py:32
 #: mediagoblin/plugins/ldap/forms.py:28 mediagoblin/plugins/openid/forms.py:31
@@ -387,7 +388,7 @@ msgstr "メールアドレス"
 
 #: mediagoblin/plugins/basic_auth/forms.py:39
 msgid "Username or Email"
-msgstr ""
+msgstr "ユーザーIDまたはメールアドレス"
 
 #: mediagoblin/plugins/basic_auth/forms.py:46
 msgid "Stay logged in"
@@ -395,7 +396,7 @@ msgstr ""
 
 #: mediagoblin/plugins/basic_auth/forms.py:51
 msgid "Username or email"
-msgstr ""
+msgstr "ユーザーIDまたはメールアドレス"
 
 #: mediagoblin/plugins/basic_auth/views.py:54
 msgid ""
@@ -434,7 +435,7 @@ msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:215
 msgid "Your password was changed successfully"
-msgstr ""
+msgstr "パスワードの変更が完了しました。"
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_fp.html:28
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_fp.html:36
@@ -466,7 +467,7 @@ msgstr "ここで作成！"
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/edit_link.html:22
 msgid "Change your password."
-msgstr ""
+msgstr "パスワードを変更します。"
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:23
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:31
@@ -651,7 +652,7 @@ msgstr "ログイン"
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:39
 #: mediagoblin/templates/mediagoblin/auth/login.html:39
 msgid "Logging in failed!"
-msgstr ""
+msgstr "ログインに失敗しました。"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:44
 msgid "Log in to create an account!"
@@ -785,7 +786,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/base.html:88
 #: mediagoblin/templates/mediagoblin/base.html:96
 msgid "log out"
-msgstr ""
+msgstr "ログアウト"
 
 #: mediagoblin/templates/mediagoblin/base.html:115
 #, python-format
@@ -807,7 +808,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:135
 msgid "Log out"
-msgstr ""
+msgstr "ログアウト"
 
 #: mediagoblin/templates/mediagoblin/base.html:138
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:112
@@ -1150,19 +1151,19 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:112
 msgid "Perspective"
-msgstr ""
+msgstr "透視図"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:115
 msgid "Front"
-msgstr ""
+msgstr "正面図"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:118
 msgid "Top"
-msgstr ""
+msgstr "上面図"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:121
 msgid "Side"
-msgstr ""
+msgstr "側面図"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:126
 msgid "WebGL"
@@ -1645,11 +1646,11 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:39
 msgid "← Newer"
-msgstr ""
+msgstr "←前へ"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:45
 msgid "Older →"
-msgstr ""
+msgstr "次へ→"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:48
 msgid "Go to page:"

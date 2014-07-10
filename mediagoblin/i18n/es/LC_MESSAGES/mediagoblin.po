@@ -5,24 +5,24 @@
 # Translators:
 # aleksejrs <deletesoftware@yandex.ru>, 2011, 2012
 # ekenbrand <ekenbrand@hotmail.com>, 2011
-# nvjacobo <jacobo@gnu.org>, 2011-2012
-# nvjacobo <jacobo@gnu.org>, 2013
+# Jacobo Nájera <jacobo@gnu.org>, 2011-2012
+# Jacobo Nájera <jacobo@gnu.org>, 2013
 # Javier Di Mauro <javierdimauro@gmail.com>, 2011
 # case <juangsub@gmail.com>, 2011
 # juanman <juanma@kde.org.ar>, 2011, 2012
-# larjona <larjona99@gmail.com>, 2012
-# larjona <larjona99@gmail.com>, 2013
+# Laura Arjona Reina <larjona99@gmail.com>, 2012
+# Laura Arjona Reina <larjona99@gmail.com>, 2013-2014
 # Mario Rodriguez <msrodriguez00@gmail.com>, 2011
 # Manuel Urbano Santos <mu@member.fsf.org>, 2011
 # shackra <shackra@riseup.net>, 2012
-# Elesa <stardustprincess17@hotmail.com>, 2012
+# Jazmín R. <stardustprincess17@hotmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2013-12-03 13:23-0600\n"
-"PO-Revision-Date: 2013-12-03 19:23+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2014-04-11 07:54+0000\n"
+"Last-Translator: Laura Arjona Reina <larjona99@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -181,11 +181,11 @@ msgstr "El título de la dirección de esta colección. Generalmente no necesita
 
 #: mediagoblin/edit/forms.py:104 mediagoblin/plugins/basic_auth/forms.py:68
 msgid "Old password"
-msgstr "Vieja contraseña"
+msgstr "Contraseña antigua"
 
 #: mediagoblin/edit/forms.py:106 mediagoblin/plugins/basic_auth/forms.py:70
 msgid "Enter your old password to prove you own this account."
-msgstr "Escriba la anterior contraseña para demostrar que esta cuenta te pertenece."
+msgstr "Escribe la contraseña antigua para demostrar que esta cuenta te pertenece."
 
 #: mediagoblin/edit/forms.py:109 mediagoblin/plugins/basic_auth/forms.py:73
 msgid "New password"
@@ -1660,7 +1660,7 @@ msgstr "← Más nuevo"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:45
 msgid "Older →"
-msgstr "Más viejo →"
+msgstr "Más antiguo →"
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:48
 msgid "Go to page:"
@@ -1674,7 +1674,7 @@ msgstr "Más nuevo"
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:39
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:44
 msgid "older"
-msgstr "Más viejo"
+msgstr "Más antiguo"
 
 #: mediagoblin/templates/mediagoblin/utils/report.html:25
 msgid "Report media"

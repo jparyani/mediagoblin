@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
-# aleksejrs <deletesoftware@yandex.ru>, 2013
+# aleksejrs <deletesoftware@yandex.ru>, 2013-2014
 # aleksejrs <deletesoftware@yandex.ru>, 2011-2012
 # Yury Sakarinen, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-12-02 09:28-0600\n"
-"PO-Revision-Date: 2013-12-03 19:23+0000\n"
+"POT-Creation-Date: 2013-12-03 13:23-0600\n"
+"PO-Revision-Date: 2014-04-27 19:14+0000\n"
 "Last-Translator: aleksejrs <deletesoftware@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/mediagoblin/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -301,7 +301,7 @@ msgstr "Перекодировка видео не удалась"
 
 #: mediagoblin/moderation/forms.py:21
 msgid "Take away privilege"
-msgstr ""
+msgstr "Лишить полномочия"
 
 #: mediagoblin/moderation/forms.py:22
 msgid "Ban the user"
@@ -309,7 +309,7 @@ msgstr "Забанить этого пользователя"
 
 #: mediagoblin/moderation/forms.py:23
 msgid "Send the user a message"
-msgstr ""
+msgstr "Отправить пользователю сообщение"
 
 #: mediagoblin/moderation/forms.py:24
 msgid "Delete the content"
@@ -329,7 +329,7 @@ msgstr ""
 
 #: mediagoblin/moderation/forms.py:115
 msgid "What privileges will you take away?"
-msgstr ""
+msgstr "Каких полномочий лишить?"
 
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
@@ -656,11 +656,11 @@ msgstr "Авторизация неуспешна!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:44
 msgid "Log in to create an account!"
-msgstr ""
+msgstr "Авторизуйтесь, чтобы создать учётную запись!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:51
 msgid "Or login with a password!"
-msgstr ""
+msgstr "Или войдите с помощью пароля!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login_link.html:23
 msgid "Or login with OpenID!"
@@ -699,11 +699,11 @@ msgstr ""
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:31
 msgid "Delete a Persona email address"
-msgstr ""
+msgstr "Удалить email-адрес Persona"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:34
 msgid "Add a Persona email address"
-msgstr ""
+msgstr "Добавить email-адрес Persona"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit_link.html:21
 msgid "Persona's"
@@ -731,7 +731,7 @@ msgstr ""
 
 #: mediagoblin/submit/forms.py:30
 msgid "Max file size: {0} mb"
-msgstr ""
+msgstr "Макс. размер файла: {0} Мб."
 
 #: mediagoblin/submit/forms.py:34
 msgid "File"
@@ -742,7 +742,7 @@ msgid ""
 "You can use\n"
 "                        <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                        Markdown</a> for formatting."
-msgstr ""
+msgstr "Для разметки можете использовать язык\n<a href=\"http://daringfireball.net/projects/markdown/basics\">\nMarkdown</a>."
 
 #: mediagoblin/submit/views.py:55
 msgid "You must provide a file."
@@ -759,7 +759,7 @@ msgstr "Коллекция «%s» добавлена!"
 
 #: mediagoblin/templates/mediagoblin/banned.html:20
 msgid "You are Banned."
-msgstr ""
+msgstr "Вы заблокированы."
 
 #: mediagoblin/templates/mediagoblin/banned.html:24
 #: mediagoblin/templates/mediagoblin/error.html:24
@@ -768,16 +768,16 @@ msgstr "Изображение нервничающего гоблина"
 
 #: mediagoblin/templates/mediagoblin/banned.html:26
 msgid "You have been banned"
-msgstr ""
+msgstr "Вас заблокировали"
 
 #: mediagoblin/templates/mediagoblin/banned.html:28
 #, python-format
 msgid "until %(until_when)s"
-msgstr ""
+msgstr "до %(until_when)s"
 
 #: mediagoblin/templates/mediagoblin/banned.html:30
 msgid "indefinitely"
-msgstr ""
+msgstr "на неопределённый срок"
 
 #: mediagoblin/templates/mediagoblin/base.html:81
 msgid "Verify your email!"
@@ -953,7 +953,7 @@ msgid ""
 "\n"
 "        >Create an account at this site</a>\n"
 "        or"
-msgstr ""
+msgstr "\n        >Создайте учётную запись на этом сайте</a>\n        или"
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:41
 msgid ""
@@ -1006,7 +1006,7 @@ msgstr "Сохранить изменения"
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:33
 #, python-format
 msgid "Changing %(username)s's email"
-msgstr ""
+msgstr "Изменение email-адреса %(username)s"
 
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:28
 #, python-format
@@ -1066,7 +1066,7 @@ msgid ""
 "\n"
 "If you are not %(username)s or didn't request an email change, you can ignore\n"
 "this email."
-msgstr ""
+msgstr "Привет,\n\nМы хотели удостовериться, что Вы — %(username)s. Если это действительно\nвы, то пожалуйста, пройдите по ссылке ниже, чтобы подтвердить, что это\nваш новый email-адрес.\n\n%(verification_url)s\n\nЕсли вы не %(username)s или не запрашивали изменение адреса, можете не\nобращать внимания на это письмо."
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:4
 msgid "New comments"
@@ -1269,7 +1269,6 @@ msgid ""
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:130
-#: mediagoblin/templates/mediagoblin/moderation/user.html:128
 msgid "Resolve"
 msgstr ""
 
@@ -1367,133 +1366,6 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:199
 msgid "No closed reports found."
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:23
-#, python-format
-msgid "User: %(username)s"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:39
-msgid "Sorry, no such user found."
-msgstr "Извините, но такой пользователь не найден."
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:43
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:60
-msgid "Email verification needed"
-msgstr "Нужно подтверждение почтового адреса"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:45
-msgid ""
-"Someone has registered an account with this username, but it still has\n"
-"        to be activated."
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:58
-msgid "Return to Users Panel"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:60
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:34
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:45
-#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:25
-#, python-format
-msgid "%(username)s's profile"
-msgstr "Профиль пользователя %(username)s"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:62
-#, python-format
-msgid "BANNED until %(expiration_date)s"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:66
-msgid "Banned Indefinitely"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:72
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:61
-msgid "This user hasn't filled in their profile (yet)."
-msgstr "Этот пользователь не заполнил свой профайл (пока)."
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:83
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:56
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:73
-msgid "Edit profile"
-msgstr "Редактировать профиль"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:90
-#: mediagoblin/templates/mediagoblin/user_pages/user.html:80
-msgid "Browse collections"
-msgstr "Смотреть коллекции"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:97
-#, python-format
-msgid "Active Reports on %(username)s"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:104
-msgid "Report ID"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:105
-msgid "Reported Content"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:106
-msgid "Description of Report"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:114
-#, python-format
-msgid "Report #%(report_number)s"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:121
-msgid "Reported Comment"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:123
-msgid "Reported Media Entry"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:134
-#, python-format
-msgid "No active reports filed on %(username)s"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:141
-#, python-format
-msgid "All reports on %(username)s"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:146
-#, python-format
-msgid "All reports that %(username)s has filed"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:160
-msgid "Ban User"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:165
-msgid "UnBan User"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:173
-msgid "Privilege"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:174
-msgid "User Has Privilege"
-msgstr "Есть у пользователя"
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:181
-msgid "Yes"
-msgstr ""
-
-#: mediagoblin/templates/mediagoblin/moderation/user.html:183
-msgid "No"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:21
@@ -1664,15 +1536,35 @@ msgid ""
 "            ❖ Published by <a href=\"%(user_url)s\"\n"
 "                          class=\"comment_authorlink\">%(username)s</a>\n"
 "      "
-msgstr ""
+msgstr "\n            ❖ Опубликовано <a href=\"%(user_url)s\"\n                          class=\"comment_authorlink\">%(username)s</a>\n      "
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:81
 msgid "File Report "
 msgstr ""
 
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:34
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:45
+#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:25
+#, python-format
+msgid "%(username)s's profile"
+msgstr "Профиль пользователя %(username)s"
+
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:52
 msgid "Here's a spot to tell others about yourself."
 msgstr "Здесь вы можете рассказать о себе."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:56
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:73
+msgid "Edit profile"
+msgstr "Редактировать профиль"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:61
+msgid "This user hasn't filled in their profile (yet)."
+msgstr "Этот пользователь не заполнил свой профайл (пока)."
+
+#: mediagoblin/templates/mediagoblin/user_pages/user.html:80
+msgid "Browse collections"
+msgstr "Смотреть коллекции"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:93
 #, python-format
@@ -1690,6 +1582,11 @@ msgstr "Ваши файлы появятся здесь, когда вы их д
 #: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
 msgid "There doesn't seem to be any media here yet..."
 msgstr "Пока что тут файлов нет…"
+
+#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
+#: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:60
+msgid "Email verification needed"
+msgstr "Нужно подтверждение почтового адреса"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:43
 msgid "Almost done! Your account still needs to be activated."
@@ -1847,7 +1744,7 @@ msgstr "Комментировать"
 msgid ""
 "You can use <a href=\"http://daringfireball.net/projects/markdown/basics\" "
 "target=\"_blank\">Markdown</a> for formatting."
-msgstr ""
+msgstr "Поддерживается разметка на языке <a href=\"http://daringfireball.net/projects/markdown/basics\" target=\"_blank\">Markdown</a>."
 
 #: mediagoblin/user_pages/forms.py:31
 msgid "I am sure I want to delete this"

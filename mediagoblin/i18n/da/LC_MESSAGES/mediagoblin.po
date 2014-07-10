@@ -3,17 +3,17 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
-# Aputsiaĸ Niels Janussen <aj@isit.gl>, 2013
+# Aputsiaĸ Niels Janussen <aj@isit.gl>, 2013-2014
 # Morten Juhl-Johansen Zölde-Fejér <morten@writtenandread.net>, 2012
 # Olle Jonsson <olle.jonsson@gmail.com>, 2012
-# ttrudslev <tanja.trudslev@gmail.com>, 2012
+# Tanja Trudslev <tanja.trudslev@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2013-12-03 13:23-0600\n"
-"PO-Revision-Date: 2013-12-03 19:23+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2014-07-06 00:16+0000\n"
+"Last-Translator: Aputsiaĸ Niels Janussen <aj@isit.gl>\n"
 "Language-Team: Danish (http://www.transifex.com/projects/p/mediagoblin/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -263,12 +263,12 @@ msgstr ""
 
 #: mediagoblin/gmg_commands/assetlink.py:76
 msgid "However, old link directory symlink found; removed.\n"
-msgstr ""
+msgstr "Dog blev den symbolske henvisning til den tidligere kataloghenvisning fundet; fjernet.\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:112
 #, python-format
 msgid "Could not link \"%s\": %s exists and is not a symlink\n"
-msgstr ""
+msgstr "Kunne ikke henvise \"%s\": %s eksisterer og er ikke en symbolsk henvisning\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:119
 #, python-format
@@ -302,11 +302,11 @@ msgstr "Omkodning af video mislykkedes"
 
 #: mediagoblin/moderation/forms.py:21
 msgid "Take away privilege"
-msgstr ""
+msgstr "Fjern privilegiet"
 
 #: mediagoblin/moderation/forms.py:22
 msgid "Ban the user"
-msgstr ""
+msgstr "Bandlys denne bruger"
 
 #: mediagoblin/moderation/forms.py:23
 msgid "Send the user a message"
@@ -314,27 +314,27 @@ msgstr ""
 
 #: mediagoblin/moderation/forms.py:24
 msgid "Delete the content"
-msgstr ""
+msgstr "Slet indholdet"
 
 #: mediagoblin/moderation/forms.py:53 mediagoblin/moderation/forms.py:118
 msgid "User will be banned until:"
-msgstr ""
+msgstr "Brugeren vil blive bandlyst indtil:"
 
 #: mediagoblin/moderation/forms.py:57
 msgid "Why are you banning this User?"
-msgstr ""
+msgstr "Hvorfor bandlyser du denne bruger?"
 
 #: mediagoblin/moderation/forms.py:109
 msgid "What action will you take to resolve the report?"
-msgstr ""
+msgstr "Hvilken handling vil du foretage, for at tackle rapporten?"
 
 #: mediagoblin/moderation/forms.py:115
 msgid "What privileges will you take away?"
-msgstr ""
+msgstr "Hvilke privilegier ønsker du at fjerne?"
 
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
-msgstr ""
+msgstr "Advarsel fra"
 
 #: mediagoblin/notifications/tools.py:54 mediagoblin/user_pages/lib.py:60
 msgid "commented on your post"
@@ -361,17 +361,17 @@ msgstr ""
 #: mediagoblin/plugins/api/views.py:75 mediagoblin/plugins/piwigo/views.py:155
 #: mediagoblin/submit/views.py:78
 msgid "Sorry, the file size is too big."
-msgstr ""
+msgstr "Beklager, filstørrelsen er for stor."
 
 #: mediagoblin/plugins/api/views.py:78 mediagoblin/plugins/piwigo/views.py:158
 #: mediagoblin/submit/views.py:81
 msgid "Sorry, uploading this file will put you over your upload limit."
-msgstr ""
+msgstr "Beklager, overførsel af denne fil vil betyde at du bryder grænsen for overførsel."
 
 #: mediagoblin/plugins/api/views.py:82 mediagoblin/plugins/piwigo/views.py:162
 #: mediagoblin/submit/views.py:87
 msgid "Sorry, you have reached your upload limit."
-msgstr ""
+msgstr "Beklager, du har nået din grænse for filoverførsel."
 
 #: mediagoblin/plugins/basic_auth/forms.py:24
 #: mediagoblin/plugins/ldap/forms.py:35 mediagoblin/plugins/openid/forms.py:27
@@ -403,11 +403,11 @@ msgstr "Brugernavn eller email"
 msgid ""
 "If that email address (case sensitive!) is registered an email has been sent"
 " with instructions on how to change your password."
-msgstr ""
+msgstr "Hvis emailadressen (der skelnes mellem små og store bogstaver!) er en registreret, så er der blevet sendt en email med instrukser om ændring af adgangskode."
 
 #: mediagoblin/plugins/basic_auth/views.py:65
 msgid "Couldn't find someone with that username."
-msgstr ""
+msgstr "Kunne ikke finde nogen med dette brugernavn."
 
 #: mediagoblin/plugins/basic_auth/views.py:68
 msgid ""
@@ -468,7 +468,7 @@ msgstr "Opret én her!"
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/edit_link.html:22
 msgid "Change your password."
-msgstr ""
+msgstr "Skift din adgangskode."
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:23
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:31
@@ -494,7 +494,7 @@ msgstr "Vis på <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
 #: mediagoblin/plugins/ldap/templates/mediagoblin/plugins/ldap/create_account_link.html:22
 msgid "Sign in to create an account!"
-msgstr ""
+msgstr "Log ind for at oprette en konto!"
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
@@ -520,7 +520,7 @@ msgstr "Beskrivelse"
 msgid ""
 "This will be visible to users allowing your\n"
 "                application to authenticate as them."
-msgstr ""
+msgstr "Dette vil være synligt for brugere, og tillader\ndine programmer at godkende som disse."
 
 #: mediagoblin/plugins/oauth/forms.py:40
 msgid "Type"
@@ -544,7 +544,7 @@ msgstr "Omdirigér URI"
 msgid ""
 "The redirect URI for the applications, this field\n"
 "            is <strong>required</strong> for public clients."
-msgstr ""
+msgstr "URI'en til viderestililng for applikationerne. Dette felt\ner <strong>påkrævet</strong> for offentlige klienter."
 
 #: mediagoblin/plugins/oauth/forms.py:66
 msgid "This field is required for public clients"
@@ -673,21 +673,21 @@ msgstr "Eller tilmeld dig med OpenID!"
 
 #: mediagoblin/plugins/persona/__init__.py:90
 msgid "Sorry, an account is already registered to that Persona email."
-msgstr ""
+msgstr "Beklager, der er allerede en konto med denne Persona-email."
 
 #: mediagoblin/plugins/persona/views.py:138
 msgid "The Persona email address was successfully removed."
-msgstr ""
+msgstr "Fjernelse af Persona-emailadressen blev gennemført."
 
 #: mediagoblin/plugins/persona/views.py:144
 msgid ""
 "You can't delete your only Persona email address unless you have a password "
 "set."
-msgstr ""
+msgstr "Du kan ikke slette din eneste Persona-emailadresse, medmindre du har angivet en adgangskode."
 
 #: mediagoblin/plugins/persona/views.py:149
 msgid "That Persona email address is not registered to this account."
-msgstr ""
+msgstr "Denne Persona-emailadresse er ikke registreret på denne konto."
 
 #: mediagoblin/plugins/persona/views.py:176
 msgid ""
@@ -708,7 +708,7 @@ msgstr ""
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit_link.html:21
 msgid "Persona's"
-msgstr ""
+msgstr "Persona'er"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/login_link.html:22
 msgid "Or login with Persona!"
@@ -732,7 +732,7 @@ msgstr ""
 
 #: mediagoblin/submit/forms.py:30
 msgid "Max file size: {0} mb"
-msgstr ""
+msgstr "Maks. filstørrelse: {0} mb"
 
 #: mediagoblin/submit/forms.py:34
 msgid "File"
@@ -743,7 +743,7 @@ msgid ""
 "You can use\n"
 "                        <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                        Markdown</a> for formatting."
-msgstr ""
+msgstr "Du kan benytte\n                        <a href=\"http://daringfireball.net/projects/markdown/basics\">\n                        Markdown</a> til tekstformatering."
 
 #: mediagoblin/submit/views.py:55
 msgid "You must provide a file."
@@ -760,25 +760,25 @@ msgstr "Samlingen \"%s\" blev tilføjet!"
 
 #: mediagoblin/templates/mediagoblin/banned.html:20
 msgid "You are Banned."
-msgstr ""
+msgstr "Du er blevet bandlyst."
 
 #: mediagoblin/templates/mediagoblin/banned.html:24
 #: mediagoblin/templates/mediagoblin/error.html:24
 msgid "Image of goblin stressing out"
-msgstr ""
+msgstr "Et billede at en goblin der er stresset"
 
 #: mediagoblin/templates/mediagoblin/banned.html:26
 msgid "You have been banned"
-msgstr ""
+msgstr "Du er blevet bandlyst"
 
 #: mediagoblin/templates/mediagoblin/banned.html:28
 #, python-format
 msgid "until %(until_when)s"
-msgstr ""
+msgstr "indtil %(until_when)s"
 
 #: mediagoblin/templates/mediagoblin/banned.html:30
 msgid "indefinitely"
-msgstr ""
+msgstr "ubestemt tid"
 
 #: mediagoblin/templates/mediagoblin/base.html:81
 msgid "Verify your email!"
@@ -1012,7 +1012,7 @@ msgstr "Ændrer %(username)ss e-mail"
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:28
 #, python-format
 msgid "Really delete user '%(user_name)s' and all related media/comments?"
-msgstr ""
+msgstr "Sikker på at brugeren '%(user_name)s' og alle relaterede medier/kommentarer skal slettes?"
 
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:35
 msgid "Yes, really delete my account"
@@ -1194,7 +1194,7 @@ msgid ""
 "You can get a modern web browser that \n"
 "      can play this video at <a href=\"http://getfirefox.com\">\n"
 "      http://getfirefox.com</a>!"
-msgstr ""
+msgstr "Du kan hente en moderne browser, der\n      kan afspille videoen på <a href=\"http://getfirefox.com\">\n      http://getfirefox.com</a>!"
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:88
 msgid "WebM file (VP8/Vorbis)"
@@ -1245,11 +1245,11 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/report.html:33
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:155
 msgid "Report"
-msgstr ""
+msgstr "Rapport"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:36
 msgid "Reported comment"
-msgstr ""
+msgstr "Rapporteret kommentar"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:81
 #, python-format
@@ -1323,7 +1323,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:80
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:174
 msgid "Reason"
-msgstr ""
+msgstr "Årsag"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:94
 #, python-format
@@ -1331,7 +1331,7 @@ msgid ""
 "\n"
 "                Comment Report #%(report_id)s\n"
 "              "
-msgstr ""
+msgstr "\n                Kommentarrapport #%(report_id)s\n              "
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:109
 #, python-format
@@ -1625,7 +1625,7 @@ msgstr "(fjern)"
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:21
 msgid "Collected in"
-msgstr ""
+msgstr "Indsamlet i"
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:40
 msgid "Add to a collection"
@@ -1711,7 +1711,7 @@ msgid ""
 "There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
 " the address is correct, maybe the page you're looking for has been moved or"
 " deleted."
-msgstr ""
+msgstr "Det ser ikke ud til at der er en side på denne adresse. Beklager!</p><p>Hvis du er sikker på, at adressen er korrekt, så er siden du leder efter muligvis flyttet eller slettet."
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"

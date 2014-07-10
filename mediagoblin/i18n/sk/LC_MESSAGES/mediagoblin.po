@@ -4,18 +4,18 @@
 # 
 # Translators:
 # martin, 2013
-# martin, 2012-2013
+# martin, 2012-2014
 # Morten Juhl-Johansen Zölde-Fejér <morten@writtenandread.net>, 2012
 # Olle Jonsson <olle.jonsson@gmail.com>, 2012
-# ttrudslev <tanja.trudslev@gmail.com>, 2012
+# Tanja Trudslev <tanja.trudslev@gmail.com>, 2012
 # martin, 2011-2012
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2013-12-03 13:23-0600\n"
-"PO-Revision-Date: 2013-12-03 19:23+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2014-01-09 18:22+0000\n"
+"Last-Translator: martin\n"
 "Language-Team: Slovak (http://www.transifex.com/projects/p/mediagoblin/language/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +30,7 @@ msgstr "Prepáč, registrácia na danej inštancii nie je povolená."
 
 #: mediagoblin/decorators.py:315
 msgid "Sorry, reporting is disabled on this instance."
-msgstr ""
+msgstr "Prepáč, reportovanie je na tejto inštancii vypnuté."
 
 #: mediagoblin/decorators.py:358 mediagoblin/plugins/ldap/views.py:55
 #: mediagoblin/plugins/persona/views.py:77
@@ -304,11 +304,11 @@ msgstr "Konvertovanie videa zlyhalo"
 
 #: mediagoblin/moderation/forms.py:21
 msgid "Take away privilege"
-msgstr ""
+msgstr "Odobrať privilégiá"
 
 #: mediagoblin/moderation/forms.py:22
 msgid "Ban the user"
-msgstr ""
+msgstr "Udeliť používateľovi BAN"
 
 #: mediagoblin/moderation/forms.py:23
 msgid "Send the user a message"
@@ -316,19 +316,19 @@ msgstr ""
 
 #: mediagoblin/moderation/forms.py:24
 msgid "Delete the content"
-msgstr ""
+msgstr "Odstrániť obsah"
 
 #: mediagoblin/moderation/forms.py:53 mediagoblin/moderation/forms.py:118
 msgid "User will be banned until:"
-msgstr ""
+msgstr "BAN používateľa potrvá do:"
 
 #: mediagoblin/moderation/forms.py:57
 msgid "Why are you banning this User?"
-msgstr ""
+msgstr "Prečo chceš udeliť BAN tomuto používateľovi?"
 
 #: mediagoblin/moderation/forms.py:109
 msgid "What action will you take to resolve the report?"
-msgstr ""
+msgstr "Čo spravíš pre vyriešenie daného reportu?"
 
 #: mediagoblin/moderation/forms.py:115
 msgid "What privileges will you take away?"
@@ -496,7 +496,7 @@ msgstr "Zobraziť na <a href=\"%(osm_url)s\">OpenStreetMap</a>"
 
 #: mediagoblin/plugins/ldap/templates/mediagoblin/plugins/ldap/create_account_link.html:22
 msgid "Sign in to create an account!"
-msgstr ""
+msgstr "Prihlás sa pre vytvorenie účtu!"
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
@@ -780,7 +780,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/banned.html:30
 msgid "indefinitely"
-msgstr ""
+msgstr "nekonečne"
 
 #: mediagoblin/templates/mediagoblin/base.html:81
 msgid "Verify your email!"
@@ -1311,11 +1311,11 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:77
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:171
 msgid "Offender"
-msgstr ""
+msgstr "Vinník"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:78
 msgid "When Reported"
-msgstr ""
+msgstr "Čas nahlásenia"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:79
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:173
@@ -1325,7 +1325,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:80
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:174
 msgid "Reason"
-msgstr ""
+msgstr "Dôvod"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:94
 #, python-format
@@ -1369,7 +1369,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:199
 msgid "No closed reports found."
-msgstr ""
+msgstr "Žiadne vyriešené nahlásenia."
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:21
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:26
@@ -1522,7 +1522,7 @@ msgstr "Tvojich 10 posledných úspešných nahratí"
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:21
 msgid "<h2>File a Report</h2>"
-msgstr ""
+msgstr "<h2>Nahlásiť</h2>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:24
 msgid "Reporting this Comment"
