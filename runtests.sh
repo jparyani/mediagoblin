@@ -34,7 +34,7 @@ elif which py.test > /dev/null; then
     export PYTEST="py.test";
 else
     echo "py.test not found.  X_X";
-    echo "Please install 'pytest e.g. with pip install pytest'.  Exiting.";
+    echo "Please install pytest e.g. with 'pip install pytest'.  Exiting.";
     exit 1
 fi
 
