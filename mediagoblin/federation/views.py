@@ -1,4 +1,3 @@
-
 import json
 import io
 import mimetypes
@@ -7,6 +6,7 @@ from werkzeug.datastructures import FileStorage
 
 from mediagoblin.media_types import sniff_media
 from mediagoblin.decorators import oauth_required
+from mediagoblin.federation.decorators import user_has_privilege
 from mediagoblin.db.models import User, MediaEntry, MediaComment
 from mediagoblin.tools.response import redirect, json_response
 from mediagoblin.meddleware.csrf import csrf_exempt
@@ -46,6 +46,7 @@ def user(request):
 
 @oauth_required
 @csrf_exempt
+@user_has_privilege(u'uploader')
 def uploads(request):
     """ Endpoint for file uploads """
     user = request.matchdict["username"]

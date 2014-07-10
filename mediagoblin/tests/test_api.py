@@ -19,20 +19,15 @@ import json
 import pytest
 import mock
 
+from webtest import AppError
+
 from mediagoblin import mg_globals
 from .resources import GOOD_JPG
+from mediagoblin.db.models import User
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin.moderation.tools import take_away_privileges
 from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
     BIG_BLUE
-
-def mocked_oauth_required(*args, **kwargs):
-    """ Mocks mediagoblin.decorator.oauth_required to always validate """
-
-    def oauth_required(controller):
-        return controller
-
-    return oauth_required
 
 class TestAPI(object):
 
@@ -41,6 +36,18 @@ class TestAPI(object):
         self.test_app = test_app
         self.db = mg_globals.database
         self.user = fixture_add_user(privileges=[u'active', u'uploader'])
+
+    def mocked_oauth_required(self, *args, **kwargs):
+        """ Mocks mediagoblin.decorator.oauth_required to always validate """
+
+        def fake_controller(controller, request, *args, **kwargs):
+            request.user = User.query.filter_by(id=self.user.id).first()
+            return controller(request, *args, **kwargs)
+
+        def oauth_required(c):
+            return lambda *args, **kwargs: fake_controller(c, *args, **kwargs)
+
+        return oauth_required
 
     def test_can_post_image(self, test_app):
         """ Tests that an image can be posted to the API """
@@ -52,7 +59,7 @@ class TestAPI(object):
         }
 
 
-        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=mocked_oauth_required):
+        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
             response = test_app.post(
                 "/api/user/{0}/uploads".format(self.user.username),
                 data,
@@ -98,15 +105,13 @@ class TestAPI(object):
             "Content-Length": str(len(data)),
         }
 
-        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=mocked_oauth_required):
-            response = test_app.post(
-                "/api/user/{0}/uploads".format(self.user.username),
-                data,
-                headers=headers
-            )
-
-            error = json.loads(response.body)
+        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
+            with pytest.raises(AppError) as excinfo:
+                response = test_app.post(
+                    "/api/user/{0}/uploads".format(self.user.username),
+                    data,
+                    headers=headers
+                )
 
             # Assert that we've got a 403
-            assert response.status_code == 403
-            assert "error" in error
+            assert "403 FORBIDDEN" in excinfo.value.message
