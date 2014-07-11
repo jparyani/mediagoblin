@@ -116,15 +116,27 @@ def feed(request):
 
         elif obj.get("objectType", None) == "image":
             # Posting an image to the feed
-            # NB: This is currently just handing the image back until we have an
-            #     to send the image to the actual feed
-
             media_id = int(data["object"]["id"])
             media = MediaEntry.query.filter_by(id=media_id)
             if media is None:
                 error = "No such 'image' with id '{0}'".format(id=media_id)
                 return json_response(error, status=404)
-            media = media[0]
+
+            media = media.first()
+            obj = data["object"]
+
+            if "displayName" in obj:
+                media.title = obj["displayName"]
+
+            if "content" in obj:
+                media.description = obj["content"]
+
+            if "license" in obj:
+                media.license = obj["license"]
+
+            media.save()
+            manager = media.media_manager.api_add_to_feed(request, media)
+
             return json_response({
                 "verb": "post",
                 "object": media.serialize(request)
@@ -205,6 +217,11 @@ def feed(request):
                 "object": image.serialize(request),
             }
             return json_response(activity)
+
+    elif request.method != "GET":
+        # Currently unsupported
+        error = "Unsupported HTTP method {0}".format(request.method)
+        return json_response({"error": error}, status=501)
 
     feed_url = request.urlgen(
         "mediagoblin.federation.feed",

@@ -63,10 +63,7 @@ class ImageMediaManager(MediaManagerBase):
         """ This handles a image upload request """
         # Use the same kind of method from mediagoblin/submit/views:submit_start
         entry.media_type = unicode(MEDIA_TYPE)
-        entry.title = unicode(request.args.get("title", file_data.filename))
-        entry.description = unicode(request.args.get("description", ""))
-        entry.license = request.args.get("license", "") # not part of the standard API
-
+        entry.title = file_data.filename
         entry.generate_slug()
 
         queue_file = prepare_queue_task(request.app, entry, file_data.filename)
@@ -74,6 +71,16 @@ class ImageMediaManager(MediaManagerBase):
             queue_file.write(request.data)
 
         entry.save()
+        return json_response(entry.serialize(request))
+
+    @staticmethod
+    def api_add_to_feed(request, entry):
+        """ Add media to Feed """
+        if entry.title:
+            # Shame we have to do this here but we didn't have the data in
+            # api_upload_request as no filename is usually specified.
+            entry.slug = None
+            entry.generate_slug()
 
         feed_url = request.urlgen(
             'mediagoblin.user_pages.atom_feed',

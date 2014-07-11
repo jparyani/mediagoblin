@@ -446,9 +446,8 @@ class MediaEntry(Base, MediaEntryMixin):
             )
 
         context = {
-            "id": self.id, 
+            "id": self.id,
             "author": author.serialize(request),
-            "displayName": self.title,
             "objectType": self.objectType,
             "url": url,
             "image": {
@@ -464,6 +463,15 @@ class MediaEntry(Base, MediaEntryMixin):
             },
         }
 
+        if self.title:
+            context["displayName"] = self.title
+
+        if self.description:
+            context["content"] = self.description
+
+        if self.license:
+            context["license"] = self.license
+
         if show_comments:
             comments = [comment.serialize(request) for comment in self.get_comments()]
             total = len(comments)
@@ -478,7 +486,7 @@ class MediaEntry(Base, MediaEntryMixin):
                         ),
             }
 
-        return context 
+        return context
 
 class FileKeynames(Base):
     """
@@ -630,6 +638,7 @@ class MediaComment(Base, MediaCommentMixin):
         media = MediaEntry.query.filter_by(id=self.media_entry).first()
         author = self.get_author
         context = {
+            "id": self.id,
             "objectType": "comment",
             "content": self.content,
             "inReplyTo": media.serialize(request, show_comments=False),

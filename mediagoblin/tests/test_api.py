@@ -23,11 +23,10 @@ from webtest import AppError
 
 from mediagoblin import mg_globals
 from .resources import GOOD_JPG
-from mediagoblin.db.models import User
+from mediagoblin.db.models import User, MediaEntry
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin.moderation.tools import take_away_privileges
-from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
-    BIG_BLUE
+from .resources import GOOD_JPG
 
 class TestAPI(object):
 
@@ -35,7 +34,53 @@ class TestAPI(object):
     def setup(self, test_app):
         self.test_app = test_app
         self.db = mg_globals.database
+
         self.user = fixture_add_user(privileges=[u'active', u'uploader'])
+
+    def _activity_to_feed(self, test_app, activity, headers=None):
+        """ Posts an activity to the user's feed """
+        if headers:
+            headers.setdefault("Content-Type", "application/json")
+        else:
+            headers = {"Content-Type": "application/json"}
+
+        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
+            response = test_app.post(
+                "/api/user/{0}/feed".format(self.user.username),
+                json.dumps(activity),
+                headers=headers
+            )
+
+        return response, json.loads(response.body)
+
+    def _upload_image(self, test_app, image):
+        """ Uploads and image to MediaGoblin via pump.io API """
+        data = open(image, "rb").read()
+        headers = {
+            "Content-Type": "image/jpeg",
+            "Content-Length": str(len(data))
+        }
+
+
+        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
+            response = test_app.post(
+                "/api/user/{0}/uploads".format(self.user.username),
+                data,
+                headers=headers
+            )
+            image = json.loads(response.body)
+
+        return response, image
+
+    def _post_image_to_feed(self, test_app, image):
+        """ Posts an already uploaded image to feed """
+        activity = {
+            "verb": "post",
+            "object": image,
+        }
+
+        return self._activity_to_feed(test_app, activity)
+
 
     def mocked_oauth_required(self, *args, **kwargs):
         """ Mocks mediagoblin.decorator.oauth_required to always validate """
@@ -52,46 +97,63 @@ class TestAPI(object):
     def test_can_post_image(self, test_app):
         """ Tests that an image can be posted to the API """
         # First request we need to do is to upload the image
-        data = open(GOOD_JPG, "rb").read()
-        headers = {
-            "Content-Type": "image/jpeg",
-            "Content-Length": str(len(data))
-        }
+        response, image = self._upload_image(test_app, GOOD_JPG)
 
+        # I should have got certain things back
+        assert response.status_code == 200
+
+        assert "id" in image
+        assert "fullImage" in image
+        assert "url" in image["fullImage"]
+        assert "url" in image
+        assert "author" in image
+        assert "published" in image
+        assert "updated" in image
+        assert image["objectType"] == "image"
+
+        # Check that we got the response we're expecting
+        response, _ = self._post_image_to_feed(test_app, image)
+        assert response.status_code == 200
+
+    def test_upload_image_with_filename(self, test_app):
+        """ Tests that you can upload an image with filename and description """
+        response, data = self._upload_image(test_app, GOOD_JPG)
+        response, data = self._post_image_to_feed(test_app, data)
+
+        image = data["object"]
+
+        # Now we need to add a title and description
+        title = "My image ^_^"
+        description = "This is my super awesome image :D"
+        license = "CC-BY-SA"
+
+        image["displayName"] = title
+        image["content"] = description
+        image["license"] = license
+
+        activity = {"verb": "update", "object": image}
 
         with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
             response = test_app.post(
-                "/api/user/{0}/uploads".format(self.user.username),
-                data,
-                headers=headers
-            )
-            image = json.loads(response.body)
-
-
-            # I should have got certain things back
-            assert response.status_code == 200
-
-            assert "id" in image
-            assert "fullImage" in image
-            assert "url" in image["fullImage"]
-            assert "url" in image
-            assert "author" in image
-            assert "published" in image
-            assert "updated" in image
-            assert image["objectType"] == "image"
-
-            # Now post this to the feed
-            activity = {
-                "verb": "post",
-                "object": image,
-            }
-            response = test_app.post(
                 "/api/user/{0}/feed".format(self.user.username),
-                activity
+                json.dumps(activity),
+                headers={"Content-Type": "application/json"}
             )
 
-            # Check that we got the response we're expecting
-            assert response.status_code == 200
+        image = json.loads(response.body)["object"]
+
+        # Check everything has been set on the media correctly
+        media = MediaEntry.query.filter_by(id=image["id"]).first()
+        assert media.title == title
+        assert media.description == description
+        assert media.license == license
+
+        # Check we're being given back everything we should on an update
+        assert image["id"] == media.id
+        assert image["displayName"] == title
+        assert image["content"] == description
+        assert image["license"] == license
+
 
     def test_only_uploaders_post_image(self, test_app):
         """ Test that only uploaders can upload images """
@@ -115,3 +177,50 @@ class TestAPI(object):
 
             # Assert that we've got a 403
             assert "403 FORBIDDEN" in excinfo.value.message
+
+
+    def test_post_comment(self, test_app):
+        """ Tests that I can post an comment media """
+        # Upload some media to comment on
+        response, data = self._upload_image(test_app, GOOD_JPG)
+        response, data = self._post_image_to_feed(test_app, data)
+
+        content = "Hai this is a comment on this lovely picture ^_^"
+
+        activity = {
+            "verb": "post",
+            "object": {
+                "objectType": "comment",
+                "content": content,
+                "inReplyTo": data["object"],
+            }
+        }
+
+        response, comment_data = self._activity_to_feed(test_app, activity)
+        assert response.status_code == 200
+
+        # Find the objects in the database
+        media = MediaEntry.query.filter_by(id=data["object"]["id"]).first()
+        comment = media.get_comments()[0]
+
+        # Tests that it matches in the database
+        assert comment.author == self.user.id
+        assert comment.content == content
+
+        # Test that the response is what we should be given
+        assert comment.id == comment_data["object"]["id"]
+        assert comment.content == comment_data["object"]["content"]
+
+    def test_profile(self, test_app):
+        """ Tests profile endpoint """
+        uri = "/api/user/{0}/profile".format(self.user.username)
+        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
+            response = test_app.get(uri)
+            profile = json.loads(response.body)
+
+            assert response.status_code == 200
+
+            assert profile["preferredUsername"] == self.user.username
+            assert profile["objectType"] == "person"
+
+            assert "links" in profile
