@@ -275,16 +275,16 @@ def feed(request):
 def object(request, raw_obj=False):
     """ Lookup for a object type """
     object_type = request.matchdict["objectType"]
-    uuid = request.matchdict["uuid"]
+    slug = request.matchdict["slug"]
     if object_type not in ["image"]:
         error = "Unknown type: {0}".format(object_type)
         # not sure why this is 404, maybe ask evan. Maybe 400?
         return json_response({"error": error}, status=404)
 
-    media = MediaEntry.query.filter_by(slug=uuid).first()
+    media = MediaEntry.query.filter_by(slug=slug).first()
     if media is None:
         # no media found with that uuid
-        error = "Can't find a {0} with ID = {1}".format(object_type, uuid)
+        error = "Can't find a {0} with ID = {1}".format(object_type, slug)
         return json_response({"error": error}, status=404)
 
     if raw_obj:

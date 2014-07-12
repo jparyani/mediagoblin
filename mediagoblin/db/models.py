@@ -461,6 +461,17 @@ class MediaEntry(Base, MediaEntryMixin):
             "pump_io": {
                 "shared": False,
             },
+            "links": {
+                "self": {
+                    "href": request.urlgen(
+                        "mediagoblin.federation.object",
+                        objectType=self.objectType,
+                        slug=self.slug,
+                        qualified=True
+                    ),
+                },
+
+            }
         }
 
         if self.title:

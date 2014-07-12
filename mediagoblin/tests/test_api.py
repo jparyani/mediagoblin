@@ -178,6 +178,35 @@ class TestAPI(object):
             # Assert that we've got a 403
             assert "403 FORBIDDEN" in excinfo.value.message
 
+    def test_object_endpoint(self, test_app):
+        """ Tests that object can be looked up at endpoint """
+        # Post an image
+        response, data = self._upload_image(test_app, GOOD_JPG)
+        response, data = self._post_image_to_feed(test_app, data)
+
+        # Now lookup image to check that endpoint works.
+        image = data["object"]
+
+        assert "links" in image
+        assert "self" in image["links"]
+
+        # Get URI and strip testing host off
+        object_uri = image["links"]["self"]["href"]
+        object_uri = object_uri.replace("http://localhost:80", "")
+
+        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
+            request = test_app.get(object_uri)
+
+        image = json.loads(request.body)
+        entry = MediaEntry.query.filter_by(id=image["id"]).first()
+
+        assert request.status_code == 200
+        assert entry.id == image["id"]
+
+        assert "image" in image
+        assert "fullImage" in image
+        assert "pump_io" in image
+        assert "links" in image
 
     def test_post_comment(self, test_app):
         """ Tests that I can post an comment media """
