@@ -12,4 +12,5 @@ test -d /var/lock || ln -s /var/run/lock /var/lock
 test -f /var/mediagoblin.db || cp /var_original/mediagoblin.db /var
 mkdir -p /var/user_dev
 
-/sbin/my_init
+cd /opt/app
+./lazyserver.sh --server-name=broadcast 2>&1
