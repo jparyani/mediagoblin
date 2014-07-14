@@ -57,7 +57,7 @@ class TestAPI(object):
         url = kwargs.pop('url', '/api/submit')
         do_follow = kwargs.pop('do_follow', False)
 
-        if not 'headers' in kwargs.keys():
+        if 'headers' not in kwargs.keys():
             kwargs['headers'] = self.http_auth_headers()
 
         response = test_app.post(url, data, **kwargs)
@@ -78,7 +78,7 @@ class TestAPI(object):
             headers=self.http_auth_headers())
 
         assert response.body == \
-                '{"username": "joapi", "email": "joapi@example.com"}'
+                b'{"email": "joapi@example.com", "username": "joapi"}'
 
     def test_2_test_submission(self, test_app):
         self.login(test_app)

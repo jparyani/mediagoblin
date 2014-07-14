@@ -112,7 +112,7 @@ def _ifd_tag_to_dict(tag):
         'field_length': tag.field_length,
         'values': None}
 
-    if isinstance(tag.printable, str):
+    if isinstance(tag.printable, six.binary_type):
         # Force it to be decoded as UTF-8 so that it'll fit into the DB
         data['printable'] = tag.printable.decode('utf8', 'replace')
 
@@ -120,7 +120,7 @@ def _ifd_tag_to_dict(tag):
         data['values'] = [_ratio_to_list(val) if isinstance(val, Ratio) else val
                 for val in tag.values]
     else:
-        if isinstance(tag.values, str):
+        if isinstance(tag.values, six.binary_type):
             # Force UTF-8, so that it fits into the DB
             data['values'] = tag.values.decode('utf8', 'replace')
         else:
@@ -134,7 +134,8 @@ def _ratio_to_list(ratio):
 
 
 def get_useful(tags):
-    return dict((key, tag) for (key, tag) in six.iteritems(tags))
+    from collections import OrderedDict
+    return OrderedDict((key, tag) for (key, tag) in six.iteritems(tags))
 
 
 def get_gps_data(tags):

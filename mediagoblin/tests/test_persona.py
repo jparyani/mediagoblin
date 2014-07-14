@@ -16,8 +16,11 @@
 
 import pkg_resources
 import pytest
-import mock
 import six
+try:
+    import mock
+except ImportError:
+    import unittest.mock as mock
 
 import six.moves.urllib.parse as urlparse
 

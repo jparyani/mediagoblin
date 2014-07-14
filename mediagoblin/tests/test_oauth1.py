@@ -17,7 +17,8 @@
 import cgi
 
 import pytest
-from urlparse import parse_qs, urlparse
+
+from six.moves.urllib.parse import parse_qs, urlparse
 
 from oauthlib.oauth1 import Client
 
@@ -52,8 +53,8 @@ class TestOAuth(object):
 
     def register_client(self, **kwargs):
         """ Regiters a client with the API """
-        
-        kwargs["type"] = "client_associate"        
+
+        kwargs["type"] = "client_associate"
         kwargs["application_type"] = kwargs.get("application_type", "native")
         return self.test_app.post("/api/client/register", kwargs)
 
@@ -63,7 +64,7 @@ class TestOAuth(object):
         client_info = response.json
 
         client = self.db.Client.query.filter_by(id=client_info["client_id"]).first()
-        
+
         assert response.status_int == 200
         assert client is not None
 
@@ -81,7 +82,7 @@ class TestOAuth(object):
         client_info = response.json
 
         client = self.db.Client.query.filter_by(id=client_info["client_id"]).first()
-        
+
         assert client is not None
         assert client.secret == client_info["client_secret"]
         assert client.application_type == query["application_type"]
@@ -163,4 +164,4 @@ class TestOAuth(object):
         assert request_token.client == client.id
         assert request_token.used == False
         assert request_token.callback == request_query["oauth_callback"]
-        
+

@@ -224,7 +224,7 @@ def test_hook_handle():
     assert pluginapi.hook_handle(
         "nothing_handling", call_log, unhandled_okay=True) is None
     assert call_log == []
-    
+
     # Multiple provided, go with the first!
     call_log = []
     assert pluginapi.hook_handle(
@@ -348,7 +348,7 @@ def test_modify_context(context_modified_app):
     """
     # Specific thing passed into a page
     result = context_modified_app.get("/modify_context/specific/")
-    assert result.body.strip() == """Specific page!
+    assert result.body.strip() == b"""Specific page!
 
 specific thing: in yer specificpage
 global thing: globally appended!
@@ -357,7 +357,7 @@ doubleme: happyhappy"""
 
     # General test, should have global context variable only
     result = context_modified_app.get("/modify_context/")
-    assert result.body.strip() == """General page!
+    assert result.body.strip() == b"""General page!
 
 global thing: globally appended!
 lol: cats

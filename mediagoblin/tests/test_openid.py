@@ -14,11 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import urlparse
 import pkg_resources
 import pytest
-import mock
 import six
+import six.moves.urllib.parse as urlparse
+try:
+    import mock
+except ImportError:
+    import unittest.mock as mock
 
 openid_consumer = pytest.importorskip(
     "openid.consumer.consumer")

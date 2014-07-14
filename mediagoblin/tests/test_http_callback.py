@@ -19,7 +19,7 @@ import json
 import pytest
 import six
 
-from urlparse import urlparse, parse_qs
+from six.moves.urllib.parse import parse_qs, urlparse
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import processing

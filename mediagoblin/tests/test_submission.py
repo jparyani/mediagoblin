@@ -14,13 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+import six
+
+if six.PY2:  # this hack only work in Python 2
+    import sys
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 import os
 import pytest
-import six
 
 import six.moves.urllib.parse as urlparse
 
