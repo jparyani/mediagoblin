@@ -16,6 +16,7 @@
 
 import os
 import sys
+import datetime
 import logging
 
 from celery import Celery
@@ -57,6 +58,18 @@ def get_celery_settings_dict(app_config, global_config,
     if force_celery_always_eager:
         celery_settings['CELERY_ALWAYS_EAGER'] = True
         celery_settings['CELERY_EAGER_PROPAGATES_EXCEPTIONS'] = True
+
+    # Garbage collection periodic task
+    frequency = app_config.get('garbage_collection', 60)
+    if frequency:
+        frequency = int(app_config['garbage_collection'])
+        celery_settings['CELERYBEAT_SCHEDULE'] = {
+            'garbage-collection': {
+                'task': 'mediagoblin.federation.task.garbage_collection',
+                'schedule': datetime.timedelta(minutes=frequency),
+            }
+        }
+        celery_settings['BROKER_HEARTBEAT'] = 1
 
     return celery_settings
 

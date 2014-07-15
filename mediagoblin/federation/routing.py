@@ -21,32 +21,32 @@ add_route(
     "mediagoblin.federation.user",
     "/api/user/<string:username>/",
     "mediagoblin.federation.views:user"
-    )
+)
 
 add_route(
     "mediagoblin.federation.user.profile",
     "/api/user/<string:username>/profile",
     "mediagoblin.federation.views:profile"
-    )
+)
 
 # Inbox and Outbox (feed)
 add_route(
     "mediagoblin.federation.feed",
     "/api/user/<string:username>/feed",
     "mediagoblin.federation.views:feed"
-    )
+)
 
 add_route(
     "mediagoblin.federation.user.uploads",
     "/api/user/<string:username>/uploads",
     "mediagoblin.federation.views:uploads"
-    )
+)
 
 add_route(
     "mediagoblin.federation.inbox",
     "/api/user/<string:username>/inbox",
     "mediagoblin.federation.views:feed"
-    )
+)
 
 # object endpoints
 add_route(
@@ -58,22 +58,22 @@ add_route(
     "mediagoblin.federation.object.comments",
     "/api/<string:objectType>/<string:uuid>/comments",
     "mediagoblin.federation.views:object_comments"
-    )
+)
 
 add_route(
     "mediagoblin.webfinger.well-known.host-meta",
     "/.well-known/host-meta",
     "mediagoblin.federation.views:host_meta"
-    )
+)
 
 add_route(
     "mediagoblin.webfinger.well-known.host-meta.json",
     "/.well-known/host-meta.json",
     "mediagoblin.federation.views:host_meta"
-    )
+)
 
 add_route(
     "mediagoblin.webfinger.whoami",
     "/api/whoami",
     "mediagoblin.federation.views:whoami"
-    )
+)

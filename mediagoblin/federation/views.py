@@ -1,3 +1,19 @@
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import json
 import io
 import mimetypes
@@ -135,7 +151,7 @@ def feed(request):
                 media.license = obj["license"]
 
             media.save()
-            manager = media.media_manager.api_add_to_feed(request, media)
+            media.media_manager.api_add_to_feed(request, media)
 
             return json_response({
                 "verb": "post",
@@ -263,7 +279,7 @@ def feed(request):
             "actor": request.user.serialize(request),
             "content": "{0} posted a picture".format(request.user.username),
             "id": 1,
-            })
+        })
         feed["items"][-1]["updated"] = feed["items"][-1]["object"]["updated"]
         feed["items"][-1]["published"] = feed["items"][-1]["object"]["published"]
         feed["items"][-1]["url"] = feed["items"][-1]["object"]["url"]
@@ -319,7 +335,6 @@ def object_comments(request):
 
     return response
 
-
 ##
 # Well known
 ##
@@ -331,19 +346,19 @@ def host_meta(request):
     links.append({
         "ref": "registration_endpoint",
         "href": request.urlgen("mediagoblin.oauth.client_register", qualified=True),
-        })
+    })
     links.append({
         "ref": "http://apinamespace.org/oauth/request_token",
         "href": request.urlgen("mediagoblin.oauth.request_token", qualified=True),
-        })
+    })
     links.append({
         "ref": "http://apinamespace.org/oauth/authorize",
         "href": request.urlgen("mediagoblin.oauth.authorize", qualified=True),
-        })
+    })
     links.append({
         "ref": "http://apinamespace.org/oauth/access_token",
         "href": request.urlgen("mediagoblin.oauth.access_token", qualified=True),
-        })
+    })
 
     return json_response({"links": links})
 
@@ -353,6 +368,6 @@ def whoami(request):
         "mediagoblin.federation.user.profile",
         username=request.user.username,
         qualified=True
-        )
+    )
 
     return redirect(request, location=profile)
