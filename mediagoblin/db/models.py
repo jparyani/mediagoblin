@@ -499,6 +499,19 @@ class MediaEntry(Base, MediaEntryMixin):
 
         return context
 
+    def unserialize(self, data):
+        """ Takes API objects and unserializes on existing MediaEntry """
+        if "displayName" in data:
+            self.title = data["displayName"]
+
+        if "content" in data:
+            self.description = data["content"]
+
+        if "license" in data:
+            self.license = data["license"]
+
+        return True
+
 class FileKeynames(Base):
     """
     keywords for various places.
@@ -657,6 +670,24 @@ class MediaComment(Base, MediaCommentMixin):
         }
 
         return context
+
+    def unserialize(self, data):
+        """ Takes API objects and unserializes on existing comment """
+        # Do initial checks to verify the object is correct
+        required_attributes = ["content", "inReplyTo"]
+        for attr in required_attributes:
+            if attr not in data:
+                return False
+
+        # Validate inReplyTo has ID
+        if "id" not in data["inReplyTo"]:
+            return False
+
+        self.media_entry = data["inReplyTo"]["id"]
+        self.content = data["content"]
+        return True
+
+
 
 class Collection(Base, CollectionMixin):
     """An 'album' or 'set' of media by a user.

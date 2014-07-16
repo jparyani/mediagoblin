@@ -62,7 +62,7 @@ def get_celery_settings_dict(app_config, global_config,
     # Garbage collection periodic task
     frequency = app_config.get('garbage_collection', 60)
     if frequency:
-        frequency = int(app_config['garbage_collection'])
+        frequency = int(frequency)
         celery_settings['CELERYBEAT_SCHEDULE'] = {
             'garbage-collection': {
                 'task': 'mediagoblin.federation.task.garbage_collection',

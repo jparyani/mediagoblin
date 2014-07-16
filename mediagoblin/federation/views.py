@@ -55,8 +55,8 @@ def user(request):
         "nickname": user.username,
         "updated": user.created.isoformat(),
         "published": user.created.isoformat(),
-        "profile": user_profile
-        }
+        "profile": user_profile,
+    }
 
     return json_response(data)
 
@@ -120,12 +120,8 @@ def feed(request):
 
         if obj.get("objectType", None) == "comment":
             # post a comment
-            media = int(data["object"]["inReplyTo"]["id"])
-            comment = MediaComment(
-                media_entry=media,
-                author=request.user.id,
-                content=data["object"]["content"]
-                )
+            comment = MediaComment(author=request.user.id)
+            comment.unserialize(data["object"])
             comment.save()
             data = {"verb": "post", "object": comment.serialize(request)}
             return json_response(data)
@@ -139,17 +135,9 @@ def feed(request):
                 return json_response(error, status=404)
 
             media = media.first()
-            obj = data["object"]
-
-            if "displayName" in obj:
-                media.title = obj["displayName"]
-
-            if "content" in obj:
-                media.description = obj["content"]
-
-            if "license" in obj:
-                media.license = obj["license"]
-
+            if not media.unserialize(data["object"]):
+                error = {"error": "Invalid 'image' with id '{0}'".format(obj_id)}
+                return json_response(error, status=400)
             media.save()
             media.media_manager.api_add_to_feed(request, media)
 
@@ -195,13 +183,14 @@ def feed(request):
             if comment is None:
                 error = {"error": "No such 'comment' with id '{0}'.".format(obj_id)}
                 return json_response(error, status=400)
-            comment = comment[0]
 
-            # TODO: refactor this out to update/setting method on MediaComment
-            if obj.get("content", None) is not None:
-                comment.content = obj["content"]
+            comment = comment[0]
+            if not comment.unserialize(data["object"]):
+                error = {"error": "Invalid 'comment' with id '{0}'".format(obj_id)}
+                return json_response(error, status=400)
 
             comment.save()
+
             activity = {
                 "verb": "update",
                 "object": comment.serialize(request),
@@ -215,19 +204,11 @@ def feed(request):
                 return json_response(error, status=400)
 
             image = image[0]
-
-            # TODO: refactor this out to update/setting method on MediaEntry
-            if obj.get("displayName", None) is not None:
-                image.title = obj["displayName"]
-
-            if obj.get("content", None) is not None:
-                image.description = obj["content"]
-
-            if obj.get("license", None) is not None:
-                # I think we might need some validation here
-                image.license = obj["license"]
-
+            if not image.unserialize(obj):
+                error = {"error": "Invalid 'image' with id '{0}'".format(obj_id)}
+                return json_response(error, status=400)
             image.save()
+
             activity = {
                 "verb": "update",
                 "object": image.serialize(request),
