@@ -19,7 +19,7 @@ import uuid
 
 from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         Integer, Unicode, UnicodeText, DateTime,
-                        ForeignKey, Date)
+                        ForeignKey, Date, Index)
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import and_
@@ -787,5 +787,19 @@ def fix_privilege_user_association_table(db):
     else:
         privilege_user_assoc.c.core__user_id.alter(name="privilege")
         privilege_user_assoc.c.core__privilege_id.alter(name="user")
+
+    db.commit()
+
+@RegisterMigration(22, MIGRATIONS)
+def add_index_username_field(db):
+    """
+    This indexes the User.username field which is frequently queried
+    for example a user logging in. This solves the issue #894
+    """
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
+
+    new_index = Index("ix_core__users_uploader", user_table.c.username)
+    new_index.create()
 
     db.commit()

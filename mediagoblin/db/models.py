@@ -57,7 +57,7 @@ class User(Base, UserMixin):
     __tablename__ = "core__users"
 
     id = Column(Integer, primary_key=True)
-    username = Column(Unicode, nullable=False, unique=True)
+    username = Column(Unicode, nullable=False, unique=True, index=True)
     # Note: no db uniqueness constraint on email because it's not
     # reliable (many email systems case insensitive despite against
     # the RFC) and because it would be a mess to implement at this
