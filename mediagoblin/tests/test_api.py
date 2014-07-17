@@ -13,20 +13,24 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import urllib
 import json
+import datetime
 
-import pytest
 import mock
+import pytz
+import pytest
 
 from webtest import AppError
+from werkzeug.datastructures import FileStorage
 
+from .resources import GOOD_JPG
 from mediagoblin import mg_globals
-from .resources import GOOD_JPG
+from mediagoblin.media_types import sniff_media
 from mediagoblin.db.models import User, MediaEntry
+from mediagoblin.submit.lib import new_upload_entry
 from mediagoblin.tests.tools import fixture_add_user
+from mediagoblin.federation.task import collect_garbage
 from mediagoblin.moderation.tools import take_away_privileges
-from .resources import GOOD_JPG
 
 class TestAPI(object):
 
@@ -253,3 +257,32 @@ class TestAPI(object):
             assert profile["objectType"] == "person"
 
             assert "links" in profile
+
+    def test_garbage_collection_task(self, test_app):
+        """ Test old media entry are removed by GC task """
+        # Create a media entry that's unprocessed and over an hour old.
+        entry_id = 72
+        file_data = FileStorage(
+            stream=open(GOOD_JPG, "rb"),
+            filename="mah_test.jpg",
+            content_type="image/jpeg"
+        )
+
+        # Find media manager
+        media_type, media_manager = sniff_media(file_data, "mah_test.jpg")
+        entry = new_upload_entry(self.user)
+        entry.id = entry_id
+        entry.title = "Mah Image"
+        entry.slug = "slugy-slug-slug"
+        entry.media_type = 'image'
+        entry.uploaded = datetime.datetime.now(pytz.UTC) - datetime.timedelta(days=2)
+        entry.save()
+
+        # Validate the model exists
+        assert MediaEntry.query.filter_by(id=entry_id).first() is not None
+
+        # Call the garbage collection task
+        collect_garbage()
+
+        # Now validate the image has been deleted
+        assert MediaEntry.query.filter_by(id=entry_id).first() is None
