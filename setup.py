@@ -50,6 +50,7 @@ if PY2:
     py2_only_install_requires.append('mock')  # mock is in the stdlib for 3.3+
 
 install_requires = [
+    'gunicorn==19',
     'setuptools',  # TODO: is this necessary
     'python-dateutil',
     'wtforms',
