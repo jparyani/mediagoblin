@@ -820,6 +820,14 @@ class Notification(Base):
     }
 
     def __repr__(self):
+        return '<{klass} #{id}: {user}: {subject} ({seen})>'.format(
+            id=self.id,
+            klass=self.__class__.__name__,
+            user=self.user,
+            subject=getattr(self, 'subject', None),
+            seen='unseen' if not self.seen else 'seen')
+
+    def __unicode__(self):
         return u'<{klass} #{id}: {user}: {subject} ({seen})>'.format(
             id=self.id,
             klass=self.__class__.__name__,
