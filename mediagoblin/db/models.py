@@ -466,7 +466,7 @@ class MediaEntry(Base, MediaEntryMixin):
                     "href": request.urlgen(
                         "mediagoblin.federation.object",
                         objectType=self.objectType,
-                        slug=self.slug,
+                        id=self.id,
                         qualified=True
                     ),
                 },
@@ -492,7 +492,7 @@ class MediaEntry(Base, MediaEntryMixin):
                 "url": request.urlgen(
                         "mediagoblin.federation.object.comments",
                         objectType=self.objectType,
-                        uuid=self.slug,
+                        id=self.id,
                         qualified=True
                         ),
             }

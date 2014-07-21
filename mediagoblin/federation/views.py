@@ -75,7 +75,10 @@ def uploads(request):
     request.user = requested_user[0]
     if request.method == "POST":
         # Wrap the data in the werkzeug file wrapper
-        mimetype = request.headers.get("Content-Type", "application/octal-stream")
+        if "Content-Type" not in request.headers:
+            error = "Must supply 'Content-Type' header to upload media."
+            return json_response({"error": error}, status=400)
+        mimetype = request.headers["Content-Type"]
         filename = mimetypes.guess_all_extensions(mimetype)
         filename = 'unknown' + filename[0] if filename else filename
         file_data = FileStorage(
@@ -136,8 +139,8 @@ def feed(request):
 
             media = media.first()
             if not media.unserialize(data["object"]):
-                error = {"error": "Invalid 'image' with id '{0}'".format(obj_id)}
-                return json_response(error, status=400)
+                error = "Invalid 'image' with id '{0}'".format(media_id)
+                return json_response({"error": error}, status=400)
             media.save()
             media.media_manager.api_add_to_feed(request, media)
 
@@ -181,13 +184,13 @@ def feed(request):
         if obj["objectType"] == "comment":
             comment = MediaComment.query.filter_by(id=obj_id)
             if comment is None:
-                error = {"error": "No such 'comment' with id '{0}'.".format(obj_id)}
-                return json_response(error, status=400)
+                error = "No such 'comment' with id '{0}'.".format(obj_id)
+                return json_response({"error": error}, status=400)
 
             comment = comment[0]
             if not comment.unserialize(data["object"]):
-                error = {"error": "Invalid 'comment' with id '{0}'".format(obj_id)}
-                return json_response(error, status=400)
+                error = "Invalid 'comment' with id '{0}'".format(obj_id)
+                return json_response({"error": error}, status=400)
 
             comment.save()
 
@@ -200,13 +203,13 @@ def feed(request):
         elif obj["objectType"] == "image":
             image = MediaEntry.query.filter_by(id=obj_id)
             if image is None:
-                error = {"error": "No such 'image' with the id '{0}'.".format(obj_id)}
-                return json_response(error, status=400)
+                error = "No such 'image' with the id '{0}'.".format(obj_id)
+                return json_response({"error": error}, status=400)
 
             image = image[0]
             if not image.unserialize(obj):
-                error = {"error": "Invalid 'image' with id '{0}'".format(obj_id)}
-                return json_response(error, status=400)
+                "Invalid 'image' with id '{0}'".format(obj_id)
+                return json_response({"error": error}, status=400)
             image.save()
 
             activity = {
@@ -254,16 +257,17 @@ def feed(request):
 
     # Now lookup the user's feed.
     for media in MediaEntry.query.all():
-        feed["items"].append({
+        item = {
             "verb": "post",
             "object": media.serialize(request),
             "actor": request.user.serialize(request),
             "content": "{0} posted a picture".format(request.user.username),
             "id": 1,
-        })
-        feed["items"][-1]["updated"] = feed["items"][-1]["object"]["updated"]
-        feed["items"][-1]["published"] = feed["items"][-1]["object"]["published"]
-        feed["items"][-1]["url"] = feed["items"][-1]["object"]["url"]
+        }
+        item["updated"] = item["object"]["updated"]
+        item["published"] = item["object"]["published"]
+        item["url"] = item["object"]["url"]
+        feed["items"].append(item)
     feed["totalItems"] = len(feed["items"])
 
     return json_response(feed)
@@ -272,16 +276,27 @@ def feed(request):
 def object(request, raw_obj=False):
     """ Lookup for a object type """
     object_type = request.matchdict["objectType"]
-    slug = request.matchdict["slug"]
+    try:
+        object_id = int(request.matchdict["id"])
+    except ValueError:
+        error = "Invalid object ID '{0}' for '{1}'".format(
+            request.matchdict["id"],
+            object_type
+        )
+        return json_response({"error": error}, status=400)
+
     if object_type not in ["image"]:
         error = "Unknown type: {0}".format(object_type)
         # not sure why this is 404, maybe ask evan. Maybe 400?
         return json_response({"error": error}, status=404)
 
-    media = MediaEntry.query.filter_by(slug=slug).first()
+    media = MediaEntry.query.filter_by(id=object_id).first()
     if media is None:
         # no media found with that uuid
-        error = "Can't find a {0} with ID = {1}".format(object_type, slug)
+        error = "Can't find '{0}' with ID '{1}'".format(
+            object_type,
+            object_id
+        )
         return json_response({"error": error}, status=404)
 
     if raw_obj:
@@ -302,7 +317,7 @@ def object_comments(request):
             "url": request.urlgen(
                 "mediagoblin.federation.object.comments",
                 objectType=media.objectType,
-                uuid=media.slug,
+                uuid=media.id,
                 qualified=True
             )
         })
@@ -320,31 +335,42 @@ def object_comments(request):
 # Well known
 ##
 def host_meta(request):
-    """ This is /.well-known/host-meta - provides URL's to resources on server """
+    """ /.well-known/host-meta - provide URLs to resources """
     links = []
 
-    # Client registration links
     links.append({
         "ref": "registration_endpoint",
-        "href": request.urlgen("mediagoblin.oauth.client_register", qualified=True),
+        "href": request.urlgen(
+            "mediagoblin.oauth.client_register",
+            qualified=True
+        ),
     })
     links.append({
         "ref": "http://apinamespace.org/oauth/request_token",
-        "href": request.urlgen("mediagoblin.oauth.request_token", qualified=True),
+        "href": request.urlgen(
+            "mediagoblin.oauth.request_token",
+            qualified=True
+        ),
     })
     links.append({
         "ref": "http://apinamespace.org/oauth/authorize",
-        "href": request.urlgen("mediagoblin.oauth.authorize", qualified=True),
+        "href": request.urlgen(
+            "mediagoblin.oauth.authorize",
+            qualified=True
+        ),
     })
     links.append({
         "ref": "http://apinamespace.org/oauth/access_token",
-        "href": request.urlgen("mediagoblin.oauth.access_token", qualified=True),
+        "href": request.urlgen(
+            "mediagoblin.oauth.access_token",
+            qualified=True
+        ),
     })
 
     return json_response({"links": links})
 
 def whoami(request):
-    """ This is /api/whoami - This is a HTTP redirect to api profile """
+    """ /api/whoami - HTTP redirect to API profile """
     profile = request.urlgen(
         "mediagoblin.federation.user.profile",
         username=request.user.username,

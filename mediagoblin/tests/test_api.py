@@ -33,6 +33,7 @@ from mediagoblin.federation.task import collect_garbage
 from mediagoblin.moderation.tools import take_away_privileges
 
 class TestAPI(object):
+    """ Test mediagoblin's pump.io complient APIs """
 
     @pytest.fixture(autouse=True)
     def setup(self, test_app):
@@ -48,7 +49,8 @@ class TestAPI(object):
         else:
             headers = {"Content-Type": "application/json"}
 
-        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
+        with mock.patch("mediagoblin.decorators.oauth_required",
+                        new_callable=self.mocked_oauth_required):
             response = test_app.post(
                 "/api/user/{0}/feed".format(self.user.username),
                 json.dumps(activity),
@@ -66,7 +68,8 @@ class TestAPI(object):
         }
 
 
-        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
+        with mock.patch("mediagoblin.decorators.oauth_required",
+                        new_callable=self.mocked_oauth_required):
             response = test_app.post(
                 "/api/user/{0}/uploads".format(self.user.username),
                 data,
@@ -137,7 +140,8 @@ class TestAPI(object):
 
         activity = {"verb": "update", "object": image}
 
-        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
+        with mock.patch("mediagoblin.decorators.oauth_required",
+                        new_callable=self.mocked_oauth_required):
             response = test_app.post(
                 "/api/user/{0}/feed".format(self.user.username),
                 json.dumps(activity),
@@ -171,9 +175,10 @@ class TestAPI(object):
             "Content-Length": str(len(data)),
         }
 
-        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
+        with mock.patch("mediagoblin.decorators.oauth_required",
+                        new_callable=self.mocked_oauth_required):
             with pytest.raises(AppError) as excinfo:
-                response = test_app.post(
+                test_app.post(
                     "/api/user/{0}/uploads".format(self.user.username),
                     data,
                     headers=headers
@@ -198,7 +203,8 @@ class TestAPI(object):
         object_uri = image["links"]["self"]["href"]
         object_uri = object_uri.replace("http://localhost:80", "")
 
-        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
+        with mock.patch("mediagoblin.decorators.oauth_required",
+                        new_callable=self.mocked_oauth_required):
             request = test_app.get(object_uri)
 
         image = json.loads(request.body)
@@ -247,7 +253,8 @@ class TestAPI(object):
     def test_profile(self, test_app):
         """ Tests profile endpoint """
         uri = "/api/user/{0}/profile".format(self.user.username)
-        with mock.patch("mediagoblin.decorators.oauth_required", new_callable=self.mocked_oauth_required):
+        with mock.patch("mediagoblin.decorators.oauth_required",
+                        new_callable=self.mocked_oauth_required):
             response = test_app.get(uri)
             profile = json.loads(response.body)
 
@@ -262,6 +269,7 @@ class TestAPI(object):
         """ Test old media entry are removed by GC task """
         # Create a media entry that's unprocessed and over an hour old.
         entry_id = 72
+        now = datetime.datetime.now(pytz.UTC)
         file_data = FileStorage(
             stream=open(GOOD_JPG, "rb"),
             filename="mah_test.jpg",
@@ -275,7 +283,7 @@ class TestAPI(object):
         entry.title = "Mah Image"
         entry.slug = "slugy-slug-slug"
         entry.media_type = 'image'
-        entry.uploaded = datetime.datetime.now(pytz.UTC) - datetime.timedelta(days=2)
+        entry.uploaded = now - datetime.timedelta(days=2)
         entry.save()
 
         # Validate the model exists

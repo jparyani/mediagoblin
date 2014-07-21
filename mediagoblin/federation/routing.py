@@ -51,12 +51,12 @@ add_route(
 # object endpoints
 add_route(
     "mediagoblin.federation.object",
-    "/api/<string:objectType>/<string:slug>",
+    "/api/<string:objectType>/<string:id>",
     "mediagoblin.federation.views:object"
     )
 add_route(
     "mediagoblin.federation.object.comments",
-    "/api/<string:objectType>/<string:uuid>/comments",
+    "/api/<string:objectType>/<string:id>/comments",
     "mediagoblin.federation.views:object_comments"
 )
 
