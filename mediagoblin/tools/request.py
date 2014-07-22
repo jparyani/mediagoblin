@@ -16,7 +16,9 @@
 
 import json
 import logging
-from mediagoblin.db.models import User
+
+from mediagoblin.db.models import User, AccessToken
+from mediagoblin.oauth.tools.request import decode_authorization_header
 
 _log = logging.getLogger(__name__)
 
@@ -31,6 +33,18 @@ def setup_user_in_request(request):
     Examine a request and tack on a request.user parameter if that's
     appropriate.
     """
+    # If API request the user will be associated with the access token
+    authorization = decode_authorization_header(request.headers)
+
+    if authorization.get(u"access_token"):
+        # Check authorization header.
+        token = authorization[u"oauth_token"]
+        token = AccessToken.query.filter_by(token=token).first()
+        if token is not None:
+            request.user = token.user
+            return
+
+
     if 'user_id' not in request.session:
         request.user = None
         return
@@ -45,8 +59,8 @@ def setup_user_in_request(request):
 
 def decode_request(request):
     """ Decodes a request based on MIME-Type """
-    data = request.get_data()
-    
+    data = request.data
+
     if request.content_type == json_encoded:
         data = json.loads(data)
     elif request.content_type == form_encoded or request.content_type == "":

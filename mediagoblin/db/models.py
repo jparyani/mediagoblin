@@ -20,6 +20,7 @@ TODO: indexes on foreignkeys, where useful.
 
 import logging
 import datetime
+import base64
 
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
@@ -136,6 +137,48 @@ class User(Base, UserMixin):
         return UserBan.query.get(self.id) is not None
 
 
+    def serialize(self, request):
+        user = {
+            "id": "acct:{0}@{1}".format(self.username, request.host),
+            "preferredUsername": self.username,
+            "displayName": "{0}@{1}".format(self.username, request.host),
+            "objectType": "person",
+            "pump_io": {
+                "shared": False,
+                "followed": False,
+            },
+            "links": {
+                "self": {
+                    "href": request.urlgen(
+                            "mediagoblin.federation.user.profile",
+                             username=self.username,
+                             qualified=True
+                             ),
+                },
+                "activity-inbox": {
+                    "href": request.urlgen(
+                            "mediagoblin.federation.inbox",
+                            username=self.username,
+                            qualified=True
+                            )
+                },
+                "activity-outbox": {
+                    "href": request.urlgen(
+                            "mediagoblin.federation.feed",
+                            username=self.username,
+                            qualified=True
+                            )
+                },
+            },
+        }
+
+        if self.bio:
+            user.update({"summary": self.bio})
+        if self.url:
+            user.update({"url": self.url})
+
+        return user
+
 class Client(Base):
     """
         Model representing a client - Used for API Auth
@@ -200,7 +243,6 @@ class NonceTimestamp(Base):
 
     nonce = Column(Unicode, nullable=False, primary_key=True)
     timestamp = Column(DateTime, nullable=False, primary_key=True)
-
 
 class MediaEntry(Base, MediaEntryMixin):
     """
@@ -388,6 +430,87 @@ class MediaEntry(Base, MediaEntryMixin):
         # pass through commit=False/True in kwargs
         super(MediaEntry, self).delete(**kwargs)
 
+    @property
+    def objectType(self):
+        """ Converts media_type to pump-like type - don't use internally """
+        return self.media_type.split(".")[-1]
+
+    def serialize(self, request, show_comments=True):
+        """ Unserialize MediaEntry to object """
+        author = self.get_uploader
+        url = request.urlgen(
+            "mediagoblin.user_pages.media_home",
+            user=author.username,
+            media=self.slug,
+            qualified=True
+            )
+
+        context = {
+            "id": self.id,
+            "author": author.serialize(request),
+            "objectType": self.objectType,
+            "url": url,
+            "image": {
+                "url": request.host_url + self.thumb_url[1:],
+            },
+            "fullImage":{
+                "url": request.host_url + self.original_url[1:],
+            },
+            "published": self.created.isoformat(),
+            "updated": self.created.isoformat(),
+            "pump_io": {
+                "shared": False,
+            },
+            "links": {
+                "self": {
+                    "href": request.urlgen(
+                        "mediagoblin.federation.object",
+                        objectType=self.objectType,
+                        id=self.id,
+                        qualified=True
+                    ),
+                },
+
+            }
+        }
+
+        if self.title:
+            context["displayName"] = self.title
+
+        if self.description:
+            context["content"] = self.description
+
+        if self.license:
+            context["license"] = self.license
+
+        if show_comments:
+            comments = [comment.serialize(request) for comment in self.get_comments()]
+            total = len(comments)
+            context["replies"] = {
+                "totalItems": total,
+                "items": comments,
+                "url": request.urlgen(
+                        "mediagoblin.federation.object.comments",
+                        objectType=self.objectType,
+                        id=self.id,
+                        qualified=True
+                        ),
+            }
+
+        return context
+
+    def unserialize(self, data):
+        """ Takes API objects and unserializes on existing MediaEntry """
+        if "displayName" in data:
+            self.title = data["displayName"]
+
+        if "content" in data:
+            self.description = data["content"]
+
+        if "license" in data:
+            self.license = data["license"]
+
+        return True
 
 class FileKeynames(Base):
     """
@@ -533,6 +656,37 @@ class MediaComment(Base, MediaCommentMixin):
                                    backref=backref("all_comments",
                                                    lazy="dynamic",
                                                    cascade="all, delete-orphan"))
+
+    def serialize(self, request):
+        """ Unserialize to python dictionary for API """
+        media = MediaEntry.query.filter_by(id=self.media_entry).first()
+        author = self.get_author
+        context = {
+            "id": self.id,
+            "objectType": "comment",
+            "content": self.content,
+            "inReplyTo": media.serialize(request, show_comments=False),
+            "author": author.serialize(request)
+        }
+
+        return context
+
+    def unserialize(self, data):
+        """ Takes API objects and unserializes on existing comment """
+        # Do initial checks to verify the object is correct
+        required_attributes = ["content", "inReplyTo"]
+        for attr in required_attributes:
+            if attr not in data:
+                return False
+
+        # Validate inReplyTo has ID
+        if "id" not in data["inReplyTo"]:
+            return False
+
+        self.media_entry = data["inReplyTo"]["id"]
+        self.content = data["content"]
+        return True
+
 
 
 class Collection(Base, CollectionMixin):

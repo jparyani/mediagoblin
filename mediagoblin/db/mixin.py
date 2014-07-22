@@ -202,6 +202,17 @@ class MediaEntryMixin(GenerateSlugMixin):
             thumb_url = mg_globals.app.staticdirector(manager[u'default_thumb'])
         return thumb_url
 
+    @property
+    def original_url(self):
+        """ Returns the URL for the original image
+        will return self.thumb_url if original url doesn't exist"""
+        if u"original" not in self.media_files:
+            return self.thumb_url
+        
+        return mg_globals.app.public_store.file_url(
+            self.media_files[u"original"]
+            )
+
     @cached_property
     def media_manager(self):
         """Returns the MEDIA_MANAGER of the media's media_type

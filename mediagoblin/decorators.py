@@ -22,7 +22,7 @@ from oauthlib.oauth1 import ResourceEndpoint
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin import messages
-from mediagoblin.db.models import MediaEntry, User, MediaComment
+from mediagoblin.db.models import MediaEntry, User, MediaComment, AccessToken
 from mediagoblin.tools.response import (
     redirect, render_404,
     render_user_banned, json_response)
@@ -401,16 +401,23 @@ def oauth_required(controller):
 
         request_validator = GMGRequestValidator()
         resource_endpoint = ResourceEndpoint(request_validator)
-        valid, request = resource_endpoint.validate_protected_resource_request(
+        valid, r = resource_endpoint.validate_protected_resource_request(
                 uri=request.url,
                 http_method=request.method,
-                body=request.get_data(),
+                body=request.data,
                 headers=dict(request.headers),
                 )
 
         if not valid:
             error = "Invalid oauth prarameter."
             return json_response({"error": error}, status=400)
+
+        # Fill user if not already
+        token = authorization[u"oauth_token"]
+        access_token = AccessToken.query.filter_by(token=token).first()
+        if access_token is not None and request.user is None:
+            user_id = access_token.user
+            request.user = User.query.filter_by(id=user_id).first()
 
         return controller(request, *args, **kwargs)
 

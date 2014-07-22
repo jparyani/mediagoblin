@@ -252,6 +252,7 @@ def authorize(request):
 
     if oauth_request.verifier is None:
         orequest = GMGRequest(request)
+        orequest.resource_owner_key = token
         request_validator = GMGRequestValidator()
         auth_endpoint = AuthorizationEndpoint(request_validator)
         verifier = auth_endpoint.create_verifier(orequest, {})
@@ -333,7 +334,7 @@ def access_token(request):
         error = "Missing required parameter."
         return json_response({"error": error}, status=400)
 
-
+    request.resource_owner_key = parsed_tokens["oauth_consumer_key"]
     request.oauth_token = parsed_tokens["oauth_token"]
     request_validator = GMGRequestValidator(data)
     av = AccessTokenEndpoint(request_validator)
