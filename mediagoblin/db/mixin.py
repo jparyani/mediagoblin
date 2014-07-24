@@ -259,7 +259,7 @@ class MediaEntryMixin(GenerateSlugMixin):
 
         if 'Image DateTimeOriginal' in exif_all:
             # format date taken
-            takendate = datetime.datetime.strptime(
+            takendate = datetime.strptime(
                 exif_all['Image DateTimeOriginal']['printable'],
                 '%Y:%m:%d %H:%M:%S').date()
             taken = takendate.strftime('%B %d %Y')
