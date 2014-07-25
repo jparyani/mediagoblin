@@ -106,25 +106,26 @@ class User(Base, UserMixin):
         super(User, self).delete(**kwargs)
         _log.info('Deleted user "{0}" account'.format(self.username))
 
-    def has_privilege(self,*priv_names):
+    def has_privilege(self, privilege, allow_admin=True):
         """
         This method checks to make sure a user has all the correct privileges
         to access a piece of content.
 
-        :param  priv_names      A variable number of unicode objects which rep-
-                                -resent the different privileges which may give
-                                the user access to this content. If you pass
-                                multiple arguments, the user will be granted
-                                access if they have ANY of the privileges
-                                passed.
+        :param  privilege       A unicode object which represent the different
+                                privileges which may give the user access to
+                                content.
+
+        :param  allow_admin     If this is set to True the then if the user is
+                                an admin, then this will always return True
+                                even if the user hasn't been given the
+                                privilege. (defaults to True)
         """
-        if len(priv_names) == 1:
-            priv = Privilege.query.filter(
-                Privilege.privilege_name==priv_names[0]).one()
-            return (priv in self.all_privileges)
-        elif len(priv_names) > 1:
-            return self.has_privilege(priv_names[0]) or \
-                self.has_privilege(*priv_names[1:])
+        priv = Privilege.query.filter_by(privilege_name=privilege).one()
+        if priv in self.all_privileges:
+            return True
+        elif allow_admin and self.has_privilege(u'admin', allow_admin=False):
+            return True
+
         return False
 
     def is_banned(self):

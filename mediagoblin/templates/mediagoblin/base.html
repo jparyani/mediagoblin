@@ -72,8 +72,8 @@
             </div>
             <div class="header_right">
               {%- if request.user %}
-                {% if request.user and 
-                      request.user.has_privilege('active') and 
+                {% if request.user and
+                      request.user.has_privilege('active') and
                       not request.user.is_banned() %}
 
                   {% set notification_count = get_notification_count(request.user.id) %}
@@ -158,7 +158,7 @@
                   {%- trans %}Create new collection{% endtrans -%}
                 </a>
                 {% template_hook("header_dropdown_buttons") %}
-                {% if request.user.has_privilege('admin','moderator') %}
+                {% if request.user.has_privilege('moderator') %}
                   <p>
                     <span class="dropdown_title">{% trans %}Moderation powers:{% endtrans %}</span>
                     <a href="{{ request.urlgen('mediagoblin.moderation.media_panel') }}">

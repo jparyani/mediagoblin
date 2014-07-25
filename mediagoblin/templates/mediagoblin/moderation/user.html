@@ -175,7 +175,7 @@
         {% for privilege in privileges %}
           <tr>
             <td>{{ privilege.privilege_name }}</td>
-            {% if privilege in user.all_privileges  %}
+            {% if user.has_privilege(privilege.privilege_name) %}
               <td class="user_with_privilege">
                 {% trans %}Yes{% endtrans %}{% else %}
               <td class="user_without_privilege">
@@ -183,7 +183,7 @@
             </td>
             {% if request.user.has_privilege('admin') %}
               <td>
-                {% if privilege in user.all_privileges  %}
+                {% if user.has_privilege(privilege.privilege_name) %}
                 <input type=submit id="{{ privilege.privilege_name }}"
                        class="submit_button button_action"
                        value =" -" />

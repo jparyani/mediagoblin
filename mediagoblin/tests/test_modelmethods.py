@@ -179,20 +179,17 @@ class TestUserHasPrivilege:
         self._setup()
 
         # then test out the user.has_privilege method for one privilege
-        assert not self.natalie_user.has_privilege(u'commenter')
-        assert self.aeva_user.has_privilege(u'active')
+        assert not self.aeva_user.has_privilege(u'admin')
+        assert self.natalie_user.has_privilege(u'active')
 
-
-    def test_user_has_privileges_multiple(self, test_app):
+    def test_allow_admin(self, test_app):
         self._setup()
 
-        # when multiple args are passed to has_privilege,  the method returns
-        # True if the user has ANY of the privileges
-        assert self.natalie_user.has_privilege(u'admin',u'commenter')
-        assert self.aeva_user.has_privilege(u'moderator',u'active')
-        assert not self.natalie_user.has_privilege(u'commenter',u'uploader')
+        # This should work because she is an admin.
+        assert self.natalie_user.has_privilege(u'commenter')
 
-
+        # Test that we can look this out ignoring that she's an admin
+        assert not self.natalie_user.has_privilege(u'commenter', allow_admin=False)
 
 def test_media_data_init(test_app):
     Session.rollback()
