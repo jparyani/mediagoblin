@@ -35,11 +35,11 @@
 {% if processing_entries.count() %}
   <table class="media_panel processing">
     <tr>
-      <th>ID</th>
-      <th>User</th>
-      <th>Title</th>
-      <th>When submitted</th>
-      <th>Transcoding progress</th>
+      <th>{% trans %}ID{% endtrans %}</th>
+      <th>{% trans %}User{% endtrans %}</th>
+      <th>{% trans %}Title{% endtrans %}</th>
+      <th>{% trans %}When submitted{% endtrans %}</th>
+      <th>{% trans %}Transcoding progress{% endtrans %}</th>
     </tr>
     {% for media_entry in processing_entries %}
       <tr>
@@ -50,7 +50,7 @@
         {% if media_entry.transcoding_progress %}
           <td>{{ media_entry.transcoding_progress }}%</td>
         {% else %}
-        <td>Unknown</td>
+        <td>{% trans %}Unknown{% endtrans %}</td>
         {% endif %}
       </tr>
     {% endfor %}
@@ -64,12 +64,12 @@
 
   <table class="media_panel failed">
     <tr>
-      <th>ID</th>
-      <th>User</th>
-      <th>Title</th>
-      <th>When submitted</th>
-      <th>Reason for failure</th>
-      <th>Failure metadata</th>
+      <th>{% trans %}ID{% endtrans %}</th>
+      <th>{% trans %}User{% endtrans %}</th>
+      <th>{% trans %}Title{% endtrans %}</th>
+      <th>{% trans %}When submitted{% endtrans %}</th>
+      <th>{% trans %}Reason for failure{% endtrans %}</th>
+      <th>{% trans %}Failure metadata{% endtrans %}</th>
     </tr>
     {% for media_entry in failed_entries %}
       <tr>
@@ -95,10 +95,10 @@
 
   <table class="media_panel processed">
     <tr>
-        <th>ID</th>
-        <th>User</th>
-        <th>Title</th>
-        <th>Submitted</th>
+        <th>{% trans %}ID{% endtrans %}</th>
+        <th>{% trans %}User{% endtrans %}</th>
+        <th>{% trans %}Title{% endtrans %}</th>
+        <th>{% trans %}Submitted{% endtrans %}</th>
     </tr>
     {% for media_entry in processed_entries %}
       <tr>
