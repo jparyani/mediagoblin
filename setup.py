@@ -47,11 +47,14 @@ if PY2:
     # TERRIBLE AND IS THE END OF ALL THINGS
     # I'd love to remove this restriction.
     py2_only_install_requires.append('sqlalchemy-migrate<0.8')
+    # Annoying.  Please remove once we can!  We only indirectly
+    # use pbr, and currently it breaks things, presumably till
+    # their next release.
+    py2_only_install_requires.append('pbr==0.5.22')
     py2_only_install_requires.append('mock')  # mock is in the stdlib for 3.3+
 
 install_requires = [
-    'gunicorn==19',
-    'setuptools',  # TODO: is this necessary
+    'gunicorn==19',  # TODO: Upgrade to 19.2 -- see https://github.com/benoitc/gunicorn/issues/830
     'python-dateutil',
     'wtforms',
     'py-bcrypt',
@@ -61,8 +64,7 @@ install_requires = [
     'celery>=3.0',
     'kombu',
     'jinja2',
-    'sphinx',  # TODO: is this a docs requirement?
-    'Babel<1.0',  # TODO: why <1.0 or 0.9.6?
+    'Babel>=1.3',
     'webtest<2',
     'ConfigObj',
     'Markdown',
@@ -72,20 +74,16 @@ install_requires = [
     # PLEASE change this when we can; a dependency is forcing us to set this
     # specific number and it is breaking setup.py develop
     'six==1.5.2',
-    'oauthlib==0.5.0',
+    'oauthlib>=0.5.0',
     'unidecode',
     'ExifRead',
-    # Annoying.  Please remove once we can!  We only indirectly
-    # use pbr, and currently it breaks things, presumably till
-    # their next release.
-    'pbr==0.5.22',
     'PasteDeploy',
     # This is optional:
     # 'translitcodec',
     # For now we're expecting that users will install this from
     # their package managers.
     # 'lxml',
-    # 'PIL',  # TODO: switch to Pillow?
+    # 'Pillow',
 ] + py2_only_install_requires
 
 with open(READMEFILE) as fobj:
