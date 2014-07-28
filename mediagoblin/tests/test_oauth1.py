@@ -14,8 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import cgi
-
 import pytest
 
 from six.moves.urllib.parse import parse_qs, urlparse
@@ -147,7 +145,7 @@ class TestOAuth(object):
         headers["Content-Type"] = self.MIME_FORM
 
         response = self.test_app.post(endpoint, headers=headers)
-        response = cgi.parse_qs(response.body)
+        response = parse_qs(response.body.decode())
 
         # each element is a list, reduce it to a string
         for key, value in response.items():
