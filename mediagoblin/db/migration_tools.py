@@ -232,7 +232,7 @@ class MigrationManager(object):
             for migration_number, migration_func in migrations_to_run:
                 self.printer(
                     u'   + Running migration %s, "%s"... ' % (
-                        migration_number, migration_func.func_name))
+                        migration_number, migration_func.__name__))
                 migration_func(self.session)
                 self.set_current_migration(migration_number)
                 self.printer('done.\n')
