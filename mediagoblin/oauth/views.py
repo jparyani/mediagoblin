@@ -16,6 +16,8 @@
 
 import datetime
 
+import six
+
 from oauthlib.oauth1 import (RequestTokenEndpoint, AuthorizationEndpoint,
                              AccessTokenEndpoint)
 
@@ -136,7 +138,7 @@ def client_register(request):
 
     contacts = data.get("contacts", None)
     if contacts is not None:
-        if type(contacts) is not unicode:
+        if not isinstance(contacts, six.text_type):
             error = "Contacts must be a string of space-seporated email addresses."
             return json_response({"error": error}, status=400)
 
@@ -152,7 +154,7 @@ def client_register(request):
 
     redirect_uris = data.get("redirect_uris", None)
     if redirect_uris is not None:
-        if type(redirect_uris) is not unicode:
+        if not isinstance(redirect_uris, six.text_type):
             error = "redirect_uris must be space-seporated URLs."
             return json_response({"error": error}, status=400)
 
