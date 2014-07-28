@@ -17,12 +17,12 @@
 import gettext
 import pkg_resources
 
+import six
 
 from babel import localedata
 from babel.support import LazyProxy
 
 from mediagoblin import mg_globals
-from mediagoblin._compat import ugettext, ungettext
 
 ###################
 # Translation tools
@@ -147,7 +147,9 @@ def pass_to_ugettext(*args, **kwargs):
     The reason we can't have a global ugettext method is because
     mg_globals gets swapped out by the application per-request.
     """
-    return ugettext(*args, **kwargs)
+    if six.PY2:
+        return mg_globals.thread_scope.translations.ugettext(*args, **kwargs)
+    return mg_globals.thread_scope.translations.gettext(*args, **kwargs)
 
 def pass_to_ungettext(*args, **kwargs):
     """
@@ -156,7 +158,9 @@ def pass_to_ungettext(*args, **kwargs):
     The reason we can't have a global ugettext method is because
     mg_globals gets swapped out by the application per-request.
     """
-    return ungettext(*args, **kwargs)
+    if six.PY2:
+        return mg_globals.thread_scope.translations.ungettext(*args, **kwargs)
+    return mg_globals.thread_scope.translations.ngettext(*args, **kwargs)
 
 
 def lazy_pass_to_ugettext(*args, **kwargs):

@@ -14,15 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import shutil
+
+from six.moves.urllib.parse import urlparse
+
 from mediagoblin.storage import (
     StorageInterface,
     clean_listy_filepath,
     NoWebServing)
-
-import os
-import shutil
-
-from mediagoblin._compat import urlparse
 
 
 class BasicFileStorage(StorageInterface):
