@@ -45,3 +45,7 @@
 
 # The legacy of buildout
 .installed.cfg
+
+# Virtualenv, tox
+venv*
+.tox/
