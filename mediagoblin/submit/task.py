@@ -16,34 +16,23 @@
 
 import celery
 import datetime
-import logging
 import pytz
 
 from mediagoblin.db.models import MediaEntry
 
-_log = logging.getLogger(__name__)
-logging.basicConfig()
-_log.setLevel(logging.DEBUG)
-
 @celery.task()
 def collect_garbage():
-	"""
-		Garbage collection to clean up media
+    """
+        Garbage collection to clean up media
 
-		This will look for all critera on models to clean
-		up. This is primerally written to clean up media that's
-		entered a erroneous state.
-	"""
-	_log.info("Garbage collection is running.")
-	now = datetime.datetime.now(pytz.UTC) - datetime.timedelta(days=1)
+        This will look for all critera on models to clean
+        up. This is primerally written to clean up media that's
+        entered a erroneous state.
+    """
+    cuttoff = datetime.datetime.now(pytz.UTC) - datetime.timedelta(days=1)
 
-	garbage = MediaEntry.query.filter(MediaEntry.created > now)
-	garbage = garbage.filter(MediaEntry.state == "unprocessed")
+    garbage = MediaEntry.query.filter(MediaEntry.created < cuttoff)
+    garbage = garbage.filter(MediaEntry.state == "unprocessed")
 
-	for entry in garbage.all():
-		_log.info("Garbage media found with ID '{0}'".format(entry.id))
-		entry.delete()
-
-
-
-
+    for entry in garbage.all():
+        entry.delete()

@@ -683,8 +683,18 @@ class MediaComment(Base, MediaCommentMixin):
         # Validate inReplyTo has ID
         if "id" not in data["inReplyTo"]:
             return False
+            
+        # Validate that the ID is correct
+        try:
+            media_id = int(data["inReplyTo"]["id"])
+        except ValueError:
+            return False
+        
+        media = MediaEntry.query.filter_by(id=media_id).first()
+        if media is None:
+            return False
 
-        self.media_entry = data["inReplyTo"]["id"]
+        self.media_entry = media.id
         self.content = data["content"]
         return True
 

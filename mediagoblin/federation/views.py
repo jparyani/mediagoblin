@@ -24,9 +24,13 @@ from mediagoblin.media_types import sniff_media
 from mediagoblin.decorators import oauth_required
 from mediagoblin.federation.decorators import user_has_privilege
 from mediagoblin.db.models import User, MediaEntry, MediaComment
-from mediagoblin.tools.response import redirect, json_response
+from mediagoblin.tools.response import redirect, json_response, json_error
 from mediagoblin.meddleware.csrf import csrf_exempt
-from mediagoblin.submit.lib import new_upload_entry
+from mediagoblin.submit.lib import new_upload_entry, api_upload_request, \
+                                    api_add_to_feed
+
+# MediaTypes
+from mediagoblin.media_types.image import MEDIA_TYPE as IMAGE_MEDIA_TYPE
 
 @oauth_required
 def profile(request, raw=False):
@@ -34,10 +38,8 @@ def profile(request, raw=False):
     user = request.matchdict["username"]
     requested_user = User.query.filter_by(username=user)
 
-    # check if the user exists
     if requested_user is None:
-        error = "No such 'user' with id '{0}'".format(user)
-        return json_response({"error": error}, status=404)
+        return json_error("No such 'user' with id '{0}'".format(user), 404)
 
     user = requested_user[0]
 
@@ -69,15 +71,14 @@ def uploads(request):
     requested_user = User.query.filter_by(username=user)
 
     if requested_user is None:
-        error = "No such 'user' with id '{0}'".format(user)
-        return json_response({"error": error}, status=404)
+        return json_error("No such 'user' with id '{0}'".format(user), 404)
 
     request.user = requested_user[0]
     if request.method == "POST":
         # Wrap the data in the werkzeug file wrapper
         if "Content-Type" not in request.headers:
-            error = "Must supply 'Content-Type' header to upload media."
-            return json_response({"error": error}, status=400)
+            return json_error(
+                "Must supply 'Content-Type' header to upload media.")
         mimetype = request.headers["Content-Type"]
         filename = mimetypes.guess_all_extensions(mimetype)
         filename = 'unknown' + filename[0] if filename else filename
@@ -90,12 +91,10 @@ def uploads(request):
         # Find media manager
         media_type, media_manager = sniff_media(file_data, filename)
         entry = new_upload_entry(request.user)
-        if hasattr(media_manager, "api_upload_request"):
-            return media_manager.api_upload_request(request, file_data, entry)
-        else:
-            return json_response({"error": "Not yet implemented"}, status=501)
+        entry.media_type = IMAGE_MEDIA_TYPE
+        return api_upload_request(request, file_data, entry)
 
-    return json_response({"error": "Not yet implemented"}, status=501)
+    return json_error("Not yet implemented", 501)
 
 @oauth_required
 @csrf_exempt
@@ -106,8 +105,7 @@ def feed(request):
 
     # check if the user exists
     if requested_user is None:
-        error = "No such 'user' with id '{0}'".format(user)
-        return json_response({"error": error}, status=404)
+        return json_error("No such 'user' with id '{0}'".format(user), 404)
 
     request.user = requested_user[0]
     if request.data:
@@ -118,11 +116,16 @@ def feed(request):
     if request.method == "POST" and data["verb"] == "post":
         obj = data.get("object", None)
         if obj is None:
-            error = {"error": "Could not find 'object' element."}
-            return json_response(error, status=400)
+            return json_error("Could not find 'object' element.")
 
         if obj.get("objectType", None) == "comment":
             # post a comment
+            if not request.user.has_privilege(u'commenter'):
+                return json_error(
+                    "Privilege 'commenter' required to comment.",
+                    status=403
+                )
+
             comment = MediaComment(author=request.user.id)
             comment.unserialize(data["object"])
             comment.save()
@@ -134,15 +137,19 @@ def feed(request):
             media_id = int(data["object"]["id"])
             media = MediaEntry.query.filter_by(id=media_id)
             if media is None:
-                error = "No such 'image' with id '{0}'".format(id=media_id)
-                return json_response(error, status=404)
+                return json_response(
+                    "No such 'image' with id '{0}'".format(id=media_id),
+                    status=404
+                )
 
             media = media.first()
             if not media.unserialize(data["object"]):
-                error = "Invalid 'image' with id '{0}'".format(media_id)
-                return json_response({"error": error}, status=400)
+                return json_error(
+                    "Invalid 'image' with id '{0}'".format(media_id)
+                )
+
             media.save()
-            media.media_manager.api_add_to_feed(request, media)
+            api_add_to_feed(request, media)
 
             return json_response({
                 "verb": "post",
@@ -151,46 +158,46 @@ def feed(request):
 
         elif obj.get("objectType", None) is None:
             # They need to tell us what type of object they're giving us.
-            error = {"error": "No objectType specified."}
-            return json_response(error, status=400)
+            return json_error("No objectType specified.")
         else:
             # Oh no! We don't know about this type of object (yet)
-            error_message = "Unknown object type '{0}'.".format(
-                obj.get("objectType", None)
-            )
-
-            error = {"error": error_message}
-            return json_response(error, status=400)
+            object_type = obj.get("objectType", None)
+            return json_error("Unknown object type '{0}'.".format(object_type))
 
     elif request.method in ["PUT", "POST"] and data["verb"] == "update":
         # Check we've got a valid object
         obj = data.get("object", None)
 
         if obj is None:
-            error = {"error": "Could not find 'object' element."}
-            return json_response(error, status=400)
+            return json_error("Could not find 'object' element.")
 
         if "objectType" not in obj:
-            error = {"error": "No objectType specified."}
-            return json_response(error, status=400)
+            return json_error("No objectType specified.")
 
         if "id" not in obj:
-            error = {"error": "Object ID has not been specified."}
-            return json_response(error, status=400)
+            return json_error("Object ID has not been specified.")
 
         obj_id = obj["id"]
 
         # Now try and find object
         if obj["objectType"] == "comment":
+            if not request.user.has_privilege(u'commenter'):
+                return json_error(
+                    "Privilege 'commenter' required to comment.",
+                    status=403
+                )
+
             comment = MediaComment.query.filter_by(id=obj_id)
             if comment is None:
-                error = "No such 'comment' with id '{0}'.".format(obj_id)
-                return json_response({"error": error}, status=400)
+                return json_error(
+                    "No such 'comment' with id '{0}'.".format(obj_id)
+                )
 
             comment = comment[0]
             if not comment.unserialize(data["object"]):
-                error = "Invalid 'comment' with id '{0}'".format(obj_id)
-                return json_response({"error": error}, status=400)
+                return json_error(
+                    "Invalid 'comment' with id '{0}'".format(obj_id)
+                )
 
             comment.save()
 
@@ -203,13 +210,15 @@ def feed(request):
         elif obj["objectType"] == "image":
             image = MediaEntry.query.filter_by(id=obj_id)
             if image is None:
-                error = "No such 'image' with the id '{0}'.".format(obj_id)
-                return json_response({"error": error}, status=400)
+                return json_error(
+                    "No such 'image' with the id '{0}'.".format(obj_id)
+                )
 
             image = image[0]
             if not image.unserialize(obj):
-                "Invalid 'image' with id '{0}'".format(obj_id)
-                return json_response({"error": error}, status=400)
+                return json_error(
+                    "Invalid 'image' with id '{0}'".format(obj_id)
+                )
             image.save()
 
             activity = {
@@ -219,9 +228,10 @@ def feed(request):
             return json_response(activity)
 
     elif request.method != "GET":
-        # Currently unsupported
-        error = "Unsupported HTTP method {0}".format(request.method)
-        return json_response({"error": error}, status=501)
+        return json_error(
+            "Unsupported HTTP method {0}".format(request.method),
+            status=501
+        )
 
     feed_url = request.urlgen(
         "mediagoblin.federation.feed",
@@ -255,7 +265,8 @@ def feed(request):
     }
 
 
-    # Now lookup the user's feed.
+    # Look up all the media to put in the feed (this will be changed
+    # when we get real feeds/inboxes/outboxes/activites)
     for media in MediaEntry.query.all():
         item = {
             "verb": "post",
@@ -283,21 +294,22 @@ def object(request, raw_obj=False):
             request.matchdict["id"],
             object_type
         )
-        return json_response({"error": error}, status=400)
+        return json_error(error)
 
     if object_type not in ["image"]:
-        error = "Unknown type: {0}".format(object_type)
         # not sure why this is 404, maybe ask evan. Maybe 400?
-        return json_response({"error": error}, status=404)
+        return json_error("Unknown type: {0}".format(object_type), status=404)
 
     media = MediaEntry.query.filter_by(id=object_id).first()
     if media is None:
-        # no media found with that uuid
         error = "Can't find '{0}' with ID '{1}'".format(
             object_type,
             object_id
         )
-        return json_response({"error": error}, status=404)
+        return json_error(
+            "Can't find '{0}' with ID '{1}'".format(object_type, object_id),
+            status=404
+        )
 
     if raw_obj:
         return media
@@ -371,6 +383,9 @@ def host_meta(request):
 
 def whoami(request):
     """ /api/whoami - HTTP redirect to API profile """
+    if request.user is None:
+        return json_error("Not logged in.", status=401)
+
     profile = request.urlgen(
         "mediagoblin.federation.user.profile",
         username=request.user.username,
