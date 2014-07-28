@@ -53,9 +53,9 @@ class ReallyLazyProxy(LazyProxy):
     """
     Like LazyProxy, except that it doesn't cache the value ;)
     """
-    @property
-    def value(self):
-        return self._func(*self._args, **self._kwargs)
+    def __init__(self, func, *args, **kwargs):
+        super(ReallyLazyProxy, self).__init__(func, *args, **kwargs)
+        object.__setattr__(self, '_is_cache_enabled', False)
 
     def __repr__(self):
         return "<%s for %s(%r, %r)>" % (
