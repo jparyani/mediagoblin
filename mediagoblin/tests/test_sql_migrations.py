@@ -14,9 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import copy
-
 import six
+import pytest
+
+pytestmark = pytest.mark.skipif(six.PY3, reason='needs sqlalchemy.migrate')
+
+import copy
 
 from sqlalchemy import (
     Table, Column, MetaData, Index,
@@ -25,7 +28,8 @@ from sqlalchemy import (
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import select, insert
-from migrate import changeset
+if six.PY2:
+    from migrate import changeset
 
 from mediagoblin.db.base import GMGTableBase
 from mediagoblin.db.migration_tools import MigrationManager, RegisterMigration
