@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-10 12:32-0500\n"
-"PO-Revision-Date: 2014-07-10 17:32+0000\n"
+"POT-Creation-Date: 2014-07-29 11:01-0500\n"
+"PO-Revision-Date: 2014-07-29 16:01+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/mediagoblin/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -83,7 +83,11 @@ msgstr "Wyślij ponownie e-mail weryfikujący."
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:89
 #: mediagoblin/media_types/blog/forms.py:24
 #: mediagoblin/media_types/blog/forms.py:33 mediagoblin/submit/forms.py:37
-#: mediagoblin/submit/forms.py:61 mediagoblin/user_pages/forms.py:45
+#: mediagoblin/submit/forms.py:61
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:40
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:69
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:100
+#: mediagoblin/user_pages/forms.py:45
 msgid "Title"
 msgstr "Tytuł"
 
@@ -540,6 +544,57 @@ msgstr ""
 msgid "What privileges will you take away?"
 msgstr ""
 
+#: mediagoblin/moderation/forms.py:122
+msgid "Why user was banned:"
+msgstr ""
+
+#: mediagoblin/moderation/forms.py:125
+msgid "Message to user:"
+msgstr ""
+
+#: mediagoblin/moderation/forms.py:128
+msgid "Resolution content:"
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:34
+msgid ""
+"\n"
+"{mod} took away {user}'s {privilege} privileges."
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:47
+msgid ""
+"\n"
+"{mod} banned user {user} {expiration_date}."
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:51
+msgid "until {date}"
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:53
+#: mediagoblin/templates/mediagoblin/banned.html:30
+msgid "indefinitely"
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:62
+msgid ""
+"\n"
+"{mod} sent a warning email to the {user}."
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:71
+msgid ""
+"\n"
+"{mod} deleted the comment."
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:78
+msgid ""
+"\n"
+"{mod} deleted the media entry."
+msgstr ""
+
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
 msgstr ""
@@ -562,7 +617,7 @@ msgstr "Nie będziesz otrzymywać komentarzy do %s."
 msgid "Must provide an oauth_token."
 msgstr "Musisz podać oauth_token."
 
-#: mediagoblin/oauth/views.py:247 mediagoblin/oauth/views.py:297
+#: mediagoblin/oauth/views.py:247 mediagoblin/oauth/views.py:298
 msgid "No request token found."
 msgstr "Nie znaleziono żetonu żądania."
 
@@ -632,7 +687,7 @@ msgid ""
 "        Yes. If you would prefer, you may go to the media homepage of the piece\n"
 "        of media you would like to feature or unfeature and look at the bar to\n"
 "        the side of the media entry. If the piece of media has not been featured\n"
-"        yet you should see a button that says 'Feature'. Press that button and\n"
+"        yet you should see a button that says \"Feature\". Press that button and\n"
 "        the media will be featured as a Primary Feature at the top of the page.\n"
 "        All other featured media entries will remain as features, but will be\n"
 "        pushed further down the page.<br /><br />\n"
@@ -715,6 +770,7 @@ msgid ""
 msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:28
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:64
 msgid "Feature"
 msgstr ""
 
@@ -1203,10 +1259,6 @@ msgstr ""
 msgid "until %(until_when)s"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/banned.html:30
-msgid "indefinitely"
-msgstr ""
-
 #: mediagoblin/templates/mediagoblin/base.html:97
 msgid "Verify your email!"
 msgstr "Zweryfikuj swój adres e-mail!"
@@ -1247,6 +1299,10 @@ msgstr "Dodaj media"
 #: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
 msgid "Create new collection"
 msgstr "Utwórz nową kolekcję"
+
+#: mediagoblin/templates/mediagoblin/base.html:163
+msgid "Moderation powers:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:169
 msgid "User management panel"
@@ -1641,6 +1697,32 @@ msgstr "Tu możesz śledzić stan przetwarzania mediów na tym serwerze."
 msgid "Media in-processing"
 msgstr "Przetwarzane media"
 
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:38
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:67
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:98
+#: mediagoblin/templates/mediagoblin/moderation/user_panel.html:75
+msgid "ID"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:39
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
+msgid "User"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
+msgid "When submitted"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:42
+msgid "Transcoding progress"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:53
+msgid "Unknown"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:59
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
 msgid "No media in-processing"
@@ -1651,6 +1733,14 @@ msgstr "Żadne media nie są obecnie przetwarzane"
 msgid "These uploads failed to process:"
 msgstr "NIe udało się przesłać tych plików:"
 
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:71
+msgid "Reason for failure"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:72
+msgid "Failure metadata"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:91
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
 msgid "No failed entries!"
@@ -1659,6 +1749,10 @@ msgstr "Brak nieprzetworzonych wpisów!"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:93
 msgid "Last 10 successful uploads"
 msgstr "Ostatnie 10 udanych wysyłek"
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:101
+msgid "Submitted"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:113
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
@@ -1698,6 +1792,10 @@ msgid ""
 "            <a href=\"%(user_url)s\"> %(user_name)s</a>\n"
 "          HAS BEEN DELETED\n"
 "        "
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/report.html:102
+msgid "Reason for report:"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:133
@@ -1949,10 +2047,6 @@ msgstr ""
 msgid "Active Users"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/user_panel.html:75
-msgid "ID"
-msgstr ""
-
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:77
 msgid "When Joined"
 msgstr ""
@@ -2181,6 +2275,14 @@ msgstr "Znajduje się w kolekcji "
 #: mediagoblin/templates/mediagoblin/utils/collections.html:40
 msgid "Add to a collection"
 msgstr "Dodaj do kolekcji"
+
+#: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:24
+msgid "Subscribe to comments"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:30
+msgid "Silence comments"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21

@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-10 12:32-0500\n"
-"PO-Revision-Date: 2014-07-10 17:32+0000\n"
+"POT-Creation-Date: 2014-07-29 11:01-0500\n"
+"PO-Revision-Date: 2014-07-29 16:01+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/mediagoblin/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
@@ -86,7 +86,11 @@ msgstr "重送認證信。"
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:89
 #: mediagoblin/media_types/blog/forms.py:24
 #: mediagoblin/media_types/blog/forms.py:33 mediagoblin/submit/forms.py:37
-#: mediagoblin/submit/forms.py:61 mediagoblin/user_pages/forms.py:45
+#: mediagoblin/submit/forms.py:61
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:40
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:69
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:100
+#: mediagoblin/user_pages/forms.py:45
 msgid "Title"
 msgstr "標題"
 
@@ -543,6 +547,57 @@ msgstr "請問您要如何處理這項回報？"
 msgid "What privileges will you take away?"
 msgstr "您要取走他哪些權限？"
 
+#: mediagoblin/moderation/forms.py:122
+msgid "Why user was banned:"
+msgstr ""
+
+#: mediagoblin/moderation/forms.py:125
+msgid "Message to user:"
+msgstr ""
+
+#: mediagoblin/moderation/forms.py:128
+msgid "Resolution content:"
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:34
+msgid ""
+"\n"
+"{mod} took away {user}'s {privilege} privileges."
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:47
+msgid ""
+"\n"
+"{mod} banned user {user} {expiration_date}."
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:51
+msgid "until {date}"
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:53
+#: mediagoblin/templates/mediagoblin/banned.html:30
+msgid "indefinitely"
+msgstr "永久封鎖了"
+
+#: mediagoblin/moderation/tools.py:62
+msgid ""
+"\n"
+"{mod} sent a warning email to the {user}."
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:71
+msgid ""
+"\n"
+"{mod} deleted the comment."
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:78
+msgid ""
+"\n"
+"{mod} deleted the media entry."
+msgstr ""
+
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
 msgstr "警告，來自"
@@ -565,7 +620,7 @@ msgstr "您將不會收到 %s 的評論通知。"
 msgid "Must provide an oauth_token."
 msgstr "必須提供 oauth_token。"
 
-#: mediagoblin/oauth/views.py:247 mediagoblin/oauth/views.py:297
+#: mediagoblin/oauth/views.py:247 mediagoblin/oauth/views.py:298
 msgid "No request token found."
 msgstr "找不到請求的 token。"
 
@@ -635,7 +690,7 @@ msgid ""
 "        Yes. If you would prefer, you may go to the media homepage of the piece\n"
 "        of media you would like to feature or unfeature and look at the bar to\n"
 "        the side of the media entry. If the piece of media has not been featured\n"
-"        yet you should see a button that says 'Feature'. Press that button and\n"
+"        yet you should see a button that says \"Feature\". Press that button and\n"
 "        the media will be featured as a Primary Feature at the top of the page.\n"
 "        All other featured media entries will remain as features, but will be\n"
 "        pushed further down the page.<br /><br />\n"
@@ -718,6 +773,7 @@ msgid ""
 msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:28
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:64
 msgid "Feature"
 msgstr ""
 
@@ -1206,10 +1262,6 @@ msgstr "您被"
 msgid "until %(until_when)s"
 msgstr "封鎖了，會在 %(until_when)s 解除"
 
-#: mediagoblin/templates/mediagoblin/banned.html:30
-msgid "indefinitely"
-msgstr "永久封鎖了"
-
 #: mediagoblin/templates/mediagoblin/base.html:97
 msgid "Verify your email!"
 msgstr "確認您的電子郵件"
@@ -1250,6 +1302,10 @@ msgstr "新增媒體"
 #: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
 msgid "Create new collection"
 msgstr "新增新的蒐藏"
+
+#: mediagoblin/templates/mediagoblin/base.html:163
+msgid "Moderation powers:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:169
 msgid "User management panel"
@@ -1644,6 +1700,32 @@ msgstr "此處您可以追蹤本站台處理媒體的狀態。"
 msgid "Media in-processing"
 msgstr "媒體處理中"
 
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:38
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:67
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:98
+#: mediagoblin/templates/mediagoblin/moderation/user_panel.html:75
+msgid "ID"
+msgstr "ID"
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:39
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
+msgid "User"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
+msgid "When submitted"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:42
+msgid "Transcoding progress"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:53
+msgid "Unknown"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:59
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
 msgid "No media in-processing"
@@ -1654,6 +1736,14 @@ msgstr "沒有正在處理中的媒體"
 msgid "These uploads failed to process:"
 msgstr "無法處理這些上傳內容："
 
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:71
+msgid "Reason for failure"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:72
+msgid "Failure metadata"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:91
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
 msgid "No failed entries!"
@@ -1662,6 +1752,10 @@ msgstr "沒有失敗的紀錄！"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:93
 msgid "Last 10 successful uploads"
 msgstr "最近 10 次成功上傳的紀錄"
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:101
+msgid "Submitted"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:113
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
@@ -1702,6 +1796,10 @@ msgid ""
 "          HAS BEEN DELETED\n"
 "        "
 msgstr "\n          <a href=\"%(user_url)s\"> %(user_name)s</a>\n          的內容已被刪除\n        "
+
+#: mediagoblin/templates/mediagoblin/moderation/report.html:102
+msgid "Reason for report:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:133
 #: mediagoblin/templates/mediagoblin/moderation/user.html:136
@@ -1952,10 +2050,6 @@ msgstr "\n在這裡您可以查詢使用者，以進行各項處置。  "
 msgid "Active Users"
 msgstr "活動中的使用者"
 
-#: mediagoblin/templates/mediagoblin/moderation/user_panel.html:75
-msgid "ID"
-msgstr "ID"
-
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:77
 msgid "When Joined"
 msgstr "加入時間"
@@ -2184,6 +2278,14 @@ msgstr "蒐集了"
 #: mediagoblin/templates/mediagoblin/utils/collections.html:40
 msgid "Add to a collection"
 msgstr "加入至蒐藏"
+
+#: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:24
+msgid "Subscribe to comments"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:30
+msgid "Silence comments"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
