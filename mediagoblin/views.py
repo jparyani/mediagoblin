@@ -18,14 +18,19 @@ from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.pluginapi import hook_handle
-from mediagoblin.tools.response import render_to_response, render_404
+from mediagoblin.tools.response import render_to_response, render_404, redirect
 from mediagoblin.decorators import uses_pagination, user_not_banned, require_active_login
 
 
 @user_not_banned
 @uses_pagination
-@require_active_login
 def default_root_view(request, page):
+    user_id = request.headers.get('X-Sandstorm-User-Id', None)
+
+    if not request.user and user_id:
+        return redirect(
+            request,
+            'mediagoblin.plugins.sandstorm.login')
     cursor = request.db.query(MediaEntry).filter_by(state=u'processed').\
         order_by(MediaEntry.created.desc())
 

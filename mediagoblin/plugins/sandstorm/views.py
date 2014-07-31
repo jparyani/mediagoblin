@@ -19,6 +19,10 @@ from mediagoblin.db.models import User, Privilege
 from mediagoblin.decorators import allow_registration, auth_enabled
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import redirect, render_to_response
+from mediagoblin.plugins.sandstorm.models import SandstormUser
+
+from random import getrandbits
+
 
 @auth_enabled
 def login(request):
@@ -29,9 +33,9 @@ def login(request):
     permissions = request.headers.get('X-Sandstorm-Permissions', None)
 
     if username and user_id:
-        user = User.query.filter_by(pw_hash=user_id).first()
+        suser = SandstormUser.query.filter_by(sandstorm_user_id=user_id).first()
 
-        if not user:
+        if not suser:
             if not mg_globals.app.auth:
                 messages.add_message(
                     request,
@@ -40,10 +44,15 @@ def login(request):
                       'instance.'))
                 return redirect(request, 'index')
 
+            while User.query.filter_by(username=username).count() > 0:
+                username += '2'
+
             user = User()
             user.username = username
             user.email = ''
-            user.pw_hash = user_id
+            user.pw_hash = unicode(getrandbits(192))
+        else:
+            user = suser.user
 
         default_privileges = [
             Privilege.query.filter(Privilege.privilege_name==u'commenter').first(),
@@ -59,24 +68,19 @@ def login(request):
         user.all_privileges += default_privileges
         user.save()
 
+        if not suser:
+            suser = SandstormUser()
+            suser.user_id = user.id
+            suser.sandstorm_user_id = user_id
+            suser.save()
+
         request.session['user_id'] = unicode(user.id)
         request.session.save()
 
-        if request.form.get('next'):
-            return redirect(request, location=request.form['next'])
-        else:
-            return redirect(request, "index")
-
-    login_failed = True
-
-    return render_to_response(
-        request,
-        'mediagoblin/auth/login.html',
-        {'login_form': {},
-         'next': request.GET.get('next') or request.form.get('next'),
-         'login_failed': login_failed,
-         'post_url': request.urlgen('mediagoblin.plugins.sandstorm.login'),
-         'allow_registration': mg_globals.app_config["allow_registration"]})
+    if request.form.get('next'):
+        return redirect(request, location=request.form['next'])
+    else:
+        return redirect(request, "index")
 
 
 @allow_registration

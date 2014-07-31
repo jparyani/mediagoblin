@@ -16,6 +16,7 @@
 import os
 
 from mediagoblin.tools import pluginapi
+from mediagoblin.plugins.sandstorm.models import SandstormUser
 
 PLUGIN_DIR = os.path.dirname(__file__)
 
@@ -24,9 +25,6 @@ def setup_plugin():
     # config = pluginapi.get_config('mediagoblin.plugins.sandstorm')
 
     routes = [
-        ('mediagoblin.plugins.ldap.register',
-         '/auth/ldap/register/',
-         'mediagoblin.plugins.ldap.views:register'),
         ('mediagoblin.plugins.sandstorm.login',
          '/auth/sandstorm/login/',
          'mediagoblin.plugins.sandstorm.views:login')]
