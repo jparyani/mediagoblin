@@ -73,8 +73,16 @@ def uploads(request):
     if requested_user is None:
         return json_error("No such 'user' with id '{0}'".format(user), 404)
 
-    request.user = requested_user[0]
+    requested_user = requested_user[0]
     if request.method == "POST":
+        # Ensure that the user is only able to upload to their own
+        # upload endpoint.
+        if requested_user.id != request.user.id:
+            return json_error(
+                "Not able to post to another users feed.",
+                status=403
+            )
+        
         # Wrap the data in the werkzeug file wrapper
         if "Content-Type" not in request.headers:
             return json_error(
@@ -107,11 +115,19 @@ def feed(request):
     if requested_user is None:
         return json_error("No such 'user' with id '{0}'".format(user), 404)
 
-    request.user = requested_user[0]
+    requested_user = requested_user[0]
     if request.data:
         data = json.loads(request.data)
     else:
         data = {"verb": None, "object": {}}
+
+    # We need to check that the user they're posting to is
+    # the person that they are.
+    if request.method in ["POST", "PUT"] and requested_user.id != request.user.id:
+        return json_error(
+            "Not able to post to another users feed.",
+            status=403
+        )
 
     if request.method == "POST" and data["verb"] == "post":
         obj = data.get("object", None)
