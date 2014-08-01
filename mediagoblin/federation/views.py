@@ -20,7 +20,6 @@ import mimetypes
 
 from werkzeug.datastructures import FileStorage
 
-from mediagoblin.media_types import sniff_media
 from mediagoblin.decorators import oauth_required
 from mediagoblin.federation.decorators import user_has_privilege
 from mediagoblin.db.models import User, MediaEntry, MediaComment
@@ -36,18 +35,19 @@ from mediagoblin.media_types.image import MEDIA_TYPE as IMAGE_MEDIA_TYPE
 def profile(request, raw=False):
     """ This is /api/user/<username>/profile - This will give profile info """
     user = request.matchdict["username"]
-    requested_user = User.query.filter_by(username=user)
+    requested_user = User.query.filter_by(username=user).first()
 
-    if requested_user is None:
-        return json_error("No such 'user' with id '{0}'".format(user), 404)
-
-    user = requested_user[0]
+    if user is None:
+        return json_error(
+            "No such 'user' with id '{0}'".format(user),
+            status=404
+        )
 
     if raw:
-        return (user, user.serialize(request))
+        return (requested_user.username, requested_user.serialize(request))
 
     # user profiles are public so return information
-    return json_response(user.serialize(request))
+    return json_response(requested_user.serialize(request))
 
 @oauth_required
 def user(request):
@@ -68,12 +68,11 @@ def user(request):
 def uploads(request):
     """ Endpoint for file uploads """
     user = request.matchdict["username"]
-    requested_user = User.query.filter_by(username=user)
+    requested_user = User.query.filter_by(username=user).first()
 
     if requested_user is None:
         return json_error("No such 'user' with id '{0}'".format(user), 404)
 
-    requested_user = requested_user[0]
     if request.method == "POST":
         # Ensure that the user is only able to upload to their own
         # upload endpoint.
@@ -82,7 +81,7 @@ def uploads(request):
                 "Not able to post to another users feed.",
                 status=403
             )
-        
+
         # Wrap the data in the werkzeug file wrapper
         if "Content-Type" not in request.headers:
             return json_error(
@@ -97,7 +96,6 @@ def uploads(request):
         )
 
         # Find media manager
-        media_type, media_manager = sniff_media(file_data, filename)
         entry = new_upload_entry(request.user)
         entry.media_type = IMAGE_MEDIA_TYPE
         return api_upload_request(request, file_data, entry)
@@ -109,13 +107,12 @@ def uploads(request):
 def feed(request):
     """ Handles the user's outbox - /api/user/<username>/feed """
     user = request.matchdict["username"]
-    requested_user = User.query.filter_by(username=user)
+    requested_user = User.query.filter_by(username=user).first()
 
     # check if the user exists
     if requested_user is None:
         return json_error("No such 'user' with id '{0}'".format(user), 404)
 
-    requested_user = requested_user[0]
     if request.data:
         data = json.loads(request.data)
     else:
@@ -123,7 +120,9 @@ def feed(request):
 
     # We need to check that the user they're posting to is
     # the person that they are.
-    if request.method in ["POST", "PUT"] and requested_user.id != request.user.id:
+    if request.method in ["POST", "PUT"] and \
+        requested_user.id != request.user.id:
+        
         return json_error(
             "Not able to post to another users feed.",
             status=403
@@ -151,14 +150,13 @@ def feed(request):
         elif obj.get("objectType", None) == "image":
             # Posting an image to the feed
             media_id = int(data["object"]["id"])
-            media = MediaEntry.query.filter_by(id=media_id)
+            media = MediaEntry.query.filter_by(id=media_id).first()
             if media is None:
                 return json_response(
                     "No such 'image' with id '{0}'".format(id=media_id),
                     status=404
                 )
 
-            media = media.first()
             if not media.unserialize(data["object"]):
                 return json_error(
                     "Invalid 'image' with id '{0}'".format(media_id)
@@ -203,13 +201,20 @@ def feed(request):
                     status=403
                 )
 
-            comment = MediaComment.query.filter_by(id=obj_id)
+            comment = MediaComment.query.filter_by(id=obj_id).first()
             if comment is None:
                 return json_error(
                     "No such 'comment' with id '{0}'.".format(obj_id)
                 )
 
-            comment = comment[0]
+            # Check that the person trying to update the comment is
+            # the author of the comment.
+            if comment.author != request.user.id:
+                return json_error(
+                    "Only author of comment is able to update comment.",
+                    status=403
+                )
+
             if not comment.unserialize(data["object"]):
                 return json_error(
                     "Invalid 'comment' with id '{0}'".format(obj_id)
@@ -224,13 +229,20 @@ def feed(request):
             return json_response(activity)
 
         elif obj["objectType"] == "image":
-            image = MediaEntry.query.filter_by(id=obj_id)
+            image = MediaEntry.query.filter_by(id=obj_id).first()
             if image is None:
                 return json_error(
                     "No such 'image' with the id '{0}'.".format(obj_id)
                 )
 
-            image = image[0]
+            # Check that the person trying to update the comment is
+            # the author of the comment.
+            if image.uploader != request.user.id:
+                return json_error(
+                    "Only uploader of image is able to update image.",
+                    status=403
+                )
+
             if not image.unserialize(obj):
                 return json_error(
                     "Invalid 'image' with id '{0}'".format(obj_id)
@@ -314,7 +326,10 @@ def object(request, raw_obj=False):
 
     if object_type not in ["image"]:
         # not sure why this is 404, maybe ask evan. Maybe 400?
-        return json_error("Unknown type: {0}".format(object_type), status=404)
+        return json_error(
+            "Unknown type: {0}".format(object_type),
+            status=404
+        )
 
     media = MediaEntry.query.filter_by(id=object_id).first()
     if media is None:

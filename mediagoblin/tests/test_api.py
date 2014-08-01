@@ -22,7 +22,7 @@ from webtest import AppError
 
 from .resources import GOOD_JPG
 from mediagoblin import mg_globals
-from mediagoblin.db.models import User, MediaEntry
+from mediagoblin.db.models import User, MediaEntry, MediaComment
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin.moderation.tools import take_away_privileges
 
@@ -119,7 +119,7 @@ class TestAPI(object):
         # Check that we got the response we're expecting
         response, _ = self._post_image_to_feed(test_app, image)
         assert response.status_code == 200
-    
+
     def test_unable_to_upload_as_someone_else(self, test_app):
         """ Test that can't upload as someoen else """
         data = open(GOOD_JPG, "rb").read()
@@ -127,10 +127,10 @@ class TestAPI(object):
             "Content-Type": "image/jpeg",
             "Content-Length": str(len(data))
         }
-        
+
         with mock.patch("mediagoblin.decorators.oauth_required",
                         new_callable=self.mocked_oauth_required):
-            
+
             # Will be self.user trying to upload as self.other_user
             with pytest.raises(AppError) as excinfo:
                 test_app.post(
@@ -138,22 +138,22 @@ class TestAPI(object):
                     data,
                     headers=headers
                 )
-            
+
             assert "403 FORBIDDEN" in excinfo.value.message
-    
+
     def test_unable_to_post_feed_as_someone_else(self, test_app):
         """ Tests that can't post an image to someone else's feed """
         response, data = self._upload_image(test_app, GOOD_JPG)
-        
+
         activity = {
             "verb": "post",
             "object": data
         }
-        
+
         headers = {
             "Content-Type": "application/json",
         }
-        
+
         with mock.patch("mediagoblin.decorators.oauth_required",
                     new_callable=self.mocked_oauth_required):
             with pytest.raises(AppError) as excinfo:
@@ -162,7 +162,40 @@ class TestAPI(object):
                     json.dumps(activity),
                     headers=headers
                 )
-            
+
+            assert "403 FORBIDDEN" in excinfo.value.message
+
+    def test_only_able_to_update_own_image(self, test_app):
+        """ Test's that the uploader is the only person who can update an image """
+        response, data = self._upload_image(test_app, GOOD_JPG)
+        response, data = self._post_image_to_feed(test_app, data)
+
+        activity = {
+            "verb": "update",
+            "object": data["object"],
+        }
+
+        headers = {
+            "Content-Type": "application/json",
+        }
+
+        # Lets change the image uploader to be self.other_user, this is easier
+        # than uploading the image as someone else as the way self.mocked_oauth_required
+        # and self._upload_image.
+        media = MediaEntry.query.filter_by(id=data["object"]["id"]).first()
+        media.uploader = self.other_user.id
+        media.save()
+
+        # Now lets try and edit the image as self.user, this should produce a 403 error.
+        with mock.patch("mediagoblin.decorators.oauth_required",
+                        new_callable=self.mocked_oauth_required):
+            with pytest.raises(AppError) as excinfo:
+                test_app.post(
+                    "/api/user/{0}/feed".format(self.user.username),
+                    json.dumps(activity),
+                    headers=headers
+                )
+
             assert "403 FORBIDDEN" in excinfo.value.message
 
     def test_upload_image_with_filename(self, test_app):
@@ -292,13 +325,13 @@ class TestAPI(object):
         # Test that the response is what we should be given
         assert comment.id == comment_data["object"]["id"]
         assert comment.content == comment_data["object"]["content"]
-    
+
     def test_unable_to_post_comment_as_someone_else(self, test_app):
         """ Tests that you're unable to post a comment as someone else. """
         # Upload some media to comment on
         response, data = self._upload_image(test_app, GOOD_JPG)
         response, data = self._post_image_to_feed(test_app, data)
-        
+
         activity = {
             "verb": "post",
             "object": {
@@ -307,11 +340,11 @@ class TestAPI(object):
                 "inReplyTo": data["object"],
             }
         }
-        
+
         headers = {
             "Content-Type": "application/json",
         }
-        
+
         with mock.patch("mediagoblin.decorators.oauth_required",
                         new_callable=self.mocked_oauth_required):
             with pytest.raises(AppError) as excinfo:
@@ -320,9 +353,53 @@ class TestAPI(object):
                     json.dumps(activity),
                     headers=headers
                 )
-                
+
             assert "403 FORBIDDEN" in excinfo.value.message
 
+    def test_unable_to_update_someone_elses_comment(self, test_app):
+        """ Test that you're able to update someoen elses comment. """
+        # Upload some media to comment on
+        response, data = self._upload_image(test_app, GOOD_JPG)
+        response, data = self._post_image_to_feed(test_app, data)
+
+        activity = {
+            "verb": "post",
+            "object": {
+                "objectType": "comment",
+                "content": "comment commenty comment ^_^",
+                "inReplyTo": data["object"],
+            }
+        }
+
+        headers = {
+            "Content-Type": "application/json",
+        }
+
+        # Post the comment.
+        response, comment_data = self._activity_to_feed(test_app, activity)
+
+        # change who uploaded the comment as it's easier than changing
+        comment_id = comment_data["object"]["id"]
+        comment = MediaComment.query.filter_by(id=comment_id).first()
+        comment.author = self.other_user.id
+
+        # Update the comment as someone else.
+        comment_data["object"]["content"] = "Yep"
+        activity = {
+            "verb": "update",
+            "object": comment_data["object"]
+        }
+
+        with mock.patch("mediagoblin.decorators.oauth_required",
+                    new_callable=self.mocked_oauth_required):
+            with pytest.raises(AppError) as excinfo:
+                test_app.post(
+                    "/api/user/{0}/feed".format(self.user.username),
+                    json.dumps(activity),
+                    headers=headers
+                )
+
+            assert "403 FORBIDDEN" in excinfo.value.message
 
     def test_profile(self, test_app):
         """ Tests profile endpoint """
