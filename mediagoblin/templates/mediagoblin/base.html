@@ -114,15 +114,6 @@
                    >{% trans %}log out{% endtrans %}</a>
                   {% endif %}
                 {%- elif auth %}
-                <a href=
-                  {% if persona_auth is defined %}
-                    "javascript:;" id="persona_login"
-                  {% else %}
-                    "{{ request.urlgen('mediagoblin.auth.login') }}"
-                  {% endif %}
-                  >
-                    {%- trans %}Log in{% endtrans -%}
-                  </a>
                 {%- endif %}
               </div>
               <div class="clear"></div>
@@ -145,13 +136,6 @@
                     </a>
                     &middot;
                     {% template_hook("blog_dashboard_home") %}
-                    <a id="logout" href=
-                      {% if persona is not defined %}
-                        "{{ request.urlgen('mediagoblin.auth.logout') }}"
-                      {% else %}
-                        "javascript:;"
-                      {% endif %}
-                      >{% trans %}Log out{% endtrans %}</a>
                   </p>
                   <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
                     {%- trans %}Add media{% endtrans -%}
