@@ -32,6 +32,7 @@ def login(request):
     user_id = request.headers.get('X-Sandstorm-User-Id', None)
     permissions = request.headers.get('X-Sandstorm-Permissions', None)
 
+    default_privileges = None
     if username and user_id:
         suser = SandstormUser.query.filter_by(sandstorm_user_id=user_id).first()
 
@@ -51,21 +52,25 @@ def login(request):
             user.username = username
             user.email = ''
             user.pw_hash = unicode(getrandbits(192))
+
+            default_privileges = [
+                Privilege.query.filter(Privilege.privilege_name==u'commenter').first(),
+                Privilege.query.filter(Privilege.privilege_name==u'reporter').first(),
+                Privilege.query.filter(Privilege.privilege_name==u'active').first()]
         else:
             user = suser.user
 
-        default_privileges = [
-            Privilege.query.filter(Privilege.privilege_name==u'commenter').first(),
-            Privilege.query.filter(Privilege.privilege_name==u'reporter').first(),
-            Privilege.query.filter(Privilege.privilege_name==u'active').first()]
-
         if 'admin' in permissions.split(','):
-            default_privileges += [
+            default_privileges = [
+                Privilege.query.filter(Privilege.privilege_name==u'commenter').first(),
+                Privilege.query.filter(Privilege.privilege_name==u'reporter').first(),
+                Privilege.query.filter(Privilege.privilege_name==u'active').first(),
                 Privilege.query.filter(Privilege.privilege_name==u'admin').first(),
                 Privilege.query.filter(Privilege.privilege_name==u'moderator').first(),
                 Privilege.query.filter(Privilege.privilege_name==u'uploader').first()]
 
-        user.all_privileges += default_privileges
+        if default_privileges:
+            user.all_privileges += default_privileges
         user.save()
 
         if not suser:
