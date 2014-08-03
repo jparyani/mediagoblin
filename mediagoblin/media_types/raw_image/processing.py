@@ -67,8 +67,8 @@ class InitialRawProcessor(InitialProcessor):
         # Extract the biggest preview and write it as our working image
         md.previews[-1].write_to_file(
             self.process_filename.encode('utf-8'))
-        self.process_filename += ".jpg"
-        _log.debug('Wrote new file from {0} to preview (jpg) {1}'.format(
+        self.process_filename += '.jpg'
+        _log.debug(u'Wrote new file from {0} to preview (jpg) {1}'.format(
             self._original_raw, self.process_filename))
 
         # Override the namebuilder with our new jpg-based name
