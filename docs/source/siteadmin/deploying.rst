@@ -200,7 +200,7 @@ Clone the MediaGoblin repository and set up the git submodules::
 
 And set up the in-package virtualenv::
 
-    (virtualenv --system-site-packages . || virtualenv .) && ./bin/python setup.py develop
+    (virtualenv --python=python2 --system-site-packages . || virtualenv --python=python22 .) && ./bin/python setup.py develop
 
 .. note::
 
@@ -213,16 +213,6 @@ And set up the in-package virtualenv::
    viratualenv up to date by simply running `make update`.
 
    Note: this is liable to break.  Use this method with caution.
-
-.. ::
-
-   (NOTE: Is this still relevant?)
-
-   If you have problems here, consider trying to install virtualenv
-   with the ``--distribute`` or ``--no-site-packages`` options. If
-   your system's default Python is in the 3.x series you may need to
-   run ``virtualenv`` with the  ``--python=python2.7`` or
-   ``--python=python2.6`` options.
 
 The above provides an in-package install of ``virtualenv``. While this
 is counter to the conventional ``virtualenv`` configuration, it is
