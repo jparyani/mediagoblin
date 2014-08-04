@@ -54,7 +54,7 @@ I hope you like unit tests JUST AS MUCH AS I DO!""")
     assert message['From'] == "sender@mediagoblin.example.org"
     assert message['To'] == "amanda@example.org, akila@example.org"
     assert message['Subject'] == "Testing is so much fun!"
-    assert message.get_payload(decode=True) == """HAYYY GUYS!
+    assert message.get_payload(decode=True) == b"""HAYYY GUYS!
 
 I hope you like unit tests JUST AS MUCH AS I DO!"""
 
@@ -67,7 +67,7 @@ I hope you like unit tests JUST AS MUCH AS I DO!"""
     assert mbox_message['From'] == "sender@mediagoblin.example.org"
     assert mbox_message['To'] == "amanda@example.org, akila@example.org"
     assert mbox_message['Subject'] == "Testing is so much fun!"
-    assert mbox_message.get_payload(decode=True) == """HAYYY GUYS!
+    assert mbox_message.get_payload(decode=True) == b"""HAYYY GUYS!
 
 I hope you like unit tests JUST AS MUCH AS I DO!"""
 
