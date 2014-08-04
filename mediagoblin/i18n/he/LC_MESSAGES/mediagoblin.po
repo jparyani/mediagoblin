@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-29 11:01-0500\n"
-"PO-Revision-Date: 2014-07-29 16:01+0000\n"
+"POT-Creation-Date: 2014-08-04 13:45-0500\n"
+"PO-Revision-Date: 2014-08-04 18:45+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Hebrew (http://www.transifex.com/projects/p/mediagoblin/language/he/)\n"
 "MIME-Version: 1.0\n"
@@ -21,15 +21,15 @@ msgstr ""
 "Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mediagoblin/decorators.py:300 mediagoblin/plugins/openid/views.py:202
+#: mediagoblin/decorators.py:303 mediagoblin/plugins/openid/views.py:202
 msgid "Sorry, registration is disabled on this instance."
 msgstr "לצערנו, רישום הינו מנוטרל על שרת זה."
 
-#: mediagoblin/decorators.py:315
+#: mediagoblin/decorators.py:318
 msgid "Sorry, reporting is disabled on this instance."
 msgstr "לצערנו, דיווח הינו מנוטרלים על שרת זה."
 
-#: mediagoblin/decorators.py:358 mediagoblin/plugins/ldap/views.py:55
+#: mediagoblin/decorators.py:361 mediagoblin/plugins/ldap/views.py:55
 #: mediagoblin/plugins/persona/views.py:77
 msgid "Sorry, authentication is disabled on this instance."
 msgstr "לצערנו, אימות הינו מנוטרל על שרת זה."
@@ -304,7 +304,7 @@ msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:40
 msgid "Name of user these media entries belong to"
-msgstr ""
+msgstr "שם משתמש לו שייכים ערכי מדיה אלו"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:43
 msgid "Path to the csv file containing metadata information."
@@ -495,7 +495,7 @@ msgstr "הבלוג של %(blog_owner_name)s"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:46
 msgid "View"
-msgstr ""
+msgstr "תצוגה"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:65
 msgid "Create a Blog"
@@ -547,11 +547,11 @@ msgstr "אילו פריבילגיות אתה תסיר?"
 
 #: mediagoblin/moderation/forms.py:122
 msgid "Why user was banned:"
-msgstr ""
+msgstr "מדוע משתמש נאסר:"
 
 #: mediagoblin/moderation/forms.py:125
 msgid "Message to user:"
-msgstr ""
+msgstr "הודעה אל משתמש:"
 
 #: mediagoblin/moderation/forms.py:128
 msgid "Resolution content:"
@@ -561,17 +561,17 @@ msgstr ""
 msgid ""
 "\n"
 "{mod} took away {user}'s {privilege} privileges."
-msgstr ""
+msgstr "\n {mod} נטל פריבילגיות {privilege} של {user}."
 
 #: mediagoblin/moderation/tools.py:47
 msgid ""
 "\n"
 "{mod} banned user {user} {expiration_date}."
-msgstr ""
+msgstr "\n {mod} אסר משתמש {user} {expiration_date}."
 
 #: mediagoblin/moderation/tools.py:51
 msgid "until {date}"
-msgstr ""
+msgstr "עד {date}"
 
 #: mediagoblin/moderation/tools.py:53
 #: mediagoblin/templates/mediagoblin/banned.html:30
@@ -582,19 +582,19 @@ msgstr "לצמיתה"
 msgid ""
 "\n"
 "{mod} sent a warning email to the {user}."
-msgstr ""
+msgstr "\n{mod} שלח דוא״ל אזהרה אל {user}."
 
 #: mediagoblin/moderation/tools.py:71
 msgid ""
 "\n"
 "{mod} deleted the comment."
-msgstr ""
+msgstr "\n {mod} מחק את התגובה."
 
 #: mediagoblin/moderation/tools.py:78
 msgid ""
 "\n"
 "{mod} deleted the media entry."
-msgstr ""
+msgstr "\n {mod} מחק את רשומת המדיה."
 
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
@@ -771,7 +771,6 @@ msgid ""
 msgstr "\n הבלט מדיה "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:28
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:64
 msgid "Feature"
 msgstr "הבלט"
 
@@ -818,29 +817,26 @@ msgstr "שום דבר אינו אשר מובלט."
 msgid ""
 "If you would like to feature a\n"
 "        piece of media, go to that media entry's homepage and click the button\n"
-"        that says"
+"        that says <a class=\"button_action\">Feature</a>."
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:65
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:67
+#, python-format
 msgid ""
 "You're seeing this page because you are a user capable of\n"
 "        featuring media, a regular user would see a blank page, so be sure to\n"
 "        have media featured as long as your instance has the 'archivalook'\n"
 "        plugin enabled. A more advanced tool to manage features can be found\n"
-"        in the"
+"        in the <a href=\"%(featured_media_url)s\">feature management panel.</a>"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:72
-msgid "feature management panel."
-msgstr ""
-
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:77
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
 msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/bits/feature_dropdown.html:22
 msgid "Feature management panel"
-msgstr ""
+msgstr "לוח ניהול תכונות"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/audio_primary.html:43
 msgid ""
@@ -1709,7 +1705,7 @@ msgstr "מזהה"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
 msgid "User"
-msgstr ""
+msgstr "משתמש"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
@@ -1722,7 +1718,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:53
 msgid "Unknown"
-msgstr ""
+msgstr "לא ידוע"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:59
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
@@ -1736,7 +1732,7 @@ msgstr "העלאות אלה נכשלו להתעבד:"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:71
 msgid "Reason for failure"
-msgstr ""
+msgstr "סיבה לכישלון"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:72
 msgid "Failure metadata"

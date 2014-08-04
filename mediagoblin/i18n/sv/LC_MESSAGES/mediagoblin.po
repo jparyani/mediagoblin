@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
+# ersi <erik-transifex@simmesgard.se>, 2014
 # ingenman <simon@ingenmansland.se>, 2011
 # joar <transifex@wandborg.se>, 2011, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-29 11:01-0500\n"
-"PO-Revision-Date: 2014-07-29 16:01+0000\n"
+"POT-Creation-Date: 2014-08-04 13:45-0500\n"
+"PO-Revision-Date: 2014-08-04 18:45+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Swedish (http://www.transifex.com/projects/p/mediagoblin/language/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -20,22 +21,22 @@ msgstr ""
 "Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mediagoblin/decorators.py:300 mediagoblin/plugins/openid/views.py:202
+#: mediagoblin/decorators.py:303 mediagoblin/plugins/openid/views.py:202
 msgid "Sorry, registration is disabled on this instance."
-msgstr "Vi beklagar, registreringen är avtängd på den här instansen."
+msgstr "Vi beklagar, registreringen är avstängd på den här instansen."
 
-#: mediagoblin/decorators.py:315
+#: mediagoblin/decorators.py:318
 msgid "Sorry, reporting is disabled on this instance."
 msgstr ""
 
-#: mediagoblin/decorators.py:358 mediagoblin/plugins/ldap/views.py:55
+#: mediagoblin/decorators.py:361 mediagoblin/plugins/ldap/views.py:55
 #: mediagoblin/plugins/persona/views.py:77
 msgid "Sorry, authentication is disabled on this instance."
 msgstr ""
 
 #: mediagoblin/auth/tools.py:43
 msgid "Invalid User name or email address."
-msgstr ""
+msgstr "Felaktigt användarnamn eller e-postadress."
 
 #: mediagoblin/auth/tools.py:44
 msgid "This field does not take email addresses."
@@ -130,7 +131,7 @@ msgstr ""
 #: mediagoblin/submit/forms.py:50
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
-msgstr ""
+msgstr "Licens"
 
 #: mediagoblin/edit/forms.py:54
 msgid "Bio"
@@ -226,7 +227,7 @@ msgstr ""
 
 #: mediagoblin/edit/views.py:193
 msgid "You can only edit your own profile."
-msgstr ""
+msgstr "Du kan bara ändra din egna profil."
 
 #: mediagoblin/edit/views.py:199
 msgid "You are editing a user's profile. Proceed with caution."
@@ -234,11 +235,11 @@ msgstr "Var försiktig, du redigerar en annan användares profil."
 
 #: mediagoblin/edit/views.py:215
 msgid "Profile changes saved"
-msgstr ""
+msgstr "Profilförändringar sparade"
 
 #: mediagoblin/edit/views.py:248
 msgid "Account settings saved"
-msgstr ""
+msgstr "Kontoinställningar sparade"
 
 #: mediagoblin/edit/views.py:282
 msgid "You need to confirm the deletion of your account."
@@ -260,7 +261,7 @@ msgstr ""
 
 #: mediagoblin/edit/views.py:378
 msgid "Your email address has been verified."
-msgstr ""
+msgstr "Din e-postadress har blivit verifierad."
 
 #: mediagoblin/edit/views.py:413 mediagoblin/plugins/basic_auth/views.py:200
 msgid "Wrong password"
@@ -421,7 +422,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:52
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:84
 msgid "Edit"
-msgstr ""
+msgstr "Ändra"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:93
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blogpost_draft_view.html:36
@@ -431,7 +432,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:56
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:88
 msgid "Delete"
-msgstr ""
+msgstr "Ta bort"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:102
 msgid "<em> Go to list view </em>"
@@ -770,7 +771,6 @@ msgid ""
 msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:28
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:64
 msgid "Feature"
 msgstr ""
 
@@ -817,23 +817,20 @@ msgstr ""
 msgid ""
 "If you would like to feature a\n"
 "        piece of media, go to that media entry's homepage and click the button\n"
-"        that says"
+"        that says <a class=\"button_action\">Feature</a>."
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:65
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:67
+#, python-format
 msgid ""
 "You're seeing this page because you are a user capable of\n"
 "        featuring media, a regular user would see a blank page, so be sure to\n"
 "        have media featured as long as your instance has the 'archivalook'\n"
 "        plugin enabled. A more advanced tool to manage features can be found\n"
-"        in the"
+"        in the <a href=\"%(featured_media_url)s\">feature management panel.</a>"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:72
-msgid "feature management panel."
-msgstr ""
-
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:77
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
 msgstr ""
 
@@ -887,7 +884,7 @@ msgstr "E-postadress"
 
 #: mediagoblin/plugins/basic_auth/forms.py:39
 msgid "Username or Email"
-msgstr ""
+msgstr "Användarnamn eller e-postadress"
 
 #: mediagoblin/plugins/basic_auth/forms.py:46
 msgid "Stay logged in"
@@ -895,7 +892,7 @@ msgstr ""
 
 #: mediagoblin/plugins/basic_auth/forms.py:51
 msgid "Username or email"
-msgstr ""
+msgstr "Användarnamn eller e-postadress"
 
 #: mediagoblin/plugins/basic_auth/views.py:54
 msgid ""
@@ -954,7 +951,7 @@ msgstr ""
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_pass.html:45
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:40
 msgid "Save"
-msgstr ""
+msgstr "Spara"
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/create_account_link.html:22
 msgid "Don't have an account yet?"
@@ -966,7 +963,7 @@ msgstr "Skapa ett här!"
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/edit_link.html:22
 msgid "Change your password."
-msgstr ""
+msgstr "Ändra ditt lösenord."
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:23
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:31
@@ -1026,7 +1023,7 @@ msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:40
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: mediagoblin/plugins/oauth/forms.py:45
 msgid ""
@@ -1072,7 +1069,7 @@ msgstr ""
 
 #: mediagoblin/plugins/openid/forms.py:38
 msgid "OpenID"
-msgstr ""
+msgstr "OpenID"
 
 #: mediagoblin/plugins/openid/views.py:48
 msgid "Sorry, the OpenID server could not be found"
@@ -1288,7 +1285,7 @@ msgstr "Mediabehandlingspanel"
 
 #: mediagoblin/templates/mediagoblin/base.html:152
 msgid "Log out"
-msgstr ""
+msgstr "Logga ut"
 
 #: mediagoblin/templates/mediagoblin/base.html:155
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:113
@@ -1618,7 +1615,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/image.html:36
 msgid "Created"
-msgstr ""
+msgstr "Skapad"
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:59
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:90
@@ -1655,7 +1652,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:130
 msgid "WebGL"
-msgstr ""
+msgstr "WebGL"
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:136
 msgid "Download model"
@@ -1810,7 +1807,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:149
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:151
 msgid "RESOLVED"
@@ -2017,11 +2014,11 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:180
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:182
 msgid "No"
-msgstr ""
+msgstr "Nej"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:213
 msgid "Ban User"
@@ -2173,7 +2170,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:54
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:58
 msgid "Add a new collection"
@@ -2308,12 +2305,12 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:48
 msgid "Go to page:"
-msgstr ""
+msgstr "Gå till sida:"
 
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:28
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:33
 msgid "newer"
-msgstr ""
+msgstr "nyare"
 
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:39
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:44
@@ -2368,19 +2365,19 @@ msgstr ""
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"
-msgstr ""
+msgstr "år"
 
 #: mediagoblin/tools/timesince.py:63
 msgid "month"
-msgstr ""
+msgstr "månad"
 
 #: mediagoblin/tools/timesince.py:64
 msgid "week"
-msgstr ""
+msgstr "vecka"
 
 #: mediagoblin/tools/timesince.py:65
 msgid "day"
-msgstr ""
+msgstr "dag"
 
 #: mediagoblin/tools/timesince.py:66
 msgid "hour"

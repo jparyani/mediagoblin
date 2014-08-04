@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
-# velmont <odin.omdal@gmail.com>, 2013
+# velmont <odin.omdal@gmail.com>, 2013-2014
 # velmont <odin.omdal@gmail.com>, 2011-2012
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-29 11:01-0500\n"
-"PO-Revision-Date: 2014-07-29 16:01+0000\n"
+"POT-Creation-Date: 2014-08-04 13:45-0500\n"
+"PO-Revision-Date: 2014-08-04 18:45+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Norwegian Nynorsk (Norway) (http://www.transifex.com/projects/p/mediagoblin/language/nn_NO/)\n"
 "MIME-Version: 1.0\n"
@@ -20,15 +20,15 @@ msgstr ""
 "Language: nn_NO\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mediagoblin/decorators.py:300 mediagoblin/plugins/openid/views.py:202
+#: mediagoblin/decorators.py:303 mediagoblin/plugins/openid/views.py:202
 msgid "Sorry, registration is disabled on this instance."
 msgstr "Registrering er slege av. Orsak."
 
-#: mediagoblin/decorators.py:315
+#: mediagoblin/decorators.py:318
 msgid "Sorry, reporting is disabled on this instance."
 msgstr "Rapportering er slege av. Orsak."
 
-#: mediagoblin/decorators.py:358 mediagoblin/plugins/ldap/views.py:55
+#: mediagoblin/decorators.py:361 mediagoblin/plugins/ldap/views.py:55
 #: mediagoblin/plugins/persona/views.py:77
 msgid "Sorry, authentication is disabled on this instance."
 msgstr "Autentisering er slege av. Orsak."
@@ -205,11 +205,11 @@ msgstr "Skriv inn passordet som prov på at dette er din konto."
 
 #: mediagoblin/edit/forms.py:155
 msgid "Identifier"
-msgstr ""
+msgstr "Identifikator"
 
 #: mediagoblin/edit/forms.py:156
 msgid "Value"
-msgstr ""
+msgstr "Verdi"
 
 #: mediagoblin/edit/views.py:78
 msgid "An entry with that slug already exists for this user."
@@ -299,62 +299,62 @@ msgid ""
 "script (and how to format the metadata csv file), read the MediaGoblin\n"
 "documentation page on command line uploading\n"
 "<http://docs.mediagoblin.org/siteadmin/commandline-upload.html>"
-msgstr ""
+msgstr "For more information about how to properly run this\nscript (and how to format the metadata csv file), read the MediaGoblin\ndocumentation page on command line uploading\n<http://docs.mediagoblin.org/siteadmin/commandline-upload.html>"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:40
 msgid "Name of user these media entries belong to"
-msgstr ""
+msgstr "Name of user these media entries belong to"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:43
 msgid "Path to the csv file containing metadata information."
-msgstr ""
+msgstr "Path to the csv file containing metadata information."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:48
 msgid "Don't process eagerly, pass off to celery"
-msgstr ""
+msgstr "Don't process eagerly, pass off to celery"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:63
 msgid "Sorry, no user by username '{username}' exists"
-msgstr ""
+msgstr "Sorry, no user by username '{username}' exists"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:74
 msgid "File at {path} not found, use -h flag for help"
-msgstr ""
+msgstr "File at {path} not found, use -h flag for help"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:115
 msgid ""
 "Error with media '{media_id}' value '{error_path}': {error_msg}\n"
 "Metadata was not uploaded."
-msgstr ""
+msgstr "Error with media '{media_id}' value '{error_path}': {error_msg}\nMetadata was not uploaded."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:141
 msgid ""
 "FAIL: Local file {filename} could not be accessed.\n"
 "{filename} will not be uploaded."
-msgstr ""
+msgstr "FAIL: Local file {filename} could not be accessed.\n{filename} will not be uploaded."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:157
 msgid ""
 "Successfully submitted {filename}!\n"
 "Be sure to look at the Media Processing Panel on your website to be sure it\n"
 "uploaded successfully."
-msgstr ""
+msgstr "Successfully submitted {filename}!\nBe sure to look at the Media Processing Panel on your website to be sure it\nuploaded successfully."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:160
 msgid "FAIL: This file is larger than the upload limits for this site."
-msgstr ""
+msgstr "FAIL: This file is larger than the upload limits for this site."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:163
 msgid "FAIL: This file will put this user past their upload limits."
-msgstr ""
+msgstr "FAIL: This file will put this user past their upload limits."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:166
 msgid "FAIL: This user is already past their upload limits."
-msgstr ""
+msgstr "FAIL: This user is already past their upload limits."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:168
 msgid "{files_uploaded} out of {files_attempted} files successfully submitted"
-msgstr ""
+msgstr "{files_uploaded} out of {files_attempted} files successfully submitted"
 
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
@@ -384,11 +384,11 @@ msgstr "Johoo! Opplasta!"
 
 #: mediagoblin/media_types/blog/views.py:198
 msgid "Woohoo! edited blogpost is submitted"
-msgstr ""
+msgstr "Sende inn det endra innlegget"
 
 #: mediagoblin/media_types/blog/views.py:320
 msgid "You deleted the Blog."
-msgstr ""
+msgstr "Du sletta bloggen."
 
 #: mediagoblin/media_types/blog/views.py:326
 #: mediagoblin/user_pages/views.py:329
@@ -397,23 +397,23 @@ msgstr "Sletta ikkje verket."
 
 #: mediagoblin/media_types/blog/views.py:333
 msgid "You are about to delete another user's Blog. Proceed with caution."
-msgstr ""
+msgstr "Du er i ferd med å sletta ein annan brukar sin blogg. Trå varsamt."
 
 #: mediagoblin/media_types/blog/views.py:344
 msgid "The blog was not deleted because you have no rights."
-msgstr ""
+msgstr "Sletta ikkje bloggen fordi du ikkje har løyve."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:43
 msgid "Add Blog Post"
-msgstr ""
+msgstr "Legg til innlegg"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:50
 msgid "Edit Blog"
-msgstr ""
+msgstr "Endra blogg"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:57
 msgid "Delete Blog"
-msgstr ""
+msgstr "Slett blogg"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:92
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blogpost_draft_view.html:35
@@ -435,11 +435,11 @@ msgstr "Slett"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:102
 msgid "<em> Go to list view </em>"
-msgstr ""
+msgstr "<em>Gå til listevisning</em>"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:104
 msgid " No blog post yet. "
-msgstr ""
+msgstr "Ingen innlegg enno."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -468,7 +468,7 @@ msgstr "Slett permanent"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:26
 msgid "Create/Edit a Blog"
-msgstr ""
+msgstr "Opprett/endra ein blogg"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:37
 #: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
@@ -481,28 +481,28 @@ msgstr "Legg til"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_edit_create.html:23
 msgid "Create/Edit a blog post."
-msgstr ""
+msgstr "Opprett/endra eit innlegg."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_edit_create.html:29
 msgid "Create/Edit a Blog Post."
-msgstr ""
+msgstr "Opprett/endra eit innlegg."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_listing.html:24
 #, python-format
 msgid "%(blog_owner_name)s's Blog"
-msgstr ""
+msgstr "Bloggen til %(blog_owner_name)s"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:46
 msgid "View"
-msgstr ""
+msgstr "Vis"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:65
 msgid "Create a Blog"
-msgstr ""
+msgstr "Lag ein blogg"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/url_to_dashboard.html:20
 msgid " Blog Dashboard "
-msgstr ""
+msgstr "Blogg styringspanel"
 
 #: mediagoblin/media_types/pdf/processing.py:142
 msgid "unoconv failing to run, check log file"
@@ -546,31 +546,31 @@ msgstr "Kva privilegium vil du ta vekk?"
 
 #: mediagoblin/moderation/forms.py:122
 msgid "Why user was banned:"
-msgstr ""
+msgstr "Grunn til at brukaren er utestengd:"
 
 #: mediagoblin/moderation/forms.py:125
 msgid "Message to user:"
-msgstr ""
+msgstr "Melding til brukar:"
 
 #: mediagoblin/moderation/forms.py:128
 msgid "Resolution content:"
-msgstr ""
+msgstr "Løysingsinnhald:"
 
 #: mediagoblin/moderation/tools.py:34
 msgid ""
 "\n"
 "{mod} took away {user}'s {privilege} privileges."
-msgstr ""
+msgstr "\n{mod} tok vekk {privilege} privilegiane til {user}."
 
 #: mediagoblin/moderation/tools.py:47
 msgid ""
 "\n"
 "{mod} banned user {user} {expiration_date}."
-msgstr ""
+msgstr "\n{mod} utestengde brukaren {user} {expiration_date}."
 
 #: mediagoblin/moderation/tools.py:51
 msgid "until {date}"
-msgstr ""
+msgstr "til {dato}"
 
 #: mediagoblin/moderation/tools.py:53
 #: mediagoblin/templates/mediagoblin/banned.html:30
@@ -581,19 +581,19 @@ msgstr "for alltid"
 msgid ""
 "\n"
 "{mod} sent a warning email to the {user}."
-msgstr ""
+msgstr "\n{mod} sende ein åtvaringsepost til {user}."
 
 #: mediagoblin/moderation/tools.py:71
 msgid ""
 "\n"
 "{mod} deleted the comment."
-msgstr ""
+msgstr "\n{mod} sletta innspelet."
 
 #: mediagoblin/moderation/tools.py:78
 msgid ""
 "\n"
 "{mod} deleted the media entry."
-msgstr ""
+msgstr "\n{mod} sletta verket."
 
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
@@ -638,7 +638,7 @@ msgstr "Du har nådd opplastingsgrensa di."
 
 #: mediagoblin/plugins/archivalook/forms.py:21
 msgid "Enter the URL for the media to be featured"
-msgstr ""
+msgstr "Skriv adresse for verket du vil visa fram."
 
 #: mediagoblin/plugins/archivalook/tools.py:132
 msgid "Primary"
@@ -770,7 +770,6 @@ msgid ""
 msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:28
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:64
 msgid "Feature"
 msgstr ""
 
@@ -817,23 +816,20 @@ msgstr ""
 msgid ""
 "If you would like to feature a\n"
 "        piece of media, go to that media entry's homepage and click the button\n"
-"        that says"
+"        that says <a class=\"button_action\">Feature</a>."
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:65
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:67
+#, python-format
 msgid ""
 "You're seeing this page because you are a user capable of\n"
 "        featuring media, a regular user would see a blank page, so be sure to\n"
 "        have media featured as long as your instance has the 'archivalook'\n"
 "        plugin enabled. A more advanced tool to manage features can be found\n"
-"        in the"
+"        in the <a href=\"%(featured_media_url)s\">feature management panel.</a>"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:72
-msgid "feature management panel."
-msgstr ""
-
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:77
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
 msgstr ""
 

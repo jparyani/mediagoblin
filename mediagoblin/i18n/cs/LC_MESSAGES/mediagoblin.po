@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-29 11:01-0500\n"
-"PO-Revision-Date: 2014-07-29 16:01+0000\n"
+"POT-Creation-Date: 2014-08-04 13:45-0500\n"
+"PO-Revision-Date: 2014-08-04 18:45+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Czech (http://www.transifex.com/projects/p/mediagoblin/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -20,15 +20,15 @@ msgstr ""
 "Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: mediagoblin/decorators.py:300 mediagoblin/plugins/openid/views.py:202
+#: mediagoblin/decorators.py:303 mediagoblin/plugins/openid/views.py:202
 msgid "Sorry, registration is disabled on this instance."
 msgstr "Promiňte, na této instanci je možnost registrace vypnuta."
 
-#: mediagoblin/decorators.py:315
+#: mediagoblin/decorators.py:318
 msgid "Sorry, reporting is disabled on this instance."
 msgstr "Promiňte, nahlášení je na tomto serveru vypnuto."
 
-#: mediagoblin/decorators.py:358 mediagoblin/plugins/ldap/views.py:55
+#: mediagoblin/decorators.py:361 mediagoblin/plugins/ldap/views.py:55
 #: mediagoblin/plugins/persona/views.py:77
 msgid "Sorry, authentication is disabled on this instance."
 msgstr "Promiňte, autentikace je na této instanci vypnuta."
@@ -205,11 +205,11 @@ msgstr "Zadejte své heslo pro ověření, že jste majitelem tohoto účtu."
 
 #: mediagoblin/edit/forms.py:155
 msgid "Identifier"
-msgstr ""
+msgstr "Identifikátor"
 
 #: mediagoblin/edit/forms.py:156
 msgid "Value"
-msgstr ""
+msgstr "Hodnota"
 
 #: mediagoblin/edit/views.py:78
 msgid "An entry with that slug already exists for this user."
@@ -388,7 +388,7 @@ msgstr ""
 
 #: mediagoblin/media_types/blog/views.py:320
 msgid "You deleted the Blog."
-msgstr ""
+msgstr "Smazal(a) jste Blog."
 
 #: mediagoblin/media_types/blog/views.py:326
 #: mediagoblin/user_pages/views.py:329
@@ -409,11 +409,11 @@ msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:50
 msgid "Edit Blog"
-msgstr ""
+msgstr "Upravit Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:57
 msgid "Delete Blog"
-msgstr ""
+msgstr "Smazat Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:92
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blogpost_draft_view.html:35
@@ -468,7 +468,7 @@ msgstr "Smazat navždy"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:26
 msgid "Create/Edit a Blog"
-msgstr ""
+msgstr "Vytvořit/Upravit Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:37
 #: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
@@ -494,11 +494,11 @@ msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:46
 msgid "View"
-msgstr ""
+msgstr "Zobrazit"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:65
 msgid "Create a Blog"
-msgstr ""
+msgstr "Vytvořit Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/url_to_dashboard.html:20
 msgid " Blog Dashboard "
@@ -550,7 +550,7 @@ msgstr ""
 
 #: mediagoblin/moderation/forms.py:125
 msgid "Message to user:"
-msgstr ""
+msgstr "Zpráva pro uživatele:"
 
 #: mediagoblin/moderation/forms.py:128
 msgid "Resolution content:"
@@ -658,7 +658,7 @@ msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:33
 msgid "How does this work?"
-msgstr ""
+msgstr "Jak to funguje?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:34
 msgid "How to feature media?"
@@ -752,7 +752,7 @@ msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:108
 msgid "CAUTION:"
-msgstr ""
+msgstr "POZOR:"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:110
 msgid ""
@@ -770,7 +770,6 @@ msgid ""
 msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:28
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:64
 msgid "Feature"
 msgstr ""
 
@@ -817,23 +816,20 @@ msgstr ""
 msgid ""
 "If you would like to feature a\n"
 "        piece of media, go to that media entry's homepage and click the button\n"
-"        that says"
+"        that says <a class=\"button_action\">Feature</a>."
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:65
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:67
+#, python-format
 msgid ""
 "You're seeing this page because you are a user capable of\n"
 "        featuring media, a regular user would see a blank page, so be sure to\n"
 "        have media featured as long as your instance has the 'archivalook'\n"
 "        plugin enabled. A more advanced tool to manage features can be found\n"
-"        in the"
+"        in the <a href=\"%(featured_media_url)s\">feature management panel.</a>"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:72
-msgid "feature management panel."
-msgstr ""
-
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:77
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
 msgstr ""
 
@@ -996,11 +992,11 @@ msgstr "Přihlašte se pro vytvoření nového účtu."
 
 #: mediagoblin/plugins/metadata_display/templates/mediagoblin/plugins/metadata_display/metadata_table.html:22
 msgid "Metadata"
-msgstr ""
+msgstr "Metadata"
 
 #: mediagoblin/plugins/metadata_display/templates/mediagoblin/plugins/metadata_display/metadata_table.html:40
 msgid "Edit Metadata"
-msgstr ""
+msgstr "Upravit metadata"
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
@@ -1433,13 +1429,13 @@ msgid ""
 "\n"
 "            >Create an account at this site</a>\n"
 "            or"
-msgstr ""
+msgstr "\n>Založte si účet na těchto stránkách</a>\nnebo"
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:42
 msgid ""
 "\n"
 "            <a class=\"button_action\" href=\"http://mediagoblin.readthedocs.org/\">Set up MediaGoblin on your own server</a>"
-msgstr ""
+msgstr "\n<a class=\"button_action\" href=\"http://mediagoblin.readthedocs.org/\">Nastavte MediaGoblin na svém vlastním serveru</a>"
 
 #: mediagoblin/templates/mediagoblin/bits/logo.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
@@ -1528,7 +1524,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:80
 msgid "Add new Row"
-msgstr ""
+msgstr "Přidat nový řádek"
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:83
 msgid "Update Metadata"
@@ -1708,7 +1704,7 @@ msgstr "ID"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
 msgid "User"
-msgstr ""
+msgstr "Uživatel"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
@@ -2017,11 +2013,11 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:180
 msgid "Yes"
-msgstr ""
+msgstr "Ano"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:182
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:213
 msgid "Ban User"
@@ -2278,11 +2274,11 @@ msgstr "Přidat do sbírky"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:24
 msgid "Subscribe to comments"
-msgstr ""
+msgstr "Odebírat komentáře"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:30
 msgid "Silence comments"
-msgstr ""
+msgstr "Utišit komentáře"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21

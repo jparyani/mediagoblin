@@ -20,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-10 12:32-0500\n"
-"PO-Revision-Date: 2014-07-25 19:41+0000\n"
-"Last-Translator: Laura Arjona Reina <larjona99@gmail.com>\n"
+"POT-Creation-Date: 2014-08-04 13:45-0500\n"
+"PO-Revision-Date: 2014-08-04 18:45+0000\n"
+"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,15 +31,15 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mediagoblin/decorators.py:300 mediagoblin/plugins/openid/views.py:202
+#: mediagoblin/decorators.py:303 mediagoblin/plugins/openid/views.py:202
 msgid "Sorry, registration is disabled on this instance."
 msgstr "Lo sentimos, el registro está deshabilitado en este momento."
 
-#: mediagoblin/decorators.py:315
+#: mediagoblin/decorators.py:318
 msgid "Sorry, reporting is disabled on this instance."
 msgstr "Lo siento, el envío de informes está deshabilitado en esta instancia."
 
-#: mediagoblin/decorators.py:358 mediagoblin/plugins/ldap/views.py:55
+#: mediagoblin/decorators.py:361 mediagoblin/plugins/ldap/views.py:55
 #: mediagoblin/plugins/persona/views.py:77
 msgid "Sorry, authentication is disabled on this instance."
 msgstr "Lo siento, la autenticación está deshabilitada en esta instancia."
@@ -94,7 +94,11 @@ msgstr "Se reenvió tu correo electrónico de verificación."
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:89
 #: mediagoblin/media_types/blog/forms.py:24
 #: mediagoblin/media_types/blog/forms.py:33 mediagoblin/submit/forms.py:37
-#: mediagoblin/submit/forms.py:61 mediagoblin/user_pages/forms.py:45
+#: mediagoblin/submit/forms.py:61
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:40
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:69
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:100
+#: mediagoblin/user_pages/forms.py:45
 msgid "Title"
 msgstr "Título"
 
@@ -551,6 +555,57 @@ msgstr "¿Qué acción tomarás para resolver el informe?"
 msgid "What privileges will you take away?"
 msgstr "¿Qué permisos vas a retirar?"
 
+#: mediagoblin/moderation/forms.py:122
+msgid "Why user was banned:"
+msgstr ""
+
+#: mediagoblin/moderation/forms.py:125
+msgid "Message to user:"
+msgstr ""
+
+#: mediagoblin/moderation/forms.py:128
+msgid "Resolution content:"
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:34
+msgid ""
+"\n"
+"{mod} took away {user}'s {privilege} privileges."
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:47
+msgid ""
+"\n"
+"{mod} banned user {user} {expiration_date}."
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:51
+msgid "until {date}"
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:53
+#: mediagoblin/templates/mediagoblin/banned.html:30
+msgid "indefinitely"
+msgstr "indefinidamente"
+
+#: mediagoblin/moderation/tools.py:62
+msgid ""
+"\n"
+"{mod} sent a warning email to the {user}."
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:71
+msgid ""
+"\n"
+"{mod} deleted the comment."
+msgstr ""
+
+#: mediagoblin/moderation/tools.py:78
+msgid ""
+"\n"
+"{mod} deleted the media entry."
+msgstr ""
+
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
 msgstr "Advertencia de"
@@ -573,7 +628,7 @@ msgstr "No recibirás notificaciones de comentarios sobre %s."
 msgid "Must provide an oauth_token."
 msgstr "Se debe proporcionar un código (token) de OAuth."
 
-#: mediagoblin/oauth/views.py:247 mediagoblin/oauth/views.py:297
+#: mediagoblin/oauth/views.py:247 mediagoblin/oauth/views.py:298
 msgid "No request token found."
 msgstr "No se ha encontrado el código (token) de petición."
 
@@ -643,7 +698,7 @@ msgid ""
 "        Yes. If you would prefer, you may go to the media homepage of the piece\n"
 "        of media you would like to feature or unfeature and look at the bar to\n"
 "        the side of the media entry. If the piece of media has not been featured\n"
-"        yet you should see a button that says 'Feature'. Press that button and\n"
+"        yet you should see a button that says \"Feature\". Press that button and\n"
 "        the media will be featured as a Primary Feature at the top of the page.\n"
 "        All other featured media entries will remain as features, but will be\n"
 "        pushed further down the page.<br /><br />\n"
@@ -657,7 +712,7 @@ msgid ""
 "        prominent and Demote moves the featured media lower down and makes it\n"
 "        less prominent.\n"
 "    "
-msgstr "\n        Sí. Si lo prefieres, puedes ir a la página de inicio del contenido que te gustaría destacar o quitar de destacados, y mirar en la barra lateral de la entrada. Si el contenido no se ha destacado aún, deberías ver un botón que dice \"Destacar\". Presiona ese botón y el contenido será destacado como primario, al inicio de la página.\nTodos los demás contenidos destacados seguirán como destacados, pero irán más abajo en la página.<br /><br />\n\n        Si vas a la página de inicio de un contenido que ya está destacado, verás las opciones \"Quitar de destacados\", \"Ascender\" y \"Descender\" donde antes estaba el botón que decía \"Destacar\". Haz clic en \"Quitar de destacados\" y ese contenido ya no aparecerá en la página inicial, aunque puedes volver a destacarlo en cualquier momento. \"Ascender\" mueve el contenido destacado más arriba en la página, y lo hace más prominente, y \"Descender\" mueve el contenido destacado más abajo y lo hace menos prominente.\n    "
+msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:70
 msgid "What is a Primary Feature? What is a Secondary Feature?"
@@ -772,23 +827,20 @@ msgstr "No hay nada destacado actualmente."
 msgid ""
 "If you would like to feature a\n"
 "        piece of media, go to that media entry's homepage and click the button\n"
-"        that says"
-msgstr "Si te gustaría destacar un\n        contenido determinado, ve a la página inicial de esa entrada y pulsa el botón\n        que dice"
+"        that says <a class=\"button_action\">Feature</a>."
+msgstr ""
 
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:65
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:67
+#, python-format
 msgid ""
 "You're seeing this page because you are a user capable of\n"
 "        featuring media, a regular user would see a blank page, so be sure to\n"
 "        have media featured as long as your instance has the 'archivalook'\n"
 "        plugin enabled. A more advanced tool to manage features can be found\n"
-"        in the"
-msgstr "Ves esta página porque eres un usuario con permisos para\ndestacar contenidos; un usuario normal vería una página en blanco; así que asegúrate de que has destacado contenido mientras tengas habilitado el complemento 'archivalook'. Se puede encontrar una herramienta más avanzada para gestionar destacados en el"
+"        in the <a href=\"%(featured_media_url)s\">feature management panel.</a>"
+msgstr ""
 
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:72
-msgid "feature management panel."
-msgstr "panel de gestión de destacados."
-
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:77
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
 msgstr "Ver el contenido más reciente"
 
@@ -1214,10 +1266,6 @@ msgstr "Has sido inhabilitado"
 msgid "until %(until_when)s"
 msgstr "hasta el %(until_when)s"
 
-#: mediagoblin/templates/mediagoblin/banned.html:30
-msgid "indefinitely"
-msgstr "indefinidamente"
-
 #: mediagoblin/templates/mediagoblin/base.html:97
 msgid "Verify your email!"
 msgstr "¡Verifica tu correo!"
@@ -1258,6 +1306,10 @@ msgstr "Añadir contenido"
 #: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
 msgid "Create new collection"
 msgstr "Crear nueva colección"
+
+#: mediagoblin/templates/mediagoblin/base.html:163
+msgid "Moderation powers:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:169
 msgid "User management panel"
@@ -1652,6 +1704,32 @@ msgstr "Aquí puedes llevar un seguimiento del estado del contenido que se está
 msgid "Media in-processing"
 msgstr "Procesando contenido"
 
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:38
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:67
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:98
+#: mediagoblin/templates/mediagoblin/moderation/user_panel.html:75
+msgid "ID"
+msgstr "ID"
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:39
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
+msgid "User"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
+msgid "When submitted"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:42
+msgid "Transcoding progress"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:53
+msgid "Unknown"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:59
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
 msgid "No media in-processing"
@@ -1662,6 +1740,14 @@ msgstr "No hay contenidos en procesamiento"
 msgid "These uploads failed to process:"
 msgstr "Estos archivos no pudieron ser procesados:"
 
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:71
+msgid "Reason for failure"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:72
+msgid "Failure metadata"
+msgstr ""
+
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:91
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
 msgid "No failed entries!"
@@ -1670,6 +1756,10 @@ msgstr "¡No han fallado entradas!"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:93
 msgid "Last 10 successful uploads"
 msgstr "Últimos 10 envíos con éxito"
+
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:101
+msgid "Submitted"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:113
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
@@ -1710,6 +1800,10 @@ msgid ""
 "          HAS BEEN DELETED\n"
 "        "
 msgstr "\nESTE CONTENIDO DE⏎\n<a href=\"%(user_url)s\"> %(user_name)s</a>⏎\nHA SIDO BORRADO⏎"
+
+#: mediagoblin/templates/mediagoblin/moderation/report.html:102
+msgid "Reason for report:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:133
 #: mediagoblin/templates/mediagoblin/moderation/user.html:136
@@ -1960,10 +2054,6 @@ msgstr "\nAquí puedes buscar usuarios de cara a tomar acciones punitivas sobre 
 msgid "Active Users"
 msgstr "Usuarios activos"
 
-#: mediagoblin/templates/mediagoblin/moderation/user_panel.html:75
-msgid "ID"
-msgstr "ID"
-
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:77
 msgid "When Joined"
 msgstr "Cuándo se unió"
@@ -2192,6 +2282,14 @@ msgstr "En la colección"
 #: mediagoblin/templates/mediagoblin/utils/collections.html:40
 msgid "Add to a collection"
 msgstr "Añadir a una colección"
+
+#: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:24
+msgid "Subscribe to comments"
+msgstr ""
+
+#: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:30
+msgid "Silence comments"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
