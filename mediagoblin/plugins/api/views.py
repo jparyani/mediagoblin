@@ -104,7 +104,7 @@ def api_test(request):
 
     # TODO: This is the *only* thing using Response() here, should that
     # not simply use json_response()?
-    return Response(json.dumps(user_data))
+    return Response(json.dumps(user_data, sort_keys=True))
 
 
 def get_entries(request):
