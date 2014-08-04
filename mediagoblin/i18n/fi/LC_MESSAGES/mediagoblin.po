@@ -3,26 +3,24 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
-# Berker Peksag <berker.peksag@gmail.com>, 2014
-# Caner Başaran <basaran.caner@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2014-07-29 11:01-0500\n"
-"PO-Revision-Date: 2014-08-04 18:37+0000\n"
-"Last-Translator: Berker Peksag <berker.peksag@gmail.com>\n"
-"Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/mediagoblin/language/tr_TR/)\n"
+"PO-Revision-Date: 2011-08-07 03:51+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/mediagoblin/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
-"Language: tr_TR\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: mediagoblin/decorators.py:300 mediagoblin/plugins/openid/views.py:202
 msgid "Sorry, registration is disabled on this instance."
-msgstr "Üzgünüz, bu durumda kayıt devre dışıdır."
+msgstr ""
 
 #: mediagoblin/decorators.py:315
 msgid "Sorry, reporting is disabled on this instance."
@@ -47,11 +45,11 @@ msgstr ""
 
 #: mediagoblin/auth/tools.py:116
 msgid "Sorry, a user with that name already exists."
-msgstr "Maalesef, bu isimde bir kullanıcı mevcut."
+msgstr ""
 
 #: mediagoblin/auth/tools.py:120 mediagoblin/edit/views.py:407
 msgid "Sorry, a user with that email address already exists."
-msgstr "Üzgünüz, bu e-posta adresine sahip bir kullanıcı zaten var."
+msgstr ""
 
 #: mediagoblin/auth/views.py:142 mediagoblin/edit/views.py:363
 #: mediagoblin/edit/views.py:384 mediagoblin/plugins/basic_auth/views.py:110
@@ -62,11 +60,11 @@ msgstr ""
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
-msgstr "E-posta adresiniz doğrulandı. Şimdi giriş yapabilir, profilinizi düzenleyip ve yeni görüntüleri gönderebilirsiniz!"
+msgstr ""
 
 #: mediagoblin/auth/views.py:167
 msgid "The verification key or user id is incorrect"
-msgstr "Doğrulama anahtarı veya kullanıcı kimliği yanlış"
+msgstr ""
 
 #: mediagoblin/auth/views.py:185
 msgid "You must be logged in so we know who to send the email to!"
@@ -74,11 +72,11 @@ msgstr ""
 
 #: mediagoblin/auth/views.py:193
 msgid "You've already verified your email address!"
-msgstr "Zaten e-posta adresinizi doğruladınız!"
+msgstr ""
 
 #: mediagoblin/auth/views.py:203
 msgid "Resent your verification email."
-msgstr "Doğrulama e-postasını tekrar yolla."
+msgstr ""
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:89
 #: mediagoblin/media_types/blog/forms.py:24
@@ -89,7 +87,7 @@ msgstr "Doğrulama e-postasını tekrar yolla."
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:100
 #: mediagoblin/user_pages/forms.py:45
 msgid "Title"
-msgstr "Başlık"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:32 mediagoblin/submit/forms.py:40
 msgid "Description of this work"
@@ -106,11 +104,11 @@ msgstr ""
 #: mediagoblin/edit/forms.py:37 mediagoblin/media_types/blog/forms.py:27
 #: mediagoblin/submit/forms.py:45
 msgid "Tags"
-msgstr "Etiketler"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:39 mediagoblin/submit/forms.py:47
 msgid "Separate tags by commas."
-msgstr "Etikerleri virgül ile ayırın."
+msgstr ""
 
 #: mediagoblin/edit/forms.py:42 mediagoblin/edit/forms.py:97
 msgid "Slug"
@@ -130,7 +128,7 @@ msgstr ""
 #: mediagoblin/submit/forms.py:50
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
-msgstr "Lisans"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:54
 msgid "Bio"
@@ -138,7 +136,7 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:60
 msgid "Website"
-msgstr "Web sitesi"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:62
 msgid "This address contains errors"
@@ -146,7 +144,7 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:67
 msgid "Email me when others comment on my media"
-msgstr "Medyama birisi yorum yazdığında bana e-posta at"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:69
 msgid "Enable insite notifications about events."
@@ -154,7 +152,7 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:71
 msgid "License preference"
-msgstr "Lisans tercihi"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:77
 msgid "This will be your default license on upload forms."
@@ -177,7 +175,7 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:106 mediagoblin/plugins/basic_auth/forms.py:68
 msgid "Old password"
-msgstr "Eski parola"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:108 mediagoblin/plugins/basic_auth/forms.py:70
 msgid "Enter your old password to prove you own this account."
@@ -185,11 +183,11 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:111 mediagoblin/plugins/basic_auth/forms.py:73
 msgid "New password"
-msgstr "Yeni parola"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:119
 msgid "New email address"
-msgstr "Yeni e-posta adresi"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:123 mediagoblin/plugins/basic_auth/forms.py:28
 #: mediagoblin/plugins/basic_auth/forms.py:43
@@ -197,7 +195,7 @@ msgstr "Yeni e-posta adresi"
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:64
 #: mediagoblin/tests/test_util.py:116
 msgid "Password"
-msgstr "Parola"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:125
 msgid "Enter your password to prove you own this account."
@@ -217,7 +215,7 @@ msgstr ""
 
 #: mediagoblin/edit/views.py:96
 msgid "You are editing another user's media. Proceed with caution."
-msgstr "Başka bir kullanıcının medyasını düzenlerken dikkatli davranın."
+msgstr ""
 
 #: mediagoblin/edit/views.py:166
 #, python-format
@@ -226,19 +224,19 @@ msgstr ""
 
 #: mediagoblin/edit/views.py:193
 msgid "You can only edit your own profile."
-msgstr "Sadece kendi profilinizi düzenleyebilirsiniz."
+msgstr ""
 
 #: mediagoblin/edit/views.py:199
 msgid "You are editing a user's profile. Proceed with caution."
-msgstr "Başka bir kullanıcının profilini düzenlerken dikkatli davranın."
+msgstr ""
 
 #: mediagoblin/edit/views.py:215
 msgid "Profile changes saved"
-msgstr "Profil değişiklikleri kaydedildi"
+msgstr ""
 
 #: mediagoblin/edit/views.py:248
 msgid "Account settings saved"
-msgstr "Hesap ayarları kaydedildi"
+msgstr ""
 
 #: mediagoblin/edit/views.py:282
 msgid "You need to confirm the deletion of your account."
@@ -260,11 +258,11 @@ msgstr ""
 
 #: mediagoblin/edit/views.py:378
 msgid "Your email address has been verified."
-msgstr "E-posta adresiniz doğrulandı."
+msgstr ""
 
 #: mediagoblin/edit/views.py:413 mediagoblin/plugins/basic_auth/views.py:200
 msgid "Wrong password"
-msgstr "Yanlış parola"
+msgstr ""
 
 #: mediagoblin/gmg_commands/assetlink.py:60
 msgid "Cannot link theme... no theme set\n"
@@ -315,7 +313,7 @@ msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:63
 msgid "Sorry, no user by username '{username}' exists"
-msgstr "'{username}' adında bir kullanıcı kayıtlı değil."
+msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:74
 msgid "File at {path} not found, use -h flag for help"
@@ -354,7 +352,7 @@ msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:168
 msgid "{files_uploaded} out of {files_attempted} files successfully submitted"
-msgstr "{files_attempted} dosyadan {files_uploaded} tanesi başarıyla gönderildi."
+msgstr ""
 
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
@@ -366,21 +364,21 @@ msgstr ""
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101
 msgid "Sorry, I don't support that file type :("
-msgstr "Üzgünüz, bu tip dosyaları desteklemiyoruz :("
+msgstr ""
 
 #: mediagoblin/media_types/blog/forms.py:26
 #: mediagoblin/media_types/blog/forms.py:35
 #: mediagoblin/plugins/oauth/forms.py:36
 msgid "Description"
-msgstr "Açıklama"
+msgstr ""
 
 #: mediagoblin/media_types/blog/forms.py:40 mediagoblin/user_pages/forms.py:31
 msgid "I am sure I want to delete this"
-msgstr "Bunu silmek için eminim"
+msgstr ""
 
 #: mediagoblin/media_types/blog/views.py:156 mediagoblin/submit/views.py:69
 msgid "Woohoo! Submitted!"
-msgstr "Hoooop! Gönderildi!"
+msgstr ""
 
 #: mediagoblin/media_types/blog/views.py:198
 msgid "Woohoo! edited blogpost is submitted"
@@ -393,7 +391,7 @@ msgstr ""
 #: mediagoblin/media_types/blog/views.py:326
 #: mediagoblin/user_pages/views.py:329
 msgid "The media was not deleted because you didn't check that you were sure."
-msgstr "Medya silinmedi çünkü emin olduğunuzu onaylamadınız."
+msgstr ""
 
 #: mediagoblin/media_types/blog/views.py:333
 msgid "You are about to delete another user's Blog. Proceed with caution."
@@ -405,15 +403,15 @@ msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:43
 msgid "Add Blog Post"
-msgstr "Yeni Blog Ekle"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:50
 msgid "Edit Blog"
-msgstr "Blog Düzenle"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:57
 msgid "Delete Blog"
-msgstr "Blog Sil"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:92
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blogpost_draft_view.html:35
@@ -421,7 +419,7 @@ msgstr "Blog Sil"
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:52
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:84
 msgid "Edit"
-msgstr "Düzenle"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:93
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blogpost_draft_view.html:36
@@ -431,7 +429,7 @@ msgstr "Düzenle"
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:56
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:88
 msgid "Delete"
-msgstr "Si"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:102
 msgid "<em> Go to list view </em>"
@@ -445,7 +443,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
 msgid "Really delete %(title)s?"
-msgstr "Gerçekten %(title)s silmek istiyor musun?"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_confirm_delete.html:47
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:61
@@ -457,14 +455,14 @@ msgstr "Gerçekten %(title)s silmek istiyor musun?"
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:67
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:48
 msgid "Cancel"
-msgstr "İptal"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_confirm_delete.html:48
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:44
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:56
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
 msgid "Delete permanently"
-msgstr "Kalıcı olarak sil"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:26
 msgid "Create/Edit a Blog"
@@ -477,7 +475,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/submit/start.html:39
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
 msgid "Add"
-msgstr "Ekle"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_edit_create.html:23
 msgid "Create/Edit a blog post."
@@ -518,7 +516,7 @@ msgstr ""
 
 #: mediagoblin/moderation/forms.py:22
 msgid "Ban the user"
-msgstr "Kullanıcıyı engelle"
+msgstr ""
 
 #: mediagoblin/moderation/forms.py:23
 msgid "Send the user a message"
@@ -575,7 +573,7 @@ msgstr ""
 #: mediagoblin/moderation/tools.py:53
 #: mediagoblin/templates/mediagoblin/banned.html:30
 msgid "indefinitely"
-msgstr "süresiz"
+msgstr ""
 
 #: mediagoblin/moderation/tools.py:62
 msgid ""
@@ -752,7 +750,7 @@ msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:108
 msgid "CAUTION:"
-msgstr "DİKKAT:"
+msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:110
 msgid ""
@@ -876,18 +874,18 @@ msgstr ""
 #: mediagoblin/plugins/persona/forms.py:24
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:76
 msgid "Username"
-msgstr "Kullanıcı adı"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/forms.py:32
 #: mediagoblin/plugins/ldap/forms.py:28 mediagoblin/plugins/openid/forms.py:31
 #: mediagoblin/plugins/persona/forms.py:28
 #: mediagoblin/plugins/persona/forms.py:39
 msgid "Email address"
-msgstr "E-posta adresi"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/forms.py:39
 msgid "Username or Email"
-msgstr "Kullanıcı adı veya E-posta"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/forms.py:46
 msgid "Stay logged in"
@@ -895,7 +893,7 @@ msgstr ""
 
 #: mediagoblin/plugins/basic_auth/forms.py:51
 msgid "Username or email"
-msgstr "Kullanıcı adı ya da e-posta"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:54
 msgid ""
@@ -910,7 +908,7 @@ msgstr ""
 #: mediagoblin/plugins/basic_auth/views.py:68
 msgid ""
 "An email has been sent with instructions on how to change your password."
-msgstr "Parolanızı nasıl değiştireceğinizle ilgili adımları anlatan bir e-posta gönderildi."
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:75
 msgid ""
@@ -924,7 +922,7 @@ msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:139
 msgid "You can now log in using your new password."
-msgstr "Şimdi yeni parolanızı giriş için kullanabilirsiniz."
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:163
 msgid ""
@@ -934,16 +932,16 @@ msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:215
 msgid "Your password was changed successfully"
-msgstr "Parolanız başarılı bir şekilde değiştirildi"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_fp.html:28
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_fp.html:36
 msgid "Set your new password"
-msgstr "Yeni parolanı gir"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_fp.html:39
 msgid "Set password"
-msgstr "Parolanı gir"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_pass.html:28
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_pass.html:38
@@ -954,15 +952,15 @@ msgstr ""
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_pass.html:45
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:40
 msgid "Save"
-msgstr "Kaydet"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/create_account_link.html:22
 msgid "Don't have an account yet?"
-msgstr "Hala hesabınız yok mu?"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/create_account_link.html:24
 msgid "Create one here!"
-msgstr "Şimdi oluşturun!"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/edit_link.html:22
 msgid "Change your password."
@@ -979,11 +977,11 @@ msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/fp_link.html:22
 msgid "Forgot your password?"
-msgstr "Parolanı mı unuttun?"
+msgstr ""
 
 #: mediagoblin/plugins/geolocation/templates/mediagoblin/plugins/geolocation/map.html:24
 msgid "Location"
-msgstr "Konum"
+msgstr ""
 
 #: mediagoblin/plugins/geolocation/templates/mediagoblin/plugins/geolocation/map.html:52
 #, python-format
@@ -1012,7 +1010,7 @@ msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:34
 msgid "Name"
-msgstr "İsim"
+msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:35
 msgid "The name of the OAuth client"
@@ -1026,7 +1024,7 @@ msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:40
 msgid "Type"
-msgstr "Tür"
+msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:45
 msgid ""
@@ -1072,7 +1070,7 @@ msgstr ""
 
 #: mediagoblin/plugins/openid/forms.py:38
 msgid "OpenID"
-msgstr "OpenID"
+msgstr ""
 
 #: mediagoblin/plugins/openid/views.py:48
 msgid "Sorry, the OpenID server could not be found"
@@ -1135,12 +1133,12 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/auth/login.html:36
 #: mediagoblin/templates/mediagoblin/auth/login.html:47
 msgid "Log in"
-msgstr "Giriş"
+msgstr ""
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:39
 #: mediagoblin/templates/mediagoblin/auth/login.html:39
 msgid "Logging in failed!"
-msgstr "Giriş başarısız!"
+msgstr ""
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:44
 msgid "Log in to create an account!"
@@ -1207,7 +1205,7 @@ msgstr ""
 
 #: mediagoblin/processing/__init__.py:420
 msgid "Invalid file given for media type."
-msgstr "Bu medya türü için geçersiz dosya türü."
+msgstr ""
 
 #: mediagoblin/processing/__init__.py:427
 msgid "Copying to public storage failed."
@@ -1223,7 +1221,7 @@ msgstr ""
 
 #: mediagoblin/submit/forms.py:34
 msgid "File"
-msgstr "Dosya"
+msgstr ""
 
 #: mediagoblin/submit/forms.py:41
 msgid ""
@@ -1234,7 +1232,7 @@ msgstr ""
 
 #: mediagoblin/submit/views.py:55
 msgid "You must provide a file."
-msgstr "Bir dosya sağlamanız gerekir."
+msgstr ""
 
 #: mediagoblin/submit/views.py:138
 #, python-format
@@ -1261,12 +1259,12 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:97
 msgid "Verify your email!"
-msgstr "E-postanızı doğrulayın!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:104
 #: mediagoblin/templates/mediagoblin/base.html:112
 msgid "log out"
-msgstr "çıkış"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:131
 #, python-format
@@ -1275,7 +1273,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:138
 msgid "Change account settings"
-msgstr "Hesap ayarlarını değiştir"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:142
 #: mediagoblin/templates/mediagoblin/base.html:165
@@ -1284,16 +1282,16 @@ msgstr "Hesap ayarlarını değiştir"
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:26
 msgid "Media processing panel"
-msgstr "Medya işlem paneli"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:152
 msgid "Log out"
-msgstr "Çıkış"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:155
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:113
 msgid "Add media"
-msgstr "Medya ekle"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:158
 #: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
@@ -1368,11 +1366,11 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
 msgid "Create an account!"
-msgstr "Hesap oluştur!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:41
 msgid "Create"
-msgstr "Oluştur"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/verification_email.txt:19
 #, python-format
@@ -1383,7 +1381,7 @@ msgid ""
 "your web browser:\n"
 "\n"
 "%(verification_url)s"
-msgstr "Merhaba %(username)s,\n\nGNU MediaGoblin hesabınızı etkinleştirmek için, lütfen aşağıdaki\nURL(bağlantı)'yı Web tarayıcınızda açın:\n\n%(verification_url)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/base_footer.html:21
 #, python-format
@@ -1402,11 +1400,11 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/base_footer.html:30
 msgid "Terms of Service"
-msgstr "Kullanıcı Sözleşmesi"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:20
 msgid "Explore"
-msgstr "Keşfet"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:24
 msgid "Hi there, welcome to this MediaGoblin site!"
@@ -1444,7 +1442,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/bits/logo.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
 msgid "MediaGoblin logo"
-msgstr "MediaGoblin logo"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:23
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:35
@@ -1456,7 +1454,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:204
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:220
 msgid "Attachments"
-msgstr "Ekler"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:57
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:226
@@ -1469,7 +1467,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:33
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:40
 msgid "Save changes"
-msgstr "Değişiklikleri kaydet"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:23
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:33
@@ -1480,17 +1478,17 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:28
 #, python-format
 msgid "Really delete user '%(user_name)s' and all related media/comments?"
-msgstr "Gerçekten '%(user_name)s' kullanıcısını ve ilgili tüm medya/yorumları silmek istiyor musun?"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:35
 msgid "Yes, really delete my account"
-msgstr "Evet, gerçekten hesabımı silmek istiyorum"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:23
 #: mediagoblin/templates/mediagoblin/edit/edit.html:35
 #, python-format
 msgid "Editing %(media_title)s"
-msgstr "%(media_title)s düzenleme"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:28
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:40
@@ -1500,22 +1498,22 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:54
 msgid "Delete my account"
-msgstr "Hesabımı sil"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:59
 msgid "Email"
-msgstr "E-posta"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:29
 #, python-format
 msgid "Editing %(collection_title)s"
-msgstr "%(collection_title)s düzenleniyor"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:23
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:34
 #, python-format
 msgid "Editing %(username)s's profile"
-msgstr "%(username)s profilini düzenleme"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:67
 #, python-format
@@ -1554,7 +1552,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:4
 msgid "New comments"
-msgstr "Yeni yorumlar"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:24
 #: mediagoblin/templates/mediagoblin/media_displays/image.html:39
@@ -1567,7 +1565,7 @@ msgstr "Yeni yorumlar"
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:48
 #, python-format
 msgid "%(formatted_time)s ago"
-msgstr "%(formatted_time)s önce"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:41
 msgid "Mark all read"
@@ -1586,11 +1584,11 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:67
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:74
 msgid "Download"
-msgstr "İndir"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:38
 msgid "Original"
-msgstr "Özgün"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:44
 msgid ""
@@ -1610,7 +1608,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:73
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:80
 msgid "Original file"
-msgstr "Özgün dosya"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
 msgid "WebM file (Vorbis codec)"
@@ -1618,7 +1616,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/image.html:36
 msgid "Created"
-msgstr "Oluşturuldu"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:59
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:90
@@ -1635,7 +1633,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:81
 msgid "PDF file"
-msgstr "PDF dosya"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:116
 msgid "Perspective"
@@ -1655,7 +1653,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:130
 msgid "WebGL"
-msgstr "WebGL"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:136
 msgid "Download model"
@@ -1663,7 +1661,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:145
 msgid "File Format"
-msgstr "Dosya Biçimi"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:147
 msgid "Object Height"
@@ -1708,7 +1706,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
 msgid "User"
-msgstr "Kullanıcı"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
@@ -1810,7 +1808,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:149
 msgid "Status"
-msgstr "Durum"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:151
 msgid "RESOLVED"
@@ -1916,7 +1914,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:60
 msgid "Email verification needed"
-msgstr "E-posta doğrulaması gerekli"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:55
 msgid ""
@@ -1930,7 +1928,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:25
 #, python-format
 msgid "%(username)s's profile"
-msgstr "%(username)s profili"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:68
 #, python-format
@@ -1950,7 +1948,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:57
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:74
 msgid "Edit profile"
-msgstr "Profil düzenle"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:96
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:81
@@ -2017,11 +2015,11 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:180
 msgid "Yes"
-msgstr "Evet"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:182
 msgid "No"
-msgstr "Hayır"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:213
 msgid "Ban User"
@@ -2053,7 +2051,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:78
 msgid "# of Comments Posted"
-msgstr "Yorum Sayısı"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:95
 msgid "No users found."
@@ -2076,17 +2074,17 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:92
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:104
 msgid "Add a comment"
-msgstr "Bir yorum ekle"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:103
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:115
 msgid "Add this comment"
-msgstr "Bu yorumu ekle"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:149
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:179
 msgid "Added"
-msgstr "Eklendi"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format
@@ -2116,11 +2114,11 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:39
 #, python-format
 msgid "Really remove %(media_title)s from %(collection_title)s?"
-msgstr "Gerçekten %(collection_title)s %(media_title)s kaldırmak istiyor musun?"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:62
 msgid "Remove"
-msgstr "Kaldır"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:21
 #, python-format
@@ -2142,7 +2140,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
 #, python-format
 msgid "%(username)s's media"
-msgstr "%(username)s medyası"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:38
 #, python-format
@@ -2154,7 +2152,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:48
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
-msgstr "<a href=\"%(user_url)s\">%(username)s</a> medyası"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:38
 #, python-format
@@ -2163,7 +2161,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:119
 msgid "Comment Preview"
-msgstr "Yorum önizlemesi"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:28
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:40
@@ -2182,7 +2180,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:29
 msgid ""
 "You can track the state of media being processed for your gallery here."
-msgstr "Burada galerinizdeki işlenmekte olan medyanın durumunu takip edebilirsiniz."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:89
 msgid "Your last 10 successful uploads"
@@ -2220,7 +2218,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:94
 #, python-format
 msgid "View all of %(username)s's media"
-msgstr "%(username)s tüm medyasını göster"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:107
 msgid ""
@@ -2236,12 +2234,12 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:43
 msgid "Almost done! Your account still needs to be activated."
-msgstr "Neredeyse bitti! Hesabınızı etkinleştirmeniz gerekiyor."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:48
 msgid ""
 "An email should arrive in a few moments with instructions on how to do so."
-msgstr "Bunun nasıl yapılacağı ile ilgili talimatlar, birkaç dakika içinde size e-posta ulaşacak."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:52
 msgid "In case it doesn't:"
@@ -2249,7 +2247,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:55
 msgid "Resend verification email"
-msgstr "Doğrulama e-postası tekrar yolla"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:63
 msgid ""
@@ -2262,11 +2260,11 @@ msgstr ""
 msgid ""
 "If you are that person but you've lost your verification email, you can <a "
 "href=\"%(login_url)s\">log in</a> and resend it."
-msgstr "Doğrulama e-postasını kaybettiyseniz, <a href=\"%(login_url)s\">giriş</a> yapabilir ve yeniden yollayabilirsiniz."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
 msgid "(remove)"
-msgstr "(kaldır)"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:21
 msgid "Collected in"
@@ -2287,16 +2285,16 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
 msgid "feed icon"
-msgstr "besleme simgesi"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:23
 msgid "Atom feed"
-msgstr "Atom besleme"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:25
 msgid "All rights reserved"
-msgstr "Tüm hakları saklıdır"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:39
 msgid "← Newer"
@@ -2308,7 +2306,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:48
 msgid "Go to page:"
-msgstr "Sayfaya git:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:28
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:33
@@ -2334,7 +2332,7 @@ msgstr ""
 
 #: mediagoblin/tools/response.py:38
 msgid "Oops!"
-msgstr "Amaninnn boo!"
+msgstr ""
 
 #: mediagoblin/tools/response.py:39
 msgid "An error occured"
@@ -2368,27 +2366,27 @@ msgstr ""
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"
-msgstr "yıl"
+msgstr ""
 
 #: mediagoblin/tools/timesince.py:63
 msgid "month"
-msgstr "ay"
+msgstr ""
 
 #: mediagoblin/tools/timesince.py:64
 msgid "week"
-msgstr "hafta"
+msgstr ""
 
 #: mediagoblin/tools/timesince.py:65
 msgid "day"
-msgstr "gün"
+msgstr ""
 
 #: mediagoblin/tools/timesince.py:66
 msgid "hour"
-msgstr "saat"
+msgstr ""
 
 #: mediagoblin/tools/timesince.py:67
 msgid "minute"
-msgstr "dakika"
+msgstr ""
 
 #: mediagoblin/user_pages/forms.py:23
 msgid "Comment"
@@ -2429,15 +2427,15 @@ msgstr ""
 
 #: mediagoblin/user_pages/views.py:188
 msgid "Sorry, comments are disabled."
-msgstr "Maalesef, yorum devre dışı."
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:193
 msgid "Oops, your comment was empty."
-msgstr "Amaninnn boo, yorumunuz boştu."
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:199
 msgid "Your comment has been posted!"
-msgstr "Yorumunuz gönderildi!"
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:235
 msgid "Please check your entries and try again."
@@ -2459,11 +2457,11 @@ msgstr ""
 
 #: mediagoblin/user_pages/views.py:317
 msgid "You deleted the media."
-msgstr "Medyayı sildiniz."
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:336
 msgid "You are about to delete another user's media. Proceed with caution."
-msgstr "Başka bir kullanıcının medyasını silerken dikkatli davranın."
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:409
 msgid "You deleted the item from the collection."

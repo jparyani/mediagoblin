@@ -11,6 +11,7 @@
 # Jakob Kramer <jakob.kramer@gmx.de>, 2012-2013
 # Jan-Christoph Borchardt <hey@jancborchardt.net>, 2011
 # Jan-Christoph Borchardt <hey@jancborchardt.net>, 2011, 2012
+# janssen <jan-transifex@aurka.com>, 2014
 # Keyzo <kyoo@kyoo.ch>, 2011
 # Marc Riese <marc@k-fx.de>, 2013
 # Marc Riese <marc@k-fx.de>, 2013
@@ -26,8 +27,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2014-07-29 11:01-0500\n"
-"PO-Revision-Date: 2014-07-29 16:01+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2014-08-04 17:42+0000\n"
+"Last-Translator: janssen <jan-transifex@aurka.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/mediagoblin/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -358,19 +359,19 @@ msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:160
 msgid "FAIL: This file is larger than the upload limits for this site."
-msgstr ""
+msgstr "FEHLER: Diese Datei ist größer als das Hochlad-Limit für diese Seite."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:163
 msgid "FAIL: This file will put this user past their upload limits."
-msgstr ""
+msgstr "FEHLER: Die Datei wird das Hochlad-Limit des Benutzers überschreiten."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:166
 msgid "FAIL: This user is already past their upload limits."
-msgstr ""
+msgstr "FEHLER: Dieser Benutzer hat das Hochlad-Limit bereits erreicht."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:168
 msgid "{files_uploaded} out of {files_attempted} files successfully submitted"
-msgstr ""
+msgstr "{files_uploaded} aus {files_attempted} Dateien wurden erfolgreich hochgeladen"
 
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
@@ -400,11 +401,11 @@ msgstr "JAAA! Geschafft!"
 
 #: mediagoblin/media_types/blog/views.py:198
 msgid "Woohoo! edited blogpost is submitted"
-msgstr ""
+msgstr "Woohoo! Die Änderung am Blogeintrag ist durchgeführt."
 
 #: mediagoblin/media_types/blog/views.py:320
 msgid "You deleted the Blog."
-msgstr ""
+msgstr "Du hast den Blog gelöscht."
 
 #: mediagoblin/media_types/blog/views.py:326
 #: mediagoblin/user_pages/views.py:329
@@ -413,23 +414,23 @@ msgstr "Das Medium wurde nicht gelöscht, da du die Löschung nicht bestätigt h
 
 #: mediagoblin/media_types/blog/views.py:333
 msgid "You are about to delete another user's Blog. Proceed with caution."
-msgstr ""
+msgstr "Du bist daran, einen Blog von einem anderen Benutzer zu löschen. Bitte sei vorsichtig."
 
 #: mediagoblin/media_types/blog/views.py:344
 msgid "The blog was not deleted because you have no rights."
-msgstr ""
+msgstr "Der Blog wurde nicht gelöscht, weil du keine Rechte für diesen Vorgang hast."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:43
 msgid "Add Blog Post"
-msgstr ""
+msgstr "Einen Blogeintrag hinzufügen"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:50
 msgid "Edit Blog"
-msgstr ""
+msgstr "Blog editieren"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:57
 msgid "Delete Blog"
-msgstr ""
+msgstr "Blog löschen"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:92
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blogpost_draft_view.html:35
@@ -451,11 +452,11 @@ msgstr "Löschen"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:102
 msgid "<em> Go to list view </em>"
-msgstr ""
+msgstr "<em> Gehe zur Listenansicht</em>"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:104
 msgid " No blog post yet. "
-msgstr ""
+msgstr "Noch kein Blogeintrag vorhanden."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -484,7 +485,7 @@ msgstr "Endgültig löschen"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:26
 msgid "Create/Edit a Blog"
-msgstr ""
+msgstr "Erstelle/Editiere einen Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:37
 #: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
@@ -497,28 +498,28 @@ msgstr "Hinzufügen"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_edit_create.html:23
 msgid "Create/Edit a blog post."
-msgstr ""
+msgstr "Erstelle/Editiere einen Blogeintrag."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_edit_create.html:29
 msgid "Create/Edit a Blog Post."
-msgstr ""
+msgstr "Erstelle/Editiere einen Blogeintrag."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_listing.html:24
 #, python-format
 msgid "%(blog_owner_name)s's Blog"
-msgstr ""
+msgstr "Blog von %(blog_owner_name)s"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:46
 msgid "View"
-msgstr ""
+msgstr "Zeige"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:65
 msgid "Create a Blog"
-msgstr ""
+msgstr "Erstelle einen Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/url_to_dashboard.html:20
 msgid " Blog Dashboard "
-msgstr ""
+msgstr "Blog Übersicht"
 
 #: mediagoblin/media_types/pdf/processing.py:142
 msgid "unoconv failing to run, check log file"
@@ -562,11 +563,11 @@ msgstr "Welche Rechte wirst du entziehen?"
 
 #: mediagoblin/moderation/forms.py:122
 msgid "Why user was banned:"
-msgstr ""
+msgstr "Der Benutzer wurde verbannt wegen:"
 
 #: mediagoblin/moderation/forms.py:125
 msgid "Message to user:"
-msgstr ""
+msgstr "Nachricht zum Benutzer:"
 
 #: mediagoblin/moderation/forms.py:128
 msgid "Resolution content:"
