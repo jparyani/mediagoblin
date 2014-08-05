@@ -33,7 +33,6 @@ from mediagoblin.db.base import Session
 from mediagoblin.meddleware import BaseMeddleware
 from mediagoblin.auth import gen_password_hash
 from mediagoblin.gmg_commands.dbupdate import run_dbupdate
-from mediagoblin.oauth.views import OAUTH_ALPHABET
 from mediagoblin.tools.crypto import random_string
 
 from datetime import datetime
@@ -346,4 +345,3 @@ def fixture_add_comment_report(comment=None, reported_user=None,
     Session.expunge(comment_report)
 
     return comment_report
-

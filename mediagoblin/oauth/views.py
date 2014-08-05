@@ -339,4 +339,3 @@ def access_token(request):
     av = AccessTokenEndpoint(request_validator)
     tokens = av.create_access_token(request, {})
     return form_response(tokens)
-

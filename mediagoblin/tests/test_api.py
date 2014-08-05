@@ -39,6 +39,7 @@ class TestAPI(object):
             username="otheruser",
             privileges=[u'active', u'uploader', u'commenter']
         )
+        self.active_user = self.user
 
     def _activity_to_feed(self, test_app, activity, headers=None):
         """ Posts an activity to the user's feed """
@@ -47,10 +48,9 @@ class TestAPI(object):
         else:
             headers = {"Content-Type": "application/json"}
 
-        with mock.patch("mediagoblin.decorators.oauth_required",
-                        new_callable=self.mocked_oauth_required):
+        with self.mock_oauth():
             response = test_app.post(
-                "/api/user/{0}/feed".format(self.user.username),
+                "/api/user/{0}/feed".format(self.active_user.username),
                 json.dumps(activity),
                 headers=headers
             )
@@ -66,10 +66,9 @@ class TestAPI(object):
         }
 
 
-        with mock.patch("mediagoblin.decorators.oauth_required",
-                        new_callable=self.mocked_oauth_required):
+        with self.mock_oauth():
             response = test_app.post(
-                "/api/user/{0}/uploads".format(self.user.username),
+                "/api/user/{0}/uploads".format(self.active_user.username),
                 data,
                 headers=headers
             )
@@ -86,18 +85,24 @@ class TestAPI(object):
 
         return self._activity_to_feed(test_app, activity)
 
-
     def mocked_oauth_required(self, *args, **kwargs):
         """ Mocks mediagoblin.decorator.oauth_required to always validate """
 
         def fake_controller(controller, request, *args, **kwargs):
-            request.user = User.query.filter_by(id=self.user.id).first()
+            request.user = User.query.filter_by(id=self.active_user.id).first()
             return controller(request, *args, **kwargs)
 
         def oauth_required(c):
             return lambda *args, **kwargs: fake_controller(c, *args, **kwargs)
 
         return oauth_required
+
+    def mock_oauth(self):
+        """ Returns a mock.patch for the oauth_required decorator """
+        return mock.patch(
+            target="mediagoblin.decorators.oauth_required",
+            new_callable=self.mocked_oauth_required
+        )
 
     def test_can_post_image(self, test_app):
         """ Tests that an image can be posted to the API """
@@ -128,9 +133,7 @@ class TestAPI(object):
             "Content-Length": str(len(data))
         }
 
-        with mock.patch("mediagoblin.decorators.oauth_required",
-                        new_callable=self.mocked_oauth_required):
-
+        with self.mock_oauth():
             # Will be self.user trying to upload as self.other_user
             with pytest.raises(AppError) as excinfo:
                 test_app.post(
@@ -154,8 +157,7 @@ class TestAPI(object):
             "Content-Type": "application/json",
         }
 
-        with mock.patch("mediagoblin.decorators.oauth_required",
-                    new_callable=self.mocked_oauth_required):
+        with self.mock_oauth():
             with pytest.raises(AppError) as excinfo:
                 test_app.post(
                     "/api/user/{0}/feed".format(self.other_user.username),
@@ -187,8 +189,7 @@ class TestAPI(object):
         media.save()
 
         # Now lets try and edit the image as self.user, this should produce a 403 error.
-        with mock.patch("mediagoblin.decorators.oauth_required",
-                        new_callable=self.mocked_oauth_required):
+        with self.mock_oauth():
             with pytest.raises(AppError) as excinfo:
                 test_app.post(
                     "/api/user/{0}/feed".format(self.user.username),
@@ -216,8 +217,7 @@ class TestAPI(object):
 
         activity = {"verb": "update", "object": image}
 
-        with mock.patch("mediagoblin.decorators.oauth_required",
-                        new_callable=self.mocked_oauth_required):
+        with self.mock_oauth():
             response = test_app.post(
                 "/api/user/{0}/feed".format(self.user.username),
                 json.dumps(activity),
@@ -251,8 +251,7 @@ class TestAPI(object):
             "Content-Length": str(len(data)),
         }
 
-        with mock.patch("mediagoblin.decorators.oauth_required",
-                        new_callable=self.mocked_oauth_required):
+        with self.mock_oauth():
             with pytest.raises(AppError) as excinfo:
                 test_app.post(
                     "/api/user/{0}/uploads".format(self.user.username),
@@ -279,8 +278,7 @@ class TestAPI(object):
         object_uri = image["links"]["self"]["href"]
         object_uri = object_uri.replace("http://localhost:80", "")
 
-        with mock.patch("mediagoblin.decorators.oauth_required",
-                        new_callable=self.mocked_oauth_required):
+        with self.mock_oauth():
             request = test_app.get(object_uri)
 
         image = json.loads(request.body)
@@ -345,8 +343,7 @@ class TestAPI(object):
             "Content-Type": "application/json",
         }
 
-        with mock.patch("mediagoblin.decorators.oauth_required",
-                        new_callable=self.mocked_oauth_required):
+        with self.mock_oauth():
             with pytest.raises(AppError) as excinfo:
                 test_app.post(
                     "/api/user/{0}/feed".format(self.other_user.username),
@@ -382,6 +379,7 @@ class TestAPI(object):
         comment_id = comment_data["object"]["id"]
         comment = MediaComment.query.filter_by(id=comment_id).first()
         comment.author = self.other_user.id
+        comment.save()
 
         # Update the comment as someone else.
         comment_data["object"]["content"] = "Yep"
@@ -390,8 +388,7 @@ class TestAPI(object):
             "object": comment_data["object"]
         }
 
-        with mock.patch("mediagoblin.decorators.oauth_required",
-                    new_callable=self.mocked_oauth_required):
+        with self.mock_oauth():
             with pytest.raises(AppError) as excinfo:
                 test_app.post(
                     "/api/user/{0}/feed".format(self.user.username),
@@ -404,8 +401,7 @@ class TestAPI(object):
     def test_profile(self, test_app):
         """ Tests profile endpoint """
         uri = "/api/user/{0}/profile".format(self.user.username)
-        with mock.patch("mediagoblin.decorators.oauth_required",
-                        new_callable=self.mocked_oauth_required):
+        with self.mock_oauth():
             response = test_app.get(uri)
             profile = json.loads(response.body)
 
@@ -416,9 +412,77 @@ class TestAPI(object):
 
             assert "links" in profile
 
+    def test_user(self, test_app):
+        """ Test the user endpoint """
+        uri = "/api/user/{0}/".format(self.user.username)
+        with self.mock_oauth():
+            response = test_app.get(uri)
+            user = json.loads(response.body)
+
+            assert response.status_code == 200
+
+            assert user["nickname"] == self.user.username
+            assert user["updated"] == self.user.created.isoformat()
+            assert user["published"] == self.user.created.isoformat()
+
+            # Test profile exists but self.test_profile will test the value
+            assert "profile" in response
+
     def test_whoami_without_login(self, test_app):
         """ Test that whoami endpoint returns error when not logged in """
         with pytest.raises(AppError) as excinfo:
             response = test_app.get("/api/whoami")
 
         assert "401 UNAUTHORIZED" in excinfo.value.message
+
+    def test_read_feed(self, test_app):
+        """ Test able to read objects from the feed """
+        response, data = self._upload_image(test_app, GOOD_JPG)
+        response, data = self._post_image_to_feed(test_app, data)
+
+        uri = "/api/user/{0}/feed".format(self.active_user.username)
+        with self.mock_oauth():
+            response = test_app.get(uri)
+            feed = json.loads(response.body)
+
+            assert response.status_code == 200
+
+            # Check it has the attributes it should
+            assert "displayName" in feed
+            assert "objectTypes" in feed
+            assert "url" in feed
+            assert "links" in feed
+            assert "author" in feed
+            assert "items" in feed
+
+            # Check that image i uploaded is there
+            assert feed["items"][0]["verb"] == "post"
+            assert feed["items"][0]["actor"]
+
+    def test_cant_post_to_someone_elses_feed(self, test_app):
+        """ Test that can't post to someone elses feed """
+        response, data = self._upload_image(test_app, GOOD_JPG)
+        self.active_user = self.other_user
+
+        with self.mock_oauth():
+            with pytest.raises(AppError) as excinfo:
+                self._post_image_to_feed(test_app, data)
+
+            assert "403 FORBIDDEN" in excinfo.value.message
+
+    def test_object_endpoint(self, test_app):
+        """ Test that object endpoint can be requested """
+        response, data = self._upload_image(test_app, GOOD_JPG)
+        response, data = self._post_image_to_feed(test_app, data)
+        object_id = data["object"]["id"]
+
+        with self.mock_oauth():
+            response = test_app.get(data["object"]["links"]["self"]["href"])
+            data = json.loads(response.body)
+
+            assert response.status_code == 200
+
+            assert object_id == data["id"]
+            assert "url" in data
+            assert "links" in data
+            assert data["objectType"] == "image"

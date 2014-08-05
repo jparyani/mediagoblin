@@ -31,47 +31,70 @@ from mediagoblin.submit.lib import new_upload_entry, api_upload_request, \
 # MediaTypes
 from mediagoblin.media_types.image import MEDIA_TYPE as IMAGE_MEDIA_TYPE
 
-@oauth_required
-def profile(request, raw=False):
-    """ This is /api/user/<username>/profile - This will give profile info """
-    user = request.matchdict["username"]
-    requested_user = User.query.filter_by(username=user).first()
+# Getters
+def get_profile(request):
+    """
+    Gets the user's profile for the endpoint requested.
+
+    For example an endpoint which is /api/{username}/feed
+    as /api/cwebber/feed would get cwebber's profile. This
+    will return a tuple (username, user_profile). If no user
+    can be found then this function returns a (None, None).
+    """
+    username = request.matchdict["username"]
+    user = User.query.filter_by(username=username).first()
 
     if user is None:
+        return None, None
+
+    return user, user.serialize(request)
+
+
+# Endpoints
+@oauth_required
+def profile_endpoint(request):
+    """ This is /api/user/<username>/profile - This will give profile info """
+    user, user_profile = get_profile(request)
+
+    if user is None:
+        username = request.matchdict["username"]
         return json_error(
-            "No such 'user' with id '{0}'".format(user),
+            "No such 'user' with username '{0}'".format(username),
             status=404
         )
 
-    if raw:
-        return (requested_user.username, requested_user.serialize(request))
-
     # user profiles are public so return information
-    return json_response(requested_user.serialize(request))
+    return json_response(user_profile)
 
 @oauth_required
-def user(request):
+def user_endpoint(request):
     """ This is /api/user/<username> - This will get the user """
-    user, user_profile = profile(request, raw=True)
-    data = {
+    user, user_profile = get_profile(request)
+    
+    if user is None:
+        username = request.matchdict["username"]
+        return json_error(
+            "No such 'user' with username '{0}'".format(username),
+            status=404
+        )
+    
+    return json_response({
         "nickname": user.username,
         "updated": user.created.isoformat(),
         "published": user.created.isoformat(),
         "profile": user_profile,
-    }
-
-    return json_response(data)
+    })
 
 @oauth_required
 @csrf_exempt
 @user_has_privilege(u'uploader')
-def uploads(request):
+def uploads_endpoint(request):
     """ Endpoint for file uploads """
-    user = request.matchdict["username"]
-    requested_user = User.query.filter_by(username=user).first()
+    username = request.matchdict["username"]
+    requested_user = User.query.filter_by(username=username).first()
 
     if requested_user is None:
-        return json_error("No such 'user' with id '{0}'".format(user), 404)
+        return json_error("No such 'user' with id '{0}'".format(username), 404)
 
     if request.method == "POST":
         # Ensure that the user is only able to upload to their own
@@ -85,7 +108,9 @@ def uploads(request):
         # Wrap the data in the werkzeug file wrapper
         if "Content-Type" not in request.headers:
             return json_error(
-                "Must supply 'Content-Type' header to upload media.")
+                "Must supply 'Content-Type' header to upload media."
+            )
+
         mimetype = request.headers["Content-Type"]
         filename = mimetypes.guess_all_extensions(mimetype)
         filename = 'unknown' + filename[0] if filename else filename
@@ -104,156 +129,179 @@ def uploads(request):
 
 @oauth_required
 @csrf_exempt
-def feed(request):
+def feed_endpoint(request):
     """ Handles the user's outbox - /api/user/<username>/feed """
-    user = request.matchdict["username"]
-    requested_user = User.query.filter_by(username=user).first()
+    username = request.matchdict["username"]
+    requested_user = User.query.filter_by(username=username).first()
 
     # check if the user exists
     if requested_user is None:
-        return json_error("No such 'user' with id '{0}'".format(user), 404)
+        return json_error("No such 'user' with id '{0}'".format(username), 404)
 
     if request.data:
         data = json.loads(request.data)
     else:
         data = {"verb": None, "object": {}}
 
-    # We need to check that the user they're posting to is
-    # the person that they are.
-    if request.method in ["POST", "PUT"] and \
-        requested_user.id != request.user.id:
-        
-        return json_error(
-            "Not able to post to another users feed.",
-            status=403
-        )
 
-    if request.method == "POST" and data["verb"] == "post":
-        obj = data.get("object", None)
-        if obj is None:
-            return json_error("Could not find 'object' element.")
+    if request.method in ["POST", "PUT"]:
+        # Validate that the activity is valid
+        if "verb" not in data or "object" not in data:
+            return json_error("Invalid activity provided.")
 
-        if obj.get("objectType", None) == "comment":
-            # post a comment
-            if not request.user.has_privilege(u'commenter'):
+        # Check that the verb is valid
+        if data["verb"] not in ["post", "update"]:
+            return json_error("Verb not yet implemented", 501)
+
+        # We need to check that the user they're posting to is
+        # the person that they are.
+        if requested_user.id != request.user.id:
+            return json_error(
+                "Not able to post to another users feed.",
+                status=403
+            )
+
+        # Handle new posts
+        if data["verb"] == "post":
+            obj = data.get("object", None)
+            if obj is None:
+                return json_error("Could not find 'object' element.")
+
+            if obj.get("objectType", None) == "comment":
+                # post a comment
+                if not request.user.has_privilege(u'commenter'):
+                    return json_error(
+                        "Privilege 'commenter' required to comment.",
+                        status=403
+                    )
+
+                comment = MediaComment(author=request.user.id)
+                comment.unserialize(data["object"])
+                comment.save()
+                data = {
+                    "verb": "post",
+                    "object": comment.serialize(request)
+                }
+                return json_response(data)
+
+            elif obj.get("objectType", None) == "image":
+                # Posting an image to the feed
+                media_id = int(data["object"]["id"])
+                media = MediaEntry.query.filter_by(id=media_id).first()
+
+                if media is None:
+                    return json_response(
+                        "No such 'image' with id '{0}'".format(media_id),
+                        status=404
+                    )
+
+                if media.uploader != request.user.id:
+                    return json_error(
+                        "Privilege 'commenter' required to comment.",
+                        status=403
+                    )
+
+
+                if not media.unserialize(data["object"]):
+                    return json_error(
+                        "Invalid 'image' with id '{0}'".format(media_id)
+                    )
+
+                media.save()
+                api_add_to_feed(request, media)
+
+                return json_response({
+                    "verb": "post",
+                    "object": media.serialize(request)
+                })
+
+            elif obj.get("objectType", None) is None:
+                # They need to tell us what type of object they're giving us.
+                return json_error("No objectType specified.")
+            else:
+                # Oh no! We don't know about this type of object (yet)
+                object_type = obj.get("objectType", None)
                 return json_error(
-                    "Privilege 'commenter' required to comment.",
-                    status=403
+                    "Unknown object type '{0}'.".format(object_type)
                 )
 
-            comment = MediaComment(author=request.user.id)
-            comment.unserialize(data["object"])
-            comment.save()
-            data = {"verb": "post", "object": comment.serialize(request)}
-            return json_response(data)
+        # Updating existing objects
+        if data["verb"] == "update":
+            # Check we've got a valid object
+            obj = data.get("object", None)
 
-        elif obj.get("objectType", None) == "image":
-            # Posting an image to the feed
-            media_id = int(data["object"]["id"])
-            media = MediaEntry.query.filter_by(id=media_id).first()
-            if media is None:
-                return json_response(
-                    "No such 'image' with id '{0}'".format(id=media_id),
-                    status=404
-                )
+            if obj is None:
+                return json_error("Could not find 'object' element.")
 
-            if not media.unserialize(data["object"]):
-                return json_error(
-                    "Invalid 'image' with id '{0}'".format(media_id)
-                )
+            if "objectType" not in obj:
+                return json_error("No objectType specified.")
 
-            media.save()
-            api_add_to_feed(request, media)
+            if "id" not in obj:
+                return json_error("Object ID has not been specified.")
 
-            return json_response({
-                "verb": "post",
-                "object": media.serialize(request)
-            })
+            obj_id = obj["id"]
 
-        elif obj.get("objectType", None) is None:
-            # They need to tell us what type of object they're giving us.
-            return json_error("No objectType specified.")
-        else:
-            # Oh no! We don't know about this type of object (yet)
-            object_type = obj.get("objectType", None)
-            return json_error("Unknown object type '{0}'.".format(object_type))
+            # Now try and find object
+            if obj["objectType"] == "comment":
+                if not request.user.has_privilege(u'commenter'):
+                    return json_error(
+                        "Privilege 'commenter' required to comment.",
+                        status=403
+                    )
 
-    elif request.method in ["PUT", "POST"] and data["verb"] == "update":
-        # Check we've got a valid object
-        obj = data.get("object", None)
+                comment = MediaComment.query.filter_by(id=obj_id).first()
+                if comment is None:
+                    return json_error(
+                        "No such 'comment' with id '{0}'.".format(obj_id)
+                    )
 
-        if obj is None:
-            return json_error("Could not find 'object' element.")
+                # Check that the person trying to update the comment is
+                # the author of the comment.
+                if comment.author != request.user.id:
+                    return json_error(
+                        "Only author of comment is able to update comment.",
+                        status=403
+                    )
 
-        if "objectType" not in obj:
-            return json_error("No objectType specified.")
+                if not comment.unserialize(data["object"]):
+                    return json_error(
+                        "Invalid 'comment' with id '{0}'".format(obj_id)
+                    )
 
-        if "id" not in obj:
-            return json_error("Object ID has not been specified.")
+                comment.save()
 
-        obj_id = obj["id"]
+                activity = {
+                    "verb": "update",
+                    "object": comment.serialize(request),
+                }
+                return json_response(activity)
 
-        # Now try and find object
-        if obj["objectType"] == "comment":
-            if not request.user.has_privilege(u'commenter'):
-                return json_error(
-                    "Privilege 'commenter' required to comment.",
-                    status=403
-                )
+            elif obj["objectType"] == "image":
+                image = MediaEntry.query.filter_by(id=obj_id).first()
+                if image is None:
+                    return json_error(
+                        "No such 'image' with the id '{0}'.".format(obj_id)
+                    )
 
-            comment = MediaComment.query.filter_by(id=obj_id).first()
-            if comment is None:
-                return json_error(
-                    "No such 'comment' with id '{0}'.".format(obj_id)
-                )
+                # Check that the person trying to update the comment is
+                # the author of the comment.
+                if image.uploader != request.user.id:
+                    return json_error(
+                        "Only uploader of image is able to update image.",
+                        status=403
+                    )
 
-            # Check that the person trying to update the comment is
-            # the author of the comment.
-            if comment.author != request.user.id:
-                return json_error(
-                    "Only author of comment is able to update comment.",
-                    status=403
-                )
+                if not image.unserialize(obj):
+                    return json_error(
+                        "Invalid 'image' with id '{0}'".format(obj_id)
+                    )
+                image.save()
 
-            if not comment.unserialize(data["object"]):
-                return json_error(
-                    "Invalid 'comment' with id '{0}'".format(obj_id)
-                )
-
-            comment.save()
-
-            activity = {
-                "verb": "update",
-                "object": comment.serialize(request),
-            }
-            return json_response(activity)
-
-        elif obj["objectType"] == "image":
-            image = MediaEntry.query.filter_by(id=obj_id).first()
-            if image is None:
-                return json_error(
-                    "No such 'image' with the id '{0}'.".format(obj_id)
-                )
-
-            # Check that the person trying to update the comment is
-            # the author of the comment.
-            if image.uploader != request.user.id:
-                return json_error(
-                    "Only uploader of image is able to update image.",
-                    status=403
-                )
-
-            if not image.unserialize(obj):
-                return json_error(
-                    "Invalid 'image' with id '{0}'".format(obj_id)
-                )
-            image.save()
-
-            activity = {
-                "verb": "update",
-                "object": image.serialize(request),
-            }
-            return json_response(activity)
+                activity = {
+                    "verb": "update",
+                    "object": image.serialize(request),
+                }
+                return json_response(activity)
 
     elif request.method != "GET":
         return json_error(
@@ -299,9 +347,9 @@ def feed(request):
         item = {
             "verb": "post",
             "object": media.serialize(request),
-            "actor": request.user.serialize(request),
+            "actor": media.get_uploader.serialize(request),
             "content": "{0} posted a picture".format(request.user.username),
-            "id": 1,
+            "id": media.id,
         }
         item["updated"] = item["object"]["updated"]
         item["published"] = item["object"]["published"]
@@ -312,7 +360,7 @@ def feed(request):
     return json_response(feed)
 
 @oauth_required
-def object(request, raw_obj=False):
+def object_endpoint(request):
     """ Lookup for a object type """
     object_type = request.matchdict["objectType"]
     try:
@@ -333,46 +381,41 @@ def object(request, raw_obj=False):
 
     media = MediaEntry.query.filter_by(id=object_id).first()
     if media is None:
-        error = "Can't find '{0}' with ID '{1}'".format(
-            object_type,
-            object_id
-        )
         return json_error(
             "Can't find '{0}' with ID '{1}'".format(object_type, object_id),
             status=404
         )
-
-    if raw_obj:
-        return media
 
     return json_response(media.serialize(request))
 
 @oauth_required
 def object_comments(request):
     """ Looks up for the comments on a object """
-    media = object(request, raw_obj=True)
-    response = media
-    if isinstance(response, MediaEntry):
-        comments = response.serialize(request)
-        comments = comments.get("replies", {
-            "totalItems": 0,
-            "items": [],
-            "url": request.urlgen(
-                "mediagoblin.federation.object.comments",
-                objectType=media.objectType,
-                uuid=media.id,
-                qualified=True
-            )
-        })
+    media = MediaEntry.query.filter_by(id=request.matchdict["id"]).first()
+    if media is None:
+        return json_error("Can't find '{0}' with ID '{1}'".format(
+            request.matchdict["objectType"],
+            request.matchdict["id"]
+        ), 404)
 
-        comments["displayName"] = "Replies to {0}".format(comments["url"])
-        comments["links"] = {
-            "first": comments["url"],
-            "self": comments["url"],
-        }
-        response = json_response(comments)
+    comments = response.serialize(request)
+    comments = comments.get("replies", {
+        "totalItems": 0,
+        "items": [],
+        "url": request.urlgen(
+            "mediagoblin.federation.object.comments",
+            objectType=media.objectType,
+            id=media.id,
+            qualified=True
+        )
+    })
 
-    return response
+    comments["displayName"] = "Replies to {0}".format(comments["url"])
+    comments["links"] = {
+        "first": comments["url"],
+        "self": comments["url"],
+    }
+    return json_response(comments)
 
 ##
 # Well known

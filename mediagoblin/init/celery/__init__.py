@@ -28,7 +28,9 @@ _log = logging.getLogger(__name__)
 
 MANDATORY_CELERY_IMPORTS = [
     'mediagoblin.processing.task',
-    'mediagoblin.notifications.task']
+    'mediagoblin.notifications.task',
+    'mediagoblin.submit.task',
+]
 
 DEFAULT_SETTINGS_MODULE = 'mediagoblin.init.celery.dummy_settings_module'
 
@@ -65,7 +67,7 @@ def get_celery_settings_dict(app_config, global_config,
         frequency = int(frequency)
         celery_settings['CELERYBEAT_SCHEDULE'] = {
             'garbage-collection': {
-                'task': 'mediagoblin.federation.task.garbage_collection',
+                'task': 'mediagoblin.submit.task.garbage_collection',
                 'schedule': datetime.timedelta(minutes=frequency),
             }
         }

@@ -15,7 +15,13 @@
 Command-line uploading
 ======================
 
-Want to submit media via the command line?  It's fairly easy to do::
+If you're a site administrator and have access to the server then you
+can use the 'addmedia' task. If you're just a user and want to upload
+media by the command line you can. This can be done with the pump.io
+API. There is `p <https://github.com/xray7224/p/>`_, which will allow you
+to easily upload media from the command line, follow p's docs to do that.
+
+To use the addmedia command::
 
   ./bin/gmg addmedia username your_media.jpg
 

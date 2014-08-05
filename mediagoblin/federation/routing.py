@@ -20,39 +20,39 @@ from mediagoblin.tools.routing import add_route
 add_route(
     "mediagoblin.federation.user",
     "/api/user/<string:username>/",
-    "mediagoblin.federation.views:user"
+    "mediagoblin.federation.views:user_endpoint"
 )
 
 add_route(
     "mediagoblin.federation.user.profile",
     "/api/user/<string:username>/profile",
-    "mediagoblin.federation.views:profile"
+    "mediagoblin.federation.views:profile_endpoint"
 )
 
 # Inbox and Outbox (feed)
 add_route(
     "mediagoblin.federation.feed",
     "/api/user/<string:username>/feed",
-    "mediagoblin.federation.views:feed"
+    "mediagoblin.federation.views:feed_endpoint"
 )
 
 add_route(
     "mediagoblin.federation.user.uploads",
     "/api/user/<string:username>/uploads",
-    "mediagoblin.federation.views:uploads"
+    "mediagoblin.federation.views:uploads_endpoint"
 )
 
 add_route(
     "mediagoblin.federation.inbox",
     "/api/user/<string:username>/inbox",
-    "mediagoblin.federation.views:feed"
+    "mediagoblin.federation.views:feed_endpoint"
 )
 
 # object endpoints
 add_route(
     "mediagoblin.federation.object",
     "/api/<string:objectType>/<string:id>",
-    "mediagoblin.federation.views:object"
+    "mediagoblin.federation.views:object_endpoint"
     )
 add_route(
     "mediagoblin.federation.object.comments",

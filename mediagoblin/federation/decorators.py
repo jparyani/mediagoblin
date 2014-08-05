@@ -36,7 +36,6 @@ def user_has_privilege(privilege_name):
         @wraps(controller)
         @require_active_login
         def wrapper(request, *args, **kwargs):
-            user_id = request.user.id
             if not request.user.has_privilege(privilege_name):
                 error = "User '{0}' needs '{1}' privilege".format(
                     request.user.username,
@@ -48,4 +47,3 @@ def user_has_privilege(privilege_name):
 
         return wrapper
     return user_has_privilege_decorator
-

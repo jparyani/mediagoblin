@@ -439,18 +439,11 @@ class MediaEntry(Base, MediaEntryMixin):
     def serialize(self, request, show_comments=True):
         """ Unserialize MediaEntry to object """
         author = self.get_uploader
-        url = request.urlgen(
-            "mediagoblin.user_pages.media_home",
-            user=author.username,
-            media=self.slug,
-            qualified=True
-            )
-
         context = {
             "id": self.id,
             "author": author.serialize(request),
             "objectType": self.objectType,
-            "url": url,
+            "url": self.url_for_self(request.urlgen),
             "image": {
                 "url": request.host_url + self.thumb_url[1:],
             },
@@ -683,13 +676,13 @@ class MediaComment(Base, MediaCommentMixin):
         # Validate inReplyTo has ID
         if "id" not in data["inReplyTo"]:
             return False
-            
+
         # Validate that the ID is correct
         try:
             media_id = int(data["inReplyTo"]["id"])
         except ValueError:
             return False
-        
+
         media = MediaEntry.query.filter_by(id=media_id).first()
         if media is None:
             return False

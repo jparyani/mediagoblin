@@ -266,7 +266,9 @@ def api_upload_request(request, file_data, entry):
     """ This handles a image upload request """
     # Use the same kind of method from mediagoblin/submit/views:submit_start
     entry.title = file_data.filename
-    entry.generate_slug()
+
+    # This will be set later but currently we just don't have enough information
+    entry.slug = None
 
     queue_file = prepare_queue_task(request.app, entry, file_data.filename)
     with queue_file:
@@ -278,14 +280,12 @@ def api_upload_request(request, file_data, entry):
 def api_add_to_feed(request, entry):
     """ Add media to Feed """
     if entry.title:
-        # Shame we have to do this here but we didn't have the data in
-        # api_upload_request as no filename is usually specified.
-        entry.slug = None
         entry.generate_slug()
 
     feed_url = request.urlgen(
         'mediagoblin.user_pages.atom_feed',
-        qualified=True, user=request.user.username)
+        qualified=True, user=request.user.username
+    )
 
     run_process_media(entry, feed_url)
     add_comment_subscription(request.user, entry)
