@@ -17,6 +17,7 @@
 import datetime
 import string
 
+from oauthlib.oauth1.rfc5849.utils import UNICODE_ASCII_CHARACTER_SET
 from oauthlib.oauth1 import (RequestTokenEndpoint, AuthorizationEndpoint,
                              AccessTokenEndpoint)
 
@@ -37,8 +38,6 @@ from mediagoblin.db.models import NonceTimestamp, Client, RequestToken
 
 # possible client types
 CLIENT_TYPES = ["web", "native"] # currently what pump supports
-OAUTH_ALPHABET = (string.ascii_letters.decode('ascii') +
-    string.digits.decode('ascii'))
 
 @csrf_exempt
 def client_register(request):
@@ -107,8 +106,8 @@ def client_register(request):
             return json_response({"error": error}, status=400)
 
         # generate the client_id and client_secret
-        client_id = random_string(22, OAUTH_ALPHABET)
-        client_secret = random_string(43, OAUTH_ALPHABET)
+        client_id = random_string(22, UNICODE_ASCII_CHARACTER_SET)
+        client_secret = random_string(43, UNICODE_ASCII_CHARACTER_SET)
         expirey = 0 # for now, lets not have it expire
         expirey_db = None if expirey == 0 else expirey
         application_type = data["application_type"]
