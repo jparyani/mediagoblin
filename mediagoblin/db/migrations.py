@@ -793,21 +793,47 @@ def fix_privilege_user_association_table(db):
 @RegisterMigration(22, MIGRATIONS)
 def add_index_username_field(db):
     """
-    This indexes the User.username field which is frequently queried
-    for example a user logging in. This solves the issue #894
+    This migration has been found to be doing the wrong thing.  See
+    the documentation in migration 23 (revert_username_index) below
+    which undoes this for those databases that did run this migration.
+
+    Old description:
+      This indexes the User.username field which is frequently queried
+      for example a user logging in. This solves the issue #894
     """
-    metadata = MetaData(bind=db.bind)
-    user_table = inspect_table(metadata, "core__users")
-
-    new_index = Index("ix_core__users_uploader", user_table.c.username)
-    new_index.create()
-
-    db.commit()
+    ## This code is left commented out *on purpose!*
+    ##
+    ## We do not normally allow commented out code like this in
+    ## MediaGoblin but this is a special case: since this migration has
+    ## been nullified but with great work to set things back below,
+    ## this is commented out for historical clarity.
+    #
+    # metadata = MetaData(bind=db.bind)
+    # user_table = inspect_table(metadata, "core__users")
+    #
+    # new_index = Index("ix_core__users_uploader", user_table.c.username)
+    # new_index.create()
+    #
+    # db.commit()
+    pass
 
 
 @RegisterMigration(23, MIGRATIONS)
 def revert_username_index(db):
     """
+    Revert the stuff we did in migration 22 above.
+
+    There were a couple of problems with what we did:
+     - There was never a need for this migration!  The unique
+       constraint had an implicit b-tree index, so it wasn't really
+       needed.  (This is my (Chris Webber's) fault for suggesting it
+       needed to happen without knowing what's going on... my bad!)
+     - On top of that, databases created after the models.py was
+       changed weren't the same as those that had been run through
+       migration 22 above.
+
+    As such, we're setting things back to the way they were before,
+    but as it turns out, that's tricky to do!
     """
     metadata = MetaData(bind=db.bind)
     user_table = inspect_table(metadata, "core__users")
