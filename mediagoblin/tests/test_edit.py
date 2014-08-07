@@ -142,8 +142,7 @@ class TestUserEdit(object):
         assert message['To'] == 'new@example.com'
         email_context = template.TEMPLATE_TEST_CONTEXT[
             'mediagoblin/edit/verification.txt']
-        assert email_context['verification_url'] in \
-            message.get_payload(decode=True)
+        assert email_context['verification_url'].encode('ascii') in message.get_payload(decode=True)
 
         path = urlparse.urlsplit(email_context['verification_url'])[2]
         assert path == u'/edit/verify_email/'

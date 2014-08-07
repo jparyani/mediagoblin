@@ -51,7 +51,7 @@ class TestHTTPCallback(object):
                 'client_id': client_id,
                 'client_secret': client_secret})
 
-        response_data = json.loads(response.body)
+        response_data = json.loads(response.body.decode())
 
         return response_data['access_token']
 

@@ -119,7 +119,7 @@ def test_register_views(test_app):
     assert message['To'] == 'angrygrrl@example.org'
     email_context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/auth/verification_email.txt']
-    assert email_context['verification_url'] in message.get_payload(decode=True)
+    assert email_context['verification_url'].encode('ascii') in message.get_payload(decode=True)
 
     path = urlparse.urlsplit(email_context['verification_url'])[2]
     get_params = urlparse.urlsplit(email_context['verification_url'])[3]
@@ -190,7 +190,7 @@ def test_register_views(test_app):
     email_context = template.TEMPLATE_TEST_CONTEXT[
         'mediagoblin/plugins/basic_auth/fp_verification_email.txt']
     #TODO - change the name of verification_url to something forgot-password-ish
-    assert email_context['verification_url'] in message.get_payload(decode=True)
+    assert email_context['verification_url'].encode('ascii') in message.get_payload(decode=True)
 
     path = urlparse.urlsplit(email_context['verification_url'])[2]
     get_params = urlparse.urlsplit(email_context['verification_url'])[3]

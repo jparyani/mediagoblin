@@ -163,7 +163,7 @@ code={1}&client_secret={2}'.format(client_id, code, client.secret))
 
         assert token_res.status_int == 200
 
-        token_data = json.loads(token_res.body)
+        token_data = json.loads(token_res.body.decode())
 
         assert not 'error' in token_data
         assert 'access_token' in token_data
@@ -191,7 +191,7 @@ code={0}&client_secret={1}'.format(code, client.secret))
 
         assert token_res.status_int == 200
 
-        token_data = json.loads(token_res.body)
+        token_data = json.loads(token_res.body.decode())
 
         assert 'error' in token_data
         assert not 'access_token' in token_data
@@ -215,7 +215,7 @@ code={0}&client_secret={1}'.format(code, client.secret))
 
         assert token_res.status_int == 200
 
-        new_token_data = json.loads(token_res.body)
+        new_token_data = json.loads(token_res.body.decode())
 
         assert not 'error' in new_token_data
         assert 'access_token' in new_token_data

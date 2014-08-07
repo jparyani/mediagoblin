@@ -61,7 +61,7 @@ def create_key(key_dir, key_filepath):
         key = str(getrandbits(192))
         key_file = tempfile.NamedTemporaryFile(dir=key_dir, suffix='.bin',
                                                delete=False)
-        key_file.write(key)
+        key_file.write(key.encode('ascii'))
         key_file.flush()
         os.rename(key_file.name, key_filepath)
         key_file.close()

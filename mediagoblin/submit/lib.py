@@ -59,7 +59,7 @@ def get_upload_file_limits(user):
     """
     Get the upload_limit and max_file_size for this user
     """
-    if user.upload_limit >= 0:
+    if user.upload_limit is not None and user.upload_limit >= 0:  # TODO: debug this
         upload_limit = user.upload_limit
     else:
         upload_limit = mg_globals.app_config.get('upload_limit', None)

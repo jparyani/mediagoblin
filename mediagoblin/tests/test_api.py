@@ -48,10 +48,10 @@ class TestAPI(object):
         return template.TEMPLATE_TEST_CONTEXT[template_name]
 
     def http_auth_headers(self):
-        return {'Authorization': 'Basic {0}'.format(
-                base64.b64encode(':'.join([
+        return {'Authorization': ('Basic {0}'.format(
+                base64.b64encode((':'.join([
                     self.user.username,
-                    self.user_password])))}
+                    self.user_password])).encode('ascii')).decode()))}
 
     def do_post(self, data, test_app, **kwargs):
         url = kwargs.pop('url', '/api/submit')

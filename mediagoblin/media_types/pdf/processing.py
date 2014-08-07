@@ -207,6 +207,7 @@ def pdf_info(original):
         _log.debug('pdfinfo could not read the pdf file.')
         raise BadMediaFail()
 
+    lines = [l.decode() for l in lines]
     info_dict = dict([[part.strip() for part in l.strip().split(':', 1)]
                       for l in lines if ':' in l])
 

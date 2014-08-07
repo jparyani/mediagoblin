@@ -456,11 +456,10 @@ def test_plugin_staticdirect(static_plugin_app):
     Test that the staticdirect utilities pull up the right things
     """
     result = json.loads(
-        static_plugin_app.get('/staticstuff/').body)
+        static_plugin_app.get('/staticstuff/').body.decode())
 
     assert len(result) == 2
 
     assert result['mgoblin_bunny_pic'] == '/test_static/images/bunny_pic.png'
     assert result['plugin_bunny_css'] == \
         '/plugin_static/staticstuff/css/bunnify.css'
-
