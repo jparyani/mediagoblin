@@ -54,7 +54,9 @@ if PY2:
     py2_only_install_requires.append('mock')  # mock is in the stdlib for 3.3+
 
 install_requires = [
-    'gunicorn==19',  # TODO: Upgrade to 19.2 -- see https://github.com/benoitc/gunicorn/issues/830
+    # TODO(berker): Upgrade to 19.2
+    # See https://github.com/benoitc/gunicorn/issues/830
+    'gunicorn==19',
     'python-dateutil',
     'wtforms',
     'py-bcrypt',
@@ -76,7 +78,7 @@ install_requires = [
     'six==1.5.2',
     'oauthlib>=0.5.0',
     'unidecode',
-    'ExifRead',
+    'ExifRead',  # TODO(berker): Install develop branch for Python 3
     'PasteDeploy',
     # This is optional:
     # 'translitcodec',
