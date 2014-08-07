@@ -860,8 +860,8 @@ def revert_username_index(db):
         replace_table_hack(db, user_table, new_user_table)
 
     else:
-        # If the db is not run using SQLite, this process is much simpler...
-        # ...as usual ;)
+        # If the db is not run using SQLite, we don't need to do crazy
+        # table copying.
 
         # Remove whichever of the not-used indexes are in place
         if u'ix_core__users_uploader' in indexes:
@@ -872,9 +872,13 @@ def revert_username_index(db):
             index.drop()
         db.commit()
 
-        # Add the unique constraint
-        constraint = UniqueConstraint(
-            'username', table=user_table)
-        constraint.create()
+        try:
+            # Add the unique constraint
+            constraint = UniqueConstraint(
+                'username', table=user_table)
+            constraint.create()
+        except ProgrammingError:
+            # constraint already exists, no need to add
+            pass
 
     db.commit()
