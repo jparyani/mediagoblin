@@ -146,4 +146,5 @@ window.show_things = function () {
 <p>{{ media.media_data.file_type }}</p>
 <h3>{% trans %}Object Height{% endtrans %}</h3>
 <p>~{{ media.media_data.height|int }} mm</p>
+{% template_hook("stl_sideinfo") %}
 {% endblock %}
