@@ -789,6 +789,7 @@ def fix_privilege_user_association_table(db):
 
     db.commit()
 
+
 @RegisterMigration(22, MIGRATIONS)
 def add_index_username_field(db):
     """
@@ -800,5 +801,54 @@ def add_index_username_field(db):
 
     new_index = Index("ix_core__users_uploader", user_table.c.username)
     new_index.create()
+
+    db.commit()
+
+
+@RegisterMigration(23, MIGRATIONS)
+def revert_username_index(db):
+    """
+    """
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
+    indexes = {index.name: index for index in user_table.indexes}
+
+    if not (u'ix_core__users_uploader' in indexes or
+            u'ix_core__users_username' in indexes):
+        # We don't need to do anything.
+        # The database isn't in a state where it needs fixing
+        #
+        # (ie, either went through the previous borked migration or
+        #  was initialized with a models.py where core__users was both
+        #  unique=True and index=True)
+        return
+
+    if db.bind.url.drivername == 'sqlite':
+        # Again, sqlite has problems.  So this is tricky.
+
+        # Yes, this is correct to use User_vR1!  Nothing has changed
+        # between the *correct* version of this table and migration 18.
+        User_vR1.__table__.create(db.bind)
+        db.commit()
+        new_user_table = inspect_table(metadata, 'rename__users')
+        replace_table_hack(db, user_table, new_user_table)
+
+    else:
+        # If the db is not run using SQLite, this process is much simpler...
+        # ...as usual ;)
+
+        # Remove whichever of the not-used indexes are in place
+        if u'ix_core__users_uploader' in indexes:
+            index = indexes[u'ix_core__users_uploader']
+            index.drop()
+        if u'ix_core__users_username' in indexes:
+            index = indexes[u'ix_core__users_username']
+            index.drop()
+        db.commit()
+
+        # Add the unique constraint
+        constraint = UniqueConstraint(
+            'username', table=user_table)
+        constraint.create()
 
     db.commit()
