@@ -883,6 +883,6 @@ def revert_username_index(db):
             constraint.create()
         except ProgrammingError:
             # constraint already exists, no need to add
-            pass
+            db.rollback()
 
     db.commit()
