@@ -845,7 +845,7 @@ def revert_username_index(db):
     # was set in models.py
     users_username_index = indexes.get(u'ix_core__users_username')
 
-    if not users_uploader_index or users_username_index:
+    if not (users_uploader_index or users_username_index):
         # We don't need to do anything.
         # The database isn't in a state where it needs fixing
         #
