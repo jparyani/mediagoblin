@@ -839,8 +839,13 @@ def revert_username_index(db):
     user_table = inspect_table(metadata, "core__users")
     indexes = {index.name: index for index in user_table.indexes}
 
-    if not (u'ix_core__users_uploader' in indexes or
-            u'ix_core__users_username' in indexes):
+    # index from unnecessary migration
+    users_uploader_index = indexes.get(u'ix_core__users_uploader')
+    # index created from models.py after (unique=True, index=True)
+    # was set in models.py
+    users_username_index = indexes.get(u'ix_core__users_username')
+
+    if not users_uploader_index or users_username_index:
         # We don't need to do anything.
         # The database isn't in a state where it needs fixing
         #
@@ -864,12 +869,10 @@ def revert_username_index(db):
         # table copying.
 
         # Remove whichever of the not-used indexes are in place
-        if u'ix_core__users_uploader' in indexes:
-            index = indexes[u'ix_core__users_uploader']
-            index.drop()
-        if u'ix_core__users_username' in indexes:
-            index = indexes[u'ix_core__users_username']
-            index.drop()
+        if users_uploader_index:
+            users_uploader_index.drop()
+        if users_username_index:
+            users_username_index.drop()
 
         # Given we're removing indexes then adding a unique constraint
         # which *we know might fail*, thus probably rolling back the
