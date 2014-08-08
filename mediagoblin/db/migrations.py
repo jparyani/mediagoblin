@@ -870,6 +870,10 @@ def revert_username_index(db):
         if u'ix_core__users_username' in indexes:
             index = indexes[u'ix_core__users_username']
             index.drop()
+
+        # Given we're removing indexes then adding a unique constraint
+        # which *we know might fail*, thus probably rolling back the
+        # session, let's commit here.
         db.commit()
 
         try:
