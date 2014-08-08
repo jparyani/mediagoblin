@@ -869,9 +869,9 @@ def revert_username_index(db):
         # table copying.
 
         # Remove whichever of the not-used indexes are in place
-        if users_uploader_index:
+        if users_uploader_index is not None:
             users_uploader_index.drop()
-        if users_username_index:
+        if users_username_index is not None:
             users_username_index.drop()
 
         # Given we're removing indexes then adding a unique constraint
