@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import copy
 import logging
 import os
 import pkg_resources
@@ -29,13 +30,18 @@ CONFIG_SPEC_PATH = pkg_resources.resource_filename(
     'mediagoblin', 'config_spec.ini')
 
 
-def _setup_defaults(config, config_path):
+def _setup_defaults(config, config_path, extra_defaults=None):
     """
     Setup DEFAULTS in a config object from an (absolute) config_path.
     """
+    extra_defaults = extra_defaults or {}
+
     config.setdefault('DEFAULT', {})
     config['DEFAULT']['here'] = os.path.dirname(config_path)
     config['DEFAULT']['__file__'] = config_path
+    
+    for key, value in extra_defaults.items():
+        config['DEFAULT'].setdefault(key, value)
 
 
 def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
@@ -73,6 +79,19 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
     plugins = config.get("plugins", {}).keys()
     plugin_configs = {}
 
+    # Now load the main config spec
+    config_spec = ConfigObj(
+        config_spec,
+        encoding='UTF8', list_values=False, _inspec=True)
+
+    # temporary bootstrap, just setup here and __file__... we'll do this again
+    _setup_defaults(config, config_path)
+
+    # Set up extra defaults that will be pushed into the rest of the
+    # configs.  This is a combined extrapolation of defaults based on 
+    mainconfig_defaults = copy.copy(config_spec.get('DEFAULT', {}))
+    mainconfig_defaults.update(config.get('DEFAULT', {}))
+
     for plugin in plugins:
         try:
             plugin_config_spec_path = pkg_resources.resource_filename(
@@ -83,7 +102,8 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
             plugin_config_spec = ConfigObj(
                 plugin_config_spec_path,
                 encoding='UTF8', list_values=False, _inspec=True)
-            _setup_defaults(plugin_config_spec, config_path)
+            _setup_defaults(
+                plugin_config_spec, config_path, mainconfig_defaults)
 
             if not "plugin_spec" in plugin_config_spec:
                 continue
@@ -95,22 +115,17 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
                 "When setting up config section, could not import '%s'" %
                 plugin)
     
-    # Now load the main config spec
-    config_spec = ConfigObj(
-        config_spec,
-        encoding='UTF8', list_values=False, _inspec=True)
-
     # append the plugin specific sections of the config spec
     config_spec['plugins'] = plugin_configs
 
-    _setup_defaults(config_spec, config_path)
+    _setup_defaults(config_spec, config_path, mainconfig_defaults)
 
     config = ConfigObj(
         config_path,
         configspec=config_spec,
         interpolation='ConfigParser')
 
-    _setup_defaults(config, config_path)
+    _setup_defaults(config, config_path, mainconfig_defaults)
 
     # For now the validator just works with the default functions,
     # but in the future if we want to add additional validation/configuration
