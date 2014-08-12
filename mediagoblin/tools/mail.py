@@ -111,7 +111,7 @@ def send_email(from_addr, to_addrs, subject, message_body):
             mhost.starttls()
         except smtplib.SMTPException:
             # Only raise an exception if we're forced to
-            if mg_globals.app_config['email_smtp_force_tls']:
+            if mg_globals.app_config['email_smtp_force_starttls']:
                 six.reraise(*sys.exc_info())
 
     if ((not common.TESTS_ENABLED)
