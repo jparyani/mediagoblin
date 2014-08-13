@@ -116,7 +116,7 @@ def run_dbupdate(app_config, global_config):
 
     # Set up the database
     db = setup_connection_and_db_from_config(app_config, migrations=True)
-    #Run the migrations
+    # Run the migrations
     run_all_migrations(db, app_config, global_config)
 
 
