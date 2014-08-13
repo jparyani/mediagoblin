@@ -131,7 +131,7 @@ def run_all_migrations(db, app_config, global_config):
     """
     # Gather information from all media managers / projects
     dbdatas = gather_database_data(
-            global_config.get('plugins', {}).keys())
+            list(global_config.get('plugins', {}).keys()))
 
     Session = sessionmaker(bind=db.engine)
 
