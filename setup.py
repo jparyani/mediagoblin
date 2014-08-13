@@ -57,6 +57,7 @@ install_requires = [
     # TODO(berker): Upgrade to 19.2
     # See https://github.com/benoitc/gunicorn/issues/830
     'gunicorn==19',
+    'alembic==0.6.6',
     'python-dateutil',
     'wtforms',
     'py-bcrypt',

@@ -16,12 +16,41 @@
 
 from __future__ import unicode_literals
 
+import os
+
+from alembic import command
+from alembic.config import Config
+
+from mediagoblin.db.base import Base
 from mediagoblin.tools.common import simple_printer
 from sqlalchemy import Table
 from sqlalchemy.sql import select
 
 class TableAlreadyExists(Exception):
     pass
+
+
+class AlembicMigrationManager(object):
+
+    def __init__(self, session):
+        root_dir = os.path.abspath(os.path.dirname(os.path.dirname(
+            os.path.dirname(__file__))))
+        alembic_cfg_path = os.path.join(root_dir, 'alembic.ini')
+        self.alembic_cfg = Config(alembic_cfg_path)
+        self.session = session
+
+    def init_tables(self):
+        Base.metadata.create_all(self.session.bind)
+        # load the Alembic configuration and generate the
+        # version table, "stamping" it with the most recent rev:
+        command.stamp(self.alembic_cfg, 'head')
+
+    def init_or_migrate(self, version='head'):
+        # TODO(berker): Check this
+        # http://alembic.readthedocs.org/en/latest/api.html#alembic.migration.MigrationContext
+        # current_rev = context.get_current_revision()
+        # Call self.init_tables() first if current_rev is None?
+        command.upgrade(self.alembic_cfg, version)
 
 
 class MigrationManager(object):

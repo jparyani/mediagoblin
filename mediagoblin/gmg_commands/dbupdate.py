@@ -106,6 +106,13 @@ forgotten to add it? ({1})'.format(plugin, exc))
     return managed_dbdata
 
 
+def run_alembic_migrations(db, app_config, global_config):
+    from mediagoblin.db.migration_tools import AlembicMigrationManager
+    Session = sessionmaker(bind=db.engine)
+    manager = AlembicMigrationManager(Session())
+    manager.init_or_migrate()
+
+
 def run_dbupdate(app_config, global_config):
     """
     Initialize or migrate the database as specified by the config file.
@@ -118,6 +125,7 @@ def run_dbupdate(app_config, global_config):
     db = setup_connection_and_db_from_config(app_config, migrations=True)
     # Run the migrations
     run_all_migrations(db, app_config, global_config)
+    run_alembic_migrations(db, app_config, global_config)
 
 
 def run_all_migrations(db, app_config, global_config):
