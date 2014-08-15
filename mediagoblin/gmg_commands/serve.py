@@ -16,14 +16,17 @@
 
 from __future__ import print_function
 
+from paste.deploy import loadapp, loadserver
+
 
 class ServeCommand(object):
 
-    def loadserver(self, server_spec, name, relative_to, **kw):
-        pass
+    def loadserver(self, server_spec, name, relative_to, **kwargs):
+        return loadserver(server_spec, name=name, relative_to=relative_to,
+                          **kwargs)
 
-    def loadapp(self, app_spec, name, relative_to, **kw):
-        pass
+    def loadapp(self, app_spec, name, relative_to, **kwargs):
+        return loadapp(app_spec, name=name, relative_to=relative_to, **kwargs)
 
     def daemonize(self):
         # TODO: pass to gunicorn if available
