@@ -76,11 +76,16 @@ def check_db_up_to_date():
     dbdatas = gather_database_data(mgg.global_config.get('plugins', {}).keys())
 
     for dbdata in dbdatas:
-        migration_manager = dbdata.make_migration_manager(Session())
-        if migration_manager.database_current_migration is None or \
-                migration_manager.migrations_to_run():
-            sys.exit("Your database is not up to date. Please run "
-                     "'gmg dbupdate' before starting MediaGoblin.")
+        session = Session()
+        try:
+            migration_manager = dbdata.make_migration_manager(session)
+            if migration_manager.database_current_migration is None or \
+                    migration_manager.migrations_to_run():
+                sys.exit("Your database is not up to date. Please run "
+                         "'gmg dbupdate' before starting MediaGoblin.")
+        finally:
+            Session.rollback()
+            Session.remove()
 
 
 if __name__ == '__main__':
