@@ -59,6 +59,10 @@ SUBCOMMAND_MAP = {
         'setup': 'mediagoblin.gmg_commands.deletemedia:parser_setup',
         'func': 'mediagoblin.gmg_commands.deletemedia:deletemedia',
         'help': 'Delete media entries'},
+    'serve': {
+            'setup': 'mediagoblin.gmg_commands.serve:parser_setup',
+            'func': 'mediagoblin.gmg_commands.serve:serve',
+            'help': 'PasteScript replacement'},
     # 'theme': {
     #     'setup': 'mediagoblin.gmg_commands.theme:theme_parser_setup',
     #     'func': 'mediagoblin.gmg_commands.theme:theme',
