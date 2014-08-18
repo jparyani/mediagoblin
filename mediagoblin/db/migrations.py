@@ -837,7 +837,8 @@ def revert_username_index(db):
     """
     metadata = MetaData(bind=db.bind)
     user_table = inspect_table(metadata, "core__users")
-    indexes = {index.name: index for index in user_table.indexes}
+    indexes = dict(
+        [(index.name, index) for index in user_table.indexes])
 
     # index from unnecessary migration
     users_uploader_index = indexes.get(u'ix_core__users_uploader')
