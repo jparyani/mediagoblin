@@ -17,3 +17,19 @@ Documentation on Built-in Hooks
 ===============================
 
 This section explains built-in hooks to MediaGoblin.
+
+
+What hooks are available?
+=========================
+
+'collection_add_media'
+----------------------
+
+This hook is used by ``add_media_to_collection``
+in ``mediagoblin.user_pages.lib``.
+It gets a ``CollectionItem`` as its argument.
+It's the newly created item just before getting commited.
+So the item can be modified by the hook, if needed.
+Changing the session regarding this item is currently
+undefined behaviour, as the SQL Session might contain other
+things.
