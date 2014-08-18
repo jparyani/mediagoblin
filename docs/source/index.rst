@@ -78,6 +78,7 @@ This guide covers writing new GNU MediaGoblin plugins.
    pluginwriter/database
    pluginwriter/api
    pluginwriter/tests
+   pluginwriter/hooks
    pluginwriter/media_type_hooks
    pluginwriter/authhooks
 
