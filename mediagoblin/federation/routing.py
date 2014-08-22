@@ -77,3 +77,9 @@ add_route(
     "/api/whoami",
     "mediagoblin.federation.views:whoami"
 )
+
+add_route(
+    "mediagoblin.federation.activity_view",
+    "/<string:username>/activity/<string:id>",
+    "mediagoblin.federation.views:activity_view"
+)

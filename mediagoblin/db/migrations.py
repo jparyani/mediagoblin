@@ -579,6 +579,29 @@ PRIVILEGE_FOUNDATIONS_v0 = [{'privilege_name':u'admin'},
                             {'privilege_name':u'active'}]
 
 
+class Activity_R0(declarative_base()):
+    __tablename__ = "core__activities"
+    id = Column(Integer, primary_key=True)
+    actor = Column(Integer, ForeignKey(User.id), nullable=False)
+    published = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    verb = Column(Unicode, nullable=False)
+    content = Column(Unicode, nullable=False)
+    title = Column(Unicode, nullable=True)
+    target = Column(Integer, ForeignKey(User.id), nullable=True)
+    object_comment = Column(Integer, ForeignKey(MediaComment.id), nullable=True)
+    object_collection = Column(Integer, ForeignKey(Collection.id), nullable=True)
+    object_media = Column(Integer, ForeignKey(MediaEntry.id), nullable=True)
+    object_user = Column(Integer, ForeignKey(User.id), nullable=True)
+
+class Generator(declarative_base()):
+    __tablename__ = "core__generators"
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode, nullable=False)
+    published = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    object_type = Column(Unicode, nullable=False)
+
 # vR1 stands for "version Rename 1".  This only exists because we need
 # to deal with dropping some booleans and it's otherwise impossible
 # with sqlite.
@@ -889,4 +912,39 @@ def revert_username_index(db):
             # constraint already exists, no need to add
             db.rollback()
 
+    db.commit()
+
+@RegisterMigration(24, MIGRATIONS)
+def create_activity_table(db):
+    """ This will create the activity table """
+    Activity_R0.__table__.create(db.bind)
+    Generator_R0.__table__.create(db.bind)
+    db.commit()
+    
+    # Create the GNU MediaGoblin generator
+    gmg_generator = Generator(name="GNU MediaGoblin", object_type="service")
+    gmg_generator.save()
+    
+    # Now we want to retroactively add what activities we can
+    # first we'll add activities when people uploaded media.
+    for media in MediaEntry.query.all():
+        activity = Activity_R0(
+            verb="create",
+            actor=media.uploader,
+            published=media.created,
+            object_media=media.id,
+        )
+        activity.generate_content()
+        activity.save()
+    
+    # Now we want to add all the comments people made
+    for comment in MediaComment.query.all():
+        activity = Activity_R0(
+            verb="comment",
+            actor=comment.author,
+            published=comment.created,
+        )
+        activity.generate_content()
+        activity.save()
+    
     db.commit()

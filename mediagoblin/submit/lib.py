@@ -24,6 +24,7 @@ from werkzeug.datastructures import FileStorage
 from mediagoblin import mg_globals
 from mediagoblin.tools.response import json_response
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
+from mediagoblin.tools.federation import create_activity
 from mediagoblin.db.models import MediaEntry, ProcessingMetaData
 from mediagoblin.processing import mark_entry_failed
 from mediagoblin.processing.task import ProcessMedia
@@ -199,6 +200,9 @@ def submit_media(mg_app, user, submitted_file, filename,
     run_process_media(entry, feed_url)
 
     add_comment_subscription(user, entry)
+    
+    # Create activity
+    create_activity("post", entry)
 
     return entry
 
@@ -289,4 +293,8 @@ def api_add_to_feed(request, entry):
 
     run_process_media(entry, feed_url)
     add_comment_subscription(request.user, entry)
+    
+    # Create activity
+    create_activity("post", entry)
+
     return json_response(entry.serialize(request))

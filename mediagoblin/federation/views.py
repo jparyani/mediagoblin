@@ -20,10 +20,11 @@ import mimetypes
 
 from werkzeug.datastructures import FileStorage
 
-from mediagoblin.decorators import oauth_required
+from mediagoblin.decorators import oauth_required, require_active_login
 from mediagoblin.federation.decorators import user_has_privilege
-from mediagoblin.db.models import User, MediaEntry, MediaComment
-from mediagoblin.tools.response import redirect, json_response, json_error
+from mediagoblin.db.models import User, MediaEntry, MediaComment, Activity
+from mediagoblin.tools.response import redirect, json_response, json_error, \
+                                       render_404, render_to_response
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.submit.lib import new_upload_entry, api_upload_request, \
                                     api_add_to_feed
@@ -340,21 +341,8 @@ def feed_endpoint(request):
         "items": [],
     }
 
-
-    # Look up all the media to put in the feed (this will be changed
-    # when we get real feeds/inboxes/outboxes/activites)
-    for media in MediaEntry.query.all():
-        item = {
-            "verb": "post",
-            "object": media.serialize(request),
-            "actor": media.get_uploader.serialize(request),
-            "content": "{0} posted a picture".format(request.user.username),
-            "id": media.id,
-        }
-        item["updated"] = item["object"]["updated"]
-        item["published"] = item["object"]["published"]
-        item["url"] = item["object"]["url"]
-        feed["items"].append(item)
+    for activity in Activity.query.filter_by(actor=request.user.id):
+        feed["items"].append(activity.serialize(request))
     feed["totalItems"] = len(feed["items"])
 
     return json_response(feed)
@@ -467,3 +455,31 @@ def whoami(request):
     )
 
     return redirect(request, location=profile)
+
+@require_active_login
+def activity_view(request):
+    """ /<username>/activity/<id> - Display activity
+    
+    This should display a HTML presentation of the activity
+    this is NOT an API endpoint.
+    """
+    # Get the user object.
+    username = request.matchdict["username"]
+    user = User.query.filter_by(username=username).first()
+    
+    activity_id = request.matchdict["id"]
+    
+    if request.user is None:
+        return render_404(request)
+    
+    activity = Activity.query.filter_by(id=activity_id).first()
+    if activity is None:
+        return render_404(request)
+    
+    return render_to_response(
+        request,
+        "mediagoblin/federation/activity.html",
+        {"activity": activity}
+    )
+    
+    

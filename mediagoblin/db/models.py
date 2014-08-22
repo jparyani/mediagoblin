@@ -37,6 +37,7 @@ from mediagoblin.db.base import Base, DictReadAttrProxy
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, \
         MediaCommentMixin, CollectionMixin, CollectionItemMixin
 from mediagoblin.tools.files import delete_media_files
+from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.common import import_component
 
 # It's actually kind of annoying how sqlalchemy-migrate does this, if
@@ -78,6 +79,8 @@ class User(Base, UserMixin):
 
     ## TODO
     # plugin data would be in a separate model
+
+    objectType = "person"
 
     def __repr__(self):
         return '<{0} #{1} {2} {3} "{4}">'.format(
@@ -143,7 +146,7 @@ class User(Base, UserMixin):
             "id": "acct:{0}@{1}".format(self.username, request.host),
             "preferredUsername": self.username,
             "displayName": "{0}@{1}".format(self.username, request.host),
-            "objectType": "person",
+            "objectType": self.objectType,
             "pump_io": {
                 "shared": False,
                 "followed": False,
@@ -651,13 +654,15 @@ class MediaComment(Base, MediaCommentMixin):
                                                    lazy="dynamic",
                                                    cascade="all, delete-orphan"))
 
+    objectType = "comment"
+    
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
         media = MediaEntry.query.filter_by(id=self.media_entry).first()
         author = self.get_author
         context = {
             "id": self.id,
-            "objectType": "comment",
+            "objectType": self.objectType,
             "content": self.content,
             "inReplyTo": media.serialize(request, show_comments=False),
             "author": author.serialize(request)
@@ -1054,13 +1059,196 @@ class PrivilegeUserAssociation(Base):
         ForeignKey(Privilege.id),
         primary_key=True)
 
+class Generator(Base):
+    """
+    This holds the information about the software used to create
+    objects for the pump.io APIs.
+    """
+    __tablename__ = "core__generators"
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode, nullable=False)
+    published = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    object_type = Column(Unicode, nullable=False)
+    
+    def serialize(self, request):
+        return {
+            "id": self.id,
+            "displayName": self.name,
+            "published": self.published.isoformat(),
+            "updated": self.updated.isoformat(),
+            "objectType": self.object_type,
+        }
+    
+    def unserialize(self, data):
+        if "displayName" in data:
+            self.name = data["displayName"]
+        
+    
+
+class Activity(Base):
+    """
+    This holds all the metadata about an activity such as uploading an image,
+    posting a comment, etc. 
+    """
+    __tablename__ = "core__activities"
+    
+    id = Column(Integer, primary_key=True)
+    actor = Column(Integer, ForeignKey(User.id), nullable=False)
+    published = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    verb = Column(Unicode, nullable=False)
+    content = Column(Unicode, nullable=False)
+    title = Column(Unicode, nullable=True)
+    target = Column(Integer, ForeignKey(User.id), nullable=True)
+    generator = Column(Integer, ForeignKey(Generator.id), nullable=True)
+    
+    
+    # Links to other models (only one of these should have a value).
+    object_comment = Column(Integer, ForeignKey(MediaComment.id), nullable=True)
+    object_collection = Column(Integer, ForeignKey(Collection.id), nullable=True)
+    object_media = Column(Integer, ForeignKey(MediaEntry.id), nullable=True)
+    object_user = Column(Integer, ForeignKey(User.id), nullable=True)
+    
+    VALID_VERBS = ["add", "author", "create", "delete", "dislike", "favorite", 
+                   "follow", "like", "post", "share", "unfavorite", "unfollow",
+                   "unlike", "unshare", "update", "tag"]
+    
+    @property
+    def object(self):
+        """ This represents the object that is given to the activity """
+        # Do we have a cached version
+        if getattr(self, "_cached_object", None) is not None:
+            return self._cached_object
+        
+        if self.object_comment is not None:
+            obj = MediaComment.query.filter_by(id=self.object_comment).first()
+        elif self.object_collection is not None:
+            obj = Collection.query.filter_by(id=self.object_collection).first()
+        elif self.object_media is not None:
+            obj = MediaEntry.query.filter_by(id=self.object_media).first()
+        elif self.object_user is not None:
+            obj = User.query.filter_by(id=self.object_user).first()
+        else:
+            # Shouldn't happen but incase it does
+            return None
+        
+        self._cached_object = obj
+        return obj
+    
+    def url(self, request):
+        actor = User.query.filter_by(id=self.actor).first() 
+        return request.urlgen(
+            "mediagoblin.federation.activity_view",
+            username=actor.username,
+            id=self.id,
+            qualified=True
+        )
+    
+    def generate_content(self):
+        """
+        Produces a HTML content for object
+        TODO: Can this be moved to a mixin?
+        """
+        verb_to_content = {
+            "add": _("{username} added {object} to {destination}"),
+            "author": _("{username} authored {object}"),
+            "create": _("{username} created {object}"),
+            "delete": _("{username} deleted {object}"),
+            "dislike": _("{username} disliked {object}"),
+            "favorite": _("{username} favorited {object}"),
+            "follow": _("{username} followed {object}"),
+            "like": _("{username} liked {object}"),
+            "post": _("{username} posted {object}"),
+            "share": _("{username} shared {object}"),
+            "unfavorite": _("{username} unfavorited {object}"),
+            "unfollow": _("{username} stopped following {object}"),
+            "unlike": _("{username} unliked {object}"),
+            "unshare": _("{username} unshared {object}"),
+            "update": _("{username} updated {object}"),
+            "tag": _("{username} tagged {object}"), 
+        }
+        
+        actor = User.query.filter_by(id=self.actor).first()
+        
+        if self.verb == "add" and self.object.objectType == "collection":
+            media = MediaEntry.query.filter_by(id=self.object.media_entry)
+            content = verb_to_content[self.verb]
+            self.content = content.format(
+                username=actor.username,
+                object=media.objectType,
+                destination=self.object.objectType,
+            )
+        elif self.verb in verb_to_content:
+            content = verb_to_content[self.verb]
+            self.content = content.format(
+                username=actor.username,
+                object=self.object.objectType
+            )
+        else:
+            return
+        
+        return self.content
+    
+    def serialize(self, request):
+        # Lookup models
+        actor = User.query.filter_by(id=self.actor).first()
+        generator = Generator.query.filter_by(id=self.generator).first()
+        
+        obj = {
+            "id": self.id,
+            "actor": actor.serialize(request),
+            "verb": self.verb,
+            "published": self.published.isoformat(),
+            "updated": self.updated.isoformat(),
+            "content": self.content,
+            "url": self.url(request),
+            "object": self.object.serialize(request)
+        }
+        
+        if self.generator:
+            obj["generator"] = generator.seralize(request)
+        
+        if self.title:
+            obj["title"] = self.title
+        
+        if self.target:
+            target = User.query.filter_by(id=self.target).first()
+            obj["target"] = target.seralize(request)
+        
+        return obj
+    
+    def unseralize(self, data):
+        """
+        Takes data given and set it on this activity.
+        
+        Several pieces of data are not written on because of security
+        reasons. For example changing the author or id of an activity.
+        """
+        if "verb" in data:
+            self.verb = data["verb"]
+        
+        if "title" in data:
+            self.title = data["title"]
+        
+        if "content" in data:
+            self.content = data["content"]
+    
+    def save(self, *args, **kwargs):
+        self.updated = datetime.datetime.now()
+        if self.content is None:
+            self.generate_content()
+        super(Activity, self).save(*args, **kwargs)    
+
 MODELS = [
     User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
     MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
     Notification, CommentNotification, ProcessingNotification, Client,
     CommentSubscription, ReportBase, CommentReport, MediaReport, UserBan,
 	Privilege, PrivilegeUserAssociation,
-    RequestToken, AccessToken, NonceTimestamp]
+    RequestToken, AccessToken, NonceTimestamp,
+    Activity, Generator]
 
 """
  Foundations are the default rows that are created immediately after the tables
