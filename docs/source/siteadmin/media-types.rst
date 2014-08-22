@@ -264,3 +264,13 @@ Run
     ./bin/gmg dbupdate
 
 
+Blog (HIGHLY EXPERIMENTAL)
+==========================
+
+MediaGoblin has a blog media type, which you might notice by looking
+through the docs!  However, it is *highly experimental*.  We have not
+security reviewed this, and it acts in a way that is not like normal
+blogs (the blogposts are themselves media types!).
+
+So you can play with this, but it is not necessarily recommended for
+production use! :)
