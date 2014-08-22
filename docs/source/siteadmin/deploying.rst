@@ -200,7 +200,7 @@ Clone the MediaGoblin repository and set up the git submodules::
 
 And set up the in-package virtualenv::
 
-    (virtualenv --python=python2 --system-site-packages . || virtualenv --python=python22 .) && ./bin/python setup.py develop
+    (virtualenv --python=python2 --system-site-packages . || virtualenv --python=python2 .) && ./bin/python setup.py develop
 
 .. note::
 
