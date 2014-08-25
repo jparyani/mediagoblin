@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-04 13:45-0500\n"
+"POT-Creation-Date: 2014-08-25 14:44-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -193,7 +193,7 @@ msgstr ""
 #: mediagoblin/plugins/basic_auth/forms.py:43
 #: mediagoblin/plugins/ldap/forms.py:39
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:64
-#: mediagoblin/tests/test_util.py:116
+#: mediagoblin/tests/test_util.py:143
 msgid "Password"
 msgstr ""
 
@@ -612,11 +612,11 @@ msgstr ""
 msgid "You will not receive notifications for comments on %s."
 msgstr ""
 
-#: mediagoblin/oauth/views.py:242
+#: mediagoblin/oauth/views.py:241
 msgid "Must provide an oauth_token."
 msgstr ""
 
-#: mediagoblin/oauth/views.py:247 mediagoblin/oauth/views.py:298
+#: mediagoblin/oauth/views.py:246 mediagoblin/oauth/views.py:297
 msgid "No request token found."
 msgstr ""
 
