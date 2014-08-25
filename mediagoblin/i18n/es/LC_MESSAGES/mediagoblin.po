@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
+# Artopal <artopal@fastmail.fm>, 2014
 # aleksejrs <deletesoftware@yandex.ru>, 2011, 2012
 # ekenbrand <ekenbrand@hotmail.com>, 2011
 # Jacobo Nájera <jacobo@gnu.org>, 2011-2012
@@ -21,8 +22,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2014-08-04 13:45-0500\n"
-"PO-Revision-Date: 2014-08-04 18:45+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2014-08-11 08:55+0000\n"
+"Last-Translator: Laura Arjona Reina <larjona99@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -557,31 +558,31 @@ msgstr "¿Qué permisos vas a retirar?"
 
 #: mediagoblin/moderation/forms.py:122
 msgid "Why user was banned:"
-msgstr ""
+msgstr "Por qué se inhabilitó al usuario:"
 
 #: mediagoblin/moderation/forms.py:125
 msgid "Message to user:"
-msgstr ""
+msgstr "Mensaje al usuario:"
 
 #: mediagoblin/moderation/forms.py:128
 msgid "Resolution content:"
-msgstr ""
+msgstr "Contenido de la resolución:"
 
 #: mediagoblin/moderation/tools.py:34
 msgid ""
 "\n"
 "{mod} took away {user}'s {privilege} privileges."
-msgstr ""
+msgstr "\n{mod} retiró al usuario {user} los permisos de: {privilege}."
 
 #: mediagoblin/moderation/tools.py:47
 msgid ""
 "\n"
 "{mod} banned user {user} {expiration_date}."
-msgstr ""
+msgstr "\n{mod} inhabilitó al usuario {user} hasta {expiration_date}."
 
 #: mediagoblin/moderation/tools.py:51
 msgid "until {date}"
-msgstr ""
+msgstr "hasta {date}"
 
 #: mediagoblin/moderation/tools.py:53
 #: mediagoblin/templates/mediagoblin/banned.html:30
@@ -592,19 +593,19 @@ msgstr "indefinidamente"
 msgid ""
 "\n"
 "{mod} sent a warning email to the {user}."
-msgstr ""
+msgstr "\n{mod} envió un correo de advertencia al {user}."
 
 #: mediagoblin/moderation/tools.py:71
 msgid ""
 "\n"
 "{mod} deleted the comment."
-msgstr ""
+msgstr "\n{mod} eliminó el comentario."
 
 #: mediagoblin/moderation/tools.py:78
 msgid ""
 "\n"
 "{mod} deleted the media entry."
-msgstr ""
+msgstr "\n{mod} borró el contenido."
 
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
@@ -712,7 +713,7 @@ msgid ""
 "        prominent and Demote moves the featured media lower down and makes it\n"
 "        less prominent.\n"
 "    "
-msgstr ""
+msgstr "\nSí. Si lo prefieres, puedes ir a la página del contenido que te gustaría destacar\no quitar de destacados, y mirar en la barra lateral junto al contenido. Si el contenido\naún no se ha destacado, debería haber un botón que ponga \"Destacar\". Pulsa ese botón\ny el contenido se destacará como primario, al inicio de la portada.\nTodos los demás contenidos destacados seguirán destacados, pero se mostrarán debajo\nen la página de portada.<br /><br />\n\nSi vas a la página de un contenido que actualmente ya está destacado, verás las opciones\n\"Quitar de destacados\", \"Ascender\" y \"Descender\" donde antes se mostraba \"Destacar\".\nHaz clic en Quitar de destacados y ese contenido ya no se mostrará en la portada,\naunque puedes volver a destacarlo en cualquier momento. Ascender mueve el contenido destacado más arriba en la portada y lo hace más prominente, y Descender mueve el contenido más abajo y lo hace menos prominente."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:70
 msgid "What is a Primary Feature? What is a Secondary Feature?"
@@ -828,7 +829,7 @@ msgid ""
 "If you would like to feature a\n"
 "        piece of media, go to that media entry's homepage and click the button\n"
 "        that says <a class=\"button_action\">Feature</a>."
-msgstr ""
+msgstr "Si te gustaría destacar\nun contenido, ve a la página de ese contenido y pulsa el botón\nque dice <a class=\"button_action\">Destacar</a>."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:67
 #, python-format
@@ -838,7 +839,7 @@ msgid ""
 "        have media featured as long as your instance has the 'archivalook'\n"
 "        plugin enabled. A more advanced tool to manage features can be found\n"
 "        in the <a href=\"%(featured_media_url)s\">feature management panel.</a>"
-msgstr ""
+msgstr "Estás viendo esta página porque eres un usuario con permisos para\ndestacar contenido, un usuario normal vería una página en blanco, así que\nasegúrate de destacar contenido mientras tu sitio tenga el complemento\n'archivalook' activado. Se puede encontrar una herramienta más avanzada\npara gestionar los destacados \nen el <a href?\"%(featured_media_url)s\">panel de gestión de destacados</a>."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
@@ -1309,7 +1310,7 @@ msgstr "Crear nueva colección"
 
 #: mediagoblin/templates/mediagoblin/base.html:163
 msgid "Moderation powers:"
-msgstr ""
+msgstr "Poderes de moderación:"
 
 #: mediagoblin/templates/mediagoblin/base.html:169
 msgid "User management panel"
@@ -1715,20 +1716,20 @@ msgstr "ID"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
 msgid "User"
-msgstr ""
+msgstr "Usuario"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
 msgid "When submitted"
-msgstr ""
+msgstr "Cuándo se envió"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:42
 msgid "Transcoding progress"
-msgstr ""
+msgstr "Proceso de transcodificación"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:53
 msgid "Unknown"
-msgstr ""
+msgstr "Desconocido"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:59
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
@@ -1742,11 +1743,11 @@ msgstr "Estos archivos no pudieron ser procesados:"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:71
 msgid "Reason for failure"
-msgstr ""
+msgstr "Motivo del fallo"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:72
 msgid "Failure metadata"
-msgstr ""
+msgstr "Metadatos del fallo"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:91
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
@@ -1759,7 +1760,7 @@ msgstr "Últimos 10 envíos con éxito"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:101
 msgid "Submitted"
-msgstr ""
+msgstr "Enviado"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:113
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
@@ -1803,7 +1804,7 @@ msgstr "\nESTE CONTENIDO DE⏎\n<a href=\"%(user_url)s\"> %(user_name)s</a>⏎\n
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:102
 msgid "Reason for report:"
-msgstr ""
+msgstr "Razón del informe:"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:133
 #: mediagoblin/templates/mediagoblin/moderation/user.html:136
@@ -2285,11 +2286,11 @@ msgstr "Añadir a una colección"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:24
 msgid "Subscribe to comments"
-msgstr ""
+msgstr "Suscribirse a los comentarios"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:30
 msgid "Silence comments"
-msgstr ""
+msgstr "Silenciar comentarios"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21

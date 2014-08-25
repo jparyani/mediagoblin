@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2014-08-04 13:45-0500\n"
-"PO-Revision-Date: 2014-08-04 18:45+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2014-08-23 12:23+0000\n"
+"Last-Translator: GenghisKhan <genghiskhan@gmx.ca>\n"
 "Language-Team: Hebrew (http://www.transifex.com/projects/p/mediagoblin/language/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -832,7 +832,7 @@ msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
-msgstr ""
+msgstr "תפיה במדיה האחרונה ביותר"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/bits/feature_dropdown.html:22
 msgid "Feature management panel"
@@ -1145,7 +1145,7 @@ msgstr "התחבר כדי ליצור חשבון!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:51
 msgid "Or login with a password!"
-msgstr "או התחבר בעזרת סיסמה!"
+msgstr "אפשר להתחבר גם בעזרת סיסמה!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login_link.html:23
 msgid "Or login with OpenID!"
@@ -1153,7 +1153,7 @@ msgstr "או התחבר עם OpenID!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/register_link.html:23
 msgid "Or register with OpenID!"
-msgstr "או הירשם בעזרת OpenID!"
+msgstr "אפשר להירשם גם בעזרת OpenID!"
 
 #: mediagoblin/plugins/persona/__init__.py:90
 msgid "Sorry, an account is already registered to that Persona email."
@@ -1365,7 +1365,7 @@ msgstr "העתק והדבק את מידע זה אל תוך הלקוח שלך:"
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
 msgid "Create an account!"
-msgstr "יצירת חשבון!"
+msgstr "צור חשבון!"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:41
 msgid "Create"
@@ -1387,7 +1387,7 @@ msgstr "שלום %(username)s,\n\nבכדי להפעיל את חשבונך בשי
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org/\" title='Version "
 "%(version)s'>MediaGoblin</a>, a <a href=\"http://gnu.org/\">GNU</a> project."
-msgstr "ממונע על ידי <a href=\"http://mediagoblin.org/\" title='גירסה %(version)s'>MediaGoblin</a>, פרויקט <a href=\"http://gnu.org/\">GNU</a>."
+msgstr "ממונע על ידי <a href=\"http://mediagoblin.org/\" title='גירסה %(version)s'>MediaGoblin</a>, פרויקט של <a href=\"http://gnu.org/\">GNU</a>."
 
 #: mediagoblin/templates/mediagoblin/bits/base_footer.html:24
 #, python-format
@@ -1710,7 +1710,7 @@ msgstr "משתמש"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
 msgid "When submitted"
-msgstr ""
+msgstr "כאשר נשלח"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:42
 msgid "Transcoding progress"
@@ -1749,7 +1749,7 @@ msgstr "10 העלאות מוצלחות אחרונות"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:101
 msgid "Submitted"
-msgstr ""
+msgstr "נשלח"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:113
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
@@ -1793,7 +1793,7 @@ msgstr "\n          תוכן מאת\n            <a href=\"%(user_url)s\"> %(use
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:102
 msgid "Reason for report:"
-msgstr ""
+msgstr "סיבת דיווח:"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:133
 #: mediagoblin/templates/mediagoblin/moderation/user.html:136
@@ -2006,11 +2006,11 @@ msgstr "הפריבילגיות של %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:172
 msgid "Privilege"
-msgstr ""
+msgstr "פריבילגיה"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:173
 msgid "Granted"
-msgstr ""
+msgstr "הוענקה"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:180
 msgid "Yes"
@@ -2275,11 +2275,11 @@ msgstr "הוסף אל אוסף"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:24
 msgid "Subscribe to comments"
-msgstr ""
+msgstr "הירשם לתגובות"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:30
 msgid "Silence comments"
-msgstr ""
+msgstr "השתק תגובות"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
