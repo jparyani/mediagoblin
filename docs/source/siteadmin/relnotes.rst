@@ -21,6 +21,78 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+0.7.0
+====
+
+**Do this to upgrade**
+
+1. Update to the latest release.  If checked out from git, run:
+   ``git fetch && git checkout -q v0.7.0 && git submodule update``
+2. Make sure to run
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+
+That's it, probably!  If you run into problems, don't hesitate to
+`contact us <http://mediagoblin.org/pages/join.html>`_
+(IRC is often best).
+
+**New features:**
+
+- New mobile upload API making use of the
+  `Pump API <https://github.com/e14n/pump.io/blob/master/API.md>`_
+  (which will be the foundation for MediaGoblin's federation)
+- New theme: Sandy 70s Speedboat!
+
+- Metadata features!  We also now have a json-ld context. 
+
+- Many improvements for archival institutions, including metadata
+  support and featuring items on the homepage.  With the (new!)
+  archivalook plugin enabled, featuring media is possible.
+  Additionally, metadata about the particular media item will show up
+  in the sidebar.
+
+  In the future these plugins may be separated, but for now they have
+  come together as part of the same plugin.
+
+- There is a new gmg subcommand called batchaddmedia that allows for
+  uploading many files at once.  This is aimed to be useful for
+  archival institutions and groups where there is an already existing
+  and large set of available media that needs to be included.
+- Speaking of, the call to postgres in the makefile is fixed.
+- We have a new, generic media-page context hook that allows for
+  adding context depending on the type of media.
+- Tired of video thumbnails breaking during processing all the time?
+  Good news, everyone!  Video thumbnail generation should not fail
+  frequently anymore.  (We think...)
+- You can now set default permissions for new users in the config.
+
+- bootstrap.sh / gnu configuration stuff still exists, but moves to be
+  experimental-bootstrap.sh so as to not confuse newcomers.  There are
+  some problems currently with the autoconf stuff that we need to work
+  out... we still have interest in supporting it, though help is
+  welcome.
+
+- MediaGoblin now checks whether or not the database is up to date
+  when starting.
+- Switched to `Skeleton <http://www.getskeleton.com/>`_ as a system for
+  graphic design.
+- New gmg subcommands for administrators:
+  - A "deletemedia" command
+  - A "deleteuser" command
+- We now have a blogging media type... it's very experimental,
+  however.  Use with caution!
+- We have switched to exifread as an external library for reading EXIF
+  data.  It's basically the same thing as before, but packaged
+  separately from MediaGoblin.
+- Many improvements to internationalization.  Also (still rudimentary,
+  but existant!) RTL language support!
+
+**Known issues:**
+ - Webfinger is now json by default; in the spec it should be xml by
+   default.  We have done this because of compatibility with the pump
+   API.  We are checking with upstream to see if there is a way to
+   resolve this discrepancy.
+
+
 0.6.1
 =====
 
