@@ -115,6 +115,7 @@ try:
     url="http://mediagoblin.org/",
     download_url="http://mediagoblin.org/download/",
     long_description=open(READMEFILE).read(),
+    description='MediaGoblin is a place to store all your different media',
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
