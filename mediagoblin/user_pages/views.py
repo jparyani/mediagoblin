@@ -289,7 +289,7 @@ def media_collect(request, media):
                              % (media.title, collection.title))
     else: # Add item to collection
         add_media_to_collection(collection, media, form.note.data)
-        create_activity("add", media)
+        create_activity("add", media, target=collection)
         messages.add_message(request, messages.SUCCESS,
                              _('"%s" added to collection "%s"')
                              % (media.title, collection.title))

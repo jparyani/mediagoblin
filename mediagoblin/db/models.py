@@ -610,6 +610,8 @@ class MediaTag(Base):
         creator=Tag.find_or_new
         )
 
+    objectType = "tag"
+
     def __init__(self, name=None, slug=None):
         Base.__init__(self)
         if name is not None:
@@ -723,6 +725,8 @@ class Collection(Base, CollectionMixin):
     __table_args__ = (
         UniqueConstraint('creator', 'slug'),
         {})
+
+    objectType = "collection"
 
     def get_collection_items(self, ascending=False):
         #TODO, is this still needed with self.collection_items being available?
@@ -1099,7 +1103,7 @@ class Activity(Base):
     published = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
     verb = Column(Unicode, nullable=False)
-    content = Column(Unicode, nullable=False)
+    content = Column(Unicode, nullable=True)
     title = Column(Unicode, nullable=True)
     target = Column(Integer, ForeignKey(User.id), nullable=True)
     generator = Column(Integer, ForeignKey(Generator.id), nullable=True)
@@ -1111,12 +1115,20 @@ class Activity(Base):
     object_media = Column(Integer, ForeignKey(MediaEntry.id), nullable=True)
     object_user = Column(Integer, ForeignKey(User.id), nullable=True)
     
+    # The target could also be several things
+    target_comment = Column(Integer, ForeignKey(MediaComment.id), nullable=True)
+    target_collection = Column(Integer, ForeignKey(Collection.id), nullable=True)
+    target_media = Column(Integer, ForeignKey(MediaEntry.id), nullable=True)
+    target_user = Column(Integer, ForeignKey(User.id), nullable=True)
+    
+    get_actor = relationship(User, foreign_keys="Activity.actor")
+    get_generator = relationship(Generator)
+    
     VALID_VERBS = ["add", "author", "create", "delete", "dislike", "favorite", 
                    "follow", "like", "post", "share", "unfavorite", "unfollow",
                    "unlike", "unshare", "update", "tag"]
     
-    @property
-    def object(self):
+    def get_object(self):
         """ This represents the object that is given to the activity """
         # Do we have a cached version
         if getattr(self, "_cached_object", None) is not None:
@@ -1131,11 +1143,32 @@ class Activity(Base):
         elif self.object_user is not None:
             obj = User.query.filter_by(id=self.object_user).first()
         else:
-            # Shouldn't happen but incase it does
+            # Shouldn't happen but in case it does
             return None
         
         self._cached_object = obj
         return obj
+    
+    def get_target(self):
+        """ This represents the target given on the activity (if any) """
+        if getattr(self, "_cached_target", None) is not None:
+            return self._cached_target
+        
+        if self.target_comment is not None:
+            target = MediaComment.query.filter_by(id=self.target_comment).first()
+        elif self.target_collection is not None:
+            target = Collection.query.filter_by(id=self.target_collection).first()
+        elif self.target_media is not None:
+            target = MediaEntry.query.filter_by(id=self.target_media).first()
+        elif self.target_user is not None:
+            target = User.query.filter_by(id=self.target_user).first()
+        else:
+            # Shouldn't happen but in case it does
+            return None
+        
+        self._cached_target = target
+        return self._cached_target
+        
     
     def url(self, request):
         actor = User.query.filter_by(id=self.actor).first() 
@@ -1151,60 +1184,66 @@ class Activity(Base):
         Produces a HTML content for object
         TODO: Can this be moved to a mixin?
         """
+        # some of these have simple and targetted. If self.target it set
+        # it will pick the targetted. If they DON'T have a targetted version
+        # the information in targetted won't be added to the content.
         verb_to_content = {
-            "add": _("{username} added {object} to {destination}"),
-            "author": _("{username} authored {object}"),
-            "create": _("{username} created {object}"),
-            "delete": _("{username} deleted {object}"),
-            "dislike": _("{username} disliked {object}"),
-            "favorite": _("{username} favorited {object}"),
-            "follow": _("{username} followed {object}"),
-            "like": _("{username} liked {object}"),
-            "post": _("{username} posted {object}"),
-            "share": _("{username} shared {object}"),
-            "unfavorite": _("{username} unfavorited {object}"),
-            "unfollow": _("{username} stopped following {object}"),
-            "unlike": _("{username} unliked {object}"),
-            "unshare": _("{username} unshared {object}"),
-            "update": _("{username} updated {object}"),
-            "tag": _("{username} tagged {object}"), 
+            "add": {
+                "simple" : _("{username} added {object}"),
+                "targetted":  _("{username} added {object} to {target}"),
+            },
+            "author": {"simple": _("{username} authored {object}")},
+            "create": {"simple": _("{username} created {object}")},
+            "delete": {"simple": _("{username} deleted {object}")},
+            "dislike": {"simple": _("{username} disliked {object}")},
+            "favorite": {"simple": _("{username} favorited {object}")},
+            "follow": {"simple": _("{username} followed {object}")},
+            "like": {"simple": _("{username} liked {object}")},
+            "post": {
+                "simple": _("{username} posted {object}"),
+                "targetted": _("{username} posted {object} to {targetted}"),
+            },
+            "share": {"simple": _("{username} shared {object}")},
+            "unfavorite": {"simple": _("{username} unfavorited {object}")},
+            "unfollow": {"simple": _("{username} stopped following {object}")},
+            "unlike": {"simple": _("{username} unliked {object}")},
+            "unshare": {"simple": _("{username} unshared {object}")},
+            "update": {"simple": _("{username} updated {object}")},
+            "tag": {"simple": _("{username} tagged {object}")},
         }
+                
+        obj = self.get_object()
+        target = self.get_target()
+        actor = self.get_actor
+        content = verb_to_content.get(self.verb, None)
         
-        actor = User.query.filter_by(id=self.actor).first()
+        if content is None or obj is None:
+            return
         
-        if self.verb == "add" and self.object.objectType == "collection":
-            media = MediaEntry.query.filter_by(id=self.object.media_entry)
-            content = verb_to_content[self.verb]
-            self.content = content.format(
+        if target is None or "targetted" not in content:
+            self.content = content["simple"].format(
                 username=actor.username,
-                object=media.objectType,
-                destination=self.object.objectType,
-            )
-        elif self.verb in verb_to_content:
-            content = verb_to_content[self.verb]
-            self.content = content.format(
-                username=actor.username,
-                object=self.object.objectType
+                object=obj.objectType
             )
         else:
-            return
+            self.content = content["targetted"].format(
+                username=actor.username,
+                object=obj.objectType,
+                target=target.objectType,
+            )
         
         return self.content
     
     def serialize(self, request):
-        # Lookup models
-        actor = User.query.filter_by(id=self.actor).first()
-        generator = Generator.query.filter_by(id=self.generator).first()
-        
         obj = {
             "id": self.id,
-            "actor": actor.serialize(request),
+            "actor": self.get_actor.serialize(request),
             "verb": self.verb,
             "published": self.published.isoformat(),
             "updated": self.updated.isoformat(),
             "content": self.content,
             "url": self.url(request),
-            "object": self.object.serialize(request)
+            "object": self.get_object().serialize(request)
         }
         
         if self.generator:
@@ -1213,8 +1252,8 @@ class Activity(Base):
         if self.title:
             obj["title"] = self.title
         
-        if self.target:
-            target = User.query.filter_by(id=self.target).first()
+        target = self.get_target()
+        if target is not None:
             obj["target"] = target.seralize(request)
         
         return obj
@@ -1237,8 +1276,6 @@ class Activity(Base):
     
     def save(self, *args, **kwargs):
         self.updated = datetime.datetime.now()
-        if self.content is None:
-            self.generate_content()
         super(Activity, self).save(*args, **kwargs)    
 
 MODELS = [
