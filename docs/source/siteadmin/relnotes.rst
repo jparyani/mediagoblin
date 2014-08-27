@@ -31,6 +31,13 @@ carefully, or at least skim over it.
 2. Make sure to run
    ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
 
+(NOTE: earlier versions of the 0.7.0 release instructions left out the
+``git submodule init`` step!  If you did an upgrade earlier based on
+these instructions and your theme looks weirdly aligned, try running
+the following:)
+
+  ``git submodule init && git submodule update``
+
 That's it, probably!  If you run into problems, don't hesitate to
 `contact us <http://mediagoblin.org/pages/join.html>`_
 (IRC is often best).
