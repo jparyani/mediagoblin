@@ -94,7 +94,7 @@ That's it, probably!  If you run into problems, don't hesitate to
   but existant!) RTL language support!
 
 **Known issues:**
- - Webfinger is now json by default; in the spec it should be xml by
+ - The host-meta is now json by default; in the spec it should be xml by
    default.  We have done this because of compatibility with the pump
    API.  We are checking with upstream to see if there is a way to
    resolve this discrepancy.
