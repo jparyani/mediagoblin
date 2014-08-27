@@ -29,7 +29,7 @@ from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import (
     RegisterMigration, inspect_table, replace_table_hack)
 from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User,
-    Privilege)
+    Privilege, Generator)
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 
 
@@ -578,30 +578,6 @@ PRIVILEGE_FOUNDATIONS_v0 = [{'privilege_name':u'admin'},
                             {'privilege_name':u'commenter'},
                             {'privilege_name':u'active'}]
 
-
-class Activity_R0(declarative_base()):
-    __tablename__ = "core__activities"
-    id = Column(Integer, primary_key=True)
-    actor = Column(Integer, ForeignKey(User.id), nullable=False)
-    published = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    verb = Column(Unicode, nullable=False)
-    content = Column(Unicode, nullable=False)
-    title = Column(Unicode, nullable=True)
-    target = Column(Integer, ForeignKey(User.id), nullable=True)
-    object_comment = Column(Integer, ForeignKey(MediaComment.id), nullable=True)
-    object_collection = Column(Integer, ForeignKey(Collection.id), nullable=True)
-    object_media = Column(Integer, ForeignKey(MediaEntry.id), nullable=True)
-    object_user = Column(Integer, ForeignKey(User.id), nullable=True)
-
-class Generator(declarative_base()):
-    __tablename__ = "core__generators"
-    id = Column(Integer, primary_key=True)
-    name = Column(Unicode, nullable=False)
-    published = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    object_type = Column(Unicode, nullable=False)
-
 # vR1 stands for "version Rename 1".  This only exists because we need
 # to deal with dropping some booleans and it's otherwise impossible
 # with sqlite.
@@ -914,17 +890,91 @@ def revert_username_index(db):
 
     db.commit()
 
+class Generator_R0(declarative_base()):
+    __tablename__ = "core__generators"
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode, nullable=False)
+    published = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    object_type = Column(Unicode, nullable=False)
+
+class Activity_R0(declarative_base()):
+    __tablename__ = "core__activities"
+    id = Column(Integer, primary_key=True)
+    actor = Column(Integer, ForeignKey(User.id), nullable=False)
+    published = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    verb = Column(Unicode, nullable=False)
+    content = Column(Unicode, nullable=False)
+    title = Column(Unicode, nullable=True)
+    target = Column(Integer, ForeignKey(User.id), nullable=True)
+    generator = Column(Integer, ForeignKey(Generator.id), nullable=True)
+
+class ActivityIntermediator_R0(declarative_base()):
+    __tablename__ = "core__acitivity_intermediators"
+    id = Column(Integer, primary_key=True)
+    type = Column(Integer, nullable=False)
+
 @RegisterMigration(24, MIGRATIONS)
-def create_activity_table(db):
-    """ This will create the activity table """
+def activity_migration(db):
+    """
+    Creates everything to create activities in GMG
+    - Adds Activity, ActivityIntermediator and Generator table
+    - Creates GMG service generator for activities produced by the server
+    - Adds the activity_as_object and activity_as_target to objects/targets
+    - Retroactively adds activities for what we can acurately work out
+    """
+    # Set constants we'll use later
+    FOREIGN_KEY = "core__acitivity_intermediators.id"
+
+
+    # Create the new tables.
     Activity_R0.__table__.create(db.bind)
     Generator_R0.__table__.create(db.bind)
+    ActivityIntermediator_R0.__table__.create(db.bind)
     db.commit()
-    
-    # Create the GNU MediaGoblin generator
-    gmg_generator = Generator(name="GNU MediaGoblin", object_type="service")
-    gmg_generator.save()
-    
+
+
+    # Initiate the tables we want to use later
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
+    generator_table = inspect_table(metadata, "core__generators")
+    collection_table = inspect_table(metadata, "core__collections")
+    media_entry_table = inspect_table(metadata, "core__media_entries")
+    media_comments_table = inspect_table(metadata, "core__media_comments")
+
+
+    # Create the foundations for Generator
+    db.execute(generator_table.insert().values(
+        name="GNU Mediagoblin",
+        object_type="service"
+    ))
+    db.commit()
+
+
+    # Now we want to modify the tables which MAY have an activity at some point
+    as_object = Column("activity_as_object", Integer, ForeignKey(FOREIGN_KEY))
+    as_object.create(media_entry_table)
+    as_target = Column("activity_as_target", Integer, ForeignKey(FOREIGN_KEY))
+    as_target.create(media_entry_table)
+
+    as_object = Column("activity_as_object", Integer, ForeignKey(FOREIGN_KEY))
+    as_object.create(user_table)
+    as_target = Column("activity_as_target", Integer, ForeignKey(FOREIGN_KEY))
+    as_target.create(user_table)
+
+    as_object = Column("activity_as_object", Integer, ForeignKey(FOREIGN_KEY))
+    as_object.create(media_comments_table)
+    as_target = Column("activity_as_target", Integer, ForeignKey(FOREIGN_KEY))
+    as_target.create(media_comments_table)
+
+    as_object = Column("activity_as_object", Integer, ForeignKey(FOREIGN_KEY))
+    as_object.create(collection_table)
+    as_target = Column("activity_as_target", Integer, ForeignKey(FOREIGN_KEY))
+    as_target.create(collection_table)
+    db.commit()
+
+
     # Now we want to retroactively add what activities we can
     # first we'll add activities when people uploaded media.
     for media in MediaEntry.query.all():
@@ -932,19 +982,40 @@ def create_activity_table(db):
             verb="create",
             actor=media.uploader,
             published=media.created,
-            object_media=media.id,
+            updated=media.created,
+            generator=gmg_generator.id
         )
         activity.generate_content()
-        activity.save()
-    
+        activity.save(set_updated=False)
+        activity.set_object(media)
+        media.save()
+
     # Now we want to add all the comments people made
     for comment in MediaComment.query.all():
         activity = Activity_R0(
             verb="comment",
             actor=comment.author,
             published=comment.created,
+            updated=comment.created,
+            generator=gmg_generator.id
         )
         activity.generate_content()
-        activity.save()
-    
+        activity.save(set_updated=False)
+        activity.set_object(comment)
+        comment.save()
+
+    # Create 'create' activities for all collections
+    for collection in Collection.query.all():
+        activity = Activity_R0(
+            verb="create",
+            actor=collection.creator,
+            published=collection.created,
+            updated=collection.created,
+            generator=gmg_generator.id
+        )
+        activity.generate_content()
+        activity.save(set_updated=False)
+        activity.set_object(collection)
+        collection.save()
+
     db.commit()
