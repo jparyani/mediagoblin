@@ -905,15 +905,21 @@ class Activity_R0(declarative_base()):
     published = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
     verb = Column(Unicode, nullable=False)
-    content = Column(Unicode, nullable=False)
+    content = Column(Unicode, nullable=True)
     title = Column(Unicode, nullable=True)
     target = Column(Integer, ForeignKey(User.id), nullable=True)
     generator = Column(Integer, ForeignKey(Generator.id), nullable=True)
+    object = Column(Integer,
+                    ForeignKey("core__activity_intermediators.id"),
+                    nullable=False)
+    target = Column(Integer,
+                    ForeignKey("core__activity_intermediators.id"),
+                    nullable=True)
 
 class ActivityIntermediator_R0(declarative_base()):
-    __tablename__ = "core__acitivity_intermediators"
+    __tablename__ = "core__activity_intermediators"
     id = Column(Integer, primary_key=True)
-    type = Column(Integer, nullable=False)
+    type = Column(Unicode, nullable=False)
 
 @RegisterMigration(24, MIGRATIONS)
 def activity_migration(db):
@@ -925,31 +931,39 @@ def activity_migration(db):
     - Retroactively adds activities for what we can acurately work out
     """
     # Set constants we'll use later
-    FOREIGN_KEY = "core__acitivity_intermediators.id"
+    FOREIGN_KEY = "core__activity_intermediators.id"
 
 
     # Create the new tables.
-    Activity_R0.__table__.create(db.bind)
-    Generator_R0.__table__.create(db.bind)
     ActivityIntermediator_R0.__table__.create(db.bind)
+    Generator_R0.__table__.create(db.bind)
+    Activity_R0.__table__.create(db.bind)
     db.commit()
 
 
     # Initiate the tables we want to use later
     metadata = MetaData(bind=db.bind)
     user_table = inspect_table(metadata, "core__users")
+    activity_table = inspect_table(metadata, "core__activities")
     generator_table = inspect_table(metadata, "core__generators")
     collection_table = inspect_table(metadata, "core__collections")
     media_entry_table = inspect_table(metadata, "core__media_entries")
     media_comments_table = inspect_table(metadata, "core__media_comments")
+    ai_table = inspect_table(metadata, "core__activity_intermediators")
 
 
     # Create the foundations for Generator
     db.execute(generator_table.insert().values(
         name="GNU Mediagoblin",
-        object_type="service"
+        object_type="service",
+        published=datetime.datetime.now(),
+        updated=datetime.datetime.now()
     ))
     db.commit()
+
+    # Get the ID of that generator
+    gmg_generator = db.execute(generator_table.select(
+        generator_table.c.name==u"GNU Mediagoblin")).first()
 
 
     # Now we want to modify the tables which MAY have an activity at some point
@@ -977,45 +991,93 @@ def activity_migration(db):
 
     # Now we want to retroactively add what activities we can
     # first we'll add activities when people uploaded media.
-    for media in MediaEntry.query.all():
-        activity = Activity_R0(
-            verb="create",
-            actor=media.uploader,
-            published=media.created,
-            updated=media.created,
-            generator=gmg_generator.id
-        )
-        activity.generate_content()
-        activity.save(set_updated=False)
-        activity.set_object(media)
-        media.save()
+    # these can't have content as it's not fesible to get the
+    # correct content strings.
+    for media in db.execute(media_entry_table.select()):
+        # Now we want to create the intermedaitory
+        db_ai = db.execute(ai_table.insert().values(
+            type="media",
+        ))
+        db_ai = db.execute(ai_table.select(
+            ai_table.c.id==db_ai.inserted_primary_key[0]
+        )).first()
+
+        # Add the activity
+        activity = {
+            "verb": "create",
+            "actor": media.uploader,
+            "published": media.created,
+            "updated": media.created,
+            "generator": gmg_generator.id,
+            "object": db_ai.id
+        }
+        db.execute(activity_table.insert().values(**activity))
+
+        # Add the AI to the media.
+        db.execute(media_entry_table.update().values(
+            activity_as_object=db_ai.id
+        ).where(id=media.id))
 
     # Now we want to add all the comments people made
-    for comment in MediaComment.query.all():
-        activity = Activity_R0(
-            verb="comment",
-            actor=comment.author,
-            published=comment.created,
-            updated=comment.created,
-            generator=gmg_generator.id
-        )
-        activity.generate_content()
-        activity.save(set_updated=False)
-        activity.set_object(comment)
-        comment.save()
+    for comment in db.execute(media_comments_table.select()):
+        # Get the MediaEntry for the comment
+        media_entry = db.execute(
+            media_entry_table.select(id=comment.media_entry_id))
+
+        # Create an AI for target
+        db_ai_media = db.execute(ai_table.insert().values(
+            type="media"
+        ))
+        db_ai_media = db.execute(ai_table.select(
+            ai_table.c.id==db_ai_media.inserted_primary_key[0]
+        ))
+
+        db.execute(
+            media_entry_table.update().values(
+                activity_as_target=db_ai_media.id
+        ).where(id=media_entry.id))
+
+        # Now create the AI for the comment
+        db_ai_comment = db.execute(ai_table.insert().values(
+            type="comment"
+        ))
+
+        activity = {
+            "verb": "comment",
+            "actor": comment.author,
+            "published": comment.created,
+            "updated": comment.created,
+            "generator": gmg_generator.id,
+            "object": db_ai_comment.id,
+            "target": db_ai_media.id,
+        }
+
+        # Now add the comment object
+        db.execute(media_comments_table.insert().values(**activity))
 
     # Create 'create' activities for all collections
-    for collection in Collection.query.all():
-        activity = Activity_R0(
-            verb="create",
-            actor=collection.creator,
-            published=collection.created,
-            updated=collection.created,
-            generator=gmg_generator.id
-        )
-        activity.generate_content()
-        activity.save(set_updated=False)
-        activity.set_object(collection)
-        collection.save()
+    for collection in db.execute(collection_table.select()):
+        # create AI
+        db_ai = db.execute(ai_table.insert().values(
+            type="collection"
+        ))
+
+        # Now add link the collection to the AI
+        db.execute(collection_table.update().values(
+            activity_as_object=db_ai.id
+        ).where(id=collection.id))
+
+        activity = {
+            "verb": "create",
+            "actor": collection.creator,
+            "published": collection.created,
+            "updated": collection.created,
+            "generator": gmg_generator.id,
+            "object": db_ai.id,
+        }
+
+        db.execute(activity_table.insert().values(**activity))
+
+
 
     db.commit()

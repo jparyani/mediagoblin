@@ -43,6 +43,8 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 
 
 class UserMixin(object):
+    object_type = "person"
+
     @property
     def bio_html(self):
         return cleaned_markdown_conversion(self.bio)
@@ -130,6 +132,11 @@ class MediaEntryMixin(GenerateSlugMixin):
         from mediagoblin.db.util import check_media_slug_used
 
         return check_media_slug_used(self.uploader, slug, self.id)
+
+    @property
+    def object_type(self):
+        """ Converts media_type to pump-like type - don't use internally """
+        return self.media_type.split(".")[-1]
 
     @property
     def description_html(self):
@@ -298,6 +305,8 @@ class MediaEntryMixin(GenerateSlugMixin):
 
 
 class MediaCommentMixin(object):
+    object_type = "comment"
+
     @property
     def content_html(self):
         """
@@ -322,6 +331,8 @@ class MediaCommentMixin(object):
 
 
 class CollectionMixin(GenerateSlugMixin):
+    object_type = "collection"
+
     def check_slug_used(self, slug):
         # import this here due to a cyclic import issue
         # (db.models -> db.mixin -> db.util -> db.models)
@@ -366,6 +377,7 @@ class CollectionItemMixin(object):
         return cleaned_markdown_conversion(self.note)
 
 class ActivityMixin(object):
+    object_type = "activity"
 
     VALID_VERBS = ["add", "author", "create", "delete", "dislike", "favorite",
                    "follow", "like", "post", "share", "unfavorite", "unfollow",
@@ -440,7 +452,8 @@ class ActivityMixin(object):
             "updated": self.updated.isoformat(),
             "content": self.content,
             "url": self.get_url(request),
-            "object": self.get_object().serialize(request)
+            "object": self.get_object().serialize(request),
+            "objectType": self.object_type,
         }
 
         if self.generator:

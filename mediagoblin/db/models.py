@@ -78,14 +78,12 @@ class User(Base, UserMixin):
     upload_limit = Column(Integer)
 
     activity_as_object = Column(Integer,
-                                ForeignKey("core__acitivity_intermediators.id"))
+                                ForeignKey("core__activity_intermediators.id"))
     activity_as_target = Column(Integer,
-                                ForeignKey("core__acitivity_intermediators.id"))
+                                ForeignKey("core__activity_intermediators.id"))
 
     ## TODO
     # plugin data would be in a separate model
-
-    objectType = "person"
 
     def __repr__(self):
         return '<{0} #{1} {2} {3} "{4}">'.format(
@@ -151,7 +149,7 @@ class User(Base, UserMixin):
             "id": "acct:{0}@{1}".format(self.username, request.host),
             "preferredUsername": self.username,
             "displayName": "{0}@{1}".format(self.username, request.host),
-            "objectType": self.objectType,
+            "objectType": self.object_type,
             "pump_io": {
                 "shared": False,
                 "followed": False,
@@ -319,9 +317,9 @@ class MediaEntry(Base, MediaEntryMixin):
         default=MutationDict())
 
     activity_as_object = Column(Integer,
-                                ForeignKey("core__acitivity_intermediators.id"))
+                                ForeignKey("core__activity_intermediators.id"))
     activity_as_target = Column(Integer,
-                                ForeignKey("core__acitivity_intermediators.id"))
+                                ForeignKey("core__activity_intermediators.id"))
 
     ## TODO
     # fail_error
@@ -444,18 +442,13 @@ class MediaEntry(Base, MediaEntryMixin):
         # pass through commit=False/True in kwargs
         super(MediaEntry, self).delete(**kwargs)
 
-    @property
-    def objectType(self):
-        """ Converts media_type to pump-like type - don't use internally """
-        return self.media_type.split(".")[-1]
-
     def serialize(self, request, show_comments=True):
         """ Unserialize MediaEntry to object """
         author = self.get_uploader
         context = {
             "id": self.id,
             "author": author.serialize(request),
-            "objectType": self.objectType,
+            "objectType": self.object_type,
             "url": self.url_for_self(request.urlgen),
             "image": {
                 "url": request.host_url + self.thumb_url[1:],
@@ -472,7 +465,7 @@ class MediaEntry(Base, MediaEntryMixin):
                 "self": {
                     "href": request.urlgen(
                         "mediagoblin.federation.object",
-                        objectType=self.objectType,
+                        object_type=self.objectType,
                         id=self.id,
                         qualified=True
                     ),
@@ -491,14 +484,15 @@ class MediaEntry(Base, MediaEntryMixin):
             context["license"] = self.license
 
         if show_comments:
-            comments = [comment.serialize(request) for comment in self.get_comments()]
+            comments = [
+                comment.serialize(request) for comment in self.get_comments()]
             total = len(comments)
             context["replies"] = {
                 "totalItems": total,
                 "items": comments,
                 "url": request.urlgen(
                         "mediagoblin.federation.object.comments",
-                        objectType=self.objectType,
+                        object_type=self.object_type,
                         id=self.id,
                         qualified=True
                         ),
@@ -620,8 +614,6 @@ class MediaTag(Base):
         creator=Tag.find_or_new
         )
 
-    objectType = "tag"
-
     def __init__(self, name=None, slug=None):
         Base.__init__(self)
         if name is not None:
@@ -668,11 +660,9 @@ class MediaComment(Base, MediaCommentMixin):
 
 
     activity_as_object = Column(Integer,
-                                ForeignKey("core__acitivity_intermediators.id"))
+                                ForeignKey("core__activity_intermediators.id"))
     activity_as_target = Column(Integer,
-                                ForeignKey("core__acitivity_intermediators.id"))
-
-    objectType = "comment"
+                                ForeignKey("core__activity_intermediators.id"))
 
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
@@ -680,7 +670,7 @@ class MediaComment(Base, MediaCommentMixin):
         author = self.get_author
         context = {
             "id": self.id,
-            "objectType": self.objectType,
+            "objectType": self.object_type,
             "content": self.content,
             "inReplyTo": media.serialize(request, show_comments=False),
             "author": author.serialize(request)
@@ -739,15 +729,13 @@ class Collection(Base, CollectionMixin):
                                                cascade="all, delete-orphan"))
 
     activity_as_object = Column(Integer,
-                                ForeignKey("core__acitivity_intermediators.id"))
+                                ForeignKey("core__activity_intermediators.id"))
     activity_as_target = Column(Integer,
-                                ForeignKey("core__acitivity_intermediators.id"))
+                                ForeignKey("core__activity_intermediators.id"))
 
     __table_args__ = (
         UniqueConstraint('creator', 'slug'),
         {})
-
-    objectType = "collection"
 
     def get_collection_items(self, ascending=False):
         #TODO, is this still needed with self.collection_items being available?
@@ -1085,10 +1073,7 @@ class PrivilegeUserAssociation(Base):
         primary_key=True)
 
 class Generator(Base):
-    """
-    This holds the information about the software used to create
-    objects for the pump.io APIs.
-    """
+    """ Information about what created an activity """
     __tablename__ = "core__generators"
 
     id = Column(Integer, primary_key=True)
@@ -1118,16 +1103,16 @@ class ActivityIntermediator(Base):
     used multiple times for the activity object or target and also allows for
     different types of objects to be used as an Activity.
     """
-    __tablename__ = "core__acitivity_intermediators"
+    __tablename__ = "core__activity_intermediators"
 
     id = Column(Integer, primary_key=True)
-    type = Column(Integer, nullable=False)
+    type = Column(Unicode, nullable=False)
 
     TYPES = {
-        0: User,
-        1: MediaEntry,
-        2: MediaComment,
-        3: Collection,
+        "user": User,
+        "media": MediaEntry,
+        "comment": MediaComment,
+        "collection": Collection,
     }
 
     def _find_model(self, obj):
@@ -1189,18 +1174,22 @@ class Activity(Base, ActivityMixin):
 
     id = Column(Integer, primary_key=True)
     actor = Column(Integer,
-                   ForeignKey(User.id, use_alter=True, name="actor"),
+                   ForeignKey("core__users.id"),
                    nullable=False)
     published = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
     verb = Column(Unicode, nullable=False)
     content = Column(Unicode, nullable=True)
     title = Column(Unicode, nullable=True)
-    generator = Column(Integer, ForeignKey(Generator.id), nullable=True)
+    generator = Column(Integer,
+                       ForeignKey("core__generators.id"),
+                       nullable=True)
     object = Column(Integer,
-                    ForeignKey(ActivityIntermediator.id), nullable=False)
+                    ForeignKey("core__activity_intermediators.id"),
+                    nullable=False)
     target = Column(Integer,
-                    ForeignKey(ActivityIntermediator.id), nullable=True)
+                    ForeignKey("core__activity_intermediators.id"),
+                    nullable=True)
 
     get_actor = relationship(User,
         foreign_keys="Activity.actor", post_update=True)
@@ -1214,8 +1203,9 @@ class Activity(Base, ActivityMixin):
             self.object = ai.id
             return
 
-        self.object.set_object(*args, **kwargs)
-        self.object.save()
+        ai = ActivityIntermediator.query.filter_by(id=self.object).first()
+        ai.set_object(*args, **kwargs)
+        ai.save()
 
     @property
     def get_object(self):
@@ -1229,8 +1219,9 @@ class Activity(Base, ActivityMixin):
             self.object = ai.id
             return
 
-        self.target.set_object(*args, **kwargs)
-        self.targt.save()
+        ai = ActivityIntermediator.query.filter_by(id=self.target).first()
+        ai.set_object(*args, **kwargs)
+        ai.save()
 
     @property
     def get_target(self):

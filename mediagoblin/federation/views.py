@@ -71,14 +71,14 @@ def profile_endpoint(request):
 def user_endpoint(request):
     """ This is /api/user/<username> - This will get the user """
     user, user_profile = get_profile(request)
-    
+
     if user is None:
         username = request.matchdict["username"]
         return json_error(
             "No such 'user' with username '{0}'".format(username),
             status=404
         )
-    
+
     return json_response({
         "nickname": user.username,
         "updated": user.created.isoformat(),
@@ -350,7 +350,7 @@ def feed_endpoint(request):
 @oauth_required
 def object_endpoint(request):
     """ Lookup for a object type """
-    object_type = request.matchdict["objectType"]
+    object_type = request.matchdict["object_type"]
     try:
         object_id = int(request.matchdict["id"])
     except ValueError:
@@ -382,17 +382,17 @@ def object_comments(request):
     media = MediaEntry.query.filter_by(id=request.matchdict["id"]).first()
     if media is None:
         return json_error("Can't find '{0}' with ID '{1}'".format(
-            request.matchdict["objectType"],
+            request.matchdict["object_type"],
             request.matchdict["id"]
         ), 404)
 
-    comments = response.serialize(request)
+    comments = media.serialize(request)
     comments = comments.get("replies", {
         "totalItems": 0,
         "items": [],
         "url": request.urlgen(
             "mediagoblin.federation.object.comments",
-            objectType=media.objectType,
+            object_type=media.object_type,
             id=media.id,
             qualified=True
         )
@@ -459,27 +459,30 @@ def whoami(request):
 @require_active_login
 def activity_view(request):
     """ /<username>/activity/<id> - Display activity
-    
+
     This should display a HTML presentation of the activity
     this is NOT an API endpoint.
     """
     # Get the user object.
     username = request.matchdict["username"]
     user = User.query.filter_by(username=username).first()
-    
+
     activity_id = request.matchdict["id"]
-    
+
     if request.user is None:
         return render_404(request)
-    
-    activity = Activity.query.filter_by(id=activity_id).first()
+
+    activity = Activity.query.filter_by(
+        id=activity_id,
+        author=user.id
+    ).first()
     if activity is None:
         return render_404(request)
-    
+
     return render_to_response(
         request,
         "mediagoblin/federation/activity.html",
         {"activity": activity}
     )
-    
-    
+
+
