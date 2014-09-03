@@ -901,14 +901,13 @@ class Generator_R0(declarative_base()):
 class Activity_R0(declarative_base()):
     __tablename__ = "core__activities"
     id = Column(Integer, primary_key=True)
-    actor = Column(Integer, ForeignKey(User.id), nullable=False)
+    actor = Column(Integer, ForeignKey("core__users.id"), nullable=False)
     published = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
     verb = Column(Unicode, nullable=False)
     content = Column(Unicode, nullable=True)
     title = Column(Unicode, nullable=True)
-    target = Column(Integer, ForeignKey(User.id), nullable=True)
-    generator = Column(Integer, ForeignKey(Generator.id), nullable=True)
+    generator = Column(Integer, ForeignKey("core__generators.id"), nullable=True)
     object = Column(Integer,
                     ForeignKey("core__activity_intermediators.id"),
                     nullable=False)
@@ -932,7 +931,6 @@ def activity_migration(db):
     """
     # Set constants we'll use later
     FOREIGN_KEY = "core__activity_intermediators.id"
-
 
     # Create the new tables.
     ActivityIntermediator_R0.__table__.create(db.bind)
@@ -967,25 +965,17 @@ def activity_migration(db):
 
 
     # Now we want to modify the tables which MAY have an activity at some point
-    as_object = Column("activity_as_object", Integer, ForeignKey(FOREIGN_KEY))
-    as_object.create(media_entry_table)
-    as_target = Column("activity_as_target", Integer, ForeignKey(FOREIGN_KEY))
-    as_target.create(media_entry_table)
+    media_col = Column("activity", Integer, ForeignKey(FOREIGN_KEY))
+    media_col.create(media_entry_table)
 
-    as_object = Column("activity_as_object", Integer, ForeignKey(FOREIGN_KEY))
-    as_object.create(user_table)
-    as_target = Column("activity_as_target", Integer, ForeignKey(FOREIGN_KEY))
-    as_target.create(user_table)
+    user_col = Column("activity", Integer, ForeignKey(FOREIGN_KEY))
+    user_col.create(user_table)
 
-    as_object = Column("activity_as_object", Integer, ForeignKey(FOREIGN_KEY))
-    as_object.create(media_comments_table)
-    as_target = Column("activity_as_target", Integer, ForeignKey(FOREIGN_KEY))
-    as_target.create(media_comments_table)
+    comments_col = Column("activity", Integer, ForeignKey(FOREIGN_KEY))
+    comments_col.create(media_comments_table)
 
-    as_object = Column("activity_as_object", Integer, ForeignKey(FOREIGN_KEY))
-    as_object.create(collection_table)
-    as_target = Column("activity_as_target", Integer, ForeignKey(FOREIGN_KEY))
-    as_target.create(collection_table)
+    collection_col = Column("activity", Integer, ForeignKey(FOREIGN_KEY))
+    collection_col.create(collection_table)
     db.commit()
 
 

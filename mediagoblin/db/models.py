@@ -77,10 +77,7 @@ class User(Base, UserMixin):
     uploaded = Column(Integer, default=0)
     upload_limit = Column(Integer)
 
-    activity_as_object = Column(Integer,
-                                ForeignKey("core__activity_intermediators.id"))
-    activity_as_target = Column(Integer,
-                                ForeignKey("core__activity_intermediators.id"))
+    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
 
     ## TODO
     # plugin data would be in a separate model
@@ -316,10 +313,7 @@ class MediaEntry(Base, MediaEntryMixin):
     media_metadata = Column(MutationDict.as_mutable(JSONEncoded),
         default=MutationDict())
 
-    activity_as_object = Column(Integer,
-                                ForeignKey("core__activity_intermediators.id"))
-    activity_as_target = Column(Integer,
-                                ForeignKey("core__activity_intermediators.id"))
+    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
 
     ## TODO
     # fail_error
@@ -659,10 +653,7 @@ class MediaComment(Base, MediaCommentMixin):
                                                    cascade="all, delete-orphan"))
 
 
-    activity_as_object = Column(Integer,
-                                ForeignKey("core__activity_intermediators.id"))
-    activity_as_target = Column(Integer,
-                                ForeignKey("core__activity_intermediators.id"))
+    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
 
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
@@ -728,10 +719,7 @@ class Collection(Base, CollectionMixin):
                                backref=backref("collections",
                                                cascade="all, delete-orphan"))
 
-    activity_as_object = Column(Integer,
-                                ForeignKey("core__activity_intermediators.id"))
-    activity_as_target = Column(Integer,
-                                ForeignKey("core__activity_intermediators.id"))
+    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
 
     __table_args__ = (
         UniqueConstraint('creator', 'slug'),
@@ -1123,8 +1111,8 @@ class ActivityIntermediator(Base):
 
         return None, None
 
-    def set_object(self, obj):
-        """ This sets itself as the object for an activity """
+    def set(self, obj):
+        """ This sets itself as the activity """
         key, model = self._find_model(obj)
         if key is None:
             raise ValueError("Invalid type of object given")
@@ -1133,32 +1121,13 @@ class ActivityIntermediator(Base):
         obj.activity_as_object = self.id
         self.type = key
 
-    @property
-    def get_object(self):
+    def get(self):
         """ Finds the object for an activity """
         if self.type is None:
             return None
 
         model = self.TYPES[self.type]
         return model.query.filter_by(activity_as_object=self.id).first()
-
-    def set_target(self, obj):
-        """ This sets itself as the target for an activity """
-        key, model = self._find_model(obj)
-        if key is None:
-            raise ValueError("Invalid type of object given")
-
-        obj.activity_as_target = self.id
-        self.type = key
-
-    @property
-    def get_target(self):
-        """ Gets the target for an activity """
-        if self.type is None:
-            return None
-
-        model = self.TYPES[self.type]
-        return model.query.filter_by(activity_as_target=self.id).first()
 
     def save(self, *args, **kwargs):
         if self.type not in self.TYPES.keys():
@@ -1195,40 +1164,43 @@ class Activity(Base, ActivityMixin):
         foreign_keys="Activity.actor", post_update=True)
     get_generator = relationship(Generator)
 
-    def set_object(self, *args, **kwargs):
-        if self.object is None:
-            ai = ActivityIntermediator()
-            ai.set_object(*args, **kwargs)
-            ai.save()
-            self.object = ai.id
-            return
-
-        ai = ActivityIntermediator.query.filter_by(id=self.object).first()
-        ai.set_object(*args, **kwargs)
-        ai.save()
-
     @property
     def get_object(self):
-        return self.object.get_object
+        if self.object is None:
+            return None
 
-    def set_target(self, *args, **kwargs):
-        if self.target is None:
-            ai = ActivityIntermediator()
-            ai.set_target(*args, **kwargs)
-            ai.save()
-            self.object = ai.id
-            return
+        ai = ActivityIntermediator.query.filter_by(id=self.object).first()
+        return ai.get()
 
-        ai = ActivityIntermediator.query.filter_by(id=self.target).first()
-        ai.set_object(*args, **kwargs)
-        ai.save()
+    def set_object(self, obj):
+        self.object = self._set_model(obj)
 
     @property
     def get_target(self):
         if self.target is None:
             return None
 
-        return self.target.get_target
+        ai = ActivityIntermediator.query.filter_by(id=self.target).first()
+        return ai.get()
+
+    def set_target(self, obj):
+        self.target = self._set_model(obj)
+
+    def _set_model(self, obj):
+        # Firstly can we set obj
+        if not hasattr(obj, "activity"):
+            raise ValueError(
+                "{0!r} is unable to be set on activity".format(obj))
+
+        if obj.activity is None:
+            # We need to create a new AI
+            ai = ActivityIntermediator()
+            ai.set(obj)
+            ai.save()
+            return ai.id
+
+        # Okay we should have an existing AI
+        return ActivityIntermediator.query.filter_by(id=obj.activity).first().id
 
     def save(self, set_updated=True, *args, **kwargs):
         if set_updated:
