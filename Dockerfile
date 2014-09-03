@@ -39,9 +39,8 @@ RUN mkdir -p /opt/app && cd /opt/app && (virtualenv --system-site-packages . || 
 RUN /opt/app/bin/pip install scikits.audiolab
 RUN mv /opt/app /tmp/virtualenv
 
-ADD . /opt/app 
+ADD . /opt/app
 RUN cd /opt/app && cp -r /tmp/virtualenv/* .
-RUN rm -rf /opt/app/.git
 
 RUN cd /opt/app && ./bin/python setup.py develop
 RUN mkdir -p /var/user_dev/media/public/media_entries && mkdir -p /var/user_dev/media/queue/media_entries

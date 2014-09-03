@@ -3,7 +3,7 @@ rm -rf dockerenv
 mkdir dockerenv && cd dockerenv
 
 # export last running docker container and untar it here
-docker export `docker ps -l -q` | tar x
+docker export `docker ps -l -q` | tar x --exclude='dev/*'
 
 # mv var out of the way since it is reserved in sandstorm
 # parts of var_original will be copied in run_grain.sh
