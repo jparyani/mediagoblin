@@ -29,13 +29,13 @@
   {% autoescape False %}
     <p> {{ activity.content }} </p>
   {% endautoescape %}
-  
+
   <div class="media_sidebar">
     {% block mediagoblin_after_added_sidebar %}
       <a href="{{ activity.url(request) }}"
          class="button_action"
          id="button_reportmedia">
-            View {{ activity.object.objectType }}
+            View {{ activity.get_object.object_type }}
       </a>
     {% endblock %}
   </div>

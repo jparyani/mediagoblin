@@ -17,7 +17,7 @@
 from mediagoblin.db.models import Activity, Generator, User, MediaEntry, \
                                   MediaComment, Collection
 
-def create_activity(verb, obj, target=None, actor=None):
+def create_activity(verb, obj, actor, target=None):
     """
     This will create an Activity object which for the obj if possible
     and save it. The verb should be one of the following:
@@ -27,9 +27,6 @@ def create_activity(verb, obj, target=None, actor=None):
 
     If none of those fit you might not want/need to create an activity for
     the object. The list is in mediagoblin.db.models.Activity.VALID_VERBS
-
-    If no actor is supplied it'll take the actor/author/uploader/etc. from
-    the object if possible, else raise a ValueError
     """
     # exception when we try and generate an activity with an unknow verb
     # could change later to allow arbitrary verbs but at the moment we'll play
@@ -40,15 +37,21 @@ def create_activity(verb, obj, target=None, actor=None):
 
     # This should exist as we're creating it by the migration for Generator
     generator = Generator.query.filter_by(name="GNU MediaGoblin").first()
+    if generator is None:
+        generator = Generator(
+            name="GNU MediaGoblin",
+            object_type="service"
+        )
+        generator.save()
+
     activity = Activity(verb=verb)
     activity.set_object(obj)
 
     if target is not None:
         activity.set_target(target)
 
-    if actor is not None:
-        # If they've set it override the actor from the obj.
-        activity.actor = actor.id if isinstance(actor, User) else actor
+   # If they've set it override the actor from the obj.
+    activity.actor = actor.id if isinstance(actor, User) else actor
 
     activity.generator = generator.id
     activity.save()

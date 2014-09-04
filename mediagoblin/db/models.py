@@ -459,7 +459,7 @@ class MediaEntry(Base, MediaEntryMixin):
                 "self": {
                     "href": request.urlgen(
                         "mediagoblin.federation.object",
-                        object_type=self.objectType,
+                        object_type=self.object_type,
                         id=self.id,
                         qualified=True
                     ),
@@ -1127,7 +1127,7 @@ class ActivityIntermediator(Base):
             return None
 
         model = self.TYPES[self.type]
-        return model.query.filter_by(activity_as_object=self.id).first()
+        return model.query.filter_by(activity=self.id).first()
 
     def save(self, *args, **kwargs):
         if self.type not in self.TYPES.keys():

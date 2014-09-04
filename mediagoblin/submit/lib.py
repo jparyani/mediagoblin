@@ -200,9 +200,10 @@ def submit_media(mg_app, user, submitted_file, filename,
     run_process_media(entry, feed_url)
 
     add_comment_subscription(user, entry)
-    
+
     # Create activity
-    create_activity("post", entry)
+    entry.activity = create_activity("post", entry, entry.uploader).id
+    entry.save()
 
     return entry
 
@@ -293,8 +294,9 @@ def api_add_to_feed(request, entry):
 
     run_process_media(entry, feed_url)
     add_comment_subscription(request.user, entry)
-    
+
     # Create activity
-    create_activity("post", entry)
+    entry.activity = create_activity("post", entry, entry.uploader).id
+    entry.save()
 
     return json_response(entry.serialize(request))

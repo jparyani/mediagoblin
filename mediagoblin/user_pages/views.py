@@ -200,7 +200,7 @@ def media_post_comment(request, media):
             _('Your comment has been posted!'))
 
         trigger_notification(comment, media, request)
-        create_activity("post", comment)
+        create_activity("post", comment, comment.author)
         add_comment_subscription(request.user, media)
 
     return redirect_obj(request, media)
@@ -262,7 +262,7 @@ def media_collect(request, media):
         collection.creator = request.user.id
         collection.generate_slug()
         collection.save()
-        create_activity("create", collection)
+        create_activity("create", collection, collection.creator)
 
     # Otherwise, use the collection selected from the drop-down
     else:
@@ -289,7 +289,7 @@ def media_collect(request, media):
                              % (media.title, collection.title))
     else: # Add item to collection
         add_media_to_collection(collection, media, form.note.data)
-        create_activity("add", media, target=collection)
+        create_activity("add", media, request.user, target=collection)
         messages.add_message(request, messages.SUCCESS,
                              _('"%s" added to collection "%s"')
                              % (media.title, collection.title))

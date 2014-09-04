@@ -898,27 +898,27 @@ class Generator_R0(declarative_base()):
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
     object_type = Column(Unicode, nullable=False)
 
+class ActivityIntermediator_R0(declarative_base()):
+    __tablename__ = "core__activity_intermediators"
+    id = Column(Integer, primary_key=True)
+    type = Column(Unicode, nullable=False)
+
 class Activity_R0(declarative_base()):
     __tablename__ = "core__activities"
     id = Column(Integer, primary_key=True)
-    actor = Column(Integer, ForeignKey("core__users.id"), nullable=False)
+    actor = Column(Integer, ForeignKey(User.id), nullable=False)
     published = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
     verb = Column(Unicode, nullable=False)
     content = Column(Unicode, nullable=True)
     title = Column(Unicode, nullable=True)
-    generator = Column(Integer, ForeignKey("core__generators.id"), nullable=True)
+    generator = Column(Integer, ForeignKey(Generator_R0.id), nullable=True)
     object = Column(Integer,
-                    ForeignKey("core__activity_intermediators.id"),
+                    ForeignKey(ActivityIntermediator_R0.id),
                     nullable=False)
     target = Column(Integer,
-                    ForeignKey("core__activity_intermediators.id"),
+                    ForeignKey(ActivityIntermediator_R0.id),
                     nullable=True)
-
-class ActivityIntermediator_R0(declarative_base()):
-    __tablename__ = "core__activity_intermediators"
-    id = Column(Integer, primary_key=True)
-    type = Column(Unicode, nullable=False)
 
 @RegisterMigration(24, MIGRATIONS)
 def activity_migration(db):
@@ -931,13 +931,13 @@ def activity_migration(db):
     """
     # Set constants we'll use later
     FOREIGN_KEY = "core__activity_intermediators.id"
+    ACTIVITY_COLUMN = "activity"
 
     # Create the new tables.
     ActivityIntermediator_R0.__table__.create(db.bind)
     Generator_R0.__table__.create(db.bind)
     Activity_R0.__table__.create(db.bind)
     db.commit()
-
 
     # Initiate the tables we want to use later
     metadata = MetaData(bind=db.bind)
@@ -965,16 +965,16 @@ def activity_migration(db):
 
 
     # Now we want to modify the tables which MAY have an activity at some point
-    media_col = Column("activity", Integer, ForeignKey(FOREIGN_KEY))
+    media_col = Column(ACTIVITY_COLUMN, Integer, ForeignKey(FOREIGN_KEY))
     media_col.create(media_entry_table)
 
-    user_col = Column("activity", Integer, ForeignKey(FOREIGN_KEY))
+    user_col = Column(ACTIVITY_COLUMN, Integer, ForeignKey(FOREIGN_KEY))
     user_col.create(user_table)
 
-    comments_col = Column("activity", Integer, ForeignKey(FOREIGN_KEY))
+    comments_col = Column(ACTIVITY_COLUMN, Integer, ForeignKey(FOREIGN_KEY))
     comments_col.create(media_comments_table)
 
-    collection_col = Column("activity", Integer, ForeignKey(FOREIGN_KEY))
+    collection_col = Column(ACTIVITY_COLUMN, Integer, ForeignKey(FOREIGN_KEY))
     collection_col.create(collection_table)
     db.commit()
 
@@ -1005,32 +1005,31 @@ def activity_migration(db):
 
         # Add the AI to the media.
         db.execute(media_entry_table.update().values(
-            activity_as_object=db_ai.id
-        ).where(id=media.id))
+            activity=db_ai.id
+        ).where(media_entry_table.c.id==media.id))
 
     # Now we want to add all the comments people made
     for comment in db.execute(media_comments_table.select()):
         # Get the MediaEntry for the comment
         media_entry = db.execute(
-            media_entry_table.select(id=comment.media_entry_id))
+            media_entry_table.select(
+                media_entry_table.c.id==comment.media_entry
+        )).first()
 
         # Create an AI for target
-        db_ai_media = db.execute(ai_table.insert().values(
-            type="media"
-        ))
         db_ai_media = db.execute(ai_table.select(
-            ai_table.c.id==db_ai_media.inserted_primary_key[0]
-        ))
+            ai_table.c.id==media_entry.activity
+        )).first().id
 
         db.execute(
-            media_entry_table.update().values(
-                activity_as_target=db_ai_media.id
-        ).where(id=media_entry.id))
+            media_comments_table.update().values(
+                activity=db_ai_media
+        ).where(media_comments_table.c.id==media_entry.id))
 
         # Now create the AI for the comment
         db_ai_comment = db.execute(ai_table.insert().values(
             type="comment"
-        ))
+        )).inserted_primary_key[0]
 
         activity = {
             "verb": "comment",
@@ -1038,12 +1037,17 @@ def activity_migration(db):
             "published": comment.created,
             "updated": comment.created,
             "generator": gmg_generator.id,
-            "object": db_ai_comment.id,
-            "target": db_ai_media.id,
+            "object": db_ai_comment,
+            "target": db_ai_media,
         }
 
         # Now add the comment object
-        db.execute(media_comments_table.insert().values(**activity))
+        db.execute(activity_table.insert().values(**activity))
+
+        # Now add activity to comment
+        db.execute(media_comments_table.update().values(
+            activity=db_ai_comment
+        ).where(media_comments_table.c.id==comment.id))
 
     # Create 'create' activities for all collections
     for collection in db.execute(collection_table.select()):
@@ -1051,11 +1055,14 @@ def activity_migration(db):
         db_ai = db.execute(ai_table.insert().values(
             type="collection"
         ))
+        db_ai = db.execute(ai_table.select(
+            ai_table.c.id==db_ai.inserted_primary_key[0]
+        )).first()
 
         # Now add link the collection to the AI
         db.execute(collection_table.update().values(
-            activity_as_object=db_ai.id
-        ).where(id=collection.id))
+            activity=db_ai.id
+        ).where(collection_table.c.id==collection.id))
 
         activity = {
             "verb": "create",
@@ -1068,6 +1075,9 @@ def activity_migration(db):
 
         db.execute(activity_table.insert().values(**activity))
 
-
+        # Now add the activity to the collection
+        db.execute(collection_table.update().values(
+            activity=db_ai.id
+        ).where(collection_table.c.id==collection.id))
 
     db.commit()

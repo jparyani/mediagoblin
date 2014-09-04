@@ -421,8 +421,8 @@ class ActivityMixin(object):
             "tag": {"simple": _("{username} tagged {object}")},
         }
 
-        obj = self.get_object()
-        target = self.get_target()
+        obj = self.get_object
+        target = self.get_target
         actor = self.get_actor
         content = verb_to_content.get(self.verb, None)
 
@@ -432,13 +432,13 @@ class ActivityMixin(object):
         if target is None or "targetted" not in content:
             self.content = content["simple"].format(
                 username=actor.username,
-                object=obj.objectType
+                object=obj.object_type
             )
         else:
             self.content = content["targetted"].format(
                 username=actor.username,
-                object=obj.objectType,
-                target=target.objectType,
+                object=obj.object_type,
+                target=target.object_type,
             )
 
         return self.content
@@ -452,19 +452,19 @@ class ActivityMixin(object):
             "updated": self.updated.isoformat(),
             "content": self.content,
             "url": self.get_url(request),
-            "object": self.get_object().serialize(request),
+            "object": self.get_object.serialize(request),
             "objectType": self.object_type,
         }
 
         if self.generator:
-            obj["generator"] = self.get_generator.seralize(request)
+            obj["generator"] = self.get_generator.serialize(request)
 
         if self.title:
             obj["title"] = self.title
 
-        target = self.get_target()
+        target = self.get_target
         if target is not None:
-            obj["target"] = target.seralize(request)
+            obj["target"] = target.serialize(request)
 
         return obj
 
