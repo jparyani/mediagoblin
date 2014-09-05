@@ -23,7 +23,8 @@ from werkzeug.datastructures import FileStorage
 from mediagoblin.decorators import oauth_required
 from mediagoblin.federation.decorators import user_has_privilege
 from mediagoblin.db.models import User, MediaEntry, MediaComment
-from mediagoblin.tools.response import redirect, json_response, json_error
+from mediagoblin.tools.response import redirect, json_response, json_error, \
+                                       render_to_response
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.submit.lib import new_upload_entry, api_upload_request, \
                                     api_add_to_feed
@@ -70,14 +71,14 @@ def profile_endpoint(request):
 def user_endpoint(request):
     """ This is /api/user/<username> - This will get the user """
     user, user_profile = get_profile(request)
-    
+
     if user is None:
         username = request.matchdict["username"]
         return json_error(
             "No such 'user' with username '{0}'".format(username),
             status=404
         )
-    
+
     return json_response({
         "nickname": user.username,
         "updated": user.created.isoformat(),
@@ -418,42 +419,68 @@ def object_comments(request):
     return json_response(comments)
 
 ##
-# Well known
+# RFC6415 - Web Host Metadata
 ##
 def host_meta(request):
-    """ /.well-known/host-meta - provide URLs to resources """
-    links = []
+    """
+    This provides the host-meta URL information that is outlined
+    in RFC6415. By default this should provide XRD+XML however
+    if the client accepts JSON we will provide that over XRD+XML.
+    The 'Accept' header is used to decude this.
 
-    links.append({
-        "ref": "registration_endpoint",
-        "href": request.urlgen(
-            "mediagoblin.oauth.client_register",
-            qualified=True
-        ),
-    })
-    links.append({
-        "ref": "http://apinamespace.org/oauth/request_token",
-        "href": request.urlgen(
-            "mediagoblin.oauth.request_token",
-            qualified=True
-        ),
-    })
-    links.append({
-        "ref": "http://apinamespace.org/oauth/authorize",
-        "href": request.urlgen(
-            "mediagoblin.oauth.authorize",
-            qualified=True
-        ),
-    })
-    links.append({
-        "ref": "http://apinamespace.org/oauth/access_token",
-        "href": request.urlgen(
-            "mediagoblin.oauth.access_token",
-            qualified=True
-        ),
-    })
+    A client should use this endpoint to determine what URLs to
+    use for OAuth endpoints.
+    """
 
-    return json_response({"links": links})
+    links = [
+        {
+            "rel": "registration_endpoint",
+            "href": request.urlgen(
+                "mediagoblin.oauth.client_register",
+                qualified=True
+            ),
+        },
+        {
+            "rel": "http://apinamespace.org/oauth/request_token",
+            "href": request.urlgen(
+                "mediagoblin.oauth.request_token",
+                qualified=True
+            ),
+        },
+        {
+            "rel": "http://apinamespace.org/oauth/authorize",
+            "href": request.urlgen(
+                "mediagoblin.oauth.authorize",
+                qualified=True
+            ),
+        },
+        {
+            "rel": "http://apinamespace.org/oauth/access_token",
+            "href": request.urlgen(
+                "mediagoblin.oauth.access_token",
+                qualified=True
+            ),
+        },
+        {
+            "rel": "http://apinamespace.org/activitypub/whoami",
+            "href": request.urlgen(
+                "mediagoblin.webfinger.whoami",
+                qualified=True
+            ),
+        }
+    ]
+
+    if "application/json" in request.accept_mimetypes:
+        return json_response({"links": links})
+
+    # provide XML+XRD
+    return render_to_response(
+        request,
+        "mediagoblin/federation/host-meta.xml",
+        {"links": links},
+        mimetype="application/xrd+xml"
+    )
+
 
 def whoami(request):
     """ /api/whoami - HTTP redirect to API profile """
