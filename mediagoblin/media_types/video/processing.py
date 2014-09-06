@@ -44,7 +44,7 @@ class VideoTranscodingFail(BaseProcessingFail):
     general_message = _(u'Video transcoding failed')
 
 
-EXCLUDED_EXTS = ["nef"]
+EXCLUDED_EXTS = ["nef", "cr2"]
 
 def sniff_handler(media_file, filename):
     name, ext = os.path.splitext(filename)

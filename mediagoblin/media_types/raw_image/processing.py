@@ -29,7 +29,7 @@ from mediagoblin.processing import (
 _log = logging.getLogger(__name__)
 
 MEDIA_TYPE = 'mediagoblin.media_types.raw_image'
-ACCEPTED_EXTENSIONS = ['nef',]
+ACCEPTED_EXTENSIONS = ['nef', 'cr2']
 
 
 # The entire function have to be copied
