@@ -20,7 +20,6 @@ TODO: indexes on foreignkeys, where useful.
 
 import logging
 import datetime
-import base64
 
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
@@ -727,6 +726,14 @@ class Collection(Base, CollectionMixin):
         return CollectionItem.query.filter_by(
             collection=self.id).order_by(order_col)
 
+    def __repr__(self):
+        safe_title = self.title.encode('ascii', 'replace')
+        return '<{classname} #{id}: {title} by {creator}>'.format(
+            id=self.id,
+            classname=self.__class__.__name__,
+            creator=self.creator,
+            title=safe_title)
+
 
 class CollectionItem(Base, CollectionItemMixin):
     __tablename__ = "core__collection_items"
@@ -755,6 +762,13 @@ class CollectionItem(Base, CollectionItemMixin):
     def dict_view(self):
         """A dict like view on this object"""
         return DictReadAttrProxy(self)
+
+    def __repr__(self):
+        return '<{classname} #{id}: Entry {entry} in {collection}>'.format(
+            id=self.id,
+            classname=self.__class__.__name__,
+            collection=self.collection,
+            entry=self.media_entry)
 
 
 class ProcessingMetaData(Base):
