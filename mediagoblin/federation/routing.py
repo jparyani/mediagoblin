@@ -73,6 +73,12 @@ add_route(
 )
 
 add_route(
+    "mediagoblin.webfinger.well-known.webfinger",
+    "/.well-known/webfinger",
+    "mediagoblin.federation.views:lrdd_lookup"
+)
+
+add_route(
     "mediagoblin.webfinger.whoami",
     "/api/whoami",
     "mediagoblin.federation.views:whoami"

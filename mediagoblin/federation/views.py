@@ -434,6 +434,14 @@ def host_meta(request):
 
     links = [
         {
+            "rel": "lrdd",
+            "type": "application/json",
+            "href": request.urlgen(
+                "mediagoblin.webfinger.well-known.webfinger",
+                qualified=True
+            )
+        },
+        {
             "rel": "registration_endpoint",
             "href": request.urlgen(
                 "mediagoblin.oauth.client_register",
@@ -467,7 +475,7 @@ def host_meta(request):
                 "mediagoblin.webfinger.whoami",
                 qualified=True
             ),
-        }
+        },
     ]
 
     if "application/json" in request.accept_mimetypes:
@@ -480,6 +488,59 @@ def host_meta(request):
         {"links": links},
         mimetype="application/xrd+xml"
     )
+
+def lrdd_lookup(request):
+    """
+    This is the lrdd endpoint which can lookup a user (or
+    other things such as activities). This is as specified by
+    RFC6415.
+
+    The cleint must provide a 'resource' as a GET parameter which
+    should be the query to be looked up.
+    """
+
+    if "resource" not in request.args:
+        return json_error("No resource parameter", status=400)
+
+    resource = request.args["resource"]
+
+    if "@" in resource:
+        # Lets pull out the username
+        resource = resource[5:] if resource.startswith("acct:") else resource
+        username, host = resource.split("@", 1)
+
+        # Now lookup the user
+        user = User.query.filter_by(username=username).first()
+
+        if user is None:
+            return json_error(
+                "Can't find 'user' with username '{0}'".format(username))
+
+        return json_response([
+            {
+                "rel": "http://webfinger.net/rel/profile-page",
+                "href": user.url_for_self(request.urlgen),
+                "type": "text/html"
+            },
+            {
+                "rel": "self",
+                "href": request.urlgen(
+                    "mediagoblin.federation.user",
+                    username=user.username,
+                    qualified=True
+                )
+            },
+            {
+                "rel": "activity-outbox",
+                "href": request.urlgen(
+                    "mediagoblin.federation.feed",
+                    username=user.username,
+                    qualified=True
+                )
+            }
+        ])
+    else:
+        return json_error("Unrecognized resource parameter", status=404)
 
 
 def whoami(request):
