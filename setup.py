@@ -89,7 +89,7 @@ install_requires = [
     # 'Pillow',
 ] + py2_only_install_requires
 
-with open(READMEFILE) as fobj:
+with open(READMEFILE, encoding="utf-8") as fobj:
     long_description = fobj.read()
 
 try:
