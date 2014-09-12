@@ -141,7 +141,7 @@ def is_unoconv_working():
     except OSError:
         _log.warn(_('unoconv failing to run, check log file'))
         return False
-    if 'ERROR' in output:
+    if b'ERROR' in output:
         return False
     return True
 
