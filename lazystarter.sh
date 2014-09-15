@@ -70,7 +70,7 @@ set -x
 export CELERY_ALWAYS_EAGER=true
 case "$selfname" in
     lazyserver.sh)
-        $starter --paste "$ini_file" "$@"
+        $starter --paste "$ini_file" $@
         ;;
     lazycelery.sh)
         MEDIAGOBLIN_CONFIG="${ini_file}" \
