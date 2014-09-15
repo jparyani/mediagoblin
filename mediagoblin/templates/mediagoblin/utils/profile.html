@@ -16,6 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #}
 
+{% block mediagoblin_head %}
+  {% template_hook("location_head") %}
+{% endblock mediagoblin_head %}
+
 {% block profile_content -%}
   {% if user.bio %}
     {% autoescape False %}
@@ -26,5 +30,13 @@
     <p>
       <a href="{{ user.url }}">{{ user.url }}</a>
     </p>
+  {% endif %}
+  {% if user.location %}
+      {%- set model = user %}
+      <h3>{% trans %}Location{% endtrans %}</h3>
+      {% if model.get_location.name %}
+        <p>{{ model.get_location.name }}</p>
+      {% endif %}
+      {% template_hook("location_info") %}
   {% endif %}
 {% endblock %}

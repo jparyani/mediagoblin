@@ -30,6 +30,7 @@
   <script type="text/javascript"
           src="{{ request.staticdirect('/js/keyboard_navigation.js') }}"></script>
 
+  {% template_hook("location_head") %}
   {% template_hook("media_head") %}
 {% endblock mediagoblin_head %}
 {% block mediagoblin_content %}
@@ -231,6 +232,8 @@
     {% block mediagoblin_sidebar %}
     {% endblock %}
 
+    {%- set model = media %}
+    {% template_hook("location_info") %}
     {% template_hook("media_sideinfo") %}
 
   </div><!--end media_sidebar-->

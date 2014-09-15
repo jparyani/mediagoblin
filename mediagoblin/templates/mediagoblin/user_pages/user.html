@@ -46,7 +46,7 @@
     {%- trans username=user.username %}{{ username }}'s profile{% endtrans -%}
   </h1>
 
-  {% if not user.url and not user.bio %}
+  {% if not user.url and not user.bio and not user.location %}
     {% if request.user and (request.user.id == user.id) %}
       <div class="profile_sidebar empty_space">
         <p>

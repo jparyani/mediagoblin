@@ -70,14 +70,14 @@ def profile_endpoint(request):
 def user_endpoint(request):
     """ This is /api/user/<username> - This will get the user """
     user, user_profile = get_profile(request)
-    
+
     if user is None:
         username = request.matchdict["username"]
         return json_error(
             "No such 'user' with username '{0}'".format(username),
             status=404
         )
-    
+
     return json_response({
         "nickname": user.username,
         "updated": user.created.isoformat(),
@@ -207,6 +207,11 @@ def feed_endpoint(request):
                         "Invalid 'image' with id '{0}'".format(media_id)
                     )
 
+
+                # Add location if one exists
+                if "location" in data:
+                    Location.create(data["location"], self)
+
                 media.save()
                 api_add_to_feed(request, media)
 
@@ -302,6 +307,15 @@ def feed_endpoint(request):
                     "object": image.serialize(request),
                 }
                 return json_response(activity)
+            elif obj["objectType"] == "person":
+                # check this is the same user
+                if "id" not in obj or obj["id"] != requested_user.id:
+                    return json_error(
+                        "Incorrect user id, unable to update"
+                    )
+
+                requested_user.unserialize(obj)
+                requested_user.save()
 
     elif request.method != "GET":
         return json_error(

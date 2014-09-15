@@ -890,3 +890,40 @@ def revert_username_index(db):
             db.rollback()
 
     db.commit()
+
+class Location_V0(declarative_base()):
+    __tablename__ = "core__locations"
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode)
+    position = Column(MutationDict.as_mutable(JSONEncoded))
+    address = Column(MutationDict.as_mutable(JSONEncoded))
+
+@RegisterMigration(24, MIGRATIONS)
+def add_location_model(db):
+    """ Add location model """
+    metadata = MetaData(bind=db.bind)
+
+    # Create location table
+    Location_V0.__table__.create(db.bind)
+    db.commit()
+
+    # Inspect the tables we need
+    user = inspect_table(metadata, "core__users")
+    collections = inspect_table(metadata, "core__collections")
+    media_entry = inspect_table(metadata, "core__media_entries")
+    media_comments = inspect_table(metadata, "core__media_comments")
+
+    # Now add location support to the various models
+    col = Column("location", Integer, ForeignKey(Location_V0.id))
+    col.create(user)
+
+    col = Column("location", Integer, ForeignKey(Location_V0.id))
+    col.create(collections)
+
+    col = Column("location", Integer, ForeignKey(Location_V0.id))
+    col.create(media_entry)
+
+    col = Column("location", Integer, ForeignKey(Location_V0.id))
+    col.create(media_comments)
+
+    db.commit()

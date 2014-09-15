@@ -21,13 +21,13 @@ PLUGIN_DIR = os.path.dirname(__file__)
 
 def setup_plugin():
     config = pluginapi.get_config('mediagoblin.plugins.geolocation')
-    
+
     # Register the template path.
     pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
 
     pluginapi.register_template_hooks(
-        {"image_sideinfo": "mediagoblin/plugins/geolocation/map.html",
-         "image_head": "mediagoblin/plugins/geolocation/map_js_head.html"})
+        {"location_info": "mediagoblin/plugins/geolocation/map.html",
+         "location_head": "mediagoblin/plugins/geolocation/map_js_head.html"})
 
 
 hooks = {
