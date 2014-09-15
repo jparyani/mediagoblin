@@ -55,9 +55,7 @@ if PY2:
     py2_only_install_requires.append('mock')  # mock is in the stdlib for 3.3+
 
 install_requires = [
-    # TODO(berker): Upgrade to 19.2
-    # See https://github.com/benoitc/gunicorn/issues/830
-    'gunicorn==19',
+    'gunicorn',
     'alembic==0.6.6',
     'python-dateutil',
     'wtforms',
