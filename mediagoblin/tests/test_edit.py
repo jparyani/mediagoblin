@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import six
 import six.moves.urllib.parse as urlparse
 import pytest
 
@@ -252,5 +253,9 @@ class TestMetaDataEdit:
         assert new_metadata == old_metadata
         context = template.TEMPLATE_TEST_CONTEXT[
             'mediagoblin/edit/metadata.html']
-        assert context['form'].errors['media_metadata'][0]['identifier'][0] == \
-            "'On the worst day' is not a 'date-time'"
+        if six.PY2:
+            expected = "u'On the worst day' is not a 'date-time'"
+        else:
+            expected = "'On the worst day' is not a 'date-time'"
+        assert context['form'].errors[
+            'media_metadata'][0]['identifier'][0] == expected

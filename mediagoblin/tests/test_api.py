@@ -145,7 +145,7 @@ class TestAPI(object):
                     headers=headers
                 )
 
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_unable_to_post_feed_as_someone_else(self, test_app):
         """ Tests that can't post an image to someone else's feed """
@@ -168,7 +168,7 @@ class TestAPI(object):
                     headers=headers
                 )
 
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_only_able_to_update_own_image(self, test_app):
         """ Test's that the uploader is the only person who can update an image """
@@ -200,7 +200,7 @@ class TestAPI(object):
                     headers=headers
                 )
 
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_upload_image_with_filename(self, test_app):
         """ Tests that you can upload an image with filename and description """
@@ -263,7 +263,7 @@ class TestAPI(object):
                 )
 
             # Assert that we've got a 403
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_object_endpoint(self, test_app):
         """ Tests that object can be looked up at endpoint """
@@ -354,7 +354,7 @@ class TestAPI(object):
                     headers=headers
                 )
 
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_unable_to_update_someone_elses_comment(self, test_app):
         """ Test that you're able to update someoen elses comment. """
@@ -399,7 +399,7 @@ class TestAPI(object):
                     headers=headers
                 )
 
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_profile(self, test_app):
         """ Tests profile endpoint """
@@ -436,7 +436,7 @@ class TestAPI(object):
         with pytest.raises(AppError) as excinfo:
             response = test_app.get("/api/whoami")
 
-        assert "401 UNAUTHORIZED" in excinfo.value.message
+        assert "401 UNAUTHORIZED" in excinfo.value.args[0]
 
     def test_read_feed(self, test_app):
         """ Test able to read objects from the feed """
@@ -471,7 +471,7 @@ class TestAPI(object):
             with pytest.raises(AppError) as excinfo:
                 self._post_image_to_feed(test_app, data)
 
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_object_endpoint_requestable(self, test_app):
         """ Test that object endpoint can be requested """
