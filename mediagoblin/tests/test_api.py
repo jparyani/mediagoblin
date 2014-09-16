@@ -284,7 +284,7 @@ class TestAPI(object):
         with self.mock_oauth():
             request = test_app.get(object_uri)
 
-        image = json.loads(request.body)
+        image = json.loads(request.body.decode())
         entry = MediaEntry.query.filter_by(id=image["id"]).first()
 
         assert request.status_code == 200
