@@ -455,7 +455,7 @@ def edit_metadata(request, media):
         return redirect_obj(request, media)      
 
     if len(form.media_metadata) == 0:
-        for identifier, value in media.media_metadata.iteritems():
+        for identifier, value in six.iteritems(media.media_metadata):
             if identifier == "@context": continue
             form.media_metadata.append_entry({
                 'identifier':identifier,
