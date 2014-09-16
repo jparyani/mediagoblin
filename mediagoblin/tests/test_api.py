@@ -58,7 +58,7 @@ class TestAPI(object):
                 headers=headers
             )
 
-        return response, json.loads(response.body)
+        return response, json.loads(response.body.decode())
 
     def _upload_image(self, test_app, image):
         """ Uploads and image to MediaGoblin via pump.io API """
@@ -75,7 +75,7 @@ class TestAPI(object):
                 data,
                 headers=headers
             )
-            image = json.loads(response.body)
+            image = json.loads(response.body.decode())
 
         return response, image
 
@@ -227,7 +227,7 @@ class TestAPI(object):
                 headers={"Content-Type": "application/json"}
             )
 
-        image = json.loads(response.body)["object"]
+        image = json.loads(response.body.decode())["object"]
 
         # Check everything has been set on the media correctly
         media = MediaEntry.query.filter_by(id=image["id"]).first()
@@ -406,7 +406,7 @@ class TestAPI(object):
         uri = "/api/user/{0}/profile".format(self.user.username)
         with self.mock_oauth():
             response = test_app.get(uri)
-            profile = json.loads(response.body)
+            profile = json.loads(response.body.decode())
 
             assert response.status_code == 200
 
@@ -420,7 +420,7 @@ class TestAPI(object):
         uri = "/api/user/{0}/".format(self.user.username)
         with self.mock_oauth():
             response = test_app.get(uri)
-            user = json.loads(response.body)
+            user = json.loads(response.body.decode())
 
             assert response.status_code == 200
 
@@ -446,7 +446,7 @@ class TestAPI(object):
         uri = "/api/user/{0}/feed".format(self.active_user.username)
         with self.mock_oauth():
             response = test_app.get(uri)
-            feed = json.loads(response.body)
+            feed = json.loads(response.body.decode())
 
             assert response.status_code == 200
 
@@ -481,7 +481,7 @@ class TestAPI(object):
 
         with self.mock_oauth():
             response = test_app.get(data["object"]["links"]["self"]["href"])
-            data = json.loads(response.body)
+            data = json.loads(response.body.decode())
 
             assert response.status_code == 200
 

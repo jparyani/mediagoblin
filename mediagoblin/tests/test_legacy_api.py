@@ -78,7 +78,7 @@ class TestAPI(object):
             '/api/test',
             headers=self.http_auth_headers())
 
-        assert json.loads(response.body) == {
+        assert json.loads(response.body.decode()) == {
             "username": "joapi", "email": "joapi@example.com"}
 
     def test_2_test_submission(self, test_app):
