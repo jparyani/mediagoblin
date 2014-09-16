@@ -56,7 +56,7 @@ class TestMetadataFunctionality:
         jsonld_fail_1 = None
         try:
             jsonld_fail_1 = compact_and_validate(metadata_fail_1)
-        except ValidationError, e:
+        except ValidationError as e:
             assert e.message == "'All Rights Reserved.' is not a 'uri'"
         assert jsonld_fail_1 == None
         #,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,
@@ -72,7 +72,7 @@ class TestMetadataFunctionality:
         jsonld_fail_2 = None
         try:
             jsonld_fail_2 = compact_and_validate(metadata_fail_2)
-        except ValidationError, e:
+        except ValidationError as e:
             assert e.message == "'The other day' is not a 'date-time'"
         assert jsonld_fail_2 == None
 
