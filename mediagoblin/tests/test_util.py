@@ -14,7 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import mock
+try:
+    import mock
+except ImportError:
+    import unittest.mock as mock
 import email
 import pytest
 import smtplib
