@@ -15,7 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import json
 
-import mock
+try:
+    import mock
+except ImportError:
+    import unittest.mock as mock
 import pytest
 
 from webtest import AppError
