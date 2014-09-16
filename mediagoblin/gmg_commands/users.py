@@ -129,7 +129,7 @@ def deleteuser(args):
     db = mg_globals.database
 
     user = db.User.query.filter_by(
-        username=unicode(args.username.lower())).one()
+        username=unicode(args.username.lower())).first()
     if user:
         user.delete()
         print 'The user %s has been deleted' % args.username
