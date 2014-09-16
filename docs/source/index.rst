@@ -78,6 +78,7 @@ This guide covers writing new GNU MediaGoblin plugins.
    pluginwriter/database
    pluginwriter/api
    pluginwriter/tests
+   pluginwriter/hooks
    pluginwriter/media_type_hooks
    pluginwriter/authhooks
 
@@ -94,6 +95,26 @@ This chapter contains various information for developers.
    devel/storage
    devel/originaldesigndecisions
    devel/migrations
+
+
+Part 5: Pump API
+================
+
+This chapter covers MediaGoblin's `Pump API
+<https://github.com/e14n/pump.io/blob/master/API.md>`_ support.  (A
+work in progress; full federation is not supported at the moment, but
+media uploading works!  You can use something like
+`PyPump <http://pypump.org>`_
+to write MediaGoblin uploadable applications.)
+
+.. toctree::
+   :maxdepth: 1
+
+   api/client_register
+   api/oauth
+   api/media
+   api/media_interaction
+
 
 
 Indices and tables

@@ -38,7 +38,7 @@ def adduser(args):
     #TODO: Lets trust admins this do not validate Emails :)
     commands_util.setup_app(args)
 
-    args.username = commands_util.prompt_if_not_set(args.username, "Username:")
+    args.username = unicode(commands_util.prompt_if_not_set(args.username, "Username:"))
     args.password = commands_util.prompt_if_not_set(args.password, "Password:",True)
     args.email = commands_util.prompt_if_not_set(args.email, "Email:")
 
@@ -119,3 +119,23 @@ def changepw(args):
         print(u'Password successfully changed')
     else:
         print(u'The user doesn\'t exist')
+
+
+def deleteuser_parser_setup(subparser):
+    subparser.add_argument(
+        'username',
+        help="Username to delete")
+
+
+def deleteuser(args):
+    commands_util.setup_app(args)
+
+    db = mg_globals.database
+
+    user = db.User.query.filter_by(
+        username=unicode(args.username.lower())).one()
+    if user:
+        user.delete()
+        print('The user %s has been deleted' % args.username)
+    else:
+        print('The user %s doesn\'t exist' % args.username)

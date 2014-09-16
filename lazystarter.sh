@@ -75,7 +75,7 @@ case "$selfname" in
     lazycelery.sh)
         MEDIAGOBLIN_CONFIG="${ini_file}" \
             CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery \
-            $starter "$@"
+            $starter -B "$@"
         ;;
     *) exit 1 ;;
 esac

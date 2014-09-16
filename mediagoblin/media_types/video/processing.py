@@ -44,7 +44,16 @@ class VideoTranscodingFail(BaseProcessingFail):
     general_message = _(u'Video transcoding failed')
 
 
+EXCLUDED_EXTS = ["nef", "cr2"]
+
 def sniff_handler(media_file, filename):
+    name, ext = os.path.splitext(filename)
+    clean_ext = ext.lower()[1:]
+
+    if clean_ext in EXCLUDED_EXTS:
+        # We don't handle this filetype, though gstreamer might think we can
+        return None
+
     transcoder = transcoders.VideoTranscoder()
     data = transcoder.discover(media_file.name)
 
@@ -109,7 +118,7 @@ def store_metadata(media_entry, metadata):
                 dt.get_minute(), dt.get_second(),
                 dt.get_microsecond()).isoformat()
 
-        metadata['tags'] = tags
+        stored_metadata['tags'] = tags
 
     # Only save this field if there's something to save
     if len(stored_metadata):

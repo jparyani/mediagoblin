@@ -38,11 +38,11 @@ def skip_transcode(metadata, size):
         if not metadata['mimetype'] in config['mime_types']:
             return False
 
-    if config['container_formats'] and metadata['tags'].get('audio-codec'):
+    if config['container_formats'] and metadata['tags'].get('container-format'):
         if not metadata['tags']['container-format'] in config['container_formats']:
             return False
 
-    if config['video_codecs'] and metadata['tags'].get('audio-codec'):
+    if config['video_codecs'] and metadata['tags'].get('video-codec'):
         if not metadata['tags']['video-codec'] in config['video_codecs']:
             return False
 

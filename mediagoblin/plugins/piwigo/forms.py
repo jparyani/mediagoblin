@@ -34,7 +34,7 @@ _md5_validator = wtforms.validators.Regexp(r"^[0-9a-fA-F]{32}$")
 class AddForm(wtforms.Form):
     original_sum = wtforms.TextField(None,
         [_md5_validator,
-         wtforms.validators.Required()])
+         wtforms.validators.InputRequired()])
     thumbnail_sum = wtforms.TextField(None,
         [wtforms.validators.Optional(),
          _md5_validator])

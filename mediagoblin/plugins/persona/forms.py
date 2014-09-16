@@ -22,20 +22,20 @@ from mediagoblin.auth.tools import normalize_user_or_email_field
 class RegistrationForm(wtforms.Form):
     username = wtforms.TextField(
         _('Username'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_email=False)])
     email = wtforms.TextField(
         _('Email address'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_user=False)])
     persona_email = wtforms.HiddenField(
         '',
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_user=False)])
 
 
 class EditForm(wtforms.Form):
     email = wtforms.TextField(
         _('Email address'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_user=False)])

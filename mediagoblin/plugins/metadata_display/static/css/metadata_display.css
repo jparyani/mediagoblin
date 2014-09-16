@@ -1,0 +1,14 @@
+table.metadata_info {
+  font-size:85%;
+  margin-left:10px;
+}
+
+table.metadata_info th {
+  font-weight: bold;
+  border-spacing: 10px;
+  text-align: left;
+}
+table.metadata_info td {
+  padding: 4px 8px;
+}
+

@@ -26,13 +26,15 @@ from webtest import TestApp
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User, MediaEntry, Collection, MediaComment, \
-    CommentSubscription, CommentNotification, Privilege, CommentReport
+    CommentSubscription, CommentNotification, Privilege, CommentReport, Client, \
+    RequestToken, AccessToken
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.db.base import Session
 from mediagoblin.meddleware import BaseMeddleware
 from mediagoblin.auth import gen_password_hash
 from mediagoblin.gmg_commands.dbupdate import run_dbupdate
+from mediagoblin.tools.crypto import random_string
 
 from datetime import datetime
 

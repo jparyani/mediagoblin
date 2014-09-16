@@ -1,0 +1,54 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% from "archivalook/utils/display_featured.html" import
+    possibly_shortened_description %}
+
+{%- set media = feature.media_entry %}
+{%- set entry_url = media.url_for_self(request.urlgen) %}
+
+<div class="primary-feature">
+  <a href="{{ entry_url }}">
+    <p class="f-title">{{ media.title }}</p>
+  </a>
+  <p>
+  <div class="audio-media">
+    {%- if 'spectrogram' in media.media_files %}
+      <div class="audio-spectrogram f-display">
+	    <img src="{{ request.app.public_store.file_url(
+		          media.media_files.spectrogram) }}"
+	         alt="Spectrogram" />
+      </div>
+    {%- endif %}
+    <audio class="audio-player" controls="controls"
+	       preload="metadata">
+      <source src="{{ request.app.public_store.file_url(
+		       media.media_files.webm_audio) }}" type="audio/webm; codecs=vorbis" />
+      <div class="no_html5">
+	{%- trans -%}Sorry, this audio will not work because
+	your web browser does not support HTML5
+	audio.{%- endtrans -%}<br/>
+	{%- trans -%}You can get a modern web browser that
+	can play the audio at <a href="http://getfirefox.com">
+	  http://getfirefox.com</a>!{%- endtrans -%}
+      </div>
+    </audio>
+  </div>
+  </p>
+  {{ possibly_shortened_description(request, feature.media_entry) }}
+</div>

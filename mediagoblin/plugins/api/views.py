@@ -66,6 +66,7 @@ def post_entry(request):
             title=six.text_type(request.form.get('title')),
             description=six.text_type(request.form.get('description')),
             license=six.text_type(request.form.get('license', '')),
+            tags_string=six.text_type(request.form.get('tags', '')),
             upload_limit=upload_limit, max_file_size=max_file_size,
             callback_url=callback_url)
 

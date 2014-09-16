@@ -251,32 +251,24 @@ class InitialProcessor(CommonAudioProcessor):
             type=int,
             help='The width of the spectogram')
 
-        parser.add_argument(
-            '--create_spectrogram',
-            action='store_true',
-            help='Create spectogram and thumbnail, will default to config')
-
         return parser
 
     @classmethod
     def args_to_request(cls, args):
         return request_from_args(
-            args, ['create_spectrogram', 'quality', 'fft_size',
+            args, ['quality', 'fft_size',
                    'thumb_size', 'medium_width'])
 
     def process(self, quality=None, fft_size=None, thumb_size=None,
-                create_spectrogram=None, medium_width=None):
+                medium_width=None):
         self.common_setup()
-
-        if not create_spectrogram:
-            create_spectrogram = self.audio_config['create_spectrogram']
 
         self.transcode(quality=quality)
         self.copy_original()
 
-        if create_spectrogram:
-            self.create_spectrogram(max_width=medium_width, fft_size=fft_size)
-            self.generate_thumb(size=thumb_size)
+        self.create_spectrogram(max_width=medium_width, fft_size=fft_size)
+        self.generate_thumb(size=thumb_size)
+
         self.delete_queue_file()
 
 

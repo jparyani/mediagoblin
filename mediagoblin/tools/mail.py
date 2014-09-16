@@ -16,7 +16,9 @@
 
 from __future__ import print_function, unicode_literals
 
+import six
 import smtplib
+import sys
 from mediagoblin import mg_globals, messages
 from mediagoblin._compat import MIMEText
 from mediagoblin.tools import common
@@ -66,6 +68,8 @@ class FakeMhost(object):
              'to': to_addrs,
              'message': message})
 
+    def starttls(self):
+        raise smtplib.SMTPException("No STARTTLS here")
 
 def _clear_test_inboxes():
     global EMAIL_TEST_INBOX
@@ -104,6 +108,13 @@ def send_email(from_addr, to_addrs, subject, message_body):
         # SMTP.__init__ Issues SMTP.connect implicitly if host
         if not mg_globals.app_config['email_smtp_host']:  # e.g. host = ''
             mhost.connect()  # We SMTP.connect explicitly
+
+        try:
+            mhost.starttls()
+        except smtplib.SMTPException:
+            # Only raise an exception if we're forced to
+            if mg_globals.app_config['email_smtp_force_starttls']:
+                six.reraise(*sys.exc_info())
 
     if ((not common.TESTS_ENABLED)
         and (mg_globals.app_config['email_smtp_user']

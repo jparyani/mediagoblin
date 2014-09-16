@@ -22,22 +22,22 @@ from mediagoblin.auth.tools import normalize_user_or_email_field
 class RegistrationForm(wtforms.Form):
     username = wtforms.TextField(
         _('Username'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_email=False)])
     password = wtforms.PasswordField(
         _('Password'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          wtforms.validators.Length(min=5, max=1024)])
     email = wtforms.TextField(
         _('Email address'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_user=False)])
 
 
 class LoginForm(wtforms.Form):
     username = wtforms.TextField(
         _('Username or Email'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          normalize_user_or_email_field()])
     password = wtforms.PasswordField(
         _('Password'))
@@ -49,28 +49,28 @@ class LoginForm(wtforms.Form):
 class ForgotPassForm(wtforms.Form):
     username = wtforms.TextField(
         _('Username or email'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          normalize_user_or_email_field()])
 
 
 class ChangeForgotPassForm(wtforms.Form):
     password = wtforms.PasswordField(
         'Password',
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          wtforms.validators.Length(min=5, max=1024)])
     token = wtforms.HiddenField(
         '',
-        [wtforms.validators.Required()])
+        [wtforms.validators.InputRequired()])
 
 
 class ChangePassForm(wtforms.Form):
     old_password = wtforms.PasswordField(
         _('Old password'),
-        [wtforms.validators.Required()],
+        [wtforms.validators.InputRequired()],
         description=_(
             "Enter your old password to prove you own this account."))
     new_password = wtforms.PasswordField(
         _('New password'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          wtforms.validators.Length(min=6, max=30)],
         id="password")

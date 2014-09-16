@@ -1,6 +1,6 @@
 .. MediaGoblin Documentation
 
-   Written in 2011, 2012 by MediaGoblin contributors
+   Written in 2011, 2012, 2014 by MediaGoblin contributors
 
    To the extent possible under law, the author(s) have dedicated all
    copyright and related and neighboring rights to this software to
@@ -18,8 +18,8 @@ Media Types
 ====================
 
 In the future, there will be all sorts of media types you can enable,
-but in the meanwhile there are five additional media types: video, audio,
-ascii art, STL/3d models, PDF and Document.
+but in the meanwhile there are six additional media types: video, audio,
+raw image, ascii art, STL/3d models, PDF and Document.
 
 First, you should probably read ":doc:`configuration`" to make sure
 you know how to modify the mediagoblin config file.
@@ -149,6 +149,28 @@ Run
 You should now be able to upload and listen to audio files!
 
 
+Raw image
+=========
+
+To enable raw image you need to install pyexiv2.  On Debianoid systems
+
+.. code-block:: bash
+
+    sudo apt-get install python-pyexiv2
+
+Add ``[[mediagoblin.media_types.raw_image]]`` under the ``[plugins]``
+section in your ``mediagoblin_local.ini`` and restart MediaGoblin.
+
+Run
+
+.. code-block:: bash
+
+    ./bin/gmg dbupdate
+
+Now you should be able to submit raw images, and mediagoblin should
+extract the JPEG preview from them.
+
+
 Ascii art
 =========
 
@@ -242,3 +264,13 @@ Run
     ./bin/gmg dbupdate
 
 
+Blog (HIGHLY EXPERIMENTAL)
+==========================
+
+MediaGoblin has a blog media type, which you might notice by looking
+through the docs!  However, it is *highly experimental*.  We have not
+security reviewed this, and it acts in a way that is not like normal
+blogs (the blogposts are themselves media types!).
+
+So you can play with this, but it is not necessarily recommended yet
+for production use! :)

@@ -20,15 +20,12 @@ from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.image.processing import sniff_handler, \
         ImageProcessingManager
 
-
 _log = logging.getLogger(__name__)
 
 
-ACCEPTED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "tiff"]
+ACCEPTED_EXTENSIONS = ["jpe", "jpg", "jpeg", "png", "gif", "tiff"]
 MEDIA_TYPE = 'mediagoblin.media_types.image'
 
-def setup_plugin():
-    config = pluginapi.get_config(MEDIA_TYPE)
 
 class ImageMediaManager(MediaManagerBase):
     human_readable = "Image"
@@ -57,7 +54,6 @@ class ImageMediaManager(MediaManagerBase):
             return original_date
         except (KeyError, ValueError):
             return None
-
 
 def get_media_type_and_manager(ext):
     if ext in ACCEPTED_EXTENSIONS:

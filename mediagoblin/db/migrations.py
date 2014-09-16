@@ -21,18 +21,19 @@ import six
 
 from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         Integer, Unicode, UnicodeText, DateTime,
-                        ForeignKey, Date)
+                        ForeignKey, Date, Index)
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import and_
 from sqlalchemy.schema import UniqueConstraint
 
-
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import (
     RegisterMigration, inspect_table, replace_table_hack)
-from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User, 
-        Privilege)
+from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User,
+    Privilege)
+from mediagoblin.db.extratypes import JSONEncoded, MutationDict
+
 
 MIGRATIONS = {}
 
@@ -467,7 +468,6 @@ def create_oauth1_tables(db):
 
     db.commit()
 
-
 @RegisterMigration(15, MIGRATIONS)
 def wants_notifications(db):
     """Add a wants_notifications field to User model"""
@@ -661,8 +661,8 @@ def create_moderation_tables(db):
     # admin, an active user or an inactive user ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     for admin_user in admin_users_ids:
         admin_user_id = admin_user['id']
-        for privilege_id in [admin_privilege_id, uploader_privilege_id, 
-                            reporter_privilege_id, commenter_privilege_id, 
+        for privilege_id in [admin_privilege_id, uploader_privilege_id,
+                            reporter_privilege_id, commenter_privilege_id,
                             active_privilege_id]:
             db.execute(user_privilege_assoc.insert().values(
                 core__privilege_id=admin_user_id,
@@ -670,7 +670,7 @@ def create_moderation_tables(db):
 
     for active_user in active_users_ids:
         active_user_id = active_user['id']
-        for privilege_id in [uploader_privilege_id, reporter_privilege_id, 
+        for privilege_id in [uploader_privilege_id, reporter_privilege_id,
                             commenter_privilege_id, active_privilege_id]:
             db.execute(user_privilege_assoc.insert().values(
                 core__privilege_id=active_user_id,
@@ -678,7 +678,7 @@ def create_moderation_tables(db):
 
     for inactive_user in inactive_users_ids:
         inactive_user_id = inactive_user['id']
-        for privilege_id in [uploader_privilege_id, reporter_privilege_id, 
+        for privilege_id in [uploader_privilege_id, reporter_privilege_id,
                              commenter_privilege_id]:
             db.execute(user_privilege_assoc.insert().values(
                 core__privilege_id=inactive_user_id,
@@ -709,6 +709,8 @@ def create_moderation_tables(db):
         is_admin.drop()
 
     db.commit()
+
+
 @RegisterMigration(19, MIGRATIONS)
 def drop_MediaEntry_collected(db):
     """
@@ -720,5 +722,173 @@ def drop_MediaEntry_collected(db):
     media_collected = media_collected.columns['collected']
 
     media_collected.drop()
+
+    db.commit()
+
+
+@RegisterMigration(20, MIGRATIONS)
+def add_metadata_column(db):
+    metadata = MetaData(bind=db.bind)
+
+    media_entry = inspect_table(metadata, 'core__media_entries')
+
+    col = Column('media_metadata', MutationDict.as_mutable(JSONEncoded),
+        default=MutationDict())
+    col.create(media_entry)
+
+    db.commit()
+
+
+class PrivilegeUserAssociation_R1(declarative_base()):
+    __tablename__ = 'rename__privileges_users'
+    user = Column(
+        "user",
+        Integer,
+        ForeignKey(User.id),
+        primary_key=True)
+    privilege = Column(
+        "privilege",
+        Integer,
+        ForeignKey(Privilege.id),
+        primary_key=True)
+
+@RegisterMigration(21, MIGRATIONS)
+def fix_privilege_user_association_table(db):
+    """
+    There was an error in the PrivilegeUserAssociation table that allowed for a
+    dangerous sql error. We need to the change the name of the columns to be
+    unique, and properly referenced.
+    """
+    metadata = MetaData(bind=db.bind)
+
+    privilege_user_assoc = inspect_table(
+        metadata, 'core__privileges_users')
+
+    # This whole process is more complex if we're dealing with sqlite
+    if db.bind.url.drivername == 'sqlite':
+        PrivilegeUserAssociation_R1.__table__.create(db.bind)
+        db.commit()
+
+        new_privilege_user_assoc = inspect_table(
+            metadata, 'rename__privileges_users')
+        result = db.execute(privilege_user_assoc.select())
+        for row in result:
+            # The columns were improperly named before, so we switch the columns
+            user_id, priv_id = row['core__privilege_id'], row['core__user_id']
+            db.execute(new_privilege_user_assoc.insert().values(
+                user=user_id,
+                privilege=priv_id))
+
+        db.commit()
+
+        privilege_user_assoc.drop()
+        new_privilege_user_assoc.rename('core__privileges_users')
+
+    # much simpler if postgres though!
+    else:
+        privilege_user_assoc.c.core__user_id.alter(name="privilege")
+        privilege_user_assoc.c.core__privilege_id.alter(name="user")
+
+    db.commit()
+
+
+@RegisterMigration(22, MIGRATIONS)
+def add_index_username_field(db):
+    """
+    This migration has been found to be doing the wrong thing.  See
+    the documentation in migration 23 (revert_username_index) below
+    which undoes this for those databases that did run this migration.
+
+    Old description:
+      This indexes the User.username field which is frequently queried
+      for example a user logging in. This solves the issue #894
+    """
+    ## This code is left commented out *on purpose!*
+    ##
+    ## We do not normally allow commented out code like this in
+    ## MediaGoblin but this is a special case: since this migration has
+    ## been nullified but with great work to set things back below,
+    ## this is commented out for historical clarity.
+    #
+    # metadata = MetaData(bind=db.bind)
+    # user_table = inspect_table(metadata, "core__users")
+    #
+    # new_index = Index("ix_core__users_uploader", user_table.c.username)
+    # new_index.create()
+    #
+    # db.commit()
+    pass
+
+
+@RegisterMigration(23, MIGRATIONS)
+def revert_username_index(db):
+    """
+    Revert the stuff we did in migration 22 above.
+
+    There were a couple of problems with what we did:
+     - There was never a need for this migration!  The unique
+       constraint had an implicit b-tree index, so it wasn't really
+       needed.  (This is my (Chris Webber's) fault for suggesting it
+       needed to happen without knowing what's going on... my bad!)
+     - On top of that, databases created after the models.py was
+       changed weren't the same as those that had been run through
+       migration 22 above.
+
+    As such, we're setting things back to the way they were before,
+    but as it turns out, that's tricky to do!
+    """
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
+    indexes = dict(
+        [(index.name, index) for index in user_table.indexes])
+
+    # index from unnecessary migration
+    users_uploader_index = indexes.get(u'ix_core__users_uploader')
+    # index created from models.py after (unique=True, index=True)
+    # was set in models.py
+    users_username_index = indexes.get(u'ix_core__users_username')
+
+    if users_uploader_index is None and users_username_index is None:
+        # We don't need to do anything.
+        # The database isn't in a state where it needs fixing
+        #
+        # (ie, either went through the previous borked migration or
+        #  was initialized with a models.py where core__users was both
+        #  unique=True and index=True)
+        return
+
+    if db.bind.url.drivername == 'sqlite':
+        # Again, sqlite has problems.  So this is tricky.
+
+        # Yes, this is correct to use User_vR1!  Nothing has changed
+        # between the *correct* version of this table and migration 18.
+        User_vR1.__table__.create(db.bind)
+        db.commit()
+        new_user_table = inspect_table(metadata, 'rename__users')
+        replace_table_hack(db, user_table, new_user_table)
+
+    else:
+        # If the db is not run using SQLite, we don't need to do crazy
+        # table copying.
+
+        # Remove whichever of the not-used indexes are in place
+        if users_uploader_index is not None:
+            users_uploader_index.drop()
+        if users_username_index is not None:
+            users_username_index.drop()
+
+        # Given we're removing indexes then adding a unique constraint
+        # which *we know might fail*, thus probably rolling back the
+        # session, let's commit here.
+        db.commit()
+
+        try:
+            # Add the unique constraint
+            constraint = UniqueConstraint(
+                'username', table=user_table)
+            constraint.create()
+        except ProgrammingError:
+            # constraint already exists, no need to add
+            db.rollback()
 
     db.commit()

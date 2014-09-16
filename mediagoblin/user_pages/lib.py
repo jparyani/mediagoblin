@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.tools.mail import send_email
-from mediagoblin.tools.template import render_template
-from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin import mg_globals
 from mediagoblin.db.base import Session
 from mediagoblin.db.models import (CollectionItem, MediaReport, CommentReport,
-                                  MediaComment, MediaEntry)
-from mediagoblin.user_pages import forms as user_forms
+                                   MediaComment, MediaEntry)
+from mediagoblin.tools.mail import send_email
+from mediagoblin.tools.pluginapi import hook_runall
+from mediagoblin.tools.template import render_template
+from mediagoblin.tools.translate import pass_to_ugettext as _
 
 
 def send_comment_email(user, comment, media, request):
@@ -73,8 +73,11 @@ def add_media_to_collection(collection, media, note=None, commit=True):
     Session.add(collection)
     Session.add(media)
 
+    hook_runall('collection_add_media', collection_item=collection_item)
+
     if commit:
         Session.commit()
+
 
 def build_report_object(report_form, media_entry=None, comment=None):
     """
@@ -86,7 +89,7 @@ def build_report_object(report_form, media_entry=None, comment=None):
     :param media_entry          A MediaEntry object. The MediaEntry being repo-
                                   -rted by a MediaReport. In a CommentReport,
                                   this will be None.
-    :param comment              A MediaComment object. The MediaComment being 
+    :param comment              A MediaComment object. The MediaComment being
                                   reported by a CommentReport. In a MediaReport
                                   this will be None.
 
@@ -115,4 +118,3 @@ def build_report_object(report_form, media_entry=None, comment=None):
     report_object.report_content = report_form.report_reason.data
     report_object.reporter_id = report_form.reporter_id.data
     return report_object
-

@@ -48,10 +48,10 @@ if PY2:
     # TERRIBLE AND IS THE END OF ALL THINGS
     # I'd love to remove this restriction.
     py2_only_install_requires.append('sqlalchemy-migrate<0.8')
-    # Annoying.  Please remove once we can!  We only indirectly
-    # use pbr, and currently it breaks things, presumably till
-    # their next release.
-    py2_only_install_requires.append('pbr==0.5.22')
+    # # Annoying.  Please remove once we can!  We only indirectly
+    # # use pbr, and currently it breaks things, presumably till
+    # # their next release.
+    # py2_only_install_requires.append('pbr==0.5.22')
     py2_only_install_requires.append('mock')  # mock is in the stdlib for 3.3+
 
 install_requires = [
@@ -76,10 +76,13 @@ install_requires = [
     # PLEASE change this when we can; a dependency is forcing us to set this
     # specific number and it is breaking setup.py develop
     'six==1.5.2',
-    'oauthlib>=0.5.0',
+    'oauthlib',
     'unidecode',
+    'jsonschema',
     'ExifRead',  # TODO(berker): Install develop branch for Python 3
     'PasteDeploy',
+    'requests',
+    'pyld',
     # This is optional:
     # 'translitcodec',
     # For now we're expecting that users will install this from
@@ -100,7 +103,7 @@ try:
     include_package_data = True,
     # scripts and dependencies
     install_requires=install_requires,
-    test_suite='nose.collector',  # TODO: We are using py.test now?
+    test_suite='nose.collector',
     entry_points="""\
         [console_scripts]
         gmg = mediagoblin.gmg_commands:main_cli
@@ -124,6 +127,7 @@ try:
     url="http://mediagoblin.org/",
     download_url="http://mediagoblin.org/download/",
     long_description=long_description,
+    description='MediaGoblin is a web application for publishing all kinds of media',
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",

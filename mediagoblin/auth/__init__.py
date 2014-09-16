@@ -25,7 +25,6 @@ def create_user(register_form):
     results = hook_runall("auth_create_user", register_form)
     return results[0]
 
-
 def extra_validation(register_form):
     from mediagoblin.auth.tools import basic_extra_validation
 

@@ -91,7 +91,7 @@
   {% else %}
     <h2>{% trans user_url=request.urlgen(
                         'mediagoblin.moderation.users_detail',
-                        user=report.reporter.username),
+                        user=report.reported_user.username),
                  user_name=report.reported_user.username %}
           CONTENT BY
             <a href="{{ user_url }}"> {{ user_name }}</a>
@@ -99,13 +99,14 @@
         {% endtrans %}
     </h2>
   {% endif %}
-  Reason for report:
+  {% trans %}Reason for report:{% endtrans %}
   <div id="report-{{ report.id }}"
        class="report_wrapper">
     <div class="report_author">
         <img src="{{ request.staticdirect(
                   '/images/icon_clipboard_alert.png') }}"
-             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
+             alt=""
+             title="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
                   Distributed by the GNOME project http://www.gnome.org" />
         <a href="{{ request.urlgen('mediagoblin.moderation.users_detail',
                         user=report.reporter.username) }}"
@@ -142,7 +143,8 @@
   </script>
   {% elif report.is_archived_report() %}
     <h2><img src="{{ request.staticdirect('/images/icon_clipboard.png') }}"
-             alt="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
+             alt=""
+             title="Under a GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
                   Distributed by the GNOME project http://www.gnome.org" />
           {% trans %}Status{% endtrans %}:
     </h2>

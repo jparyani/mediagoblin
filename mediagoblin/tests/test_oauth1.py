@@ -162,4 +162,3 @@ class TestOAuth(object):
         assert request_token.client == client.id
         assert request_token.used == False
         assert request_token.callback == request_query["oauth_callback"]
-

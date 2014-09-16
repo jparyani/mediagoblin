@@ -21,13 +21,13 @@
         <a type="submit" href="{{ request.urlgen('mediagoblin.notifications.subscribe_comments',
             user=media.get_uploader.username,
             media=media.slug_or_id)}}"
-            class="button_action">Subscribe to comments
+            class="button_action">{% trans %}Subscribe to comments{% endtrans %}
         </a>
     {% else %}
         <a type="submit" href="{{ request.urlgen('mediagoblin.notifications.silence_comments',
             user=media.get_uploader.username,
             media=media.slug_or_id)}}"
-            class="button_action">Silence comments
+            class="button_action">{% trans %}Silence comments{% endtrans %}
         </a>
     {% endif %}
 {%- endif %}

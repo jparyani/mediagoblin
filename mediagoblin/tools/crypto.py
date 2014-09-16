@@ -27,8 +27,7 @@ from mediagoblin import mg_globals
 _log = logging.getLogger(__name__)
 
 # produces base64 alphabet
-alphabet = string.ascii_letters + "-_"
-base = len(alphabet)
+ALPHABET = string.ascii_letters + "-_"
 
 # Use the system (hardware-based) random number generator if it exists.
 # -- this optimization is lifted from Django
@@ -117,8 +116,9 @@ def get_timed_signer_url(namespace):
     return itsdangerous.URLSafeTimedSerializer(__itsda_secret,
          salt=namespace)
 
-def random_string(length):
+def random_string(length, alphabet=ALPHABET):
     """ Returns a URL safe base64 encoded crypographically strong string """
+    base = len(alphabet)
     rstring = ""
     for i in range(length):
         n = getrandbits(6) # 6 bytes = 2^6 = 64

@@ -22,20 +22,20 @@ from mediagoblin.auth.tools import normalize_user_or_email_field
 class RegistrationForm(wtforms.Form):
     openid = wtforms.HiddenField(
         '',
-        [wtforms.validators.Required()])
+        [wtforms.validators.InputRequired()])
     username = wtforms.TextField(
         _('Username'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_email=False)])
     email = wtforms.TextField(
         _('Email address'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_user=False)])
 
 
 class LoginForm(wtforms.Form):
     openid = wtforms.TextField(
         _('OpenID'),
-        [wtforms.validators.Required(),
+        [wtforms.validators.InputRequired(),
          # Can openid's only be urls?
          wtforms.validators.URL(message='Please enter a valid url.')])

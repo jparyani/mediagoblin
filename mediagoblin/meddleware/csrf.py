@@ -46,7 +46,7 @@ class CsrfForm(Form):
     is included in the POST."""
 
     csrf_token = HiddenField("",
-                             [validators.Required()])
+                             [validators.InputRequired()])
 
 
 def render_csrf_form_token(request):

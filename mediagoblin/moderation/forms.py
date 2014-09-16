@@ -119,10 +119,13 @@ class ReportResolutionForm(wtforms.Form):
         format='%Y-%m-%d',
         validators=[wtforms.validators.optional()])
     why_user_was_banned = wtforms.TextAreaField(
+        _(u'Why user was banned:'),
         validators=[wtforms.validators.optional()])
     message_to_user = wtforms.TextAreaField(
+        _(u'Message to user:'),
         validators=[wtforms.validators.optional()])
-    resolution_content = wtforms.TextAreaField()
+    resolution_content = wtforms.TextAreaField(
+        _(u'Resolution content:'))
 
 # ======== Forms for mediagoblin.moderation.report_panel page ==============  #
 

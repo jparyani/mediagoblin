@@ -1,0 +1,55 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+            {% if request.user and request.user.has_privilege('featurer') %}
+              {% set media_feature=featured_media.filter_by(
+                    media_entry_id = media.id).first() %}
+              {% if not media_feature %}
+                <a href="{{ request.urlgen(
+                    'mediagoblin.user_pages.media_feature',
+                            user=media.get_uploader.username,
+                             media=media.slug_or_id) }}"
+        class="button_action" id="button_featuremedia" title="{% trans %}
+Feature Media {% endtrans %}">
+                    {% trans %}Feature{% endtrans %}</a>
+              {% else %}
+                <a href="{{ request.urlgen(
+                    'mediagoblin.user_pages.media_unfeature',
+                            user=media.get_uploader.username,
+                             media=media.slug_or_id) }}"
+        class="button_action" id="button_unfeaturemedia" title="{% trans %}
+Unfeature Media {% endtrans %}">
+                    {% trans %}Unfeature{% endtrans %}</a>
+                {% if not media_feature.display_type == 'primary' %}
+                <a href="{{ request.urlgen(
+                    'mediagoblin.user_pages.feature_promote',
+                            user=media.get_uploader.username,
+                             media=media.slug_or_id) }}"
+        class="button_action" id="button_promotefeature" title="{% trans %}
+Promote Feature {% endtrans %}">
+                    {% trans %}Promote{% endtrans %}</a>
+                {% endif %}{% if not media_feature.display_type == 'tertiary' %}
+                <a href="{{ request.urlgen(
+                    'mediagoblin.user_pages.feature_demote',
+                            user=media.get_uploader.username,
+                             media=media.slug_or_id) }}"
+        class="button_action" id="button_demotefeature" title="{% trans %}
+Demote Feature {% endtrans %}">
+                    {% trans %}Demote{% endtrans %}</a>
+                {% endif %}
+              {% endif %}
+            {% endif %}

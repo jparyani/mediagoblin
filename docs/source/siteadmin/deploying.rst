@@ -165,11 +165,11 @@ to the unpriviledged system account.
 To do this, enter either of the following commands, changing the defaults
 to suit your particular requirements::
 
-  sudo mkdir -p /srv/mediagoblin.example.org && sudo chown -hR mediagoblin:mediagoblin /srv/mediagoblin.example.org
+  sudo mkdir -p /srv/mediagoblin.example.org && sudo chown -hR mediagoblin: /srv/mediagoblin.example.org
 
 or (as the root user)::
 
-  mkdir -p /srv/mediagoblin.example.org && chown -hR mediagoblin:mediagoblin /srv/mediagoblin.example.org
+  mkdir -p /srv/mediagoblin.example.org && chown -hR mediagoblin: /srv/mediagoblin.example.org
 
 
 Install MediaGoblin and Virtualenv
@@ -200,7 +200,7 @@ Clone the MediaGoblin repository and set up the git submodules::
 
 And set up the in-package virtualenv::
 
-    (virtualenv --system-site-packages . || virtualenv .) && ./bin/python setup.py develop
+    (virtualenv --python=python2 --system-site-packages . || virtualenv --python=python2 .) && ./bin/python setup.py develop
 
 .. note::
 
@@ -213,16 +213,6 @@ And set up the in-package virtualenv::
    viratualenv up to date by simply running `make update`.
 
    Note: this is liable to break.  Use this method with caution.
-
-.. ::
-
-   (NOTE: Is this still relevant?)
-
-   If you have problems here, consider trying to install virtualenv
-   with the ``--distribute`` or ``--no-site-packages`` options. If
-   your system's default Python is in the 3.x series you may need to
-   run ``virtualenv`` with the  ``--python=python2.7`` or
-   ``--python=python2.6`` options.
 
 The above provides an in-package install of ``virtualenv``. While this
 is counter to the conventional ``virtualenv`` configuration, it is
@@ -244,7 +234,7 @@ This concludes the initial configuration of the development
 environment. In the future, when you update your
 codebase, you should also run::
 
-    ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate && git submodule fetch
+    git submodule update && ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate
 
 Note: If you are running an active site, depending on your server
 configuration, you may need to stop it first or the dbupdate command

@@ -28,19 +28,18 @@ _log = logging.getLogger(__name__)
 def get_url_map():
     add_route('index', '/', 'mediagoblin.views:root_view')
     add_route('terms_of_service','/terms_of_service',
-        'mediagoblin.views:terms_of_service')
+        'mediagoblin.views:terms_of_service'),
     mount('/auth', auth_routes)
     mount('/mod', moderation_routes)
 
     import mediagoblin.submit.routing
     import mediagoblin.user_pages.routing
     import mediagoblin.edit.routing
-    import mediagoblin.webfinger.routing
     import mediagoblin.listings.routing
     import mediagoblin.notifications.routing
     import mediagoblin.oauth.routing
+    import mediagoblin.federation.routing
 
-    
     for route in PluginManager().get_routes():
         add_route(*route)
 

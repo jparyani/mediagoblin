@@ -101,25 +101,26 @@ class User(Base, UserMixin):
         super(User, self).delete(**kwargs)
         _log.info('Deleted user "{0}" account'.format(self.username))
 
-    def has_privilege(self,*priv_names):
+    def has_privilege(self, privilege, allow_admin=True):
         """
         This method checks to make sure a user has all the correct privileges
         to access a piece of content.
 
-        :param  priv_names      A variable number of unicode objects which rep-
-                                -resent the different privileges which may give
-                                the user access to this content. If you pass
-                                multiple arguments, the user will be granted
-                                access if they have ANY of the privileges
-                                passed.
+        :param  privilege       A unicode object which represent the different
+                                privileges which may give the user access to
+                                content.
+
+        :param  allow_admin     If this is set to True the then if the user is
+                                an admin, then this will always return True
+                                even if the user hasn't been given the
+                                privilege. (defaults to True)
         """
-        if len(priv_names) == 1:
-            priv = Privilege.query.filter(
-                Privilege.privilege_name==priv_names[0]).one()
-            return (priv in self.all_privileges)
-        elif len(priv_names) > 1:
-            return self.has_privilege(priv_names[0]) or \
-                self.has_privilege(*priv_names[1:])
+        priv = Privilege.query.filter_by(privilege_name=privilege).one()
+        if priv in self.all_privileges:
+            return True
+        elif allow_admin and self.has_privilege(u'admin', allow_admin=False):
+            return True
+
         return False
 
     def is_banned(self):
@@ -131,6 +132,48 @@ class User(Base, UserMixin):
         """
         return UserBan.query.get(self.id) is not None
 
+
+    def serialize(self, request):
+        user = {
+            "id": "acct:{0}@{1}".format(self.username, request.host),
+            "preferredUsername": self.username,
+            "displayName": "{0}@{1}".format(self.username, request.host),
+            "objectType": "person",
+            "pump_io": {
+                "shared": False,
+                "followed": False,
+            },
+            "links": {
+                "self": {
+                    "href": request.urlgen(
+                            "mediagoblin.federation.user.profile",
+                             username=self.username,
+                             qualified=True
+                             ),
+                },
+                "activity-inbox": {
+                    "href": request.urlgen(
+                            "mediagoblin.federation.inbox",
+                            username=self.username,
+                            qualified=True
+                            )
+                },
+                "activity-outbox": {
+                    "href": request.urlgen(
+                            "mediagoblin.federation.feed",
+                            username=self.username,
+                            qualified=True
+                            )
+                },
+            },
+        }
+
+        if self.bio:
+            user.update({"summary": self.bio})
+        if self.url:
+            user.update({"url": self.url})
+
+        return user
 
 class Client(Base):
     """
@@ -197,7 +240,6 @@ class NonceTimestamp(Base):
     nonce = Column(Unicode, nullable=False, primary_key=True)
     timestamp = Column(DateTime, nullable=False, primary_key=True)
 
-
 class MediaEntry(Base, MediaEntryMixin):
     """
     TODO: Consider fetching the media_files using join
@@ -260,6 +302,8 @@ class MediaEntry(Base, MediaEntryMixin):
         cascade="all, delete-orphan"
         )
     collections = association_proxy("collections_helper", "in_collection")
+    media_metadata = Column(MutationDict.as_mutable(JSONEncoded),
+        default=MutationDict())
 
     ## TODO
     # fail_error
@@ -382,6 +426,80 @@ class MediaEntry(Base, MediaEntryMixin):
         # pass through commit=False/True in kwargs
         super(MediaEntry, self).delete(**kwargs)
 
+    @property
+    def objectType(self):
+        """ Converts media_type to pump-like type - don't use internally """
+        return self.media_type.split(".")[-1]
+
+    def serialize(self, request, show_comments=True):
+        """ Unserialize MediaEntry to object """
+        author = self.get_uploader
+        context = {
+            "id": self.id,
+            "author": author.serialize(request),
+            "objectType": self.objectType,
+            "url": self.url_for_self(request.urlgen),
+            "image": {
+                "url": request.host_url + self.thumb_url[1:],
+            },
+            "fullImage":{
+                "url": request.host_url + self.original_url[1:],
+            },
+            "published": self.created.isoformat(),
+            "updated": self.created.isoformat(),
+            "pump_io": {
+                "shared": False,
+            },
+            "links": {
+                "self": {
+                    "href": request.urlgen(
+                        "mediagoblin.federation.object",
+                        objectType=self.objectType,
+                        id=self.id,
+                        qualified=True
+                    ),
+                },
+
+            }
+        }
+
+        if self.title:
+            context["displayName"] = self.title
+
+        if self.description:
+            context["content"] = self.description
+
+        if self.license:
+            context["license"] = self.license
+
+        if show_comments:
+            comments = [comment.serialize(request) for comment in self.get_comments()]
+            total = len(comments)
+            context["replies"] = {
+                "totalItems": total,
+                "items": comments,
+                "url": request.urlgen(
+                        "mediagoblin.federation.object.comments",
+                        objectType=self.objectType,
+                        id=self.id,
+                        qualified=True
+                        ),
+            }
+
+        return context
+
+    def unserialize(self, data):
+        """ Takes API objects and unserializes on existing MediaEntry """
+        if "displayName" in data:
+            self.title = data["displayName"]
+
+        if "content" in data:
+            self.description = data["content"]
+
+        if "license" in data:
+            self.license = data["license"]
+
+        return True
 
 class FileKeynames(Base):
     """
@@ -528,6 +646,47 @@ class MediaComment(Base, MediaCommentMixin):
                                                    lazy="dynamic",
                                                    cascade="all, delete-orphan"))
 
+    def serialize(self, request):
+        """ Unserialize to python dictionary for API """
+        media = MediaEntry.query.filter_by(id=self.media_entry).first()
+        author = self.get_author
+        context = {
+            "id": self.id,
+            "objectType": "comment",
+            "content": self.content,
+            "inReplyTo": media.serialize(request, show_comments=False),
+            "author": author.serialize(request)
+        }
+
+        return context
+
+    def unserialize(self, data):
+        """ Takes API objects and unserializes on existing comment """
+        # Do initial checks to verify the object is correct
+        required_attributes = ["content", "inReplyTo"]
+        for attr in required_attributes:
+            if attr not in data:
+                return False
+
+        # Validate inReplyTo has ID
+        if "id" not in data["inReplyTo"]:
+            return False
+
+        # Validate that the ID is correct
+        try:
+            media_id = int(data["inReplyTo"]["id"])
+        except ValueError:
+            return False
+
+        media = MediaEntry.query.filter_by(id=media_id).first()
+        if media is None:
+            return False
+
+        self.media_entry = media.id
+        self.content = data["content"]
+        return True
+
+
 
 class Collection(Base, CollectionMixin):
     """An 'album' or 'set' of media by a user.
@@ -563,6 +722,14 @@ class Collection(Base, CollectionMixin):
         return CollectionItem.query.filter_by(
             collection=self.id).order_by(order_col)
 
+    def __repr__(self):
+        safe_title = self.title.encode('ascii', 'replace')
+        return '<{classname} #{id}: {title} by {creator}>'.format(
+            id=self.id,
+            classname=self.__class__.__name__,
+            creator=self.creator,
+            title=safe_title)
+
 
 class CollectionItem(Base, CollectionItemMixin):
     __tablename__ = "core__collection_items"
@@ -591,6 +758,13 @@ class CollectionItem(Base, CollectionItemMixin):
     def dict_view(self):
         """A dict like view on this object"""
         return DictReadAttrProxy(self)
+
+    def __repr__(self):
+        return '<{classname} #{id}: Entry {entry} in {collection}>'.format(
+            id=self.id,
+            classname=self.__class__.__name__,
+            collection=self.collection,
+            entry=self.media_entry)
 
 
 class ProcessingMetaData(Base):
@@ -661,6 +835,14 @@ class Notification(Base):
 
     def __repr__(self):
         return '<{klass} #{id}: {user}: {subject} ({seen})>'.format(
+            id=self.id,
+            klass=self.__class__.__name__,
+            user=self.user,
+            subject=getattr(self, 'subject', None),
+            seen='unseen' if not self.seen else 'seen')
+
+    def __unicode__(self):
+        return u'<{klass} #{id}: {user}: {subject} ({seen})>'.format(
             id=self.id,
             klass=self.__class__.__name__,
             user=self.user,
@@ -871,13 +1053,13 @@ class PrivilegeUserAssociation(Base):
 
     __tablename__ = 'core__privileges_users'
 
-    privilege_id = Column(
-        'core__privilege_id',
+    user = Column(
+        "user",
         Integer,
         ForeignKey(User.id),
         primary_key=True)
-    user_id = Column(
-        'core__user_id',
+    privilege = Column(
+        "privilege",
         Integer,
         ForeignKey(Privilege.id),
         primary_key=True)

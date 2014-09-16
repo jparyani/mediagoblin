@@ -158,6 +158,14 @@ def json_response(serializable, _disable_cors=False, *args, **kw):
 
     return response
 
+def json_error(error_str, status=400, *args, **kwargs):
+    """
+        This is like json_response but takes an error message in and formats
+        it in {"error": error_str}. This also sets the default HTTP status
+        code to 400.
+    """
+    return json_response({"error": error_str}, status=status, *args, **kwargs)
+    
 def form_response(data, *args, **kwargs):
     """
         Responds using application/x-www-form-urlencoded and returns a werkzeug

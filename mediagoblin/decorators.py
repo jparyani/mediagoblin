@@ -23,7 +23,7 @@ from six.moves.urllib.parse import urljoin
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin import messages
-from mediagoblin.db.models import MediaEntry, User, MediaComment
+from mediagoblin.db.models import MediaEntry, User, MediaComment, AccessToken
 from mediagoblin.tools.response import (
     redirect, render_404,
     render_user_banned, json_response)
@@ -75,7 +75,7 @@ def require_active_login(controller):
     return new_controller_func
 
 
-def user_has_privilege(privilege_name):
+def user_has_privilege(privilege_name, allow_admin=True):
     """
     Requires that a user have a particular privilege in order to access a page.
     In order to require that a user have multiple privileges, use this
@@ -86,14 +86,17 @@ def user_has_privilege(privilege_name):
                                         the privilege object. This object is
                                         the name of the privilege, as assigned
                                         in the Privilege.privilege_name column
+
+        :param allow_admin          If this is true then if the user is an admin
+                                    it will allow the user even if the user doesn't
+                                    have the privilage given in privilage_name.
     """
 
     def user_has_privilege_decorator(controller):
         @wraps(controller)
         @require_active_login
         def wrapper(request, *args, **kwargs):
-            user_id = request.user.id
-            if not request.user.has_privilege(privilege_name):
+            if not request.user.has_privilege(privilege_name, allow_admin):
                 raise Forbidden()
 
             return controller(request, *args, **kwargs)
@@ -370,7 +373,8 @@ def require_admin_or_moderator_login(controller):
     @wraps(controller)
     def new_controller_func(request, *args, **kwargs):
         if request.user and \
-            not request.user.has_privilege(u'admin',u'moderator'):
+            not (request.user.has_privilege(u'admin')
+                or request.user.has_privilege(u'moderator')):
 
             raise Forbidden()
         elif not request.user:
@@ -402,16 +406,23 @@ def oauth_required(controller):
 
         request_validator = GMGRequestValidator()
         resource_endpoint = ResourceEndpoint(request_validator)
-        valid, request = resource_endpoint.validate_protected_resource_request(
+        valid, r = resource_endpoint.validate_protected_resource_request(
                 uri=request.url,
                 http_method=request.method,
-                body=request.get_data(),
+                body=request.data,
                 headers=dict(request.headers),
                 )
 
         if not valid:
             error = "Invalid oauth prarameter."
             return json_response({"error": error}, status=400)
+
+        # Fill user if not already
+        token = authorization[u"oauth_token"]
+        access_token = AccessToken.query.filter_by(token=token).first()
+        if access_token is not None and request.user is None:
+            user_id = access_token.user
+            request.user = User.query.filter_by(id=user_id).first()
 
         return controller(request, *args, **kwargs)
 

@@ -261,8 +261,8 @@ def blog_post_listing(request, page, url_user=None):
     """
     Page, listing all the blog posts of a particular blog.
     """
-    blog_slug = request.matchdict.get('blog_slug', None)
-    blog = get_blog_by_slug(request, blog_slug, author=request.user.id)
+    blog_slug = request.matchdict['blog_slug']
+    blog = get_blog_by_slug(request, blog_slug, author=url_user.id)
     if not blog:
         return render_404(request)
 

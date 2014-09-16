@@ -1,0 +1,23 @@
+<script type="text/javascript" src="{{
+   request.staticdirect('/extlib/video-js/video.js') }}"></script>
+{# Sadly commented out till we can get the mediagoblin skin ported over
+ # to the newest video.js release ;\  #}
+{#
+   <link href="{{ request.staticdirect('/css/vjs-mg-skin.css') }}"
+         rel="stylesheet">
+#}
+<link href="{{
+        request.staticdirect('/extlib/video-js/video-js.css') }}"
+      rel="stylesheet">
+
+<style type="text/css">
+  .vjs-default-skin .vjs-big-play-button
+  {
+    top: 50%;
+    left: 50%;
+    margin: -1.5em auto auto -2em;
+  }
+  .vjs-play-progress, .vjs-volume-level {
+    background-color: #86D4B1 !important;
+  }
+</style>

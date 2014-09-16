@@ -24,6 +24,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 
 from mediagoblin import mg_globals
+from mediagoblin.tools.response import json_response
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 from mediagoblin.db.models import MediaEntry, ProcessingMetaData
 from mediagoblin.processing import mark_entry_failed
@@ -100,7 +101,7 @@ class UserPastUploadLimit(UploadLimitError):
 
 def submit_media(mg_app, user, submitted_file, filename,
                  title=None, description=None,
-                 license=None, tags_string=u"",
+                 license=None, metadata=None, tags_string=u"",
                  upload_limit=None, max_file_size=None,
                  callback_url=None,
                  # If provided we'll do the feed_url update, otherwise ignore
@@ -143,6 +144,8 @@ def submit_media(mg_app, user, submitted_file, filename,
     entry.description = description or u""
 
     entry.license = license or None
+
+    entry.media_metadata = metadata or {}
 
     # Process the user's folksonomy "tags"
     entry.tags = convert_to_tag_list_of_dicts(tags_string)
@@ -259,3 +262,33 @@ def run_process_media(entry, feed_url=None,
         mark_entry_failed(entry.id, exc)
         # re-raise the exception
         raise
+
+
+def api_upload_request(request, file_data, entry):
+    """ This handles a image upload request """
+    # Use the same kind of method from mediagoblin/submit/views:submit_start
+    entry.title = file_data.filename
+
+    # This will be set later but currently we just don't have enough information
+    entry.slug = None
+
+    queue_file = prepare_queue_task(request.app, entry, file_data.filename)
+    with queue_file:
+        queue_file.write(request.data)
+
+    entry.save()
+    return json_response(entry.serialize(request))
+
+def api_add_to_feed(request, entry):
+    """ Add media to Feed """
+    if entry.title:
+        entry.generate_slug()
+
+    feed_url = request.urlgen(
+        'mediagoblin.user_pages.atom_feed',
+        qualified=True, user=request.user.username
+    )
+
+    run_process_media(entry, feed_url)
+    add_comment_subscription(request.user, entry)
+    return json_response(entry.serialize(request))

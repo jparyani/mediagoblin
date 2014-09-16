@@ -14,10 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import mock
 import email
+import pytest
+import smtplib
+import pkg_resources
 
 import six
 
+from mediagoblin.tests.tools import get_app
 from mediagoblin.tools import common, url, translate, mail, text, testing
 
 testing._activate_testing()
@@ -70,6 +75,28 @@ I hope you like unit tests JUST AS MUCH AS I DO!"""
     assert mbox_message.get_payload(decode=True) == b"""HAYYY GUYS!
 
 I hope you like unit tests JUST AS MUCH AS I DO!"""
+
+@pytest.fixture()
+def starttls_enabled_app(request):
+    return get_app(
+        request,
+        mgoblin_config=pkg_resources.resource_filename(
+            "mediagoblin.tests",
+            "starttls_config.ini"
+        )
+    )
+
+def test_email_force_starttls(starttls_enabled_app):
+    common.TESTS_ENABLED = False
+    SMTP = lambda *args, **kwargs: mail.FakeMhost()
+    with mock.patch('smtplib.SMTP', SMTP):
+        with pytest.raises(smtplib.SMTPException):
+            mail.send_email(
+                from_addr="notices@my.test.instance.com",
+                to_addrs="someone@someplace.com",
+                subject="Testing is so much fun!",
+                message_body="Ohai ^_^"
+            )
 
 def test_slugify():
     assert url.slugify(u'a walk in the park') == u'a-walk-in-the-park'

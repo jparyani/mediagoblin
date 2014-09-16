@@ -14,7 +14,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import pytz
+import datetime
+
+from werkzeug.datastructures import FileStorage
+
+from .resources import GOOD_JPG
 from mediagoblin.db.base import Session
+from mediagoblin.media_types import sniff_media
+from mediagoblin.submit.lib import new_upload_entry
+from mediagoblin.submit.task import collect_garbage
 from mediagoblin.db.models import User, MediaEntry, MediaComment
 from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
 
@@ -91,3 +100,35 @@ def test_media_deletes_broken_attachment(test_app):
 
     MediaEntry.query.get(media.id).delete()
     User.query.get(user_a.id).delete()
+
+def test_garbage_collection_task(test_app):
+    """ Test old media entry are removed by GC task """
+    user = fixture_add_user()
+
+    # Create a media entry that's unprocessed and over an hour old.
+    entry_id = 72
+    now = datetime.datetime.now(pytz.UTC)
+    file_data = FileStorage(
+        stream=open(GOOD_JPG, "rb"),
+        filename="mah_test.jpg",
+        content_type="image/jpeg"
+    )
+
+    # Find media manager
+    media_type, media_manager = sniff_media(file_data, "mah_test.jpg")
+    entry = new_upload_entry(user)
+    entry.id = entry_id
+    entry.title = "Mah Image"
+    entry.slug = "slugy-slug-slug"
+    entry.media_type = 'image'
+    entry.created = now - datetime.timedelta(days=2)
+    entry.save()
+
+    # Validate the model exists
+    assert MediaEntry.query.filter_by(id=entry_id).first() is not None
+
+    # Call the garbage collection task
+    collect_garbage()
+
+    # Now validate the image has been deleted
+    assert MediaEntry.query.filter_by(id=entry_id).first() is None

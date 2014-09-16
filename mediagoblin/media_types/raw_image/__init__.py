@@ -1,5 +1,5 @@
 # GNU MediaGoblin -- federated, autonomous media hosting
-# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+# Copyright (C) 2014 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -14,10 +14,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from mediagoblin.tools.routing import add_route
+from mediagoblin.media_types.image import ImageMediaManager
+from mediagoblin.media_types.raw_image.processing import (
+    ACCEPTED_EXTENSIONS, MEDIA_TYPE,
+    RawImageProcessingManager, sniff_handler)
 
-add_route('mediagoblin.webfinger.host_meta', '/.well-known/host-meta',
-    'mediagoblin.webfinger.views:host_meta')
 
-add_route('mediagoblin.webfinger.xrd', '/webfinger/xrd',
-        'mediagoblin.webfinger.views:xrd')
+class RawImageMediaManager(ImageMediaManager):
+    human_readable = "Raw image"
+
+
+def get_media_type_and_manager(ext):
+    if ext in ACCEPTED_EXTENSIONS:
+        return MEDIA_TYPE, RawImageMediaManager
+
+
+hooks = {
+    'get_media_type_and_manager': get_media_type_and_manager,
+    'sniff_handler': sniff_handler,
+    ('media_manager', MEDIA_TYPE): lambda: RawImageMediaManager,
+    ('reprocess_manager', MEDIA_TYPE): lambda: RawImageProcessingManager,
+}

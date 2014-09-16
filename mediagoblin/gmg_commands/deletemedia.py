@@ -15,19 +15,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import print_function
+import sys
 
 from mediagoblin.gmg_commands import util as commands_util
 
 
 def parser_setup(subparser):
     subparser.add_argument('media_ids',
-                           help='Comma separated list of media IDs to will be deleted.')
+                           help='Comma separated list of media IDs will be deleted.')
 
 
 def deletemedia(args):
     app = commands_util.setup_app(args)
 
-    media_ids = set(map(int, args.media_ids.split(',')))
+    media_ids = set([int(mid) for mid in args.media_ids.split(',') if mid.isdigit()])
+    if not media_ids:
+        print 'Can\'t find any valid media ID(s).'
+        sys.exit(1)
     found_medias = set()
     filter_ids = app.db.MediaEntry.id.in_(media_ids)
     medias = app.db.MediaEntry.query.filter(filter_ids).all()
@@ -38,3 +42,4 @@ def deletemedia(args):
     for media in media_ids - found_medias:
         print('Can\'t find a media with ID %d.' % media)
     print('Done.')
+    sys.exit(0)

@@ -7,3 +7,6 @@
 [submodule "extlib/skeleton"]
 	path = extlib/skeleton
 	url = git://github.com/dhg/Skeleton.git
+[submodule "extlib/sandyseventiesspeedboat"]
+	path = extlib/sandyseventiesspeedboat
+	url = https://github.com/jpope777/sandyseventiesspeedboat-mg.git

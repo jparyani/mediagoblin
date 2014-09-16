@@ -1,0 +1,154 @@
+.primary-feature    {
+    display:inline-block;
+    width: 460px;
+    padding:10px;
+    margin:0px 0px 0px 160px;
+    border-right: 1px solid #222;
+    border-left: 1px solid #222;
+}
+
+.primary-feature .f-title {
+    text-align:center;
+}
+.primary-feature .f-description {
+    
+}
+.primary-feature .f-display {
+    width: 300px;
+    margin: 5px auto;
+}
+.primary-feature .f-display img {
+    width: 300px;
+}
+.primary-feature .f-display video {
+    width: 300px;
+    margin: 5px auto;
+    display: block;
+}
+.primary-feature a {
+    text-decoration:none;
+    
+}
+.primary-feature p {
+    display:block;
+    margin: 5px auto;
+}
+
+.secondary-feature   {
+    display:inline-block;
+    width: 800px;
+    padding:10px;
+    margin: 0 auto;   
+    font-size:85%;
+    border-top: 1px solid #222; 
+}
+.secondary-feature .f-title, 
+.secondary-feature .f-description {
+    width:500px;
+}
+.secondary-feature .f-display {
+    width: 250px;
+    margin: 20px 25px 20px 0;
+}
+.secondary-feature .f-display img {
+    width: 200px;
+}
+
+.secondary-feature .f-display audio {
+    width: 250px;
+    display: block;
+}
+
+.secondary-feature .f-display video {
+    width: 200px;
+}
+
+.secondary-feature a {
+    text-decoration:none;
+}
+.secondary-feature p {
+    display:inline-block;
+    margin:5px;
+}
+
+.f-title {
+    color:#ffffff;
+    font-size:150%;
+}
+
+.aligned-right .f-display,
+.aligned-right .f-description,
+.aligned-right .f-title {
+  float: right;
+}
+.aligned-left .f-display,
+.aligned-left .f-description,
+.aligned-left .f-title {
+  float: left;
+}
+
+.tertiary-features   {
+    display:inline-block;
+    width: 802px;
+    padding:10px;
+    margin: 10 auto;   
+    font-size:65%;
+    border-top: 0.5px solid #222;
+}
+
+.tertiary-features tr td {
+    width: 254px;
+    padding: 20px 15px;
+}
+
+.tertiary-features tr td.row_first {
+    text-align: left;
+}
+
+.tertiary-features tr td.row_center {
+    text-align: center;
+}
+
+.tertiary-features tr td.row_last {
+    text-align: right;
+}
+
+.tertiary-features tr td p, .tertiary-features tr td a, {
+    display:block;
+    width: 250px;
+    text-decoration:none;
+    float: left;
+}
+
+div.navigation-sidebar {
+    display:inline-block;
+    float:right;
+    font-size:1.25em;
+    padding:20px 10px 10px 10px;
+}
+div.navigation-sidebar a {
+    display: block;
+    margin: 3px 0 0 0;
+}
+
+select.media_select {
+    width: 800px;
+    height: 400px;
+}
+
+.frontpage-container {
+    width: 800px;
+    margin: 0 auto;
+}
+
+form#featured-media-panel div textarea {
+    width: 800px;
+    margin: 0 auto;
+    font-size:1.15em;
+    height: 15em;
+    font-weight: 0.3;
+    resize: none;
+    padding: 5px 25px;
+    color: #111;
+    line-height: 1.25em;
+}

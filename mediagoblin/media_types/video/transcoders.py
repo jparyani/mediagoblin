@@ -186,7 +186,7 @@ from playbin')
         self.buffer_probes = {}
 
         pipeline = ''.join([
-            'filesrc location="%s" ! decodebin ! ' % self.source_path,
+            'filesrc location="%s" ! decodebin2 ! ' % self.source_path,
             'ffmpegcolorspace ! videoscale ! ',
             'video/x-raw-rgb,depth=24,bpp=24,pixel-aspect-ratio=1/1',
             ',width={0}'.format(self.width) if self.width else '',

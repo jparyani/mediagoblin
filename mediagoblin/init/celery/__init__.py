@@ -16,6 +16,7 @@
 
 import os
 import sys
+import datetime
 import logging
 
 import six
@@ -29,7 +30,9 @@ _log = logging.getLogger(__name__)
 
 MANDATORY_CELERY_IMPORTS = [
     'mediagoblin.processing.task',
-    'mediagoblin.notifications.task']
+    'mediagoblin.notifications.task',
+    'mediagoblin.submit.task',
+]
 
 DEFAULT_SETTINGS_MODULE = 'mediagoblin.init.celery.dummy_settings_module'
 
@@ -59,6 +62,18 @@ def get_celery_settings_dict(app_config, global_config,
     if force_celery_always_eager:
         celery_settings['CELERY_ALWAYS_EAGER'] = True
         celery_settings['CELERY_EAGER_PROPAGATES_EXCEPTIONS'] = True
+
+    # Garbage collection periodic task
+    frequency = app_config.get('garbage_collection', 60)
+    if frequency:
+        frequency = int(frequency)
+        celery_settings['CELERYBEAT_SCHEDULE'] = {
+            'garbage-collection': {
+                'task': 'mediagoblin.submit.task.garbage_collection',
+                'schedule': datetime.timedelta(minutes=frequency),
+            }
+        }
+        celery_settings['BROKER_HEARTBEAT'] = 1
 
     return celery_settings
 
