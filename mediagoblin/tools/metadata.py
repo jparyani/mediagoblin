@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from io import open
 import os
 import copy
 import json
@@ -102,7 +103,7 @@ def load_resource(package, resource_path):
       os.path.sep.
     """
     filename = resource_filename(package, os.path.sep.join(resource_path))
-    return file(filename).read()
+    return open(filename, encoding="utf-8").read()
 
 def load_resource_json(package, resource_path):
     """
