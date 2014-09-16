@@ -250,5 +250,7 @@ class TestMetaDataEdit:
         old_metadata = new_metadata
         new_metadata = media_entry.media_metadata
         assert new_metadata == old_metadata
-        assert (b"&#39;On the worst day&#39; is not a &#39;date-time&#39;" in
-            response.body)
+        context = template.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/edit/metadata.html']
+        assert context['form'].errors['media_metadata'][0]['identifier'][0] == \
+            "'On the worst day' is not a 'date-time'"
