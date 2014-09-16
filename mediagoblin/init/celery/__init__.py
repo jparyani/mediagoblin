@@ -67,7 +67,7 @@ def get_celery_settings_dict(app_config, global_config,
         frequency = int(frequency)
         celery_settings['CELERYBEAT_SCHEDULE'] = {
             'garbage-collection': {
-                'task': 'mediagoblin.submit.task.garbage_collection',
+                'task': 'mediagoblin.submit.task.collect_garbage',
                 'schedule': datetime.timedelta(minutes=frequency),
             }
         }
