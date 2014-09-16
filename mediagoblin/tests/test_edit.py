@@ -250,5 +250,5 @@ class TestMetaDataEdit:
         old_metadata = new_metadata
         new_metadata = media_entry.media_metadata
         assert new_metadata == old_metadata
-        assert ("u&#39;On the worst day&#39; is not a &#39;date-time&#39;" in
+        assert (b"&#39;On the worst day&#39; is not a &#39;date-time&#39;" in
             response.body)
