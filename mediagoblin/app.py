@@ -93,7 +93,9 @@ class MediaGoblinApp(object):
         self.db = setup_database(app_config['run_migrations'])
 
         # Quit app if need to run dbupdate
-        check_db_up_to_date()
+        ## NOTE: This is currently commented out due to session errors..
+        ##  We'd like to re-enable!
+        # check_db_up_to_date()
 
         # Register themes
         self.theme_registry, self.current_theme = register_themes(app_config)
