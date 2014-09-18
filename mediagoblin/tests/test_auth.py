@@ -233,6 +233,21 @@ def test_register_views(test_app):
     assert urlparse.urlsplit(response.location)[2] == '/'
     assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
 
+    ## Verify that username is lowercased on login attempt
+    template.clear_test_template_context()
+    response = test_app.post(
+        '/auth/login/', {
+            'username': u'ANGRYGIRL',
+            'password': 'iamveryveryangry'})
+
+    # Username should no longer be uppercased; it should be lowercased
+    assert not form.username.data == u'ANGRYGIRL'
+    assert form.username.data == u'angrygirl'
+
+    # User should be redirected
+    response.follow()
+    assert urlparse.urlsplit(response.location)[2] == '/'
+    assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
 
 def test_authentication_views(test_app):
     """
