@@ -39,12 +39,12 @@ def _setup_defaults(config, config_path, extra_defaults=None):
     config.setdefault('DEFAULT', {})
     config['DEFAULT']['here'] = os.path.dirname(config_path)
     config['DEFAULT']['__file__'] = config_path
-    
+
     for key, value in extra_defaults.items():
         config['DEFAULT'].setdefault(key, value)
 
 
-def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
+def read_mediagoblin_config(config_path, config_spec_path=CONFIG_SPEC_PATH):
     """
     Read a config object from config_path.
 
@@ -60,7 +60,7 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
 
     Args:
      - config_path: path to the config file
-     - config_spec: config file that provides defaults and value types
+     - config_spec_path: config file that provides defaults and value types
        for validation / conversion.  Defaults to mediagoblin/config_spec.ini
 
     Returns:
@@ -74,23 +74,23 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
     # we can add their plugin specs to the general config_spec.
     config = ConfigObj(
         config_path,
-        interpolation='ConfigParser')
-
-    plugins = config.get("plugins", {}).keys()
-    plugin_configs = {}
-
-    # Now load the main config spec
-    config_spec = ConfigObj(
-        config_spec,
-        encoding='UTF8', list_values=False, _inspec=True)
+        interpolation="ConfigParser")
 
     # temporary bootstrap, just setup here and __file__... we'll do this again
     _setup_defaults(config, config_path)
 
+    # Now load the main config spec
+    config_spec = ConfigObj(
+        config_spec_path,
+        encoding="UTF8", list_values=False, _inspec=True)
+
     # Set up extra defaults that will be pushed into the rest of the
-    # configs.  This is a combined extrapolation of defaults based on 
-    mainconfig_defaults = copy.copy(config_spec.get('DEFAULT', {}))
-    mainconfig_defaults.update(config.get('DEFAULT', {}))
+    # configs.  This is a combined extrapolation of defaults based on
+    mainconfig_defaults = copy.copy(config_spec.get("DEFAULT", {}))
+    mainconfig_defaults.update(config["DEFAULT"])
+
+    plugins = config.get("plugins", {}).keys()
+    plugin_configs = {}
 
     for plugin in plugins:
         try:
@@ -98,10 +98,10 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
                 plugin, "config_spec.ini")
             if not os.path.exists(plugin_config_spec_path):
                 continue
-            
+
             plugin_config_spec = ConfigObj(
                 plugin_config_spec_path,
-                encoding='UTF8', list_values=False, _inspec=True)
+                encoding="UTF8", list_values=False, _inspec=True)
             _setup_defaults(
                 plugin_config_spec, config_path, mainconfig_defaults)
 
@@ -114,16 +114,16 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
             _log.warning(
                 "When setting up config section, could not import '%s'" %
                 plugin)
-    
+
     # append the plugin specific sections of the config spec
-    config_spec['plugins'] = plugin_configs
+    config_spec["plugins"] = plugin_configs
 
     _setup_defaults(config_spec, config_path, mainconfig_defaults)
 
     config = ConfigObj(
         config_path,
         configspec=config_spec,
-        interpolation='ConfigParser')
+        interpolation="ConfigParser")
 
     _setup_defaults(config, config_path, mainconfig_defaults)
 

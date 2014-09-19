@@ -109,6 +109,34 @@ they sound like.
 - email_smtp_user
 - email_smtp_pass
 
+Changing data directory
+-----------------------
+
+MediaGoblin by default stores your data in wherever ``data_basedir``.
+This can be changed by changing the value in your ``mediagoblin.ini`` file
+for example::
+
+    [DEFAULT]
+    data_basedir = "/var/mediagoblin/user_data"
+
+For efficiency reasons MediaGoblin doesn't serve these files itself and
+instead leaves that to the webserver. You will have to alter the location
+to match the path in ``data_basedir``.
+
+If you use ``lazyserver.sh`` you need to change the ``paste.ini`` file::
+
+    [app:mediagoblin]
+    /mgoblin_media = /var/mediagoblin/user_data
+
+If you use nginx you need to change the config::
+
+     # Instance specific media:
+     location /mgoblin_media/ {
+         alias /var/mediagoblin/user_data;
+     }
+
+Once you have done this you will need to move any existing media you had in the
+old directory to the new directory so existing media still can be displayed.
 
 All other configuration changes
 -------------------------------
