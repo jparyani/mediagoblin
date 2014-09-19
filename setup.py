@@ -113,7 +113,6 @@ try:
     author='Free Software Foundation and contributors',
     author_email='cwebber@gnu.org',
     url="http://mediagoblin.org/",
-    download_url="http://mediagoblin.org/download/",
     long_description=open(READMEFILE).read(),
     description='MediaGoblin is a web application for publishing all kinds of media',
     classifiers=[
