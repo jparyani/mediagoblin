@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-25 14:44-0500\n"
+"POT-Creation-Date: 2014-09-21 11:08-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2373,34 +2373,34 @@ msgstr ""
 msgid "Could not read the image file."
 msgstr ""
 
-#: mediagoblin/tools/response.py:38
+#: mediagoblin/tools/response.py:39
 msgid "Oops!"
 msgstr ""
 
-#: mediagoblin/tools/response.py:39
+#: mediagoblin/tools/response.py:40
 msgid "An error occured"
 msgstr ""
 
-#: mediagoblin/tools/response.py:53
+#: mediagoblin/tools/response.py:54
 msgid "Bad Request"
 msgstr ""
 
-#: mediagoblin/tools/response.py:55
+#: mediagoblin/tools/response.py:56
 msgid "The request sent to the server is invalid, please double check it"
 msgstr ""
 
-#: mediagoblin/tools/response.py:63
+#: mediagoblin/tools/response.py:64
 msgid "Operation not allowed"
 msgstr ""
 
-#: mediagoblin/tools/response.py:64
+#: mediagoblin/tools/response.py:65
 msgid ""
 "Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
 "function that you are not allowed to. Have you been trying to delete all "
 "user accounts again?"
 msgstr ""
 
-#: mediagoblin/tools/response.py:72
+#: mediagoblin/tools/response.py:73
 msgid ""
 "There doesn't seem to be a page at this address. Sorry!</p><p>If you're "
 "sure the address is correct, maybe the page you're looking for has been "
