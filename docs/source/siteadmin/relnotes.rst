@@ -44,14 +44,16 @@ That's it, probably!  If you run into problems, don't hesitate to
 **Bugfixes/improvements:**
 
 - The *MOST IMPORTANT* change in this release:
-  Commenting out a couple of non-critical features that were causing
+  Disabling a couple of non-critical features that were causing
   database transaction issues.  (These should be back by 0.8.0.)
-  - Disabled the "checking if the database is up to date at
+
+  + Disabled the "checking if the database is up to date at
     mediagoblin startup" feature
-  - Disabled the garbage collection stuff by default for now
+  + Disabled the garbage collection stuff by default for now
     (You can set garbage_collection under the config mediagoblin
     header to something other than 0 to turn it back on for now, but
     it's potentially risky for the moment.)
+
 - Some fixes to the 0.7.0 docs
 - Fixed Sandy 70s speedboat navbar by updating git submodule
 - Added support for cr2 files in raw_image media type
@@ -59,8 +61,10 @@ That's it, probably!  If you run into problems, don't hesitate to
 - Collection and CollectionItem objects now have nicer in-python representations
 - Fixed unicode error with raw image mediatype logging
 - Fixed #945 "Host metadata does not confirm to spec (/.well-known/meta-data)"
-  - Add XRD+XML formatting for /.well-known/host-meta
-  - Add /.well-known/webfinger API to lookup user hrefs
+
+  + Add XRD+XML formatting for /.well-known/host-meta
+  + Add /.well-known/webfinger API to lookup user hrefs
+
 - deleteuser gmg subcommand now fails gracefully
 - Removed a false download link from setup.py
 
