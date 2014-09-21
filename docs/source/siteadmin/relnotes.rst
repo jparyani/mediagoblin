@@ -21,6 +21,49 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+0.7.1
+=====
+
+This is a purely bugfix release.  Important changes happened since
+0.7.0; if running MediaGoblin 0.7.0, an upgrade is highly recommended;
+see below.  This release is especially useful if you have been running
+postgres and have been receiving seemingly random database transaction
+errors.
+
+**Do this to upgrade**
+
+1. Update to the latest release.  If checked out from git, run:
+   ``git fetch && git checkout -q v0.7.1 && git submodule init && git submodule update``
+2. Make sure to run
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+
+That's it, probably!  If you run into problems, don't hesitate to
+`contact us <http://mediagoblin.org/pages/join.html>`_
+(IRC is often best).
+
+**Bugfixes/improvements:**
+
+- The *MOST IMPORTANT* change in this release:
+  Commenting out a couple of non-critical features that were causing
+  database transaction issues.  (These should be back by 0.8.0.)
+  - Disabled the "checking if the database is up to date at
+    mediagoblin startup" feature
+  - Disabled the garbage collection stuff by default for now
+    (You can set garbage_collection under the config mediagoblin
+    header to something other than 0 to turn it back on for now, but
+    it's potentially risky for the moment.)
+- Some fixes to the 0.7.0 docs
+- Fixed Sandy 70s speedboat navbar by updating git submodule
+- Added support for cr2 files in raw_image media type
+- Added a description to setup.py
+- Collection and CollectionItem objects now have nicer in-python representations
+- Fixed unicode error with raw image mediatype logging
+- Fixed #945 "Host metadata does not confirm to spec (/.well-known/meta-data)"
+  - Add XRD+XML formatting for /.well-known/host-meta
+  - Add /.well-known/webfinger API to lookup user hrefs
+- deleteuser gmg subcommand now fails gracefully
+- Removed a false download link from setup.py
+
 0.7.0
 ====
 
