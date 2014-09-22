@@ -18,8 +18,7 @@ import logging
 import json
 import traceback
 
-from urllib2 import urlopen, Request, HTTPError
-from urllib import urlencode
+from six.moves.urllib import request, parse
 
 _log = logging.getLogger(__name__)
 
@@ -37,10 +36,10 @@ def create_post_request(url, data, **kw):
         data_parser: The parser function that is used to parse the `data`
             argument
     '''
-    data_parser = kw.get('data_parser', urlencode)
+    data_parser = kw.get('data_parser', parse.urlencode)
     headers = kw.get('headers', {})
 
-    return Request(url, data_parser(data), headers=headers)
+    return request.Request(url, data_parser(data), headers=headers)
 
 
 def json_processing_callback(entry):
@@ -76,11 +75,11 @@ def json_processing_callback(entry):
             data_parser=json.dumps)
 
     try:
-        urlopen(request)
+        request.urlopen(request)
         _log.debug('Processing callback for {0} sent'.format(entry))
 
         return True
-    except HTTPError:
+    except request.HTTPError:
         _log.error('Failed to send callback: {0}'.format(
             traceback.format_exc()))
 

@@ -18,6 +18,8 @@
 from sqlalchemy import create_engine, event
 import logging
 
+import six
+
 from mediagoblin.db.base import Base, Session
 from mediagoblin import mg_globals
 
@@ -28,7 +30,7 @@ class DatabaseMaster(object):
     def __init__(self, engine):
         self.engine = engine
 
-        for k, v in Base._decl_class_registry.iteritems():
+        for k, v in six.iteritems(Base._decl_class_registry):
             setattr(self, k, v)
 
     def commit(self):

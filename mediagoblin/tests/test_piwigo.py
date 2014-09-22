@@ -44,28 +44,23 @@ class Test_PWG(object):
     def test_session(self):
         resp = self.do_post("pwg.session.login",
             {"username": u"nouser", "password": "wrong"})
-        assert resp.body == XML_PREFIX \
-            + '<rsp stat="fail"><err code="999" msg="Invalid username/password"/></rsp>'
+        assert resp.body == (XML_PREFIX + '<rsp stat="fail"><err code="999" msg="Invalid username/password"/></rsp>').encode('ascii')
 
         resp = self.do_post("pwg.session.login",
             {"username": self.username, "password": "wrong"})
-        assert resp.body == XML_PREFIX \
-            + '<rsp stat="fail"><err code="999" msg="Invalid username/password"/></rsp>'
+        assert resp.body == (XML_PREFIX + '<rsp stat="fail"><err code="999" msg="Invalid username/password"/></rsp>').encode('ascii')
 
         resp = self.do_get("pwg.session.getStatus")
-        assert resp.body == XML_PREFIX \
-            + '<rsp stat="ok"><username>guest</username></rsp>'
+        assert resp.body == (XML_PREFIX + '<rsp stat="ok"><username>guest</username></rsp>').encode('ascii')
 
         resp = self.do_post("pwg.session.login",
             {"username": self.username, "password": self.password})
-        assert resp.body == XML_PREFIX + '<rsp stat="ok">1</rsp>'
+        assert resp.body == (XML_PREFIX + '<rsp stat="ok">1</rsp>').encode('ascii')
 
         resp = self.do_get("pwg.session.getStatus")
-        assert resp.body == XML_PREFIX \
-            + '<rsp stat="ok"><username>chris</username></rsp>'
+        assert resp.body == (XML_PREFIX + '<rsp stat="ok"><username>chris</username></rsp>').encode('ascii')
 
         self.do_get("pwg.session.logout")
 
         resp = self.do_get("pwg.session.getStatus")
-        assert resp.body == XML_PREFIX \
-            + '<rsp stat="ok"><username>guest</username></rsp>'
+        assert resp.body == (XML_PREFIX + '<rsp stat="ok"><username>guest</username></rsp>').encode('ascii')

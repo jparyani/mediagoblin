@@ -17,7 +17,9 @@
 
 import logging
 
-from urllib import urlencode
+from six.moves.urllib.parse import urlencode
+
+import six
 
 from werkzeug.exceptions import BadRequest
 
@@ -44,11 +46,11 @@ def register_client(request):
 
     if request.method == 'POST' and form.validate():
         client = OAuthClient()
-        client.name = unicode(form.name.data)
-        client.description = unicode(form.description.data)
-        client.type = unicode(form.type.data)
+        client.name = six.text_type(form.name.data)
+        client.description = six.text_type(form.description.data)
+        client.type = six.text_type(form.type.data)
         client.owner_id = request.user.id
-        client.redirect_uri = unicode(form.redirect_uri.data)
+        client.redirect_uri = six.text_type(form.redirect_uri.data)
 
         client.save()
 

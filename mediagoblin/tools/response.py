@@ -16,6 +16,7 @@
 
 import json
 
+import six
 import werkzeug.utils
 from werkzeug.wrappers import Response as wz_Response
 from mediagoblin.tools.template import render_template
@@ -153,7 +154,7 @@ def json_response(serializable, _disable_cors=False, *args, **kw):
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With'}
-        for key, value in cors_headers.iteritems():
+        for key, value in six.iteritems(cors_headers):
             response.headers.set(key, value)
 
     return response

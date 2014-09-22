@@ -22,6 +22,8 @@ except ImportError:
     import Image
 import logging
 
+import six
+
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
     create_pub_filepath, FilenameBuilder,
@@ -93,7 +95,7 @@ class CommonAsciiProcessor(MediaProcessor):
         orig_file.seek(0)
 
     def store_unicode_file(self):
-        with file(self.process_filename, 'rb') as orig_file:
+        with open(self.process_filename, 'rb') as orig_file:
             self._detect_charset(orig_file)
             unicode_filepath = create_pub_filepath(self.entry,
                                                    'ascii-portable.txt')
@@ -104,7 +106,7 @@ class CommonAsciiProcessor(MediaProcessor):
                 # Encode the unicode instance to ASCII and replace any
                 # non-ASCII with an HTML entity (&#
                 unicode_file.write(
-                    unicode(orig_file.read().decode(
+                    six.text_type(orig_file.read().decode(
                             self.charset)).encode(
                                 'ascii',
                                 'xmlcharrefreplace'))
@@ -112,7 +114,7 @@ class CommonAsciiProcessor(MediaProcessor):
         self.entry.media_files['unicode'] = unicode_filepath
 
     def generate_thumb(self, font=None, thumb_size=None):
-        with file(self.process_filename, 'rb') as orig_file:
+        with open(self.process_filename, 'rb') as orig_file:
             # If no font kwarg, check config
             if not font:
                 font = self.ascii_config.get('thumbnail_font', None)
@@ -141,7 +143,7 @@ class CommonAsciiProcessor(MediaProcessor):
             thumb = converter._create_image(
                 orig_file.read())
 
-            with file(tmp_thumb, 'w') as thumb_file:
+            with open(tmp_thumb, 'w') as thumb_file:
                 thumb.thumbnail(
                     thumb_size,
                     Image.ANTIALIAS)

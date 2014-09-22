@@ -16,6 +16,8 @@
 import bcrypt
 import random
 
+import six
+
 from mediagoblin import mg_globals
 from mediagoblin.tools.crypto import get_timed_signer_url
 from mediagoblin.tools.mail import send_email
@@ -66,7 +68,7 @@ def bcrypt_gen_password_hash(raw_pass, extra_salt=None):
     if extra_salt:
         raw_pass = u"%s:%s" % (extra_salt, raw_pass)
 
-    return unicode(
+    return six.text_type(
         bcrypt.hashpw(raw_pass.encode('utf-8'), bcrypt.gensalt()))
 
 

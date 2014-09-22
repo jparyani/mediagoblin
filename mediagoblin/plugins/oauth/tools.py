@@ -23,6 +23,8 @@ from datetime import datetime
 
 from functools import wraps
 
+import six
+
 from mediagoblin.tools.response import json_response
 
 
@@ -86,7 +88,7 @@ def create_token(client, user):
 
 def generate_identifier():
     ''' Generates a ``uuid.uuid4()`` '''
-    return unicode(uuid.uuid4())
+    return six.text_type(uuid.uuid4())
 
 
 def generate_token():
@@ -110,5 +112,5 @@ def generate_secret():
     '''
     # XXX: We might not want it to use bcrypt, since bcrypt takes its time to
     # generate the result.
-    return unicode(getrandbits(192))
+    return six.text_type(getrandbits(192))
 

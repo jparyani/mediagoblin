@@ -140,7 +140,7 @@ def feed_endpoint(request):
         return json_error("No such 'user' with id '{0}'".format(username), 404)
 
     if request.data:
-        data = json.loads(request.data)
+        data = json.loads(request.data.decode())
     else:
         data = {"verb": None, "object": {}}
 

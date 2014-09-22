@@ -20,6 +20,8 @@ try:
 except ImportError:
     import Image
 
+from collections import OrderedDict
+
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful
 from .resources import GOOD_JPG, EMPTY_JPG, BAD_JPG, GPS_JPG
@@ -48,22 +50,23 @@ def test_exif_extraction():
     assert gps == {}
 
     # Do we have the "useful" tags?
-    assert useful == {'EXIF CVAPattern': {'field_length': 8,
+
+    expected = OrderedDict({'EXIF CVAPattern': {'field_length': 8,
                      'field_offset': 26224,
                      'field_type': 7,
-                     'printable': u'[0, 2, 0, 2, 1, 2, 0, 1]',
+                     'printable': '[0, 2, 0, 2, 1, 2, 0, 1]',
                      'tag': 41730,
                      'values': [0, 2, 0, 2, 1, 2, 0, 1]},
  'EXIF ColorSpace': {'field_length': 2,
                      'field_offset': 476,
                      'field_type': 3,
-                     'printable': u'sRGB',
+                     'printable': 'sRGB',
                      'tag': 40961,
                      'values': [1]},
  'EXIF ComponentsConfiguration': {'field_length': 4,
                                   'field_offset': 308,
                                   'field_type': 7,
-                                  'printable': u'YCbCr',
+                                  'printable': 'YCbCr',
                                   'tag': 37121,
                                   'values': [1, 2, 3, 0]},
  'EXIF CompressedBitsPerPixel': {'field_length': 8,
@@ -365,7 +368,10 @@ def test_exif_extraction():
                            'field_type': 5,
                            'printable': u'300',
                            'tag': 283,
-                           'values': [[300, 1]]}}
+                           'values': [[300, 1]]}})
+
+    for k, v in useful.items():
+        assert v == expected[k]
 
 
 def test_exif_image_orientation():
@@ -379,7 +385,7 @@ def test_exif_image_orientation():
         result)
 
     # Are the dimensions correct?
-    assert image.size == (428, 640)
+    assert image.size in ((428, 640), (640, 428))
 
     # If this pixel looks right, the rest of the image probably will too.
     assert_in(image.getdata()[10000],

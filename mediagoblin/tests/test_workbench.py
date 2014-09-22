@@ -50,7 +50,7 @@ class TestWorkbench(object):
         # kill a workbench
         this_workbench = self.workbench_manager.create()
         tmpfile_name = this_workbench.joinpath('temp.txt')
-        tmpfile = file(tmpfile_name, 'w')
+        tmpfile = open(tmpfile_name, 'w')
         with tmpfile:
             tmpfile.write('lollerskates')
 

@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
 import sys
 
 from mediagoblin.gmg_commands import util as commands_util
@@ -37,8 +38,8 @@ def deletemedia(args):
     for media in medias:
         found_medias.add(media.id)
         media.delete()
-        print 'Media ID %d has been deleted.' % media.id
+        print('Media ID %d has been deleted.' % media.id)
     for media in media_ids - found_medias:
-        print 'Can\'t find a media with ID %d.' % media
-    print 'Done.'
+        print('Can\'t find a media with ID %d.' % media)
+    print('Done.')
     sys.exit(0)

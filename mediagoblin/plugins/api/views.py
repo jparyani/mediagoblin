@@ -17,6 +17,8 @@
 import json
 import logging
 
+import six
+
 from werkzeug.exceptions import BadRequest
 from werkzeug.wrappers import Response
 
@@ -55,16 +57,16 @@ def post_entry(request):
 
     callback_url = request.form.get('callback_url')
     if callback_url:
-        callback_url = unicode(callback_url)
+        callback_url = six.text_type(callback_url)
     try:
         entry = submit_media(
             mg_app=request.app, user=request.user,
             submitted_file=request.files['file'],
             filename=request.files['file'].filename,
-            title=unicode(request.form.get('title')),
-            description=unicode(request.form.get('description')),
-            license=unicode(request.form.get('license', '')),
-            tags_string=unicode(request.form.get('tags', '')),
+            title=six.text_type(request.form.get('title')),
+            description=six.text_type(request.form.get('description')),
+            license=six.text_type(request.form.get('license', '')),
+            tags_string=six.text_type(request.form.get('tags', '')),
             upload_limit=upload_limit, max_file_size=max_file_size,
             callback_url=callback_url)
 
@@ -89,7 +91,7 @@ def post_entry(request):
         '''
         if isinstance(e, InvalidFileType) or \
                 isinstance(e, FileTypeNotSupported):
-            raise BadRequest(unicode(e))
+            raise BadRequest(six.text_type(e))
         else:
             raise
 
@@ -103,7 +105,7 @@ def api_test(request):
 
     # TODO: This is the *only* thing using Response() here, should that
     # not simply use json_response()?
-    return Response(json.dumps(user_data))
+    return Response(json.dumps(user_data, sort_keys=True))
 
 
 def get_entries(request):

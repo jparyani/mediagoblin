@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import collections
 import tempfile
 import shutil
 import os
@@ -26,13 +27,13 @@ from .resources import GOOD_PDF as GOOD
 
 @pytest.mark.skipif("not check_prerequisites()")
 def test_pdf():
-    good_dict = {'pdf_version_major': 1, 'pdf_title': '',
+    good_dict = collections.OrderedDict({'pdf_version_major': 1, 'pdf_title': '',
         'pdf_page_size_width': 612, 'pdf_author': '',
         'pdf_keywords': '', 'pdf_pages': 10,
         'pdf_producer': 'dvips + GNU Ghostscript 7.05',
         'pdf_version_minor': 3,
         'pdf_creator': 'LaTeX with hyperref package',
-        'pdf_page_size_height': 792}
+        'pdf_page_size_height': 792})
     assert pdf_info(GOOD) == good_dict
     temp_dir = tempfile.mkdtemp()
     create_pdf_thumb(GOOD, os.path.join(temp_dir, 'good_256_256.png'), 256, 256)

@@ -14,6 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import six
+import pytest
+
+pytestmark = pytest.mark.skipif(six.PY3, reason='needs sqlalchemy.migrate')
+
 import copy
 
 from sqlalchemy import (
@@ -23,7 +28,8 @@ from sqlalchemy import (
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import select, insert
-from migrate import changeset
+if six.PY2:
+    from migrate import changeset
 
 from mediagoblin.db.base import GMGTableBase
 from mediagoblin.db.migration_tools import MigrationManager, RegisterMigration
@@ -190,7 +196,7 @@ def level_exits_new_table(db_conn):
 
     for level in result:
 
-        for exit_name, to_level in level['exits'].iteritems():
+        for exit_name, to_level in six.iteritems(level['exits']):
             # Insert the level exit
             db_conn.execute(
                 level_exits.insert().values(

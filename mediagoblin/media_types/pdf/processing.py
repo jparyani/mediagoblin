@@ -138,10 +138,10 @@ def is_unoconv_working():
     try:
         proc = Popen([unoconv, '--show'], stderr=PIPE)
         output = proc.stderr.read()
-    except OSError, e:
+    except OSError:
         _log.warn(_('unoconv failing to run, check log file'))
         return False
-    if 'ERROR' in output:
+    if b'ERROR' in output:
         return False
     return True
 
@@ -207,6 +207,7 @@ def pdf_info(original):
         _log.debug('pdfinfo could not read the pdf file.')
         raise BadMediaFail()
 
+    lines = [l.decode() for l in lines]
     info_dict = dict([[part.strip() for part in l.strip().split(':', 1)]
                       for l in lines if ':' in l])
 

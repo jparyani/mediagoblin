@@ -15,7 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import json
 
-import mock
+try:
+    import mock
+except ImportError:
+    import unittest.mock as mock
 import pytest
 
 from webtest import AppError
@@ -55,7 +58,7 @@ class TestAPI(object):
                 headers=headers
             )
 
-        return response, json.loads(response.body)
+        return response, json.loads(response.body.decode())
 
     def _upload_image(self, test_app, image):
         """ Uploads and image to MediaGoblin via pump.io API """
@@ -72,7 +75,7 @@ class TestAPI(object):
                 data,
                 headers=headers
             )
-            image = json.loads(response.body)
+            image = json.loads(response.body.decode())
 
         return response, image
 
@@ -142,7 +145,7 @@ class TestAPI(object):
                     headers=headers
                 )
 
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_unable_to_post_feed_as_someone_else(self, test_app):
         """ Tests that can't post an image to someone else's feed """
@@ -165,7 +168,7 @@ class TestAPI(object):
                     headers=headers
                 )
 
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_only_able_to_update_own_image(self, test_app):
         """ Test's that the uploader is the only person who can update an image """
@@ -197,7 +200,7 @@ class TestAPI(object):
                     headers=headers
                 )
 
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_upload_image_with_filename(self, test_app):
         """ Tests that you can upload an image with filename and description """
@@ -224,7 +227,7 @@ class TestAPI(object):
                 headers={"Content-Type": "application/json"}
             )
 
-        image = json.loads(response.body)["object"]
+        image = json.loads(response.body.decode())["object"]
 
         # Check everything has been set on the media correctly
         media = MediaEntry.query.filter_by(id=image["id"]).first()
@@ -260,7 +263,7 @@ class TestAPI(object):
                 )
 
             # Assert that we've got a 403
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_object_endpoint(self, test_app):
         """ Tests that object can be looked up at endpoint """
@@ -281,7 +284,7 @@ class TestAPI(object):
         with self.mock_oauth():
             request = test_app.get(object_uri)
 
-        image = json.loads(request.body)
+        image = json.loads(request.body.decode())
         entry = MediaEntry.query.filter_by(id=image["id"]).first()
 
         assert request.status_code == 200
@@ -351,7 +354,7 @@ class TestAPI(object):
                     headers=headers
                 )
 
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_unable_to_update_someone_elses_comment(self, test_app):
         """ Test that you're able to update someoen elses comment. """
@@ -396,14 +399,14 @@ class TestAPI(object):
                     headers=headers
                 )
 
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
     def test_profile(self, test_app):
         """ Tests profile endpoint """
         uri = "/api/user/{0}/profile".format(self.user.username)
         with self.mock_oauth():
             response = test_app.get(uri)
-            profile = json.loads(response.body)
+            profile = json.loads(response.body.decode())
 
             assert response.status_code == 200
 
@@ -417,7 +420,7 @@ class TestAPI(object):
         uri = "/api/user/{0}/".format(self.user.username)
         with self.mock_oauth():
             response = test_app.get(uri)
-            user = json.loads(response.body)
+            user = json.loads(response.body.decode())
 
             assert response.status_code == 200
 
@@ -433,7 +436,7 @@ class TestAPI(object):
         with pytest.raises(AppError) as excinfo:
             response = test_app.get("/api/whoami")
 
-        assert "401 UNAUTHORIZED" in excinfo.value.message
+        assert "401 UNAUTHORIZED" in excinfo.value.args[0]
 
     def test_read_feed(self, test_app):
         """ Test able to read objects from the feed """
@@ -443,7 +446,7 @@ class TestAPI(object):
         uri = "/api/user/{0}/feed".format(self.active_user.username)
         with self.mock_oauth():
             response = test_app.get(uri)
-            feed = json.loads(response.body)
+            feed = json.loads(response.body.decode())
 
             assert response.status_code == 200
 
@@ -468,9 +471,9 @@ class TestAPI(object):
             with pytest.raises(AppError) as excinfo:
                 self._post_image_to_feed(test_app, data)
 
-            assert "403 FORBIDDEN" in excinfo.value.message
+            assert "403 FORBIDDEN" in excinfo.value.args[0]
 
-    def test_object_endpoint(self, test_app):
+    def test_object_endpoint_requestable(self, test_app):
         """ Test that object endpoint can be requested """
         response, data = self._upload_image(test_app, GOOD_JPG)
         response, data = self._post_image_to_feed(test_app, data)
@@ -478,7 +481,7 @@ class TestAPI(object):
 
         with self.mock_oauth():
             response = test_app.get(data["object"]["links"]["self"]["href"])
-            data = json.loads(response.body)
+            data = json.loads(response.body.decode())
 
             assert response.status_code == 200
 

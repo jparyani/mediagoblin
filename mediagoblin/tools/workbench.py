@@ -18,10 +18,15 @@ import os
 import shutil
 import tempfile
 
+import six
+
+from mediagoblin._compat import py2_unicode
 
 # Actual workbench stuff
 # ----------------------
 
+
+@py2_unicode
 class Workbench(object):
     """
     Represent the directory for the workbench
@@ -36,11 +41,8 @@ class Workbench(object):
         """
         self.dir = dir
 
-    def __unicode__(self):
-        return unicode(self.dir)
-
     def __str__(self):
-        return str(self.dir)
+        return six.text_type(self.dir)
 
     def __repr__(self):
         try:

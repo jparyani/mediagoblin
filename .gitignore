@@ -24,6 +24,7 @@
 /celery.db
 /kombu.db
 /server-log.txt
+*.egg/
 
 # pyconfigure/automake generated files
 /Makefile
@@ -44,3 +45,7 @@
 
 # The legacy of buildout
 .installed.cfg
+
+# Virtualenv, tox
+venv*
+.tox/

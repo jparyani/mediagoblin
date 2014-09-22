@@ -16,6 +16,8 @@
 
 
 import logging
+
+import six
 import wtforms
 from sqlalchemy import or_
 
@@ -136,7 +138,7 @@ def register_user(request, register_form):
         user.save()
 
         # log the user in
-        request.session['user_id'] = unicode(user.id)
+        request.session['user_id'] = six.text_type(user.id)
         request.session.save()
 
         # send verification email

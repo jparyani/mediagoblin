@@ -14,8 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import
+
 import shutil
 import uuid
+
+import six
 
 from werkzeug.utils import secure_filename
 
@@ -174,7 +178,7 @@ class StorageInterface(object):
             shutil.copy(self.get_local_path(filepath), dest_path)
         else:
             with self.get_file(filepath, 'rb') as source_file:
-                with file(dest_path, 'wb') as dest_file:
+                with open(dest_path, 'wb') as dest_file:
                     # Copy from remote storage in 4M chunks
                     shutil.copyfileobj(source_file, dest_file, length=4*1048576)
 
@@ -187,7 +191,7 @@ class StorageInterface(object):
         your storage system.
         """
         with self.get_file(filepath, 'wb') as dest_file:
-            with file(filename, 'rb') as source_file:
+            with open(filename, 'rb') as source_file:
                 # Copy to storage system in 4M chunks
                 shutil.copyfileobj(source_file, dest_file, length=4*1048576)
 
@@ -220,7 +224,7 @@ def clean_listy_filepath(listy_filepath):
       A cleaned list of unicode objects.
     """
     cleaned_filepath = [
-        unicode(secure_filename(filepath))
+        six.text_type(secure_filename(filepath))
         for filepath in listy_filepath]
 
     if u'' in cleaned_filepath:
@@ -257,7 +261,7 @@ def storage_system_from_config(config_section):
     """
     # This construct is needed, because dict(config) does
     # not replace the variables in the config items.
-    config_params = dict(config_section.iteritems())
+    config_params = dict(six.iteritems(config_section))
 
     if 'storage_class' in config_params:
         storage_class = config_params['storage_class']
@@ -268,4 +272,4 @@ def storage_system_from_config(config_section):
     storage_class = common.import_component(storage_class)
     return storage_class(**config_params)
 
-import filestorage
+from . import filestorage

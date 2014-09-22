@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import six
+
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User, Privilege, UserBan
 from mediagoblin.db.base import Session
@@ -22,8 +24,9 @@ from mediagoblin.tools.response import redirect
 from datetime import datetime
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 
+
 def take_punitive_actions(request, form, report, user):
-    message_body =''
+    message_body = ''
 
     # The bulk of this action is running through all of the different
     # punitive actions that a moderator could take.
@@ -212,6 +215,6 @@ def parse_report_panel_settings(form):
         filters['reporter_id'] = form.reporter.data
 
     filters = dict((k, v)
-        for k, v in filters.iteritems() if v)
+        for k, v in six.iteritems(filters) if v)
 
     return filters

@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import six
+
 from mediagoblin import messages
 import mediagoblin.mg_globals as mg_globals
 
@@ -59,9 +61,9 @@ def submit_start(request):
                     mg_app=request.app, user=request.user,
                     submitted_file=request.files['file'],
                     filename=request.files['file'].filename,
-                    title=unicode(submit_form.title.data),
-                    description=unicode(submit_form.description.data),
-                    license=unicode(submit_form.license.data) or None,
+                    title=six.text_type(submit_form.title.data),
+                    description=six.text_type(submit_form.description.data),
+                    license=six.text_type(submit_form.license.data) or None,
                     tags_string=submit_form.tags.data,
                     upload_limit=upload_limit, max_file_size=max_file_size,
                     urlgen=request.urlgen)
@@ -117,8 +119,8 @@ def add_collection(request, media=None):
     if request.method == 'POST' and submit_form.validate():
         collection = request.db.Collection()
 
-        collection.title = unicode(submit_form.title.data)
-        collection.description = unicode(submit_form.description.data)
+        collection.title = six.text_type(submit_form.title.data)
+        collection.description = six.text_type(submit_form.description.data)
         collection.creator = request.user.id
         collection.generate_slug()
 

@@ -13,6 +13,9 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import six
+
 from openid.consumer import consumer
 from openid.consumer.discover import DiscoveryFailure
 from openid.extensions.sreg import SRegRequest, SRegResponse
@@ -186,7 +189,7 @@ def finish_login(request):
 
     if user:
         # Set up login in session
-        request.session['user_id'] = unicode(user.id)
+        request.session['user_id'] = six.text_type(user.id)
         request.session.save()
 
         if request.session.get('next'):

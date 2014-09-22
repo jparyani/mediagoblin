@@ -16,7 +16,7 @@
 
 import pytest
 
-import urlparse
+import six.moves.urllib.parse as urlparse
 
 from mediagoblin.tools import template, mail
 
@@ -135,13 +135,13 @@ otherperson@example.com\n\nSGkgb3RoZXJwZXJzb24sCmNocmlzIGNvbW1lbnRlZCBvbiB5b3VyI
         self.logout()
         self.login('otherperson', 'nosreprehto')
 
-        self.test_app.get(media_uri_slug + '/c/{0}/'.format(comment_id))
+        self.test_app.get(media_uri_slug + 'c/{0}/'.format(comment_id))
 
         notification = Notification.query.filter_by(id=notification_id).first()
 
         assert notification.seen == True
 
-        self.test_app.get(media_uri_slug + '/notifications/silence/')
+        self.test_app.get(media_uri_slug + 'notifications/silence/')
 
         subscription = CommentSubscription.query.filter_by(id=subscription_id)\
                 .first()

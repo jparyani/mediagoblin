@@ -14,9 +14,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 from setuptools import setup, find_packages
+from io import open
 import os
 import re
+
+import sys
+
+PY2 = sys.version_info[0] == 2  # six is not installed yet
 
 READMEFILE = "README"
 VERSIONFILE = os.path.join("mediagoblin", "_version.py")
@@ -24,13 +31,68 @@ VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
 
 
 def get_version():
-    verstrline = open(VERSIONFILE, "rt").read()
+    with open(VERSIONFILE, "rt") as fobj:
+        verstrline = fobj.read()
     mo = re.search(VSRE, verstrline, re.M)
     if mo:
         return mo.group(1)
     else:
         raise RuntimeError("Unable to find version string in %s." %
                            VERSIONFILE)
+
+py2_only_install_requires = []
+if PY2:
+    py2_only_install_requires.append('argparse')  # only for < 2.7
+    py2_only_install_requires.append('PasteScript')
+    # newer sqlalchemy-migrate requires pbr which BREAKS EVERYTHING AND IS
+    # TERRIBLE AND IS THE END OF ALL THINGS
+    # I'd love to remove this restriction.
+    py2_only_install_requires.append('sqlalchemy-migrate<0.8')
+    # # Annoying.  Please remove once we can!  We only indirectly
+    # # use pbr, and currently it breaks things, presumably till
+    # # their next release.
+    # py2_only_install_requires.append('pbr==0.5.22')
+    py2_only_install_requires.append('mock')  # mock is in the stdlib for 3.3+
+
+install_requires = [
+    'gunicorn',
+    'alembic==0.6.6',
+    'python-dateutil',
+    'wtforms',
+    'py-bcrypt',
+    'pytest>=2.3.1',
+    'pytest-xdist',
+    'werkzeug>=0.7',
+    'celery>=3.0',
+    'kombu',
+    'jinja2',
+    'Babel>=1.3',
+    'webtest<2',
+    'ConfigObj',
+    'Markdown',
+    'sqlalchemy<0.9.0, >0.8.0',
+    'itsdangerous',
+    'pytz',
+    # PLEASE change this when we can; a dependency is forcing us to set this
+    # specific number and it is breaking setup.py develop
+    'six==1.5.2',
+    'oauthlib',
+    'unidecode',
+    'jsonschema',
+    'ExifRead',  # TODO(berker): Install develop branch for Python 3
+    'PasteDeploy',
+    'requests',
+    'pyld',
+    # This is optional:
+    # 'translitcodec',
+    # For now we're expecting that users will install this from
+    # their package managers.
+    # 'lxml',
+    # 'Pillow',
+] + py2_only_install_requires
+
+with open(READMEFILE, encoding="utf-8") as fobj:
+    long_description = fobj.read()
 
 try:
     setup(
@@ -40,57 +102,7 @@ try:
     zip_safe=False,
     include_package_data = True,
     # scripts and dependencies
-    install_requires=[
-        'setuptools',
-        'python-dateutil',
-        'PasteScript',
-        'wtforms',
-        'py-bcrypt',
-        'pytest>=2.3.1',
-        'pytest-xdist',
-        'werkzeug>=0.7',
-        'celery>=3.0',
-        'kombu',
-        'jinja2',
-        'sphinx',
-        'Babel>=1.0',
-        'argparse',
-        'webtest<2',
-        'ConfigObj',
-        'Markdown',
-        'sqlalchemy<0.9.0, >0.8.0',
-        # newer sqlalchemy-migrate requires pbr which BREAKS EVERYTHING AND IS
-        #  TERRIBLE AND IS THE END OF ALL THINGS
-        #  I'd love to remove this restriction.
-        'sqlalchemy-migrate<0.8',
-        'mock',
-        'itsdangerous',
-        'pytz',
-        'six>=1.4.1',
-        'oauthlib',
-        'unidecode',
-        'jsonschema',
-        'requests',
-        'pyld',
-        'ExifRead',
-
-        # PLEASE change this when we can; a dependency is forcing us to set this
-        # specific number and it is breaking setup.py develop
-        'six==1.5.2'
-
-        ## Annoying.  Please remove once we can!  We only indirectly
-        ## use pbr, and currently it breaks things, presumably till
-        ## their next release.
-        # 'pbr==0.5.22',
-
-        ## This is optional!
-        # 'translitcodec',
-        ## For now we're expecting that users will install this from
-        ## their package managers.
-        # 'lxml',
-        # 'PIL',
-        ],
-    # requires=['gst'],
+    install_requires=install_requires,
     test_suite='nose.collector',
     entry_points="""\
         [console_scripts]
@@ -113,7 +125,7 @@ try:
     author='Free Software Foundation and contributors',
     author_email='cwebber@gnu.org',
     url="http://mediagoblin.org/",
-    long_description=open(READMEFILE).read(),
+    long_description=long_description,
     description='MediaGoblin is a web application for publishing all kinds of media',
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -121,22 +133,26 @@ try:
         "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content"
         ],
     )
-except TypeError, e:
+except TypeError as e:
+    import sys
+
     # Check if the problem is caused by the sqlalchemy/setuptools conflict
     msg_as_str = str(e)
     if not (msg_as_str == 'dist must be a Distribution instance'):
         raise
 
     # If so, tell the user it is OK to just run the script again.
-    print "\n\n---------- NOTE ----------"
-    print "The setup.py command you ran failed."
-    print ""
-    print ("It is a known possible failure. Just run it again. It works the "
-           "second time.")
-    import sys
+    print("\n\n---------- NOTE ----------", file=sys.stderr)
+    print("The setup.py command you ran failed.\n", file=sys.stderr)
+    print("It is a known possible failure. Just run it again. It works the "
+          "second time.", file=sys.stderr)
     sys.exit(1)

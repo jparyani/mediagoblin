@@ -23,6 +23,7 @@ from mediagoblin.tools.routing import endpoint_to_controller
 from werkzeug.wrappers import Request
 from werkzeug.exceptions import HTTPException
 from werkzeug.routing import RequestRedirect
+from werkzeug.wsgi import SharedDataMiddleware
 
 from mediagoblin import meddleware, __version__
 from mediagoblin.db.util import check_db_up_to_date
@@ -281,8 +282,11 @@ def paste_app_factory(global_config, **app_config):
 
     if not mediagoblin_config:
         raise IOError("Usable mediagoblin config not found.")
+    del app_config['config']
 
     mgoblin_app = MediaGoblinApp(mediagoblin_config)
+    mgoblin_app.call_backend = SharedDataMiddleware(mgoblin_app.call_backend,
+                                                    exports=app_config)
     mgoblin_app = hook_transform('wrap_wsgi', mgoblin_app)
 
     return mgoblin_app

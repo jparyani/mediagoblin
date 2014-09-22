@@ -18,7 +18,9 @@ import json
 import logging
 
 import pytest
-from urlparse import parse_qs, urlparse
+import six
+
+from six.moves.urllib.parse import parse_qs, urlparse
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import template, pluginapi
@@ -154,14 +156,14 @@ class TestOAuth(object):
         code = self.get_code_from_redirect_uri(code_redirect.location)
 
         client = self.db.OAuthClient.query.filter(
-                self.db.OAuthClient.identifier == unicode(client_id)).first()
+                self.db.OAuthClient.identifier == six.text_type(client_id)).first()
 
         token_res = self.test_app.get('/oauth-2/access_token?client_id={0}&\
 code={1}&client_secret={2}'.format(client_id, code, client.secret))
 
         assert token_res.status_int == 200
 
-        token_data = json.loads(token_res.body)
+        token_data = json.loads(token_res.body.decode())
 
         assert not 'error' in token_data
         assert 'access_token' in token_data
@@ -182,14 +184,14 @@ code={1}&client_secret={2}'.format(client_id, code, client.secret))
         code = self.get_code_from_redirect_uri(code_redirect.location)
 
         client = self.db.OAuthClient.query.filter(
-                self.db.OAuthClient.identifier == unicode(client_id)).first()
+                self.db.OAuthClient.identifier == six.text_type(client_id)).first()
 
         token_res = self.test_app.get('/oauth-2/access_token?\
 code={0}&client_secret={1}'.format(code, client.secret))
 
         assert token_res.status_int == 200
 
-        token_data = json.loads(token_res.body)
+        token_data = json.loads(token_res.body.decode())
 
         assert 'error' in token_data
         assert not 'access_token' in token_data
@@ -213,7 +215,7 @@ code={0}&client_secret={1}'.format(code, client.secret))
 
         assert token_res.status_int == 200
 
-        new_token_data = json.loads(token_res.body)
+        new_token_data = json.loads(token_res.body.decode())
 
         assert not 'error' in new_token_data
         assert 'access_token' in new_token_data

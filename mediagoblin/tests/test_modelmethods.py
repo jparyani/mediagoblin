@@ -17,13 +17,18 @@
 # Maybe not every model needs a test, but some models have special
 # methods, and so it makes sense to test them here.
 
+from __future__ import print_function
+
 from mediagoblin.db.base import Session
 from mediagoblin.db.models import MediaEntry, User, Privilege
 
 from mediagoblin.tests import MGClientTestCase
 from mediagoblin.tests.tools import fixture_add_user
 
-import mock
+try:
+    import mock
+except ImportError:
+    import unittest.mock as mock
 import pytest
 
 
@@ -202,7 +207,7 @@ def test_media_data_init(test_app):
     obj_in_session = 0
     for obj in Session():
         obj_in_session += 1
-        print repr(obj)
+        print(repr(obj))
     assert obj_in_session == 0
 
 

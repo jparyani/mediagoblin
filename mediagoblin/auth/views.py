@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import six
+
 from itsdangerous import BadSignature
 
 from mediagoblin import messages, mg_globals
@@ -93,7 +95,7 @@ def login(request):
                 # set up login in session
                 if login_form.stay_logged_in.data:
                     request.session['stay_logged_in'] = True
-                request.session['user_id'] = unicode(user.id)
+                request.session['user_id'] = six.text_type(user.id)
                 request.session.save()
 
                 if request.form.get('next'):

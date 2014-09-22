@@ -17,6 +17,7 @@
 import gettext
 import pkg_resources
 
+import six
 
 from babel import localedata
 from babel.support import LazyProxy
@@ -52,9 +53,9 @@ class ReallyLazyProxy(LazyProxy):
     """
     Like LazyProxy, except that it doesn't cache the value ;)
     """
-    @property
-    def value(self):
-        return self._func(*self._args, **self._kwargs)
+    def __init__(self, func, *args, **kwargs):
+        super(ReallyLazyProxy, self).__init__(func, *args, **kwargs)
+        object.__setattr__(self, '_is_cache_enabled', False)
 
     def __repr__(self):
         return "<%s for %s(%r, %r)>" % (
@@ -146,8 +147,9 @@ def pass_to_ugettext(*args, **kwargs):
     The reason we can't have a global ugettext method is because
     mg_globals gets swapped out by the application per-request.
     """
-    return mg_globals.thread_scope.translations.ugettext(
-        *args, **kwargs)
+    if six.PY2:
+        return mg_globals.thread_scope.translations.ugettext(*args, **kwargs)
+    return mg_globals.thread_scope.translations.gettext(*args, **kwargs)
 
 def pass_to_ungettext(*args, **kwargs):
     """
@@ -156,8 +158,9 @@ def pass_to_ungettext(*args, **kwargs):
     The reason we can't have a global ugettext method is because
     mg_globals gets swapped out by the application per-request.
     """
-    return mg_globals.thread_scope.translations.ungettext(
-        *args, **kwargs)
+    if six.PY2:
+        return mg_globals.thread_scope.translations.ungettext(*args, **kwargs)
+    return mg_globals.thread_scope.translations.ngettext(*args, **kwargs)
 
 
 def lazy_pass_to_ugettext(*args, **kwargs):

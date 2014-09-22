@@ -17,7 +17,9 @@
 import json
 
 import pytest
-from urlparse import urlparse, parse_qs
+import six
+
+from six.moves.urllib.parse import parse_qs, urlparse
 
 from mediagoblin import mg_globals
 from mediagoblin.tools import processing
@@ -49,7 +51,7 @@ class TestHTTPCallback(object):
                 'client_id': client_id,
                 'client_secret': client_secret})
 
-        response_data = json.loads(response.body)
+        response_data = json.loads(response.body.decode())
 
         return response_data['access_token']
 
@@ -63,7 +65,7 @@ class TestHTTPCallback(object):
         code = parse_qs(urlparse(redirect.location).query)['code'][0]
 
         client = self.db.OAuthClient.query.filter(
-                self.db.OAuthClient.identifier == unicode(client_id)).first()
+                self.db.OAuthClient.identifier == six.text_type(client_id)).first()
 
         client_secret = client.secret
 

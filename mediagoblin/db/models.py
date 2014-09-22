@@ -18,6 +18,8 @@
 TODO: indexes on foreignkeys, where useful.
 """
 
+from __future__ import print_function
+
 import logging
 import datetime
 
@@ -38,15 +40,9 @@ from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, \
 from mediagoblin.tools.files import delete_media_files
 from mediagoblin.tools.common import import_component
 
-# It's actually kind of annoying how sqlalchemy-migrate does this, if
-# I understand it right, but whatever.  Anyway, don't remove this :P
-#
-# We could do migration calls more manually instead of relying on
-# this import-based meddling...
-from migrate import changeset
+import six
 
 _log = logging.getLogger(__name__)
-
 
 
 class User(Base, UserMixin):
@@ -344,7 +340,7 @@ class MediaEntry(Base, MediaEntryMixin):
         return the value of the key.
         """
         media_file = MediaFile.query.filter_by(media_entry=self.id,
-                                               name=unicode(file_key)).first()
+                                               name=six.text_type(file_key)).first()
 
         if media_file:
             if metadata_key:
@@ -357,11 +353,11 @@ class MediaEntry(Base, MediaEntryMixin):
         Update the file_metadata of a MediaFile.
         """
         media_file = MediaFile.query.filter_by(media_entry=self.id,
-                                               name=unicode(file_key)).first()
+                                               name=six.text_type(file_key)).first()
 
         file_metadata = media_file.file_metadata or {}
 
-        for key, value in kwargs.iteritems():
+        for key, value in six.iteritems(kwargs):
             file_metadata[key] = value
 
         media_file.file_metadata = file_metadata
@@ -386,7 +382,7 @@ class MediaEntry(Base, MediaEntryMixin):
             media_data.get_media_entry = self
         else:
             # Update old media data
-            for field, value in kwargs.iteritems():
+            for field, value in six.iteritems(kwargs):
                 setattr(media_data, field, value)
 
     @memoized_property
@@ -415,7 +411,7 @@ class MediaEntry(Base, MediaEntryMixin):
         # Delete all related files/attachments
         try:
             delete_media_files(self)
-        except OSError, error:
+        except OSError as error:
             # Returns list of files we failed to delete
             _log.error('No such files from the user "{1}" to delete: '
                        '{0}'.format(str(error), self.get_uploader))
@@ -1125,7 +1121,7 @@ def show_table_init(engine_uri):
 
 if __name__ == '__main__':
     from sys import argv
-    print repr(argv)
+    print(repr(argv))
     if len(argv) == 2:
         uri = argv[1]
     else:

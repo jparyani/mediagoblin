@@ -26,10 +26,6 @@ from mediagoblin.db.models import User
 from mediagoblin.plugins.oauth.tools import generate_identifier, \
     generate_secret, generate_token, generate_code, generate_refresh_token
 
-# Don't remove this, I *think* it applies sqlalchemy-migrate functionality onto
-# the models.
-from migrate import changeset
-
 
 class OAuthClient(Base):
     __tablename__ = 'oauth__client'

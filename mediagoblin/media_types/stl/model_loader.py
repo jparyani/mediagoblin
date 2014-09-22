@@ -22,7 +22,7 @@ class ThreeDeeParseError(Exception):
     pass
 
 
-class ThreeDee():
+class ThreeDee(object):
     """
     3D model parser base class.  Derrived classes are used for basic
     analysis of 3D models, and are not intended to be used for 3D

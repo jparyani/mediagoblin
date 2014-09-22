@@ -19,6 +19,7 @@ import os
 import pkg_resources
 import shutil
 
+import six
 
 from paste.deploy import loadapp
 from webtest import TestApp
@@ -144,7 +145,7 @@ def install_fixtures_simple(db, fixtures):
     """
     Very simply install fixtures in the database
     """
-    for collection_name, collection_fixtures in fixtures.iteritems():
+    for collection_name, collection_fixtures in six.iteritems(fixtures):
         collection = db[collection_name]
         for fixture in collection_fixtures:
             collection.insert(fixture)
@@ -164,7 +165,7 @@ def assert_db_meets_expected(db, expected):
              {'id': 'foo',
               'some_field': 'some_value'},]}
     """
-    for collection_name, collection_data in expected.iteritems():
+    for collection_name, collection_data in six.iteritems(expected):
         collection = db[collection_name]
         for expected_document in collection_data:
             document = collection.query.filter_by(id=expected_document['id']).first()

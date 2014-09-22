@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 try:
     from PIL import Image
 except ImportError:
@@ -21,6 +23,8 @@ except ImportError:
 import os
 import logging
 import argparse
+
+import six
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
@@ -65,14 +69,14 @@ def resize_image(entry, resized, keyname, target_name, new_size,
         resize_filter = PIL_FILTERS[filter.upper()]
     except KeyError:
         raise Exception('Filter "{0}" not found, choose one of {1}'.format(
-            unicode(filter),
+            six.text_type(filter),
             u', '.join(PIL_FILTERS.keys())))
 
     resized.thumbnail(new_size, resize_filter)
 
     # Copy the new file to the conversion subdir, then remotely.
     tmp_resized_filename = os.path.join(workdir, target_name)
-    with file(tmp_resized_filename, 'w') as resized_file:
+    with open(tmp_resized_filename, 'wb') as resized_file:
         resized.save(resized_file, quality=quality)
     store_public(entry, keyname, tmp_resized_filename, target_name)
 
@@ -114,7 +118,7 @@ def resize_tool(entry,
         or im.size[1] > new_size[1]\
         or exif_image_needs_rotation(exif_tags):
         resize_image(
-            entry, im, unicode(keyname), target_name,
+            entry, im, six.text_type(keyname), target_name,
             tuple(new_size),
             exif_tags, conversions_subdir,
             quality, filter)
@@ -381,5 +385,4 @@ if __name__ == '__main__':
     clean = clean_exif(result)
     useful = get_useful(clean)
 
-    print pp.pprint(
-        clean)
+    print(pp.pprint(clean))

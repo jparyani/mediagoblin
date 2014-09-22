@@ -224,7 +224,7 @@ def test_hook_handle():
     assert pluginapi.hook_handle(
         "nothing_handling", call_log, unhandled_okay=True) is None
     assert call_log == []
-    
+
     # Multiple provided, go with the first!
     call_log = []
     assert pluginapi.hook_handle(
@@ -348,7 +348,7 @@ def test_modify_context(context_modified_app):
     """
     # Specific thing passed into a page
     result = context_modified_app.get("/modify_context/specific/")
-    assert result.body.strip() == """Specific page!
+    assert result.body.strip() == b"""Specific page!
 
 specific thing: in yer specificpage
 global thing: globally appended!
@@ -357,7 +357,7 @@ doubleme: happyhappy"""
 
     # General test, should have global context variable only
     result = context_modified_app.get("/modify_context/")
-    assert result.body.strip() == """General page!
+    assert result.body.strip() == b"""General page!
 
 global thing: globally appended!
 lol: cats
@@ -421,7 +421,7 @@ def test_plugin_assetlink(static_plugin_app):
     junk_file_path = os.path.join(
         linked_assets_dir.rstrip(os.path.sep),
         'junk.txt')
-    with file(junk_file_path, 'w') as junk_file:
+    with open(junk_file_path, 'w') as junk_file:
         junk_file.write('barf')
 
     os.unlink(plugin_link_dir)
@@ -440,14 +440,14 @@ to:
 
     # link dir exists, but is a non-symlink
     os.unlink(plugin_link_dir)
-    with file(plugin_link_dir, 'w') as clobber_file:
+    with open(plugin_link_dir, 'w') as clobber_file:
         clobber_file.write('clobbered!')
 
     result = run_assetlink().collection[0]
     assert result == 'Could not link "staticstuff": %s exists and is not a symlink\n' % (
         plugin_link_dir)
 
-    with file(plugin_link_dir, 'r') as clobber_file:
+    with open(plugin_link_dir, 'r') as clobber_file:
         assert clobber_file.read() == 'clobbered!'
 
 
@@ -456,11 +456,10 @@ def test_plugin_staticdirect(static_plugin_app):
     Test that the staticdirect utilities pull up the right things
     """
     result = json.loads(
-        static_plugin_app.get('/staticstuff/').body)
+        static_plugin_app.get('/staticstuff/').body.decode())
 
     assert len(result) == 2
 
     assert result['mgoblin_bunny_pic'] == '/test_static/images/bunny_pic.png'
     assert result['plugin_bunny_css'] == \
         '/plugin_static/staticstuff/css/bunnify.css'
-

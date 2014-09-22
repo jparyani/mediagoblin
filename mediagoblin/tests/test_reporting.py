@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import pytest
+import six
 
 from mediagoblin.tools import template
 from mediagoblin.tests.tools import (fixture_add_user, fixture_media_entry,
@@ -75,7 +76,7 @@ class TestReportFiling:
 
         response, context = self.do_post(
             {'report_reason':u'Testing Media Report',
-            'reporter_id':unicode(allie_id)},url= media_uri_slug + "report/")
+            'reporter_id':six.text_type(allie_id)},url= media_uri_slug + "report/")
 
         assert response.status == "302 FOUND"
 
@@ -110,7 +111,7 @@ class TestReportFiling:
 
         response, context = self.do_post({
             'report_reason':u'Testing Comment Report',
-            'reporter_id':unicode(allie_id)},url= comment_uri_slug + "report/")
+            'reporter_id':six.text_type(allie_id)},url= comment_uri_slug + "report/")
 
         assert response.status == "302 FOUND"
 

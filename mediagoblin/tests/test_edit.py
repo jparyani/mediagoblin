@@ -14,7 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import urlparse, os, pytest
+import six
+import six.moves.urllib.parse as urlparse
+import pytest
 
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User, MediaEntry
@@ -142,8 +144,7 @@ class TestUserEdit(object):
         assert message['To'] == 'new@example.com'
         email_context = template.TEMPLATE_TEST_CONTEXT[
             'mediagoblin/edit/verification.txt']
-        assert email_context['verification_url'] in \
-            message.get_payload(decode=True)
+        assert email_context['verification_url'].encode('ascii') in message.get_payload(decode=True)
 
         path = urlparse.urlsplit(email_context['verification_url'])[2]
         assert path == u'/edit/verify_email/'
@@ -250,5 +251,11 @@ class TestMetaDataEdit:
         old_metadata = new_metadata
         new_metadata = media_entry.media_metadata
         assert new_metadata == old_metadata
-        assert ("u&#39;On the worst day&#39; is not a &#39;date-time&#39;" in
-            response.body)
+        context = template.TEMPLATE_TEST_CONTEXT[
+            'mediagoblin/edit/metadata.html']
+        if six.PY2:
+            expected = "u'On the worst day' is not a 'date-time'"
+        else:
+            expected = "'On the worst day' is not a 'date-time'"
+        assert context['form'].errors[
+            'media_metadata'][0]['identifier'][0] == expected

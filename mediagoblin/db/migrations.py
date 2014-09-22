@@ -17,13 +17,15 @@
 import datetime
 import uuid
 
+import six
+
 from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         Integer, Unicode, UnicodeText, DateTime,
                         ForeignKey, Date, Index)
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import and_
-from migrate.changeset.constraint import UniqueConstraint
+from sqlalchemy.schema import UniqueConstraint
 
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import (
@@ -249,7 +251,7 @@ def mediaentry_new_slug_era(db):
     for row in db.execute(media_table.select()):
         # no slug, try setting to an id
         if not row.slug:
-            append_garbage_till_unique(row, unicode(row.id))
+            append_garbage_till_unique(row, six.text_type(row.id))
         # has "=" or ":" in it... we're getting rid of those
         elif u"=" in row.slug or u":" in row.slug:
             append_garbage_till_unique(
@@ -278,7 +280,7 @@ def unique_collections_slug(db):
                 existing_slugs[row.creator].append(row.slug)
 
     for row_id in slugs_to_change:
-        new_slug = unicode(uuid.uuid4())
+        new_slug = six.text_type(uuid.uuid4())
         db.execute(collection_table.update().
                    where(collection_table.c.id == row_id).
                    values(slug=new_slug))

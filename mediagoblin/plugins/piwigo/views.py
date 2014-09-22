@@ -17,6 +17,8 @@
 import logging
 import re
 
+import six
+
 from werkzeug.exceptions import MethodNotAllowed, BadRequest, NotImplemented
 from werkzeug.wrappers import BaseResponse
 
@@ -133,8 +135,8 @@ def pwg_images_addSimple(request):
             mg_app=request.app, user=request.user,
             submitted_file=request.files['image'],
             filename=request.files['image'].filename,
-            title=unicode(form.name.data),
-            description=unicode(form.comment.data),
+            title=six.text_type(form.name.data),
+            description=six.text_type(form.comment.data),
             upload_limit=upload_limit, max_file_size=max_file_size)
 
         collection_id = form.category.data

@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import six
 
 import jinja2
 from jinja2.ext import Extension
@@ -32,7 +33,6 @@ from mediagoblin.tools.translate import get_locale_from_request
 from mediagoblin.tools.pluginapi import get_hook_templates, hook_transform
 from mediagoblin.tools.timesince import timesince
 from mediagoblin.meddleware.csrf import render_csrf_form_token
-
 
 SETUP_JINJA_ENVS = {}
 
@@ -66,9 +66,12 @@ def get_jinja_env(template_loader, locale):
             'jinja2.ext.i18n', 'jinja2.ext.autoescape',
             TemplateHookExtension] + local_exts)
 
-    template_env.install_gettext_callables(
-        mg_globals.thread_scope.translations.ugettext,
-        mg_globals.thread_scope.translations.ungettext)
+    if six.PY2:
+        template_env.install_gettext_callables(mg_globals.thread_scope.translations.ugettext,
+                                           mg_globals.thread_scope.translations.ungettext)
+    else:
+        template_env.install_gettext_callables(mg_globals.thread_scope.translations.gettext,
+                                           mg_globals.thread_scope.translations.ngettext)
 
     # All templates will know how to ...
     # ... fetch all waiting messages and remove them from the queue

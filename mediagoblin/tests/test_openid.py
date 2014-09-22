@@ -14,10 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import urlparse
 import pkg_resources
 import pytest
-import mock
+import six
+import six.moves.urllib.parse as urlparse
+try:
+    import mock
+except ImportError:
+    import unittest.mock as mock
 
 openid_consumer = pytest.importorskip(
     "openid.consumer.consumer")
@@ -206,7 +210,7 @@ class TestOpenIDPlugin(object):
             # Make sure user is in the session
             context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
             session = context['request'].session
-            assert session['user_id'] == unicode(test_user.id)
+            assert session['user_id'] == six.text_type(test_user.id)
 
         _test_new_user()
 

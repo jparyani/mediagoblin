@@ -16,6 +16,8 @@
 
 import logging
 
+import six
+
 from werkzeug.exceptions import Unauthorized
 
 from mediagoblin.auth.tools import check_login_simple
@@ -40,7 +42,7 @@ class HTTPAuth(Auth):
         if not request.authorization:
             return False
 
-        user = check_login_simple(unicode(request.authorization['username']),
+        user = check_login_simple(six.text_type(request.authorization['username']),
                                   request.authorization['password'])
 
         if user:

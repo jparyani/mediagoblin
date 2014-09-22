@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import six
+
 from datetime import datetime
 
 from itsdangerous import BadSignature
@@ -82,7 +84,7 @@ def edit_media(request, media):
             media.tags = convert_to_tag_list_of_dicts(
                                    form.tags.data)
 
-            media.license = unicode(form.license.data) or None
+            media.license = six.text_type(form.license.data) or None
             media.slug = slug
             media.save()
 
@@ -140,7 +142,7 @@ def edit_attachments(request, media):
 
             attachment_public_filepath \
                 = mg_globals.public_store.get_unique_filepath(
-                ['media_entries', unicode(media.id), 'attachment',
+                ['media_entries', six.text_type(media.id), 'attachment',
                  public_filename])
 
             attachment_public_file = mg_globals.public_store.get_file(
@@ -205,8 +207,8 @@ def edit_profile(request, url_user=None):
         bio=user.bio)
 
     if request.method == 'POST' and form.validate():
-        user.url = unicode(form.url.data)
-        user.bio = unicode(form.bio.data)
+        user.url = six.text_type(form.url.data)
+        user.bio = six.text_type(form.bio.data)
 
         user.save()
 
@@ -321,9 +323,9 @@ def edit_collection(request, collection):
             form.slug.errors.append(
                 _(u'A collection with that slug already exists for this user.'))
         else:
-            collection.title = unicode(form.title.data)
-            collection.description = unicode(form.description.data)
-            collection.slug = unicode(form.slug.data)
+            collection.title = six.text_type(form.title.data)
+            collection.description = six.text_type(form.description.data)
+            collection.slug = six.text_type(form.slug.data)
 
             collection.save()
 
@@ -453,7 +455,7 @@ def edit_metadata(request, media):
         return redirect_obj(request, media)      
 
     if len(form.media_metadata) == 0:
-        for identifier, value in media.media_metadata.iteritems():
+        for identifier, value in six.iteritems(media.media_metadata):
             if identifier == "@context": continue
             form.media_metadata.append_entry({
                 'identifier':identifier,

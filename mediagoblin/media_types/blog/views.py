@@ -19,6 +19,8 @@ _log = logging.getLogger(__name__)
 
 from datetime import datetime
 
+import six
+
 from werkzeug.exceptions import Forbidden
 from mediagoblin.tools import pluginapi
 
@@ -75,8 +77,8 @@ def blog_edit(request):
             if request.method=='POST' and form.validate():
                 _log.info("Here")
                 blog = request.db.Blog()
-                blog.title = unicode(form.title.data)
-                blog.description = unicode(cleaned_markdown_conversion((form.description.data)))
+                blog.title = six.text_type(form.title.data)
+                blog.description = six.text_type(cleaned_markdown_conversion((form.description.data)))
                 blog.author = request.user.id
                 blog.generate_slug()
 
@@ -112,8 +114,8 @@ def blog_edit(request):
                      'app_config': mg_globals.app_config})
         else:
             if request.method == 'POST' and form.validate():
-                blog.title = unicode(form.title.data)
-                blog.description = unicode(cleaned_markdown_conversion((form.description.data)))
+                blog.title = six.text_type(form.title.data)
+                blog.description = six.text_type(cleaned_markdown_conversion((form.description.data)))
                 blog.author = request.user.id
                 blog.generate_slug()
 
@@ -137,10 +139,10 @@ def blogpost_create(request):
 
         blogpost = request.db.MediaEntry()
         blogpost.media_type = 'mediagoblin.media_types.blogpost'
-        blogpost.title = unicode(form.title.data)
-        blogpost.description = unicode(cleaned_markdown_conversion((form.description.data)))
+        blogpost.title = six.text_type(form.title.data)
+        blogpost.description = six.text_type(cleaned_markdown_conversion((form.description.data)))
         blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
-        blogpost.license = unicode(form.license.data) or None
+        blogpost.license = six.text_type(form.license.data) or None
         blogpost.uploader = request.user.id
         blogpost.generate_slug()
 
@@ -187,10 +189,10 @@ def blogpost_edit(request):
 
     form = blog_forms.BlogPostEditForm(request.form, **defaults)
     if request.method == 'POST' and form.validate():
-        blogpost.title = unicode(form.title.data)
-        blogpost.description = unicode(cleaned_markdown_conversion((form.description.data)))
+        blogpost.title = six.text_type(form.title.data)
+        blogpost.description = six.text_type(cleaned_markdown_conversion((form.description.data)))
         blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
-        blogpost.license = unicode(form.license.data)
+        blogpost.license = six.text_type(form.license.data)
         set_blogpost_state(request, blogpost)
         blogpost.generate_slug()
         blogpost.save()

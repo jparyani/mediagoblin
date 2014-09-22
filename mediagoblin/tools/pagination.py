@@ -17,8 +17,10 @@
 import urllib
 import copy
 from math import ceil, floor
-from itertools import izip, count
+from itertools import count
 from werkzeug.datastructures import MultiDict
+
+from six.moves import zip
 
 PAGINATION_DEFAULT_PER_PAGE = 30
 
@@ -52,7 +54,7 @@ class Pagination(object):
         if jump_to_id:
             cursor = copy.copy(self.cursor)
 
-            for (doc, increment) in izip(cursor, count(0)):
+            for (doc, increment) in list(zip(cursor, count(0))):
                 if doc.id == jump_to_id:
                     self.page = 1 + int(floor(increment / self.per_page))
 
