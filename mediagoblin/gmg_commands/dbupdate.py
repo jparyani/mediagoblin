@@ -16,6 +16,7 @@
 
 import logging
 
+import six
 from sqlalchemy.orm import sessionmaker
 
 from mediagoblin.db.open import setup_connection_and_db_from_config
@@ -125,7 +126,11 @@ def run_dbupdate(app_config, global_config):
     db = setup_connection_and_db_from_config(app_config, migrations=True)
     # Run the migrations
     run_all_migrations(db, app_config, global_config)
-    run_alembic_migrations(db, app_config, global_config)
+
+    # TODO: Make this happen regardless of python 2 or 3 once ensured
+    # to be "safe"!
+    if six.PY3:
+        run_alembic_migrations(db, app_config, global_config)
 
 
 def run_all_migrations(db, app_config, global_config):
