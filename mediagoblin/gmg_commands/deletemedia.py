@@ -30,7 +30,7 @@ def deletemedia(args):
 
     media_ids = set([int(mid) for mid in args.media_ids.split(',') if mid.isdigit()])
     if not media_ids:
-        print 'Can\'t find any valid media ID(s).'
+        print('Can\'t find any valid media ID(s).')
         sys.exit(1)
     found_medias = set()
     filter_ids = app.db.MediaEntry.id.in_(media_ids)
