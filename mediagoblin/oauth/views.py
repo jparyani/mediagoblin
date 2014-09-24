@@ -190,10 +190,6 @@ def request_token(request):
         error = "Could not decode data."
         return json_response({"error": error}, status=400)
 
-    if data == "":
-        error = "Unknown Content-Type"
-        return json_response({"error": error}, status=400)
-
     if not data and request.headers:
         data = request.headers
 
