@@ -22,19 +22,25 @@ import pytest
 
 from mediagoblin.media_types.pdf.processing import (
     pdf_info, check_prerequisites, create_pdf_thumb)
-from .resources import GOOD_PDF as GOOD
+from .resources import GOOD_PDF
 
 
-@pytest.mark.skipif("not check_prerequisites()")
+@pytest.mark.skipif("not os.path.exists(GOOD_PDF) or not check_prerequisites()")
 def test_pdf():
-    good_dict = collections.OrderedDict({'pdf_version_major': 1, 'pdf_title': '',
-        'pdf_page_size_width': 612, 'pdf_author': '',
-        'pdf_keywords': '', 'pdf_pages': 10,
-        'pdf_producer': 'dvips + GNU Ghostscript 7.05',
-        'pdf_version_minor': 3,
-        'pdf_creator': 'LaTeX with hyperref package',
-        'pdf_page_size_height': 792})
-    assert pdf_info(GOOD) == good_dict
+    expected_dict = {'pdf_author': -1,
+                     'pdf_creator': -1,
+                     'pdf_keywords': -1,
+                     'pdf_page_size_height': -1,
+                     'pdf_page_size_width': -1,
+                     'pdf_pages': -1,
+                     'pdf_producer': -1,
+                     'pdf_title': -1,
+                     'pdf_version_major': 1,
+                     'pdf_version_minor': -1}
+    good_info = pdf_info(GOOD_PDF)
+    for k, v in expected_dict.items():
+        assert(k in good_info)
+        assert(v == -1 or v == good_info[k])
     temp_dir = tempfile.mkdtemp()
-    create_pdf_thumb(GOOD, os.path.join(temp_dir, 'good_256_256.png'), 256, 256)
+    create_pdf_thumb(GOOD_PDF, os.path.join(temp_dir, 'good_256_256.png'), 256, 256)
     shutil.rmtree(temp_dir)

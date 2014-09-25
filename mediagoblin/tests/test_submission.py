@@ -149,7 +149,7 @@ class TestSubmission:
     def test_normal_png(self):
         self.check_normal_upload(u'Normal upload 2', GOOD_PNG)
 
-    @pytest.mark.skipif("not pdf_check_prerequisites()")
+    @pytest.mark.skipif("not os.path.exists(GOOD_PDF) or not pdf_check_prerequisites()")
     def test_normal_pdf(self):
         response, context = self.do_post({'title': u'Normal upload 3 (pdf)'},
                                          do_follow=True,
