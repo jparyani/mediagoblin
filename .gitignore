@@ -23,6 +23,7 @@
 /mediagoblin.db
 /celery.db
 /kombu.db
+/celerybeat-schedule
 /server-log.txt
 *.egg/
 
