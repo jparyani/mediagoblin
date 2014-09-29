@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import copy
 import logging
 import os
 import pkg_resources
@@ -29,16 +30,21 @@ CONFIG_SPEC_PATH = pkg_resources.resource_filename(
     'mediagoblin', 'config_spec.ini')
 
 
-def _setup_defaults(config, config_path):
+def _setup_defaults(config, config_path, extra_defaults=None):
     """
     Setup DEFAULTS in a config object from an (absolute) config_path.
     """
+    extra_defaults = extra_defaults or {}
+
     config.setdefault('DEFAULT', {})
     config['DEFAULT']['here'] = os.path.dirname(config_path)
     config['DEFAULT']['__file__'] = config_path
 
+    for key, value in extra_defaults.items():
+        config['DEFAULT'].setdefault(key, value)
 
-def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
+
+def read_mediagoblin_config(config_path, config_spec_path=CONFIG_SPEC_PATH):
     """
     Read a config object from config_path.
 
@@ -54,7 +60,7 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
 
     Args:
      - config_path: path to the config file
-     - config_spec: config file that provides defaults and value types
+     - config_spec_path: config file that provides defaults and value types
        for validation / conversion.  Defaults to mediagoblin/config_spec.ini
 
     Returns:
@@ -68,7 +74,20 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
     # we can add their plugin specs to the general config_spec.
     config = ConfigObj(
         config_path,
-        interpolation='ConfigParser')
+        interpolation="ConfigParser")
+
+    # temporary bootstrap, just setup here and __file__... we'll do this again
+    _setup_defaults(config, config_path)
+
+    # Now load the main config spec
+    config_spec = ConfigObj(
+        config_spec_path,
+        encoding="UTF8", list_values=False, _inspec=True)
+
+    # Set up extra defaults that will be pushed into the rest of the
+    # configs.  This is a combined extrapolation of defaults based on
+    mainconfig_defaults = copy.copy(config_spec.get("DEFAULT", {}))
+    mainconfig_defaults.update(config["DEFAULT"])
 
     plugins = config.get("plugins", {}).keys()
     plugin_configs = {}
@@ -79,11 +98,12 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
                 plugin, "config_spec.ini")
             if not os.path.exists(plugin_config_spec_path):
                 continue
-            
+
             plugin_config_spec = ConfigObj(
                 plugin_config_spec_path,
-                encoding='UTF8', list_values=False, _inspec=True)
-            _setup_defaults(plugin_config_spec, config_path)
+                encoding="UTF8", list_values=False, _inspec=True)
+            _setup_defaults(
+                plugin_config_spec, config_path, mainconfig_defaults)
 
             if not "plugin_spec" in plugin_config_spec:
                 continue
@@ -94,23 +114,18 @@ def read_mediagoblin_config(config_path, config_spec=CONFIG_SPEC_PATH):
             _log.warning(
                 "When setting up config section, could not import '%s'" %
                 plugin)
-    
-    # Now load the main config spec
-    config_spec = ConfigObj(
-        config_spec,
-        encoding='UTF8', list_values=False, _inspec=True)
 
     # append the plugin specific sections of the config spec
-    config_spec['plugins'] = plugin_configs
+    config_spec["plugins"] = plugin_configs
 
-    _setup_defaults(config_spec, config_path)
+    _setup_defaults(config_spec, config_path, mainconfig_defaults)
 
     config = ConfigObj(
         config_path,
         configspec=config_spec,
-        interpolation='ConfigParser')
+        interpolation="ConfigParser")
 
-    _setup_defaults(config, config_path)
+    _setup_defaults(config, config_path, mainconfig_defaults)
 
     # For now the validator just works with the default functions,
     # but in the future if we want to add additional validation/configuration
