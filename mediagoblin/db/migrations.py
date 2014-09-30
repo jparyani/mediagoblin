@@ -19,6 +19,9 @@ import uuid
 
 import six
 
+if six.PY2:
+    import migrate
+
 from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         Integer, Unicode, UnicodeText, DateTime,
                         ForeignKey, Date, Index)
