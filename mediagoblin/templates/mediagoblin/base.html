@@ -62,138 +62,142 @@
   <body>
     {% include 'mediagoblin/bits/body_start.html' %}
     {% block mediagoblin_body %}
-      {% block mediagoblin_header %}
-        <div class="container">
-          <header>
-            <div class="row foot">
-            <div class="header_left">
-              {%- include "mediagoblin/bits/logo.html" -%}
-              {% block mediagoblin_header_title %}{% endblock %}
-            </div>
-            <div class="header_right">
-              {%- if request.user %}
-                {% if request.user and
-                      request.user.has_privilege('active') and
-                      not request.user.is_banned() %}
+      <div id="wrap">
+        {% block mediagoblin_header %}
+          <div class="container">
+            <header>
+              <div class="row foot">
+              <div class="header_left">
+                {%- include "mediagoblin/bits/logo.html" -%}
+                {% block mediagoblin_header_title %}{% endblock %}
+              </div>
+              <div class="header_right">
+                {%- if request.user %}
+                  {% if request.user and
+                        request.user.has_privilege('active') and
+                        not request.user.is_banned() %}
 
-                  {% set notification_count = get_notification_count(request.user.id) %}
-                  {% if notification_count %}
-                    <a href="javascript:;"
-                       class="notification-gem button_action button_info"
-                       title="Notifications">
-                    {{ notification_count }}</a>
-                  {% endif %}
-                  <a href="javascript:;"
-                     class="button_action header_dropdown_down"
-                     aria-controls="header_dropdown">&#9660;</a>
-                  <a href="javascript:;"
-                     class="button_action header_dropdown_up"
-                     aria-controls="header_dropdown">&#9650;</a>
-                {% elif request.user and not request.user.has_privilege('active') %}
-                {# the following link should only appear when verification is needed #}
-                  <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
-                                   user=request.user.username) }}"
-                     class="button_action_highlight">
-                 {% trans %}Verify your email!{% endtrans %}</a>
-                 or <a id="logout" href=
-                 {% if persona is not defined %}
-                   "{{ request.urlgen('mediagoblin.auth.logout') }}"
-                 {% else %}
-                   "javascript:;"
-                 {% endif %}
-                 >{% trans %}log out{% endtrans %}</a>
-                {% elif request.user and request.user.is_banned() %}
-                  <a id="logout" href=
-                 {% if persona is not defined %}
-                   "{{ request.urlgen('mediagoblin.auth.logout') }}"
-                 {% else %}
-                   "javascript:;"
-                 {% endif %}
-                 >{% trans %}log out{% endtrans %}</a>
-                {% endif %}
-              {%- elif auth %}
-              <a href=
-                {% if persona_auth is defined %}
-                  "javascript:;" id="persona_login"
-                {% else %}
-                  "{{ request.urlgen('mediagoblin.auth.login') }}"
-                {% endif %}
-                >
-                  {%- trans %}Log in{% endtrans -%}
-                </a>
-              {%- endif %}
-            </div>
-            <div class="clear"></div>
-            {% if request.user and request.user.has_privilege('active') %}
-              <div id="header_dropdown">
-                <p>
-                  <span class="dropdown_title">
-                    {% trans user_url=request.urlgen('mediagoblin.user_pages.user_home',
-                                                      user=request.user.username),
-                             user_name=request.user.username -%}
-                      <a href="{{ user_url }}">{{ user_name }}</a>'s account
-                    {%- endtrans %}
-                  </span>
-                  &middot;
-                  <a href="{{ request.urlgen('mediagoblin.edit.account') }}">{%- trans %}Change account settings{% endtrans -%}</a>
-                  &middot;
-                  <a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
-                                               user=request.user.username) }}">
-                    {%- trans %}Media processing panel{% endtrans -%}
-                  </a>
-                  &middot;
-                  {% template_hook("blog_dashboard_home") %}
-                  <a id="logout" href=
-                    {% if persona is not defined %}
-                      "{{ request.urlgen('mediagoblin.auth.logout') }}"
-                    {% else %}
-                      "javascript:;"
+                    {% set notification_count = get_notification_count(request.user.id) %}
+                    {% if notification_count %}
+                      <a href="javascript:;"
+                         class="notification-gem button_action button_info"
+                         title="Notifications">
+                      {{ notification_count }}</a>
                     {% endif %}
-                    >{% trans %}Log out{% endtrans %}</a>
-                </p>
-                <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
-                  {%- trans %}Add media{% endtrans -%}
-                </a>
-                <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
-                  {%- trans %}Create new collection{% endtrans -%}
-                </a>
-                {% template_hook("header_dropdown_buttons") %}
-                {% if request.user.has_privilege('moderator') %}
+                    <a href="javascript:;"
+                       class="button_action header_dropdown_down"
+                       aria-controls="header_dropdown">&#9660;</a>
+                    <a href="javascript:;"
+                       class="button_action header_dropdown_up"
+                       aria-controls="header_dropdown">&#9650;</a>
+                  {% elif request.user and not request.user.has_privilege('active') %}
+                  {# the following link should only appear when verification is needed #}
+                    <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                                     user=request.user.username) }}"
+                       class="button_action_highlight">
+                   {% trans %}Verify your email!{% endtrans %}</a>
+                   or <a id="logout" href=
+                   {% if persona is not defined %}
+                     "{{ request.urlgen('mediagoblin.auth.logout') }}"
+                   {% else %}
+                     "javascript:;"
+                   {% endif %}
+                   >{% trans %}log out{% endtrans %}</a>
+                  {% elif request.user and request.user.is_banned() %}
+                    <a id="logout" href=
+                   {% if persona is not defined %}
+                     "{{ request.urlgen('mediagoblin.auth.logout') }}"
+                   {% else %}
+                     "javascript:;"
+                   {% endif %}
+                   >{% trans %}log out{% endtrans %}</a>
+                  {% endif %}
+                {%- elif auth %}
+                <a href=
+                  {% if persona_auth is defined %}
+                    "javascript:;" id="persona_login"
+                  {% else %}
+                    "{{ request.urlgen('mediagoblin.auth.login') }}"
+                  {% endif %}
+                  >
+                    {%- trans %}Log in{% endtrans -%}
+                  </a>
+                {%- endif %}
+              </div>
+              <div class="clear"></div>
+              {% if request.user and request.user.has_privilege('active') %}
+                <div id="header_dropdown">
                   <p>
-                    <span class="dropdown_title">{% trans %}Moderation powers:{% endtrans %}</span>
-                    <a href="{{ request.urlgen('mediagoblin.moderation.media_panel') }}">
+                    <span class="dropdown_title">
+                      {% trans user_url=request.urlgen('mediagoblin.user_pages.user_home',
+                                                        user=request.user.username),
+                               user_name=request.user.username -%}
+                        <a href="{{ user_url }}">{{ user_name }}</a>'s account
+                      {%- endtrans %}
+                    </span>
+                    &middot;
+                    <a href="{{ request.urlgen('mediagoblin.edit.account') }}">{%- trans %}Change account settings{% endtrans -%}</a>
+                    &middot;
+                    <a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
+                                                 user=request.user.username) }}">
                       {%- trans %}Media processing panel{% endtrans -%}
                     </a>
                     &middot;
-                    <a href="{{ request.urlgen('mediagoblin.moderation.users') }}">
-                      {%- trans %}User management panel{% endtrans -%}
-                    </a>
-                    &middot;
-                    <a href="{{ request.urlgen('mediagoblin.moderation.reports') }}">
-                      {%- trans %}Report management panel{% endtrans -%}
-                    </a>
-                    {% template_hook("moderation_powers") %}
+                    {% template_hook("blog_dashboard_home") %}
+                    <a id="logout" href=
+                      {% if persona is not defined %}
+                        "{{ request.urlgen('mediagoblin.auth.logout') }}"
+                      {% else %}
+                        "javascript:;"
+                      {% endif %}
+                      >{% trans %}Log out{% endtrans %}</a>
                   </p>
-                {% endif %}
-                {% include 'mediagoblin/fragments/header_notifications.html' %}
-              </div>
+                  <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
+                    {%- trans %}Add media{% endtrans -%}
+                  </a>
+                  <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.collection') }}">
+                    {%- trans %}Create new collection{% endtrans -%}
+                  </a>
+                  {% template_hook("header_dropdown_buttons") %}
+                  {% if request.user.has_privilege('moderator') %}
+                    <p>
+                      <span class="dropdown_title">{% trans %}Moderation powers:{% endtrans %}</span>
+                      <a href="{{ request.urlgen('mediagoblin.moderation.media_panel') }}">
+                        {%- trans %}Media processing panel{% endtrans -%}
+                      </a>
+                      &middot;
+                      <a href="{{ request.urlgen('mediagoblin.moderation.users') }}">
+                        {%- trans %}User management panel{% endtrans -%}
+                      </a>
+                      &middot;
+                      <a href="{{ request.urlgen('mediagoblin.moderation.reports') }}">
+                        {%- trans %}Report management panel{% endtrans -%}
+                      </a>
+                      {% template_hook("moderation_powers") %}
+                    </p>
+                  {% endif %}
+                  {% include 'mediagoblin/fragments/header_notifications.html' %}
+                </div>
+              {% endif %}
+              </div><!-- end row -->
+            </header>
+          </div>
+        {% endblock %}
+        <div class="container">
+          {% include 'mediagoblin/bits/above_content.html' %}
+          <div class="mediagoblin_content">
+            {% include "mediagoblin/utils/messages.html" %}
+            {% block mediagoblin_content %}
+            {% endblock mediagoblin_content %}
+            {% if csrf_token is defined %}
+              {% template_hook("persona_form") %}
             {% endif %}
-            </div><!-- end row -->
-          </header>
+          </div>
         </div>
-      {% endblock %}
-      <div class="container">
-        {% include 'mediagoblin/bits/above_content.html' %}
-        <div class="mediagoblin_content">
-          {% include "mediagoblin/utils/messages.html" %}
-          {% block mediagoblin_content %}
-          {% endblock mediagoblin_content %}
-          {% if csrf_token is defined %}
-            {% template_hook("persona_form") %}
-          {% endif %}
-        </div>
-        {%- include "mediagoblin/bits/base_footer.html" %}
       </div>
+    <div class="container">
+      {%- include "mediagoblin/bits/base_footer.html" %}
+    </div>
     {%- endblock mediagoblin_body %}
     {% include 'mediagoblin/bits/body_end.html' %}
   </body>

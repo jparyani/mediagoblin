@@ -25,7 +25,7 @@
   src: local('Lato Regular'), local('Lato-Regular'), url('../fonts/Lato-Regular.ttf') format('truetype');
 }
 
-body {
+html, body {
   background-color: #161616;
   color: #C3C3C3;
   padding: 0;
@@ -110,6 +110,23 @@ input, textarea {
 
 /* website structure */
 
+#wrap {
+  min-height: 100%;
+  height: auto;
+
+  /* This must be equal to the footer height + 5px */
+  margin-bottom: -35px;
+}
+
+#wrap:after {
+  content: "";
+  display: block;
+}
+
+footer, #wrap:after {
+  height: 30px;
+}
+
 header {
   width: 100%;
   padding: 0;
@@ -176,9 +193,7 @@ a.logo {
 
 footer {
   width: 100%;
-  height: 30px;
   border-top: 1px solid #333;
-  bottom: 0px;
   padding: 8px 0;
   text-align: center;
   font-size: 0.875em;
