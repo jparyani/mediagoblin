@@ -54,7 +54,7 @@ class InitialRawProcessor(InitialProcessor):
         """
         Pull out a full-size JPEG-preview
         """
-        super(self.__class__, self).common_setup()
+        super(InitialRawProcessor, self).common_setup()
 
         self._original_raw = self.process_filename
 
@@ -77,6 +77,6 @@ class InitialRawProcessor(InitialProcessor):
 
 class RawImageProcessingManager(ProcessingManager):
     def __init__(self):
-        super(self.__class__, self).__init__()
+        super(RawImageProcessingManager, self).__init__()
         self.add_processor(InitialRawProcessor)
         self.add_processor(Resizer)
