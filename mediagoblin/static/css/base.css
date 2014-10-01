@@ -965,3 +965,19 @@ table.metadata_editor tr td {
 table.metadata_editor tr td.form_field_input input {
     width:350px;
 }
+
+.application {
+  min-height: 30px;
+  margin-left: 70px;
+}
+
+.application-icon {
+  position: absolute;
+  left: 12px;
+  width: 50px;
+  height: 50px;
+}
+
+.application-button {
+  float: right;
+}

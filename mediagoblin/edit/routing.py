@@ -28,3 +28,5 @@ add_route('mediagoblin.edit.verify_email', '/edit/verify_email/',
     'mediagoblin.edit.views:verify_email')
 add_route('mediagoblin.edit.email', '/edit/email/',
     'mediagoblin.edit.views:change_email')
+add_route('mediagoblin.edit.deauthorize_applications', '/edit/deauthorize/',
+    'mediagoblin.edit.views:deauthorize_applications')

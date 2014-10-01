@@ -217,6 +217,8 @@ class RequestToken(Base):
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
 
+    get_client = relationship(Client)
+
 class AccessToken(Base):
     """
         Model for representing the access tokens
@@ -229,6 +231,8 @@ class AccessToken(Base):
     request_token = Column(Unicode, ForeignKey(RequestToken.token))
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+
+    get_requesttoken = relationship(RequestToken)
 
 
 class NonceTimestamp(Base):

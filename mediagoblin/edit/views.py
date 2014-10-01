@@ -47,7 +47,7 @@ from mediagoblin.tools.text import (
     convert_to_tag_list_of_dicts, media_tags_as_string)
 from mediagoblin.tools.url import slugify
 from mediagoblin.db.util import check_media_slug_used, check_collection_slug_used
-from mediagoblin.db.models import User
+from mediagoblin.db.models import User, Client, AccessToken
 
 import mimetypes
 
@@ -258,6 +258,34 @@ def edit_account(request):
         {'user': user,
          'form': form})
 
+@require_active_login
+def deauthorize_applications(request):
+    """ Deauthroize OAuth applications """
+    if request.method == 'POST' and "application" in request.form:
+        token = request.form["application"]
+        access_token = AccessToken.query.filter_by(token=token).first()
+        if access_token is None:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                _("Unknown application, not able to deauthorize")
+            )
+        else:
+            access_token.delete()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                _("Application has been deauthorized")
+            )
+
+    access_tokens = AccessToken.query.filter_by(user=request.user.id)
+    applications = [(a.get_requesttoken, a) for a in access_tokens]
+
+    return render_to_response(
+        request,
+        'mediagoblin/edit/deauthorize_applications.html',
+        {'applications': applications}
+    )
 
 @require_active_login
 def delete_account(request):

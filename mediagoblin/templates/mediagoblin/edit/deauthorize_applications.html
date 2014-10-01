@@ -1,0 +1,69 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{%- extends "mediagoblin/base.html" %}
+
+{% block title -%}
+  {% trans -%}
+    Deauthorize applications
+  {%- endtrans %} &mdash; {{ super() }}
+{%- endblock %}
+
+{% block mediagoblin_content %}
+  <h2>{% trans -%}Deauthorize Applications{%- endtrans %}</h2>
+  <p>{% trans -%}
+    These applications can access your GNU MediaGoblin account. Deauthorizing the
+    application will prevent the application from accessing your account.
+    {%- endtrans %}
+  </p>
+
+  <form method="POST" action="{{ request.urlgen('mediagoblin.edit.deauthorize_applications') }}">
+  {{ csrf_token }}
+  {% if not applications %}
+    <em>{% trans -%}There are no applications authorized.{%- endtrans %}</em>
+  {% endif %}
+  {% for application, access in applications %}
+    <div class="application">
+      <div class="application-button">
+        <button class="button_action" name="application" value="{{ access.token }}">Deauthorize</button>
+      </div>
+      {% if application.get_client.logo_url %}
+        <img class="application-icon" src="{{ application.get_client.logo_url }}">
+      {% else %}
+        <img class="application-icon" src="{{ request.staticdirect('/images/small-gavroche.png') }}">
+      {% endif %}
+      <div class="application-content">
+        <strong>{{ application.get_client.application_name }}</strong>
+        <p class="application-data">
+          <small>
+            {% trans -%}Type:{%- endtrans %}
+            &nbsp;
+            {{ application.get_client.application_type }}</small>
+          <br />
+          <small>
+            {% trans -%}Authorized:{%- endtrans %}
+            &nbsp;
+            {%- trans formatted_time=timesince(access.created) -%}
+              {{ formatted_time }} ago
+            {%- endtrans -%}
+          </small>
+        </p>
+      </div>
+    </div>
+  {% endfor %}
+  </form>
+{% endblock %}
