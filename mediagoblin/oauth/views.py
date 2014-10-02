@@ -125,15 +125,15 @@ def client_register(request):
         error = "Invalid registration type"
         return json_response({"error": error}, status=400)
 
-    logo_url = data.get("logo_url", client.logo_url)
-    if logo_url is not None and not validate_url(logo_url):
-        error = "Logo URL {0} is not a valid URL.".format(logo_url)
+    logo_uri = data.get("logo_uri", client.logo_url)
+    if logo_uri is not None and not validate_url(logo_uri):
+        error = "Logo URI {0} is not a valid URI.".format(logo_uri)
         return json_response(
                 {"error": error},
                 status=400
                 )
     else:
-        client.logo_url = logo_url
+        client.logo_url = logo_uri
 
     client.application_name = data.get("application_name", None)
 

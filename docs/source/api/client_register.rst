@@ -15,7 +15,7 @@
 Registering a Client
 ====================
 
-To use the GNU MediaGoblin API you need to use the dynamic client registration. This has been adapted from the `OpenID specification <https://openid.net/specs/openid-connect-registration-1_0.html>`_, this is the only part of OpenID that is being used to serve the purpose to provide the client registration which is used in OAuth. 
+To use the GNU MediaGoblin API you need to use the dynamic client registration. This has been adapted from the `OpenID specification <https://openid.net/specs/openid-connect-registration-1_0.html>`_, this is the only part of OpenID that is being used to serve the purpose to provide the client registration which is used in OAuth.
 
 The endpoint is ``/api/client/register``
 
@@ -39,8 +39,8 @@ application_type
 application_name
     **optional** - This is the name of your client
 
-logo_url
-    **optional** - This is a URL of the logo image for your client
+logo_uri
+    **optional** - This is a URI of the logo image for your client
 
 redirect_uri
     **optional** - This is a space seporated list of pre-registered URLs for use at the Authorization Server
@@ -93,8 +93,8 @@ Using the response we got above we can update the information and add new inform
         "client_id": "vwljdhUMhhNbdKizpjZlxv",
         "client_secret": "hJtfhaQzgKerlLVdaeRAgmbcstSOBLRfgOinMxBCHcb",
         "application_type": "web",
-        "application_name": "MyClient!", 
-        "logo_url": "https://myclient.org/images/my_logo.png",
+        "application_name": "MyClient!",
+        "logo_uri": "https://myclient.org/images/my_logo.png",
         "contacts": "myemail@someprovider.com another_developer@provider.net",
     }
 
@@ -155,4 +155,3 @@ redirect_uris must be space-separated URLs.
 URI <URI> is not a valid URI
     This is when your URI is invalid.
 
- 

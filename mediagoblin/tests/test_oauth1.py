@@ -72,7 +72,7 @@ class TestOAuth(object):
                 "application_name": "Testificate MD",
                 "application_type": "web",
                 "contacts": "someone@someplace.com tuteo@tsengeo.lu",
-                "logo_url": "http://ayrel.com/utral.png",
+                "logo_uri": "http://ayrel.com/utral.png",
                 "redirect_uris": "http://navi-kosman.lu http://gmg-yawne-oeru.lu",
                 }
 
@@ -85,7 +85,7 @@ class TestOAuth(object):
         assert client.secret == client_info["client_secret"]
         assert client.application_type == query["application_type"]
         assert client.redirect_uri == query["redirect_uris"].split()
-        assert client.logo_url == query["logo_url"]
+        assert client.logo_url == query["logo_uri"]
         assert client.contacts == query["contacts"].split()
 
 
@@ -102,7 +102,7 @@ class TestOAuth(object):
                 "type": "client_update",
                 "application_name": "neytiri",
                 "contacts": "someone@someplace.com abc@cba.com",
-                "logo_url": "http://place.com/picture.png",
+                "logo_uri": "http://place.com/picture.png",
                 "application_type": "web",
                 "redirect_uris": "http://blah.gmg/whatever https://inboxen.org/",
                 }
@@ -117,7 +117,7 @@ class TestOAuth(object):
         assert client.application_type == update_query["application_type"]
         assert client.application_name == update_query["application_name"]
         assert client.contacts == update_query["contacts"].split()
-        assert client.logo_url == update_query["logo_url"]
+        assert client.logo_url == update_query["logo_uri"]
         assert client.redirect_uri == update_query["redirect_uris"].split()
 
     def to_authorize_headers(self, data):
