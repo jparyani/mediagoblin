@@ -1,4 +1,4 @@
-# Copyright 2012, 2013 Brandon Invergo <brandon@invergo.net>
+# Copyright 2012, 2013, 2014 Brandon Invergo <brandon@invergo.net>
 #
 # This file is part of pyconfigure.  This program is free
 # software; you can redistribute it and/or modify it under the
@@ -107,69 +107,64 @@ m4_define([_AC_LANG_CALL(Python)],
 
 
 AC_DEFUN([AC_LANG_COMPILER(Python)],
-[AC_REQUIRE([AC_PROG_PYTHON])])
+[AC_REQUIRE([PC_PROG_PYTHON])])
 
 
-# PC_INIT([MIN_VER], [MAX_VER]) 
+# PC_INIT([MIN-VERSION], [MAX-VERSION]) 
 # -----------------------------
 # Initialize pyconfigure, finding a Python interpreter with a given
 # minimum and/or maximum version. 
 AC_DEFUN([PC_INIT],
+[PC_PROG_PYTHON([], [$1], [$2])
+dnl If we found something, do a sanity check that the interpreter really
+dnl has the version its name would suggest.
+m4_ifval([PYTHON],
+        [PC_PYTHON_VERIFY_VERSION([>=], [pc_min_ver], [],
+                  [AC_MSG_FAILURE([No compatible Python interpreter found. If you're sure that you have one, try setting the PYTHON environment variable to the location of the interpreter.])])])
+m4_ifval([PYTHON],
+        [PC_PYTHON_VERIFY_VERSION([<=], [pc_max_ver], [],
+                  [AC_MSG_FAILURE([No compatible Python interpreter found. If you're sure that you have one, try setting the PYTHON environment variable to the location of the interpreter.])])])
+])# PC_INIT
+
+# PC_PROG_PYTHON([PROG-TO-CHECK-FOR], [MIN-VERSION], [MAX-VERSION])
+# ---------------------------------
+# Find a Python interpreter.  Python versions prior to 2.0 are not
+# supported. (2.0 was released on October 16, 2000).
+AC_DEFUN_ONCE([PC_PROG_PYTHON],
 [AC_ARG_VAR([PYTHON], [the Python interpreter])
 dnl The default minimum version is 2.0
-m4_define_default([pc_min_ver], m4_ifval([$1], [$1], [2.0]))
+m4_define_default([pc_min_ver], m4_ifval([$2], [$2], [2.0]))
 dnl The default maximum version is 3.3
-m4_define_default([pc_max_ver], m4_ifval([$2], [$2], [3.3]))
+m4_define_default([pc_max_ver], m4_ifval([$3], [$3], [4.0]))
 dnl Build up a list of possible interpreter names. 
 m4_define_default([_PC_PYTHON_INTERPRETER_LIST],
+    [[python] \
+dnl If we want some Python 3 versions (max version >= 3.0), 
+dnl also search for "python3"
+     m4_if(m4_version_compare(pc_max_ver, [2.9]), [1], [python3], []) \
+dnl If we want some Python 2 versions (min version <= 2.7),
+dnl also search for "python2".
+     m4_if(m4_version_compare(pc_min_ver, [2.8]), [-1], [python2], []) \
 dnl Construct a comma-separated list of interpreter names (python2.6, 
 dnl python2.7, etc). We only care about the first 3 characters of the
 dnl version strings (major-dot-minor; not 
 dnl major-dot-minor-dot-bugfix[-dot-whatever])
-        [m4_foreach([pc_ver], 
+     m4_foreach([pc_ver], 
                     m4_esyscmd_s(seq -s[[", "]] -f["[[%.1f]]"] m4_substr(pc_max_ver, [0], [3]) -0.1 m4_substr(pc_min_ver, [0], [3])),
 dnl Remove python2.8 and python2.9 since they will never exist
-                    [m4_bmatch(pc_ver, [2.[89]], [], [python]pc_ver)] ) \
-dnl If we want some Python 3 versions (max version >= 3.0), 
-dnl also search for "python3"
-m4_if(m4_version_compare(pc_max_ver, [2.9]), [1], [python3], []) \
-dnl If we want some Python 2 versions (min version <= 2.7),
-dnl also search for "python2". Finally, also search for plain ol' "python"
-m4_if(m4_version_compare(pc_min_ver, [2.8]), [-1], [python2], []) [python]])
+                    [m4_bmatch(pc_ver, [2.[89]], [], [python]pc_ver)])])
 dnl Do the actual search at last.
-AC_PATH_PROGS(PYTHON, [_PC_PYTHON_INTERPRETER_LIST])
-dnl If we found something, do a sanity check that the interpreter really
-dnl has the version its name would suggest.
-m4_ifval([PYTHON],
-        [PC_PYTHON_VERIFY_VERSION([>=], [pc_min_ver],
-                  [AC_MSG_RESULT([yes])],
-                  [AC_MSG_FAILURE([No compatible Python interpreter found. If you're sure that you have one, try setting the PYTHON environment variable to the location of the interpreter.])])])
-m4_ifval([PYTHON],
-        [PC_PYTHON_VERIFY_VERSION([<=], [pc_max_ver], 
-                  [AC_MSG_RESULT([yes])], 
-                  [AC_MSG_FAILURE([No compatible Python interpreter found. If you're sure that you have one, try setting the PYTHON environment variable to the location of the interpreter.])])])
-])# PC_INIT
-
-# AC_PROG_PYTHON(PROG-TO-CHECK-FOR)
-# ---------------------------------
-# Find a Python interpreter.  Python versions prior to 2.0 are not
-# supported. (2.0 was released on October 16, 2000).
-AC_DEFUN([AC_PROG_PYTHON],
-[AC_ARG_VAR([PYTHON], [the Python interpreter])
-m4_define_default([_PC_PYTHON_INTERPRETER_LIST],
-                  [python python3 python3.3 python3.2 python3.1 python3.0 python2 python2.7 dnl
-                   python2.6 python2.5 python2.4 python2.3 python2.2 python2.1 python2.0])
 m4_ifval([$1],
 	[AC_PATH_PROGS(PYTHON, [$1 _PC_PYTHON_INTERPRETER_LIST])],
 	[AC_PATH_PROGS(PYTHON, [_PC_PYTHON_INTERPRETER_LIST])])
-])
+])# PC_PROG_PYTHON
   
 
 # PC_PYTHON_PROG_PYTHON_CONFIG(PROG-TO-CHECK-FOR)
 # ----------------------------------------------
 # Find the python-config program
 AC_DEFUN([PC_PYTHON_PROG_PYTHON_CONFIG],
-[AC_REQUIRE([PC_INIT])[]dnl
+[AC_REQUIRE([PC_PROG_PYTHON])[]dnl
 AC_ARG_VAR([PYTHON_CONFIG], [the Python-config program])
 dnl python-config's binary name is normally based on the Python interpreter's
 dnl binary name (i.e. python2.7 -> python2.7-config)
@@ -180,9 +175,10 @@ m4_ifval([$1],
 ]) # PC_PYTHON_PROG_PYTHON_CONFIG
 
 
-# PC_PYTHON_VERIFY_VERSION(RELATION, VERSION, [ACTION-IF-TRUE], [ACTION-IF-NOT-FOUND])
+# PC_PYTHON_VERIFY_VERSION([RELATION], [VERSION], [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ---------------------------------------------------------------------------
-# Run ACTION-IF-TRUE if the Python interpreter PROG has version >= VERSION.
+# Run ACTION-IF-TRUE if the Python interpreter PROG has version [RELATION] VERSION.
+# i.e if RELATION is "<", check if PROG has a version number less than VERSION.
 # Run ACTION-IF-FALSE otherwise.
 # Specify RELATION as any mathematical comparison "<", ">", "<=", ">=", "==" or "!="
 # This test uses sys.hexversion instead of the string equivalent (first
@@ -191,7 +187,7 @@ m4_ifval([$1],
 AC_DEFUN([PC_PYTHON_VERIFY_VERSION],
 [m4_define([pc_python_safe_ver], m4_bpatsubsts($2, [\.], [_]))
 AC_CACHE_CHECK([if Python $1 '$2'],
-    [[pc_cv_python_min_version_]pc_python_safe_ver],
+    [[pc_cv_python_req_version_]pc_python_safe_ver],
     [AC_LANG_PUSH(Python)[]dnl
      AC_RUN_IFELSE(
         [AC_LANG_PROGRAM([dnl
@@ -205,13 +201,17 @@ import sys
     # xrange is not present in Python 3.0 and range returns an iterator
     for i in list(range(4)):
         reqverhex = (reqverhex << 8) + reqver[[i]]
+    # the final 8 bits are "0xf0" for final versions, which are all
+    # we'll test against, since it's doubtful that a released software
+    # will depend on an alpha- or beta-state Python.
+    reqverhex += 0xf0
     if sys.hexversion $1 reqverhex:
         sys.exit()
     else:
         sys.exit(1)
 ])], 
-         [[pc_cv_python_req_version_]pc_python_safe_ver="yes"], 
-         [[pc_cv_python_req_version_]pc_python_safe_ver="no"])
+         [[pc_cv_python_req_version_]pc_python_safe_ver=yes], 
+         [[pc_cv_python_req_version_]pc_python_safe_ver=no])
      AC_LANG_POP(Python)[]dnl
     ])
 AS_IF([test "$[pc_cv_python_req_version_]pc_python_safe_ver" = "no"], [$4], [$3])
@@ -224,17 +224,17 @@ AS_IF([test "$[pc_cv_python_req_version_]pc_python_safe_ver" = "no"], [$4], [$3]
 # the best way to do this; it's what "site.py" does in the standard
 # library.
 AC_DEFUN([PC_PYTHON_CHECK_VERSION],
-[AC_REQUIRE([PC_INIT])[]dnl
+[AC_REQUIRE([PC_PROG_PYTHON])[]dnl
 AC_CACHE_CHECK([for $1 version], 
     [pc_cv_python_version],
     [AC_LANG_PUSH(Python)[]dnl
-     AC_LANG_CONFTEST([
-         AC_LANG_PROGRAM([dnl
+     AC_LINK_IFELSE([AC_LANG_PROGRAM([dnl
 import sys
 ], [dnl
     sys.stdout.write(sys.version[[:3]])
-])])
-     pc_cv_python_version=`$PYTHON conftest.py`
+])],
+                   [pc_cv_python_version=`./conftest`],
+                   [AC_MSG_FAILURE([failed to run Python program])])
      AC_LANG_POP(Python)[]dnl
     ])
 AC_SUBST([PYTHON_VERSION], [$pc_cv_python_version])
@@ -255,11 +255,15 @@ AC_CACHE_CHECK([for Python prefix], [pc_cv_python_prefix],
     pc_cv_python_prefix=`$PYTHON_CONFIG --prefix 2>&AS_MESSAGE_LOG_FD`
 else
     AC_LANG_PUSH(Python)[]dnl
-    pc_cv_python_prefix=AC_LANG_CONFTEST([AC_LANG_PROGRAM([dnl
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([dnl
 import sys
 ], [dnl
-    sys.exit(sys.prefix)
-])])
+    sys.stdout.write(sys.prefix)
+])], [pc_cv_python_prefix=`./conftest`;
+      if test $? != 0; then
+         AC_MSG_FAILURE([could not determine Python prefix])
+      fi],
+      [AC_MSG_FAILURE([failed to run Python program])])
     AC_LANG_POP(Python)[]dnl
 fi])
 AC_SUBST([PYTHON_PREFIX], [$pc_cv_python_prefix])])
@@ -276,11 +280,16 @@ AC_CACHE_CHECK([for Python exec-prefix], [pc_cv_python_exec_prefix],
     pc_cv_python_exec_prefix=`$PYTHON_CONFIG --exec-prefix 2>&AS_MESSAGE_LOG_FD`
 else
     AC_LANG_PUSH(Python)[]dnl
-    pc_cv_python_exec_prefix=AC_LANG_CONFTEST([AC_LANG_PROGRAM([dnl
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([dnl
 import sys
 ], [dnl
-    sys.exit(sys.exec_prefix)
-])])
+    sys.stdout.write(sys.exec_prefix)
+])],
+        [pc_cv_python_exec_prefix=`./conftest`;
+         if test $? != 0; then
+            AC_MSG_FAILURE([could not determine Python exec_prefix])
+         fi],
+         [AC_MSG_FAILURE([failed to run Python program])])
     AC_LANG_POP(Python)[]dnl
 fi
 ])
@@ -420,18 +429,19 @@ AC_SUBST([PYTHON_ABI_FLAGS], [$pc_cv_python_abi_flags])])
 # At times (like when building shared libraries) you may want
 # to know which OS platform Python thinks this is.
 AC_DEFUN([PC_PYTHON_CHECK_PLATFORM],
-[AC_REQUIRE([PC_INIT])[]dnl
+[AC_REQUIRE([PC_PROG_PYTHON])[]dnl
 dnl Get the platform from within Python (sys.platform)
-AC_CACHE_CHECK([for Python platform], 
-    [pc_cv_python_platform],
+AC_CACHE_CHECK([for Python platform], [pc_cv_python_platform],
     [AC_LANG_PUSH(Python)[]dnl
-     AC_LANG_CONFTEST([
-         AC_LANG_PROGRAM([dnl
+     AC_LINK_IFELSE([AC_LANG_PROGRAM([dnl
 import sys
 ], [dnl
     sys.stdout.write(sys.platform)
-])])
-    pc_cv_python_platform=`$PYTHON conftest.py`
+])], [pc_cv_python_platform=`./conftest`;
+     if test $? != 0; then
+        AC_MSG_FAILURE([could not determine Python platform])
+     fi],
+     [AC_MSG_FAILURE([failed to run Python program])])
     AC_LANG_POP(Python)[]dnl
    ])
 AC_SUBST([PYTHON_PLATFORM], [$pc_cv_python_platform])
@@ -443,7 +453,7 @@ AC_SUBST([PYTHON_PLATFORM], [$pc_cv_python_platform])
 # The directory to which new libraries are installed (i.e. the
 # "site-packages" directory.
 AC_DEFUN([PC_PYTHON_CHECK_SITE_DIR],
-[AC_REQUIRE([PC_INIT])AC_REQUIRE([PC_PYTHON_CHECK_PREFIX])[]dnl
+[AC_REQUIRE([PC_PROG_PYTHON])AC_REQUIRE([PC_PYTHON_CHECK_PREFIX])[]dnl
 AC_CACHE_CHECK([for Python site-packages directory],
     [pc_cv_python_site_dir],
     [AC_LANG_PUSH(Python)[]dnl
@@ -453,8 +463,7 @@ AC_CACHE_CHECK([for Python site-packages directory],
      else
        pc_py_prefix=$prefix
      fi
-     AC_LANG_CONFTEST([
-         AC_LANG_PROGRAM([dnl
+     AC_LINK_IFELSE([AC_LANG_PROGRAM([dnl
 import sys
 from platform import python_implementation
 # sysconfig in CPython 2.7 doesn't work in virtualenv
@@ -475,8 +484,8 @@ else:
     sitedir = sysconfig.get_path('purelib', vars={'base':'$pc_py_prefix'})
 ], [dnl
     sys.stdout.write(sitedir)
-])])
-     pc_cv_python_site_dir=`$PYTHON conftest.py`
+])], [pc_cv_python_site_dir=`./conftest`],
+     [AC_MSG_FAILURE([failed to run Python program])])
      AC_LANG_POP(Python)[]dnl
      case $pc_cv_python_site_dir in
      $pc_py_prefix*)
@@ -500,14 +509,14 @@ AC_SUBST([pythondir], [\${prefix}/$pc_cv_python_site_dir])])# PC_PYTHON_CHECK_SI
 # $PACKAGE directory under PYTHON_SITE_DIR
 AC_DEFUN([PC_PYTHON_SITE_PACKAGE_DIR],
 [AC_REQUIRE([PC_PYTHON_CHECK_SITE_DIR])[]dnl
-AC_SUBST([pkgpythondir], [\${pythondir}/$PACKAGE])])
+AC_SUBST([pkgpythondir], [\${pythondir}/$PACKAGE_NAME])])
 
 
 # PC_PYTHON_CHECK_EXEC_DIR
 # ------------------------
 # directory for installing python extension modules (shared libraries)
 AC_DEFUN([PC_PYTHON_CHECK_EXEC_DIR],
-[AC_REQUIRE([PC_INIT])AC_REQUIRE([PC_PYTHON_CHECK_EXEC_PREFIX])[]dnl
+[AC_REQUIRE([PC_PROG_PYTHON])AC_REQUIRE([PC_PYTHON_CHECK_EXEC_PREFIX])[]dnl
   AC_CACHE_CHECK([for Python extension module directory],
     [pc_cv_python_exec_dir],
     [AC_LANG_PUSH(Python)[]dnl
@@ -517,8 +526,7 @@ AC_DEFUN([PC_PYTHON_CHECK_EXEC_DIR],
      else
        pc_py_exec_prefix=$pc_cv_python_exec_prefix
      fi
-     AC_LANG_CONFTEST([
-         AC_LANG_PROGRAM([dnl
+     AC_LINK_IFELSE([AC_LANG_PROGRAM([dnl
 import sys
 from platform import python_implementation
 # sysconfig in CPython 2.7 doesn't work in virtualenv
@@ -539,8 +547,8 @@ else:
     sitedir = sysconfig.get_path('purelib', vars={'platbase':'$pc_py_exec_prefix'})
 ], [dnl
     sys.stdout.write(sitedir)
-])])
-     pc_cv_python_exec_dir=`$PYTHON conftest.py`
+])], [pc_cv_python_exec_dir=`./conftest`],
+     [AC_MSG_FAILURE([failed to run Python program])])
      AC_LANG_POP(Python)[]dnl
      case $pc_cv_python_exec_dir in
      $pc_py_exec_prefix*)
@@ -565,7 +573,7 @@ AC_SUBST([pyexecdir], [\${exec_prefix}/$pc_cv_python_pyexecdir])]) #PY_PYTHON_CH
 # $PACKAGE directory under PYTHON_SITE_DIR
 AC_DEFUN([PC_PYTHON_EXEC_PACKAGE_DIR],
 [AC_REQUIRE([PC_PYTHON_CHECK_EXEC_DIR])[]dnl
-AC_SUBST([pkgpyexecdir], [\${pyexecdir}/$PACKAGE])])
+AC_SUBST([pkgpyexecdir], [\${pyexecdir}/$PACKAGE_NAME])])
 
 
 ## -------------------------------------------- ##
@@ -577,7 +585,7 @@ AC_SUBST([pkgpyexecdir], [\${pyexecdir}/$PACKAGE])])
 # ----------------------------------------------------------------------
 # Macro for checking if a Python library is installed
 AC_DEFUN([PC_PYTHON_CHECK_MODULE],
-[AC_REQUIRE([PC_INIT])[]dnl
+[AC_REQUIRE([PC_PROG_PYTHON])[]dnl
 m4_define([pc_python_safe_mod], m4_bpatsubsts($1, [\.], [_]))
 AC_CACHE_CHECK([for Python '$1' library],
     [[pc_cv_python_module_]pc_python_safe_mod],
@@ -605,7 +613,7 @@ AS_IF([test "$[pc_cv_python_module_]pc_python_safe_mod" = "no"], [$3], [$2])
 # Check to see if a given function call, optionally from a module, can
 # be successfully called
 AC_DEFUN([PC_PYTHON_CHECK_FUNC],
-[AC_REQUIRE([PC_INIT])[]dnl
+[AC_REQUIRE([PC_PROG_PYTHON])[]dnl
 m4_define([pc_python_safe_mod], m4_bpatsubsts($1, [\.], [_]))
 AC_CACHE_CHECK([for Python m4_ifnblank($1, '$1.$2()', '$2()') function],
     [[pc_cv_python_func_]pc_python_safe_mod[_$2]],

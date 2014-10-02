@@ -72,11 +72,11 @@ ifneq ($(VIRTUALENV),no)
 else
 	$(PYTHON) $(srcdir)/setup.py install --prefix=$(DESTDIR)$(prefix)
 endif
-	if [[ $(DESTDIR)$(prefix) != $(abs_srcdir) ]]; then \
-		$(INSTALL_DATA) $(srcdir)/Makefile $(DESTDIR)$(prefix)/Makefile; \
-		$(INSTALL_DATA) $(srcdir)/lazycelery.sh $(DESTDIR)$(prefix)/lazycelery.sh; \
-		$(INSTALL_DATA) $(srcdir)/lazyserver.sh $(DESTDIR)$(prefix)/lazyserver.sh; \
-	fi
+# 	if [[ $(DESTDIR)$(prefix) != $(abs_srcdir) ]]; then \
+# 		$(INSTALL_DATA) $(srcdir)/Makefile $(DESTDIR)$(prefix)/Makefile; \
+# 		$(INSTALL_DATA) $(srcdir)/lazycelery.sh $(DESTDIR)$(prefix)/lazycelery.sh; \
+# 		$(INSTALL_DATA) $(srcdir)/lazyserver.sh $(DESTDIR)$(prefix)/lazyserver.sh; \
+# 	fi
 
 # The same as "install", except use the "develop" setup.py target
 develop: installdirs
@@ -102,13 +102,11 @@ endif
 # should remove a basic package installed via setup.py, but please double- and 
 # triple-check it so that you don't remove something you shouldn't!
 # Be sure to remove any extra files you install, such as binaries or documentation!
+# 
 # uninstall: 
-#	case $(prefix) in
-#		/usr|/usr/local )
-#			exit 1 ;;
-#		/www/*|/srv/* )
-#		 	rm -rvf $(prefix) ;;
-#	esac
+# 	rm -rvf $(pkgpythondir)
+# 	rm -v $(pythondir)/$(PACKAGE_DISTNAME)-*.egg-info
+# 
 
 # Just use the usual setup.py clean command
 clean:
