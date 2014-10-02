@@ -63,15 +63,17 @@ class AlembicMigrationManager(object):
         Base.metadata.create_all(self.session.bind)
         # load the Alembic configuration and generate the
         # version table, "stamping" it with the most recent rev:
+        # XXX: we need to find a better way to detect current installations
+        # using sqlalchemy-migrate because we don't have to create all table
+        # for them
         command.stamp(self.alembic_cfg, 'head')
 
     def init_or_migrate(self, version=None):
-        if self.get_current_revision() is None:
-            log.info('Initializing tables and stamping it with '
-                     'the most recent migration...')
-            self.init_tables()
-        else:
-            self.upgrade(version)
+        # XXX: we need to call this method when we ditch
+        # sqlalchemy-migrate entirely
+        # if self.get_current_revision() is None:
+        #     self.init_tables()
+        self.upgrade(version)
 
 
 class MigrationManager(object):
