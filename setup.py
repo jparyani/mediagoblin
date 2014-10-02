@@ -53,6 +53,8 @@ if PY2:
     # # their next release.
     # py2_only_install_requires.append('pbr==0.5.22')
     py2_only_install_requires.append('mock')  # mock is in the stdlib for 3.3+
+    # PyPI version (1.4.2) does not have proper Python 3 support
+    py2_only_install_requires.append('ExifRead')
 
 install_requires = [
     'gunicorn',
@@ -79,7 +81,6 @@ install_requires = [
     'oauthlib',
     'unidecode',
     'jsonschema',
-    'ExifRead',  # TODO(berker): Install develop branch for Python 3
     'PasteDeploy',
     'requests',
     'pyld',
@@ -90,6 +91,12 @@ install_requires = [
     # 'lxml',
     # 'Pillow',
 ] + py2_only_install_requires
+
+dependency_links = []
+if not PY2:
+    # PyPI version (1.4.2) does not have proper Python 3 support
+    dependency_links.append('https://github.com/ianare/exif-py/zipball/develop#egg=ExifRead-2.0.0')
+    install_requires.append('ExifRead>=2.0.0')
 
 with open(READMEFILE, encoding="utf-8") as fobj:
     long_description = fobj.read()
@@ -103,6 +110,7 @@ try:
     include_package_data = True,
     # scripts and dependencies
     install_requires=install_requires,
+    dependency_links=dependency_links,
     test_suite='nose.collector',
     entry_points="""\
         [console_scripts]
