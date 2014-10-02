@@ -1,1 +1,57 @@
-Generic single-database configuration.
+Migration Guide
+---------------
+
+Alembic comes with a CLI called ``alembic``.
+
+Create a Migration
+^^^^^^^^^^^^^^^^^^
+
+Lets create our first migration::
+
+    $ alembic revision -m "add favourite_band field"
+      Generating
+      /your/gmg/path/mediagoblin/db/migrations/versions/1e3793de36a_add_favourite_band_field.py ... done
+
+By default, migration files have two methods: ``upgrade`` and ``downgrade``.
+Alembic will invoke these methods to apply the migrations to your current
+database.
+
+Now, we need to edit our newly created migration file
+``1e3793de36a_add_favourite_band_field.py`` to add a new column ``favourite_band``
+to ``core__users`` table::
+
+    def upgrade():
+        op.add_column('core__users', sa.Column('favourite_band', sa.Unicode(100)))
+
+
+    def downgrade():
+        op.drop_column('core__users', 'favourite_band')
+
+.. note::
+
+   Alembic can also generate `automatic migrations <http://alembic.readthedocs.org/en/latest/tutorial.html#auto-generating-migrations>`__.
+
+Then we can run ``gmg dbupdate`` to apply the new migration::
+
+    $ gmg dbupdate
+    INFO  [alembic.migration] Context impl SQLiteImpl.
+    INFO  [alembic.migration] Will assume non-transactional DDL.
+    INFO  [alembic.migration] Running upgrade None -> 1e3793de36a, add favourite band field
+
+If you want to revert that migration, simply run::
+
+    $ alembic downgrade -1
+
+.. warning::
+
+   Currently, Alembic cannot do ``DROP COLUMN``, ``ALTER COLUMN`` etc.
+   operations in SQLite. Please see https://bitbucket.org/zzzeek/alembic/issue/21/column-renames-not-supported-on-sqlite
+   for detailed information.
+
+Glossary
+^^^^^^^^
+
+* ``alembic.ini``: The Alembic configuration file. The ``alembic`` CLI will
+  look that file everytime it invaked.
+* ``mediagoblin/db/migrations/versions/``: Alembic will add new migration files
+  to this directory.
