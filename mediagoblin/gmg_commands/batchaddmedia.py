@@ -14,10 +14,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import requests, codecs
+from __future__ import print_function
+
+import codecs
 import csv
-from urlparse import urlparse
+import os
+
+import requests
+import six
+
+from six.moves.urllib.parse import urlparse
 
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.submit.lib import (
@@ -60,8 +66,8 @@ def batchaddmedia(args):
     # get the user
     user = app.db.User.query.filter_by(username=args.username.lower()).first()
     if user is None:
-        print _(u"Sorry, no user by username '{username}' exists".format(
-                    username=args.username))
+        print(_(u"Sorry, no user by username '{username}' exists".format(
+                    username=args.username)))
         return
 
     upload_limit, max_file_size = get_upload_file_limits(user)
@@ -73,7 +79,7 @@ def batchaddmedia(args):
     else:
         error = _(u'File at {path} not found, use -h flag for help'.format(
                     path=args.metadata_path))
-        print error
+        print(error)
         return
 
     abs_metadata_filename = os.path.abspath(metadata_path)
@@ -85,7 +91,7 @@ def batchaddmedia(args):
         if some_string is None:
             return None
         else:
-            return unicode(some_string)
+            return six.text_type(some_string)
 
     with codecs.open(
             abs_metadata_filename, 'r', encoding='utf-8') as all_metadata:
@@ -110,13 +116,13 @@ def batchaddmedia(args):
         license = file_metadata.get('license')
         try:
             json_ld_metadata = compact_and_validate(file_metadata)
-        except ValidationError, exc:
+        except ValidationError as exc:
             error = _(u"""Error with media '{media_id}' value '{error_path}': {error_msg}
 Metadata was not uploaded.""".format(
                 media_id=media_id,
                 error_path=exc.path[0],
                 error_msg=exc.message))
-            print error
+            print(error)
             continue
 
         url = urlparse(original_location)
@@ -136,9 +142,9 @@ Metadata was not uploaded.""".format(
             try:
                 media_file = file(file_abs_path, 'r')
             except IOError:
-                print _(u"""\
+                print(_(u"""\
 FAIL: Local file {filename} could not be accessed.
-{filename} will not be uploaded.""".format(filename=filename))
+{filename} will not be uploaded.""".format(filename=filename)))
                 continue
         try:
             submit_media(
@@ -152,22 +158,22 @@ FAIL: Local file {filename} could not be accessed.
                 metadata=json_ld_metadata,
                 tags_string=u"",
                 upload_limit=upload_limit, max_file_size=max_file_size)
-            print _(u"""Successfully submitted {filename}!
+            print(_(u"""Successfully submitted {filename}!
 Be sure to look at the Media Processing Panel on your website to be sure it
-uploaded successfully.""".format(filename=filename))
+uploaded successfully.""".format(filename=filename)))
             files_uploaded += 1
         except FileUploadLimit:
-            print _(
-u"FAIL: This file is larger than the upload limits for this site.")
+            print(_(
+u"FAIL: This file is larger than the upload limits for this site."))
         except UserUploadLimit:
-            print _(
-"FAIL: This file will put this user past their upload limits.")
+            print(_(
+"FAIL: This file will put this user past their upload limits."))
         except UserPastUploadLimit:
-            print _("FAIL: This user is already past their upload limits.")
-    print _(
+            print(_("FAIL: This user is already past their upload limits."))
+    print(_(
 "{files_uploaded} out of {files_attempted} files successfully submitted".format(
         files_uploaded=files_uploaded,
-        files_attempted=files_attempted))
+        files_attempted=files_attempted)))
 
 
 def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
