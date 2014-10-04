@@ -1117,9 +1117,13 @@ class ActivityIntermediator(Base):
         if key is None:
             raise ValueError("Invalid type of object given")
 
-        # First set self as activity
-        obj.activity_as_object = self.id
+        # We need to save so that self.id is populated
         self.type = key
+        self.save()
+
+        # First set self as activity
+        obj.activity = self.id
+        obj.save()
 
     def get(self):
         """ Finds the object for an activity """
