@@ -1,6 +1,7 @@
 dnl configure.ac
 dnl
 dnl Copyright 2012, 2013 Brandon Invergo <brandon@invergo.net>
+dnl           2014 MediaGoblin contributors (see MediaGoblin's AUTHORS)
 dnl
 dnl Copying and distribution of this file, with or without modification,
 dnl are permitted in any medium without royalty provided the copyright
@@ -56,9 +57,9 @@ dnl
 AC_CONFIG_MACRO_DIR([m4])
 
 
-# The default prefix should be changed from /usr/local. Set it, as in
-# the documentation, to /srv/mediagoblin.example.org/mediagoblin/
-AC_PREFIX_DEFAULT([`pwd`])
+dnl # The default prefix should be changed from /usr/local. Set it, as in
+dnl # the documentation, to /srv/mediagoblin.example.org/mediagoblin/
+dnl AC_PREFIX_DEFAULT([`pwd`])
 
 
 dnl###########################
@@ -84,7 +85,7 @@ dnl          series and the max is in the 3.0 series, non-existent
 dnl          releases (2.8 & 2.9) will be correctly skipped.
 dnl----
 dnl
-PC_INIT([2.7], [3.3.1])
+dnl PC_INIT([2.7], [3.3.1])
 
 
 dnl--PC_PROG_PYTHON---------------------------------------------------
@@ -126,12 +127,12 @@ dnl available, checking both for "virtualenv" and "virtualenv2"
 dnl (AC_CHECK_PROGS)
 dnl----
 dnl
-# Support installing to a virtualenv via the --with-virtualenv 
+# Support doing development in a virtualenv via the --with-virtualenv 
 # configure flag
 AC_ARG_WITH([virtualenv],
-	[AS_HELP_STRING([--with-virtualenv], [install to a Python virtualenv])],
+	[AS_HELP_STRING([--without-virtualenv], [install to a Python virtualenv])],
 	[],
-	[with_virtualenv=no])
+	[with_virtualenv=yes])
 AS_IF([test "x$with_virtualenv" != xno],
 	    AC_CHECK_PROGS([VIRTUALENV], [virtualenv virtualenv3 virtualenv2], [no])
 	    AS_IF([test "x$VIRTUALENV" = xno],
@@ -401,11 +402,16 @@ dnl
 dnl PC_PYTHON_CHECK_ABI_FLAGS
 
 
+dnl--MediaGoblin specific variables ----------------------------------
+
+
 dnl#########
 dnl Finish #
 dnl#########
 
 dnl Define the files to be configured
 AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([env], [chmod +x env])
+
 dnl Generate config.status
 AC_OUTPUT

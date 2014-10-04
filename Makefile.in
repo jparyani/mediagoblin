@@ -51,51 +51,54 @@ pkgpythondir = @pkgpythondir@
 pkgpyexecdir = @pkgpyexecdir@
 PYTHONPATH = $(pythondir)$(PATH_SEPARATOR)$(DESTDIR)$(pythondir)
 
+# Maybe add a virtualenv prefix to a command
+ifneq ($(VIRTUALENV),no)
+# virtualenv specified to be included by config (default)
+#   ... we only use virtualenv for local development, we don't
+#   auto-deploy to it.
+
+maybe_venved = ./bin/
+maybe_venved_python = ./bin/python
+# Yes, build the virtualenv as a dependency!
+maybe_venv_dep = ./bin/python
+
+else
+# --without-virtualenv must have been passed in... don't build
+#   a local virtualenv or use such commands
+maybe_venved =
+maybe_venved_python = $(PYTHON)
+# No need for commands to build virtualenv as a dependency!
+maybe_venv_dep = 
+endif
+
+
+
+.PHONY: all install uninstall distclean info install-html html \
+install-pdf pdf install-dvi dvi install-ps ps clean dist check \
+installdirs i18n virtualenv
+# update postgresql
+
 all: develop
 
-.PHONY: all install develop uninstall distclean info install-html html \
-install-pdf pdf install-dvi dvi install-ps ps clean dist check \
-installdirs postgresql update
+develop:
+	echo "nothin yet"
 
-# Since installing to a virtualenv is all the rage these days, support
-# it here. If the VIRTUALENV variable is set to anything other than
-# "no", set up a new virtualenv and install there, otherwise install
-# as usual from setup.py
 install: installdirs
-	$(NORMAL_INSTALL)
-ifneq ($(VIRTUALENV),no)
-	$(VIRTUALENV) $(VIRTUALENV_FLAGS) --python=$(PYTHON) \
-		--system-site-packages $(DESTDIR)$(prefix) || \
-		$(VIRTUALENV) $(DESTDIR)$(prefix)
-	$(DESTDIR)$(prefix)/bin/python $(srcdir)/setup.py install \
-		--prefix=$(DESTDIR)$(prefix)
-else
-	$(PYTHON) $(srcdir)/setup.py install --prefix=$(DESTDIR)$(prefix)
-endif
-# 	if [[ $(DESTDIR)$(prefix) != $(abs_srcdir) ]]; then \
-# 		$(INSTALL_DATA) $(srcdir)/Makefile $(DESTDIR)$(prefix)/Makefile; \
-# 		$(INSTALL_DATA) $(srcdir)/lazycelery.sh $(DESTDIR)$(prefix)/lazycelery.sh; \
-# 		$(INSTALL_DATA) $(srcdir)/lazyserver.sh $(DESTDIR)$(prefix)/lazyserver.sh; \
-# 	fi
+	$(maybe_venved_python) $(srcdir)/setup.py install --prefix=$(DESTDIR)$(prefix)
 
-# The same as "install", except use the "develop" setup.py target
-develop: installdirs
-	$(NORMAL_INSTALL)
-ifneq ($(VIRTUALENV),no)
-	$(VIRTUALENV) $(VIRTUALENV_FLAGS) --python=$(PYTHON) \
-		--system-site-packages $(DESTDIR)$(prefix) || \
-		$(VIRTUALENV) $(DESTDIR)$(prefix)
-	$(DESTDIR)$(prefix)/bin/python $(srcdir)/setup.py develop \
-		--prefix=$(DESTDIR)$(prefix)
-else
-	$(PYTHON) $(srcdir)/setup.py develop --prefix=$(DESTDIR)$(prefix)
-endif
-	if [ "$(DESTDIR)$(prefix)" != "$(abs_srcdir)" ]; then \
-		$(INSTALL_DATA) $(srcdir)/Makefile $(DESTDIR)$(prefix)/Makefile; \
-		$(INSTALL_DATA) $(srcdir)/lazycelery.sh $(DESTDIR)$(prefix)/lazycelery.sh; \
-		$(INSTALL_DATA) $(srcdir)/lazyserver.sh $(DESTDIR)$(prefix)/lazyserver.sh; \
-	fi
 
+i18n: $(maybe_venv_dep)
+	$(maybe_venved)pybabel compile -D mediagoblin -d mediagoblin/i18n/
+
+
+ifneq ($(VIRTUALENV),no)
+./bin/python:
+	rm -f ./bin/python
+	virtualenv --system-site-packages .
+	./bin/python setup.py develop --upgrade
+
+virtualenv: bin/python
+endif
 
 # setup.py doesn't (yet) support an uninstall command, so until it does, you 
 # must manually remove everything that was installed here. The following example
@@ -110,7 +113,7 @@ endif
 
 # Just use the usual setup.py clean command
 clean:
-	$(PYTHON) setup.py clean
+	$(maybe_venved_python) setup.py clean
 
 
 # Clean up the output of configure
@@ -123,7 +126,7 @@ distclean:
 
 # You can either use the setup.py sdist command or you can roll your own here
 dist:
-#	$(PYTHON) setup.py sdist
+#	$(maybe_venved_python) setup.py sdist
 	mkdir $(PACKAGE_DISTNAME)
 	cp -r $(DISTFILES) $(PACKAGE_DISTNAME)
 	tar -czf $(PACKAGE_DISTNAME).tar.gz $(PACKAGE_DISTNAME)
@@ -131,25 +134,25 @@ dist:
 
 # Use the setup.py check command
 check:
-	$(PYTHON) setup.py check
+	$(maybe_venved_python) setup.py check
 
 # setup.py might complain if a directory doesn't exist so just in case, make the directory
 # here
 installdirs:
 	$(MKDIR_P) $(DESTDIR)$(prefix)
 
-# Set up PostgreSQL
-postgresql:
-	sudo -u $(POSTGRES) createuser mediagoblin
-	sudo -u $(POSTGRES) createdb -E UNICODE -O mediagoblin mediagoblin
+# # Set up PostgreSQL
+# postgresql:
+# 	sudo -u $(POSTGRES) createuser mediagoblin
+# 	sudo -u $(POSTGRES) createdb -E UNICODE -O mediagoblin mediagoblin
 
-update:
-ifneq ($(VIRTUALENV),no)
-	$(prefix)/bin/python $(srcdir)/setup.py develop --prefix=$(prefix) --upgrade
-else
-	$(PYTHON) $(srcdir)/setup.py develop --prefix=$(prefix) --upgrade
-endif	
-	$(prefix)/bin/gmg dbupdate
+# update:
+# ifneq ($(VIRTUALENV),no)
+# 	$(prefix)/bin/python $(srcdir)/setup.py develop --prefix=$(prefix) --upgrade
+# else
+# 	$(PYTHON) $(srcdir)/setup.py develop --prefix=$(prefix) --upgrade
+# endif	
+# 	$(prefix)/bin/gmg dbupdate
 
 # The following show how to install documentation. In this example,
 # docs are built from a separate Makefile contained in the docs
@@ -193,6 +196,8 @@ ifneq ($(SPHINXBUILD),no)
 	$(MAKE) -C docs latexpdf SPHINXBUILD=$(SPHINXBUILD)
 endif
 
+
+# Targets that don't seem supported?
 
 install-dvi:
 
