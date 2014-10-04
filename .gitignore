@@ -26,6 +26,7 @@
 /celerybeat-schedule
 /server-log.txt
 *.egg/
+/env
 
 # pyconfigure/automake generated files
 /Makefile
