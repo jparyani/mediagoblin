@@ -39,9 +39,12 @@ from mediagoblin.tools import common, licenses
 from mediagoblin.tools.pluginapi import hook_handle
 from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.url import slugify
+from mediagoblin.tools.translate import pass_to_ugettext as _
 
 
 class UserMixin(object):
+    object_type = "person"
+
     @property
     def bio_html(self):
         return cleaned_markdown_conversion(self.bio)
@@ -131,6 +134,11 @@ class MediaEntryMixin(GenerateSlugMixin):
         return check_media_slug_used(self.uploader, slug, self.id)
 
     @property
+    def object_type(self):
+        """ Converts media_type to pump-like type - don't use internally """
+        return self.media_type.split(".")[-1]
+
+    @property
     def description_html(self):
         """
         Rendered version of the description, run through
@@ -208,7 +216,7 @@ class MediaEntryMixin(GenerateSlugMixin):
         will return self.thumb_url if original url doesn't exist"""
         if u"original" not in self.media_files:
             return self.thumb_url
-        
+
         return mg_globals.app.public_store.file_url(
             self.media_files[u"original"]
             )
@@ -297,6 +305,8 @@ class MediaEntryMixin(GenerateSlugMixin):
 
 
 class MediaCommentMixin(object):
+    object_type = "comment"
+
     @property
     def content_html(self):
         """
@@ -321,6 +331,8 @@ class MediaCommentMixin(object):
 
 
 class CollectionMixin(GenerateSlugMixin):
+    object_type = "collection"
+
     def check_slug_used(self, slug):
         # import this here due to a cyclic import issue
         # (db.models -> db.mixin -> db.util -> db.models)
@@ -363,3 +375,111 @@ class CollectionItemMixin(object):
         Run through Markdown and the HTML cleaner.
         """
         return cleaned_markdown_conversion(self.note)
+
+class ActivityMixin(object):
+    object_type = "activity"
+
+    VALID_VERBS = ["add", "author", "create", "delete", "dislike", "favorite",
+                   "follow", "like", "post", "share", "unfavorite", "unfollow",
+                   "unlike", "unshare", "update", "tag"]
+
+    def get_url(self, request):
+        return request.urlgen(
+            "mediagoblin.federation.activity_view",
+            username=self.get_actor.username,
+            id=self.id,
+            qualified=True
+        )
+
+    def generate_content(self):
+        """ Produces a HTML content for object """
+        # some of these have simple and targetted. If self.target it set
+        # it will pick the targetted. If they DON'T have a targetted version
+        # the information in targetted won't be added to the content.
+        verb_to_content = {
+            "add": {
+                "simple" : _("{username} added {object}"),
+                "targetted":  _("{username} added {object} to {target}"),
+            },
+            "author": {"simple": _("{username} authored {object}")},
+            "create": {"simple": _("{username} created {object}")},
+            "delete": {"simple": _("{username} deleted {object}")},
+            "dislike": {"simple": _("{username} disliked {object}")},
+            "favorite": {"simple": _("{username} favorited {object}")},
+            "follow": {"simple": _("{username} followed {object}")},
+            "like": {"simple": _("{username} liked {object}")},
+            "post": {
+                "simple": _("{username} posted {object}"),
+                "targetted": _("{username} posted {object} to {target}"),
+            },
+            "share": {"simple": _("{username} shared {object}")},
+            "unfavorite": {"simple": _("{username} unfavorited {object}")},
+            "unfollow": {"simple": _("{username} stopped following {object}")},
+            "unlike": {"simple": _("{username} unliked {object}")},
+            "unshare": {"simple": _("{username} unshared {object}")},
+            "update": {"simple": _("{username} updated {object}")},
+            "tag": {"simple": _("{username} tagged {object}")},
+        }
+
+        obj = self.get_object
+        target = self.get_target
+        actor = self.get_actor
+        content = verb_to_content.get(self.verb, None)
+
+        if content is None or obj is None:
+            return
+
+        if target is None or "targetted" not in content:
+            self.content = content["simple"].format(
+                username=actor.username,
+                object=obj.object_type
+            )
+        else:
+            self.content = content["targetted"].format(
+                username=actor.username,
+                object=obj.object_type,
+                target=target.object_type,
+            )
+
+        return self.content
+
+    def serialize(self, request):
+        obj = {
+            "id": self.id,
+            "actor": self.get_actor.serialize(request),
+            "verb": self.verb,
+            "published": self.published.isoformat(),
+            "updated": self.updated.isoformat(),
+            "content": self.content,
+            "url": self.get_url(request),
+            "object": self.get_object.serialize(request),
+            "objectType": self.object_type,
+        }
+
+        if self.generator:
+            obj["generator"] = self.get_generator.serialize(request)
+
+        if self.title:
+            obj["title"] = self.title
+
+        target = self.get_target
+        if target is not None:
+            obj["target"] = target.serialize(request)
+
+        return obj
+
+    def unseralize(self, data):
+        """
+        Takes data given and set it on this activity.
+
+        Several pieces of data are not written on because of security
+        reasons. For example changing the author or id of an activity.
+        """
+        if "verb" in data:
+            self.verb = data["verb"]
+
+        if "title" in data:
+            self.title = data["title"]
+
+        if "content" in data:
+            self.content = data["content"]

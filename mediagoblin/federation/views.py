@@ -20,11 +20,11 @@ import mimetypes
 
 from werkzeug.datastructures import FileStorage
 
-from mediagoblin.decorators import oauth_required
+from mediagoblin.decorators import oauth_required, require_active_login
 from mediagoblin.federation.decorators import user_has_privilege
-from mediagoblin.db.models import User, MediaEntry, MediaComment
+from mediagoblin.db.models import User, MediaEntry, MediaComment, Activity
 from mediagoblin.tools.response import redirect, json_response, json_error, \
-                                       render_to_response
+                                       render_404, render_to_response
 from mediagoblin.meddleware.csrf import csrf_exempt
 from mediagoblin.submit.lib import new_upload_entry, api_upload_request, \
                                     api_add_to_feed
@@ -341,21 +341,8 @@ def feed_endpoint(request):
         "items": [],
     }
 
-
-    # Look up all the media to put in the feed (this will be changed
-    # when we get real feeds/inboxes/outboxes/activites)
-    for media in MediaEntry.query.all():
-        item = {
-            "verb": "post",
-            "object": media.serialize(request),
-            "actor": media.get_uploader.serialize(request),
-            "content": "{0} posted a picture".format(request.user.username),
-            "id": media.id,
-        }
-        item["updated"] = item["object"]["updated"]
-        item["published"] = item["object"]["published"]
-        item["url"] = item["object"]["url"]
-        feed["items"].append(item)
+    for activity in Activity.query.filter_by(actor=request.user.id):
+        feed["items"].append(activity.serialize(request))
     feed["totalItems"] = len(feed["items"])
 
     return json_response(feed)
@@ -363,7 +350,7 @@ def feed_endpoint(request):
 @oauth_required
 def object_endpoint(request):
     """ Lookup for a object type """
-    object_type = request.matchdict["objectType"]
+    object_type = request.matchdict["object_type"]
     try:
         object_id = int(request.matchdict["id"])
     except ValueError:
@@ -395,17 +382,17 @@ def object_comments(request):
     media = MediaEntry.query.filter_by(id=request.matchdict["id"]).first()
     if media is None:
         return json_error("Can't find '{0}' with ID '{1}'".format(
-            request.matchdict["objectType"],
+            request.matchdict["object_type"],
             request.matchdict["id"]
         ), 404)
 
-    comments = response.serialize(request)
+    comments = media.serialize(request)
     comments = comments.get("replies", {
         "totalItems": 0,
         "items": [],
         "url": request.urlgen(
             "mediagoblin.federation.object.comments",
-            objectType=media.objectType,
+            object_type=media.object_type,
             id=media.id,
             qualified=True
         )
@@ -555,3 +542,34 @@ def whoami(request):
     )
 
     return redirect(request, location=profile)
+
+@require_active_login
+def activity_view(request):
+    """ /<username>/activity/<id> - Display activity
+
+    This should display a HTML presentation of the activity
+    this is NOT an API endpoint.
+    """
+    # Get the user object.
+    username = request.matchdict["username"]
+    user = User.query.filter_by(username=username).first()
+
+    activity_id = request.matchdict["id"]
+
+    if request.user is None:
+        return render_404(request)
+
+    activity = Activity.query.filter_by(
+        id=activity_id,
+        author=user.id
+    ).first()
+    if activity is None:
+        return render_404(request)
+
+    return render_to_response(
+        request,
+        "mediagoblin/federation/activity.html",
+        {"activity": activity}
+    )
+
+

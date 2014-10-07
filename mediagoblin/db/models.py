@@ -36,7 +36,8 @@ from mediagoblin.db.extratypes import (PathTupleWithSlashes, JSONEncoded,
                                        MutationDict)
 from mediagoblin.db.base import Base, DictReadAttrProxy
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, \
-        MediaCommentMixin, CollectionMixin, CollectionItemMixin
+        MediaCommentMixin, CollectionMixin, CollectionItemMixin, \
+        ActivityMixin
 from mediagoblin.tools.files import delete_media_files
 from mediagoblin.tools.common import import_component
 
@@ -70,6 +71,8 @@ class User(Base, UserMixin):
     bio = Column(UnicodeText)  # ??
     uploaded = Column(Integer, default=0)
     upload_limit = Column(Integer)
+
+    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
 
     ## TODO
     # plugin data would be in a separate model
@@ -138,7 +141,7 @@ class User(Base, UserMixin):
             "id": "acct:{0}@{1}".format(self.username, request.host),
             "preferredUsername": self.username,
             "displayName": "{0}@{1}".format(self.username, request.host),
-            "objectType": "person",
+            "objectType": self.object_type,
             "pump_io": {
                 "shared": False,
                 "followed": False,
@@ -309,6 +312,8 @@ class MediaEntry(Base, MediaEntryMixin):
     media_metadata = Column(MutationDict.as_mutable(JSONEncoded),
         default=MutationDict())
 
+    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
+
     ## TODO
     # fail_error
 
@@ -430,18 +435,13 @@ class MediaEntry(Base, MediaEntryMixin):
         # pass through commit=False/True in kwargs
         super(MediaEntry, self).delete(**kwargs)
 
-    @property
-    def objectType(self):
-        """ Converts media_type to pump-like type - don't use internally """
-        return self.media_type.split(".")[-1]
-
     def serialize(self, request, show_comments=True):
         """ Unserialize MediaEntry to object """
         author = self.get_uploader
         context = {
             "id": self.id,
             "author": author.serialize(request),
-            "objectType": self.objectType,
+            "objectType": self.object_type,
             "url": self.url_for_self(request.urlgen),
             "image": {
                 "url": request.host_url + self.thumb_url[1:],
@@ -458,7 +458,7 @@ class MediaEntry(Base, MediaEntryMixin):
                 "self": {
                     "href": request.urlgen(
                         "mediagoblin.federation.object",
-                        objectType=self.objectType,
+                        object_type=self.object_type,
                         id=self.id,
                         qualified=True
                     ),
@@ -477,14 +477,15 @@ class MediaEntry(Base, MediaEntryMixin):
             context["license"] = self.license
 
         if show_comments:
-            comments = [comment.serialize(request) for comment in self.get_comments()]
+            comments = [
+                comment.serialize(request) for comment in self.get_comments()]
             total = len(comments)
             context["replies"] = {
                 "totalItems": total,
                 "items": comments,
                 "url": request.urlgen(
                         "mediagoblin.federation.object.comments",
-                        objectType=self.objectType,
+                        object_type=self.object_type,
                         id=self.id,
                         qualified=True
                         ),
@@ -650,13 +651,16 @@ class MediaComment(Base, MediaCommentMixin):
                                                    lazy="dynamic",
                                                    cascade="all, delete-orphan"))
 
+
+    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
+
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
         media = MediaEntry.query.filter_by(id=self.media_entry).first()
         author = self.get_author
         context = {
             "id": self.id,
-            "objectType": "comment",
+            "objectType": self.object_type,
             "content": self.content,
             "inReplyTo": media.serialize(request, show_comments=False),
             "author": author.serialize(request)
@@ -713,6 +717,8 @@ class Collection(Base, CollectionMixin):
     get_creator = relationship(User,
                                backref=backref("collections",
                                                cascade="all, delete-orphan"))
+
+    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
 
     __table_args__ = (
         UniqueConstraint('creator', 'slug'),
@@ -1068,13 +1074,183 @@ class PrivilegeUserAssociation(Base):
         ForeignKey(Privilege.id),
         primary_key=True)
 
+class Generator(Base):
+    """ Information about what created an activity """
+    __tablename__ = "core__generators"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode, nullable=False)
+    published = Column(DateTime, default=datetime.datetime.now)
+    updated = Column(DateTime, default=datetime.datetime.now)
+    object_type = Column(Unicode, nullable=False)
+
+    def __repr__(self):
+        return "<{klass} {name}>".format(
+            klass=self.__class__.__name__,
+            name=self.name
+        )
+
+    def serialize(self, request):
+        return {
+            "id": self.id,
+            "displayName": self.name,
+            "published": self.published.isoformat(),
+            "updated": self.updated.isoformat(),
+            "objectType": self.object_type,
+        }
+
+    def unserialize(self, data):
+        if "displayName" in data:
+            self.name = data["displayName"]
+
+
+class ActivityIntermediator(Base):
+    """
+    This is used so that objects/targets can have a foreign key back to this
+    object and activities can a foreign key to this object. This objects to be
+    used multiple times for the activity object or target and also allows for
+    different types of objects to be used as an Activity.
+    """
+    __tablename__ = "core__activity_intermediators"
+
+    id = Column(Integer, primary_key=True)
+    type = Column(Unicode, nullable=False)
+
+    TYPES = {
+        "user": User,
+        "media": MediaEntry,
+        "comment": MediaComment,
+        "collection": Collection,
+    }
+
+    def _find_model(self, obj):
+        """ Finds the model for a given object """
+        for key, model in self.TYPES.items():
+            if isinstance(obj, model):
+                return key, model
+
+        return None, None
+
+    def set(self, obj):
+        """ This sets itself as the activity """
+        key, model = self._find_model(obj)
+        if key is None:
+            raise ValueError("Invalid type of object given")
+
+        # We need to save so that self.id is populated
+        self.type = key
+        self.save()
+
+        # First set self as activity
+        obj.activity = self.id
+        obj.save()
+
+    def get(self):
+        """ Finds the object for an activity """
+        if self.type is None:
+            return None
+
+        model = self.TYPES[self.type]
+        return model.query.filter_by(activity=self.id).first()
+
+    def save(self, *args, **kwargs):
+        if self.type not in self.TYPES.keys():
+            raise ValueError("Invalid type set")
+        Base.save(self, *args, **kwargs)
+
+class Activity(Base, ActivityMixin):
+    """
+    This holds all the metadata about an activity such as uploading an image,
+    posting a comment, etc.
+    """
+    __tablename__ = "core__activities"
+
+    id = Column(Integer, primary_key=True)
+    actor = Column(Integer,
+                   ForeignKey("core__users.id"),
+                   nullable=False)
+    published = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    verb = Column(Unicode, nullable=False)
+    content = Column(Unicode, nullable=True)
+    title = Column(Unicode, nullable=True)
+    generator = Column(Integer,
+                       ForeignKey("core__generators.id"),
+                       nullable=True)
+    object = Column(Integer,
+                    ForeignKey("core__activity_intermediators.id"),
+                    nullable=False)
+    target = Column(Integer,
+                    ForeignKey("core__activity_intermediators.id"),
+                    nullable=True)
+
+    get_actor = relationship(User,
+        foreign_keys="Activity.actor", post_update=True)
+    get_generator = relationship(Generator)
+
+    def __repr__(self):
+        if self.content is None:
+            return "<{klass} verb:{verb}>".format(
+                klass=self.__class__.__name__,
+                verb=self.verb
+            )
+        else:
+            return "<{klass} {content}>".format(
+                klass=self.__class__.__name__,
+                content=self.content
+            )
+
+    @property
+    def get_object(self):
+        if self.object is None:
+            return None
+
+        ai = ActivityIntermediator.query.filter_by(id=self.object).first()
+        return ai.get()
+
+    def set_object(self, obj):
+        self.object = self._set_model(obj)
+
+    @property
+    def get_target(self):
+        if self.target is None:
+            return None
+
+        ai = ActivityIntermediator.query.filter_by(id=self.target).first()
+        return ai.get()
+
+    def set_target(self, obj):
+        self.target = self._set_model(obj)
+
+    def _set_model(self, obj):
+        # Firstly can we set obj
+        if not hasattr(obj, "activity"):
+            raise ValueError(
+                "{0!r} is unable to be set on activity".format(obj))
+
+        if obj.activity is None:
+            # We need to create a new AI
+            ai = ActivityIntermediator()
+            ai.set(obj)
+            ai.save()
+            return ai.id
+
+        # Okay we should have an existing AI
+        return ActivityIntermediator.query.filter_by(id=obj.activity).first().id
+
+    def save(self, set_updated=True, *args, **kwargs):
+        if set_updated:
+            self.updated = datetime.datetime.now()
+        super(Activity, self).save(*args, **kwargs)
+
 MODELS = [
     User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
     MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
     Notification, CommentNotification, ProcessingNotification, Client,
     CommentSubscription, ReportBase, CommentReport, MediaReport, UserBan,
 	Privilege, PrivilegeUserAssociation,
-    RequestToken, AccessToken, NonceTimestamp]
+    RequestToken, AccessToken, NonceTimestamp,
+    Activity, ActivityIntermediator, Generator]
 
 """
  Foundations are the default rows that are created immediately after the tables

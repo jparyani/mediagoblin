@@ -1,0 +1,42 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2014 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{%- extends "mediagoblin/base.html" %}
+
+{% block mediagoblin_head %}
+	{% template_hook("media_head") %}
+{% endblock mediagoblin_head %}
+
+{% block mediagoblin_content %}
+<div class="media_pane eleven columns">
+  <h2 class="media_title">
+    {% if activity.title %}{{ activity.title }}{% endif %}
+  </h2>
+  {% autoescape False %}
+    <p> {{ activity.content }} </p>
+  {% endautoescape %}
+
+  <div class="media_sidebar">
+    {% block mediagoblin_after_added_sidebar %}
+      <a href="{{ activity.url(request) }}"
+         class="button_action"
+         id="button_reportmedia">
+            View {{ activity.get_object.object_type }}
+      </a>
+    {% endblock %}
+  </div>
+{% endblock %}

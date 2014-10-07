@@ -28,6 +28,7 @@ from mediagoblin.tools.response import render_to_response, render_404, \
 from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.pagination import Pagination
+from mediagoblin.tools.federation import create_activity
 from mediagoblin.user_pages import forms as user_forms
 from mediagoblin.user_pages.lib import (send_comment_email,
 	add_media_to_collection, build_report_object)
@@ -201,7 +202,7 @@ def media_post_comment(request, media):
             _('Your comment has been posted!'))
 
         trigger_notification(comment, media, request)
-
+        create_activity("post", comment, comment.author, target=media)
         add_comment_subscription(request.user, media)
 
     return redirect_obj(request, media)
@@ -263,6 +264,7 @@ def media_collect(request, media):
         collection.creator = request.user.id
         collection.generate_slug()
         collection.save()
+        create_activity("create", collection, collection.creator)
 
     # Otherwise, use the collection selected from the drop-down
     else:
@@ -289,7 +291,7 @@ def media_collect(request, media):
                              % (media.title, collection.title))
     else: # Add item to collection
         add_media_to_collection(collection, media, form.note.data)
-
+        create_activity("add", media, request.user, target=collection)
         messages.add_message(request, messages.SUCCESS,
                              _('"%s" added to collection "%s"')
                              % (media.title, collection.title))

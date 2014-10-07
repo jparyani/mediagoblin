@@ -34,7 +34,7 @@ from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import (
     RegisterMigration, inspect_table, replace_table_hack)
 from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User,
-    Privilege)
+    Privilege, Generator)
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 
 
@@ -583,7 +583,6 @@ PRIVILEGE_FOUNDATIONS_v0 = [{'privilege_name':u'admin'},
                             {'privilege_name':u'commenter'},
                             {'privilege_name':u'active'}]
 
-
 # vR1 stands for "version Rename 1".  This only exists because we need
 # to deal with dropping some booleans and it's otherwise impossible
 # with sqlite.
@@ -893,5 +892,197 @@ def revert_username_index(db):
         except ProgrammingError:
             # constraint already exists, no need to add
             db.rollback()
+
+    db.commit()
+
+class Generator_R0(declarative_base()):
+    __tablename__ = "core__generators"
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode, nullable=False)
+    published = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    object_type = Column(Unicode, nullable=False)
+
+class ActivityIntermediator_R0(declarative_base()):
+    __tablename__ = "core__activity_intermediators"
+    id = Column(Integer, primary_key=True)
+    type = Column(Unicode, nullable=False)
+
+class Activity_R0(declarative_base()):
+    __tablename__ = "core__activities"
+    id = Column(Integer, primary_key=True)
+    actor = Column(Integer, ForeignKey(User.id), nullable=False)
+    published = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    verb = Column(Unicode, nullable=False)
+    content = Column(Unicode, nullable=True)
+    title = Column(Unicode, nullable=True)
+    generator = Column(Integer, ForeignKey(Generator_R0.id), nullable=True)
+    object = Column(Integer,
+                    ForeignKey(ActivityIntermediator_R0.id),
+                    nullable=False)
+    target = Column(Integer,
+                    ForeignKey(ActivityIntermediator_R0.id),
+                    nullable=True)
+
+@RegisterMigration(24, MIGRATIONS)
+def activity_migration(db):
+    """
+    Creates everything to create activities in GMG
+    - Adds Activity, ActivityIntermediator and Generator table
+    - Creates GMG service generator for activities produced by the server
+    - Adds the activity_as_object and activity_as_target to objects/targets
+    - Retroactively adds activities for what we can acurately work out
+    """
+    # Set constants we'll use later
+    FOREIGN_KEY = "core__activity_intermediators.id"
+    ACTIVITY_COLUMN = "activity"
+
+    # Create the new tables.
+    ActivityIntermediator_R0.__table__.create(db.bind)
+    Generator_R0.__table__.create(db.bind)
+    Activity_R0.__table__.create(db.bind)
+    db.commit()
+
+    # Initiate the tables we want to use later
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
+    activity_table = inspect_table(metadata, "core__activities")
+    generator_table = inspect_table(metadata, "core__generators")
+    collection_table = inspect_table(metadata, "core__collections")
+    media_entry_table = inspect_table(metadata, "core__media_entries")
+    media_comments_table = inspect_table(metadata, "core__media_comments")
+    ai_table = inspect_table(metadata, "core__activity_intermediators")
+
+
+    # Create the foundations for Generator
+    db.execute(generator_table.insert().values(
+        name="GNU Mediagoblin",
+        object_type="service",
+        published=datetime.datetime.now(),
+        updated=datetime.datetime.now()
+    ))
+    db.commit()
+
+    # Get the ID of that generator
+    gmg_generator = db.execute(generator_table.select(
+        generator_table.c.name==u"GNU Mediagoblin")).first()
+
+
+    # Now we want to modify the tables which MAY have an activity at some point
+    media_col = Column(ACTIVITY_COLUMN, Integer, ForeignKey(FOREIGN_KEY))
+    media_col.create(media_entry_table)
+
+    user_col = Column(ACTIVITY_COLUMN, Integer, ForeignKey(FOREIGN_KEY))
+    user_col.create(user_table)
+
+    comments_col = Column(ACTIVITY_COLUMN, Integer, ForeignKey(FOREIGN_KEY))
+    comments_col.create(media_comments_table)
+
+    collection_col = Column(ACTIVITY_COLUMN, Integer, ForeignKey(FOREIGN_KEY))
+    collection_col.create(collection_table)
+    db.commit()
+
+
+    # Now we want to retroactively add what activities we can
+    # first we'll add activities when people uploaded media.
+    # these can't have content as it's not fesible to get the
+    # correct content strings.
+    for media in db.execute(media_entry_table.select()):
+        # Now we want to create the intermedaitory
+        db_ai = db.execute(ai_table.insert().values(
+            type="media",
+        ))
+        db_ai = db.execute(ai_table.select(
+            ai_table.c.id==db_ai.inserted_primary_key[0]
+        )).first()
+
+        # Add the activity
+        activity = {
+            "verb": "create",
+            "actor": media.uploader,
+            "published": media.created,
+            "updated": media.created,
+            "generator": gmg_generator.id,
+            "object": db_ai.id
+        }
+        db.execute(activity_table.insert().values(**activity))
+
+        # Add the AI to the media.
+        db.execute(media_entry_table.update().values(
+            activity=db_ai.id
+        ).where(media_entry_table.c.id==media.id))
+
+    # Now we want to add all the comments people made
+    for comment in db.execute(media_comments_table.select()):
+        # Get the MediaEntry for the comment
+        media_entry = db.execute(
+            media_entry_table.select(
+                media_entry_table.c.id==comment.media_entry
+        )).first()
+
+        # Create an AI for target
+        db_ai_media = db.execute(ai_table.select(
+            ai_table.c.id==media_entry.activity
+        )).first().id
+
+        db.execute(
+            media_comments_table.update().values(
+                activity=db_ai_media
+        ).where(media_comments_table.c.id==media_entry.id))
+
+        # Now create the AI for the comment
+        db_ai_comment = db.execute(ai_table.insert().values(
+            type="comment"
+        )).inserted_primary_key[0]
+
+        activity = {
+            "verb": "comment",
+            "actor": comment.author,
+            "published": comment.created,
+            "updated": comment.created,
+            "generator": gmg_generator.id,
+            "object": db_ai_comment,
+            "target": db_ai_media,
+        }
+
+        # Now add the comment object
+        db.execute(activity_table.insert().values(**activity))
+
+        # Now add activity to comment
+        db.execute(media_comments_table.update().values(
+            activity=db_ai_comment
+        ).where(media_comments_table.c.id==comment.id))
+
+    # Create 'create' activities for all collections
+    for collection in db.execute(collection_table.select()):
+        # create AI
+        db_ai = db.execute(ai_table.insert().values(
+            type="collection"
+        ))
+        db_ai = db.execute(ai_table.select(
+            ai_table.c.id==db_ai.inserted_primary_key[0]
+        )).first()
+
+        # Now add link the collection to the AI
+        db.execute(collection_table.update().values(
+            activity=db_ai.id
+        ).where(collection_table.c.id==collection.id))
+
+        activity = {
+            "verb": "create",
+            "actor": collection.creator,
+            "published": collection.created,
+            "updated": collection.created,
+            "generator": gmg_generator.id,
+            "object": db_ai.id,
+        }
+
+        db.execute(activity_table.insert().values(**activity))
+
+        # Now add the activity to the collection
+        db.execute(collection_table.update().values(
+            activity=db_ai.id
+        ).where(collection_table.c.id==collection.id))
 
     db.commit()
