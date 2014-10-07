@@ -200,7 +200,7 @@ def media_post_comment(request, media):
             _('Your comment has been posted!'))
 
         trigger_notification(comment, media, request)
-        create_activity("post", comment, comment.author)
+        create_activity("post", comment, comment.author, target=media)
         add_comment_subscription(request.user, media)
 
     return redirect_obj(request, media)

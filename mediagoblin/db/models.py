@@ -1070,6 +1070,12 @@ class Generator(Base):
     updated = Column(DateTime, default=datetime.datetime.now)
     object_type = Column(Unicode, nullable=False)
 
+    def __repr__(self):
+        return "<{klass} {name}>".format(
+            klass=self.__class__.__name__,
+            name=self.name
+        )
+
     def serialize(self, request):
         return {
             "id": self.id,
@@ -1167,6 +1173,18 @@ class Activity(Base, ActivityMixin):
     get_actor = relationship(User,
         foreign_keys="Activity.actor", post_update=True)
     get_generator = relationship(Generator)
+
+    def __repr__(self):
+        if self.content is None:
+            return "<{klass} verb:{verb}>".format(
+                klass=self.__class__.__name__,
+                verb=self.verb
+            )
+        else:
+            return "<{klass} {content}>".format(
+                klass=self.__class__.__name__,
+                content=self.content
+            )
 
     @property
     def get_object(self):

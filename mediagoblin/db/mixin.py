@@ -410,7 +410,7 @@ class ActivityMixin(object):
             "like": {"simple": _("{username} liked {object}")},
             "post": {
                 "simple": _("{username} posted {object}"),
-                "targetted": _("{username} posted {object} to {targetted}"),
+                "targetted": _("{username} posted {object} to {target}"),
             },
             "share": {"simple": _("{username} shared {object}")},
             "unfavorite": {"simple": _("{username} unfavorited {object}")},
