@@ -86,7 +86,7 @@ AS_IF([test "x$with_python3" != xno],
       AC_CHECK_PROGS([PYTHON], [python2.7 python2.6], [none])
       AS_IF([test "x$PYTHON" = xnone],
               [AC_MSG_FAILURE(
-		[No acceptable pythons (2.7, 2.6) could be found])]))
+		[No acceptable python (2.7, 2.6) could be found])]))
 
 
 dnl--PC_INIT----------------------------------------------------------
