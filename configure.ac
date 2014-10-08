@@ -69,6 +69,11 @@ dnl
 dnl In this section, we check for the presence of important commands
 dnl and programs.
 
+dnl--A bit simpler python init----------------------------------------
+dnl Expect python2.7 or python2.6 unless --with-python3 is given.
+dnl----
+
+
 AC_ARG_WITH([python3],
 	[AS_HELP_STRING([--with-python3], [Set up to use Python 3 by default.])],
 	[],
@@ -82,12 +87,6 @@ AS_IF([test "x$with_python3" != xno],
       AS_IF([test "x$PYTHON" = xnone],
               [AC_MSG_FAILURE(
 		[No acceptable pythons (2.7, 2.6) could be found])]))
-
-
-
-dnl--A bit simpler python init----------------------------------------
-dnl Expect python2.7 or python2.6 unless --with-python3 is given.
-dnl----
 
 
 dnl--PC_INIT----------------------------------------------------------
