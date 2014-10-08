@@ -27,6 +27,7 @@
 /server-log.txt
 *.egg/
 /env
+/paste.ini
 
 # pyconfigure/automake generated files
 /Makefile
