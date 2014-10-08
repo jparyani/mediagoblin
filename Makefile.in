@@ -83,6 +83,7 @@ all: develop
 
 develop: $(maybe_venv_dep) i18n paste.ini mediagoblin.ini
 
+# NEVER clobber a user's mediagoblin.ini once they've defined it
 mediagoblin.ini:
 	cp --no-clobber mediagoblin.example.ini mediagoblin.ini
 
@@ -128,9 +129,17 @@ endif
 # 	rm -v $(pythondir)/$(PACKAGE_DISTNAME)-*.egg-info
 # 
 
-# Just use the usual setup.py clean command
+
 clean:
-	$(maybe_venved_python) setup.py clean
+	@echo "No rule to clean house, yet."
+
+
+# We don't know what this does yet.
+# Originally:
+## Just use the usual setup.py clean command
+#clean:
+#	$(maybe_venved_python) setup.py clean
+
 
 
 # Clean up the output of configure
