@@ -74,8 +74,6 @@ maybe_venved_python = $(PYTHON)
 maybe_venv_dep = 
 endif
 
-
-
 .PHONY: all install uninstall distclean info install-html html \
 install-pdf pdf install-dvi dvi install-ps ps clean dist check \
 installdirs i18n virtualenv
@@ -83,8 +81,14 @@ installdirs i18n virtualenv
 
 all: develop
 
-develop: $(maybe_venv_dep) i18n
-	echo "nothin yet"
+develop: $(maybe_venv_dep) i18n paste.ini
+
+paste.ini:
+ifeq ($(USE_PYTHON3),yes)
+	-ln -s paste.py3.ini paste.ini
+else
+	-ln -s paste.py2.ini paste.ini
+endif
 
 # base-configs: paste.ini mediagoblin.example.ini
 
