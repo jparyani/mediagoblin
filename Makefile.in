@@ -81,8 +81,12 @@ installdirs i18n virtualenv
 
 all: develop
 
-develop: $(maybe_venv_dep) i18n paste.ini
+develop: $(maybe_venv_dep) i18n paste.ini mediagoblin.ini
 
+mediagoblin.ini:
+	cp --no-clobber mediagoblin.example.ini mediagoblin.ini
+
+# We just symlink the mediagoblin from the appropriate python version
 paste.ini:
 ifeq ($(USE_PYTHON3),yes)
 	-ln -s paste.py3.ini paste.ini
