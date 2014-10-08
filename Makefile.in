@@ -44,6 +44,7 @@ datarootdir = @datarootdir@
 pkgdatadir = $(datadir)/@PACKAGE_NAME@
 pkgincludedir = $(includedir)/@PACKAGE_NAME@
 PYTHONPATH = $(pythondir)$(PATH_SEPARATOR)$(DESTDIR)$(pythondir)
+USE_PYTHON3 = @USE_PYTHON3@
 
 # pkgpythondir = @pkgpythondir@
 # pkgpyexecdir = @pkgpyexecdir@
