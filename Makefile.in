@@ -24,8 +24,6 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PYTHON = @PYTHON@
 VIRTUALENV = @VIRTUALENV@
-SPHINXBUILD = @SPHINXBUILD@
-POSTGRES = @POSTGRES@
 SHELL = @SHELL@
 MKDIR_P = @MKDIR_P@
 INSTALL = @INSTALL@
@@ -43,13 +41,17 @@ srcdir = @srcdir@
 abs_srcdir = @abs_srcdir@
 datadir = @datadir@
 datarootdir = @datarootdir@
-pythondir = @pythondir@
-pyexecdir = @pyexecdir@
 pkgdatadir = $(datadir)/@PACKAGE_NAME@
 pkgincludedir = $(includedir)/@PACKAGE_NAME@
-pkgpythondir = @pkgpythondir@
-pkgpyexecdir = @pkgpyexecdir@
 PYTHONPATH = $(pythondir)$(PATH_SEPARATOR)$(DESTDIR)$(pythondir)
+
+# pkgpythondir = @pkgpythondir@
+# pkgpyexecdir = @pkgpyexecdir@
+# pythondir = @pythondir@
+# pyexecdir = @pyexecdir@
+# SPHINXBUILD = @SPHINXBUILD@
+# POSTGRES = @POSTGRES@
+
 
 # Maybe add a virtualenv prefix to a command
 ifneq ($(VIRTUALENV),no)
@@ -80,8 +82,10 @@ installdirs i18n virtualenv
 
 all: develop
 
-develop:
+develop: $(maybe_venv_dep) i18n
 	echo "nothin yet"
+
+# base-configs: paste.ini mediagoblin.example.ini
 
 install: installdirs
 	$(maybe_venved_python) $(srcdir)/setup.py install --prefix=$(DESTDIR)$(prefix)
@@ -98,6 +102,10 @@ ifneq ($(VIRTUALENV),no)
 	./bin/python setup.py develop --upgrade
 
 virtualenv: bin/python
+
+clean-virtualenv:
+	rm -rf ./bin/
+	rm -rf ./lib/
 endif
 
 # setup.py doesn't (yet) support an uninstall command, so until it does, you 
@@ -123,6 +131,8 @@ distclean:
 	rm -rvf $(srcdir)/autom4te.cache
 	rm -v $(srcdir)/aclocal.m4
 	rm -v $(srcdir)/Makefile
+	rm -v $(srcdir)/env
+
 
 # You can either use the setup.py sdist command or you can roll your own here
 dist:

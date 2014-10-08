@@ -46,7 +46,7 @@ dnl 2) package version (i.e. 1.2)
 dnl 3) bug/info/project email address (i.e. bug-foo@gnu.org)
 dnl----
 dnl
-AC_INIT([mediagoblin], [0.4.0.dev], [cwebber@gnu.org])
+AC_INIT([mediagoblin], [0.7.1.dev], [cwebber@gnu.org])
 
 
 dnl----
@@ -69,6 +69,27 @@ dnl
 dnl In this section, we check for the presence of important commands
 dnl and programs.
 
+AC_ARG_WITH([python3],
+	[AS_HELP_STRING([--with-python3], [Set up to use Python 3 by default.])],
+	[],
+	[with_python3=no])
+AS_IF([test "x$with_python3" != xno],
+        AC_CHECK_PROGS([PYTHON], [python3.3], [none])
+	AS_IF([test "x$PYTHON" = xnone],
+              [AC_MSG_FAILURE(
+		[--with-python3 given but no acceptable python3 (3.3) could be found])]),
+      AC_CHECK_PROGS([PYTHON], [python2.7 python2.6], [none])
+      AS_IF([test "x$PYTHON" = xnone],
+              [AC_MSG_FAILURE(
+		[No acceptable pythons (2.7, 2.6) could be found])]))
+
+
+
+dnl--A bit simpler python init----------------------------------------
+dnl Expect python2.7 or python2.6 unless --with-python3 is given.
+dnl----
+
+
 dnl--PC_INIT----------------------------------------------------------
 dnl This is the only required macro. Its primary function is to find
 dnl a Python interpreter that is compatible with the package and set 
@@ -85,8 +106,7 @@ dnl          series and the max is in the 3.0 series, non-existent
 dnl          releases (2.8 & 2.9) will be correctly skipped.
 dnl----
 dnl
-dnl PC_INIT([2.7], [3.3.1])
-
+dnl PC_INIT([3.3], [3.4])
 
 dnl--PC_PROG_PYTHON---------------------------------------------------
 dnl This macro provides a means of finding a Python interpreter.
@@ -113,10 +133,10 @@ dnl you require a specific version, you can do something like the
 dnl following example.
 dnl----
 dnl
-PC_PYTHON_PROG_PYTHON_CONFIG([python2-config])
-if [[ "x$PYTHON_CONFIG" == "x" ]]; then
-   PC_PYTHON_PROG_PYTHON_CONFIG([$PYTHON-config])
-fi   
+dnl PC_PYTHON_PROG_PYTHON_CONFIG([python2-config])
+dnl if [[ "x$PYTHON_CONFIG" == "x" ]]; then
+dnl    PC_PYTHON_PROG_PYTHON_CONFIG([$PYTHON-config])
+dnl fi   
 
 dnl----
 dnl With the following set of macros, we implement an option 
@@ -151,10 +171,10 @@ dnl print a warning. If the program uses some other documentation
 dnl system, you can do something similar with it.
 dnl----
 dnl
-# Check for sphinx-build
-AC_CHECK_PROGS([SPHINXBUILD], [sphinx-build sphinx-build3 sphinx-build2], [no])
-AS_IF([test "x$SPHINXBUILD" = xno], 
-    AC_MSG_WARN(sphinx-build is required to build documentation))
+dnl # Check for sphinx-build
+dnl AC_CHECK_PROGS([SPHINXBUILD], [sphinx-build sphinx-build3 sphinx-build2], [no])
+dnl AS_IF([test "x$SPHINXBUILD" = xno], 
+dnl     AC_MSG_WARN(sphinx-build is required to build documentation))
 
 
 dnl----
@@ -165,11 +185,14 @@ dnl
 AC_PROG_MKDIR_P
 AC_PROG_INSTALL	    
 
-# Check for a supported database program
-AC_PATH_PROG([SQLITE], [sqlite3])
-AC_PATH_PROG([POSTGRES], [psql])
-AS_IF([test "x$SQLITE" = x -a "x$POSTGRES" = "x"],
-   [AC_MSG_ERROR([SQLite or PostgreSQL is required])])
+dnl########################################
+dnl Database stuff... maybe restore this? #
+dnl########################################
+dnl # Check for a supported database program
+dnl AC_PATH_PROG([SQLITE], [sqlite3])
+dnl AC_PATH_PROG([POSTGRES], [psql])
+dnl AS_IF([test "x$SQLITE" = x -a "x$POSTGRES" = "x"],
+dnl    [AC_MSG_ERROR([SQLite or PostgreSQL is required])])
 
 
 dnl#################################
@@ -239,7 +262,7 @@ dnl provide compatibility with GNU Makefile specifications, allowing
 dnl the user to change the prefix from the commandline.
 dnl----
 dnl
-PC_PYTHON_SITE_PACKAGE_DIR
+dnl PC_PYTHON_SITE_PACKAGE_DIR
 
 
 dnl--PC_PYTHON_CHECK_EXEC_DIR------------------------------------------
@@ -254,7 +277,7 @@ dnl Same as PC_PYTHON_SITE_PACKAGE_DIR but for $exec-prefix. Stored in
 dnl pkgpyexecdir
 dnl----
 dnl
-PC_PYTHON_EXEC_PACKAGE_DIR
+dnl PC_PYTHON_EXEC_PACKAGE_DIR
 
 
 dnl###############################
@@ -270,13 +293,13 @@ dnl
 dnl PC_PYTHON_CHECK_MODULE([foo])
 
 
-# Check for python-lxml module
-PC_PYTHON_CHECK_MODULE([lxml], [], 
-                       [AC_MSG_ERROR([python-lxml is required])])
-
-# Check for the Python Imaging Library
-PC_PYTHON_CHECK_MODULE([Image], [],
-                       [AC_MSG_ERROR([Python Imaging Library is required])])
+dnl # Check for python-lxml module
+dnl PC_PYTHON_CHECK_MODULE([lxml], [], 
+dnl                        [AC_MSG_ERROR([python-lxml is required])])
+dnl 
+dnl # Check for the Python Imaging Library
+dnl PC_PYTHON_CHECK_MODULE([Image], [],
+dnl                        [AC_MSG_ERROR([Python Imaging Library is required])])
 
 
 dnl--PC_PYTHON_CHECK_FUNC([PYTHON-MODULE], [FUNCTION], [ARGS], 
@@ -402,7 +425,7 @@ dnl
 dnl PC_PYTHON_CHECK_ABI_FLAGS
 
 
-dnl--MediaGoblin specific variables ----------------------------------
+dnl--MediaGoblin specific commands/variables ------------------------
 
 
 dnl#########
