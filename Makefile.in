@@ -121,6 +121,7 @@ virtualenv: bin/python
 clean-virtualenv:
 	rm -rf ./bin/
 	rm -rf ./lib/
+	rm -rf ./include/
 endif
 
 # setup.py doesn't (yet) support an uninstall command, so until it does, you 
