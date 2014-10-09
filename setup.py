@@ -58,7 +58,7 @@ if PY2:
     pyversion_install_requires.append('PasteScript')
     pyversion_install_requires.append('Paste')
 else:
-    pyversion_install_requires('gunicorn')
+    pyversion_install_requires.append('gunicorn')
 
 install_requires = [
     'alembic==0.6.6',
