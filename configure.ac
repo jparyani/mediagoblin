@@ -435,7 +435,6 @@ dnl#########
 
 dnl Define the files to be configured
 AC_CONFIG_FILES([Makefile])
-AC_CONFIG_FILES([lazystarter.sh], [chmod +x lazystarter.sh])
 
 dnl Generate config.status
 AC_OUTPUT
