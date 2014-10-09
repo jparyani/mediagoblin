@@ -45,6 +45,79 @@ import six
 
 _log = logging.getLogger(__name__)
 
+class Location(Base):
+    """ Represents a physical location """
+    __tablename__ = "core__locations"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode)
+
+    # GPS coordinates
+    position = Column(MutationDict.as_mutable(JSONEncoded))
+    address = Column(MutationDict.as_mutable(JSONEncoded))
+
+    @classmethod
+    def create(cls, data, obj):
+        location = cls()
+        location.unserialize(data)
+        location.save()
+        obj.location = location.id
+        return location
+
+    def serialize(self, request):
+        location = {"objectType": "place"}
+
+        if self.name is not None:
+            location["name"] = self.name
+
+        if self.position:
+            location["position"] = self.position
+
+        if self.address:
+            location["address"] = self.address
+
+        return location
+
+    def unserialize(self, data):
+        if "name" in data:
+            self.name = data["name"]
+
+        self.position = {}
+        self.address = {}
+
+        # nicer way to do this?
+        if "position" in data:
+            # TODO: deal with ISO 9709 formatted string as position
+            if "altitude" in data["position"]:
+                self.position["altitude"] = data["position"]["altitude"]
+
+            if "direction" in data["position"]:
+                self.position["direction"] = data["position"]["direction"]
+
+            if "longitude" in data["position"]:
+                self.position["longitude"] = data["position"]["longitude"]
+
+            if "latitude" in data["position"]:
+                self.position["latitude"] = data["position"]["latitude"]
+
+        if "address" in data:
+            if "formatted" in data["address"]:
+                self.address["formatted"] = data["address"]["formatted"]
+
+            if "streetAddress" in data["address"]:
+                self.address["streetAddress"] = data["address"]["streetAddress"]
+
+            if "locality" in data["address"]:
+                self.address["locality"] = data["address"]["locality"]
+
+            if "region" in data["address"]:
+                self.address["region"] = data["address"]["region"]
+
+            if "postalCode" in data["address"]:
+                self.address["postalCode"] = data["addresss"]["postalCode"]
+
+            if "country" in data["address"]:
+                self.address["country"] = data["address"]["country"]
 
 class User(Base, UserMixin):
     """
@@ -71,6 +144,8 @@ class User(Base, UserMixin):
     bio = Column(UnicodeText)  # ??
     uploaded = Column(Integer, default=0)
     upload_limit = Column(Integer)
+    location = Column(Integer, ForeignKey("core__locations.id"))
+    get_location = relationship("Location", lazy="joined")
 
     activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
 
@@ -175,8 +250,17 @@ class User(Base, UserMixin):
             user.update({"summary": self.bio})
         if self.url:
             user.update({"url": self.url})
+        if self.location:
+            user.update({"location": self.get_location.seralize(request)})
 
         return user
+
+    def unserialize(self, data):
+        if "summary" in data:
+            self.bio = data["summary"]
+
+        if "location" in data:
+            Location.create(data, self)
 
 class Client(Base):
     """
@@ -265,6 +349,8 @@ class MediaEntry(Base, MediaEntryMixin):
         # or use sqlalchemy.types.Enum?
     license = Column(Unicode)
     file_size = Column(Integer, default=0)
+    location = Column(Integer, ForeignKey("core__locations.id"))
+    get_location = relationship("Location", lazy="joined")
 
     fail_error = Column(Unicode)
     fail_metadata = Column(JSONEncoded)
@@ -476,6 +562,9 @@ class MediaEntry(Base, MediaEntryMixin):
         if self.license:
             context["license"] = self.license
 
+        if self.location:
+            context["location"] = self.get_location.serialize(request)
+
         if show_comments:
             comments = [
                 comment.serialize(request) for comment in self.get_comments()]
@@ -503,6 +592,9 @@ class MediaEntry(Base, MediaEntryMixin):
 
         if "license" in data:
             self.license = data["license"]
+
+        if "location" in data:
+            Licence.create(data["location"], self)
 
         return True
 
@@ -629,6 +721,8 @@ class MediaComment(Base, MediaCommentMixin):
     author = Column(Integer, ForeignKey(User.id), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.now)
     content = Column(UnicodeText, nullable=False)
+    location = Column(Integer, ForeignKey("core__locations.id"))
+    get_location = relationship("Location", lazy="joined")
 
     # Cascade: Comments are owned by their creator. So do the full thing.
     # lazy=dynamic: People might post a *lot* of comments,
@@ -666,6 +760,9 @@ class MediaComment(Base, MediaCommentMixin):
             "author": author.serialize(request)
         }
 
+        if self.location:
+            context["location"] = self.get_location.seralize(request)
+
         return context
 
     def unserialize(self, data):
@@ -692,6 +789,10 @@ class MediaComment(Base, MediaCommentMixin):
 
         self.media_entry = media.id
         self.content = data["content"]
+
+        if "location" in data:
+            Location.create(data["location"], self)
+
         return True
 
 
@@ -710,6 +811,9 @@ class Collection(Base, CollectionMixin):
                      index=True)
     description = Column(UnicodeText)
     creator = Column(Integer, ForeignKey(User.id), nullable=False)
+    location = Column(Integer, ForeignKey("core__locations.id"))
+    get_location = relationship("Location", lazy="joined")
+
     # TODO: No of items in Collection. Badly named, can we migrate to num_items?
     items = Column(Integer, default=0)
 
@@ -889,9 +993,8 @@ class ProcessingNotification(Notification):
         'polymorphic_identity': 'processing_notification'
     }
 
-with_polymorphic(
-    Notification,
-    [ProcessingNotification, CommentNotification])
+# the with_polymorphic call has been moved to the bottom above MODELS
+# this is because it causes conflicts with relationship calls.
 
 class ReportBase(Base):
     """
@@ -1243,6 +1346,10 @@ class Activity(Base, ActivityMixin):
             self.updated = datetime.datetime.now()
         super(Activity, self).save(*args, **kwargs)
 
+with_polymorphic(
+    Notification,
+    [ProcessingNotification, CommentNotification])
+
 MODELS = [
     User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
     MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
@@ -1250,7 +1357,8 @@ MODELS = [
     CommentSubscription, ReportBase, CommentReport, MediaReport, UserBan,
 	Privilege, PrivilegeUserAssociation,
     RequestToken, AccessToken, NonceTimestamp,
-    Activity, ActivityIntermediator, Generator]
+    Activity, ActivityIntermediator, Generator,
+    Location]
 
 """
  Foundations are the default rows that are created immediately after the tables

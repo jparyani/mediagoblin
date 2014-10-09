@@ -208,6 +208,11 @@ def feed_endpoint(request):
                         "Invalid 'image' with id '{0}'".format(media_id)
                     )
 
+
+                # Add location if one exists
+                if "location" in data:
+                    Location.create(data["location"], self)
+
                 media.save()
                 api_add_to_feed(request, media)
 
@@ -303,6 +308,15 @@ def feed_endpoint(request):
                     "object": image.serialize(request),
                 }
                 return json_response(activity)
+            elif obj["objectType"] == "person":
+                # check this is the same user
+                if "id" not in obj or obj["id"] != requested_user.id:
+                    return json_error(
+                        "Incorrect user id, unable to update"
+                    )
+
+                requested_user.unserialize(obj)
+                requested_user.save()
 
     elif request.method != "GET":
         return json_error(

@@ -47,7 +47,7 @@ from mediagoblin.tools.text import (
     convert_to_tag_list_of_dicts, media_tags_as_string)
 from mediagoblin.tools.url import slugify
 from mediagoblin.db.util import check_media_slug_used, check_collection_slug_used
-from mediagoblin.db.models import User, Client, AccessToken
+from mediagoblin.db.models import User, Client, AccessToken, Location
 
 import mimetypes
 
@@ -202,13 +202,28 @@ def edit_profile(request, url_user=None):
 
     user = url_user
 
+    # Get the location name
+    if user.location is None:
+        location = ""
+    else:
+        location = user.get_location.name
+
     form = forms.EditProfileForm(request.form,
         url=user.url,
-        bio=user.bio)
+        bio=user.bio,
+        location=location)
 
     if request.method == 'POST' and form.validate():
         user.url = six.text_type(form.url.data)
         user.bio = six.text_type(form.bio.data)
+
+        # Save location
+        if form.location.data and user.location is None:
+            user.get_location = Location(name=unicode(form.location.data))
+        elif form.location.data:
+            location = user.get_location.name
+            location.name = unicode(form.location.data)
+            location.save()
 
         user.save()
 
@@ -480,7 +495,7 @@ def edit_metadata(request, media):
         json_ld_metadata = compact_and_validate(metadata_dict)
         media.media_metadata = json_ld_metadata
         media.save()
-        return redirect_obj(request, media)      
+        return redirect_obj(request, media)
 
     if len(form.media_metadata) == 0:
         for identifier, value in six.iteritems(media.media_metadata):

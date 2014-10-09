@@ -61,6 +61,7 @@ class EditProfileForm(wtforms.Form):
         [wtforms.validators.Optional(),
          wtforms.validators.URL(message=_("This address contains errors"))])
 
+    location = wtforms.TextField(_('Hometown'))
 
 class EditAccountForm(wtforms.Form):
     wants_comment_notification = wtforms.BooleanField(

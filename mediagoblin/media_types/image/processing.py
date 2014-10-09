@@ -27,6 +27,7 @@ import argparse
 import six
 
 from mediagoblin import mg_globals as mgg
+from mediagoblin.db.models import Location
 from mediagoblin.processing import (
     BadMediaFail, FilenameBuilder,
     MediaProcessor, ProcessingManager,
@@ -235,8 +236,7 @@ class CommonImageProcessor(MediaProcessor):
             self.entry.media_data_init(exif_all=exif_all)
 
         if len(gps_data):
-            for key in list(gps_data.keys()):
-                gps_data['gps_' + key] = gps_data.pop(key)
+            Location.create({"position": gps_data}, self.entry)
             self.entry.media_data_init(**gps_data)
 
 

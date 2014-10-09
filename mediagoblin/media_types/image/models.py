@@ -39,10 +39,6 @@ class ImageData(Base):
     width = Column(Integer)
     height = Column(Integer)
     exif_all = Column(JSONEncoded)
-    gps_longitude = Column(Float)
-    gps_latitude = Column(Float)
-    gps_altitude = Column(Float)
-    gps_direction = Column(Float)
 
 
 DATA_MODEL = ImageData

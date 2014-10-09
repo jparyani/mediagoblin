@@ -17,14 +17,13 @@
 #}
 
 {% block geolocation_map %}
-  {% if     media.media_data.gps_latitude is defined
-        and media.media_data.gps_latitude
-        and media.media_data.gps_longitude is defined
-        and media.media_data.gps_longitude %}
-    <h3>{% trans %}Location{% endtrans %}</h3>
+  {% if model.location
+        and model.get_location.position
+        and model.get_location.position.latitude
+        and model.get_location.position.longitude %}
     <div>
-      {%- set lon = media.media_data.gps_longitude %}
-      {%- set lat = media.media_data.gps_latitude %}
+      {%- set lon = model.get_location.position.longitude %}
+      {%- set lat = model.get_location.position.latitude %}
       {%- set osm_url = "http://openstreetmap.org/?mlat={lat}&mlon={lon}".format(lat=lat, lon=lon) %}
         <div id="tile-map" style="width: 100%; height: 196px;">
 	  <input type="hidden" id="gps-longitude"

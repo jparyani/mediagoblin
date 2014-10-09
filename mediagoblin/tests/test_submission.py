@@ -363,7 +363,7 @@ class TestSubmission:
     def test_media_data(self):
         self.check_normal_upload(u"With GPS data", GPS_JPG)
         media = self.check_media(None, {"title": u"With GPS data"}, 1)
-        assert media.media_data.gps_latitude == 59.336666666666666
+        assert media.get_location.position["latitude"] == 59.336666666666666
 
     def test_processing(self):
         public_store_dir = mg_globals.global_config[
