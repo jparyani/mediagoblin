@@ -16,13 +16,33 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-use_python3=@USE_PYTHON3@
-
 selfname=$(basename "$0")
 local_bin="./bin"
+
+# Test whether or not gunicorn is installed
+# -----------------------------------------
+if [ -f "${local_bin}/python" ]; then
+    our_python="${local_bin}/python";
+else
+    our_python="python";
+fi
+
+if $our_python -c "import sys
+try:
+    import gunicorn
+    sys.exit(0)
+except ImportError:
+    sys.exit(1)
+"; then
+    use_gunicorn=true;
+else
+    use_gunicorn=false;
+fi
+# -----------------------------------------
+
 case "$selfname" in
     lazyserver.sh)
-        if $use_python3; then
+        if $use_gunicorn; then
             starter_cmd=gunicorn;
         else
             starter_cmd=paster;
@@ -76,7 +96,7 @@ set -x
 export CELERY_ALWAYS_EAGER=true
 case "$selfname" in
     lazyserver.sh)
-        if $use_python3; then
+        if $use_gunicorn; then
             $starter --paste "$ini_file" --log-file=- $@;
         else
             $starter serve "$ini_file" "$@" --reload;
