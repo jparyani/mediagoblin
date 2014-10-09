@@ -290,3 +290,34 @@ def paste_app_factory(global_config, **app_config):
     mgoblin_app = hook_transform('wrap_wsgi', mgoblin_app)
 
     return mgoblin_app
+
+
+def paste_server_selector(wsgi_app, global_config=None, **app_config):
+    """
+    Select between gunicorn and paste depending on what ia available
+    """
+    # See if we can import the gunicorn server...
+    # otherwise we'll use the paste server
+    try:
+        import gunicorn
+    except ImportError:
+        gunicorn = None
+
+    if gunicorn is None:
+        # use paste
+        from paste.httpserver import server_runner
+
+        cleaned_app_config = dict(
+            [(key, app_config[key])
+             for key in app_config
+             if key in ["host", "port", "handler", "ssl_pem", "ssl_context",
+                        "server_version", "protocol_version", "start_loop",
+                        "daemon_threads", "socket_timeout", "use_threadpool",
+                        "threadpool_workers", "threadpool_options",
+                        "request_queue_size"]])
+
+        return server_runner(wsgi_app, global_config, **cleaned_app_config)
+    else:
+        # use gunicorn
+        from gunicorn.app.pasterapp import PasterServerApplication
+        return PasterServerApplication(wsgi_app, global_config, **app_config)

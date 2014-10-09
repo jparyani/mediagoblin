@@ -123,6 +123,9 @@ try:
         [paste.app_factory]
         app = mediagoblin.app:paste_app_factory
 
+        [paste.server_runner]
+        paste_server_selector = mediagoblin.app:paste_server_selector
+
         [paste.filter_app_factory]
         errors = mediagoblin.errormiddleware:mgoblin_error_middleware
 
