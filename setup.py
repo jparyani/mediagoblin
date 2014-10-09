@@ -40,24 +40,27 @@ def get_version():
         raise RuntimeError("Unable to find version string in %s." %
                            VERSIONFILE)
 
-py2_only_install_requires = []
+pyversion_install_requires = []
 if PY2:
-    py2_only_install_requires.append('argparse')  # only for < 2.7
-    py2_only_install_requires.append('PasteScript')
+    pyversion_install_requires.append('argparse')  # only for < 2.7
+    pyversion_install_requires.append('PasteScript')
     # newer sqlalchemy-migrate requires pbr which BREAKS EVERYTHING AND IS
     # TERRIBLE AND IS THE END OF ALL THINGS
     # I'd love to remove this restriction.
-    py2_only_install_requires.append('sqlalchemy-migrate<0.8')
+    pyversion_install_requires.append('sqlalchemy-migrate<0.8')
     # # Annoying.  Please remove once we can!  We only indirectly
     # # use pbr, and currently it breaks things, presumably till
     # # their next release.
-    # py2_only_install_requires.append('pbr==0.5.22')
-    py2_only_install_requires.append('mock')  # mock is in the stdlib for 3.3+
+    # pyversion_install_requires.append('pbr==0.5.22')
+    pyversion_install_requires.append('mock')  # mock is in the stdlib for 3.3+
     # PyPI version (1.4.2) does not have proper Python 3 support
-    py2_only_install_requires.append('ExifRead')
+    pyversion_install_requires.append('ExifRead')
+    pyversion_install_requires.append('PasteScript')
+    pyversion_install_requires.append('Paste')
+else:
+    pyversion_install_requires('gunicorn')
 
 install_requires = [
-    'gunicorn',
     'alembic==0.6.6',
     'python-dateutil',
     'wtforms',
@@ -90,7 +93,7 @@ install_requires = [
     # their package managers.
     # 'lxml',
     # 'Pillow',
-] + py2_only_install_requires
+] + pyversion_install_requires
 
 dependency_links = []
 if not PY2:
