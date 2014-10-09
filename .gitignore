@@ -29,6 +29,7 @@
 /env
 /paste.ini
 /mediagoblin.ini
+/lazystarter.sh
 
 # pyconfigure/automake generated files
 /Makefile

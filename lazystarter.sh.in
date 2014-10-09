@@ -16,11 +16,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+use_python3=@USE_PYTHON3@
+
 selfname=$(basename "$0")
 local_bin="./bin"
 case "$selfname" in
     lazyserver.sh)
-        starter_cmd=gunicorn
+        if $use_python3; then
+            starter_cmd=gunicorn;
+        else
+            starter_cmd=paster;
+        fi
         ini_prefix=paste
         ;;
     lazycelery.sh)
@@ -70,7 +76,11 @@ set -x
 export CELERY_ALWAYS_EAGER=true
 case "$selfname" in
     lazyserver.sh)
-        $starter --paste "$ini_file" --log-file=- $@
+        if $use_python3; then
+            $starter --paste "$ini_file" --log-file=- $@;
+        else
+            $starter serve "$ini_file" "$@" --reload;
+        fi
         ;;
     lazycelery.sh)
         MEDIAGOBLIN_CONFIG="${ini_file}" \

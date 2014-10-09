@@ -80,12 +80,12 @@ AC_ARG_WITH([python3],
 	[with_python3=no])
 AS_IF([test "x$with_python3" != xno],
         AC_CHECK_PROGS([PYTHON], [python3.3], [none])
-        AC_SUBST([USE_PYTHON3], [yes])
+        AC_SUBST([USE_PYTHON3], [true])
 	AS_IF([test "x$PYTHON" = xnone],
               [AC_MSG_FAILURE(
 		[--with-python3 given but no acceptable python3 (3.3) could be found])]),
       AC_CHECK_PROGS([PYTHON], [python2.7 python2.6], [none])
-      AC_SUBST([USE_PYTHON3], [no])
+      AC_SUBST([USE_PYTHON3], [false])
       AS_IF([test "x$PYTHON" = xnone],
               [AC_MSG_FAILURE(
 		[No acceptable python (2.7, 2.6) could be found])]))
@@ -435,7 +435,7 @@ dnl#########
 
 dnl Define the files to be configured
 AC_CONFIG_FILES([Makefile])
-AC_CONFIG_FILES([env], [chmod +x env])
+AC_CONFIG_FILES([lazystarter.sh], [chmod +x lazystarter.sh])
 
 dnl Generate config.status
 AC_OUTPUT
