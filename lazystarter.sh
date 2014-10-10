@@ -98,6 +98,14 @@ else
     exit 1
 fi
 
+# If the user somehow doesn't have a mediagoblin.ini
+# (maybe they aren't using make) give them one
+if [ -f mediagoblin.example.ini ] && \
+    [ ! -f mediagoblin.ini ]; then
+    echo "No mediagoblin.ini found, making one";
+    cp --no-clobber mediagoblin.example.ini mediagoblin.ini;
+fi
+
 set -x
 export CELERY_ALWAYS_EAGER=true
 case "$selfname" in
