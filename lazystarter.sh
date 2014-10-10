@@ -62,8 +62,14 @@ esac
 if [ "$1" = "-h" ]; then
     echo "$0 [-h] [-c filename.ini] [ARGS_to_${starter_cmd} ...]"
     echo ""
-    echo "   For Gunicorn settings, see at:"
-    echo "      http://docs.gunicorn.org/en/19.0/settings.html"
+    if $use_gunicorn; then
+        echo "   For Gunicorn settings, see at:"
+        echo "      http://docs.gunicorn.org/en/19.0/settings.html"
+    else
+        echo "   For example:"
+        echo "         $0 -c fcgi.ini port_number=23371"
+        echo "     or: $0 --server-name=fcgi --log-file=paste.log"
+    fi
     echo ""
     echo "   The configfile defaults to ${ini_prefix}_local.ini,"
     echo "   if that is readable, otherwise ${ini_prefix}.ini."
