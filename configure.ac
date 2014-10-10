@@ -54,7 +54,7 @@ dnl Load macros from the m4/ directory. If you plan to write new
 dnl macros, put them in files in this directory.
 dnl----
 dnl
-AC_CONFIG_MACRO_DIR([m4])
+dnl AC_CONFIG_MACRO_DIR([m4])
 
 
 dnl # The default prefix should be changed from /usr/local. Set it, as in
