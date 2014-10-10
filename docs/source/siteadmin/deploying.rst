@@ -207,12 +207,16 @@ And set up the in-package virtualenv::
    We presently have an **experimental** make-style deployment system.  if
    you'd like to try it, instead of the above command, you can run::
 
-     ./experimental-bootstrap.sh && ./configure && make
+     ./bootstrap.sh && ./configure && make
 
    This also includes a number of nice features, such as keeping your
    viratualenv up to date by simply running `make update`.
 
    Note: this is liable to break.  Use this method with caution.
+
+You then need to make a local copy of mediagoblin.ini, if you don't have one::
+
+   cp --no-clobber mediagoblin.example.ini mediagoblin.ini
 
 The above provides an in-package install of ``virtualenv``. While this
 is counter to the conventional ``virtualenv`` configuration, it is
