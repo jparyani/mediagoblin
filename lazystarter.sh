@@ -100,6 +100,8 @@ fi
 
 # If the user somehow doesn't have a mediagoblin.ini
 # (maybe they aren't using make) give them one
+#   ... this doesn't fulfill all conditions maybe, but is a stopgap
+#   that doesn't have noticable race conditions
 if [ -f mediagoblin.example.ini ] && \
     [ ! -f mediagoblin.ini ]; then
     echo "No mediagoblin.ini found, making one";
