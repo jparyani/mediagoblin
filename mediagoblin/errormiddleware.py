@@ -14,8 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from paste.exceptions.errormiddleware import make_error_middleware
-
 MGOBLIN_ERROR_MESSAGE = """\
 <div style="text-align:center;font-family: monospace">
   <h1>YEOWCH... that's an error!</h1>
@@ -56,5 +54,11 @@ def mgoblin_error_middleware(app, global_conf, **kw):
     It should take all of Paste's default options, so see:
       http://pythonpaste.org/modules/exceptions.html
     """
+    # No paste?  Fail in a friendly way!
+    try:
+        from paste.exceptions.errormiddleware import make_error_middleware
+    except ImportError:
+        return app
+
     kw['error_message'] = MGOBLIN_ERROR_MESSAGE
     return make_error_middleware(app, global_conf, **kw)
