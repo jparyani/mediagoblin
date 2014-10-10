@@ -85,20 +85,11 @@ installdirs i18n virtualenv
 
 all: develop
 
-develop: $(maybe_venv_dep) i18n paste.ini mediagoblin.ini
+develop: $(maybe_venv_dep) i18n mediagoblin.ini
 
 # NEVER clobber a user's mediagoblin.ini once they've defined it
 mediagoblin.ini:
 	cp --no-clobber mediagoblin.example.ini mediagoblin.ini
-
-# We just symlink the mediagoblin from the appropriate python version
-# Note, we DO clobber paste.ini ...
-paste.ini:
-ifeq ($(USE_PYTHON3),true)
-	ln -s paste.py3.ini paste.ini
-else
-	ln -s paste.py2.ini paste.ini
-endif
 
 # base-configs: paste.ini mediagoblin.example.ini
 
@@ -157,6 +148,12 @@ distclean: $(maybe_venv_clean)
 	rm -vf $(srcdir)/Makefile
 
 
+###########################################################################
+# These things aren't really tested / supported yet.
+###########################################################################
+
+
+
 # You can either use the setup.py sdist command or you can roll your own here
 dist:
 #	$(maybe_venved_python) setup.py sdist
@@ -186,6 +183,10 @@ installdirs:
 # 	$(PYTHON) $(srcdir)/setup.py develop --prefix=$(prefix) --upgrade
 # endif	
 # 	$(prefix)/bin/gmg dbupdate
+
+######################
+# Needs to be updated?
+######################
 
 # The following show how to install documentation. In this example,
 # docs are built from a separate Makefile contained in the docs
