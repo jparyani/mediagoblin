@@ -16,10 +16,15 @@
 
 import argparse
 import os
+import shutil
 
 import six
 
 from mediagoblin.tools.common import import_component
+
+import logging
+_log = logging.getLogger(__name__)
+logging.basicConfig()
 
 
 SUBCOMMAND_MAP = {
@@ -126,6 +131,27 @@ def main_cli():
             args.conf_file = 'mediagoblin_local.ini'
         else:
             args.conf_file = 'mediagoblin.ini'
+
+    # This is a hopefully TEMPORARY hack for adding a mediagoblin.ini
+    # if none exists, to make up for a deficiency as we are migrating
+    # our docs to the new "no mediagoblin.ini by default" workflow.
+    # Normally, the docs should provide instructions for this, but
+    # since 0.7.1 docs say "install from master!" and yet we removed
+    # mediagoblin.ini, we need to cover our bases...
+
+    parent_directory = os.path.split(os.path.abspath(args.conf_file))[0]
+    if os.path.split(args.conf_file)[1] == 'mediagoblin.ini' \
+       and not os.path.exists(args.conf_file) \
+       and os.path.exists(
+           os.path.join(
+               parent_directory, 'mediagoblin.example.ini')):
+        # Do the copy-over of the mediagoblin config for the user
+        _log.warning(
+            "No mediagoblin.ini found and no other path given, "
+            "so making one for you.")
+        shutil.copy(
+            os.path.join(parent_directory, "mediagoblin.example.ini"),
+            os.path.join(parent_directory, "mediagoblin.ini"))
 
     args.func(args)
 
