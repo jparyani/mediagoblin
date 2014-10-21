@@ -31,12 +31,15 @@ class GMGTableBase(object):
         # The key *has* to exist on sql.
         return getattr(self, key)
 
-    def save(self):
+    def save(self, commit=True):
         sess = object_session(self)
         if sess is None:
             sess = Session()
         sess.add(self)
-        sess.commit()
+        if commit:
+            sess.commit()
+        else:
+            sess.flush()
 
     def delete(self, commit=True):
         """Delete the object and commit the change immediately by default"""

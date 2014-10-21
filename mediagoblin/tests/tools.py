@@ -27,7 +27,7 @@ from webtest import TestApp
 from mediagoblin import mg_globals
 from mediagoblin.db.models import User, MediaEntry, Collection, MediaComment, \
     CommentSubscription, CommentNotification, Privilege, CommentReport, Client, \
-    RequestToken, AccessToken
+    RequestToken, AccessToken, Activity, Generator
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.db.base import Session
@@ -346,3 +346,28 @@ def fixture_add_comment_report(comment=None, reported_user=None,
     Session.expunge(comment_report)
 
     return comment_report
+
+def fixture_add_activity(obj, verb="post", target=None, generator=None, actor=None):
+    if generator is None:
+        generator = Generator(
+            name="GNU MediaGoblin",
+            object_type="service"
+        )
+        generator.save()
+
+    if actor is None:
+        actor = fixture_add_user()
+
+    activity = Activity(
+        verb=verb,
+        actor=actor.id,
+        generator=generator.id,
+    )
+
+    activity.set_object(obj)
+
+    if target is not None:
+        activity.set_target(target)
+
+    activity.save()
+    return activity
