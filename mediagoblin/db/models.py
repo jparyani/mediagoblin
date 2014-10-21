@@ -26,7 +26,7 @@ import datetime
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
         SmallInteger, Date
-from sqlalchemy.orm import relationship, backref, with_polymorphic
+from sqlalchemy.orm import relationship, backref, with_polymorphic, validates
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -1240,11 +1240,11 @@ class ActivityIntermediator(Base):
         if key is None:
             raise ValueError("Invalid type of object given")
 
-        # We need to save so that self.id is populated
         self.type = key
-        self.save()
 
-        # First set self as activity
+        # We need to populate the self.id so we need to save but, we don't
+        # want to save this AI in the database (yet) so commit=False.
+        self.save(commit=False)
         obj.activity = self.id
         obj.save()
 
@@ -1256,10 +1256,11 @@ class ActivityIntermediator(Base):
         model = self.TYPES[self.type]
         return model.query.filter_by(activity=self.id).first()
 
-    def save(self, *args, **kwargs):
-        if self.type not in self.TYPES.keys():
-            raise ValueError("Invalid type set")
-        Base.save(self, *args, **kwargs)
+    @validates("type")
+    def validate_type(self, key, value):
+        """ Validate that the type set is a valid type """
+        assert value in self.TYPES
+        return value
 
 class Activity(Base, ActivityMixin):
     """

@@ -20,10 +20,12 @@
 from __future__ import print_function
 
 from mediagoblin.db.base import Session
-from mediagoblin.db.models import MediaEntry, User, Privilege
+from mediagoblin.db.models import MediaEntry, User, Privilege, Activity, \
+                                  Generator
 
 from mediagoblin.tests import MGClientTestCase
-from mediagoblin.tests.tools import fixture_add_user
+from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry, \
+                                    fixture_add_activity
 
 try:
     import mock
@@ -230,3 +232,55 @@ class TestUserUrlForSelf(MGClientTestCase):
             self.user(u'lindsay').url_for_self(fake_urlgen())
         assert excinfo.errisinstance(TypeError)
         assert 'object is not callable' in str(excinfo)
+
+class TestActivitySetGet(object):
+    """ Test methods on the Activity and ActivityIntermediator models """
+
+    @pytest.fixture(autouse=True)
+    def setup(self, test_app):
+        self.app = test_app
+        self.user = fixture_add_user()
+        self.obj = fixture_media_entry()
+        self.target = fixture_media_entry()
+
+    def test_set_activity_object(self):
+        """ Activity.set_object should produce ActivityIntermediator """
+        # The fixture will set self.obj as the object on the activity.
+        activity = fixture_add_activity(self.obj, actor=self.user)
+
+        # Assert the media has been associated with an AI
+        assert self.obj.activity is not None
+
+        # Assert the AI on the media and object are the same
+        assert activity.object == self.obj.activity
+
+    def test_activity_set_target(self):
+        """ Activity.set_target should produce ActivityIntermediator """
+        # This should set everything needed on the target
+        activity = fixture_add_activity(self.obj, actor=self.user)
+        activity.set_target(self.target)
+
+        # Assert the media has been associated with the AI
+        assert self.target.activity is not None
+
+        # assert the AI on the media and target are the same
+        assert activity.target == self.target.activity
+
+    def test_get_activity_object(self):
+        """ Activity.get_object should return a set object """
+        activity = fixture_add_activity(self.obj, actor=self.user)
+
+        print("self.obj.activity = {0}".format(self.obj.activity))
+
+        # check we now can get the object
+        assert activity.get_object is not None
+        assert activity.get_object.id == self.obj.id
+
+    def test_get_activity_target(self):
+        """ Activity.set_target should return a set target """
+        activity = fixture_add_activity(self.obj, actor=self.user)
+        activity.set_target(self.target)
+
+        # check we can get the target
+        assert activity.get_target is not None
+        assert activity.get_target.id == self.target.id
