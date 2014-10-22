@@ -87,42 +87,45 @@ class GenerateSlugMixin(object):
            generated bits until it's unique.  That'll be a little bit of junk,
            but at least it has the basis of a nice slug.
         """
+
         #Is already a slug assigned? Check if it is valid
         if self.slug:
-            self.slug = slugify(self.slug)
+            slug = slugify(self.slug)
 
         # otherwise, try to use the title.
         elif self.title:
             # assign slug based on title
-            self.slug = slugify(self.title)
+            slug = slugify(self.title)
+
+        else:
+            # We don't have any information to set a slug
+            return
 
         # We don't want any empty string slugs
-        if self.slug == u"":
-            self.slug = None
-
-        # Do we have anything at this point?
-        # If not, we're not going to get a slug
-        # so just return... we're not going to force one.
-        if not self.slug:
-            return  # giving up!
+        if slug == u"":
+            return
 
         # Otherwise, let's see if this is unique.
-        if self.check_slug_used(self.slug):
+        if self.check_slug_used(slug):
             # It looks like it's being used... lame.
 
             # Can we just append the object's id to the end?
             if self.id:
-                slug_with_id = u"%s-%s" % (self.slug, self.id)
+                slug_with_id = u"%s-%s" % (slug, self.id)
                 if not self.check_slug_used(slug_with_id):
                     self.slug = slug_with_id
                     return  # success!
 
             # okay, still no success;
             # let's whack junk on there till it's unique.
-            self.slug += '-' + uuid.uuid4().hex[:4]
+            slug += '-' + uuid.uuid4().hex[:4]
             # keep going if necessary!
-            while self.check_slug_used(self.slug):
-                self.slug += uuid.uuid4().hex[:4]
+            while self.check_slug_used(slug):
+                slug += uuid.uuid4().hex[:4]
+
+        # self.check_slug_used(slug) must be False now so we have a slug that
+        # we can use now.
+        self.slug = slug
 
 
 class MediaEntryMixin(GenerateSlugMixin):
