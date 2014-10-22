@@ -233,22 +233,6 @@ def test_register_views(test_app):
     assert urlparse.urlsplit(response.location)[2] == '/'
     assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
 
-    ## Verify that username is lowercased on login attempt
-    template.clear_test_template_context()
-    response = test_app.post(
-        '/auth/login/', {
-            'username': u'ANGRYGIRL',
-            'password': 'iamveryveryangry'})
-
-    # Username should no longer be uppercased; it should be lowercased
-    assert not form.username.data == u'ANGRYGIRL'
-    assert form.username.data == u'angrygirl'
-
-    # User should be redirected
-    response.follow()
-    assert urlparse.urlsplit(response.location)[2] == '/'
-    assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
-
 def test_authentication_views(test_app):
     """
     Test logging in and logging out
@@ -350,6 +334,19 @@ def test_authentication_views(test_app):
             'password': 'toast',
             'next' : '/u/chris/'})
     assert urlparse.urlsplit(response.location)[2] == '/u/chris/'
+
+    ## Verify that username is lowercased on login attempt
+    template.clear_test_template_context()
+    response = test_app.post(
+        '/auth/login/', {
+            'username': u'ANDREW',
+            'password': 'fuselage'})
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
+    form = context['login_form']
+
+    # Username should no longer be uppercased; it should be lowercased
+    assert not form.username.data == u'ANDREW'
+    assert form.username.data == u'andrew'
 
 @pytest.fixture()
 def authentication_disabled_app(request):
