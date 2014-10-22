@@ -301,6 +301,7 @@ def feed_endpoint(request):
                     return json_error(
                         "Invalid 'image' with id '{0}'".format(obj_id)
                     )
+                image.generate_slug()
                 image.save()
 
                 activity = {

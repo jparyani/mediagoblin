@@ -286,9 +286,6 @@ def api_upload_request(request, file_data, entry):
 
 def api_add_to_feed(request, entry):
     """ Add media to Feed """
-    if entry.title:
-        entry.generate_slug()
-
     feed_url = request.urlgen(
         'mediagoblin.user_pages.atom_feed',
         qualified=True, user=request.user.username
