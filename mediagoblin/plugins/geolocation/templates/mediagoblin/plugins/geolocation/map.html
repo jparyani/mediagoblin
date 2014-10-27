@@ -19,8 +19,8 @@
 {% block geolocation_map %}
   {% if model.location
         and model.get_location.position
-        and model.get_location.position.latitude
-        and model.get_location.position.longitude %}
+        and "latitude" in model.get_location.position
+        and "longitude" in model.get_location.position %}
     <div>
       {%- set lon = model.get_location.position.longitude %}
       {%- set lat = model.get_location.position.latitude %}
