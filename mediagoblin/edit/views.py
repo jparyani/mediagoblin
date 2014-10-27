@@ -221,7 +221,7 @@ def edit_profile(request, url_user=None):
         if form.location.data and user.location is None:
             user.get_location = Location(name=unicode(form.location.data))
         elif form.location.data:
-            location = user.get_location.name
+            location = user.get_location
             location.name = unicode(form.location.data)
             location.save()
 
