@@ -31,7 +31,7 @@ def remove_gps_from_image(db):
     metadata = MetaData(bind=db.bind)
     image_table = inspect_table(metadata, "image__mediadata")
     location_table = inspect_table(metadata, "core__locations")
-    media_entires_table = inspect_table(metadata, "core__media_entries")
+    media_entries_table = inspect_table(metadata, "core__media_entries")
 
     # First do the data migration
     for row in db.execute(image_table.select()):
@@ -58,9 +58,9 @@ def remove_gps_from_image(db):
         location = db.execute(location_table.insert().values(position=fields))
 
         # now store the new location model on Image
-        db.execute(media_entires_table.update().values(
+        db.execute(media_entries_table.update().values(
             location=location.inserted_primary_key[0]
-        ).where(media_entires_table.c.id==row.media_entry))
+        ).where(media_entries_table.c.id==row.media_entry))
 
     db.commit()
 
