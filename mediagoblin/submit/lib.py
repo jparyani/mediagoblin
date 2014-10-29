@@ -195,17 +195,17 @@ def submit_media(mg_app, user, submitted_file, filename,
     else:
         feed_url = None
 
+    add_comment_subscription(user, entry)
+
+    # Create activity
+    create_activity("post", entry, entry.uploader)
+    entry.save()
+
     # Pass off to processing
     #
     # (... don't change entry after this point to avoid race
     # conditions with changes to the document via processing code)
     run_process_media(entry, feed_url)
-
-    add_comment_subscription(user, entry)
-
-    # Create activity
-    entry.activity = create_activity("post", entry, entry.uploader).id
-    entry.save()
 
     return entry
 
@@ -291,11 +291,11 @@ def api_add_to_feed(request, entry):
         qualified=True, user=request.user.username
     )
 
-    run_process_media(entry, feed_url)
     add_comment_subscription(request.user, entry)
 
     # Create activity
-    entry.activity = create_activity("post", entry, entry.uploader).id
+    create_activity("post", entry, entry.uploader)
     entry.save()
+    run_process_media(entry, feed_url)
 
     return json_response(entry.serialize(request))

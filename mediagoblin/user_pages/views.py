@@ -195,15 +195,14 @@ def media_post_comment(request, media):
             messages.ERROR,
             _("Oops, your comment was empty."))
     else:
+        create_activity("post", comment, comment.author, target=media)
+        add_comment_subscription(request.user, media)
         comment.save()
 
         messages.add_message(
             request, messages.SUCCESS,
             _('Your comment has been posted!'))
-
         trigger_notification(comment, media, request)
-        create_activity("post", comment, comment.author, target=media)
-        add_comment_subscription(request.user, media)
 
     return redirect_obj(request, media)
 
@@ -263,8 +262,8 @@ def media_collect(request, media):
         collection.description = form.collection_description.data
         collection.creator = request.user.id
         collection.generate_slug()
-        collection.save()
         create_activity("create", collection, collection.creator)
+        collection.save()
 
     # Otherwise, use the collection selected from the drop-down
     else:
