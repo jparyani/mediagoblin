@@ -47,12 +47,12 @@ def json_processing_callback(entry):
     Send an HTTP post to the registered callback url, if any.
     '''
     if not entry.processing_metadata:
-        _log.debug('No metadata processing callback for {0}'.format(entry))
+        _log.debug('No processing callback URL for {0}'.format(entry))
         return
 
     url = entry.processing_metadata[0].callback_url
 
-    _log.debug('Sending metadata processing callback for {0} ({1})'.format(
+    _log.debug('Sending processing callback for {0} to {1}'.format(
         entry,
         url))
 
