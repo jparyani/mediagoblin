@@ -72,6 +72,7 @@
                 {% block mediagoblin_header_title %}{% endblock %}
               </div>
               <div class="header_right">
+                {% template_hook("header_extra") %}
                 {%- if request.user %}
                   {% if request.user and
                         request.user.has_privilege('active') and
