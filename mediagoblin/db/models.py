@@ -251,7 +251,7 @@ class User(Base, UserMixin):
         if self.url:
             user.update({"url": self.url})
         if self.location:
-            user.update({"location": self.get_location.seralize(request)})
+            user.update({"location": self.get_location.serialize(request)})
 
         return user
 
@@ -528,7 +528,7 @@ class MediaEntry(Base, MediaEntryMixin):
             "id": self.id,
             "author": author.serialize(request),
             "objectType": self.object_type,
-            "url": self.url_for_self(request.urlgen),
+            "url": self.url_for_self(request.urlgen, qualified=True),
             "image": {
                 "url": request.host_url + self.thumb_url[1:],
             },
@@ -844,6 +844,18 @@ class Collection(Base, CollectionMixin):
             creator=self.creator,
             title=safe_title)
 
+    def serialize(self, request):
+        # Get all serialized output in a list
+        items = []
+        for item in self.get_collection_items():
+            items.append(item.serialize(request))
+
+        return {
+            "totalItems": self.items,
+            "url": self.url_for_self(request.urlgen, qualified=True),
+            "items": items,
+        }
+
 
 class CollectionItem(Base, CollectionItemMixin):
     __tablename__ = "core__collection_items"
@@ -879,6 +891,9 @@ class CollectionItem(Base, CollectionItemMixin):
             classname=self.__class__.__name__,
             collection=self.collection,
             entry=self.media_entry)
+
+    def serialize(self, request):
+        return self.get_media_entry.serialize(request)
 
 
 class ProcessingMetaData(Base):
