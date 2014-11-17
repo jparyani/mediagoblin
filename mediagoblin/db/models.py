@@ -489,7 +489,11 @@ class MediaEntry(Base, MediaEntryMixin):
         return import_component(self.media_type + '.models:BACKREF_NAME')
 
     def __repr__(self):
-        safe_title = self.title.encode('ascii', 'replace')
+        if six.PY2:
+            # obj.__repr__() should return a str on Python 2
+            safe_title = self.title.encode('utf-8', 'replace')
+        else:
+            safe_title = self.title
 
         return '<{classname} {id}: {title}>'.format(
                 classname=self.__class__.__name__,

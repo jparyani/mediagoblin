@@ -88,14 +88,15 @@ def addmedia(args):
         # this is kinda terrible
         if some_string is None:
             return None
-        else:
-            return six.text_type(some_string)
+        if six.PY2:
+            return six.text_type(some_string, 'utf-8')
+        return some_string
 
     try:
         submit_media(
             mg_app=app,
             user=user,
-            submitted_file=open(abs_filename, 'r'), filename=filename,
+            submitted_file=open(abs_filename, 'rb'), filename=filename,
             title=maybe_unicodeify(args.title),
             description=maybe_unicodeify(args.description),
             license=maybe_unicodeify(args.license),
