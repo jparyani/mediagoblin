@@ -42,6 +42,7 @@ from mediagoblin.tools.files import delete_media_files
 from mediagoblin.tools.common import import_component
 
 import six
+from pytz import UTC
 
 _log = logging.getLogger(__name__)
 
@@ -212,8 +213,10 @@ class User(Base, UserMixin):
 
 
     def serialize(self, request):
+        published = UTC.localize(self.created)
         user = {
             "id": "acct:{0}@{1}".format(self.username, request.host),
+            "oublished": published.isoformat(),
             "preferredUsername": self.username,
             "displayName": "{0}@{1}".format(self.username, request.host),
             "objectType": self.object_type,
@@ -524,6 +527,8 @@ class MediaEntry(Base, MediaEntryMixin):
     def serialize(self, request, show_comments=True):
         """ Unserialize MediaEntry to object """
         author = self.get_uploader
+        published = UTC.localize(self.created)
+        updated = UTC.localize(self.created)
         context = {
             "id": self.id,
             "author": author.serialize(request),
@@ -535,8 +540,8 @@ class MediaEntry(Base, MediaEntryMixin):
             "fullImage":{
                 "url": request.host_url + self.original_url[1:],
             },
-            "published": self.created.isoformat(),
-            "updated": self.created.isoformat(),
+            "published": published.isoformat(),
+            "updated": updated.isoformat(),
             "pump_io": {
                 "shared": False,
             },
@@ -1209,11 +1214,13 @@ class Generator(Base):
         )
 
     def serialize(self, request):
+        published = UTC.localize(self.published)
+        updated = UTC.localize(self.updated)
         return {
             "id": self.id,
             "displayName": self.name,
-            "published": self.published.isoformat(),
-            "updated": self.updated.isoformat(),
+            "published": published.isoformat(),
+            "updated": updated.isoformat(),
             "objectType": self.object_type,
         }
 

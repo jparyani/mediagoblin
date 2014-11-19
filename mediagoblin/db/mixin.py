@@ -31,6 +31,7 @@ import uuid
 import re
 from datetime import datetime
 
+from pytz import UTC
 from werkzeug.utils import cached_property
 
 from mediagoblin import mg_globals
@@ -447,12 +448,14 @@ class ActivityMixin(object):
         return self.content
 
     def serialize(self, request):
+        published = UTC.localize(self.published)
+        updated = UTC.localize(self.updated)
         obj = {
             "id": self.id,
             "actor": self.get_actor.serialize(request),
             "verb": self.verb,
-            "published": self.published.isoformat(),
-            "updated": self.updated.isoformat(),
+            "published": published.isoformat(),
+            "updated": updated.isoformat(),
             "content": self.content,
             "url": self.get_url(request),
             "object": self.get_object.serialize(request),
