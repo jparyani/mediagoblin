@@ -388,6 +388,18 @@ this ``nginx.conf`` file should be modeled on the following::
      }
     }
 
+The first four ``location`` directives instruct Nginx to serve the
+static and uploaded files directly rather than through the MediaGoblin
+process. This approach is faster and requires less memory.
+
+.. note::
+
+   The user who owns the Nginx process, normally ``www-data``,
+   requires execute permission on the directories ``static``,
+   ``public``, ``theme_static`` and ``plugin_static`` plus all their
+   parent directories. This user also requires read permission on all
+   the files within these directories. This is normally the default.
+
 Now, nginx instance is configured to serve the MediaGoblin
 application. Perform a quick test to ensure that this configuration
 works. Restart nginx so it picks up your changes, with a command that
@@ -433,3 +445,7 @@ Security Considerations
    and restart the server, so that it creates a new secret key.
    All previous sessions will be invalidated.
 
+..
+   Local variables:
+   fill-column: 70
+   End:
