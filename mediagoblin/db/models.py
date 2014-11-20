@@ -216,7 +216,7 @@ class User(Base, UserMixin):
         published = UTC.localize(self.created)
         user = {
             "id": "acct:{0}@{1}".format(self.username, request.host),
-            "oublished": published.isoformat(),
+            "published": published.isoformat(),
             "preferredUsername": self.username,
             "displayName": "{0}@{1}".format(self.username, request.host),
             "objectType": self.object_type,
