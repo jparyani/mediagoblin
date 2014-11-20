@@ -357,7 +357,14 @@ def feed_endpoint(request):
     }
 
     for activity in Activity.query.filter_by(actor=request.user.id):
-        feed["items"].append(activity.serialize(request))
+        try:
+            feed["items"].append(activity.serialize(request))
+        except AttributeError:
+            # This occurs because of how we hard-deletion and the object
+            # no longer existing anymore. We want to keep the Activity
+            # in case someone wishes to look it up but we shouldn't display
+            # it in the feed.
+            pass
     feed["totalItems"] = len(feed["items"])
 
     return json_response(feed)
