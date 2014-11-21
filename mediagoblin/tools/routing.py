@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import urlparse
 
 import six
 from werkzeug.routing import Map, Rule
@@ -65,3 +66,17 @@ def mount(mountpoint, routes):
     for endpoint, url, controller in routes:
         url = "%s/%s" % (mountpoint.rstrip('/'), url.lstrip('/'))
         add_route(endpoint, url, controller)
+
+def extract_url_arguments(url, urlmap):
+    """
+    This extracts the URL arguments from a given URL
+    """
+    parsed_url = urlparse.urlparse(url)
+    map_adapter = urlmap.bind(
+        server_name=parsed_url.netloc,
+        script_name=parsed_url.path,
+        url_scheme=parsed_url.scheme,
+        path_info=parsed_url.path
+    )
+
+    return map_adapter.match()[1]

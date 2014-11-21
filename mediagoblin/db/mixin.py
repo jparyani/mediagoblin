@@ -448,10 +448,16 @@ class ActivityMixin(object):
         return self.content
 
     def serialize(self, request):
+        href = request.urlgen(
+            "mediagoblin.federation.object",
+            object_type=self.object_type,
+            id=self.id,
+            qualified=True
+        )
         published = UTC.localize(self.published)
         updated = UTC.localize(self.updated)
         obj = {
-            "id": self.id,
+            "id": href,
             "actor": self.get_actor.serialize(request),
             "verb": self.verb,
             "published": published.isoformat(),

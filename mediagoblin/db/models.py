@@ -40,6 +40,7 @@ from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, \
         ActivityMixin
 from mediagoblin.tools.files import delete_media_files
 from mediagoblin.tools.common import import_component
+from mediagoblin.tools.routing import extract_url_arguments
 
 import six
 from pytz import UTC
@@ -526,11 +527,17 @@ class MediaEntry(Base, MediaEntryMixin):
 
     def serialize(self, request, show_comments=True):
         """ Unserialize MediaEntry to object """
+        href = request.urlgen(
+            "mediagoblin.federation.object",
+            object_type=self.object_type,
+            id=self.id,
+            qualified=True
+        )
         author = self.get_uploader
         published = UTC.localize(self.created)
         updated = UTC.localize(self.created)
         context = {
-            "id": self.id,
+            "id": href,
             "author": author.serialize(request),
             "objectType": self.object_type,
             "url": self.url_for_self(request.urlgen, qualified=True),
@@ -547,12 +554,7 @@ class MediaEntry(Base, MediaEntryMixin):
             },
             "links": {
                 "self": {
-                    "href": request.urlgen(
-                        "mediagoblin.federation.object",
-                        object_type=self.object_type,
-                        id=self.id,
-                        qualified=True
-                    ),
+                    "href": href,
                 },
 
             }
@@ -755,10 +757,16 @@ class MediaComment(Base, MediaCommentMixin):
 
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
+        href = request.urlgen(
+            "mediagoblin.federation.object",
+            object_type=self.object_type,
+            id=self.id,
+            qualified=True
+        )
         media = MediaEntry.query.filter_by(id=self.media_entry).first()
         author = self.get_author
         context = {
-            "id": self.id,
+            "id": href,
             "objectType": self.object_type,
             "content": self.content,
             "inReplyTo": media.serialize(request, show_comments=False),
@@ -770,7 +778,7 @@ class MediaComment(Base, MediaCommentMixin):
 
         return context
 
-    def unserialize(self, data):
+    def unserialize(self, data, request):
         """ Takes API objects and unserializes on existing comment """
         # Do initial checks to verify the object is correct
         required_attributes = ["content", "inReplyTo"]
@@ -784,7 +792,10 @@ class MediaComment(Base, MediaCommentMixin):
 
         # Validate that the ID is correct
         try:
-            media_id = int(data["inReplyTo"]["id"])
+            media_id = int(extract_url_arguments(
+                url=data["inReplyTo"]["id"],
+                urlmap=request.app.url_map
+            )["id"])
         except ValueError:
             return False
 
@@ -1214,10 +1225,16 @@ class Generator(Base):
         )
 
     def serialize(self, request):
+        href = request.urlgen(
+            "mediagoblin.federation.object",
+            object_type=self.object_type,
+            id=self.id,
+            qualified=True
+        )
         published = UTC.localize(self.published)
         updated = UTC.localize(self.updated)
         return {
-            "id": self.id,
+            "id": href,
             "displayName": self.name,
             "published": published.isoformat(),
             "updated": updated.isoformat(),

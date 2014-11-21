@@ -1,4 +1,4 @@
-# GNU MediaGoblin -- federated, autonomous media hosting
+# GN MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@ from werkzeug.datastructures import FileStorage
 from mediagoblin.decorators import oauth_required, require_active_login
 from mediagoblin.federation.decorators import user_has_privilege
 from mediagoblin.db.models import User, MediaEntry, MediaComment, Activity
+from mediagoblin.tools.routing import extract_url_arguments
 from mediagoblin.tools.response import redirect, json_response, json_error, \
                                        render_404, render_to_response
 from mediagoblin.meddleware.csrf import csrf_exempt
@@ -177,7 +178,7 @@ def feed_endpoint(request):
                     )
 
                 comment = MediaComment(author=request.user.id)
-                comment.unserialize(data["object"])
+                comment.unserialize(data["object"], request)
                 comment.save()
                 data = {
                     "verb": "post",
@@ -187,7 +188,11 @@ def feed_endpoint(request):
 
             elif obj.get("objectType", None) == "image":
                 # Posting an image to the feed
-                media_id = int(data["object"]["id"])
+                media_id = int(extract_url_arguments(
+                    url=data["object"]["id"],
+                    urlmap=request.app.url_map
+                )["id"])
+
                 media = MediaEntry.query.filter_by(id=media_id).first()
 
                 if media is None:
@@ -245,7 +250,10 @@ def feed_endpoint(request):
             if "id" not in obj:
                 return json_error("Object ID has not been specified.")
 
-            obj_id = obj["id"]
+            obj_id = int(extract_url_arguments(
+                url=obj["id"],
+                urlmap=request.app.url_map
+            )["id"])
 
             # Now try and find object
             if obj["objectType"] == "comment":
@@ -374,7 +382,7 @@ def object_endpoint(request):
     """ Lookup for a object type """
     object_type = request.matchdict["object_type"]
     try:
-        object_id = int(request.matchdict["id"])
+        object_id = request.matchdict["id"]
     except ValueError:
         error = "Invalid object ID '{0}' for '{1}'".format(
             request.matchdict["id"],
