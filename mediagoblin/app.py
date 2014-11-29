@@ -46,6 +46,19 @@ from mediagoblin.auth.tools import check_auth_enabled, no_auth_logout
 _log = logging.getLogger(__name__)
 
 
+class Context(object):
+    """
+    MediaGoblin context object.
+
+    If a web request is being used, a Flask Request object is used
+    instead, otherwise (celery tasks, etc), attach things to this
+    object.
+
+    Usually appears as "ctx" in utilities as first argument.
+    """
+    pass
+
+
 class MediaGoblinApp(object):
     """
     WSGI application of MediaGoblin
@@ -149,14 +162,78 @@ class MediaGoblinApp(object):
         self.meddleware = [common.import_component(m)(self)
                            for m in meddleware.ENABLED_MEDDLEWARE]
 
+    def gen_context(self, ctx=None):
+        """
+        Attach contextual information to request, or generate a context object
+
+        This avoids global variables; various utilities and contextual
+        information (current translation, etc) are attached to this
+        object.
+        """
+        # Set up context
+        # --------------
+
+        # Is a context provided?
+        if ctx is not None:
+            # Do special things if this is a request
+            if isinstance(ctx, Request):
+                ctx = self._request_only_gen_context(ctx)
+
+        else:
+            ctx = Context()
+        
+        # Attach utilities
+        # ----------------
+
+        # Attach self as request.app
+        # Also attach a few utilities from request.app for convenience?
+        ctx.app = self
+
+        ctx.db = self.db
+        ctx.staticdirect = self.staticdirector
+
+        return ctx
+
+    def _request_only_gen_context(self, request):
+        """
+        Requests get some extra stuff attached to them that's not relevant
+        otherwise.
+        """
+        # Do we really want to load this via middleware?  Maybe?
+        request.session = self.session_manager.load_session_from_cookie(request)
+
+        request.locale = translate.get_locale_from_request(request)
+
+        # This should be moved over for certain, but how to deal with
+        # request.locale?
+        request.template_env = template.get_jinja_env(
+            self.template_loader, request.locale)
+
+        mg_request.setup_user_in_request(request)
+
+        ## Routing / controller loading stuff
+        request.map_adapter = self.url_map.bind_to_environ(request.environ)
+
+        def build_proxy(endpoint, **kw):
+            try:
+                qualified = kw.pop('qualified')
+            except KeyError:
+                qualified = False
+
+            return request.map_adapter.build(
+                    endpoint,
+                    values=dict(**kw),
+                    force_external=qualified)
+
+        request.urlgen = build_proxy
+
+        return request
+
     def call_backend(self, environ, start_response):
         request = Request(environ)
 
         # Compatibility with django, use request.args preferrably
         request.GET = request.args
-
-        ## Routing / controller loading stuff
-        map_adapter = self.url_map.bind_to_environ(request.environ)
 
         # By using fcgi, mediagoblin can run under a base path
         # like /mediagoblin/. request.path_info contains the
@@ -175,41 +252,14 @@ class MediaGoblinApp(object):
             environ.pop('HTTPS')
 
         ## Attach utilities to the request object
-        # Do we really want to load this via middleware?  Maybe?
-        session_manager = self.session_manager
-        request.session = session_manager.load_session_from_cookie(request)
-        # Attach self as request.app
-        # Also attach a few utilities from request.app for convenience?
-        request.app = self
-
-        request.db = self.db
-        request.staticdirect = self.staticdirector
-
-        request.locale = translate.get_locale_from_request(request)
-        request.template_env = template.get_jinja_env(
-            self.template_loader, request.locale)
-
-        def build_proxy(endpoint, **kw):
-            try:
-                qualified = kw.pop('qualified')
-            except KeyError:
-                qualified = False
-
-            return map_adapter.build(
-                    endpoint,
-                    values=dict(**kw),
-                    force_external=qualified)
-
-        request.urlgen = build_proxy
+        request = self.gen_context(request)
 
         # Log user out if authentication_disabled
         no_auth_logout(request)
 
-        mg_request.setup_user_in_request(request)
-
         request.controller_name = None
         try:
-            found_rule, url_values = map_adapter.match(return_rule=True)
+            found_rule, url_values = request.map_adapter.match(return_rule=True)
             request.matchdict = url_values
         except RequestRedirect as response:
             # Deal with 301 responses eg due to missing final slash
@@ -225,6 +275,7 @@ class MediaGoblinApp(object):
         # used for lazy context modification
         request.controller_name = found_rule.endpoint
 
+        ## TODO: get rid of meddleware, turn it into hooks only
         # pass the request through our meddleware classes
         try:
             for m in self.meddleware:
@@ -255,8 +306,9 @@ class MediaGoblinApp(object):
             response = render_http_exception(
                 request, e, e.get_description(environ))
 
-        session_manager.save_session_to_cookie(request.session,
-                                               request, response)
+        self.session_manager.save_session_to_cookie(
+            request.session,
+            request, response)
 
         return response(environ, start_response)
 
