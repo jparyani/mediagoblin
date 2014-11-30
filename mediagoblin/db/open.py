@@ -59,12 +59,25 @@ else:
     from sqlalchemy.orm import sessionmaker
 
     class DatabaseManager(object):
+        """
+        Manage database connections.
+
+        The main method here is session_scope which can be used with a
+        "with" statement to get a session that is properly torn down
+        by the end of execution.
+        """
         def __init__(self, engine):
             self.engine = engine
             self.Session = sessionmaker(bind=engine)
 
         @contextmanager
         def session_scope(self):
+            """
+            This is a context manager, use like::
+
+              with dbmanager.session_scope() as request.db:
+                  some_view(request)
+            """
             session = self.Session()
 
             #####################################
