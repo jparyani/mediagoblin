@@ -19,8 +19,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker, object_session
 from sqlalchemy import inspect
 
-Session = scoped_session(sessionmaker())
+from mediagoblin.tools.transition import DISABLE_GLOBALS
 
+if not DISABLE_GLOBALS:
+    Session = scoped_session(sessionmaker())
 
 
 class GMGTableBase(object):
@@ -28,7 +30,8 @@ class GMGTableBase(object):
     def _session(self):
         return inspect(self).session
 
-    query = Session.query_property()
+    if not DISABLE_GLOBALS:
+        query = Session.query_property()
 
     def get(self, key):
         return getattr(self, key)
@@ -38,9 +41,10 @@ class GMGTableBase(object):
         return getattr(self, key)
 
     def save(self, commit=True):
-        sess = object_session(self)
-        if sess is None:
+        sess = self._session
+        if sess is None and not DISABLE_GLOBALS:
             sess = Session()
+        assert sess is not None, "Can't save, %r has a detached session" % self
         sess.add(self)
         if commit:
             sess.commit()
@@ -49,7 +53,7 @@ class GMGTableBase(object):
 
     def delete(self, commit=True):
         """Delete the object and commit the change immediately by default"""
-        sess = object_session(self)
+        sess = self._session
         assert sess is not None, "Not going to delete detached %r" % self
         sess.delete(self)
         if commit:

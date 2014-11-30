@@ -42,6 +42,8 @@ from mediagoblin.tools.pluginapi import PluginManager, hook_transform
 from mediagoblin.tools.crypto import setup_crypto
 from mediagoblin.auth.tools import check_auth_enabled, no_auth_logout
 
+from mediagoblin.tools.transition import DISABLE_GLOBALS
+
 
 _log = logging.getLogger(__name__)
 
@@ -150,9 +152,14 @@ class MediaGoblinApp(object):
         # certain properties need to be accessed globally eg from
         # validators, etc, which might not access to the request
         # object.
+        #
+        # Note, we are trying to transition this out;
+        # run with environment variable DISABLE_GLOBALS=true
+        # to work on it
         #######################################################
 
-        setup_globals(app=self)
+        if not DISABLE_GLOBALS:
+            setup_globals(app=self)
 
         # Workbench *currently* only used by celery, so this only
         # matters in always eager mode :)
@@ -174,12 +181,7 @@ class MediaGoblinApp(object):
         # --------------
 
         # Is a context provided?
-        if ctx is not None:
-            # Do special things if this is a request
-            if isinstance(ctx, Request):
-                ctx = self._request_only_gen_context(ctx)
-
-        else:
+        if ctx is None:
             ctx = Context()
         
         # Attach utilities
@@ -191,6 +193,11 @@ class MediaGoblinApp(object):
 
         ctx.db = self.db
         ctx.staticdirect = self.staticdirector
+
+        # Do special things if this is a request
+        # --------------------------------------
+        if isinstance(ctx, Request):
+            ctx = self._request_only_gen_context(ctx)
 
         return ctx
 
