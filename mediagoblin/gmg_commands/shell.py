@@ -20,6 +20,8 @@ import code
 from mediagoblin import mg_globals
 from mediagoblin.gmg_commands import util as commands_util
 
+from mediagoblin.tools.transition import DISABLE_GLOBALS
+
 
 def shell_parser_setup(subparser):
     subparser.add_argument(
@@ -27,14 +29,21 @@ def shell_parser_setup(subparser):
         action="store_true")
 
 
-SHELL_BANNER = """\
-GNU MediaGoblin shell!
-----------------------
-Available vars:
- - mgoblin_app: instantiated mediagoblin application
- - mg_globals: mediagoblin.globals
- - db: database instance
-"""
+if DISABLE_GLOBALS:
+    SHELL_BANNER = (
+        "GNU MediaGoblin shell!\n"
+        "----------------------\n"
+        "Available vars:\n"
+        " - app: instantiated mediagoblin application\n"
+        " - db: database session\n")
+else:
+    SHELL_BANNER = (
+        "GNU MediaGoblin shell!\n"
+        "----------------------\n"
+        "Available vars:\n"
+        " - app: instantiated mediagoblin application\n"
+        " - mg_globals: mediagoblin.globals\n"
+        " - db: database instance\n")
 
 def py_shell(**user_namespace):
     """
@@ -59,18 +68,28 @@ def ipython_shell(**user_namespace):
         user_ns=user_namespace)
     return True
 
+
 def shell(args):
     """
     Setup a shell for the user either a normal Python shell or an IPython one
     """
-    user_namespace = {
-        'mg_globals': mg_globals,
-        'mgoblin_app': commands_util.setup_app(args),
-        'db': mg_globals.database}
+    app = commands_util.setup_app(args)
 
-    if args.ipython:
-        ipython_shell(**user_namespace)
+    def run_shell(db):
+        user_namespace = {
+            'mg_globals': mg_globals,
+            'app': app,
+            'db': db}
+
+        if args.ipython:
+            ipython_shell(**user_namespace)
+        else:
+            # Try ipython_shell first and fall back if not available
+            if not ipython_shell(**user_namespace):
+                py_shell(**user_namespace)
+
+    if DISABLE_GLOBALS:
+        with app.db_manager.session_scope() as db:
+            run_shell(db)
     else:
-        # Try ipython_shell first and fall back if not available
-        if not ipython_shell(**user_namespace):
-            py_shell(**user_namespace)
+        run_shell(mg_globals.database)
