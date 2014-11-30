@@ -15,40 +15,92 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from sqlalchemy import create_engine, event
+from contextlib import contextmanager
 import logging
 
 import six
+from sqlalchemy import create_engine, event
 
-from mediagoblin.db.base import Base, Session
 from mediagoblin import mg_globals
+from mediagoblin.db.base import Base
 
 _log = logging.getLogger(__name__)
 
+from mediagoblin.tools.transition import DISABLE_GLOBALS
 
-class DatabaseMaster(object):
-    def __init__(self, engine):
-        self.engine = engine
+if DISABLE_GLOBALS:
+    from mediagoblin.db.base import Session
 
-        for k, v in six.iteritems(Base._decl_class_registry):
-            setattr(self, k, v)
+    class DatabaseMaster(object):
+        def __init__(self, engine):
+            self.engine = engine
 
-    def commit(self):
-        Session.commit()
+            for k, v in six.iteritems(Base._decl_class_registry):
+                setattr(self, k, v)
 
-    def save(self, obj):
-        Session.add(obj)
-        Session.flush()
+        def commit(self):
+            Session.commit()
 
-    def check_session_clean(self):
-        for dummy in Session():
-            _log.warn("STRANGE: There are elements in the sql session. "
-                      "Please report this and help us track this down.")
-            break
+        def save(self, obj):
+            Session.add(obj)
+            Session.flush()
 
-    def reset_after_request(self):
-        Session.rollback()
-        Session.remove()
+        def check_session_clean(self):
+            for dummy in Session():
+                _log.warn("STRANGE: There are elements in the sql session. "
+                          "Please report this and help us track this down.")
+                break
+
+        def reset_after_request(self):
+            Session.rollback()
+            Session.remove()
+
+else:
+    from sqlalchemy.orm import sessionmaker
+
+    class DatabaseManager(object):
+        def __init__(self, engine):
+            self.engine = engine
+            self.Session = sessionmaker(bind=engine)
+
+        @contextmanager
+        def session_scope(self):
+            session = self.Session()
+
+            #####################################
+            # Functions to emulate DatabaseMaster
+            #####################################
+            def commit():
+                session.commit()
+
+            def save(obj):
+                session.add(obj)
+                session.flush()
+
+            def check_session_clean():
+                # Is this implemented right?
+                for dummy in session:
+                    _log.warn("STRANGE: There are elements in the sql session. "
+                              "Please report this and help us track this down.")
+                    break
+
+            def reset_after_request():
+                session.rollback()
+                session.remove()
+
+            # now attach
+            session.commit = commit
+            session.save = save
+            session.check_session_clean = check_session_clean
+            session.reset_after_request = reset_after_request
+            #####################################
+
+            try:
+                yield session
+            finally:
+                session.rollback()
+                session.close()
+
 
 
 def load_models(app_config):
