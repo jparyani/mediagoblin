@@ -85,11 +85,11 @@ class MediaGoblinApp(object):
         ##############
 
         # Open and setup the config
-        global_config, app_config = setup_global_and_app_config(config_path)
+        self.global_config, self.app_config = setup_global_and_app_config(config_path)
 
         media_type_warning()
 
-        setup_crypto()
+        setup_crypto(self.app_config)
 
         ##########################################
         # Setup other connections / useful objects
@@ -108,9 +108,9 @@ class MediaGoblinApp(object):
 
         # Set up the database
         if DISABLE_GLOBALS:
-            self.db_manager = setup_database(app_config['run_migrations'])
+            self.db_manager = setup_database(self.app_config['run_migrations'])
         else:
-            self.db = setup_database(app_config['run_migrations'])
+            self.db = setup_database(self.app_config['run_migrations'])
 
         # Quit app if need to run dbupdate
         ## NOTE: This is currently commented out due to session errors..
@@ -118,11 +118,11 @@ class MediaGoblinApp(object):
         # check_db_up_to_date()
 
         # Register themes
-        self.theme_registry, self.current_theme = register_themes(app_config)
+        self.theme_registry, self.current_theme = register_themes(self.app_config)
 
         # Get the template environment
         self.template_loader = get_jinja_loader(
-            app_config.get('local_templates'),
+            self.app_config.get('local_templates'),
             self.current_theme,
             PluginManager().get_template_paths()
             )
@@ -130,7 +130,7 @@ class MediaGoblinApp(object):
         # Check if authentication plugin is enabled and respond accordingly.
         self.auth = check_auth_enabled()
         if not self.auth:
-            app_config['allow_comments'] = False
+            self.app_config['allow_comments'] = False
 
         # Set up storage systems
         self.public_store, self.queue_store = setup_storage()
@@ -139,16 +139,16 @@ class MediaGoblinApp(object):
         self.url_map = get_url_map()
 
         # set up staticdirector tool
-        self.staticdirector = get_staticdirector(app_config)
+        self.staticdirector = get_staticdirector(self.app_config)
 
         # Setup celery, if appropriate
-        if setup_celery and not app_config.get('celery_setup_elsewhere'):
+        if setup_celery and not self.app_config.get('celery_setup_elsewhere'):
             if os.environ.get('CELERY_ALWAYS_EAGER', 'false').lower() == 'true':
                 setup_celery_from_config(
-                    app_config, global_config,
+                    self.app_config, self.global_config,
                     force_celery_always_eager=True)
             else:
-                setup_celery_from_config(app_config, global_config)
+                setup_celery_from_config(self.app_config, self.global_config)
 
         #######################################################
         # Insert appropriate things into mediagoblin.mg_globals
@@ -167,14 +167,14 @@ class MediaGoblinApp(object):
 
         # Workbench *currently* only used by celery, so this only
         # matters in always eager mode :)
-        setup_workbench()
+        self.workbench_manager = setup_workbench()
 
         # instantiate application meddleware
         self.meddleware = [common.import_component(m)(self)
                            for m in meddleware.ENABLED_MEDDLEWARE]
 
     @contextmanager
-    def gen_context(self, ctx=None):
+    def gen_context(self, ctx=None, **kwargs):
         """
         Attach contextual information to request, or generate a context object
 
@@ -188,7 +188,7 @@ class MediaGoblinApp(object):
         else:
             yield self._gen_context(self.db, ctx)
 
-    def _gen_context(self, db, ctx):
+    def _gen_context(self, db, ctx, **kwargs):
         # Set up context
         # --------------
 

@@ -28,6 +28,8 @@ from mediagoblin.tools.pluginapi import hook_runall
 from mediagoblin.tools.workbench import WorkbenchManager
 from mediagoblin.storage import storage_system_from_config
 
+from mediagoblin.tools.transition import DISABLE_GLOBALS
+
 
 class Error(Exception):
     pass
@@ -154,4 +156,7 @@ def setup_workbench():
 
     workbench_manager = WorkbenchManager(app_config['workbench_path'])
 
-    setup_globals(workbench_manager=workbench_manager)
+    if not DISABLE_GLOBALS:
+        setup_globals(workbench_manager=workbench_manager)
+
+    return workbench_manager

@@ -36,7 +36,7 @@ try:
 except AttributeError:
     getrandbits = random.getrandbits
 
-
+# TODO: This should be attached to the MediaGoblinApp
 __itsda_secret = None
 
 
@@ -73,9 +73,9 @@ def create_key(key_dir, key_filepath):
     _log.info("Saved new key for It's Dangerous")
 
 
-def setup_crypto():
+def setup_crypto(app_config):
     global __itsda_secret
-    key_dir = mg_globals.app_config["crypto_path"]
+    key_dir = app_config["crypto_path"]
     key_filepath = os.path.join(key_dir, 'itsdangeroussecret.bin')
     try:
         load_key(key_filepath)
