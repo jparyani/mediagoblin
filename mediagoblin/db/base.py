@@ -16,12 +16,12 @@
 
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker, object_session
 from sqlalchemy import inspect
 
 from mediagoblin.tools.transition import DISABLE_GLOBALS
 
 if not DISABLE_GLOBALS:
+    from sqlalchemy.orm import scoped_session, sessionmaker
     Session = scoped_session(sessionmaker())
 
 
