@@ -28,6 +28,16 @@ _log = logging.getLogger(__name__)
 
 from mediagoblin.tools.transition import DISABLE_GLOBALS
 
+def set_models_as_attributes(obj):
+    """
+    Set all models as attributes on this object, for convenience
+
+    TODO: This should eventually be deprecated.
+    """
+    for k, v in six.iteritems(Base._decl_class_registry):
+        setattr(obj, k, v)
+
+
 if not DISABLE_GLOBALS:
     from mediagoblin.db.base import Session
 
@@ -35,8 +45,7 @@ if not DISABLE_GLOBALS:
         def __init__(self, engine):
             self.engine = engine
 
-            for k, v in six.iteritems(Base._decl_class_registry):
-                setattr(self, k, v)
+            set_models_as_attributes(self)
 
         def commit(self):
             Session.commit()
@@ -69,6 +78,7 @@ else:
         def __init__(self, engine):
             self.engine = engine
             self.Session = sessionmaker(bind=engine)
+            set_models_as_attributes(self)
 
         @contextmanager
         def session_scope(self):
@@ -106,6 +116,8 @@ else:
             session.save = save
             session.check_session_clean = check_session_clean
             session.reset_after_request = reset_after_request
+
+            set_models_as_attributes(session)
             #####################################
 
             try:
