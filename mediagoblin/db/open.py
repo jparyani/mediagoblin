@@ -28,7 +28,7 @@ _log = logging.getLogger(__name__)
 
 from mediagoblin.tools.transition import DISABLE_GLOBALS
 
-if DISABLE_GLOBALS:
+if not DISABLE_GLOBALS:
     from mediagoblin.db.base import Session
 
     class DatabaseMaster(object):
