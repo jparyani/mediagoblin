@@ -64,6 +64,10 @@ if not DISABLE_GLOBALS:
             Session.rollback()
             Session.remove()
 
+        @property
+        def query(self):
+            return Session.query
+
 else:
     from sqlalchemy.orm import sessionmaker
 
