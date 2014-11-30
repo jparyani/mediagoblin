@@ -17,9 +17,13 @@
 import sys
 
 from mediagoblin import mg_globals as mgg
-from mediagoblin.db.base import Session
 from mediagoblin.db.models import MediaEntry, Tag, MediaTag, Collection
 from mediagoblin.gmg_commands.dbupdate import gather_database_data
+
+from mediagoblin.tools.transition import DISABLE_GLOBALS
+
+if not DISABLE_GLOBALS:
+    from mediagoblin.db.base import Session
 
 ##########################
 # Random utility functions
