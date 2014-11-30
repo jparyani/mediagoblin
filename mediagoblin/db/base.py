@@ -17,11 +17,17 @@
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker, object_session
+from sqlalchemy import inspect
 
 Session = scoped_session(sessionmaker())
 
 
+
 class GMGTableBase(object):
+    @property
+    def _session(self):
+        return inspect(self).session
+
     query = Session.query_property()
 
     def get(self, key):
