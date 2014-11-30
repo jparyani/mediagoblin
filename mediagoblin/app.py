@@ -106,7 +106,10 @@ class MediaGoblinApp(object):
         setup_plugins()
 
         # Set up the database
-        self.db = setup_database(app_config['run_migrations'])
+        if DISABLE_GLOBALS:
+            self.db_manager = setup_database(app_config['run_migrations'])
+        else:
+            self.db = setup_database(app_config['run_migrations'])
 
         # Quit app if need to run dbupdate
         ## NOTE: This is currently commented out due to session errors..
@@ -191,7 +194,9 @@ class MediaGoblinApp(object):
         # Also attach a few utilities from request.app for convenience?
         ctx.app = self
 
-        ctx.db = self.db
+        if not DISABLE_GLOBALS:
+            ctx.db = self.db
+
         ctx.staticdirect = self.staticdirector
 
         # Do special things if this is a request
@@ -300,7 +305,11 @@ class MediaGoblinApp(object):
 
         # get the Http response from the controller
         try:
-            response = controller(request)
+            if DISABLE_GLOBALS:
+                with self.db_manager.session_scope() as request.db:
+                    response = controller(request)
+            else:
+                response = controller(request)
         except HTTPException as e:
             response = render_http_exception(
                 request, e, e.get_description(environ))
@@ -326,9 +335,10 @@ class MediaGoblinApp(object):
         try:
             return self.call_backend(environ, start_response)
         finally:
-            # Reset the sql session, so that the next request
-            # gets a fresh session
-            self.db.reset_after_request()
+            if not DISABLE_GLOBALS:
+                # Reset the sql session, so that the next request
+                # gets a fresh session
+                self.db.reset_after_request()
 
 
 def paste_app_factory(global_config, **app_config):
