@@ -35,7 +35,8 @@ if DISABLE_GLOBALS:
         "----------------------\n"
         "Available vars:\n"
         " - app: instantiated mediagoblin application\n"
-        " - db: database session\n")
+        " - db: database session\n"
+        " - ctx: context object\n")
 else:
     SHELL_BANNER = (
         "GNU MediaGoblin shell!\n"
@@ -43,7 +44,8 @@ else:
         "Available vars:\n"
         " - app: instantiated mediagoblin application\n"
         " - mg_globals: mediagoblin.globals\n"
-        " - db: database instance\n")
+        " - db: database instance\n"
+        " - ctx: context object\n")
 
 def py_shell(**user_namespace):
     """
@@ -75,11 +77,12 @@ def shell(args):
     """
     app = commands_util.setup_app(args)
 
-    def run_shell(db):
+    def run_shell(db, ctx):
         user_namespace = {
             'mg_globals': mg_globals,
             'app': app,
-            'db': db}
+            'db': db,
+            "ctx": ctx}
 
         if args.ipython:
             ipython_shell(**user_namespace)
@@ -88,8 +91,6 @@ def shell(args):
             if not ipython_shell(**user_namespace):
                 py_shell(**user_namespace)
 
-    if DISABLE_GLOBALS:
-        with app.db_manager.session_scope() as db:
-            run_shell(db)
-    else:
-        run_shell(mg_globals.database)
+    with app.gen_context() as ctx:
+        db = ctx.db
+        run_shell(db, ctx)

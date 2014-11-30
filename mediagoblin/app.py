@@ -16,6 +16,7 @@
 
 import os
 import logging
+from contextlib import contextmanager
 
 from mediagoblin.routing import get_url_map
 from mediagoblin.tools.routing import endpoint_to_controller
@@ -172,6 +173,7 @@ class MediaGoblinApp(object):
         self.meddleware = [common.import_component(m)(self)
                            for m in meddleware.ENABLED_MEDDLEWARE]
 
+    @contextmanager
     def gen_context(self, ctx=None):
         """
         Attach contextual information to request, or generate a context object
@@ -180,6 +182,13 @@ class MediaGoblinApp(object):
         information (current translation, etc) are attached to this
         object.
         """
+        if DISABLE_GLOBALS:
+            with self.db_manager.session_scope() as db:
+                yield self._gen_context(db, ctx)
+        else:
+            yield self._gen_context(self.db, ctx)
+
+    def _gen_context(self, db, ctx):
         # Set up context
         # --------------
 
@@ -194,8 +203,7 @@ class MediaGoblinApp(object):
         # Also attach a few utilities from request.app for convenience?
         ctx.app = self
 
-        if not DISABLE_GLOBALS:
-            ctx.db = self.db
+        ctx.db = db
 
         ctx.staticdirect = self.staticdirector
 
@@ -264,8 +272,10 @@ class MediaGoblinApp(object):
             environ.pop('HTTPS')
 
         ## Attach utilities to the request object
-        request = self.gen_context(request)
+        with self.gen_context(request) as request:
+            return self._finish_call_backend(request, environ, start_response)
 
+    def _finish_call_backend(self, request, environ, start_response):
         # Log user out if authentication_disabled
         no_auth_logout(request)
 
@@ -305,11 +315,7 @@ class MediaGoblinApp(object):
 
         # get the Http response from the controller
         try:
-            if DISABLE_GLOBALS:
-                with self.db_manager.session_scope() as request.db:
-                    response = controller(request)
-            else:
-                response = controller(request)
+            response = controller(request)
         except HTTPException as e:
             response = render_http_exception(
                 request, e, e.get_description(environ))
