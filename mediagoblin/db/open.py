@@ -142,9 +142,13 @@ def setup_connection_and_db_from_config(app_config, migrations=False):
 
     # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
-    Session.configure(bind=engine)
+    if DISABLE_GLOBALS:
+        return DatabaseManager(engine)
 
-    return DatabaseMaster(engine)
+    else:
+        Session.configure(bind=engine)
+
+        return DatabaseMaster(engine)
 
 
 def check_db_migrations_current(db):
