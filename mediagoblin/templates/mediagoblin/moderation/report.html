@@ -130,11 +130,11 @@
   {% if not report.is_archived_report() and 
         not (report.reported_user.has_privilege('admin') and 
         not request.user.has_privilege('admin')) %}
-    <input type=button value="{% trans %}Resolve{% endtrans %}" id=open_resolution_form />
+    <input type=button class="button_action" value="{% trans %}Resolve{% endtrans %}" id=open_resolution_form />
     <form action="" method="POST" id=resolution_form>
       {{ wtforms_util.render_divs(form) }}
       {{ csrf_token }}
-      <input type=submit id="submit_this_report" value="{% trans %}Resolve This Report{% endtrans %}"/>
+      <input type=submit class="button_action_highlight" id="submit_this_report" value="{% trans %}Resolve This Report{% endtrans %}"/>
     </form>
   <script>
   $(document).ready(function() {
