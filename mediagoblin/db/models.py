@@ -769,12 +769,15 @@ class MediaComment(Base, MediaCommentMixin):
         )
         media = MediaEntry.query.filter_by(id=self.media_entry).first()
         author = self.get_author
+        published = UTC.localize(self.created)
         context = {
             "id": href,
             "objectType": self.object_type,
             "content": self.content,
             "inReplyTo": media.serialize(request, show_comments=False),
-            "author": author.serialize(request)
+            "author": author.serialize(request),
+            "published": published.isoformat(),
+            "updated": published.isoformat(),
         }
 
         if self.location:

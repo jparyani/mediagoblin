@@ -81,20 +81,6 @@ SUBCOMMAND_MAP = {
     #     'func': 'mediagoblin.gmg_commands.theme:theme',
     #     'help': 'Theming commands',
     #     }
-
-    ## These might be useful, mayyyybe, but don't really work anymore
-    ## due to mongo change and the "versatility" of sql options.
-    ##
-    ## For now, commenting out.  Might re-enable soonish?
-    #
-    # 'env_export': {
-    #     'setup': 'mediagoblin.gmg_commands.import_export:import_export_parse_setup',
-    #     'func': 'mediagoblin.gmg_commands.import_export:env_export',
-    #     'help': 'Exports the data for this MediaGoblin instance'},
-    # 'env_import': {
-    #     'setup': 'mediagoblin.gmg_commands.import_export:import_export_parse_setup',
-    #     'func': 'mediagoblin.gmg_commands.import_export:env_import',
-    #     'help': 'Imports the data for this MediaGoblin instance'},
     }
 
 
