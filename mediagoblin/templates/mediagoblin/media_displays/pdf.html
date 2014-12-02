@@ -46,21 +46,23 @@
 {%- endblock %}
 
 {% block mediagoblin_media %}
-  {% if pdf_js %}
-    <iframe width="640px" height="480px"
-        src="{{ request.staticdirect('/extlib/pdf.js/web/viewer.html') }}?file={{ pdf_view }} ">
-    </iframe>
-  {% else %}
-    <a href="{{ pdf_view }}">
-    <img id="medium"
-         class="media_image"
-         src="{{ medium_view }}"
-         alt="
-           {%- trans media_title=media.title -%}
-             Image for {{ media_title}}
-           {%- endtrans %}"/>
-    </a>
-  {% endif %}
+  <div class="media_other_container">
+    {% if pdf_js %}
+      <iframe width="640px" height="480px"
+          src="{{ request.staticdirect('/extlib/pdf.js/web/viewer.html') }}?file={{ pdf_view }} ">
+      </iframe>
+    {% else %}
+      <a href="{{ pdf_view }}">
+      <img id="medium"
+           class="media_image"
+           src="{{ medium_view }}"
+           alt="
+             {%- trans media_title=media.title -%}
+               Image for {{ media_title}}
+             {%- endtrans %}"/>
+      </a>
+    {% endif %}
+  </div>
 {% endblock %}
 
 {% block mediagoblin_sidebar %}

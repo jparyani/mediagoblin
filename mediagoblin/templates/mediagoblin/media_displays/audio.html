@@ -28,27 +28,29 @@
 {% endblock %}
 
 {% block mediagoblin_media %}
-  <div class="audio-media">
-    {% if 'spectrogram' in media.media_files %}
-      <div class="audio-spectrogram">
-	<img src="{{ request.app.public_store.file_url(
-		      media.media_files.spectrogram) }}"
-	     alt="Spectrogram" />
-      </div>
-    {% endif %}
-    <audio class="audio-player" controls="controls"
-	   preload="metadata">
-      <source src="{{ request.app.public_store.file_url(
-		       media.media_files.webm_audio) }}" type="audio/webm; codecs=vorbis" />
-      <div class="no_html5">
-	{%- trans -%}Sorry, this audio will not work because 
-	your web browser does not support HTML5 
-	audio.{%- endtrans -%}<br/>
-	{%- trans -%}You can get a modern web browser that 
-	can play the audio at <a href="http://getfirefox.com">
-	  http://getfirefox.com</a>!{%- endtrans -%}
-      </div>
-    </audio>
+  <div class="media_other_container">
+    <div class="audio-media">
+      {% if 'spectrogram' in media.media_files %}
+        <div class="audio-spectrogram">
+	  <img src="{{ request.app.public_store.file_url(
+		        media.media_files.spectrogram) }}"
+	       alt="Spectrogram" />
+        </div>
+      {% endif %}
+      <audio class="audio-player" controls="controls"
+	     preload="metadata">
+        <source src="{{ request.app.public_store.file_url(
+		         media.media_files.webm_audio) }}" type="audio/webm; codecs=vorbis" />
+        <div class="no_html5">
+	  {%- trans -%}Sorry, this audio will not work because 
+	  your web browser does not support HTML5 
+	  audio.{%- endtrans -%}<br/>
+	  {%- trans -%}You can get a modern web browser that 
+	  can play the audio at <a href="http://getfirefox.com">
+	    http://getfirefox.com</a>!{%- endtrans -%}
+        </div>
+      </audio>
+    </div>
   </div>
 {% endblock %}
 

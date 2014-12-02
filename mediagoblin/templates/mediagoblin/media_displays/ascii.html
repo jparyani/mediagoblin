@@ -19,13 +19,15 @@
 {% extends 'mediagoblin/user_pages/media.html' %}
 
 {% block mediagoblin_media %}
-  <div class="ascii-wrapper">
-    <pre>
-      {%- autoescape False -%}
-      {{- request.app.public_store.get_file(
-             media.media_files['unicode']).read()|string -}}
-      {%- endautoescape -%}
-    </pre>
+  <div class="media_image_container">
+    <div class="ascii-wrapper">
+      <pre>
+        {%- autoescape False -%}
+        {{- request.app.public_store.get_file(
+               media.media_files['unicode']).read()|string -}}
+        {%- endautoescape -%}
+      </pre>
+    </div>
   </div>
 {% endblock %}
 

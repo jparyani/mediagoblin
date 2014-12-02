@@ -211,12 +211,18 @@ footer {
 }
 
 .media_image_container {
-  display: flex;
-  justify-content: center;
 }
 
 .media_image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   max-width: 100%;
+}
+
+.media_other_container {
+  display: flex;
+  justify-content: center;
 }
 
 .media_pane {
@@ -887,7 +893,12 @@ pre {
     margin-left:3px;
     margin-right:3px;
   }
+  #thingy_view {
+    width:640px;
+    height:640px;
+  }
 }
+
 /* Tablet Portrait size to standard 960 (devices and browsers) */
 @media only screen and (min-width: 768px) and (max-width: 959px) {
   .container .three.columns.media_thumbnail {
@@ -896,7 +907,7 @@ pre {
     margin-right:2px;
   }
   .media_thumbnail.thumb_entry img {
-    margin-left: -16.5px;
+    max-width:100%;
   }
   .thumb_gallery {
     margin-left: 0;
@@ -904,7 +915,12 @@ pre {
   }
   .navigation_button {
   }
+  #thingy_view {
+    width:508px;
+    height:508px;
+  }
 }
+
 /* All Mobile Sizes (devices and browser) */
 @media screen and (max-width: 767px) {
   .thumb_row {
@@ -943,6 +959,22 @@ pre {
 
   .media_comments {
     border-bottom: 1px solid #333333;
+  }
+}
+
+/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+  #thingy_view {
+    width:420px;
+    height:420px;
+  }
+}
+
+/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+@media only screen and (max-width: 479px) {
+  #thingy_view {
+    width:300px;
+    height:300px;
   }
 }
 

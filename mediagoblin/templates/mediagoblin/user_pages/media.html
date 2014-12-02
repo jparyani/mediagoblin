@@ -48,8 +48,8 @@
   </div>
 </div>
   <div class="media_pane eleven columns">
-    <div class="media_image_container">
-      {% block mediagoblin_media %}
+    {% block mediagoblin_media %}
+      <div class="media_image_container">
         {% set display_media = request.app.public_store.file_url(
                  media.get_display_media()[1]) %}
         {# if there's a medium file size, that means the medium size
@@ -69,8 +69,8 @@
                alt="{% trans media_title=media.title -%}
                       Image for {{ media_title }}{% endtrans %}" />
         {% endif %}
-      {% endblock %}
-    </div>
+      </div>
+    {% endblock %}
     <div class="row head foot">
     <h2 class="media_title">
       {{ media.title }}

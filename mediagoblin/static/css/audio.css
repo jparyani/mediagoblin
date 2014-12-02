@@ -1,6 +1,9 @@
 .audio-spectrogram {
     position: relative;
 }
+.audio-spectrogram > img {
+    width: 100%;
+}
 .playhead {
     position: absolute;
     top: 0;

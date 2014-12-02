@@ -46,6 +46,7 @@
 {%- endblock %}
 
 {% block mediagoblin_media %}
+<div class="media_other_container">
   {% set display_type, display_path = media.get_display_media() %}
 
   <video controls
@@ -68,6 +69,7 @@
       http://getfirefox.com</a>!{%- endtrans -%}
     </div>
   </video>
+</div>
 {% endblock %}
 
 {% block mediagoblin_sidebar %}
