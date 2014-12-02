@@ -26,7 +26,7 @@ from werkzeug.datastructures import FileStorage
 from mediagoblin import mg_globals
 from mediagoblin.tools.response import json_response
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
-from mediagoblin.tools.federation import create_activity
+from mediagoblin.tools.federation import create_activity, create_generator
 from mediagoblin.db.models import MediaEntry, ProcessingMetaData
 from mediagoblin.processing import mark_entry_failed
 from mediagoblin.processing.task import ProcessMedia
@@ -294,7 +294,12 @@ def api_add_to_feed(request, entry):
     add_comment_subscription(request.user, entry)
 
     # Create activity
-    create_activity("post", entry, entry.uploader)
+    create_activity(
+        verb="post",
+        obj=entry,
+        actor=entry.uploader,
+        generator=create_generator(request)
+    )
     entry.save()
     run_process_media(entry, feed_url)
 

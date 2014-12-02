@@ -23,6 +23,7 @@ from werkzeug.datastructures import FileStorage
 from mediagoblin.decorators import oauth_required, require_active_login
 from mediagoblin.federation.decorators import user_has_privilege
 from mediagoblin.db.models import User, MediaEntry, MediaComment, Activity
+from mediagoblin.tools.federation import create_activity, create_generator
 from mediagoblin.tools.routing import extract_url_arguments
 from mediagoblin.tools.response import redirect, json_response, json_error, \
                                        render_404, render_to_response
@@ -180,6 +181,17 @@ def feed_endpoint(request):
                 comment = MediaComment(author=request.user.id)
                 comment.unserialize(data["object"], request)
                 comment.save()
+                
+                # Create activity for comment
+                generator = create_generator(request)
+                activity = create_activity(
+                    verb="post",
+                    actor=request.user,
+                    obj=comment,
+                    target=comment.get_entry,
+                    generator=generator
+                )
+
                 data = {
                     "verb": "post",
                     "object": comment.serialize(request)

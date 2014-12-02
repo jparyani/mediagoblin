@@ -419,9 +419,9 @@ def oauth_required(controller):
 
         # Fill user if not already
         token = authorization[u"oauth_token"]
-        access_token = AccessToken.query.filter_by(token=token).first()
-        if access_token is not None and request.user is None:
-            user_id = access_token.user
+        request.access_token = AccessToken.query.filter_by(token=token).first()
+        if request.access_token is not None and request.user is None:
+            user_id = request.access_token.user
             request.user = User.query.filter_by(id=user_id).first()
 
         return controller(request, *args, **kwargs)

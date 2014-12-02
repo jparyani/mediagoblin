@@ -16,7 +16,34 @@
 
 from mediagoblin.db.models import Activity, Generator, User
 
-def create_activity(verb, obj, actor, target=None):
+def create_generator(request):
+    """
+    This creates a Generator object based on the Client associated with the
+    OAuth credentials used. If the request has invalid OAuth credentials or
+    no OAuth credentials None is returned.
+    """
+    if not hasattr(request, "access_token"):
+        return None
+
+    client = request.access_token.get_requesttoken.get_client
+    
+    # Check if there is a generator already
+    generator = Generator.query.filter_by(
+        name=client.application_name,
+        object_type="client"
+    ).first()
+    if generator is None:
+        generator = Generator(
+            name=client.application_name,
+            object_type="client"
+        )
+        generator.save()
+
+    return generator
+    
+     
+
+def create_activity(verb, obj, actor, target=None, generator=None):
     """
     This will create an Activity object which for the obj if possible
     and save it. The verb should be one of the following:
@@ -34,14 +61,15 @@ def create_activity(verb, obj, actor, target=None):
     if verb not in Activity.VALID_VERBS:
         raise ValueError("A invalid verb type has been supplied.")
 
-    # This should exist as we're creating it by the migration for Generator
-    generator = Generator.query.filter_by(name="GNU MediaGoblin").first()
     if generator is None:
-        generator = Generator(
-            name="GNU MediaGoblin",
-            object_type="service"
-        )
-        generator.save()
+        # This should exist as we're creating it by the migration for Generator
+        generator = Generator.query.filter_by(name="GNU MediaGoblin").first()
+        if generator is None:
+            generator = Generator(
+                name="GNU MediaGoblin",
+                object_type="service"
+            )
+            generator.save()
 
     activity = Activity(verb=verb)
     activity.set_object(obj)
