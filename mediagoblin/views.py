@@ -25,7 +25,7 @@ from mediagoblin.decorators import uses_pagination, user_not_banned
 @user_not_banned
 @uses_pagination
 def default_root_view(request, page):
-    cursor = MediaEntry.query.filter_by(state=u'processed').\
+    cursor = request.db.query(MediaEntry).filter_by(state=u'processed').\
         order_by(MediaEntry.created.desc())
 
     pagination = Pagination(page, cursor)
