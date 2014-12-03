@@ -97,9 +97,6 @@ else:
             #####################################
             # Functions to emulate DatabaseMaster
             #####################################
-            def commit():
-                session.commit()
-
             def save(obj):
                 session.add(obj)
                 session.flush()
@@ -116,7 +113,6 @@ else:
                 session.remove()
 
             # now attach
-            session.commit = commit
             session.save = save
             session.check_session_clean = check_session_clean
             session.reset_after_request = reset_after_request
