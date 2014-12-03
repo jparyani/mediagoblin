@@ -29,7 +29,6 @@ from mediagoblin import _version
 from mediagoblin.tools import common
 from mediagoblin.tools.translate import is_rtl
 from mediagoblin.tools.translate import set_thread_locale
-from mediagoblin.tools.translate import get_locale_from_request
 from mediagoblin.tools.pluginapi import get_hook_templates, hook_transform
 from mediagoblin.tools.timesince import timesince
 from mediagoblin.meddleware.csrf import render_csrf_form_token
@@ -37,7 +36,7 @@ from mediagoblin.meddleware.csrf import render_csrf_form_token
 SETUP_JINJA_ENVS = {}
 
 
-def get_jinja_env(template_loader, locale):
+def get_jinja_env(app, template_loader, locale):
     """
     Set up the Jinja environment,
 
@@ -54,7 +53,7 @@ def get_jinja_env(template_loader, locale):
     # The default config does not require a [jinja2] block.
     # You may create one if you wish to enable additional jinja2 extensions,
     # see example in config_spec.ini 
-    jinja2_config = mg_globals.global_config.get('jinja2', {})
+    jinja2_config = app.global_config.get('jinja2', {})
     local_exts = jinja2_config.get('extensions', [])
 
     # jinja2.StrictUndefined will give exceptions on references
@@ -79,10 +78,10 @@ def get_jinja_env(template_loader, locale):
     # ... have access to the global and app config
     # ... determine if the language is rtl or ltr
     template_env.globals['fetch_messages'] = messages.fetch_messages
-    template_env.globals['app_config'] = mg_globals.app_config
-    template_env.globals['global_config'] = mg_globals.global_config
+    template_env.globals['app_config'] = app.app_config
+    template_env.globals['global_config'] = app.global_config
     template_env.globals['version'] = _version.__version__
-    template_env.globals['auth'] = mg_globals.app.auth
+    template_env.globals['auth'] = app.auth
     template_env.globals['is_rtl'] = is_rtl(locale)
     template_env.filters['urlencode'] = url_quote_plus
 

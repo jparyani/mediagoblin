@@ -227,7 +227,7 @@ class MediaGoblinApp(object):
         # This should be moved over for certain, but how to deal with
         # request.locale?
         request.template_env = template.get_jinja_env(
-            self.template_loader, request.locale)
+            self, self.template_loader, request.locale)
 
         mg_request.setup_user_in_request(request)
 
