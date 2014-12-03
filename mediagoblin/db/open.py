@@ -158,8 +158,13 @@ def _sqlite_disable_fk_pragma_on_connect(dbapi_con, con_record):
     dbapi_con.execute('pragma foreign_keys=off')
 
 
-def setup_connection_and_db_from_config(app_config, migrations=False):
+def setup_connection_and_db_from_config(app_config, migrations=False, app=None):
     engine = create_engine(app_config['sql_engine'])
+
+    # @@: Maybe make a weak-ref so an engine can get garbage
+    # collected?  Not that we expect to make a lot of MediaGoblinApp
+    # instances in a single process...
+    engine.app = app
 
     # Enable foreign key checking for sqlite
     if app_config['sql_engine'].startswith('sqlite://'):

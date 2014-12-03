@@ -30,6 +30,10 @@ class GMGTableBase(object):
     def _session(self):
         return inspect(self).session
 
+    @property
+    def _app(self):
+        return self._session.bind.app
+
     if not DISABLE_GLOBALS:
         query = Session.query_property()
 

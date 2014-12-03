@@ -108,9 +108,9 @@ class MediaGoblinApp(object):
 
         # Set up the database
         if DISABLE_GLOBALS:
-            self.db_manager = setup_database(self.app_config['run_migrations'])
+            self.db_manager = setup_database(self)
         else:
-            self.db = setup_database(self.app_config['run_migrations'])
+            self.db = setup_database(self)
 
         # Quit app if need to run dbupdate
         ## NOTE: This is currently commented out due to session errors..
