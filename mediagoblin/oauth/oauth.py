@@ -28,6 +28,10 @@ class GMGRequestValidator(RequestValidator):
         self.POST = data
         super(GMGRequestValidator, self).__init__(*args, **kwargs)
 
+    @property
+    def nonce_length(self):
+        return 5, 30
+
     def save_request_token(self, token, request):
         """ Saves request token in db """
         client_id = self.POST[u"oauth_consumer_key"]
