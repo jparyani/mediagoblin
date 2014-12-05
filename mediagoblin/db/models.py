@@ -70,7 +70,7 @@ class Location(Base):
         location = {"objectType": "place"}
 
         if self.name is not None:
-            location["name"] = self.name
+            location["displayName"] = self.name
 
         if self.position:
             location["position"] = self.position
@@ -81,8 +81,8 @@ class Location(Base):
         return location
 
     def unserialize(self, data):
-        if "name" in data:
-            self.name = data["name"]
+        if "displayName" in data:
+            self.name = data["displayName"]
 
         self.position = {}
         self.address = {}
