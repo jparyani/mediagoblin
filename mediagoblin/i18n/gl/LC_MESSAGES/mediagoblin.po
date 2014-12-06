@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-04 13:45-0500\n"
-"PO-Revision-Date: 2014-08-04 18:45+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"POT-Creation-Date: 2014-09-21 11:08-0500\n"
+"PO-Revision-Date: 2014-11-30 07:07+0000\n"
+"Last-Translator: Adrián Chaves Fernández <adriyetichaves@gmail.com>\n"
 "Language-Team: Galician (http://www.transifex.com/projects/p/mediagoblin/language/gl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -194,7 +194,7 @@ msgstr "Novo enderezo de correo"
 #: mediagoblin/plugins/basic_auth/forms.py:43
 #: mediagoblin/plugins/ldap/forms.py:39
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:64
-#: mediagoblin/tests/test_util.py:116
+#: mediagoblin/tests/test_util.py:143
 msgid "Password"
 msgstr "Contrasinal"
 
@@ -545,31 +545,31 @@ msgstr "Que privilexios vai retirarlle?"
 
 #: mediagoblin/moderation/forms.py:122
 msgid "Why user was banned:"
-msgstr ""
+msgstr "Motivo da prohibición de acceso:"
 
 #: mediagoblin/moderation/forms.py:125
 msgid "Message to user:"
-msgstr ""
+msgstr "Mensaxe ao usuario:"
 
 #: mediagoblin/moderation/forms.py:128
 msgid "Resolution content:"
-msgstr ""
+msgstr "Contido da resolución:"
 
 #: mediagoblin/moderation/tools.py:34
 msgid ""
 "\n"
 "{mod} took away {user}'s {privilege} privileges."
-msgstr ""
+msgstr "\n{mod} retiroulle a {user} os privilexios de {privilege}."
 
 #: mediagoblin/moderation/tools.py:47
 msgid ""
 "\n"
 "{mod} banned user {user} {expiration_date}."
-msgstr ""
+msgstr "\n{mod} prohibiulle o acceso a {user} {expiration_date}."
 
 #: mediagoblin/moderation/tools.py:51
 msgid "until {date}"
-msgstr ""
+msgstr "ata o {date}"
 
 #: mediagoblin/moderation/tools.py:53
 #: mediagoblin/templates/mediagoblin/banned.html:30
@@ -580,19 +580,19 @@ msgstr "de maneira indefinida"
 msgid ""
 "\n"
 "{mod} sent a warning email to the {user}."
-msgstr ""
+msgstr "\n{mod} enviou unha mensaxe de advertencia a {user}."
 
 #: mediagoblin/moderation/tools.py:71
 msgid ""
 "\n"
 "{mod} deleted the comment."
-msgstr ""
+msgstr "\n{mod} eliminou o comentario."
 
 #: mediagoblin/moderation/tools.py:78
 msgid ""
 "\n"
 "{mod} deleted the media entry."
-msgstr ""
+msgstr "\n{mod} eliminou a entrada multimedia."
 
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
@@ -612,11 +612,11 @@ msgstr "Subscrito aos comentarios de %s!"
 msgid "You will not receive notifications for comments on %s."
 msgstr "Non recibirá notificacións sobre comentarios de %s."
 
-#: mediagoblin/oauth/views.py:242
+#: mediagoblin/oauth/views.py:241
 msgid "Must provide an oauth_token."
 msgstr "Debe fornecer un «auth_token»."
 
-#: mediagoblin/oauth/views.py:247 mediagoblin/oauth/views.py:298
+#: mediagoblin/oauth/views.py:246 mediagoblin/oauth/views.py:297
 msgid "No request token found."
 msgstr "Non se atopou o código da solicitude."
 
@@ -674,7 +674,7 @@ msgid ""
 "      inside the text box, click the Submit Query button, and your media should be\n"
 "      displayed on the front page.\n"
 "    "
-msgstr "\nAcceda á páxina do contido que quere descatar. Copie o seu enderezo URL e pégueo nunha liña nova da caixa de texto anterior. Non debería haber máis dun URL por liña. O URL que pegue debería estar baixo a cabeceira que mellor describa a prominencia coa que se debería destacar (principal, secundario, terciario). Unha vez teña todos os contidos que queira destacar na caixa de texto, prema «Enviar a consulta», e os seus contidos aparecerán na súa páxina principal."
+msgstr "\nAcceda á páxina do contido que quere destacar. Copie o seu enderezo URL e pégueo nunha liña nova da caixa de texto anterior. Non debería haber máis dun URL por liña. O URL que pegue debería estar baixo a cabeceira que mellor describa a prominencia coa que se debería destacar (principal, secundario, terciario). Unha vez teña todos os contidos que queira destacar na caixa de texto, prema «Enviar a consulta», e os seus contidos aparecerán na súa páxina principal."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:48
 msgid "Is there another way to manage featured media?"
@@ -700,7 +700,7 @@ msgid ""
 "        prominent and Demote moves the featured media lower down and makes it\n"
 "        less prominent.\n"
 "    "
-msgstr ""
+msgstr "\n        Así é. Se o prefire, pode ir á páxina principal do contido multimedia que\n        quere destacar ou deixar de destacar, e observar a barra lateral da \n        páxina. Se o contido non está destacado debería aparecer o botón\n        «Destacar». Prémao para destacar o contido como contido destacado\n        principal, na parte superior da páxina. O resto de contidos destacados\n        seguirán a estar destacados, pero aparecerán máis abaixo na páxina.\n        <br /><br />\n\n        Se accede á páxina dun contido que está actualmente destacado,\n        disporá das opcións «Deixar de destacar», «Promover» e «Degradar»\n        onde antes aparecía «Destacar». Prema «Deixar de destacar» para\n        deixar de mostrar o contido na páxina principal. Sempre poderá\n        destacalo de novo máis tarde. «Promover» aumenta a prominencia do\n        contido, mentres que «Degradar» a diminúe.\n    "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:70
 msgid "What is a Primary Feature? What is a Secondary Feature?"
@@ -816,7 +816,7 @@ msgid ""
 "If you would like to feature a\n"
 "        piece of media, go to that media entry's homepage and click the button\n"
 "        that says <a class=\"button_action\">Feature</a>."
-msgstr ""
+msgstr "Se quere destacar un contido,\n        abra a páxina do contido e prema o botón\n        <a class=\"button_action\">Destacar</a>."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:67
 #, python-format
@@ -826,7 +826,7 @@ msgid ""
 "        have media featured as long as your instance has the 'archivalook'\n"
 "        plugin enabled. A more advanced tool to manage features can be found\n"
 "        in the <a href=\"%(featured_media_url)s\">feature management panel.</a>"
-msgstr ""
+msgstr "Está a ver esta páxina porque a súa conta de usuario\n        dispón dos permisos necesarios para destacar contidos, a maior parte\n        dos usuarios non verán máis que unha páxina baleira, así que asegúrese\n        de destacar contidos sempre que a súa instalación teña activado o\n        complemento «archivalook». Atopará unha ferramenta máis avanzada\n        para a xestión de contidos destacados no\n        <a href=\"%(featured_media_url)s\">panel de xestión de contidos\n        destacados</a>."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
@@ -1297,7 +1297,7 @@ msgstr "Crear unha colección nova"
 
 #: mediagoblin/templates/mediagoblin/base.html:163
 msgid "Moderation powers:"
-msgstr ""
+msgstr "Poderes de moderación:"
 
 #: mediagoblin/templates/mediagoblin/base.html:169
 msgid "User management panel"
@@ -1703,20 +1703,20 @@ msgstr "Identificador"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
 msgid "User"
-msgstr ""
+msgstr "Usuario"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
 msgid "When submitted"
-msgstr ""
+msgstr "Ao enviarse"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:42
 msgid "Transcoding progress"
-msgstr ""
+msgstr "Progreso do cambio de codificación"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:53
 msgid "Unknown"
-msgstr ""
+msgstr "Descoñecido"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:59
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
@@ -1730,11 +1730,11 @@ msgstr "Non foi posíbel procesar os seguintes envíos:"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:71
 msgid "Reason for failure"
-msgstr ""
+msgstr "Motivo do erro"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:72
 msgid "Failure metadata"
-msgstr ""
+msgstr "Datos do erro"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:91
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
@@ -1747,7 +1747,7 @@ msgstr "Últimos 10 envíos sen erros"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:101
 msgid "Submitted"
-msgstr ""
+msgstr "Enviado"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:113
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
@@ -1791,7 +1791,7 @@ msgstr "\n          ELIMINOUSE\n          O CONTIDO DE\n            <a href=\"%(
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:102
 msgid "Reason for report:"
-msgstr ""
+msgstr "Motivo do informe:"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:133
 #: mediagoblin/templates/mediagoblin/moderation/user.html:136
@@ -2273,11 +2273,11 @@ msgstr "Engadir a unha colección"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:24
 msgid "Subscribe to comments"
-msgstr ""
+msgstr "Subscribirse aos comentarios"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:30
 msgid "Silence comments"
-msgstr ""
+msgstr "Silenciar os comentarios"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
@@ -2327,34 +2327,34 @@ msgstr "Etiquetado con"
 msgid "Could not read the image file."
 msgstr "Non foi posíbel ler o ficheiro da imaxe."
 
-#: mediagoblin/tools/response.py:38
+#: mediagoblin/tools/response.py:39
 msgid "Oops!"
 msgstr "Ups!"
 
-#: mediagoblin/tools/response.py:39
+#: mediagoblin/tools/response.py:40
 msgid "An error occured"
 msgstr "Produciuse un erro."
 
-#: mediagoblin/tools/response.py:53
+#: mediagoblin/tools/response.py:54
 msgid "Bad Request"
 msgstr "Petición incorrecta"
 
-#: mediagoblin/tools/response.py:55
+#: mediagoblin/tools/response.py:56
 msgid "The request sent to the server is invalid, please double check it"
 msgstr "A petición enviada ao servidor é incorrecta, compróbea."
 
-#: mediagoblin/tools/response.py:63
+#: mediagoblin/tools/response.py:64
 msgid "Operation not allowed"
 msgstr "Operación non permitida"
 
-#: mediagoblin/tools/response.py:64
+#: mediagoblin/tools/response.py:65
 msgid ""
 "Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
 "function that you are not allowed to. Have you been trying to delete all "
 "user accounts again?"
 msgstr "Intentou utilizar unha función para a que non ten permisos. Que foi, volveu intentar eliminar todas as contas de usuario outra vez?"
 
-#: mediagoblin/tools/response.py:72
+#: mediagoblin/tools/response.py:73
 msgid ""
 "There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
 " the address is correct, maybe the page you're looking for has been moved or"

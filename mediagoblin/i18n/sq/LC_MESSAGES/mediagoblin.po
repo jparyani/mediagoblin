@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-04 13:45-0500\n"
-"PO-Revision-Date: 2014-08-04 18:45+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"POT-Creation-Date: 2014-09-21 11:08-0500\n"
+"PO-Revision-Date: 2014-10-24 21:16+0000\n"
+"Last-Translator: Besnik <besnik@programeshqip.org>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/mediagoblin/language/sq/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -70,7 +70,7 @@ msgstr "Kyçi i verifikimit ose id-ja e përdoruesit është e pasaktë"
 
 #: mediagoblin/auth/views.py:185
 msgid "You must be logged in so we know who to send the email to!"
-msgstr "Duhet të jeni i futur, që ta dimë kujt t'ia çojmë email-in!"
+msgstr "Duhet të jeni i futur, që ta dimë kujt t’ia çojmë email-in!"
 
 #: mediagoblin/auth/views.py:193
 msgid "You've already verified your email address!"
@@ -118,7 +118,7 @@ msgstr "Identifikues"
 
 #: mediagoblin/edit/forms.py:43 mediagoblin/edit/forms.py:98
 msgid "The slug can't be empty"
-msgstr "Identifikuesi s'mund të jetë i zbrazët"
+msgstr "Identifikuesi s’mund të jetë i zbrazët"
 
 #: mediagoblin/edit/forms.py:44
 msgid ""
@@ -130,7 +130,7 @@ msgstr "Titulli i adresës së kësaj medie. Zakonisht nuk keni nevojë ta ndrys
 #: mediagoblin/submit/forms.py:50
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
-msgstr "Leje"
+msgstr "Licencë"
 
 #: mediagoblin/edit/forms.py:54
 msgid "Bio"
@@ -138,7 +138,7 @@ msgstr "Jetëshkrim"
 
 #: mediagoblin/edit/forms.py:60
 msgid "Website"
-msgstr "Site Web"
+msgstr "Sajt Web"
 
 #: mediagoblin/edit/forms.py:62
 msgid "This address contains errors"
@@ -162,7 +162,7 @@ msgstr "Kjo do të jetë licenca juaj parazgjedhje për forma ngarkimesh."
 
 #: mediagoblin/edit/forms.py:90
 msgid "The title can't be empty"
-msgstr "Titulli s'mund të jetë i zbrazët"
+msgstr "Titulli s’mund të jetë i zbrazët"
 
 #: mediagoblin/edit/forms.py:92 mediagoblin/submit/forms.py:64
 #: mediagoblin/user_pages/forms.py:48
@@ -195,7 +195,7 @@ msgstr "Adresë email e re"
 #: mediagoblin/plugins/basic_auth/forms.py:43
 #: mediagoblin/plugins/ldap/forms.py:39
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:64
-#: mediagoblin/tests/test_util.py:116
+#: mediagoblin/tests/test_util.py:143
 msgid "Password"
 msgstr "Fjalëkalim"
 
@@ -205,11 +205,11 @@ msgstr "Jepni fjalëkalimin tuaj që të provohet se jeni i zoti i kësaj llogar
 
 #: mediagoblin/edit/forms.py:155
 msgid "Identifier"
-msgstr ""
+msgstr "Identifikues"
 
 #: mediagoblin/edit/forms.py:156
 msgid "Value"
-msgstr ""
+msgstr "Vlerë"
 
 #: mediagoblin/edit/views.py:78
 msgid "An entry with that slug already exists for this user."
@@ -303,11 +303,11 @@ msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:40
 msgid "Name of user these media entries belong to"
-msgstr ""
+msgstr "Emri i përdoruesit të cilit i përkasin këto zëra media"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:43
 msgid "Path to the csv file containing metadata information."
-msgstr ""
+msgstr "Shteg për te kartela csv që përmban informacion tejtëdhënash."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:48
 msgid "Don't process eagerly, pass off to celery"
@@ -315,7 +315,7 @@ msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:63
 msgid "Sorry, no user by username '{username}' exists"
-msgstr ""
+msgstr "Na ndjeni, nuk ka përdorues me emër përdoruesi '{username}'"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:74
 msgid "File at {path} not found, use -h flag for help"
@@ -331,7 +331,7 @@ msgstr ""
 msgid ""
 "FAIL: Local file {filename} could not be accessed.\n"
 "{filename} will not be uploaded."
-msgstr ""
+msgstr "DËSHTIM: Nuk hyhet dot te kartela vendore {filename}.\n{filename} nuk do të ngarkohet."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:157
 msgid ""
@@ -350,11 +350,11 @@ msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:166
 msgid "FAIL: This user is already past their upload limits."
-msgstr ""
+msgstr "DËSHTIM: Ky përdorues i ka tejkaluar tashmë kufijtë për ngarkime."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:168
 msgid "{files_uploaded} out of {files_attempted} files successfully submitted"
-msgstr ""
+msgstr "U parashtruan me sukses {files_uploaded} nga {files_attempted} gjithsej"
 
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
@@ -388,7 +388,7 @@ msgstr ""
 
 #: mediagoblin/media_types/blog/views.py:320
 msgid "You deleted the Blog."
-msgstr ""
+msgstr "E fshitë Blogun."
 
 #: mediagoblin/media_types/blog/views.py:326
 #: mediagoblin/user_pages/views.py:329
@@ -401,19 +401,19 @@ msgstr ""
 
 #: mediagoblin/media_types/blog/views.py:344
 msgid "The blog was not deleted because you have no rights."
-msgstr ""
+msgstr "Blogu nuk fshi, ngaqë nuk keni të drejta."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:43
 msgid "Add Blog Post"
-msgstr ""
+msgstr "Shtoni Postim Blogu"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:50
 msgid "Edit Blog"
-msgstr ""
+msgstr "Përpunoni Blogun"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:57
 msgid "Delete Blog"
-msgstr ""
+msgstr "Fshijeni Blogun"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:92
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blogpost_draft_view.html:35
@@ -435,11 +435,11 @@ msgstr "Fshije"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:102
 msgid "<em> Go to list view </em>"
-msgstr ""
+msgstr "<em> Shko te pamja si listë </em>"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:104
 msgid " No blog post yet. "
-msgstr ""
+msgstr "Ende pa postime blogu."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -468,7 +468,7 @@ msgstr "Fshije përgjithmonë"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:26
 msgid "Create/Edit a Blog"
-msgstr ""
+msgstr "Krijoni/Përpunoni një Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:37
 #: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
@@ -481,28 +481,28 @@ msgstr "Shtoni"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_edit_create.html:23
 msgid "Create/Edit a blog post."
-msgstr ""
+msgstr "Krijoni/Përpunoni një postim blogu."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_edit_create.html:29
 msgid "Create/Edit a Blog Post."
-msgstr ""
+msgstr "Krijoni/Përpunoni një Postim Blogu."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_listing.html:24
 #, python-format
 msgid "%(blog_owner_name)s's Blog"
-msgstr ""
+msgstr "Blog nga %(blog_owner_name)s"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:46
 msgid "View"
-msgstr ""
+msgstr "Shihni"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:65
 msgid "Create a Blog"
-msgstr ""
+msgstr "Krijoni një Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/url_to_dashboard.html:20
 msgid " Blog Dashboard "
-msgstr ""
+msgstr "Pult Blogu"
 
 #: mediagoblin/media_types/pdf/processing.py:142
 msgid "unoconv failing to run, check log file"
@@ -546,11 +546,11 @@ msgstr "Cilat privilegje do të hiqni?"
 
 #: mediagoblin/moderation/forms.py:122
 msgid "Why user was banned:"
-msgstr ""
+msgstr "Pse u dëbua përdoruesi:"
 
 #: mediagoblin/moderation/forms.py:125
 msgid "Message to user:"
-msgstr ""
+msgstr "Mesazh përdoruesit:"
 
 #: mediagoblin/moderation/forms.py:128
 msgid "Resolution content:"
@@ -560,17 +560,17 @@ msgstr ""
 msgid ""
 "\n"
 "{mod} took away {user}'s {privilege} privileges."
-msgstr ""
+msgstr "\n{mod} i hoqi {user} privilegje {privilege}."
 
 #: mediagoblin/moderation/tools.py:47
 msgid ""
 "\n"
 "{mod} banned user {user} {expiration_date}."
-msgstr ""
+msgstr "\n{mod} dëboi përdoruesin {user} {expiration_date}."
 
 #: mediagoblin/moderation/tools.py:51
 msgid "until {date}"
-msgstr ""
+msgstr "deri mëuntil {date}"
 
 #: mediagoblin/moderation/tools.py:53
 #: mediagoblin/templates/mediagoblin/banned.html:30
@@ -581,19 +581,19 @@ msgstr "pafundësisht"
 msgid ""
 "\n"
 "{mod} sent a warning email to the {user}."
-msgstr ""
+msgstr "\n{mod} dërgoi një email sinjalizimi për {user}."
 
 #: mediagoblin/moderation/tools.py:71
 msgid ""
 "\n"
 "{mod} deleted the comment."
-msgstr ""
+msgstr "\n{mod} fshiu komentin."
 
 #: mediagoblin/moderation/tools.py:78
 msgid ""
 "\n"
 "{mod} deleted the media entry."
-msgstr ""
+msgstr "\n{mod} fshiu zërin media."
 
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
@@ -613,13 +613,13 @@ msgstr "U pajtua te komentet në %s!"
 msgid "You will not receive notifications for comments on %s."
 msgstr "Nuk do të merrni njoftime për komente te %s."
 
-#: mediagoblin/oauth/views.py:242
+#: mediagoblin/oauth/views.py:241
 msgid "Must provide an oauth_token."
 msgstr "Duhet dhënë një oauth_token."
 
-#: mediagoblin/oauth/views.py:247 mediagoblin/oauth/views.py:298
+#: mediagoblin/oauth/views.py:246 mediagoblin/oauth/views.py:297
 msgid "No request token found."
-msgstr "S'u gjet token kërkese."
+msgstr "S’u gjet token kërkese."
 
 #: mediagoblin/plugins/api/views.py:76 mediagoblin/plugins/piwigo/views.py:155
 #: mediagoblin/submit/views.py:78
@@ -629,7 +629,7 @@ msgstr "Na ndjeni, madhësia e kartelës është shumë e madhe."
 #: mediagoblin/plugins/api/views.py:79 mediagoblin/plugins/piwigo/views.py:158
 #: mediagoblin/submit/views.py:81
 msgid "Sorry, uploading this file will put you over your upload limit."
-msgstr "Na ndjeni, ngarkimi i kësaj kartele do t'ju kalonte tej kufirit tuaj për ngarkime."
+msgstr "Na ndjeni, ngarkimi i kësaj kartele do t’ju kalonte tej kufirit tuaj për ngarkime."
 
 #: mediagoblin/plugins/api/views.py:83 mediagoblin/plugins/piwigo/views.py:162
 #: mediagoblin/submit/views.py:87
@@ -638,15 +638,15 @@ msgstr "Na ndjeni, keni arritur kufirin tuaj për ngarkimet."
 
 #: mediagoblin/plugins/archivalook/forms.py:21
 msgid "Enter the URL for the media to be featured"
-msgstr ""
+msgstr "Jepni URL-në për median që do të paraqitet"
 
 #: mediagoblin/plugins/archivalook/tools.py:132
 msgid "Primary"
-msgstr ""
+msgstr "Parësore"
 
 #: mediagoblin/plugins/archivalook/tools.py:133
 msgid "Secondary"
-msgstr ""
+msgstr "Dytësore"
 
 #: mediagoblin/plugins/archivalook/tools.py:134
 msgid "Tertiary"
@@ -658,7 +658,7 @@ msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:33
 msgid "How does this work?"
-msgstr ""
+msgstr "Si funksionon kjo?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:34
 msgid "How to feature media?"
@@ -752,7 +752,7 @@ msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:108
 msgid "CAUTION:"
-msgstr ""
+msgstr "KUJDES:"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:110
 msgid ""
@@ -831,7 +831,7 @@ msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
-msgstr ""
+msgstr "Shihni mediat më të reja"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/bits/feature_dropdown.html:22
 msgid "Feature management panel"
@@ -897,11 +897,11 @@ msgstr "Emër përdoruesi ose email"
 msgid ""
 "If that email address (case sensitive!) is registered an email has been sent"
 " with instructions on how to change your password."
-msgstr "Nëse ajo adresë email (siç është shkruajtur!) është e regjistruar, është dërguar një email me udhëzime se si të ndryshoni fjalëkalimin tuaj."
+msgstr "Nëse ajo adresë email (siç është shkruar!) është e regjistruar, është dërguar një email me udhëzime se si të ndryshoni fjalëkalimin tuaj."
 
 #: mediagoblin/plugins/basic_auth/views.py:65
 msgid "Couldn't find someone with that username."
-msgstr "S'u gjet dot dikush me atë emër përdoruesi."
+msgstr "S’u gjet dot dikush me atë emër përdoruesi."
 
 #: mediagoblin/plugins/basic_auth/views.py:68
 msgid ""
@@ -992,11 +992,11 @@ msgstr "Për të krijuar një llogari, hyni!"
 
 #: mediagoblin/plugins/metadata_display/templates/mediagoblin/plugins/metadata_display/metadata_table.html:22
 msgid "Metadata"
-msgstr ""
+msgstr "Tejtëdhëna"
 
 #: mediagoblin/plugins/metadata_display/templates/mediagoblin/plugins/metadata_display/metadata_table.html:40
 msgid "Edit Metadata"
-msgstr ""
+msgstr "Përpunoni Tejtëdhëna"
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
@@ -1121,7 +1121,7 @@ msgstr "Fshini një OpenID"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/edit_link.html:21
 msgid "OpenID's"
-msgstr ""
+msgstr "OpenID-je"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:28
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:36
@@ -1191,7 +1191,7 @@ msgstr "Shtoni një adresë email Persona"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit_link.html:21
 msgid "Persona's"
-msgstr ""
+msgstr "Persona-je"
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/login_link.html:22
 msgid "Or login with Persona!"
@@ -1406,13 +1406,13 @@ msgstr "Eksploroni"
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:24
 msgid "Hi there, welcome to this MediaGoblin site!"
-msgstr "Tungjatjeta juaj, mirë se vini te ky site MediaGoblin!"
+msgstr "Tungjatjeta juaj, mirë se vini te ky sajt MediaGoblin!"
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:25
 msgid ""
 "This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
 "extraordinarily great piece of media hosting software."
-msgstr "Ky site përdor <a href=\"http://mediagoblin.org\">MediaGoblin</a>, një program jashtëzakonisht i shkëlqyer për strehim mediash."
+msgstr "Ky sajt përdor <a href=\"http://mediagoblin.org\">MediaGoblin</a>, një program jashtëzakonisht i shkëlqyer për strehim mediash."
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:27
 msgid ""
@@ -1429,7 +1429,7 @@ msgid ""
 "\n"
 "            >Create an account at this site</a>\n"
 "            or"
-msgstr ""
+msgstr "\n            >Krijoni një llogari në këtë sajt</a>\n            ose"
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:42
 msgid ""
@@ -1516,23 +1516,23 @@ msgstr "Po përpunohet profili i %(username)s"
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:67
 #, python-format
 msgid "Metadata for \"%(media_name)s\""
-msgstr ""
+msgstr "Tejtëdhëna për \"%(media_name)s\""
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:72
 msgid "MetaData"
-msgstr ""
+msgstr "Tejtëdhëna"
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:80
 msgid "Add new Row"
-msgstr ""
+msgstr "Shtoni Rresht të ri"
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:83
 msgid "Update Metadata"
-msgstr ""
+msgstr "Përditësoni Tejtëdhëna"
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:87
 msgid "Clear empty Rows"
-msgstr ""
+msgstr "Hiqi Rreshtat e zbrazët"
 
 #: mediagoblin/templates/mediagoblin/edit/verification.txt:19
 #, python-format
@@ -1593,7 +1593,7 @@ msgid ""
 "Sorry, this audio will not work because \n"
 "\tyour web browser does not support HTML5 \n"
 "\taudio."
-msgstr "Na ndjeni, zëri s'do të funksionojë, ngaqë \n\tshfletuesi juaj s'mbulon audio HTML5."
+msgstr "Na ndjeni, zëri s’do të funksionojë, ngaqë \n\tshfletuesi juaj s’mbulon audio HTML5."
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:47
 msgid ""
@@ -1704,20 +1704,20 @@ msgstr "ID"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
 msgid "User"
-msgstr ""
+msgstr "Përdorues"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
 msgid "When submitted"
-msgstr ""
+msgstr "Parashtruar më"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:42
 msgid "Transcoding progress"
-msgstr ""
+msgstr "Ecuri ndërkodimi"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:53
 msgid "Unknown"
-msgstr ""
+msgstr "E panjohur"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:59
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
@@ -1731,11 +1731,11 @@ msgstr "Nuk arritën të kryheshin këto ngarkime:"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:71
 msgid "Reason for failure"
-msgstr ""
+msgstr "Arsye dështimi"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:72
 msgid "Failure metadata"
-msgstr ""
+msgstr "Tejtëdhëna dështimi"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:91
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
@@ -1748,7 +1748,7 @@ msgstr "10 ngarkimet e fundit të suksesshme"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:101
 msgid "Submitted"
-msgstr ""
+msgstr "U parashtrua"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:113
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
@@ -1788,11 +1788,11 @@ msgid ""
 "            <a href=\"%(user_url)s\"> %(user_name)s</a>\n"
 "          HAS BEEN DELETED\n"
 "        "
-msgstr "\n          LËNDË NGA\n            <a href=\"%(user_url)s\"> %(user_name)s</a>\n          ËSHTË FSHIRË\n        "
+msgstr "\n          LËNDË E\n            <a href=\"%(user_url)s\"> %(user_name)s</a>\n          ËSHTË FSHIRË\n        "
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:102
 msgid "Reason for report:"
-msgstr ""
+msgstr "Arsye raportimi"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:133
 #: mediagoblin/templates/mediagoblin/moderation/user.html:136
@@ -1810,7 +1810,7 @@ msgstr "Gjendje"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:151
 msgid "RESOLVED"
-msgstr "ZGJIDHUR"
+msgstr "I ZGJIDHUR"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:159
 msgid "You cannot take action against an administrator"
@@ -1830,7 +1830,7 @@ msgstr "\n    Këtu mund të kërkoni nëpër raportet që janë depozituar nga 
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:35
 msgid "Active Reports Filed"
-msgstr "Raportime Aktive të Depozituar"
+msgstr "Raportime Aktive të Depozituara"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:77
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:173
@@ -1857,7 +1857,7 @@ msgid ""
 "\n"
 "                Comment Report #%(report_id)s\n"
 "              "
-msgstr "\n                Raport Komenti #%(report_id)s\n              "
+msgstr "\n                Raportim Komenti #%(report_id)s\n              "
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:111
 #, python-format
@@ -1869,7 +1869,7 @@ msgstr "\n                Raportim Media #%(report_id)s\n              "
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:125
 msgid "No open reports found."
-msgstr "S'u gjetën raportime të hapur."
+msgstr "S’u gjetën raportime të hapur."
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:127
 msgid "Closed Reports"
@@ -1877,7 +1877,7 @@ msgstr "Raportime të Mbyllur"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:172
 msgid "Resolved"
-msgstr "Zgjidhur"
+msgstr "I zgjidhur"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:174
 msgid "Action Taken"
@@ -1893,20 +1893,20 @@ msgstr "\n              Raportim i Mbyllur #%(report_id)s\n            "
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:202
 msgid "No closed reports found."
-msgstr "S'u gjetën raportime të mbyllur."
+msgstr "S’u gjetën raportime të mbyllur."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:23
 #, python-format
 msgid "User: %(username)s"
-msgstr ""
+msgstr "Përdoruesi: %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:42
 msgid "Return to Users Panel"
-msgstr ""
+msgstr "Kthehuni te Panel Përdoruesish"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:49
 msgid "Sorry, no such user found."
-msgstr ""
+msgstr "Na ndjeni, nuk u gjet përdorues i tillë."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:53
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
@@ -1918,7 +1918,7 @@ msgstr "Lypset verifikimi i email-it"
 msgid ""
 "Someone has registered an account with this username, but it still has\n"
 "        to be activated."
-msgstr ""
+msgstr "Dikush ka regjistruar një llogari me këtë emër përdoruesi, por ajo\n        lypset të aktivizohet."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:66
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:34
@@ -1931,11 +1931,11 @@ msgstr "Profili i %(username)s"
 #: mediagoblin/templates/mediagoblin/moderation/user.html:68
 #, python-format
 msgid "BANNED until %(expiration_date)s"
-msgstr ""
+msgstr "DËBUAR deri më %(expiration_date)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:72
 msgid "Banned Indefinitely"
-msgstr ""
+msgstr "Dëbuar Pafundësisht"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:78
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:62
@@ -1946,7 +1946,7 @@ msgstr "Ky përdorues nuk e ka plotësuar (ende) profilin e vet."
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:57
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:74
 msgid "Edit profile"
-msgstr "Përpunoni profil"
+msgstr "Përpunoni profilin"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:96
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:81
@@ -1956,56 +1956,56 @@ msgstr "Shfletoni koleksionet"
 #: mediagoblin/templates/mediagoblin/moderation/user.html:105
 #, python-format
 msgid "Active Reports on %(username)s"
-msgstr ""
+msgstr "Raportime Aktive mbi %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:112
 msgid "Report ID"
-msgstr ""
+msgstr "ID Raportimi"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:113
 msgid "Reported Content"
-msgstr ""
+msgstr "Lëndë e Raportuar"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:114
 msgid "Description of Report"
-msgstr ""
+msgstr "Përshkrim Raportimi"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:122
 #, python-format
 msgid "Report #%(report_number)s"
-msgstr ""
+msgstr "Raporti #%(report_number)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:129
 msgid "Reported Comment"
-msgstr ""
+msgstr "Koment i Raportuar"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:131
 msgid "Reported Media Entry"
-msgstr ""
+msgstr "Zë Media i Raportuar"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:142
 #, python-format
 msgid "No active reports filed on %(username)s"
-msgstr ""
+msgstr "Pa raportime aktive të depozituara mbi %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:150
 #, python-format
 msgid "All reports on %(username)s"
-msgstr ""
+msgstr "Krejt raportimet mbi %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:155
 #, python-format
 msgid "All reports that %(username)s has filed"
-msgstr ""
+msgstr "Krejt raportimet që ka depozituar %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:164
 #, python-format
 msgid "%(username)s's Privileges"
-msgstr ""
+msgstr "Privilegje për %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:172
 msgid "Privilege"
-msgstr ""
+msgstr "Privilegj"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:173
 msgid "Granted"
@@ -2013,19 +2013,19 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:180
 msgid "Yes"
-msgstr ""
+msgstr "Po"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:182
 msgid "No"
-msgstr ""
+msgstr "Jo"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:213
 msgid "Ban User"
-msgstr ""
+msgstr "Dëboni Përdorues"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:218
 msgid "UnBan User"
-msgstr ""
+msgstr "Zhdëbojeni Përdoruesin"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:21
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:26
@@ -2053,7 +2053,7 @@ msgstr "# i Komenteve të Postuara"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:95
 msgid "No users found."
-msgstr "S'u gjetën përdorues."
+msgstr "S’u gjetën përdorues."
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
@@ -2067,7 +2067,7 @@ msgstr "Shtoni media tuajën"
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:38
 #, python-format
 msgid "❖ Blog post by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr ""
+msgstr "❖ Postim blogu nga <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:92
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:104
@@ -2097,17 +2097,17 @@ msgstr "%(collection_title)s nga <a href=\"%(user_url)s\">%(username)s</a>"
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:23
 #, python-format
 msgid "Delete collection %(collection_title)s"
-msgstr ""
+msgstr "Fshije koleksionin %(collection_title)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:38
 #, python-format
 msgid "Really delete collection: %(title)s?"
-msgstr ""
+msgstr "Të fshihet vërtet koleksioni: %(title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:23
 #, python-format
 msgid "Remove %(media_title)s from %(collection_title)s"
-msgstr ""
+msgstr "Hiqe %(media_title)s nga %(collection_title)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:39
 #, python-format
@@ -2211,7 +2211,7 @@ msgstr "Raportim Kartele"
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:53
 msgid "Here's a spot to tell others about yourself."
-msgstr "Ja një vend t'i tregoni botës mbi veten."
+msgstr "Ja një vend t’i tregoni botës mbi veten."
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:94
 #, python-format
@@ -2274,7 +2274,7 @@ msgstr "Shtoje te një koleksion"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:24
 msgid "Subscribe to comments"
-msgstr ""
+msgstr "Pajtohuni te komentet"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:30
 msgid "Silence comments"
@@ -2328,34 +2328,34 @@ msgstr "Etiketuar me"
 msgid "Could not read the image file."
 msgstr "Nuk lexoi dot kartelën e figurës."
 
-#: mediagoblin/tools/response.py:38
+#: mediagoblin/tools/response.py:39
 msgid "Oops!"
 msgstr "Oooh!"
 
-#: mediagoblin/tools/response.py:39
+#: mediagoblin/tools/response.py:40
 msgid "An error occured"
 msgstr "Ndodhi një gabim"
 
-#: mediagoblin/tools/response.py:53
+#: mediagoblin/tools/response.py:54
 msgid "Bad Request"
 msgstr "Kërkesë e Gabuar"
 
-#: mediagoblin/tools/response.py:55
+#: mediagoblin/tools/response.py:56
 msgid "The request sent to the server is invalid, please double check it"
 msgstr "Kërkesa e dërguar te shërbyesi është e mangët, ju lutemi, rikontrollojeni"
 
-#: mediagoblin/tools/response.py:63
+#: mediagoblin/tools/response.py:64
 msgid "Operation not allowed"
 msgstr "Veprim i palejuar"
 
-#: mediagoblin/tools/response.py:64
+#: mediagoblin/tools/response.py:65
 msgid ""
 "Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
 "function that you are not allowed to. Have you been trying to delete all "
 "user accounts again?"
 msgstr "Më ndjeni or trim, nuk ju lë dot ta bëni këtë!</p><p>Provuat të kryeni një funksion që nuk lejohet. Keni provuar prapë të fshini krejt llogaritë e përdoruesve?"
 
-#: mediagoblin/tools/response.py:72
+#: mediagoblin/tools/response.py:73
 msgid ""
 "There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
 " the address is correct, maybe the page you're looking for has been moved or"
@@ -2394,7 +2394,7 @@ msgstr "Koment"
 msgid ""
 "You can use <a href=\"http://daringfireball.net/projects/markdown/basics\" "
 "target=\"_blank\">Markdown</a> for formatting."
-msgstr "Mund të përdorni <a href=\"http://daringfireball.net/projects/markdown/basics\" target=\"_blank\">Markdown</a> për formatime."
+msgstr "Për formatime mund të përdorni <a href=\"http://daringfireball.net/projects/markdown/basics\" target=\"_blank\">Markdown</a>."
 
 #: mediagoblin/user_pages/forms.py:35
 msgid "I am sure I want to remove this item from the collection"

@@ -5,13 +5,14 @@
 # Translators:
 # Berker Peksag <berker.peksag@gmail.com>, 2014
 # Caner Başaran <basaran.caner@gmail.com>, 2013
+# Volkan Gezer <volkangezer@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-29 11:01-0500\n"
-"PO-Revision-Date: 2014-08-04 18:37+0000\n"
-"Last-Translator: Berker Peksag <berker.peksag@gmail.com>\n"
+"POT-Creation-Date: 2014-09-21 11:08-0500\n"
+"PO-Revision-Date: 2014-10-20 02:25+0000\n"
+"Last-Translator: Volkan Gezer <volkangezer@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/mediagoblin/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,15 +21,15 @@ msgstr ""
 "Language: tr_TR\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: mediagoblin/decorators.py:300 mediagoblin/plugins/openid/views.py:202
+#: mediagoblin/decorators.py:303 mediagoblin/plugins/openid/views.py:202
 msgid "Sorry, registration is disabled on this instance."
 msgstr "Üzgünüz, bu durumda kayıt devre dışıdır."
 
-#: mediagoblin/decorators.py:315
+#: mediagoblin/decorators.py:318
 msgid "Sorry, reporting is disabled on this instance."
-msgstr ""
+msgstr "Üzgünüz, bu örnekte bildirme devre dışı."
 
-#: mediagoblin/decorators.py:358 mediagoblin/plugins/ldap/views.py:55
+#: mediagoblin/decorators.py:361 mediagoblin/plugins/ldap/views.py:55
 #: mediagoblin/plugins/persona/views.py:77
 msgid "Sorry, authentication is disabled on this instance."
 msgstr ""
@@ -195,7 +196,7 @@ msgstr "Yeni e-posta adresi"
 #: mediagoblin/plugins/basic_auth/forms.py:43
 #: mediagoblin/plugins/ldap/forms.py:39
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:64
-#: mediagoblin/tests/test_util.py:116
+#: mediagoblin/tests/test_util.py:143
 msgid "Password"
 msgstr "Parola"
 
@@ -613,11 +614,11 @@ msgstr ""
 msgid "You will not receive notifications for comments on %s."
 msgstr ""
 
-#: mediagoblin/oauth/views.py:242
+#: mediagoblin/oauth/views.py:241
 msgid "Must provide an oauth_token."
 msgstr ""
 
-#: mediagoblin/oauth/views.py:247 mediagoblin/oauth/views.py:298
+#: mediagoblin/oauth/views.py:246 mediagoblin/oauth/views.py:297
 msgid "No request token found."
 msgstr ""
 
@@ -770,7 +771,6 @@ msgid ""
 msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:28
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:64
 msgid "Feature"
 msgstr ""
 
@@ -817,23 +817,20 @@ msgstr ""
 msgid ""
 "If you would like to feature a\n"
 "        piece of media, go to that media entry's homepage and click the button\n"
-"        that says"
+"        that says <a class=\"button_action\">Feature</a>."
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:65
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:67
+#, python-format
 msgid ""
 "You're seeing this page because you are a user capable of\n"
 "        featuring media, a regular user would see a blank page, so be sure to\n"
 "        have media featured as long as your instance has the 'archivalook'\n"
 "        plugin enabled. A more advanced tool to manage features can be found\n"
-"        in the"
+"        in the <a href=\"%(featured_media_url)s\">feature management panel.</a>"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:72
-msgid "feature management panel."
-msgstr ""
-
-#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:77
+#: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
 msgstr ""
 
@@ -2332,34 +2329,34 @@ msgstr ""
 msgid "Could not read the image file."
 msgstr ""
 
-#: mediagoblin/tools/response.py:38
+#: mediagoblin/tools/response.py:39
 msgid "Oops!"
 msgstr "Amaninnn boo!"
 
-#: mediagoblin/tools/response.py:39
+#: mediagoblin/tools/response.py:40
 msgid "An error occured"
 msgstr ""
 
-#: mediagoblin/tools/response.py:53
+#: mediagoblin/tools/response.py:54
 msgid "Bad Request"
 msgstr ""
 
-#: mediagoblin/tools/response.py:55
+#: mediagoblin/tools/response.py:56
 msgid "The request sent to the server is invalid, please double check it"
 msgstr ""
 
-#: mediagoblin/tools/response.py:63
+#: mediagoblin/tools/response.py:64
 msgid "Operation not allowed"
 msgstr ""
 
-#: mediagoblin/tools/response.py:64
+#: mediagoblin/tools/response.py:65
 msgid ""
 "Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
 "function that you are not allowed to. Have you been trying to delete all "
 "user accounts again?"
 msgstr ""
 
-#: mediagoblin/tools/response.py:72
+#: mediagoblin/tools/response.py:73
 msgid ""
 "There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
 " the address is correct, maybe the page you're looking for has been moved or"

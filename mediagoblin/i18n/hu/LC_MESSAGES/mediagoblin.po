@@ -3,86 +3,80 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
-# adriagm <adria@fsfe.org>, 2014
-# Al fred <devaleitzer@aim.com>, 2011
-# Al fred <devaleitzer@aim.com>, 2011
-# emwa goldwoman, 2014
-# Enric Morales <transifex@enric.me>, 2014
-# Albert Casals <skarbat@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2014-09-21 11:08-0500\n"
-"PO-Revision-Date: 2014-10-18 10:21+0000\n"
-"Last-Translator: adriagm <adria@fsfe.org>\n"
-"Language-Team: Catalan (http://www.transifex.com/projects/p/mediagoblin/language/ca/)\n"
+"PO-Revision-Date: 2011-08-07 03:51+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Hungarian (http://www.transifex.com/projects/p/mediagoblin/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
-"Language: ca\n"
+"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: mediagoblin/decorators.py:303 mediagoblin/plugins/openid/views.py:202
 msgid "Sorry, registration is disabled on this instance."
-msgstr "Ho sentim, el registre està desactivat en aquest cas."
+msgstr ""
 
 #: mediagoblin/decorators.py:318
 msgid "Sorry, reporting is disabled on this instance."
-msgstr "Ho sentim, no és possible avisar en aquest cas."
+msgstr ""
 
 #: mediagoblin/decorators.py:361 mediagoblin/plugins/ldap/views.py:55
 #: mediagoblin/plugins/persona/views.py:77
 msgid "Sorry, authentication is disabled on this instance."
-msgstr "No es permet l'autenticació en aquesta instància."
+msgstr ""
 
 #: mediagoblin/auth/tools.py:43
 msgid "Invalid User name or email address."
-msgstr "Nom d'usuari o adreça de correu incorrecte"
+msgstr ""
 
 #: mediagoblin/auth/tools.py:44
 msgid "This field does not take email addresses."
-msgstr "Aquest camp no permet introduir adreces de correu"
+msgstr ""
 
 #: mediagoblin/auth/tools.py:45
 msgid "This field requires an email address."
-msgstr "Aquest camp necessita una adreça de correu"
+msgstr ""
 
 #: mediagoblin/auth/tools.py:116
 msgid "Sorry, a user with that name already exists."
-msgstr "Lamentablement aquest usuari ja existeix."
+msgstr ""
 
 #: mediagoblin/auth/tools.py:120 mediagoblin/edit/views.py:407
 msgid "Sorry, a user with that email address already exists."
-msgstr "Perdó, ja existeix un usuari amb aquesta adreça de correu."
+msgstr ""
 
 #: mediagoblin/auth/views.py:142 mediagoblin/edit/views.py:363
 #: mediagoblin/edit/views.py:384 mediagoblin/plugins/basic_auth/views.py:110
 msgid "The verification key or user id is incorrect."
-msgstr "La clau de verificació o l'identificador d'usuari és incorrecte."
+msgstr ""
 
 #: mediagoblin/auth/views.py:161
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
-msgstr "Ja s'ha verificat la vostra adreça electrònica. Ara podeu entrar, editar el vostre perfil i penjar imatge!"
+msgstr ""
 
 #: mediagoblin/auth/views.py:167
 msgid "The verification key or user id is incorrect"
-msgstr "La clau de verificació o la identificació de l'usuari no són correctes."
+msgstr ""
 
 #: mediagoblin/auth/views.py:185
 msgid "You must be logged in so we know who to send the email to!"
-msgstr "Has d'estar conectat per saber a qui hem d'enviar el correu!"
+msgstr ""
 
 #: mediagoblin/auth/views.py:193
 msgid "You've already verified your email address!"
-msgstr "Ja has verificat la teva adreça de correu!"
+msgstr ""
 
 #: mediagoblin/auth/views.py:203
 msgid "Resent your verification email."
-msgstr "Torna'm a enviar el correu de verificació"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:89
 #: mediagoblin/media_types/blog/forms.py:24
@@ -93,11 +87,11 @@ msgstr "Torna'm a enviar el correu de verificació"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:100
 #: mediagoblin/user_pages/forms.py:45
 msgid "Title"
-msgstr "Títol"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:32 mediagoblin/submit/forms.py:40
 msgid "Description of this work"
-msgstr "Descripció d'aquest treball."
+msgstr ""
 
 #: mediagoblin/edit/forms.py:33 mediagoblin/edit/forms.py:56
 #: mediagoblin/edit/forms.py:93 mediagoblin/submit/forms.py:65
@@ -105,95 +99,95 @@ msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
-msgstr "Pots utilitzar⏎ <a href=\"http://daringfireball.net/projects/markdown/basics\">⏎ Markdown</a> per donar-li format"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:37 mediagoblin/media_types/blog/forms.py:27
 #: mediagoblin/submit/forms.py:45
 msgid "Tags"
-msgstr "Etiquetes"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:39 mediagoblin/submit/forms.py:47
 msgid "Separate tags by commas."
-msgstr "Separa els tags amb comes."
+msgstr ""
 
 #: mediagoblin/edit/forms.py:42 mediagoblin/edit/forms.py:97
 msgid "Slug"
-msgstr "Fitxa"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:43 mediagoblin/edit/forms.py:98
 msgid "The slug can't be empty"
-msgstr "La fitxa no pot ser buida"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:44
 msgid ""
 "The title part of this media's address. You usually don't need to change "
 "this."
-msgstr "El títol de l'adreça d'aquest mitjà. Normalment no necessites modificar això."
+msgstr ""
 
 #: mediagoblin/edit/forms.py:48 mediagoblin/media_types/blog/forms.py:29
 #: mediagoblin/submit/forms.py:50
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
-msgstr "Llicència"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:54
 msgid "Bio"
-msgstr "Biografia"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:60
 msgid "Website"
-msgstr "Lloc web"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:62
 msgid "This address contains errors"
-msgstr "Aquesta adreça conté errors"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:67
 msgid "Email me when others comment on my media"
-msgstr "Envia'm correu quan d'altres comentin al meu mitjà"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:69
 msgid "Enable insite notifications about events."
-msgstr "Habiliteu les notificacions internes d'esdeveniments."
+msgstr ""
 
 #: mediagoblin/edit/forms.py:71
 msgid "License preference"
-msgstr "Llicència per defecte"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:77
 msgid "This will be your default license on upload forms."
-msgstr "Aquesta serà la vostra llicència per defecte en els formularis de carregada d'arxius."
+msgstr ""
 
 #: mediagoblin/edit/forms.py:90
 msgid "The title can't be empty"
-msgstr "El títol no pot ser buit"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:92 mediagoblin/submit/forms.py:64
 #: mediagoblin/user_pages/forms.py:48
 msgid "Description of this collection"
-msgstr "Descripció d'aquesta col.lecció"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:99
 msgid ""
 "The title part of this collection's address. You usually don't need to "
 "change this."
-msgstr "La part del títol de l'adreça d'aquesta col.lecció. Normalment no cal que canviis això."
+msgstr ""
 
 #: mediagoblin/edit/forms.py:106 mediagoblin/plugins/basic_auth/forms.py:68
 msgid "Old password"
-msgstr "Contrasenya antiga"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:108 mediagoblin/plugins/basic_auth/forms.py:70
 msgid "Enter your old password to prove you own this account."
-msgstr "Introdueix la teva contrasenya antiga per comprovar que aquest compte és teu."
+msgstr ""
 
 #: mediagoblin/edit/forms.py:111 mediagoblin/plugins/basic_auth/forms.py:73
 msgid "New password"
-msgstr "Nova contrasenya"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:119
 msgid "New email address"
-msgstr "Nova adreça de correu"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:123 mediagoblin/plugins/basic_auth/forms.py:28
 #: mediagoblin/plugins/basic_auth/forms.py:43
@@ -201,101 +195,101 @@ msgstr "Nova adreça de correu"
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:64
 #: mediagoblin/tests/test_util.py:143
 msgid "Password"
-msgstr "Contrasenya"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:125
 msgid "Enter your password to prove you own this account."
-msgstr "Introduïu la vostra contrasenya d'aquest compte"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:155
 msgid "Identifier"
-msgstr "Identificador"
+msgstr ""
 
 #: mediagoblin/edit/forms.py:156
 msgid "Value"
-msgstr "Valor"
+msgstr ""
 
 #: mediagoblin/edit/views.py:78
 msgid "An entry with that slug already exists for this user."
-msgstr "Ja existeix una entrada amb aquesta fitxa per aquest usuari"
+msgstr ""
 
 #: mediagoblin/edit/views.py:96
 msgid "You are editing another user's media. Proceed with caution."
-msgstr "Esteu editant fitxers d'un altre usuari. Aneu amb compte."
+msgstr ""
 
 #: mediagoblin/edit/views.py:166
 #, python-format
 msgid "You added the attachment %s!"
-msgstr "S'ha adjuntat %s correctament."
+msgstr ""
 
 #: mediagoblin/edit/views.py:193
 msgid "You can only edit your own profile."
-msgstr "Només podeu editar el vostre perfil."
+msgstr ""
 
 #: mediagoblin/edit/views.py:199
 msgid "You are editing a user's profile. Proceed with caution."
-msgstr "Esteu editant el perfil d'un usuari. Aneu amb compte"
+msgstr ""
 
 #: mediagoblin/edit/views.py:215
 msgid "Profile changes saved"
-msgstr "Els canvis al perfil s'han guardat"
+msgstr ""
 
 #: mediagoblin/edit/views.py:248
 msgid "Account settings saved"
-msgstr "Els detalls del compte s'han guardat"
+msgstr ""
 
 #: mediagoblin/edit/views.py:282
 msgid "You need to confirm the deletion of your account."
-msgstr "Heu de confirmar l'eliminació del vostre compte."
+msgstr ""
 
 #: mediagoblin/edit/views.py:318 mediagoblin/submit/views.py:132
 #: mediagoblin/user_pages/views.py:252
 #, python-format
 msgid "You already have a collection called \"%s\"!"
-msgstr "Ja tens una col.lecció anomenada \"%s\"!"
+msgstr ""
 
 #: mediagoblin/edit/views.py:322
 msgid "A collection with that slug already exists for this user."
-msgstr "Ja existeix una col·lecció d'aquest usuari sota aquesta fitxa"
+msgstr ""
 
 #: mediagoblin/edit/views.py:337
 msgid "You are editing another user's collection. Proceed with caution."
-msgstr "Estas editant la col.lecció d'un altre usuari. Prossegueix amb cautela."
+msgstr ""
 
 #: mediagoblin/edit/views.py:378
 msgid "Your email address has been verified."
-msgstr "S'ha verificat la vostra adreça de correu"
+msgstr ""
 
 #: mediagoblin/edit/views.py:413 mediagoblin/plugins/basic_auth/views.py:200
 msgid "Wrong password"
-msgstr "Contrasenya errònia"
+msgstr ""
 
 #: mediagoblin/gmg_commands/assetlink.py:60
 msgid "Cannot link theme... no theme set\n"
-msgstr "No es pot enllaçar el tema... no hi ha tema establert\n"
+msgstr ""
 
 #: mediagoblin/gmg_commands/assetlink.py:73
 msgid "No asset directory for this theme\n"
-msgstr "No hi ha un directori de recursos per a aquest tema\n"
+msgstr ""
 
 #: mediagoblin/gmg_commands/assetlink.py:76
 msgid "However, old link directory symlink found; removed.\n"
-msgstr "Tot i així, l'enllaç antic al directori s'ha trobat; eliminat.\n"
+msgstr ""
 
 #: mediagoblin/gmg_commands/assetlink.py:112
 #, python-format
 msgid "Could not link \"%s\": %s exists and is not a symlink\n"
-msgstr "No s'ha pogut enllaçar \"%s\" perquè hi ha un fitxer, que no és un enllaç, amb el mateix nom.\n"
+msgstr ""
 
 #: mediagoblin/gmg_commands/assetlink.py:119
 #, python-format
 msgid "Skipping \"%s\"; already set up.\n"
-msgstr "S'ha omès \"%s\" perquè ja està llest.\n"
+msgstr ""
 
 #: mediagoblin/gmg_commands/assetlink.py:124
 #, python-format
 msgid "Old link found for \"%s\"; removing.\n"
-msgstr "S'ha trobat un enllaç antic per a \"%s\" i s'ha eliminat.\n"
+msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:34
 msgid ""
@@ -307,11 +301,11 @@ msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:40
 msgid "Name of user these media entries belong to"
-msgstr "Nombre del usuario al cual le pertenecen éstos contenidos."
+msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:43
 msgid "Path to the csv file containing metadata information."
-msgstr "Ruta al archivo csv que contiene la información de metadatos."
+msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:48
 msgid "Don't process eagerly, pass off to celery"
@@ -365,26 +359,26 @@ msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
 "or somesuch.<br/>Make sure to permit the settings of cookies for this "
 "domain."
-msgstr "No s'ha trobat la galeta CSRF. Potser ha estat blocada.<br/>Assegureu-vos de permetre les galetes d'aquest domini."
+msgstr ""
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101
 msgid "Sorry, I don't support that file type :("
-msgstr "Ho sento, no puc manegar aquest tipus d'arxiu :("
+msgstr ""
 
 #: mediagoblin/media_types/blog/forms.py:26
 #: mediagoblin/media_types/blog/forms.py:35
 #: mediagoblin/plugins/oauth/forms.py:36
 msgid "Description"
-msgstr "Descripció"
+msgstr ""
 
 #: mediagoblin/media_types/blog/forms.py:40 mediagoblin/user_pages/forms.py:31
 msgid "I am sure I want to delete this"
-msgstr "Estic segur que vull esborrar això"
+msgstr ""
 
 #: mediagoblin/media_types/blog/views.py:156 mediagoblin/submit/views.py:69
 msgid "Woohoo! Submitted!"
-msgstr "Visca! S'ha enviat!"
+msgstr ""
 
 #: mediagoblin/media_types/blog/views.py:198
 msgid "Woohoo! edited blogpost is submitted"
@@ -397,7 +391,7 @@ msgstr ""
 #: mediagoblin/media_types/blog/views.py:326
 #: mediagoblin/user_pages/views.py:329
 msgid "The media was not deleted because you didn't check that you were sure."
-msgstr "El mitjà no s'ha esborrat perque no has marcat que n'estiguessis segur."
+msgstr ""
 
 #: mediagoblin/media_types/blog/views.py:333
 msgid "You are about to delete another user's Blog. Proceed with caution."
@@ -425,7 +419,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:52
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:84
 msgid "Edit"
-msgstr "Editar"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:93
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blogpost_draft_view.html:36
@@ -435,7 +429,7 @@ msgstr "Editar"
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:56
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:88
 msgid "Delete"
-msgstr "Esborrar"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:102
 msgid "<em> Go to list view </em>"
@@ -449,7 +443,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
 #, python-format
 msgid "Really delete %(title)s?"
-msgstr "Realment vols esborrar %(title)s?"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_confirm_delete.html:47
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:61
@@ -461,14 +455,14 @@ msgstr "Realment vols esborrar %(title)s?"
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:67
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:48
 msgid "Cancel"
-msgstr "Cancel·la"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_confirm_delete.html:48
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:44
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:56
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:49
 msgid "Delete permanently"
-msgstr "Esborrar permanentment"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:26
 msgid "Create/Edit a Blog"
@@ -481,7 +475,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/submit/start.html:39
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:68
 msgid "Add"
-msgstr "Afegir"
+msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_edit_create.html:23
 msgid "Create/Edit a blog post."
@@ -510,43 +504,43 @@ msgstr ""
 
 #: mediagoblin/media_types/pdf/processing.py:142
 msgid "unoconv failing to run, check log file"
-msgstr "No s'ha pogut executar unoconv. Comproveu el registre d'errors."
+msgstr ""
 
 #: mediagoblin/media_types/video/processing.py:44
 msgid "Video transcoding failed"
-msgstr "La transformació del vídeo ha fallat"
+msgstr ""
 
 #: mediagoblin/moderation/forms.py:21
 msgid "Take away privilege"
-msgstr "Treure privilegi"
+msgstr ""
 
 #: mediagoblin/moderation/forms.py:22
 msgid "Ban the user"
-msgstr "Feu fora l'usuari"
+msgstr ""
 
 #: mediagoblin/moderation/forms.py:23
 msgid "Send the user a message"
-msgstr "Envieu un missatge a l'usuari"
+msgstr ""
 
 #: mediagoblin/moderation/forms.py:24
 msgid "Delete the content"
-msgstr "Esborreu el comentari"
+msgstr ""
 
 #: mediagoblin/moderation/forms.py:53 mediagoblin/moderation/forms.py:118
 msgid "User will be banned until:"
-msgstr "Fareu fora l'usuari fins:"
+msgstr ""
 
 #: mediagoblin/moderation/forms.py:57
 msgid "Why are you banning this User?"
-msgstr "Per què heu fet fora aquest usuari?"
+msgstr ""
 
 #: mediagoblin/moderation/forms.py:109
 msgid "What action will you take to resolve the report?"
-msgstr "Quina acció heu près per solucionar aquest incident?"
+msgstr ""
 
 #: mediagoblin/moderation/forms.py:115
 msgid "What privileges will you take away?"
-msgstr "Quins privilegis vols treure?"
+msgstr ""
 
 #: mediagoblin/moderation/forms.py:122
 msgid "Why user was banned:"
@@ -579,7 +573,7 @@ msgstr ""
 #: mediagoblin/moderation/tools.py:53
 #: mediagoblin/templates/mediagoblin/banned.html:30
 msgid "indefinitely"
-msgstr "indefinidament"
+msgstr ""
 
 #: mediagoblin/moderation/tools.py:62
 msgid ""
@@ -601,44 +595,44 @@ msgstr ""
 
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
-msgstr "Alerta de "
+msgstr ""
 
 #: mediagoblin/notifications/tools.py:54 mediagoblin/user_pages/lib.py:60
 msgid "commented on your post"
-msgstr "comentat al teu post"
+msgstr ""
 
 #: mediagoblin/notifications/views.py:35
 #, python-format
 msgid "Subscribed to comments on %s!"
-msgstr "Us heu subscrit als comentaris de %s."
+msgstr ""
 
 #: mediagoblin/notifications/views.py:48
 #, python-format
 msgid "You will not receive notifications for comments on %s."
-msgstr "Ja no rebreu més notificacions de comentaris de %s."
+msgstr ""
 
 #: mediagoblin/oauth/views.py:241
 msgid "Must provide an oauth_token."
-msgstr "Heu de donar una oauth_token."
+msgstr ""
 
 #: mediagoblin/oauth/views.py:246 mediagoblin/oauth/views.py:297
 msgid "No request token found."
-msgstr "No s'ha trobat un testimoni de petició."
+msgstr ""
 
 #: mediagoblin/plugins/api/views.py:76 mediagoblin/plugins/piwigo/views.py:155
 #: mediagoblin/submit/views.py:78
 msgid "Sorry, the file size is too big."
-msgstr "Ho sentim, la mida del fitxer és massa gran."
+msgstr ""
 
 #: mediagoblin/plugins/api/views.py:79 mediagoblin/plugins/piwigo/views.py:158
 #: mediagoblin/submit/views.py:81
 msgid "Sorry, uploading this file will put you over your upload limit."
-msgstr "Ho sentim, pujant aquest fitxer assolireu el vostre límit de pujada."
+msgstr ""
 
 #: mediagoblin/plugins/api/views.py:83 mediagoblin/plugins/piwigo/views.py:162
 #: mediagoblin/submit/views.py:87
 msgid "Sorry, you have reached your upload limit."
-msgstr "Ho sentim, hey assolit el límit de pujada."
+msgstr ""
 
 #: mediagoblin/plugins/archivalook/forms.py:21
 msgid "Enter the URL for the media to be featured"
@@ -810,7 +804,7 @@ msgstr ""
 #: mediagoblin/plugins/archivalook/templates/archivalook/recent_media.html:30
 #: mediagoblin/templates/mediagoblin/root.html:32
 msgid "Most recent media"
-msgstr "Mitjans més recents"
+msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:61
 msgid "Nothing is currently featured."
@@ -876,123 +870,123 @@ msgstr ""
 #: mediagoblin/plugins/persona/forms.py:24
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:76
 msgid "Username"
-msgstr "Nom d'usuari"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/forms.py:32
 #: mediagoblin/plugins/ldap/forms.py:28 mediagoblin/plugins/openid/forms.py:31
 #: mediagoblin/plugins/persona/forms.py:28
 #: mediagoblin/plugins/persona/forms.py:39
 msgid "Email address"
-msgstr "Adreça electrònica"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/forms.py:39
 msgid "Username or Email"
-msgstr "Nom d'usuari o adreça de correu"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/forms.py:46
 msgid "Stay logged in"
-msgstr "Recorda'm"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/forms.py:51
 msgid "Username or email"
-msgstr "Nom d'usuari o correu"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:54
 msgid ""
 "If that email address (case sensitive!) is registered an email has been sent"
 " with instructions on how to change your password."
-msgstr "Si aquesta adreça de correu és correcta, s'ha enviat un missatge amb instruccions per canviar la vostra contrasenya"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:65
 msgid "Couldn't find someone with that username."
-msgstr "No s'ha trobat cap usuari amb aquest nom."
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:68
 msgid ""
 "An email has been sent with instructions on how to change your password."
-msgstr "S'ha enviat un correu amb instruccions de com cambiar la teva contrasenya"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:75
 msgid ""
 "Could not send password recovery email as your username is inactive or your "
 "account's email address has not been verified."
-msgstr "No hem pogut enviar el correu de recuperació de contrasenya perquè el teu nom d'usuari és inactiu o bé l'adreça electrònica del teu compte no ha sigut verificada."
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:123
 msgid "The user id is incorrect."
-msgstr "L'identificador d'usuari és incorrecte."
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:139
 msgid "You can now log in using your new password."
-msgstr "Ara et pots conectar amb la teva nova contrasenya."
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:163
 msgid ""
 "You are no longer an active user. Please contact the system admin to "
 "reactivate your account."
-msgstr "Ja no sou un usuari actiu. SI us plau contacteu amb l'administrador del sistema si voleu reactivar el vostre compte."
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:215
 msgid "Your password was changed successfully"
-msgstr "S'ha canviat l'adreça de correu correctament"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_fp.html:28
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_fp.html:36
 msgid "Set your new password"
-msgstr "Estableix la teva nova contrasenya"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_fp.html:39
 msgid "Set password"
-msgstr "Establir contrasenya"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_pass.html:28
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_pass.html:38
 #, python-format
 msgid "Changing %(username)s's password"
-msgstr "Modificant la contrasenya de %(username)s."
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_pass.html:45
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:40
 msgid "Save"
-msgstr "Desa"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/create_account_link.html:22
 msgid "Don't have an account yet?"
-msgstr "Encara no teniu un compte?"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/create_account_link.html:24
 msgid "Create one here!"
-msgstr "Creeu-ne un aquí!"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/edit_link.html:22
 msgid "Change your password."
-msgstr "Canvieu la vostra contrasenya"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:23
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:31
 msgid "Recover password"
-msgstr "Recuperar contrasenya"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/forgot_password.html:34
 msgid "Send instructions"
-msgstr "Enviar instruccions"
+msgstr ""
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/fp_link.html:22
 msgid "Forgot your password?"
-msgstr "Has oblidat la teva contrasenya?"
+msgstr ""
 
 #: mediagoblin/plugins/geolocation/templates/mediagoblin/plugins/geolocation/map.html:24
 msgid "Location"
-msgstr "Ubicació"
+msgstr ""
 
 #: mediagoblin/plugins/geolocation/templates/mediagoblin/plugins/geolocation/map.html:52
 #, python-format
 msgid "View on <a href=\"%(osm_url)s\">OpenStreetMap</a>"
-msgstr "Veure a <a href=\"%(osm_url)s\">OpenStreetMap</a>"
+msgstr ""
 
 #: mediagoblin/plugins/ldap/templates/mediagoblin/plugins/ldap/create_account_link.html:22
 msgid "Sign in to create an account!"
-msgstr "Identifiqueu-vos per crear un compte!"
+msgstr ""
 
 #: mediagoblin/plugins/metadata_display/templates/mediagoblin/plugins/metadata_display/metadata_table.html:22
 msgid "Metadata"
@@ -1004,29 +998,29 @@ msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
-msgstr "Permetre"
+msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:30
 msgid "Deny"
-msgstr "Denegar"
+msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:34
 msgid "Name"
-msgstr "Nom"
+msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:35
 msgid "The name of the OAuth client"
-msgstr "El nom del client OAuth"
+msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:38
 msgid ""
 "This will be visible to users allowing your\n"
 "                application to authenticate as them."
-msgstr "Això serà visiable a usuaris que permetin que la teva aplicació\n                s'autentifiqui com a ells."
+msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:40
 msgid "Type"
-msgstr "Tipus"
+msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:45
 msgid ""
@@ -1036,96 +1030,96 @@ msgid ""
 "                <strong>Public</strong> - The client can't make confidential\n"
 "                requests to the GNU MediaGoblin instance (e.g. client-side\n"
 "                JavaScript client)."
-msgstr "<strong>Confidencial</strong> - El client pot\n                fer peticions a la instància GNU MediaGoblin que no pot ésser\n                interceptada per l'agent d'usuari (el client a la part servidor).<br />\n                <strong>Public</strong> - El client no pot fer peticions \n                confidencials a la instància GNU MediaGoblin (la part   \n                client JavaScript)."
+msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:52
 msgid "Redirect URI"
-msgstr "Redireccionar URI "
+msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:54
 msgid ""
 "The redirect URI for the applications, this field\n"
 "            is <strong>required</strong> for public clients."
-msgstr "La URI de redirecció per les aplicacions, aquest camp\n            és <strong>requeriment</strong> per els clients públics."
+msgstr ""
 
 #: mediagoblin/plugins/oauth/forms.py:66
 msgid "This field is required for public clients"
-msgstr "Aquest camp és requeriment per a clients públics"
+msgstr ""
 
 #: mediagoblin/plugins/oauth/views.py:55
 msgid "The client {0} has been registered!"
-msgstr "El client {0} ha sigut enregistrat!"
+msgstr ""
 
 #: mediagoblin/plugins/oauth/templates/oauth/client/connections.html:22
 msgid "OAuth client connections"
-msgstr "Connexions de clients OAuth"
+msgstr ""
 
 #: mediagoblin/plugins/oauth/templates/oauth/client/list.html:22
 msgid "Your OAuth clients"
-msgstr "Els vostres clients OAuth"
+msgstr ""
 
 #: mediagoblin/plugins/openid/__init__.py:97
 #: mediagoblin/plugins/openid/views.py:268
 #: mediagoblin/plugins/openid/views.py:297
 msgid "Sorry, an account is already registered to that OpenID."
-msgstr "Ja hi ha un compte registrat amb aquesta OpenID."
+msgstr ""
 
 #: mediagoblin/plugins/openid/forms.py:38
 msgid "OpenID"
-msgstr "OpenID"
+msgstr ""
 
 #: mediagoblin/plugins/openid/views.py:48
 msgid "Sorry, the OpenID server could not be found"
-msgstr "No s'ha pogut trobar aquest servidor d'OpenID"
+msgstr ""
 
 #: mediagoblin/plugins/openid/views.py:61
 #, python-format
 msgid "No OpenID service was found for %s"
-msgstr "No s'ha trobat un servei d'OpenID per a %s"
+msgstr ""
 
 #: mediagoblin/plugins/openid/views.py:106
 #, python-format
 msgid "Verification of %s failed: %s"
-msgstr "Ha fallat la verificació de %s: %s"
+msgstr ""
 
 #: mediagoblin/plugins/openid/views.py:117
 msgid "Verification cancelled"
-msgstr "S'ha cancel·lat la verificació"
+msgstr ""
 
 #: mediagoblin/plugins/openid/views.py:314
 msgid "Your OpenID url was saved successfully."
-msgstr "S'ha desat el vostre localitzador d'OpenID."
+msgstr ""
 
 #: mediagoblin/plugins/openid/views.py:338
 #: mediagoblin/plugins/openid/views.py:393
 msgid "You can't delete your only OpenID URL unless you have a password set"
-msgstr "No podeu eliminar el vostre únic localitzador d'OpenID sense haver definit una contrasenya"
+msgstr ""
 
 #: mediagoblin/plugins/openid/views.py:343
 #: mediagoblin/plugins/openid/views.py:402
 msgid "That OpenID is not registered to this account."
-msgstr "Aquest OpenID no està registrat amb aquest compte"
+msgstr ""
 
 #: mediagoblin/plugins/openid/views.py:385
 msgid "OpenID was successfully removed."
-msgstr "S'ha eliminat l'OpenID"
+msgstr ""
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:23
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:31
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:34
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:23
 msgid "Add an OpenID"
-msgstr "Afegeix un OpenID"
+msgstr ""
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:34
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:23
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/delete.html:31
 msgid "Delete an OpenID"
-msgstr "Elimina un OpenID"
+msgstr ""
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/edit_link.html:21
 msgid "OpenID's"
-msgstr "OpenIDs"
+msgstr ""
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:28
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:36
@@ -1135,147 +1129,147 @@ msgstr "OpenIDs"
 #: mediagoblin/templates/mediagoblin/auth/login.html:36
 #: mediagoblin/templates/mediagoblin/auth/login.html:47
 msgid "Log in"
-msgstr "Entreu"
+msgstr ""
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:39
 #: mediagoblin/templates/mediagoblin/auth/login.html:39
 msgid "Logging in failed!"
-msgstr "Hi ha hagut un error en l'inici de sessió"
+msgstr ""
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:44
 msgid "Log in to create an account!"
-msgstr "Inicieu una sessió per crear un compte"
+msgstr ""
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:51
 msgid "Or login with a password!"
-msgstr "O entreu amb una contrasenya."
+msgstr ""
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login_link.html:23
 msgid "Or login with OpenID!"
-msgstr "O entreu amb un OpenID."
+msgstr ""
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/register_link.html:23
 msgid "Or register with OpenID!"
-msgstr "O registreu-vos amb un OpenID."
+msgstr ""
 
 #: mediagoblin/plugins/persona/__init__.py:90
 msgid "Sorry, an account is already registered to that Persona email."
-msgstr "Ho sentim, ja hi ha un compte registrat per aquest correu de Persona."
+msgstr ""
 
 #: mediagoblin/plugins/persona/views.py:138
 msgid "The Persona email address was successfully removed."
-msgstr "L'adreça de correu de Persona s'ha eliminat satisfactòriament."
+msgstr ""
 
 #: mediagoblin/plugins/persona/views.py:144
 msgid ""
 "You can't delete your only Persona email address unless you have a password "
 "set."
-msgstr "No podeu eliminar només l'adreça de Persona si no li heu definit una contrasenya."
+msgstr ""
 
 #: mediagoblin/plugins/persona/views.py:149
 msgid "That Persona email address is not registered to this account."
-msgstr "Aquesta adreça de correu de Persona no està registrada a aquest compte."
+msgstr ""
 
 #: mediagoblin/plugins/persona/views.py:176
 msgid ""
 "Sorry, an account is already registered with that Persona email address."
-msgstr "Disculpeu, ja s'ha registrat un compte de Persona amb aquesta adreça de correu."
+msgstr ""
 
 #: mediagoblin/plugins/persona/views.py:192
 msgid "Your Persona email address was saved successfully."
-msgstr "La vostra adreça de Persona s'ha desat satisfactòriament."
+msgstr ""
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:31
 msgid "Delete a Persona email address"
-msgstr "Esborreu una adreça de correu de Persona."
+msgstr ""
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit.html:34
 msgid "Add a Persona email address"
-msgstr "Afegiu una adreça de correu de Persona."
+msgstr ""
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/edit_link.html:21
 msgid "Persona's"
-msgstr "de Persona"
+msgstr ""
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/login_link.html:22
 msgid "Or login with Persona!"
-msgstr "O inicieu la sessió amb Persona!"
+msgstr ""
 
 #: mediagoblin/plugins/persona/templates/mediagoblin/plugins/persona/register_link.html:22
 msgid "Or register with Persona!"
-msgstr "O registreu-vos amb Persona!"
+msgstr ""
 
 #: mediagoblin/processing/__init__.py:420
 msgid "Invalid file given for media type."
-msgstr "Aquest tipus de fitxer no és vàlid."
+msgstr ""
 
 #: mediagoblin/processing/__init__.py:427
 msgid "Copying to public storage failed."
-msgstr "Ha fallat la còpia al magatzem públic."
+msgstr ""
 
 #: mediagoblin/processing/__init__.py:435
 msgid "An acceptable processing file was not found"
-msgstr "No s'ha trobat cap fitxer adient per processar."
+msgstr ""
 
 #: mediagoblin/submit/forms.py:30
 msgid "Max file size: {0} mb"
-msgstr "Mida màxima del fitxer: {0} Mb"
+msgstr ""
 
 #: mediagoblin/submit/forms.py:34
 msgid "File"
-msgstr "Fitxer"
+msgstr ""
 
 #: mediagoblin/submit/forms.py:41
 msgid ""
 "You can use\n"
 "                        <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                        Markdown</a> for formatting."
-msgstr "Podeu usar\n                        <a href=\"http://daringfireball.net/projects/markdown/basics\">\n                        Markdown</a> per a formatar el text."
+msgstr ""
 
 #: mediagoblin/submit/views.py:55
 msgid "You must provide a file."
-msgstr "Heu d'escollir un fitxer."
+msgstr ""
 
 #: mediagoblin/submit/views.py:138
 #, python-format
 msgid "Collection \"%s\" added!"
-msgstr "S'ha afegit la col.leccio \"%s\"!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/banned.html:20
 msgid "You are Banned."
-msgstr "Heu estat expulsat."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/banned.html:24
 #: mediagoblin/templates/mediagoblin/error.html:24
 msgid "Image of goblin stressing out"
-msgstr "Imatge d'un goblin fent exercici"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/banned.html:26
 msgid "You have been banned"
-msgstr "Heu estat expulsat"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/banned.html:28
 #, python-format
 msgid "until %(until_when)s"
-msgstr "fins %(until_when)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:97
 msgid "Verify your email!"
-msgstr "Verifica el teu correu electrònic"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:104
 #: mediagoblin/templates/mediagoblin/base.html:112
 msgid "log out"
-msgstr "surt"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:131
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
-msgstr "Compte de <a href=\"%(user_url)s\">%(user_name)s</a>"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:138
 msgid "Change account settings"
-msgstr "Modificar els ajustaments del compte"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:142
 #: mediagoblin/templates/mediagoblin/base.html:165
@@ -1284,21 +1278,21 @@ msgstr "Modificar els ajustaments del compte"
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:26
 msgid "Media processing panel"
-msgstr "Quadre de processament de fitxers"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:152
 msgid "Log out"
-msgstr "Surt"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:155
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:113
 msgid "Add media"
-msgstr "Tots els fitxers"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:158
 #: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
 msgid "Create new collection"
-msgstr "Crea una nova col·lecció"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:163
 msgid "Moderation powers:"
@@ -1306,73 +1300,73 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:169
 msgid "User management panel"
-msgstr "Tauler d'administració de l'usuari"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/base.html:173
 msgid "Report management panel"
-msgstr "Tauler d'informes reportats de l'usuari"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:21
 msgid "Authorization"
-msgstr "Autorització"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:26
 #: mediagoblin/templates/mediagoblin/api/authorize.html:53
 msgid "Authorize"
-msgstr "Autoritzeu"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:29
 msgid "You are logged in as"
-msgstr "Heu iniciat sessió com a"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:33
 msgid "Do you want to authorize "
-msgstr "Voleu autoritzar"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:37
 msgid "an unknown application"
-msgstr "una aplicació desconeguda"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:39
 msgid " to access your account? "
-msgstr "per accedir al vostre compte?"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:41
 msgid "Applications with access to your account can: "
-msgstr "Les aplicacions amb accés al vostre compte poden:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:43
 msgid "Post new media as you"
-msgstr "Publicar nout mitjà com a tu"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:44
 msgid "See your information (e.g profile, media, etc...)"
-msgstr "Veure la vostra informació (p. ex. perfil, mitjan"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:45
 msgid "Change your information"
-msgstr "Canvieu la vostra informació"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:21
 msgid "Authorization Finished"
-msgstr "Autorització finalitzada"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:26
 msgid "Authorization Complete"
-msgstr "Autorització completa"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:28
 msgid "Copy and paste this into your client:"
-msgstr "Copieu i enganxeu això al vostre client:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
 msgid "Create an account!"
-msgstr "Creeu un compte!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:41
 msgid "Create"
-msgstr "Crea"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/verification_email.txt:19
 #, python-format
@@ -1383,14 +1377,14 @@ msgid ""
 "your web browser:\n"
 "\n"
 "%(verification_url)s"
-msgstr "Hola %(username)s,\n\nper activar el vostre compte de GNU MediaGoblin account, obriu aquest enllaç\namb el vostre navegador:\n\n%(verification_url)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/base_footer.html:21
 #, python-format
 msgid ""
 "Powered by <a href=\"http://mediagoblin.org/\" title='Version "
 "%(version)s'>MediaGoblin</a>, a <a href=\"http://gnu.org/\">GNU</a> project."
-msgstr "Funciona amb <a href=\"http://mediagoblin.org/\" title='versió de %(version)s>MediaGoblin</a>, un projecte de <a href=\"http://gnu.org/\">GNU</a>."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/base_footer.html:24
 #, python-format
@@ -1398,35 +1392,35 @@ msgid ""
 "Released under the <a "
 "href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a "
 "href=\"%(source_link)s\">Source code</a> available."
-msgstr "Alliberat segons la <a href=\"http://www.fsf.org/licensing/licenses/agpl-3.0.html\">AGPL</a>. <a href=\"%(source_link)s\">Codi font</a> disponible."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/base_footer.html:30
 msgid "Terms of Service"
-msgstr "Condicions del servei"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:20
 msgid "Explore"
-msgstr "Explorar"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:24
 msgid "Hi there, welcome to this MediaGoblin site!"
-msgstr "Hola, una benvinguda al MediaGoblin!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:25
 msgid ""
 "This site is running <a href=\"http://mediagoblin.org\">MediaGoblin</a>, an "
 "extraordinarily great piece of media hosting software."
-msgstr "El lloc esta usant <a href=\"http://mediagoblin.org\">MediaGoblin</a>, una gran i extraordinària peça de software per allotjar mitjans."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:27
 msgid ""
 "To add your own media, place comments, and more, you can log in with your "
 "MediaGoblin account."
-msgstr "Per afegir el teu propi mitjà, col.locar comentaris, i més, pots conectar-te amb el teu compte MediaGoblin."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:29
 msgid "Don't have one yet? It's easy!"
-msgstr "No en tens una encara? Es fàcil!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:36
 msgid ""
@@ -1444,24 +1438,24 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/bits/logo.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
 msgid "MediaGoblin logo"
-msgstr "Logo de MediaGoblin"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:23
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:35
 #, python-format
 msgid "Editing attachments for %(media_title)s"
-msgstr "Editant afegits per a %(media_title)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:44
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:204
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:220
 msgid "Attachments"
-msgstr "Fitxers adjunts"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:57
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:226
 msgid "Add attachment"
-msgstr "Afegeix un fitxer adjunt"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:63
 #: mediagoblin/templates/mediagoblin/edit/edit.html:42
@@ -1469,53 +1463,53 @@ msgstr "Afegeix un fitxer adjunt"
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:33
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:40
 msgid "Save changes"
-msgstr "Desa els canvis"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:23
 #: mediagoblin/templates/mediagoblin/edit/change_email.html:33
 #, python-format
 msgid "Changing %(username)s's email"
-msgstr "Canviant l'adreça de %(username)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:28
 #, python-format
 msgid "Really delete user '%(user_name)s' and all related media/comments?"
-msgstr "Confirmeu l'eliminació de l'usuari %(user_name)s i els seus continguts."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/delete_account.html:35
 msgid "Yes, really delete my account"
-msgstr "Elimina el compte"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit.html:23
 #: mediagoblin/templates/mediagoblin/edit/edit.html:35
 #, python-format
 msgid "Editing %(media_title)s"
-msgstr "Edició de %(media_title)s "
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:28
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:40
 #, python-format
 msgid "Changing %(username)s's account settings"
-msgstr "Modificant els detalls del compte de %(username)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:54
 msgid "Delete my account"
-msgstr "Elimina el meu compte"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:59
 msgid "Email"
-msgstr "Adreça de correu"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit_collection.html:29
 #, python-format
 msgid "Editing %(collection_title)s"
-msgstr "Editant %(collection_title)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:23
 #: mediagoblin/templates/mediagoblin/edit/edit_profile.html:34
 #, python-format
 msgid "Editing %(username)s's profile"
-msgstr "S'està editant el perfil de %(username)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:67
 #, python-format
@@ -1550,11 +1544,11 @@ msgid ""
 "\n"
 "If you are not %(username)s or didn't request an email change, you can ignore\n"
 "this email."
-msgstr "Hola,\n\nhem volgut verificar que ets %(username)s. Si és el cas, feu clic a l'enllaç següent per tal de verificar la vostra nova adreça de correu.\n\n%(verification_url)s\n\nSi no sou %(username)s o no autoritzeu aquest canvi d'adreça, podeu ignorar aquest correu."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:4
 msgid "New comments"
-msgstr "Nous comentaris"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:24
 #: mediagoblin/templates/mediagoblin/media_displays/image.html:39
@@ -1567,11 +1561,11 @@ msgstr "Nous comentaris"
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:48
 #, python-format
 msgid "%(formatted_time)s ago"
-msgstr "Fa %(formatted_time)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:41
 msgid "Mark all read"
-msgstr "Marqueu-los tots com a llegits"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/listings/collection.html:30
 #: mediagoblin/templates/mediagoblin/listings/collection.html:35
@@ -1579,46 +1573,46 @@ msgstr "Marqueu-los tots com a llegits"
 #: mediagoblin/templates/mediagoblin/listings/tag.html:35
 #, python-format
 msgid "Media tagged with: %(tag_name)s"
-msgstr "Mitjà marcat amb: %(tag_name)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:34
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:67
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:74
 msgid "Download"
-msgstr "Descarregar"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:38
 msgid "Original"
-msgstr "Original"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:44
 msgid ""
 "Sorry, this audio will not work because \n"
 "\tyour web browser does not support HTML5 \n"
 "\taudio."
-msgstr "Ho sento, aquest audiothis àudio no funcionarà perque \n »el teu navegador web no contempla suport d'àudio \n »HTML5."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:47
 msgid ""
 "You can get a modern web browser that \n"
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t  http://getfirefox.com</a>!"
-msgstr "Pots obtenir un navegador web modern que \n »podrà reproduir l'àudio, a <a href=\"http://getfirefox.com\">\n » http://getfirefox.com</a>!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:73
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:80
 msgid "Original file"
-msgstr "Arxiu original"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
 msgid "WebM file (Vorbis codec)"
-msgstr "Arxiu WebM (Vorbis codec)"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/image.html:36
 msgid "Created"
-msgstr "Creat"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:59
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:90
@@ -1631,78 +1625,78 @@ msgstr "Creat"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:68
 #, python-format
 msgid "Image for %(media_title)s"
-msgstr "Imatge per %(media_title)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:81
 msgid "PDF file"
-msgstr "Fitxer PDF"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:116
 msgid "Perspective"
-msgstr "Perspectiva."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:119
 msgid "Front"
-msgstr "Davant"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:122
 msgid "Top"
-msgstr "Amunt"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:125
 msgid "Side"
-msgstr "Costat"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:130
 msgid "WebGL"
-msgstr "WebGL"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:136
 msgid "Download model"
-msgstr "Descarrega el model"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:145
 msgid "File Format"
-msgstr "Format del fitxer"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:147
 msgid "Object Height"
-msgstr "Alçada de l'objecte"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:63
 msgid ""
 "Sorry, this video will not work because\n"
 "      your web browser does not support HTML5 \n"
 "      video."
-msgstr "Aquest vídeo no funciona perquè\nel vostre navegador web no soporta\nvídeos HTML5."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:66
 msgid ""
 "You can get a modern web browser that \n"
 "      can play this video at <a href=\"http://getfirefox.com\">\n"
 "      http://getfirefox.com</a>!"
-msgstr "Publiqueu nou contingut com a vos"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:88
 msgid "WebM file (VP8/Vorbis)"
-msgstr "Arxiu WebM (VP8/Vorbis)"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:30
 msgid ""
 "Here you can track the state of media being processed on this instance."
-msgstr "Aqui pots seguir l'estat del mitjà que s'està processant a aquesta instància."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:33
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:32
 msgid "Media in-processing"
-msgstr "S'està processant el fitxer"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:38
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:67
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:98
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:75
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:39
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
@@ -1726,12 +1720,12 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:59
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
 msgid "No media in-processing"
-msgstr "No s'està processant cap mitjà"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:62
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:59
 msgid "These uploads failed to process:"
-msgstr "No s'han pogut penjar els següents fitxers:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:71
 msgid "Reason for failure"
@@ -1744,11 +1738,11 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:91
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
 msgid "No failed entries!"
-msgstr "Sense entrades fallades!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:93
 msgid "Last 10 successful uploads"
-msgstr "Les últimes 10 pujades correctes"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:101
 msgid "Submitted"
@@ -1757,24 +1751,24 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:113
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
 msgid "No processed entries, yet!"
-msgstr "Encara no hi ha entrades processades!"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:27
 msgid "Sorry, no such report found."
-msgstr "Ho sento, no s'ha trobat cap informe."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:33
 msgid "Return to Reports Panel"
-msgstr "Torneu al Tauler de Reportar informes."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:35
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:162
 msgid "Report"
-msgstr "Informeu-ne"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:38
 msgid "Reported comment"
-msgstr "Comentari reportat"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:83
 #, python-format
@@ -1792,7 +1786,7 @@ msgid ""
 "            <a href=\"%(user_url)s\"> %(user_name)s</a>\n"
 "          HAS BEEN DELETED\n"
 "        "
-msgstr "\n          S'HA ELIMINAT EL CONTINGUT DE\n            <a href=\"%(user_url)s\"> %(user_name)s</a>\n           \n        "
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:102
 msgid "Reason for report:"
@@ -1801,29 +1795,29 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/report.html:133
 #: mediagoblin/templates/mediagoblin/moderation/user.html:136
 msgid "Resolve"
-msgstr "Solucioneu-ho"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:137
 #: mediagoblin/templates/mediagoblin/moderation/report.html:157
 msgid "Resolve This Report"
-msgstr "Solucioneu aquesta notificació"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:149
 msgid "Status"
-msgstr "Estat"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:151
 msgid "RESOLVED"
-msgstr "SOLUCIONAT"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:159
 msgid "You cannot take action against an administrator"
-msgstr "No podeu dur a emprendre accions contra un administrador"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:22
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:27
 msgid "Report panel"
-msgstr "Tauler de notificacions reportades"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:30
 msgid ""
@@ -1843,17 +1837,17 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:78
 msgid "When Reported"
-msgstr "Quan s'ha reportat"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:79
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:175
 msgid "Reported By"
-msgstr "Reportat per"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:80
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:176
 msgid "Reason"
-msgstr "Motiu"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:95
 #, python-format
@@ -1861,7 +1855,7 @@ msgid ""
 "\n"
 "                Comment Report #%(report_id)s\n"
 "              "
-msgstr "\n                Comment Report #%(report_id)s\n              "
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:111
 #, python-format
@@ -1873,19 +1867,19 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:125
 msgid "No open reports found."
-msgstr "No s'ha trobat cap informe obert."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:127
 msgid "Closed Reports"
-msgstr "Informes reportats tancats"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:172
 msgid "Resolved"
-msgstr "Solucionat"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:174
 msgid "Action Taken"
-msgstr "Acció presa"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:188
 #, python-format
@@ -1893,11 +1887,11 @@ msgid ""
 "\n"
 "              Closed Report #%(report_id)s\n"
 "            "
-msgstr "\n              Informe reportat #%(report_id)s tancat.\n            "
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:202
 msgid "No closed reports found."
-msgstr "No s'ha trobat cap informe reportats tancat."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:23
 #, python-format
@@ -1916,7 +1910,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:60
 msgid "Email verification needed"
-msgstr "Cal que verifiqueu l'adreça electrònica"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:55
 msgid ""
@@ -1930,7 +1924,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:25
 #, python-format
 msgid "%(username)s's profile"
-msgstr "Perfil de %(username)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:68
 #, python-format
@@ -1944,18 +1938,18 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/user.html:78
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:62
 msgid "This user hasn't filled in their profile (yet)."
-msgstr "Aquest usuari encara no ha escrit res al seu perfil."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:89
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:57
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:74
 msgid "Edit profile"
-msgstr "Edita el perfil"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:96
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:81
 msgid "Browse collections"
-msgstr "Navega les col·leccions"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:105
 #, python-format
@@ -2034,7 +2028,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:21
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:26
 msgid "User panel"
-msgstr "Tauler d'usuari"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:29
 msgid ""
@@ -2045,28 +2039,28 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:34
 msgid "Active Users"
-msgstr "Usuaris actius"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:77
 msgid "When Joined"
-msgstr "Data d'incorporació"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:78
 msgid "# of Comments Posted"
-msgstr "número de comentaris publicats"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:95
 msgid "No users found."
-msgstr "No hem trobat cap usuari."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/submit/collection.html:26
 msgid "Add a collection"
-msgstr "Afegir a la col.lecció"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/submit/start.html:28
 #: mediagoblin/templates/mediagoblin/submit/start.html:35
 msgid "Add your media"
-msgstr "Afegeix el teu mitjà"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:38
 #, python-format
@@ -2076,27 +2070,27 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:92
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:104
 msgid "Add a comment"
-msgstr "Afegeix un comentari"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:103
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:115
 msgid "Add this comment"
-msgstr "Afegir aquest comentari"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:149
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:179
 msgid "Added"
-msgstr "Afegit"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format
 msgid "%(collection_title)s (%(username)s's collection)"
-msgstr "%(collection_title)s (la col.lecció de %(username)s)"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:39
 #, python-format
 msgid "%(collection_title)s by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr "%(collection_title)s per a <a href=\"%(user_url)s\">%(username)s</a>"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:23
 #, python-format
@@ -2116,77 +2110,77 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:39
 #, python-format
 msgid "Really remove %(media_title)s from %(collection_title)s?"
-msgstr "Relment eliminar %(media_title)s de %(collection_title)s?"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:62
 msgid "Remove"
-msgstr "Eliminar"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:21
 #, python-format
 msgid "%(username)s's collections"
-msgstr "Les col·leccions de %(username)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:28
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s collections"
-msgstr "Les col·leccions de <a href=\"%(user_url)s\">%(username)s</a>"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/comment_email.txt:19
 #, python-format
 msgid ""
 "Hi %(username)s,\n"
 "%(comment_author)s commented on your post (%(comment_url)s) at %(instance_name)s\n"
-msgstr "Hola %(username)s,\n%(comment_author)s ha comentat el teu post (%(comment_url)s) a %(instance_name)s\n"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:30
 #, python-format
 msgid "%(username)s's media"
-msgstr "Mitjà de %(username)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:38
 #, python-format
 msgid ""
 "<a href=\"%(user_url)s\">%(username)s</a>'s media with tag <a "
 "href=\"%(tag_url)s\">%(tag)s</a>"
-msgstr "<a href=\"%(user_url)s\">%(username)s</a>'s media with tag <a href=\"%(tag_url)s\">%(tag)s</a>"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/gallery.html:48
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(username)s</a>'s media"
-msgstr "Mitjans de <a href=\"%(user_url)s\">%(username)s</a>"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:38
 #, python-format
 msgid "❖ Browsing media by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr "❖ Navegant mitjà per a <a href=\"%(user_url)s\">%(username)s</a>"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:119
 msgid "Comment Preview"
-msgstr "Previsualització del comentari"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:28
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:40
 #, python-format
 msgid "Add “%(media_title)s” to a collection"
-msgstr "Afegeix “%(media_title)s” a una col·lecció"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:54
 msgid "+"
-msgstr "+"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/media_collect.html:58
 msgid "Add a new collection"
-msgstr "Afegir una nova col.lecció"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:29
 msgid ""
 "You can track the state of media being processed for your gallery here."
-msgstr "Aquí pots seguir l'estat del mitjà que s'està processant per la teva galeria"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:89
 msgid "Your last 10 successful uploads"
-msgstr "Les teves 10 últimes pujades correctes"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:21
 msgid "<h2>File a Report</h2>"
@@ -2194,7 +2188,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:24
 msgid "Reporting this Comment"
-msgstr "Reporteu aquest comentari."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:60
 msgid "Reporting this Media Entry"
@@ -2207,74 +2201,74 @@ msgid ""
 "            ❖ Published by <a href=\"%(user_url)s\"\n"
 "                          class=\"comment_authorlink\">%(username)s</a>\n"
 "      "
-msgstr "\n            ❖ Publicat per <a href=\"%(user_url)s\"\n                          class=\"comment_authorlink\">%(username)s</a>\n      "
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:81
 msgid "File Report "
-msgstr "Reporteu el fitxer"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:53
 msgid "Here's a spot to tell others about yourself."
-msgstr "Aqui hi ha un espai per explicar de tu als demés"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:94
 #, python-format
 msgid "View all of %(username)s's media"
-msgstr "Mostra tots els mitjans de %(username)s"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:107
 msgid ""
 "This is where your media will appear, but you don't seem to have added "
 "anything yet."
-msgstr "Aqui és on apareixerà el teu mitjà, però sembla que encara no hi has afegit res."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:119
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:84
 #: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
 msgid "There doesn't seem to be any media here yet..."
-msgstr "Sembla que no hi ha cap mitjà aqui encara..."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:43
 msgid "Almost done! Your account still needs to be activated."
-msgstr "Gairebé esteu! Tan sols falta que activeu el vostre compte"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:48
 msgid ""
 "An email should arrive in a few moments with instructions on how to do so."
-msgstr "Us hauria d'arribar un correu amb les instruccions per a fer-ho."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:52
 msgid "In case it doesn't:"
-msgstr "Per si no hi fos:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:55
 msgid "Resend verification email"
-msgstr "Torna'm a enviar el correu de verificació"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:63
 msgid ""
 "Someone has registered an account with this username, but it still has to be"
 " activated."
-msgstr "Algú ja ha registrat un compte amb aquest nom d'usuari, però encara l'ha d'activar."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:68
 #, python-format
 msgid ""
 "If you are that person but you've lost your verification email, you can <a "
 "href=\"%(login_url)s\">log in</a> and resend it."
-msgstr "Si sou aquest usuari però heu perdut el correu de verificació, podeu <a href=\"%(login_url)s\">entrar</a> i tornar-lo a enviar."
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:49
 msgid "(remove)"
-msgstr "(elimina)"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:21
 msgid "Collected in"
-msgstr "Afegit a la col·lecció el"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/collections.html:40
 msgid "Add to a collection"
-msgstr "Afegeix a la col·lecció"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:24
 msgid "Subscribe to comments"
@@ -2287,209 +2281,209 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
 msgid "feed icon"
-msgstr "Icona RSS"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:23
 msgid "Atom feed"
-msgstr "Canal Atom"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/license.html:25
 msgid "All rights reserved"
-msgstr "Tots els drets reservats"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:39
 msgid "← Newer"
-msgstr "← Més nou"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:45
 msgid "Older →"
-msgstr "Més antic →"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/pagination.html:48
 msgid "Go to page:"
-msgstr "Anar a la pàgina:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:28
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:33
 msgid "newer"
-msgstr "més nou"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:39
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:44
 msgid "older"
-msgstr "més antic"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/report.html:25
 msgid "Report media"
-msgstr "Informar mitjà"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/utils/tags.html:20
 msgid "Tagged with"
-msgstr "Etiquetat com"
+msgstr ""
 
 #: mediagoblin/tools/exif.py:81
 msgid "Could not read the image file."
-msgstr "No s'ha pogut llegir l'arxiu d'imatge"
+msgstr ""
 
 #: mediagoblin/tools/response.py:39
 msgid "Oops!"
-msgstr "Ups!"
+msgstr ""
 
 #: mediagoblin/tools/response.py:40
 msgid "An error occured"
-msgstr "S'ha trobat un error"
+msgstr ""
 
 #: mediagoblin/tools/response.py:54
 msgid "Bad Request"
-msgstr "Petició incorrecta"
+msgstr ""
 
 #: mediagoblin/tools/response.py:56
 msgid "The request sent to the server is invalid, please double check it"
-msgstr "La petició enviada al servidor no és vàlida. Si us plau, reviseu-la."
+msgstr ""
 
 #: mediagoblin/tools/response.py:64
 msgid "Operation not allowed"
-msgstr "Operació no permesa"
+msgstr ""
 
 #: mediagoblin/tools/response.py:65
 msgid ""
 "Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
 "function that you are not allowed to. Have you been trying to delete all "
 "user accounts again?"
-msgstr "David, no et puc deixar fer això!</p><p>Has intentat fer alguna cosa que no se't permet fer... com eliminar, una altra vegada, tots els comptes!"
+msgstr ""
 
 #: mediagoblin/tools/response.py:73
 msgid ""
 "There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
 " the address is correct, maybe the page you're looking for has been moved or"
 " deleted."
-msgstr "No s'ha trobat una pàgina a aquesta adreça.</p><p>Potser ha estat eliminada o s'ha canviat de lloc."
+msgstr ""
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"
-msgstr "any"
+msgstr ""
 
 #: mediagoblin/tools/timesince.py:63
 msgid "month"
-msgstr "mes"
+msgstr ""
 
 #: mediagoblin/tools/timesince.py:64
 msgid "week"
-msgstr "setmana"
+msgstr ""
 
 #: mediagoblin/tools/timesince.py:65
 msgid "day"
-msgstr "dia"
+msgstr ""
 
 #: mediagoblin/tools/timesince.py:66
 msgid "hour"
-msgstr "hora"
+msgstr ""
 
 #: mediagoblin/tools/timesince.py:67
 msgid "minute"
-msgstr "minut"
+msgstr ""
 
 #: mediagoblin/user_pages/forms.py:23
 msgid "Comment"
-msgstr "Comenta"
+msgstr ""
 
 #: mediagoblin/user_pages/forms.py:25
 msgid ""
 "You can use <a href=\"http://daringfireball.net/projects/markdown/basics\" "
 "target=\"_blank\">Markdown</a> for formatting."
-msgstr "Podeu usar <a href=\"http://daringfireball.net/projects/markdown/basics\" target=\"_blank\">Markdown</a> per a formatar el text."
+msgstr ""
 
 #: mediagoblin/user_pages/forms.py:35
 msgid "I am sure I want to remove this item from the collection"
-msgstr "Estic segur que vull esborrar aquest element de la col.lecció"
+msgstr ""
 
 #: mediagoblin/user_pages/forms.py:39
 msgid "Collection"
-msgstr "Col·lecció"
+msgstr ""
 
 #: mediagoblin/user_pages/forms.py:40
 msgid "-- Select --"
-msgstr "-- Sel.leccionar --"
+msgstr ""
 
 #: mediagoblin/user_pages/forms.py:42
 msgid "Include a note"
-msgstr "Incluir una nota"
+msgstr ""
 
 #: mediagoblin/user_pages/forms.py:49
 msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\" target=\"_blank\">\n"
 "                      Markdown</a> for formatting."
-msgstr "Podeu usar\n                      <a href=\"http://daringfireball.net/projects/markdown/basics\" target=\"_blank\">\n                      Markdown</a> per a formatar el text."
+msgstr ""
 
 #: mediagoblin/user_pages/forms.py:55 mediagoblin/user_pages/forms.py:61
 msgid "Reason for Reporting"
-msgstr "Raó per informar"
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:188
 msgid "Sorry, comments are disabled."
-msgstr "Els comentaris estan desactivats."
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:193
 msgid "Oops, your comment was empty."
-msgstr "Uups, el teu comentari era buit."
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:199
 msgid "Your comment has been posted!"
-msgstr "El teu comentari s'ha publicat!"
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:235
 msgid "Please check your entries and try again."
-msgstr "Si et plau, comprova les teves entrades i intenta-ho de nou."
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:275
 msgid "You have to select or add a collection"
-msgstr "Has de sel.leccionar o afegir una col.lecció"
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:286
 #, python-format
 msgid "\"%s\" already in collection \"%s\""
-msgstr "\"%s\" ja és a la col.lecció \"%s\""
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:292
 #, python-format
 msgid "\"%s\" added to collection \"%s\""
-msgstr "\"%s\" afegir a la col.lecció \"%s\""
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:317
 msgid "You deleted the media."
-msgstr "Has esborrat el mitjà"
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:336
 msgid "You are about to delete another user's media. Proceed with caution."
-msgstr "Ets a punt d'esborrar el mitjà d'un altre usuari. Prossegueix amb cautela."
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:409
 msgid "You deleted the item from the collection."
-msgstr "Has esborrat l'element de la col.lecció"
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:413
 msgid "The item was not removed because you didn't check that you were sure."
-msgstr "L'element no s'ha eliminat perque no has marcat que n'estiguessis segur."
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:421
 msgid ""
 "You are about to delete an item from another user's collection. Proceed with"
 " caution."
-msgstr "Ets a punt d'esborrar un element de la col.lecció d'un altre usuari. Prossegueix amb cautela."
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:453
 #, python-format
 msgid "You deleted the collection \"%s\""
-msgstr "Has esborrat la col.lecció \"%s\""
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:460
 msgid ""
 "The collection was not deleted because you didn't check that you were sure."
-msgstr "La col.lecció no s'ha esborrat perquè no has marcat que n'estiguessis segur."
+msgstr ""
 
 #: mediagoblin/user_pages/views.py:468
 msgid ""
 "You are about to delete another user's collection. Proceed with caution."
-msgstr "Ets a punt d'esborrar la col.lecció d'un altre usuari. Prossegueix amb cautela."
+msgstr ""
