@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import urllib
 
 import six
 
@@ -313,10 +314,13 @@ def authorize_finish(request):
             oauth_request.verifier
             )
 
+    # It's come from the OAuth headers so it'll be encoded.
+    redirect_url = urllib.unquote(oauth_request.callback)
+
     return redirect(
             request,
             querystring=querystring,
-            location=oauth_request.callback
+            location=redirect_url
             )
 
 @csrf_exempt
