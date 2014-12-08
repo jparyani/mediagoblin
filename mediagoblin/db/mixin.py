@@ -465,6 +465,11 @@ class ActivityMixin(object):
             "url": self.get_url(request),
             "object": self.get_object.serialize(request),
             "objectType": self.object_type,
+            "links": {
+                "self": {
+                    "href": href,
+                },
+            },
         }
 
         if self.generator:

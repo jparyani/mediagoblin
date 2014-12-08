@@ -294,7 +294,7 @@ def api_add_to_feed(request, entry):
     add_comment_subscription(request.user, entry)
 
     # Create activity
-    create_activity(
+    activity = create_activity(
         verb="post",
         obj=entry,
         actor=entry.uploader,
@@ -303,4 +303,4 @@ def api_add_to_feed(request, entry):
     entry.save()
     run_process_media(entry, feed_url)
 
-    return json_response(entry.serialize(request))
+    return activity

@@ -181,7 +181,7 @@ def feed_endpoint(request):
                 comment = MediaComment(author=request.user.id)
                 comment.unserialize(data["object"], request)
                 comment.save()
-                
+
                 # Create activity for comment
                 generator = create_generator(request)
                 activity = create_activity(
@@ -192,11 +192,7 @@ def feed_endpoint(request):
                     generator=generator
                 )
 
-                data = {
-                    "verb": "post",
-                    "object": comment.serialize(request)
-                }
-                return json_response(data)
+                return json_response(activity.serialize(request))
 
             elif obj.get("objectType", None) == "image":
                 # Posting an image to the feed
@@ -231,12 +227,9 @@ def feed_endpoint(request):
                     Location.create(data["location"], self)
 
                 media.save()
-                api_add_to_feed(request, media)
+                activity = api_add_to_feed(request, media)
 
-                return json_response({
-                    "verb": "post",
-                    "object": media.serialize(request)
-                })
+                return json_response(activity.serialize(request))
 
             elif obj.get("objectType", None) is None:
                 # They need to tell us what type of object they're giving us.
@@ -296,11 +289,16 @@ def feed_endpoint(request):
 
                 comment.save()
 
-                activity = {
-                    "verb": "update",
-                    "object": comment.serialize(request),
-                }
-                return json_response(activity)
+                # Create an update activity
+                generator = create_generator(request)
+                activity = create_activity(
+                    verb="update",
+                    actor=request.user,
+                    obj=comment,
+                    generator=generator
+                )
+
+                return json_response(activity.serialize(request))
 
             elif obj["objectType"] == "image":
                 image = MediaEntry.query.filter_by(id=obj_id).first()
@@ -324,11 +322,16 @@ def feed_endpoint(request):
                 image.generate_slug()
                 image.save()
 
-                activity = {
-                    "verb": "update",
-                    "object": image.serialize(request),
-                }
-                return json_response(activity)
+                # Create an update activity
+                generator = create_generator(request)
+                activity = create_activity(
+                    verb="update",
+                    actor=request.user,
+                    obj=image,
+                    generator=generator
+                )
+
+                return json_response(activity.serialize(request))
             elif obj["objectType"] == "person":
                 # check this is the same user
                 if "id" not in obj or obj["id"] != requested_user.id:
@@ -338,6 +341,16 @@ def feed_endpoint(request):
 
                 requested_user.unserialize(obj)
                 requested_user.save()
+
+                generator = create_generator(request)
+                activity = create_activity(
+                    verb="update",
+                    actor=request.user,
+                    obj=requested_user,
+                    generator=generator
+                )
+
+                return json_response(activity.serialize(request))
 
     elif request.method != "GET":
         return json_error(
