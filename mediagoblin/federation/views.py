@@ -1,4 +1,4 @@
-# GN MediaGoblin -- federated, autonomous media hosting
+# GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -129,6 +129,84 @@ def uploads_endpoint(request):
         return api_upload_request(request, file_data, entry)
 
     return json_error("Not yet implemented", 501)
+
+@oauth_required
+@csrf_exempt
+def inbox_endpoint(request, inbox=None):
+    """ This is the user's inbox
+
+    Currently because we don't have the ability to represent the inbox in the
+    database this is not a "real" inbox in the pump.io/Activity streams 1.0
+    sense but instead just gives back all the data on the website
+
+    inbox: allows you to pass a query in to limit inbox scope
+    """
+    username = request.matchdict["username"]
+    user = User.query.filter_by(username=username).first()
+
+    if user is None:
+        return json_error("No such 'user' with id '{0}'".format(username), 404)
+
+
+    # Only the user who's authorized should be able to read their inbox
+    if user.id != request.user.id:
+        return json_error(
+            "Only '{0}' can read this inbox.".format(user.username),
+            403
+        )
+
+    if inbox is None:
+        inbox = Activity.query.all()
+
+    # We want to make a query for all media on the site and then apply GET
+    # limits where we can.
+    inbox = inbox.order_by(Activity.published.desc())
+
+    # Limit by the "count" (default: 20)
+    inbox = inbox.limit(request.args.get("count", 20))
+
+    # Offset (default: no offset - first <count> results)
+    inbox = inbox.offset(request.args.get("offset", 0))
+
+    # build the inbox feed
+    feed = {
+        "displayName": "Activities for {0}".format(user.username),
+        "author": user.serialize(request),
+        "objectTypes": ["activity"],
+        "url": request.base_url,
+        "links": {"self": {"href": request.url}},
+        "items": [],
+    }
+
+    for activity in inbox:
+        try:
+            feed["items"].append(activity.serialize(request))
+        except AttributeError:
+            # As with the feed endpint this occurs because of how we our
+            # hard-deletion method. Some activites might exist where the
+            # Activity object and/or target no longer exist, for this case we
+            # should just skip them.
+            pass
+
+    feed["totalItems"] = len(feed["items"])
+    return json_response(feed)
+
+@oauth_required
+@csrf_exempt
+def inbox_minor_endpoint(request):
+    """ Inbox subset for less important Activities """
+    inbox = Activity.query.filter(
+        (Activity.verb == "update") | (Activity.verb == "delete")
+    )
+
+    return inbox_endpoint(request=request, inbox=inbox)
+
+@oauth_required
+@csrf_exempt
+def inbox_major_endpoint(request):
+    """ Inbox subset for most important Activities """
+    inbox = Activity.query.filter_by(verb="post")
+    return inbox_endpoint(request=request, inbox=inbox)
 
 @oauth_required
 @csrf_exempt

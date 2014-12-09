@@ -45,7 +45,37 @@ add_route(
 add_route(
     "mediagoblin.federation.inbox",
     "/api/user/<string:username>/inbox",
-    "mediagoblin.federation.views:feed_endpoint"
+    "mediagoblin.federation.views:inbox_endpoint"
+)
+
+add_route(
+    "mediagoblin.federation.inbox_minor",
+    "/api/user/<string:username>/inbox/minor",
+    "mediagoblin.federation.views:inbox_minor_endpoint"
+)
+
+add_route(
+    "mediagoblin.federation.inbox_major",
+    "/api/user/<string:username>/inbox/major",
+    "mediagoblin.federation.views:inbox_major_endpoint"
+)
+
+add_route(
+    "mediagoblin.federation.inbox_direct",
+    "/api/user/<string:username>/inbox/direct",
+    "mediagoblin.federation.views:inbox_endpoint"
+)
+
+add_route(
+    "mediagoblin.federation.inbox_direct_minor",
+    "/api/user/<string:username>/inbox/direct/minor",
+    "mediagoblin.federation.views:inbox_minor_endpoint"
+)
+
+add_route(
+    "mediagoblin.federation.inbox_direct_major",
+    "/api/user/<string:username>/inbox/direct/major",
+    "mediagoblin.federation.views:inbox_major_endpoint"
 )
 
 # object endpoints
