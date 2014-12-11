@@ -591,6 +591,22 @@ class MediaEntry(Base, MediaEntryMixin):
                         ),
             }
 
+        # Add image height and width if possible. We didn't use to store this
+        # data and we're not able (and maybe not willing) to re-process all
+        # images so it's possible this might not exist.
+        if self.get_file_metadata("thumb", "height"):
+            height = self.get_file_metadata("thumb", "height")
+            context["image"]["height"] = height
+        if self.get_file_metadata("thumb", "width"):
+            width = self.get_file_metadata("thumb", "width")
+            context["image"]["width"] = width
+        if self.get_file_metadata("original", "height"):
+            height = self.get_file_metadata("original", "height")
+            context["fullImage"]["height"] = height
+        if self.get_file_metadata("original", "height"):
+            width = self.get_file_metadata("original", "width")
+            context["fullImage"]["width"] = width
+
         return context
 
     def unserialize(self, data):

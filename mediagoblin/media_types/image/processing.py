@@ -225,9 +225,13 @@ class CommonImageProcessor(MediaProcessor):
             self.entry, self.process_filename,
             self.name_builder.fill('{basename}{ext}'))
 
-    def extract_metadata(self):
-        # Is there any GPS data
+    def extract_metadata(self, file):
+        """ Extract all the metadata from the image and store """
+        # Extract GPS data and store in Location
         gps_data = get_gps_data(self.exif_tags)
+
+        if len(gps_data):
+            Location.create({"position": gps_data}, self.entry)
 
         # Insert exif data into database
         exif_all = clean_exif(self.exif_tags)
@@ -235,9 +239,18 @@ class CommonImageProcessor(MediaProcessor):
         if len(exif_all):
             self.entry.media_data_init(exif_all=exif_all)
 
-        if len(gps_data):
-            Location.create({"position": gps_data}, self.entry)
-            self.entry.media_data_init(**gps_data)
+        # Extract file metadata
+        try:
+            im = Image.open(self.process_filename)
+        except IOError:
+            raise BadMediaFail()
+
+        metadata = {
+            "width": im.size[0],
+            "height": im.size[1],
+        }
+
+        self.entry.set_file_metadata(file, **metadata)
 
 
 class InitialProcessor(CommonImageProcessor):
@@ -252,6 +265,9 @@ class InitialProcessor(CommonImageProcessor):
         """
         Determine if this media type is eligible for processing
         """
+        if entry is None and state is None:
+            raise ValueError("Must specify either entry or state")
+
         if not state:
             state = entry.state
         return state in (
@@ -301,7 +317,7 @@ class InitialProcessor(CommonImageProcessor):
                                            quality=quality)
         self.generate_thumb(size=thumb_size, filter=filter, quality=quality)
         self.copy_original()
-        self.extract_metadata()
+        self.extract_metadata('original')
         self.delete_queue_file()
 
 
@@ -318,6 +334,9 @@ class Resizer(CommonImageProcessor):
         """
         Determine if this media type is eligible for processing
         """
+        if entry is None and state is None:
+            raise ValueError("Must specify either entry or state")
+
         if not state:
             state = entry.state
         return state in 'processed'
@@ -366,13 +385,52 @@ class Resizer(CommonImageProcessor):
         elif file == 'thumb':
             self.generate_thumb(size=size, filter=filter, quality=quality)
 
+        self.extract_metadata(file)
+
+class MetadataProcessing(CommonImageProcessor):
+    """ Extraction and storage of media's metadata for processed images """
+
+    name = 'metadatabuilder'
+    description = 'Add or update image metadata'
+
+    @classmethod
+    def media_is_eligible(cls, entry=None, state=None):
+        if entry is None and state is None:
+            raise ValueError("Must specify either entry or state")
+
+        if state is None:
+            state = entry.state
+
+        return state == 'processed'
+
+    @classmethod
+    def generate_parser(cls):
+        parser = argparse.ArgumentParser(
+            description=cls.description,
+            prog=cls.name
+        )
+
+        parser.add_argument(
+            'file',
+            choices=['original', 'medium', 'thumb']
+        )
+
+        return parser
+
+    @classmethod
+    def args_to_request(cls, args):
+        return request_from_args(args, ['file'])
+
+    def process(self, file):
+        self.common_setup()
+        self.extract_metadata(file)
 
 class ImageProcessingManager(ProcessingManager):
     def __init__(self):
         super(ImageProcessingManager, self).__init__()
         self.add_processor(InitialProcessor)
         self.add_processor(Resizer)
-
+        self.add_processor(MetadataProcessing)
 
 if __name__ == '__main__':
     import sys
