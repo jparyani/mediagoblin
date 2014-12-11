@@ -436,38 +436,32 @@ def feed_endpoint(request):
             status=501
         )
 
-    feed_url = request.urlgen(
-        "mediagoblin.federation.feed",
-        username=request.user.username,
-        qualified=True
-    )
-
     feed = {
         "displayName": "Activities by {user}@{host}".format(
             user=request.user.username,
             host=request.host
         ),
         "objectTypes": ["activity"],
-        "url": feed_url,
-        "links": {
-            "first": {
-                "href": feed_url,
-            },
-            "self": {
-                "href": request.url,
-            },
-            "prev": {
-                "href": feed_url,
-            },
-            "next": {
-                "href": feed_url,
-            }
-        },
+        "url": request.base_url,
+        "links": {"self": {"href": request.url}},
         "author": request.user.serialize(request),
         "items": [],
     }
 
-    for activity in Activity.query.filter_by(actor=request.user.id):
+    # Create outbox
+    outbox = Activity.query.filter_by(actor=request.user.id)
+
+    # We want the newest things at the top (issue: #1055)
+    outbox = outbox.order_by(Activity.published.desc())
+
+    # Limit by the "count" (default: 20)
+    outbox = outbox.limit(request.args.get("count", 20))
+
+    # Offset (default: no offset - first <count>  result)
+    outbox = outbox.offset(request.args.get("offset", 0))
+
+    # Build feed.
+    for activity in outbox:
         try:
             feed["items"].append(activity.serialize(request))
         except AttributeError:
