@@ -188,7 +188,7 @@ class TestAPI(object):
         # Lets change the image uploader to be self.other_user, this is easier
         # than uploading the image as someone else as the way self.mocked_oauth_required
         # and self._upload_image.
-        id = int(data["object"]["id"].split("/")[-1])
+        id = int(data["object"]["id"].split("/")[-2])
         media = MediaEntry.query.filter_by(id=id).first()
         media.uploader = self.other_user.id
         media.save()
@@ -232,14 +232,14 @@ class TestAPI(object):
         image = json.loads(response.body.decode())["object"]
 
         # Check everything has been set on the media correctly
-        id = int(image["id"].split("/")[-1])
+        id = int(image["id"].split("/")[-2])
         media = MediaEntry.query.filter_by(id=id).first()
         assert media.title == title
         assert media.description == description
         assert media.license == license
 
         # Check we're being given back everything we should on an update
-        assert int(image["id"].split("/")[-1]) == media.id
+        assert int(image["id"].split("/")[-2]) == media.id
         assert image["displayName"] == title
         assert image["content"] == description
         assert image["license"] == license
@@ -288,7 +288,7 @@ class TestAPI(object):
             request = test_app.get(object_uri)
 
         image = json.loads(request.body.decode())
-        entry_id = int(image["id"].split("/")[-1])
+        entry_id = int(image["id"].split("/")[-2])
         entry = MediaEntry.query.filter_by(id=entry_id).first()
 
         assert request.status_code == 200
@@ -319,7 +319,7 @@ class TestAPI(object):
         assert response.status_code == 200
 
         # Find the objects in the database
-        media_id = int(data["object"]["id"].split("/")[-1])
+        media_id = int(data["object"]["id"].split("/")[-2])
         media = MediaEntry.query.filter_by(id=media_id).first()
         comment = media.get_comments()[0]
 
@@ -382,7 +382,7 @@ class TestAPI(object):
         response, comment_data = self._activity_to_feed(test_app, activity)
 
         # change who uploaded the comment as it's easier than changing
-        comment_id = int(comment_data["object"]["id"].split("/")[-1])
+        comment_id = int(comment_data["object"]["id"].split("/")[-2])
         comment = MediaComment.query.filter_by(id=comment_id).first()
         comment.author = self.other_user.id
         comment.save()
