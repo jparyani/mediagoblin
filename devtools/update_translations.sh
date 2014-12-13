@@ -57,7 +57,9 @@ echo "==> Compiling .mo files"
 
 for file in `find mediagoblin/i18n/ -name "*.po"`; do
     if [ "$file" != "mediagoblin/i18n/jbo/LC_MESSAGES/mediagoblin.po" ]; then 
-        ./bin/pybabel compile -i $file -d mediagoblin/i18n/ -l `echo $file | awk -F / '{ print $3 }'`;
+        ./bin/pybabel compile -i $file \
+                      -d mediagoblin/i18n/ \
+                      -l `echo $file | awk -F / '{ print $3 }'`;
     else
         echo "Skipping $file which pybabel can't compile :("; 
     fi;
