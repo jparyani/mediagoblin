@@ -46,7 +46,22 @@ echo "==> Re-Pulling translations from Transifex"
 ./bin/tx pull -a
 
 echo "==> Compiling .mo files"
-./bin/pybabel compile -D mediagoblin -d mediagoblin/i18n/
+
+## This used to be a lot simpler:
+# ./bin/pybabel compile -D mediagoblin -d mediagoblin/i18n/
+
+## But now we have a Lojban translation that we can't compile
+## currently.  We don't want to get rid of it because we want it... see 
+## https://issues.mediagoblin.org/ticket/1070
+## to track progress.
+
+for file in `find mediagoblin/i18n/ -name "*.po"`; do
+    if [ "$file" != "mediagoblin/i18n/jbo/LC_MESSAGES/mediagoblin.po" ]; then 
+        ./bin/pybabel compile -i $file -d mediagoblin/i18n/ -l `echo $file | awk -F / '{ print $3 }'`;
+    else
+        echo "Skipping $file which pybabel can't compile :("; 
+    fi;
+done
 
 echo "==> Committing to git"
 git add mediagoblin/i18n/
