@@ -32,7 +32,23 @@ echo "==> Extracting translations"
 ./bin/pybabel extract -F babel.ini -o mediagoblin/i18n/templates/mediagoblin.pot .
 
 echo "==> Compiling .mo files"
-./bin/pybabel compile -D mediagoblin -d mediagoblin/i18n/
+## This used to be a lot simpler...
+##
+## But now we have a Lojban translation that we can't compile
+## currently.  We don't want to get rid of it because we want it... see 
+## https://issues.mediagoblin.org/ticket/1070
+## to track progress.
+
+for file in `find mediagoblin/i18n/ -name "*.po"`; do
+    if [ "$file" != "mediagoblin/i18n/jbo/mediagoblin.po" ] && \
+       [ "$file" != "mediagoblin/i18n/templates/en/mediagoblin.po" ]; then 
+        ./bin/pybabel compile -i $file \
+                      -o `dirname $file`/mediagoblin.mo \
+                      -l `echo $file | awk -F / '{ print $3 }'`;
+    else
+        echo "Skipping $file which pybabel can't compile :("; 
+    fi;
+done
 
 echo "==> Committing to git"
 git add mediagoblin/i18n/
