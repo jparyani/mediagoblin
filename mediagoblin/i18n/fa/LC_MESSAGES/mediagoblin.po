@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-12-06 14:33-0600\n"
-"PO-Revision-Date: 2014-12-06 20:33+0000\n"
+"POT-Creation-Date: 2014-12-14 15:01-0600\n"
+"PO-Revision-Date: 2014-12-14 21:01+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Persian (http://www.transifex.com/projects/p/mediagoblin/language/fa/)\n"
 "MIME-Version: 1.0\n"
@@ -697,11 +697,11 @@ msgstr ""
 msgid "You will not receive notifications for comments on %s."
 msgstr "شما اعلانات مربوط به نظرات جدید در %s را دریافت نخواهید کرد."
 
-#: mediagoblin/oauth/views.py:238
+#: mediagoblin/oauth/views.py:239
 msgid "Must provide an oauth_token."
 msgstr ""
 
-#: mediagoblin/oauth/views.py:243 mediagoblin/oauth/views.py:294
+#: mediagoblin/oauth/views.py:244 mediagoblin/oauth/views.py:295
 msgid "No request token found."
 msgstr "رشته‌ی تایید هویت درخواستی یافت نگردید."
 
@@ -1438,8 +1438,8 @@ msgid "Authorization Complete"
 msgstr "مراحل دسترسی دادن کامل گردید"
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:28
-msgid "Copy and paste this into your client:"
-msgstr "یک نسخه از این بر روی دستگاه خود ایجاد کنید:"
+msgid "Copy and paste this <strong>verifier code</strong> into your client:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36

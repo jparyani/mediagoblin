@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-12-06 14:33-0600\n"
-"PO-Revision-Date: 2014-12-06 20:33+0000\n"
+"POT-Creation-Date: 2014-12-14 15:01-0600\n"
+"PO-Revision-Date: 2014-12-14 21:01+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/mediagoblin/language/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -83,75 +83,75 @@ msgstr "Verificatie e-mail opnieuw opgestuurd."
 
 #: mediagoblin/db/mixin.py:404
 msgid "{username} added {object}"
-msgstr ""
+msgstr "{username} voegde toe {object}"
 
 #: mediagoblin/db/mixin.py:405
 msgid "{username} added {object} to {target}"
-msgstr ""
+msgstr "{username} voegde {object} toe aan {target}"
 
 #: mediagoblin/db/mixin.py:407
 msgid "{username} authored {object}"
-msgstr ""
+msgstr "{username} bewerkte {object}"
 
 #: mediagoblin/db/mixin.py:408
 msgid "{username} created {object}"
-msgstr ""
+msgstr "{username} creëerde {object}"
 
 #: mediagoblin/db/mixin.py:409
 msgid "{username} deleted {object}"
-msgstr ""
+msgstr "{username} verwijderde {object}"
 
 #: mediagoblin/db/mixin.py:410
 msgid "{username} disliked {object}"
-msgstr ""
+msgstr "{username} vond {object} niet meer leuk"
 
 #: mediagoblin/db/mixin.py:411
 msgid "{username} favorited {object}"
-msgstr ""
+msgstr "{username} maakte {object} favoriet"
 
 #: mediagoblin/db/mixin.py:412
 msgid "{username} followed {object}"
-msgstr ""
+msgstr "{username} volgde {object}"
 
 #: mediagoblin/db/mixin.py:413
 msgid "{username} liked {object}"
-msgstr ""
+msgstr "{username} vond {object} leuk"
 
 #: mediagoblin/db/mixin.py:415
 msgid "{username} posted {object}"
-msgstr ""
+msgstr "{username} plaatste {object}"
 
 #: mediagoblin/db/mixin.py:416
 msgid "{username} posted {object} to {target}"
-msgstr ""
+msgstr "{username} plaatste {object} in {target}"
 
 #: mediagoblin/db/mixin.py:418
 msgid "{username} shared {object}"
-msgstr ""
+msgstr "{username} deelde {object}"
 
 #: mediagoblin/db/mixin.py:419
 msgid "{username} unfavorited {object}"
-msgstr ""
+msgstr "{username} verwijderde {object} als favoriet"
 
 #: mediagoblin/db/mixin.py:420
 msgid "{username} stopped following {object}"
-msgstr ""
+msgstr "{username} beëindigde volgen {object}"
 
 #: mediagoblin/db/mixin.py:421
 msgid "{username} unliked {object}"
-msgstr ""
+msgstr "{username} vond {object} niet leuk"
 
 #: mediagoblin/db/mixin.py:422
 msgid "{username} unshared {object}"
-msgstr ""
+msgstr "{username} beëindigde delen {object}"
 
 #: mediagoblin/db/mixin.py:423
 msgid "{username} updated {object}"
-msgstr ""
+msgstr "{username} werkte {object} bij"
 
 #: mediagoblin/db/mixin.py:424
 msgid "{username} tagged {object}"
-msgstr ""
+msgstr "{username} tagde {object}"
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90
 #: mediagoblin/media_types/blog/forms.py:24
@@ -219,7 +219,7 @@ msgstr "Dit adres bevat fouten"
 
 #: mediagoblin/edit/forms.py:64
 msgid "Hometown"
-msgstr ""
+msgstr "Thuis"
 
 #: mediagoblin/edit/forms.py:68
 msgid "Email me when others comment on my media"
@@ -319,11 +319,11 @@ msgstr "Accountinstellingen opgeslagen"
 
 #: mediagoblin/edit/views.py:286
 msgid "Unknown application, not able to deauthorize"
-msgstr ""
+msgstr "Onbekende applicatie, kon autorisatie niet intrekken"
 
 #: mediagoblin/edit/views.py:293
 msgid "Application has been deauthorized"
-msgstr ""
+msgstr "Autorisatie voor applicatie is ingetrokken"
 
 #: mediagoblin/edit/views.py:327
 msgid "You need to confirm the deletion of your account."
@@ -698,11 +698,11 @@ msgstr "Geabonneerd op reacties op %s!"
 msgid "You will not receive notifications for comments on %s."
 msgstr "Je ontvangt geen meldingen over reacties op %s."
 
-#: mediagoblin/oauth/views.py:238
+#: mediagoblin/oauth/views.py:239
 msgid "Must provide an oauth_token."
 msgstr "Moet een oauth_token leveren."
 
-#: mediagoblin/oauth/views.py:243 mediagoblin/oauth/views.py:294
+#: mediagoblin/oauth/views.py:244 mediagoblin/oauth/views.py:295
 msgid "No request token found."
 msgstr "Geen aanvraagtoken gevonden."
 
@@ -1439,8 +1439,8 @@ msgid "Authorization Complete"
 msgstr "Autorisatie compleet"
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:28
-msgid "Copy and paste this into your client:"
-msgstr "Kopieer en plak dit in je client:"
+msgid "Copy and paste this <strong>verifier code</strong> into your client:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
@@ -1557,29 +1557,29 @@ msgstr "Wijzigen %(username)s's e-mailadres"
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:21
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:58
 msgid "Deauthorize applications"
-msgstr ""
+msgstr "Intrekken applicatieautorisaties"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:27
 msgid "Deauthorize Applications"
-msgstr ""
+msgstr "Intrekken applicatieautorisaties"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:28
 msgid ""
 "These applications can access your GNU MediaGoblin account. Deauthorizing the\n"
 "    application will prevent the application from accessing your account."
-msgstr ""
+msgstr "Deze applicaties kunnen je GNU MediaGoblin account gebruiken.\nDeautoriseren van de applicatie betekent dat die je account niet kan gebruiken."
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:37
 msgid "There are no applications authorized."
-msgstr ""
+msgstr "Er zijn geen applicaties geautoriseerd."
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:53
 msgid "Type:"
-msgstr ""
+msgstr "Type:"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:58
 msgid "Authorized:"
-msgstr ""
+msgstr "Geautoriseerd:"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:60
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:24
@@ -1702,14 +1702,14 @@ msgid ""
 "Sorry, this audio will not work because \n"
 "\t  your web browser does not support HTML5 \n"
 "\t  audio."
-msgstr ""
+msgstr "Sorry, dit geluidsfragment zal niet werken omdat\n⇥ je webbrowser geen HTML5 audio ondersteunt"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:48
 msgid ""
 "You can get a modern web browser that \n"
 "\t  can play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
-msgstr ""
+msgstr "Je kunt een moderne web-browser die wel\n⇥ audio kan afspelen vinden op <a href=\"http://getfirefox.com\">\n⇥ http://getfirefox.com</a>!"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:62
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:75

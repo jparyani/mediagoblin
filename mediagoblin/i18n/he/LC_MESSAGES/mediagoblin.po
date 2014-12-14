@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-12-06 14:33-0600\n"
-"PO-Revision-Date: 2014-12-06 20:33+0000\n"
+"POT-Creation-Date: 2014-12-14 15:01-0600\n"
+"PO-Revision-Date: 2014-12-14 21:01+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Hebrew (http://www.transifex.com/projects/p/mediagoblin/language/he/)\n"
 "MIME-Version: 1.0\n"
@@ -91,15 +91,15 @@ msgstr ""
 
 #: mediagoblin/db/mixin.py:407
 msgid "{username} authored {object}"
-msgstr ""
+msgstr "{username} חיבר {object}"
 
 #: mediagoblin/db/mixin.py:408
 msgid "{username} created {object}"
-msgstr ""
+msgstr "{username} יצר {object}"
 
 #: mediagoblin/db/mixin.py:409
 msgid "{username} deleted {object}"
-msgstr ""
+msgstr "{username} מחק {object}"
 
 #: mediagoblin/db/mixin.py:410
 msgid "{username} disliked {object}"
@@ -119,7 +119,7 @@ msgstr ""
 
 #: mediagoblin/db/mixin.py:415
 msgid "{username} posted {object}"
-msgstr ""
+msgstr "{username} פירסם {object}"
 
 #: mediagoblin/db/mixin.py:416
 msgid "{username} posted {object} to {target}"
@@ -147,7 +147,7 @@ msgstr ""
 
 #: mediagoblin/db/mixin.py:423
 msgid "{username} updated {object}"
-msgstr ""
+msgstr "{username} עדכן {object}"
 
 #: mediagoblin/db/mixin.py:424
 msgid "{username} tagged {object}"
@@ -698,11 +698,11 @@ msgstr "הירשם אל תגובות בתוך %s!"
 msgid "You will not receive notifications for comments on %s."
 msgstr "אתה לא תקבל התראות עבור הודעות על %s."
 
-#: mediagoblin/oauth/views.py:238
+#: mediagoblin/oauth/views.py:239
 msgid "Must provide an oauth_token."
 msgstr "יש לספק oauth_token."
 
-#: mediagoblin/oauth/views.py:243 mediagoblin/oauth/views.py:294
+#: mediagoblin/oauth/views.py:244 mediagoblin/oauth/views.py:295
 msgid "No request token found."
 msgstr "לא נמצאה אות בקשה."
 
@@ -1439,8 +1439,8 @@ msgid "Authorization Complete"
 msgstr "הרשאה הושלמה"
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:28
-msgid "Copy and paste this into your client:"
-msgstr "העתק והדבק את מידע זה אל תוך הלקוח שלך:"
+msgid "Copy and paste this <strong>verifier code</strong> into your client:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
@@ -1575,7 +1575,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:53
 msgid "Type:"
-msgstr ""
+msgstr "טיפוס:"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:58
 msgid "Authorized:"

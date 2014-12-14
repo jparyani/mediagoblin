@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-12-06 14:33-0600\n"
-"PO-Revision-Date: 2014-12-06 20:33+0000\n"
+"POT-Creation-Date: 2014-12-14 15:01-0600\n"
+"PO-Revision-Date: 2014-12-14 21:01+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/projects/p/mediagoblin/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
@@ -696,11 +696,11 @@ msgstr ""
 msgid "You will not receive notifications for comments on %s."
 msgstr ""
 
-#: mediagoblin/oauth/views.py:238
+#: mediagoblin/oauth/views.py:239
 msgid "Must provide an oauth_token."
 msgstr ""
 
-#: mediagoblin/oauth/views.py:243 mediagoblin/oauth/views.py:294
+#: mediagoblin/oauth/views.py:244 mediagoblin/oauth/views.py:295
 msgid "No request token found."
 msgstr ""
 
@@ -1437,7 +1437,7 @@ msgid "Authorization Complete"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:28
-msgid "Copy and paste this into your client:"
+msgid "Copy and paste this <strong>verifier code</strong> into your client:"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:28

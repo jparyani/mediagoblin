@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-12-06 14:33-0600\n"
-"PO-Revision-Date: 2014-12-06 20:33+0000\n"
+"POT-Creation-Date: 2014-12-14 15:01-0600\n"
+"PO-Revision-Date: 2014-12-14 21:01+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/mediagoblin/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -710,11 +710,11 @@ msgstr "Vous serez notifié pour les commentaires sur “%s” !"
 msgid "You will not receive notifications for comments on %s."
 msgstr "Vous ne serez pas notifié pour les commentaires sur “%s”."
 
-#: mediagoblin/oauth/views.py:238
+#: mediagoblin/oauth/views.py:239
 msgid "Must provide an oauth_token."
 msgstr "Doit fournir un oauth_token."
 
-#: mediagoblin/oauth/views.py:243 mediagoblin/oauth/views.py:294
+#: mediagoblin/oauth/views.py:244 mediagoblin/oauth/views.py:295
 msgid "No request token found."
 msgstr "Aucun jeton d'authentification n'a été trouvé dans la requête. "
 
@@ -1451,8 +1451,8 @@ msgid "Authorization Complete"
 msgstr "Autorisation terminée"
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:28
-msgid "Copy and paste this into your client:"
-msgstr "Copiez-collez ceci dans votre client :"
+msgid "Copy and paste this <strong>verifier code</strong> into your client:"
+msgstr ""
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
