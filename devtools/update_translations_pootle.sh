@@ -26,7 +26,7 @@ echo "==> pulling git master"
 git pull
 
 echo "==> pulling present translations"
-rsync -vaz chapters.gnu.org::pootle/mediagoblin/ mediagoblin/i18n/
+rsync --exclude ".translation_index" -vaz chapters.gnu.org::pootle/mediagoblin/ mediagoblin/i18n/
 
 echo "==> Extracting translations"
 ./bin/pybabel extract -F babel.ini -o mediagoblin/i18n/templates/mediagoblin.pot .
