@@ -231,7 +231,7 @@ def feed_endpoint(request):
             return json_error("Invalid activity provided.")
 
         # Check that the verb is valid
-        if data["verb"] not in ["post", "update"]:
+        if data["verb"] not in ["post", "update", "delete"]:
             return json_error("Verb not yet implemented", 501)
 
         # We need to check that the user they're posting to is
@@ -429,6 +429,81 @@ def feed_endpoint(request):
                 )
 
                 return json_response(activity.serialize(request))
+
+        elif data["verb"] == "delete":
+            obj = data.get("object", None)
+            if obj is None:
+                return json_error("Could not find 'object' element.")
+
+            if "objectType" not in obj:
+                return json_error("No objectType specified.")
+
+            if "id" not in obj:
+                return json_error("Object ID has not been specified.")
+
+            # Parse out the object ID
+            obj_id = int(extract_url_arguments(
+                url=obj["id"],
+                urlmap=request.app.url_map
+            )["id"])
+
+            if obj.get("objectType", None) == "comment":
+                # Find the comment asked for
+                comment = MediaComment.query.filter_by(
+                    id=obj_id,
+                    author=request.user.id
+                ).first()
+
+                if comment is None:
+                    return json_error(
+                        "No such 'comment' with id '{0}'.".format(obj_id)
+                    )
+
+                # Make a delete activity
+                generator = create_generator(request)
+                activity = create_activity(
+                    verb="delete",
+                    actor=request.user,
+                    obj=comment,
+                    generator=generator
+                )
+
+                # Unfortunately this has to be done while hard deletion exists
+                context = activity.serialize(request)
+
+                # now we can delete the comment
+                comment.delete()
+
+                return json_response(context)
+
+            if obj.get("objectType", None) == "image":
+                # Find the image
+                entry = MediaEntry.query.filter_by(
+                    id=obj_id,
+                    uploader=request.user.id
+                ).first()
+
+                if entry is None:
+                    return json_error(
+                        "No such 'image' with id '{0}'.".format(obj_id)
+                    )
+
+                # Make the delete activity
+                generator = create_generator(request)
+                activity = create_activity(
+                    verb="delete",
+                    actor=request.user,
+                    obj=entry,
+                    generator=generator
+                )
+
+                # This is because we have hard deletion
+                context = activity.serialize(request)
+
+                # Now we can delete the image
+                entry.delete()
+
+                return json_response(context)
 
     elif request.method != "GET":
         return json_error(

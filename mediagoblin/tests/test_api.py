@@ -492,3 +492,72 @@ class TestAPI(object):
             assert "url" in data
             assert "links" in data
             assert data["objectType"] == "image"
+
+    def test_delete_media_by_activity(self, test_app):
+        """ Test that an image can be deleted by a delete activity to feed """
+        response, data = self._upload_image(test_app, GOOD_JPG)
+        response, data = self._post_image_to_feed(test_app, data)
+        object_id = data["object"]["id"]
+
+        activity = {
+            "verb": "delete",
+            "object": {
+                "id": object_id,
+                "objectType": "image",
+            }
+        }
+
+        response = self._activity_to_feed(test_app, activity)[1]
+
+        # Check the media is no longer in the database
+        media_id = int(object_id.split("/")[-2])
+        media = MediaEntry.query.filter_by(id=media_id).first()
+
+        assert media is None
+
+        # Check we've been given the full delete activity back
+        assert "id" in response
+        assert response["verb"] == "delete"
+        assert "object" in response
+        assert response["object"]["id"] == object_id
+        assert response["object"]["objectType"] == "image"
+
+    def test_delete_comment_by_activity(self, test_app):
+        """ Test that a comment is deleted by a delete activity to feed """
+        # First upload an image to comment against
+        response, data = self._upload_image(test_app, GOOD_JPG)
+        response, data = self._post_image_to_feed(test_app, data)
+
+        # Post a comment to delete
+        activity = {
+            "verb": "post",
+            "object": {
+                "objectType": "comment",
+                "content": "This is a comment.",
+                "inReplyTo": data["object"],
+            }
+        }
+
+        comment = self._activity_to_feed(test_app, activity)[1]
+
+        # Now delete the image
+        activity = {
+            "verb": "delete",
+            "object": {
+                "id": comment["object"]["id"],
+                "objectType": "comment",
+            }
+        }
+
+        delete = self._activity_to_feed(test_app, activity)[1]
+
+        # Verify the comment no longer exists
+        comment_id = int(comment["object"]["id"].split("/")[-2])
+        assert MediaComment.query.filter_by(id=comment_id).first() is None
+
+        # Check we've got a delete activity back
+        assert "id" in delete
+        assert delete["verb"] == "delete"
+        assert "object" in delete
+        assert delete["object"]["id"] == comment["object"]["id"]
+        assert delete["object"]["objectType"] == "comment"
