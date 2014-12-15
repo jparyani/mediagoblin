@@ -210,7 +210,7 @@ def inbox_major_endpoint(request):
 
 @oauth_required
 @csrf_exempt
-def feed_endpoint(request):
+def feed_endpoint(request, outbox=None):
     """ Handles the user's outbox - /api/user/<username>/feed """
     username = request.matchdict["username"]
     requested_user = User.query.filter_by(username=username).first()
@@ -524,7 +524,10 @@ def feed_endpoint(request):
     }
 
     # Create outbox
-    outbox = Activity.query.filter_by(actor=request.user.id)
+    if outbox is None:
+        outbox = Activity.query.filter_by(actor=request.user.id)
+    else:
+        outbox = outbox.filter_by(actor=request.user.id)
 
     # We want the newest things at the top (issue: #1055)
     outbox = outbox.order_by(Activity.published.desc())
@@ -548,6 +551,28 @@ def feed_endpoint(request):
     feed["totalItems"] = len(feed["items"])
 
     return json_response(feed)
+
+@oauth_required
+def feed_minor_endpoint(request):
+    """ Outbox for minor activities such as updates """
+    # If it's anything but GET pass it along
+    if request.method != "GET":
+        return feed_endpoint(request)
+
+    outbox = Activity.query.filter(
+        (Activity.verb == "update") | (Activity.verb == "delete")
+    )
+    return feed_endpoint(request, outbox=outbox)
+
+@oauth_required
+def feed_major_endpoint(request):
+    """ Outbox for all major activities """
+    # If it's anything but a GET pass it along
+    if request.method != "GET":
+        return feed_endpoint(request)
+
+    outbox = Activity.query.filter_by(verb="post")
+    return feed_endpoint(request, outbox=outbox)
 
 @oauth_required
 def object_endpoint(request):

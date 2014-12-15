@@ -40,6 +40,20 @@ add_route(
 )
 
 add_route(
+    "mediagoblin.federation.feed_major",
+    "/api/user/<string:username>/feed/major/",
+    "mediagoblin.federation.views:feed_major_endpoint",
+    match_slash=False
+)
+
+add_route(
+    "mediagoblin.federation.feed_minor",
+    "/api/user/<string:username>/feed/minor/",
+    "mediagoblin.federation.views:feed_minor_endpoint",
+    match_slash=False
+)
+
+add_route(
     "mediagoblin.federation.user.uploads",
     "/api/user/<string:username>/uploads/",
     "mediagoblin.federation.views:uploads_endpoint",
@@ -76,14 +90,14 @@ add_route(
 
 add_route(
     "mediagoblin.federation.inbox_direct_minor",
-    "/api/user/<string:username>/inbox/direct/minor",
+    "/api/user/<string:username>/inbox/direct/minor/",
     "mediagoblin.federation.views:inbox_minor_endpoint",
     match_slash=False
 )
 
 add_route(
     "mediagoblin.federation.inbox_direct_major",
-    "/api/user/<string:username>/inbox/direct/major",
+    "/api/user/<string:username>/inbox/direct/major/",
     "mediagoblin.federation.views:inbox_major_endpoint",
     match_slash=False
 )
