@@ -360,9 +360,9 @@ def feed_endpoint(request, outbox=None):
                         status=403
                     )
 
-                if not comment.unserialize(data["object"]):
+                if not comment.unserialize(data["object"], request):
                     return json_error(
-                        "Invalid 'comment' with id '{0}'".format(obj_id)
+                        "Invalid 'comment' with id '{0}'".format(obj["id"])
                     )
 
                 comment.save()
@@ -382,7 +382,7 @@ def feed_endpoint(request, outbox=None):
                 image = MediaEntry.query.filter_by(id=obj_id).first()
                 if image is None:
                     return json_error(
-                        "No such 'image' with the id '{0}'.".format(obj_id)
+                        "No such 'image' with the id '{0}'.".format(obj["id"])
                     )
 
                 # Check that the person trying to update the comment is

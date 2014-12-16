@@ -803,31 +803,25 @@ class MediaComment(Base, MediaCommentMixin):
 
     def unserialize(self, data, request):
         """ Takes API objects and unserializes on existing comment """
-        # Do initial checks to verify the object is correct
-        required_attributes = ["content", "inReplyTo"]
-        for attr in required_attributes:
-            if attr not in data:
+        # Handle changing the reply ID
+        if "inReplyTo" in data:
+            # Validate that the ID is correct
+            try:
+                media_id = int(extract_url_arguments(
+                    url=data["inReplyTo"]["id"],
+                    urlmap=request.app.url_map
+                )["id"])
+            except ValueError:
                 return False
 
-        # Validate inReplyTo has ID
-        if "id" not in data["inReplyTo"]:
-            return False
+            media = MediaEntry.query.filter_by(id=media_id).first()
+            if media is None:
+                return False
 
-        # Validate that the ID is correct
-        try:
-            media_id = int(extract_url_arguments(
-                url=data["inReplyTo"]["id"],
-                urlmap=request.app.url_map
-            )["id"])
-        except ValueError:
-            return False
+            self.media_entry = media.id
 
-        media = MediaEntry.query.filter_by(id=media_id).first()
-        if media is None:
-            return False
-
-        self.media_entry = media.id
-        self.content = data["content"]
+        if "content" in data:
+            self.content = data["content"]
 
         if "location" in data:
             Location.create(data["location"], self)

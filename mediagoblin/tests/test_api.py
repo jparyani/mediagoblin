@@ -561,3 +561,40 @@ class TestAPI(object):
         assert "object" in delete
         assert delete["object"]["id"] == comment["object"]["id"]
         assert delete["object"]["objectType"] == "comment"
+
+    def test_edit_comment(self, test_app):
+        """ Test that someone can update their own comment """
+        # First upload an image to comment against
+        response, data = self._upload_image(test_app, GOOD_JPG)
+        response, data = self._post_image_to_feed(test_app, data)
+
+        # Post a comment to edit
+        activity = {
+            "verb": "post",
+            "object": {
+                "objectType": "comment",
+                "content": "This is a comment",
+                "inReplyTo": data["object"],
+            }
+        }
+
+        comment = self._activity_to_feed(test_app, activity)[1]
+
+        # Now create an update activity to change the content
+        activity = {
+            "verb": "update",
+            "object": {
+                "id": comment["object"]["id"],
+                "content": "This is my fancy new content string!",
+                "objectType": "comment",
+            },
+        }
+
+        comment = self._activity_to_feed(test_app, activity)[1]
+
+        # Verify the comment reflects the changes
+        comment_id = int(comment["object"]["id"].split("/")[-2])
+        model = MediaComment.query.filter_by(id=comment_id).first()
+
+        assert model.content == activity["object"]["content"]
+
