@@ -156,7 +156,7 @@ def inbox_endpoint(request, inbox=None):
         )
 
     if inbox is None:
-        inbox = Activity.query.all()
+        inbox = Activity.query
 
     # We want to make a query for all media on the site and then apply GET
     # limits where we can.
