@@ -424,6 +424,15 @@ class ActivityMixin(object):
             "tag": {"simple": _("{username} tagged {object}")},
         }
 
+        object_map = {
+            "image": _("an image"),
+            "comment": _("a comment"),
+            "collection": _("a collection"),
+            "video": _("a video"),
+            "audio": _("audio"),
+            "person": _("a person"),
+        }
+
         obj = self.get_object
         target = self.get_target
         actor = self.get_actor
@@ -432,15 +441,23 @@ class ActivityMixin(object):
         if content is None or obj is None:
             return
 
+        # Decide what to fill the object with
+        if hasattr(obj, "title") and obj.title.strip(" "):
+            object = obj.title
+        elif obj.object_type in object_map:
+            object = object_map[obj.object_type]
+        else:
+            object = _("an object")
+
         if target is None or "targetted" not in content:
             self.content = content["simple"].format(
                 username=actor.username,
-                object=obj.object_type
+                object=object
             )
         else:
             self.content = content["targetted"].format(
                 username=actor.username,
-                object=obj.object_type,
+                object=object,
                 target=target.object_type,
             )
 
