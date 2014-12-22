@@ -443,22 +443,30 @@ class ActivityMixin(object):
 
         # Decide what to fill the object with
         if hasattr(obj, "title") and obj.title.strip(" "):
-            object = obj.title
+            object_value = obj.title
         elif obj.object_type in object_map:
-            object = object_map[obj.object_type]
+            object_value = object_map[obj.object_type]
         else:
-            object = _("an object")
+            object_value = _("an object")
 
-        if target is None or "targetted" not in content:
-            self.content = content["simple"].format(
-                username=actor.username,
-                object=object
-            )
-        else:
+        # Do we want to add a target (indirect object) to content?
+        if target is not None and "targetted" in content:
+            if hasattr(target, "title") and target.title.strip(" "):
+                target_value = target.title
+            elif target.object_type in object_map:
+                target_value = object_map[target.object_type]
+            else:
+                target_value = _("an object")
+
             self.content = content["targetted"].format(
                 username=actor.username,
-                object=object,
-                target=target.object_type,
+                object=object_value,
+                target=target_value
+            )
+        else:
+            self.content = content["simple"].format(
+                username=actor.username,
+                object=object_value
             )
 
         return self.content
