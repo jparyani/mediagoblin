@@ -105,13 +105,13 @@ This chapter covers MediaGoblin's `Pump API
 work in progress; full federation is not supported at the moment, but
 media uploading works!  You can use something like
 `PyPump <http://pypump.org>`_
-to write MediaGoblin uploadable applications.)
+to write MediaGoblin applications.)
 
 .. toctree::
    :maxdepth: 1
 
-   api/client_register
-   api/oauth
+   api/authentication
+   api/activities
    api/media
    api/media_interaction
 

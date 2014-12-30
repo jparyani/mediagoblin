@@ -12,7 +12,7 @@
    <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 Pump.io supports a number of different interactions that can happen against
-media. Theser are commenting, liking/favoriting and (re-)sharing. Currently
+media. These are commenting, liking/favoriting and (re-)sharing. Currently
 MediaGoblin supports just commenting although other interactions will come at
 a later date.
 
@@ -23,7 +23,7 @@ How to comment
 .. warning:: Commenting on a comment currently is NOT supported.
 
 Commenting is done by posting a comment activity to the users feed. The
-activity should look similiar to::
+activity should look similar to::
 
     {
         "verb": "post",

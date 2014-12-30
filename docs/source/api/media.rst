@@ -13,19 +13,19 @@
 
 .. info:: Currently only image uploading is supported.
 
-===============
-Uploading Media
-===============
+=====
+Media
+=====
 
 To use any the APIs mentioned in this document you will required :doc:`oauth`
 
-Uploading and posting an media requiest you to make two to three requests:
+Uploading and posting an media request you to make two to three requests:
 
 1) Uploads the data to the server
 2) Post media to feed
 3) Update media to have title, description, license, etc. (optional)
 
-These steps could be condenced in the future however currently this is how the
+These steps could be recondensed in the future however currently this is how the
 pump.io API works. There is currently an issue open, if you would like to change
 how this works please contribute upstream: https://github.com/e14n/pump.io/issues/657
 
@@ -41,7 +41,7 @@ A POST request should be made to the media upload URI submitting at least two he
 * `Content-Length` - size in bytes of the media.
 
 The media data should be submitted as POST data to the image upload URI.
-You will get back a JSON encoded response which will look similiar to::
+You will get back a JSON encoded response which will look similar to::
 
     {
         "updated": "2014-01-11T09:45:48Z",
@@ -139,7 +139,7 @@ and update request to the endpoint, the following attributes can be submitted:
 .. note:: license attribute is mediagoblin specific, pump.io does not support this attribute
 
 
-The update request should look something similiar to::
+The update request should look something similar to::
 
     {
         "verb": "update",
