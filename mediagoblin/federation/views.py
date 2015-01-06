@@ -158,12 +158,24 @@ def inbox_endpoint(request, inbox=None):
     if inbox is None:
         inbox = Activity.query
 
+    # Count how many items for the "totalItems" field
+    total_items = inbox.count()
+
     # We want to make a query for all media on the site and then apply GET
     # limits where we can.
     inbox = inbox.order_by(Activity.published.desc())
 
     # Limit by the "count" (default: 20)
-    inbox = inbox.limit(request.args.get("count", 20))
+    try:
+        limit = int(request.args.get("count", 20))
+    except ValueError:
+        limit = 20
+
+    # Prevent the count being too big (pump uses 200 so we shall)
+    limit = limit if limit <= 200 else 200
+
+    # Apply the limit
+    inbox = inbox.limit(limit)
 
     # Offset (default: no offset - first <count> results)
     inbox = inbox.offset(request.args.get("offset", 0))
@@ -176,6 +188,7 @@ def inbox_endpoint(request, inbox=None):
         "url": request.base_url,
         "links": {"self": {"href": request.url}},
         "items": [],
+        "totalItems": total_items,
     }
 
     for activity in inbox:
@@ -188,7 +201,6 @@ def inbox_endpoint(request, inbox=None):
             # should just skip them.
             pass
 
-    feed["totalItems"] = len(feed["items"])
     return json_response(feed)
 
 @oauth_required
@@ -533,7 +545,18 @@ def feed_endpoint(request, outbox=None):
     outbox = outbox.order_by(Activity.published.desc())
 
     # Limit by the "count" (default: 20)
-    outbox = outbox.limit(request.args.get("count", 20))
+    limit = request.args.get("count", 20)
+
+    try:
+        limit = int(limit)
+    except ValueError:
+        limit = 20
+
+    # The upper most limit should be 200
+    limit = limit if limit < 200 else 200
+
+    # apply the limit
+    outbox = outbox.limit(limit)
 
     # Offset (default: no offset - first <count>  result)
     outbox = outbox.offset(request.args.get("offset", 0))
