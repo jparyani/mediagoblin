@@ -112,8 +112,7 @@ to write MediaGoblin applications.)
 
    api/authentication
    api/activities
-   api/media
-   api/media_interaction
+   api/objects
 
 
 
