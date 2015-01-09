@@ -69,7 +69,7 @@ That's it, probably!  If you run into problems, don't hesitate to
 - Removed a false download link from setup.py
 
 0.7.0
-====
+=====
 
 **Do this to upgrade**
 
