@@ -1,6 +1,6 @@
 .. MediaGoblin Documentation
 
-   Written in 2011, 2012 by MediaGoblin contributors
+   Written in 2015 by MediaGoblin contributors
 
    To the extent possible under law, the author(s) have dedicated all
    copyright and related and neighboring rights to this software to
@@ -133,14 +133,14 @@ These are:
 +-------------+----------+----------+----------------------------------+
 | Parameter   | Default  | Limit    | Description                      |
 +=============+==========+==========+==================================+
-| count       | 20       | 200      | Number activities to return      |
+| count       | 20       | 200      | Number of activities to return   |
 +-------------+----------+----------+----------------------------------+
 | offset      | 0        | No limit | Offset of collection             |
 +-------------+----------+----------+----------------------------------+
 
 .. warning::
    Activities are added to the beginning of collection so using count and
-   offset to do pages.
+   offset is a bad way of doing pages.
 
 .. important::
    Due to the way we're currently doing deletes in MediaGoblin some activities

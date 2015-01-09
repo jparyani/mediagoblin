@@ -1,6 +1,6 @@
 .. MediaGoblin Documentation
 
-   Written in 2011, 2012 by MediaGoblin contributors
+   Written in 2015 by MediaGoblin contributors
 
    To the extent possible under law, the author(s) have dedicated all
    copyright and related and neighboring rights to this software to
@@ -65,7 +65,7 @@ steps to do is as follows:
 2) Post media to feed
 3) Update media to have title, description, license, etc. (optional)
 
-This could be condenced into a 2-step process however this would need to happen
+This could be condensed into a 2-step process however this would need to happen
 upstream. If you would like to contribute to changing this upstream there is
 an issue open: https://github.com/e14n/pump.io/issues/657
 
@@ -145,7 +145,7 @@ object described above. You create a post activity and post that to the feed
         }
     }
 
-You will get back the full activity back, unlike above however if you with to
+You will get back the full activity, unlike above however if you wish to
 submit `displayName` (title) or `content` (description) information you need
 to create an update activity and post that to the feed after you have posted
 the image. An update activity would look like::
@@ -176,7 +176,7 @@ update activity. An update to a comment might look like::
     }
 
 This should be posted to the feed (outbox). You will get back the full update
-activity back in response.
+activity in response.
 
 Deleting Objects
 ----------------
@@ -197,7 +197,7 @@ You should get the full delete activity in response.
 .. warning::
     While deletion works, currently because of the way deletion is implemented
     deletion either via the API or the webUI causes any activities to be broken
-    and will be skipped and unaccessable. A migration to remove the broken
+    and will be skipped and unaccessible. A migration to remove the broken
     activities will come in a future release when soft-deletion has been
     implemented.
 
