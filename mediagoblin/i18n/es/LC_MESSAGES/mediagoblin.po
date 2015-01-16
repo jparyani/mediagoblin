@@ -1,5 +1,5 @@
 # Translations template for PROJECT.
-# Copyright (C) 2014 ORGANIZATION
+# Copyright (C) 2015 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
@@ -10,9 +10,10 @@
 # Jacobo Nájera <jacobo@gnu.org>, 2013
 # Javier Di Mauro <javierdimauro@gmail.com>, 2011
 # case <juangsub@gmail.com>, 2011
-# juanman <juanma@kde.org.ar>, 2011, 2012
+# juanman <juanma@gnutn.org.ar>, 2011, 2012
 # Laura Arjona Reina <larjona@larjona.net>, 2012
 # Laura Arjona Reina <larjona@larjona.net>, 2013-2014
+# Laura Arjona Reina <larjona@larjona.net>, 2014
 # Mario Rodriguez <msrodriguez00@gmail.com>, 2011
 # Manuel Urbano Santos <mu@member.fsf.org>, 2011
 # shackra <shackra@riseup.net>, 2012
@@ -21,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-12-14 15:01-0600\n"
-"PO-Revision-Date: 2014-12-14 21:01+0000\n"
+"POT-Creation-Date: 2015-01-16 15:13-0600\n"
+"PO-Revision-Date: 2015-01-16 21:13+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -94,74 +95,102 @@ msgstr "Se reenvió tu correo electrónico de verificación."
 
 #: mediagoblin/db/mixin.py:404
 msgid "{username} added {object}"
-msgstr ""
+msgstr "{username} agregó {object}"
 
 #: mediagoblin/db/mixin.py:405
 msgid "{username} added {object} to {target}"
-msgstr ""
+msgstr "{username} agregó {object} a {target}"
 
 #: mediagoblin/db/mixin.py:407
 msgid "{username} authored {object}"
-msgstr ""
+msgstr "{username} tomó la autoría de {object}"
 
 #: mediagoblin/db/mixin.py:408
 msgid "{username} created {object}"
-msgstr ""
+msgstr "{username} creó {object}"
 
 #: mediagoblin/db/mixin.py:409
 msgid "{username} deleted {object}"
-msgstr ""
+msgstr "{username} eliminó {object}"
 
 #: mediagoblin/db/mixin.py:410
 msgid "{username} disliked {object}"
-msgstr ""
+msgstr "A {username} no le gustó {object}"
 
 #: mediagoblin/db/mixin.py:411
 msgid "{username} favorited {object}"
-msgstr ""
+msgstr "{username} marcó como favorito {object}"
 
 #: mediagoblin/db/mixin.py:412
 msgid "{username} followed {object}"
-msgstr ""
+msgstr "{username} siguió {object}"
 
 #: mediagoblin/db/mixin.py:413
 msgid "{username} liked {object}"
-msgstr ""
+msgstr "A {username} le gustó {object}"
 
 #: mediagoblin/db/mixin.py:415
 msgid "{username} posted {object}"
-msgstr ""
+msgstr "{username} publicó {object}"
 
 #: mediagoblin/db/mixin.py:416
 msgid "{username} posted {object} to {target}"
-msgstr ""
+msgstr "{username} publicó {object} en {target}"
 
 #: mediagoblin/db/mixin.py:418
 msgid "{username} shared {object}"
-msgstr ""
+msgstr "{username} compartió {object}"
 
 #: mediagoblin/db/mixin.py:419
 msgid "{username} unfavorited {object}"
-msgstr ""
+msgstr "{username} quitó de favoritos {object}"
 
 #: mediagoblin/db/mixin.py:420
 msgid "{username} stopped following {object}"
-msgstr ""
+msgstr "{username} dejó de seguir a {object}"
 
 #: mediagoblin/db/mixin.py:421
 msgid "{username} unliked {object}"
-msgstr ""
+msgstr "A {username} le dejó de gustar {object}"
 
 #: mediagoblin/db/mixin.py:422
 msgid "{username} unshared {object}"
-msgstr ""
+msgstr "{username} dejó de compartir {object}"
 
 #: mediagoblin/db/mixin.py:423
 msgid "{username} updated {object}"
-msgstr ""
+msgstr "{username} actualizó {object}"
 
 #: mediagoblin/db/mixin.py:424
 msgid "{username} tagged {object}"
+msgstr "{username} etiquetó {object}"
+
+#: mediagoblin/db/mixin.py:428
+msgid "an image"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:429
+msgid "a comment"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:430
+msgid "a collection"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:431
+msgid "a video"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:432
+msgid "audio"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:433
+msgid "a person"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:450 mediagoblin/db/mixin.py:459
+msgid "an object"
 msgstr ""
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90
@@ -230,7 +259,7 @@ msgstr "La dirección contiene errores"
 
 #: mediagoblin/edit/forms.py:64
 msgid "Hometown"
-msgstr ""
+msgstr "Lugar de origen"
 
 #: mediagoblin/edit/forms.py:68
 msgid "Email me when others comment on my media"
@@ -322,7 +351,7 @@ msgstr "Estás editando un perfil de usuario. Procede con precaución."
 
 #: mediagoblin/edit/views.py:232
 msgid "Profile changes saved"
-msgstr "Los cambios de perfil fueron salvados"
+msgstr "Se grabaron los cambios del perfil"
 
 #: mediagoblin/edit/views.py:265
 msgid "Account settings saved"
@@ -330,11 +359,11 @@ msgstr "las configuraciones de cuenta fueron salvadas"
 
 #: mediagoblin/edit/views.py:286
 msgid "Unknown application, not able to deauthorize"
-msgstr ""
+msgstr "Aplicación desconocida, no se puede desautorizar"
 
 #: mediagoblin/edit/views.py:293
 msgid "Application has been deauthorized"
-msgstr ""
+msgstr "Se ha desautorizado la aplicación"
 
 #: mediagoblin/edit/views.py:327
 msgid "You need to confirm the deletion of your account."
@@ -1451,7 +1480,7 @@ msgstr "Autorización completa"
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:28
 msgid "Copy and paste this <strong>verifier code</strong> into your client:"
-msgstr ""
+msgstr "Copia y pega este <strong>código de verificación</strong> en tu cliente:"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
@@ -1568,29 +1597,29 @@ msgstr "Cambiando el correo electrónico de %(username)s"
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:21
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:58
 msgid "Deauthorize applications"
-msgstr ""
+msgstr "Desautorizar aplicaciones"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:27
 msgid "Deauthorize Applications"
-msgstr ""
+msgstr "Desautorizar Aplicaciones"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:28
 msgid ""
 "These applications can access your GNU MediaGoblin account. Deauthorizing the\n"
 "    application will prevent the application from accessing your account."
-msgstr ""
+msgstr "Estas aplicaciones pueden acceder a tu cuenta de GNU MediaGoblin. Desautorizando\nla aplicación, se evitará que la aplicación acceda a tu cuenta."
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:37
 msgid "There are no applications authorized."
-msgstr ""
+msgstr "No hay aplicaciones autorizadas."
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:53
 msgid "Type:"
-msgstr ""
+msgstr "Tipo:"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:58
 msgid "Authorized:"
-msgstr ""
+msgstr "Autorizada:"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:60
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:24
@@ -1713,14 +1742,14 @@ msgid ""
 "Sorry, this audio will not work because \n"
 "\t  your web browser does not support HTML5 \n"
 "\t  audio."
-msgstr ""
+msgstr "Lo siento, este sonido no funcionará, porque \n\t  tu navegador web no soporta sonido\n\t  HTML5."
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:48
 msgid ""
 "You can get a modern web browser that \n"
 "\t  can play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
-msgstr ""
+msgstr "¡Puedes conseguir un navegador moderno \n\t  que pueda reproducir el sonido en <a href=\"http://getfirefox.com\">\n\t    http://getfirefox.com</a>!"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:62
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:75

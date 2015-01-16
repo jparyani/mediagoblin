@@ -1,5 +1,5 @@
 # Translations template for PROJECT.
-# Copyright (C) 2014 ORGANIZATION
+# Copyright (C) 2015 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-12-14 15:01-0600\n"
-"PO-Revision-Date: 2014-12-14 21:01+0000\n"
+"POT-Creation-Date: 2015-01-16 15:13-0600\n"
+"PO-Revision-Date: 2015-01-16 21:13+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Galician (http://www.transifex.com/projects/p/mediagoblin/language/gl/)\n"
 "MIME-Version: 1.0\n"
@@ -149,6 +149,34 @@ msgstr ""
 
 #: mediagoblin/db/mixin.py:424
 msgid "{username} tagged {object}"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:428
+msgid "an image"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:429
+msgid "a comment"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:430
+msgid "a collection"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:431
+msgid "a video"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:432
+msgid "audio"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:433
+msgid "a person"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:450 mediagoblin/db/mixin.py:459
+msgid "an object"
 msgstr ""
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90

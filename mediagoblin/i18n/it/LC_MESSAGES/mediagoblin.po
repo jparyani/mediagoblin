@@ -1,5 +1,5 @@
 # Translations template for PROJECT.
-# Copyright (C) 2014 ORGANIZATION
+# Copyright (C) 2015 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
@@ -8,14 +8,14 @@
 # Gaetano <gaedeb01@gmail.com>, 2013
 # pikappa469 <pikappa469@alice.it>, 2011
 # nunni <robi@nunnisoft.ch>, 2011
-# Damtux, 2013
+# Damtux, 2013-2014
 # Damtux, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-12-14 15:01-0600\n"
-"PO-Revision-Date: 2014-12-14 21:01+0000\n"
+"POT-Creation-Date: 2015-01-16 15:13-0600\n"
+"PO-Revision-Date: 2015-01-16 21:13+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/mediagoblin/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -155,6 +155,34 @@ msgstr ""
 
 #: mediagoblin/db/mixin.py:424
 msgid "{username} tagged {object}"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:428
+msgid "an image"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:429
+msgid "a comment"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:430
+msgid "a collection"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:431
+msgid "a video"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:432
+msgid "audio"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:433
+msgid "a person"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:450 mediagoblin/db/mixin.py:459
+msgid "an object"
 msgstr ""
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90
@@ -498,11 +526,11 @@ msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:50
 msgid "Edit Blog"
-msgstr ""
+msgstr "Modifica Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:57
 msgid "Delete Blog"
-msgstr ""
+msgstr "Elimina Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:92
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blogpost_draft_view.html:35
@@ -557,7 +585,7 @@ msgstr "Elimina definitivamente"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:26
 msgid "Create/Edit a Blog"
-msgstr ""
+msgstr "Crea/Modifica un Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:37
 #: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
@@ -841,7 +869,7 @@ msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:108
 msgid "CAUTION:"
-msgstr ""
+msgstr "ATTENZIONE:"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:110
 msgid ""
@@ -1077,11 +1105,11 @@ msgstr "Iscriviti per creare un account!"
 
 #: mediagoblin/plugins/metadata_display/templates/mediagoblin/plugins/metadata_display/metadata_table.html:22
 msgid "Metadata"
-msgstr ""
+msgstr "Metadati"
 
 #: mediagoblin/plugins/metadata_display/templates/mediagoblin/plugins/metadata_display/metadata_table.html:40
 msgid "Edit Metadata"
-msgstr ""
+msgstr "Modifica Metadati"
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
@@ -1514,7 +1542,7 @@ msgid ""
 "\n"
 "            >Create an account at this site</a>\n"
 "            or"
-msgstr ""
+msgstr "\n>Crea un account in questo sito</a>\noppure"
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:42
 msgid ""
@@ -1990,7 +2018,7 @@ msgstr "Segnalazioni Chiuse"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:172
 msgid "Resolved"
-msgstr ""
+msgstr "Risolto"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:174
 msgid "Action Taken"
@@ -2011,7 +2039,7 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/user.html:23
 #, python-format
 msgid "User: %(username)s"
-msgstr ""
+msgstr "Utente: %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:42
 msgid "Return to Users Panel"
@@ -2126,11 +2154,11 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:180
 msgid "Yes"
-msgstr ""
+msgstr "Sì"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:182
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:213
 msgid "Ban User"

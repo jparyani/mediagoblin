@@ -1,16 +1,17 @@
 # Translations template for PROJECT.
-# Copyright (C) 2014 ORGANIZATION
+# Copyright (C) 2015 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
+# Besnik <besnik@programeshqip.org>, 2012-2014
 # Besnik <besnik@programeshqip.org>, 2012-2013
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-12-14 15:01-0600\n"
-"PO-Revision-Date: 2014-12-14 21:01+0000\n"
+"POT-Creation-Date: 2015-01-16 15:13-0600\n"
+"PO-Revision-Date: 2015-01-16 21:13+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/mediagoblin/language/sq/)\n"
 "MIME-Version: 1.0\n"
@@ -56,7 +57,7 @@ msgstr "Na ndjeni, ka tashmë një përdorues me këtë adresë email."
 #: mediagoblin/auth/views.py:145 mediagoblin/edit/views.py:408
 #: mediagoblin/edit/views.py:429 mediagoblin/plugins/basic_auth/views.py:110
 msgid "The verification key or user id is incorrect."
-msgstr "Kyçi i verifikimit ose id-ja e përdoruesit është e pasaktë."
+msgstr "Kyçi i verifikimit ose ID-ja e përdoruesit është e pasaktë."
 
 #: mediagoblin/auth/views.py:164
 msgid ""
@@ -66,7 +67,7 @@ msgstr "Adresa juaj email u verifikua. Tani mund të bëni hyrjen, të përpunon
 
 #: mediagoblin/auth/views.py:170
 msgid "The verification key or user id is incorrect"
-msgstr "Kyçi i verifikimit ose id-ja e përdoruesit është e pasaktë"
+msgstr "Kyçi i verifikimit ose ID-ja e përdoruesit është e pasaktë"
 
 #: mediagoblin/auth/views.py:188
 msgid "You must be logged in so we know who to send the email to!"
@@ -82,74 +83,102 @@ msgstr "Ridërgoni email-in tuaj të verifikimit."
 
 #: mediagoblin/db/mixin.py:404
 msgid "{username} added {object}"
-msgstr ""
+msgstr "{username} shtoi {object}"
 
 #: mediagoblin/db/mixin.py:405
 msgid "{username} added {object} to {target}"
-msgstr ""
+msgstr "{username} shtoi {object} te {target}"
 
 #: mediagoblin/db/mixin.py:407
 msgid "{username} authored {object}"
-msgstr ""
+msgstr "{username} krijoi {object}"
 
 #: mediagoblin/db/mixin.py:408
 msgid "{username} created {object}"
-msgstr ""
+msgstr "{username} krijoi {object}"
 
 #: mediagoblin/db/mixin.py:409
 msgid "{username} deleted {object}"
-msgstr ""
+msgstr "{username} fshiu {object}"
 
 #: mediagoblin/db/mixin.py:410
 msgid "{username} disliked {object}"
-msgstr ""
+msgstr "{username} nuk i pëlqeu {object}"
 
 #: mediagoblin/db/mixin.py:411
 msgid "{username} favorited {object}"
-msgstr ""
+msgstr "{username} parapëlqen {object}"
 
 #: mediagoblin/db/mixin.py:412
 msgid "{username} followed {object}"
-msgstr ""
+msgstr "{username} ndoqi {object}"
 
 #: mediagoblin/db/mixin.py:413
 msgid "{username} liked {object}"
-msgstr ""
+msgstr "{username} pëlqeu {object}"
 
 #: mediagoblin/db/mixin.py:415
 msgid "{username} posted {object}"
-msgstr ""
+msgstr "{username} postoi {object}"
 
 #: mediagoblin/db/mixin.py:416
 msgid "{username} posted {object} to {target}"
-msgstr ""
+msgstr "{username} postoi {object} te {target}"
 
 #: mediagoblin/db/mixin.py:418
 msgid "{username} shared {object}"
-msgstr ""
+msgstr "{username} ndau me të tjerët {object}"
 
 #: mediagoblin/db/mixin.py:419
 msgid "{username} unfavorited {object}"
-msgstr ""
+msgstr "{username} nuk e parapëlqen më {object}"
 
 #: mediagoblin/db/mixin.py:420
 msgid "{username} stopped following {object}"
-msgstr ""
+msgstr "{username} ndali ndjekjen e {object}"
 
 #: mediagoblin/db/mixin.py:421
 msgid "{username} unliked {object}"
-msgstr ""
+msgstr " "
 
 #: mediagoblin/db/mixin.py:422
 msgid "{username} unshared {object}"
-msgstr ""
+msgstr "{username} nuk e ndan më me të tjerët {object}"
 
 #: mediagoblin/db/mixin.py:423
 msgid "{username} updated {object}"
-msgstr ""
+msgstr "{username} përditësoi {object}"
 
 #: mediagoblin/db/mixin.py:424
 msgid "{username} tagged {object}"
+msgstr "{username} etiketoi {object}"
+
+#: mediagoblin/db/mixin.py:428
+msgid "an image"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:429
+msgid "a comment"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:430
+msgid "a collection"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:431
+msgid "a video"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:432
+msgid "audio"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:433
+msgid "a person"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:450 mediagoblin/db/mixin.py:459
+msgid "an object"
 msgstr ""
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90
@@ -210,7 +239,7 @@ msgstr "Jetëshkrim"
 
 #: mediagoblin/edit/forms.py:60
 msgid "Website"
-msgstr "Sajt Web"
+msgstr "Sajt"
 
 #: mediagoblin/edit/forms.py:62
 msgid "This address contains errors"
@@ -218,7 +247,7 @@ msgstr "Kjo adresë përmban gabime"
 
 #: mediagoblin/edit/forms.py:64
 msgid "Hometown"
-msgstr ""
+msgstr "Vendlindja"
 
 #: mediagoblin/edit/forms.py:68
 msgid "Email me when others comment on my media"
@@ -318,11 +347,11 @@ msgstr "Rregullimet e llogarisë u ruajtën"
 
 #: mediagoblin/edit/views.py:286
 msgid "Unknown application, not able to deauthorize"
-msgstr ""
+msgstr "Zbatim i panjour, nuk do të jeni në gjendje ta çautorizoni"
 
 #: mediagoblin/edit/views.py:293
 msgid "Application has been deauthorized"
-msgstr ""
+msgstr "Zbatimi u çautorizua"
 
 #: mediagoblin/edit/views.py:327
 msgid "You need to confirm the deletion of your account."
@@ -383,7 +412,7 @@ msgid ""
 "script (and how to format the metadata csv file), read the MediaGoblin\n"
 "documentation page on command line uploading\n"
 "<http://docs.mediagoblin.org/siteadmin/commandline-upload.html>"
-msgstr ""
+msgstr "Për më tepër të dhëna se si të xhirohet siç duhet ky programth\n(dhe se si të formatohet kartela csv e tejtëdhënave), lexoni faqen\ne dokumentimin të MediaGoblin-it mbi ngarkime që nga rresht urdhrash:\n<http://docs.mediagoblin.org/siteadmin/commandline-upload.html>"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:46
 msgid "Name of user these media entries belong to"
@@ -403,13 +432,13 @@ msgstr "Na ndjeni, nuk ka përdorues me emër përdoruesi '{username}'"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:80
 msgid "File at {path} not found, use -h flag for help"
-msgstr ""
+msgstr "Nuk u gjet kartelë te {path}, përdorni parametrin -h për ndihmë"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:121
 msgid ""
 "Error with media '{media_id}' value '{error_path}': {error_msg}\n"
 "Metadata was not uploaded."
-msgstr ""
+msgstr "Gabim me median '{media_id}', vlera '{error_path}': {error_msg}\nTejtëdhënat nuk u ngarkuan."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:147
 msgid ""
@@ -422,15 +451,15 @@ msgid ""
 "Successfully submitted {filename}!\n"
 "Be sure to look at the Media Processing Panel on your website to be sure it\n"
 "uploaded successfully."
-msgstr ""
+msgstr "{filename} u parashtrua me sukses!\nMos harroni të shihni te Paneli i Përpunimit të Medias, te sajti juaj, për\nt’u siguruart se u ngarkua me sukses."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:166
 msgid "FAIL: This file is larger than the upload limits for this site."
-msgstr ""
+msgstr "DËSHTIM: Kjo kartelë është më e madhe se sa kufijt për ngarkim të këtij sajti."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:169
 msgid "FAIL: This file will put this user past their upload limits."
-msgstr ""
+msgstr "DËSHTIM: Kjo kartelë do ta shtyjë këtë përdorues përtej kufijve të tij për ngarkimet."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:172
 msgid "FAIL: This user is already past their upload limits."
@@ -481,7 +510,7 @@ msgstr "Media nuk u fshi ngaqë nuk i vutë shenjë pohimit se jeni i sigurt."
 
 #: mediagoblin/media_types/blog/views.py:335
 msgid "You are about to delete another user's Blog. Proceed with caution."
-msgstr ""
+msgstr "Ju ndan një hap nga fshirja e Blogut të një përdoruesi tjetër. Veproni me kujdes."
 
 #: mediagoblin/media_types/blog/views.py:346
 msgid "The blog was not deleted because you have no rights."
@@ -734,11 +763,11 @@ msgstr "Dytësore"
 
 #: mediagoblin/plugins/archivalook/tools.py:134
 msgid "Tertiary"
-msgstr ""
+msgstr "I tretë"
 
 #: mediagoblin/plugins/archivalook/tools.py:135
 msgid "-----------{display_type}-Features---------------------------\n"
-msgstr ""
+msgstr "-----------Veçori-{display_type}---------------------------\n"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:33
 msgid "How does this work?"
@@ -746,7 +775,7 @@ msgstr "Si funksionon kjo?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:34
 msgid "How to feature media?"
-msgstr ""
+msgstr "Si të shfaqet si i zgjedhur një zë media?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:37
 msgid ""
@@ -759,11 +788,11 @@ msgid ""
 "      inside the text box, click the Submit Query button, and your media should be\n"
 "      displayed on the front page.\n"
 "    "
-msgstr ""
+msgstr "\n      Shkoni te faqja e zërit media që doni të zgjidhni. Kopjoni URL-në e tij\n      mandej hidheni në një rresht i ri, te kutia e teksteve më sipër. Duhet\n      të ketë një url për rresht. Url-ja që hidhni te kutia e teksteve duhet\n      të jetë nën kryet që përshkruan se sa i zgjedhur duhet të jetë zëri\n      (Parësor, Dytësor, ose i Tretë). Pasi t’i keni brenda kutisë së teksteve\n      krejt zërat media që doni t’i shfaqni si të zgjedhura, klikoni mbi butonin\n      Parashtroni Kërkesës, dhe media juaj do të duhej të shfaqet te ballina.\n    "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:48
 msgid "Is there another way to manage featured media?"
-msgstr ""
+msgstr "Ka rrugë tjetër për administrim mediash të zgjedhura?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:51
 msgid ""
@@ -785,11 +814,11 @@ msgid ""
 "        prominent and Demote moves the featured media lower down and makes it\n"
 "        less prominent.\n"
 "    "
-msgstr ""
+msgstr "\n        Po. Nëse e parapëlqeni, mund të shkoni te faqja hyrëse e media për zërin\n        e medias që dëshironi ta zgjidhni ose hiqni nga të zgjedhura dhe shihni te shtylla\n        majtas zërit media. Nëse zëri media nuk është i zgjedhur\n        do të shihni një buton ku thuhet \"Zgjidheni\". Shtypeni atë buton dhe\n        dhe media do të shfaqet si Zgjedhje Parësore në krye të faqes.\n        Krejt zërat e tjerë media do të mbeten në gjendjen që ishin, por do të\n        zhvendosen më poshtë në faqe.<br /><br />\n\n        Nëse shkoni te faqja hyrëse e medias që përmban zërin media që është\n        e zgjedhur, atje ku më parë qe butoni ku lexohej \"Zgjidheni\",\n        do të shihni mundësitë \"Çzgjidheni\", \"Ngjiteni\" dhe \"Zbriteni\".\n        Klikoni mbi Çzgjidheni dhe ai zë nuk do të shfaqet më te ballina, por\n        mundeni ta zgjidhni sërish, kurdo. Ngjiteni e kalon zërin e zgjedhur më\n        lart te faqja dhe e bën më të dukshëm, kurse Zbriteni e kalon më poshtë\n        dhe e bën më pak të dukshëm.\n    "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:70
 msgid "What is a Primary Feature? What is a Secondary Feature?"
-msgstr ""
+msgstr "Ç’është Zgjedhja Parësore? Ç’është Zgjedhja Dytësore?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:74
 msgid ""
@@ -802,13 +831,13 @@ msgid ""
 "      Primary Features also can display longer descriptions than Secondary\n"
 "      Features, and Secondary Features can display longer descriptions than\n"
 "      Tertiary Features."
-msgstr ""
+msgstr "\n      Këto kategori thjesht tregojnë se sa nxirret në pah një zë media te\n      ballina juaj. Të zgjedhurat Parësore vendosen në krye të ballinës dhe\n      janë shumë më të mëdha. Më pas vijnë të Zgjedhurat Dytësore, që janë\n      paksa më të vogla. Të Zgjedhurat e Treta formojnë një rrjetë në fund\n      të faqes.<br /><br />\n\n      Të Zgjedhurat Parësore mund të shfaqin edhe përshkrime më të gjata se\n      ato Dytësoret, dhe ato Dytësore mund të shfaqin përshkrime më të gjata\n      se sa Të Zgjedhurat e Treta."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:85
 msgid ""
 "How to decide what information is displayed when a media entry is\n"
 "    featured?"
-msgstr ""
+msgstr "Si të vendoset se çfarë të dhënash shfaqen kur një zë media bëhet\n    i zgjedhur?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:88
 msgid ""
@@ -820,11 +849,11 @@ msgid ""
 "      Secondary Features display the first 256 characters of their description,\n"
 "      and Tertiary Features display the first 128 characters of their description.\n"
 "    "
-msgstr ""
+msgstr "\n      Kur një zë media zgjidhet, te ballina e sajtit tuaj do të shfaqen titulli,\n      miniatura, dhe një pjesë e përshkrimit për zërin. Numri i shenjave që\n      shfaqen varet nga shkalla e zgjedhjes. Për të Zgjedhurat Parësore shfaqen\n      512 shenjat e parë të përshkrimit për to, për Dytësoret shfaqen 256, dhe\n      të Tretat shfaqen 128 shenjat e përshkrimit të tyre.\n    "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:98
 msgid "How to unfeature a piece of media?"
-msgstr ""
+msgstr "Si t’i hiqet zgjedhja një zëri media?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:102
 msgid ""
@@ -832,7 +861,7 @@ msgid ""
 "      Unfeature a media by removing its line from the above textarea and then\n"
 "      pressing the Submit Query button.\n"
 "    "
-msgstr ""
+msgstr "\n      Hiqjani zgjedhjen një zëri media duke e hequr rreshtin e tij nga fusha e teksteve\n      më sipër dhe duke shtypur mandej butonin Parashtrojeni Kërkesën.\n    "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:108
 msgid "CAUTION:"
@@ -845,47 +874,47 @@ msgid ""
 "      you make a typo, once you press Submit Query, your media entry will NOT be\n"
 "      featured. Make sure that all your intended Media Entries are featured.\n"
 "    "
-msgstr ""
+msgstr "\n      Kur kopjohen dhe hidhen url-ra te fusha e teksteve më sipër, kini parasysh\n      se, nëse bëni një gabim shtypjeje, pas shtypjes së butonit Parashtrojeni\n      Kërkesën,\n zëri juaj media NUK do të zgjidhet. Sigurohuni që janë zgjedhur\n      krejt Zërat Media që doni.\n                "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:26
 msgid ""
 "\n"
 "Feature Media "
-msgstr ""
+msgstr "\nZgjidhni Media "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:28
 msgid "Feature"
-msgstr ""
+msgstr "Zgjidheni"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:34
 msgid ""
 "\n"
 "Unfeature Media "
-msgstr ""
+msgstr "\nHiqni Media Si të Zgjedhur"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:36
 msgid "Unfeature"
-msgstr ""
+msgstr "Hiqeni Si të Zgjedhur"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:42
 msgid ""
 "\n"
 "Promote Feature "
-msgstr ""
+msgstr "\nNxirreni Në Pah të Zgjedhurën"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:44
 msgid "Promote"
-msgstr ""
+msgstr "Nxirreni Në Pah"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:50
 msgid ""
 "\n"
 "Demote Feature "
-msgstr ""
+msgstr "\nMos e Nxirrni Në Pah të Zgjedhurën"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:52
 msgid "Demote"
-msgstr ""
+msgstr "Mos e Nxirrni Në Pah"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/recent_media.html:30
 #: mediagoblin/templates/mediagoblin/root.html:32
@@ -894,14 +923,14 @@ msgstr "Mediat më të reja"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:61
 msgid "Nothing is currently featured."
-msgstr ""
+msgstr "Nuk ka asgjë të zgjedhur."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:62
 msgid ""
 "If you would like to feature a\n"
 "        piece of media, go to that media entry's homepage and click the button\n"
 "        that says <a class=\"button_action\">Feature</a>."
-msgstr ""
+msgstr "Nëse doni që një zë media të jetë ndër të zgjedhurit,\n        shkoni te faqja hyrëse e atij zëri media dhe klikoni mbi butoni\n        ku thuhet <a class=\"button_action\">Zgjidheni</a>."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:67
 #, python-format
@@ -911,7 +940,7 @@ msgid ""
 "        have media featured as long as your instance has the 'archivalook'\n"
 "        plugin enabled. A more advanced tool to manage features can be found\n"
 "        in the <a href=\"%(featured_media_url)s\">feature management panel.</a>"
-msgstr ""
+msgstr "Këtë faqe e shihni sepse jeni përdorues i lejuar të zgjedhë\n        media; një përdorues i rëndomtë do të shihte një faqe të zbrazët, ndaj\n        sigurohuni se zgjidhni media, sa kohë që shtojca 'archivalook' është\n        e aktivizuar për instancën tuaj. Një mjet më i përparuar për administrim\n        zgjedhjesh gjendet te <a href=\"%(featured_media_url)s\">paneli i administrimit të zgjedhjeve.</a>"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
@@ -919,21 +948,21 @@ msgstr "Shihni mediat më të reja"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/bits/feature_dropdown.html:22
 msgid "Feature management panel"
-msgstr ""
+msgstr "Paneli i administrimit të zgjedhjeve"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/audio_primary.html:43
 msgid ""
 "Sorry, this audio will not work because\n"
 "\tyour web browser does not support HTML5\n"
 "\taudio."
-msgstr ""
+msgstr "Na ndjeni, kjo audio nuk do të funksionojë ngaqë\n\tshfletuesi juaj web nuk mbulon audio HTML5."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/audio_primary.html:46
 msgid ""
 "You can get a modern web browser that\n"
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t  http://getfirefox.com</a>!"
-msgstr ""
+msgstr "Te <a href=\"http://getfirefox.com\">http://getfirefox.com</a>\n\tmund të merrni një shfletues web modern\n\tqë mund ta luajë audion!"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_primary.html:43
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_secondary.html:43
@@ -941,7 +970,7 @@ msgid ""
 "Sorry, this video will not work because\n"
 "          your web browser does not support HTML5 \n"
 "          video."
-msgstr ""
+msgstr "Na ndjeni, kjo video nuk do të funksionojë, ngaqë\n          shfletuesi juaj web nuk mbulon video HTML5."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_primary.html:46
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_secondary.html:46
@@ -949,7 +978,7 @@ msgid ""
 "You can get a modern web browser that \n"
 "          can play this video at <a href=\"http://getfirefox.com\">\n"
 "          http://getfirefox.com</a>!"
-msgstr ""
+msgstr "Te <a href=\"http://getfirefox.com\">http://getfirefox.com</a>\n\tmund të merrni një shfletues web modern\n\tqë mund ta luajë këtë video!"
 
 #: mediagoblin/plugins/basic_auth/forms.py:24
 #: mediagoblin/plugins/ldap/forms.py:35 mediagoblin/plugins/openid/forms.py:27
@@ -1000,7 +1029,7 @@ msgstr "Email-i i ricaktimit të fjalëkalimit nuk u dërgua dot, ngaqë emri ju
 
 #: mediagoblin/plugins/basic_auth/views.py:123
 msgid "The user id is incorrect."
-msgstr "Id-ja e përdoruesit është e pasaktë."
+msgstr "ID-ja e përdoruesit është e pasaktë."
 
 #: mediagoblin/plugins/basic_auth/views.py:139
 msgid "You can now log in using your new password."
@@ -1378,7 +1407,7 @@ msgstr "Krijoni koleksion të ri"
 
 #: mediagoblin/templates/mediagoblin/base.html:165
 msgid "Moderation powers:"
-msgstr ""
+msgstr "Aftësi moderim:"
 
 #: mediagoblin/templates/mediagoblin/base.html:171
 msgid "User management panel"
@@ -1439,7 +1468,7 @@ msgstr "Autorizim i Plotësuar"
 
 #: mediagoblin/templates/mediagoblin/api/oob.html:28
 msgid "Copy and paste this <strong>verifier code</strong> into your client:"
-msgstr ""
+msgstr "Kopjojeni dhe hidheni këtë <strong>kod verifikimi</strong> te klienti juaj:"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
@@ -1515,7 +1544,7 @@ msgstr "\n            >Krijoni një llogari në këtë sajt</a>\n            ose
 msgid ""
 "\n"
 "            <a class=\"button_action\" href=\"http://mediagoblin.readthedocs.org/\">Set up MediaGoblin on your own server</a>"
-msgstr ""
+msgstr "\n            <a class=\"button_action\" href=\"http://mediagoblin.readthedocs.org/\">Instalojeni MediaGoblin-in te shërbyesi juaj</a>"
 
 #: mediagoblin/templates/mediagoblin/bits/logo.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
@@ -1556,29 +1585,29 @@ msgstr "Ndryshim i email-it për %(username)s"
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:21
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:58
 msgid "Deauthorize applications"
-msgstr ""
+msgstr "Të çautorizojë zbatime"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:27
 msgid "Deauthorize Applications"
-msgstr ""
+msgstr "Të çautorizojë Zbatime"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:28
 msgid ""
 "These applications can access your GNU MediaGoblin account. Deauthorizing the\n"
 "    application will prevent the application from accessing your account."
-msgstr ""
+msgstr "Këto zbatime mund të hyjnë te llogaria juaj GNU MediaGoblin. Çautorizimi\n    i zbatimit do t’ia pengojë zbatimit hyrjen te llogaria juaj."
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:37
 msgid "There are no applications authorized."
-msgstr ""
+msgstr "Nuk ka zbatime të autorizuara"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:53
 msgid "Type:"
-msgstr ""
+msgstr "Lloj:"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:58
 msgid "Authorized:"
-msgstr ""
+msgstr "Autorizuar Më:"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:60
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:24
@@ -1701,14 +1730,14 @@ msgid ""
 "Sorry, this audio will not work because \n"
 "\t  your web browser does not support HTML5 \n"
 "\t  audio."
-msgstr ""
+msgstr "Na ndjeni, kjo audio nuk do të luhet, ngaqë \n\t  shfletuesi juaj web nuk mbulon audio HTML5."
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:48
 msgid ""
 "You can get a modern web browser that \n"
 "\t  can play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
-msgstr ""
+msgstr "Te <a href=\"http://getfirefox.com\">http://getfirefox.com</a>\n\t mund të merrni një shfletues web modern\n\t që mund ta luajë audion!"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:62
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:75

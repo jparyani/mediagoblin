@@ -1,5 +1,5 @@
 # Translations template for PROJECT.
-# Copyright (C) 2014 ORGANIZATION
+# Copyright (C) 2015 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
@@ -13,7 +13,9 @@
 # Laurent Pointecouteau <hell_pe@no-log.org>, 2013
 # loic_le.ninan, 2014
 # MarkTraceur <marktraceur@gmail.com>, 2011
+# Mathieu Gauthier-Pilote <mathieu.g.p@republiquelibre.org>, 2015
 # maxineb <maxineb@members.fsf.org>, 2011
+# Nathan Follens, 2015
 # spechard <sd@s13d.fr>, 2014
 # syl_, 2014
 # joar <transifex@wandborg.se>, 2011
@@ -22,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-12-14 15:01-0600\n"
-"PO-Revision-Date: 2014-12-14 21:01+0000\n"
+"POT-Creation-Date: 2015-01-16 15:13-0600\n"
+"PO-Revision-Date: 2015-01-16 21:13+0000\n"
 "Last-Translator: cwebber <cwebber@dustycloud.org>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/mediagoblin/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -95,74 +97,102 @@ msgstr "E-mail de vérification renvoyé."
 
 #: mediagoblin/db/mixin.py:404
 msgid "{username} added {object}"
-msgstr ""
+msgstr "{username} a ajouté {object}"
 
 #: mediagoblin/db/mixin.py:405
 msgid "{username} added {object} to {target}"
-msgstr ""
+msgstr "{username} a ajouté {object} a {target}"
 
 #: mediagoblin/db/mixin.py:407
 msgid "{username} authored {object}"
-msgstr ""
+msgstr "{username} est l'auteur de {object}"
 
 #: mediagoblin/db/mixin.py:408
 msgid "{username} created {object}"
-msgstr ""
+msgstr "{username} a créé {object}"
 
 #: mediagoblin/db/mixin.py:409
 msgid "{username} deleted {object}"
-msgstr ""
+msgstr "{username} a supprimé {object}"
 
 #: mediagoblin/db/mixin.py:410
 msgid "{username} disliked {object}"
-msgstr ""
+msgstr "{username} a détesté {object}"
 
 #: mediagoblin/db/mixin.py:411
 msgid "{username} favorited {object}"
-msgstr ""
+msgstr "{username} a favorisé {object}"
 
 #: mediagoblin/db/mixin.py:412
 msgid "{username} followed {object}"
-msgstr ""
+msgstr "{username} a suivit {object}"
 
 #: mediagoblin/db/mixin.py:413
 msgid "{username} liked {object}"
-msgstr ""
+msgstr "{username} a aimé {object}"
 
 #: mediagoblin/db/mixin.py:415
 msgid "{username} posted {object}"
-msgstr ""
+msgstr "{username} a affiché {object}"
 
 #: mediagoblin/db/mixin.py:416
 msgid "{username} posted {object} to {target}"
-msgstr ""
+msgstr "{username} a affiché {object} a {target}"
 
 #: mediagoblin/db/mixin.py:418
 msgid "{username} shared {object}"
-msgstr ""
+msgstr "{username} a partagé {object}"
 
 #: mediagoblin/db/mixin.py:419
 msgid "{username} unfavorited {object}"
-msgstr ""
+msgstr "{username} a defavorisé {object}"
 
 #: mediagoblin/db/mixin.py:420
 msgid "{username} stopped following {object}"
-msgstr ""
+msgstr "{username} a arrêté de suivre {object}"
 
 #: mediagoblin/db/mixin.py:421
 msgid "{username} unliked {object}"
-msgstr ""
+msgstr "{username} n'aime plus {object}"
 
 #: mediagoblin/db/mixin.py:422
 msgid "{username} unshared {object}"
-msgstr ""
+msgstr "{username} ne partage plus {object}"
 
 #: mediagoblin/db/mixin.py:423
 msgid "{username} updated {object}"
-msgstr ""
+msgstr "{username} a mis à jour {object}"
 
 #: mediagoblin/db/mixin.py:424
 msgid "{username} tagged {object}"
+msgstr "{username} a marqué {object}"
+
+#: mediagoblin/db/mixin.py:428
+msgid "an image"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:429
+msgid "a comment"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:430
+msgid "a collection"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:431
+msgid "a video"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:432
+msgid "audio"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:433
+msgid "a person"
+msgstr ""
+
+#: mediagoblin/db/mixin.py:450 mediagoblin/db/mixin.py:459
+msgid "an object"
 msgstr ""
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90
@@ -231,7 +261,7 @@ msgstr "Cette adresse contient des erreurs"
 
 #: mediagoblin/edit/forms.py:64
 msgid "Hometown"
-msgstr ""
+msgstr "Lieu de naissance"
 
 #: mediagoblin/edit/forms.py:68
 msgid "Email me when others comment on my media"
@@ -331,11 +361,11 @@ msgstr "Les préférences du compte ont été enregistrées"
 
 #: mediagoblin/edit/views.py:286
 msgid "Unknown application, not able to deauthorize"
-msgstr ""
+msgstr "Application inconnue, incapable d'annuler l'autorisation"
 
 #: mediagoblin/edit/views.py:293
 msgid "Application has been deauthorized"
-msgstr ""
+msgstr "L'application n'est plus autorisée"
 
 #: mediagoblin/edit/views.py:327
 msgid "You need to confirm the deletion of your account."
@@ -451,7 +481,7 @@ msgstr "ÉCHEC : Cet utilisateur a déjà dépassé sa limite d'upload."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:174
 msgid "{files_uploaded} out of {files_attempted} files successfully submitted"
-msgstr ""
+msgstr "{files_uploaded} fichiers sur {files_attempted} ont été soumis correctement"
 
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
@@ -494,11 +524,11 @@ msgstr "Ce média n'a pas été supprimé car vous n'avez pas coché la case de 
 
 #: mediagoblin/media_types/blog/views.py:335
 msgid "You are about to delete another user's Blog. Proceed with caution."
-msgstr ""
+msgstr "Vous êtes sur le point de supprimer le blogue d'un autre utilisateur. Soyez prudent."
 
 #: mediagoblin/media_types/blog/views.py:346
 msgid "The blog was not deleted because you have no rights."
-msgstr ""
+msgstr "Le blogue n'a pas été supprimé car vous ne disposez pas du privilège de le faire."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:43
 msgid "Add Blog Post"
@@ -532,7 +562,7 @@ msgstr "Supprimer"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:102
 msgid "<em> Go to list view </em>"
-msgstr ""
+msgstr "<em> Passer au mode liste </em>"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:104
 msgid " No blog post yet. "
@@ -643,31 +673,31 @@ msgstr "Quels privilèges souhaitez-vous révoquer ? "
 
 #: mediagoblin/moderation/forms.py:122
 msgid "Why user was banned:"
-msgstr ""
+msgstr "Raison du bannissement de l'utilisateur:"
 
 #: mediagoblin/moderation/forms.py:125
 msgid "Message to user:"
-msgstr ""
+msgstr "Message à l'utilisateur:"
 
 #: mediagoblin/moderation/forms.py:128
 msgid "Resolution content:"
-msgstr ""
+msgstr "Contenu de la résolution:"
 
 #: mediagoblin/moderation/tools.py:37
 msgid ""
 "\n"
 "{mod} took away {user}'s {privilege} privileges."
-msgstr ""
+msgstr "\n{mod} a retiré les privilèges {privilege} de {user}."
 
 #: mediagoblin/moderation/tools.py:50
 msgid ""
 "\n"
 "{mod} banned user {user} {expiration_date}."
-msgstr ""
+msgstr "\n{mod} a banni l'utilisateur {user} {expiration_date}."
 
 #: mediagoblin/moderation/tools.py:54
 msgid "until {date}"
-msgstr ""
+msgstr "jusqu'au {date}"
 
 #: mediagoblin/moderation/tools.py:56
 #: mediagoblin/templates/mediagoblin/banned.html:30
@@ -735,7 +765,7 @@ msgstr "Désolé, vous avez atteint votre limite d'ajout de médias. "
 
 #: mediagoblin/plugins/archivalook/forms.py:21
 msgid "Enter the URL for the media to be featured"
-msgstr ""
+msgstr "Saisissez l'adresse (URL) du média à mettre en avant-plan"
 
 #: mediagoblin/plugins/archivalook/tools.py:132
 msgid "Primary"
@@ -759,7 +789,7 @@ msgstr "Comment cela fonctionne-t-il ?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:34
 msgid "How to feature media?"
-msgstr ""
+msgstr "Comment mettre un média à l'avant-plan?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:37
 msgid ""
