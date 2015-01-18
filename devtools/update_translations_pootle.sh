@@ -19,14 +19,16 @@
 # exit if anything fails
 set -e
 
-echo "==> checking out master"
-git checkout master
+## Maybe we'll uncomment these post-merge to master
 
-echo "==> pulling git master"
-git pull
+# echo "==> checking out master"
+# git checkout master
+
+# echo "==> pulling git master"
+# git pull
 
 echo "==> pulling present translations"
-rsync --exclude ".translation_index" -vaz chapters.gnu.org::pootle/mediagoblin/ mediagoblin/i18n/
+rsync --exclude-from="devtools/pootle-exclude.txt" -vaz chapters.gnu.org::pootle/mediagoblin/ mediagoblin/i18n/
 
 echo "==> Extracting translations"
 ./bin/pybabel extract -F babel.ini -o mediagoblin/i18n/templates/mediagoblin.pot .

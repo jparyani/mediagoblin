@@ -1,0 +1,2 @@
+.translation_index
+LC_MESSAGES/
