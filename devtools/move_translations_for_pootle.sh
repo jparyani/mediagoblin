@@ -28,4 +28,5 @@ done
 
 # english is not required and is Pootle's "template" now
 mkdir mediagoblin/i18n/templates/
-git mv mediagoblin/i18n/en/ mediagoblin/i18n/templates/
+git mv mediagoblin/i18n/en/mediagoblin.po \
+	mediagoblin/i18n/templates/mediagoblin.pot
