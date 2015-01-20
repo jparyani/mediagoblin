@@ -124,7 +124,8 @@ def changepw(args):
 def deleteuser_parser_setup(subparser):
     subparser.add_argument(
         'username',
-        help="Username to delete")
+        help="Username to delete",
+        type=six.text_type)
 
 
 def deleteuser(args):
@@ -132,8 +133,7 @@ def deleteuser(args):
 
     db = mg_globals.database
 
-    user = db.User.query.filter_by(
-        username=unicode(args.username.lower())).first()
+    user = db.User.query.filter_by(username=args.username.lower()).first()
     if user:
         user.delete()
         print('The user %s has been deleted' % args.username)
