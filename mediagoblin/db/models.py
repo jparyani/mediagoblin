@@ -1345,7 +1345,8 @@ class Activity(Base, ActivityMixin):
                     nullable=True)
 
     get_actor = relationship(User,
-        foreign_keys="Activity.actor", post_update=True)
+                             backref=backref("activities",
+                                             cascade="all, delete-orphan"))
     get_generator = relationship(Generator)
 
     def __repr__(self):
