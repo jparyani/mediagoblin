@@ -22,6 +22,7 @@ from mediagoblin.tools.response import redirect, render_to_response
 from mediagoblin.plugins.sandstorm.models import SandstormUser
 
 from random import getrandbits
+import urllib
 
 
 @auth_enabled
@@ -31,6 +32,11 @@ def login(request):
     username = request.headers.get('X-Sandstorm-Username', None)
     user_id = request.headers.get('X-Sandstorm-User-Id', None)
     permissions = request.headers.get('X-Sandstorm-Permissions', None)
+
+    if username != None:
+        username = urllib.unquote(username)
+    if permissions != None:
+        permissions = urllib.unquote(permissions)
 
     default_privileges = None
     if username and user_id:
