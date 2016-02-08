@@ -17,22 +17,49 @@ const pkgdef :Spk.PackageDefinition = (
     # This manifest is included in your app package to tell Sandstorm
     # about your app.
 
-    appVersion = 3,  # Increment this for every release.
+    appTitle = (defaultText = "MediaGoblin"),
+
+    appVersion = 4,  # Increment this for every release.
+
+    appMarketingVersion = (defaultText = "0.7.1"),
 
     actions = [
       # Define your "new document" handlers here.
       ( title = (defaultText = "New MediaGoblin Instance"),
+        nounPhrase = (defaultText = "collection"),
         command = .myCommand
         # The command to run when starting for the first time. (".myCommand"
         # is just a constant defined at the bottom of the file.)
       )
     ],
 
-    continueCommand = .myCommand
-    # This is the command called to start your app back up after it has been
-    # shut down for inactivity. Here we're using the same command as for
-    # starting a new instance, but you could use different commands for each
-    # case.
+    continueCommand = .myCommand,
+
+    metadata = (
+      icons = (
+        appGrid = (svg = ( embed "app-graphics/mediagoblin-128.svg")),
+        grain = (svg = ( embed "app-graphics/mediagoblin-24.svg")),
+        market =  (svg = ( embed "app-graphics/mediagoblin-150.svg")),
+      ),
+
+      website = "http://mediagoblin.org/",
+      codeUrl = "https://github.com/jparyani/mediagoblin",
+      license = (openSource = agpl3),
+      categories = [media],
+
+      author = (
+        contactEmail = "jparyani@sandstorm.io",
+        pgpSignature = embed "pgp-signature",
+        upstreamAuthor = "MediaGoblin Project",
+      ),
+      pgpKeyring = embed "pgp-keyring",
+
+      description = (defaultText = embed "description.md"),
+
+      screenshots = [
+        (width = 448, height = 376, png = embed "sandstorm-screenshot.png")
+      ],
+    ),
   ),
 
   sourceMap = (
