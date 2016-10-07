@@ -11,7 +11,7 @@ test -d /var/log || cp -r /var_original/log /var
 test -d /var/lib || cp -r /var_original/lib /var
 test -d /var/run || cp -r /var_original/run /var
 test -e /var/lock || ln -s /var/run/lock /var/lock
-test -f /var/mediagoblin.db || (cp /var_original/mediagoblin.db /var && echo "0.7.1" > /var/VERSION)
+test -f /var/mediagoblin.db || (cp /opt/app/var_original/mediagoblin.db /var && echo "0.7.1" > /var/VERSION)
 mkdir -p /var/user_dev
 
 # Version migration

@@ -80,7 +80,7 @@ install_requires = [
     'pytz',
     # PLEASE change this when we can; a dependency is forcing us to set this
     # specific number and it is breaking setup.py develop
-    'six==1.5.2',
+    # 'six==1.5.2',
     'oauthlib',
     'unidecode',
     'jsonschema',

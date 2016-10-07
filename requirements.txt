@@ -26,4 +26,6 @@ jsonschema
 requests
 pyld
 ExifRead
-six==1.5.2
+six<2
+lxml
+pillow
